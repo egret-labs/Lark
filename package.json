@@ -1,0 +1,15 @@
+{
+    "name": "lark",
+    "description": "A set of complementary tools to Lark",
+    "author": "Egret Technology Inc.",
+    "version": "0.0.1",
+    "private": true,
+    "author":"egret-labs",
+    "scripts": {
+        "start": "node app"
+    },
+    "bin": {
+        "lark": "./bin/lark"
+    }
+}
+
