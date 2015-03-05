@@ -30,14 +30,16 @@
 /// <reference path="../lib/node.d.ts"/>
 
 import Build = require("./Build");
+import Publish = require("./Publish");
 
 function executeCommandLine(currentDir:string, args:string[]):void {
-    var build:Build = new Build(currentDir);
     switch (args[0]) {
-        case "build":
-            build.run();
+        case "publish":
+            var publish = new Publish(currentDir);
+            publish.run();
             break;
         default :
+            var build = new Build(currentDir);
             build.run();
             break;
     }

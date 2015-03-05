@@ -26,20 +26,48 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-/// <reference path="../lib/node.d.ts"/>
-var Build = require("./Build");
-var Publish = require("./Publish");
-function executeCommandLine(currentDir, args) {
-    switch (args[0]) {
-        case "publish":
-            var publish = new Publish(currentDir);
-            publish.run();
-            break;
-        default:
-            var build = new Build(currentDir);
-            build.run();
-            break;
+
+import TypeScript = require("../lib/typescript/tsc");
+import FileUtil = require("../lib/FileUtil");
+
+class Publish {
+
+    public constructor(projectDir:string) {
+        this.projectDir = projectDir;
+    }
+
+    private projectDir:string;
+
+    public run():void {
+
+        //清理bin-debug目录
+        var releasePath = FileUtil.joinPath(this.projectDir, "bin-release/");
+        var fileList = FileUtil.getDirectoryListing(releasePath);
+        var length = fileList.length;
+        for (var i = 0; i < length; i++) {
+            var path = fileList[i];
+            FileUtil.remove(path);
+        }
+        //拷贝模板文件
+        var tempatePath = FileUtil.joinPath(this.projectDir, "template/");
+        fileList = FileUtil.getDirectoryListing(tempatePath);
+        length = fileList.length;
+        for (i = 0; i < length; i++) {
+            path = fileList[i];
+            var destPath = path.substring(tempatePath.length);
+            destPath = FileUtil.joinPath(releasePath, destPath);
+            FileUtil.copy(path, destPath);
+        }
+        var srcPath:string = FileUtil.joinPath(this.projectDir, "src");
+        var tsList:string[] = FileUtil.search(srcPath, "ts");
+        var output = FileUtil.joinPath(releasePath, "lark_min.js");
+        var cmd = tsList.join(" ") + " -t ES5 --out " + "\"" + output + "\"";
+        FileUtil.save("tsc_config_temp.txt", cmd);
+        TypeScript.exit = function ():void {
+            FileUtil.remove("tsc_config_temp.txt");
+        };
+        TypeScript.executeCommandLine(["@tsc_config_temp.txt"]);
     }
 }
-executeCommandLine(process.cwd(), process.argv.slice(2));
-module.exports = executeCommandLine;
+
+export = Publish;
