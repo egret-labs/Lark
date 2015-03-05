@@ -1,2 +1,2 @@
 #! /usr/bin/env node
-require('../tools/compiler/CommandLine.js')
+require('../compiler/Entry.js')

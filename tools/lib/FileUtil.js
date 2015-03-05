@@ -10,20 +10,20 @@
 //     * Redistributions in binary form must reproduce the above copyright
 //       notice, this list of conditions and the following disclaimer in the
 //       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret-Labs.org nor the
+//     * Neither the name of the Egret nor the
 //       names of its contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
 //
-//  THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
-//  EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-//  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-//  DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
-//  DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-//  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-//  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-//  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-//  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-//  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
 /// <reference path="../lib/node.d.ts"/>
@@ -50,7 +50,7 @@ exports.save = save;
 function createDirectory(path, mode, made) {
     path = escapePath(path);
     if (mode === undefined) {
-        mode = 0777 & (~process.umask());
+        mode = 511 & (~process.umask());
     }
     if (!made)
         made = null;
@@ -264,8 +264,8 @@ exports.getFileName = getFileName;
  * @param path 要搜索的文件夹
  * @param relative 是否返回相对路径，若不传入或传入false，都返回绝对路径。
  */
-function getDirectoryListing(path) {
-    var relative = arguments[1];
+function getDirectoryListing(path, relative) {
+    if (relative === void 0) { relative = false; }
     path = escapePath(path);
     try {
         var list = FS.readdirSync(path);
@@ -273,27 +273,27 @@ function getDirectoryListing(path) {
     catch (e) {
         return [];
     }
+    var length = list.length;
     if (!relative) {
-        var length = list.length;
-        for (var i = 0; i < length; i++) {
-            list[i] = joinPath(path, list[i]);
+        for (var i = length - 1; i >= 0; i--) {
+            if (list[i].charAt(0) == ".") {
+                list.splice(i, 1);
+            }
+            else {
+                list[i] = joinPath(path, list[i]);
+            }
+        }
+    }
+    else {
+        for (i = length - 1; i >= 0; i--) {
+            if (list[i].charAt(0) == ".") {
+                list.splice(i, 1);
+            }
         }
     }
     return list;
 }
 exports.getDirectoryListing = getDirectoryListing;
-function getDirectoryAllListing(path) {
-    var list = [];
-    if (isDirectory(path)) {
-        var fileList = getDirectoryListing(path);
-        for (var key in fileList) {
-            list = list.concat(getDirectoryAllListing(fileList[key]));
-        }
-        return list;
-    }
-    return [path];
-}
-exports.getDirectoryAllListing = getDirectoryAllListing;
 /**
  * 使用指定扩展名搜索文件夹及其子文件夹下所有的文件
  * @param dir 要搜索的文件夹

@@ -53,7 +53,7 @@ export function save(path:string,data:any):void{
 export function createDirectory(path:string, mode?:any, made?:any):void {
     path = escapePath(path);
     if (mode === undefined) {
-        mode = 0777 & (~process.umask());
+        mode = 511 & (~process.umask());
     }
     if (!made) made = null;
 
@@ -272,8 +272,7 @@ export function getFileName(path:string):string {
  * @param path 要搜索的文件夹
  * @param relative 是否返回相对路径，若不传入或传入false，都返回绝对路径。
  */
-export function getDirectoryListing(path:string):string[]{
-    var relative = arguments[1];
+export function getDirectoryListing(path:string,relative:boolean=false):string[]{
     path = escapePath(path);
     try{
         var list = FS.readdirSync(path);
@@ -281,27 +280,27 @@ export function getDirectoryListing(path:string):string[]{
     catch (e){
         return [];
     }
+    var length = list.length;
     if(!relative){
-        var length = list.length;
-        for(var i = 0;i<length;i++){
-            list[i] = joinPath(path,list[i]);
+        for(var i = length-1;i>=0;i--){
+            if (list[i].charAt(0) == ".") {
+                list.splice(i,1);
+            }
+            else
+            {
+                list[i] = joinPath(path,list[i]);
+            }
+        }
+    }
+    else
+    {
+        for(i = length-1;i>=0;i--){
+            if (list[i].charAt(0) == ".") {
+                list.splice(i,1);
+            }
         }
     }
     return list;
-}
-
-export function getDirectoryAllListing(path:string):string[] {
-    var list = [];
-    if (isDirectory(path)) {
-        var fileList = getDirectoryListing(path);
-        for (var key in fileList) {
-            list = list.concat(getDirectoryAllListing(fileList[key]));
-        }
-
-        return list;
-    }
-
-    return [path];
 }
 
 /**

@@ -26,21 +26,15 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-
 /// <reference path="../lib/node.d.ts"/>
-
-import Build = require("./Build");
-
-function executeCommandLine(currentDir: string,args: string[]): void {
-    switch(args[0]){
+var Build = require("./Build");
+function executeCommandLine(currentDir, args) {
+    switch (args[0]) {
         case "build":
-            var build:Build = new Build(currentDir);
+            var build = new Build(currentDir);
             build.run();
             break;
     }
 }
-
-
-executeCommandLine(process.cwd(),process.argv.slice(2));
-
-export = executeCommandLine;
+executeCommandLine(process.cwd(), process.argv.slice(2));
+module.exports = executeCommandLine;
