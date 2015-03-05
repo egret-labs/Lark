@@ -27,18 +27,34 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark{
+
+module lark {
+
+    var __getDefinitionByName__cache:Object = {};
     /**
-     * 显示对象基类
+     * 返回 name 参数指定的类的类对象引用。
+     * @param name 类的名称。
      */
-    export class DisplayObject extends HashObject{
-        /**
-         * 创建一个显示对象
-         */
-        public constructor(){
-            super();
+    export function getDefinitionByName(name:string):any{
+        if(!name)
+            return null;
+        var definition:any = __getDefinitionByName__cache[name];
+        if(definition){
+            return definition;
         }
-        public x:number = 0;
-        public y:number = 0;
+        var paths:Array<string> = name.split(".");
+        var length:number = paths.length;
+        definition = __global;
+        for(var i:number=0;i<length;i++){
+            var path:string = paths[i];
+            definition = definition[path];
+            if(!definition){
+                return null;
+            }
+        }
+        __getDefinitionByName__cache[name] = definition;
+        return definition;
     }
 }
+
+var __global = __global || this;

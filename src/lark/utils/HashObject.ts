@@ -27,18 +27,32 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark{
-    /**
-     * 显示对象基类
-     */
-    export class DisplayObject extends HashObject{
+
+module lark {
+
+	/**
+     * 哈希对象。引擎内所有对象的基类，为对象实例提供唯一的hashCode值,提高对象比较的性能。
+	 */
+    export class HashObject implements IHashObject{
+
         /**
-         * 创建一个显示对象
+         * 创建一个 lark.HashObject 对象
          */
-        public constructor(){
-            super();
+        public constructor() {
+            this._hashCode = HashObject.hashCount++;
         }
-        public x:number = 0;
-        public y:number = 0;
+
+        /**
+         * 哈希计数
+         */
+        private static hashCount:number = 1;
+
+        private _hashCode:number;
+        /**
+         * 返回此对象唯一的哈希值,用于唯一确定一个对象。hashCode为大于等于1的整数。
+         */
+        public get hashCode():number {
+            return this._hashCode;
+        }
     }
 }

@@ -27,18 +27,16 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark{
+module lark {
     /**
-     * 显示对象基类
+     * IHashObject是哈希对象接口。引擎内所有接口的基类,为对象实例提供唯一的hashCode值,提高对象比较的性能。
+     * 注意：自定义对象请直接继承HashObject，而不是实现此接口,否则会导致hashCode不唯一。
+     * 此接口主要用于供IEventDispatcher等接口继承。
      */
-    export class DisplayObject extends HashObject{
+    export interface IHashObject {
         /**
-         * 创建一个显示对象
+         * 返回此对象唯一的哈希值,用于唯一确定一个对象。hashCode为大于等于1的整数。
          */
-        public constructor(){
-            super();
-        }
-        public x:number = 0;
-        public y:number = 0;
+        hashCode:number;
     }
 }

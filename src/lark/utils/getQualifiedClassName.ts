@@ -27,18 +27,25 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark{
+
+module lark {
     /**
-     * 显示对象基类
+     * 返回一个对象的完全限定名<br/>
+     * @param value 需要完全限定类名称的对象，可以将任何 TypeScript / JavaScript值传递给此方法，包括所有可用的TypeScript / JavaScript类型、对象实例、原始类型（如number）和类对象
      */
-    export class DisplayObject extends HashObject{
-        /**
-         * 创建一个显示对象
-         */
-        public constructor(){
-            super();
+    export function getQualifiedClassName(value:any):string {
+        var prototype: any = value.prototype ? value.prototype : Object.getPrototypeOf(value);
+        if(prototype.hasOwnProperty("__class__")){
+            return prototype["__class__"];
         }
-        public x:number = 0;
-        public y:number = 0;
+        var constructorString:string = prototype.constructor.toString();
+        var index:number = constructorString.indexOf("(");
+        var className:string = constructorString.substring(9, index);
+        Object.defineProperty(prototype, "__class__", {
+            value: className,
+            enumerable: false,
+            writable: true
+        });
+        return className;
     }
 }

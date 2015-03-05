@@ -29,16 +29,15 @@
 
 module lark{
     /**
-     * 显示对象基类
+     * 舞台，显示列表根容器。
      */
-    export class DisplayObject extends HashObject{
+    export class Stage extends DisplayObjectContainer{
+
         /**
-         * 创建一个显示对象
+         * 舞台对象不允许自行实例化。
          */
         public constructor(){
             super();
         }
-        public x:number = 0;
-        public y:number = 0;
     }
 }

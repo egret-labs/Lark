@@ -29,16 +29,14 @@
 
 module lark{
     /**
-     * 显示对象基类
+     * 容器基类
      */
-    export class DisplayObject extends HashObject{
+    export class DisplayObjectContainer extends DisplayObject{
         /**
-         * 创建一个显示对象
+         * 实例化一个容器
          */
         public constructor(){
             super();
         }
-        public x:number = 0;
-        public y:number = 0;
     }
 }

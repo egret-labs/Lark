@@ -29,16 +29,41 @@
 
 module lark{
     /**
-     * 显示对象基类
+     * Lark播放器
      */
-    export class DisplayObject extends HashObject{
+    export class Player extends HashObject{
+
         /**
-         * 创建一个显示对象
+         * 播放器对象不允许自行实例化。
          */
-        public constructor(){
+        public constructor(context:IPlayerContext){
             super();
+            if(!context){
+                throw new Error("Lark播放器实例化失败，IPlayerContext不能为空！");
+            }
+            this.context = context;
         }
-        public x:number = 0;
-        public y:number = 0;
+
+        private context:IPlayerContext;
+        /**
+         * 启动播放器
+         */
+        public start():void{
+            if(!this.context){
+                return;
+            }
+        }
+        /**
+         * 停止播放器，停止后将不能重新启动。
+         */
+        public stop():void{
+            this.context = null;
+        }
+        /**
+         * 暂停播放器，后续可以通过调用start()重新启动播放器。
+         */
+        public pause():void{
+
+        }
     }
 }

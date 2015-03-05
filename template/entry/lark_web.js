@@ -46,38 +46,16 @@ lark_web.startLoading = function () {
 };
 
 lark_web.start = function(){
-    var resizeTimer = null;
-    var doResize = function () {
-        var canvas=document.getElementById("lark_canvas");
-        canvas.width = window.innerWidth;
-        canvas.height =  window.innerHeight;
-        resizeTimer = null;
-        var cxt=canvas.getContext("2d");
-        cxt.fillStyle="#009aff";
-        cxt.fillRect(0,0, canvas.width, canvas.height);
-        var img = new Image();
-        img.src = "image/test.png";
-        img.onload = function(){
-            cxt.drawImage(img,(canvas.width-img.width)*0.5,(canvas.height-img.height)*0.5);
-        }
-    };
-    window.onresize = function () {
-        if (resizeTimer == null) {
-            resizeTimer = setTimeout(doResize, 300);
-        }
-    };
-    doResize();
+    var canvas=document.getElementById("lark_canvas");
+    var canvasContext = new lark.CanvasContext(canvas);
+    var player = new lark.Player(canvasContext);
+    player.start();
 }
 
 var support = [].map && document.createElement("canvas").getContext;
 if (support) {
-    //lark_web.preloadScript(egret_file_list, "libs/");
-    //lark_web.preloadScript(game_file_list, "bin-debug/src/");
-    //lark_web.startLoading();
-    lark_web.loadSingleScript("launcher/manifest.json",function(){
-        
-    });
-    lark_web.start();
+    lark_web.preloadScript(lark_file_list, "");
+    lark_web.startLoading();
 }
 else {
     alert("Lark 不支持您当前的浏览器!")

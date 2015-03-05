@@ -27,18 +27,15 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark{
+
+module lark {
+
+    export var __START_TIME:number;
     /**
-     * 显示对象基类
+     * 用于计算相对时间。此方法返回自启动 Lark 引擎以来经过的毫秒数。
+	 * @return 启动 Lark 引擎以来经过的毫秒数。
      */
-    export class DisplayObject extends HashObject{
-        /**
-         * 创建一个显示对象
-         */
-        public constructor(){
-            super();
-        }
-        public x:number = 0;
-        public y:number = 0;
+    export function getTimer():number {
+        return Date.now() - __START_TIME;
     }
 }

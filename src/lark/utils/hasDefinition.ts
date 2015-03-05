@@ -27,18 +27,15 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark{
-    /**
-     * 显示对象基类
-     */
-    export class DisplayObject extends HashObject{
-        /**
-         * 创建一个显示对象
-         */
-        public constructor(){
-            super();
-        }
-        public x:number = 0;
-        public y:number = 0;
+
+module lark {
+     /**
+      * 检查指定的应用程序域之内是否存在一个公共定义。该定义可以是一个类、一个命名空间或一个函数的定义。
+      * @param name 定义的名称。
+	  * @return 公共定义是否存在
+      */
+    export function hasDefinition(name:string):boolean{
+        var definition:any = getDefinitionByName(name);
+        return definition?true:false;
     }
 }

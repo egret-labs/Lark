@@ -28,17 +28,27 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark{
+
     /**
-     * 显示对象基类
+     * IPlayerContext接口定义Lark播放器与平台相关的操作，包括绘制，网络，交互操作等。
      */
-    export class DisplayObject extends HashObject{
+    export interface IPlayerContext extends IHashObject{
+
         /**
-         * 创建一个显示对象
+         * 清除整个屏幕
          */
-        public constructor(){
-            super();
-        }
-        public x:number = 0;
-        public y:number = 0;
+        clearScreen():void;
+
+        /**
+         * 清除屏幕的部分渲染区域
+         */
+        clearRect(x:number, y:number, width:number, height:number):void;
+
+        /**
+         * 绘制图片到一个区域上
+         */
+        drawImage(texture: Texture, sourceX:number, sourceY:number, sourceWidth:number, sourceHeight:number,
+                  targetX:number, targetY:number, targetWidth:number, targetHeight:number):void;
+
     }
 }
