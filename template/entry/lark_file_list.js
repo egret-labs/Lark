@@ -1,3 +1,4 @@
+
 var lark_file_list =
     [
         "lark/utils/getDefinitionByName.js",
@@ -11,4 +12,4 @@ var lark_file_list =
         "lark/player/contexts/CanvasContext.js",
         "Main.js"
     ];
-var document_class = "Main";
+var lark_entry_class_name = "lark.Main";

@@ -36,21 +36,54 @@ module lark{
         /**
          * 播放器对象不允许自行实例化。
          */
-        public constructor(context:IPlayerContext){
+        public constructor(context:IPlayerContext,entryClassName:string){
             super();
             if(!context){
                 throw new Error("Lark播放器实例化失败，IPlayerContext不能为空！");
             }
             this.context = context;
+            this.entryClassName = entryClassName;
         }
 
         private context:IPlayerContext;
+        /**
+         * 入口类的完整类名
+         */
+        private entryClassName:string;
+        /**
+         * 舞台引用
+         */
+        private stage:Stage;
         /**
          * 启动播放器
          */
         public start():void{
             if(!this.context){
                 return;
+            }
+            if(!this.stage){
+                this.initialize();
+            }
+
+        }
+
+        private initialize():void{
+            this.stage = new lark.Stage();
+            var rootClass;
+            if(this.entryClassName){
+                rootClass = lark.getDefinitionByName(this.entryClassName);
+            }
+            if(rootClass) {
+                var rootContainer:any = new rootClass();
+                if(rootContainer instanceof lark.DisplayObject){
+                   // this.stage.addChild(rootContainer);
+                }
+                else{
+                    throw new Error("Lark入口类必须是lark.DisplayObject的子类: "+this.entryClassName);
+                }
+            }
+            else{
+                throw new Error("找不到Lark入口类: "+this.entryClassName);
             }
         }
         /**

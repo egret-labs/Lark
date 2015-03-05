@@ -48,7 +48,7 @@ lark_web.startLoading = function () {
 lark_web.start = function(){
     var canvas=document.getElementById("lark_canvas");
     var canvasContext = new lark.CanvasContext(canvas);
-    var player = new lark.Player(canvasContext);
+    var player = new lark.Player(canvasContext,lark_entry_class_name);
     player.start();
 }
 
