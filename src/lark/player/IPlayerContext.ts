@@ -27,12 +27,12 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark{
+module lark {
 
     /**
      * IPlayerContext接口定义Lark播放器与平台相关的操作，包括绘制，网络，交互操作等。
      */
-    export interface IPlayerContext extends IHashObject{
+    export interface IPlayerContext extends IHashObject {
 
         /**
          * 清除整个屏幕
@@ -47,7 +47,7 @@ module lark{
         /**
          * 绘制图片到一个区域上
          */
-        drawImage(texture: Texture, sourceX:number, sourceY:number, sourceWidth:number, sourceHeight:number,
+        drawImage(texture:Texture, sourceX:number, sourceY:number, sourceWidth:number, sourceHeight:number,
                   targetX:number, targetY:number, targetWidth:number, targetHeight:number):void;
 
     }

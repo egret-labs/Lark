@@ -27,15 +27,15 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark{
+module lark {
     /**
      * 容器基类
      */
-    export class DisplayObjectContainer extends DisplayObject{
+    export class DisplayObjectContainer extends DisplayObject {
         /**
          * 实例化一个容器
          */
-        public constructor(){
+        public constructor() {
             super();
         }
     }

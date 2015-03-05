@@ -27,17 +27,17 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark{
+module lark {
     /**
      * Lark播放器在Canvas上封装的实现
      */
-    export class CanvasContext extends HashObject implements IPlayerContext{
+    export class CanvasContext extends HashObject implements IPlayerContext {
         /**
          * 创建一个Canvas屏幕渲染器
          */
-        public constructor(canvas:HTMLCanvasElement){
+        public constructor(canvas:HTMLCanvasElement) {
             super();
-            if(!canvas){
+            if (!canvas) {
                 throw new Error("CanvasContext实例化失败，canvas参数不能为空！");
             }
             this.canvas = canvas;
@@ -46,50 +46,51 @@ module lark{
 
         private canvas:HTMLCanvasElement;
 
-        private initialize():void{
+        private initialize():void {
             window.onresize = this.onSizeChanged;
             this.onSizeChanged();
         }
 
         private sizeChanged:boolean = false;
 
-        private onSizeChanged = ():void=>{
-            if(!this.sizeChanged){
+        private onSizeChanged = ():void=> {
+            if (!this.sizeChanged) {
                 this.sizeChanged = true;
-                setTimeout(this.doResize,100)
+                setTimeout(this.doResize, 100)
             }
         }
 
-        private doResize = ():void=>{
+        private doResize = ():void=> {
             this.sizeChanged = false;
             this.canvas.width = window.innerWidth;
-            this.canvas.height =  window.innerHeight;
+            this.canvas.height = window.innerHeight;
             var cxt = this.canvas.getContext("2d");
             var img = new Image();
             img.src = "image/test.png";
-            img.onload = ()=>{
-                cxt.drawImage(img,(this.canvas.width-img.width)*0.5,(this.canvas.height-img.height)*0.5);
+            img.onload = ()=> {
+                cxt.drawImage(img, (this.canvas.width - img.width) * 0.5, (this.canvas.height - img.height) * 0.5);
             }
         }
+
         /**
          * 清除整个屏幕
          */
-        public clearScreen():void{
+        public clearScreen():void {
 
         }
 
         /**
          * 清除屏幕的部分渲染区域
          */
-        public clearRect(x:number, y:number, width:number, height:number):void{
+        public clearRect(x:number, y:number, width:number, height:number):void {
 
         }
 
         /**
          * 绘制图片到一个区域上
          */
-        public drawImage(texture: Texture, sourceX:number, sourceY:number, sourceWidth:number, sourceHeight:number,
-                  targetX:number, targetY:number, targetWidth:number, targetHeight:number):void{
+        public drawImage(texture:Texture, sourceX:number, sourceY:number, sourceWidth:number, sourceHeight:number,
+                         targetX:number, targetY:number, targetWidth:number, targetHeight:number):void {
 
         }
     }

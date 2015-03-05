@@ -30,10 +30,10 @@
 
 module lark {
 
-	/**
+    /**
      * 哈希对象。引擎内所有对象的基类，为对象实例提供唯一的hashCode值,提高对象比较的性能。
-	 */
-    export class HashObject implements IHashObject{
+     */
+    export class HashObject implements IHashObject {
 
         /**
          * 创建一个 lark.HashObject 对象

@@ -27,15 +27,15 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark{
+module lark {
     /**
      * 渲染命令
      */
-    export class RenderCommand{
+    export class RenderCommand {
         /**
          * 实例化一个渲染命令
          */
-        public constructor(){
+        public constructor() {
 
         }
 

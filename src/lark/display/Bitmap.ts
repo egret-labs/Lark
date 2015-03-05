@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark{
+module lark {
     /**
      * Bitmap 类表示用于表示位图图像的显示对象。这些图像可以是使用 Bitmap() 构造函数创建的图像。
      * 利用 Bitmap() 构造函数，可以创建包含对 Texture 对象的引用的 Bitmap 对象。创建了 Bitmap 对象后，
@@ -36,12 +36,12 @@ module lark{
      * 由于能够创建引用相同 Texture 对象的多个 Bitmap 对象，因此，多个显示对象可以使用相同的复杂 Texture 对象，
      * 而不会因为每个显示对象实例使用一个 Texture 对象而产生内存开销。
      */
-    export class Bitmap extends DisplayObject{
+    export class Bitmap extends DisplayObject {
 
         /**
          * 创建一个Bitmap对象
          */
-        public constructor(){
+        public constructor() {
             super();
         }
     }

@@ -27,13 +27,13 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark{
-    export class Main extends DisplayObject{
+module lark {
+    export class Main extends DisplayObject {
 
-        public constructor(){
+        public constructor() {
             super();
             this.x = 1;
-            alert("this.x:"+this.x);
+            alert("this.x:" + this.x);
         }
 
     }

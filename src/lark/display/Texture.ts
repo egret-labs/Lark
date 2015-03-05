@@ -36,14 +36,15 @@ module lark {
      * 在OpenGL / WebGL中，资源是一个提交GPU后获取的纹理id
      * Texture类封装了这些底层实现的细节，开发者只需要关心接口即可
      */
-    export class Texture extends HashObject{
+    export class Texture extends HashObject {
 
         /**
          * 创建一个 lark.Texture 对象
          */
-        public constructor(){
+        public constructor() {
             super();
         }
+
         /**
          * 表示这个纹理在 bitmapData 上的 x 起始位置
          */
@@ -87,6 +88,7 @@ module lark {
         public get textureHeight():number {
             return this._textureHeight;
         }
+
         /**
          * 表示bitmapData.width
          */

@@ -31,24 +31,25 @@
 module lark {
 
     var __getDefinitionByName__cache:Object = {};
+
     /**
      * 返回 name 参数指定的类的类对象引用。
      * @param name 类的名称。
      */
-    export function getDefinitionByName(name:string):any{
-        if(!name)
+    export function getDefinitionByName(name:string):any {
+        if (!name)
             return null;
         var definition:any = __getDefinitionByName__cache[name];
-        if(definition){
+        if (definition) {
             return definition;
         }
         var paths:Array<string> = name.split(".");
         var length:number = paths.length;
         definition = __global;
-        for(var i:number=0;i<length;i++){
+        for (var i:number = 0; i < length; i++) {
             var path:string = paths[i];
             definition = definition[path];
-            if(!definition){
+            if (!definition) {
                 return null;
             }
         }

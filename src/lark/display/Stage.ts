@@ -27,16 +27,16 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark{
+module lark {
     /**
      * 舞台，显示列表根容器。
      */
-    export class Stage extends DisplayObjectContainer{
+    export class Stage extends DisplayObjectContainer {
 
         /**
          * 舞台对象不允许自行实例化。
          */
-        public constructor(){
+        public constructor() {
             super();
         }
     }

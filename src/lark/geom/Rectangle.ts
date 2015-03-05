@@ -95,11 +95,11 @@ module lark {
         /**
          * 矩形左上角的 x 坐标。
          */
-        public get left(): number {
+        public get left():number {
             return this.x;
         }
 
-        public set left(value: number) {
+        public set left(value:number) {
             this.width += this.x - value;
             this.x = value;
         }
@@ -107,11 +107,11 @@ module lark {
         /**
          * 矩形左上角的 y 坐标。
          */
-        public get top(): number {
+        public get top():number {
             return this.y;
         }
 
-        public set top(value: number) {
+        public set top(value:number) {
             this.height += this.y - value;
             this.y = value;
         }
@@ -158,7 +158,7 @@ module lark {
         /**
          * 将 Rectangle 对象的所有属性设置为 0。
          */
-        public setEmpty(): void {
+        public setEmpty():void {
             this.x = 0;
             this.y = 0;
             this.width = 0;

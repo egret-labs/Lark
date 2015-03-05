@@ -31,9 +31,9 @@
 
 import Build = require("./Build");
 
-function executeCommandLine(currentDir: string,args: string[]): void {
+function executeCommandLine(currentDir:string, args:string[]):void {
     var build:Build = new Build(currentDir);
-    switch(args[0]){
+    switch (args[0]) {
         case "build":
             build.run();
             break;
@@ -44,7 +44,6 @@ function executeCommandLine(currentDir: string,args: string[]): void {
 }
 
 
-
-executeCommandLine(process.cwd(),process.argv.slice(2));
+executeCommandLine(process.cwd(), process.argv.slice(2));
 
 export = executeCommandLine;

@@ -39,13 +39,13 @@ var charset = "utf-8";
  * @param path 文件完整路径名
  * @param data 要保存的数据
  */
-export function save(path:string,data:any):void{
-    if(exists(path)) {
+export function save(path:string, data:any):void {
+    if (exists(path)) {
         remove(path);
     }
     path = escapePath(path);
     createDirectory(Path.dirname(path));
-    FS.writeFileSync(path,data,charset);
+    FS.writeFileSync(path, data, charset);
 }
 /**
  * 创建文件夹
@@ -95,19 +95,19 @@ var textTemp = {};
 export function read(path:string):string {
     path = escapePath(path);
     var text = textTemp[path];
-    if(text){
+    if (text) {
         return text;
     }
-    try{
-        text = FS.readFileSync(path,charset);
+    try {
+        text = FS.readFileSync(path, charset);
         text = text.replace(/^\uFEFF/, '');
     }
     catch (err0) {
         return "";
     }
-    if(text){
+    if (text) {
         var ext = getExtension(path).toLowerCase();
-        if(ext=="ts"||ext=="exml"){
+        if (ext == "ts" || ext == "exml") {
             textTemp[path] = text;
         }
     }
@@ -120,7 +120,7 @@ export function read(path:string):string {
  */
 export function readBinary(path:string):any {
     path = escapePath(path);
-    try{
+    try {
         var binary = FS.readFileSync(path);
     }
     catch (e) {
@@ -148,21 +148,21 @@ export function copy(source:string, dest:string):void {
 
 export function isDirectory(path:string):boolean {
     path = escapePath(path);
-    try{
+    try {
         var stat = FS.statSync(path);
     }
-    catch(e){
+    catch (e) {
         return false;
     }
     return stat.isDirectory();
 }
 
-export function isSymbolicLink(path:string):boolean{
+export function isSymbolicLink(path:string):boolean {
     path = escapePath(path);
-    try{
+    try {
         var stat = FS.statSync(path);
     }
-    catch(e){
+    catch (e) {
         return false;
     }
     return stat.isSymbolicLink();
@@ -170,10 +170,10 @@ export function isSymbolicLink(path:string):boolean{
 
 export function isFile(path:string):boolean {
     path = escapePath(path);
-    try{
+    try {
         var stat = FS.statSync(path);
     }
-    catch(e){
+    catch (e) {
         return false;
     }
     return stat.isFile();
@@ -199,22 +199,22 @@ function _copy_dir(sourceDir, outputDir) {
  */
 export function remove(path:string):void {
     path = escapePath(path);
-    try{
+    try {
         FS.lstatSync(path).isDirectory()
             ? rmdir(path)
             : FS.unlinkSync(path)
     }
-    catch (e){
+    catch (e) {
     }
 }
 
 function rmdir(path) {
     var files = [];
-    if( FS.existsSync(path) ) {
+    if (FS.existsSync(path)) {
         files = FS.readdirSync(path);
-        files.forEach(function(file){
+        files.forEach(function (file) {
             var curPath = path + "/" + file;
-            if(FS.statSync(curPath).isDirectory()) {
+            if (FS.statSync(curPath).isDirectory()) {
                 rmdir(curPath);
             }
             else {
@@ -230,7 +230,7 @@ function rmdir(path) {
  */
 export function getDirectory(path:string):string {
     path = escapePath(path);
-    return Path.dirname(path)+"/";
+    return Path.dirname(path) + "/";
 }
 
 /**
@@ -239,12 +239,12 @@ export function getDirectory(path:string):string {
 export function getExtension(path:string):string {
     path = escapePath(path);
     var index = path.lastIndexOf(".");
-    if(index==-1)
+    if (index == -1)
         return "";
     var i = path.lastIndexOf("/");
-    if(i>index)
+    if (i > index)
         return "";
-    return path.substring(index+1);
+    return path.substring(index + 1);
 }
 
 /**
@@ -272,31 +272,29 @@ export function getFileName(path:string):string {
  * @param path 要搜索的文件夹
  * @param relative 是否返回相对路径，若不传入或传入false，都返回绝对路径。
  */
-export function getDirectoryListing(path:string,relative:boolean=false):string[]{
+export function getDirectoryListing(path:string, relative:boolean = false):string[] {
     path = escapePath(path);
-    try{
+    try {
         var list = FS.readdirSync(path);
     }
-    catch (e){
+    catch (e) {
         return [];
     }
     var length = list.length;
-    if(!relative){
-        for(var i = length-1;i>=0;i--){
+    if (!relative) {
+        for (var i = length - 1; i >= 0; i--) {
             if (list[i].charAt(0) == ".") {
-                list.splice(i,1);
+                list.splice(i, 1);
             }
-            else
-            {
-                list[i] = joinPath(path,list[i]);
+            else {
+                list[i] = joinPath(path, list[i]);
             }
         }
     }
-    else
-    {
-        for(i = length-1;i>=0;i--){
+    else {
+        for (i = length - 1; i >= 0; i--) {
             if (list[i].charAt(0) == ".") {
-                list.splice(i,1);
+                list.splice(i, 1);
             }
         }
     }
@@ -310,14 +308,14 @@ export function getDirectoryListing(path:string,relative:boolean=false):string[]
  */
 export function search(dir:string, extension:string):string[] {
     var list = [];
-    try{
+    try {
         var stat = FS.statSync(dir);
     }
-    catch(e){
+    catch (e) {
         return list;
     }
     if (stat.isDirectory()) {
-        findFiles(dir,list,extension,null);
+        findFiles(dir, list, extension, null);
     }
     return list;
 }
@@ -329,50 +327,49 @@ export function search(dir:string, extension:string):string[] {
 export function searchByFunction(dir:string, filterFunc:Function):string[] {
     var list = [];
     var checkDir = arguments[2];
-    try{
+    try {
         var stat = FS.statSync(dir);
     }
-    catch(e){
+    catch (e) {
         return list;
     }
     if (stat.isDirectory()) {
-        findFiles(dir,list,"",filterFunc,checkDir);
+        findFiles(dir, list, "", filterFunc, checkDir);
     }
     return list;
 }
 
 
-
-function findFiles(filePath:string,list:string[],extension:string,filterFunc?:Function,checkDir?:boolean) {
+function findFiles(filePath:string, list:string[], extension:string, filterFunc?:Function, checkDir?:boolean) {
     var files = FS.readdirSync(filePath);
     var length = files.length;
     for (var i = 0; i < length; i++) {
         if (files[i].charAt(0) == ".") {
             continue;
         }
-        var path = joinPath(filePath ,files[i]);
+        var path = joinPath(filePath, files[i]);
         var stat = FS.statSync(path);
         if (stat.isDirectory()) {
-            if(checkDir){
+            if (checkDir) {
                 if (!filterFunc(path)) {
                     continue;
                 }
             }
-            findFiles(path, list,extension,filterFunc);
+            findFiles(path, list, extension, filterFunc);
         }
         else if (filterFunc != null) {
             if (filterFunc(path)) {
                 list.push(path);
             }
         }
-        else if(extension){
+        else if (extension) {
             var len = extension.length;
-            if(path.charAt(path.length-len-1)=="."&&
-                path.substr(path.length-len,len).toLowerCase()==extension){
+            if (path.charAt(path.length - len - 1) == "." &&
+                path.substr(path.length - len, len).toLowerCase() == extension) {
                 list.push(path);
             }
         }
-        else{
+        else {
             list.push(path);
         }
     }
@@ -397,8 +394,8 @@ export function escapePath(path:string):string {
 /**
  * 连接路径,支持传入多于两个的参数。也支持"../"相对路径解析。返回的分隔符为Unix风格。
  */
-export function joinPath(dir:string,filename:string):string{
-    var path = Path.join.apply(null,arguments);
+export function joinPath(dir:string, filename:string):string {
+    var path = Path.join.apply(null, arguments);
     path = escapePath(path);
     return path;
 }

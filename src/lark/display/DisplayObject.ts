@@ -27,17 +27,18 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark{
+module lark {
     /**
      * 显示对象基类
      */
-    export class DisplayObject extends HashObject{
+    export class DisplayObject extends HashObject {
         /**
          * 创建一个显示对象
          */
-        public constructor(){
+        public constructor() {
             super();
         }
+
         /**
          * 表示 DisplayObject 的实例名称。
          * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
@@ -105,6 +106,7 @@ module lark{
         public get scaleX():number {
             return this._scaleX;
         }
+
         public set scaleX(value:number) {
             this._scaleX = value;
         }
@@ -119,6 +121,7 @@ module lark{
         public get scaleY():number {
             return this._scaleY;
         }
+
         public set scaleY(value:number) {
             this._scaleY = value;
         }
@@ -148,6 +151,7 @@ module lark{
         public get rotation():number {
             return this._rotation;
         }
+
         public set rotation(value:number) {
             this._rotation = value;
         }
@@ -174,6 +178,7 @@ module lark{
         public get touchEnabled():boolean {
             return this._touchEnabled;
         }
+
         public set touchEnabled(value:boolean) {
             this._touchEnabled = value;
         }
@@ -183,7 +188,7 @@ module lark{
         /**
          * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
          */
-        public get scrollRect():Rectangle{
+        public get scrollRect():Rectangle {
             return this._scrollRect;
         }
 
@@ -199,6 +204,7 @@ module lark{
         public get width():number {
             return this._width;
         }
+
         public set width(value:number) {
             this._width = value;
         }
@@ -211,6 +217,7 @@ module lark{
         public get height():number {
             return this._height;
         }
+
         public set height(value:number) {
             this._height = value;
         }

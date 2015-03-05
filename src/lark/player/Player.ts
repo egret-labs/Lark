@@ -27,18 +27,18 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark{
+module lark {
     /**
      * Lark播放器
      */
-    export class Player extends HashObject{
+    export class Player extends HashObject {
 
         /**
          * 播放器对象不允许自行实例化。
          */
-        public constructor(context:IPlayerContext,entryClassName:string){
+        public constructor(context:IPlayerContext, entryClassName:string) {
             super();
-            if(!context){
+            if (!context) {
                 throw new Error("Lark播放器实例化失败，IPlayerContext不能为空！");
             }
             this.context = context;
@@ -54,48 +54,51 @@ module lark{
          * 舞台引用
          */
         private stage:Stage;
+
         /**
          * 启动播放器
          */
-        public start():void{
-            if(!this.context){
+        public start():void {
+            if (!this.context) {
                 return;
             }
-            if(!this.stage){
+            if (!this.stage) {
                 this.initialize();
             }
 
         }
 
-        private initialize():void{
+        private initialize():void {
             this.stage = new lark.Stage();
             var rootClass;
-            if(this.entryClassName){
+            if (this.entryClassName) {
                 rootClass = lark.getDefinitionByName(this.entryClassName);
             }
-            if(rootClass) {
+            if (rootClass) {
                 var rootContainer:any = new rootClass();
-                if(rootContainer instanceof lark.DisplayObject){
-                   // this.stage.addChild(rootContainer);
+                if (rootContainer instanceof lark.DisplayObject) {
+                    // this.stage.addChild(rootContainer);
                 }
-                else{
-                    throw new Error("Lark入口类必须是lark.DisplayObject的子类: "+this.entryClassName);
+                else {
+                    throw new Error("Lark入口类必须是lark.DisplayObject的子类: " + this.entryClassName);
                 }
             }
-            else{
-                throw new Error("找不到Lark入口类: "+this.entryClassName);
+            else {
+                throw new Error("找不到Lark入口类: " + this.entryClassName);
             }
         }
+
         /**
          * 停止播放器，停止后将不能重新启动。
          */
-        public stop():void{
+        public stop():void {
             this.context = null;
         }
+
         /**
          * 暂停播放器，后续可以通过调用start()重新启动播放器。
          */
-        public pause():void{
+        public pause():void {
 
         }
     }

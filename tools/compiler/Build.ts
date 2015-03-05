@@ -32,40 +32,40 @@
 import TypeScript = require("../lib/typescript/tsc");
 import FileUtil = require("../lib/FileUtil");
 
-class Build{
+class Build {
 
-    public constructor(projectDir:string){
+    public constructor(projectDir:string) {
         this.projectDir = projectDir;
     }
 
     private projectDir:string;
 
-    public run():void{
+    public run():void {
 
         //清理bin-debug目录
-        var debugPath = FileUtil.joinPath(this.projectDir,"bin-debug/");
+        var debugPath = FileUtil.joinPath(this.projectDir, "bin-debug/");
         var fileList = FileUtil.getDirectoryListing(debugPath);
         var length = fileList.length;
-        for(var i=0;i<length;i++){
+        for (var i = 0; i < length; i++) {
             var path = fileList[i];
             FileUtil.remove(path);
         }
         //拷贝模板文件
-        var tempatePath = FileUtil.joinPath(this.projectDir,"template/");
+        var tempatePath = FileUtil.joinPath(this.projectDir, "template/");
         fileList = FileUtil.getDirectoryListing(tempatePath);
         length = fileList.length;
-        for(i=0;i<length;i++){
+        for (i = 0; i < length; i++) {
             path = fileList[i];
             var destPath = path.substring(tempatePath.length);
-            destPath = FileUtil.joinPath(debugPath,destPath);
-            FileUtil.copy(path,destPath);
+            destPath = FileUtil.joinPath(debugPath, destPath);
+            FileUtil.copy(path, destPath);
         }
-        var srcPath:string = FileUtil.joinPath(this.projectDir,"src");
-        var tsList:string[] = FileUtil.search(srcPath,"ts");
+        var srcPath:string = FileUtil.joinPath(this.projectDir, "src");
+        var tsList:string[] = FileUtil.search(srcPath, "ts");
         var output = FileUtil.joinPath(this.projectDir, "bin-debug");
         var cmd = tsList.join(" ") + " -t ES5 --outDir " + "\"" + output + "\"";
-        FileUtil.save("tsc_config_temp.txt",cmd);
-        TypeScript.exit = function():void{
+        FileUtil.save("tsc_config_temp.txt", cmd);
+        TypeScript.exit = function ():void {
             FileUtil.remove("tsc_config_temp.txt");
         };
         TypeScript.executeCommandLine(["@tsc_config_temp.txt"]);
