@@ -3,5 +3,10 @@
  */
 
 module lark {
+    export class Matrix extends HashObject{
 
+        public constructor(){
+            super();
+        }
+    }
 }
