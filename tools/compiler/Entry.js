@@ -29,9 +29,12 @@
 /// <reference path="../lib/node.d.ts"/>
 var Build = require("./Build");
 function executeCommandLine(currentDir, args) {
+    var build = new Build(currentDir);
     switch (args[0]) {
         case "build":
-            var build = new Build(currentDir);
+            build.run();
+            break;
+        default:
             build.run();
             break;
     }

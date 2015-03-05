@@ -32,9 +32,12 @@
 import Build = require("./Build");
 
 function executeCommandLine(currentDir: string,args: string[]): void {
+    var build:Build = new Build(currentDir);
     switch(args[0]){
         case "build":
-            var build:Build = new Build(currentDir);
+            build.run();
+            break;
+        default :
             build.run();
             break;
     }
