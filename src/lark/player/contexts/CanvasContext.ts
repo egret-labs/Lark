@@ -65,8 +65,6 @@ module lark{
             this.canvas.width = window.innerWidth;
             this.canvas.height =  window.innerHeight;
             var cxt = this.canvas.getContext("2d");
-            cxt.fillStyle="#009aff";
-            cxt.fillRect(0,0, this.canvas.width, this.canvas.height);
             var img = new Image();
             img.src = "image/test.png";
             img.onload = ()=>{
