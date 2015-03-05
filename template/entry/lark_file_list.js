@@ -1,9 +1,6 @@
 var lark_file_list =
     [
         "lark/utils/getDefinitionByName.js",
-        "lark/utils/getQualifiedClassName.js",
-        "lark/utils/getQualifiedSuperclassName.js",
-        "lark/utils/hasDefinition.js",
         "lark/utils/HashObject.js",
         "lark/utils/getTimer.js",
         "lark/display/Texture.js",
