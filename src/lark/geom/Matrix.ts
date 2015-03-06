@@ -325,7 +325,6 @@ module lark {
     var PI = Math.PI;
     var HalfPI = PI / 2;
     var PacPI = PI + HalfPI;
-    var TwoPI = PI * 2;
 
     function cos(angle: number): number {
         switch (angle) {
