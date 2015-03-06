@@ -56,6 +56,12 @@ module lark {
         public y:number;
 
         /**
+         * 从 (0,0) 到此点的线段长度。
+         */
+        public length():number{
+            return Math.sqrt(this.x*this.x+this.y*this.y);
+        }
+        /**
          * 将 Point 的成员设置为指定值
          * @param x 该对象的x属性值
          * @param y 该对象的y属性值
