@@ -57,8 +57,11 @@ var Build = (function () {
         var output = FileUtil.joinPath(this.projectDir, "bin-debug");
         var cmd = tsList.join(" ") + " -t ES5 --outDir " + "\"" + output + "\"";
         FileUtil.save("tsc_config_temp.txt", cmd);
-        TypeScript.exit = function () {
+        TypeScript.exit = function (exitCode) {
             FileUtil.remove("tsc_config_temp.txt");
+            if (exitCode != 0) {
+                process.exit(exitCode);
+            }
         };
         TypeScript.executeCommandLine(["@tsc_config_temp.txt"]);
     };
