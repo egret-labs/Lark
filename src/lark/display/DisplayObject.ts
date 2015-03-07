@@ -45,16 +45,7 @@ module lark {
          */
         public name:string;
 
-        /**
-         * BlendMode 类中的一个值，用于指定要使用的混合模式。
-         * 内部绘制位图的方法有两种。 如果启用了混合模式或外部剪辑遮罩，则将通过向矢量渲染器添加有位图填充的正方形来绘制位图。
-         * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
-         */
-        public blendMode:string = null;
-
-
         private _parent:DisplayObjectContainer;
-
         /**
          * 表示包含此显示对象的 DisplayObjectContainer 对象。
          * 使用 parent 属性可以指定高于显示列表层次结构中当前显示对象的显示对象的相对路径。
@@ -63,36 +54,54 @@ module lark {
             return this._parent;
         }
 
-        public _parentChanged(parent:DisplayObjectContainer):void {
+        public _setParent(parent:DisplayObjectContainer):void {
             this._parent = parent;
         }
 
-        private _x:number = 0;
+        private _matrix:Matrix = new Matrix();
+        /**
+         * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。
+         */
+        public get matrix():Matrix {
+            return this._matrix;
+        }
+
+        public set matrix(value:Matrix) {
+            if (value) {
+                this._matrix.copyFrom(value);
+            }
+        }
+
         /**
          * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。
          * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
          * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
          */
         public get x():number {
-            return this._x;
+            return this._matrix.tx;
         }
 
         public set x(value:number) {
-            this._x = value;
+            if (value === this._matrix.tx) {
+                return;
+            }
+            this._matrix.tx = value;
         }
 
-        private _y:number = 0;
         /**
          * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 y 坐标。
          * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
          * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
          */
         public get y():number {
-            return this._y;
+            return this._matrix.ty;
         }
 
         public set y(value:number) {
-            this._y = value;
+            if (value === this._matrix.ty) {
+                return;
+            }
+            this._matrix.ty = value;
         }
 
 
@@ -126,21 +135,6 @@ module lark {
             this._scaleY = value;
         }
 
-
-        private _visible:boolean = true;
-        /**
-         * 显示对象是否可见。
-         * 不可见的显示对象已被禁用。例如，如果实例的 visible=false，则无法单击该对象。
-         * 默认值为 true 可见
-         */
-        public get visible():boolean {
-            return this._visible;
-        }
-
-        public set visible(value:boolean) {
-            this._visible = value;
-        }
-
         private _rotation:number = 0;
         /**
          * 表示 DisplayObject 实例距其原始方向的旋转程度，以度为单位。
@@ -154,6 +148,46 @@ module lark {
 
         public set rotation(value:number) {
             this._rotation = value;
+        }
+
+        private _width:number = 0;
+        /**
+         * 表示显示对象的宽度，以像素为单位。
+         * 宽度是根据显示对象内容的范围来计算的。优先顺序为 显式设置宽度 > 测量宽度。
+         */
+        public get width():number {
+            return this._width;
+        }
+
+        public set width(value:number) {
+            this._width = value;
+        }
+
+        private _height:number = 0;
+        /**
+         * 表示显示对象的高度，以像素为单位。
+         * 高度是根据显示对象内容的范围来计算的。优先顺序为 显式设置高度 > 测量高度。
+         */
+        public get height():number {
+            return this._height;
+        }
+
+        public set height(value:number) {
+            this._height = value;
+        }
+
+        private _visible:boolean = true;
+        /**
+         * 显示对象是否可见。
+         * 不可见的显示对象已被禁用。例如，如果实例的 visible=false，则无法单击该对象。
+         * 默认值为 true 可见
+         */
+        public get visible():boolean {
+            return this._visible;
+        }
+
+        public set visible(value:boolean) {
+            this._visible = value;
         }
 
         private _alpha:number = 1;
@@ -196,30 +230,38 @@ module lark {
             this._scrollRect = value;
         }
 
-        private _width:number = 0;
+        private _blendMode:string = null;
         /**
-         * 表示显示对象的宽度，以像素为单位。
-         * 宽度是根据显示对象内容的范围来计算的。优先顺序为 显式设置宽度 > 测量宽度。
+         * BlendMode 类中的一个值，用于指定要使用的混合模式。
+         * 内部绘制位图的方法有两种。 如果启用了混合模式或外部剪辑遮罩，则将通过向矢量渲染器添加有位图填充的正方形来绘制位图。
+         * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
          */
-        public get width():number {
-            return this._width;
+        public get blendMode():string {
+            return this._blendMode;
         }
 
-        public set width(value:number) {
-            this._width = value;
+        public set blendMode(value:string) {
+            this._blendMode = value;
         }
 
-        private _height:number = 0;
+        private _mask:DisplayObject;
         /**
-         * 表示显示对象的高度，以像素为单位。
-         * 高度是根据显示对象内容的范围来计算的。优先顺序为 显式设置高度 > 测量高度。
+         * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
+         * 但不绘制 mask 对象本身。将 mask 设置为 null 可删除蒙版。要能够缩放遮罩对象，它必须在显示列表中。要能够拖动蒙版
+         * Sprite 对象，它必须在显示列表中。当将 cacheAsBitmap 属性设置为 true，将 cacheAsBitmapMatrix 属性设置为 Matrix
+         * 对象来缓存显示对象时，遮罩对象和被遮罩的显示对象必须是同一缓存位图的一部分。因此，如果缓存显示对象，则遮罩必须是显示
+         * 对象的子级。如果缓存显示列表上的显示对象的祖代，则遮罩必须是该祖代的子级或其后代之一。如果缓存遮罩对象的多个祖代，
+         * 则遮罩必须是显示列表中离遮罩对象最近的缓存容器的后代。
+         * 注意：单个 mask 对象不能用于遮罩多个执行调用的显示对象。在将 mask 分配给第二个显示对象时，会撤消其作为第一个对象的遮罩，
+         * 该对象的 mask 属性将变为 null。
          */
-        public get height():number {
-            return this._height;
+        public get mask():DisplayObject {
+            return this._mask;
         }
 
-        public set height(value:number) {
-            this._height = value;
+        public set mask(value:DisplayObject) {
+            this._mask = value;
         }
     }
+
 }

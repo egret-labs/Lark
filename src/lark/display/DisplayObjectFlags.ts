@@ -27,80 +27,78 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
+
 module lark {
     /**
      * @exclude
-     * Lark播放器
+     * 显示对象失效标志
      */
-    export class Player extends HashObject {
+    export enum DisplayObjectFlags {
+        None = 0x0000,
 
         /**
-         * 播放器对象不允许自行实例化。
+         * 显示对象可见的标志
          */
-        public constructor(context:IPlayerContext, entryClassName:string) {
-            super();
-            if (!context) {
-                throw new Error("Lark播放器实例化失败，IPlayerContext不能为空！");
-            }
-            this.context = context;
-            this.entryClassName = entryClassName;
-        }
-
-        private context:IPlayerContext;
-        /**
-         * 入口类的完整类名
-         */
-        private entryClassName:string;
-        /**
-         * 舞台引用
-         */
-        private stage:Stage;
+        Visible = 0x0001,
 
         /**
-         * 启动播放器
+         * 显示对象的matrix属性失效标志，通常因为scaleX，width等属性发生改变。
          */
-        public start():void {
-            if (!this.context) {
-                return;
-            }
-            if (!this.stage) {
-                this.initialize();
-            }
-
-        }
-
-        private initialize():void {
-            this.stage = new lark.Stage();
-            var rootClass;
-            if (this.entryClassName) {
-                rootClass = lark.getDefinitionByName(this.entryClassName);
-            }
-            if (rootClass) {
-                var rootContainer:any = new rootClass();
-                if (rootContainer instanceof lark.DisplayObject) {
-                    // this.stage.addChild(rootContainer);
-                }
-                else {
-                    throw new Error("Lark入口类必须是lark.DisplayObject的子类: " + this.entryClassName);
-                }
-            }
-            else {
-                throw new Error("找不到Lark入口类: " + this.entryClassName);
-            }
-        }
+        InvalidMatrix = 0x0008,
 
         /**
-         * 停止播放器，停止后将不能重新启动。
+         * 显示对象应该被缓存成位图的标志，即使没有设置这个标志，也有可能被缓存成位图，例如含有滤镜的情况。
+         * 而当设置了这个标志，如果内存不足，也会放弃缓存。
          */
-        public stop():void {
-            this.context = null;
-        }
+        CacheAsBitmap = 0x010000,
 
         /**
-         * 暂停播放器，后续可以通过调用start()重新启动播放器。
+         * 显示对象的matrix对象从上一次同步后发生了改变。
          */
-        public pause():void {
+        DirtyMatrix = 0x100000,
 
-        }
+        /**
+         * 显示对象的子项列表发生改变
+         */
+        DirtyChildren = 0x200000,
+
+        /**
+         * 显示对象的位图数据从上一次同步后发生了改变。
+         */
+        DirtyBitmapData = 0x1000000,
+
+        /**
+         * 显示对象的遮罩对象从上一次同步后发生了改变。
+         */
+        DirtyMask = 0x8000000,
+
+        /**
+         * 显示对象的层级从上一次同步后发生了改变。
+         */
+        DirtyClipDepth = 0x10000000,
+
+        /**
+         * 显示对象的子孙项列表从上一次同步后发生了改变。
+         */
+        DirtyDescendents = 0x20000000,
+
+        /**
+         * 显示对象的其他属性从上一次同步后发生了改变
+         * 通常是以下属性改变：
+         * blendMode,
+         * scale9Grid,
+         * cacheAsBitmap,
+         * filters,
+         * visible
+         */
+        DirtyMiscellaneousProperties = 0x40000000,
+
+        /**
+         * 所有需要同步的属性全都失效.
+         */
+        Dirty = DirtyMatrix | DirtyChildren | DirtyBitmapData | DirtyMask | DirtyClipDepth |
+            DirtyMiscellaneousProperties
+
     }
+
 }

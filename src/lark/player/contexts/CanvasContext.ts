@@ -29,6 +29,7 @@
 
 module lark {
     /**
+     * @exclude
      * Lark播放器在Canvas上封装的实现
      */
     export class CanvasContext extends HashObject implements IPlayerContext {

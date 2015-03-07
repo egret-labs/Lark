@@ -30,6 +30,7 @@
 module lark {
 
     /**
+     * @exclude
      * IPlayerContext接口定义Lark播放器与平台相关的操作，包括绘制，网络，交互操作等。
      */
     export interface IPlayerContext extends IHashObject {
