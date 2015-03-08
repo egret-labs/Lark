@@ -40,6 +40,92 @@ module lark {
         }
 
         /**
+         * 格式化旋转角度的值
+         */
+        private static clampRotation(value): number {
+            value %= 360;
+            if (value > 180) {
+                value -= 360;
+            } else if (value < -180) {
+                value += 360;
+            }
+            return value;
+        }
+
+        private _displayObjectFlags:number = 0;
+
+        $setFlags(flags:DisplayObjectFlags) {
+            this._displayObjectFlags |= flags;
+        }
+
+        /**
+         * 使用此方法来设置失效标记，将同时将失效标志传递给父级。
+         */
+        $setDirtyFlags(flags:DisplayObjectFlags) {
+            this._displayObjectFlags |= flags;
+            if (this._parent) {
+                this._parent.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
+            }
+        }
+
+        $toggleFlags(flags:DisplayObjectFlags, on:boolean) {
+            if (on) {
+                this._displayObjectFlags |= flags;
+            } else {
+                this._displayObjectFlags &= ~flags;
+            }
+        }
+
+        $removeFlags(flags:DisplayObjectFlags) {
+            this._displayObjectFlags &= ~flags;
+        }
+
+        $hasFlags(flags:DisplayObjectFlags):boolean {
+            return (this._displayObjectFlags & flags) === flags;
+        }
+
+        $hasAnyFlags(flags:DisplayObjectFlags):boolean {
+            return !!(this._displayObjectFlags & flags);
+        }
+
+        /**
+         * 沿着显示列表向上传递标志量，如果标志量已经被设置过就停止传递。
+         */
+        $propagateFlagsUp(flags:DisplayObjectFlags) {
+            if (this.$hasFlags(flags)) {
+                return;
+            }
+            this.$setFlags(flags);
+            var parent = this._parent;
+            if (parent) {
+                parent.$propagateFlagsUp(flags);
+            }
+        }
+
+        /**
+         * 沿着显示列表向下传递标志量，非容器直接设置自身的flag，此方法会在DisplayObjectContainer中被覆盖。
+         */
+        $propagateFlagsDown(flags:DisplayObjectFlags) {
+            this.$setFlags(flags);
+        }
+
+
+        $invalidateMatrix() {
+            this.$setDirtyFlags(DisplayObjectFlags.DirtyMatrix);
+            this.$setFlags(DisplayObjectFlags.InvalidMatrix);
+            this.$invalidatePosition();
+        }
+
+        /**
+         * 标记这个显示对象在父级容器的位置发生了改变。
+         * Marks this object as having been moved in its parent display object.
+         */
+        $invalidatePosition() {
+
+        }
+
+
+        /**
          * 表示 DisplayObject 的实例名称。
          * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
          */
@@ -54,7 +140,7 @@ module lark {
             return this._parent;
         }
 
-        public _setParent(parent:DisplayObjectContainer):void {
+        $setParent(parent:DisplayObjectContainer):void {
             this._parent = parent;
         }
 
@@ -63,14 +149,40 @@ module lark {
          * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。
          */
         public get matrix():Matrix {
+            return this.$getMatrix();
+        }
+
+        $getMatrix():Matrix {
+            if (this.$hasFlags(DisplayObjectFlags.InvalidMatrix)) {
+                this._matrix.$updateScaleAndRotation(this._scaleX, this._scaleY, this._skewX, this._skewY);
+                this.$removeFlags(DisplayObjectFlags.InvalidMatrix);
+            }
             return this._matrix;
         }
 
         public set matrix(value:Matrix) {
+            this.$setMatrix(value);
             if (value) {
                 this._matrix.copyFrom(value);
             }
         }
+
+        $setMatrix(matrix: Matrix): void {
+            if (this._matrix.equals(matrix)) {
+                return;
+            }
+            var m = this._matrix;
+            m.copyFrom(matrix);
+            this._scaleX = m.$getScaleX();
+            this._scaleY = m.$getScaleY();
+            this._skewX = matrix.$getSkewX();
+            this._skewY = matrix.$getSkewY();
+            this._rotation = DisplayObject.clampRotation(this._skewY * 180 / Math.PI);
+            this.$removeFlags(DisplayObjectFlags.InvalidMatrix);
+            this.$setDirtyFlags(DisplayObjectFlags.DirtyMatrix);
+            this.$invalidatePosition();
+        }
+
 
         /**
          * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。
@@ -117,7 +229,11 @@ module lark {
         }
 
         public set scaleX(value:number) {
+            if (value === this._scaleX) {
+                return;
+            }
             this._scaleX = value;
+            this.$invalidateMatrix();
         }
 
         private _scaleY:number = 1;
@@ -132,9 +248,15 @@ module lark {
         }
 
         public set scaleY(value:number) {
+            if (value === this._scaleY) {
+                return;
+            }
             this._scaleY = value;
+            this.$invalidateMatrix();
         }
 
+        private _skewX:number = 0;
+        private _skewY:number = 0;
         private _rotation:number = 0;
         /**
          * 表示 DisplayObject 实例距其原始方向的旋转程度，以度为单位。
@@ -147,7 +269,16 @@ module lark {
         }
 
         public set rotation(value:number) {
+            value = DisplayObject.clampRotation(value);
+            if (value === this._rotation) {
+                return;
+            }
+            var delta = value - this._rotation;
+            var angle = delta / 180 * Math.PI;
+            this._skewX += angle;
+            this._skewY += angle;
             this._rotation = value;
+            this.$invalidateMatrix();
         }
 
         private _width:number = 0;
@@ -176,18 +307,22 @@ module lark {
             this._height = value;
         }
 
-        private _visible:boolean = true;
         /**
          * 显示对象是否可见。
          * 不可见的显示对象已被禁用。例如，如果实例的 visible=false，则无法单击该对象。
          * 默认值为 true 可见
          */
         public get visible():boolean {
-            return this._visible;
+            return this.$hasFlags(DisplayObjectFlags.Visible);
         }
 
         public set visible(value:boolean) {
-            this._visible = value;
+            value = !!value;
+            if (value === this.$hasFlags(DisplayObjectFlags.Visible)) {
+                return;
+            }
+            this.$toggleFlags(DisplayObjectFlags.Visible, value);
+            this.$setDirtyFlags(DisplayObjectFlags.DirtyMiscellaneousProperties);
         }
 
         private _alpha:number = 1;
@@ -262,6 +397,7 @@ module lark {
         public set mask(value:DisplayObject) {
             this._mask = value;
         }
+
     }
 
 }

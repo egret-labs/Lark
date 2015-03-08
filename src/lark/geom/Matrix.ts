@@ -28,8 +28,46 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 
-
 module lark {
+
+    var PI = Math.PI;
+    var HalfPI = PI / 2;
+    var PacPI = PI + HalfPI;
+    var TwoPI = PI * 2;
+
+    function cos(angle:number):number {
+        switch (angle) {
+            case HalfPI:
+            case -PacPI:
+                return 0;
+            case PI:
+            case -PI:
+                return -1;
+            case PacPI:
+            case -HalfPI:
+                return 0;
+            default:
+                return Math.cos(angle);
+        }
+    }
+
+    function sin(angle:number):number {
+        switch (angle) {
+            case HalfPI:
+            case -PacPI:
+                return 1;
+            case PI:
+            case -PI:
+                return 0;
+            case PacPI:
+            case -HalfPI:
+                return -1;
+            default:
+                return Math.sin(angle);
+        }
+    }
+
+
     /**
      * Matrix 类表示一个转换矩阵，它确定如何将点从一个坐标空间映射到另一个坐标空间。
      * 您可以对一个显示对象执行不同的图形转换，方法是设置 Matrix 对象的属性，将该 Matrix
@@ -83,41 +121,41 @@ module lark {
         /**
          * 返回一个新的 Matrix 对象，它是此矩阵的克隆，带有与所含对象完全相同的副本。
          */
-        public clone(): Matrix {
-            return new Matrix(this.a,this.b,this.c,this.d,this.tx,this.ty);
+        public clone():Matrix {
+            return new Matrix(this.a, this.b, this.c, this.d, this.tx, this.ty);
         }
 
         /**
          * 将某个矩阵与当前矩阵连接，从而将这两个矩阵的几何效果有效地结合在一起。
          * @param other 要连接到源矩阵的矩阵。
          */
-        public concat(other: Matrix): void {
-            var a0 =  this.a;
-            var b0 =  this.b;
-            var c0 =  this.c;
-            var d0 =  this.d;
+        public concat(other:Matrix):void {
+            var a0 = this.a;
+            var b0 = this.b;
+            var c0 = this.c;
+            var d0 = this.d;
             var tx0 = this.tx;
             var ty0 = this.ty;
 
-            var a1 =  other.a;
-            var b1 =  other.b;
-            var c1 =  other.c;
-            var d1 =  other.d;
+            var a1 = other.a;
+            var b1 = other.b;
+            var c1 = other.c;
+            var d1 = other.d;
             var tx1 = other.tx;
             var ty1 = other.ty;
 
-            var a =  a0 * a1;
-            var b =  0.0;
-            var c =  0.0;
-            var d =  d0 * d1;
+            var a = a0 * a1;
+            var b = 0.0;
+            var c = 0.0;
+            var d = d0 * d1;
             var tx = tx0 * a1 + tx1;
             var ty = ty0 * d1 + ty1;
 
             if (b0 !== 0.0 || c0 !== 0.0 || b1 !== 0.0 || c1 !== 0.0) {
-                a  += b0 * c1;
-                d  += c0 * b1;
-                b  += a0 * b1 + b0 * d1;
-                c  += c0 * a1 + d0 * c1;
+                a += b0 * c1;
+                d += c0 * b1;
+                b += a0 * b1 + b0 * d1;
+                c += c0 * a1 + d0 * c1;
                 tx += ty0 * c1;
                 ty += tx0 * b1;
             }
@@ -133,7 +171,7 @@ module lark {
         /**
          * 将源 Matrix 对象中的所有矩阵数据复制到调用方 Matrix 对象中。
          */
-        public copyFrom(other: Matrix): void {
+        public copyFrom(other:Matrix):void {
             this.a = other.a;
             this.b = other.b;
             this.c = other.c;
@@ -151,14 +189,14 @@ module lark {
          * @param tx 沿 x 轴向右平移（移动）的像素数。
          * @param ty 沿 y 轴向下平移（移动）的像素数。
          */
-        public createBox(scaleX: number, scaleY: number, rotation: number = 0, tx: number = 0, ty: number = 0): void {
+        public createBox(scaleX:number, scaleY:number, rotation:number = 0, tx:number = 0, ty:number = 0):void {
             if (rotation !== 0) {
                 var u = cos(rotation);
                 var v = sin(rotation);
-                this.a =  u * scaleX;
-                this.b =  v * scaleY;
+                this.a = u * scaleX;
+                this.b = v * scaleY;
                 this.c = -v * scaleX;
-                this.d =  u * scaleY;
+                this.d = u * scaleY;
             }
             else {
                 this.a = scaleX;
@@ -179,7 +217,7 @@ module lark {
          * @param tx 沿 x 轴向右平移的距离（以像素为单位）。此值将偏移 width 参数的一半。
          * @param ty 沿 y 轴向下平移的距离（以像素为单位）。此值将偏移 height 参数的一半。
          */
-        public createGradientBox(width: number, height: number, rotation: number = 0, tx: number = 0, ty: number = 0): void {
+        public createGradientBox(width:number, height:number, rotation:number = 0, tx:number = 0, ty:number = 0):void {
             this.createBox(width / 1638.4, height / 1638.4, rotation, tx + width / 2, ty + height / 2);
         }
 
@@ -191,11 +229,11 @@ module lark {
          * @param resultPoint 我们建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，若不传入将创建一个新的Point对象返回。
          * @returns 由应用矩阵转换所产生的点。
          */
-        public deltaTransformPoint(pointX:number,pointY:number,resultPoint?:Point): Point {
+        public deltaTransformPoint(pointX:number, pointY:number, resultPoint?:Point):Point {
             var x = this.a * pointX + this.c * pointY;
             var y = this.b * pointX + this.d * pointY;
-            if(resultPoint){
-                resultPoint.setTo(x,y);
+            if (resultPoint) {
+                resultPoint.setTo(x, y);
                 return resultPoint;
             }
             return new Point(x, y);
@@ -205,7 +243,7 @@ module lark {
          * 为每个矩阵属性设置一个值，该值将导致矩阵无转换。通过应用恒等矩阵转换的对象将与原始对象完全相同。
          * 调用 identity() 方法后，生成的矩阵具有以下属性：a=1、b=0、c=0、d=1、tx=0 和 ty=0。
          */
-        public identity(): void {
+        public identity():void {
             this.a = this.d = 1;
             this.b = this.c = this.tx = this.ty = 0;
         }
@@ -236,7 +274,7 @@ module lark {
          * rotate() 方法将更改 Matrix 对象的 a、b、c 和 d 属性。
          * @param angle 以弧度为单位的旋转角度。
          */
-        public rotate(angle: number): void {
+        public rotate(angle:number):void {
             angle = +angle;
             if (angle !== 0) {
                 var u = cos(angle);
@@ -247,10 +285,10 @@ module lark {
                 var td = this.d;
                 var ttx = this.tx;
                 var tty = this.ty;
-                this.a = ta  * u - tb  * v;
-                this.b = ta  * v + tb  * u;
-                this.c = tc  * u - td  * v;
-                this.d = tc  * v + td  * u;
+                this.a = ta * u - tb * v;
+                this.b = ta * v + tb * u;
+                this.c = tc * u - td * v;
+                this.d = tc * v + td * u;
                 this.tx = ttx * u - tty * v;
                 this.ty = ttx * v + tty * u;
             }
@@ -262,7 +300,7 @@ module lark {
          * @param sx 用于沿 x 轴缩放对象的乘数。
          * @param sy 用于沿 y 轴缩放对象的乘数。
          */
-        public scale(sx: number, sy: number): void {
+        public scale(sx:number, sy:number):void {
             if (sx !== 1) {
                 this.a *= sx;
                 this.c *= sx;
@@ -284,7 +322,7 @@ module lark {
          * @param tx 沿 x 轴平移每个点的距离。
          * @param ty 沿 y 轴平移每个点的距离。
          */
-        public setTo(a: number, b: number, c: number, d: number, tx: number, ty: number): void {
+        public setTo(a:number, b:number, c:number, d:number, tx:number, ty:number):void {
             this.a = a;
             this.b = b;
             this.c = c;
@@ -300,12 +338,12 @@ module lark {
          * @param resultPoint 我们建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，若不传入将创建一个新的Point对象返回。
          * @returns 由应用矩阵转换所产生的点。
          */
-        public transformPoint(pointX:number,pointY:number,resultPoint?:Point): Point {
+        public transformPoint(pointX:number, pointY:number, resultPoint?:Point):Point {
 
             var x = this.a * pointX + this.c * pointY + this.tx;
             var y = this.b * pointX + this.d * pointY + this.ty;
-            if(resultPoint){
-                resultPoint.setTo(x,y);
+            if (resultPoint) {
+                resultPoint.setTo(x, y);
                 return resultPoint;
             }
             return new Point(x, y);
@@ -316,33 +354,74 @@ module lark {
          * @param dx 沿 x 轴向右移动的量（以像素为单位）。
          * @param dy 沿 y 轴向下移动的量（以像素为单位）。
          */
-        public translate(dx: number, dy: number): void {
+        public translate(dx:number, dy:number):void {
             this.tx += dx;
             this.ty += dy;
         }
-    }
 
-    var PI = Math.PI;
-    var HalfPI = PI / 2;
-    var PacPI = PI + HalfPI;
-
-    function cos(angle: number): number {
-        switch (angle) {
-            case HalfPI: case -PacPI: return 0;
-            case PI: case -PI: return -1;
-            case PacPI: case -HalfPI: return 0;
-            default:
-                return Math.cos(angle);
+        /**
+         * 是否与另一个矩阵数据相等
+         * @param other 要比较的另一个矩阵对象。
+         * @returns 是否相等，ture表示相等。
+         */
+        public equals(other: Matrix): boolean {
+            return this.a === other.a && this.b === other.b &&
+                this.c === other.c && this.d === other.d &&
+                this.tx === other.tx && this.ty === other.ty;
         }
-    }
 
-    function sin(angle: number): number {
-        switch (angle) {
-            case HalfPI: case -PacPI: return 1;
-            case PI: case -PI: return 0;
-            case PacPI: case -HalfPI: return -1;
-            default:
-                return Math.sin(angle);
+        private getDeterminant() {
+            return this.a * this.d - this.b * this.c;
         }
+
+        $getScaleX():number {
+            var a = this.a;
+            var b = this.b;
+            if (a === 1 && b === 0) {
+                return 1;
+            }
+            var result = Math.sqrt(a * a + b * b);
+            return this.getDeterminant() < 0 ? -result : result;
+        }
+
+        $getScaleY():number {
+            var c = this.c;
+            var d = this.d;
+            if (c === 0 && d === 1) {
+                return 1;
+            }
+            var result = Math.sqrt(c * c + d * d);
+            return this.getDeterminant() < 0 ? -result : result;
+        }
+
+        $getSkewX():number {
+            return Math.atan2(this.d, this.c) - (PI / 2);
+        }
+
+        $getSkewY():number {
+            return Math.atan2(this.b, this.a);
+        }
+
+        $updateScaleAndRotation(scaleX:number, scaleY:number, skewX:number, skewY:number) {
+            if ((skewX === 0 || skewX === TwoPI) && (skewY === 0 || skewY === TwoPI)) {
+                this.a = scaleX;
+                this.b = this.c = 0;
+                this.d = scaleY;
+                return;
+            }
+
+            var u = cos(skewX);
+            var v = sin(skewX);
+            if (skewX === skewY) {
+                this.a = u * scaleX;
+                this.b = v * scaleX;
+            } else {
+                this.a = cos(skewY) * scaleX;
+                this.b = sin(skewY) * scaleX;
+            }
+            this.c = -v * scaleY;
+            this.d = u * scaleY;
+        }
+
     }
 }

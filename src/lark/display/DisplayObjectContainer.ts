@@ -37,6 +37,23 @@ module lark {
          */
         public constructor() {
             super();
+            this.$setDirtyFlags(DisplayObjectFlags.DirtyChildren);
         }
+
+        /**
+         * Propagates flags down the display list. Propagation stops if all flags are already set.
+         */
+        $propagateFlagsDown(flags: DisplayObjectFlags) {
+            if (this.$hasFlags(flags)) {
+                return;
+            }
+            this.$setFlags(flags);
+            var children = this._children;
+            for (var i = 0; i < children.length; i++) {
+                children[i].$propagateFlagsDown(flags);
+            }
+        }
+
+        private _children:DisplayObject[] = [];
     }
 }
