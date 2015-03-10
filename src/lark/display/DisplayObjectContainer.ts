@@ -40,6 +40,14 @@ module lark {
             this.$setDirtyFlags(DisplayObjectFlags.DirtyChildren);
         }
 
+        /**
+         *
+         */
+        private $invalidateChildren() {
+            this.$setDirtyFlags(DisplayObjectFlags.DirtyChildren);
+            this.$invalidateContentBounds();
+        }
+
         $propagateFlagsDown(flags: DisplayObjectFlags) {
             if (this.$hasFlags(flags)) {
                 return;

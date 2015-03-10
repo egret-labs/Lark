@@ -84,7 +84,6 @@ module lark {
                 this._displayObjectFlags &= ~flags;
             }
         }
-
         $removeFlags(flags:DisplayObjectFlags) {
             this._displayObjectFlags &= ~flags;
         }
@@ -128,6 +127,7 @@ module lark {
         $invalidatePosition() {
             this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
+            this.$invalidateParentContentBounds();
         }
 
 
@@ -324,7 +324,7 @@ module lark {
          * 宽度是根据显示对象内容的范围来计算的。优先顺序为 显式设置宽度 > 测量宽度。
          */
         public get width():number {
-            return this.$getTransformedBounds(this._parent, Rectangle.TEMP).width;
+            return this.getBounds(this._parent, Rectangle.TEMP).width;
         }
 
         public set width(value:number) {
@@ -333,7 +333,7 @@ module lark {
                 return;
             }
             var contentBounds = this.$getContentBounds();
-            var bounds = this.$getTransformedBounds(this._parent, Rectangle.TEMP);
+            var bounds = this.getBounds(this._parent, Rectangle.TEMP);
             var angle = this._rotation / 180 * Math.PI;
             var baseWidth = contentBounds.$getBaseWidth(angle);
             if (!baseWidth) {
@@ -350,7 +350,7 @@ module lark {
          * 高度是根据显示对象内容的范围来计算的。优先顺序为 显式设置高度 > 测量高度。
          */
         public get height():number {
-            return this.$getTransformedBounds(this._parent, Rectangle.TEMP).height;
+            return this.getBounds(this._parent, Rectangle.TEMP).height;
         }
 
         public set height(value:number) {
@@ -359,7 +359,7 @@ module lark {
                 return;
             }
             var contentBounds = this.$getContentBounds();
-            var bounds = this.$getTransformedBounds(this._parent, Rectangle.TEMP);
+            var bounds = this.getBounds(this._parent, Rectangle.TEMP);
             var angle = this._rotation / 180 * Math.PI;
             var baseHeight = contentBounds.$getBaseHeight(angle);
             if (!baseHeight) {
@@ -438,7 +438,7 @@ module lark {
         }
 
         public set touchEnabled(value:boolean) {
-            this._touchEnabled = value;
+            this._touchEnabled = !!value;
         }
 
 
@@ -496,7 +496,24 @@ module lark {
          */
         public getBounds(targetCoordinateSpace:DisplayObject, resultRect?:Rectangle):Rectangle {
             targetCoordinateSpace = targetCoordinateSpace || this;
-            return this.$getTransformedBounds(targetCoordinateSpace, resultRect);
+            var bounds = this.$getContentBounds();
+            if (!resultRect) {
+                resultRect = new lark.Rectangle();
+            }
+            resultRect.copyFrom(bounds);
+            if (targetCoordinateSpace === this || resultRect.isEmpty()) {
+                return resultRect;
+            }
+            var m;
+            if (targetCoordinateSpace) {
+                m = Matrix.TEMP;
+                var invertedTargetMatrix = targetCoordinateSpace.$getInvertedConcatenatedMatrix();
+                invertedTargetMatrix.$preMultiplyInto(this.$getConcatenatedMatrix(), m);
+            } else {
+                m = this.$getConcatenatedMatrix();
+            }
+            m.transformBounds(resultRect);
+            return resultRect;
         }
 
         /**
@@ -527,27 +544,19 @@ module lark {
 
 
         /**
-         * 获取这个显示对象在另一个坐标系空间里的矩形区域。
+         * 标记自身的测量尺寸失效
          */
-        $getTransformedBounds(targetCoordinateSpace:DisplayObject, resultRect?:Rectangle):Rectangle {
-            var bounds = this.$getContentBounds();
-            if (!resultRect) {
-                resultRect = new lark.Rectangle();
+        $invalidateContentBounds(): void {
+            this.$propagateFlagsUp(DisplayObjectFlags.InvalidContentBounds);
+        }
+
+        /**
+         * 标记父级的测量尺寸失效
+         */
+        $invalidateParentContentBounds(): void {
+            if (this._parent) {
+                this._parent.$invalidateContentBounds();
             }
-            resultRect.copyFrom(bounds);
-            if (targetCoordinateSpace === this || resultRect.isEmpty()) {
-                return resultRect;
-            }
-            var m;
-            if (targetCoordinateSpace) {
-                m = Matrix.TEMP;
-                var invertedTargetMatrix = targetCoordinateSpace.$getInvertedConcatenatedMatrix();
-                invertedTargetMatrix.$preMultiplyInto(this.$getConcatenatedMatrix(), m);
-            } else {
-                m = this.$getConcatenatedMatrix();
-            }
-            m.transformBounds(resultRect);
-            return resultRect;
         }
 
         private _contentBounds:Rectangle = new Rectangle();
@@ -556,6 +565,9 @@ module lark {
          * 获取自身占用的矩形区域，如果是容器，还包括所有子项占据的区域。
          */
         $getContentBounds():Rectangle {
+            if(this.$hasFlags(DisplayObjectFlags.InvalidContentBounds)){
+                this.$removeFlags(DisplayObjectFlags.InvalidContentBounds);
+            }
             return this._contentBounds;
         }
 

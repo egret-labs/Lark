@@ -42,6 +42,11 @@ module lark {
         Visible = 0x0001,
 
         /**
+         * 显示对象的测量尺寸失效。
+         */
+        InvalidContentBounds = 0x0004,
+
+        /**
          * 显示对象的matrix属性失效标志，通常因为scaleX，width等属性发生改变。
          */
         InvalidMatrix = 0x0008,
