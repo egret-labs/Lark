@@ -93,10 +93,6 @@ module lark {
             return (this._displayObjectFlags & flags) === flags;
         }
 
-        $hasAnyFlags(flags:DisplayObjectFlags):boolean {
-            return !!(this._displayObjectFlags & flags);
-        }
-
         /**
          * 沿着显示列表向上传递标志量，如果标志量已经被设置过就停止传递。
          */
@@ -121,7 +117,7 @@ module lark {
 
         $invalidateMatrix() {
             this.$setDirtyFlags(DisplayObjectFlags.DirtyMatrix);
-            this.$setFlags(DisplayObjectFlags.InvalidMatrix | DisplayObjectFlags.InvalidInvertedMatrix);
+            this.$setFlags(DisplayObjectFlags.InvalidMatrix);
             this.$invalidatePosition();
         }
 
@@ -189,19 +185,8 @@ module lark {
             this._skewY = matrix.$getSkewY();
             this._rotation = DisplayObject.clampRotation(this._skewY * 180 / Math.PI);
             this.$removeFlags(DisplayObjectFlags.InvalidMatrix);
-            this.$setFlags(DisplayObjectFlags.InvalidInvertedMatrix);
             this.$setDirtyFlags(DisplayObjectFlags.DirtyMatrix);
             this.$invalidatePosition();
-        }
-
-        private _invertedMatrix:Matrix = new Matrix();
-
-        $getInvertedMatrix() {
-            if (this.$hasFlags(DisplayObjectFlags.InvalidInvertedMatrix)) {
-                this.$getMatrix().$invertInto(this._invertedMatrix);
-                this.$removeFlags(DisplayObjectFlags.InvalidInvertedMatrix);
-            }
-            return this._invertedMatrix;
         }
 
         private _concatenatedMatrix:Matrix = new Matrix();

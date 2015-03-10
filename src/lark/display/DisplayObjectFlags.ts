@@ -45,10 +45,6 @@ module lark {
          * 显示对象的matrix属性失效标志，通常因为scaleX，width等属性发生改变。
          */
         InvalidMatrix = 0x0008,
-        /**
-         * 显示对象的逆矩阵失效。
-         */
-        InvalidInvertedMatrix = 0x0010,
 
         /**
          * 显示对象祖代的矩阵失效。

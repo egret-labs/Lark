@@ -40,9 +40,6 @@ module lark {
             this.$setDirtyFlags(DisplayObjectFlags.DirtyChildren);
         }
 
-        /**
-         * Propagates flags down the display list. Propagation stops if all flags are already set.
-         */
         $propagateFlagsDown(flags: DisplayObjectFlags) {
             if (this.$hasFlags(flags)) {
                 return;
