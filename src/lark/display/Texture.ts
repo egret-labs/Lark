@@ -48,73 +48,73 @@ module lark {
         /**
          * 表示这个纹理在 bitmapData 上的 x 起始位置
          */
-        public _bitmapX:number = 0;
+        $bitmapX:number = 0;
         /**
          * 表示这个纹理在 bitmapData 上的 y 起始位置
          */
-        public _bitmapY:number = 0;
+        $bitmapY:number = 0;
         /**
          * 表示这个纹理在 bitmapData 上的宽度
          */
-        public _bitmapWidth:number = 0;
+        $bitmapWidth:number = 0;
         /**
          * 表示这个纹理在 bitmapData 上的高度
          */
-        public _bitmapHeight:number = 0;
+        $bitmapHeight:number = 0;
 
         /**
          * 表示这个纹理显示了之后在 x 方向的渲染偏移量
          */
-        public _offsetX = 0;
+        $offsetX = 0;
         /**
          * 表示这个纹理显示了之后在 y 方向的渲染偏移量
          */
-        public _offsetY = 0;
+        $offsetY = 0;
 
 
-        public _textureWidth:number = 0;
+        $textureWidth:number = 0;
         /**
          * 纹理宽度
          */
         public get textureWidth():number {
-            return this._textureWidth;
+            return this.$textureWidth;
         }
 
 
-        public _textureHeight:number = 0;
+        $textureHeight:number = 0;
         /**
          * 纹理高度
          */
         public get textureHeight():number {
-            return this._textureHeight;
+            return this.$textureHeight;
         }
 
         /**
          * 表示bitmapData.width
          */
-        public _sourceWidth:number = 0;
+        $sourceWidth:number = 0;
         /**
          * 表示bitmapData.height
          */
-        public _sourceHeight:number = 0;
+        $sourceHeight:number = 0;
 
-        public _bitmapData:any = null;
+        $bitmapData:any = null;
         /**
          * 纹理对象中得位图数据
          */
         public get bitmapData():any {
-            return this._bitmapData;
+            return this.$bitmapData;
         }
 
-        public _setBitmapData(value:any) {
-            this._bitmapData = value;
-            this._sourceWidth = value.width;
-            this._sourceHeight = value.height;
-            this._textureWidth = this._sourceWidth;
-            this._textureHeight = this._sourceHeight;
-            this._bitmapWidth = this._textureWidth;
-            this._bitmapHeight = this._textureHeight;
-            this._offsetX = this._offsetY = this._bitmapX = this._bitmapY = 0;
+        $setBitmapData(value:any) {
+            this.$bitmapData = value;
+            this.$sourceWidth = value.width;
+            this.$sourceHeight = value.height;
+            this.$textureWidth = this.$sourceWidth;
+            this.$textureHeight = this.$sourceHeight;
+            this.$bitmapWidth = this.$textureWidth;
+            this.$bitmapHeight = this.$textureHeight;
+            this.$offsetX = this.$offsetY = this.$bitmapX = this.$bitmapY = 0;
         }
     }
 }
