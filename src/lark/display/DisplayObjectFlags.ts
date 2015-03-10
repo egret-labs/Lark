@@ -59,6 +59,11 @@ module lark {
          * 显示对象祖代的逆矩阵失效。
          */
         InvalidInvertedConcatenatedMatrix = 0x0040,
+
+        /**
+         * 显示对象祖代的透明度属性失效。
+         */
+        InvalidConcatenatedAlpha = 0x0080,
         /**
          * 显示对象应该被缓存成位图的标志，即使没有设置这个标志，也有可能被缓存成位图，例如含有滤镜的情况。
          * 而当设置了这个标志，如果内存不足，也会放弃缓存。
@@ -80,6 +85,10 @@ module lark {
          */
         DirtyBitmapData = 0x1000000,
 
+        /**
+         * 显示对象透明度属性从上一次同步后发生了改变。
+         */
+        DirtyAlpha = 0x4000000,
         /**
          * 显示对象的遮罩对象从上一次同步后发生了改变。
          */
@@ -109,7 +118,7 @@ module lark {
         /**
          * 所有需要同步的属性全都失效.
          */
-        Dirty = DirtyMatrix | DirtyChildren | DirtyBitmapData | DirtyMask | DirtyClipDepth |
+        Dirty = DirtyMatrix | DirtyChildren | DirtyBitmapData | DirtyAlpha | DirtyMask | DirtyClipDepth |
             DirtyMiscellaneousProperties
 
     }

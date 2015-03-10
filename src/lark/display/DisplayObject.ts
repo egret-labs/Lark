@@ -42,6 +42,7 @@ module lark {
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
             DisplayObjectFlags.DirtyDescendents |
             DisplayObjectFlags.DirtyMatrix |
+            DisplayObjectFlags.DirtyAlpha |
             DisplayObjectFlags.DirtyMask |
             DisplayObjectFlags.DirtyClipDepth |
             DisplayObjectFlags.DirtyMiscellaneousProperties;
@@ -414,7 +415,32 @@ module lark {
         }
 
         public set alpha(value:number) {
+            value = +value | 0;
+            if (value === this._alpha) {
+                return;
+            }
             this._alpha = value;
+            this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedAlpha);
+            this.$setDirtyFlags(DisplayObjectFlags.DirtyAlpha);
+        }
+
+        private _concatenatedAlpha:number = 1;
+
+        /**
+         * 获取这个显示对象跟它所有父级透明度的乘积
+         */
+        $getConcatenatedAlpha():number {
+            if (this.$hasFlags(DisplayObjectFlags.InvalidConcatenatedAlpha)) {
+                if (this._parent) {
+                    var parentAlpha = this._parent.$getConcatenatedAlpha();
+                    this._concatenatedAlpha = parentAlpha * this._alpha;
+                }
+                else {
+                    this._concatenatedAlpha = this._alpha;
+                }
+                this.$removeFlags(DisplayObjectFlags.InvalidConcatenatedAlpha);
+            }
+            return this._concatenatedAlpha;
         }
 
         private _touchEnabled:boolean = true;
@@ -483,9 +509,9 @@ module lark {
          * 若不传入将创建一个新的Rectangle对象返回。
          * @returns 定义与 targetCoordinateSpace 对象坐标系统相关的显示对象面积的矩形。
          */
-        public getBounds(targetCoordinateSpace:DisplayObject,resultRect?:Rectangle):Rectangle {
+        public getBounds(targetCoordinateSpace:DisplayObject, resultRect?:Rectangle):Rectangle {
             targetCoordinateSpace = targetCoordinateSpace || this;
-            return this.$getTransformedBounds(targetCoordinateSpace,resultRect);
+            return this.$getTransformedBounds(targetCoordinateSpace, resultRect);
         }
 
         /**
@@ -496,9 +522,9 @@ module lark {
          * 若不传入将创建一个新的Point对象返回。
          * @returns 具有相对于显示对象的坐标的 Point 对象。
          */
-        public globalToLocal(stageX:number,stageY:number,resultPoint?:Point):Point {
+        public globalToLocal(stageX:number, stageY:number, resultPoint?:Point):Point {
             var m = this.$getInvertedConcatenatedMatrix();
-            return m.transformPoint(stageX,stageY,resultPoint);
+            return m.transformPoint(stageX, stageY, resultPoint);
         }
 
         /**
@@ -509,9 +535,9 @@ module lark {
          * 若不传入将创建一个新的Point对象返回。
          * @returns 具有相对于显示对象的坐标的 Point 对象。
          */
-        public localToGlobal(localX:number,localY:number,resultPoint?:Point):Point {
+        public localToGlobal(localX:number, localY:number, resultPoint?:Point):Point {
             var m = this.$getConcatenatedMatrix();
-            return m.transformPoint(localX,localY,resultPoint);
+            return m.transformPoint(localX, localY, resultPoint);
         }
 
 
