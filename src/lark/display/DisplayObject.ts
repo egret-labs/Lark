@@ -37,12 +37,20 @@ module lark {
          */
         public constructor() {
             super();
+            this._displayObjectFlags = DisplayObjectFlags.Visible |
+            DisplayObjectFlags.InvalidConcatenatedMatrix |
+            DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
+            DisplayObjectFlags.DirtyDescendents |
+            DisplayObjectFlags.DirtyMatrix |
+            DisplayObjectFlags.DirtyMask |
+            DisplayObjectFlags.DirtyClipDepth |
+            DisplayObjectFlags.DirtyMiscellaneousProperties;
         }
 
         /**
          * 格式化旋转角度的值
          */
-        private static clampRotation(value): number {
+        private static clampRotation(value):number {
             value %= 360;
             if (value > 180) {
                 value -= 360;
@@ -112,7 +120,7 @@ module lark {
 
         $invalidateMatrix() {
             this.$setDirtyFlags(DisplayObjectFlags.DirtyMatrix);
-            this.$setFlags(DisplayObjectFlags.InvalidMatrix);
+            this.$setFlags(DisplayObjectFlags.InvalidMatrix | DisplayObjectFlags.InvalidInvertedMatrix);
             this.$invalidatePosition();
         }
 
@@ -121,7 +129,8 @@ module lark {
          * Marks this object as having been moved in its parent display object.
          */
         $invalidatePosition() {
-
+            this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedMatrix |
+            DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
         }
 
 
@@ -167,7 +176,7 @@ module lark {
             }
         }
 
-        $setMatrix(matrix: Matrix): void {
+        $setMatrix(matrix:Matrix):void {
             if (this._matrix.equals(matrix)) {
                 return;
             }
@@ -179,10 +188,48 @@ module lark {
             this._skewY = matrix.$getSkewY();
             this._rotation = DisplayObject.clampRotation(this._skewY * 180 / Math.PI);
             this.$removeFlags(DisplayObjectFlags.InvalidMatrix);
+            this.$setFlags(DisplayObjectFlags.InvalidInvertedMatrix);
             this.$setDirtyFlags(DisplayObjectFlags.DirtyMatrix);
             this.$invalidatePosition();
         }
 
+        private _invertedMatrix:Matrix = new Matrix();
+
+        $getInvertedMatrix() {
+            if (this.$hasFlags(DisplayObjectFlags.InvalidInvertedMatrix)) {
+                this.$getMatrix().$invertInto(this._invertedMatrix);
+                this.$removeFlags(DisplayObjectFlags.InvalidInvertedMatrix);
+            }
+            return this._invertedMatrix;
+        }
+
+        private _concatenatedMatrix:Matrix = new Matrix();
+
+        /**
+         * 获得这个显示对象以及它所有父级对象的连接矩阵。
+         */
+        $getConcatenatedMatrix():Matrix {
+            if (this.$hasFlags(DisplayObjectFlags.InvalidConcatenatedMatrix)) {
+                if (this._parent) {
+                    this._parent.$getConcatenatedMatrix().$preMultiplyInto(this.$getMatrix(),
+                        this._concatenatedMatrix);
+                } else {
+                    this._concatenatedMatrix.copyFrom(this.$getMatrix());
+                }
+                this.$removeFlags(DisplayObjectFlags.InvalidConcatenatedMatrix);
+            }
+            return this._concatenatedMatrix;
+        }
+
+        private _invertedConcatenatedMatrix:Matrix = new Matrix();
+
+        $getInvertedConcatenatedMatrix():Matrix {
+            if (this.$hasFlags(DisplayObjectFlags.InvalidInvertedConcatenatedMatrix)) {
+                this.$getConcatenatedMatrix().$invertInto(this._invertedConcatenatedMatrix);
+                this.$removeFlags(DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
+            }
+            return this._invertedConcatenatedMatrix;
+        }
 
         /**
          * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。
@@ -194,6 +241,7 @@ module lark {
         }
 
         public set x(value:number) {
+            value = +value | 0;
             if (value === this._matrix.tx) {
                 return;
             }
@@ -210,6 +258,7 @@ module lark {
         }
 
         public set y(value:number) {
+            value = +value | 0;
             if (value === this._matrix.ty) {
                 return;
             }
@@ -229,6 +278,7 @@ module lark {
         }
 
         public set scaleX(value:number) {
+            value = +value | 0;
             if (value === this._scaleX) {
                 return;
             }
@@ -248,6 +298,7 @@ module lark {
         }
 
         public set scaleY(value:number) {
+            value = +value | 0;
             if (value === this._scaleY) {
                 return;
             }
@@ -269,6 +320,7 @@ module lark {
         }
 
         public set rotation(value:number) {
+            value = +value | 0;
             value = DisplayObject.clampRotation(value);
             if (value === this._rotation) {
                 return;
@@ -281,30 +333,56 @@ module lark {
             this.$invalidateMatrix();
         }
 
-        private _width:number = 0;
         /**
          * 表示显示对象的宽度，以像素为单位。
          * 宽度是根据显示对象内容的范围来计算的。优先顺序为 显式设置宽度 > 测量宽度。
          */
         public get width():number {
-            return this._width;
+            return this.$getTransformedBounds(this._parent, Rectangle.TEMP).width;
         }
 
         public set width(value:number) {
-            this._width = value;
+            value = +value | 0;
+            if (value < 0) {
+                return;
+            }
+            var contentBounds = this.$getContentBounds();
+            var bounds = this.$getTransformedBounds(this._parent, Rectangle.TEMP);
+            var angle = this._rotation / 180 * Math.PI;
+            var baseWidth = contentBounds.$getBaseWidth(angle);
+            if (!baseWidth) {
+                return;
+            }
+            var baseHeight = contentBounds.$getBaseHeight(angle);
+            this._scaleY = bounds.height / baseHeight;
+            this._scaleX = value / baseWidth;
+            this.$invalidateMatrix();
         }
 
-        private _height:number = 0;
         /**
          * 表示显示对象的高度，以像素为单位。
          * 高度是根据显示对象内容的范围来计算的。优先顺序为 显式设置高度 > 测量高度。
          */
         public get height():number {
-            return this._height;
+            return this.$getTransformedBounds(this._parent, Rectangle.TEMP).height;
         }
 
         public set height(value:number) {
-            this._height = value;
+            value = +value | 0;
+            if (value < 0) {
+                return;
+            }
+            var contentBounds = this.$getContentBounds();
+            var bounds = this.$getTransformedBounds(this._parent, Rectangle.TEMP);
+            var angle = this._rotation / 180 * Math.PI;
+            var baseHeight = contentBounds.$getBaseHeight(angle);
+            if (!baseHeight) {
+                return;
+            }
+            var baseWidth = contentBounds.$getBaseWidth(angle);
+            this._scaleY = value / baseHeight;
+            this._scaleX = bounds.width / baseWidth;
+            this.$invalidateMatrix();
         }
 
         /**
@@ -396,6 +474,78 @@ module lark {
 
         public set mask(value:DisplayObject) {
             this._mask = value;
+        }
+
+        /**
+         * 返回一个矩形，该矩形定义相对于 targetCoordinateSpace 对象坐标系的显示对象区域。
+         * @param targetCoordinateSpace 定义要使用的坐标系的显示对象。
+         * @param resultRect 引擎建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Rectangle对象来存储结果，
+         * 若不传入将创建一个新的Rectangle对象返回。
+         * @returns 定义与 targetCoordinateSpace 对象坐标系统相关的显示对象面积的矩形。
+         */
+        public getBounds(targetCoordinateSpace:DisplayObject,resultRect?:Rectangle):Rectangle {
+            targetCoordinateSpace = targetCoordinateSpace || this;
+            return this.$getTransformedBounds(targetCoordinateSpace,resultRect);
+        }
+
+        /**
+         * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
+         * @param stageX 舞台坐标x
+         * @param stageY 舞台坐标y
+         * @param resultPoint 引擎建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
+         * 若不传入将创建一个新的Point对象返回。
+         * @returns 具有相对于显示对象的坐标的 Point 对象。
+         */
+        public globalToLocal(stageX:number,stageY:number,resultPoint?:Point):Point {
+            var m = this.$getInvertedConcatenatedMatrix();
+            return m.transformPoint(stageX,stageY,resultPoint);
+        }
+
+        /**
+         * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
+         * @param localX 舞台坐标x
+         * @param localY 舞台坐标y
+         * @param resultPoint 引擎建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
+         * 若不传入将创建一个新的Point对象返回。
+         * @returns 具有相对于显示对象的坐标的 Point 对象。
+         */
+        public localToGlobal(localX:number,localY:number,resultPoint?:Point):Point {
+            var m = this.$getConcatenatedMatrix();
+            return m.transformPoint(localX,localY,resultPoint);
+        }
+
+
+        /**
+         * 获取这个显示对象在另一个坐标系空间里的矩形区域。
+         */
+        $getTransformedBounds(targetCoordinateSpace:DisplayObject, resultRect?:Rectangle):Rectangle {
+            var bounds = this.$getContentBounds();
+            if (!resultRect) {
+                resultRect = new lark.Rectangle();
+            }
+            resultRect.copyFrom(bounds);
+            if (targetCoordinateSpace === this || resultRect.isEmpty()) {
+                return resultRect;
+            }
+            var m;
+            if (targetCoordinateSpace) {
+                m = Matrix.TEMP;
+                var invertedTargetMatrix = targetCoordinateSpace.$getInvertedConcatenatedMatrix();
+                invertedTargetMatrix.$preMultiplyInto(this.$getConcatenatedMatrix(), m);
+            } else {
+                m = this.$getConcatenatedMatrix();
+            }
+            m.transformBounds(resultRect);
+            return resultRect;
+        }
+
+        private _contentBounds:Rectangle = new Rectangle();
+
+        /**
+         * 获取自身占用的矩形区域，如果是容器，还包括所有子项占据的区域。
+         */
+        $getContentBounds():Rectangle {
+            return this._contentBounds;
         }
 
     }

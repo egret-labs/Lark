@@ -36,6 +36,10 @@ module lark {
     export class Point extends HashObject {
 
         /**
+         * 只允许在局部变量中使用，使用完要立即释放，并要防止嵌套调用导致对象在其他位置被修改的可能性。
+         */
+        public static TEMP: Point = new Point();
+        /**
          * 创建一个 lark.Point 对象
          * @param x 该对象的x属性值，默认为0
          * @param y 该对象的y属性值，默认为0

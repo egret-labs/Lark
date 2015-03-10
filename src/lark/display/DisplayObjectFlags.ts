@@ -45,7 +45,20 @@ module lark {
          * 显示对象的matrix属性失效标志，通常因为scaleX，width等属性发生改变。
          */
         InvalidMatrix = 0x0008,
+        /**
+         * 显示对象的逆矩阵失效。
+         */
+        InvalidInvertedMatrix = 0x0010,
 
+        /**
+         * 显示对象祖代的矩阵失效。
+         */
+        InvalidConcatenatedMatrix = 0x0020,
+
+        /**
+         * 显示对象祖代的逆矩阵失效。
+         */
+        InvalidInvertedConcatenatedMatrix = 0x0040,
         /**
          * 显示对象应该被缓存成位图的标志，即使没有设置这个标志，也有可能被缓存成位图，例如含有滤镜的情况。
          * 而当设置了这个标志，如果内存不足，也会放弃缓存。

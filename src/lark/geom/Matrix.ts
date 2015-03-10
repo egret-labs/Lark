@@ -74,6 +74,11 @@ module lark {
      * 对象应用于显示对象的 matrix 属性。这些转换函数包括平移（x 和 y 重新定位）、旋转、缩放和倾斜。
      */
     export class Matrix extends HashObject {
+
+        /**
+         * 只允许在局部变量中使用，使用完要立即释放，并要防止嵌套调用导致对象在其他位置被修改的可能性。
+         */
+        public static TEMP: Matrix = new Matrix();
         /**
          * 创建一个 Matrix 对象
          * @param a 缩放或旋转图像时影响像素沿 x 轴定位的值。
@@ -226,7 +231,7 @@ module lark {
          * 与使用 transformPoint() 方法应用的标准转换不同，deltaTransformPoint() 方法的转换不考虑转换参数 tx 和 ty。
          * @param pointX 想要获得其矩阵转换结果的点的x坐标。
          * @param pointY 想要获得其矩阵转换结果的点的y坐标。
-         * @param resultPoint 我们建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，若不传入将创建一个新的Point对象返回。
+         * @param resultPoint 引擎建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，若不传入将创建一个新的Point对象返回。
          * @returns 由应用矩阵转换所产生的点。
          */
         public deltaTransformPoint(pointX:number, pointY:number, resultPoint?:Point):Point {
@@ -252,21 +257,39 @@ module lark {
          * 执行原始矩阵的逆转换。
          * 您可以将一个逆矩阵应用于对象来撤消在应用原始矩阵时执行的转换。
          */
-        public invert():void {
-            var a1 = this.a;
-            var b1 = this.b;
-            var c1 = this.c;
-            var d1 = this.d;
-            var tx1 = this.tx;
-            var ty1 = this.ty;
-            var n = a1 * d1 - b1 * c1;
+        public invert(): void {
+            this.$invertInto(this);
+        }
 
-            this.a = d1 / n;
-            this.b = -b1 / n;
-            this.c = -c1 / n;
-            this.d = a1 / n;
-            this.tx = (c1 * ty1 - d1 * tx1) / n;
-            this.ty = -(a1 * ty1 - b1 * tx1) / n;
+        $invertInto(target: Matrix): void {
+            var a = this.a;
+            var b = this.b;
+            var c = this.c;
+            var d = this.d;
+            var tx = this.tx;
+            var ty = this.ty;
+
+            if (b === 0 && c === 0) {
+                var a1 = target.a = 1 / a;
+                var d1 = target.d = 1 / d;
+                target.b = target.c = 0;
+                target.tx = -a1 * tx;
+                target.ty = -d1 * ty;
+                return;
+            }
+            var determinant = a * d - b * c;
+            if (determinant === 0) {
+                target.identity();
+                return;
+            }
+            determinant = 1 / determinant;
+            var k = 0;
+            k = target.a =  d * determinant;
+            b = target.b = -b * determinant;
+            c = target.c = -c * determinant;
+            d = target.d =  a * determinant;
+            target.tx = -(k * tx + c * ty);
+            target.ty = -(b * tx + d * ty);
         }
 
         /**
@@ -335,7 +358,7 @@ module lark {
          * 返回将 Matrix 对象表示的几何转换应用于指定点所产生的结果。
          * @param pointX 想要获得其矩阵转换结果的点的x坐标。
          * @param pointY 想要获得其矩阵转换结果的点的y坐标。
-         * @param resultPoint 我们建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，若不传入将创建一个新的Point对象返回。
+         * @param resultPoint 引擎建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，若不传入将创建一个新的Point对象返回。
          * @returns 由应用矩阵转换所产生的点。
          */
         public transformPoint(pointX:number, pointY:number, resultPoint?:Point):Point {
@@ -421,6 +444,43 @@ module lark {
             }
             this.c = -v * scaleY;
             this.d = u * scaleY;
+        }
+
+        /**
+         * target = other * this
+         */
+        $preMultiplyInto(other: Matrix, target: Matrix): void {
+            var a0 = this.a;
+            var b0 = this.b;
+            var c0 = this.c;
+            var d0 = this.d;
+            var tx0 = this.tx;
+            var ty0 = this.ty;
+
+            var a1 = other.a;
+            var b1 = other.b;
+            var c1 = other.c;
+            var d1 = other.d;
+            var tx1 = other.tx;
+            var ty1 = other.ty;
+
+            var a =  a1 * a0;
+            var b =  0.0;
+            var c =  0.0;
+            var d =  d1 * d0;
+            var tx = tx1 * a0 + tx0;
+            var ty = ty1 * d0 + ty0;
+
+            if (b1 !== 0.0 || c1 !== 0.0 || b0 !== 0.0 || c0 !== 0.0) {
+                a  += b1 * c0;
+                d  += c1 * b0;
+                b  += a1 * b0 + b1 * d0;
+                c  += c1 * a0 + d1 * c0;
+                tx += ty1 * c0;
+                ty += tx1 * b0;
+            }
+
+            target.setTo(a,b,c,d,tx,ty);
         }
 
     }

@@ -39,6 +39,10 @@ module lark {
     export class Rectangle extends HashObject {
 
         /**
+         * 只允许在局部变量中使用，使用完要立即释放，并要防止嵌套调用导致对象在其他位置被修改的可能性。
+         */
+        public static TEMP: Rectangle = new Rectangle();
+        /**
          * 创建一个新 Rectangle 对象，其左上角由 x 和 y 参数指定，并具有指定的 width 和 height 参数。
          * @param x 矩形左上角的 x 坐标。
          * @param y 矩形左上角的 y 坐标。
@@ -117,6 +121,15 @@ module lark {
         }
 
         /**
+         * 将源 Rectangle 对象中的所有矩形数据复制到调用方 Rectangle 对象中。
+         */
+        public copyFrom(sourceRect: Rectangle): void {
+            this.x = sourceRect.x;
+            this.y = sourceRect.y;
+            this.width = sourceRect.width;
+            this.height = sourceRect.height;
+        }
+        /**
          * 将 Rectangle 的成员设置为指定值
          * @param x 矩形左上角的 x 坐标。
          * @param y 矩形左上角的 y 坐标。
@@ -155,6 +168,12 @@ module lark {
         }
 
         /**
+         * 确定此 Rectangle 对象是否为空。
+         */
+        public isEmpty(): boolean {
+            return this.width <= 0 || this.height <= 0;
+        }
+        /**
          * 将 Rectangle 对象的所有属性设置为 0。
          */
         public setEmpty():void {
@@ -186,6 +205,18 @@ module lark {
                 return true;
             }
             return false;
+        }
+
+        $getBaseWidth(angle: number): number {
+            var u = Math.abs(Math.cos(angle));
+            var v = Math.abs(Math.sin(angle));
+            return u * this.width + v * this.height;
+        }
+
+        $getBaseHeight(angle: number): number {
+            var u = Math.abs(Math.cos(angle));
+            var v = Math.abs(Math.sin(angle));
+            return v * this.width + u * this.height;
         }
     }
 }
