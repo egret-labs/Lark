@@ -41,7 +41,7 @@ module lark {
         }
 
         /**
-         *
+         * 标记子项列表失效
          */
         private $invalidateChildren() {
             this.$setDirtyFlags(DisplayObjectFlags.DirtyChildren);
