@@ -38,6 +38,52 @@ module lark {
          */
         public constructor() {
             super();
+            this.$stage = this;
+        }
+
+        private _frameRate:number = 60;
+        /**
+         * 获取并设置舞台的帧速率。帧速率是指每秒显示的帧数。帧速率的有效范围为每秒 0.01 到 60 个帧。
+         */
+        public get frameRate():number {
+            return this._frameRate;
+        }
+
+        public set frameRate(value:number) {
+            this._frameRate = +value;
+        }
+
+        private _scaleMode:string = "noScale";
+        /**
+         * 缩放模式
+         */
+        public get scaleMode():string {
+            return this._scaleMode;
+        }
+
+        public set scaleMode(value:string) {
+            this._scaleMode = value;
+        }
+
+        private _stageWidth:number = 0;
+        /**
+         * 舞台的当前宽度（以像素为单位）。
+         */
+        public get stageWidth():number {
+            return this._stageWidth;
+        }
+
+        private _stageHeight:number = 0;
+        /**
+         * 舞台的当前高度（以像素为单位）。
+         */
+        public get stageHeight():number {
+            return this._stageHeight;
+        }
+
+        $updateStageSize(width:number, height:number):void {
+            this._stageWidth = +width | 0;
+            this._stageHeight = +height | 0;
         }
     }
 }

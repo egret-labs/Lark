@@ -72,21 +72,21 @@ module lark {
         $offsetY = 0;
 
 
-        $textureWidth:number = 0;
+        $width:number = 0;
         /**
          * 纹理宽度
          */
-        public get textureWidth():number {
-            return this.$textureWidth;
+        public get width():number {
+            return this.$width;
         }
 
 
-        $textureHeight:number = 0;
+        $height:number = 0;
         /**
          * 纹理高度
          */
-        public get textureHeight():number {
-            return this.$textureHeight;
+        public get height():number {
+            return this.$height;
         }
 
         /**
@@ -99,21 +99,13 @@ module lark {
         $sourceHeight:number = 0;
 
         $bitmapData:any = null;
-        /**
-         * 纹理对象中得位图数据
-         */
-        public get bitmapData():any {
-            return this.$bitmapData;
-        }
 
         $setBitmapData(value:any) {
+            var w = +value.width | 0;
+            var h = +value.height | 0;
             this.$bitmapData = value;
-            this.$sourceWidth = value.width;
-            this.$sourceHeight = value.height;
-            this.$textureWidth = this.$sourceWidth;
-            this.$textureHeight = this.$sourceHeight;
-            this.$bitmapWidth = this.$textureWidth;
-            this.$bitmapHeight = this.$textureHeight;
+            this.$width = this.$bitmapWidth = this.$sourceWidth = w;
+            this.$height = this.$bitmapHeight = this.$sourceHeight = h;
             this.$offsetX = this.$offsetY = this.$bitmapX = this.$bitmapY = 0;
         }
     }

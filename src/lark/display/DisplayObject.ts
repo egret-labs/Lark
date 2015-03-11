@@ -72,8 +72,8 @@ module lark {
          */
         $setDirtyFlags(flags:DisplayObjectFlags) {
             this._displayObjectFlags |= flags;
-            if (this._parent) {
-                this._parent.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
+            if (this.$parent) {
+                this.$parent.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
             }
         }
 
@@ -84,6 +84,7 @@ module lark {
                 this._displayObjectFlags &= ~flags;
             }
         }
+
         $removeFlags(flags:DisplayObjectFlags) {
             this._displayObjectFlags &= ~flags;
         }
@@ -100,7 +101,7 @@ module lark {
                 return;
             }
             this.$setFlags(flags);
-            var parent = this._parent;
+            var parent = this.$parent;
             if (parent) {
                 parent.$propagateFlagsUp(flags);
             }
@@ -113,6 +114,9 @@ module lark {
             this.$setFlags(flags);
         }
 
+        $hasAnyFlags(flags:DisplayObjectFlags):boolean {
+            return !!(this._displayObjectFlags & flags);
+        }
 
         $invalidateMatrix() {
             this.$setDirtyFlags(DisplayObjectFlags.DirtyMatrix);
@@ -137,17 +141,38 @@ module lark {
          */
         public name:string;
 
-        private _parent:DisplayObjectContainer;
+        $parent:DisplayObjectContainer;
+
         /**
          * 表示包含此显示对象的 DisplayObjectContainer 对象。
          * 使用 parent 属性可以指定高于显示列表层次结构中当前显示对象的显示对象的相对路径。
          */
         public get parent():DisplayObjectContainer {
-            return this._parent;
+            return this.$parent;
         }
 
         $setParent(parent:DisplayObjectContainer):void {
-            this._parent = parent;
+            this.$parent = parent;
+        }
+
+        $onAddToStage(stage:Stage):void {
+            this.$stage = stage;
+            DisplayObjectContainer.$EVENT_ADD_TO_STAGE_LIST.push(this);
+        }
+
+        $onRemoveFromStage():void {
+            DisplayObjectContainer.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
+        }
+
+        $stage:Stage = null;
+
+        /**
+         * 显示对象的舞台。
+         * 例如，您可以创建多个显示对象并加载到显示列表中，每个显示对象的 stage 属性是指相同的 Stage 对象。
+         * 如果显示对象未添加到显示列表，则其 stage 属性会设置为 null。
+         */
+        public get stage():Stage {
+            return this.$stage;
         }
 
         private _matrix:Matrix = new Matrix();
@@ -196,8 +221,8 @@ module lark {
          */
         $getConcatenatedMatrix():Matrix {
             if (this.$hasFlags(DisplayObjectFlags.InvalidConcatenatedMatrix)) {
-                if (this._parent) {
-                    this._parent.$getConcatenatedMatrix().$preMultiplyInto(this.$getMatrix(),
+                if (this.$parent) {
+                    this.$parent.$getConcatenatedMatrix().$preMultiplyInto(this.$getMatrix(),
                         this._concatenatedMatrix);
                 } else {
                     this._concatenatedMatrix.copyFrom(this.$getMatrix());
@@ -324,7 +349,7 @@ module lark {
          * 宽度是根据显示对象内容的范围来计算的。优先顺序为 显式设置宽度 > 测量宽度。
          */
         public get width():number {
-            return this.getBounds(this._parent, Rectangle.TEMP).width;
+            return this.getBounds(this.$parent, Rectangle.TEMP).width;
         }
 
         public set width(value:number) {
@@ -332,8 +357,8 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var contentBounds = this.$getContentBounds();
-            var bounds = this.getBounds(this._parent, Rectangle.TEMP);
+            var contentBounds = this.getContentBounds();
+            var bounds = this.getBounds(this.$parent, Rectangle.TEMP);
             var angle = this._rotation / 180 * Math.PI;
             var baseWidth = contentBounds.$getBaseWidth(angle);
             if (!baseWidth) {
@@ -350,7 +375,7 @@ module lark {
          * 高度是根据显示对象内容的范围来计算的。优先顺序为 显式设置高度 > 测量高度。
          */
         public get height():number {
-            return this.getBounds(this._parent, Rectangle.TEMP).height;
+            return this.getBounds(this.$parent, Rectangle.TEMP).height;
         }
 
         public set height(value:number) {
@@ -358,8 +383,8 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var contentBounds = this.$getContentBounds();
-            var bounds = this.getBounds(this._parent, Rectangle.TEMP);
+            var contentBounds = this.getContentBounds();
+            var bounds = this.getBounds(this.$parent, Rectangle.TEMP);
             var angle = this._rotation / 180 * Math.PI;
             var baseHeight = contentBounds.$getBaseHeight(angle);
             if (!baseHeight) {
@@ -416,8 +441,8 @@ module lark {
          */
         $getConcatenatedAlpha():number {
             if (this.$hasFlags(DisplayObjectFlags.InvalidConcatenatedAlpha)) {
-                if (this._parent) {
-                    var parentAlpha = this._parent.$getConcatenatedAlpha();
+                if (this.$parent) {
+                    var parentAlpha = this.$parent.$getConcatenatedAlpha();
                     this._concatenatedAlpha = parentAlpha * this._alpha;
                 }
                 else {
@@ -496,7 +521,11 @@ module lark {
          */
         public getBounds(targetCoordinateSpace:DisplayObject, resultRect?:Rectangle):Rectangle {
             targetCoordinateSpace = targetCoordinateSpace || this;
-            var bounds = this.$getContentBounds();
+            return this.$getTransformedBounds(targetCoordinateSpace,resultRect);
+        }
+
+        $getTransformedBounds(targetCoordinateSpace:DisplayObject, resultRect?:Rectangle):Rectangle {
+            var bounds = this.getContentBounds();
             if (!resultRect) {
                 resultRect = new lark.Rectangle();
             }
@@ -546,16 +575,16 @@ module lark {
         /**
          * 标记自身的测量尺寸失效
          */
-        $invalidateContentBounds(): void {
+        $invalidateContentBounds():void {
             this.$propagateFlagsUp(DisplayObjectFlags.InvalidContentBounds);
         }
 
         /**
          * 标记父级的测量尺寸失效
          */
-        $invalidateParentContentBounds(): void {
-            if (this._parent) {
-                this._parent.$invalidateContentBounds();
+        $invalidateParentContentBounds():void {
+            if (this.$parent) {
+                this.$parent.$invalidateContentBounds();
             }
         }
 
@@ -564,13 +593,22 @@ module lark {
         /**
          * 获取自身占用的矩形区域，如果是容器，还包括所有子项占据的区域。
          */
-        $getContentBounds():Rectangle {
-            if(this.$hasFlags(DisplayObjectFlags.InvalidContentBounds)){
+        private getContentBounds():Rectangle {
+            var bounds = this._contentBounds;
+            if (this.$hasFlags(DisplayObjectFlags.InvalidContentBounds)) {
                 this.$removeFlags(DisplayObjectFlags.InvalidContentBounds);
+                this.$measureContentBounds(bounds);
             }
-            return this._contentBounds;
+            return bounds;
         }
 
+        /**
+         * 测量自身占用的矩形区域，如果是容器，还包括所有子项占据的区域。
+         * @param bounds 测量结果存储在这个矩形对象内
+         */
+        $measureContentBounds(bounds:Rectangle):void{
+
+        }
     }
 
 }

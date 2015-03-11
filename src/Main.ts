@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark {
-    export class Main extends DisplayObject {
+    export class Main extends DisplayObjectContainer {
 
         public constructor() {
             super();

@@ -44,5 +44,27 @@ module lark {
         public constructor() {
             super();
         }
+
+        $texture:Texture = null;
+
+        public get texture():Texture{
+            return this.$texture;
+        }
+
+        public set texture(value:Texture){
+            this.$texture = value;
+            this.$invalidateContentBounds();
+            this.$setDirtyFlags(DisplayObjectFlags.DirtyBitmapData);
+        }
+
+        $measureContentBounds(bounds:Rectangle):void {
+            var texture:Texture = this.$texture;
+            if(texture){
+                bounds.setTo(0,0,texture.width,texture.height);
+            }
+            else{
+                bounds.setEmpty();
+            }
+        }
     }
 }

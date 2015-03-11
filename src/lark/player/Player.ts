@@ -78,7 +78,7 @@ module lark {
             if (rootClass) {
                 var rootContainer:any = new rootClass();
                 if (rootContainer instanceof lark.DisplayObject) {
-                    // this.stage.addChild(rootContainer);
+                    this.stage.addChild(rootContainer);
                 }
                 else {
                     throw new Error("Lark入口类必须是lark.DisplayObject的子类: " + this.entryClassName);
