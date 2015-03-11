@@ -32,8 +32,23 @@ module lark {
 
         public constructor() {
             super();
-            this.x = 1;
-            alert("this.x:" + this.x);
+            var img = new Image();
+            img.src = "image/test.png";
+            img.onload = ()=> {
+                var texture:Texture = new Texture();
+                texture.$setBitmapData(img);
+                this.start(texture);
+            }
+
+        } 
+
+        private start(texture:Texture):void{
+            var bitmap = new Bitmap();
+            bitmap.texture = texture;
+            bitmap.x = 200;
+            bitmap.y = 200;
+            this.addChild(bitmap);
+            console.log("texture.width:"+texture.width);
         }
 
     }
