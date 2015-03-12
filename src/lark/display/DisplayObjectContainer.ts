@@ -63,7 +63,7 @@ module lark {
             }
         }
 
-        private _children:DisplayObject[];
+        private _children:DisplayObject[] = [];
 
         /**
          * 返回此对象的子项数目。

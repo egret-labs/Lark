@@ -66,6 +66,7 @@ module lark {
             }
             this.isPlaying = true;
             if (!this.stage) {
+                lark.$START_TIME = Date.now();
                 this.initialize();
             }
             this.context.startTick(this.onTick,this);
@@ -111,7 +112,6 @@ module lark {
         }
 
         private onTick():void{
-            console.log(lark.getTimer());
         }
 
     }

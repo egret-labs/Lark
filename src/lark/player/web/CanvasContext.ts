@@ -71,7 +71,7 @@ module lark {
             var img = new Image();
             img.src = "image/test.png";
             img.onload = ()=> {
-                this.context.drawImage(img, (this.canvas.width - img.width) * 0.5, (this.canvas.height - img.height) * 0.5, 100, 100);
+                this.context.drawImage(img, (this.canvas.width - img.width) * 0.5, (this.canvas.height - img.height) * 0.5);
             }
         }
 

@@ -38,6 +38,9 @@ module lark {
         private static _instance:WebTicker;
 
         public static getInstance():WebTicker{
+            if(!WebTicker._instance){
+                WebTicker._instance = new lark.WebTicker();
+            }
             return WebTicker._instance;
         }
 
@@ -111,6 +114,7 @@ module lark {
             for(var i=0;i<length;i++){
                 this.callBackList[i].call(this.thisObjectList[i])
             }
+            this.requestAnimationId = this.requestAnimationFrame.call(window, this.onTick);
         }
     }
 }
