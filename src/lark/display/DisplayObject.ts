@@ -547,7 +547,7 @@ module lark {
             }
             m.$transformBounds(resultRect);
             return resultRect;
-        } 
+        }
 
         /**
          * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。

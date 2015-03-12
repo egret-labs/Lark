@@ -87,11 +87,13 @@ module lark {
         /**
          * 绘制图片到一个区域上
          */
-        public drawImage(texture:Texture, x:number, y:number, width:number, height:number, matrix:Matrix, globalAlpha:number):void {
+        public drawImage(texture:Texture, matrix:Matrix, globalAlpha:number):void {
             this.context.globalAlpha = globalAlpha;
             this.context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
-            this.context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY,
-                texture.$bitmapWidth, texture.$bitmapHeight, x, y, width, height);
+            var width = texture.$bitmapWidth;
+            var height = texture.$bitmapHeight;
+            this.context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY,width, height,
+                texture.$offsetX, texture.$offsetY, width, height);
         }
 
         /**

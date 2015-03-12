@@ -56,7 +56,7 @@ module lark {
         /**
          * 绘制图片到一个区域上
          */
-        drawImage(texture:Texture, x:number, y:number, width:number, height:number, matrix:Matrix, globalAlpha:number):void;
+        drawImage(texture:Texture, matrix:Matrix, globalAlpha:number):void;
 
     }
 }
