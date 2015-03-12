@@ -17,6 +17,7 @@ var lark_file_list =
         "lark/player/Player.js",
         "lark/player/web/WebTicker.js",
         "lark/player/web/CanvasContext.js",
-        "Main.js"
+        "Main.js",
+        "Text.js"
     ];
 var lark_entry_class_name = "lark.Main";
