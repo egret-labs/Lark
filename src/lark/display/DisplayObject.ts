@@ -256,7 +256,7 @@ module lark {
         }
 
         public set x(value:number) {
-            value = +value | 0;
+            value = +value || 0;
             if (value === this._matrix.tx) {
                 return;
             }
@@ -273,7 +273,7 @@ module lark {
         }
 
         public set y(value:number) {
-            value = +value | 0;
+            value = +value || 0;
             if (value === this._matrix.ty) {
                 return;
             }
@@ -293,7 +293,7 @@ module lark {
         }
 
         public set scaleX(value:number) {
-            value = +value | 0;
+            value = +value || 0;
             if (value === this._scaleX) {
                 return;
             }
@@ -313,7 +313,7 @@ module lark {
         }
 
         public set scaleY(value:number) {
-            value = +value | 0;
+            value = +value || 0;
             if (value === this._scaleY) {
                 return;
             }
@@ -335,7 +335,7 @@ module lark {
         }
 
         public set rotation(value:number) {
-            value = +value | 0;
+            value = +value || 0;
             value = DisplayObject.clampRotation(value);
             if (value === this._rotation) {
                 return;
@@ -357,7 +357,7 @@ module lark {
         }
 
         public set width(value:number) {
-            value = +value | 0;
+            value = +value || 0;
             if (value < 0) {
                 return;
             }
@@ -383,7 +383,7 @@ module lark {
         }
 
         public set height(value:number) {
-            value = +value | 0;
+            value = +value || 0;
             if (value < 0) {
                 return;
             }
@@ -429,7 +429,7 @@ module lark {
         }
 
         public set alpha(value:number) {
-            value = +value | 0;
+            value = +value || 0;
             if (value === this._alpha) {
                 return;
             }
