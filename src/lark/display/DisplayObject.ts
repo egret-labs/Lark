@@ -134,6 +134,10 @@ module lark {
             this.$invalidateParentContentBounds();
         }
 
+        /**
+         * 能够含有子项的类将子项列表存储在这个属性里。
+         */
+        $children:DisplayObject[] = null;
 
         /**
          * 表示 DisplayObject 的实例名称。

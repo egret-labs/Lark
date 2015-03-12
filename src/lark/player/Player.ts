@@ -54,25 +54,26 @@ module lark {
         /**
          * 舞台引用
          */
-        private stage:Stage;
+        private stage:Stage = null;
 
         private isPlaying:boolean = false;
+
         /**
          * 启动播放器
          */
         public start():void {
-            if(this.isPlaying||!this.context){
+            if (this.isPlaying || !this.context) {
                 return;
             }
             this.isPlaying = true;
             if (!this.stage) {
-                lark.$START_TIME = Date.now();
                 this.initialize();
             }
-            this.context.startTick(this.onTick,this);
+            this.context.startTick(this.onTick, this);
         }
 
         private initialize():void {
+            lark.$START_TIME = Date.now();
             this.stage = new lark.Stage();
             var rootClass;
             if (this.entryClassName) {
@@ -104,14 +105,40 @@ module lark {
          * 暂停播放器，后续可以通过调用start()重新启动播放器。
          */
         public pause():void {
-            if(!this.isPlaying){
+            if (!this.isPlaying) {
                 return;
             }
             this.isPlaying = false;
-            this.context.stopTick(this.onTick,this);
+            this.context.stopTick(this.onTick, this);
         }
 
-        private onTick():void{
+        private onTick():void {
+            this.findDirtyDisplayObjects(this.stage)
+        }
+
+        private findDirtyDisplayObjects(displayObject:DisplayObject):void {
+            var stack:DisplayObject[] = [displayObject];
+            while (stack.length > 0) {
+                displayObject = stack.pop();
+                if (displayObject.$hasAnyFlags(DisplayObjectFlags.Dirty)) {
+                    this.updateFrame(displayObject);
+                }
+                if (displayObject.$hasFlags(DisplayObjectFlags.DirtyDescendents)) {
+                    var children = displayObject.$children;
+                    if (children) {
+                        for (var i = children.length - 1; i >= 0; i--) {
+                            var child = children[i];
+                            stack.push(child);
+                        }
+                    }
+                    displayObject.$removeFlags(DisplayObjectFlags.DirtyDescendents);
+                }
+            }
+        }
+
+        private updateFrame(displayObject:DisplayObject):void {
+
+            displayObject.$removeFlags(DisplayObjectFlags.Dirty);
         }
 
     }

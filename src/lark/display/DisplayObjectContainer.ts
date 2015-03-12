@@ -41,6 +41,7 @@ module lark {
          */
         public constructor() {
             super();
+            this.$children = [];
             this.$setDirtyFlags(DisplayObjectFlags.DirtyChildren);
         }
 
@@ -57,19 +58,17 @@ module lark {
                 return;
             }
             this.$setFlags(flags);
-            var children = this._children;
+            var children = this.$children;
             for (var i = 0; i < children.length; i++) {
                 children[i].$propagateFlagsDown(flags);
             }
         }
 
-        private _children:DisplayObject[] = [];
-
         /**
          * 返回此对象的子项数目。
          */
         public get numChildren():number {
-            return this._children.length;
+            return this.$children.length;
         }
 
         /**
@@ -78,7 +77,7 @@ module lark {
          * @returns 在 child 参数中传递的 DisplayObject 实例。
          */
         public addChild(child:DisplayObject):DisplayObject {
-            var index:number = this._children.length;
+            var index:number = this.$children.length;
 
             if (child.$parent == this)
                 index--;
@@ -102,7 +101,7 @@ module lark {
             if (child == this)
                 return child;
 
-            if (index < 0 || index > this._children.length) {
+            if (index < 0 || index > this.$children.length) {
                 //lark.Logger.fatalWithErrorId(1007);
                 return child;
             }
@@ -114,13 +113,13 @@ module lark {
             }
 
             if (host) {
-                var hostIndex = host._children.indexOf(child);
+                var hostIndex = host.$children.indexOf(child);
                 if (hostIndex >= 0) {
                     host.$doRemoveChild(hostIndex);
                 }
             }
 
-            this._children.splice(index, 0, child);
+            this.$children.splice(index, 0, child);
             child.$setParent(this);
             if (notifyListeners) {
                 //child.dispatchEventWith(Event.ADDED, true);
@@ -163,8 +162,8 @@ module lark {
          */
         public getChildAt(index:number):DisplayObject {
             index = +index | 0;
-            if (index >= 0 && index < this._children.length) {
-                return this._children[index];
+            if (index >= 0 && index < this.$children.length) {
+                return this.$children[index];
             }
             else {
                 //lark.Logger.fatalWithErrorId(1007);
@@ -177,7 +176,7 @@ module lark {
          * @returns 要标识的子显示对象的索引位置。
          */
         public getChildIndex(child:DisplayObject):number {
-            return this._children.indexOf(child);
+            return this.$children.indexOf(child);
         }
 
         /**
@@ -186,7 +185,7 @@ module lark {
          * @returns 具有指定名称的子显示对象。
          */
         public getChildByName(name:string):DisplayObject {
-            var children = this._children;
+            var children = this.$children;
             var length = children.length;
             var displayObject:DisplayObject;
             for (var i:number = 0; i < length; i++) {
@@ -204,7 +203,7 @@ module lark {
          * @returns 在 child 参数中传递的 DisplayObject 实例。
          */
         public removeChild(child:DisplayObject):DisplayObject {
-            var index = this._children.indexOf(child);
+            var index = this.$children.indexOf(child);
             if (index >= 0) {
                 return this.$doRemoveChild(index);
             }
@@ -221,7 +220,7 @@ module lark {
          */
         public removeChildAt(index:number):DisplayObject {
             index = +index | 0;
-            if (index >= 0 && index < this._children.length) {
+            if (index >= 0 && index < this.$children.length) {
                 return this.$doRemoveChild(index);
             }
             else {
@@ -232,7 +231,7 @@ module lark {
 
         $doRemoveChild(index:number, notifyListeners:boolean = true):DisplayObject {
             index = +index | 0;
-            var children = this._children;
+            var children = this.$children;
             var child:DisplayObject = children[index];
             if (notifyListeners) {
                 //child.dispatchEventWith(Event.REMOVED, true);
@@ -267,18 +266,18 @@ module lark {
         }
 
         private doSetChildIndex(child:DisplayObject, index:number):void {
-            var lastIdx = this._children.indexOf(child);
+            var lastIdx = this.$children.indexOf(child);
             if (lastIdx < 0) {
                 //lark.Logger.fatalWithErrorId(1006);
             }
             //从原来的位置删除
-            this._children.splice(lastIdx, 1);
+            this.$children.splice(lastIdx, 1);
             //放到新的位置
-            if (index < 0 || this._children.length <= index) {
-                this._children.push(child);
+            if (index < 0 || this.$children.length <= index) {
+                this.$children.push(child);
             }
             else {
-                this._children.splice(index, 0, child);
+                this.$children.splice(index, 0, child);
             }
             this.$invalidateChildren();
         }
@@ -291,7 +290,7 @@ module lark {
         public swapChildrenAt(index1:number, index2:number):void {
             index1 = +index1 | 0;
             index2 = +index2 | 0;
-            if (index1 >= 0 && index1 < this._children.length && index2 >= 0 && index2 < this._children.length) {
+            if (index1 >= 0 && index1 < this.$children.length && index2 >= 0 && index2 < this.$children.length) {
                 this.doSwapChildrenAt(index1, index2);
             }
             else {
@@ -306,8 +305,8 @@ module lark {
          * @param child2 第二个子对象。
          */
         public swapChildren(child1:DisplayObject, child2:DisplayObject):void {
-            var index1:number = this._children.indexOf(child1);
-            var index2:number = this._children.indexOf(child2);
+            var index1:number = this.$children.indexOf(child1);
+            var index2:number = this.$children.indexOf(child2);
             if (index1 == -1 || index2 == -1) {
                 //lark.Logger.fatalWithErrorId(1008);
             }
@@ -320,7 +319,7 @@ module lark {
             if (index1 == index2) {
                 return;
             }
-            var list:Array<DisplayObject> = this._children;
+            var list:Array<DisplayObject> = this.$children;
             var child:DisplayObject = list[index1];
             list[index1] = list[index2];
             list[index2] = child;
@@ -331,7 +330,7 @@ module lark {
          * 从 DisplayObjectContainer 实例的子级列表中删除所有 child DisplayObject 实例。
          */
         public removeChildren():void {
-            var children = this._children;
+            var children = this.$children;
             for (var i:number = children.length - 1; i >= 0; i--) {
                 this.$doRemoveChild(i);
             }
@@ -339,17 +338,17 @@ module lark {
 
         $onAddToStage(stage:Stage):void {
             super.$onAddToStage(stage);
-            var children = this._children;
+            var children = this.$children;
             var length = children.length;
             for (var i = 0; i < length; i++) {
-                var child:DisplayObject = this._children[i];
+                var child:DisplayObject = this.$children[i];
                 child.$onAddToStage(stage);
             }
         }
 
         $onRemoveFromStage():void {
             super.$onRemoveFromStage();
-            var children = this._children;
+            var children = this.$children;
             var length = children.length;
             for (var i = 0; i < length; i++) {
                 var child:DisplayObject = children[i];
@@ -358,7 +357,7 @@ module lark {
         }
 
         $measureContentBounds(bounds:Rectangle):void {
-            var children = this._children;
+            var children = this.$children;
             var length = children.length;
             var xMin = 0, xMax = 0, yMin = 0, yMax = 0;
             var found:boolean = false;
