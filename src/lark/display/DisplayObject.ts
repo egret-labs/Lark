@@ -537,7 +537,7 @@ module lark {
             if (targetCoordinateSpace === this || resultRect.isEmpty()) {
                 return resultRect;
             }
-            var m;
+            var m:Matrix;
             if (targetCoordinateSpace) {
                 m = Matrix.TEMP;
                 var invertedTargetMatrix = targetCoordinateSpace.$getInvertedConcatenatedMatrix();
@@ -545,9 +545,9 @@ module lark {
             } else {
                 m = this.$getConcatenatedMatrix();
             }
-            m.transformBounds(resultRect);
+            m.$transformBounds(resultRect);
             return resultRect;
-        }
+        } 
 
         /**
          * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。

@@ -393,6 +393,43 @@ module lark {
                 this.tx === other.tx && this.ty === other.ty;
         }
 
+        $transformBounds(bounds: Rectangle): void {
+            var a  = this.a;
+            var b  = this.b;
+            var c  = this.c;
+            var d  = this.d;
+            var tx = this.tx;
+            var ty = this.ty;
+
+            var x = bounds.x;
+            var y = bounds.y;
+            var w = bounds.width;
+            var h = bounds.height;
+
+            var x0 = Math.round(a * x + c * y + tx);
+            var y0 = Math.round(b * x + d * y + ty);
+            var x1 = Math.round(a * (x + w) + c * y + tx);
+            var y1 = Math.round(b * (x + w) + d * y + ty);
+            var x2 = Math.round(a * (x + w) + c * (y + h) + tx);
+            var y2 = Math.round(b * (x + w) + d * (y + h) + ty);
+            var x3 = Math.round(a * x + c * (y + h) + tx);
+            var y3 = Math.round(b * x + d * (y + h) + ty);
+
+            var tmp = 0;
+
+            if (x0 > x1) { tmp = x0; x0 = x1; x1 = tmp; }
+            if (x2 > x3) { tmp = x2; x2 = x3; x3 = tmp; }
+
+            bounds.x = x0 < x2 ? x0 : x2;
+            bounds.width = (x1 > x3 ? x1 : x3) - bounds.x;
+
+            if (y0 > y1) { tmp = y0; y0 = y1; y1 = tmp; }
+            if (y2 > y3) { tmp = y2; y2 = y3; y3 = tmp; }
+
+            bounds.y = y0 < y2 ? y0 : y2;
+            bounds.height = (y1 > y3 ? y1 : y3)-bounds.y;
+        }
+
         private getDeterminant() {
             return this.a * this.d - this.b * this.c;
         }
