@@ -138,6 +138,12 @@ module lark {
 
         private updateFrame(displayObject:DisplayObject):void {
 
+            if (displayObject instanceof Bitmap) {
+                var texture = (<Bitmap> displayObject).$texture;
+                if(texture){
+                    this.context.drawImage(texture,0,0,texture.width,texture.height,displayObject.$getConcatenatedMatrix(),displayObject.$getConcatenatedAlpha());
+                }
+            }
             displayObject.$removeFlags(DisplayObjectFlags.Dirty);
         }
 

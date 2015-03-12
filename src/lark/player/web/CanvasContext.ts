@@ -68,46 +68,44 @@ module lark {
             this.sizeChanged = false;
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
-            var img = new Image();
-            img.src = "image/test.png";
-            img.onload = ()=> {
-                this.context.drawImage(img, (this.canvas.width - img.width) * 0.5, (this.canvas.height - img.height) * 0.5);
-            }
         }
 
         /**
          * 清除整个屏幕
          */
         public clearScreen():void {
-
+            this.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
 
         /**
          * 清除屏幕的部分渲染区域
          */
         public clearRect(x:number, y:number, width:number, height:number):void {
-
+            this.context.clearRect(x, y, width, height);
         }
 
         /**
          * 绘制图片到一个区域上
          */
-        public drawImage(texture:Texture, sourceX:number, sourceY:number, sourceWidth:number, sourceHeight:number,
-                         targetX:number, targetY:number, targetWidth:number, targetHeight:number):void {
-
+        public drawImage(texture:Texture, x:number, y:number, width:number, height:number, matrix:Matrix, globalAlpha:number):void {
+            this.context.globalAlpha = globalAlpha;
+            this.context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+            this.context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY,
+                texture.$bitmapWidth, texture.$bitmapHeight, x, y, width, height);
         }
 
         /**
          * 启动心跳计时器
          */
-        public startTick(callBack:Function,thisObject:any):void{
-            WebTicker.getInstance().register(callBack,thisObject);
+        public startTick(callBack:Function, thisObject:any):void {
+            WebTicker.getInstance().register(callBack, thisObject);
         }
+
         /**
          * 停止心跳计时器
          */
-        public stopTick(callBack:Function,thisObject:any):void{
-            WebTicker.getInstance().unregister(callBack,thisObject);
+        public stopTick(callBack:Function, thisObject:any):void {
+            WebTicker.getInstance().unregister(callBack, thisObject);
         }
     }
 }

@@ -38,11 +38,11 @@ module lark {
         /**
          * 启动心跳计时器
          */
-        startTick(callBack:Function,thisObject:any):void;
+        startTick(callBack:Function, thisObject:any):void;
         /**
          * 停止心跳计时器
          */
-        stopTick(callBack:Function,thisObject:any):void;
+        stopTick(callBack:Function, thisObject:any):void;
         /**
          * 清除整个屏幕
          */
@@ -56,8 +56,7 @@ module lark {
         /**
          * 绘制图片到一个区域上
          */
-        drawImage(texture:Texture, sourceX:number, sourceY:number, sourceWidth:number, sourceHeight:number,
-                  targetX:number, targetY:number, targetWidth:number, targetHeight:number):void;
+        drawImage(texture:Texture, x:number, y:number, width:number, height:number, matrix:Matrix, globalAlpha:number):void;
 
     }
 }

@@ -43,12 +43,19 @@ module lark {
         }
 
         private start(texture:Texture):void{
-            var bitmap = new Bitmap();
-            bitmap.texture = texture;
-            bitmap.x = 200;
-            bitmap.y = 200;
-            this.addChild(bitmap);
-            console.log("texture.width:"+texture.width);
+            var x=20,y=20;
+            for(var i=0;i<1000;i++){
+                var bitmap = new Bitmap();
+                bitmap.texture = texture;
+                bitmap.x = x;
+                bitmap.y = y;
+                x += texture.width+40;
+                if(x>1920){
+                    x = 0;
+                    y += texture.height+40;
+                }
+                this.addChild(bitmap);
+            }
         }
 
     }
