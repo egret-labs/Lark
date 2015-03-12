@@ -66,8 +66,8 @@ module lark {
 
         private doResize = ():void=> {
             this.sizeChanged = false;
-            this.canvas.width = window.innerWidth;
-            this.canvas.height = window.innerHeight;
+            //this.canvas.width = window.innerWidth;
+            //this.canvas.height = window.innerHeight;
         }
 
         /**
@@ -92,6 +92,24 @@ module lark {
             this.context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
             this.context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY,
                 texture.$bitmapWidth, texture.$bitmapHeight, x, y, width, height);
+        }
+
+        /**
+         * 绘制文本到一个区域上
+         */
+        public drawText(text: string, font: string, color: string, x: number, y: number, width: number, stroke:boolean, lineWidth:number, matrix: Matrix, globalAlpha: number): void {
+            this.context.globalAlpha = globalAlpha;
+            this.context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+            this.context.font = font;
+            if (stroke) {
+                this.context.lineWidth = lineWidth;
+                this.context.strokeStyle = color;
+                this.context.strokeText(text, x, y, width);
+            }
+            else {
+                this.context.fillStyle = color;
+                this.context.fillText(text, x, y, width);
+            }
         }
 
         /**

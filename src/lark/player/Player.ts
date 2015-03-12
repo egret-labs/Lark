@@ -144,6 +144,12 @@ module lark {
                     this.context.drawImage(texture,0,0,texture.width,texture.height,displayObject.$getConcatenatedMatrix(),displayObject.$getConcatenatedAlpha());
                 }
             }
+            if (displayObject instanceof text.TextSpan) {
+                var span = <text.TextSpan>displayObject;
+                var font = span.toFontString();
+                var style = span.toColorString();
+                this.context.drawText(span.text, font, style, 0, 0, span.textWidth, false, 0, displayObject.$getConcatenatedMatrix(), displayObject.$getConcatenatedAlpha());
+            }
             displayObject.$removeFlags(DisplayObjectFlags.Dirty);
         }
 

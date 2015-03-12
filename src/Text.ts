@@ -27,29 +27,65 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
+
+
 module lark {
-    export class Text extends DisplayObject {
+    export class Text extends DisplayObjectContainer {
 
         public constructor() {
             super();
+            var img = new Image();
+            img.src = "image/test.png";
+            img.onload = () => {
+                var texture: Texture = new Texture();
+                texture.$setBitmapData(img);
+                this.createChildren(texture);
+            }
+            
         }
 
+        createChildren(texture: Texture) {
+
+            var bitmap = new Bitmap();
+            bitmap.texture = texture;
+
+
+            var str = "Hello World, THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF";
+            var font = new text.FontDescription('"Microsoft Yahei"', true, true);
+            var format = new text.ElementFormat();
+            format.fontDescription = font;
+
+
+            var txtElement = new text.TextElement("Hi-------------", format);
+            var iconElement = new text.GraphicElement(bitmap, 24, 24);
+            var txtElement2 = new text.TextElement(str, format);
+
+            
+            var group = new text.GroupElement([txtElement, iconElement, txtElement2]);
+
+            var textBlock = new text.TextBlock();
+            textBlock.content = group;
+            var line: text.TextLine = null;
+            var y = 30;
+            while (line = textBlock.createTextLine(line, 300)) {
+                this.addChild(line);
+                line.y = y;
+                y += line.height;
+            }
+        }
     }
 }
 
-function resize() {
-    var canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("lark_canvas");
-    var context = canvas.getContext("2d");
-    setTimeout(() => context.fillText("Hello Text!", canvas.width / 2, canvas.height / 2 + 200), 300);
-}
 
 
 function load() {
-    resize();
 
+    //var txt = new lark.Text();
+    //txt.createChildren();
 
     var canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("lark_canvas");
     var context = canvas.getContext("2d");
+    context.font = '14px "Microsoft Yahei"';
 
 
     var count = 1000;
@@ -129,6 +165,3 @@ function createFontDicFor(font: string, text: string, context: CanvasRenderingCo
     }
     return letterDic;
 }
-
-window.addEventListener("load", load);
-window.addEventListener("resize", resize);
