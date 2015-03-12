@@ -43,14 +43,16 @@ module lark {
             }
             this.canvas = canvas;
             this.context = canvas.getContext("2d");
-            this.initialize();
         }
+
 
         private canvas:HTMLCanvasElement;
         private context:CanvasRenderingContext2D;
 
+        private stage:Stage = null;
 
-        private initialize():void {
+        public initialize(stage:Stage):void {
+            this.stage = stage;
             window.onresize = this.onSizeChanged;
             this.onSizeChanged();
         }
@@ -68,6 +70,8 @@ module lark {
             this.sizeChanged = false;
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
+            console.log("doResize");
+            this.stage.$updateStageSize(window.innerWidth,window.innerHeight);
         }
 
         /**
