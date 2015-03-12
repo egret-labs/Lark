@@ -40,16 +40,18 @@ module lark {
 
         }
 
-        public matrix:Matrix;
+        //对于V8，要控制对象属性的个数在12~128之间才能获得最高的属性查询性能。
 
+        /**
+         * 要绘制的纹理
+         */
         public texture:Texture;
+        /**
+         * 要绘制到屏幕的整体透明度。
+         */
+        public alpha:number = 1;
 
-        public x:number = 0;
+        public matrix:Matrix = null;
 
-        public y:number = 0;
-
-        public width:number = 0;
-
-        public height:number = 0;
     }
 }
