@@ -29,7 +29,7 @@
 
 module lark {
     /**
-     * @exclude
+     * @excluded
      * Lark播放器在Canvas上封装的实现
      */
     export class CanvasContext extends HashObject implements IPlayerContext {
@@ -68,9 +68,8 @@ module lark {
 
         private doResize = ():void=> {
             this.sizeChanged = false;
-            this.canvas.width = window.innerWidth;
-            this.canvas.height = window.innerHeight;
-            console.log("doResize");
+            //this.canvas.width = window.innerWidth;
+            //this.canvas.height = window.innerHeight;
             this.stage.$updateStageSize(window.innerWidth,window.innerHeight);
         }
 
@@ -98,6 +97,24 @@ module lark {
             var height = texture.$bitmapHeight;
             this.context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY,width, height,
                 texture.$offsetX, texture.$offsetY, width, height);
+        }
+
+        /**
+         * 绘制文本到一个区域上
+         */
+        public drawText(text: string, font: string, color: string, x: number, y: number, width: number, stroke:boolean, lineWidth:number, matrix: Matrix, globalAlpha: number): void {
+            this.context.globalAlpha = globalAlpha;
+            this.context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+            this.context.font = font;
+            if (stroke) {
+                this.context.lineWidth = lineWidth;
+                this.context.strokeStyle = color;
+                this.context.strokeText(text, x, y, width);
+            }
+            else {
+                this.context.fillStyle = color;
+                this.context.fillText(text, x, y, width);
+            }
         }
 
         /**

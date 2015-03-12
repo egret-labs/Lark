@@ -29,7 +29,7 @@
 
 module lark {
     /**
-     * @exclude
+     * @excluded
      * Lark播放器
      */
     export class Player extends HashObject {
@@ -142,7 +142,7 @@ module lark {
             if (displayObject instanceof Bitmap) {
                 var texture = (<Bitmap> displayObject).$texture;
                 if(texture){
-                    this.context.drawImage(texture,0,0,texture.width,texture.height,displayObject.$getConcatenatedMatrix(),displayObject.$getConcatenatedAlpha());
+                    this.context.drawImage(texture,displayObject.$getConcatenatedMatrix(),displayObject.$getConcatenatedAlpha());
                 }
             }
             if (displayObject instanceof text.TextSpan) {

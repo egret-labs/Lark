@@ -30,7 +30,7 @@
 module lark {
 
     /**
-     * @exclude
+     * @excluded
      * 心跳触发器
      */
     export class WebTicker extends HashObject {

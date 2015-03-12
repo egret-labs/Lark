@@ -30,7 +30,7 @@
 
 module lark {
     /**
-     * @exclude
+     * @excluded
      * 显示对象失效标志
      */
     export enum DisplayObjectFlags {

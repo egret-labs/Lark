@@ -29,7 +29,7 @@
 
 module lark {
     /**
-     * @exclude
+     * @excluded
      * 渲染命令
      */
     export class RenderCommand {
