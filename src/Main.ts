@@ -40,7 +40,7 @@ module lark {
                 this.start(texture);
             }
 
-        } 
+        }
 
         private start(texture:Texture):void{
             var bitmap = new Bitmap();

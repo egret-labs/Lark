@@ -56,17 +56,19 @@ module lark {
          */
         private stage:Stage;
 
+        private isPlaying:boolean = false;
         /**
          * 启动播放器
          */
         public start():void {
-            if (!this.context) {
+            if(this.isPlaying||!this.context){
                 return;
             }
+            this.isPlaying = true;
             if (!this.stage) {
                 this.initialize();
             }
-
+            this.context.startTick(this.onTick,this);
         }
 
         private initialize():void {
@@ -93,6 +95,7 @@ module lark {
          * 停止播放器，停止后将不能重新启动。
          */
         public stop():void {
+            this.pause();
             this.context = null;
         }
 
@@ -100,7 +103,16 @@ module lark {
          * 暂停播放器，后续可以通过调用start()重新启动播放器。
          */
         public pause():void {
-
+            if(!this.isPlaying){
+                return;
+            }
+            this.isPlaying = false;
+            this.context.stopTick(this.onTick,this);
         }
+
+        private onTick():void{
+            console.log(lark.getTimer());
+        }
+
     }
 }

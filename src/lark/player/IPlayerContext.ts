@@ -36,6 +36,14 @@ module lark {
     export interface IPlayerContext extends IHashObject {
 
         /**
+         * 启动心跳计时器
+         */
+        startTick(callBack:Function,thisObject:any):void;
+        /**
+         * 停止心跳计时器
+         */
+        stopTick(callBack:Function,thisObject:any):void;
+        /**
          * 清除整个屏幕
          */
         clearScreen():void;

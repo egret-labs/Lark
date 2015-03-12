@@ -40,9 +40,16 @@ module lark {
 
         }
 
+        public matrix:Matrix;
+
+        public texture:Texture;
+
         public x:number = 0;
+
         public y:number = 0;
+
         public width:number = 0;
+
         public height:number = 0;
     }
 }

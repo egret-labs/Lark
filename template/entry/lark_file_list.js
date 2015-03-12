@@ -15,7 +15,8 @@ var lark_file_list =
         "lark/display/Stage.js",
         "lark/player/RenderCommand.js",
         "lark/player/Player.js",
-        "lark/player/contexts/CanvasContext.js",
+        "lark/player/web/WebTicker.js",
+        "lark/player/web/CanvasContext.js",
         "Main.js"
     ];
 var lark_entry_class_name = "lark.Main";

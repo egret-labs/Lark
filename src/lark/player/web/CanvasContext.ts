@@ -42,10 +42,13 @@ module lark {
                 throw new Error("CanvasContext实例化失败，canvas参数不能为空！");
             }
             this.canvas = canvas;
+            this.context = canvas.getContext("2d");
             this.initialize();
         }
 
         private canvas:HTMLCanvasElement;
+        private context:CanvasRenderingContext2D;
+
 
         private initialize():void {
             window.onresize = this.onSizeChanged;
@@ -65,11 +68,10 @@ module lark {
             this.sizeChanged = false;
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
-            var cxt = this.canvas.getContext("2d");
             var img = new Image();
             img.src = "image/test.png";
             img.onload = ()=> {
-                cxt.drawImage(img, (this.canvas.width - img.width) * 0.5, (this.canvas.height - img.height) * 0.5);
+                this.context.drawImage(img, (this.canvas.width - img.width) * 0.5, (this.canvas.height - img.height) * 0.5, 100, 100);
             }
         }
 
@@ -93,6 +95,19 @@ module lark {
         public drawImage(texture:Texture, sourceX:number, sourceY:number, sourceWidth:number, sourceHeight:number,
                          targetX:number, targetY:number, targetWidth:number, targetHeight:number):void {
 
+        }
+
+        /**
+         * 启动心跳计时器
+         */
+        public startTick(callBack:Function,thisObject:any):void{
+            WebTicker.getInstance().register(callBack,thisObject);
+        }
+        /**
+         * 停止心跳计时器
+         */
+        public stopTick(callBack:Function,thisObject:any):void{
+            WebTicker.getInstance().unregister(callBack,thisObject);
         }
     }
 }
