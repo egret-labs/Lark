@@ -613,6 +613,13 @@ module lark {
         $measureContentBounds(bounds:Rectangle):void{
 
         }
+
+        /**
+         * 获取渲染节点
+         */
+        $getRenderNode():RenderNode{
+            return null;
+        }
     }
 
 }

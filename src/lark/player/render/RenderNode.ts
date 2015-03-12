@@ -30,28 +30,47 @@
 module lark {
     /**
      * @excluded
-     * 渲染命令
+     * 渲染节点基类
      */
-    export class RenderCommand {
-        /**
-         * 实例化一个渲染命令
-         */
-        public constructor() {
+    export class RenderNode {
+
+        public constructor(){
 
         }
 
-        //对于V8，要控制对象属性的个数在12~128之间才能获得最高的属性查询性能。
+        /**
+         * 上一次绘制区域在屏幕上的起点x
+         */
+        public oldXMin:number = 0;
+        /**
+         * 上一次绘制区域在屏幕上的起点y
+         */
+        public oldYMin:number = 0;
+        /**
+         * 上一次绘制区域在屏幕上的终点x
+         */
+        public oldXMax:number = 0;
+        /**
+         * 上一次绘制区域在屏幕上的终点y
+         */
+        public oldYMax:number = 0;
+
 
         /**
-         * 要绘制的纹理
+         * 绘制区域在屏幕上的起点x
          */
-        public texture:Texture;
+        public xMin:number = 0;
         /**
-         * 要绘制到屏幕的整体透明度。
+         * 绘制区域在屏幕上的起点y
          */
-        public alpha:number = 1;
-
-        public matrix:Matrix = null;
-
+        public yMin:number = 0;
+        /**
+         * 绘制区域在屏幕上的终点x
+         */
+        public xMax:number = 0;
+        /**
+         * 绘制区域在屏幕上的终点y
+         */
+        public yMax:number = 0;
     }
 }

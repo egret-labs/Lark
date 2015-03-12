@@ -29,52 +29,29 @@
 
 module lark {
     /**
-     * Bitmap 类表示用于表示位图图像的显示对象。这些图像可以是使用 Bitmap() 构造函数创建的图像。
-     * 利用 Bitmap() 构造函数，可以创建包含对 Texture 对象的引用的 Bitmap 对象。创建了 Bitmap 对象后，
-     * 使用父 DisplayObjectContainer 实例的 addChild() 或 addChildAt() 方法将位图放在显示列表中。
-     * 一个 Bitmap 对象可在若干 Bitmap 对象之中共享其 Texture 引用，与转换属性或旋转属性无关。
-     * 由于能够创建引用相同 Texture 对象的多个 Bitmap 对象，因此，多个显示对象可以使用相同的复杂 Texture 对象，
-     * 而不会因为每个显示对象实例使用一个 Texture 对象而产生内存开销。
+     * @excluded
+     * 位图渲染节点
      */
-    export class Bitmap extends DisplayObject {
-
+    export class BitmapNode extends RenderNode {
         /**
-         * 创建一个Bitmap对象
+         * 实例化一个渲染命令
          */
         public constructor() {
             super();
         }
 
-        $texture:Texture = null;
-
-        public get texture():Texture{
-            return this.$texture;
-        }
-
-        public set texture(value:Texture){
-            this.$texture = value;
-            this.$invalidateContentBounds();
-            this.$setDirtyFlags(DisplayObjectFlags.DirtyBitmapData);
-        }
-
-        $measureContentBounds(bounds:Rectangle):void {
-            var texture:Texture = this.$texture;
-            if(texture){
-                bounds.setTo(0,0,texture.width,texture.height);
-            }
-            else{
-                bounds.setEmpty();
-            }
-        }
-
-        private _renderNode:BitmapNode = new BitmapNode();
+        //对于V8，要控制对象属性的个数在12~128之间才能获得最高的属性查询性能。
 
         /**
-         * 获取渲染节点
+         * 要绘制的纹理
          */
-        $getRenderNode():RenderNode{
-            var node = this._renderNode;
-            return node;
-        }
+        public texture:Texture = null;
+        /**
+         * 要绘制到屏幕的整体透明度。
+         */
+        public alpha:number = 1;
+
+        public matrix:Matrix = null;
+
     }
 }
