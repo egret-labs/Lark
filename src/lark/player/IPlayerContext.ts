@@ -60,7 +60,12 @@ module lark {
         /**
          * 绘制图片到一个区域上
          */
-        drawImage(texture:Texture, matrix:Matrix, globalAlpha:number):void;
+        drawImage(texture: Texture, x: number, y: number, width: number, height: number, matrix: Matrix, globalAlpha: number): void;
+
+        /**
+         * 绘制文本到一个区域上
+         */
+        drawText(text: string, font: string, color: string, x: number, y: number, width: number, stroke: boolean, lineWidth: number, matrix: Matrix, globalAlpha: number): void;
 
     }
 }
