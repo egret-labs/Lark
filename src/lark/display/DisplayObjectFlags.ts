@@ -96,11 +96,6 @@ module lark {
         DirtyMask = 0x8000000,
 
         /**
-         * 显示对象的层级从上一次同步后发生了改变。
-         */
-        DirtyClipDepth = 0x10000000,
-
-        /**
          * 显示对象的子孙项列表从上一次同步后发生了改变。
          */
         DirtyDescendents = 0x20000000,
@@ -119,7 +114,7 @@ module lark {
         /**
          * 所有需要同步的属性全都失效.
          */
-        Dirty = DirtyMatrix | DirtyChildren | DirtyBitmapData | DirtyAlpha | DirtyMask | DirtyClipDepth |
+        Dirty = DirtyMatrix | DirtyChildren | DirtyBitmapData | DirtyAlpha | DirtyMask |
             DirtyMiscellaneousProperties
 
     }

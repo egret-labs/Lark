@@ -74,6 +74,13 @@ module lark {
          */
         $getRenderNode():RenderNode{
             var node = this._renderNode;
+            node.alpha = this.$getConcatenatedAlpha();
+            node.matrix = this.$getConcatenatedMatrix();
+            node.texture = this.$texture;
+            var rect = Rectangle.TEMP;
+            rect.copyFrom(this.$getContentBounds());
+            node.matrix.$transformBounds(rect);
+            node.updateDrawRect(rect.x,rect.y,rect.x+rect.width,rect.y+rect.height);
             return node;
         }
     }

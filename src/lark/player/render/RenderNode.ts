@@ -72,5 +72,19 @@ module lark {
          * 绘制区域在屏幕上的终点y
          */
         public yMax:number = 0;
+
+        /**
+         * 更新绘制的矩形区域
+         */
+        public updateDrawRect(xMin:number,yMin:number,xMax:number,yMax:number):void{
+            this.oldXMax = this.xMax;
+            this.oldXMin = this.xMin;
+            this.oldYMax = this.yMax;
+            this.oldYMin = this.yMin;
+            this.xMin = xMin;
+            this.yMin = yMin;
+            this.xMax = xMax;
+            this.yMax = yMax;
+        }
     }
 }
