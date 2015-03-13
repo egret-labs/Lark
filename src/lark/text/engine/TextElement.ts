@@ -48,38 +48,75 @@
             var format = this._elementFormat;
             var font = format.fontDescription;
             var fontString = format.toFontString();
-            var ctx = TextElement.$bufferContext;
-            ctx.font = fontString;
 
-
-            var textLength = this._text.length;
+            var textAtoms = this.split(this._text.substr(startIndex));
+            var textLength = 0;
             var currentWidth = 0;
-            for (var i = startIndex; i < textLength && currentWidth < width; i++) {
-                var char = this._text.charAt(i);
-                var w = ctx.measureText(char).width;
-                currentWidth += w;
+            for (var i = 0; i < textAtoms.length; i++) {
+                var atom = textAtoms[i];
+                var w = TextElement.measureText(atom, fontString);
+                var testW = currentWidth + w;
+                if (testW >= width)
+                    break;
+                currentWidth = testW;
+                textLength += atom.length;
             }
 
             var full = currentWidth >= width;
 
-            //减去最后一个超出宽度的字符
-            if (currentWidth > width) {
-                currentWidth -= w;
-                i--;
-            }
-
 
             var span: TextSpan = null;
             if (currentWidth > 0) {
-                span = new TextSpan(this._text.substring(startIndex, i), font.fontName, currentWidth, font.bold, font.italic, format.fontSize, format.color);
+                span = new TextSpan(this._text.substr(startIndex, textLength), font.fontName, currentWidth, font.bold, font.italic, format.fontSize, format.color);
                 span.width = currentWidth;
             } 
             return {
                 span: span,
-                length: i - startIndex,
-                ended: i == textLength,
-                full: full
+                length: textLength,
+                ended: startIndex + textLength == this._text.length,
+                full: full,
+                format:format
             };
         }
+        static splitRegex = /(?=[\u00BF-\u1FFF\u2C00-\uD7FF]|\b)(?![。，！、》…）)}”】\.\,\!\?\]])/;
+        protected split(text:string) {
+            return text.split(TextElement.splitRegex);
+        }
+
+        static fontDic: IStringDic = {
+            "Init": {}
+        }
+        static measureText(text: string,font:string) {
+            var width = 0.0;
+            var ctx = TextElement.$bufferContext;
+            if (ctx.font != font)
+                ctx.font = font;
+            var letterdic = TextElement.fontDic[font];
+            if (letterdic == undefined) {
+                letterdic = {};
+                TextElement.fontDic[font] = letterdic
+            }
+            var length = text.length;
+            for (var i = 0; i < length; i++) {
+                var letter = text.charCodeAt(i);
+                var w = letterdic[letter];
+                if (w >= 0) {
+                    width += w;
+                    continue;
+                }
+                w = ctx.measureText(text.charAt(i)).width;
+                letterdic[letter] = w;
+                width += w;
+            }
+            return width;
+        }
+    }
+
+    interface ILetterToWidth {
+        [letter: number]: number
+    }
+
+    interface IStringDic {
+        [key: string]: ILetterToWidth
     }
 }

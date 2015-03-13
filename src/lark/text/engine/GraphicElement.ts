@@ -3,8 +3,8 @@
         public constructor(graphic: DisplayObject = null, elementWidth: number = 15.0, elementHeight: number = 15.0, elementFormat: ElementFormat = null) {
             super();
             this._graphic = graphic;
-            this._elementHeight = elementHeight;
-            this._elementWidth = elementWidth;
+            this._graphic.width = elementWidth;
+            this._graphic.height = elementHeight;
             this._elementFormat = elementFormat;
         }
 
@@ -33,29 +33,6 @@
             this._graphic = value;
         }
 
-        protected _elementWidth: number = NaN;
-        
-        public get elementWidth(): number {
-            return this._elementWidth;
-        }
-
-        public set elementWidth(value: number) {
-            if (this._elementWidth == value)
-                return;
-            this._elementWidth = value;
-        }
-
-        protected _elementHeight: number = NaN;
-        public get elementHeight(): number {
-            return this._elementHeight;
-        }
-
-        public set elementHeight(value: number) {
-            if (this._elementHeight == value)
-                return;
-            this._elementHeight = value;
-        }
-
         public $createSpan(width: number,isFirstSpan:boolean =false, startIndex: number = 0): CreateSpanResult {
             if (startIndex > 0)
                 return {
@@ -63,13 +40,13 @@
                     full:false
                 };
 
-
+            var graphic = this._graphic;
             var span: DisplayObject = null;
             var end = true;
             if (isFirstSpan)
-                span = this._graphic;
-            else if (width < this._graphic.width)
-                span = this._graphic;
+                span = graphic;
+            else if (width < graphic.width)
+                span = graphic;
             else
                 end = false;
             
@@ -79,7 +56,8 @@
                 span: span,
                 length: span == null ? 0 : 1,
                 ended: end,
-                full: full
+                full: full,
+                format:this._elementFormat
             };
         }
     }

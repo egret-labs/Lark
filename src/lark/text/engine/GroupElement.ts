@@ -26,7 +26,6 @@
             //startIndex 大于 总长度，不能再创建新 span
             if (startElementIndex == -1) {
                 return {
-                    span: null,
                     ended: true,
                     length: 0,
                     full: false
@@ -56,7 +55,8 @@
                 span: result.span,
                 full: result.full,
                 ended: result.ended && i == this._elements.length - 1,
-                length: result.length
+                length: result.length,
+                format:result.format
             };
         }
     }

@@ -50,15 +50,16 @@ module lark {
             bitmap.texture = texture;
 
 
-            var str = "Hello World, THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF";
+            var str = "Hello World, ActionScript コードから直接 TextLine オブジェクトを作成することはできません。new TextLine() を呼び出すと、例外がスローされます。你好啊，我是中文Hi, how are you? 你在干什么안녕하세요";
             var font = new text.FontDescription('"Microsoft Yahei"', true, true);
             var format = new text.ElementFormat();
             format.fontDescription = font;
             format.fontSize = 24;
+            format.verticalAlign = VerticalAlign.BOTTOM;
 
 
             var txtElement = new text.TextElement("Hi-------------", format);
-            var iconElement = new text.GraphicElement(bitmap, 24, 24);
+            var iconElement = new text.GraphicElement(bitmap, 50, 50, format);
             var txtElement2 = new text.TextElement(str, format);
 
             
@@ -68,101 +69,27 @@ module lark {
             textBlock.content = group;
             var line: text.TextLine = null;
             var y = 30;
-            while (line = textBlock.createTextLine(line, 300)) {
+            var width = Math.random() * 200 + 400
+            while (line = textBlock.createTextLine(line, width)) {
                 this.addChild(line);
                 line.y = y;
-                y += line.height;
+                y += line.height+10;
+                format.color = this.getRandomColor();
+                //format.fontSize = Math.random() * 60 + 20;
             }
         }
-    }
-}
 
-
-
-function load() {
-
-    //var txt = new lark.Text();
-    //txt.createChildren();
-
-    var canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("lark_canvas");
-    var context = canvas.getContext("2d");
-    context.font = '14px "Microsoft Yahei"';
-
-
-    var count = 1000;
-    var width = 0;
-
-
-    var demoText = 'TextFormat';
-    var start = performance.now();
-    for (var i = 0; i < count; i++) {
-        width = measureText(demoText, context);
-    }
-    var end = performance.now();
-    console.log( width, end - start);
-
-
-
-
-    //demoText = "Hello world";
-    start = performance.now();
-    for (var i = 0; i < count; i++) {
-        width = context.measureText(demoText).width;
-    }
-    end = performance.now();
-
-    console.log( width, end - start);
-
-
-
-
-}
-interface ILetterToWidth {
-    [letter:number]:number
-}
-
-interface IStringDic {
-    [key:string]:ILetterToWidth
-}
-
-var fontDic: IStringDic = {
-    "Init": []
-}
-
-
-
-function measureText(text: string, context:CanvasRenderingContext2D) {
-    var width = 0.0;
-    var font = context.font;
-    var letterdic = fontDic[font];
-    if (letterdic==undefined) {
-        letterdic = createFontDicFor(font, text, context);
-        fontDic[font] = letterdic
-    }
-    var length = text.length;
-    for (var i = 0; i < length; i++) {
-        var letter = text.charCodeAt(i);
-        var w = letterdic[letter];
-        if (w >= 0) {
-            width += w;
-            continue;
+        
+        colors = [0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0x00FFFF, 0xFFFF00, 0xFF00FF];
+        getRandomColor() {
+            var random = Math.random() * this.colors.length;
+            random = Math.floor(random);
+            return this.colors[random];
         }
-        w = context.measureText(text.charAt(i)).width;
-        letterdic[letter] = w;
-        width += w;
     }
-    return width;
 }
 
-function createFontDicFor(font: string, text: string, context: CanvasRenderingContext2D) {
-    var letterDic: ILetterToWidth = {};
-    var length = text.length;
-    for (var i = 0; i < length; i++) {
-        var letter = text.charCodeAt(i);
-        if (letter in letterDic)
-            continue;
-        var width = context.measureText(text.charAt(i)).width;
-        letterDic[letter] = width;
-    }
-    return letterDic;
-}
+
+
+
+

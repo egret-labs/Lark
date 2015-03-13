@@ -67,7 +67,8 @@
     export interface CreateSpanResult {
         span?: DisplayObject;
         length?: number;
-        ended: boolean;
-        full: boolean;
+        ended?: boolean;
+        full?: boolean;
+        format?: ElementFormat;
     }
 }

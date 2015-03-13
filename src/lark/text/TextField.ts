@@ -29,6 +29,7 @@
 
 module lark {
 
+    import TextBlock = text.TextBlock;
 
     /**
      * TextField 类用于创建显示对象以显示和输入文本。 
@@ -36,12 +37,38 @@ module lark {
      * Lark 提供了多种在运行时设置文本格式的方法。TextFormat 类允许您设置 TextField 对象的字符和段落格式。
      * 
      */
-    class TextField extends DisplayObject {
+    class TextField extends DisplayObjectContainer {
         /**
          * 创建一个TextField对象
          */
         public constructor() {
             super();
+        }
+
+
+        protected _multiline = false;
+        public get multiline(): boolean {
+            return this._multiline;
+        }
+        public set multiline(value: boolean) {
+            if (value == this._multiline)
+                return;
+            this._multiline = value;
+
+            //todo:dirty
+        }
+
+        
+        protected _wordWrap = false;
+        public get wordWrap(): boolean {
+            return this._wordWrap;
+        }
+        public set wordWrap(value: boolean) {
+            if (value == this._wordWrap)
+                return;
+            this._wordWrap = value;
+
+            //todo:dirty
         }
     }
 }

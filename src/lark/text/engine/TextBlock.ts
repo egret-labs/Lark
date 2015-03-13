@@ -27,8 +27,9 @@ module lark.text {
             var textLine:TextLine = null;
             var currentWidth = lineOffset;
             var currentLength = 0;
-
-
+            var maxHeight = 0;
+            var minHeight = 10000;
+            var results:CreateSpanResult[] = []
             while (currentWidth < width) {
                 var result = content.$createSpan(width - currentWidth, previousLine == null, start + currentLength);
 
@@ -39,9 +40,11 @@ module lark.text {
                 var span = result.span;
                 span.x = currentWidth;
                 currentWidth += span.width;
-                textLine.addChild(span);
+                results.push(result);
                 currentLength += result.length;
-
+                var h = span.height;
+                maxHeight = Math.max(maxHeight, h);
+                minHeight = Math.min(minHeight, h);
                 if (result.ended || result.full)
                     break;
             }
@@ -49,6 +52,26 @@ module lark.text {
             {
                 textLine.$setAtomCount(currentLength);
                 textLine.$setTextBlockBeginIndex(start);
+
+                for (var i = 0; i < results.length; i++) {
+                    var result = results[i];
+                    var span = result.span;
+                    switch (result.format.verticalAlign) {
+                        case VerticalAlign.BOTTOM: {
+                            span.y = maxHeight - span.height;
+                            break;
+                        }
+                        case VerticalAlign.MIDDLE: {
+                            span.y = (maxHeight - span.height) / 2;
+                            break;
+                        }
+                        case VerticalAlign.TOP: {
+                            span.y = 0;
+                            break;
+                        }
+                    }
+                    textLine.addChild(span);
+                }
             }
             return textLine;
         }

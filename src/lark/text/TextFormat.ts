@@ -33,7 +33,7 @@ module lark {
      * 您可以将文本格式应用于静态文本字段和动态文本字段。
      * 
      */
-    class TextFormat extends HashObject {
+    class TextFormat extends text.ElementFormat {
 
         static $defaultTextFormat: TextFormat = new TextFormat();
 
@@ -57,39 +57,10 @@ module lark {
 
 
         /**
-         * 指定文本是否为粗体字。
-         */
-        public bold: boolean = false;
-
-
-        /**
-         * 表示文本为带项目符号的列表的一部分。
-         */
-        public bullet: boolean = false;
-
-
-        /**
-         * 表示文本的颜色。
-         */
-        public color: number = NaN;
-
-
-        /**
-         * 使用此文本格式的文本的字体名称，以字符串形式表示。
-         */
-        public font: string = null;
-
-
-        /**
          * 表示从左边距到段落中第一个字符的缩进。
          */
         public indent: number = NaN;
 
-
-        /**
-         * 表示使用此文本格式的文本是否为斜体。
-         */
-        public italic: boolean = null;
 
 
         /**
@@ -110,23 +81,12 @@ module lark {
         public rightMargin: number = NaN;
 
 
-        /**
-         * 使用此文本格式的文本的大小（以像素为单位）。
-         */
-        public size: number = NaN;
-
 
         /**
          * 表示显示超链接的目标窗口。
          */
         public target : string = null;
-
-
-        /**
-         * 表示使用此文本格式的文本是带下划线 (true) 还是不带下划线 (false)。
-         */
-        public underline: boolean = null;
-
+        
 
         /**
          * 表示使用此文本格式的文本的目标 URL。
