@@ -149,7 +149,7 @@ module lark {
                 var span = <text.TextSpan>displayObject;
                 var font = span.toFontString();
                 var style = span.toColorString();
-                this.context.drawText(span.text, font, style, 0, 0, span.textWidth, false, 0, displayObject.$getConcatenatedMatrix(), displayObject.$getConcatenatedAlpha());
+                this.context.drawText(span.text, font, style, 0, span.size, span.textWidth, false, 0, displayObject.$getConcatenatedMatrix(), displayObject.$getConcatenatedAlpha());
             }
             displayObject.$removeFlags(DisplayObjectFlags.Dirty);
         }
