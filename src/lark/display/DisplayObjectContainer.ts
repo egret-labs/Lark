@@ -370,7 +370,7 @@ module lark {
                     xMin = Math.min(xMin, childBounds.x)
                     xMax = Math.max(xMax, childBounds.x + childBounds.width);
                     yMin = Math.min(yMin,childBounds.y);
-                    yMax = Math.max(yMax,childBounds.y+childBounds.width);
+                    yMax = Math.max(yMax,childBounds.y+childBounds.height);
                 }
                 else {
                     found = true;
