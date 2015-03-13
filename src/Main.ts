@@ -49,6 +49,7 @@ module lark {
                 bitmap.texture = texture;
                 bitmap.x = x;
                 bitmap.y = y;
+                bitmap.scaleX = bitmap.scaleY = Math.random();
                 bitmap.rotation = Math.random()*360;
                 x += texture.width+40;
                 if(x>1920){
