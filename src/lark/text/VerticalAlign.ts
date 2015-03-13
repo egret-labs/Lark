@@ -1,5 +1,5 @@
 ﻿module lark {
-    export const enum VerticalAlign {
+    export enum VerticalAlign {
         TOP,
         BOTTOM,
         MIDDLE

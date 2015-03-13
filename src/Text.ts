@@ -54,8 +54,8 @@ module lark {
             var font = new text.FontDescription('"Microsoft Yahei"', true, true);
             var format = new text.ElementFormat();
             format.fontDescription = font;
-            format.fontSize = 50;
-            format.verticalAlign = VerticalAlign.TOP;
+            format.fontSize = 24;
+            format.verticalAlign = VerticalAlign.BOTTOM;
 
 
             var txtElement = new text.TextElement("Hi-------------", format);
