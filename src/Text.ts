@@ -54,8 +54,8 @@ module lark {
             var font = new text.FontDescription('"Microsoft Yahei"', true, true);
             var format = new text.ElementFormat();
             format.fontDescription = font;
-            format.fontSize = 24;
-            format.verticalAlign = VerticalAlign.BOTTOM;
+            format.fontSize = 50;
+            format.verticalAlign = VerticalAlign.TOP;
 
 
             var txtElement = new text.TextElement("Hi-------------", format);
@@ -68,7 +68,7 @@ module lark {
             var textBlock = new text.TextBlock();
             textBlock.content = group;
             var line: text.TextLine = null;
-            var y = 30;
+            var y = 0;
             var width = Math.random() * 200 + 400
             while (line = textBlock.createTextLine(line, width)) {
                 this.addChild(line);

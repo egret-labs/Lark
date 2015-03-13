@@ -107,6 +107,7 @@ module lark {
             this.context.globalAlpha = globalAlpha;
             this.context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
             this.context.font = font;
+            this.context.textBaseline = "middle";
             if (stroke) {
                 this.context.lineWidth = lineWidth;
                 this.context.strokeStyle = color;
