@@ -118,6 +118,23 @@ module lark {
             }
         }
 
+        public beginDrawDirtyRect():void{
+            this.context.setTransform(1,0,0,1,0,0);
+            this.context.save();
+        }
+
+        public drawDirtyRect(x:number,y:number,width:number,height:number):void{
+            this.context.rect(x,y,width,height);
+        }
+
+        public endDrawDirtyRect():void{
+            this.context.clip();
+        }
+
+        public endDrawScreen():void{
+            this.context.restore();
+        }
+
         /**
          * 启动心跳计时器
          */

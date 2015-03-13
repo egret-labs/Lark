@@ -34,7 +34,7 @@ module lark {
      */
     export class RenderNode {
 
-        public constructor(){
+        public constructor() {
 
         }
 
@@ -74,17 +74,56 @@ module lark {
         public yMax:number = 0;
 
         /**
+         * 是否需要重绘
+         */
+        public isDirty:boolean = false;
+
+        /**
+         * 要绘制到屏幕的整体透明度。
+         */
+        public alpha:number = 1;
+
+        public matrix:Matrix = null;
+        /**
          * 更新绘制的矩形区域
          */
-        public updateDrawRect(xMin:number,yMin:number,xMax:number,yMax:number):void{
+        public update(target:DisplayObject):void {
+            this.alpha = target.$getConcatenatedAlpha();
+            this.matrix = target.$getConcatenatedMatrix();
+            var rect = Rectangle.TEMP;
+            rect.copyFrom(target.$getContentBounds());
+            this.matrix.$transformBounds(rect);
+            this.isDirty = target.$hasAnyFlags(DisplayObjectFlags.Dirty);
             this.oldXMax = this.xMax;
             this.oldXMin = this.xMin;
             this.oldYMax = this.yMax;
             this.oldYMin = this.yMin;
-            this.xMin = xMin;
-            this.yMin = yMin;
-            this.xMax = xMax;
-            this.yMax = yMax;
+            this.xMin = rect.x;
+            this.yMin = rect.y;
+            this.xMax = rect.x+rect.width;
+            this.yMax = rect.y+rect.height;
         }
+
+        /**
+         * 测试节点的当前矩形和上次矩形是否跟目标节点的当前矩形相交。
+         */
+        public intersects(node:RenderNode):boolean {
+
+            return this.intersectsRect(this.xMin,this.yMin,this.xMax,this.yMax,node.xMin,node.yMin,node.xMax,node.yMax)||
+                this.intersectsRect(this.oldXMin,this.oldYMin,this.oldXMax,this.oldYMax,node.xMin,node.yMin,node.xMax,node.yMax);
+        }
+
+        private intersectsRect(minX:number, minY:number, maxX:number, maxY:number,
+                               targetMinX:number, targetMinY:number, targetMaxX:number, targetMaxY:number):boolean {
+            var max = minX > targetMinX ? minX : targetMinX;
+            var min = maxX < targetMaxX ? maxX : targetMaxX;
+            if (max > min) {
+                return false;
+            }
+            max = minY > targetMinY ? minY : targetMinY;
+            min = maxY < targetMaxY ? maxY : targetMaxY;
+            return max<=min;
+        }
+
     }
 }
