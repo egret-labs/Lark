@@ -44,7 +44,6 @@ module lark {
             DisplayObjectFlags.DirtyMatrix |
             DisplayObjectFlags.DirtyAlpha |
             DisplayObjectFlags.DirtyMask |
-            DisplayObjectFlags.DirtyClipDepth |
             DisplayObjectFlags.DirtyMiscellaneousProperties;
         }
 
@@ -361,7 +360,7 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var contentBounds = this.getContentBounds();
+            var contentBounds = this.$getContentBounds();
             var bounds = this.getBounds(this.$parent, Rectangle.TEMP);
             var angle = this._rotation / 180 * Math.PI;
             var baseWidth = contentBounds.$getBaseWidth(angle);
@@ -387,7 +386,7 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var contentBounds = this.getContentBounds();
+            var contentBounds = this.$getContentBounds();
             var bounds = this.getBounds(this.$parent, Rectangle.TEMP);
             var angle = this._rotation / 180 * Math.PI;
             var baseHeight = contentBounds.$getBaseHeight(angle);
@@ -529,9 +528,9 @@ module lark {
         }
 
         $getTransformedBounds(targetCoordinateSpace:DisplayObject, resultRect?:Rectangle):Rectangle {
-            var bounds = this.getContentBounds();
+            var bounds = this.$getContentBounds();
             if (!resultRect) {
-                resultRect = new lark.Rectangle();
+                resultRect = new Rectangle();
             }
             resultRect.copyFrom(bounds);
             if (targetCoordinateSpace === this || resultRect.isEmpty()) {
@@ -597,7 +596,7 @@ module lark {
         /**
          * 获取自身占用的矩形区域，如果是容器，还包括所有子项占据的区域。
          */
-        private getContentBounds():Rectangle {
+        $getContentBounds():Rectangle {
             var bounds = this._contentBounds;
             if (this.$hasFlags(DisplayObjectFlags.InvalidContentBounds)) {
                 this.$removeFlags(DisplayObjectFlags.InvalidContentBounds);

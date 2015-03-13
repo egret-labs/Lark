@@ -68,8 +68,9 @@ module lark {
 
         private doResize = ():void=> {
             this.sizeChanged = false;
-            //this.canvas.width = window.innerWidth;
-            //this.canvas.height = window.innerHeight;
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+            console.log(window.innerWidth,window.innerHeight);
             this.stage.$updateStageSize(window.innerWidth,window.innerHeight);
         }
 

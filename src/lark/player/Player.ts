@@ -117,12 +117,15 @@ module lark {
             this.findDirtyDisplayObjects(this.stage)
         }
 
+        private renderNodeList:RenderNode[] = [];
+        private dirtyNodeList:RenderNode[] = [];
+
         private findDirtyDisplayObjects(displayObject:DisplayObject):void {
             var stack:DisplayObject[] = [displayObject];
             while (stack.length > 0) {
                 displayObject = stack.pop();
                 if (displayObject.$hasAnyFlags(DisplayObjectFlags.Dirty)) {
-                    this.updateFrame(displayObject);
+                    this.updateRenderNode(displayObject);
                 }
                 if (displayObject.$hasFlags(DisplayObjectFlags.DirtyDescendents)) {
                     var children = displayObject.$children;
@@ -137,7 +140,7 @@ module lark {
             }
         }
 
-        private updateFrame(displayObject:DisplayObject):void {
+        private updateRenderNode(displayObject:DisplayObject):void {
 
             if (displayObject instanceof Bitmap) {
                 var texture = (<Bitmap> displayObject).$texture;
@@ -145,14 +148,23 @@ module lark {
                     this.context.drawImage(texture,displayObject.$getConcatenatedMatrix(),displayObject.$getConcatenatedAlpha());
                 }
             }
-            if (displayObject instanceof text.TextSpan) {
+            else if (displayObject instanceof text.TextSpan) {
                 var span = <text.TextSpan>displayObject;
                 var font = span.toFontString();
                 var style = span.toColorString();
                 this.context.drawText(span.text, font, style, 0, span.size, span.textWidth, false, 0, displayObject.$getConcatenatedMatrix(), displayObject.$getConcatenatedAlpha());
             }
+            if(displayObject.$hasFlags(DisplayObjectFlags.DirtyChildren)){
+                var children = displayObject.$children;
+                if (children) {
+                    var length = children.length;
+                    for (var i = 0; i < length; i++) {
+                        var child = children[i];
+                        this.updateRenderNode(child);
+                    }
+                }
+            }
             displayObject.$removeFlags(DisplayObjectFlags.Dirty);
         }
-
     }
 }
