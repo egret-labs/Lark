@@ -352,7 +352,7 @@ module lark {
          * 宽度是根据显示对象内容的范围来计算的。优先顺序为 显式设置宽度 > 测量宽度。
          */
         public get width():number {
-            return this.getBounds(this.$parent, Rectangle.TEMP).width;
+            return this.$getTransformedBounds(this.$parent, Rectangle.TEMP).width;
         }
 
         public set width(value:number) {
@@ -361,7 +361,7 @@ module lark {
                 return;
             }
             var contentBounds = this.$getContentBounds();
-            var bounds = this.getBounds(this.$parent, Rectangle.TEMP);
+            var bounds = this.$getTransformedBounds(this.$parent, Rectangle.TEMP);
             var angle = this._rotation / 180 * Math.PI;
             var baseWidth = contentBounds.$getBaseWidth(angle);
             if (!baseWidth) {
@@ -378,7 +378,7 @@ module lark {
          * 高度是根据显示对象内容的范围来计算的。优先顺序为 显式设置高度 > 测量高度。
          */
         public get height():number {
-            return this.getBounds(this.$parent, Rectangle.TEMP).height;
+            return this.$getTransformedBounds(this.$parent, Rectangle.TEMP).height;
         }
 
         public set height(value:number) {
@@ -387,7 +387,7 @@ module lark {
                 return;
             }
             var contentBounds = this.$getContentBounds();
-            var bounds = this.getBounds(this.$parent, Rectangle.TEMP);
+            var bounds = this.$getTransformedBounds(this.$parent, Rectangle.TEMP);
             var angle = this._rotation / 180 * Math.PI;
             var baseHeight = contentBounds.$getBaseHeight(angle);
             if (!baseHeight) {
