@@ -37,5 +37,15 @@ module lark {
         public constructor(){
             super();
         }
+
+        public text:string = null;
+
+        public font:string = null;
+
+        public size:number = 12;
+
+        public style:string = null;
+
+        public textWidth:number = 0;
     }
 }

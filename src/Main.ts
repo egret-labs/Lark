@@ -44,17 +44,20 @@ module lark {
 
         private start(texture:Texture):void{
             var x=20,y=20;
-            for(var i=0;i<1000;i++){
+            for(var i=0;i<500;i++){
                 var bitmap = new Bitmap();
                 bitmap.texture = texture;
                 bitmap.x = x;
                 bitmap.y = y;
                 bitmap.scaleX = bitmap.scaleY = Math.random();
                 bitmap.rotation = Math.random()*360;
-                x += texture.width+40;
+                x += texture.width;
                 if(x>1920){
                     x = 0;
-                    y += texture.height+40;
+                    y += texture.height;
+                    if(y>960){
+                        y = 0;
+                    }
                 }
                 this.addChild(bitmap);
             }

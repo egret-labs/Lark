@@ -46,12 +46,6 @@ module lark {
          * 要绘制的纹理
          */
         public texture:Texture = null;
-        /**
-         * 要绘制到屏幕的整体透明度。
-         */
-        public alpha:number = 1;
-
-        public matrix:Matrix = null;
 
     }
 }

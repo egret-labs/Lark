@@ -114,57 +114,106 @@ module lark {
         }
 
         private onTick():void {
-            this.findDirtyDisplayObjects(this.stage)
+            var t = lark.getTimer();
+            this.syncDisplayList(this.stage);
+            if (this.dirtyNodeList.length > 0) {
+                var t1 = lark.getTimer();
+                console.log("syncDisplayList:"+(t1-t)+"ms");
+                this.drawDirtyRect();
+                var t2 = lark.getTimer();
+                console.log("drawDirtyRect:"+(t2-t1)+"ms");
+                this.drawRenderNodes();
+                var t3 = lark.getTimer();
+                console.log("drawImageCost:"+(t3-t2)+"ms");
+            }
         }
 
         private renderNodeList:RenderNode[] = [];
         private dirtyNodeList:RenderNode[] = [];
+        private notDirtyNodeList:RenderNode[] = [];
 
-        private findDirtyDisplayObjects(displayObject:DisplayObject):void {
+        /**
+         * 同步显示列表。
+         */
+        private syncDisplayList(displayObject:DisplayObject):void {
+            var nodeList:RenderNode[] = [];
+            var dirtyNodes:RenderNode[] = [];
+            var notDirtyNodes:RenderNode[] = [];
             var stack:DisplayObject[] = [displayObject];
             while (stack.length > 0) {
                 displayObject = stack.pop();
-                if (displayObject.$hasAnyFlags(DisplayObjectFlags.Dirty)) {
-                    this.updateRenderNode(displayObject);
-                }
-                if (displayObject.$hasFlags(DisplayObjectFlags.DirtyDescendents)) {
-                    var children = displayObject.$children;
-                    if (children) {
-                        for (var i = children.length - 1; i >= 0; i--) {
-                            var child = children[i];
-                            stack.push(child);
-                        }
+                var node = displayObject.$getRenderNode();
+                displayObject.$removeFlags(DisplayObjectFlags.Dirty);
+                if (node) {
+                    nodeList.push(node);
+                    if (node.isDirty) {
+                        dirtyNodes.push(node);
                     }
-                    displayObject.$removeFlags(DisplayObjectFlags.DirtyDescendents);
+                    else {
+                        notDirtyNodes.push(node);
+                    }
                 }
-            }
-        }
-
-        private updateRenderNode(displayObject:DisplayObject):void {
-
-            if (displayObject instanceof Bitmap) {
-                var texture = (<Bitmap> displayObject).$texture;
-                if(texture){
-                    this.context.drawImage(texture,displayObject.$getConcatenatedMatrix(),displayObject.$getConcatenatedAlpha());
-                }
-            }
-            else if (displayObject instanceof text.TextSpan) {
-                var span = <text.TextSpan>displayObject;
-                var font = span.toFontString();
-                var style = span.toColorString();
-                this.context.drawText(span.text, font, style, 0, 0, span.textWidth, false, 0, displayObject.$getConcatenatedMatrix(), displayObject.$getConcatenatedAlpha());
-            }
-            if(displayObject.$hasFlags(DisplayObjectFlags.DirtyChildren)){
                 var children = displayObject.$children;
                 if (children) {
-                    var length = children.length;
-                    for (var i = 0; i < length; i++) {
+                    for (var i = children.length - 1; i >= 0; i--) {
                         var child = children[i];
-                        this.updateRenderNode(child);
+                        stack.push(child);
                     }
                 }
             }
-            displayObject.$removeFlags(DisplayObjectFlags.Dirty);
+            this.renderNodeList = nodeList;
+            this.dirtyNodeList = dirtyNodes;
+            this.notDirtyNodeList = notDirtyNodes;
+        }
+
+        /**
+         * 绘制脏矩形区域
+         */
+        private drawDirtyRect():void {
+            this.context.beginDrawDirtyRect();
+            var dirtyList = this.dirtyNodeList;
+            var notDirtyList = this.notDirtyNodeList;
+            var dirtyLength = dirtyList.length;
+            for (var i = 0; i < dirtyLength; i++) {
+                var node = dirtyList[i];
+                for (var j = notDirtyList.length - 1; j >= 0; j--) {
+                    var targetNode = notDirtyList[j]
+                    if (node.intersects(targetNode)) {
+                        targetNode.isDirty = true;
+                        notDirtyList.splice(j, 1);
+                    }
+                }
+                this.context.drawDirtyRect(node.oldXMin, node.oldYMin, node.oldXMax - node.oldXMin, node.oldYMax - node.oldYMin);
+                this.context.drawDirtyRect(node.xMin, node.yMin, node.xMax - node.xMin, node.yMax - node.yMin);
+            }
+            this.context.endDrawDirtyRect();
+        }
+
+        /**
+         * 绘制渲染节点
+         */
+        private drawRenderNodes():void {
+            var nodeList = this.renderNodeList;
+            var length = nodeList.length;
+            for (var i = 0; i < length; i++) {
+                var node = nodeList[i];
+                if (!node.isDirty) {
+                    continue;
+                }
+                if (node instanceof BitmapNode) {
+                    var bitmapNode = <BitmapNode>node;
+                    var texture = bitmapNode.texture;
+                    if (texture) {
+                        this.context.drawImage(texture, bitmapNode.matrix, bitmapNode.alpha);
+                    }
+                }
+                else if(node instanceof TextNode){
+                    var textNode = <TextNode>node;
+                    this.context.drawText(textNode.text, textNode.font, textNode.style, 0,
+                        textNode.size, textNode.textWidth, false, 0, textNode.matrix, textNode.alpha);
+                }
+            }
+            this.context.endDrawScreen();
         }
     }
 }

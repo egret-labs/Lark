@@ -4,6 +4,7 @@
      */
     export class TextSpan extends DisplayObject implements ISpan {
         constructor(
+
             public text: string = null,
             public fontName: string = "",
             public textWidth: number = 0,
@@ -24,11 +25,27 @@
             bounds.setTo(0, 0, this.textWidth, this.size);
         }
 
-        toFontString() {
+        private _renderNode:TextNode = new TextNode();
+
+        /**
+         * 获取渲染节点
+         */
+        $getRenderNode():RenderNode{
+            var node = this._renderNode;
+            node.update(this);
+            node.text = this.text;
+            node.size = this.size;
+            node.font = this.$toFontString();
+            node.style = this.$toColorString();
+            node.textWidth = this.textWidth;
+            return node;
+        }
+
+        $toFontString() {
             return this.size + "px " + this.fontName + " " + (this.italic ? FontDescription.ITALIC : "") + " " + (this.bold ? FontDescription.BOLD : "");
         }
 
-        toColorString() {
+        $toColorString() {
             return lark.toColorString(this.color);
         }
     }
