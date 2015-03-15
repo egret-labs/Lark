@@ -42,6 +42,8 @@ module lark {
 
         }
 
+        private targetIcon:Bitmap;
+
         private start(texture:Texture):void{
             var x=20,y=20;
             for(var i=0;i<500;i++){
@@ -61,8 +63,17 @@ module lark {
                 }
                 this.addChild(bitmap);
             }
+            this.targetIcon = new lark.Bitmap();
+            this.targetIcon.texture = texture;
+            this.targetIcon.x = 300;
+            this.targetIcon.y = 300;
+            this.addChild(this.targetIcon);
+            WebTicker.getInstance().register(this.onTick,this);
         }
 
+        private onTick():void{
+            this.targetIcon.rotation += 5;
+        }
     }
 
 }

@@ -85,6 +85,7 @@ module lark {
          * 清除屏幕的部分渲染区域
          */
         public clearRect(x:number, y:number, width:number, height:number):void {
+            this.context.setTransform(1,0,0,1,0,0);
             this.context.clearRect(x, y, width, height);
         }
 
@@ -125,6 +126,7 @@ module lark {
         }
 
         public drawDirtyRect(x:number,y:number,width:number,height:number):void{
+            this.clearRect(x,y,width,height);
             this.context.rect(x,y,width,height);
         }
 

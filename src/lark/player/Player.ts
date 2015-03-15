@@ -116,29 +116,30 @@ module lark {
         private onTick():void {
             var t = lark.getTimer();
             this.syncDisplayList(this.stage);
-            if (this.dirtyNodeList.length > 0) {
+            //if (this.dirtyNodeList.length > 0) {
                 var t1 = lark.getTimer();
-                console.log("syncDisplayList:"+(t1-t)+"ms");
-                this.drawDirtyRect();
+              //  console.log("syncDisplayList:"+(t1-t)+"ms");
+                //this.drawDirtyRect();
                 var t2 = lark.getTimer();
-                console.log("drawDirtyRect:"+(t2-t1)+"ms");
+               // console.log("drawDirtyRect:"+(t2-t1)+"ms");
                 this.drawRenderNodes();
                 var t3 = lark.getTimer();
-                console.log("drawImageCost:"+(t3-t2)+"ms");
-            }
+               // console.log("drawCost:"+(t3-t2)+"ms");
+            //}
         }
 
         private renderNodeList:RenderNode[] = [];
         private dirtyNodeList:RenderNode[] = [];
         private notDirtyNodeList:RenderNode[] = [];
+        private screenGrids:any[] = [];
 
         /**
          * 同步显示列表。
          */
         private syncDisplayList(displayObject:DisplayObject):void {
             var nodeList:RenderNode[] = [];
-            var dirtyNodes:RenderNode[] = [];
-            var notDirtyNodes:RenderNode[] = [];
+           // var dirtyNodes:RenderNode[] = [];
+          //  var notDirtyNodes:RenderNode[] = [];
             var stack:DisplayObject[] = [displayObject];
             while (stack.length > 0) {
                 displayObject = stack.pop();
@@ -146,12 +147,12 @@ module lark {
                 displayObject.$removeFlags(DisplayObjectFlags.Dirty);
                 if (node) {
                     nodeList.push(node);
-                    if (node.isDirty) {
-                        dirtyNodes.push(node);
-                    }
-                    else {
-                        notDirtyNodes.push(node);
-                    }
+                    //if (node.isDirty) {
+                    //    dirtyNodes.push(node);
+                    //}
+                    //else {
+                    //    notDirtyNodes.push(node);
+                    //}
                 }
                 var children = displayObject.$children;
                 if (children) {
@@ -162,8 +163,8 @@ module lark {
                 }
             }
             this.renderNodeList = nodeList;
-            this.dirtyNodeList = dirtyNodes;
-            this.notDirtyNodeList = notDirtyNodes;
+            //this.dirtyNodeList = dirtyNodes;
+            //this.notDirtyNodeList = notDirtyNodes;
         }
 
         /**
@@ -185,6 +186,7 @@ module lark {
                 }
                 this.context.drawDirtyRect(node.oldXMin, node.oldYMin, node.oldXMax - node.oldXMin, node.oldYMax - node.oldYMin);
                 this.context.drawDirtyRect(node.xMin, node.yMin, node.xMax - node.xMin, node.yMax - node.yMin);
+
             }
             this.context.endDrawDirtyRect();
         }
@@ -193,13 +195,14 @@ module lark {
          * 绘制渲染节点
          */
         private drawRenderNodes():void {
+            this.context.clearScreen();
             var nodeList = this.renderNodeList;
             var length = nodeList.length;
             for (var i = 0; i < length; i++) {
                 var node = nodeList[i];
-                if (!node.isDirty) {
-                    continue;
-                }
+                //if (!node.isDirty) {
+                //    continue;
+                //}
                 if (node instanceof BitmapNode) {
                     var bitmapNode = <BitmapNode>node;
                     var texture = bitmapNode.texture;
@@ -213,7 +216,7 @@ module lark {
                         textNode.size/2, textNode.textWidth, false, 0, textNode.matrix, textNode.alpha);
                 }
             }
-            this.context.endDrawScreen();
+            //this.context.endDrawScreen();
         }
     }
 }
