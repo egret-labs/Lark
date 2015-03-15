@@ -127,7 +127,7 @@ module lark {
                 var t3 = lark.getTimer();
                 console.log("drawCost:"+(t3-t2)+"ms");
             //}
-            FPS.update(this.drawCalls,t1-t,t2-t1,t3-t2,t3-t);
+            FPS.update(this.drawCalls,t1-t,t2-t1,t3-t2);
         }
 
         private renderNodeList:RenderNode[] = [];
