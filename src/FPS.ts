@@ -28,62 +28,43 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark {
-    export class Main extends DisplayObjectContainer {
+
+    export class FPS {
 
         public constructor() {
-            super();
-            var img = new Image();
-            img.src = "image/test.png";
-            img.onload = ()=> {
-                var texture:Texture = new Texture();
-                texture.$setBitmapData(img);
-                this.start(texture);
-            }
 
         }
 
-        private targetIcon:Bitmap;
+        private static _textSpan:lark.text.TextSpan;
 
-        private iconList:Bitmap[] = [];
-
-        private start(texture:Texture):void{
-            var x=20,y=20;
-            for(var i=0;i<1000;i++){
-                var bitmap = new Bitmap();
-                bitmap.texture = texture;
-                bitmap.x = x;
-                bitmap.y = y;
-                bitmap.scaleX = bitmap.scaleY = Math.random();
-                bitmap.rotation = Math.random()*360;
-                x += texture.width;
-                if(x>1920){
-                    x = 0;
-                    y += texture.height;
-                    if(y>960){
-                        y = 0;
-                    }
-                }
-                this.addChild(bitmap);
-                this.iconList.push(bitmap);
+        public static get display():lark.text.TextSpan {
+            if (!FPS._textSpan) {
+                FPS._textSpan = new lark.text.TextSpan();
+                FPS._textSpan.color = 0xFF0000;
+                FPS._textSpan.bold = true;
+                FPS._textSpan.size = 28;
+                FPS._textSpan.text = "fps:60";
+                FPS._textSpan.textWidth = 400;
             }
-            this.targetIcon = new lark.Bitmap();
-            this.targetIcon.texture = texture;
-            this.targetIcon.x = 300;
-            this.targetIcon.y = 300;
-            this.addChild(this.targetIcon);
-            this.iconList.push(this.targetIcon);
-            this.addChild(FPS.display);
-            WebTicker.getInstance().register(this.onTick,this);
+            return FPS._textSpan;
         }
 
-        private onTick():void{
-            var list = this.iconList;
-            var length = list.length;
-            for(var i=0;i<length;i++){
-                var bitmap = list[i];
-                //bitmap.rotation += 2;
+        private static totalTime:number = 0;
+        private static totalTick:number = 0;
+        private static lastTime:number = 0;
+        private static lastFPS:number = 60;
+
+        public static update(drawCalls:number,...args):void {
+            var current = lark.getTimer();
+            FPS.totalTime += current - this.lastTime;
+            FPS.lastTime = current;
+            FPS.totalTick++;
+            if (FPS.totalTime > 500) {
+                FPS.lastFPS = Math.round(FPS.totalTick * 1000 / FPS.totalTime);
+                FPS.totalTick = 0;
+                FPS.totalTime = 0;
             }
+            FPS._textSpan.text = "FPS:" + FPS.lastFPS + "  Draw:"+drawCalls+"  Cost: " + args.join(" , ");
         }
     }
-
 }

@@ -34,6 +34,7 @@ var lark_file_list =
         "lark/text/engine/TextBlock.js",
         "lark/text/TextFormat.js",
         "lark/text/TextField.js",
+        "FPS.js",
         "Main.js",
         "Text.js"
     ];

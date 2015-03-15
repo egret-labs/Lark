@@ -114,18 +114,20 @@ module lark {
         }
 
         private onTick():void {
+            this.drawCalls = 0;
             var t = lark.getTimer();
             this.syncDisplayList(this.stage);
             //if (this.dirtyNodeList.length > 0) {
                 var t1 = lark.getTimer();
-              //  console.log("syncDisplayList:"+(t1-t)+"ms");
+                console.log("syncDisplayList:"+(t1-t)+"ms");
                 //this.drawDirtyRect();
                 var t2 = lark.getTimer();
                // console.log("drawDirtyRect:"+(t2-t1)+"ms");
                 this.drawRenderNodes();
                 var t3 = lark.getTimer();
-               // console.log("drawCost:"+(t3-t2)+"ms");
+                console.log("drawCost:"+(t3-t2)+"ms");
             //}
+            FPS.update(this.drawCalls,t1-t,t2-t1,t3-t2,t3-t);
         }
 
         private renderNodeList:RenderNode[] = [];
@@ -133,6 +135,7 @@ module lark {
         private notDirtyNodeList:RenderNode[] = [];
         private screenGrids:any[] = [];
 
+        private drawCalls:number = 0;
         /**
          * 同步显示列表。
          */
@@ -198,6 +201,7 @@ module lark {
             this.context.clearScreen();
             var nodeList = this.renderNodeList;
             var length = nodeList.length;
+            this.drawCalls = length;
             for (var i = 0; i < length; i++) {
                 var node = nodeList[i];
                 //if (!node.isDirty) {
