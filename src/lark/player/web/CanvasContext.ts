@@ -92,7 +92,9 @@ module lark {
          * 绘制图片到一个区域上
          */
         public drawImage(texture:Texture, matrix:Matrix, globalAlpha:number):void {
-            this.context.globalAlpha = globalAlpha;
+            if(this.context.globalAlpha!=globalAlpha){
+                this.context.globalAlpha = globalAlpha;
+            }
             this.context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
             var width = texture.$bitmapWidth;
             var height = texture.$bitmapHeight;

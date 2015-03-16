@@ -172,6 +172,7 @@ module lark {
          * 绘制脏矩形区域
          */
         private drawDirtyRect():void {
+            var dirtyRegion = this.stage.$dirtyRegion;
             this.context.beginDrawDirtyRect();
             var dirtyList = this.dirtyNodeList;
             var notDirtyList = this.notDirtyNodeList;
@@ -185,11 +186,20 @@ module lark {
                         notDirtyList.splice(j, 1);
                     }
                 }
-                this.context.drawDirtyRect(node.oldXMin, node.oldYMin, node.oldXMax - node.oldXMin, node.oldYMax - node.oldYMin);
-                this.context.drawDirtyRect(node.xMin, node.yMin, node.xMax - node.xMin, node.yMax - node.yMin);
-
+                dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.oldXMin, node.oldYMin, node.oldXMax - node.oldXMin, node.oldYMax - node.oldYMin));
+                dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.xMin, node.yMin, node.xMax - node.xMin, node.yMax - node.yMin));
+                //this.context.drawDirtyRect(node.oldXMin, node.oldYMin, node.oldXMax - node.oldXMin, node.oldYMax - node.oldYMin);
+                //this.context.drawDirtyRect(node.xMin, node.yMin, node.xMax - node.xMin, node.yMax - node.yMin);
+            }
+            var list:Rectangle[] = [];
+            dirtyRegion.gatherOptimizedRegions(list);
+            var length = list.length;
+            for(i=0;i<length;i++){
+                var rect = list[i];
+                this.context.drawDirtyRect(rect.x,rect.y,rect.width,rect.height);
             }
             this.context.endDrawDirtyRect();
+            dirtyRegion.clear();
         }
 
         /**

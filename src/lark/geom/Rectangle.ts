@@ -41,7 +41,8 @@ module lark {
         /**
          * 只允许在局部变量中使用，使用完要立即释放，并要防止嵌套调用导致对象在其他位置被修改的可能性。
          */
-        public static TEMP: Rectangle = new Rectangle();
+        public static TEMP:Rectangle = new Rectangle();
+
         /**
          * 创建一个新 Rectangle 对象，其左上角由 x 和 y 参数指定，并具有指定的 width 和 height 参数。
          * @param x 矩形左上角的 x 坐标。
@@ -123,12 +124,13 @@ module lark {
         /**
          * 将源 Rectangle 对象中的所有矩形数据复制到调用方 Rectangle 对象中。
          */
-        public copyFrom(sourceRect: Rectangle): void {
+        public copyFrom(sourceRect:Rectangle):void {
             this.x = sourceRect.x;
             this.y = sourceRect.y;
             this.width = sourceRect.width;
             this.height = sourceRect.height;
         }
+
         /**
          * 将 Rectangle 的成员设置为指定值
          * @param x 矩形左上角的 x 坐标。
@@ -136,11 +138,12 @@ module lark {
          * @param width 矩形的宽度（以像素为单位）。
          * @param height 矩形的高度（以像素为单位）。
          */
-        public setTo(x:number, y:number, width:number, height:number):void {
+        public setTo(x:number, y:number, width:number, height:number):Rectangle {
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
+            return this;
         }
 
         /**
@@ -170,9 +173,10 @@ module lark {
         /**
          * 确定此 Rectangle 对象是否为空。
          */
-        public isEmpty(): boolean {
+        public isEmpty():boolean {
             return this.width <= 0 || this.height <= 0;
         }
+
         /**
          * 将 Rectangle 对象的所有属性设置为 0。
          */
@@ -207,16 +211,96 @@ module lark {
             return false;
         }
 
-        $getBaseWidth(angle: number): number {
+        $getBaseWidth(angle:number):number {
             var u = Math.abs(Math.cos(angle));
             var v = Math.abs(Math.sin(angle));
             return u * this.width + v * this.height;
         }
 
-        $getBaseHeight(angle: number): number {
+        $getBaseHeight(angle:number):number {
             var u = Math.abs(Math.cos(angle));
             var v = Math.abs(Math.sin(angle));
             return v * this.width + u * this.height;
+        }
+
+        /**
+         * 是否包含另一个Rectangle对象。
+         */
+        $containsRect(other:Rectangle):boolean {
+            var r1 = other.x + other.width;
+            var b1 = other.y + other.height;
+            var r2 = this.x + this.width;
+            var b2 = this.y + this.height;
+            return (other.x >= this.x) &&
+                (other.x < r2) &&
+                (other.y >= this.y) &&
+                (other.y < b2) &&
+                (r1 > this.x) &&
+                (r1 <= r2) &&
+                (b1 > this.y) &&
+                (b1 <= b2);
+        }
+
+        /**
+         * 设置当前矩形为与另一个矩形与当前矩形相交的部分
+         */
+        $intersect (other: Rectangle):void {
+            if (this.isEmpty() || other.isEmpty()) {
+                return;
+            }
+            var x = Math.max(this.x, other.x);
+            var y = Math.max(this.y, other.y);
+            var w = Math.min(this.x + this.width, other.x + other.width) - x;
+            var h = Math.min(this.y + this.height, other.y + other.height) - y;
+            if (w<=0||h<=0) {
+                x = y = w = h = 0;
+            }
+            this.setTo(x,y,w,h);
+        }
+
+
+        /**
+         * 合并另一个矩形到当前矩形内
+         */
+        $union (other: Rectangle):void {
+            if (this.isEmpty()) {
+                this.copyFrom(other);
+                return;
+            } else if (other.isEmpty()) {
+                return;
+            }
+            var x = this.x, y = this.y;
+            if (this.x > other.x) {
+                x = other.x;
+            }
+            if (this.y > other.y) {
+                y = other.y;
+            }
+            var x0 = this.x + this.width;
+            if (x0 < other.x + other.width) {
+                x0 = other.x + other.width;
+            }
+            var y0 = this.y + this.height;
+            if (y0 < other.y + other.height) {
+                y0 = other.y + other.height;
+            }
+            this.x = x;
+            this.y = y;
+            this.width = x0 - x;
+            this.height = y0 - y;
+        }
+
+        /**
+         * 扩展矩形区域到整数像素
+         */
+        $snap (): Rectangle  {
+            var x1 = Math.ceil(this.x + this.width);
+            var y1 = Math.ceil(this.y + this.height);
+            this.x = Math.floor(this.x);
+            this.y = Math.floor(this.y);
+            this.width = x1 - this.x;
+            this.height = y1 - this.y;
+            return this;
         }
     }
 }

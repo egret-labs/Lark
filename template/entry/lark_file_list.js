@@ -8,6 +8,7 @@ var lark_file_list =
         "lark/geom/Matrix.js",
         "lark/geom/Point.js",
         "lark/geom/Rectangle.js",
+        "lark/player/render/DirtyRegion.js",
         "lark/display/Texture.js",
         "lark/display/DisplayObjectFlags.js",
         "lark/display/DisplayObject.js",

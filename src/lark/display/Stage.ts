@@ -81,10 +81,12 @@ module lark {
             return this._stageHeight;
         }
 
+        $dirtyRegion:lark.player.DirtyRegion;
+
         $updateStageSize(width:number, height:number):void {
             this._stageWidth = +width || 0;
             this._stageHeight = +height || 0;
-
+            this.$dirtyRegion = new lark.player.DirtyRegion(width,height);
             this.$propagateFlagsDown(DisplayObjectFlags.DirtyChildren);
         }
     }
