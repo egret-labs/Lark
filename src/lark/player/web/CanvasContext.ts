@@ -54,7 +54,7 @@ module lark {
         public initialize(stage:Stage):void {
             this.stage = stage;
             window.onresize = this.onSizeChanged;
-            this.onSizeChanged();
+            this.doResize();
         }
 
         private sizeChanged:boolean = false;
