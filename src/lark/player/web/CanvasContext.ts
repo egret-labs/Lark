@@ -105,7 +105,9 @@ module lark {
          * 绘制文本到一个区域上
          */
         public drawText(text: string, font: string, color: string, x: number, y: number, width: number, stroke:boolean, lineWidth:number, matrix: Matrix, globalAlpha: number): void {
-            this.context.globalAlpha = globalAlpha;
+            if(this.context.globalAlpha!=globalAlpha){
+                this.context.globalAlpha = globalAlpha;
+            }
             this.context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
             this.context.font = font;
             this.context.textBaseline = "middle";
