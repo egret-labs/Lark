@@ -41,7 +41,6 @@ module lark {
             if (!FPS._textSpan) {
                 FPS._textSpan = new lark.text.TextSpan();
                 FPS._textSpan.color = 0xFF0000;
-                FPS._textSpan.bold = true;
                 FPS._textSpan.size = 20;
                 FPS._textSpan.text = "fps:60";
                 FPS._textSpan.textWidth = 200;
@@ -66,8 +65,8 @@ module lark {
                 FPS.totalTick = 0;
                 FPS.totalTime = 0;
             }
-            FPS._textSpan.text = "FPS:" + FPS.lastFPS + " draw:"+drawCalls+" cost: " + args.join(",");
-            FPS._textSpan.textWidth = 20*FPS._textSpan.text.length;
+            FPS.display.text = "FPS:" + FPS.lastFPS + " draw:"+drawCalls+" cost: " + args.join(",");
+            FPS.display.textWidth = 20 * FPS.display.text.length;
         }
     }
 }

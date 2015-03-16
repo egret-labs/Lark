@@ -45,7 +45,7 @@
             var end = true;
             if (isFirstSpan)
                 span = graphic;
-            else if (width < graphic.width)
+            else if (width >= graphic.width)
                 span = graphic;
             else
                 end = false;

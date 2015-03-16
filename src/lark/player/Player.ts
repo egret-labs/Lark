@@ -119,13 +119,13 @@ module lark {
             this.syncDisplayList(this.stage);
             //if (this.dirtyNodeList.length > 0) {
                 var t1 = lark.getTimer();
-                console.log("syncDisplayList:"+(t1-t)+"ms");
+                //console.log("syncDisplayList:"+(t1-t)+"ms");
                 //this.drawDirtyRect();
                 var t2 = lark.getTimer();
                // console.log("drawDirtyRect:"+(t2-t1)+"ms");
                 this.drawRenderNodes();
                 var t3 = lark.getTimer();
-                console.log("drawCost:"+(t3-t2)+"ms");
+                //console.log("drawCost:"+(t3-t2)+"ms");
             //}
             FPS.update(this.drawCalls,t1-t,t2-t1,t3-t2);
         }

@@ -101,13 +101,22 @@ module lark {
                 texture.$offsetX, texture.$offsetY, width, height);
         }
 
+        private $ctxPropCache = {
+            font: "",
+            fillStyle: "",
+            strokeStyle:""
+        }
+
         /**
          * 绘制文本到一个区域上
          */
         public drawText(text: string, font: string, color: string, x: number, y: number, width: number, stroke:boolean, lineWidth:number, matrix: Matrix, globalAlpha: number): void {
             this.context.globalAlpha = globalAlpha;
             this.context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
-            this.context.font = font;
+            if (font != this.$ctxPropCache.font) {
+                this.context.font = font;
+                this.$ctxPropCache.font = font;
+            }
             this.context.textBaseline = "middle";
             if (stroke) {
                 this.context.lineWidth = lineWidth;
@@ -115,7 +124,10 @@ module lark {
                 this.context.strokeText(text, x, y, width);
             }
             else {
-                this.context.fillStyle = color;
+                if (color != this.$ctxPropCache.fillStyle) {
+                    this.context.fillStyle = color;
+                    this.$ctxPropCache.fillStyle = color;
+                }
                 this.context.fillText(text, x, y, width);
             }
         }

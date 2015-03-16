@@ -81,7 +81,7 @@ module lark {
             var length = list.length;
             for(var i=0;i<length;i++){
                 var bitmap = list[i];
-                //bitmap.rotation += 2;
+                bitmap.rotation += 2;
             }
         }
     }
