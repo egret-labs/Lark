@@ -3,11 +3,12 @@
 module lark.text {
     
     export class TextBlock extends HashObject {
-        constructor() {
+        constructor(content:ContentElement = null) {
             super();
+            this._content = content;
         }
 
-        protected _content: ContentElement = null;
+        protected _content: ContentElement;
         public get content(): ContentElement {
             return this._content;
         }
@@ -29,14 +30,15 @@ module lark.text {
             var currentLength = 0;
             var maxHeight = 0;
             var minHeight = 10000;
-            var results:CreateSpanResult[] = []
+            var results: CreateSpanResult[] = []
+            var firstSpan = true;
             while (currentWidth < width) {
-                var result = content.$createSpan(width - currentWidth, previousLine == null, start + currentLength);
-
+                var result = content.$createSpan(width - currentWidth, firstSpan, start + currentLength);
                 if (result.span == null)
                     break;
                 if (textLine == null)
                     textLine = new TextLine();
+                firstSpan = false;
                 var span = result.span;
                 span.x = currentWidth;
                 currentWidth += span.width;
@@ -74,6 +76,15 @@ module lark.text {
                 }
             }
             return textLine;
+        }
+
+        createAllTextLines(width = 1000000, lineOffset = 0.0): text.TextLine[]{
+            var line: text.TextLine = null;
+            var lines: text.TextLine[] = []; 
+            while (line = this.createTextLine(line, width, line == null ? lineOffset : 0)) {
+                lines.push(line);
+            }
+            return lines;
         }
     }
 }

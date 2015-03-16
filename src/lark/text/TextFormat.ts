@@ -33,14 +33,14 @@ module lark {
      * 您可以将文本格式应用于静态文本字段和动态文本字段。
      * 
      */
-    class TextFormat extends text.ElementFormat {
+    export class TextFormat extends text.ElementFormat {
 
         static $defaultTextFormat: TextFormat = new TextFormat();
 
         /**
          * 创建一个TextFormat对象
          */
-        public constructor() {
+        public constructor(align:string = "left") {
             super();
         }
 
@@ -53,32 +53,32 @@ module lark {
         /**
          * 表示块缩进，以像素为单位。
          */
-        public blockIndent: number = NaN;
+        public blockIndent: number = 0;
 
 
         /**
          * 表示从左边距到段落中第一个字符的缩进。
          */
-        public indent: number = NaN;
+        public indent: number = 0;
 
 
 
         /**
          * 一个整数，表示行与行之间的垂直间距（称为前导）量。
          */
-        public leading: number = NaN;
+        public leading: number = 0;
 
 
         /**
          * 段落的左边距，以像素为单位。
          */
-        public leftMargin : number = NaN;
+        public leftMargin : number = 0;
 
 
         /**
          * 段落的右边距，以像素为单位。
          */
-        public rightMargin: number = NaN;
+        public rightMargin: number = 0;
 
 
 
@@ -92,5 +92,25 @@ module lark {
          * 表示使用此文本格式的文本的目标 URL。
          */
         public url: string = null;
+
+        public equals(other: TextFormat) {
+            
+            return super.equals(other) || other.align == this.align &&
+                other.blockIndent == this.blockIndent &&
+                other.indent == this.indent &&
+                other.leading == this.leading &&
+                other.leftMargin == this.leftMargin &&
+                other.rightMargin == this.rightMargin &&
+                other.target == this.target &&
+                other.url == this.url;
+        }
+
+        public clone(): TextFormat {
+            var format = new TextFormat();
+            for (var p in this) {
+                format[p] = this[p];
+            }
+            return format;
+        }
     }
 }

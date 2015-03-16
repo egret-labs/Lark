@@ -25,6 +25,11 @@
         public get text(): string {
             return this._text;
         }
+        public set text(value: string) {
+            if (this._text == value)
+                return;
+            this._text = value;
+        }
 
 
         public get length(): number {
@@ -56,10 +61,15 @@
                 var atom = textAtoms[i];
                 var w = TextElement.measureText(atom, fontString);
                 var testW = currentWidth + w;
-                if (testW >= width)
+                if (testW <= width || isFirstSpan) {
+                    currentWidth = testW;
+                    textLength += atom.length;
+                    if (testW >= width)
+                        break;
+                }
+                else {
                     break;
-                currentWidth = testW;
-                textLength += atom.length;
+                }
             }
 
             var full = currentWidth >= width;
@@ -67,8 +77,7 @@
 
             var span: TextSpan = null;
             if (currentWidth > 0) {
-                span = new TextSpan(this._text.substr(startIndex, textLength), font.fontName, currentWidth, font.bold, font.italic, format.fontSize, format.color);
-                span.width = currentWidth;
+                span = new TextSpan(this._text.substr(startIndex, textLength), font.toString(), Math.min(currentWidth, width), format.fontSize, format.color);
             } 
             return {
                 span: span,
@@ -86,11 +95,16 @@
         static fontDic: IStringDic = {
             "Init": {}
         }
+        static cache = {
+            font:""
+        }
         static measureText(text: string,font:string) {
             var width = 0.0;
             var ctx = TextElement.$bufferContext;
-            if (ctx.font != font)
+            if (font != TextElement.cache.font) {
                 ctx.font = font;
+                TextElement.cache.font = font;
+            }
             var letterdic = TextElement.fontDic[font];
             if (letterdic == undefined) {
                 letterdic = {};

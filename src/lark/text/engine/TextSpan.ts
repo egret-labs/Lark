@@ -4,18 +4,29 @@
      */
     export class TextSpan extends DisplayObject implements ISpan {
         constructor(
-
-            public text: string = null,
-            public fontName: string = "",
-            public textWidth: number = 0,
-            public bold: boolean = false,
-            public italic: boolean = false,
-            public size: number = 12,
-            public color: number = 0x000000,
-            public length: number = 0) {
+            text: string = null,
+            fontString: string = "",
+            textWidth: number = 0,
+            size: number = 12,
+            color: number = 0x000000,
+            length: number = 0) {
             super();
+            this.text = text;
+            this.fontString = fontString;
+            this.textWidth = textWidth;
+            this.size = size;
+            this.color = color;
+            this.length = length;
             this.$invalidateContentBounds();
         }
+
+
+        public text: string;
+        public fontString: string;
+        public textWidth: number;
+        public size: number;
+        public color: number;
+        public length: number;
 
         /**
          * 测量自身占用的矩形区域，如果是容器，还包括所有子项占据的区域。
@@ -42,7 +53,7 @@
         }
 
         $toFontString() {
-            return this.size + "px " + this.fontName + " " + (this.italic ? FontDescription.ITALIC : "") + " " + (this.bold ? FontDescription.BOLD : "");
+            return this.size + "px " + this.fontString;
         }
 
         $toColorString() {
