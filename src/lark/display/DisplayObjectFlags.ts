@@ -82,6 +82,13 @@ module lark {
         DirtyChildren = 0x200000,
 
         /**
+         * 显示对象的文本内容从上一次同步后发生了改变。
+         * Indicates whether this display object's text content has changed since the last time it was
+         * synchronized.
+         */
+        DirtyTextContent = 0x800000,
+
+        /**
          * 显示对象的位图数据从上一次同步后发生了改变。
          */
         DirtyBitmapData = 0x1000000,
@@ -115,7 +122,7 @@ module lark {
          * 所有需要同步的属性全都失效.
          */
         Dirty = DirtyMatrix | DirtyChildren | DirtyBitmapData | DirtyAlpha | DirtyMask |
-            DirtyMiscellaneousProperties
+            DirtyMiscellaneousProperties | DirtyTextContent
 
     }
 

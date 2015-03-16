@@ -44,7 +44,7 @@ module lark {
                 FPS._textSpan.bold = true;
                 FPS._textSpan.size = 24;
                 FPS._textSpan.text = "fps:60";
-                FPS._textSpan.textWidth = 200;
+                FPS._textSpan.textWidth = 400;
                 FPS._textSpan.x = 20;
                 FPS._textSpan.y = 20;
             }
@@ -56,7 +56,10 @@ module lark {
         private static lastTime:number = 0;
         private static lastFPS:number = 60;
 
-        public static update(drawCalls:number,...args):void {
+        public static update(drawCalls:number, ...args):void {
+            if(!FPS._textSpan){
+                return;
+            }
             var current = lark.getTimer();
             FPS.totalTime += current - this.lastTime;
             FPS.lastTime = current;
@@ -66,8 +69,11 @@ module lark {
                 FPS.totalTick = 0;
                 FPS.totalTime = 0;
             }
-            FPS._textSpan.text = "FPS:" + FPS.lastFPS + " draw:"+drawCalls+" cost: " + args.join(",");
-            FPS._textSpan.textWidth = 24*FPS._textSpan.text.length;
+            var text = "FPS:" + FPS.lastFPS + " draw:" + drawCalls + " cost: " + args.join(",");
+            if (FPS._textSpan.text != text) {
+                FPS._textSpan.text = text;
+                FPS._textSpan.$setDirtyFlags(DisplayObjectFlags.DirtyTextContent);
+            }
         }
     }
 }

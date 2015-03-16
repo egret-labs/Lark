@@ -85,7 +85,6 @@ module lark {
          * 清除屏幕的部分渲染区域
          */
         public clearRect(x:number, y:number, width:number, height:number):void {
-            this.context.setTransform(1,0,0,1,0,0);
             this.context.clearRect(x, y, width, height);
         }
 
@@ -122,9 +121,17 @@ module lark {
             }
         }
 
+        public reset():void{
+            var context = this.context;
+            context.setTransform(1, 0, 0, 1, 0, 0);
+            context.fillStyle = null;
+            context.strokeStyle = null;
+            context.globalAlpha = 1;
+        }
         public beginDrawDirtyRect():void{
-            this.context.setTransform(1,0,0,1,0,0);
+            this.reset();
             this.context.save();
+            this.context.beginPath();
         }
 
         public drawDirtyRect(x:number,y:number,width:number,height:number):void{

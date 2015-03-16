@@ -117,32 +117,30 @@ module lark {
             this.drawCalls = 0;
             var t = lark.getTimer();
             this.syncDisplayList(this.stage);
-            //if (this.dirtyNodeList.length > 0) {
-                var t1 = lark.getTimer();
-                console.log("syncDisplayList:"+(t1-t)+"ms");
-                //this.drawDirtyRect();
+            var t1 = lark.getTimer();
+            if(this.dirtyNodeList.length>0){
+                this.drawDirtyRect();
                 var t2 = lark.getTimer();
-               // console.log("drawDirtyRect:"+(t2-t1)+"ms");
                 this.drawRenderNodes();
                 var t3 = lark.getTimer();
-                console.log("drawCost:"+(t3-t2)+"ms");
-            //}
-            FPS.update(this.drawCalls,t1-t,t2-t1,t3-t2);
+            }
+
+            FPS.update(this.drawCalls, t1 - t, t2 - t1, t3 - t2);
         }
 
         private renderNodeList:RenderNode[] = [];
         private dirtyNodeList:RenderNode[] = [];
         private notDirtyNodeList:RenderNode[] = [];
-        private screenGrids:any[] = [];
 
         private drawCalls:number = 0;
+
         /**
          * 同步显示列表。
          */
         private syncDisplayList(displayObject:DisplayObject):void {
             var nodeList:RenderNode[] = [];
-           // var dirtyNodes:RenderNode[] = [];
-          //  var notDirtyNodes:RenderNode[] = [];
+            var dirtyNodes:RenderNode[] = [];
+            var notDirtyNodes:RenderNode[] = [];
             var stack:DisplayObject[] = [displayObject];
             while (stack.length > 0) {
                 displayObject = stack.pop();
@@ -150,12 +148,12 @@ module lark {
                 displayObject.$removeFlags(DisplayObjectFlags.Dirty);
                 if (node) {
                     nodeList.push(node);
-                    //if (node.isDirty) {
-                    //    dirtyNodes.push(node);
-                    //}
-                    //else {
-                    //    notDirtyNodes.push(node);
-                    //}
+                    if (node.isDirty) {
+                        dirtyNodes.push(node);
+                    }
+                    else {
+                        notDirtyNodes.push(node);
+                    }
                 }
                 var children = displayObject.$children;
                 if (children) {
@@ -166,8 +164,8 @@ module lark {
                 }
             }
             this.renderNodeList = nodeList;
-            //this.dirtyNodeList = dirtyNodes;
-            //this.notDirtyNodeList = notDirtyNodes;
+            this.dirtyNodeList = dirtyNodes;
+            this.notDirtyNodeList = notDirtyNodes;
         }
 
         /**
@@ -198,15 +196,28 @@ module lark {
          * 绘制渲染节点
          */
         private drawRenderNodes():void {
-            this.context.clearScreen();
             var nodeList = this.renderNodeList;
-            var length = nodeList.length;
-            this.drawCalls = length;
+            var dirtyList = this.dirtyNodeList;
+            var notDirtyList = this.notDirtyNodeList;
+            var length = dirtyList.length;
+            for(var j=0;j<length;j++){
+                var node = dirtyList[j];
+                for(var k=notDirtyList.length-1;k>=0;k--){
+                    var target = notDirtyList[k];
+                    if(node.intersects(target)){
+                        target.isDirty = true;
+                        notDirtyList.splice(k,1);
+                    }
+                }
+            }
+            length = nodeList.length;
+            var drawCalls = 0;
             for (var i = 0; i < length; i++) {
                 var node = nodeList[i];
-                //if (!node.isDirty) {
-                //    continue;
-                //}
+                if (!node.isDirty) {
+                    continue;
+                }
+                drawCalls++;
                 if (node instanceof BitmapNode) {
                     var bitmapNode = <BitmapNode>node;
                     var texture = bitmapNode.texture;
@@ -214,13 +225,14 @@ module lark {
                         this.context.drawImage(texture, bitmapNode.matrix, bitmapNode.alpha);
                     }
                 }
-                else if(node instanceof TextNode){
+                else if (node instanceof TextNode) {
                     var textNode = <TextNode>node;
                     this.context.drawText(textNode.text, textNode.font, textNode.style, 0,
-                        textNode.size/2, textNode.textWidth, false, 0, textNode.matrix, textNode.alpha);
+                        textNode.size / 2, textNode.textWidth, false, 0, textNode.matrix, textNode.alpha);
                 }
             }
-            //this.context.endDrawScreen();
+            this.drawCalls = drawCalls;
+            this.context.endDrawScreen();
         }
     }
 }

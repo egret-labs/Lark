@@ -67,6 +67,8 @@ module lark {
          */
         drawText(text:string, font:string, color:string, x:number, y:number, width:number, stroke:boolean, lineWidth:number, matrix:Matrix, globalAlpha:number): void;
 
+        reset():void;
+
         beginDrawDirtyRect():void;
 
         drawDirtyRect(x:number, y:number, width:number, height:number):void;
