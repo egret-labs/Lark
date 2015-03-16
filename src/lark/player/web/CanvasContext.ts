@@ -54,7 +54,7 @@ module lark {
         public initialize(stage:Stage):void {
             this.stage = stage;
             window.onresize = this.onSizeChanged;
-            this.onSizeChanged();
+            this.doResize();
         }
 
         private sizeChanged:boolean = false;
@@ -111,10 +111,12 @@ module lark {
          * 绘制文本到一个区域上
          */
         public drawText(text: string, font: string, color: string, x: number, y: number, width: number, stroke:boolean, lineWidth:number, matrix: Matrix, globalAlpha: number): void {
+            if(this.context.globalAlpha!=globalAlpha){
             this.context.globalAlpha = globalAlpha;
+            }
             this.context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
             if (font != this.$ctxPropCache.font) {
-                this.context.font = font;
+            this.context.font = font;
                 this.$ctxPropCache.font = font;
             }
             this.context.textBaseline = "middle";
@@ -125,7 +127,7 @@ module lark {
             }
             else {
                 if (color != this.$ctxPropCache.fillStyle) {
-                    this.context.fillStyle = color;
+                this.context.fillStyle = color;
                     this.$ctxPropCache.fillStyle = color;
                 }
                 this.context.fillText(text, x, y, width);
