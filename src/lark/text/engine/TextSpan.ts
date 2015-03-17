@@ -5,13 +5,15 @@
     export class TextSpan extends DisplayObject implements ISpan {
         constructor(
             text: string = null,
-            fontString: string = "",
+            fontString: string = "sans-serif",
             textWidth: number = 0,
             size: number = 12,
             color: number = 0x000000,
             length: number = 0) {
             super();
             this.text = text;
+            if (!fontString)
+                fontString = "sans-serif";
             this.fontString = fontString;
             this.textWidth = textWidth;
             this.size = size;

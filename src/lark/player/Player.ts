@@ -223,7 +223,7 @@ module lark {
                 else if (node instanceof TextNode) {
                     var textNode = <TextNode>node;
                     this.context.drawText(textNode.text, textNode.font, textNode.style, 0,
-                        textNode.size / 2, textNode.textWidth, false, 0, textNode.matrix, textNode.alpha);
+                        textNode.size / 2, textNode.textWidth, textNode.matrix, textNode.alpha);
                 }
             }
             this.drawCalls = drawCalls;
