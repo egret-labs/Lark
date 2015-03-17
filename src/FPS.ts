@@ -42,7 +42,7 @@ module lark {
                 FPS._textSpan = new lark.text.TextSpan();
                 FPS._textSpan.color = 0xFF0000;
                 FPS._textSpan.size = 24;
-                FPS._textSpan.text = "fps:60";
+                FPS._textSpan.text = "";
                 FPS._textSpan.textWidth = 400;
                 FPS._textSpan.x = 20;
                 FPS._textSpan.y = 20;
@@ -53,7 +53,6 @@ module lark {
         private static totalTime:number = 0;
         private static totalTick:number = 0;
         private static lastTime:number = 0;
-        private static lastFPS:number = 60;
 
         public static update(drawCalls:number, ...args):void {
             if(!FPS._textSpan){
@@ -64,14 +63,14 @@ module lark {
             FPS.lastTime = current;
             FPS.totalTick++;
             if (FPS.totalTime > 500) {
-                FPS.lastFPS = Math.round(FPS.totalTick * 1000 / FPS.totalTime);
+                var lastFPS = Math.round(FPS.totalTick * 1000 / FPS.totalTime);
                 FPS.totalTick = 0;
                 FPS.totalTime = 0;
-            }
-            var text = "FPS:" + FPS.lastFPS + " draw:" + drawCalls + " cost: " + args.join(",");
-            if (FPS._textSpan.text != text) {
-                FPS._textSpan.text = text;
-                FPS._textSpan.$setDirtyFlags(DisplayObjectFlags.DirtyTextContent);
+                var text = "FPS:" + lastFPS + " draw:" + drawCalls + " cost: " + args.join(",");
+                if (FPS._textSpan.text != text) {
+                    FPS._textSpan.text = text;
+                    FPS._textSpan.$setDirtyFlags(DisplayObjectFlags.DirtyTextContent);
+                }
             }
         }
     }
