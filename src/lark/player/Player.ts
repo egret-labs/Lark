@@ -150,7 +150,6 @@ module lark.player {
                 var node = renderList[i];
                 if(nodeList.indexOf(node)==-1){
                     dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.oldMinx, node.oldMinY, node.oldMaxX - node.oldMinx, node.oldMaxY - node.oldMinY));
-                    dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.minX, node.minY, node.maxX - node.minX, node.maxY - node.minY));
                 }
             }
             this.renderNodeList = nodeList;
