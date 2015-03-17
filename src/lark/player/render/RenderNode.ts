@@ -41,37 +41,37 @@ module lark {
         /**
          * 上一次绘制区域在屏幕上的起点x
          */
-        public oldXMin:number = 0;
+        public oldMinx:number = 0;
         /**
          * 上一次绘制区域在屏幕上的起点y
          */
-        public oldYMin:number = 0;
+        public oldMinY:number = 0;
         /**
          * 上一次绘制区域在屏幕上的终点x
          */
-        public oldXMax:number = 0;
+        public oldMaxX:number = 0;
         /**
          * 上一次绘制区域在屏幕上的终点y
          */
-        public oldYMax:number = 0;
+        public oldMaxY:number = 0;
 
 
         /**
          * 绘制区域在屏幕上的起点x
          */
-        public xMin:number = 0;
+        public minX:number = 0;
         /**
          * 绘制区域在屏幕上的起点y
          */
-        public yMin:number = 0;
+        public minY:number = 0;
         /**
          * 绘制区域在屏幕上的终点x
          */
-        public xMax:number = 0;
+        public maxX:number = 0;
         /**
          * 绘制区域在屏幕上的终点y
          */
-        public yMax:number = 0;
+        public maxY:number = 0;
 
         /**
          * 是否需要重绘
@@ -84,6 +84,7 @@ module lark {
         public alpha:number = 1;
 
         public matrix:Matrix = null;
+
         /**
          * 更新绘制的矩形区域
          */
@@ -94,40 +95,29 @@ module lark {
             rect.copyFrom(target.$getContentBounds());
             this.matrix.$transformBounds(rect);
             this.isDirty = target.$hasAnyFlags(DisplayObjectFlags.Dirty);
-            this.oldXMax = this.xMax;
-            this.oldXMin = this.xMin;
-            this.oldYMax = this.yMax;
-            this.oldYMin = this.yMin;
-            this.xMin = rect.x;
-            this.yMin = rect.y;
-            this.xMax = rect.x+rect.width;
-            this.yMax = rect.y+rect.height;
+            this.oldMaxX = this.maxX;
+            this.oldMinx = this.minX;
+            this.oldMaxY = this.maxY;
+            this.oldMinY = this.minY;
+            this.minX = rect.x;
+            this.minY = rect.y;
+            this.maxX = rect.x + rect.width;
+            this.maxY = rect.y + rect.height;
         }
 
-        /**
-         * 测试节点的当前矩形和上次矩形是否跟目标节点的当前矩形相交。
-         */
-        public intersects(node:RenderNode):boolean {
-
-            return this.intersectsRect(this.xMin,this.yMin,this.xMax,this.yMax,node.xMin,node.yMin,node.xMax,node.yMax)||
-                this.intersectsRect(this.oldXMin,this.oldYMin,this.oldXMax,this.oldYMax,node.xMin,node.yMin,node.xMax,node.yMax);
-        }
-
-        public intersectRect(rect:Rectangle):boolean {
-            return this.intersectsRect(this.xMin,this.yMin,this.xMax,this.yMax,rect.x,rect.y,rect.x+rect.width,rect.y+rect.height);
-        }
-
-        private intersectsRect(minX:number, minY:number, maxX:number, maxY:number,
-                               targetMinX:number, targetMinY:number, targetMaxX:number, targetMaxY:number):boolean {
-            var max = minX > targetMinX ? minX : targetMinX;
-            var min = maxX < targetMaxX ? maxX : targetMaxX;
+        public intersects(rect:Rectangle):boolean {
+            var targetMinX:number = rect.x;
+            var targetMinY:number = rect.y;
+            var targetMaxX:number = targetMinX + rect.width;
+            var targetMaxY:number = targetMinY + rect.height;
+            var max = this.minX > targetMinX ? this.minX : targetMinX;
+            var min = this.maxX < targetMaxX ? this.maxX : targetMaxX;
             if (max > min) {
                 return false;
             }
-            max = minY > targetMinY ? minY : targetMinY;
-            min = maxY < targetMaxY ? maxY : targetMaxY;
-            return max<=min;
+            max = this.minY > targetMinY ? this.minY : targetMinY;
+            min = this.maxY < targetMaxY ? this.maxY : targetMaxY;
+            return max <= min;
         }
-
     }
 }

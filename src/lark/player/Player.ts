@@ -118,7 +118,7 @@ module lark {
             var t = lark.getTimer();
             this.syncDisplayList(this.stage);
             var t1 = lark.getTimer();
-            if(this.dirtyNodeList.length>0){
+            if(this.dirtyRectList.length>0){
                 this.drawDirtyRect();
                 var t2 = lark.getTimer();
                 this.drawRenderNodes();
@@ -129,7 +129,6 @@ module lark {
         }
 
         private renderNodeList:RenderNode[] = [];
-        private dirtyNodeList:RenderNode[] = [];
         private notDirtyNodeList:RenderNode[] = [];
 
         private dirtyRectList:Rectangle[] = [];
@@ -141,8 +140,8 @@ module lark {
          */
         private syncDisplayList(displayObject:DisplayObject):void {
             var nodeList:RenderNode[] = [];
-            var dirtyNodes:RenderNode[] = [];
             var notDirtyNodes:RenderNode[] = [];
+            var dirtyRegion = this.stage.$dirtyRegion;
             var stack:DisplayObject[] = [displayObject];
             while (stack.length > 0) {
                 displayObject = stack.pop();
@@ -151,7 +150,8 @@ module lark {
                 if (node) {
                     nodeList.push(node);
                     if (node.isDirty) {
-                        dirtyNodes.push(node);
+                        dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.oldMinx, node.oldMinY, node.oldMaxX - node.oldMinx, node.oldMaxY - node.oldMinY));
+                        dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.minX, node.minY, node.maxX - node.minX, node.maxY - node.minY));
                     }
                     else {
                         notDirtyNodes.push(node);
@@ -165,8 +165,11 @@ module lark {
                     }
                 }
             }
+            var dirtyRegion = this.stage.$dirtyRegion;
+            var list:Rectangle[] = this.dirtyRectList;
+            list.length = 0;
+            dirtyRegion.gatherOptimizedRegions(list);
             this.renderNodeList = nodeList;
-            this.dirtyNodeList = dirtyNodes;
             this.notDirtyNodeList = notDirtyNodes;
         }
 
@@ -174,35 +177,14 @@ module lark {
          * 绘制脏矩形区域
          */
         private drawDirtyRect():void {
-            var dirtyRegion = this.stage.$dirtyRegion;
             this.context.beginDrawDirtyRect();
-            var dirtyList = this.dirtyNodeList;
-            var notDirtyList = this.notDirtyNodeList;
-            var dirtyLength = dirtyList.length;
-            for (var i = 0; i < dirtyLength; i++) {
-                var node = dirtyList[i];
-                for (var j = notDirtyList.length - 1; j >= 0; j--) {
-                    var targetNode = notDirtyList[j]
-                    if (node.intersects(targetNode)) {
-                        targetNode.isDirty = true;
-                        notDirtyList.splice(j, 1);
-                    }
-                }
-                dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.oldXMin, node.oldYMin, node.oldXMax - node.oldXMin, node.oldYMax - node.oldYMin));
-                dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.xMin, node.yMin, node.xMax - node.xMin, node.yMax - node.yMin));
-                //this.context.drawDirtyRect(node.oldXMin, node.oldYMin, node.oldXMax - node.oldXMin, node.oldYMax - node.oldYMin);
-                //this.context.drawDirtyRect(node.xMin, node.yMin, node.xMax - node.xMin, node.yMax - node.yMin);
-            }
             var list:Rectangle[] = this.dirtyRectList;
-            list.length = 0;
-            dirtyRegion.gatherOptimizedRegions(list);
             var length = list.length;
-            for(i=0;i<length;i++){
+            for(var i=0;i<length;i++){
                 var rect = list[i];
                 this.context.drawDirtyRect(rect.x,rect.y,rect.width,rect.height);
             }
             this.context.endDrawDirtyRect();
-            dirtyRegion.clear();
         }
 
         /**
@@ -217,7 +199,7 @@ module lark {
                 var rect = dirtyRectList[j];
                 for(var k=notDirtyList.length-1;k>=0;k--){
                     var target = notDirtyList[k];
-                    if(target.intersectRect(rect)){
+                    if(target.intersects(rect)){
                         target.isDirty = true;
                         notDirtyList.splice(k,1);
                     }
@@ -246,6 +228,7 @@ module lark {
             }
             this.drawCalls = drawCalls;
             this.context.endDrawScreen();
+            this.stage.$dirtyRegion.clear();
         }
     }
 }
