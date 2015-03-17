@@ -15,6 +15,7 @@ var lark_file_list =
         "lark/display/DisplayObjectContainer.js",
         "lark/display/Bitmap.js",
         "lark/display/Stage.js",
+        "lark/player/render/NodeType.js",
         "lark/player/render/RenderNode.js",
         "lark/player/render/BitmapNode.js",
         "lark/player/render/TextNode.js",

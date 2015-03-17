@@ -29,52 +29,10 @@
 
 module lark.player {
 
-    /**
-     * @excluded
-     * IPlayerContext接口定义Lark播放器与平台相关的操作，包括绘制，网络，交互操作等。
-     */
-    export interface IPlayerContext extends IHashObject {
-
-        /**
-         * 初始化播放器上下文
-         */
-        initialize(stage:Stage):void;
-        /**
-         * 启动心跳计时器
-         */
-        startTick(callBack:Function, thisObject:any):void;
-        /**
-         * 停止心跳计时器
-         */
-        stopTick(callBack:Function, thisObject:any):void;
-        /**
-         * 清除整个屏幕
-         */
-        clearScreen():void;
-
-        /**
-         * 清除屏幕的部分渲染区域
-         */
-        clearRect(x:number, y:number, width:number, height:number):void;
-
-        /**
-         * 绘制图片到一个区域上
-         */
-        drawImage(texture:Texture, matrix:Matrix, globalAlpha:number): void;
-
-        /**
-         * 绘制文本到一个区域上
-         */
-        drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number): void;
-
-        reset():void;
-
-        beginDrawDirtyRect():void;
-
-        drawDirtyRect(x:number, y:number, width:number, height:number):void;
-
-        endDrawDirtyRect():void;
-
-        endDrawScreen():void;
+    export enum NodeType {
+        Node = 0x0001,
+        Graphics = 0x0003,
+        Text = 0x0005,
+        Bitmap = 0x000D
     }
 }

@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
+module lark.player {
     /**
      * @excluded
      * 位图渲染节点
@@ -38,6 +38,7 @@ module lark {
          */
         public constructor() {
             super();
+            this.nodeType = NodeType.Bitmap;
         }
 
         //对于V8，要控制对象属性的个数在12~128之间才能获得最高的属性查询性能。

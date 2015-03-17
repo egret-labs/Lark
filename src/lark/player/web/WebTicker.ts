@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
+module lark.player {
 
     /**
      * @excluded
@@ -39,7 +39,7 @@ module lark {
 
         public static getInstance():WebTicker{
             if(!WebTicker._instance){
-                WebTicker._instance = new lark.WebTicker();
+                WebTicker._instance = new WebTicker();
             }
             return WebTicker._instance;
         }

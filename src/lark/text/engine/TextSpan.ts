@@ -38,12 +38,12 @@
             bounds.setTo(0, 0, this.textWidth, this.size);
         }
 
-        private _renderNode:TextNode = new TextNode();
+        private _renderNode:lark.player.TextNode = new lark.player.TextNode();
 
         /**
          * 获取渲染节点
          */
-        $getRenderNode():RenderNode{
+        $getRenderNode():lark.player.RenderNode{
             var node = this._renderNode;
             node.update(this);
             node.text = this.text;

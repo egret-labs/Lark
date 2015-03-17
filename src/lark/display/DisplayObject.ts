@@ -620,7 +620,7 @@ module lark {
         /**
          * 获取渲染节点
          */
-        $getRenderNode():RenderNode{
+        $getRenderNode():lark.player.RenderNode{
             return null;
         }
     }

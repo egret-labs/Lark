@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
+module lark.player {
     /**
      * @excluded
      * 文本渲染节点
@@ -36,6 +36,7 @@ module lark {
 
         public constructor(){
             super();
+            this.nodeType = NodeType.Text;
         }
 
         public text:string = null;

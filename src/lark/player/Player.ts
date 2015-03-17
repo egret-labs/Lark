@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
+module lark.player {
     /**
      * @excluded
      * Lark播放器
@@ -227,17 +227,22 @@ module lark {
                 }
                 node.isDirty = false;
                 drawCalls++;
-                if (node instanceof BitmapNode) {
-                    var bitmapNode = <BitmapNode>node;
-                    var texture = bitmapNode.texture;
-                    if (texture) {
-                        this.context.drawImage(texture, bitmapNode.matrix, bitmapNode.alpha);
-                    }
-                }
-                else if (node instanceof TextNode) {
-                    var textNode = <TextNode>node;
-                    this.context.drawText(textNode.text, textNode.font, textNode.style, 0,
-                        textNode.size / 2, textNode.textWidth, textNode.matrix, textNode.alpha);
+                switch(node.nodeType){
+                    case NodeType.Bitmap:
+                        var bitmapNode = <BitmapNode>node;
+                        var texture = bitmapNode.texture;
+                        if (texture) {
+                            this.context.drawImage(texture, bitmapNode.matrix, bitmapNode.alpha);
+                        }
+                        break;
+                    case NodeType.Text:
+                        var textNode = <TextNode>node;
+                        this.context.drawText(textNode.text, textNode.font, textNode.style, 0,
+                            textNode.size / 2, textNode.textWidth, textNode.matrix, textNode.alpha);
+                        break;
+                    case NodeType.Graphics:
+
+                        break;
                 }
             }
             this.drawCalls = drawCalls;

@@ -145,7 +145,7 @@ module lark {
             this.$setTextFieldFlags(TextFieldFlags.ScrollVDirty);
         }
 
-        $getRenderNode(): RenderNode {
+        $getRenderNode(): lark.player.RenderNode {
             if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0)
                 this.$createLines();
             if ((this._textFieldFlags & TextFieldFlags.ScrollVDirty) == TextFieldFlags.ScrollVDirty)

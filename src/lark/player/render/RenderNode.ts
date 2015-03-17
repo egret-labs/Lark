@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
+module lark.player {
     /**
      * @excluded
      * 渲染节点基类
@@ -35,9 +35,10 @@ module lark {
     export class RenderNode {
 
         public constructor() {
-
+            this.nodeType = NodeType.Node;
         }
 
+        public nodeType:number;
         /**
          * 上一次绘制区域在屏幕上的起点x
          */

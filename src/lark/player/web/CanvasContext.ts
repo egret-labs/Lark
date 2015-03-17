@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
+module lark.player {
     /**
      * @excluded
      * Lark播放器在Canvas上封装的实现
@@ -128,6 +128,9 @@ module lark {
         public beginDrawDirtyRect():void{
             this.reset();
             this.context.save();
+            this.context.beginPath();
+            this.context.rect(0,0,this.stage.stageWidth,this.stage.stageHeight);
+            this.context.clip();
             this.context.beginPath();
         }
 
