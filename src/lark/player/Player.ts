@@ -169,7 +169,9 @@ module lark.player {
                 if (isDirty) {
                     node.isDirty = isDirty;
                     dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.oldMinx, node.oldMinY, node.oldMaxX - node.oldMinx, node.oldMaxY - node.oldMinY));
-                    dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.minX, node.minY, node.maxX - node.minX, node.maxY - node.minY));
+                    if(node.moved){
+                        dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.minX, node.minY, node.maxX - node.minX, node.maxY - node.minY));
+                    }
                 }
                 else {
                     notDirtyNodes.push(node);
@@ -224,7 +226,6 @@ module lark.player {
                 if (!node.isDirty) {
                     continue;
                 }
-                node.isDirty = false;
                 drawCalls++;
                 switch(node.nodeType){
                     case NodeType.Bitmap:
@@ -243,6 +244,7 @@ module lark.player {
 
                         break;
                 }
+                node.finish();
             }
             this.drawCalls = drawCalls;
             this.context.endDrawScreen();

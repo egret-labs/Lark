@@ -85,24 +85,26 @@ module lark.player {
         public alpha:number = 1;
 
         public matrix:Matrix = null;
-
+        /**
+         * 在屏幕上的矩形区域是否发现改变。
+         */
+        public moved:boolean = false;
         /**
          * 更新绘制的矩形区域
          */
         public update(target:DisplayObject):void {
             this.alpha = target.$getConcatenatedAlpha();
-            this.matrix = target.$getConcatenatedMatrix();
-            var rect = Rectangle.TEMP;
-            rect.copyFrom(target.$getContentBounds());
-            this.matrix.$transformBounds(rect);
-            this.oldMaxX = this.maxX;
-            this.oldMinx = this.minX;
-            this.oldMaxY = this.maxY;
-            this.oldMinY = this.minY;
-            this.minX = rect.x;
-            this.minY = rect.y;
-            this.maxX = rect.x + rect.width;
-            this.maxY = rect.y + rect.height;
+            if(target.$hasAnyFlags(DisplayObjectFlags.InvalidConcatenatedMatrix|DisplayObjectFlags.InvalidContentBounds)){
+                this.matrix = target.$getConcatenatedMatrix();
+                var rect = Rectangle.TEMP;
+                rect.copyFrom(target.$getContentBounds());
+                this.matrix.$transformBounds(rect);
+                this.minX = rect.x;
+                this.minY = rect.y;
+                this.maxX = rect.x + rect.width;
+                this.maxY = rect.y + rect.height;
+                this.moved = true;
+            }
         }
 
         public intersects(rect:Rectangle):boolean {
@@ -118,6 +120,18 @@ module lark.player {
             max = this.minY > targetMinY ? this.minY : targetMinY;
             min = this.maxY < targetMaxY ? this.maxY : targetMaxY;
             return max <= min;
+        }
+
+        /**
+         * 渲染结束，已经绘制到屏幕
+         */
+        public finish():void{
+            this.isDirty = false;
+            this.oldMaxX = this.maxX;
+            this.oldMinx = this.minX;
+            this.oldMaxY = this.maxY;
+            this.oldMinY = this.minY;
+            this.moved = false;
         }
     }
 }
