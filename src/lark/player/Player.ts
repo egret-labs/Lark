@@ -225,6 +225,7 @@ module lark {
                 if (!node.isDirty) {
                     continue;
                 }
+                node.isDirty = false;
                 drawCalls++;
                 if (node instanceof BitmapNode) {
                     var bitmapNode = <BitmapNode>node;
