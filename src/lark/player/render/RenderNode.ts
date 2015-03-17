@@ -113,6 +113,10 @@ module lark {
                 this.intersectsRect(this.oldXMin,this.oldYMin,this.oldXMax,this.oldYMax,node.xMin,node.yMin,node.xMax,node.yMax);
         }
 
+        public intersectRect(rect:Rectangle):boolean {
+            return this.intersectsRect(this.xMin,this.yMin,this.xMax,this.yMax,rect.x,rect.y,rect.x+rect.width,rect.y+rect.height);
+        }
+
         private intersectsRect(minX:number, minY:number, maxX:number, maxY:number,
                                targetMinX:number, targetMinY:number, targetMaxX:number, targetMaxY:number):boolean {
             var max = minX > targetMinX ? minX : targetMinX;

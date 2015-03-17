@@ -132,6 +132,8 @@ module lark {
         private dirtyNodeList:RenderNode[] = [];
         private notDirtyNodeList:RenderNode[] = [];
 
+        private dirtyRectList:Rectangle[] = [];
+
         private drawCalls:number = 0;
 
         /**
@@ -191,7 +193,8 @@ module lark {
                 //this.context.drawDirtyRect(node.oldXMin, node.oldYMin, node.oldXMax - node.oldXMin, node.oldYMax - node.oldYMin);
                 //this.context.drawDirtyRect(node.xMin, node.yMin, node.xMax - node.xMin, node.yMax - node.yMin);
             }
-            var list:Rectangle[] = [];
+            var list:Rectangle[] = this.dirtyRectList;
+            list.length = 0;
             dirtyRegion.gatherOptimizedRegions(list);
             var length = list.length;
             for(i=0;i<length;i++){
@@ -207,14 +210,14 @@ module lark {
          */
         private drawRenderNodes():void {
             var nodeList = this.renderNodeList;
-            var dirtyList = this.dirtyNodeList;
             var notDirtyList = this.notDirtyNodeList;
-            var length = dirtyList.length;
+            var dirtyRectList = this.dirtyRectList;
+            var length = dirtyRectList.length;
             for(var j=0;j<length;j++){
-                var node = dirtyList[j];
+                var rect = dirtyRectList[j];
                 for(var k=notDirtyList.length-1;k>=0;k--){
                     var target = notDirtyList[k];
-                    if(node.intersects(target)){
+                    if(target.intersectRect(rect)){
                         target.isDirty = true;
                         notDirtyList.splice(k,1);
                     }
