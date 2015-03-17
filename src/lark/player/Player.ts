@@ -159,6 +159,7 @@ module lark {
             if (node) {
                 nodeList.push(node);
                 if (isDirty) {
+                    node.isDirty = isDirty;
                     dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.oldMinx, node.oldMinY, node.oldMaxX - node.oldMinx, node.oldMaxY - node.oldMinY));
                     dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.minX, node.minY, node.maxX - node.minX, node.maxY - node.minY));
                 }

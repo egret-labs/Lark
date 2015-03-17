@@ -94,7 +94,6 @@ module lark {
             var rect = Rectangle.TEMP;
             rect.copyFrom(target.$getContentBounds());
             this.matrix.$transformBounds(rect);
-            this.isDirty = target.$hasAnyFlags(DisplayObjectFlags.Dirty);
             this.oldMaxX = this.maxX;
             this.oldMinx = this.minX;
             this.oldMaxY = this.maxY;
