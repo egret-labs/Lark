@@ -260,6 +260,8 @@ module lark {
                 return;
             }
             this._matrix.tx = value;
+            this.$invalidatePosition();
+            this.$setDirtyFlags(DisplayObjectFlags.DirtyMatrix);
         }
 
         /**
@@ -277,6 +279,8 @@ module lark {
                 return;
             }
             this._matrix.ty = value;
+            this.$invalidatePosition();
+            this.$setDirtyFlags(DisplayObjectFlags.DirtyMatrix);
         }
 
 
