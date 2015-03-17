@@ -116,7 +116,7 @@ module lark {
         private onTick():void {
             this.drawCalls = 0;
             var t = lark.getTimer();
-            this.syncDisplayList(this.stage);
+            this.syncDisplayList();
             var t1 = lark.getTimer();
             if(this.dirtyRectList.length>0){
                 this.drawDirtyRect();
@@ -138,39 +138,42 @@ module lark {
         /**
          * 同步显示列表。
          */
-        private syncDisplayList(displayObject:DisplayObject):void {
+        private syncDisplayList():void {
             var nodeList:RenderNode[] = [];
             var notDirtyNodes:RenderNode[] = [];
             var dirtyRegion = this.stage.$dirtyRegion;
-            var stack:DisplayObject[] = [displayObject];
-            while (stack.length > 0) {
-                displayObject = stack.pop();
-                var node = displayObject.$getRenderNode();
-                displayObject.$removeFlags(DisplayObjectFlags.Dirty);
-                if (node) {
-                    nodeList.push(node);
-                    if (node.isDirty) {
-                        dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.oldMinx, node.oldMinY, node.oldMaxX - node.oldMinx, node.oldMaxY - node.oldMinY));
-                        dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.minX, node.minY, node.maxX - node.minX, node.maxY - node.minY));
-                    }
-                    else {
-                        notDirtyNodes.push(node);
-                    }
-                }
-                var children = displayObject.$children;
-                if (children) {
-                    for (var i = children.length - 1; i >= 0; i--) {
-                        var child = children[i];
-                        stack.push(child);
-                    }
-                }
-            }
+            this.visitDisplayList(this.stage,false,nodeList,notDirtyNodes,dirtyRegion);
             var dirtyRegion = this.stage.$dirtyRegion;
             var list:Rectangle[] = this.dirtyRectList;
             list.length = 0;
             dirtyRegion.gatherOptimizedRegions(list);
             this.renderNodeList = nodeList;
             this.notDirtyNodeList = notDirtyNodes;
+        }
+
+        private visitDisplayList(displayObject:DisplayObject,parentDirty:boolean,nodeList:RenderNode[],
+                                 notDirtyNodes:RenderNode[],dirtyRegion:lark.player.DirtyRegion):void{
+            var node = displayObject.$getRenderNode();
+            var isDirty:boolean = displayObject.$hasAnyFlags(DisplayObjectFlags.Dirty)||parentDirty;
+            displayObject.$removeFlags(DisplayObjectFlags.Dirty);
+            if (node) {
+                nodeList.push(node);
+                if (isDirty) {
+                    dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.oldMinx, node.oldMinY, node.oldMaxX - node.oldMinx, node.oldMaxY - node.oldMinY));
+                    dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.minX, node.minY, node.maxX - node.minX, node.maxY - node.minY));
+                }
+                else {
+                    notDirtyNodes.push(node);
+                }
+            }
+            var children = displayObject.$children;
+            if (children) {
+                var length = children.length;
+                for (var i = 0; i < length; i++) {
+                    var child = children[i];
+                    this.visitDisplayList(child,isDirty,nodeList,notDirtyNodes,dirtyRegion);
+                }
+            }
         }
 
         /**
