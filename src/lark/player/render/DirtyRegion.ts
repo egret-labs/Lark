@@ -64,6 +64,9 @@ module lark.player {
         }
 
         addDirtyRectangle(rectangle:Rectangle) {
+            if(rectangle.isEmpty()){
+                return;
+            }
             var x = rectangle.x >> this.sizeInBits;
             var y = rectangle.y >> this.sizeInBits;
             if (x >= this.c || y >= this.r) {
