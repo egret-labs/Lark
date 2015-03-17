@@ -79,7 +79,7 @@ module lark.player {
          * 清除整个屏幕
          */
         public clearScreen():void {
-            this.setTransform(1,0,0,1,0,0);
+            this.reset();
             this.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
 
@@ -128,9 +128,6 @@ module lark.player {
         public beginDrawDirtyRect():void{
             this.reset();
             this.context.save();
-            this.context.beginPath();
-            this.context.rect(0,0,this.stage.stageWidth,this.stage.stageHeight);
-            this.context.clip();
             this.context.beginPath();
         }
 
