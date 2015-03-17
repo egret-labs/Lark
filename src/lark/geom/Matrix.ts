@@ -345,13 +345,14 @@ module lark {
          * @param tx 沿 x 轴平移每个点的距离。
          * @param ty 沿 y 轴平移每个点的距离。
          */
-        public setTo(a:number, b:number, c:number, d:number, tx:number, ty:number):void {
+        public setTo(a:number, b:number, c:number, d:number, tx:number, ty:number):Matrix {
             this.a = a;
             this.b = b;
             this.c = c;
             this.d = d;
             this.tx = tx;
             this.ty = ty;
+            return this;
         }
 
         /**

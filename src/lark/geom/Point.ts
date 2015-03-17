@@ -70,9 +70,10 @@ module lark {
          * @param x 该对象的x属性值
          * @param y 该对象的y属性值
          */
-        public setTo(x:number, y:number):void {
+        public setTo(x:number, y:number):Point {
             this.x = x;
             this.y = y;
+            return this;
         }
 
         /**

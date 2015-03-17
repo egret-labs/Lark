@@ -74,10 +74,12 @@ module lark {
             this.stage.$updateStageSize(window.innerWidth,window.innerHeight);
         }
 
+
         /**
          * 清除整个屏幕
          */
         public clearScreen():void {
+            this.setTransform(1,0,0,1,0,0);
             this.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
 
@@ -92,60 +94,36 @@ module lark {
          * 绘制图片到一个区域上
          */
         public drawImage(texture:Texture, matrix:Matrix, globalAlpha:number):void {
-            if(this.context.globalAlpha!=globalAlpha){
-                this.context.globalAlpha = globalAlpha;
-            }
-            this.context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+            this.setGlobalAlpha(globalAlpha);
+            var point = this.setTransform(matrix.a, matrix.b, matrix.c, matrix.d,matrix.tx,matrix.ty);
             var width = texture.$bitmapWidth;
             var height = texture.$bitmapHeight;
             this.context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY,width, height,
-                texture.$offsetX, texture.$offsetY, width, height);
-        }
-
-        private $ctxCache = {
-            font: "",
-            fillStyle: "",
-            alpha: 1
+                texture.$offsetX+point.x, texture.$offsetY+point.y, width, height);
         }
 
         /**
          * 绘制文本到一个区域上
          */
         public drawText(text: string, font: string, color: string, x: number, y: number, width: number, matrix: Matrix, globalAlpha: number): void {
-            var cache = this.$ctxCache;
             var context = this.context;
+            this.setGlobalAlpha(globalAlpha);
+            this.setFont(font);
+            this.setFillStyle(color);
+            var point = this.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+            context.fillText(text, x+point.x, y+point.y, width);
 
-            if (cache.alpha != globalAlpha) {
-                context.globalAlpha = globalAlpha;
-                cache.alpha = globalAlpha;
-            }
-            if (font != cache.font) {
-                context.font = font;
-                cache.font = font;
-            }
-            if (color != cache.fillStyle) {
-                context.fillStyle = color;
-                cache.fillStyle = color;
-            }
-            context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
-            context.fillText(text, x, y, width);
-            
         }
 
         public reset():void{
             var context = this.context;
-            var cache = this.$ctxCache;
-
-            context.setTransform(1, 0, 0, 1, 0, 0);
-            context.fillStyle = null;
+            this.setTransform(1, 0, 0, 1, 0, 0);
+            this.setGlobalAlpha(1);
+            this.setFont(null);
+            this.setFillStyle(null);
             context.strokeStyle = null;
-            context.globalAlpha = 1;
             context.textBaseline = "middle";
-            context.font = null;
 
-            cache.alpha = 1;
-            cache.fillStyle = null;
-            cache.font = null;
         }
         public beginDrawDirtyRect():void{
             this.reset();
@@ -178,6 +156,69 @@ module lark {
          */
         public stopTick(callBack:Function, thisObject:any):void {
             WebTicker.getInstance().unregister(callBack, thisObject);
+        }
+
+        private _globalAlpha:number = 1;
+        /**
+         * 设置并缓存globalAlpha属性，所有修改必须统一调用此方法。
+         */
+        private setGlobalAlpha(value:number):void{
+            if(this._globalAlpha===value){
+                return;
+            }
+            this._globalAlpha = value;
+            this.context.globalAlpha = value;
+        }
+
+        private _a:number = 1;
+        private _b:number = 0;
+        private _c:number = 0;
+        private _d:number = 1;
+        private _ad_bc:number = 1;
+        private TEMP_POINT:Point = new Point();
+        /**
+         * 设置并缓存矩阵变换参数，所有修改必须统一调用此方法。注意此方法不会把tx和ty传入Canvas，只传入abcd等属性，请在外部应用返回的偏移量。
+         * 大部分情况下，每次绘制只有tx，ty发生变化，旋转缩放并不会改变。使用此方法会分离出tx，ty属性，从而避免过度调用context.setTransform().
+         */
+        private setTransform(a:number,b:number,c:number,d:number,tx:number,ty:number):Point{
+            if(this._a!==a||this._b!==b||this._c!==c||this._d!==d){
+                this._a = a;
+                this._b = b;
+                this._c = c;
+                this._d = d;
+                this._ad_bc = a*d - b*c;
+                this.context.setTransform(a,b,c,d,0,0);
+            }
+            if(a===1&&b==0&&c===0&&d===1){
+                return this.TEMP_POINT.setTo(tx,ty);
+            }
+            var x = (d*tx - c*ty)/this._ad_bc;
+            var y = (a*ty - b*tx)/this._ad_bc;
+            return this.TEMP_POINT.setTo(x,y);
+        }
+
+        private _font:string = null;
+        /**
+         * 设置并缓存font属性，所有修改必须统一调用此方法。
+         */
+        private setFont(value:string):void{
+            if(this._font==value){
+                return;
+            }
+            this._font = value;
+            this.context.font = value;
+        }
+
+        private _fillStyle:string = null;
+        /**
+         * 设置并缓存fillStyle属性，所有修改必须统一调用此方法。
+         */
+        private setFillStyle(value:string):void{
+            if(this._fillStyle==value){
+                return;
+            }
+            this._fillStyle = value;
+            this.context.fillStyle = value;
         }
     }
 }
