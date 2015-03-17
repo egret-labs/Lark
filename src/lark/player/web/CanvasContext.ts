@@ -102,45 +102,50 @@ module lark {
                 texture.$offsetX, texture.$offsetY, width, height);
         }
 
-        private $ctxPropCache = {
+        private $ctxCache = {
             font: "",
             fillStyle: "",
-            strokeStyle:""
+            alpha: 1
         }
 
         /**
          * 绘制文本到一个区域上
          */
-        public drawText(text: string, font: string, color: string, x: number, y: number, width: number, stroke:boolean, lineWidth:number, matrix: Matrix, globalAlpha: number): void {
-            if(this.context.globalAlpha!=globalAlpha){
-            this.context.globalAlpha = globalAlpha;
+        public drawText(text: string, font: string, color: string, x: number, y: number, width: number, matrix: Matrix, globalAlpha: number): void {
+            var cache = this.$ctxCache;
+            var context = this.context;
+
+            if (cache.alpha != globalAlpha) {
+                context.globalAlpha = globalAlpha;
+                cache.alpha = globalAlpha;
             }
-            this.context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
-            if (font != this.$ctxPropCache.font) {
-            this.context.font = font;
-                this.$ctxPropCache.font = font;
+            if (font != cache.font) {
+                context.font = font;
+                cache.font = font;
             }
-            this.context.textBaseline = "middle";
-            if (stroke) {
-                this.context.lineWidth = lineWidth;
-                this.context.strokeStyle = color;
-                this.context.strokeText(text, x, y, width);
+            if (color != cache.fillStyle) {
+                context.fillStyle = color;
+                cache.fillStyle = color;
             }
-            else {
-                if (color != this.$ctxPropCache.fillStyle) {
-                this.context.fillStyle = color;
-                    this.$ctxPropCache.fillStyle = color;
-                }
-                this.context.fillText(text, x, y, width);
-            }
+            context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+            context.fillText(text, x, y, width);
+            
         }
 
         public reset():void{
             var context = this.context;
+            var cache = this.$ctxCache;
+
             context.setTransform(1, 0, 0, 1, 0, 0);
             context.fillStyle = null;
             context.strokeStyle = null;
             context.globalAlpha = 1;
+            context.textBaseline = "middle";
+            context.font = null;
+
+            cache.alpha = 1;
+            cache.fillStyle = null;
+            cache.font = null;
         }
         public beginDrawDirtyRect():void{
             this.reset();

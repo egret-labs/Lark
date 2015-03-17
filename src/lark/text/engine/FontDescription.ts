@@ -1,6 +1,6 @@
 ﻿module lark.text {
     export class FontDescription extends HashObject {
-        public constructor(fontName: string = "", italic:boolean = false, bold: boolean = false) {
+        public constructor(fontName: string = "sans-serif", italic:boolean = false, bold: boolean = false) {
             super();
             this.fontName = fontName;
             this.italic = italic;
@@ -17,7 +17,7 @@
         */
         public bold: boolean;
         toString(): string {
-            return this.fontName + " " + (this.italic ? "italic" : "") + " " + (this.bold ? "bold" : "");
+            return (this.fontName || "sans-serif") + " " + (this.italic ? "italic" : "") + " " + (this.bold ? "bold" : "");
         }
 
         public equals(other: FontDescription) {

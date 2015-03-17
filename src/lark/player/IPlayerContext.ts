@@ -65,7 +65,7 @@ module lark {
         /**
          * 绘制文本到一个区域上
          */
-        drawText(text:string, font:string, color:string, x:number, y:number, width:number, stroke:boolean, lineWidth:number, matrix:Matrix, globalAlpha:number): void;
+        drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number): void;
 
         reset():void;
 
