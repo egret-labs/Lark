@@ -56,6 +56,7 @@ module lark.player {
         }
 
         clear() {
+            this.dirtyRects = [];
             for (var y = 0; y < this.r; y++) {
                 for (var x = 0; x < this.c; x++) {
                     this.grid[y][x].clear();
@@ -63,10 +64,17 @@ module lark.player {
             }
         }
 
-        addDirtyRectangle(rectangle:Rectangle) {
+        private dirtyRects:Rectangle[] = [];
+
+        public addDirtyRectangle(rectangle:Rectangle) {
             if(rectangle.isEmpty()){
                 return;
             }
+            this.dirtyRects.push(rectangle.clone());
+        }
+
+        private doAddDirtyRectangle(rectangle:Rectangle) {
+
             var x = rectangle.x >> this.sizeInBits;
             var y = rectangle.y >> this.sizeInBits;
             if (x >= this.c || y >= this.r) {
@@ -97,7 +105,7 @@ module lark.player {
                         var intersection = cell.region.clone();
                         intersection.$intersect(rectangle);
                         if (!intersection.isEmpty()) {
-                            this.addDirtyRectangle(intersection);
+                            this.doAddDirtyRectangle(intersection);
                         }
                     }
                 }
@@ -116,6 +124,11 @@ module lark.player {
         }
 
         gatherOptimizedRegions(regions:Rectangle[]) {
+            var list = this.dirtyRects;
+            var length = list.length;
+            for(var i=0;i<length;i++){
+                this.doAddDirtyRectangle(list[i]);
+            }
             this.gatherRegions(regions);
         }
     }
