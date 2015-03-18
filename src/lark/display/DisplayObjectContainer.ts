@@ -233,6 +233,7 @@ module lark {
             index = +index | 0;
             var children = this.$children;
             var child:DisplayObject = children[index];
+            this.$markDirtyRegion(child);
             if (notifyListeners) {
                 //child.dispatchEventWith(Event.REMOVED, true);
             }
@@ -253,6 +254,28 @@ module lark {
             child.$invalidatePosition();
             this.$invalidateChildren();
             return child;
+        }
+
+        $markDirtyRegion(child:DisplayObject):void{
+            var stage = this.$stage;
+            if(!stage||!stage.$dirtyRegion){
+                return;
+            }
+            this.$markChildBounsAsDirtyRegion(child,stage.$dirtyRegion);
+        }
+
+        $markChildBounsAsDirtyRegion(child:DisplayObject,dirtyRegion:lark.player.DirtyRegion):void{
+            var node = child.$getRenderNode(false);
+            if(node){
+                dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.oldMinx,node.oldMinY,node.oldMaxX-node.oldMinx,node.oldMaxY-node.oldMinY));
+            }
+            var children = child.$children;
+            if(children){
+                var length = children.length;
+                for(var i=0;i<length;i++){
+                    this.$markChildBounsAsDirtyRegion(children[i],dirtyRegion);
+                }
+            }
         }
 
         /**

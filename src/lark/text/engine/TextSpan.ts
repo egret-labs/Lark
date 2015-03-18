@@ -39,18 +39,19 @@
         }
 
         private _renderNode:lark.player.TextNode = new lark.player.TextNode();
-
         /**
          * 获取渲染节点
          */
-        $getRenderNode():lark.player.RenderNode{
+        $getRenderNode(update:boolean=true):lark.player.RenderNode{
             var node = this._renderNode;
-            node.update(this);
-            node.text = this.text;
-            node.size = this.size;
-            node.font = this.$toFontString();
-            node.style = this.$toColorString();
-            node.textWidth = this.textWidth;
+            if(update){
+                node.update(this);
+                node.text = this.text;
+                node.size = this.size;
+                node.font = this.$toFontString();
+                node.style = this.$toColorString();
+                node.textWidth = this.textWidth;
+            }
             return node;
         }
 

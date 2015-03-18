@@ -94,7 +94,7 @@ module lark.player {
          */
         public update(target:DisplayObject):void {
             this.alpha = target.$getConcatenatedAlpha();
-            if(target.$hasAnyFlags(DisplayObjectFlags.InvalidConcatenatedMatrix|DisplayObjectFlags.InvalidContentBounds)){
+           // if(target.$hasAnyFlags(DisplayObjectFlags.InvalidConcatenatedMatrix|DisplayObjectFlags.InvalidContentBounds)){
                 this.matrix = target.$getConcatenatedMatrix();
                 var rect = Rectangle.TEMP;
                 rect.copyFrom(target.$getContentBounds());
@@ -104,7 +104,7 @@ module lark.player {
                 this.maxX = rect.x + rect.width;
                 this.maxY = rect.y + rect.height;
                 this.moved = true;
-            }
+            //}
         }
 
         public intersects(rect:Rectangle):boolean {
@@ -127,11 +127,13 @@ module lark.player {
          */
         public finish():void{
             this.isDirty = false;
-            this.oldMaxX = this.maxX;
-            this.oldMinx = this.minX;
-            this.oldMaxY = this.maxY;
-            this.oldMinY = this.minY;
-            this.moved = false;
+            if(this.moved){
+                this.oldMaxX = this.maxX;
+                this.oldMinx = this.minX;
+                this.oldMaxY = this.maxY;
+                this.oldMinY = this.minY;
+                this.moved = false;
+            }
         }
     }
 }

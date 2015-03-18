@@ -124,6 +124,10 @@ module lark.player {
                 this.drawRenderNodes();
                 var t3 = lark.getTimer();
             }
+            else{
+                t2 = t1;
+                t3 = t2;
+            }
 
             FPS.update(this.drawCalls, t1 - t, t2 - t1, t3 - t2);
         }
@@ -144,14 +148,6 @@ module lark.player {
             var dirtyRegion = this.stage.$dirtyRegion;
             this.visitDisplayList(this.stage,false,nodeList,notDirtyNodes,dirtyRegion);
 
-            var renderList = this.renderNodeList;
-            var length = renderList.length;
-            for(var i=0;i<length;i++){
-                var node = renderList[i];
-                if(nodeList.indexOf(node)==-1){
-                    dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.oldMinx, node.oldMinY, node.oldMaxX - node.oldMinx, node.oldMaxY - node.oldMinY));
-                }
-            }
             this.renderNodeList = nodeList;
             this.notDirtyNodeList = notDirtyNodes;
             var list:Rectangle[] = this.dirtyRectList;

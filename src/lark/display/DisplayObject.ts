@@ -40,6 +40,7 @@ module lark {
             this._displayObjectFlags = DisplayObjectFlags.Visible |
             DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
+            DisplayObjectFlags.InvalidConcatenatedAlpha |
             DisplayObjectFlags.DirtyDescendents |
             DisplayObjectFlags.DirtyMatrix |
             DisplayObjectFlags.DirtyAlpha |
@@ -620,7 +621,7 @@ module lark {
         /**
          * 获取渲染节点
          */
-        $getRenderNode():lark.player.RenderNode{
+        $getRenderNode(update:boolean=true):lark.player.RenderNode{
             return null;
         }
     }

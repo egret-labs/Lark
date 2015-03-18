@@ -72,10 +72,12 @@ module lark {
         /**
          * 获取渲染节点
          */
-        $getRenderNode():lark.player.RenderNode{
+        $getRenderNode(update:boolean=true):lark.player.RenderNode{
             var node = this._renderNode;
-            node.update(this);
-            node.texture = this.$texture;
+            if(update){
+                node.update(this);
+                node.texture = this.$texture;
+            }
             return node;
         }
     }
