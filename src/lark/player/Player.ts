@@ -133,7 +133,6 @@ module lark.player {
         }
 
         private renderNodeList:RenderNode[] = [];
-        private notDirtyNodeList:RenderNode[] = [];
 
         private dirtyRectList:Rectangle[] = [];
 
@@ -144,15 +143,25 @@ module lark.player {
          */
         private syncDisplayList():void {
             var nodeList:RenderNode[] = [];
-            var notDirtyNodes:RenderNode[] = [];
+            var notDirtyList:RenderNode[] = [];
             var dirtyRegion = this.stage.$dirtyRegion;
-            this.visitDisplayList(this.stage,false,nodeList,notDirtyNodes,dirtyRegion);
+            this.visitDisplayList(this.stage,false,nodeList,notDirtyList,dirtyRegion);
 
             this.renderNodeList = nodeList;
-            this.notDirtyNodeList = notDirtyNodes;
-            var list:Rectangle[] = this.dirtyRectList;
-            list.length = 0;
-            dirtyRegion.gatherOptimizedRegions(list);
+            var dirtyRectList:Rectangle[] = this.dirtyRectList;
+            dirtyRectList.length = 0;
+            dirtyRegion.gatherOptimizedRegions(dirtyRectList);
+            var length = dirtyRectList.length;
+            for(var j=0;j<length;j++){
+                var rect = dirtyRectList[j];
+                for(var k=notDirtyList.length-1;k>=0;k--){
+                    var target = notDirtyList[k];
+                    if(target.intersects(rect)){
+                        target.isDirty = true;
+                        notDirtyList.splice(k,1);
+                    }
+                }
+            }
         }
 
         private visitDisplayList(displayObject:DisplayObject,parentDirty:boolean,nodeList:RenderNode[],
@@ -202,20 +211,7 @@ module lark.player {
          */
         private drawRenderNodes():void {
             var nodeList = this.renderNodeList;
-            var notDirtyList = this.notDirtyNodeList;
-            var dirtyRectList = this.dirtyRectList;
-            var length = dirtyRectList.length;
-            for(var j=0;j<length;j++){
-                var rect = dirtyRectList[j];
-                for(var k=notDirtyList.length-1;k>=0;k--){
-                    var target = notDirtyList[k];
-                    if(target.intersects(rect)){
-                        target.isDirty = true;
-                        notDirtyList.splice(k,1);
-                    }
-                }
-            }
-            length = nodeList.length;
+            var length = nodeList.length;
             var drawCalls = 0;
             for (var i = 0; i < length; i++) {
                 var node = nodeList[i];
