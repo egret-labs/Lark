@@ -42,14 +42,12 @@ module lark {
         public constructor() {
             super();
             this.$children = [];
-            this.$setDirtyFlags(DisplayObjectFlags.DirtyChildren);
         }
 
         /**
          * 标记子项列表失效
          */
         private $invalidateChildren() {
-            this.$setDirtyFlags(DisplayObjectFlags.DirtyChildren);
             if(this.$stage){
                 this.$stage.$displayListTreeChanged = true;
             }
@@ -137,7 +135,7 @@ module lark {
                     }
                 }
             }
-
+            child.$markDirty();
             child.$invalidatePosition();
             this.$invalidateChildren();
             return child;
@@ -236,7 +234,7 @@ module lark {
             index = +index | 0;
             var children = this.$children;
             var child:DisplayObject = children[index];
-            this.$markRenderNodeDirty(child);
+            child.$markDirty();
             if (notifyListeners) {
                 //child.dispatchEventWith(Event.REMOVED, true);
             }
@@ -283,6 +281,7 @@ module lark {
             else {
                 this.$children.splice(index, 0, child);
             }
+            child.$markDirty();
             this.$invalidateChildren();
         }
 
@@ -324,9 +323,12 @@ module lark {
                 return;
             }
             var list:Array<DisplayObject> = this.$children;
-            var child:DisplayObject = list[index1];
-            list[index1] = list[index2];
-            list[index2] = child;
+            var child1:DisplayObject = list[index1];
+            var child2:DisplayObject = list[index2];
+            list[index1] = child2;
+            list[index2] = child1;
+            child1.$markDirty();
+            child2.$markDirty();
             this.$invalidateChildren();
         }
 

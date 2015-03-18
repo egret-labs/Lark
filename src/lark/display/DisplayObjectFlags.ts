@@ -72,57 +72,9 @@ module lark {
         CacheAsBitmap = 0x010000,
 
         /**
-         * 显示对象的matrix对象从上一次同步后发生了改变。
+         * 显示对象需要重绘的标志
          */
-        DirtyMatrix = 0x100000,
-
-        /**
-         * 显示对象的子项列表发生改变
-         */
-        DirtyChildren = 0x200000,
-
-        /**
-         * 显示对象的文本内容从上一次同步后发生了改变。
-         * Indicates whether this display object's text content has changed since the last time it was
-         * synchronized.
-         */
-        DirtyTextContent = 0x800000,
-
-        /**
-         * 显示对象的位图数据从上一次同步后发生了改变。
-         */
-        DirtyBitmapData = 0x1000000,
-
-        /**
-         * 显示对象透明度属性从上一次同步后发生了改变。
-         */
-        DirtyAlpha = 0x4000000,
-        /**
-         * 显示对象的遮罩对象从上一次同步后发生了改变。
-         */
-        DirtyMask = 0x8000000,
-
-        /**
-         * 显示对象的子孙项列表从上一次同步后发生了改变。
-         */
-        DirtyDescendents = 0x20000000,
-
-        /**
-         * 显示对象的其他属性从上一次同步后发生了改变
-         * 通常是以下属性改变：
-         * blendMode,
-         * scale9Grid,
-         * cacheAsBitmap,
-         * filters,
-         * visible
-         */
-        DirtyMiscellaneousProperties = 0x40000000,
-
-        /**
-         * 所有需要同步的属性全都失效.
-         */
-        Dirty = DirtyMatrix | DirtyChildren | DirtyBitmapData | DirtyAlpha | DirtyMask |
-            DirtyMiscellaneousProperties | DirtyTextContent
+        Dirty = 0x20000000
 
     }
 

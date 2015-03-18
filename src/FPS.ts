@@ -69,7 +69,7 @@ module lark {
                 var text = "FPS:" + lastFPS + " draw:" + drawCalls + " cost: " + args.join(",");
                 if (FPS._textSpan.text != text) {
                     FPS._textSpan.text = text;
-                    FPS._textSpan.$setDirtyFlags(DisplayObjectFlags.DirtyTextContent);
+                    FPS._textSpan.$markDirty();
                 }
             }
         }

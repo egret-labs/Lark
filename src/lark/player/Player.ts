@@ -180,15 +180,12 @@ module lark.player {
                 this.renderNodeList = nodeList;
             }
             else{
-                var dirtyRectList = this.dirtyRectList;
-                this.renderNodeList.forEach((node:RenderNode):void=>{
-                    this.checkRenderNode(node,dirtyRectList);
-                })
+                this.renderNodeList.forEach(this.checkRenderNode);
             }
             this.context.endDrawScreen();
             stage.$dirtyRegion.clear();
             stage.$dirtyRenderNodes = {};
-           // stage.$displayListTreeChanged = false;
+            stage.$displayListTreeChanged = false;
         }
 
         private visitDisplayList(displayObject:DisplayObject, nodeList:RenderNode[],dirtyRectList):void {
@@ -196,7 +193,7 @@ module lark.player {
             displayObject.$removeFlags(DisplayObjectFlags.Dirty);
             if (node) {
                 nodeList.push(node);
-                this.checkRenderNode(node,dirtyRectList);
+                this.checkRenderNode(node);
             }
             var children = displayObject.$children;
             if (children) {
@@ -211,8 +208,10 @@ module lark.player {
         /**
          * 检查一个渲染节点是否需要绘制
          */
-        private checkRenderNode(node:RenderNode,dirtyRectList):void {
+        private checkRenderNode = (node:RenderNode):void => {
             if (!node.isDirty) {
+                //这部分碰撞检测还有很大优化空间，可以跳过屏幕外的节点，visible或alpha是0的节点。
+                var dirtyRectList = this.dirtyRectList;
                 for (var j = dirtyRectList.length-1; j >= 0; j--) {
                     var rect = dirtyRectList[j];
                     if(node.intersects(rect)){

@@ -54,7 +54,7 @@ module lark {
         public set texture(value:Texture){
             this.$texture = value;
             this.$invalidateContentBounds();
-            this.$setDirtyFlags(DisplayObjectFlags.DirtyBitmapData);
+            this.$markDirty();
         }
 
         $measureContentBounds(bounds:Rectangle):void {

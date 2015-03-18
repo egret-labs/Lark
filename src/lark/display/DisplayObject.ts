@@ -41,11 +41,7 @@ module lark {
             DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
             DisplayObjectFlags.InvalidConcatenatedAlpha |
-            DisplayObjectFlags.DirtyDescendents |
-            DisplayObjectFlags.DirtyMatrix |
-            DisplayObjectFlags.DirtyAlpha |
-            DisplayObjectFlags.DirtyMask |
-            DisplayObjectFlags.DirtyMiscellaneousProperties;
+            DisplayObjectFlags.Dirty;
         }
 
         /**
@@ -65,17 +61,6 @@ module lark {
 
         $setFlags(flags:DisplayObjectFlags) {
             this._displayObjectFlags |= flags;
-        }
-
-        /**
-         * 使用此方法来设置失效标记，将同时将失效标志传递给父级。
-         */
-        $setDirtyFlags(flags:DisplayObjectFlags) {
-            this._displayObjectFlags |= flags;
-            if (this.$parent) {
-                this.$parent.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
-            }
-            this.$markRenderNodeDirty(this);
         }
 
         $toggleFlags(flags:DisplayObjectFlags, on:boolean) {
@@ -120,7 +105,7 @@ module lark {
         }
 
         $invalidateMatrix() {
-            this.$setDirtyFlags(DisplayObjectFlags.DirtyMatrix);
+            this.$markDirty();
             this.$setFlags(DisplayObjectFlags.InvalidMatrix);
             this.$invalidatePosition();
         }
@@ -215,7 +200,7 @@ module lark {
             this._skewY = matrix.$getSkewY();
             this._rotation = DisplayObject.clampRotation(this._skewY * 180 / Math.PI);
             this.$removeFlags(DisplayObjectFlags.InvalidMatrix);
-            this.$setDirtyFlags(DisplayObjectFlags.DirtyMatrix);
+            this.$markDirty();
             this.$invalidatePosition();
         }
 
@@ -263,7 +248,7 @@ module lark {
             }
             this._matrix.tx = value;
             this.$invalidatePosition();
-            this.$setDirtyFlags(DisplayObjectFlags.DirtyMatrix);
+            this.$markDirty();
         }
 
         /**
@@ -282,7 +267,7 @@ module lark {
             }
             this._matrix.ty = value;
             this.$invalidatePosition();
-            this.$setDirtyFlags(DisplayObjectFlags.DirtyMatrix);
+            this.$markDirty();
         }
 
 
@@ -420,7 +405,7 @@ module lark {
                 return;
             }
             this.$toggleFlags(DisplayObjectFlags.Visible, value);
-            this.$setDirtyFlags(DisplayObjectFlags.DirtyMiscellaneousProperties);
+            this.$markDirty();
         }
 
         private _alpha:number = 1;
@@ -440,7 +425,7 @@ module lark {
             }
             this._alpha = value;
             this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedAlpha);
-            this.$setDirtyFlags(DisplayObjectFlags.DirtyAlpha);
+            this.$markDirty();
         }
 
         private _concatenatedAlpha:number = 1;
@@ -626,15 +611,18 @@ module lark {
             return null;
         }
 
-        $markRenderNodeDirty(child:DisplayObject):void{
+        /**
+         * 标记此显示对象需要重绘
+         */
+        $markDirty():void{
             var stage = this.$stage;
-            if(!stage||!stage.$dirtyRenderNodes){
+            if(!stage){
                 return;
             }
-            this.markChildRenderNodeDirty(child,stage.$dirtyRenderNodes);
+            this.markChildNodeDirty(this,stage.$dirtyRenderNodes);
         }
 
-        private markChildRenderNodeDirty(child:DisplayObject,dirtyNodes:any):void{
+        private markChildNodeDirty(child:DisplayObject,dirtyNodes:any):void{
             var node = child.$getRenderNode(false);
             if(node){
                 dirtyNodes[node.id] = node;
@@ -643,7 +631,7 @@ module lark {
             if(children){
                 var length = children.length;
                 for(var i=0;i<length;i++){
-                    this.markChildRenderNodeDirty(children[i],dirtyNodes);
+                    this.markChildNodeDirty(children[i],dirtyNodes);
                 }
             }
         }
