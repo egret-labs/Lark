@@ -34,8 +34,8 @@ module lark.player {
      */
     export class TextNode extends RenderNode{
 
-        public constructor(){
-            super();
+        public constructor(target:DisplayObject){
+            super(target);
             this.nodeType = NodeType.Text;
         }
 

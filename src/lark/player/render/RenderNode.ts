@@ -34,9 +34,17 @@ module lark.player {
      */
     export class RenderNode {
 
-        public constructor() {
+        public constructor(target:DisplayObject) {
             this.nodeType = NodeType.Node;
+            this.target = target;
+            this.id = RenderNode.idCount++;
         }
+
+        private static idCount:number = 1;
+
+        public id:number;
+
+        public target:DisplayObject;
 
         public nodeType:number;
         /**
@@ -92,7 +100,8 @@ module lark.player {
         /**
          * 更新绘制的矩形区域
          */
-        public update(target:DisplayObject):void {
+        public update():void {
+            var target = this.target;
             this.alpha = target.$getConcatenatedAlpha();
            // if(target.$hasAnyFlags(DisplayObjectFlags.InvalidConcatenatedMatrix|DisplayObjectFlags.InvalidContentBounds)){
                 this.matrix = target.$getConcatenatedMatrix();

@@ -47,44 +47,45 @@ module lark {
         private iconList:Bitmap[] = [];
 
         private start(texture:Texture):void{
-            var x=20,y=20;
+            var x=0,y=20;
             for(var i=0;i<1000;i++){
                 var bitmap = new Bitmap();
                 bitmap.texture = texture;
                 bitmap.x = x;
                 bitmap.y = y;
-                bitmap.scaleX = bitmap.scaleY = Math.random();
-                bitmap.rotation = Math.random()*360;
+                //bitmap.scaleX = bitmap.scaleY = Math.random();
+                //bitmap.rotation = 1;
                 x += texture.width;
                 if(x>1920){
                     x = 0;
                     y += texture.height;
-                    if(y>960){
-                        y = 0;
-                    }
+                    //if(y>960){
+                    //    y = 0;
+                    //}
                 }
                 this.addChild(bitmap);
                 this.iconList.push(bitmap);
             }
             this.targetIcon = new lark.Bitmap();
             this.targetIcon.texture = texture;
-            this.targetIcon.x = 300;
-            this.targetIcon.y = 300;
+            this.targetIcon.x = 700;
+            this.targetIcon.y = 500;
             this.addChild(this.targetIcon);
             this.iconList.push(this.targetIcon);
             this.addChild(FPS.display);
-            WebTicker.getInstance().register(this.onTick,this);
+            lark.player.WebTicker.getInstance().register(this.onTick,this);
         }
 
         private onTick():void{
-            //this.targetIcon.rotation += 2;
-            var list = this.iconList;
-            var length = list.length;
-            for(var i=0;i<length;i++){
-                var bitmap = list[i];
-                bitmap.rotation += 2;
-                i+=2;
-            }
+            this.targetIcon.rotation += 2;
+            //var list = this.iconList;
+            //var length = list.length;
+            //for(var i=0;i<length;i++){
+            //    var bitmap = list[i];
+            //    //bitmap.x = Math.random()*1900;
+            //    //bitmap.y = Math.random()*960;
+            //    i+=2;
+            //}
         }
     }
 

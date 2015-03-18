@@ -81,6 +81,13 @@ module lark {
             return this._stageHeight;
         }
 
+        /**
+         * 显示列表的结构发生改变
+         */
+        $displayListTreeChanged:boolean = true;
+
+        $dirtyRenderNodes:any = {};
+
         $dirtyRegion:lark.player.DirtyRegion;
 
         $updateStageSize(width:number, height:number):void {

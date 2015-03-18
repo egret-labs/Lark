@@ -116,15 +116,15 @@ module lark.player {
         private onTick():void {
             this.drawCalls = 0;
             var t = lark.getTimer();
-            this.syncDisplayList();
+            this.computeDirtyRects();
             var t1 = lark.getTimer();
-            if(this.dirtyRectList.length>0){
+            if (this.dirtyRectList.length > 0) {
                 this.drawDirtyRect();
                 var t2 = lark.getTimer();
-                this.drawRenderNodes();
+                this.drawDisplayList();
                 var t3 = lark.getTimer();
             }
-            else{
+            else {
                 t2 = t1;
                 t3 = t2;
             }
@@ -138,58 +138,21 @@ module lark.player {
 
         private drawCalls:number = 0;
 
-        /**
-         * 同步显示列表。
-         */
-        private syncDisplayList():void {
-            var nodeList:RenderNode[] = [];
-            var notDirtyList:RenderNode[] = [];
+        private computeDirtyRects():void {
             var dirtyRegion = this.stage.$dirtyRegion;
-            this.visitDisplayList(this.stage,false,nodeList,notDirtyList,dirtyRegion);
-
-            this.renderNodeList = nodeList;
+            var nodeList = this.stage.$dirtyRenderNodes;
+            for (var i in nodeList) {
+                var node:RenderNode = nodeList[i];
+                node.target.$getRenderNode();
+                node.isDirty = true;
+                dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.oldMinx, node.oldMinY, node.oldMaxX - node.oldMinx, node.oldMaxY - node.oldMinY));
+                if (node.moved) {
+                    dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.minX, node.minY, node.maxX - node.minX, node.maxY - node.minY));
+                }
+            }
             var dirtyRectList:Rectangle[] = this.dirtyRectList;
             dirtyRectList.length = 0;
             dirtyRegion.gatherOptimizedRegions(dirtyRectList);
-            var length = dirtyRectList.length;
-            for(var j=0;j<length;j++){
-                var rect = dirtyRectList[j];
-                for(var k=notDirtyList.length-1;k>=0;k--){
-                    var target = notDirtyList[k];
-                    if(target.intersects(rect)){
-                        target.isDirty = true;
-                        notDirtyList.splice(k,1);
-                    }
-                }
-            }
-        }
-
-        private visitDisplayList(displayObject:DisplayObject,parentDirty:boolean,nodeList:RenderNode[],
-                                 notDirtyNodes:RenderNode[],dirtyRegion:lark.player.DirtyRegion):void{
-            var node = displayObject.$getRenderNode();
-            var isDirty:boolean = displayObject.$hasAnyFlags(DisplayObjectFlags.Dirty)||parentDirty;
-            displayObject.$removeFlags(DisplayObjectFlags.Dirty);
-            if (node) {
-                nodeList.push(node);
-                if (isDirty) {
-                    node.isDirty = isDirty;
-                    dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.oldMinx, node.oldMinY, node.oldMaxX - node.oldMinx, node.oldMaxY - node.oldMinY));
-                    if(node.moved){
-                        dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.minX, node.minY, node.maxX - node.minX, node.maxY - node.minY));
-                    }
-                }
-                else {
-                    notDirtyNodes.push(node);
-                }
-            }
-            var children = displayObject.$children;
-            if (children) {
-                var length = children.length;
-                for (var i = 0; i < length; i++) {
-                    var child = children[i];
-                    this.visitDisplayList(child,isDirty,nodeList,notDirtyNodes,dirtyRegion);
-                }
-            }
         }
 
         /**
@@ -199,27 +162,68 @@ module lark.player {
             this.context.beginDrawDirtyRect();
             var list:Rectangle[] = this.dirtyRectList;
             var length = list.length;
-            for(var i=0;i<length;i++){
+            for (var i = 0; i < length; i++) {
                 var rect = list[i];
-                this.context.drawDirtyRect(rect.x,rect.y,rect.width,rect.height);
+                this.context.drawDirtyRect(rect.x, rect.y, rect.width, rect.height);
             }
             this.context.endDrawDirtyRect();
         }
 
         /**
-         * 绘制渲染节点
+         * 同步显示列表。
          */
-        private drawRenderNodes():void {
-            var nodeList = this.renderNodeList;
-            var length = nodeList.length;
-            var drawCalls = 0;
-            for (var i = 0; i < length; i++) {
-                var node = nodeList[i];
-                if (!node.isDirty) {
-                    continue;
+        private drawDisplayList():void {
+            var stage = this.stage;
+            if(stage.$displayListTreeChanged){
+                var nodeList:RenderNode[] = [];
+                this.visitDisplayList(this.stage, nodeList,this.dirtyRectList);
+                this.renderNodeList = nodeList;
+            }
+            else{
+                var dirtyRectList = this.dirtyRectList;
+                this.renderNodeList.forEach((node:RenderNode):void=>{
+                    this.checkRenderNode(node,dirtyRectList);
+                })
+            }
+            this.context.endDrawScreen();
+            stage.$dirtyRegion.clear();
+            stage.$dirtyRenderNodes = {};
+           // stage.$displayListTreeChanged = false;
+        }
+
+        private visitDisplayList(displayObject:DisplayObject, nodeList:RenderNode[],dirtyRectList):void {
+            var node = displayObject.$getRenderNode();
+            displayObject.$removeFlags(DisplayObjectFlags.Dirty);
+            if (node) {
+                nodeList.push(node);
+                this.checkRenderNode(node,dirtyRectList);
+            }
+            var children = displayObject.$children;
+            if (children) {
+                var length = children.length;
+                for (var i = 0; i < length; i++) {
+                    var child = children[i];
+                    this.visitDisplayList(child, nodeList,dirtyRectList);
                 }
-                drawCalls++;
-                switch(node.nodeType){
+            }
+        }
+
+        /**
+         * 检查一个渲染节点是否需要绘制
+         */
+        private checkRenderNode(node:RenderNode,dirtyRectList):void {
+            if (!node.isDirty) {
+                for (var j = dirtyRectList.length-1; j >= 0; j--) {
+                    var rect = dirtyRectList[j];
+                    if(node.intersects(rect)){
+                        node.isDirty = true;
+                        break;
+                    }
+                }
+            }
+            if(node.isDirty){
+                this.drawCalls++;
+                switch (node.nodeType) {
                     case NodeType.Bitmap:
                         var bitmapNode = <BitmapNode>node;
                         var texture = bitmapNode.texture;
@@ -238,9 +242,6 @@ module lark.player {
                 }
                 node.finish();
             }
-            this.drawCalls = drawCalls;
-            this.context.endDrawScreen();
-            this.stage.$dirtyRegion.clear();
         }
     }
 }

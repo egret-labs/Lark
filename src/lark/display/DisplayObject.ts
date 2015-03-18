@@ -75,6 +75,7 @@ module lark {
             if (this.$parent) {
                 this.$parent.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
             }
+            this.$markRenderNodeDirty(this);
         }
 
         $toggleFlags(flags:DisplayObjectFlags, on:boolean) {
@@ -623,6 +624,28 @@ module lark {
          */
         $getRenderNode(update:boolean=true):lark.player.RenderNode{
             return null;
+        }
+
+        $markRenderNodeDirty(child:DisplayObject):void{
+            var stage = this.$stage;
+            if(!stage||!stage.$dirtyRenderNodes){
+                return;
+            }
+            this.markChildRenderNodeDirty(child,stage.$dirtyRenderNodes);
+        }
+
+        private markChildRenderNodeDirty(child:DisplayObject,dirtyNodes:any):void{
+            var node = child.$getRenderNode(false);
+            if(node){
+                dirtyNodes[node.id] = node;
+            }
+            var children = child.$children;
+            if(children){
+                var length = children.length;
+                for(var i=0;i<length;i++){
+                    this.markChildRenderNodeDirty(children[i],dirtyNodes);
+                }
+            }
         }
     }
 

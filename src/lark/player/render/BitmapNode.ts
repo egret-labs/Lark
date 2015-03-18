@@ -36,8 +36,8 @@ module lark.player {
         /**
          * 实例化一个渲染命令
          */
-        public constructor() {
-            super();
+        public constructor(target:DisplayObject) {
+            super(target);
             this.nodeType = NodeType.Bitmap;
         }
 
