@@ -643,6 +643,11 @@ module lark {
             if(!node){
                 return;
             }
+            if(!this.$stage){
+                node.finish();
+                node.minX = node.maxX = node.minY = node.maxY = 0;
+                return;
+            }
             node.alpha = this.$getConcatenatedAlpha();
             node.matrix = this.$getConcatenatedMatrix();
             var bounds = this.$getContentBounds();

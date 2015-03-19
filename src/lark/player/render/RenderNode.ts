@@ -47,23 +47,6 @@ module lark.player {
         public target:DisplayObject;
 
         public nodeType:number;
-        /**
-         * 上一次绘制区域在屏幕上的起点x
-         */
-        public oldMinx:number = 0;
-        /**
-         * 上一次绘制区域在屏幕上的起点y
-         */
-        public oldMinY:number = 0;
-        /**
-         * 上一次绘制区域在屏幕上的终点x
-         */
-        public oldMaxX:number = 0;
-        /**
-         * 上一次绘制区域在屏幕上的终点y
-         */
-        public oldMaxY:number = 0;
-
 
         /**
          * 绘制区域在屏幕上的起点x
@@ -118,13 +101,7 @@ module lark.player {
          */
         public finish():void{
             this.isDirty = false;
-            if(this.moved){
-                this.oldMaxX = this.maxX;
-                this.oldMinx = this.minX;
-                this.oldMaxY = this.maxY;
-                this.oldMinY = this.minY;
-                this.moved = false;
-            }
+            this.moved = false;
         }
     }
 }

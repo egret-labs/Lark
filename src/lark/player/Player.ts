@@ -143,14 +143,14 @@ module lark.player {
             var nodeList = this.stage.$dirtyRenderNodes;
             for (var i in nodeList) {
                 var node:RenderNode = nodeList[i];
-                node.target.$updateRenderNode();
                 node.target.$removeFlagsUp(DisplayObjectFlags.Dirty);
                 node.isDirty = true;
-                dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.oldMinx, node.oldMinY, node.oldMaxX - node.oldMinx, node.oldMaxY - node.oldMinY));
+                dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.minX, node.minY, node.maxX - node.minX, node.maxY - node.minY));
+                node.target.$updateRenderNode();
                 if (node.moved) {
                     dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.minX, node.minY, node.maxX - node.minX, node.maxY - node.minY));
                 }
-            }
+            } 
             var dirtyRectList:Rectangle[] = this.dirtyRectList;
             dirtyRectList.length = 0;
             dirtyRegion.gatherOptimizedRegions(dirtyRectList);
