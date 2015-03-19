@@ -47,8 +47,8 @@ module lark {
         private iconList:Bitmap[] = [];
 
         private start(texture:Texture):void{
-            var x=0,y=20;
-            for(var i=0;i<20000;i++){
+            var x=0,y=0;
+            for(var i=0;i<100000;i++){
                 var bitmap = new Bitmap();
                 bitmap.texture = texture;
                 bitmap.x = x;
@@ -63,7 +63,6 @@ module lark {
                     //    y = 0;
                     //}
                 }
-                bitmap.visible = Math.random()>0.5;
                 this.addChild(bitmap);
                 this.iconList.push(bitmap);
             }

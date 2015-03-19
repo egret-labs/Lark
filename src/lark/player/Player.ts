@@ -217,7 +217,7 @@ module lark.player {
                 var dirtyRectList = this.dirtyRectList;
                 for (var j = dirtyRectList.length-1; j >= 0; j--) {
                     var rect = dirtyRectList[j];
-                    if(node.intersects(rect)){
+                    if(node.intersects(rect.x,rect.y,rect.x+rect.width,rect.y+rect.height)){
                         node.isDirty = true;
                         break;
                     }
