@@ -48,7 +48,7 @@ module lark {
          * 标记子项列表失效
          */
         private $invalidateChildren() {
-            if(this.$stage){
+            if (this.$stage) {
                 this.$stage.$displayListTreeChanged = true;
             }
             this.$invalidateContentBounds();
@@ -135,8 +135,10 @@ module lark {
                     }
                 }
             }
+            this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedMatrix |
+            DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
+            DisplayObjectFlags.InvalidConcatenatedAlpha);
             child.$markDirty();
-            child.$invalidatePosition();
             this.$invalidateChildren();
             return child;
         }
@@ -252,7 +254,9 @@ module lark {
             }
             child.$setParent(null);
             children.splice(index, 1);
-            child.$invalidatePosition();
+            this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedMatrix |
+            DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
+            DisplayObjectFlags.InvalidConcatenatedAlpha);
             this.$invalidateChildren();
             return child;
         }
@@ -375,8 +379,8 @@ module lark {
                 if (found) {
                     xMin = Math.min(xMin, childBounds.x)
                     xMax = Math.max(xMax, childBounds.x + childBounds.width);
-                    yMin = Math.min(yMin,childBounds.y);
-                    yMax = Math.max(yMax,childBounds.y+childBounds.height);
+                    yMin = Math.min(yMin, childBounds.y);
+                    yMax = Math.max(yMax, childBounds.y + childBounds.height);
                 }
                 else {
                     found = true;
@@ -386,7 +390,7 @@ module lark {
                     yMax = yMin + childBounds.height;
                 }
             }
-            bounds.setTo(xMin,yMin,xMax-xMin,yMax-yMin);
+            bounds.setTo(xMin, yMin, xMax - xMin, yMax - yMin);
         }
 
 

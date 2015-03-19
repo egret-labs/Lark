@@ -59,11 +59,11 @@ module lark {
 
         private _displayObjectFlags:number = 0;
 
-        $setFlags(flags:DisplayObjectFlags) {
+        $setFlags(flags:DisplayObjectFlags):void {
             this._displayObjectFlags |= flags;
         }
 
-        $toggleFlags(flags:DisplayObjectFlags, on:boolean) {
+        $toggleFlags(flags:DisplayObjectFlags, on:boolean):void {
             if (on) {
                 this._displayObjectFlags |= flags;
             } else {
@@ -71,7 +71,7 @@ module lark {
             }
         }
 
-        $removeFlags(flags:DisplayObjectFlags) {
+        $removeFlags(flags:DisplayObjectFlags):void {
             this._displayObjectFlags &= ~flags;
         }
 
@@ -82,7 +82,7 @@ module lark {
         /**
          * 沿着显示列表向上传递标志量，如果标志量已经被设置过就停止传递。
          */
-        $propagateFlagsUp(flags:DisplayObjectFlags) {
+        $propagateFlagsUp(flags:DisplayObjectFlags):void {
             if (this.$hasFlags(flags)) {
                 return;
             }
@@ -96,7 +96,7 @@ module lark {
         /**
          * 沿着显示列表向下传递标志量，非容器直接设置自身的flag，此方法会在DisplayObjectContainer中被覆盖。
          */
-        $propagateFlagsDown(flags:DisplayObjectFlags) {
+        $propagateFlagsDown(flags:DisplayObjectFlags):void {
             this.$setFlags(flags);
         }
 
@@ -104,7 +104,7 @@ module lark {
             return !!(this._displayObjectFlags & flags);
         }
 
-        $invalidateMatrix() {
+        $invalidateMatrix():void {
             this.$markDirty();
             this.$setFlags(DisplayObjectFlags.InvalidMatrix);
             this.$invalidatePosition();
@@ -114,10 +114,14 @@ module lark {
          * 标记这个显示对象在父级容器的位置发生了改变。
          * Marks this object as having been moved in its parent display object.
          */
-        $invalidatePosition() {
+        $invalidatePosition():void {
             this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
             this.$invalidateParentContentBounds();
+        }
+
+        $invalidateAlpha():void{
+            this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedAlpha);
         }
 
         /**
