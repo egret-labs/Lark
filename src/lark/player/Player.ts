@@ -177,7 +177,7 @@ module lark.player {
             var stage = this.stage;
             if(this.stage.$displayListTreeChanged){
                 var nodeList:RenderNode[] = [];
-                this.visitDisplayList(this.stage, nodeList,this.dirtyRectList);
+                this.visitDisplayList(this.stage, nodeList);
                 this.renderNodeList = nodeList;
             }
             else{
@@ -189,7 +189,7 @@ module lark.player {
             stage.$displayListTreeChanged = false;
         }
 
-        private visitDisplayList(displayObject:DisplayObject, nodeList:RenderNode[],dirtyRectList):void {
+        private visitDisplayList(displayObject:DisplayObject, nodeList:RenderNode[]):void {
             if(!displayObject.$hasFlags(DisplayObjectFlags.Visible)){
                 return;
             }
@@ -203,7 +203,7 @@ module lark.player {
                 var length = children.length;
                 for (var i = 0; i < length; i++) {
                     var child = children[i];
-                    this.visitDisplayList(child, nodeList,dirtyRectList);
+                    this.visitDisplayList(child, nodeList);
                 }
             }
         }
