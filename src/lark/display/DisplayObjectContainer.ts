@@ -33,8 +33,8 @@ module lark {
      */
     export class DisplayObjectContainer extends DisplayObject {
 
-        static $EVENT_ADD_TO_STAGE_LIST:Array<DisplayObject> = [];
-        static $EVENT_REMOVE_FROM_STAGE_LIST:Array<DisplayObject> = [];
+        static $EVENT_ADD_TO_STAGE_LIST:DisplayObject[] = [];
+        static $EVENT_REMOVE_FROM_STAGE_LIST:DisplayObject[] = [];
 
         /**
          * 实例化一个容器
@@ -122,15 +122,19 @@ module lark {
 
             this.$children.splice(index, 0, child);
             child.$setParent(this);
+            var stage:Stage = this.$stage;
+            if (stage) {//当前容器在舞台
+                child.$onAddToStage(stage);
+
+            }
             if (notifyListeners) {
                 //child.dispatchEventWith(Event.ADDED, true);
             }
-            if (this.$stage) {//当前容器在舞台
-                child.$onAddToStage(this.$stage);
+            if(stage){
                 var list = DisplayObjectContainer.$EVENT_ADD_TO_STAGE_LIST;
-                while (list.length > 0) {
+                while (list.length) {
                     var childAddToStage = list.shift();
-                    if (notifyListeners) {
+                    if (notifyListeners&&childAddToStage.$stage) {
                         //childAddToStage.dispatchEventWith(Event.ADDED_TO_STAGE);
                     }
                 }
