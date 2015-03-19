@@ -113,4 +113,10 @@ module lark {
             return format;
         }
     }
+
+    export enum TextFloat {
+        LEFT,
+        RIGHT,
+        NONE
+    }
 }

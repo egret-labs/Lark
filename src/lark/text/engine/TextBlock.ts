@@ -30,8 +30,9 @@ module lark.text {
             var currentLength = 0;
             var maxHeight = 0;
             var minHeight = 10000;
-            var results: CreateSpanResult[] = []
+            var results: [CreateSpanResult[], CreateSpanResult[], CreateSpanResult[]] = [[], [], []];
             var firstSpan = true;
+            var hasGraphic = false;
             while (currentWidth < width) {
                 var result = content.$createSpan(width - currentWidth, firstSpan, start + currentLength);
                 if (result.span == null)
@@ -40,43 +41,113 @@ module lark.text {
                     textLine = new TextLine();
                 firstSpan = false;
                 var span = result.span;
-                span.x = currentWidth;
+
                 currentWidth += span.width;
-                results.push(result);
                 currentLength += result.length;
+
                 var h = span.height;
                 maxHeight = Math.max(maxHeight, h);
                 minHeight = Math.min(minHeight, h);
+
+                var isGraphic = span instanceof GraphicElement;
+                hasGraphic = hasGraphic || isGraphic;
+
+                var arrayToInsert = results[1];
+                if (isGraphic) {
+                    if (result.format.float == TextFloat.LEFT)
+                        arrayToInsert = results[0];
+                    else if (result.format.float == TextFloat.LEFT)
+                        arrayToInsert = results[2];
+                }
+
+                arrayToInsert.push(result);
+
                 if (result.ended || result.full)
                     break;
             }
+
             if (textLine)
             {
                 textLine.$setAtomCount(currentLength);
                 textLine.$setTextBlockBeginIndex(start);
 
-                for (var i = 0; i < results.length; i++) {
-                    var result = results[i];
-                    var span = result.span;
-                    switch (result.format.verticalAlign) {
-                        case VerticalAlign.BOTTOM: {
-                            span.y = maxHeight - span.height;
-                            break;
-                        }
-                        case VerticalAlign.MIDDLE: {
-                            span.y = (maxHeight - span.height) / 2;
-                            break;
-                        }
-                        case VerticalAlign.TOP: {
-                            span.y = 0;
-                            break;
-                        }
-                    }
-                    textLine.addChild(span);
-                }
+                var lefts = this.layoutLeftSpans(results[0], lineOffset, maxHeight);
+                lineOffset = lefts.offset;
+                var spans = lefts.spans;
+                var middles = this.layoutMiddleSpans(results[1], lineOffset, maxHeight);
+                lineOffset = middles.offset;
+                spans = spans.concat(middles.spans);
+                var rights = this.layoutRightSpans(results[2], lineOffset, maxHeight);
+                spans = spans.concat(rights.spans);
+                
+                spans.forEach(span=> textLine.addChild(span));
             }
             return textLine;
         }
+
+        protected layoutMiddleSpans(middles: CreateSpanResult[], offset: number, maxHeight: number): { spans: DisplayObject[]; offset: number }{
+            var spans: DisplayObject[] = [];
+            for (var i = 0; i < middles.length; i++) {
+                var result = middles[i];
+                var span = result.span;
+                switch (result.format.verticalAlign) {
+                    case VerticalAlign.BOTTOM: {
+                        span.y = maxHeight - span.height;
+                        break;
+                    }
+                    case VerticalAlign.MIDDLE: {
+                        span.y = (maxHeight - span.height) / 2;
+                        break;
+                    }
+                    case VerticalAlign.TOP: {
+                        span.y = 0;
+                        break;
+                    }
+                }
+                span.x = offset;
+                offset += span.width;
+                spans.push(span);
+            }
+            return {
+                spans: spans,
+                offset: offset
+            };
+        }
+
+
+        protected layoutLeftSpans(lefts: CreateSpanResult[], offset: number, maxHeight: number): { spans: DisplayObject[];offset:number} {
+            var spans: DisplayObject[] = [];
+            for (var i = 0; i < lefts.length; i++) {
+                var result = lefts[i];
+                var span = result.span;
+                span.y = 0;
+                span.x = offset;
+                offset += span.width;
+                spans.push(span);
+            }
+            return {
+                spans: spans,
+                offset:offset
+            };
+        }
+
+
+        protected layoutRightSpans(rights: CreateSpanResult[], offset: number, maxHeight: number): { spans: DisplayObject[]; offset: number } {
+            var spans: DisplayObject[] = [];
+            for (var i = rights.length-1; i >=0; i--) {
+                var result = rights[i];
+                var span = result.span;
+                span.y = 0;
+                span.x = offset;
+                offset += span.width;
+                spans.push(span);
+            }
+            return {
+                spans: spans,
+                offset: offset
+            };
+        }
+
 
         createAllTextLines(width = 1000000, lineOffset = 0.0): text.TextLine[]{
             var line: text.TextLine = null;

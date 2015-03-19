@@ -61,6 +61,9 @@ module lark {
             this._text = text;
             this._format = format;
             this.$invalidateContentBounds();
+            
+            //todo: replace with event listeners
+            lark.player.WebTicker.getInstance().register(this.onEnterFrame, this);
         }
 
 
@@ -145,14 +148,11 @@ module lark {
             this.$setTextFieldFlags(TextFieldFlags.ScrollVDirty);
         }
 
-        $getRenderNode(update:boolean=true): lark.player.RenderNode {
-            if(update){
-                if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0)
-                    this.$createLines();
-                if ((this._textFieldFlags & TextFieldFlags.ScrollVDirty) == TextFieldFlags.ScrollVDirty)
-                    this.$updateChildren();
-            }
-            return null;
+        private onEnterFrame() {
+            if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0)
+                this.$createLines();
+            if ((this._textFieldFlags & TextFieldFlags.ScrollVDirty) == TextFieldFlags.ScrollVDirty)
+                this.$updateChildren();
         }
 
         static LineBreaks = /\r|\n/;
