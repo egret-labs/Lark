@@ -51,20 +51,30 @@ module lark.player {
         /**
          * 绘制区域在屏幕上的起点x
          */
-        public minX:number = 0;
+        public x:number = 0;
         /**
          * 绘制区域在屏幕上的起点y
          */
-        public minY:number = 0;
+        public y:number = 0;
         /**
-         * 绘制区域在屏幕上的终点x
+         * 绘制区域在屏幕上的宽度
          */
-        public maxX:number = 0;
+        public width:number = 0;
         /**
-         * 绘制区域在屏幕上的终点y
+         * 绘制区域在屏幕上的高度
          */
-        public maxY:number = 0;
+        public height:number = 0;
 
+        public setRect(x:number,y:number,width:number,height:number):void{
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+
+        public getRect():Rectangle{
+            return Rectangle.TEMP.setTo(this.x,this.y,this.width,this.height);
+        }
         /**
          * 是否需要重绘
          */
@@ -83,16 +93,19 @@ module lark.player {
 
         public intersects(rect:Rectangle):boolean {
             var targetMinX:number = rect.x;
-            var targetMinY:number = rect.y;
             var targetMaxX:number = targetMinX + rect.width;
-            var targetMaxY:number = targetMinY + rect.height;
-            var max = this.minX > targetMinX ? this.minX : targetMinX;
-            var min = this.maxX < targetMaxX ? this.maxX : targetMaxX;
+            var maxX = this.x+this.width;
+            var max = this.x > targetMinX ? this.x : targetMinX;
+            var min = maxX < targetMaxX ? maxX : targetMaxX;
             if (max > min) {
                 return false;
             }
-            max = this.minY > targetMinY ? this.minY : targetMinY;
-            min = this.maxY < targetMaxY ? this.maxY : targetMaxY;
+
+            var targetMinY:number = rect.y;
+            var targetMaxY:number = targetMinY + rect.height;
+            var maxY:number = this.y+this.height;
+            max = this.y > targetMinY ? this.y : targetMinY;
+            min = maxY < targetMaxY ? maxY : targetMaxY;
             return max <= min;
         }
 

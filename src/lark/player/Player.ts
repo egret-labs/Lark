@@ -145,12 +145,12 @@ module lark.player {
                 var node:RenderNode = nodeList[i];
                 node.target.$removeFlagsUp(DisplayObjectFlags.Dirty);
                 node.isDirty = true;
-                dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.minX, node.minY, node.maxX - node.minX, node.maxY - node.minY));
+                dirtyRegion.addDirtyRectangle(node.getRect());
                 node.target.$updateRenderNode();
                 if (node.moved) {
-                    dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.minX, node.minY, node.maxX - node.minX, node.maxY - node.minY));
+                    dirtyRegion.addDirtyRectangle(node.getRect());
                 }
-            } 
+            }
             var dirtyRectList:Rectangle[] = this.dirtyRectList;
             dirtyRectList.length = 0;
             dirtyRegion.gatherOptimizedRegions(dirtyRectList);

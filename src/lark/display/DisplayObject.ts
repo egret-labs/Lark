@@ -645,7 +645,7 @@ module lark {
             }
             if(!this.$stage){
                 node.finish();
-                node.minX = node.maxX = node.minY = node.maxY = 0;
+                node.setRect(0,0,0,0);
                 return;
             }
             node.alpha = this.$getConcatenatedAlpha();
@@ -655,13 +655,10 @@ module lark {
                 var rect = Rectangle.TEMP;
                 rect.copyFrom(bounds);
                 node.matrix.$transformBounds(rect);
-                node.minX = rect.x;
-                node.minY = rect.y;
-                node.maxX = rect.x + rect.width;
-                node.maxY = rect.y + rect.height;
+                node.setRect(rect.x,rect.y,rect.width,rect.height);
             }
         }
-
+ 
         /**
          * 标记此显示对象需要重绘
          */
