@@ -65,20 +65,20 @@ module lark {
             this._scaleMode = value;
         }
 
-        private _stageWidth:number = 0;
+        $stageWidth:number = 0;
         /**
          * 舞台的当前宽度（以像素为单位）。
          */
         public get stageWidth():number {
-            return this._stageWidth;
+            return this.$stageWidth;
         }
 
-        private _stageHeight:number = 0;
+        $stageHeight:number = 0;
         /**
          * 舞台的当前高度（以像素为单位）。
          */
         public get stageHeight():number {
-            return this._stageHeight;
+            return this.$stageHeight;
         }
 
         /**
@@ -91,8 +91,8 @@ module lark {
         $dirtyRegion:lark.player.DirtyRegion;
 
         $updateStageSize(width:number, height:number):void {
-            this._stageWidth = +width || 0;
-            this._stageHeight = +height || 0;
+            this.$stageWidth = +width || 0;
+            this.$stageHeight = +height || 0;
             this.$dirtyRegion = new lark.player.DirtyRegion(width,height);
             this.$markDirty();
         }

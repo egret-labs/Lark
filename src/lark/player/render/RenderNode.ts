@@ -70,6 +70,8 @@ module lark.player {
             this.y = y;
             this.maxX = x+width;
             this.maxY = y+height;
+            var stage = this.target.$stage;
+            this.outOfScreen = !this.intersects(0,0,stage.$stageWidth,stage.$stageHeight);
         }
 
         public getRect():Rectangle{
@@ -79,7 +81,10 @@ module lark.player {
          * 是否需要重绘
          */
         public isDirty:boolean = false;
-
+        /**
+         * 当前位置在屏幕之外
+         */
+        public outOfScreen:boolean = false;
         /**
          * 要绘制到屏幕的整体透明度。
          */

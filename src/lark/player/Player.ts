@@ -139,15 +139,20 @@ module lark.player {
         private drawCalls:number = 0;
 
         private computeDirtyRects():void {
+            var stageWidth = this.stage.stageWidth;
+            var stageHeight = this.stage.stageHeight;
             var dirtyRegion = this.stage.$dirtyRegion;
             var nodeList = this.stage.$dirtyRenderNodes;
             for (var i in nodeList) {
                 var node:RenderNode = nodeList[i];
                 node.target.$removeFlagsUp(DisplayObjectFlags.Dirty);
-                node.isDirty = true;
-                dirtyRegion.addDirtyRectangle(node.getRect());
+                if(!node.outOfScreen){
+                    node.isDirty = true;
+                    dirtyRegion.addDirtyRectangle(node.getRect());
+                }
                 node.target.$updateRenderNode();
-                if (node.moved) {
+                if (node.moved&&!node.outOfScreen) {
+                    node.isDirty = true;
                     dirtyRegion.addDirtyRectangle(node.getRect());
                 }
             }
@@ -212,6 +217,9 @@ module lark.player {
          * 检查一个渲染节点是否需要绘制
          */
         private checkRenderNode = (node:RenderNode):void => {
+            if(node.outOfScreen){
+                return;
+            }
             if (!node.isDirty) {
                 //这部分碰撞检测还有很大优化空间，可以跳过屏幕外的节点，visible或alpha是0的节点。
                 var dirtyRectList = this.dirtyRectList;
