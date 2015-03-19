@@ -139,18 +139,16 @@ module lark.player {
         private drawCalls:number = 0;
 
         private computeDirtyRects():void {
-            var stageWidth = this.stage.stageWidth;
-            var stageHeight = this.stage.stageHeight;
             var dirtyRegion = this.stage.$dirtyRegion;
             var nodeList = this.stage.$dirtyRenderNodes;
             for (var i in nodeList) {
                 var node:RenderNode = nodeList[i];
-                if(!node.outOfScreen){
+                if(!node.outOfScreen&&node.alpha!==0){
                     node.isDirty = true;
                     dirtyRegion.addDirtyRectangle(node.getRect());
                 }
                 node.update();
-                if (node.moved&&!node.outOfScreen) {
+                if (node.moved&&!node.outOfScreen&&node.alpha!==0) {
                     node.isDirty = true;
                     dirtyRegion.addDirtyRectangle(node.getRect());
                 }
@@ -216,7 +214,7 @@ module lark.player {
          * 检查一个渲染节点是否需要绘制
          */
         private checkRenderNode = (node:RenderNode):void => {
-            if(node.outOfScreen){
+            if(node.outOfScreen||node.alpha===0){
                 return;
             }
             if (!node.isDirty) {

@@ -68,8 +68,8 @@ module lark {
             }
             this.targetIcon = new lark.Bitmap();
             this.targetIcon.texture = texture;
-            this.targetIcon.x = 0;
-            this.targetIcon.y = 0;
+            this.targetIcon.x = 700;
+            this.targetIcon.y = 500;
             this.addChild(this.targetIcon);
             this.iconList.push(this.targetIcon);
             this.addChild(FPS.display);
