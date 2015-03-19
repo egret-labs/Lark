@@ -31,7 +31,7 @@ module lark {
 
     import TextBlock = text.TextBlock;
 
-    export const enum TextFieldFlags {
+    export enum TextFieldFlags {
         None = 0x000000,
         TextDirty = 0x000001,
         FormatDirty = 0x000002,
