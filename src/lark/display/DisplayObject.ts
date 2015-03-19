@@ -643,6 +643,7 @@ module lark {
             if(!node){
                 return;
             }
+            this.$removeFlagsUp(DisplayObjectFlags.Dirty);
             if(!this.$stage){
                 node.finish();
                 node.setRect(0,0,0,0);

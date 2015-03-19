@@ -44,7 +44,7 @@ module lark.player {
 
         public id:number;
 
-        public target:DisplayObject;
+        private target:DisplayObject;
 
         public nodeType:number;
 
@@ -106,6 +106,13 @@ module lark.player {
             max = this.y > targetMinY ? this.y : targetMinY;
             min = this.maxY < targetMaxY ? this.maxY : targetMaxY;
             return max <= min;
+        }
+
+        /**
+         * 更新节点属性
+         */
+        public update():void{
+            this.target.$updateRenderNode();
         }
 
         /**

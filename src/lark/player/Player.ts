@@ -145,12 +145,11 @@ module lark.player {
             var nodeList = this.stage.$dirtyRenderNodes;
             for (var i in nodeList) {
                 var node:RenderNode = nodeList[i];
-                node.target.$removeFlagsUp(DisplayObjectFlags.Dirty);
                 if(!node.outOfScreen){
                     node.isDirty = true;
                     dirtyRegion.addDirtyRectangle(node.getRect());
                 }
-                node.target.$updateRenderNode();
+                node.update();
                 if (node.moved&&!node.outOfScreen) {
                     node.isDirty = true;
                     dirtyRegion.addDirtyRectangle(node.getRect());
@@ -168,7 +167,7 @@ module lark.player {
             this.context.beginDrawDirtyRect();
             var list:Rectangle[] = this.dirtyRectList;
             var length = list.length;
-            for (var i = 0; i < length; i++) {
+            for (var i = 0; i < length; i++) { 
                 var rect = list[i];
                 this.context.drawDirtyRect(rect.x, rect.y, rect.width, rect.height);
             }
