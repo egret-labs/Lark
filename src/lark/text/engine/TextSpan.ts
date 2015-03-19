@@ -11,6 +11,7 @@
             color: number = 0x000000,
             length: number = 0) {
             super();
+            this.$renderNode = new lark.player.TextNode(this);
             this.text = text;
             if (!fontString)
                 fontString = "sans-serif";
@@ -38,21 +39,17 @@
             bounds.setTo(0, 0, this.textWidth, this.size);
         }
 
-        private _renderNode:lark.player.TextNode = new lark.player.TextNode(this);
         /**
          * 获取渲染节点
          */
-        $getRenderNode(update:boolean=true):lark.player.RenderNode{
-            var node = this._renderNode;
-            if(update){
-                node.update();
-                node.text = this.text;
-                node.size = this.size;
-                node.font = this.$toFontString();
-                node.style = this.$toColorString();
-                node.textWidth = this.textWidth;
-            }
-            return node;
+        $updateRenderNode():void{
+            super.$updateRenderNode();
+            var node = <lark.player.TextNode>this.$renderNode;
+            node.text = this.text;
+            node.size = this.size;
+            node.font = this.$toFontString();
+            node.style = this.$toColorString();
+            node.textWidth = this.textWidth;
         }
 
         $toFontString() {

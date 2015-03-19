@@ -149,11 +149,11 @@ module lark {
         }
 
         private onEnterFrame() {
-            if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0)
-                this.$createLines();
-            if ((this._textFieldFlags & TextFieldFlags.ScrollVDirty) == TextFieldFlags.ScrollVDirty)
-                this.$updateChildren();
-        }
+                if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0)
+                    this.$createLines();
+                if ((this._textFieldFlags & TextFieldFlags.ScrollVDirty) == TextFieldFlags.ScrollVDirty)
+                    this.$updateChildren();
+            }
 
         static LineBreaks = /\r|\n/;
         private _textLines: Array<text.TextLine> = []; 

@@ -74,6 +74,19 @@ module lark {
         $removeFlags(flags:DisplayObjectFlags):void {
             this._displayObjectFlags &= ~flags;
         }
+        /**
+         * 沿着显示列表向上移除标志量，如果标志量没被设置过就停止移除。
+         */
+        $removeFlagsUp(flags:DisplayObjectFlags):void{
+            if(!this.$hasFlags(flags)){
+                return;
+            }
+            this.$removeFlags(flags)
+            var parent = this.$parent;
+            if(parent){
+                parent.$removeFlagsUp(flags);
+            }
+        }
 
         $hasFlags(flags:DisplayObjectFlags):boolean {
             return (this._displayObjectFlags & flags) === flags;
@@ -120,10 +133,6 @@ module lark {
             this.$invalidateParentContentBounds();
         }
 
-        $invalidateAlpha():void{
-            this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedAlpha);
-        }
-
         /**
          * 能够含有子项的类将子项列表存储在这个属性里。
          */
@@ -152,10 +161,18 @@ module lark {
         $onAddToStage(stage:Stage):void {
             this.$stage = stage;
             DisplayObjectContainer.$EVENT_ADD_TO_STAGE_LIST.push(this);
+            var node = this.$renderNode;
+            if(node){
+                stage.$dirtyRenderNodes[node.id] = node;
+            }
         }
 
         $onRemoveFromStage():void {
             DisplayObjectContainer.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
+            var node = this.$renderNode;
+            if(node){
+                this.$stage.$dirtyRenderNodes[node.id] = node;
+            }
         }
 
         $stage:Stage = null;
@@ -180,6 +197,9 @@ module lark {
         $getMatrix():Matrix {
             if (this.$hasFlags(DisplayObjectFlags.InvalidMatrix)) {
                 this._matrix.$updateScaleAndRotation(this._scaleX, this._scaleY, this._skewX, this._skewY);
+                if(this.$renderNode){
+                    this.$renderNode.moved = true;
+                }
                 this.$removeFlags(DisplayObjectFlags.InvalidMatrix);
             }
             return this._matrix;
@@ -408,6 +428,9 @@ module lark {
             if (value === this.$hasFlags(DisplayObjectFlags.Visible)) {
                 return;
             }
+            if(this.$stage){
+                this.$stage.$displayListTreeChanged = true;
+            }
             this.$toggleFlags(DisplayObjectFlags.Visible, value);
             this.$markDirty();
         }
@@ -595,6 +618,9 @@ module lark {
             var bounds = this._contentBounds;
             if (this.$hasFlags(DisplayObjectFlags.InvalidContentBounds)) {
                 this.$removeFlags(DisplayObjectFlags.InvalidContentBounds);
+                if(this.$renderNode){
+                    this.$renderNode.moved = true;
+                }
                 this.$measureContentBounds(bounds);
             }
             return bounds;
@@ -608,34 +634,50 @@ module lark {
 
         }
 
+        $renderNode:lark.player.RenderNode = null;
         /**
          * 获取渲染节点
          */
-        $getRenderNode(update:boolean=true):lark.player.RenderNode{
-            return null;
+        $updateRenderNode():void{
+            var node = this.$renderNode;
+            if(!node){
+                return;
+            }
+            node.alpha = this.$getConcatenatedAlpha();
+            node.matrix = this.$getConcatenatedMatrix();
+            var bounds = this.$getContentBounds();
+            if(node.moved){
+                var rect = Rectangle.TEMP;
+                rect.copyFrom(bounds);
+                node.matrix.$transformBounds(rect);
+                node.minX = rect.x;
+                node.minY = rect.y;
+                node.maxX = rect.x + rect.width;
+                node.maxY = rect.y + rect.height;
+            }
         }
 
         /**
          * 标记此显示对象需要重绘
          */
         $markDirty():void{
-            var stage = this.$stage;
-            if(!stage){
-                return;
-            }
-            this.markChildNodeDirty(this,stage.$dirtyRenderNodes);
+            var dirtyNodes = this.$stage?this.$stage.$dirtyRenderNodes:null;
+            this.markChildDirty(this,dirtyNodes);
         }
 
-        private markChildNodeDirty(child:DisplayObject,dirtyNodes:any):void{
-            var node = child.$getRenderNode(false);
-            if(node){
+        private markChildDirty(child:DisplayObject,dirtyNodes:any):void{
+            if(this.$hasFlags(DisplayObjectFlags.Dirty)){
+                return;
+            }
+            this.$setFlags(DisplayObjectFlags.Dirty);
+            var node = child.$renderNode;
+            if(node&&dirtyNodes){
                 dirtyNodes[node.id] = node;
             }
             var children = child.$children;
             if(children){
-                var length = children.length;
-                for(var i=0;i<length;i++){
-                    this.markChildNodeDirty(children[i],dirtyNodes);
+                for(var i=children.length-1;i>=0;i--){
+                    this.markChildDirty(children[i],dirtyNodes);
                 }
             }
         }

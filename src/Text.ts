@@ -82,7 +82,7 @@ module lark {
             textField.y = 100;
             textField.height = 800;
             textField.wordWrap = true;
-            //this.addChild(textField);
+            this.addChild(textField);
 
             format = format.clone();
             format.indent = 30;

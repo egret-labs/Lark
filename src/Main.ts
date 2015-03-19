@@ -63,6 +63,7 @@ module lark {
                     //    y = 0;
                     //}
                 }
+                bitmap.visible = Math.random()>0.5;
                 this.addChild(bitmap);
                 this.iconList.push(bitmap);
             }
