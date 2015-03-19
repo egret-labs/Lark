@@ -48,7 +48,7 @@ module lark {
          * 标记子项列表失效
          */
         private $invalidateChildren() {
-            if (this.$stage) {
+            if(this.$stage){
                 this.$stage.$displayListTreeChanged = true;
             }
             this.$invalidateContentBounds();
@@ -141,8 +141,8 @@ module lark {
             }
             this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
-            DisplayObjectFlags.InvalidConcatenatedAlpha);
-            child.$markDirty();
+            DisplayObjectFlags.InvalidConcatenatedAlpha|
+            DisplayObjectFlags.Dirty);
             this.$invalidateChildren();
             return child;
         }
@@ -240,7 +240,6 @@ module lark {
             index = +index | 0;
             var children = this.$children;
             var child:DisplayObject = children[index];
-            child.$markDirty();
             if (notifyListeners) {
                 //child.dispatchEventWith(Event.REMOVED, true);
             }
@@ -260,7 +259,8 @@ module lark {
             children.splice(index, 1);
             this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
-            DisplayObjectFlags.InvalidConcatenatedAlpha);
+            DisplayObjectFlags.InvalidConcatenatedAlpha|
+            DisplayObjectFlags.Dirty);
             this.$invalidateChildren();
             return child;
         }

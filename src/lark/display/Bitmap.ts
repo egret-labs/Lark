@@ -43,6 +43,7 @@ module lark {
          */
         public constructor() {
             super();
+            this.$renderNode = new lark.player.BitmapNode(this);
         }
 
         $texture:Texture = null;
@@ -67,13 +68,11 @@ module lark {
             }
         }
 
-        private _renderNode:lark.player.BitmapNode = new lark.player.BitmapNode(this);
-
         /**
          * 获取渲染节点
          */
         $getRenderNode(update:boolean=true):lark.player.RenderNode{
-            var node = this._renderNode;
+            var node = <lark.player.BitmapNode>this.$renderNode;
             if(update){
                 node.update();
                 node.texture = this.$texture;
