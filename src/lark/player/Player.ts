@@ -143,7 +143,7 @@ module lark.player {
             var nodeList = this.stage.$dirtyRenderNodes;
             for (var i in nodeList) {
                 var node:RenderNode = nodeList[i];
-                node.target.$getRenderNode();
+                node.target.$updateRenderNode();
                 node.target.$removeFlagsUp(DisplayObjectFlags.Dirty);
                 node.isDirty = true;
                 dirtyRegion.addDirtyRectangle(Rectangle.TEMP.setTo(node.oldMinx, node.oldMinY, node.oldMaxX - node.oldMinx, node.oldMaxY - node.oldMinY));
@@ -193,7 +193,7 @@ module lark.player {
             if(!displayObject.$hasFlags(DisplayObjectFlags.Visible)){
                 return;
             }
-            var node = displayObject.$getRenderNode();
+            var node = displayObject.$renderNode;
             if (node) {
                 nodeList.push(node);
                 this.checkRenderNode(node);

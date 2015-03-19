@@ -42,17 +42,14 @@
         /**
          * 获取渲染节点
          */
-        $getRenderNode(update:boolean=true):lark.player.RenderNode{
+        $updateRenderNode():void{
+            super.$updateRenderNode();
             var node = <lark.player.TextNode>this.$renderNode;
-            if(update){
-                node.update();
-                node.text = this.text;
-                node.size = this.size;
-                node.font = this.$toFontString();
-                node.style = this.$toColorString();
-                node.textWidth = this.textWidth;
-            }
-            return node;
+            node.text = this.text;
+            node.size = this.size;
+            node.font = this.$toFontString();
+            node.style = this.$toColorString();
+            node.textWidth = this.textWidth;
         }
 
         $toFontString() {

@@ -69,15 +69,12 @@ module lark {
         }
 
         /**
-         * 获取渲染节点
+         * 更新渲染节点上的属性
          */
-        $getRenderNode(update:boolean=true):lark.player.RenderNode{
+        $updateRenderNode():void{
+            super.$updateRenderNode()
             var node = <lark.player.BitmapNode>this.$renderNode;
-            if(update){
-                node.update();
-                node.texture = this.$texture;
-            }
-            return node;
+            node.texture = this.$texture;
         }
     }
 }

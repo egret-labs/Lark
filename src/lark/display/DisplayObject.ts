@@ -197,6 +197,9 @@ module lark {
         $getMatrix():Matrix {
             if (this.$hasFlags(DisplayObjectFlags.InvalidMatrix)) {
                 this._matrix.$updateScaleAndRotation(this._scaleX, this._scaleY, this._skewX, this._skewY);
+                if(this.$renderNode){
+                    this.$renderNode.moved = true;
+                }
                 this.$removeFlags(DisplayObjectFlags.InvalidMatrix);
             }
             return this._matrix;
@@ -615,6 +618,9 @@ module lark {
             var bounds = this._contentBounds;
             if (this.$hasFlags(DisplayObjectFlags.InvalidContentBounds)) {
                 this.$removeFlags(DisplayObjectFlags.InvalidContentBounds);
+                if(this.$renderNode){
+                    this.$renderNode.moved = true;
+                }
                 this.$measureContentBounds(bounds);
             }
             return bounds;
@@ -632,8 +638,23 @@ module lark {
         /**
          * 获取渲染节点
          */
-        $getRenderNode(update:boolean=true):lark.player.RenderNode{
-            return null;
+        $updateRenderNode():void{
+            var node = this.$renderNode;
+            if(!node){
+                return;
+            }
+            node.alpha = this.$getConcatenatedAlpha();
+            node.matrix = this.$getConcatenatedMatrix();
+            var bounds = this.$getContentBounds();
+            if(node.moved){
+                var rect = Rectangle.TEMP;
+                rect.copyFrom(bounds);
+                node.matrix.$transformBounds(rect);
+                node.minX = rect.x;
+                node.minY = rect.y;
+                node.maxX = rect.x + rect.width;
+                node.maxY = rect.y + rect.height;
+            }
         }
 
         /**

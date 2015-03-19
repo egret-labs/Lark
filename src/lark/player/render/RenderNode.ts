@@ -97,24 +97,6 @@ module lark.player {
          * 在屏幕上的矩形区域是否发现改变。
          */
         public moved:boolean = false;
-        /**
-         * 更新绘制的矩形区域
-         */
-        public update():void {
-            var target = this.target;
-            this.alpha = target.$getConcatenatedAlpha();
-           // if(target.$hasAnyFlags(DisplayObjectFlags.InvalidConcatenatedMatrix|DisplayObjectFlags.InvalidContentBounds)){
-                this.matrix = target.$getConcatenatedMatrix();
-                var rect = Rectangle.TEMP;
-                rect.copyFrom(target.$getContentBounds());
-                this.matrix.$transformBounds(rect);
-                this.minX = rect.x;
-                this.minY = rect.y;
-                this.maxX = rect.x + rect.width;
-                this.maxY = rect.y + rect.height;
-                this.moved = true;
-            //}
-        }
 
         public intersects(rect:Rectangle):boolean {
             var targetMinX:number = rect.x;
