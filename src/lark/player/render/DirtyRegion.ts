@@ -31,7 +31,7 @@ module lark.player {
 
     export class DirtyRegion {
 
-        private grid:Cell [][];
+        private grid:Region[][];
         private w:number;
         private h:number;
         private c:number;
@@ -47,101 +47,137 @@ module lark.player {
             this.c = Math.ceil(w / size);
             this.r = Math.ceil(h / size);
             this.grid = [];
-            for (var y = 0; y < this.r; y++) {
+            for (var x = 0; x < this.c; x++) {
                 this.grid.push([]);
-                for (var x = 0; x < this.c; x++) {
-                    this.grid[y][x] = new Cell(new Rectangle(x * size, y * size, size, size));
+                for (var y = 0; y < this.r; y++) {
+                    this.grid[x][y] = new Region(x * size, y * size, size);
                 }
             }
         }
 
         clear() {
-            this.dirtyRects = [];
-            for (var y = 0; y < this.r; y++) {
-                for (var x = 0; x < this.c; x++) {
-                    this.grid[y][x].clear();
+            for (var x = 0; x < this.c; x++) {
+                for (var y = 0; y < this.r; y++) {
+                    this.grid[x][y].clear();
                 }
             }
         }
 
-        private dirtyRects:Rectangle[] = [];
 
-        public addDirtyRectangle(rectangle:Rectangle) {
-            if(rectangle.isEmpty()){
+        public addDirtyRegion(minX:number, minY:number, maxX:number, maxY:number):void {
+            if (minX >= maxX || minY >= maxY) {
                 return;
             }
-            this.dirtyRects.push(rectangle.clone());
+            if(minX<0){
+                minX=0;
+            }
+            if(minY<0){
+                minY = 0;
+            }
+            if(maxX>this.w){
+                maxX = this.w;
+            }
+            if(maxY>this.h){
+                maxY = this.h;
+            }
+            var startX = minX >> this.sizeInBits;
+            var startY = minY >> this.sizeInBits;
+            var endX = Math.ceil(maxX / this.size);
+            var endY = Math.ceil(maxY / this.size);
+            var grid = this.grid;
+            for (var x = startX; x < endX; x++) {
+                for (var y = startY; y < endY; y++) {
+                    var region = grid[x][y];
+                    region.union(minX, minY, maxX, maxY);
+                }
+            }
         }
 
-        private doAddDirtyRectangle(rectangle:Rectangle) {
-
-            var x = rectangle.x >> this.sizeInBits;
-            var y = rectangle.y >> this.sizeInBits;
-            if (x >= this.c || y >= this.r) {
-                return;
-            }
-            if (x < 0) {
-                x = 0;
-            }
-            if (y < 0) {
-                y = 0;
-            }
-            var cell = this.grid[y][x];
-            rectangle = rectangle.clone();
-            rectangle.$snap();
-
-            if (cell.region.$containsRect(rectangle)) {
-                if (cell.bounds.isEmpty()) {
-                    cell.bounds.copyFrom(rectangle)
-                } else if (!cell.bounds.$containsRect(rectangle)) {
-                    cell.bounds.$union(rectangle);
-                }
-            } else {
-                var w = Math.min(this.c, Math.ceil((rectangle.x + rectangle.width) / this.size)) - x;
-                var h = Math.min(this.r, Math.ceil((rectangle.y + rectangle.height) / this.size)) - y;
-                for (var i = 0; i < w; i++) {
-                    for (var j = 0; j < h; j++) {
-                        var cell = this.grid[y + j][x + i];
-                        var intersection = cell.region.clone();
-                        intersection.$intersect(rectangle);
-                        if (!intersection.isEmpty()) {
-                            this.doAddDirtyRectangle(intersection);
-                        }
+        gatherRegions(regions:Region[]) {
+            for (var x = 0; x < this.c; x++) {
+                for (var y = 0; y < this.r; y++) {
+                    var region = this.grid[x][y];
+                    if (!region.isEmpty()) {
+                        regions.push(region);
                     }
                 }
             }
         }
 
-        gatherRegions(regions:Rectangle[]) {
-            for (var y = 0; y < this.r; y++) {
-                for (var x = 0; x < this.c; x++) {
-                    var bounds = this.grid[y][x].bounds;
-                    if (!bounds.isEmpty()) {
-                        regions.push(this.grid[y][x].bounds);
-                    }
-                }
-            }
-        }
-
-        gatherOptimizedRegions(regions:Rectangle[]) {
-            var list = this.dirtyRects;
-            var length = list.length;
-            for(var i=0;i<length;i++){
-                this.doAddDirtyRectangle(list[i]);
-            }
+        gatherOptimizedRegions(regions:Region[]) {
             this.gatherRegions(regions);
         }
     }
 
-    class Cell {
-        region: Rectangle;
-        bounds: Rectangle;
-        constructor(region: Rectangle) {
-            this.region = region;
-            this.bounds = region.clone();
+    export class Region {
+
+        constructor(minX:number, minY:number, size:number) {
+            this.minX = this.startX = minX;
+            this.minY = this.startY = minY;
+            this.maxX = this.endX = minX + size;
+            this.maxY = this.endY = minY + size;
         }
-        clear () {
-            this.bounds.setEmpty();
+
+        private startX:number;
+        private startY:number;
+        private endX:number;
+        private endY:number;
+
+        public minX:number;
+        public minY:number;
+        public maxX:number;
+        public maxY:number;
+
+
+        private empty:boolean = false;
+
+        public clear():void {
+            this.empty = true;
+            this.minX = this.minY = this.maxX = this.maxY = 0;
+        }
+
+        public isEmpty():boolean {
+            return (this.minX >= this.maxX || this.minY >= this.maxY);
+        }
+
+        /**
+         * 合并另一个矩形到当前矩形内
+         */
+        public union(targetMinX:number, targetMinY:number, targetMaxX:number, targetMaxY:number):void {
+
+            if (this.startX > targetMinX) {
+                targetMinX = this.startX;
+            }
+            if (this.startY > targetMinY) {
+                targetMinY = this.startY;
+            }
+            if (this.endX < targetMaxX) {
+                targetMaxX = this.endX;
+            }
+            if (this.endY < targetMaxY) {
+                targetMaxY = this.endY;
+            }
+
+            if(this.empty){
+                this.empty = false;
+                this.minX = targetMinX;
+                this.maxX = targetMaxX;
+                this.minY = targetMinY;
+                this.maxY = targetMaxY;
+            }
+
+            if (this.minX > targetMinX) {
+                this.minX = targetMinX;
+            }
+            if (this.minY > targetMinY) {
+                this.minY = targetMinY;
+            }
+            if (this.maxX < targetMaxX) {
+                this.maxX = targetMaxX;
+            }
+            if (this.maxY < targetMaxY) {
+                this.maxY = targetMaxY;
+            }
         }
     }
 }
