@@ -114,7 +114,6 @@ module lark.player {
         }
 
         private onTick():void {
-            this.drawCalls = 0;
             var t = lark.getTimer();
             this.computeDirtyRects();
             var t1 = lark.getTimer();
@@ -177,13 +176,20 @@ module lark.player {
          */
         private drawDisplayList():void {
             var stage = this.stage;
+            var dirtyRectList = this.dirtyRectList;
+            var context = this.context;
+            this.drawCalls = 0;
             if(this.stage.$displayListTreeChanged){
                 var nodeList:RenderNode[] = [];
-                this.visitDisplayList(this.stage, nodeList);
+                this.visitDisplayList(this.stage, nodeList,dirtyRectList,context);
                 this.renderNodeList = nodeList;
             }
             else{
-                this.renderNodeList.forEach(this.checkRenderNode);
+                var renderList = this.renderNodeList;
+                var length = renderList.length;
+                for(var i=0;i<length;i++){
+                    this.checkRenderNode(renderList[i],dirtyRectList,context);
+                }
             }
             this.context.endDrawScreen();
             stage.$dirtyRegion.clear();
@@ -191,21 +197,21 @@ module lark.player {
             stage.$displayListTreeChanged = false;
         }
 
-        private visitDisplayList(displayObject:DisplayObject, nodeList:RenderNode[]):void {
+        private visitDisplayList(displayObject:DisplayObject, nodeList:RenderNode[],dirtyRectList:Rectangle[],context:IPlayerContext):void {
             if(!displayObject.$hasFlags(DisplayObjectFlags.Visible)){
                 return;
             }
             var node = displayObject.$renderNode;
             if (node) {
                 nodeList.push(node);
-                this.checkRenderNode(node);
+                this.checkRenderNode(node,dirtyRectList,context);
             }
             var children = displayObject.$children;
             if (children) {
                 var length = children.length;
                 for (var i = 0; i < length; i++) {
                     var child = children[i];
-                    this.visitDisplayList(child, nodeList);
+                    this.visitDisplayList(child, nodeList,dirtyRectList,context);
                 }
             }
         }
@@ -213,13 +219,11 @@ module lark.player {
         /**
          * 检查一个渲染节点是否需要绘制
          */
-        private checkRenderNode = (node:RenderNode):void => {
+        private checkRenderNode(node:RenderNode,dirtyRectList:Rectangle[],context:IPlayerContext):void {
             if(node.outOfScreen||node.alpha===0){
                 return;
             }
             if (!node.isDirty) {
-                //这部分碰撞检测还有很大优化空间，可以跳过屏幕外的节点，visible或alpha是0的节点。
-                var dirtyRectList = this.dirtyRectList;
                 for (var j = dirtyRectList.length-1; j >= 0; j--) {
                     var rect = dirtyRectList[j];
                     if(node.intersects(rect.x,rect.y,rect.x+rect.width,rect.y+rect.height)){
@@ -235,12 +239,12 @@ module lark.player {
                         var bitmapNode = <BitmapNode>node;
                         var texture = bitmapNode.texture;
                         if (texture) {
-                            this.context.drawImage(texture, bitmapNode.matrix, bitmapNode.alpha);
+                            context.drawImage(texture, bitmapNode.matrix, bitmapNode.alpha);
                         }
                         break;
                     case NodeType.Text:
                         var textNode = <TextNode>node;
-                        this.context.drawText(textNode.text, textNode.font, textNode.style, 0,
+                        context.drawText(textNode.text, textNode.font, textNode.style, 0,
                             textNode.size / 2, textNode.textWidth, textNode.matrix, textNode.alpha);
                         break;
                     case NodeType.Graphics:

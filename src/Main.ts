@@ -48,7 +48,7 @@ module lark {
 
         private start(texture:Texture):void{
             var x=0,y=0;
-            for(var i=0;i<100000;i++){
+            for(var i=0;i<300000;i++){
                 var bitmap = new Bitmap();
                 bitmap.texture = texture;
                 bitmap.x = x;
