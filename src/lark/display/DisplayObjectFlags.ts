@@ -74,14 +74,7 @@ module lark {
         /**
          * 显示对象需要重绘的标志
          */
-        Dirty = 0x20000000,
-        /**
-         * 添加或删除子项时，需要向子项传递的标志。
-         */
-        InvalidChildren = DisplayObjectFlags.InvalidConcatenatedMatrix |
-            DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
-            DisplayObjectFlags.InvalidConcatenatedAlpha|
-            DisplayObjectFlags.Dirty
+        Dirty = 0x20000000
 
     }
 

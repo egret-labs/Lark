@@ -179,10 +179,9 @@ module lark.player {
             var dirtyRectList = this.dirtyRectList;
             var context = this.context;
             this.drawCalls = 0;
-            this.stage.$displayListTreeChanged  = true;
             if(this.stage.$displayListTreeChanged){
                 var nodeList:RenderNode[] = [];
-                this.visitDisplayList(this.stage, nodeList,dirtyRectList,context,0);
+                this.visitDisplayList(this.stage, nodeList,dirtyRectList,context);
                 this.renderNodeList = nodeList;
             }
             else{
@@ -198,13 +197,13 @@ module lark.player {
             stage.$displayListTreeChanged = false;
         }
 
-        private visitDisplayList(displayObject:DisplayObject, nodeList:RenderNode[],dirtyRectList:Rectangle[],context:IPlayerContext,index:number):void {
+        private visitDisplayList(displayObject:DisplayObject, nodeList:RenderNode[],dirtyRectList:Rectangle[],context:IPlayerContext):void {
             if(!displayObject.$hasFlags(DisplayObjectFlags.Visible)){
                 return;
             }
             var node = displayObject.$renderNode;
             if (node) {
-                nodeList[index++] = node;
+                nodeList.push(node);
                 this.checkRenderNode(node,dirtyRectList,context);
             }
             var children = displayObject.$children;
@@ -212,7 +211,7 @@ module lark.player {
                 var length = children.length;
                 for (var i = 0; i < length; i++) {
                     var child = children[i];
-                    this.visitDisplayList(child, nodeList,dirtyRectList,context,index);
+                    this.visitDisplayList(child, nodeList,dirtyRectList,context);
                 }
             }
         }
