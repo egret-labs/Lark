@@ -1,6 +1,6 @@
 ﻿module lark.text {
     export class GraphicElement extends ContentElement {
-        public constructor(graphic: DisplayObject = null, elementWidth: number = 15.0, elementHeight: number = 15.0, elementFormat: ElementFormat = null) {
+        public constructor(graphic: DisplayObject = null, public elementWidth: number = 15.0, public elementHeight: number = 15.0, elementFormat: ElementFormat = TextFormat.$defaultTextFormat) {
             super();
             this._graphic = graphic;
             this._graphic.width = elementWidth;
@@ -45,12 +45,15 @@
             var end = true;
             if (isFirstSpan)
                 span = graphic;
-            else if (width >= graphic.width)
+            else if (width >= this.elementWidth)
                 span = graphic;
             else
                 end = false;
-            
-            var full = span != null && span.width >= width;
+            if (span) {
+                span.width = this.elementWidth;
+                span.height = this.elementHeight;
+            }
+            var full = span != null && this.elementWidth >= width;
 
             return {
                 span: span,

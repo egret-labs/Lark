@@ -180,7 +180,7 @@ module lark {
                 var t = ps[i];
                 x = format.leftMargin + format.blockIndent;
                 textElement.text = t;
-                var lines = textBlock.createAllTextLines(w, format.indent);
+                var lines = textBlock.createAllTextLines(w, format);
                 this._textLines = this._textLines.concat(lines);
             }
 

@@ -28,6 +28,13 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark {
+
+
+    export class TextFloat {
+        static LEFT = "left";
+        static RIGHT = 'right';
+        static NONE = '';
+    }
     /**
      * TextFormat 类描述字符格式设置信息。使用 TextFormat 类可以为文本字段创建特定的文本格式。
      * 您可以将文本格式应用于静态文本字段和动态文本字段。
@@ -113,10 +120,5 @@ module lark {
             return format;
         }
     }
-
-    export enum TextFloat {
-        LEFT,
-        RIGHT,
-        NONE
-    }
+    TextFormat.$defaultTextFormat.fontDescription = new text.FontDescription();
 }

@@ -26,6 +26,7 @@ module lark.text {
 
         public textHeight: number = 0;
 
-        public overflowRegion: Point = null;
+        public leftOverflowAreas: Rectangle[] = null;
+        public rightOverflowAreas: Rectangle[] = null;
     }
 }

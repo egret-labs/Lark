@@ -24,9 +24,6 @@ module lark.text {
             var start = previousLine == null ? 0 : previousLine.atomCount + previousLine.textBlockBeginIndex;
             var content = this._content;
 
-            if (previousLine && previousLine.overflowRegion) {
-                lineOffset = previousLine.overflowRegion.x;
-            }
 
             var textLine:TextLine = null;
             var currentWidth = lineOffset;
@@ -56,7 +53,7 @@ module lark.text {
                 if (isGraphic) {
                     if (result.format.float == TextFloat.LEFT)
                         arrayToInsert = results[0];
-                    else if (result.format.float == TextFloat.LEFT)
+                    else if (result.format.float == TextFloat.RIGHT)
                         arrayToInsert = results[2];
                 }
 
@@ -76,28 +73,25 @@ module lark.text {
             {
                 textLine.$setAtomCount(currentLength);
                 textLine.$setTextBlockBeginIndex(start);
-
-                var lefts = this.layoutLeftSpans(results[0], lineOffset, maxHeight);
-                lineOffset = lefts.offset;
+                var offset = lineOffset;
+                var lefts = this.layoutLeftSpans(results[0], offset, maxHeight);
+                offset = lefts.offset;
                 var spans = lefts.spans;
-                var middles = this.layoutMiddleSpans(results[1], lineOffset, maxHeight);
-                lineOffset = middles.offset;
+                var middles = this.layoutMiddleSpans(results[1], offset, maxHeight);
+                offset = middles.offset;
                 spans = spans.concat(middles.spans);
-                var rights = this.layoutRightSpans(results[2], lineOffset, maxHeight);
+                var rights = this.layoutRightSpans(results[2], width, maxHeight);
                 spans = spans.concat(rights.spans);
                 
                 spans.forEach(span=> textLine.addChild(span));
                 
 
                 if (lefts.spans.length) {
-                    var x = lefts.offset;
-                    var y = Math.max.apply(Math, lefts.spans.map(s=> s.height));
-                    textLine.overflowRegion = new Point(x, y - maxHeight);
+                    textLine.leftOverflowAreas = lefts.spans.map(s=> new Rectangle(s.x, 0, s.width, s.height));
                 }
-                else if (previousLine &&previousLine.overflowRegion&& previousLine.overflowRegion&&previousLine.overflowRegion.y> (previousLine.textHeight+textLine.textHeight)) {
-                    textLine.overflowRegion = new Point(previousLine.overflowRegion.x, previousLine.overflowRegion.y - maxHeight);
+                if (rights.spans.length) {
+                    textLine.rightOverflowAreas = rights.spans.map(s=> new Rectangle(s.x, 0, s.width, s.height));
                 }
-                console.log(textLine.overflowRegion,textLine);
                 textLine.textHeight = maxHeight;
             }
             return textLine;
@@ -150,30 +144,72 @@ module lark.text {
         }
 
 
-        protected layoutRightSpans(rights: CreateSpanResult[], offset: number, maxHeight: number): { spans: DisplayObject[]; offset: number } {
+        protected layoutRightSpans(rights: CreateSpanResult[], width: number, maxHeight: number): { spans: DisplayObject[]; offset: number } {
             var spans: DisplayObject[] = [];
-            for (var i = rights.length-1; i >=0; i--) {
+            for (var i = 0; i < rights.length; i++) {
                 var result = rights[i];
                 var span = result.span;
                 span.y = 0;
-                span.x = offset;
-                offset += span.width;
+                span.x = width - span.width;
+                width -= span.width;
                 spans.push(span);
             }
             return {
                 spans: spans,
-                offset: offset
+                offset: width
             };
         }
 
 
-        createAllTextLines(width = 1000000, lineOffset = 0.0): text.TextLine[]{
+        createAllTextLines(width = 1000000, format:TextFormat = TextFormat.$defaultTextFormat): text.TextLine[]{
             var line: text.TextLine = null;
-            var lines: text.TextLine[] = []; 
-            while (line = this.createTextLine(line, width, line == null ? lineOffset : 0)) {
+            var lines: text.TextLine[] = [];
+            var leftBlockAreas: Rectangle[] = [];
+            var rightBlockAreas: Rectangle[] = [];
+            var offset = format.indent;
+            var rightOffset = width
+            var y = format.leading;
+            while (true) {
+                line = this.createTextLine(line, rightOffset, offset);
+                if (!line)
+                    break;
+                line.y = y;
+                if (line.leftOverflowAreas) {
+                    line.leftOverflowAreas.forEach(a=>a.y = y);
+                    leftBlockAreas = leftBlockAreas.concat(line.leftOverflowAreas);
+                }
+                if (line.rightOverflowAreas) {
+                    line.rightOverflowAreas.forEach(a=> a.y = y);
+                    rightBlockAreas = rightBlockAreas.concat(line.rightOverflowAreas);
+                }
+                //line.x = offset;
+                y += line.textHeight + format.leading;
                 lines.push(line);
+                offset = this.getLineOffset(leftBlockAreas, y, format.leading + format.fontSize);
+                rightOffset = this.getRightLineOffset(rightBlockAreas, width, y, format.leading + format.fontSize);
             }
             return lines;
+        }
+
+        getLineOffset(areas: Rectangle[], y:number,height:number):number {
+            var maxX = 0;
+            for (var i = 0; i < areas.length; i++) {
+                var area = areas[i];
+                if (area.y >= y + height || area.bottom <= y)
+                    continue;
+                maxX = Math.max(maxX, area.right);
+            }
+            return maxX;
+        }
+        getRightLineOffset(areas: Rectangle[], width:number,y: number, height: number): number {
+            var minX = width;
+            for (var i = 0; i < areas.length; i++) {
+                var area = areas[i];
+                if (area.y >= y + height || area.bottom <= y)
+                    continue;
+                minX = Math.min(minX, area.left);
+            }
+            return minX;
         }
     }
 }

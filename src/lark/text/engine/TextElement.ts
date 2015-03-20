@@ -1,6 +1,6 @@
 ﻿module lark.text {
     export class TextElement extends ContentElement {
-        constructor(text: string = null, elementFormat: ElementFormat = null) {
+        constructor(text: string = null, elementFormat: ElementFormat = TextFormat.$defaultTextFormat) {
             super();
             this._text = text;
             this._elementFormat = elementFormat;
@@ -70,6 +70,7 @@
                 else {
                     break;
                 }
+                isFirstSpan = false;
             }
 
             var full = currentWidth >= width;
