@@ -133,7 +133,7 @@ module lark.player {
 
         private renderNodeList:RenderNode[] = [];
 
-        private dirtyRectList:Rectangle[] = [];
+        private dirtyRectList:Region[] = [];
 
         private drawCalls:number = 0;
 
@@ -144,15 +144,15 @@ module lark.player {
                 var node:RenderNode = nodeList[i];
                 if(!node.outOfScreen&&node.alpha!==0){
                     node.isDirty = true;
-                    dirtyRegion.addDirtyRectangle(node.getRect());
+                    dirtyRegion.addDirtyRegion(node.minX,node.minY,node.maxX,node.maxY);
                 }
                 node.update();
                 if (node.moved&&!node.outOfScreen&&node.alpha!==0) {
                     node.isDirty = true;
-                    dirtyRegion.addDirtyRectangle(node.getRect());
+                    dirtyRegion.addDirtyRegion(node.minX,node.minY,node.maxX,node.maxY);
                 }
             }
-            var dirtyRectList:Rectangle[] = this.dirtyRectList;
+            var dirtyRectList:Region[] = this.dirtyRectList;
             dirtyRectList.length = 0;
             dirtyRegion.gatherOptimizedRegions(dirtyRectList);
         }
@@ -162,11 +162,11 @@ module lark.player {
          */
         private drawDirtyRect():void {
             this.context.beginDrawDirtyRect();
-            var list:Rectangle[] = this.dirtyRectList;
+            var list:Region[] = this.dirtyRectList;
             var length = list.length;
             for (var i = 0; i < length; i++) { 
-                var rect = list[i];
-                this.context.drawDirtyRect(rect.x, rect.y, rect.width, rect.height);
+                var region = list[i];
+                this.context.drawDirtyRect(region.minX, region.minY, region.maxX-region.minX, region.maxY-region.minY);
             }
             this.context.endDrawDirtyRect();
         }
@@ -197,7 +197,7 @@ module lark.player {
             stage.$displayListTreeChanged = false;
         }
 
-        private visitDisplayList(displayObject:DisplayObject, nodeList:RenderNode[],dirtyRectList:Rectangle[],context:IPlayerContext):void {
+        private visitDisplayList(displayObject:DisplayObject, nodeList:RenderNode[],dirtyRectList:Region[],context:IPlayerContext):void {
             if(!displayObject.$hasFlags(DisplayObjectFlags.Visible)){
                 return;
             }
@@ -219,14 +219,14 @@ module lark.player {
         /**
          * 检查一个渲染节点是否需要绘制
          */
-        private checkRenderNode(node:RenderNode,dirtyRectList:Rectangle[],context:IPlayerContext):void {
+        private checkRenderNode(node:RenderNode,dirtyRectList:Region[],context:IPlayerContext):void {
             if(node.outOfScreen||node.alpha===0){
                 return;
             }
             if (!node.isDirty) {
                 for (var j = dirtyRectList.length-1; j >= 0; j--) {
-                    var rect = dirtyRectList[j];
-                    if(node.intersects(rect.x,rect.y,rect.x+rect.width,rect.y+rect.height)){
+                    var region = dirtyRectList[j];
+                    if(node.intersects(region.minX,region.minY,region.maxX,region.maxY)){
                         node.isDirty = true;
                         break;
                     }

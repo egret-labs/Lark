@@ -48,13 +48,13 @@ module lark {
 
         private start(texture:Texture):void{
             var x=0,y=0;
-            for(var i=0;i<300000;i++){
+            for(var i=0;i<2500;i++){
                 var bitmap = new Bitmap();
                 bitmap.texture = texture;
                 bitmap.x = x;
                 bitmap.y = y;
                 //bitmap.scaleX = bitmap.scaleY = Math.random();
-                //bitmap.rotation = 1;
+                //bitmap.rotation = Math.random()*360;
                 x += texture.width;
                 if(x>1920){
                     x = 0;
@@ -82,9 +82,7 @@ module lark {
             //var length = list.length;
             //for(var i=0;i<length;i++){
             //    var bitmap = list[i];
-            //    //bitmap.x = Math.random()*1900;
-            //    //bitmap.y = Math.random()*960;
-            //    i+=2;
+            //    bitmap.rotation += 2;
             //}
         }
     }

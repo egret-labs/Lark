@@ -51,11 +51,11 @@ module lark.player {
         /**
          * 绘制区域在屏幕上的起点x
          */
-        public x:number = 0;
+        public minX:number = 0;
         /**
          * 绘制区域在屏幕上的起点y
          */
-        public y:number = 0;
+        public minY:number = 0;
         /**
          * 绘制区域在屏幕上的终点x
          */
@@ -65,17 +65,13 @@ module lark.player {
          */
         public maxY:number = 0;
 
-        public setRect(x:number,y:number,width:number,height:number):void{
-            this.x = x;
-            this.y = y;
-            this.maxX = x+width;
-            this.maxY = y+height;
+        public setRect(minX:number,minY:number,width:number,height:number):void{
+            this.minX = minX;
+            this.minY = minY;
+            this.maxX = minX+width;
+            this.maxY = minY+height;
             var stage = this.target.$stage;
             this.outOfScreen = !this.intersects(0,0,stage.$stageWidth,stage.$stageHeight);
-        }
-
-        public getRect():Rectangle{
-            return Rectangle.TEMP.setTo(this.x,this.y,this.maxX-this.x,this.maxY-this.y);
         }
         /**
          * 是否需要重绘
@@ -97,13 +93,13 @@ module lark.player {
         public moved:boolean = false;
 
         public intersects(targetMinX:number,targetMinY:number,targetMaxX:number,targetMaxY:number):boolean {
-            var max = this.x > targetMinX ? this.x : targetMinX;
+            var max = this.minX > targetMinX ? this.minX : targetMinX;
             var min = this.maxX < targetMaxX ? this.maxX : targetMaxX;
             if (max > min) {
                 return false;
             }
 
-            max = this.y > targetMinY ? this.y : targetMinY;
+            max = this.minY > targetMinY ? this.minY : targetMinY;
             min = this.maxY < targetMaxY ? this.maxY : targetMaxY;
             return max <= min;
         }
