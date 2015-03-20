@@ -24,6 +24,9 @@ module lark.text {
             var start = previousLine == null ? 0 : previousLine.atomCount + previousLine.textBlockBeginIndex;
             var content = this._content;
 
+            if (previousLine && previousLine.overflowRegion) {
+                lineOffset = previousLine.overflowRegion.x;
+            }
 
             var textLine:TextLine = null;
             var currentWidth = lineOffset;
@@ -45,11 +48,8 @@ module lark.text {
                 currentWidth += span.width;
                 currentLength += result.length;
 
-                var h = span.height;
-                maxHeight = Math.max(maxHeight, h);
-                minHeight = Math.min(minHeight, h);
 
-                var isGraphic = span instanceof GraphicElement;
+                var isGraphic = !(span instanceof TextSpan);
                 hasGraphic = hasGraphic || isGraphic;
 
                 var arrayToInsert = results[1];
@@ -61,6 +61,12 @@ module lark.text {
                 }
 
                 arrayToInsert.push(result);
+
+                if (!isGraphic || result.format.float == TextFloat.NONE) {
+                    var h = span.height;
+                    maxHeight = Math.max(maxHeight, h);
+                    minHeight = Math.min(minHeight, h);
+                }
 
                 if (result.ended || result.full)
                     break;
@@ -81,6 +87,18 @@ module lark.text {
                 spans = spans.concat(rights.spans);
                 
                 spans.forEach(span=> textLine.addChild(span));
+                
+
+                if (lefts.spans.length) {
+                    var x = lefts.offset;
+                    var y = Math.max.apply(Math, lefts.spans.map(s=> s.height));
+                    textLine.overflowRegion = new Point(x, y - maxHeight);
+                }
+                else if (previousLine &&previousLine.overflowRegion&& previousLine.overflowRegion&&previousLine.overflowRegion.y> (previousLine.textHeight+textLine.textHeight)) {
+                    textLine.overflowRegion = new Point(previousLine.overflowRegion.x, previousLine.overflowRegion.y - maxHeight);
+                }
+                console.log(textLine.overflowRegion,textLine);
+                textLine.textHeight = maxHeight;
             }
             return textLine;
         }

@@ -23,5 +23,9 @@ module lark.text {
         public $setTextBlockBeginIndex(value: number) {
             this._textBlockBeginIndex = value;
         }
+
+        public textHeight: number = 0;
+
+        public overflowRegion: Point = null;
     }
 }
