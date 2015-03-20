@@ -139,10 +139,7 @@ module lark {
                     }
                 }
             }
-            child.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedMatrix |
-            DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
-            DisplayObjectFlags.InvalidConcatenatedAlpha|
-            DisplayObjectFlags.Dirty);
+            child.$propagateFlagsDown(DisplayObjectFlags.InvalidChildren);
             this.$invalidateChildren();
             return child;
         }
@@ -257,10 +254,7 @@ module lark {
             }
             child.$setParent(null);
             children.splice(index, 1);
-            child.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedMatrix |
-            DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
-            DisplayObjectFlags.InvalidConcatenatedAlpha|
-            DisplayObjectFlags.Dirty);
+            child.$propagateFlagsDown(DisplayObjectFlags.InvalidChildren);
             this.$invalidateChildren();
             return child;
         }
