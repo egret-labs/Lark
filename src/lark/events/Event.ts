@@ -41,21 +41,6 @@ module lark {
      */
     export class Event extends HashObject {
 
-
-        /**
-         * 创建一个作为参数传递给事件侦听器的 Event 对象。
-         * @param type {string} 事件的类型，可以作为 Event.type 访问。
-         * @param bubbles {boolean} 确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
-         * @param cancelable {boolean} 确定是否可以取消 Event 对象。默认值为 false。
-         */
-        public constructor(type:string, bubbles?:boolean, cancelable?:boolean, data?:any) {
-            super();
-            this.$type = type;
-            this.$bubbles = !!bubbles;
-            this._cancelable = !!cancelable;
-        }
-
-
         /**
          * 在将显示对象直接添加到舞台显示列表或将包含显示对象的子树添加至舞台显示列表中时调度。
          * 以下方法会触发此事件：DisplayObjectContainer.addChild()、DisplayObjectContainer.addChildAt()。
@@ -77,11 +62,11 @@ module lark {
          */
         public static REMOVED:string = "removed";
         /**
-         * 主循环：进入新的一帧
+         * 进入新的一帧
          */
         public static ENTER_FRAME:string = "enterFrame";
         /**
-         * 即将开始渲染
+         * 即将开始渲染,注意：与Event.ENTER_FRAME事件不同，若在Event.RENDER事件的回调函数执行期间再添加的Event.RENDER事件监听无效，不会产生有效回调。
          */
         public static RENDER:string = "render";
         /**
@@ -93,6 +78,21 @@ module lark {
          * 舞台尺寸发生改变
          */
         public static RESIZE:string = "resize";
+
+
+
+        /**
+         * 创建一个作为参数传递给事件侦听器的 Event 对象。
+         * @param type {string} 事件的类型，可以作为 Event.type 访问。
+         * @param bubbles {boolean} 确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
+         * @param cancelable {boolean} 确定是否可以取消 Event 对象。默认值为 false。
+         */
+        public constructor(type:string, bubbles?:boolean, cancelable?:boolean, data?:any) {
+            super();
+            this.$type = type;
+            this.$bubbles = !!bubbles;
+            this._cancelable = !!cancelable;
+        }
 
         /**
          * 事件附带的数据对象
