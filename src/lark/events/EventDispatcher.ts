@@ -96,6 +96,9 @@ module lark {
             if (!list) {
                 list = eventMap[type] = [];
             }
+            else if(this.notifyLevel!==0){
+                eventMap[type] = list = list.concat();
+            }
             this.$insertEventBin(list, listener, thisObject, priority)
         }
 
@@ -142,6 +145,9 @@ module lark {
             var list:EventBin[] = eventMap[type];
             if (!list) {
                 return;
+            }
+            if(this.notifyLevel!==0){
+                eventMap[type] = list = list.concat();
             }
             this.$removeEventBin(list, listener, thisObject);
             if (list.length == 0) {
@@ -198,6 +204,8 @@ module lark {
             return this.$notifyListener(event);
         }
 
+        private notifyLevel:number = 0;
+
         $notifyListener(event:Event):boolean {
             var eventMap:Object = event.$eventPhase == 1 ? this.$captureEventsMap : this.$eventsMap;
             if (!eventMap) {
@@ -211,8 +219,8 @@ module lark {
             if (length == 0) {
                 return true;
             }
-
-            list = list.concat();
+            //做个标记，防止外部修改原始数组导致便利错误。这里不直接调用list.concat()因为dispatchEvent()方法调用通常比addEventListener等方法频繁。
+            this.notifyLevel++;
             for (var i = 0; i < length; i++) {
                 var eventBin:any = list[i];
                 eventBin.listener.call(eventBin.thisObject, event);
@@ -220,6 +228,7 @@ module lark {
                     break;
                 }
             }
+            this.notifyLevel--;
             return !event.$isDefaultPrevented;
         }
 
