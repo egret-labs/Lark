@@ -61,9 +61,8 @@ module lark {
             this._text = text;
             this._format = format;
             this.$invalidateContentBounds();
-            
-            //todo: replace with event listeners
-            lark.player.WebTicker.getInstance().register(this.onEnterFrame, this);
+
+            this.addEventListener(Event.ENTER_FRAME,this.onEnterFrame,this);
         }
 
 

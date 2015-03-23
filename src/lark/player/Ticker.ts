@@ -70,13 +70,64 @@ module lark.player {
             }
         }
 
+        /**
+         * 执行一次刷新
+         */
         public update():void{
             var list = this.playerList;
             var length = list.length;
+            if(length==0){
+                return;
+            }
+            this.broadcastEnterFrame();
+            this.broadcastRender();
             for(var i=0;i<length;i++){
                 list[i].render();
             }
 
+        }
+
+        private reuseEvent:Event = new Event("")
+
+        /**
+         * 广播EnterFrame事件。
+         */
+        private broadcastEnterFrame():void {
+            var list = DisplayObject.$enterFrameCallBackList;
+            var length = list.length;
+            if(length===0){
+                return;
+            }
+            list = list.concat();
+            var event:Event = this.reuseEvent;
+            event.$type = Event.ENTER_FRAME;
+            for (var i:number = 0; i < length; i++) {
+                var eventBin:any = list[i];
+                event.$target = eventBin.display;
+                event.$currentTarget = eventBin.display;
+                eventBin.listener.call(eventBin.thisObject, event);
+            }
+        }
+
+        /**
+         * 广播Render事件。
+         */
+        private broadcastRender():void {
+            var list:Array<any> = DisplayObject.$renderCallBackList;
+            var length:number = list.length;
+            if(length===0){
+                return;
+            }
+            list = list.concat();
+            var event:Event = this.reuseEvent;
+            event.$type = Event.RENDER;
+            for (var i:number = 0; i < length; i++) {
+                var eventBin:any = list[i];
+                var target = eventBin.display;
+                event.$target = target;
+                event.$currentTarget = target;
+                eventBin.listener.call(eventBin.thisObject, event);
+            }
         }
     }
 }

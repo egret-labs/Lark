@@ -91,7 +91,7 @@ module lark {
                     this.$eventsMap = {};
                 eventMap = this.$eventsMap;
             }
-            var list:EventBin[] = eventMap[type];
+            var list:lark.player.EventBin[] = eventMap[type];
             if (!list) {
                 list = eventMap[type] = [];
             }
@@ -104,7 +104,7 @@ module lark {
         /**
          * 在一个事件列表中按优先级插入事件对象
          */
-        $insertEventBin(list:EventBin[], listener:Function, thisObject:any, priority:number, display?:DisplayObject):boolean {
+        $insertEventBin(list:lark.player.EventBin[], listener:Function, thisObject:any, priority:number, display?:DisplayObject):boolean {
             var insertIndex = -1;
             var length = list.length;
             for (var i = 0; i < length; i++) {
@@ -141,7 +141,7 @@ module lark {
             var eventMap:Object = useCapture ? this.$captureEventsMap : this.$eventsMap;
             if (!eventMap)
                 return;
-            var list:EventBin[] = eventMap[type];
+            var list:lark.player.EventBin[] = eventMap[type];
             if (!list) {
                 return;
             }
@@ -157,7 +157,7 @@ module lark {
         /**
          * 在一个事件列表中按优先级插入事件对象
          */
-        $removeEventBin(list:EventBin[], listener:Function, thisObject:any, display?:DisplayObject):boolean {
+        $removeEventBin(list:lark.player.EventBin[], listener:Function, thisObject:any, display?:DisplayObject):boolean {
             var length = list.length;
             for (var i = 0; i < length; i++) {
                 var bin = list[i];
@@ -210,7 +210,7 @@ module lark {
             if (!eventMap) {
                 return true;
             }
-            var list:EventBin[] = eventMap[event.$type];
+            var list:lark.player.EventBin[] = eventMap[event.$type];
             if (!list) {
                 return true;
             }
@@ -245,11 +245,13 @@ module lark {
             }
         }
     }
+}
 
+module lark.player{
     /**
      * 事件信息对象
      */
-    interface EventBin {
+    export interface EventBin {
         listener: Function;
         thisObject:any;
         priority:number;

@@ -25,7 +25,6 @@ var lark_file_list =
         "lark/player/render/GraphicsNode.js",
         "lark/player/Ticker.js",
         "lark/player/Player.js",
-        "lark/player/web/WebTicker.js",
         "lark/player/web/CanvasContext.js",
         "lark/text/VerticalAlign.js",
         "lark/text/engine/FontDescription.js",

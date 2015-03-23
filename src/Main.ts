@@ -73,10 +73,10 @@ module lark {
             this.addChild(this.targetIcon);
             this.iconList.push(this.targetIcon);
             this.addChild(FPS.display);
-            lark.player.WebTicker.getInstance().register(this.onTick,this);
+            this.addEventListener(Event.ENTER_FRAME,this.onTick,this);
         }
 
-        private onTick():void{
+        private onTick(event:Event):void{
             this.targetIcon.rotation += 2;
             //var list = this.iconList;
             //var length = list.length;

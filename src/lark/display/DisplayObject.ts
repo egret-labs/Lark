@@ -685,8 +685,8 @@ module lark {
             }
         }
 
-        static $enterFrameCallBackList:Array<any> = [];
-        static $renderCallBackList:Array<any> = [];
+        static $enterFrameCallBackList:lark.player.EventBin[] = [];
+        static $renderCallBackList:lark.player.EventBin[] = [];
 
         public addEventListener(type:string, listener:Function, thisObject:any, useCapture?:boolean, priority:number = 0):void {
             super.addEventListener(type, listener, thisObject, useCapture, priority);
