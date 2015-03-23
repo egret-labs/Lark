@@ -74,16 +74,17 @@ module lark {
         $removeFlags(flags:DisplayObjectFlags):void {
             this._displayObjectFlags &= ~flags;
         }
+
         /**
          * 沿着显示列表向上移除标志量，如果标志量没被设置过就停止移除。
          */
-        $removeFlagsUp(flags:DisplayObjectFlags):void{
-            if(!this.$hasFlags(flags)){
+        $removeFlagsUp(flags:DisplayObjectFlags):void {
+            if (!this.$hasFlags(flags)) {
                 return;
             }
             this.$removeFlags(flags)
             var parent = this.$parent;
-            if(parent){
+            if (parent) {
                 parent.$removeFlagsUp(flags);
             }
         }
@@ -162,7 +163,7 @@ module lark {
             this.$stage = stage;
             DisplayObjectContainer.$EVENT_ADD_TO_STAGE_LIST.push(this);
             var node = this.$renderNode;
-            if(node){
+            if (node) {
                 stage.$dirtyRenderNodes[node.id] = node;
             }
         }
@@ -170,7 +171,7 @@ module lark {
         $onRemoveFromStage():void {
             DisplayObjectContainer.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
             var node = this.$renderNode;
-            if(node){
+            if (node) {
                 this.$stage.$dirtyRenderNodes[node.id] = node;
             }
         }
@@ -197,7 +198,7 @@ module lark {
         $getMatrix():Matrix {
             if (this.$hasFlags(DisplayObjectFlags.InvalidMatrix)) {
                 this._matrix.$updateScaleAndRotation(this._scaleX, this._scaleY, this._skewX, this._skewY);
-                if(this.$renderNode){
+                if (this.$renderNode) {
                     this.$renderNode.moved = true;
                 }
                 this.$removeFlags(DisplayObjectFlags.InvalidMatrix);
@@ -428,7 +429,7 @@ module lark {
             if (value === this.$hasFlags(DisplayObjectFlags.Visible)) {
                 return;
             }
-            if(this.$stage){
+            if (this.$stage) {
                 this.$stage.$displayListTreeChanged = true;
             }
             this.$toggleFlags(DisplayObjectFlags.Visible, value);
@@ -542,7 +543,7 @@ module lark {
          */
         public getBounds(targetCoordinateSpace:DisplayObject, resultRect?:Rectangle):Rectangle {
             targetCoordinateSpace = targetCoordinateSpace || this;
-            return this.$getTransformedBounds(targetCoordinateSpace,resultRect);
+            return this.$getTransformedBounds(targetCoordinateSpace, resultRect);
         }
 
         $getTransformedBounds(targetCoordinateSpace:DisplayObject, resultRect?:Rectangle):Rectangle {
@@ -618,7 +619,7 @@ module lark {
             var bounds = this._contentBounds;
             if (this.$hasFlags(DisplayObjectFlags.InvalidContentBounds)) {
                 this.$removeFlags(DisplayObjectFlags.InvalidContentBounds);
-                if(this.$renderNode){
+                if (this.$renderNode) {
                     this.$renderNode.moved = true;
                 }
                 this.$measureContentBounds(bounds);
@@ -630,57 +631,56 @@ module lark {
          * 测量自身占用的矩形区域，如果是容器，还包括所有子项占据的区域。
          * @param bounds 测量结果存储在这个矩形对象内
          */
-        $measureContentBounds(bounds:Rectangle):void{
+        $measureContentBounds(bounds:Rectangle):void {
 
         }
 
         $renderNode:lark.player.RenderNode = null;
+
         /**
          * 获取渲染节点
          */
-        $updateRenderNode():void{
+        $updateRenderNode():void {
             var node = this.$renderNode;
-            if(!node){
+            if (!node) {
                 return;
             }
             this.$removeFlagsUp(DisplayObjectFlags.Dirty);
-            if(!this.$stage){
+            if (!this.$stage) {
                 node.finish();
-                node.setRect(0,0,0,0);
+                node.clearRect();
                 return;
             }
             node.alpha = this.$getConcatenatedAlpha();
-            node.matrix = this.$getConcatenatedMatrix();
+            var m = this.$getConcatenatedMatrix();
+            node.matrix = m;
             var bounds = this.$getContentBounds();
-            if(node.moved){
-                var rect = Rectangle.TEMP;
-                rect.copyFrom(bounds);
-                node.matrix.$transformBounds(rect);
-                node.setRect(rect.x,rect.y,rect.width,rect.height);
+            if (node.moved) {
+                node.updateRect(bounds);
             }
         }
- 
+
         /**
          * 标记此显示对象需要重绘
          */
-        $markDirty():void{
-            var dirtyNodes = this.$stage?this.$stage.$dirtyRenderNodes:null;
-            this.markChildDirty(this,dirtyNodes);
+        $markDirty():void {
+            var dirtyNodes = this.$stage ? this.$stage.$dirtyRenderNodes : null;
+            this.markChildDirty(this, dirtyNodes);
         }
 
-        private markChildDirty(child:DisplayObject,dirtyNodes:any):void{
-            if(this.$hasFlags(DisplayObjectFlags.Dirty)){
+        private markChildDirty(child:DisplayObject, dirtyNodes:any):void {
+            if (this.$hasFlags(DisplayObjectFlags.Dirty)) {
                 return;
             }
             this.$setFlags(DisplayObjectFlags.Dirty);
             var node = child.$renderNode;
-            if(node&&dirtyNodes){
+            if (node && dirtyNodes) {
                 dirtyNodes[node.id] = node;
             }
             var children = child.$children;
-            if(children){
-                for(var i=children.length-1;i>=0;i--){
-                    this.markChildDirty(children[i],dirtyNodes);
+            if (children) {
+                for (var i = children.length - 1; i >= 0; i--) {
+                    this.markChildDirty(children[i], dirtyNodes);
                 }
             }
         }

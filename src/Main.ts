@@ -48,20 +48,20 @@ module lark {
 
         private start(texture:Texture):void{
             var x=0,y=0;
-            for(var i=0;i<2500;i++){
+            for(var i=0;i<2000;i++){
                 var bitmap = new Bitmap();
                 bitmap.texture = texture;
                 bitmap.x = x;
                 bitmap.y = y;
-                //bitmap.scaleX = bitmap.scaleY = Math.random();
-                //bitmap.rotation = Math.random()*360;
+                bitmap.scaleX = bitmap.scaleY = Math.random();
+                bitmap.rotation = Math.random()*360;
                 x += texture.width;
                 if(x>1920){
                     x = 0;
                     y += texture.height;
-                    //if(y>960){
-                    //    y = 0;
-                    //}
+                    if(y>960){
+                        y = 0;
+                    }
                 }
                 this.addChild(bitmap);
                 this.iconList.push(bitmap);
@@ -77,13 +77,13 @@ module lark {
         }
 
         private onTick():void{
-            this.targetIcon.rotation += 2;
-            //var list = this.iconList;
-            //var length = list.length;
-            //for(var i=0;i<length;i++){
-            //    var bitmap = list[i];
-            //    bitmap.rotation += 2;
-            //}
+            //this.targetIcon.rotation += 2;
+            var list = this.iconList;
+            var length = list.length;
+            for(var i=0;i<length;i++){
+                var bitmap = list[i];
+                bitmap.rotation += 2;
+            }
         }
     }
 
