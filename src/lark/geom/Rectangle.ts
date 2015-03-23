@@ -222,23 +222,5 @@ module lark {
             var v = Math.abs(Math.sin(angle));
             return v * this.width + u * this.height;
         }
-
-        /**
-         * 是否包含另一个Rectangle对象。
-         */
-        $containsRect(other:Rectangle):boolean {
-            var r1 = other.x + other.width;
-            var b1 = other.y + other.height;
-            var r2 = this.x + this.width;
-            var b2 = this.y + this.height;
-            return (other.x >= this.x) &&
-                (other.x < r2) &&
-                (other.y >= this.y) &&
-                (other.y < b2) &&
-                (r1 > this.x) &&
-                (r1 <= r2) &&
-                (b1 > this.y) &&
-                (b1 <= b2);
-        }
     }
 }
