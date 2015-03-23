@@ -118,7 +118,7 @@ module lark.player {
             this.computeDirtyRects();
             var t1 = lark.getTimer();
             if (this.dirtyRatio > 0) {
-                var cleanAll:boolean = this.dirtyRatio>80;
+                var cleanAll:boolean = this.dirtyRatio>this.stage.$dirtyRatio;
                 if(!cleanAll)
                 {
                     this.drawDirtyRect();
