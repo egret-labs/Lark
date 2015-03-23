@@ -4,7 +4,6 @@ var lark_file_list =
         "lark/utils/getDefinitionByName.js",
         "lark/utils/HashObject.js",
         "lark/utils/getTimer.js",
-        "lark/utils/toColorString.js",
         "lark/geom/Matrix.js",
         "lark/geom/Point.js",
         "lark/geom/Rectangle.js",
