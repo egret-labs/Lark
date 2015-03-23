@@ -118,7 +118,7 @@ module lark.player {
             this.computeDirtyRects();
             var t1 = lark.getTimer();
             if (this.dirtyRatio > 0) {
-                var cleanAll:boolean = this.dirtyRatio>0.8;
+                var cleanAll:boolean = this.dirtyRatio>80;
                 if(!cleanAll)
                 {
                     this.drawDirtyRect();
@@ -132,7 +132,7 @@ module lark.player {
                 t3 = t2;
             }
 
-            FPS.update(this.drawCalls, t1 - t, t2 - t1, t3 - t2);
+            FPS.update(this.drawCalls,this.dirtyRatio, t1 - t, t2 - t1, t3 - t2);
         }
 
         private renderNodeList:RenderNode[] = [];

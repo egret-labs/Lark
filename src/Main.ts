@@ -77,13 +77,13 @@ module lark {
         }
 
         private onTick():void{
-            //this.targetIcon.rotation += 2;
-            var list = this.iconList;
-            var length = list.length;
-            for(var i=0;i<length;i++){
-                var bitmap = list[i];
-                bitmap.rotation += 2;
-            }
+            this.targetIcon.rotation += 2;
+            //var list = this.iconList;
+            //var length = list.length;
+            //for(var i=0;i<length;i++){
+            //    var bitmap = list[i];
+            //    bitmap.rotation += 2;
+            //}
         }
     }
 
