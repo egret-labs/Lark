@@ -31,7 +31,7 @@ module lark {
     /**
      * 显示对象基类
      */
-    export class DisplayObject extends HashObject {
+    export class DisplayObject extends EventDispatcher {
         /**
          * 创建一个显示对象
          */
@@ -684,6 +684,88 @@ module lark {
                 }
             }
         }
+
+        static $enterFrameCallBackList:Array<any> = [];
+        static $renderCallBackList:Array<any> = [];
+
+        public addEventListener(type:string, listener:Function, thisObject:any, useCapture?:boolean, priority:number = 0):void {
+            super.addEventListener(type, listener, thisObject, useCapture, priority);
+            var isEnterFrame = (type == Event.ENTER_FRAME);
+            if (isEnterFrame || type == Event.RENDER) {
+                var list:Array<any> = isEnterFrame ? DisplayObject.$enterFrameCallBackList : DisplayObject.$renderCallBackList;
+                this.$insertEventBin(list, listener, thisObject, priority, this);
+            }
+        }
+
+        public removeEventListener(type:string, listener:Function, thisObject:any, useCapture?:boolean):void {
+            super.removeEventListener(type, listener, thisObject, useCapture);
+            var isEnterFrame:boolean = (type == Event.ENTER_FRAME);
+            if (isEnterFrame || type == Event.RENDER) {
+                var list:Array<any> = isEnterFrame ? DisplayObject.$enterFrameCallBackList : DisplayObject.$renderCallBackList;
+                this.$removeEventBin(list, listener, thisObject, this);
+            }
+        }
+
+        public dispatchEvent(event:Event):boolean {
+            if (!event.$bubbles) {
+                return super.dispatchEvent(event);
+            }
+
+            var list:Array<DisplayObject> = [];
+            var target:DisplayObject = this;
+            while (target) {
+                list.push(target);
+                target = target.$parent;
+            }
+            event.$target = this;
+            this.$dispatchPropagationEvent(event, list);
+            return !event.$isDefaultPrevented;
+        }
+
+        $dispatchPropagationEvent(event:Event, list:DisplayObject[]):void {
+            var length:number = list.length;
+            var eventPhase:number = EventPhase.CAPTURING_PHASE;
+            for (var i:number = length - 1; i >= 0; i--) {
+                var currentTarget:DisplayObject = list[i];
+                event.$currentTarget = currentTarget;
+                event.$eventPhase = eventPhase;
+                currentTarget.$notifyListener(event);
+                if (event.$isPropagationStopped || event.$isPropagationImmediateStopped) {
+                    return;
+                }
+            }
+
+            var eventPhase:number = EventPhase.AT_TARGET;
+            var currentTarget:DisplayObject = list[0];
+            event.$currentTarget = currentTarget;
+            event.$eventPhase = eventPhase;
+            currentTarget.$notifyListener(event);
+            if (event.$isPropagationStopped || event.$isPropagationImmediateStopped) {
+                return;
+            }
+
+            var eventPhase:number = EventPhase.BUBBLING_PHASE;
+            for (i = 1; i < length; i++) {
+                var currentTarget:DisplayObject = list[i];
+                event.$currentTarget = currentTarget;
+                event.$eventPhase = eventPhase;
+                currentTarget.$notifyListener(event);
+                if (event.$isPropagationStopped || event.$isPropagationImmediateStopped) {
+                    return;
+                }
+            }
+        }
+
+        public willTrigger(type:string):boolean {
+            var parent = this;
+            while (parent) {
+                if (parent.hasEventListener(type))
+                    return true;
+                parent = parent.$parent;
+            }
+            return false;
+        }
+
     }
 
 }

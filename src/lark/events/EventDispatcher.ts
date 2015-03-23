@@ -77,7 +77,6 @@ module lark {
          * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
          */
         public addEventListener(type:string, listener:Function, thisObject:any, useCapture?:boolean, priority:number = 0):void {
-            useCapture = !!useCapture;
             if (!listener) {
                 //Logger.fatalWithErrorId(1010);
             }

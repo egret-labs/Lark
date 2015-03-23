@@ -31,7 +31,7 @@ module lark.player {
 
     /**
      * @excluded
-     * 心跳触发器
+     * 用于WEB的心跳触发器
      */
     export class WebTicker extends HashObject {
 

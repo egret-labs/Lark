@@ -43,6 +43,35 @@ module lark.player {
             }
             this.canvas = canvas;
             this.context = canvas.getContext("2d");
+            this.checkTicker();
+        }
+
+        /**
+         * 检查心跳计时器，若未初始化则立即初始化并启动。
+         */
+        private checkTicker():void{
+            var ticker:Ticker = Ticker.getInstance();
+            if(!ticker){
+                return;
+            }
+            var requestAnimationFrame =
+                window["requestAnimationFrame"] ||
+                window["webkitRequestAnimationFrame"] ||
+                window["mozRequestAnimationFrame"] ||
+                window["oRequestAnimationFrame"] ||
+                window["msRequestAnimationFrame"];
+
+            if (!requestAnimationFrame) {
+                requestAnimationFrame = function (callback) {
+                    return window.setTimeout(callback, 1000 / 60);
+                };
+            }
+
+            requestAnimationFrame.call(window, onTick);
+            function onTick():void{
+                ticker.update();
+                requestAnimationFrame.call(window, onTick)
+            }
         }
 
 
@@ -70,7 +99,6 @@ module lark.player {
             this.sizeChanged = false;
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
-            console.log(window.innerWidth,window.innerHeight);
             this.stage.$updateStageSize(window.innerWidth,window.innerHeight);
         }
 
@@ -142,20 +170,6 @@ module lark.player {
 
         public endDrawScreen():void{
             this.context.restore();
-        }
-
-        /**
-         * 启动心跳计时器
-         */
-        public startTick(callBack:Function, thisObject:any):void {
-            WebTicker.getInstance().register(callBack, thisObject);
-        }
-
-        /**
-         * 停止心跳计时器
-         */
-        public stopTick(callBack:Function, thisObject:any):void {
-            WebTicker.getInstance().unregister(callBack, thisObject);
         }
 
         private _globalAlpha:number = 1;

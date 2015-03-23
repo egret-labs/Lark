@@ -29,44 +29,54 @@
 
 module lark.player {
 
-    /**
-     * @excluded
-     * IPlayerContext接口定义Lark播放器与平台相关的操作，包括绘制，网络，交互操作等。
-     */
-    export interface IPlayerContext extends IHashObject {
+    export class Ticker {
+
+        static $instance:Ticker;
+
+        public static getInstance():Ticker{
+            if(!Ticker.$instance){
+                return Ticker.$instance = new Ticker();
+            }
+            return null;
+        }
+
+        public constructor(){
+            if(Ticker.$instance){
+                throw new Error("Ticker实例化出错！不允许实例化多个Ticker对象。");
+            }
+        }
+
+        private playerList:Player[] = [];
 
         /**
-         * 初始化播放器上下文
+         * 注册一个播放器实例并运行
          */
-        initialize(stage:Stage):void;
-        /**
-         * 清除整个屏幕
-         */
-        clearScreen():void;
-
-        /**
-         * 清除屏幕的部分渲染区域
-         */
-        clearRect(x:number, y:number, width:number, height:number):void;
+        public startPlayer(player:Player):void{
+            if(this.playerList.indexOf(player)!=-1){
+                return;
+            }
+            this.playerList = this.playerList.concat();
+            this.playerList.push(player);
+        }
 
         /**
-         * 绘制图片到一个区域上
+         * 停止一个播放器实例的运行。
          */
-        drawImage(texture:Texture, matrix:Matrix, globalAlpha:number): void;
+        public stopPlayer(player:Player):void{
+            var index = this.playerList.indexOf(player);
+            if(index!==-1){
+                this.playerList = this.playerList.concat();
+                this.playerList.splice(index,1);
+            }
+        }
 
-        /**
-         * 绘制文本到一个区域上
-         */
-        drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number): void;
+        public update():void{
+            var list = this.playerList;
+            var length = list.length;
+            for(var i=0;i<length;i++){
+                list[i].render();
+            }
 
-        reset():void;
-
-        beginDrawDirtyRect():void;
-
-        drawDirtyRect(x:number, y:number, width:number, height:number):void;
-
-        endDrawDirtyRect():void;
-
-        endDrawScreen():void;
+        }
     }
 }
