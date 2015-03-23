@@ -693,7 +693,9 @@ module lark {
             var isEnterFrame = (type == Event.ENTER_FRAME);
             if (isEnterFrame || type == Event.RENDER) {
                 var list:Array<any> = isEnterFrame ? DisplayObject.$enterFrameCallBackList : DisplayObject.$renderCallBackList;
-                this.$insertEventBin(list, listener, thisObject, priority, this);
+                if(list){
+                    this.$insertEventBin(list, listener, thisObject, priority, this);
+                }
             }
         }
 
@@ -702,7 +704,9 @@ module lark {
             var isEnterFrame:boolean = (type == Event.ENTER_FRAME);
             if (isEnterFrame || type == Event.RENDER) {
                 var list:Array<any> = isEnterFrame ? DisplayObject.$enterFrameCallBackList : DisplayObject.$renderCallBackList;
-                this.$removeEventBin(list, listener, thisObject, this);
+                if(list){
+                    this.$removeEventBin(list, listener, thisObject, this);
+                }
             }
         }
 

@@ -62,16 +62,16 @@ module lark {
          */
         public static REMOVED:string = "removed";
         /**
-         * 进入新的一帧
+         * 进入新的一帧,监听此事件将会在下一帧开始时触发一次回调。这是一个广播事件，可以在任何一个显示对象上监听，无论它是否在显示列表中。
          */
         public static ENTER_FRAME:string = "enterFrame";
         /**
-         * 即将开始渲染,注意：与Event.ENTER_FRAME事件不同，若在Event.RENDER事件的回调函数执行期间再添加的Event.RENDER事件监听无效，不会产生有效回调。
+         * 渲染事件，监听此事件将会在本帧末即将开始渲染的前一刻触发回调，这是一个广播事件，可以在任何一个显示对象上监听，无论它是否在显示列表中。
+         * 注意：与Event.ENTER_FRAME事件不同，Event.RENDER事件会确保在“本帧”末被回调，所以对于在回调函数执行期间再添加的Event.RENDER事件监听将会无效。
          */
         public static RENDER:string = "render";
         /**
          * 离开舞台。
-         * @constant {string} egret.Event.LEAVE_STAGE
          */
         public static LEAVE_STAGE:string = "leaveStage";
         /**

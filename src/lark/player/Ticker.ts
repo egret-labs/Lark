@@ -114,11 +114,11 @@ module lark.player {
          */
         private broadcastRender():void {
             var list:Array<any> = DisplayObject.$renderCallBackList;
+            DisplayObject.$renderCallBackList = null;
             var length:number = list.length;
             if(length===0){
                 return;
             }
-            list = list.concat();
             var event:Event = this.reuseEvent;
             event.$type = Event.RENDER;
             for (var i:number = 0; i < length; i++) {
@@ -128,6 +128,7 @@ module lark.player {
                 event.$currentTarget = target;
                 eventBin.listener.call(eventBin.thisObject, event);
             }
+            DisplayObject.$renderCallBackList = [];
         }
     }
 }
