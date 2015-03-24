@@ -10,7 +10,7 @@
             this._elements = value;
         }
 
-        public $createSpan(width: number, isFirstSpan: boolean = false, startIndex: number = 0): CreateSpanResult {
+        public $createSpan(width: number, isFirstSpan: boolean = false, startIndex: number = 0, format?: ITextStyle): CreateSpanResult {
             var elementLength = 0;
             var startElementIndex = -1;
             var indexInStartElement = 0;
@@ -34,7 +34,7 @@
 
             for (var i = startElementIndex; i < this._elements.length; i++) {
                 var content = this._elements[startElementIndex];
-                var result = content.$createSpan(width, isFirstSpan, indexInStartElement);
+                var result = content.$createSpan(width, isFirstSpan, indexInStartElement, format);
 
                 //得到 span 返回结果
                 if (result.span != null) {
