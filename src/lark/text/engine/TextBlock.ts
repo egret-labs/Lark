@@ -18,7 +18,7 @@ module lark.text {
             this._content = value;
         }
 
-        createTextLine(previousLine: TextLine = null, width = 1000000, lineOffset = 0.0, fitSomething: boolean = false): TextLine {
+        createTextLine(previousLine: TextLine = null, width = 1000000, lineOffset = 0.0, format?:ITextStyle): TextLine {
 
 
             var start = previousLine == null ? 0 : previousLine.atomCount + previousLine.textBlockBeginIndex;
@@ -34,7 +34,7 @@ module lark.text {
             var firstSpan = true;
             var hasGraphic = false;
             while (currentWidth < width) {
-                var result = content.$createSpan(width - currentWidth, firstSpan, start + currentLength);
+                var result = content.$createSpan(width - currentWidth, firstSpan, start + currentLength,format);
                 if (result.span == null)
                     break;
                 if (textLine == null)
@@ -161,16 +161,17 @@ module lark.text {
         }
 
 
-        createAllTextLines(width = 1000000, format?:TextFormat): text.TextLine[]{
+        createAllTextLines(width = 1000000, format?:ITextFieldStyle): text.TextLine[]{
             var line: text.TextLine = null;
             var lines: text.TextLine[] = [];
             var leftBlockAreas: Rectangle[] = [];
             var rightBlockAreas: Rectangle[] = [];
-            var offset = format.indent;
+            var offset = format.indent || 0;
             var rightOffset = width
-            var y = format.leading;
+            var leading = format.leading || 0;
+            var y = leading;
             while (true) {
-                line = this.createTextLine(line, rightOffset, offset);
+                line = this.createTextLine(line, rightOffset, offset,format);
                 if (!line)
                     break;
                 line.y = y;
@@ -183,10 +184,10 @@ module lark.text {
                     rightBlockAreas = rightBlockAreas.concat(line.rightOverflowAreas);
                 }
                 //line.x = offset;
-                y += line.textHeight + format.leading;
+                y += line.textHeight + leading;
                 lines.push(line);
-                offset = this.getLineOffset(leftBlockAreas, y, format.leading + format.fontSize);
-                rightOffset = this.getRightLineOffset(rightBlockAreas, width, y, format.leading + format.fontSize);
+                offset = this.getLineOffset(leftBlockAreas, y, leading + format.fontSize);
+                rightOffset = this.getRightLineOffset(rightBlockAreas, width, y, leading + format.fontSize);
             }
             return lines;
         }

@@ -43,9 +43,6 @@ module lark {
                 this.createChildren(texture)
             }
             
-            window.addEventListener("resize", e=> {
-                setTimeout(() => this.createChildren(this.texture), 300);
-            });
         }
 
         createChildren(texture: Texture) {
@@ -75,38 +72,43 @@ module lark {
             };
 
             var style: ITextStyle = {
-                fontFamily: "'Microsoft YaHei'",
-                float: TextFloat.LEFT,
-                fontSize: 40,
-                color: 0x000000,
-                bold: false,
-                italic: false,
-                verticalAlign: VerticalAlign.BOTTOM
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize:30
             };
 
-            var red: ITextStyle = mergeStyle(style, { color: 0xFF0000 });
-            var green: ITextStyle = mergeStyle(style, { color: 0x00FF00 });
-            var blue: ITextStyle = mergeStyle(style, { color: 0x0000FF });
 
-            var textNodes: Array<string|IRichTextNode> = [{
-                width: 300,
-                height: 150,
-                src: "http://rescdn.qqmail.com/bizmail/zh_CN/htmledition/images/logo/logo_biz_7_00cf31a.gif",
-                style: { float: TextFloat.RIGHT }
-            }, {
-                    text: "Hello World",
-                    style: red
+            var textNodes: Array<string|IRichTextNode> = ["Hi ",
+
+                {
+                    width: 100,
+                    height: 100,
+                    src: "http://rescdn.qqmail.com/bizmail/zh_CN/htmledition/images/logo/logo_biz_7_00cf31a.gif",
+                    style: { float: TextFloat.LEFT }
+                },
+                {
+                    text: "setTimeout(() => rich.width = this.stage ? this.stage.stageWidth : 500, 300); \\n World",
+                    style: { color: 0xFF0000, italic: true }
                 }, {
-                    text: " Blue text",
-                    style: blue
+                    text: " rich.height = 300;\n",
+                    style: { color: 0x00FF00, bold: true }
                 }, {
-                    text: " Green text",
-                    style: green
-                },bitmap,"Hi"];
+                    text: " rich.width = this.stage ? this.stage.stageWidth : 500;",
+                    style: { color: 0x0000FF }
+                }," Hi"];
             
             var rich = new RichTextField(style);
             rich.nodes = textNodes;
+            rich.wordWrap = true;
+            rich.multiline = true;
+            
+            rich.width = this.stage ? this.stage.stageWidth : 500;
+            rich.height = 300;
+            rich.y = 300;
             this.addChild(rich);
+            window["t"] = rich;
+            window.addEventListener("resize", e=> {
+                setTimeout(() => rich.width = this.stage ? this.stage.stageWidth : 500, 300);
+            });
         }
 
         
@@ -121,23 +123,3 @@ module lark {
 
 
 
-
-
-function convertImgToBase64(url, callback, outputFormat) {
-    var canvas = <HTMLCanvasElement>document.createElement('CANVAS');
-    var ctx = canvas.getContext('2d');
-    var img = new Image;
-    //img.crossOrigin = 'Anonymous';
-    img.onload = function () {
-        canvas.height = img.height;
-        canvas.width = img.width;
-        ctx.drawImage(img, 0, 0);
-        var dataURL = canvas.toDataURL(outputFormat || 'image/png');
-        console.log(dataURL);
-        // Clean up
-        canvas = null;
-    };
-    img.src = url;
-}
-
-convertImgToBase64("http://localhost:8080/image/px.png",null,null);

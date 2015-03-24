@@ -31,21 +31,30 @@ module lark {
 
     export type RichTextNode = string | IRichTextNode;
 
+    export interface IRichTextNode {
+        text?: string;
+        style?: ITextStyle;
+        width?: number;
+        height?: number;
+        src?: string;
+    }
+
     export class RichTextField extends TextField {
 
-        public constructor(format?: TextFormat) {
+        public constructor(format?: ITextFieldStyle) {
             super(null, format);
         }
 
         protected _nodes: RichTextNode[];
 
-        public get nodes(): RichTextNode[]{
+        public get nodes(): RichTextNode[] {
             return this._nodes;
         }
 
         public set nodes(value: RichTextNode[]) {
             this._nodes = value;
         }
+
 
         protected _makeContents() {
             if (!hasFlag(this._textFieldFlags, TextFieldFlags.TextDirty)
@@ -55,7 +64,7 @@ module lark {
             var contents: text.ContentElement[] = [];
             var nodes = this._nodes, length = this._nodes.length;
             for (var i = 0; i < length; i++) {
-                var node:any = nodes[i];
+                var node: any = nodes[i];
                 var element: text.ContentElement = null;
                 if ((<string>node).charAt) {
                     element = this.parseString(node);
@@ -74,7 +83,7 @@ module lark {
             this._contents = [new text.GroupElement(contents)];
         }
 
-        protected parseGraphic(node: DisplayObject, format?: text.ElementFormat) {
+        protected parseGraphic(node: DisplayObject, format?: ITextStyle) {
             var ge = new text.GraphicElement(node, node.width, node.height, format);
             return ge;
         }
@@ -82,43 +91,63 @@ module lark {
         protected parseImage(node: IRichTextNode) {
             var width = node.width, height = node.height;
             var bitmap = new Bitmap();
+            bitmap.texture = getTexture(node.src, bitmap);
             bitmap.width = width;
             bitmap.height = height;
-            bitmap.texture = RichTextField.getPlaceholderTexture();
-
-            var image = new Image(width, height);
-            image.src = node.src;
-            image.onload = e=> {
-                var texture = new Texture();
-                texture.$setBitmapData(image);
-                bitmap.texture = texture;
-                bitmap.width = width;
-                bitmap.height = height;
-            };
-
             return this.parseGraphic(bitmap, node.style);
         }
 
         protected parseString(node: string) {
-            return this.parseTextNode({ text: node });
+            return this.parseTextNode({ text: node, style: this._format });
         }
 
         protected parseTextNode(node: IRichTextNode) {
-            var textElement = new text.TextElement(node.text, node.style);
+            var textElement = new text.TextElement(node.text, this.normalizeStyle(node.style));
             return textElement;
         }
 
-        protected static $PlaceholderTexture:Texture = null;
-        public static getPlaceholderTexture() {
-            if (RichTextField.$PlaceholderTexture == null) {
-                var img = new Image();
-                img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQIW2NkAAIAAAoAAggA9GkAAAAASUVORK5CYII=";
-                img.height = img.width = 1;
-                var texture: Texture = new Texture();
-                texture.$setBitmapData(img);
-                RichTextField.$PlaceholderTexture = texture;
-            }
-            return RichTextField.$PlaceholderTexture;
-        }
     }
+
+
+    var $1px: Texture = null;
+    var $TextureCache: { [src: string]: Texture } = {};
+
+    function $get1px() {
+        if ($1px == null) {
+            var img = new Image(1, 1);
+            img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQIW2NkAAIAAAoAAggA9GkAAAAASUVORK5CYII=";
+            var texture: Texture = new Texture();
+            texture.$setBitmapData(img);
+            $1px = texture;
+        }
+        return $1px;
+    }
+
+    function getTexture(src: string, bitmap: Bitmap): Texture {
+        if (src in $TextureCache) {
+            return $TextureCache[src];
+        }
+        else {
+            loadTexture(src, bitmap);
+        }
+        return $get1px();
+    }
+
+    function loadTexture(src: string, bitmap: Bitmap) {
+
+        var image = new Image();
+        image.src = src;
+        image.onload = e=> {
+            var texture = new Texture();
+            texture.$setBitmapData(image);
+            $TextureCache[src] = texture;
+
+            var width = bitmap.width;
+            var height = bitmap.height;
+            bitmap.texture = texture;
+            bitmap.width = width;
+            bitmap.height = height;
+        };
+    }
+
 }

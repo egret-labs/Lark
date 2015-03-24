@@ -2,7 +2,7 @@
     /**
      * 最小的文本显示对象
      */
-    export class TextSpan extends DisplayObject implements ISpan {
+    export class TextSpan extends DisplayObject {
         constructor(
             text: string = null,
             fontString: string = "sans-serif",
@@ -47,7 +47,7 @@
             var node = <lark.player.TextNode>this.$renderNode;
             node.text = this.text;
             node.size = this.size;
-            node.font = this.$toFontString();
+            node.font = this.fontString;
             node.style = this.$toColorString();
             node.textWidth = this.textWidth;
         }

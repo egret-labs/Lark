@@ -1,6 +1,6 @@
 ﻿module lark.text {
     export class TextElement extends ContentElement {
-        constructor(text: string = null, elementFormat: ElementFormat = {}) {
+        constructor(text: string = null, elementFormat: ITextStyle = {}) {
             super();
             this._text = text;
             this._elementFormat = elementFormat;
@@ -45,17 +45,18 @@
             this._text = left + newText + right;
         }
 
-        public $createSpan(width: number, isFirstSpan: boolean = false, startIndex: number = 0): CreateSpanResult {
+        public $createSpan(width: number, isFirstSpan: boolean = false, startIndex: number = 0, superformat?: ITextStyle): CreateSpanResult {
             if (width <= 0 || startIndex < 0 || startIndex > this._text.length)
                 throw new Error("TextElement:$createSpan arguments error");
 
 
             var format = this._elementFormat;
-            var fontString = format.fontFamily;
+            var fontString = TextElement.toFontString(format);
 
             var textAtoms = this.split(this._text.substr(startIndex));
             var textLength = 0;
             var currentWidth = 0;
+            var full = false;
             for (var i = 0; i < textAtoms.length; i++) {
                 var atom = textAtoms[i];
                 var w = TextElement.measureText(atom, fontString);
@@ -65,6 +66,11 @@
                     textLength += atom.length;
                     if (testW >= width)
                         break;
+                    if (atom.indexOf("\n") >= 0)
+                    {
+                        full = true;
+                        break;
+                    }
                 }
                 else {
                     break;
@@ -72,7 +78,7 @@
                 isFirstSpan = false;
             }
 
-            var full = currentWidth >= width;
+            full = full || currentWidth >= width;
 
 
             var span: TextSpan = null;
@@ -123,6 +129,10 @@
                 width += w;
             }
             return width;
+        }
+
+        static toFontString(style: ITextStyle) {
+            return (style.italic ? "italic" : "") + " " + (style.bold ? "bold" : "") +" " + style.fontSize +"px " + (style.fontFamily || "sans-serif") ;
         }
     }
 

@@ -1,6 +1,6 @@
 ﻿module lark.text {
     export class GraphicElement extends ContentElement {
-        public constructor(graphic: DisplayObject = null, public elementWidth: number = 15.0, public elementHeight: number = 15.0, elementFormat?: ElementFormat) {
+        public constructor(graphic: DisplayObject = null, public elementWidth: number = 15.0, public elementHeight: number = 15.0, elementFormat?: ITextStyle) {
             super();
             this._graphic = graphic;
             this._graphic.width = elementWidth;
@@ -33,7 +33,7 @@
             this._graphic = value;
         }
 
-        public $createSpan(width: number,isFirstSpan:boolean =false, startIndex: number = 0): CreateSpanResult {
+        public $createSpan(width: number, isFirstSpan: boolean = false, startIndex: number = 0,format?: ITextStyle): CreateSpanResult {
             if (startIndex > 0)
                 return {
                     ended: true,

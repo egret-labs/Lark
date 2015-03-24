@@ -4,13 +4,13 @@
             super();
         }
 
-        protected _elementFormat: ElementFormat = null;
+        protected _elementFormat: ITextStyle = null;
 
-        public get elementFormat(): ElementFormat {
+        public get elementFormat(): ITextStyle {
             return this._elementFormat;
         }
 
-        public set elementFormat(value: ElementFormat) {
+        public set elementFormat(value: ITextStyle) {
             if (this._elementFormat === value)
                 return;
             this._elementFormat = value;
@@ -59,7 +59,7 @@
 
         public userData: any = null;
 
-        public $createSpan(width: number, isFirstSpan: boolean = false, startIndex: number = 0): CreateSpanResult {
+        public $createSpan(width: number, isFirstSpan: boolean = false, startIndex: number = 0, format?:ITextStyle): CreateSpanResult {
             return null;
         }
     }
@@ -69,6 +69,6 @@
         length?: number;
         ended?: boolean;
         full?: boolean;
-        format?: ElementFormat;
+        format?: ITextStyle;
     }
 }

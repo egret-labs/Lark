@@ -43,6 +43,83 @@ module lark {
         Dirty = LineDirty | ScrollVDirty
     }
 
+
+    /**
+     * TextFormat 类描述字符格式设置信息。使用 TextFormat 类可以为文本字段创建特定的文本格式。
+     * 您可以将文本格式应用于静态文本字段和动态文本字段。
+     * 
+     */
+    export interface ITextFieldStyle extends ITextStyle {
+
+        /**
+         * 表示段落的对齐方式。
+         */
+        align?: string;
+
+
+        /**
+         * 表示块缩进，以像素为单位。
+         */
+        blockIndent?: number;
+
+
+        /**
+         * 表示从左边距到段落中第一个字符的缩进。
+         */
+        indent?: number;
+
+
+
+        /**
+         * 一个整数，表示行与行之间的垂直间距（称为前导）量。
+         */
+        leading?: number;
+
+
+        /**
+         * 段落的左边距，以像素为单位。
+         */
+        leftMargin?: number;
+
+
+        /**
+         * 段落的右边距，以像素为单位。
+         */
+        rightMargin?: number;
+
+
+
+        /**
+         * 表示显示超链接的目标窗口。
+         */
+        target?: string;
+        
+
+        /**
+         * 表示使用此文本格式的文本的目标 URL。
+         */
+        url?: string;
+
+    }
+
+    
+
+    var BaseStyle: ITextFieldStyle = {
+        fontFamily: "sans-serif",
+        fontSize: 12,
+        color: 0x000000,
+        bold: false,
+        italic: false,
+        float: TextFloat.NONE,
+        leftMargin: 0,
+        rightMargin: 0,
+        blockIndent: 0,
+        align: "left",
+        indent: 0,
+        leading: 0,
+        verticalAlign: VerticalAlign.BOTTOM
+    }
+
     export function hasFlag(prop:number, flag:number):boolean{
         return (prop & flag) == flag;
     }
@@ -57,13 +134,14 @@ module lark {
         /**
          * 创建一个TextField对象
          */
-        public constructor(text:string,format?:TextFormat) {
+        public constructor(text:string,format?:ITextFieldStyle) {
             super();
             this._text = text;
-            this._format = format;
+            this._format = this.normalizeStyle(format,BaseStyle);
             this.$invalidateContentBounds();
             
-            this.addEventListener(Event.RENDER,this.onEnterFrame,this);
+            this.addEventListener(Event.ENTER_FRAME, this.onEnterFrame, this);
+            //this.stage.invalidate();
         }
 
 
@@ -84,11 +162,12 @@ module lark {
             this.$setTextFieldFlags(TextFieldFlags.TextDirty);
         }
 
-        protected _format: TextFormat;
-        public get format(): TextFormat {
+        protected _format: ITextFieldStyle;
+        public get format(): ITextFieldStyle {
             return this._format;
         }
-        public set format(value: TextFormat) {
+        public set format(value: ITextFieldStyle) {
+            value = this.normalizeStyle(value, BaseStyle);
             this._format = value;
             this.$setTextFieldFlags(TextFieldFlags.FormatDirty);
         }
@@ -115,9 +194,9 @@ module lark {
             this.$setTextFieldFlags(TextFieldFlags.WordWrapDirty);
         }
 
-        protected _width:number = 0;
+        protected _width:number = NaN;
         public get width(): number {
-            return this._width;
+            return this._width || this.$getTransformedBounds(this.$parent, Rectangle.TEMP).width;
         }
         public set width(value: number) {
             if (value == this._width)
@@ -126,9 +205,9 @@ module lark {
             this.$setTextFieldFlags(TextFieldFlags.Dirty);
         }
 
-        protected _height: number = 0;
+        protected _height: number = NaN;
         public get height(): number {
-            return this._height;
+            return this._height || this.$getTransformedBounds(this.$parent, Rectangle.TEMP).height;
         }
         public set height(value: number) {
             if (value == this._height)
@@ -168,16 +247,20 @@ module lark {
             var textBlock = new text.TextBlock();
 
 
-            var y = format.leading;
-            var x = format.leftMargin;
-            var w = this._width - format.leftMargin - format.rightMargin - format.blockIndent;
+            var y = format.leading||0;
+            var x = format.leftMargin || 0;
+            var lm = format.leftMargin || 0,
+                rm = format.rightMargin || 0,
+                bidt = format.blockIndent || 0;
+
+            var w = (this._width||10000) - lm - rm - bidt;
             if (wrap == false)
                 w = 100000;
 
 
             for (var i = 0; i < contents.length; i++) {
                 var content = contents[i];
-                x = format.leftMargin + format.blockIndent;
+                x = lm + bidt;
                 textBlock.content = content;
                 var lines = textBlock.createAllTextLines(w, format);
                 this._textLines = this._textLines.concat(lines);
@@ -196,8 +279,8 @@ module lark {
                 var line = lines[i];
                 this.addChild(line);
                 line.y = y;
-                y += lines[i].height + this._format.leading;
-                if (y > this._height)
+                y += lines[i].textHeight + (this._format.leading || 0);
+                if (y > (this._height||10000))
                     break;
             }
             this._textFieldFlags &= ~TextFieldFlags.ScrollVDirty;
@@ -212,7 +295,22 @@ module lark {
             if (!this._multiline)
                 lines = [lines.join(' ')];
 
-            this._contents = lines.map(t=> new text.TextElement(t));
+            this._contents = lines.map(t=> new text.TextElement(t, this._format));
+        }
+
+        protected normalizeStyle(change: ITextFieldStyle,base:ITextFieldStyle = this._format): ITextFieldStyle {
+            var style: ITextStyle = {};
+            for (var p in base) {
+                if (base[p] !== undefined)
+                    style[p] = base[p];
+            }
+
+            for (var p in change) {
+                if (change[p] !== undefined)
+                    style[p] = change[p];
+            }
+
+            return style;
         }
     }
 }
