@@ -67,7 +67,8 @@ module lark {
         public static ENTER_FRAME:string = "enterFrame";
         /**
          * 渲染事件，监听此事件将会在本帧末即将开始渲染的前一刻触发回调，这是一个广播事件，可以在任何一个显示对象上监听，无论它是否在显示列表中。
-         * 注意：与Event.ENTER_FRAME事件不同，Event.RENDER事件会确保在“本帧”末被回调，所以对于在回调函数执行期间再添加的Event.RENDER事件监听将会无效。
+         * 注意：每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 stage.invalidate() 方法，由于每帧只会触发一次屏幕刷新，
+         * 若在 Event.RENDER 回调函数执行期间再次调用stage.invalidate()，将会被忽略。
          */
         public static RENDER:string = "render";
         /**

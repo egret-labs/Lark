@@ -30,7 +30,6 @@
 module lark.player {
 
     /**
-     * @excluded
      * IPlayerContext接口定义Lark播放器与平台相关的操作，包括绘制，网络，交互操作等。
      */
     export interface IPlayerContext extends IHashObject {
@@ -59,6 +58,9 @@ module lark.player {
          */
         drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number): void;
 
+        /**
+         * 重置所有属性
+         */
         reset():void;
 
         beginDrawDirtyRect():void;

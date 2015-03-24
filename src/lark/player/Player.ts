@@ -29,7 +29,6 @@
 
 module lark.player {
     /**
-     * @excluded
      * Lark播放器
      */
     export class Player extends HashObject {

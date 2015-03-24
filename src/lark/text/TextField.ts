@@ -62,7 +62,7 @@ module lark {
             this._format = format;
             this.$invalidateContentBounds();
 
-            this.addEventListener(Event.ENTER_FRAME,this.onEnterFrame,this);
+            this.addEventListener(Event.RENDER,this.onEnterFrame,this);
         }
 
 

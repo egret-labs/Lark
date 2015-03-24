@@ -29,16 +29,26 @@
 
 module lark.player {
 
+    /**
+     * Lark心跳控制器
+     */
     export class Ticker {
 
         static $instance:Ticker;
-
+        /**
+         * 获取单例，注意只能获取一次，用于初始化。
+         */
         public static getInstance():Ticker{
             if(!Ticker.$instance){
                 return Ticker.$instance = new Ticker();
             }
             return null;
         }
+
+        /**
+         * 是否要广播Event.RENDER事件的标志。
+         */
+        static $invalidateRenderFlag:boolean = false;
 
         public constructor(){
             if(Ticker.$instance){
@@ -80,7 +90,10 @@ module lark.player {
                 return;
             }
             this.broadcastEnterFrame();
-            this.broadcastRender();
+            if(Ticker.$invalidateRenderFlag){
+                this.broadcastRender();
+                Ticker.$invalidateRenderFlag = false;
+            }
             for(var i=0;i<length;i++){
                 list[i].render();
             }
@@ -114,11 +127,11 @@ module lark.player {
          */
         private broadcastRender():void {
             var list:Array<any> = DisplayObject.$renderCallBackList;
-            DisplayObject.$renderCallBackList = null;
             var length:number = list.length;
             if(length===0){
                 return;
             }
+            list = list.concat();
             var event:Event = this.reuseEvent;
             event.$type = Event.RENDER;
             for (var i:number = 0; i < length; i++) {
@@ -128,7 +141,6 @@ module lark.player {
                 event.$currentTarget = target;
                 eventBin.listener.call(eventBin.thisObject, event);
             }
-            DisplayObject.$renderCallBackList = [];
         }
     }
 }

@@ -82,6 +82,13 @@ module lark {
         }
 
         /**
+         * 调用 invalidate() 方法后，在显示列表下次呈现时，Lark 会向每个已注册侦听 Event.RENDER 事件的显示对象发送一个 Event.RENDER 事件。
+         * 每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 invalidate() 方法。
+         */
+        public invalidate():void {
+            lark.player.Ticker.$invalidateRenderFlag = true;
+        }
+        /**
          * 显示列表的结构发生改变
          */
         $displayListTreeChanged:boolean = true;
