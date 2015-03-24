@@ -38,7 +38,8 @@ module lark {
         MultilineDirty = 0x000004,
         WordWrapDirty = 0x000008,
         ScrollVDirty = 0x000010,
-        LineDirty = TextDirty | FormatDirty | MultilineDirty | WordWrapDirty,
+        RichNodeDirty = 0x000010,
+        LineDirty = TextDirty | FormatDirty | MultilineDirty | WordWrapDirty | RichNodeDirty,
         Dirty = LineDirty | ScrollVDirty
     }
 
@@ -56,7 +57,7 @@ module lark {
         /**
          * 创建一个TextField对象
          */
-        public constructor(text:string,format:TextFormat=TextFormat.$defaultTextFormat) {
+        public constructor(text:string,format?:TextFormat) {
             super();
             this._text = text;
             this._format = format;
@@ -67,7 +68,7 @@ module lark {
         }
 
 
-        private _textFieldFlags: number = TextFieldFlags.Dirty;
+        protected _textFieldFlags: number = TextFieldFlags.Dirty;
 
         $setTextFieldFlags(flags: TextFieldFlags) {
             this._textFieldFlags |= flags;
@@ -149,24 +150,23 @@ module lark {
         }
 
         private onEnterFrame() {
-                if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0)
-                    this.$createLines();
-                if ((this._textFieldFlags & TextFieldFlags.ScrollVDirty) == TextFieldFlags.ScrollVDirty)
-                    this.$updateChildren();
-            }
+            if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0)
+                this.$createLines();
+            if ((this._textFieldFlags & TextFieldFlags.ScrollVDirty) == TextFieldFlags.ScrollVDirty)
+                this.$updateChildren();
+        }
 
         static LineBreaks = /\r|\n/;
         private _textLines: Array<text.TextLine> = []; 
         $createLines() {
             this._textLines.length = 0;
-            this._splitParagraphs();
-            var ps = this._paragraphs;
+            this._makeContents();
+            var contents = this._contents;
 
 
             var wrap = this._wordWrap && this._multiline;
             var format = this._format;
-            var textElement = new text.TextElement(null,format);
-            var textBlock = new text.TextBlock(textElement);
+            var textBlock = new text.TextBlock();
 
 
             var y = format.leading;
@@ -176,10 +176,10 @@ module lark {
                 w = 100000;
 
 
-            for (var i = 0; i < ps.length; i++) {
-                var t = ps[i];
+            for (var i = 0; i < contents.length; i++) {
+                var content = contents[i];
                 x = format.leftMargin + format.blockIndent;
-                textElement.text = t;
+                textBlock.content = content;
                 var lines = textBlock.createAllTextLines(w, format);
                 this._textLines = this._textLines.concat(lines);
             }
@@ -204,15 +204,16 @@ module lark {
             this._textFieldFlags &= ~TextFieldFlags.ScrollVDirty;
         }
 
-        private _paragraphs: string[];
-        private _splitParagraphs() {
+        protected _contents: text.ContentElement[];
+        protected _makeContents() {
             if (!hasFlag(this._textFieldFlags, TextFieldFlags.TextDirty) && !hasFlag(this._textFieldFlags, TextFieldFlags.MultilineDirty))
                 return;
             var lines = this._text.split(TextField.LineBreaks);
-            if (this._multiline)
-                this._paragraphs = lines;
-            else
-                this._paragraphs = [lines.join(" ")];
+            
+            if (!this._multiline)
+                lines = [lines.join(' ')];
+
+            this._contents = lines.map(t=> new text.TextElement(t));
         }
     }
 }

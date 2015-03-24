@@ -40,85 +40,85 @@ module lark {
      * 您可以将文本格式应用于静态文本字段和动态文本字段。
      * 
      */
-    export class TextFormat extends text.ElementFormat {
+    export interface TextFormat extends text.ElementFormat {
 
-        static $defaultTextFormat: TextFormat = new TextFormat();
+        //static $defaultTextFormat: TextFormat = new TextFormat();
 
         /**
          * 创建一个TextFormat对象
          */
-        public constructor(align:string = "left") {
-            super();
-        }
+        //public constructor(align:string = "left") {
+        //    super();
+        //}
 
         /**
          * 表示段落的对齐方式。
          */
-        public align: string = null;
+        align?: string;
 
 
         /**
          * 表示块缩进，以像素为单位。
          */
-        public blockIndent: number = 0;
+        blockIndent?: number;
 
 
         /**
          * 表示从左边距到段落中第一个字符的缩进。
          */
-        public indent: number = 0;
+        indent?: number;
 
 
 
         /**
          * 一个整数，表示行与行之间的垂直间距（称为前导）量。
          */
-        public leading: number = 0;
+         leading?: number;
 
 
         /**
          * 段落的左边距，以像素为单位。
          */
-        public leftMargin : number = 0;
+        leftMargin? : number ;
 
 
         /**
          * 段落的右边距，以像素为单位。
          */
-        public rightMargin: number = 0;
+        rightMargin?: number ;
 
 
 
         /**
          * 表示显示超链接的目标窗口。
          */
-        public target : string = null;
+        target? : string;
         
 
         /**
          * 表示使用此文本格式的文本的目标 URL。
          */
-        public url: string = null;
+        url?: string ;
 
-        public equals(other: TextFormat) {
+        //public equals(other: TextFormat) {
             
-            return super.equals(other) || other.align == this.align &&
-                other.blockIndent == this.blockIndent &&
-                other.indent == this.indent &&
-                other.leading == this.leading &&
-                other.leftMargin == this.leftMargin &&
-                other.rightMargin == this.rightMargin &&
-                other.target == this.target &&
-                other.url == this.url;
-        }
+        //    return super.equals(other) || other.align == this.align &&
+        //        other.blockIndent == this.blockIndent &&
+        //        other.indent == this.indent &&
+        //        other.leading == this.leading &&
+        //        other.leftMargin == this.leftMargin &&
+        //        other.rightMargin == this.rightMargin &&
+        //        other.target == this.target &&
+        //        other.url == this.url;
+        //}
 
-        public clone(): TextFormat {
-            var format = new TextFormat();
-            for (var p in this) {
-                format[p] = this[p];
-            }
-            return format;
-        }
+        //public clone(): TextFormat {
+        //    var format = new TextFormat();
+        //    for (var p in this) {
+        //        format[p] = this[p];
+        //    }
+        //    return format;
+        //}
     }
-    TextFormat.$defaultTextFormat.fontDescription = new text.FontDescription();
+    //TextFormat.$defaultTextFormat.fontDescription = new text.FontDescription();
 }

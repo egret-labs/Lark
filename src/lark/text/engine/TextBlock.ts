@@ -161,7 +161,7 @@ module lark.text {
         }
 
 
-        createAllTextLines(width = 1000000, format:TextFormat = TextFormat.$defaultTextFormat): text.TextLine[]{
+        createAllTextLines(width = 1000000, format?:TextFormat): text.TextLine[]{
             var line: text.TextLine = null;
             var lines: text.TextLine[] = [];
             var leftBlockAreas: Rectangle[] = [];

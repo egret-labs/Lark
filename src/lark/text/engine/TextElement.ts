@@ -1,6 +1,6 @@
 ﻿module lark.text {
     export class TextElement extends ContentElement {
-        constructor(text: string = null, elementFormat: ElementFormat = TextFormat.$defaultTextFormat) {
+        constructor(text: string = null, elementFormat: ElementFormat = {}) {
             super();
             this._text = text;
             this._elementFormat = elementFormat;
@@ -51,8 +51,7 @@
 
 
             var format = this._elementFormat;
-            var font = format.fontDescription;
-            var fontString = format.toFontString();
+            var fontString = format.fontFamily;
 
             var textAtoms = this.split(this._text.substr(startIndex));
             var textLength = 0;
@@ -78,7 +77,7 @@
 
             var span: TextSpan = null;
             if (currentWidth > 0) {
-                span = new TextSpan(this._text.substr(startIndex, textLength), font.toString(), currentWidth, format.fontSize, format.color);
+                span = new TextSpan(this._text.substr(startIndex, textLength), fontString, currentWidth, format.fontSize, format.color);
             } 
             return {
                 span: span,
