@@ -65,11 +65,38 @@ module lark.player {
          */
         public maxY:number = 0;
 
-        public setRect(minX:number,minY:number,width:number,height:number):void{
-            this.minX = minX;
-            this.minY = minY;
-            this.maxX = minX+width;
-            this.maxY = minY+height;
+        public clearRect():void{
+            this.minX = this.minY = this.maxX = this.maxY = 0;
+        }
+
+        public updateRect(bounds:Rectangle): void {
+
+            var m = this.matrix;
+            var a:number = m.a,b:number = m.b,c:number=m.c,d:number=m.d,tx:number=m.tx,ty:number=m.ty;
+            var x:number = bounds.x,y:number = bounds.y,w:number = bounds.width,h:number=bounds.height;
+            var round = Math.round;
+            var x0 = round(a * x + c * y + tx);
+            var y0 = round(b * x + d * y + ty);
+            var x1 = round(a * (x + w) + c * y + tx);
+            var y1 = round(b * (x + w) + d * y + ty);
+            var x2 = round(a * (x + w) + c * (y + h) + tx);
+            var y2 = round(b * (x + w) + d * (y + h) + ty);
+            var x3 = round(a * x + c * (y + h) + tx);
+            var y3 = round(b * x + d * (y + h) + ty);
+
+            var tmp;
+
+            if (x0 > x1) { tmp = x0; x0 = x1; x1 = tmp; }
+            if (x2 > x3) { tmp = x2; x2 = x3; x3 = tmp; }
+
+            this.minX = x0 < x2 ? x0 : x2;
+            this.maxX = x1 > x3 ? x1 : x3;
+
+            if (y0 > y1) { tmp = y0; y0 = y1; y1 = tmp; }
+            if (y2 > y3) { tmp = y2; y2 = y3; y3 = tmp; }
+
+            this.minY = y0 < y2 ? y0 : y2;
+            this.maxY = y1 > y3 ? y1 : y3;
             var stage = this.target.$stage;
             this.outOfScreen = !this.intersects(0,0,stage.$stageWidth,stage.$stageHeight);
         }

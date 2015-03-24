@@ -17,9 +17,9 @@
                 fontString = "sans-serif";
             this.fontString = fontString;
             this.textWidth = textWidth;
-            this.size = size;
-            this.color = color;
-            this.length = length;
+            this.size = +size|0;
+            this.color = +color|0;
+            this.length = +length|0;
             this.$invalidateContentBounds();
         }
 
@@ -57,7 +57,16 @@
         }
 
         $toColorString() {
-            return lark.toColorString(this.color);
+            var value = this.color;
+            if(value < 0)
+                value = 0;
+            if(value > 16777215)
+                value = 16777215;
+            var color:string = value.toString(16).toUpperCase();
+            while(color.length<6){
+                color = "0"+color;
+            }
+            return "#"+color;
         }
     }
 }

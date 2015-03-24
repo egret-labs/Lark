@@ -48,20 +48,20 @@ module lark {
 
         private start(texture:Texture):void{
             var x=0,y=0;
-            for(var i=0;i<2500;i++){
+            for(var i=0;i<2000;i++){
                 var bitmap = new Bitmap();
                 bitmap.texture = texture;
                 bitmap.x = x;
                 bitmap.y = y;
-                //bitmap.scaleX = bitmap.scaleY = Math.random();
-                //bitmap.rotation = Math.random()*360;
+                bitmap.scaleX = bitmap.scaleY = Math.random();
+                bitmap.rotation = Math.random()*360;
                 x += texture.width;
                 if(x>1920){
                     x = 0;
                     y += texture.height;
-                    //if(y>960){
-                    //    y = 0;
-                    //}
+                    if(y>960){
+                        y = 0;
+                    }
                 }
                 this.addChild(bitmap);
                 this.iconList.push(bitmap);
@@ -73,10 +73,10 @@ module lark {
             this.addChild(this.targetIcon);
             this.iconList.push(this.targetIcon);
             this.addChild(FPS.display);
-            lark.player.WebTicker.getInstance().register(this.onTick,this);
+            this.addEventListener(Event.ENTER_FRAME,this.onTick,this);
         }
 
-        private onTick():void{
+        private onTick(event:Event):void{
             this.targetIcon.rotation += 2;
             //var list = this.iconList;
             //var length = list.length;

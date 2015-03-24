@@ -27,48 +27,24 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark {
 
     /**
-     * IPlayerContext接口定义Lark播放器与平台相关的操作，包括绘制，网络，交互操作等。
+     * EventPhase 可为 Event 类的 eventPhase 属性提供值。
      */
-    export interface IPlayerContext extends IHashObject {
+    export enum EventPhase{
 
         /**
-         * 初始化播放器上下文
+         * 捕获阶段，是事件流的第一个阶段。
          */
-        initialize(stage:Stage):void;
+        CAPTURING_PHASE = 1,
         /**
-         * 清除整个屏幕
+         * 目标阶段，是事件流的第二个阶段。
          */
-        clearScreen():void;
-
+        AT_TARGET = 2,
         /**
-         * 清除屏幕的部分渲染区域
+         * 冒泡阶段，是事件流的第三个阶段。
          */
-        clearRect(x:number, y:number, width:number, height:number):void;
-
-        /**
-         * 绘制图片到一个区域上
-         */
-        drawImage(texture:Texture, matrix:Matrix, globalAlpha:number): void;
-
-        /**
-         * 绘制文本到一个区域上
-         */
-        drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number): void;
-
-        /**
-         * 重置所有属性
-         */
-        reset():void;
-
-        beginDrawDirtyRect():void;
-
-        drawDirtyRect(x:number, y:number, width:number, height:number):void;
-
-        endDrawDirtyRect():void;
-
-        endDrawScreen():void;
+        BUBBLING_PHASE = 3
     }
 }

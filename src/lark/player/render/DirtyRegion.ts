@@ -68,16 +68,16 @@ module lark.player {
             if (minX >= maxX || minY >= maxY) {
                 return;
             }
-            if(minX<0){
-                minX=0;
+            if (minX < 0) {
+                minX = 0;
             }
-            if(minY<0){
+            if (minY < 0) {
                 minY = 0;
             }
-            if(maxX>this.w){
+            if (maxX > this.w) {
                 maxX = this.w;
             }
-            if(maxY>this.h){
+            if (maxY > this.h) {
                 maxY = this.h;
             }
             var startX = minX >> this.sizeInBits;
@@ -93,15 +93,20 @@ module lark.player {
             }
         }
 
+        public dirtyRatio:number = 0;
+
         gatherRegions(regions:Region[]) {
+            var areas:number = 0;
             for (var x = 0; x < this.c; x++) {
                 for (var y = 0; y < this.r; y++) {
                     var region = this.grid[x][y];
                     if (!region.isEmpty()) {
                         regions.push(region);
+                        areas += region.area();
                     }
                 }
             }
+            this.dirtyRatio = Math.round(areas*100/(this.w*this.h));
         }
 
         gatherOptimizedRegions(regions:Region[]) {
@@ -140,6 +145,10 @@ module lark.player {
             return (this.minX >= this.maxX || this.minY >= this.maxY);
         }
 
+        public area():number {
+            return (this.maxX - this.minX) * (this.maxY - this.minY);
+        }
+
         /**
          * 合并另一个矩形到当前矩形内
          */
@@ -158,7 +167,7 @@ module lark.player {
                 targetMaxY = this.endY;
             }
 
-            if(this.empty){
+            if (this.empty) {
                 this.empty = false;
                 this.minX = targetMinX;
                 this.maxX = targetMaxX;

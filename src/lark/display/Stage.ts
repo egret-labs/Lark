@@ -82,13 +82,26 @@ module lark {
         }
 
         /**
+         * 调用 invalidate() 方法后，在显示列表下次呈现时，Lark 会向每个已注册侦听 Event.RENDER 事件的显示对象发送一个 Event.RENDER 事件。
+         * 每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 invalidate() 方法。
+         */
+        public invalidate():void {
+            lark.player.Ticker.$invalidateRenderFlag = true;
+        }
+        /**
          * 显示列表的结构发生改变
          */
         $displayListTreeChanged:boolean = true;
-
+        /**
+         * 显示对象的渲染节点发生改变时，把自身的RenderNode对象注册到此列表上。
+         */
         $dirtyRenderNodes:any = {};
 
         $dirtyRegion:lark.player.DirtyRegion;
+        /**
+         * 一个阈值，当屏幕上脏矩形区域的面积占总面积的百分比小于或等于此值时启用脏矩形绘制，否则直接清空整个屏幕重新绘制所有显示对象。
+         */
+        $dirtyRatio:number = 80;
 
         $updateStageSize(width:number, height:number):void {
             this.$stageWidth = +width || 0;

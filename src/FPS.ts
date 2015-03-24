@@ -54,7 +54,7 @@ module lark {
         private static totalTick:number = 0;
         private static lastTime:number = 0;
 
-        public static update(drawCalls:number, ...args):void {
+        public static update(drawCalls:number,dirtyRatio:number, ...args):void {
             if(!FPS._textSpan){
                 return;
             }
@@ -66,7 +66,7 @@ module lark {
                 var lastFPS = Math.round(FPS.totalTick * 1000 / FPS.totalTime);
                 FPS.totalTick = 0;
                 FPS.totalTime = 0;
-                var text = "FPS:" + lastFPS + " draw:" + drawCalls + " cost: " + args.join(",");
+                var text = "FPS:" + lastFPS + " draw:" + drawCalls + ","+dirtyRatio+"% cost: " + args.join(",");
                 if (FPS._textSpan.text != text) {
                     FPS._textSpan.text = text;
                     FPS._textSpan.$markDirty();
