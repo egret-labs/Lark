@@ -68,7 +68,7 @@ module lark.player {
             if (!this.stage) {
                 this.initialize();
             }
-            Ticker.$instance.addPlayer(this);
+            Ticker.$instance.$addPlayer(this);
         }
 
         private initialize():void {
@@ -109,13 +109,13 @@ module lark.player {
                 return;
             }
             this.isPlaying = false;
-            Ticker.$instance.removePlayer(this);
+            Ticker.$instance.$removePlayer(this);
         }
 
         /**
          * 渲染屏幕
          */
-        public render():void {
+        $render():void {
             var t = lark.getTimer();
             this.computeDirtyRects();
             var t1 = lark.getTimer();

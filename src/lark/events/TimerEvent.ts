@@ -54,5 +54,17 @@ module lark {
         public constructor(type:string, bubbles?:boolean, cancelable?:boolean) {
             super(type, bubbles, cancelable);
         }
+
+        /**
+         * 使用指定的EventDispatcher对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         * @param target 事件派发目标
+         * @param type 事件类型
+         */
+        public static dispatchTimerEvent(target:IEventDispatcher,type:string):boolean{
+            var event = Event.create(TimerEvent,type);
+            var result = target.dispatchEvent(event);
+            Event.release(event);
+            return result;
+        }
     }
 }

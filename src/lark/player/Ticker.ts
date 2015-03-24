@@ -35,11 +35,12 @@ module lark.player {
     export class Ticker {
 
         static $instance:Ticker;
+
         /**
          * 获取单例，注意只能获取一次，用于初始化。
          */
-        public static getInstance():Ticker{
-            if(!Ticker.$instance){
+        public static getInstance():Ticker {
+            if (!Ticker.$instance) {
                 return Ticker.$instance = new Ticker();
             }
             return null;
@@ -50,8 +51,8 @@ module lark.player {
          */
         static $invalidateRenderFlag:boolean = false;
 
-        public constructor(){
-            if(Ticker.$instance){
+        public constructor() {
+            if (Ticker.$instance) {
                 throw new Error("Ticker实例化出错！不允许实例化多个Ticker对象。");
             }
         }
@@ -61,8 +62,8 @@ module lark.player {
         /**
          * 注册一个播放器实例并运行
          */
-        public addPlayer(player:Player):void{
-            if(this.playerList.indexOf(player)!=-1){
+        $addPlayer(player:Player):void {
+            if (this.playerList.indexOf(player) != -1) {
                 return;
             }
             this.playerList = this.playerList.concat();
@@ -72,36 +73,53 @@ module lark.player {
         /**
          * 停止一个播放器实例的运行。
          */
-        public removePlayer(player:Player):void{
+        $removePlayer(player:Player):void {
             var index = this.playerList.indexOf(player);
-            if(index!==-1){
+            if (index !== -1) {
                 this.playerList = this.playerList.concat();
-                this.playerList.splice(index,1);
+                this.playerList.splice(index, 1);
             }
         }
 
         private timerList:Timer[] = [];
 
-        public addTimer(timer:Timer):void{
+        $addTimer(timer:Timer):void {
+            if (this.timerList.indexOf(timer) != -1) {
+                return;
+            }
+            this.timerList = this.timerList.concat();
+            this.timerList.push(timer);
+        }
 
+        $removeTimer(timer:Timer):void {
+            var index = this.timerList.indexOf(timer);
+            if (index !== -1) {
+                this.timerList = this.timerList.concat();
+                this.timerList.splice(index, 1);
+            }
         }
 
         /**
          * 执行一次刷新
          */
-        public update():void{
-            var list = this.playerList;
-            var length = list.length;
-            if(length==0){
+        public update():void {
+            var playerList = this.playerList;
+            var length = playerList.length;
+            if (length == 0) {
                 return;
             }
+            var timerList = this.timerList;
+            var timerLength = timerList.length;
+            for (var i = 0; i < timerLength; i++) {
+                timerList[i].$update();
+            }
             this.broadcastEnterFrame();
-            if(Ticker.$invalidateRenderFlag){
+            if (Ticker.$invalidateRenderFlag) {
                 this.broadcastRender();
                 Ticker.$invalidateRenderFlag = false;
             }
-            for(var i=0;i<length;i++){
-                list[i].render();
+            for (i = 0; i < length; i++) {
+                playerList[i].$render();
             }
 
         }
@@ -114,7 +132,7 @@ module lark.player {
         private broadcastEnterFrame():void {
             var list = DisplayObject.$enterFrameCallBackList;
             var length = list.length;
-            if(length===0){
+            if (length === 0) {
                 return;
             }
             list = list.concat();
@@ -134,7 +152,7 @@ module lark.player {
         private broadcastRender():void {
             var list = DisplayObject.$renderCallBackList;
             var length = list.length;
-            if(length===0){
+            if (length === 0) {
                 return;
             }
             list = list.concat();

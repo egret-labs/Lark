@@ -236,13 +236,15 @@ module lark {
          * @param type 事件类型
          * @param bubbles 是否冒泡，默认false
          * @param data 附加数据(可选)
+         * @returns 如果成功调度了事件，则值为 true。值 false 表示失败或对事件调用了 preventDefault()。
          */
-        public dispatchEventWith(type:string, bubbles?:boolean, data?:any):void {
+        public dispatchEventWith(type:string, bubbles?:boolean, data?:any):boolean {
             if (bubbles || this.hasEventListener(type)) {
                 var event = Event.create(Event,type, bubbles);
                 event.data = data;
-                this.dispatchEvent(event);
+                var result = this.dispatchEvent(event);
                 Event.release(event);
+                return result;
             }
         }
     }

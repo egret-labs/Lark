@@ -41,7 +41,7 @@ module lark {
          * @param delay 计时器事件间的延迟（以毫秒为单位）。
          * @param repeatCount 设置的计时器运行总次数。
          */
-        constructor(delay:number, repeatCount:number = 0) {
+        public constructor(delay:number, repeatCount:number = 0) {
             super();
             this.delay = +delay||0;
             this.repeatCount = +repeatCount|0;
@@ -92,7 +92,7 @@ module lark {
             if(this._running)
                 return;
             this.lastTime = getTimer();
-            //Ticker.getInstance().register(this.onEnterFrame, this);
+            lark.player.Ticker.$instance.$addTimer(this);
             this._running = true;
         }
 
@@ -102,22 +102,22 @@ module lark {
         public stop() {
             if(!this._running)
                 return;
-            //Ticker.getInstance().unregister(this.onEnterFrame, this);
+            lark.player.Ticker.$instance.$removeTimer(this);
             this._running = false;
         }
 
         private lastTime:number = 0;
 
-        private onEnterFrame() {
+        $update() {
             var now = getTimer();
             var passTime = now - this.lastTime;
             if(passTime>this.delay){
                 this.lastTime = now;
                 this._currentCount++;
-                //TimerEvent.dispatchTimerEvent(this,TimerEvent.TIMER);
+                TimerEvent.dispatchTimerEvent(this,TimerEvent.TIMER);
                 if (this.repeatCount > 0 && this._currentCount >= this.repeatCount) {
                     this.stop();
-                    //TimerEvent.dispatchTimerEvent(this,TimerEvent.TIMER_COMPLETE);
+                    TimerEvent.dispatchTimerEvent(this,TimerEvent.TIMER_COMPLETE);
                 }
             }
         }
