@@ -50,6 +50,10 @@ module lark.player {
          * 是否要广播Event.RENDER事件的标志。
          */
         static $invalidateRenderFlag:boolean = false;
+        /**
+         * 需要立即刷新屏幕的标志
+         */
+        static $updateAfterEventsFlag:boolean = false;
 
         public constructor() {
             if (Ticker.$instance) {
@@ -137,23 +141,33 @@ module lark.player {
             }
             this.lastCount -= 1000;
             if(this.lastCount>0){
+                if(Ticker.$updateAfterEventsFlag){
+                    this.render();
+                }
                 return;
             }
             this.lastCount += this.frameInterval;
+            this.broadcastEnterFrame();
+            this.render();
+        }
+
+        /**
+         * 执行一次屏幕渲染
+         */
+        private render():void{
             var playerList = this.playerList;
             var length = playerList.length;
             if (length == 0) {
                 return;
             }
-            this.broadcastEnterFrame();
             if (Ticker.$invalidateRenderFlag) {
                 this.broadcastRender();
                 Ticker.$invalidateRenderFlag = false;
             }
-            for (i = 0; i < length; i++) {
+            for (var i = 0; i < length; i++) {
                 playerList[i].$render();
             }
-
+            Ticker.$updateAfterEventsFlag = false;
         }
 
         private reuseEvent:Event = new Event("")

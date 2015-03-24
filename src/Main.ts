@@ -73,11 +73,15 @@ module lark {
             this.addChild(this.targetIcon);
             this.iconList.push(this.targetIcon);
             this.addChild(FPS.display);
-            this.addEventListener(Event.ENTER_FRAME,this.onTick,this);
+            this.stage.frameRate = 24;
+            var timer = new Timer(16);
+            timer.addEventListener(TimerEvent.TIMER,this.onTick,this);
+            timer.start();
         }
 
-        private onTick(event:Event):void{
+        private onTick(event:TimerEvent):void{
             this.targetIcon.rotation += 2;
+            event.updateAfterEvent();
             //var list = this.iconList;
             //var length = list.length;
             //for(var i=0;i<length;i++){

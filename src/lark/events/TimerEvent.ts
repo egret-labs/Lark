@@ -66,5 +66,12 @@ module lark {
             Event.release(event);
             return result;
         }
+
+        /**
+         * 如果已修改显示列表，调用此方法将会忽略帧频限制，在此事件处理完成后立即重绘屏幕。
+         */
+        public updateAfterEvent():void{
+            lark.player.Ticker.$updateAfterEventsFlag = true;
+        }
     }
 }
