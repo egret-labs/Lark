@@ -51,7 +51,7 @@ module lark {
          * @param  priority 事件侦听器的优先级。优先级由一个带符号的 32 位整数指定。数字越大，优先级越高。优先级为 n 的所有侦听器会在
          * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
          */
-        addEventListener(type:string, listener:Function, thisObject:any, useCapture?:boolean, priority?:number):void;
+        addEventListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority?:number):void;
         /**
          * 移除事件侦听器
          * @param type 事件名
@@ -59,7 +59,7 @@ module lark {
          * @param thisObject 侦听函数绑定的this对象
          * @param useCapture 是否使用捕获，这个属性只在显示列表中生效。
          */
-        removeEventListener(type:string, listener:Function, thisObject:any, useCapture?:boolean):void;
+        removeEventListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean):void;
 
         /**
          * 检测是否存在监听器

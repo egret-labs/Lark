@@ -44,6 +44,7 @@ module lark {
         private _frameRate:number = 60;
         /**
          * 获取并设置舞台的帧速率。帧速率是指每秒显示的帧数。帧速率的有效范围为每秒 0.01 到 60 个帧。
+         * 注意，若同一个网页中包含多个lark.Stage实例，修改任何一个Stage的frameRate属性都会同步修改其他Stage的帧率。
          */
         public get frameRate():number {
             return this._frameRate;
@@ -95,7 +96,7 @@ module lark {
         /**
          * 显示对象的渲染节点发生改变时，把自身的RenderNode对象注册到此列表上。
          */
-        $dirtyRenderNodes:any = {};
+        $dirtyRenderNodes:{[key:number]:lark.player.RenderNode} = {};
 
         $dirtyRegion:lark.player.DirtyRegion;
         /**

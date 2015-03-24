@@ -668,7 +668,7 @@ module lark {
             this.markChildDirty(this, dirtyNodes);
         }
 
-        private markChildDirty(child:DisplayObject, dirtyNodes:any):void {
+        private markChildDirty(child:DisplayObject, dirtyNodes:{[key:number]:lark.player.RenderNode}):void {
             if (this.$hasFlags(DisplayObjectFlags.Dirty)) {
                 return;
             }
@@ -688,7 +688,7 @@ module lark {
         static $enterFrameCallBackList:lark.player.EventBin[] = [];
         static $renderCallBackList:lark.player.EventBin[] = [];
 
-        public addEventListener(type:string, listener:Function, thisObject:any, useCapture?:boolean, priority:number = 0):void {
+        public addEventListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority:number = 0):void {
             super.addEventListener(type, listener, thisObject, useCapture, priority);
             var isEnterFrame = (type == Event.ENTER_FRAME);
             if (isEnterFrame || type == Event.RENDER) {
@@ -697,11 +697,11 @@ module lark {
             }
         }
 
-        public removeEventListener(type:string, listener:Function, thisObject:any, useCapture?:boolean):void {
+        public removeEventListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean):void {
             super.removeEventListener(type, listener, thisObject, useCapture);
             var isEnterFrame:boolean = (type == Event.ENTER_FRAME);
             if (isEnterFrame || type == Event.RENDER) {
-                var list:Array<any> = isEnterFrame ? DisplayObject.$enterFrameCallBackList : DisplayObject.$renderCallBackList;
+                var list = isEnterFrame ? DisplayObject.$enterFrameCallBackList : DisplayObject.$renderCallBackList;
                 this.$removeEventBin(list, listener, thisObject, this);
             }
         }

@@ -11,6 +11,8 @@ var lark_file_list =
         "lark/events/EventPhase.js",
         "lark/events/Event.js",
         "lark/events/EventDispatcher.js",
+        "lark/utils/Timer.js",
+        "lark/events/TimerEvent.js",
         "lark/display/Texture.js",
         "lark/display/DisplayObjectFlags.js",
         "lark/display/DisplayObject.js",

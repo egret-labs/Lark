@@ -68,11 +68,10 @@ module lark.player {
             if (!this.stage) {
                 this.initialize();
             }
-            Ticker.$instance.startPlayer(this);
+            Ticker.$instance.$addPlayer(this);
         }
 
         private initialize():void {
-            lark.$START_TIME = Date.now();
             this.stage = new lark.Stage();
             this.context.initialize(this.stage);
             var rootClass;
@@ -109,13 +108,13 @@ module lark.player {
                 return;
             }
             this.isPlaying = false;
-            Ticker.$instance.stopPlayer(this);
+            Ticker.$instance.$removePlayer(this);
         }
 
         /**
          * 渲染屏幕
          */
-        public render():void {
+        $render():void {
             var t = lark.getTimer();
             this.computeDirtyRects();
             var t1 = lark.getTimer();
@@ -149,7 +148,7 @@ module lark.player {
             var dirtyRegion = this.stage.$dirtyRegion;
             var nodeList = this.stage.$dirtyRenderNodes;
             for (var i in nodeList) {
-                var node:RenderNode = nodeList[i];
+                var node = nodeList[i];
                 if(!node.outOfScreen&&node.alpha!==0){
                     node.isDirty = true;
                     dirtyRegion.addDirtyRegion(node.minX,node.minY,node.maxX,node.maxY);
