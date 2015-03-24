@@ -239,9 +239,10 @@ module lark {
          */
         public dispatchEventWith(type:string, bubbles?:boolean, data?:any):void {
             if (bubbles || this.hasEventListener(type)) {
-                var event = Event.$fromPool(type, bubbles, data);
+                var event = Event.create(Event,type, bubbles);
+                event.data = data;
                 this.dispatchEvent(event);
-                Event.$toPool(event);
+                Event.release(event);
             }
         }
     }

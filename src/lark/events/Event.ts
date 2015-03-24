@@ -81,14 +81,13 @@ module lark {
         public static RESIZE:string = "resize";
 
 
-
         /**
          * 创建一个作为参数传递给事件侦听器的 Event 对象。
          * @param type {string} 事件的类型，可以作为 Event.type 访问。
          * @param bubbles {boolean} 确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
          * @param cancelable {boolean} 确定是否可以取消 Event 对象。默认值为 false。
          */
-        public constructor(type:string, bubbles?:boolean, cancelable?:boolean, data?:any) {
+        public constructor(type:string, bubbles?:boolean, cancelable?:boolean) {
             super();
             this.$type = type;
             this.$bubbles = !!bubbles;
@@ -203,39 +202,60 @@ module lark {
                 this.$isPropagationImmediateStopped = true;
         }
 
-
         /**
-         * 重置事件对象
+         * 当事件实例传递给Event.release()静态方法时，实例上的clean()方法将会被自动调用。
+         * 若此自定义事件的实例设计为可以循环复用的，为了避免引起内存泄露，自定义事件需要覆盖此方法来确保实例被缓存前断开对外部对象的一切引用。
          */
-        $reset(type:string, bubbles?:boolean, data?:any):Event {
-            this.$type = type;
-            this.$bubbles = !!bubbles;
-            this.data = data;
-            this.$isDefaultPrevented = this.$isPropagationStopped = this.$isPropagationImmediateStopped = false;
-            this.$target = this.$currentTarget = null;
-            this.$eventPhase = 2;
-            return this;
+        protected clean():void{
+            this.data = this.$target = this.$currentTarget = null;
         }
 
-        private static eventPool:Event[] = [];
-
         /**
-         * 从对象池中取一个Event实例
+         * 从对象池中取出或创建一个新的事件实例。注意：若使用此方法来创建自定义事件的实例，自定义的构造函数参数列表必须跟Event类一致。
+         * 在JavaScript中，减少对象的创建次数可以获得更高的运行性能。因此我们建议您尽可能使用Event.create()和Event.release()
+         * 这一对方法来创建和释放事件对象，这一对方法会将事件实例在内部缓存下来供下次循环使用，从而避免过多地重复创建对象。
+         *
+         * 外部调用范例：
+         *    var event = Event.create(Event,type, bubbles);
+         *    event.data = data;   //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
+         *    this.dispatchEvent(event);
+         *    Event.release(event);
          */
-        static $fromPool(type:string, bubbles?:boolean, data?:any):Event {
-            var eventPool = Event.eventPool;
-            if (eventPool.length) {
-                return eventPool.pop().$reset(type, bubbles, data);
+        public static create(EventClass:any, type:string, bubbles?:boolean, cancelable?:boolean):Event {
+            var eventPool:Event[] = EventClass.$eventPool;
+            if(!eventPool){
+                eventPool = EventClass.$eventPool = [];
             }
-            return new Event(type, bubbles, false, data);
+            if (eventPool.length) {
+                var event:Event = eventPool.pop();
+                event.$type = type;
+                event.$bubbles = !!bubbles;
+                event._cancelable = !!cancelable;
+                event.$isDefaultPrevented = false;
+                event.$isPropagationStopped = false;
+                event.$isPropagationImmediateStopped = false;
+                event.$eventPhase = 2;
+                return event;
+            }
+            return new EventClass(type, bubbles, cancelable);
         }
 
         /**
-         * 将一个用完的Event实例放回对象池
+         * 释放一个事件对象，并缓存到对象池。注意：此方法只能传入由Event.create()创建的事件实例，传入非法对象实例可能会导致报错。
+         * 在JavaScript中，减少对象的创建次数可以获得更高的运行性能。因此我们建议您尽可能使用Event.create()和Event.release()
+         * 这一对方法来创建和释放事件对象，这一对方法会将事件实例在内部缓存下来供下次循环使用，从而避免过多地重复创建对象。
+         *
+         * 外部调用范例：
+         *    var event = Event.create(Event,type, bubbles);
+         *    event.data = data;   //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
+         *    this.dispatchEvent(event);
+         *    Event.release(event);
          */
-        static $toPool(event:Event):void {
-            event.data = event.$target = event.$currentTarget = null;
-            this.eventPool.push(event);
+        public static release(event:Event):void{
+            event.clean();
+            var EventClass:any = Object.getPrototypeOf(event).constructor;
+            EventClass.$eventPool.push(event);
         }
+
     }
 }
