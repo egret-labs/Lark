@@ -76,7 +76,7 @@ module lark {
          * @param  priority 事件侦听器的优先级。优先级由一个带符号的 32 位整数指定。数字越大，优先级越高。优先级为 n 的所有侦听器会在
          * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
          */
-        public addEventListener(type:string, listener:Function, thisObject:any, useCapture?:boolean, priority:number = 0):void {
+        public addEventListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority:number = 0):void {
             if (!listener) {
                 //Logger.fatalWithErrorId(1010);
             }
@@ -104,7 +104,7 @@ module lark {
         /**
          * 在一个事件列表中按优先级插入事件对象
          */
-        $insertEventBin(list:lark.player.EventBin[], listener:Function, thisObject:any, priority:number, display?:DisplayObject):boolean {
+        $insertEventBin(list:lark.player.EventBin[], listener:(event:Event)=>void, thisObject:any, priority:number, display?:DisplayObject):boolean {
             var insertIndex = -1;
             var length = list.length;
             for (var i = 0; i < length; i++) {
@@ -136,7 +136,7 @@ module lark {
          * @param thisObject 侦听函数绑定的this对象
          * @param useCapture 是否使用捕获，这个属性只在显示列表中生效。
          */
-        public removeEventListener(type:string, listener:Function, thisObject:any, useCapture:boolean = false):void {
+        public removeEventListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture:boolean = false):void {
 
             var eventMap:Object = useCapture ? this.$captureEventsMap : this.$eventsMap;
             if (!eventMap)
@@ -157,7 +157,7 @@ module lark {
         /**
          * 在一个事件列表中按优先级插入事件对象
          */
-        $removeEventBin(list:lark.player.EventBin[], listener:Function, thisObject:any, display?:DisplayObject):boolean {
+        $removeEventBin(list:lark.player.EventBin[], listener:(event:Event)=>void, thisObject:any, display?:DisplayObject):boolean {
             var length = list.length;
             for (var i = 0; i < length; i++) {
                 var bin = list[i];
@@ -253,7 +253,7 @@ module lark.player{
      * 事件信息对象
      */
     export interface EventBin {
-        listener: Function;
+        listener: (event:Event)=>void;
         thisObject:any;
         priority:number;
         display?:DisplayObject;

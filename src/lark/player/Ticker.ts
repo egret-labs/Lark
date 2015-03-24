@@ -61,7 +61,7 @@ module lark.player {
         /**
          * 注册一个播放器实例并运行
          */
-        public startPlayer(player:Player):void{
+        public addPlayer(player:Player):void{
             if(this.playerList.indexOf(player)!=-1){
                 return;
             }
@@ -72,12 +72,18 @@ module lark.player {
         /**
          * 停止一个播放器实例的运行。
          */
-        public stopPlayer(player:Player):void{
+        public removePlayer(player:Player):void{
             var index = this.playerList.indexOf(player);
             if(index!==-1){
                 this.playerList = this.playerList.concat();
                 this.playerList.splice(index,1);
             }
+        }
+
+        private timerList:Timer[] = [];
+
+        public addTimer(timer:Timer):void{
+
         }
 
         /**
@@ -112,10 +118,10 @@ module lark.player {
                 return;
             }
             list = list.concat();
-            var event:Event = this.reuseEvent;
+            var event = this.reuseEvent;
             event.$type = Event.ENTER_FRAME;
-            for (var i:number = 0; i < length; i++) {
-                var eventBin:any = list[i];
+            for (var i = 0; i < length; i++) {
+                var eventBin = list[i];
                 event.$target = eventBin.display;
                 event.$currentTarget = eventBin.display;
                 eventBin.listener.call(eventBin.thisObject, event);
@@ -126,16 +132,16 @@ module lark.player {
          * 广播Render事件。
          */
         private broadcastRender():void {
-            var list:Array<any> = DisplayObject.$renderCallBackList;
-            var length:number = list.length;
+            var list = DisplayObject.$renderCallBackList;
+            var length = list.length;
             if(length===0){
                 return;
             }
             list = list.concat();
             var event:Event = this.reuseEvent;
             event.$type = Event.RENDER;
-            for (var i:number = 0; i < length; i++) {
-                var eventBin:any = list[i];
+            for (var i = 0; i < length; i++) {
+                var eventBin = list[i];
                 var target = eventBin.display;
                 event.$target = target;
                 event.$currentTarget = target;

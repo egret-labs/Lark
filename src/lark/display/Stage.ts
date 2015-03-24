@@ -96,7 +96,7 @@ module lark {
         /**
          * 显示对象的渲染节点发生改变时，把自身的RenderNode对象注册到此列表上。
          */
-        $dirtyRenderNodes:any = {};
+        $dirtyRenderNodes:{[key:number]:lark.player.RenderNode} = {};
 
         $dirtyRegion:lark.player.DirtyRegion;
         /**
