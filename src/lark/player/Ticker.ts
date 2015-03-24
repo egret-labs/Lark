@@ -55,6 +55,7 @@ module lark.player {
             if (Ticker.$instance) {
                 throw new Error("Ticker实例化出错！不允许实例化多个Ticker对象。");
             }
+            lark.$START_TIME = Date.now();
         }
 
         private playerList:Player[] = [];

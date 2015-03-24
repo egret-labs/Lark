@@ -72,7 +72,6 @@ module lark.player {
         }
 
         private initialize():void {
-            lark.$START_TIME = Date.now();
             this.stage = new lark.Stage();
             this.context.initialize(this.stage);
             var rootClass;
