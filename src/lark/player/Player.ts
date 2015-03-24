@@ -114,7 +114,7 @@ module lark.player {
         /**
          * 渲染屏幕
          */
-        $render():void {
+        $render(triggerByFrame:boolean):void {
             var t = lark.getTimer();
             this.computeDirtyRects();
             var t1 = lark.getTimer();
@@ -133,7 +133,9 @@ module lark.player {
                 t3 = t2;
             }
 
-            FPS.update(this.drawCalls,this.dirtyRatio, t1 - t, t2 - t1, t3 - t2);
+            if(triggerByFrame){
+                FPS.update(this.drawCalls,this.dirtyRatio, t1 - t, t2 - t1, t3 - t2);
+            }
         }
 
         private renderNodeList:RenderNode[] = [];

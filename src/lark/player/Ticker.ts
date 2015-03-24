@@ -142,19 +142,19 @@ module lark.player {
             this.lastCount -= 1000;
             if(this.lastCount>0){
                 if(Ticker.$updateAfterEventsFlag){
-                    this.render();
+                    this.render(false);
                 }
                 return;
             }
             this.lastCount += this.frameInterval;
             this.broadcastEnterFrame();
-            this.render();
+            this.render(true);
         }
 
         /**
          * 执行一次屏幕渲染
          */
-        private render():void{
+        private render(triggerByFrame:boolean):void{
             var playerList = this.playerList;
             var length = playerList.length;
             if (length == 0) {
@@ -165,7 +165,7 @@ module lark.player {
                 Ticker.$invalidateRenderFlag = false;
             }
             for (var i = 0; i < length; i++) {
-                playerList[i].$render();
+                playerList[i].$render(triggerByFrame);
             }
             Ticker.$updateAfterEventsFlag = false;
         }
