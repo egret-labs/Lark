@@ -206,7 +206,7 @@ module lark {
          * 当事件实例传递给Event.release()静态方法时，实例上的clean()方法将会被自动调用。
          * 若此自定义事件的实例设计为可以循环复用的，为了避免引起内存泄露，自定义事件需要覆盖此方法来确保实例被缓存前断开对外部对象的一切引用。
          */
-        protected clean():void{
+        protected clean():void {
             this.data = this.$target = this.$currentTarget = null;
         }
 
@@ -221,13 +221,14 @@ module lark {
          *    this.dispatchEvent(event);
          *    Event.release(event);
          */
-        public static create(EventClass:any, type:string, bubbles?:boolean, cancelable?:boolean):Event {
-            var eventPool:Event[] = EventClass.$eventPool;
-            if(!eventPool){
-                eventPool = EventClass.$eventPool = [];
+        public static create<T extends Event>(EventClass:{new (type:string, bubbles?:boolean, cancelable?:boolean): T;eventPool?:Event[]},
+                                              type:string, bubbles?:boolean, cancelable?:boolean):T {
+            var eventPool:Event[] = EventClass.eventPool;
+            if (!eventPool) {
+                eventPool = EventClass.eventPool = [];
             }
             if (eventPool.length) {
-                var event:Event = eventPool.pop();
+                var event:T = <T> eventPool.pop();
                 event.$type = type;
                 event.$bubbles = !!bubbles;
                 event._cancelable = !!cancelable;
@@ -251,10 +252,10 @@ module lark {
          *    this.dispatchEvent(event);
          *    Event.release(event);
          */
-        public static release(event:Event):void{
+        public static release(event:Event):void {
             event.clean();
             var EventClass:any = Object.getPrototypeOf(event).constructor;
-            EventClass.$eventPool.push(event);
+            EventClass.eventPool.push(event);
         }
 
     }
