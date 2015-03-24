@@ -125,7 +125,7 @@ module lark.player {
             this.lastCount = this.frameInterval = Math.round(60000/value);
         }
 
-        private lastCount:number = 1;
+        private lastCount:number = 1000;
         /**
          * 执行一次刷新
          */

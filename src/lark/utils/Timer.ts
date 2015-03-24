@@ -43,15 +43,29 @@ module lark {
          */
         public constructor(delay:number, repeatCount:number = 0) {
             super();
-            this.delay = +delay||0;
+            this.delay = delay;
             this.repeatCount = +repeatCount|0;
         }
 
+        private _delay:number = 0;
 		/**
          * 计时器事件间的延迟（以毫秒为单位）。如果在计时器正在运行时设置延迟间隔，则计时器将按相同的 repeatCount 迭代重新启动。
          * 注意：建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
 		 */
-        public delay:number;
+        public get delay():number{
+            return this._delay;
+        }
+        public set delay(value:number){
+            value = +value||0;
+            if(value<1){
+                value = 1;
+            }
+            if(this._delay===value){
+                return;
+            }
+            this._delay = value;
+            this.lastCount = this.updateInterval = Math.round(60*value);
+        }
 
 		/**
          * 设置的计时器运行总次数。如果重复计数设置为 0，则计时器将持续不断运行，或直至调用了 stop() 方法或节目停止。
@@ -91,7 +105,6 @@ module lark {
         public start() {
             if(this._running)
                 return;
-            this.lastTime = getTimer();
             lark.player.Ticker.$instance.$addTimer(this);
             this._running = true;
         }
@@ -106,19 +119,24 @@ module lark {
             this._running = false;
         }
 
-        private lastTime:number = 0;
+        private updateInterval:number = 1000;
+        private lastCount:number = 1000;
 
+        /**
+         * Ticker以60FPS频率刷新此方法
+         */
         $update() {
-            var now = getTimer();
-            var passTime = now - this.lastTime;
-            if(passTime>this.delay){
-                this.lastTime = now;
-                this._currentCount++;
-                TimerEvent.dispatchTimerEvent(this,TimerEvent.TIMER);
-                if (this.repeatCount > 0 && this._currentCount >= this.repeatCount) {
-                    this.stop();
-                    TimerEvent.dispatchTimerEvent(this,TimerEvent.TIMER_COMPLETE);
-                }
+            this.lastCount -= 1000;
+            if(this.lastCount>0){
+                return;
+            }
+            this.lastCount += this.updateInterval;
+            this._currentCount++;
+            var complete = (this.repeatCount > 0 && this._currentCount >= this.repeatCount);
+            TimerEvent.dispatchTimerEvent(this,TimerEvent.TIMER);
+            if (complete) {
+                this.stop();
+                TimerEvent.dispatchTimerEvent(this,TimerEvent.TIMER_COMPLETE);
             }
         }
     }
