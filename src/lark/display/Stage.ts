@@ -41,17 +41,16 @@ module lark {
             this.$stage = this;
         }
 
-        private _frameRate:number = 60;
         /**
          * 获取并设置舞台的帧速率。帧速率是指每秒显示的帧数。帧速率的有效范围为每秒 0.01 到 60 个帧。
          * 注意，若同一个网页中包含多个lark.Stage实例，修改任何一个Stage的frameRate属性都会同步修改其他Stage的帧率。
          */
         public get frameRate():number {
-            return this._frameRate;
+            return lark.player.Ticker.$instance.$frameRate;
         }
 
         public set frameRate(value:number) {
-            this._frameRate = +value;
+            lark.player.Ticker.$instance.$setFrameRate(value);
         }
 
         private _scaleMode:string = "noScale";

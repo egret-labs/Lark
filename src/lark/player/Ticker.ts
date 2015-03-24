@@ -101,18 +101,49 @@ module lark.player {
         }
 
         /**
+         * 全局帧率
+         */
+        $frameRate:number = 60;
+
+        private frameInterval:number = 1;
+        /**
+         * 设置全局帧率
+         */
+        $setFrameRate(value:number):void{
+            value = +value||0;
+            if(value<=0){
+                return;
+            }
+            if(this.$frameRate===value){
+                return;
+            }
+            this.$frameRate = value;
+            if(value>60){
+                value = 60;
+            }
+            //这里用60*1000来避免浮点数计算不准确的问题。
+            this.lastCount = this.frameInterval = Math.round(60000/value);
+        }
+
+        private lastCount:number = 1;
+        /**
          * 执行一次刷新
          */
         public update():void {
-            var playerList = this.playerList;
-            var length = playerList.length;
-            if (length == 0) {
-                return;
-            }
             var timerList = this.timerList;
             var timerLength = timerList.length;
             for (var i = 0; i < timerLength; i++) {
                 timerList[i].$update();
+            }
+            this.lastCount -= 1000;
+            if(this.lastCount>0){
+                return;
+            }
+            this.lastCount += this.frameInterval;
+            var playerList = this.playerList;
+            var length = playerList.length;
+            if (length == 0) {
+                return;
             }
             this.broadcastEnterFrame();
             if (Ticker.$invalidateRenderFlag) {
