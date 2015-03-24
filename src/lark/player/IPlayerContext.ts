@@ -37,7 +37,7 @@ module lark.player {
         /**
          * 初始化播放器上下文
          */
-        initialize(stage:Stage):void;
+        initialize(player:Player):void;
         /**
          * 清除整个屏幕
          */

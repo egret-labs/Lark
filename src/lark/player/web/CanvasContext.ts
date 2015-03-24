@@ -78,12 +78,39 @@ module lark.player {
         private canvas:HTMLCanvasElement;
         private context:CanvasRenderingContext2D;
 
-        private stage:Stage = null;
+        private player:Player = null;
 
-        public initialize(stage:Stage):void {
-            this.stage = stage;
+        public initialize(player:Player):void {
+            this.player = player;
             window.onresize = this.onSizeChanged;
             this.doResize();
+            this.canvas.addEventListener("mousedown",this.onTouchBegin);
+            this.canvas.addEventListener("mousemove",this.onTouchMove);
+            this.canvas.addEventListener("mouseup",this.onTouchEnd);
+        }
+
+        private onTouchBegin = (event:any):void => {
+            var location = this.getLocation(event);
+            this.player.onTouchBegin(location.x, location.y, event.identifier);
+        }
+
+        private onTouchMove = (event:any):void => {
+            var location = this.getLocation(event);
+            this.player.onTouchMove(location.x, location.y, event.identifier);
+
+        }
+
+        private onTouchEnd = (event:any):void => {
+            var location = this.getLocation(event);
+            this.player.onTouchEnd(location.x, location.y, event.identifier);
+        }
+
+        private getLocation(event:any):Point {
+            var doc = document.documentElement;
+            var box = this.canvas.getBoundingClientRect();
+            var left = box.left + window.pageXOffset - doc.clientLeft;
+            var top = box.top + window.pageYOffset - doc.clientTop;
+            return Point.TEMP.setTo(event.pageX - left,event.pageY - top);
         }
 
         private sizeChanged:boolean = false;
@@ -99,7 +126,7 @@ module lark.player {
             this.sizeChanged = false;
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
-            this.stage.$updateStageSize(window.innerWidth,window.innerHeight);
+            this.player.stage.$updateStageSize(window.innerWidth,window.innerHeight);
         }
 
 
