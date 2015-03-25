@@ -42,44 +42,74 @@ module lark {
 
         }
 
-        private targetIcon:Bitmap;
+        private targetIcon:DisplayObject;
 
-        private iconList:Bitmap[] = [];
+        private iconList:DisplayObject[] = [];
 
-        private start(texture:Texture):void{
-            var x=0,y=0;
-            for(var i=0;i<2000;i++){
+        private start(texture:Texture):void {
+            var x = 0, y = 0;
+            for (var i = 0; i < 2000; i++) {
                 var bitmap = new Bitmap();
                 bitmap.texture = texture;
                 bitmap.x = x;
                 bitmap.y = y;
                 bitmap.scaleX = bitmap.scaleY = Math.random();
-                bitmap.rotation = Math.random()*360;
+                bitmap.rotation = Math.random() * 360;
                 x += texture.width;
-                if(x>1920){
+                if (x > 1920) {
                     x = 0;
                     y += texture.height;
-                    if(y>960){
+                    if (y > 960) {
                         y = 0;
                     }
                 }
                 this.addChild(bitmap);
                 this.iconList.push(bitmap);
             }
-            this.targetIcon = new lark.Bitmap();
-            this.targetIcon.texture = texture;
-            this.targetIcon.x = 700;
-            this.targetIcon.y = 500;
+            bitmap = new lark.Bitmap();
+            bitmap.texture = texture;
+            bitmap.x = 700;
+            bitmap.y = 500;
+            this.iconList.push(bitmap);
+            this.targetIcon = bitmap;
             this.addChild(this.targetIcon);
-            this.iconList.push(this.targetIcon);
             this.addChild(FPS.display);
             this.stage.frameRate = 24;
             var timer = new Timer(16);
-            timer.addEventListener(TimerEvent.TIMER,this.onTick,this);
+            timer.addEventListener(TimerEvent.TIMER, this.onTick, this);
             timer.start();
+            this.addEventListener(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
-        private onTick(event:TimerEvent):void{
+        private touchTarget:DisplayObject;
+        private offsetX:number = 0;
+        private offsetY:number = 0;
+
+        private onTouchBegin(event:TouchEvent):void {
+            this.touchTarget = <DisplayObject>event.target;
+            this.addChild(this.touchTarget);
+            this.offsetX = this.touchTarget.x - event.stageX;
+            this.offsetY = this.touchTarget.y - event.stageY;
+            this.addEventListener(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            this.addEventListener(TouchEvent.TOUCH_END, this.onTouchEnd, this);
+            event.updateAfterEvent();
+        }
+
+        private onTouchMove(event:TouchEvent):void {
+            this.touchTarget.x = event.stageX + this.offsetX;
+            this.touchTarget.y = event.stageY + this.offsetY;
+            event.updateAfterEvent();
+        }
+
+        private onTouchEnd(event:TouchEvent):void {
+            this.targetIcon = this.touchTarget;
+            this.touchTarget = null;
+            this.removeEventListener(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            this.removeEventListener(TouchEvent.TOUCH_END, this.onTouchEnd, this);
+            event.updateAfterEvent();
+        }
+
+        private onTick(event:TimerEvent):void {
             this.targetIcon.rotation += 2;
             event.updateAfterEvent();
             //var list = this.iconList;

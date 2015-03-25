@@ -32,22 +32,46 @@ module lark.player {
      * @excluded
      * 渲染节点基类
      */
-    export class RenderNode {
+    export class RenderNode extends HashObject{
 
         public constructor(target:DisplayObject) {
+            super();
             this.nodeType = NodeType.Node;
             this.target = target;
-            this.id = RenderNode.idCount++;
         }
 
-        private static idCount:number = 1;
-
-        public id:number;
-
+        /**
+         * 目标显示对象
+         */
         private target:DisplayObject;
-
+        /**
+         * 节点类型
+         */
         public nodeType:number;
-
+        /**
+         * 要绘制到屏幕的整体透明度。
+         */
+        public alpha:number = 1;
+        /**
+         * 目标显示对象以及它所有父级对象的连接矩阵。
+         */
+        public matrix:Matrix = null;
+        /**
+         * 目标显示对象的测量边界
+         */
+        public bounds:Rectangle = null;
+        /**
+         * 是否需要重绘
+         */
+        public isDirty:boolean = false;
+        /**
+         * 当前位置在屏幕之外
+         */
+        public outOfScreen:boolean = false;
+        /**
+         * 在屏幕上的矩形区域是否发现改变。
+         */
+        public moved:boolean = false;
         /**
          * 绘制区域在屏幕上的起点x
          */
@@ -65,15 +89,18 @@ module lark.player {
          */
         public maxY:number = 0;
 
-        public clearRect():void{
+        public clearRect():void {
             this.minX = this.minY = this.maxX = this.maxY = 0;
         }
 
-        public updateRect(bounds:Rectangle): void {
-
+        /**
+         * 更新绘制在屏幕上的矩形区域范围
+         */
+        public updateRect(stageWidth:number,stageHeight:number):void {
+            var bounds = this.bounds;
             var m = this.matrix;
-            var a:number = m.a,b:number = m.b,c:number=m.c,d:number=m.d,tx:number=m.tx,ty:number=m.ty;
-            var x:number = bounds.x,y:number = bounds.y,w:number = bounds.width,h:number=bounds.height;
+            var a:number = m.a, b:number = m.b, c:number = m.c, d:number = m.d, tx:number = m.tx, ty:number = m.ty;
+            var x:number = bounds.x, y:number = bounds.y, w:number = bounds.width, h:number = bounds.height;
             var round = Math.round;
             var x0 = round(a * x + c * y + tx);
             var y0 = round(b * x + d * y + ty);
@@ -86,40 +113,40 @@ module lark.player {
 
             var tmp;
 
-            if (x0 > x1) { tmp = x0; x0 = x1; x1 = tmp; }
-            if (x2 > x3) { tmp = x2; x2 = x3; x3 = tmp; }
+            if (x0 > x1) {
+                tmp = x0;
+                x0 = x1;
+                x1 = tmp;
+            }
+            if (x2 > x3) {
+                tmp = x2;
+                x2 = x3;
+                x3 = tmp;
+            }
 
             this.minX = x0 < x2 ? x0 : x2;
             this.maxX = x1 > x3 ? x1 : x3;
 
-            if (y0 > y1) { tmp = y0; y0 = y1; y1 = tmp; }
-            if (y2 > y3) { tmp = y2; y2 = y3; y3 = tmp; }
+            if (y0 > y1) {
+                tmp = y0;
+                y0 = y1;
+                y1 = tmp;
+            }
+            if (y2 > y3) {
+                tmp = y2;
+                y2 = y3;
+                y3 = tmp;
+            }
 
             this.minY = y0 < y2 ? y0 : y2;
             this.maxY = y1 > y3 ? y1 : y3;
-            var stage = this.target.$stage;
-            this.outOfScreen = !this.intersects(0,0,stage.$stageWidth,stage.$stageHeight);
+            this.outOfScreen = !this.intersects(0, 0, stageWidth, stageHeight);
         }
-        /**
-         * 是否需要重绘
-         */
-        public isDirty:boolean = false;
-        /**
-         * 当前位置在屏幕之外
-         */
-        public outOfScreen:boolean = false;
-        /**
-         * 要绘制到屏幕的整体透明度。
-         */
-        public alpha:number = 1;
 
-        public matrix:Matrix = null;
         /**
-         * 在屏幕上的矩形区域是否发现改变。
+         * 是否与目标矩形相交
          */
-        public moved:boolean = false;
-
-        public intersects(targetMinX:number,targetMinY:number,targetMaxX:number,targetMaxY:number):boolean {
+        public intersects(targetMinX:number, targetMinY:number, targetMaxX:number, targetMaxY:number):boolean {
             var max = this.minX > targetMinX ? this.minX : targetMinX;
             var min = this.maxX < targetMaxX ? this.maxX : targetMaxX;
             if (max > min) {
@@ -134,16 +161,29 @@ module lark.player {
         /**
          * 更新节点属性
          */
-        public update():void{
+        public update():void {
             this.target.$updateRenderNode();
         }
 
         /**
          * 渲染结束，已经绘制到屏幕
          */
-        public finish():void{
+        public finish():void {
             this.isDirty = false;
             this.moved = false;
+        }
+
+        /**
+         * 与舞台坐标点碰撞检测
+         */
+        public hitTest(stageX:number,stageY:number,shapeFlag?:boolean):DisplayObject{
+            var m = this.target.$getInvertedConcatenatedMatrix();
+            var x = m.a * stageX + m.c * stageY + m.tx;
+            var y = m.b * stageX + m.d * stageY + m.ty;
+            if(this.bounds.contains(x,y)){
+                return this.target;
+            }
+            return null;
         }
     }
 }
