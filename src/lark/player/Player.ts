@@ -276,15 +276,29 @@ module lark.player {
         }
 
         public onTouchBegin(x:number,y:number,identifier:number):void {
-            //console.log("begin",x,y,identifier);
+            var target = this.findTarget(x,y);
+            TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_BEGIN,true,true,x,y,identifier,true);
         }
 
         public onTouchMove(x:number,y:number,identifier:number):void {
-            //console.log("move",x,y,identifier);
+            var target = this.findTarget(x,y);
+            TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_MOVE,true,true,x,y,identifier,true);
         }
 
         public onTouchEnd(x:number,y:number,identifier:number):void {
-            //console.log("end",x,y,identifier);
+            var target = this.findTarget(x,y);
+            TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_END,true,true,x,y,identifier,false);
+        }
+
+        private findTarget(stageX:number,stageY:number):DisplayObject{
+            var renderList = this.renderNodeList;
+            for(var i=renderList.length-1;i>=0;i--){
+                var target = renderList[i].hitTest(stageX,stageY);
+                if(target){
+                    return target;
+                }
+            }
+            return this.stage;
         }
     }
 }

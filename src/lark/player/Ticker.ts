@@ -53,7 +53,7 @@ module lark.player {
         /**
          * 需要立即刷新屏幕的标志
          */
-        static $updateAfterEventsFlag:boolean = false;
+        static $requestRenderingFlag:boolean = false;
 
         public constructor() {
             if (Ticker.$instance) {
@@ -141,7 +141,7 @@ module lark.player {
             }
             this.lastCount -= 1000;
             if(this.lastCount>0){
-                if(Ticker.$updateAfterEventsFlag){
+                if(Ticker.$requestRenderingFlag){
                     this.render(false);
                 }
                 return;
@@ -167,7 +167,7 @@ module lark.player {
             for (var i = 0; i < length; i++) {
                 playerList[i].$render(triggerByFrame);
             }
-            Ticker.$updateAfterEventsFlag = false;
+            Ticker.$requestRenderingFlag = false;
         }
 
         private reuseEvent:Event = new Event("")

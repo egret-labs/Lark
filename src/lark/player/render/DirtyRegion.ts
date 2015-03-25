@@ -106,7 +106,7 @@ module lark.player {
                     }
                 }
             }
-            this.dirtyRatio = Math.round(areas*100/(this.w*this.h));
+            this.dirtyRatio = Math.ceil(areas*1000/(this.w*this.h))/10;
         }
 
         gatherOptimizedRegions(regions:Region[]) {

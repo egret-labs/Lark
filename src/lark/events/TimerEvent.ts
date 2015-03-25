@@ -56,22 +56,22 @@ module lark {
         }
 
         /**
+         * 如果已修改显示列表，调用此方法将会忽略帧频限制，在此事件处理完成后立即重绘屏幕。
+         */
+        public updateAfterEvent():void {
+            lark.player.Ticker.$requestRenderingFlag = true;
+        }
+
+        /**
          * 使用指定的EventDispatcher对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
          * @param target 事件派发目标
          * @param type 事件类型
          */
-        public static dispatchTimerEvent(target:IEventDispatcher,type:string):boolean{
-            var event = Event.create(TimerEvent,type);
+        public static dispatchTimerEvent(target:IEventDispatcher, type:string, bubbles?:boolean, cancelable?:boolean):boolean {
+            var event = Event.create(TimerEvent, type, bubbles, cancelable);
             var result = target.dispatchEvent(event);
             Event.release(event);
             return result;
-        }
-
-        /**
-         * 如果已修改显示列表，调用此方法将会忽略帧频限制，在此事件处理完成后立即重绘屏幕。
-         */
-        public updateAfterEvent():void{
-            lark.player.Ticker.$updateAfterEventsFlag = true;
         }
     }
 }

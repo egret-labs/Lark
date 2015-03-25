@@ -164,7 +164,7 @@ module lark {
             DisplayObjectContainer.$EVENT_ADD_TO_STAGE_LIST.push(this);
             var node = this.$renderNode;
             if (node) {
-                stage.$dirtyRenderNodes[node.id] = node;
+                stage.$dirtyRenderNodes[node.hashCode] = node;
             }
         }
 
@@ -172,7 +172,7 @@ module lark {
             DisplayObjectContainer.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
             var node = this.$renderNode;
             if (node) {
-                this.$stage.$dirtyRenderNodes[node.id] = node;
+                this.$stage.$dirtyRenderNodes[node.hashCode] = node;
             }
         }
 
@@ -198,9 +198,6 @@ module lark {
         $getMatrix():Matrix {
             if (this.$hasFlags(DisplayObjectFlags.InvalidMatrix)) {
                 this._matrix.$updateScaleAndRotation(this._scaleX, this._scaleY, this._skewX, this._skewY);
-                if (this.$renderNode) {
-                    this.$renderNode.moved = true;
-                }
                 this.$removeFlags(DisplayObjectFlags.InvalidMatrix);
             }
             return this._matrix;
@@ -241,6 +238,9 @@ module lark {
                         this._concatenatedMatrix);
                 } else {
                     this._concatenatedMatrix.copyFrom(this.$getMatrix());
+                }
+                if (this.$renderNode) {
+                    this.$renderNode.moved = true;
                 }
                 this.$removeFlags(DisplayObjectFlags.InvalidConcatenatedMatrix);
             }
@@ -646,17 +646,17 @@ module lark {
                 return;
             }
             this.$removeFlagsUp(DisplayObjectFlags.Dirty);
-            if (!this.$stage) {
+            var stage = this.$stage;
+            if (!stage) {
                 node.finish();
                 node.clearRect();
                 return;
             }
             node.alpha = this.$getConcatenatedAlpha();
-            var m = this.$getConcatenatedMatrix();
-            node.matrix = m;
-            var bounds = this.$getContentBounds();
+            node.matrix = this.$getConcatenatedMatrix();
+            node.bounds = this.$getContentBounds();
             if (node.moved) {
-                node.updateRect(bounds);
+                node.updateRect(stage.stageWidth,stage.stageHeight);
             }
         }
 
@@ -675,7 +675,7 @@ module lark {
             this.$setFlags(DisplayObjectFlags.Dirty);
             var node = child.$renderNode;
             if (node && dirtyNodes) {
-                dirtyNodes[node.id] = node;
+                dirtyNodes[node.hashCode] = node;
             }
             var children = child.$children;
             if (children) {
