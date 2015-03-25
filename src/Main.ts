@@ -90,8 +90,8 @@ module lark {
             this.addChild(this.touchTarget);
             this.offsetX = this.touchTarget.x - event.stageX;
             this.offsetY = this.touchTarget.y - event.stageY;
-            this.addEventListener(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
-            this.addEventListener(TouchEvent.TOUCH_END, this.onTouchEnd, this);
+            this.stage.addEventListener(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            this.stage.addEventListener(TouchEvent.TOUCH_END, this.onTouchEnd, this);
             event.updateAfterEvent();
         }
 
@@ -104,8 +104,8 @@ module lark {
         private onTouchEnd(event:TouchEvent):void {
             this.targetIcon = this.touchTarget;
             this.touchTarget = null;
-            this.removeEventListener(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
-            this.removeEventListener(TouchEvent.TOUCH_END, this.onTouchEnd, this);
+            this.stage.removeEventListener(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            this.stage.removeEventListener(TouchEvent.TOUCH_END, this.onTouchEnd, this);
             event.updateAfterEvent();
         }
 
