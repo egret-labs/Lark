@@ -55,60 +55,23 @@ module lark {
 
 
 
-
-            var mergeStyle = function (base: ITextStyle, change: ITextStyle): ITextStyle {
-                var style: ITextStyle = {};
-                for (var p in base) {
-                    if (base[p] !== undefined)
-                        style[p] = base[p];
-                }
-
-                for (var p in change) {
-                    if (change[p] !== undefined)
-                        style[p] = change[p];
-                }
-
-                return style;
-            };
-
             var style: ITextStyle = {
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize:30
             };
 
 
-            var textNodes: Array<string|IRichTextNode> = ["Hi ",
 
-                {
-                    width: 100,
-                    height: 100,
-                    src: "http://rescdn.qqmail.com/bizmail/zh_CN/htmledition/images/logo/logo_biz_7_00cf31a.gif",
-                    style: { float: TextFloat.LEFT }
-                },
-                {
-                    text: "setTimeout(() => rich.width = this.stage ? this.stage.stageWidth : 500, 300); \\n World",
-                    style: { color: 0xFF0000, italic: true }
-                }, {
-                    text: " rich.height = 300;\n",
-                    style: { color: 0x00FF00, bold: true }
-                }, {
-                    text: " rich.width = this.stage ? this.stage.stageWidth : 500;",
-                    style: { color: 0x0000FF }
-                }," Hi"];
-            
-            var rich = new RichTextField(style);
-            rich.nodes = textNodes;
-            rich.wordWrap = true;
-            rich.multiline = true;
-            
-            rich.width = this.stage ? this.stage.stageWidth : 500;
-            rich.height = 300;
-            rich.y = 300;
-            this.addChild(rich);
-            window["t"] = rich;
-            window.addEventListener("resize", e=> {
-                setTimeout(() => rich.width = this.stage ? this.stage.stageWidth : 500, 300);
-            });
+            var text = "setTimeout(() => rich.width = this.stage? this.stage.stageWidth: 500, 300); \n"
+                + " World setTimeout(() => rich.width = this.stage? this.stage.stageWidth : 500, 300); \n "
+                + " World setTimeout(() => rich.width = this.stage ? this.stage.stageWidth : 500, 300); \\n World";
+            var tf = new TextField(text);
+            tf.style = { align: "left", color: 0xFF0000 };
+            //tf.width = 400;
+            tf.multiline = true;
+            tf.y = 200;
+            this.addChild(tf);
+
         }
 
         

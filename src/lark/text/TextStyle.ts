@@ -29,11 +29,14 @@
 
 module lark {
 
-
-    export class TextFloat {
-        static LEFT = "left";
-        static RIGHT = 'right';
-        static NONE = '';
+    export class Align {
+        static LEFT: string = "left";
+        static CENTER: string = "left";
+        static RIGHT: string = "right";
+        static TOP = "top";
+        static MIDDLE = "middle";
+        static BOTTOM = "bottom";
+        static NONE = "";
     }
 
     export interface ITextStyle {
@@ -43,9 +46,26 @@ module lark {
         italic?: boolean;
         color?: number;
         float?: string;
-        verticalAlign?: lark.VerticalAlign;
+        verticalAlign?: string;
         href?: string;
         target?: string;
+        toFontString?(includeSize?:boolean):string;
     }
 
+    Object.defineProperty(Object.prototype, "toFontString", {
+        value: function (includeSize = false) {
+            var style = <ITextStyle>this;
+            var font = "";
+            if (style.italic)
+                font += "italic ";
+            if (style.bold)
+                font += "bold ";
+            if (includeSize)
+                font += (style.fontSize || 12) + "px ";
+            font += (style.fontFamily || "sans-serif");
+            return font;
+        },
+        enumerable: false,
+        writable:false
+    });
 }
