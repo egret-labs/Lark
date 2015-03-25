@@ -2,45 +2,40 @@
     /**
      * 最小的文本显示对象
      */
-    export class TextSpan extends DisplayObject {
+    export class TextSpan extends HashObject {
         constructor(
             text: string ,
             style:ITextStyle,
-            textWidth: number = 0,
-            length: number = 0) {
+            textWidth: number ,
+            length: number ,
+            x: number,
+            y:number) {
             super();
-            this.$renderNode = new lark.player.TextNode(this);
             this.text = text;
             this.style = style;
             this.textWidth = textWidth;
-            this.$invalidateContentBounds();
+            this.x = +x || 0;
+            this.y = +y || 0;
         }
 
 
         public text: string;
+        public x: number;
+        public y: number;
         public textWidth: number;
         public style: ITextStyle;
         public length: number;
 
-        /**
-         * 测量自身占用的矩形区域，如果是容器，还包括所有子项占据的区域。
-         * @param bounds 测量结果存储在这个矩形对象内
-         */
-        $measureContentBounds(bounds: Rectangle): void {
-            bounds.setTo(0, 0, this.textWidth, this.style.fontSize);
+        public get height() {
+            return this.style.fontSize * 1.2;
         }
 
-        /**
-         * 获取渲染节点
-         */
-        $updateRenderNode():void{
-            super.$updateRenderNode();
-            var node = <lark.player.TextNode>this.$renderNode;
-            node.text = this.text;
-            node.size = this.style.fontSize;
-            node.font = this.style.toFontString(true);
-            node.style = this.$toColorString();
-            node.textWidth = this.textWidth;
+        public get width() {
+            return this.textWidth;
+        }
+
+        $toFontString(includeSize = false) {
+            return this.style.toFontString(includeSize);
         }
 
         $toColorString() {

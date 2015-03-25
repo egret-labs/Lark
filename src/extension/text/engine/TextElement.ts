@@ -83,7 +83,7 @@
 
             var span: TextSpan = null;
             if (currentWidth > 0) {
-                span = new TextSpan(this._text.substr(startIndex, textLength), format, currentWidth);
+                span = new TextSpan(this._text.substr(startIndex, textLength), format, currentWidth,textLength,0,0);
             } 
             return {
                 span: span,

@@ -82,7 +82,7 @@ module lark.text {
                 spans = spans.concat(middles.spans);
                 var rights = this.layoutRightSpans(results[2], width, maxHeight);
                 spans = spans.concat(rights.spans);
-                
+                //todo
                 spans.forEach(span=> textLine.addChild(span));
                 
 
@@ -97,8 +97,8 @@ module lark.text {
             return textLine;
         }
 
-        protected layoutMiddleSpans(middles: CreateSpanResult[], offset: number, maxHeight: number): { spans: DisplayObject[]; offset: number }{
-            var spans: DisplayObject[] = [];
+        protected layoutMiddleSpans(middles: CreateSpanResult[], offset: number, maxHeight: number): { spans: ISpan[]; offset: number }{
+            var spans: ISpan[] = [];
             for (var i = 0; i < middles.length; i++) {
                 var result = middles[i];
                 var span = result.span;
@@ -127,8 +127,8 @@ module lark.text {
         }
 
 
-        protected layoutLeftSpans(lefts: CreateSpanResult[], offset: number, maxHeight: number): { spans: DisplayObject[];offset:number} {
-            var spans: DisplayObject[] = [];
+        protected layoutLeftSpans(lefts: CreateSpanResult[], offset: number, maxHeight: number): { spans: ISpan[];offset:number} {
+            var spans: ISpan[] = [];
             for (var i = 0; i < lefts.length; i++) {
                 var result = lefts[i];
                 var span = result.span;
@@ -144,8 +144,8 @@ module lark.text {
         }
 
 
-        protected layoutRightSpans(rights: CreateSpanResult[], width: number, maxHeight: number): { spans: DisplayObject[]; offset: number } {
-            var spans: DisplayObject[] = [];
+        protected layoutRightSpans(rights: CreateSpanResult[], width: number, maxHeight: number): { spans: ISpan[]; offset: number } {
+            var spans: ISpan[] = [];
             for (var i = 0; i < rights.length; i++) {
                 var result = rights[i];
                 var span = result.span;
@@ -183,7 +183,6 @@ module lark.text {
                     line.rightOverflowAreas.forEach(a=> a.y = y);
                     rightBlockAreas = rightBlockAreas.concat(line.rightOverflowAreas);
                 }
-                //line.x = offset;
                 y += line.textHeight + leading;
                 lines.push(line);
                 offset = this.getLineOffset(leftBlockAreas, y, leading + format.fontSize);

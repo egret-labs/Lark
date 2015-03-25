@@ -38,19 +38,15 @@ module lark.player {
             super(target);
         }
 
-        public text:string = null;
+        public spans: TextSpan[] = null;
 
-        public font:string = null;
-
-        public size:number = 12;
-
-        public style:string = null;
-
-        public textWidth:number = 0;
-
-        public render(renderContext:IPlayerContext):void {
-            renderContext.drawText(this.text, this.font, this.style, 0,
-                this.size / 2, this.textWidth, this.matrix, this.alpha);
+        public render(renderContext: IPlayerContext): void {
+            var spans = this.spans, length = spans.length;
+            for (var i = 0; i < length; i++) {
+                var span = spans[i];
+                renderContext.drawText(span.text, span.$toFontString(true), span.$toColorString(), span.x,
+                    span.style.fontSize / 2 + span.y, span.textWidth, this.matrix, this.alpha);
+            }
         }
     }
 }
