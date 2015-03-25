@@ -29,7 +29,6 @@ var lark_file_list =
         "lark/player/Player.js",
         "lark/text/TextMeasurer.js",
         "lark/player/web/CanvasContext.js",
-        "lark/text/VerticalAlign.js",
         "lark/text/TextStyle.js",
         "lark/text/TextSpan.js",
         "lark/text/TextField.js",
