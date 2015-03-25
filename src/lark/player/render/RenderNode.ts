@@ -36,7 +36,6 @@ module lark.player {
 
         public constructor(target:DisplayObject) {
             super();
-            this.nodeType = NodeType.Node;
             this.target = target;
         }
 
@@ -44,10 +43,6 @@ module lark.player {
          * 目标显示对象
          */
         private target:DisplayObject;
-        /**
-         * 节点类型
-         */
-        public nodeType:number;
         /**
          * 要绘制到屏幕的整体透明度。
          */
@@ -184,6 +179,13 @@ module lark.player {
                 return this.target;
             }
             return null;
+        }
+
+        /**
+         * 执行渲染操作
+         */
+        public render(renderContext:IPlayerContext):void{
+
         }
     }
 }

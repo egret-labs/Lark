@@ -36,7 +36,6 @@ module lark.player {
 
         public constructor(target:DisplayObject){
             super(target);
-            this.nodeType = NodeType.Graphics;
         }
 
     }

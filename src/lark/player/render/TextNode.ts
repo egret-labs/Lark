@@ -32,11 +32,10 @@ module lark.player {
      * @excluded
      * 文本渲染节点
      */
-    export class TextNode extends RenderNode{
+    export class TextNode extends RenderNode {
 
-        public constructor(target:DisplayObject){
+        public constructor(target:DisplayObject) {
             super(target);
-            this.nodeType = NodeType.Text;
         }
 
         public text:string = null;
@@ -48,5 +47,10 @@ module lark.player {
         public style:string = null;
 
         public textWidth:number = 0;
+
+        public render(renderContext:IPlayerContext):void {
+            renderContext.drawText(this.text, this.font, this.style, 0,
+                this.size / 2, this.textWidth, this.matrix, this.alpha);
+        }
     }
 }

@@ -254,26 +254,10 @@ module lark.player {
             }
             if(cleanAll||node.isDirty){
                 this.drawCalls++;
-                switch (node.nodeType) {
-                    case NodeType.Bitmap:
-                        var bitmapNode = <BitmapNode>node;
-                        var texture = bitmapNode.texture;
-                        if (texture) {
-                            context.drawImage(texture, bitmapNode.matrix, bitmapNode.alpha);
-                        }
-                        break;
-                    case NodeType.Text:
-                        var textNode = <TextNode>node;
-                        context.drawText(textNode.text, textNode.font, textNode.style, 0,
-                            textNode.size / 2, textNode.textWidth, textNode.matrix, textNode.alpha);
-                        break;
-                    case NodeType.Graphics:
-
-                        break;
-                }
+                node.render(context);
                 node.finish();
             }
-        }
+        } 
 
         public onTouchBegin(x:number,y:number,identifier:number):void {
             var target = this.findTarget(x,y);

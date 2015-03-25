@@ -38,7 +38,6 @@ module lark.player {
          */
         public constructor(target:DisplayObject) {
             super(target);
-            this.nodeType = NodeType.Bitmap;
         }
 
         //对于V8，要控制对象属性的个数在12~128之间才能获得最高的属性查询性能。
@@ -47,6 +46,13 @@ module lark.player {
          * 要绘制的纹理
          */
         public texture:Texture = null;
+
+        public render(renderContext:IPlayerContext):void{
+            var texture = this.texture;
+            if (texture) {
+                renderContext.drawImage(texture, this.matrix, this.alpha);
+            }
+        }
 
     }
 }
