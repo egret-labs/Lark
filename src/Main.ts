@@ -47,38 +47,51 @@ module lark {
         private iconList:DisplayObject[] = [];
 
         private start(texture:Texture):void {
-            var x = 0, y = 0;
-            for (var i = 0; i < 2000; i++) {
-                var bitmap = new Bitmap();
-                bitmap.texture = texture;
-                bitmap.x = x;
-                bitmap.y = y;
-                bitmap.scaleX = bitmap.scaleY = Math.random();
-                bitmap.rotation = Math.random() * 360;
-                x += texture.width;
-                if (x > 1920) {
-                    x = 0;
-                    y += texture.height;
-                    if (y > 960) {
-                        y = 0;
-                    }
-                }
-                this.addChild(bitmap);
-                this.iconList.push(bitmap);
-            }
-            bitmap = new lark.Bitmap();
-            bitmap.texture = texture;
-            bitmap.x = 700;
-            bitmap.y = 500;
-            this.iconList.push(bitmap);
-            this.targetIcon = bitmap;
-            this.addChild(this.targetIcon);
-            this.addChild(FPS.display);
-            this.stage.frameRate = 24;
-            var timer = new Timer(16);
-            timer.addEventListener(TimerEvent.TIMER, this.onTick, this);
-            timer.start();
-            this.addEventListener(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+
+            var bitmap = new Bitmap(texture);
+            this.addChild(bitmap);
+
+            var container = new DisplayObjectContainer();
+            this.addChild(container);
+            container.x = 250;
+            container.addChild(new Bitmap(texture));
+            bitmap = new Bitmap(texture);
+            bitmap.x = 250;
+            container.addChild(bitmap);
+            container.touchChildren = false;
+            
+            //var x = 0, y = 0;
+            //for (var i = 0; i < 2000; i++) {
+            //    var bitmap = new Bitmap();
+            //    bitmap.texture = texture;
+            //    bitmap.x = x;
+            //    bitmap.y = y;
+            //    bitmap.scaleX = bitmap.scaleY = Math.random();
+            //    bitmap.rotation = Math.random() * 360;
+            //    x += texture.width;
+            //    if (x > 1920) {
+            //        x = 0;
+            //        y += texture.height;
+            //        if (y > 960) {
+            //            y = 0;
+            //        }
+            //    }
+            //    this.addChild(bitmap);
+            //    this.iconList.push(bitmap);
+            //}
+            //bitmap = new lark.Bitmap();
+            //bitmap.texture = texture;
+            //bitmap.x = 700;
+            //bitmap.y = 500;
+            //this.iconList.push(bitmap);
+            //this.targetIcon = bitmap;
+            //this.addChild(this.targetIcon);
+            //this.addChild(FPS.display);
+            //this.stage.frameRate = 24;
+            //var timer = new Timer(16);
+            //timer.addEventListener(TimerEvent.TIMER, this.onTick, this);
+            //timer.start();
+            this.stage.addEventListener(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
         private touchTarget:DisplayObject;
@@ -87,6 +100,9 @@ module lark {
 
         private onTouchBegin(event:TouchEvent):void {
             this.touchTarget = <DisplayObject>event.target;
+            if(this.touchTarget===this.stage){
+                return;
+            }
             this.addChild(this.touchTarget);
             this.offsetX = this.touchTarget.x - event.stageX;
             this.offsetY = this.touchTarget.y - event.stageY;

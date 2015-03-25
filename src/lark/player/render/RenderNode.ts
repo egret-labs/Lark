@@ -169,19 +169,6 @@ module lark.player {
         }
 
         /**
-         * 与舞台坐标点碰撞检测
-         */
-        public hitTest(stageX:number,stageY:number,shapeFlag?:boolean):DisplayObject{
-            var m = this.target.$getInvertedConcatenatedMatrix();
-            var x = m.a * stageX + m.c * stageY + m.tx;
-            var y = m.b * stageX + m.d * stageY + m.ty;
-            if(this.bounds.contains(x,y)){
-                return this.target;
-            }
-            return null;
-        }
-
-        /**
          * 执行渲染操作
          */
         public render(renderContext:IPlayerContext):void{

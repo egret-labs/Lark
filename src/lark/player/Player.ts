@@ -275,14 +275,11 @@ module lark.player {
         }
 
         private findTarget(stageX:number,stageY:number):DisplayObject{
-            var renderList = this.renderNodeList;
-            for(var i=renderList.length-1;i>=0;i--){
-                var target = renderList[i].hitTest(stageX,stageY);
-                if(target){
-                    return target;
-                }
+            var target = this.stage.$hitTest(stageX,stageY);
+            if(!target){
+                target = this.stage;
             }
-            return this.stage;
+            return target;
         }
     }
 }

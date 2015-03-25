@@ -392,17 +392,34 @@ module lark {
         }
 
 
-        public _touchChildren:boolean = true;
+        $touchChildren:boolean = true;
         /**
          * 指定此对象的子项以及子孙项是否接收鼠标/触摸事件
          * 默认值为 true 即可以接收。
          */
         public get touchChildren():boolean {
-            return this._touchChildren;
+            return this.$touchChildren;
         }
 
         public set touchChildren(value:boolean) {
-            this._touchChildren = value;
+            this.$touchChildren = value;
+        }
+
+        $hitTest(stageX:number,stageY:number):DisplayObject{
+            if(!this.$hasFlags(DisplayObjectFlags.Visible)||!this.$touchEnabled&&!this.$touchChildren){
+                return null;
+            }
+            var children = this.$children;
+            for(var i = children.length-1;i>=0;i--){
+                var target = children[i].$hitTest(stageX,stageY);
+                if(target){
+                    break;
+                }
+            }
+            if(!this.$touchChildren&&target){
+                return this;
+            }
+            return target;
         }
 
     }

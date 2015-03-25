@@ -361,6 +361,7 @@ module lark {
             this._skewY += angle;
             this._rotation = value;
             this.$invalidateMatrix();
+
         }
 
         /**
@@ -475,17 +476,17 @@ module lark {
             return this._concatenatedAlpha;
         }
 
-        private _touchEnabled:boolean = true;
+        $touchEnabled:boolean = true;
         /**
          * 指定此对象是否接收鼠标/触摸事件
          * @default true 默认为 true 即可以接收。
          */
         public get touchEnabled():boolean {
-            return this._touchEnabled;
+            return this.$touchEnabled;
         }
 
         public set touchEnabled(value:boolean) {
-            this._touchEnabled = !!value;
+            this.$touchEnabled = !!value;
         }
 
 
@@ -669,10 +670,10 @@ module lark {
         }
 
         private markChildDirty(child:DisplayObject, dirtyNodes:{[key:number]:lark.player.RenderNode}):void {
-            if (this.$hasFlags(DisplayObjectFlags.Dirty)) {
+            if (child.$hasFlags(DisplayObjectFlags.Dirty)) {
                 return;
             }
-            this.$setFlags(DisplayObjectFlags.Dirty);
+            child.$setFlags(DisplayObjectFlags.Dirty);
             var node = child.$renderNode;
             if (node && dirtyNodes) {
                 dirtyNodes[node.hashCode] = node;
@@ -683,6 +684,36 @@ module lark {
                     this.markChildDirty(children[i], dirtyNodes);
                 }
             }
+        }
+
+        /**
+         * 计算显示对象，以确定它是否与 x 和 y 参数指定的点重叠或相交。x 和 y 参数指定舞台的坐标空间中的点，
+         * 而不是包含显示对象的显示对象容器中的点（除非显示对象容器是舞台）。
+         * @param stageX 要测试的舞台 x 坐标。
+         * @param stageY 要测试的舞台 y 坐标。
+         * @param shapeFlag 是检查对象 (true) 的实际像素，还是只检查边框 (false)。
+         * @returns {boolean} 如果显示对象与指定的点重叠或相交，则为 true；否则为 false。
+         */
+        public hitTestPoint(stageX: number, stageY: number, shapeFlag: boolean): boolean {
+            //var testingType = shapeFlag ?
+            //    player.HitTestingType.HitTestShape :
+            //    player.HitTestingType.HitTestBounds;
+            //return this.$containsGlobalPoint(stageX,stageY,testingType,null);
+            return false;
+        }
+
+        $hitTest(stageX:number,stageY:number):DisplayObject{
+            if(!this.$touchEnabled||!this.$hasFlags(DisplayObjectFlags.Visible)){
+                return null;
+            }
+            var m = this.$getInvertedConcatenatedMatrix();
+            var localX = m.a * stageX + m.c * stageY + m.tx;
+            var localY = m.b * stageX + m.d * stageY + m.ty;
+            var bounds:Rectangle = this.$getContentBounds();
+            if(bounds.contains(localX,localY)){
+                return this;
+            }
+            return null;
         }
 
         static $enterFrameCallBackList:lark.player.EventBin[] = [];
@@ -769,3 +800,13 @@ module lark {
     }
 
 }
+//module lark.player{
+//    /**
+//     * 碰撞检测类型
+//     */
+//    export enum HitTestingType {
+//        HitTestBounds,
+//        HitTestShape,
+//        Mouse,
+//    }
+//}

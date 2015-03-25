@@ -41,9 +41,10 @@ module lark {
         /**
          * 创建一个Bitmap对象
          */
-        public constructor() {
+        public constructor(texture?:Texture) {
             super();
             this.$renderNode = new lark.player.BitmapNode(this);
+            this.texture = texture;
         }
 
         $texture:Texture = null;
