@@ -27,15 +27,20 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
+module lark.text {
+
+    import TextBlock = text.TextBlock;
 
     export enum TextFieldFlags {
         None = 0x000000,
         TextDirty = 0x000001,
         FormatDirty = 0x000002,
         MultilineDirty = 0x000004,
-        LineDirty = TextDirty | FormatDirty | MultilineDirty ,
-        Dirty = LineDirty
+        WordWrapDirty = 0x000008,
+        ScrollVDirty = 0x000010,
+        RichNodeDirty = 0x000010,
+        LineDirty = TextDirty | FormatDirty | MultilineDirty | WordWrapDirty | RichNodeDirty,
+        Dirty = LineDirty | ScrollVDirty
     }
 
 
@@ -47,14 +52,54 @@ module lark {
     export interface ITextFieldStyle extends ITextStyle {
 
         /**
-         * 表示段落的对齐方式。left 或 right
+         * 表示段落的对齐方式。
          */
         align?: string;
+
+
+        /**
+         * 表示块缩进，以像素为单位。
+         */
+        blockIndent?: number;
+
+
+        /**
+         * 表示从左边距到段落中第一个字符的缩进。
+         */
+        indent?: number;
+
+
 
         /**
          * 一个整数，表示行与行之间的垂直间距（称为前导）量。
          */
         leading?: number;
+
+
+        /**
+         * 段落的左边距，以像素为单位。
+         */
+        leftMargin?: number;
+
+
+        /**
+         * 段落的右边距，以像素为单位。
+         */
+        rightMargin?: number;
+
+
+
+        /**
+         * 表示显示超链接的目标窗口。
+         */
+        target?: string;
+        
+
+        /**
+         * 表示使用此文本格式的文本的目标 URL。
+         */
+        url?: string;
+
     }
 
     
@@ -65,14 +110,19 @@ module lark {
         color: 0x000000,
         bold: false,
         italic: false,
-        float: "",
+        float: Align.NONE,
+        leftMargin: 0,
+        rightMargin: 0,
+        blockIndent: 0,
         align: Align.LEFT,
-        leading: 0.2,
+        indent: 0,
+        leading: 0,
         verticalAlign: Align.BOTTOM
     }
-    
-    var SplitRegex = /(?=[\u00BF-\u1FFF\u2C00-\uD7FF]|\b)(?![。，！、》…）)}”】\.\,\!\?\]\:])/;
-    var LineBreaks = /\r|\n/;
+
+    export function hasFlag(prop:number, flag:number):boolean{
+        return (prop & flag) == flag;
+    }
 
     /**
      * TextField 类用于创建显示对象以显示和输入文本。 
@@ -87,10 +137,11 @@ module lark {
         public constructor(text:string,format?:ITextFieldStyle) {
             super();
             this._text = text;
-            this._style = this.normalizeStyle(format,BaseStyle);
+            this._format = this.normalizeStyle(format,BaseStyle);
             this.$invalidateContentBounds();
             
             this.addEventListener(Event.ENTER_FRAME, this.onEnterFrame, this);
+            //this.stage.invalidate();
         }
 
 
@@ -111,13 +162,13 @@ module lark {
             this.$setTextFieldFlags(TextFieldFlags.TextDirty);
         }
 
-        protected _style: ITextFieldStyle;
-        public get style(): ITextFieldStyle {
-            return this._style;
+        protected _format: ITextFieldStyle;
+        public get format(): ITextFieldStyle {
+            return this._format;
         }
-        public set style(value: ITextFieldStyle) {
+        public set format(value: ITextFieldStyle) {
             value = this.normalizeStyle(value, BaseStyle);
-            this._style = value;
+            this._format = value;
             this.$setTextFieldFlags(TextFieldFlags.FormatDirty);
         }
 
@@ -130,6 +181,17 @@ module lark {
                 return;
             this._multiline = value;
             this.$setTextFieldFlags(TextFieldFlags.MultilineDirty);
+        }
+        
+        protected _wordWrap = true;
+        public get wordWrap(): boolean {
+            return this._wordWrap;
+        }
+        public set wordWrap(value: boolean) {
+            if (value == this._wordWrap)
+                return;
+            this._wordWrap = value;
+            this.$setTextFieldFlags(TextFieldFlags.WordWrapDirty);
         }
 
         protected _width:number = NaN;
@@ -154,75 +216,91 @@ module lark {
             this.$setTextFieldFlags(TextFieldFlags.Dirty);
         }
 
-        private onEnterFrame() {
-            if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0) {
-                this.$createLines();
-                this.$updateChildren();
-                this._textFieldFlags = 0;
-            }
+        protected _scrollV: number = 0;
+        public get scrollV(): number {
+            return this._scrollV;
+        }
+        public set scrollV(value: number) {
+            if (this._scrollV == value)
+                return;
+            this._scrollV = value;
+            this.$setTextFieldFlags(TextFieldFlags.ScrollVDirty);
         }
 
-        private textLines: Array<TextSpan> = []; 
+        private onEnterFrame() {
+                if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0)
+                    this.$createLines();
+                if ((this._textFieldFlags & TextFieldFlags.ScrollVDirty) == TextFieldFlags.ScrollVDirty)
+                    this.$updateChildren();
+            }
+
+        static LineBreaks = /\r|\n/;
+        private _textLines: Array<text.TextLine> = []; 
         $createLines() {
-            var lines = this._text.split(LineBreaks);
+            this._textLines.length = 0;
+            this._makeContents();
+            var contents = this._contents;
 
-            if (!this._multiline)
-                lines = [lines.join(' ')];
 
-            var w = (this._width || 10000);
-            var spanArrays = lines.map(t=> this.createLineSpan(t, w));
-            this.textLines = Array.prototype.concat.apply([], spanArrays);
+            var wrap = this._wordWrap && this._multiline;
+            var format = this._format;
+            var textBlock = new text.TextBlock();
+
+
+            var y = format.leading||0;
+            var x = format.leftMargin || 0;
+            var lm = format.leftMargin || 0,
+                rm = format.rightMargin || 0,
+                bidt = format.blockIndent || 0;
+
+            var w = (this._width||10000) - lm - rm - bidt;
+            if (wrap == false)
+                w = 100000;
+
+
+            for (var i = 0; i < contents.length; i++) {
+                var content = contents[i];
+                x = lm + bidt;
+                textBlock.content = content;
+                var lines = textBlock.createAllTextLines(w, format);
+                this._textLines = this._textLines.concat(lines);
+            }
+
+            this.$updateChildren();
+
+            this._textFieldFlags = 0;
         }
 
         $updateChildren() {
             this.removeChildren();
-            var width = this._width || (this.$stage ? this.$stage.stageWidth : 400);
-            var height = this._height || 10000;
-            var lines = this.textLines, format = this._style;
-
-            var xRate: number = 0;
-            if (format.align == "center") 
-                xRate = 0.5;
-            else if (format.align == "right") 
-                xRate = 1;
-
-            var y = format.leading * format.fontSize / 2;
-            for (var i = 0; i < lines.length; i++) {
+            var lines = this._textLines;
+            var y = 0;
+            for (var i = this._scrollV; i < lines.length; i++) {
                 var line = lines[i];
                 this.addChild(line);
                 line.y = y;
-                line.x = (width - line.textWidth) * xRate;
-                y += lines[i].height + format.leading * format.fontSize;
-                if (this._multiline == false || y > height)
+                y += lines[i].textHeight + (this._format.leading || 0);
+                if (y > (this._height||10000))
+                    break;
+                if (this._multiline == false)
                     break;
             }
+            this._textFieldFlags &= ~TextFieldFlags.ScrollVDirty;
         }
 
-        protected createLineSpan(lineString: string,width:number): TextSpan[]{
-            var textAtoms = lineString.split(SplitRegex);
-            var currentWidth = 0;
-            var style = this._style;
-            var lines: TextSpan[] = [];
-            var line = "";
-            for (var i = 0; i < textAtoms.length; i++) {
-                var atom = textAtoms[i];
-                var w = TextMeasurer.measureText(atom, this._style);
-                var testW = currentWidth + w;
-                if (testW < width) {
-                    line += atom;
-                    currentWidth = testW;
-                }
-                else {
-                    lines.push(new TextSpan(line, style, currentWidth, line.length));
-                    line = atom;
-                    currentWidth = w;
-                }
-            }
-            lines.push(new TextSpan(line, style, currentWidth, line.length));
-            return lines;
+        protected _contents: text.ContentElement[];
+        protected _makeContents() {
+            if (!hasFlag(this._textFieldFlags, TextFieldFlags.TextDirty) && !hasFlag(this._textFieldFlags, TextFieldFlags.MultilineDirty))
+                return;
+            var lines = this._text.split(TextField.LineBreaks);
+            
+            if (!this._multiline)
+                lines = [lines.join(' ')];
+
+            this._contents = lines.map(t=> new text.TextElement(t, this._format));
         }
 
-        protected normalizeStyle(change: ITextFieldStyle,base:ITextFieldStyle = this._style): ITextFieldStyle {
+        protected normalizeStyle(change: ITextFieldStyle,base:ITextFieldStyle = this._format): ITextFieldStyle {
             var style: ITextStyle = {};
             for (var p in base) {
                 if (base[p] !== undefined)

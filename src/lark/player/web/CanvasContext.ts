@@ -44,6 +44,7 @@ module lark.player {
             this.canvas = canvas;
             this.context = canvas.getContext("2d");
             this.checkTicker();
+            TextMeasurer.setInstance(new CanvasTextMeasurer(this, this.context));
         }
 
         /**
@@ -155,6 +156,11 @@ module lark.player {
             var height = texture.$bitmapHeight;
             this.context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY,width, height,
                 texture.$offsetX+point.x, texture.$offsetY+point.y, width, height);
+        }
+
+        public setupFont(style: ITextStyle): void {
+            var font = style.toFontString(true);
+            this.setFont(font);
         }
 
         /**

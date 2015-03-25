@@ -1,34 +1,25 @@
-﻿module lark.text {
+﻿module lark {
     /**
      * 最小的文本显示对象
      */
     export class TextSpan extends DisplayObject {
         constructor(
-            text: string = null,
-            fontString: string = "sans-serif",
+            text: string ,
+            style:ITextStyle,
             textWidth: number = 0,
-            size: number = 12,
-            color: number = 0x000000,
             length: number = 0) {
             super();
             this.$renderNode = new lark.player.TextNode(this);
             this.text = text;
-            if (!fontString)
-                fontString = "sans-serif";
-            this.fontString = fontString;
+            this.style = style;
             this.textWidth = textWidth;
-            this.size = +size|0;
-            this.color = +color|0;
-            this.length = +length|0;
             this.$invalidateContentBounds();
         }
 
 
         public text: string;
-        public fontString: string;
         public textWidth: number;
-        public size: number;
-        public color: number;
+        public style: ITextStyle;
         public length: number;
 
         /**
@@ -36,7 +27,7 @@
          * @param bounds 测量结果存储在这个矩形对象内
          */
         $measureContentBounds(bounds: Rectangle): void {
-            bounds.setTo(0, 0, this.textWidth, this.size);
+            bounds.setTo(0, 0, this.textWidth, this.style.fontSize);
         }
 
         /**
@@ -46,18 +37,14 @@
             super.$updateRenderNode();
             var node = <lark.player.TextNode>this.$renderNode;
             node.text = this.text;
-            node.size = this.size;
-            node.font = this.fontString;
+            node.size = this.style.fontSize;
+            node.font = this.style.toFontString(true);
             node.style = this.$toColorString();
             node.textWidth = this.textWidth;
         }
 
-        $toFontString() {
-            return this.size + "px " + this.fontString;
-        }
-
         $toColorString() {
-            var value = this.color;
+            var value = this.style.color;
             if(value < 0)
                 value = 0;
             if(value > 16777215)

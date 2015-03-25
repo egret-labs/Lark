@@ -51,15 +51,15 @@ module lark.text {
 
                 var arrayToInsert = results[1];
                 if (isGraphic) {
-                    if (result.format.float == TextFloat.LEFT)
+                    if (result.format.float == Align.LEFT)
                         arrayToInsert = results[0];
-                    else if (result.format.float == TextFloat.RIGHT)
+                    else if (result.format.float == Align.RIGHT)
                         arrayToInsert = results[2];
                 }
 
                 arrayToInsert.push(result);
 
-                if (!isGraphic || result.format.float == TextFloat.NONE) {
+                if (!isGraphic || result.format.float == Align.NONE) {
                     var h = span.height;
                     maxHeight = Math.max(maxHeight, h);
                     minHeight = Math.min(minHeight, h);
@@ -103,15 +103,15 @@ module lark.text {
                 var result = middles[i];
                 var span = result.span;
                 switch (result.format.verticalAlign) {
-                    case VerticalAlign.BOTTOM: {
+                    case Align.BOTTOM: {
                         span.y = maxHeight - span.height;
                         break;
                     }
-                    case VerticalAlign.MIDDLE: {
+                    case Align.MIDDLE: {
                         span.y = (maxHeight - span.height) / 2;
                         break;
                     }
-                    case VerticalAlign.TOP: {
+                    case Align.TOP: {
                         span.y = 0;
                         break;
                     }
