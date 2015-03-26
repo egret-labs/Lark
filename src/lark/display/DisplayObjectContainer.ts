@@ -51,7 +51,7 @@ module lark {
             if(this.$stage){
                 this.$stage.$displayListTreeChanged = true;
             }
-            this.$propagateFlagsUp(DisplayObjectFlags.InvalidContentBounds);
+            this.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
         }
 
         $propagateFlagsDown(flags:DisplayObjectFlags) {
@@ -365,13 +365,16 @@ module lark {
         }
 
 
-        $measureContentBounds(bounds:Rectangle):void {
+        $measureChildBounds(bounds:Rectangle):void {
             var children = this.$children;
             var length = children.length;
+            if(length===0){
+                return;
+            }
             var xMin = 0, xMax = 0, yMin = 0, yMax = 0;
             var found:boolean = false;
-            for (var i = 0; i < length; i++) {
-                var childBounds = children[i].$getTransformedBounds(this, Rectangle.TEMP);
+            for (var i = -1; i < length; i++) {
+                var childBounds = i===-1?bounds:children[i].$getTransformedBounds(this, Rectangle.TEMP);
                 if (childBounds.isEmpty()) {
                     continue;
                 }
@@ -424,12 +427,9 @@ module lark {
                 return this;
             }
             if(this.$touchEnabled){
-                var node = this.$renderNode;
-                if(node&&node.hitTest(stageX,stageY)){
-                    return this;
-                }
+                return super.$hitTest(stageX,stageY);
             }
-            return target;
+            return null;
         }
 
     }

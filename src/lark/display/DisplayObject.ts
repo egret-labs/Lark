@@ -118,21 +118,21 @@ module lark {
             return !!(this._displayObjectFlags & flags);
         }
 
-        $invalidateMatrix():void {
+        private invalidateMatrix():void {
             this.$markDirty();
             this.$setFlags(DisplayObjectFlags.InvalidMatrix);
-            this.$invalidatePosition();
+            this.invalidatePosition();
         }
 
         /**
          * 标记这个显示对象在父级容器的位置发生了改变。
          */
-        $invalidatePosition():void {
+        private invalidatePosition():void {
             this.$markDirty();
             this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
             if (this.$parent) {
-                this.$parent.$propagateFlagsUp(DisplayObjectFlags.InvalidContentBounds);
+                this.$parent.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
             }
         }
 
@@ -224,7 +224,7 @@ module lark {
             this._skewY = matrix.$getSkewY();
             this._rotation = DisplayObject.clampRotation(this._skewY * 180 / Math.PI);
             this.$removeFlags(DisplayObjectFlags.InvalidMatrix);
-            this.$invalidatePosition();
+            this.invalidatePosition();
         }
 
         private _concatenatedMatrix:Matrix = new Matrix();
@@ -273,7 +273,7 @@ module lark {
                 return;
             }
             this._matrix.tx = value;
-            this.$invalidatePosition();
+            this.invalidatePosition();
         }
 
         /**
@@ -291,7 +291,7 @@ module lark {
                 return;
             }
             this._matrix.ty = value;
-            this.$invalidatePosition();
+            this.invalidatePosition();
         }
 
 
@@ -312,7 +312,7 @@ module lark {
                 return;
             }
             this._scaleX = value;
-            this.$invalidateMatrix();
+            this.invalidateMatrix();
         }
 
         private _scaleY:number = 1;
@@ -332,7 +332,7 @@ module lark {
                 return;
             }
             this._scaleY = value;
-            this.$invalidateMatrix();
+            this.invalidateMatrix();
         }
 
         private _skewX:number = 0;
@@ -359,7 +359,7 @@ module lark {
             this._skewX += angle;
             this._skewY += angle;
             this._rotation = value;
-            this.$invalidateMatrix();
+            this.invalidateMatrix();
 
         }
 
@@ -376,17 +376,17 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var contentBounds = this.$getContentBounds();
+            var originalBounds = this.getOriginalBounds();
             var bounds = this.$getTransformedBounds(this.$parent, Rectangle.TEMP);
             var angle = this._rotation / 180 * Math.PI;
-            var baseWidth = contentBounds.$getBaseWidth(angle);
+            var baseWidth = originalBounds.$getBaseWidth(angle);
             if (!baseWidth) {
                 return;
             }
-            var baseHeight = contentBounds.$getBaseHeight(angle);
+            var baseHeight = originalBounds.$getBaseHeight(angle);
             this._scaleY = bounds.height / baseHeight;
             this._scaleX = value / baseWidth;
-            this.$invalidateMatrix();
+            this.invalidateMatrix();
         }
 
         /**
@@ -402,17 +402,17 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var contentBounds = this.$getContentBounds();
+            var originalBounds = this.getOriginalBounds();
             var bounds = this.$getTransformedBounds(this.$parent, Rectangle.TEMP);
             var angle = this._rotation / 180 * Math.PI;
-            var baseHeight = contentBounds.$getBaseHeight(angle);
+            var baseHeight = originalBounds.$getBaseHeight(angle);
             if (!baseHeight) {
                 return;
             }
-            var baseWidth = contentBounds.$getBaseWidth(angle);
+            var baseWidth = originalBounds.$getBaseWidth(angle);
             this._scaleY = value / baseHeight;
             this._scaleX = bounds.width / baseWidth;
-            this.$invalidateMatrix();
+            this.invalidateMatrix();
         }
 
         /**
@@ -461,10 +461,10 @@ module lark {
         /**
          * 获取这个显示对象跟它所有父级透明度的乘积
          */
-        $getConcatenatedAlpha():number {
+        private getConcatenatedAlpha():number {
             if (this.$hasFlags(DisplayObjectFlags.InvalidConcatenatedAlpha)) {
                 if (this.$parent) {
-                    var parentAlpha = this.$parent.$getConcatenatedAlpha();
+                    var parentAlpha = this.$parent.getConcatenatedAlpha();
                     this._concatenatedAlpha = parentAlpha * this._alpha;
                 }
                 else {
@@ -548,7 +548,7 @@ module lark {
         }
 
         $getTransformedBounds(targetCoordinateSpace:DisplayObject, resultRect?:Rectangle):Rectangle {
-            var bounds = this.$getContentBounds();
+            var bounds = this.getOriginalBounds();
             if (!resultRect) {
                 resultRect = new Rectangle();
             }
@@ -594,33 +594,54 @@ module lark {
             return m.transformPoint(localX, localY, resultPoint);
         }
 
-
         /**
          * 标记自身的测量尺寸失效
          */
         $invalidateContentBounds():void {
             this.$markDirty();
-            this.$propagateFlagsUp(DisplayObjectFlags.InvalidContentBounds);
+            this.$setFlags(DisplayObjectFlags.InvalidContentBounds);
+            this.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
         }
 
-        private _contentBounds:Rectangle = new Rectangle();
+        private _bounds:Rectangle = new Rectangle();
+
         /**
-         * 获取自身占用的矩形区域，如果是容器，还包括所有子项占据的区域。
+         * 获取显示对象占用的矩形区域集合，通常包括自身绘制的测量区域，如果是容器，还包括所有子项占据的区域。
          */
-        $getContentBounds():Rectangle {
-            var bounds = this._contentBounds;
-            if (this.$hasFlags(DisplayObjectFlags.InvalidContentBounds)) {
-                this.$removeFlags(DisplayObjectFlags.InvalidContentBounds);
+        private getOriginalBounds():Rectangle {
+            var bounds = this._bounds;
+            if (this.$hasFlags(DisplayObjectFlags.InvalidBounds)) {
                 if (this.$renderNode) {
                     this.$renderNode.moved = true;
                 }
-                this.$measureContentBounds(bounds);
+                bounds.copyFrom(this.$getContentBounds());
+                this.$measureChildBounds(bounds);
+                this.$removeFlags(DisplayObjectFlags.InvalidBounds);
             }
             return bounds;
         }
 
         /**
-         * 测量自身占用的矩形区域，如果是容器，还包括所有子项占据的区域。
+         * 测量子项占用的矩形区域
+         * @param bounds 测量结果存储在这个矩形对象内
+         */
+        $measureChildBounds(bounds:Rectangle):void {
+
+        }
+
+        private _contentBounds:Rectangle = new Rectangle();
+
+        $getContentBounds():Rectangle {
+            var bounds = this._contentBounds;
+            if (this.$hasFlags(DisplayObjectFlags.InvalidContentBounds)) {
+                this.$measureContentBounds(bounds);
+                this.$removeFlags(DisplayObjectFlags.InvalidContentBounds);
+            }
+            return bounds;
+        }
+
+        /**
+         * 测量自身占用的矩形区域，注意：此测量结果并不包括子项占据的区域。
          * @param bounds 测量结果存储在这个矩形对象内
          */
         $measureContentBounds(bounds:Rectangle):void {
@@ -636,7 +657,7 @@ module lark {
         $updateRenderNode():void {
             this.$removeFlagsUp(DisplayObjectFlags.Dirty);
             var node = this.$renderNode;
-            node.alpha = this.$getConcatenatedAlpha();
+            node.alpha = this.getConcatenatedAlpha();
             node.matrix = this.$getConcatenatedMatrix();
             node.bounds = this.$getContentBounds();
         }
@@ -729,11 +750,11 @@ module lark {
                 target = target.$parent;
             }
             event.$target = this;
-            this.$dispatchPropagationEvent(event, list);
+            this.dispatchPropagationEvent(event, list);
             return !event.$isDefaultPrevented;
         }
 
-        $dispatchPropagationEvent(event:Event, list:DisplayObject[]):void {
+        private dispatchPropagationEvent(event:Event, list:DisplayObject[]):void {
             var length:number = list.length;
             var eventPhase:number = EventPhase.CAPTURING_PHASE;
             for (var i:number = length - 1; i >= 0; i--) {

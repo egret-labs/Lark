@@ -34,7 +34,7 @@ module lark.player {
      * @excluded
      * 渲染节点基类
      */
-    export class RenderNode extends HashObject{
+    export class RenderNode extends HashObject {
 
         public constructor(target:DisplayObject) {
             super();
@@ -112,24 +112,25 @@ module lark.player {
                 return;
             }
             this.target.$updateRenderNode();
-            if(!this.moved){
+            if (!this.moved) {
                 return;
             }
             var bounds = TempBounds.copyFrom(this.bounds);
             this.matrix.$transformBounds(bounds);
             this.minX = bounds.x;
-            this.maxX = bounds.x+bounds.width;
+            this.maxX = bounds.x + bounds.width;
             this.minY = bounds.y;
-            this.maxY = bounds.y+bounds.height;
+            this.maxY = bounds.y + bounds.height;
             this.outOfScreen = !this.intersects(0, 0, stage.stageWidth, stage.stageHeight);
         }
 
         /**
          * 执行渲染,绘制自身到屏幕
          */
-        public render(renderContext:IPlayerContext):void{
+        public render(renderContext:IPlayerContext):void {
 
         }
+
         /**
          * 渲染结束，已经绘制到屏幕
          */
@@ -137,16 +138,5 @@ module lark.player {
             this.isDirty = false;
             this.moved = false;
         }
-
-        /**
-         * 碰撞检测，返回是否与舞台坐标相交。
-         */
-        public hitTest(stageX:number,stageY:number):boolean{
-            var m = this.target.$getInvertedConcatenatedMatrix();
-            var bounds = this.bounds;
-            var localX = m.a * stageX + m.c * stageY + m.tx;
-            var localY = m.b * stageX + m.d * stageY + m.ty;
-            return bounds.contains(localX,localY);
-        } 
     }
 }
