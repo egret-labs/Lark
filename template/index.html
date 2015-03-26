@@ -60,9 +60,9 @@
 <body>
     <canvas id="lark_canvas" width="1920" height="960"/>
     <script>
-        var mainClass = location.search && location.search.match("main=(.+)") ? location.search.match("main=(.+)")[1] : "lark.Main";
+        var entryClass = location.search && location.search.match("main=(.+)") ? location.search.match("main=(.+)")[1] : "lark.Main";
         var canvas=document.getElementById("lark_canvas");
-        var player = lark.player.createPlayer(canvas, mainClass);
+        var player = lark.web.createPlayer(canvas, entryClass);
         player.start();
     </script>
 </body>
