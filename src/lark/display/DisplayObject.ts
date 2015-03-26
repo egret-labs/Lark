@@ -28,6 +28,20 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark {
+
+    /**
+     * 格式化旋转角度的值
+     */
+    function clampRotation(value):number {
+        value %= 360;
+        if (value > 180) {
+            value -= 360;
+        } else if (value < -180) {
+            value += 360;
+        }
+        return value;
+    }
+
     /**
      * 显示对象基类
      */
@@ -42,19 +56,6 @@ module lark {
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
             DisplayObjectFlags.InvalidConcatenatedAlpha |
             DisplayObjectFlags.Dirty;
-        }
-
-        /**
-         * 格式化旋转角度的值
-         */
-        private static clampRotation(value):number {
-            value %= 360;
-            if (value > 180) {
-                value -= 360;
-            } else if (value < -180) {
-                value += 360;
-            }
-            return value;
         }
 
         private _displayObjectFlags:number = 0;
@@ -222,7 +223,7 @@ module lark {
             this._scaleY = m.$getScaleY();
             this._skewX = matrix.$getSkewX();
             this._skewY = matrix.$getSkewY();
-            this._rotation = DisplayObject.clampRotation(this._skewY * 180 / Math.PI);
+            this._rotation = clampRotation(this._skewY * 180 / Math.PI);
             this.$removeFlags(DisplayObjectFlags.InvalidMatrix);
             this.invalidatePosition();
         }
@@ -350,7 +351,7 @@ module lark {
 
         public set rotation(value:number) {
             value = +value || 0;
-            value = DisplayObject.clampRotation(value);
+            value = clampRotation(value);
             if (value === this._rotation) {
                 return;
             }

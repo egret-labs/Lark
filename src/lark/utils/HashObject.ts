@@ -29,6 +29,10 @@
 
 
 module lark {
+    /**
+     * 哈希计数
+     */
+    var hashCount:number = 1;
 
     /**
      * 哈希对象。引擎内所有对象的基类，为对象实例提供唯一的hashCode值,提高对象比较的性能。
@@ -39,13 +43,8 @@ module lark {
          * 创建一个 lark.HashObject 对象
          */
         public constructor() {
-            this._hashCode = HashObject.hashCount++;
+            this._hashCode = hashCount++;
         }
-
-        /**
-         * 哈希计数
-         */
-        private static hashCount:number = 1;
 
         private _hashCode:number;
         /**

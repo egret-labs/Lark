@@ -30,7 +30,7 @@
 
 module lark {
 
-    var __getDefinitionByName__cache:Object = {};
+    var $getDefinitionByNameCache:Object = {};
 
     /**
      * 返回 name 参数指定的类的类对象引用。
@@ -39,7 +39,7 @@ module lark {
     export function getDefinitionByName(name:string):any {
         if (!name)
             return null;
-        var definition:any = __getDefinitionByName__cache[name];
+        var definition:any = $getDefinitionByNameCache[name];
         if (definition) {
             return definition;
         }
@@ -53,7 +53,7 @@ module lark {
                 return null;
             }
         }
-        __getDefinitionByName__cache[name] = definition;
+        $getDefinitionByNameCache[name] = definition;
         return definition;
     }
 }
