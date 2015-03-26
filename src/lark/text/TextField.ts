@@ -40,24 +40,22 @@ module lark {
 
 
     /**
-     * TextFormat 类描述字符格式设置信息。使用 TextFormat 类可以为文本字段创建特定的文本格式。
-     * 您可以将文本格式应用于静态文本字段和动态文本字段。
-     * 
+     * ITextFieldStyle 接口述字符格式设置信息。使用 ITextFieldStyle 可以为文本字段创建特定的文本格式。
      */
     export interface ITextFieldStyle extends ITextStyle {
 
         /**
-         * 表示段落的对齐方式。left 或 right
+         * 表示段落的对齐方式。left, right 或 center, 参考 lark.Align
          */
         align?: string;
 
         /**
-         * 一个整数，表示行与行之间的垂直间距（称为前导）量。
+         * 行间距
+         * 该值为行间距与字体大小的比值，比如 当 fontSize 为 20 时 0.2 代表 4px;
          */
         leading?: number;
     }
 
-    
 
     var BaseStyle: ITextFieldStyle = {
         fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -84,12 +82,11 @@ module lark {
         /**
          * 创建一个TextField对象
          */
-        public constructor(text:string,format?:ITextFieldStyle) {
+        public constructor(text:string,style?:ITextFieldStyle) {
             super();
             this._text = text;
-            this._style = TextField.normalizeStyle(format, BaseStyle);
+            this._style = TextField.$normalizeStyle(style, BaseStyle);
             this.$renderNode = new lark.player.TextNode(this);
-            this.$invalidateContentBounds();
         }
 
 
@@ -97,7 +94,7 @@ module lark {
 
         $setTextFieldFlags(flags: TextFieldFlags) {
             this._textFieldFlags |= flags;
-            this.$markDirty();
+            this.$invalidateContentBounds();
         }
 
         protected _text: string;
@@ -116,12 +113,16 @@ module lark {
             return this._style;
         }
         public set style(value: ITextFieldStyle) {
-            value = TextField.normalizeStyle(value, BaseStyle);
+            value = TextField.$normalizeStyle(value, BaseStyle);
             this._style = value;
             this.$setTextFieldFlags(TextFieldFlags.FormatDirty);
         }
 
         protected _multiline = true;
+
+        /**
+        * 设置或获取是否允许多行显示
+        */
         public get multiline(): boolean {
             return this._multiline;
         }
@@ -155,16 +156,17 @@ module lark {
         }
 
         $setRenderLines(lines: TextSpan[]) {
-            this.$renderLines = lines;
+            this.renderLines = lines;
             this._textFieldFlags &= ~TextFieldFlags.LineDirty;
             this.$invalidateContentBounds();
-            this.$markDirty();
         }
 
         $measureContentBounds(bounds: Rectangle): void {
+            if (this._textFieldFlags > 0)
+                this.$updateLines();
             var height = 0;
-            if (this.$renderLines.length) {
-                var lastLine = this.$renderLines[this.$renderLines.length - 1];
+            if (this.renderLines.length) {
+                var lastLine = this.renderLines[this.renderLines.length - 1];
                 height = lastLine.y + lastLine.height
             }
             bounds.setTo(0, 0, this.width, height);
@@ -175,34 +177,29 @@ module lark {
          */
         $updateRenderNode(): void {
             if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0) {
-                this.$createLines();
-                this.$updateChildren();
+                this.$updateLines();
                 this._textFieldFlags = 0;
             }
-            (<player.TextNode>this.$renderNode).spans = this.$renderLines;
+            (<player.TextNode>this.$renderNode).spans = this.renderLines;
             super.$updateRenderNode();
         }
 
         private textLines: Array<TextSpan> = [];
-        $renderLines: Array<TextSpan> = [];
-        $createLines() {
-            var lines = this._text.split(LineBreaks);
+        private renderLines: Array<TextSpan> = [];
 
-            if (!this._multiline)
-                lines = [lines.join(' ')];
+        $updateLines() {
 
-            var w = this._width;
-            var spanArrays = lines.map(t=> this.createLineSpan(t, w));
-            this.textLines = Array.prototype.concat.apply([], spanArrays);
-        }
 
-        $updateChildren() {
             var width = this._width;
             var height = this._height || 10000;
+
+
+            this.createLines(width);
+            this.renderLines.length = 0;
             var lines = this.textLines, format = this._style;
             var lineHeight = format.fontSize * (1 + format.leading);
 
-            this.$renderLines.length = 0;
+
 
             var xRate: number = 0;
             if (format.align == "center") 
@@ -210,17 +207,29 @@ module lark {
             else if (format.align == "right") 
                 xRate = 1;
 
+
+
             var y = format.leading * format.fontSize / 2;
             for (var i = 0; i < lines.length; i++) {
                 var line = lines[i];
                 line.y = y;
                 line.x = (width - line.textWidth) * xRate;
                 y += lineHeight
-                this.$renderLines.push(line);
+                this.renderLines.push(line);
                 if (this._multiline == false || y > height)
                     break;
             }
-            this.$invalidateContentBounds();
+        }
+
+
+        protected createLines(width: number) {
+            var lines = this._text.split(LineBreaks);
+
+            if (!this._multiline)
+                lines = [lines.join(' ')];
+
+            var spanArrays = lines.map(t=> this.createLineSpan(t, width));
+            this.textLines = Array.prototype.concat.apply([], spanArrays);
         }
 
         protected createLineSpan(lineString: string,width:number): TextSpan[]{
@@ -247,7 +256,7 @@ module lark {
             return lines;
         }
 
-        public static normalizeStyle(change: ITextFieldStyle,base:ITextFieldStyle = BaseStyle): ITextFieldStyle {
+        static $normalizeStyle(change: ITextFieldStyle,base:ITextFieldStyle = BaseStyle): ITextFieldStyle {
             var style: ITextStyle = {};
             for (var p in base) {
                 if (base[p] !== undefined)

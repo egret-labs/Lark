@@ -44,7 +44,7 @@ module lark.player {
             this.canvas = canvas;
             this.context = canvas.getContext("2d");
             this.checkTicker();
-            TextMeasurer.setInstance(new CanvasTextMeasurer(this, this.context));
+            TextMeasurer.$setInstance(new CanvasTextMeasurer(this, this.context));
         }
 
         /**

@@ -63,21 +63,15 @@ module lark {
 
 
 
-            //var text = "setTimeout(() => rich.width = this.stage? this.stage.stageWidth: 500, 300); \n"
-            //    + " World setTimeout(() => rich.width = this.stage? this.stage.stageWidth : 500, 300); \n "
-            //    + " World setTimeout(() => rich.width = this.stage ? this.stage.stageWidth : 500, 300); \\n World";
-            //var tf = new TextField(text);
-            //tf.style = { align: "left", color: 0xFF0000 };
-            ////tf.width = 400;
-            //tf.multiline = true;
-            //tf.y = 200;
-            //this.addChild(tf);
-            //var x, y, touchdown = false;
-            //var move = (e: TouchEvent) => { if (touchdown == false) return; tf.width += e.stageX - x; x = e.stageX;};
-            //tf.addEventListener(TouchEvent.TOUCH_BEGIN,(e: TouchEvent) => { x = e.stageX; touchdown = true }, this);
-
-            //tf.addEventListener(TouchEvent.TOUCH_MOVE, move, this);
-            //tf.addEventListener(TouchEvent.TOUCH_END, e=> touchdown = false, this);
+            var text = "setTimeout(() => rich.width = this.stage? this.stage.stageWidth: 500, 300); \n"
+                + " World setTimeout(() => rich.width = this.stage? this.stage.stageWidth : 500, 300); \n "
+                + " World setTimeout(() => rich.width = this.stage ? this.stage.stageWidth : 500, 300); \\n World";
+            var tf = new TextField(text);
+            tf.style = { align: "left", color: 0xFF0000 };
+            tf.width = 400;
+            tf.multiline = true;
+            tf.y = 200;
+            this.addChild(tf);
 
             var rich = new lark.RichTextField({ fontSize: 30,align:"right" });
             rich.y = 50;

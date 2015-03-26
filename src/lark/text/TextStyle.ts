@@ -28,7 +28,10 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark {
-
+    
+    /**
+    * 文本的对齐方式
+    */
     export class Align {
         static LEFT: string = "left";
         static CENTER: string = "left";
@@ -38,18 +41,55 @@ module lark {
         static BOTTOM = "bottom";
         static NONE = "";
     }
-
+    
+    /**
+    * 定义多样式文本的样式
+    */
     export interface ITextStyle {
+        /**
+        * 需要使用的字体集
+        */
         fontFamily?: string;
+
+        /**
+        * 设置字号，以像素为单位
+        */
         fontSize?: number;
+
+        /**
+        * 设置是否需要粗体
+        */
         bold?: boolean;
+
+        /**
+        * 设置是否需要斜体
+        */
         italic?: boolean;
+
+        /**
+        * 设置文本颜色，数字格式 如 0x000000 表示黑色
+        */
         color?: number;
+
+        /**
+        * 设置显示对象浮动的位置
+        * 此属性一般用于图文混排时，设置图片相对于段落的位置
+        */
         float?: string;
+
+        /**
+        * 设置一行中不同高度的文本或显示对象的纵向对齐方式，请参照 lark.Align
+        */
         verticalAlign?: string;
+
+        /**
+        * 设置段落中文本的水平对齐方式
+        */
         align?: string;
-        href?: string;
-        target?: string;
+        
+        /**
+        * 根据样式生成 Context 需要的字体字符串
+        */
         toFontString?(includeSize?:boolean):string;
     }
 
