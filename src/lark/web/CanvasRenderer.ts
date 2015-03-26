@@ -29,8 +29,7 @@
 
 module lark.web {
     /**
-     * @excluded
-     * Lark播放器在Canvas上封装的实现
+     * Canvas屏幕渲染器
      */
     export class CanvasRenderer extends HashObject implements lark.player.IRenderer,lark.player.ITextMetrics {
         /**
@@ -39,7 +38,7 @@ module lark.web {
         public constructor(canvas:HTMLCanvasElement,stage:Stage) {
             super();
             if (!canvas) {
-                throw new Error("CanvasContext实例化失败，canvas参数不能为空！");
+                throw new Error("CanvasRenderer实例化失败，canvas参数不能为空！");
             }
             this.canvas = canvas;
             this.context = canvas.getContext("2d");
