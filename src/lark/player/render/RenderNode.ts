@@ -28,11 +28,13 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark.player {
+
+    var TempBounds = new Rectangle();
     /**
      * @excluded
      * 渲染节点基类
      */
-    export class RenderNode extends HashObject{
+    export class RenderNode extends HashObject {
 
         public constructor(target:DisplayObject) {
             super();
@@ -110,61 +112,25 @@ module lark.player {
                 return;
             }
             this.target.$updateRenderNode();
-            if(!this.moved){
+            if (!this.moved) {
                 return;
             }
-            var bounds = this.bounds;
-            var m = this.matrix;
-            var a:number = m.a, b:number = m.b, c:number = m.c, d:number = m.d, tx:number = m.tx, ty:number = m.ty;
-            var x:number = bounds.x, y:number = bounds.y, w:number = bounds.width, h:number = bounds.height;
-            var round = Math.round;
-            var x0 = round(a * x + c * y + tx);
-            var y0 = round(b * x + d * y + ty);
-            var x1 = round(a * (x + w) + c * y + tx);
-            var y1 = round(b * (x + w) + d * y + ty);
-            var x2 = round(a * (x + w) + c * (y + h) + tx);
-            var y2 = round(b * (x + w) + d * (y + h) + ty);
-            var x3 = round(a * x + c * (y + h) + tx);
-            var y3 = round(b * x + d * (y + h) + ty);
-
-            var tmp;
-
-            if (x0 > x1) {
-                tmp = x0;
-                x0 = x1;
-                x1 = tmp;
-            }
-            if (x2 > x3) {
-                tmp = x2;
-                x2 = x3;
-                x3 = tmp;
-            }
-
-            this.minX = x0 < x2 ? x0 : x2;
-            this.maxX = x1 > x3 ? x1 : x3;
-
-            if (y0 > y1) {
-                tmp = y0;
-                y0 = y1;
-                y1 = tmp;
-            }
-            if (y2 > y3) {
-                tmp = y2;
-                y2 = y3;
-                y3 = tmp;
-            }
-
-            this.minY = y0 < y2 ? y0 : y2;
-            this.maxY = y1 > y3 ? y1 : y3;
+            var bounds = TempBounds.copyFrom(this.bounds);
+            this.matrix.$transformBounds(bounds);
+            this.minX = bounds.x;
+            this.maxX = bounds.x + bounds.width;
+            this.minY = bounds.y;
+            this.maxY = bounds.y + bounds.height;
             this.outOfScreen = !this.intersects(0, 0, stage.stageWidth, stage.stageHeight);
         }
 
         /**
          * 执行渲染,绘制自身到屏幕
          */
-        public render(renderContext:IPlayerContext):void{
+        public render(renderContext:IPlayerContext):void {
 
         }
+
         /**
          * 渲染结束，已经绘制到屏幕
          */
@@ -172,16 +138,5 @@ module lark.player {
             this.isDirty = false;
             this.moved = false;
         }
-
-        /**
-         * 碰撞检测，返回是否与舞台坐标相交。
-         */
-        public hitTest(stageX:number,stageY:number):boolean{
-            var m = this.target.$getInvertedConcatenatedMatrix();
-            var bounds = this.bounds;
-            var localX = m.a * stageX + m.c * stageY + m.tx;
-            var localY = m.b * stageX + m.d * stageY + m.ty;
-            return bounds.contains(localX,localY);
-        } 
     }
 }
