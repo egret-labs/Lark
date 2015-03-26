@@ -364,6 +364,7 @@ module lark {
             }
         }
 
+
         $measureContentBounds(bounds:Rectangle):void {
             var children = this.$children;
             var length = children.length;

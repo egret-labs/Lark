@@ -124,11 +124,12 @@ module lark {
         /**
          * 将源 Rectangle 对象中的所有矩形数据复制到调用方 Rectangle 对象中。
          */
-        public copyFrom(sourceRect:Rectangle):void {
+        public copyFrom(sourceRect:Rectangle):Rectangle {
             this.x = sourceRect.x;
             this.y = sourceRect.y;
             this.width = sourceRect.width;
             this.height = sourceRect.height;
+            return this;
         }
 
         /**

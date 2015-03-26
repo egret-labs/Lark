@@ -603,13 +603,12 @@ module lark {
             this.$propagateFlagsUp(DisplayObjectFlags.InvalidContentBounds);
         }
 
-        $contentBounds:Rectangle = new Rectangle();
-
+        private _contentBounds:Rectangle = new Rectangle();
         /**
          * 获取自身占用的矩形区域，如果是容器，还包括所有子项占据的区域。
          */
         $getContentBounds():Rectangle {
-            var bounds = this.$contentBounds;
+            var bounds = this._contentBounds;
             if (this.$hasFlags(DisplayObjectFlags.InvalidContentBounds)) {
                 this.$removeFlags(DisplayObjectFlags.InvalidContentBounds);
                 if (this.$renderNode) {
@@ -684,11 +683,14 @@ module lark {
         }
 
         $hitTest(stageX:number, stageY:number):DisplayObject {
-            if (!this.$touchEnabled || !this.$hasFlags(DisplayObjectFlags.Visible)) {
+            if (!this.$touchEnabled || !this.$renderNode || !this.$hasFlags(DisplayObjectFlags.Visible)) {
                 return null;
             }
-            var node = this.$renderNode;
-            if (node && node.hitTest(stageX, stageY)) {
+            var m = this.$getInvertedConcatenatedMatrix();
+            var bounds = this.$getContentBounds();
+            var localX = m.a * stageX + m.c * stageY + m.tx;
+            var localY = m.b * stageX + m.d * stageY + m.ty;
+            if (bounds.contains(localX, localY)) {
                 return this;
             }
             return null;

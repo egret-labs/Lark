@@ -176,13 +176,14 @@ module lark {
         /**
          * 将源 Matrix 对象中的所有矩阵数据复制到调用方 Matrix 对象中。
          */
-        public copyFrom(other:Matrix):void {
+        public copyFrom(other:Matrix):Matrix {
             this.a = other.a;
             this.b = other.b;
             this.c = other.c;
             this.d = other.d;
             this.tx = other.tx;
             this.ty = other.ty;
+            return this;
         }
 
         /**
@@ -386,17 +387,18 @@ module lark {
 
             var x = bounds.x;
             var y = bounds.y;
-            var w = bounds.width;
-            var h = bounds.height;
+            var xMax = x + bounds.width;
+            var yMax = bounds.height;
 
-            var x0 = Math.round(a * x + c * y + tx);
-            var y0 = Math.round(b * x + d * y + ty);
-            var x1 = Math.round(a * (x + w) + c * y + tx);
-            var y1 = Math.round(b * (x + w) + d * y + ty);
-            var x2 = Math.round(a * (x + w) + c * (y + h) + tx);
-            var y2 = Math.round(b * (x + w) + d * (y + h) + ty);
-            var x3 = Math.round(a * x + c * (y + h) + tx);
-            var y3 = Math.round(b * x + d * (y + h) + ty);
+            var round = Math.round;
+            var x0 = round(a * x + c * y + tx);
+            var y0 = round(b * x + d * y + ty);
+            var x1 = round(a * xMax + c * y + tx);
+            var y1 = round(b * xMax + d * y + ty);
+            var x2 = round(a * xMax + c * yMax + tx);
+            var y2 = round(b * xMax + d * yMax + ty);
+            var x3 = round(a * x + c * yMax + tx);
+            var y3 = round(b * x + d * yMax + ty);
 
             var tmp = 0;
 

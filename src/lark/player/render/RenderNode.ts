@@ -28,6 +28,8 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark.player {
+
+    var TempBounds = new Rectangle();
     /**
      * @excluded
      * 渲染节点基类
@@ -113,49 +115,13 @@ module lark.player {
             if(!this.moved){
                 return;
             }
-            var bounds = this.bounds;
+            var bounds = TempBounds.copyFrom(this.bounds);
             var m = this.matrix;
-            var a:number = m.a, b:number = m.b, c:number = m.c, d:number = m.d, tx:number = m.tx, ty:number = m.ty;
-            var x:number = bounds.x, y:number = bounds.y, w:number = bounds.width, h:number = bounds.height;
-            var round = Math.round;
-            var x0 = round(a * x + c * y + tx);
-            var y0 = round(b * x + d * y + ty);
-            var x1 = round(a * (x + w) + c * y + tx);
-            var y1 = round(b * (x + w) + d * y + ty);
-            var x2 = round(a * (x + w) + c * (y + h) + tx);
-            var y2 = round(b * (x + w) + d * (y + h) + ty);
-            var x3 = round(a * x + c * (y + h) + tx);
-            var y3 = round(b * x + d * (y + h) + ty);
-
-            var tmp;
-
-            if (x0 > x1) {
-                tmp = x0;
-                x0 = x1;
-                x1 = tmp;
-            }
-            if (x2 > x3) {
-                tmp = x2;
-                x2 = x3;
-                x3 = tmp;
-            }
-
-            this.minX = x0 < x2 ? x0 : x2;
-            this.maxX = x1 > x3 ? x1 : x3;
-
-            if (y0 > y1) {
-                tmp = y0;
-                y0 = y1;
-                y1 = tmp;
-            }
-            if (y2 > y3) {
-                tmp = y2;
-                y2 = y3;
-                y3 = tmp;
-            }
-
-            this.minY = y0 < y2 ? y0 : y2;
-            this.maxY = y1 > y3 ? y1 : y3;
+            m.$transformBounds(bounds);
+            this.minX = bounds.x;
+            this.maxX = bounds.x+bounds.width;
+            this.minY = bounds.y;
+            this.maxY = bounds.y+bounds.height;
             this.outOfScreen = !this.intersects(0, 0, stage.stageWidth, stage.stageHeight);
         }
 
