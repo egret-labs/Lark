@@ -56,20 +56,8 @@ module lark.text {
             this._y = value;
         }
 
-
-        protected _width = 0;
-        public set width(value: number) {
-            if (value == this._width)
-                return;
-            this._width = value;
-        }
-
-        protected _height = 0;
-        public set height(value: number) {
-            if (value == this._height)
-                return;
-            this._height = value;
-        }
+        public width: number = 0;
+        public height: number = 0;
 
         public spans: ISpan[] = [];
         public addChild(span: ISpan) {

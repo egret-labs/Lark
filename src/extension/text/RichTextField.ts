@@ -95,20 +95,18 @@ module lark {
     }
 
     /**
-     * TextField 类用于创建显示对象以显示和输入文本。 
-     * 可以使用 TextField 类的方法和属性对文本字段进行操作。
-     * Lark 提供了多种在运行时设置文本格式的方法。TextFormat 类允许您设置 TextField 对象的字符和段落格式。
+     * RichTextField 类用于显示带有复杂格式的文本和显示对象。 
+     * Lark 提供了多种在运行时设置文本格式的方法。ITextFieldStyle 允许您设置 RichTextField 对象的字符和段落格式。
      * 
      */
     export class RichTextField extends DisplayObjectContainer {
         /**
-         * 创建一个TextField对象
+         * 创建一个RichTextField对象
          */
         public constructor(format?:ITextFieldStyle) {
             super();
-            this._format = TextField.normalizeStyle(format, BaseStyle);
-            this.$invalidateContentBounds();
-            this.addEventListener(Event.ENTER_FRAME, this.onEnterFrame, this);
+            this._format = TextField.$normalizeStyle(format, BaseStyle);
+            this.addEventListener(Event.ENTER_FRAME, this.update, this);
         }
         
         protected _textFieldFlags: number = TextFieldFlags.Dirty;
@@ -120,18 +118,24 @@ module lark {
 
 
         protected _format: ITextFieldStyle;
+        /**
+        *  设置或获取 RichTextField 默认的文本格式
+        */
         public get format(): ITextFieldStyle {
             return this._format;
         }
         public set format(value: ITextFieldStyle) {
-            value = TextField.normalizeStyle(value);
+            value = TextField.$normalizeStyle(value);
             this._format = value;
             this.$setTextFieldFlags(TextFieldFlags.FormatDirty);
         }
 
 
         protected _nodes: RichTextNode[];
-
+        
+        /**
+        *  设置或获取要在 RichTextField 中显示的多样式文本或显示对象
+        */
         public get nodes(): RichTextNode[] {
             return this._nodes;
         }
@@ -142,6 +146,9 @@ module lark {
 
 
         protected _width: number = 400;
+        /**
+        *  设置或获取 RichTextField 的宽度
+        */
         public get width(): number {
             return this._width;
         }
@@ -153,6 +160,9 @@ module lark {
         }
 
         protected _height: number = NaN;
+        /**
+        *  设置或获取 RichTextField 的高度
+        */
         public get height(): number {
             return this._height;
         }
@@ -164,6 +174,9 @@ module lark {
         }
 
         protected _scrollV: number = 0;
+        /**
+        *  设置或获取 RichTextField 的垂直滚动位置，以行为单位
+        */
         public get scrollV(): number {
             return this._scrollV;
         }
@@ -174,7 +187,11 @@ module lark {
             this.$setTextFieldFlags(TextFieldFlags.ScrollVDirty);
         }
 
-        private onEnterFrame() {
+        /**
+        * 立即更新子项
+        * 当您需要立即更新对 RichTextField 做的更改时，请调用此方法
+        */
+        public update() {
             if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0)
                 this.$generateTextLines();
             if ((this._textFieldFlags & TextFieldFlags.ScrollVDirty) == TextFieldFlags.ScrollVDirty)
@@ -298,7 +315,7 @@ module lark {
         }
 
         protected parseTextNode(node: IRichTextNode) {
-            var textElement = new text.TextElement(node.text, TextField.normalizeStyle(node.style, this._format));
+            var textElement = new text.TextElement(node.text, TextField.$normalizeStyle(node.style, this._format));
             return textElement;
         }
     }
