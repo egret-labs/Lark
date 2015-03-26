@@ -47,7 +47,7 @@ module lark {
         /**
          * 标记子项列表失效
          */
-        private $invalidateChildren() {
+        private invalidateChildren() {
             if(this.$stage){
                 this.$stage.$displayListTreeChanged = true;
             }
@@ -140,7 +140,7 @@ module lark {
                 }
             }
             child.$propagateFlagsDown(DisplayObjectFlags.InvalidChildren);
-            this.$invalidateChildren();
+            this.invalidateChildren();
             return child;
         }
 
@@ -255,7 +255,7 @@ module lark {
             child.$setParent(null);
             children.splice(index, 1);
             child.$propagateFlagsDown(DisplayObjectFlags.InvalidChildren);
-            this.$invalidateChildren();
+            this.invalidateChildren();
             return child;
         }
 
@@ -284,7 +284,7 @@ module lark {
                 this.$children.splice(index, 0, child);
             }
             child.$markDirty();
-            this.$invalidateChildren();
+            this.invalidateChildren();
         }
 
         /**
@@ -331,7 +331,7 @@ module lark {
             list[index2] = child1;
             child1.$markDirty();
             child2.$markDirty();
-            this.$invalidateChildren();
+            this.invalidateChildren();
         }
 
         /**
