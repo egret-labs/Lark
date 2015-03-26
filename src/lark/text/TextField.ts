@@ -162,9 +162,12 @@ module lark {
         }
 
         $measureContentBounds(bounds: Rectangle): void {
-            var lastLine = this.$renderLines[this.$renderLines.length - 1];
-            bounds.setTo(0, 0, this.width, lastLine.y + lastLine.height);
-            console.log(lastLine.y + lastLine.height);
+            var height = 0;
+            if (this.$renderLines.length) {
+                var lastLine = this.$renderLines[this.$renderLines.length - 1];
+                height = lastLine.y + lastLine.height
+            }
+            bounds.setTo(0, 0, this.width, height);
         }
 
         /**
