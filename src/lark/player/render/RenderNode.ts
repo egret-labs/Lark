@@ -116,8 +116,7 @@ module lark.player {
                 return;
             }
             var bounds = TempBounds.copyFrom(this.bounds);
-            var m = this.matrix;
-            m.$transformBounds(bounds);
+            this.matrix.$transformBounds(bounds);
             this.minX = bounds.x;
             this.maxX = bounds.x+bounds.width;
             this.minY = bounds.y;
