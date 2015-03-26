@@ -27,48 +27,18 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.web {
-
+module lark.player {
     /**
-     * Lark网页版程序入口
+     * 文本测量实例接口
      */
-    export function createPlayer(canvas:HTMLCanvasElement,entryClassName:string):lark.player.Player {
-        var ticker = lark.player.Ticker.createInstance();
-        if (ticker) {
-            startTicker(ticker);
-        }
-        var stage = new lark.Stage();
-        var canvasRenderer = new CanvasRenderer(canvas,stage);
-        if(!TextMetrics.$instance){
-            TextMetrics.$instance = new CanvasTextMetrics(canvasRenderer,canvas);
-        }
-        var interaction = new lark.player.Interaction(stage);
-        var webInteraction = new WebInteraction(interaction,canvas);
-        var player = new lark.player.Player(canvasRenderer,stage,entryClassName);
-        return player;
-    }
-
-    /**
-     * 启动心跳计时器。
-     */
-    function startTicker(ticker:lark.player.Ticker):void {
-        var requestAnimationFrame =
-            window["requestAnimationFrame"] ||
-            window["webkitRequestAnimationFrame"] ||
-            window["mozRequestAnimationFrame"] ||
-            window["oRequestAnimationFrame"] ||
-            window["msRequestAnimationFrame"];
-
-        if (!requestAnimationFrame) {
-            requestAnimationFrame = function (callback) {
-                return window.setTimeout(callback, 1000 / 60);
-            };
-        }
-
-        requestAnimationFrame.call(window, onTick);
-        function onTick():void {
-            ticker.update();
-            requestAnimationFrame.call(window, onTick)
-        }
+    export interface ITextMetrics {
+        /**
+         * 设置文本样式
+         */
+        setupFont(style:ITextStyle):void;
+        /**
+         * 测量文本在指定样式下的宽度
+         */
+        measureText(text:string):number;
     }
 }

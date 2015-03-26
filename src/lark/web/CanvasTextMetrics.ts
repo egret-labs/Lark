@@ -29,7 +29,7 @@
 
 module lark.web {
 
-    export class CanvasTextMetrics extends HashObject implements lark.ITextMetrics{
+    export class CanvasTextMetrics extends HashObject implements lark.player.ITextMetrics{
         public constructor(renderer:CanvasRenderer, canvas:HTMLCanvasElement) {
             super();
             this.renderer = renderer;
@@ -47,4 +47,4 @@ module lark.web {
             return this.context.measureText(text).width;
         }
     }
-}
+} 

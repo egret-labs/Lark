@@ -36,7 +36,7 @@ module lark {
      */
     export class TextMetrics {
 
-        static $instance:ITextMetrics;
+        static $instance:lark.player.ITextMetrics;
 
         /**
          * 测量文本在指定样式下的宽度
@@ -61,16 +61,5 @@ module lark {
             }
             return width;
         }
-    }
-
-    export interface ITextMetrics {
-        /**
-         * 设置文本样式
-         */
-        setupFont(style:ITextStyle):void;
-        /**
-         * 测量文本在指定样式下的宽度
-         */
-        measureText(text:string):number;
     }
 }
