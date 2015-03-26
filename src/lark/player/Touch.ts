@@ -32,7 +32,7 @@ module lark.player{
     /**
      * 用户交互操作管理器
      */
-    export class Interaction extends HashObject {
+    export class Touch extends HashObject {
 
         public constructor(stage:Stage){
             super();

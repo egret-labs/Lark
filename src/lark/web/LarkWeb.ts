@@ -42,8 +42,8 @@ module lark.web {
         if(!TextMetrics.$instance){
             TextMetrics.$instance = canvasRenderer;
         }
-        var interaction = new lark.player.Interaction(stage);
-        var webInteraction = new WebInteraction(interaction,canvas);
+        var touch = new lark.player.Touch(stage);
+        var webTouch = new WebTouch(touch,canvas);
         var player = new lark.player.Player(canvasRenderer,stage,entryClassName);
         return player;
     }

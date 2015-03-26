@@ -29,19 +29,19 @@
 
 module lark.web {
 
-    export class WebInteraction extends HashObject{
+    export class WebTouch extends HashObject{
 
-        public constructor(interacion:lark.player.Interaction,canvas:HTMLCanvasElement){
+        public constructor(touch:lark.player.Touch,canvas:HTMLCanvasElement){
             super();
             this.canvas = canvas;
-            this.interaction = interacion;
+            this.interaction = touch;
             canvas.addEventListener("mousedown",this.onTouchBegin);
             canvas.addEventListener("mousemove",this.onTouchMove);
             canvas.addEventListener("mouseup",this.onTouchEnd);
         }
 
         private canvas:HTMLCanvasElement;
-        private interaction:lark.player.Interaction;
+        private interaction:lark.player.Touch;
 
         private onTouchBegin = (event:any):void => {
             var location = this.getLocation(event);
