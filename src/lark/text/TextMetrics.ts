@@ -43,9 +43,6 @@ module lark {
          */
         public static measureText(text:string, style:ITextStyle):number {
             var instance = TextMetrics.$instance;
-            if (!instance)
-                throw new Error("TextMeasurer.setInstance has not been called");
-
             var width = 0.0;
             var fontCache = $TextWidthCache;
             var font = style.toFontString(true);

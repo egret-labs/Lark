@@ -34,29 +34,29 @@ module lark.web {
         public constructor(touch:lark.player.Touch,canvas:HTMLCanvasElement){
             super();
             this.canvas = canvas;
-            this.interaction = touch;
+            this.touch = touch;
             canvas.addEventListener("mousedown",this.onTouchBegin);
             canvas.addEventListener("mousemove",this.onTouchMove);
             canvas.addEventListener("mouseup",this.onTouchEnd);
         }
 
         private canvas:HTMLCanvasElement;
-        private interaction:lark.player.Touch;
+        private touch:lark.player.Touch;
 
         private onTouchBegin = (event:any):void => {
             var location = this.getLocation(event);
-            this.interaction.onTouchBegin(location.x, location.y, event.identifier);
+            this.touch.onTouchBegin(location.x, location.y, event.identifier);
         }
 
         private onTouchMove = (event:any):void => {
             var location = this.getLocation(event);
-            this.interaction.onTouchMove(location.x, location.y, event.identifier);
+            this.touch.onTouchMove(location.x, location.y, event.identifier);
 
         }
 
         private onTouchEnd = (event:any):void => {
             var location = this.getLocation(event);
-            this.interaction.onTouchEnd(location.x, location.y, event.identifier);
+            this.touch.onTouchEnd(location.x, location.y, event.identifier);
         }
 
         private getLocation(event:any):Point {
