@@ -30,6 +30,7 @@
 module lark.text {
 
     import TextBlock = text.TextBlock;
+    import TF = lark.TextField;
 
     export enum TextFieldFlags {
         None = 0x000000,
@@ -273,18 +274,30 @@ module lark.text {
 
         $updateChildren() {
             this.removeChildren();
+            
+            var tf = new TF("");
+            tf.width = this.width;
+            tf.height = this.height;
             var lines = this._textLines;
             var y = 0;
             for (var i = this._scrollV; i < lines.length; i++) {
                 var line = lines[i];
-                this.addChild(line);
                 line.y = y;
+
+                line.spans.forEach(span=> {
+                    if (span instanceof TextSpan)
+                        tf.$renderLines1.push(span)
+                    else if(span instanceof DisplayObject)
+                        this.addChild(span);
+                });
+
                 y += lines[i].textHeight + (this._format.leading || 0);
                 if (y > (this._height||10000))
                     break;
                 if (this._multiline == false)
                     break;
             }
+            this.addChild(tf);
             this._textFieldFlags &= ~TextFieldFlags.ScrollVDirty;
         }
 

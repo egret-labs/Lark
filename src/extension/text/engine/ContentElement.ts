@@ -64,8 +64,10 @@
         }
     }
 
+    export interface ISpan { width: number; height: number; x: number; y: number }
+
     export interface CreateSpanResult {
-        span?: DisplayObject;
+        span?: ISpan;
         length?: number;
         ended?: boolean;
         full?: boolean;

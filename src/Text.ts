@@ -71,7 +71,25 @@ module lark {
             tf.multiline = true;
             tf.y = 200;
             this.addChild(tf);
+            var x, y, touchdown = false;
+            var move = (e: TouchEvent) => { if (touchdown == false) return; tf.width += e.stageX - x; x = e.stageX;};
+            tf.addEventListener(TouchEvent.TOUCH_BEGIN,(e: TouchEvent) => { x = e.stageX; touchdown = true }, this);
 
+            tf.addEventListener(TouchEvent.TOUCH_MOVE, move, this);
+            tf.addEventListener(TouchEvent.TOUCH_END, e=> touchdown = false, this);
+
+            var rich = new lark.text.RichTextField({ fontSize: 50 });
+            rich.y = 50;
+            rich.width = 500;
+            rich.height = 400;
+            rich.nodes = [{
+                text: "Hi",
+                style: { color: 0x00FF00 }
+            }, {
+                    text: " Hi how are you",
+                    style: { color: 0x00FF00 }
+                }];
+            this.addChild(rich);
         }
 
         

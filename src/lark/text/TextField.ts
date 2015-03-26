@@ -80,17 +80,16 @@ module lark {
      * Lark 提供了多种在运行时设置文本格式的方法。TextFormat 类允许您设置 TextField 对象的字符和段落格式。
      * 
      */
-    export class TextField extends DisplayObjectContainer {
+    export class TextField extends DisplayObject {
         /**
          * 创建一个TextField对象
          */
         public constructor(text:string,format?:ITextFieldStyle) {
             super();
             this._text = text;
-            this._style = this.normalizeStyle(format,BaseStyle);
+            this._style = this.normalizeStyle(format, BaseStyle);
+            this.$renderNode = new lark.player.TextNode(this);
             this.$invalidateContentBounds();
-            
-            this.addEventListener(Event.ENTER_FRAME, this.onEnterFrame, this);
         }
 
 
@@ -98,6 +97,7 @@ module lark {
 
         $setTextFieldFlags(flags: TextFieldFlags) {
             this._textFieldFlags |= flags;
+            this.$markDirty();
         }
 
         protected _text: string;
@@ -132,20 +132,20 @@ module lark {
             this.$setTextFieldFlags(TextFieldFlags.MultilineDirty);
         }
 
-        protected _width:number = NaN;
+        protected _width:number = 400;
         public get width(): number {
-            return this._width || this.$getTransformedBounds(this.$parent, Rectangle.TEMP).width;
+            return this._width;
         }
         public set width(value: number) {
             if (value == this._width)
                 return;
-            this._width = value;
+            this._width = +value || 0;
             this.$setTextFieldFlags(TextFieldFlags.Dirty);
         }
 
         protected _height: number = NaN;
         public get height(): number {
-            return this._height || this.$getTransformedBounds(this.$parent, Rectangle.TEMP).height;
+            return this._height;
         }
         public set height(value: number) {
             if (value == this._height)
@@ -154,31 +154,47 @@ module lark {
             this.$setTextFieldFlags(TextFieldFlags.Dirty);
         }
 
-        private onEnterFrame() {
+
+        $measureContentBounds(bounds: Rectangle): void {
+            var lastLine = this.$renderLines[this.$renderLines.length - 1];
+            bounds.setTo(0, 0, this.width, lastLine.y + lastLine.height);
+            console.log(lastLine.y + lastLine.height);
+        }
+
+        /**
+         * 获取渲染节点
+         */
+        $updateRenderNode(): void {
             if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0) {
                 this.$createLines();
                 this.$updateChildren();
                 this._textFieldFlags = 0;
             }
+            super.$updateRenderNode();
+            (<player.TextNode>this.$renderNode).spans = this.$renderLines;
         }
 
-        private textLines: Array<TextSpan> = []; 
+        private textLines: Array<TextSpan> = [];
+        $renderLines: Array<TextSpan> = [];
+        $renderLines1: Array<TextSpan> = [];
         $createLines() {
             var lines = this._text.split(LineBreaks);
 
             if (!this._multiline)
                 lines = [lines.join(' ')];
 
-            var w = (this._width || 10000);
+            var w = this._width;
             var spanArrays = lines.map(t=> this.createLineSpan(t, w));
             this.textLines = Array.prototype.concat.apply([], spanArrays);
         }
 
         $updateChildren() {
-            this.removeChildren();
-            var width = this._width || (this.$stage ? this.$stage.stageWidth : 400);
+            var width = this._width;
             var height = this._height || 10000;
             var lines = this.textLines, format = this._style;
+            var lineHeight = format.fontSize * (1 + format.leading);
+
+            this.$renderLines.length = 0;
 
             var xRate: number = 0;
             if (format.align == "center") 
@@ -189,13 +205,16 @@ module lark {
             var y = format.leading * format.fontSize / 2;
             for (var i = 0; i < lines.length; i++) {
                 var line = lines[i];
-                this.addChild(line);
                 line.y = y;
                 line.x = (width - line.textWidth) * xRate;
-                y += lines[i].height + format.leading * format.fontSize;
+                y += lineHeight
+                this.$renderLines.push(line);
                 if (this._multiline == false || y > height)
                     break;
             }
+            if (this.$renderLines1.length)
+                this.$renderLines = [].concat(this.$renderLines1);
+            this.$invalidateContentBounds();
         }
 
         protected createLineSpan(lineString: string,width:number): TextSpan[]{
@@ -209,16 +228,16 @@ module lark {
                 var w = TextMeasurer.measureText(atom, this._style);
                 var testW = currentWidth + w;
                 if (testW < width) {
-                    line += atom;
+                    line += line == "" ? atom.trim() : atom;
                     currentWidth = testW;
                 }
                 else {
-                    lines.push(new TextSpan(line, style, currentWidth, line.length));
-                    line = atom;
+                    lines.push(new TextSpan(line, style, currentWidth, line.length,0,0));
+                    line = atom.trim();
                     currentWidth = w;
                 }
             }
-            lines.push(new TextSpan(line, style, currentWidth, line.length));
+            lines.push(new TextSpan(line, style, currentWidth, line.length, 0, 0));
             return lines;
         }
 
