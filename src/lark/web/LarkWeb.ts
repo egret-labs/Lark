@@ -27,32 +27,48 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark.web {
+
     /**
-     * @excluded
-     * 位图渲染节点
+     * Lark网页版程序入口
      */
-    export class BitmapNode extends RenderNode {
-        /**
-         * 实例化一个渲染命令
-         */
-        public constructor(target:DisplayObject) {
-            super(target);
+    export function createPlayer(canvas:HTMLCanvasElement,entryClassName:string):lark.player.Player {
+        var ticker = lark.player.Ticker.createInstance();
+        if (ticker) {
+            startTicker(ticker);
+        }
+        var stage = new lark.Stage();
+        var canvasContext = new CanvasRenderer(canvas,stage);
+        if(!TextMetrics.$instance){
+            TextMetrics.$instance = new CanvasTextMetrics(canvasContext,canvas);
+        }
+        var interaction = new lark.player.Interaction(stage);
+        var webInteraction = new WebInteraction(interaction,canvas);
+        var player = new lark.player.Player(canvasContext,stage,entryClassName);
+        return player;
+    }
+
+    /**
+     * 启动心跳计时器。
+     */
+    function startTicker(ticker:lark.player.Ticker):void {
+        var requestAnimationFrame =
+            window["requestAnimationFrame"] ||
+            window["webkitRequestAnimationFrame"] ||
+            window["mozRequestAnimationFrame"] ||
+            window["oRequestAnimationFrame"] ||
+            window["msRequestAnimationFrame"];
+
+        if (!requestAnimationFrame) {
+            requestAnimationFrame = function (callback) {
+                return window.setTimeout(callback, 1000 / 60);
+            };
         }
 
-        //对于V8，要控制对象属性的个数在12~128之间才能获得最高的属性查询性能。
-
-        /**
-         * 要绘制的纹理
-         */
-        public texture:Texture = null;
-
-        public render(renderContext:IRenderer):void{
-            var texture = this.texture;
-            if (texture) {
-                renderContext.drawImage(texture, this.matrix, this.alpha);
-            }
+        requestAnimationFrame.call(window, onTick);
+        function onTick():void {
+            ticker.update();
+            requestAnimationFrame.call(window, onTick)
         }
-
     }
 }

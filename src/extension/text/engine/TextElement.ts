@@ -59,7 +59,7 @@
             var full = false;
             for (var i = 0; i < textAtoms.length; i++) {
                 var atom = textAtoms[i];
-                var w = TextMeasurer.measureText(atom, format);
+                var w = TextMetrics.measureText(atom, format);
                 var testW = currentWidth + w;
                 if (testW <= width || isFirstSpan) {
                     currentWidth = testW;

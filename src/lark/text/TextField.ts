@@ -240,7 +240,7 @@ module lark {
             var line = "";
             for (var i = 0; i < textAtoms.length; i++) {
                 var atom = textAtoms[i];
-                var w = TextMeasurer.measureText(atom, this._style);
+                var w = TextMetrics.measureText(atom, this._style);
                 var testW = currentWidth + w;
                 if (testW < width) {
                     line += line == "" ? atom.trim() : atom;

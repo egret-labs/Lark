@@ -127,7 +127,7 @@ module lark.player {
         /**
          * 执行渲染,绘制自身到屏幕
          */
-        public render(renderContext:IPlayerContext):void {
+        public render(renderContext:IRenderer):void {
 
         }
 

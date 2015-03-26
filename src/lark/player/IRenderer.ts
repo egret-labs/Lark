@@ -30,40 +30,41 @@
 module lark.player {
 
     /**
-     * Lark网页版程序入口
+     * IPlayerContext接口定义Lark播放器与平台相关的操作，包括绘制，网络，交互操作等。
      */
-    export function createPlayer(canvas:HTMLCanvasElement,entryClassName:string):Player {
-        checkTicker();
-        var canvasContext = new lark.player.CanvasContext(canvas);
-        var player = new Player(canvasContext,entryClassName);
-        return player;
-    }
+    export interface IRenderer extends IHashObject {
 
-    /**
-     * 检查心跳计时器，若未初始化则立即初始化并启动。
-     */
-    function checkTicker():void {
-        var ticker:Ticker = Ticker.getInstance();
-        if (!ticker) {
-            return;
-        }
-        var requestAnimationFrame =
-            window["requestAnimationFrame"] ||
-            window["webkitRequestAnimationFrame"] ||
-            window["mozRequestAnimationFrame"] ||
-            window["oRequestAnimationFrame"] ||
-            window["msRequestAnimationFrame"];
+        /**
+         * 清除整个屏幕
+         */
+        clearScreen():void;
 
-        if (!requestAnimationFrame) {
-            requestAnimationFrame = function (callback) {
-                return window.setTimeout(callback, 1000 / 60);
-            };
-        }
+        /**
+         * 清除屏幕的部分渲染区域
+         */
+        clearRect(x:number, y:number, width:number, height:number):void;
 
-        requestAnimationFrame.call(window, onTick);
-        function onTick():void {
-            ticker.update();
-            requestAnimationFrame.call(window, onTick)
-        }
+        /**
+         * 绘制图片到一个区域上
+         */
+        drawImage(texture:Texture, matrix:Matrix, globalAlpha:number): void;
+
+        /**
+         * 绘制文本到一个区域上
+         */
+        drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number): void;
+
+        /**
+         * 重置所有属性
+         */
+        reset():void;
+
+        beginDrawDirtyRect():void;
+
+        drawDirtyRect(x:number, y:number, width:number, height:number):void;
+
+        endDrawDirtyRect():void;
+
+        endDrawScreen():void;
     }
 }

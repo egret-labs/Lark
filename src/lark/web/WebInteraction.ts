@@ -27,48 +27,44 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark.web {
 
-    /**
-     * IPlayerContext接口定义Lark播放器与平台相关的操作，包括绘制，网络，交互操作等。
-     */
-    export interface IPlayerContext extends IHashObject {
+    export class WebInteraction extends HashObject{
 
-        /**
-         * 初始化播放器上下文
-         */
-        initialize(player:Player):void;
-        /**
-         * 清除整个屏幕
-         */
-        clearScreen():void;
+        public constructor(interacion:lark.player.Interaction,canvas:HTMLCanvasElement){
+            super();
+            this.canvas = canvas;
+            this.interaction = interacion;
+            canvas.addEventListener("mousedown",this.onTouchBegin);
+            canvas.addEventListener("mousemove",this.onTouchMove);
+            canvas.addEventListener("mouseup",this.onTouchEnd);
+        }
 
-        /**
-         * 清除屏幕的部分渲染区域
-         */
-        clearRect(x:number, y:number, width:number, height:number):void;
+        private canvas:HTMLCanvasElement;
+        private interaction:lark.player.Interaction;
 
-        /**
-         * 绘制图片到一个区域上
-         */
-        drawImage(texture:Texture, matrix:Matrix, globalAlpha:number): void;
+        private onTouchBegin = (event:any):void => {
+            var location = this.getLocation(event);
+            this.interaction.onTouchBegin(location.x, location.y, event.identifier);
+        }
 
-        /**
-         * 绘制文本到一个区域上
-         */
-        drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number): void;
+        private onTouchMove = (event:any):void => {
+            var location = this.getLocation(event);
+            this.interaction.onTouchMove(location.x, location.y, event.identifier);
 
-        /**
-         * 重置所有属性
-         */
-        reset():void;
+        }
 
-        beginDrawDirtyRect():void;
+        private onTouchEnd = (event:any):void => {
+            var location = this.getLocation(event);
+            this.interaction.onTouchEnd(location.x, location.y, event.identifier);
+        }
 
-        drawDirtyRect(x:number, y:number, width:number, height:number):void;
-
-        endDrawDirtyRect():void;
-
-        endDrawScreen():void;
+        private getLocation(event:any):Point {
+            var doc = document.documentElement;
+            var box = this.canvas.getBoundingClientRect();
+            var left = box.left + window.pageXOffset - doc.clientLeft;
+            var top = box.top + window.pageYOffset - doc.clientTop;
+            return Point.TEMP.setTo(event.pageX - left,event.pageY - top);
+        }
     }
 }
