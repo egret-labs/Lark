@@ -15,10 +15,53 @@
         html { -ms-touch-action: none; overflow: hidden;}
         canvas{ cursor:default;display: block; margin: 0 auto }
     </style>
+    <script src="lark/utils/getDefinitionByName.js"></script>
+    <script src="lark/utils/HashObject.js"></script>
+    <script src="lark/utils/getTimer.js"></script>
+    <script src="lark/geom/Matrix.js"></script>
+    <script src="lark/geom/Point.js"></script>
+    <script src="lark/geom/Rectangle.js"></script>
+    <script src="lark/player/render/DirtyRegion.js"></script>
+    <script src="lark/events/EventPhase.js"></script>
+    <script src="lark/events/Event.js"></script>
+    <script src="lark/events/EventDispatcher.js"></script>
+    <script src="lark/utils/Timer.js"></script>
+    <script src="lark/events/TimerEvent.js"></script>
+    <script src="lark/events/TouchEvent.js"></script>
+    <script src="lark/display/Texture.js"></script>
+    <script src="lark/display/DisplayObjectFlags.js"></script>
+    <script src="lark/display/DisplayObject.js"></script>
+    <script src="lark/display/DisplayObjectContainer.js"></script>
+    <script src="lark/display/Bitmap.js"></script>
+    <script src="lark/display/Stage.js"></script>
+    <script src="lark/player/render/RenderNode.js"></script>
+    <script src="lark/player/render/BitmapNode.js"></script>
+    <script src="lark/player/render/TextNode.js"></script>
+    <script src="lark/player/render/GraphicsNode.js"></script>
+    <script src="lark/player/Ticker.js"></script>
+    <script src="lark/player/Player.js"></script>
+    <script src="lark/text/TextMeasurer.js"></script>
+    <script src="lark/player/web/CanvasContext.js"></script>
+    <script src="lark/text/TextStyle.js"></script>
+    <script src="lark/text/TextSpan.js"></script>
+    <script src="lark/text/TextField.js"></script>
+    <script src="extension/text/engine/ContentElement.js"></script>
+    <script src="extension/text/engine/GraphicElement.js"></script>
+    <script src="extension/text/engine/TextElement.js"></script>
+    <script src="extension/text/engine/GroupElement.js"></script>
+    <script src="extension/text/engine/TextBlock.js"></script>
+    <script src="extension/text/engine/TextLine.js"></script>
+    <script src="extension/text/RichTextField.js"></script>
+    <script src="FPS.js"></script>
+    <script src="Main.js"></script>
+    <script src="Text.js"></script>
 </head>
 <body>
     <canvas id="lark_canvas" width="1920" height="960"/>
-    <script src="entry/lark_file_list.js"></script>
-    <script src="entry/lark_web.js"></script>
+    <script>
+        var canvas=document.getElementById("lark_canvas");
+        var player = lark.player.createPlayer(canvas,"lark.Main");
+        player.start();
+    </script>
 </body>
 </html>

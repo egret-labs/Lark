@@ -43,38 +43,8 @@ module lark.player {
             }
             this.canvas = canvas;
             this.context = canvas.getContext("2d");
-            this.checkTicker();
             TextMeasurer.setInstance(new CanvasTextMeasurer(this, this.context));
         }
-
-        /**
-         * 检查心跳计时器，若未初始化则立即初始化并启动。
-         */
-        private checkTicker():void{
-            var ticker:Ticker = Ticker.getInstance();
-            if(!ticker){
-                return;
-            }
-            var requestAnimationFrame =
-                window["requestAnimationFrame"] ||
-                window["webkitRequestAnimationFrame"] ||
-                window["mozRequestAnimationFrame"] ||
-                window["oRequestAnimationFrame"] ||
-                window["msRequestAnimationFrame"];
-
-            if (!requestAnimationFrame) {
-                requestAnimationFrame = function (callback) {
-                    return window.setTimeout(callback, 1000 / 60);
-                };
-            }
-
-            requestAnimationFrame.call(window, onTick);
-            function onTick():void{
-                ticker.update();
-                requestAnimationFrame.call(window, onTick)
-            }
-        }
-
 
         private canvas:HTMLCanvasElement;
         private context:CanvasRenderingContext2D;
