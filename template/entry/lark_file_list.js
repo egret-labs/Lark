@@ -37,7 +37,6 @@ var lark_file_list =
     "extension/text/engine/GroupElement.js",
     "extension/text/engine/TextBlock.js",
     "extension/text/engine/TextLine.js",
-    "extension/text/TextField.js",
     "extension/text/RichTextField.js",
         "FPS.js",
         "Main.js",

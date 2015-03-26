@@ -18,7 +18,7 @@ module lark.text {
             this._content = value;
         }
 
-        createTextLine(previousLine: TextLine = null, width = 1000000, lineOffset = 0.0, format?:ITextStyle): TextLine {
+        createTextLine(previousLine: TextLine = null, width = 1000000, lineOffset = 0.0, format?: ITextFieldStyle): TextLine {
 
 
             var start = previousLine == null ? 0 : previousLine.atomCount + previousLine.textBlockBeginIndex;
@@ -77,12 +77,15 @@ module lark.text {
                 var lefts = this.layoutLeftSpans(results[0], offset, maxHeight);
                 offset = lefts.offset;
                 var spans = lefts.spans;
-                var middles = this.layoutMiddleSpans(results[1], offset, maxHeight);
-                offset = middles.offset;
-                spans = spans.concat(middles.spans);
+
                 var rights = this.layoutRightSpans(results[2], width, maxHeight);
                 spans = spans.concat(rights.spans);
-                //todo
+                var endxForMiddle = rights.offset;
+
+                var middles = this.layoutMiddleSpans(results[1], format.align, offset, endxForMiddle, maxHeight);
+                offset = middles.offset;
+                spans = spans.concat(middles.spans);
+                
                 spans.forEach(span=> textLine.addChild(span));
                 
 
@@ -97,8 +100,16 @@ module lark.text {
             return textLine;
         }
 
-        protected layoutMiddleSpans(middles: CreateSpanResult[], offset: number, maxHeight: number): { spans: ISpan[]; offset: number }{
+        protected layoutMiddleSpans(middles: CreateSpanResult[], align: string, startx: number, endx: number, maxHeight: number): { spans: ISpan[]; offset: number }{
             var spans: ISpan[] = [];
+            var offset = startx;
+            var xRate: number = 0;
+            if (align == "center")
+                xRate = 0.5;
+            else if (align == "right")
+                xRate = 1;
+
+
             for (var i = 0; i < middles.length; i++) {
                 var result = middles[i];
                 var span = result.span;
@@ -120,6 +131,10 @@ module lark.text {
                 offset += span.width;
                 spans.push(span);
             }
+
+            var offsetx = (endx - offset) * xRate;
+            offsetx && spans.forEach(s=> s.x += offsetx);
+
             return {
                 spans: spans,
                 offset: offset
@@ -170,6 +185,9 @@ module lark.text {
             var rightOffset = width
             var leading = format.leading || 0;
             var y = leading;
+
+
+
             while (true) {
                 line = this.createTextLine(line, rightOffset, offset,format);
                 if (!line)

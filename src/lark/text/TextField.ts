@@ -87,7 +87,7 @@ module lark {
         public constructor(text:string,format?:ITextFieldStyle) {
             super();
             this._text = text;
-            this._style = this.normalizeStyle(format, BaseStyle);
+            this._style = TextField.normalizeStyle(format, BaseStyle);
             this.$renderNode = new lark.player.TextNode(this);
             this.$invalidateContentBounds();
         }
@@ -116,7 +116,7 @@ module lark {
             return this._style;
         }
         public set style(value: ITextFieldStyle) {
-            value = this.normalizeStyle(value, BaseStyle);
+            value = TextField.normalizeStyle(value, BaseStyle);
             this._style = value;
             this.$setTextFieldFlags(TextFieldFlags.FormatDirty);
         }
@@ -154,16 +154,24 @@ module lark {
             this.$setTextFieldFlags(TextFieldFlags.Dirty);
         }
 
+        $setRenderLines(lines: TextSpan[]) {
+            this.$renderLines = lines;
+            this._textFieldFlags &= ~TextFieldFlags.LineDirty;
+            this.$invalidateContentBounds();
+            this.$markDirty();
+        }
 
         $measureContentBounds(bounds: Rectangle): void {
-            var lastLine = this.$renderLines[this.$renderLines.length - 1];
-            bounds.setTo(0, 0, this.width, lastLine.y + lastLine.height);
-            console.log(lastLine.y + lastLine.height);
+            var height = 0;
+            if (this.$renderLines.length) {
+                var lastLine = this.$renderLines[this.$renderLines.length - 1];
+                height = lastLine.y + lastLine.height
+            }
+            bounds.setTo(0, 0, this.width, height);
         }
 
         /**
-         * 之前若调用过$markDirty()方法，此方法在绘制阶段会自动被调用，它负责将自身的属性改变同步到RenderNode，并清空相关的Dirty标记。
-         * 注意：此方法里禁止添加移除显示子项或执行其他可能产生新的Dirty标记的操作，仅执行同步操作，否则可能导致屏幕绘制错误。
+         * 获取渲染节点
          */
         $updateRenderNode(): void {
             if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0) {
@@ -171,13 +179,12 @@ module lark {
                 this.$updateChildren();
                 this._textFieldFlags = 0;
             }
-            super.$updateRenderNode();
             (<player.TextNode>this.$renderNode).spans = this.$renderLines;
+            super.$updateRenderNode();
         }
 
         private textLines: Array<TextSpan> = [];
         $renderLines: Array<TextSpan> = [];
-        $renderLines1: Array<TextSpan> = [];
         $createLines() {
             var lines = this._text.split(LineBreaks);
 
@@ -213,8 +220,6 @@ module lark {
                 if (this._multiline == false || y > height)
                     break;
             }
-            if (this.$renderLines1.length)
-                this.$renderLines = [].concat(this.$renderLines1);
             this.$invalidateContentBounds();
         }
 
@@ -242,7 +247,7 @@ module lark {
             return lines;
         }
 
-        protected normalizeStyle(change: ITextFieldStyle,base:ITextFieldStyle = this._style): ITextFieldStyle {
+        public static normalizeStyle(change: ITextFieldStyle,base:ITextFieldStyle = BaseStyle): ITextFieldStyle {
             var style: ITextStyle = {};
             for (var p in base) {
                 if (base[p] !== undefined)

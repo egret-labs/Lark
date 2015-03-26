@@ -27,7 +27,61 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.text {
+module lark {
+
+    import TextBlock = text.TextBlock;
+    import TF = lark.TextField;
+
+    export enum TextFieldFlags {
+        WordWrapDirty = 0x000008,
+        ScrollVDirty = 0x000010,
+        RichNodeDirty = 0x000010,
+        RichLineDirty = TextDirty | FormatDirty | MultilineDirty | WordWrapDirty | RichNodeDirty,
+        RichDirty = LineDirty | ScrollVDirty
+    }
+
+
+    /**
+     * TextFormat 类描述字符格式设置信息。使用 TextFormat 类可以为文本字段创建特定的文本格式。
+     * 您可以将文本格式应用于静态文本字段和动态文本字段。
+     * 
+     */
+    export interface ITextFieldStyle extends ITextStyle {
+        
+        /**
+         * 表示块缩进，以像素为单位。
+         */
+        blockIndent?: number;
+
+        /**
+         * 表示从左边距到段落中第一个字符的缩进。
+         */
+        indent?: number;
+
+        /**
+         * 段落的左边距，以像素为单位。
+         */
+        leftMargin?: number;
+
+        /**
+         * 段落的右边距，以像素为单位。
+         */
+        rightMargin?: number;
+
+        /**
+         * 表示显示超链接的目标窗口。
+         */
+        target?: string;        
+
+        /**
+         * 表示使用此文本格式的文本的目标 URL。
+         */
+        url?: string;
+
+    }
+
+    
+
 
     export type RichTextNode = string | IRichTextNode;
 
@@ -37,13 +91,44 @@ module lark.text {
         width?: number;
         height?: number;
         src?: string;
+        graphic?: DisplayObject;
     }
 
-    export class RichTextField extends TextField {
-
-        public constructor(format?: ITextFieldStyle) {
-            super(null, format);
+    /**
+     * TextField 类用于创建显示对象以显示和输入文本。 
+     * 可以使用 TextField 类的方法和属性对文本字段进行操作。
+     * Lark 提供了多种在运行时设置文本格式的方法。TextFormat 类允许您设置 TextField 对象的字符和段落格式。
+     * 
+     */
+    export class RichTextField extends DisplayObjectContainer {
+        /**
+         * 创建一个TextField对象
+         */
+        public constructor(format?:ITextFieldStyle) {
+            super();
+            this._format = TextField.normalizeStyle(format, BaseStyle);
+            this.$invalidateContentBounds();
+            this.addEventListener(Event.ENTER_FRAME, this.onEnterFrame, this);
         }
+        
+        protected _textFieldFlags: number = TextFieldFlags.Dirty;
+
+        $setTextFieldFlags(flags: TextFieldFlags) {
+            this._textFieldFlags |= flags;
+            this.$markDirty();
+        }
+
+
+        protected _format: ITextFieldStyle;
+        public get format(): ITextFieldStyle {
+            return this._format;
+        }
+        public set format(value: ITextFieldStyle) {
+            value = TextField.normalizeStyle(value);
+            this._format = value;
+            this.$setTextFieldFlags(TextFieldFlags.FormatDirty);
+        }
+
 
         protected _nodes: RichTextNode[];
 
@@ -56,7 +141,115 @@ module lark.text {
         }
 
 
-        protected _makeContents() {
+        protected _width: number = 400;
+        public get width(): number {
+            return this._width;
+        }
+        public set width(value: number) {
+            if (value == this._width)
+                return;
+            this._width = +value || 0;
+            this.$setTextFieldFlags(TextFieldFlags.Dirty);
+        }
+
+        protected _height: number = NaN;
+        public get height(): number {
+            return this._height;
+        }
+        public set height(value: number) {
+            if (value == this._height)
+                return;
+            this._height = value;
+            this.$setTextFieldFlags(TextFieldFlags.Dirty);
+        }
+
+        protected _scrollV: number = 0;
+        public get scrollV(): number {
+            return this._scrollV;
+        }
+        public set scrollV(value: number) {
+            if (this._scrollV == value)
+                return;
+            this._scrollV = value;
+            this.$setTextFieldFlags(TextFieldFlags.ScrollVDirty);
+        }
+
+        private onEnterFrame() {
+            if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0)
+                this.$generateTextLines();
+            if ((this._textFieldFlags & TextFieldFlags.ScrollVDirty) == TextFieldFlags.ScrollVDirty)
+                this.$updateChildren();
+        }
+
+        protected _contents: text.ContentElement[];
+        protected _textLines: Array<text.TextLine> = []; 
+        protected _textfield: TextField = new TextField("");
+
+        protected $generateTextLines() {
+            this._textLines.length = 0;
+            this.parseContents();
+            var contents = this._contents;
+
+
+            var format = this._format;
+            var textBlock = new text.TextBlock();
+
+
+            var y = format.leading;
+            var x = format.leftMargin;
+            var lm = format.leftMargin,
+                rm = format.rightMargin,
+                bidt = format.blockIndent;
+
+            var width = this._width - lm - rm - bidt;
+
+
+            for (var i = 0; i < contents.length; i++) {
+                var content = contents[i];
+                x = lm + bidt;
+                textBlock.content = content;
+                var lines = textBlock.createAllTextLines(width, format);
+                this._textLines = this._textLines.concat(lines);
+            }
+
+            this.$updateChildren();
+
+            this._textFieldFlags = 0;
+        }
+
+        protected $updateChildren() {
+            this.removeChildren();
+            
+            var textfield = this._textfield;
+            textfield.width = this.width;
+            textfield.height = this.height;
+            var textLines = [];
+            var lines = this._textLines;
+            var y = 0;
+
+
+            for (var i = this._scrollV; i < lines.length; i++) {
+                var line = lines[i];
+                line.y = y;
+                line.spans.forEach(span=> {
+                    if (span instanceof TextSpan)
+                        textLines.push(span)
+                    else if(span instanceof DisplayObject)
+                        this.addChild(span);
+                });
+
+                y += lines[i].textHeight + this._format.leading;
+                if (y > (this._height || 10000))
+                    break;
+            }
+            this.addChild(textfield);
+            textfield.$setRenderLines(textLines);
+            this._textFieldFlags &= ~TextFieldFlags.ScrollVDirty;
+        }
+
+
+
+        protected parseContents() {
             if (!hasFlag(this._textFieldFlags, TextFieldFlags.TextDirty)
                 && !hasFlag(this._textFieldFlags, TextFieldFlags.MultilineDirty)
                 && !hasFlag(this._textFieldFlags, TextFieldFlags.RichNodeDirty))
@@ -74,6 +267,9 @@ module lark.text {
                 }
                 else if (node instanceof DisplayObject) {
                     element = this.parseGraphic(node, this._format);
+                }
+                else if ((<IRichTextNode>node).graphic) {
+                    element = this.parseGraphic((<IRichTextNode>node).graphic,(<IRichTextNode>node).style||this._format);
                 }
                 else if ((<IRichTextNode>node).text) {
                     element = this.parseTextNode(node);
@@ -102,38 +298,45 @@ module lark.text {
         }
 
         protected parseTextNode(node: IRichTextNode) {
-            var textElement = new text.TextElement(node.text, this.normalizeStyle(node.style));
+            var textElement = new text.TextElement(node.text, TextField.normalizeStyle(node.style, this._format));
             return textElement;
         }
-
     }
 
 
-    var $1px: Texture = null;
+
+    var BaseStyle: ITextFieldStyle = {
+        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+        fontSize: 14,
+        color: 0x000000,
+        bold: false,
+        italic: false,
+        float: Align.NONE,
+        leftMargin: 0,
+        rightMargin: 0,
+        blockIndent: 0,
+        align: Align.LEFT,
+        indent: 0,
+        leading: 0,
+        verticalAlign: Align.BOTTOM
+    }
+
+    function hasFlag(prop: number, flag: number): boolean {
+        return (prop & flag) == flag;
+    }
+
+
+
+    var img1px = new Image(1, 1);
+    img1px.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQIW2NkAAIAAAoAAggA9GkAAAAASUVORK5CYII=";
+    var texture: Texture = new Texture();
+    texture.$setBitmapData(img1px);
+    var $1px: Texture = texture;
     var $TextureCache: { [src: string]: Texture } = {};
 
-    function $get1px() {
-        if ($1px == null) {
-            var img = new Image(1, 1);
-            img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQIW2NkAAIAAAoAAggA9GkAAAAASUVORK5CYII=";
-            var texture: Texture = new Texture();
-            texture.$setBitmapData(img);
-            $1px = texture;
-        }
-        return $1px;
-    }
-
     function getTexture(src: string, bitmap: Bitmap): Texture {
-        if (src in $TextureCache) {
+        if (src in $TextureCache) 
             return $TextureCache[src];
-        }
-        else {
-            loadTexture(src, bitmap);
-        }
-        return $get1px();
-    }
-
-    function loadTexture(src: string, bitmap: Bitmap) {
 
         var image = new Image();
         image.src = src;
@@ -148,6 +351,7 @@ module lark.text {
             bitmap.width = width;
             bitmap.height = height;
         };
-    }
 
+        return $1px;
+    }
 }

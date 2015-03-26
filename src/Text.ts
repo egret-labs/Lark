@@ -35,7 +35,7 @@ module lark {
         public constructor() {
             super();
             var img = new Image();
-            img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQIW2NkAAIAAAoAAggA9GkAAAAASUVORK5CYII=";
+            img.src = "http://tp2.sinaimg.cn/2078341137/50/5619181703/1";
             img.onload = () => {
                 var texture: Texture = new Texture();
                 texture.$setBitmapData(img);
@@ -50,6 +50,7 @@ module lark {
             this.addChild(FPS.display);
             var bitmap = new Bitmap();
             bitmap.texture = texture;
+            bitmap.width = bitmap.height = 200;
             var bitmap2 = new Bitmap();
             bitmap2.texture = texture;
 
@@ -62,34 +63,258 @@ module lark {
 
 
 
-            var text = "setTimeout(() => rich.width = this.stage? this.stage.stageWidth: 500, 300); \n"
-                + " World setTimeout(() => rich.width = this.stage? this.stage.stageWidth : 500, 300); \n "
-                + " World setTimeout(() => rich.width = this.stage ? this.stage.stageWidth : 500, 300); \\n World";
-            var tf = new TextField(text);
-            tf.style = { align: "left", color: 0xFF0000 };
-            //tf.width = 400;
-            tf.multiline = true;
-            tf.y = 200;
-            this.addChild(tf);
-            var x, y, touchdown = false;
-            var move = (e: TouchEvent) => { if (touchdown == false) return; tf.width += e.stageX - x; x = e.stageX;};
-            tf.addEventListener(TouchEvent.TOUCH_BEGIN,(e: TouchEvent) => { x = e.stageX; touchdown = true }, this);
+            //var text = "setTimeout(() => rich.width = this.stage? this.stage.stageWidth: 500, 300); \n"
+            //    + " World setTimeout(() => rich.width = this.stage? this.stage.stageWidth : 500, 300); \n "
+            //    + " World setTimeout(() => rich.width = this.stage ? this.stage.stageWidth : 500, 300); \\n World";
+            //var tf = new TextField(text);
+            //tf.style = { align: "left", color: 0xFF0000 };
+            ////tf.width = 400;
+            //tf.multiline = true;
+            //tf.y = 200;
+            //this.addChild(tf);
+            //var x, y, touchdown = false;
+            //var move = (e: TouchEvent) => { if (touchdown == false) return; tf.width += e.stageX - x; x = e.stageX;};
+            //tf.addEventListener(TouchEvent.TOUCH_BEGIN,(e: TouchEvent) => { x = e.stageX; touchdown = true }, this);
 
-            tf.addEventListener(TouchEvent.TOUCH_MOVE, move, this);
-            tf.addEventListener(TouchEvent.TOUCH_END, e=> touchdown = false, this);
+            //tf.addEventListener(TouchEvent.TOUCH_MOVE, move, this);
+            //tf.addEventListener(TouchEvent.TOUCH_END, e=> touchdown = false, this);
 
-            var rich = new lark.text.RichTextField({ fontSize: 50 });
+            var rich = new lark.RichTextField({ fontSize: 30,align:"right" });
             rich.y = 50;
             rich.width = 500;
-            rich.height = 400;
-            rich.nodes = [{
-                text: "Hi",
-                style: { color: 0x00FF00 }
-            }, {
+            rich.height = 500;
+            rich.nodes = ['Hi ', {
                     text: " Hi how are you",
-                    style: { color: 0x00FF00 }
-                }];
+                    style: { color: 0xFF0000 }
+            }, bitmap, {
+                    graphic: bitmap2,
+                    style: {
+                        float:"left"
+                    }
+            }, {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float:"right"
+                    }
+            },
+                "faj s dhfa sdf as df asd \n s \n s \n s \nf as df a sdf as df a sdf asd fa",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "left"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "right"
+                }
+                },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "left"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "right"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "left"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "right"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "left"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "right"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "left"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "right"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "left"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "right"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "left"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "right"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "left"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "right"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "left"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "left"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "left"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "left"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "left"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+            {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "left"
+                }
+            },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer "];
             this.addChild(rich);
+            
+            window.addEventListener("mousewheel", e=> {
+                rich.scrollV += (e.wheelDelta > 0 ? 1 : -1);
+                if (rich.scrollV < 0)
+                    rich.scrollV = 0;
+            });
         }
 
         
