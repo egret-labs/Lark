@@ -92,11 +92,11 @@ module lark {
             //this.iconList.push(bitmap);
             //this.targetIcon = bitmap;
             //this.addChild(this.targetIcon);
-            //this.addChild(FPS.display);
             //this.stage.frameRate = 24;
             //var timer = new Timer(16);
             //timer.addEventListener(TimerEvent.TIMER, this.onTick, this);
             //timer.start();
+            this.addChild(FPS.display);
             this.stage.addEventListener(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
