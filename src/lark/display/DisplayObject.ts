@@ -126,12 +126,14 @@ module lark {
 
         /**
          * 标记这个显示对象在父级容器的位置发生了改变。
-         * Marks this object as having been moved in its parent display object.
          */
         $invalidatePosition():void {
+            this.$markDirty();
             this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
-            this.$invalidateParentContentBounds();
+            if (this.$parent) {
+                this.$parent.$propagateFlagsUp(DisplayObjectFlags.InvalidContentBounds);
+            }
         }
 
         /**
@@ -222,7 +224,6 @@ module lark {
             this._skewY = matrix.$getSkewY();
             this._rotation = DisplayObject.clampRotation(this._skewY * 180 / Math.PI);
             this.$removeFlags(DisplayObjectFlags.InvalidMatrix);
-            this.$markDirty();
             this.$invalidatePosition();
         }
 
@@ -273,7 +274,6 @@ module lark {
             }
             this._matrix.tx = value;
             this.$invalidatePosition();
-            this.$markDirty();
         }
 
         /**
@@ -292,7 +292,6 @@ module lark {
             }
             this._matrix.ty = value;
             this.$invalidatePosition();
-            this.$markDirty();
         }
 
 
@@ -477,6 +476,7 @@ module lark {
         }
 
         $touchEnabled:boolean = true;
+
         /**
          * 指定此对象是否接收鼠标/触摸事件
          * @default true 默认为 true 即可以接收。
@@ -599,25 +599,17 @@ module lark {
          * 标记自身的测量尺寸失效
          */
         $invalidateContentBounds():void {
+            this.$markDirty();
             this.$propagateFlagsUp(DisplayObjectFlags.InvalidContentBounds);
         }
 
-        /**
-         * 标记父级的测量尺寸失效
-         */
-        $invalidateParentContentBounds():void {
-            if (this.$parent) {
-                this.$parent.$invalidateContentBounds();
-            }
-        }
-
-        private _contentBounds:Rectangle = new Rectangle();
+        $contentBounds:Rectangle = new Rectangle();
 
         /**
          * 获取自身占用的矩形区域，如果是容器，还包括所有子项占据的区域。
          */
         $getContentBounds():Rectangle {
-            var bounds = this._contentBounds;
+            var bounds = this.$contentBounds;
             if (this.$hasFlags(DisplayObjectFlags.InvalidContentBounds)) {
                 this.$removeFlags(DisplayObjectFlags.InvalidContentBounds);
                 if (this.$renderNode) {
@@ -639,30 +631,19 @@ module lark {
         $renderNode:lark.player.RenderNode = null;
 
         /**
-         * 获取渲染节点
+         * 之前若调用过$markDirty()方法，此方法在绘制阶段会自动被调用，它负责将自身的属性改变同步到RenderNode，并清空相关的Dirty标记。
+         * 注意：此方法里禁止添加移除显示子项或执行其他可能产生新的Dirty标记的操作，仅执行同步操作，否则可能导致屏幕绘制错误。
          */
         $updateRenderNode():void {
-            var node = this.$renderNode;
-            if (!node) {
-                return;
-            }
             this.$removeFlagsUp(DisplayObjectFlags.Dirty);
-            var stage = this.$stage;
-            if (!stage) {
-                node.finish();
-                node.clearRect();
-                return;
-            }
+            var node = this.$renderNode;
             node.alpha = this.$getConcatenatedAlpha();
             node.matrix = this.$getConcatenatedMatrix();
             node.bounds = this.$getContentBounds();
-            if (node.moved) {
-                node.updateRect(stage.stageWidth,stage.stageHeight);
-            }
         }
 
         /**
-         * 标记此显示对象需要重绘
+         * 标记此显示对象需要重绘，调用此方法后，在屏幕绘制阶段$updateRenderNode()方法会自动被回调，您可能需要覆盖它来同步自身改变的属性到目标RenderNode。
          */
         $markDirty():void {
             var dirtyNodes = this.$stage ? this.$stage.$dirtyRenderNodes : null;
@@ -694,7 +675,7 @@ module lark {
          * @param shapeFlag 是检查对象 (true) 的实际像素，还是只检查边框 (false)。
          * @returns {boolean} 如果显示对象与指定的点重叠或相交，则为 true；否则为 false。
          */
-        public hitTestPoint(stageX: number, stageY: number, shapeFlag: boolean): boolean {
+        public hitTestPoint(stageX:number, stageY:number, shapeFlag:boolean):boolean {
             //var testingType = shapeFlag ?
             //    player.HitTestingType.HitTestShape :
             //    player.HitTestingType.HitTestBounds;
@@ -702,12 +683,12 @@ module lark {
             return false;
         }
 
-        $hitTest(stageX:number,stageY:number):DisplayObject{
-            if(!this.$touchEnabled||!this.$hasFlags(DisplayObjectFlags.Visible)){
+        $hitTest(stageX:number, stageY:number):DisplayObject {
+            if (!this.$touchEnabled || !this.$hasFlags(DisplayObjectFlags.Visible)) {
                 return null;
             }
             var node = this.$renderNode;
-            if(node&&node.hitTest(stageX,stageY)){
+            if (node && node.hitTest(stageX, stageY)) {
                 return this;
             }
             return null;

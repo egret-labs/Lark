@@ -162,7 +162,8 @@ module lark {
         }
 
         /**
-         * 获取渲染节点
+         * 之前若调用过$markDirty()方法，此方法在绘制阶段会自动被调用，它负责将自身的属性改变同步到RenderNode，并清空相关的Dirty标记。
+         * 注意：此方法里禁止添加移除显示子项或执行其他可能产生新的Dirty标记的操作，仅执行同步操作，否则可能导致屏幕绘制错误。
          */
         $updateRenderNode(): void {
             if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0) {

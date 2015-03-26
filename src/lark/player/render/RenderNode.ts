@@ -84,14 +84,35 @@ module lark.player {
          */
         public maxY:number = 0;
 
-        public clearRect():void {
-            this.minX = this.minY = this.maxX = this.maxY = 0;
+        /**
+         * 是否与目标矩形相交
+         */
+        public intersects(targetMinX:number, targetMinY:number, targetMaxX:number, targetMaxY:number):boolean {
+            var max = this.minX > targetMinX ? this.minX : targetMinX;
+            var min = this.maxX < targetMaxX ? this.maxX : targetMaxX;
+            if (max > min) {
+                return false;
+            }
+
+            max = this.minY > targetMinY ? this.minY : targetMinY;
+            min = this.maxY < targetMaxY ? this.maxY : targetMaxY;
+            return max <= min;
         }
 
         /**
-         * 更新绘制在屏幕上的矩形区域范围
+         * 更新节点属性
          */
-        public updateRect(stageWidth:number,stageHeight:number):void {
+        public update():void {
+            var stage = this.target.$stage;
+            if (!stage) {
+                this.finish();
+                this.minX = this.minY = this.maxX = this.maxY = 0;
+                return;
+            }
+            this.target.$updateRenderNode();
+            if(!this.moved){
+                return;
+            }
             var bounds = this.bounds;
             var m = this.matrix;
             var a:number = m.a, b:number = m.b, c:number = m.c, d:number = m.d, tx:number = m.tx, ty:number = m.ty;
@@ -135,30 +156,9 @@ module lark.player {
 
             this.minY = y0 < y2 ? y0 : y2;
             this.maxY = y1 > y3 ? y1 : y3;
-            this.outOfScreen = !this.intersects(0, 0, stageWidth, stageHeight);
+            this.outOfScreen = !this.intersects(0, 0, stage.stageWidth, stage.stageHeight);
         }
 
-        /**
-         * 是否与目标矩形相交
-         */
-        public intersects(targetMinX:number, targetMinY:number, targetMaxX:number, targetMaxY:number):boolean {
-            var max = this.minX > targetMinX ? this.minX : targetMinX;
-            var min = this.maxX < targetMaxX ? this.maxX : targetMaxX;
-            if (max > min) {
-                return false;
-            }
-
-            max = this.minY > targetMinY ? this.minY : targetMinY;
-            min = this.maxY < targetMaxY ? this.maxY : targetMaxY;
-            return max <= min;
-        }
-
-        /**
-         * 更新节点属性
-         */
-        public update():void {
-            this.target.$updateRenderNode();
-        }
         /**
          * 执行渲染,绘制自身到屏幕
          */
@@ -178,9 +178,10 @@ module lark.player {
          */
         public hitTest(stageX:number,stageY:number):boolean{
             var m = this.target.$getInvertedConcatenatedMatrix();
+            var bounds = this.bounds;
             var localX = m.a * stageX + m.c * stageY + m.tx;
             var localY = m.b * stageX + m.d * stageY + m.ty;
-            return this.bounds.contains(localX,localY);
-        }
+            return bounds.contains(localX,localY);
+        } 
     }
 }

@@ -51,7 +51,7 @@ module lark {
             if(this.$stage){
                 this.$stage.$displayListTreeChanged = true;
             }
-            this.$invalidateContentBounds();
+            this.$propagateFlagsUp(DisplayObjectFlags.InvalidContentBounds);
         }
 
         $propagateFlagsDown(flags:DisplayObjectFlags) {
