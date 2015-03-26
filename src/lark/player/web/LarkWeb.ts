@@ -34,7 +34,7 @@ module lark.web {
      */
     export function createPlayer(canvas:HTMLCanvasElement,entryClassName:string):lark.player.Player {
         checkTicker();
-        var canvasContext = new lark.player.CanvasContext(canvas);
+        var canvasContext = new CanvasContext(canvas);
         var player = new lark.player.Player(canvasContext,entryClassName);
         return player;
     }

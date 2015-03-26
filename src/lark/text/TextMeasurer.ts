@@ -79,9 +79,9 @@ module lark {
     }
 
     export class CanvasTextMeasurer extends TextMeasurer {
-        protected renderContext: player.CanvasContext;
+        protected renderContext: web.CanvasContext;
         protected ctx: CanvasRenderingContext2D;
-        public constructor(renderContext: player.CanvasContext,ctx:CanvasRenderingContext2D) {
+        public constructor(renderContext: web.CanvasContext,ctx:CanvasRenderingContext2D) {
             super();
             this.renderContext = renderContext;
             this.ctx = ctx;

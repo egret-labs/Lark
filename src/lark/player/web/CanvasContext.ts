@@ -27,12 +27,12 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark.web {
     /**
      * @excluded
      * Lark播放器在Canvas上封装的实现
      */
-    export class CanvasContext extends HashObject implements IPlayerContext {
+    export class CanvasContext extends HashObject implements lark.player.IPlayerContext {
         /**
          * 创建一个Canvas屏幕渲染器
          */
@@ -49,9 +49,9 @@ module lark.player {
         private canvas:HTMLCanvasElement;
         private context:CanvasRenderingContext2D;
 
-        private player:Player = null;
+        private player:lark.player.Player = null;
 
-        public initialize(player:Player):void {
+        public initialize(player:lark.player.Player):void {
             this.player = player;
             window.onresize = this.onSizeChanged;
             this.doResize();
