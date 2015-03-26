@@ -27,15 +27,15 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark.web {
 
     /**
      * Lark网页版程序入口
      */
-    export function createPlayer(canvas:HTMLCanvasElement,entryClassName:string):Player {
+    export function createPlayer(canvas:HTMLCanvasElement,entryClassName:string):lark.player.Player {
         checkTicker();
         var canvasContext = new lark.player.CanvasContext(canvas);
-        var player = new Player(canvasContext,entryClassName);
+        var player = new lark.player.Player(canvasContext,entryClassName);
         return player;
     }
 
@@ -43,7 +43,7 @@ module lark.player {
      * 检查心跳计时器，若未初始化则立即初始化并启动。
      */
     function checkTicker():void {
-        var ticker:Ticker = Ticker.getInstance();
+        var ticker = lark.player.Ticker.getInstance();
         if (!ticker) {
             return;
         }
