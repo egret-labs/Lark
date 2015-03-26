@@ -122,6 +122,7 @@ module lark.player {
             var t = lark.getTimer();
             this.computeDirtyRects();
             var t1 = lark.getTimer();
+            this.drawCalls = 0;
             if (this.dirtyRatio > 0) {
                 var cleanAll:boolean = this.dirtyRatio>this._stage.$dirtyRatio;
                 if(!cleanAll)
@@ -196,7 +197,6 @@ module lark.player {
             var stage = this._stage;
             var dirtyRectList = this.dirtyRectList;
             var context = this.context;
-            this.drawCalls = 0;
             if(this._stage.$displayListTreeChanged){
                 var nodeList:RenderNode[] = [];
                 this.visitDisplayList(this._stage, nodeList,dirtyRectList,context,cleanAll);
