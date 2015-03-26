@@ -47,6 +47,7 @@ module lark.player {
                 renderContext.drawText(span.text, span.$toFontString(true), span.$toColorString(), span.x,
                     span.style.fontSize / 2 + span.y, span.textWidth, this.matrix, this.alpha);
             }
+            console.log(i);
         }
     }
 }

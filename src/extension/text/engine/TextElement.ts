@@ -51,7 +51,7 @@
 
 
             var format = this._elementFormat;
-            var fontString = TextElement.toFontString(format);
+            
 
             var textAtoms = this.split(this._text.substr(startIndex));
             var textLength = 0;
@@ -59,7 +59,7 @@
             var full = false;
             for (var i = 0; i < textAtoms.length; i++) {
                 var atom = textAtoms[i];
-                var w = TextElement.measureText(atom, fontString);
+                var w = TextMeasurer.measureText(atom, format);
                 var testW = currentWidth + w;
                 if (testW <= width || isFirstSpan) {
                     currentWidth = testW;

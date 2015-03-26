@@ -47,6 +47,7 @@ module lark {
         color?: number;
         float?: string;
         verticalAlign?: string;
+        align?: string;
         href?: string;
         target?: string;
         toFontString?(includeSize?:boolean):string;
