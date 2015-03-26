@@ -33,8 +33,8 @@ module lark.web {
      * Lark网页版程序入口
      */
     export function createPlayer(canvas:HTMLCanvasElement,entryClassName:string):lark.player.Player {
-        var ticker = lark.player.Ticker.createInstance();
-        if (ticker) {
+        if(!lark.player.Ticker.$instance){
+            var ticker = lark.player.Ticker.$instance = new lark.player.Ticker();
             startTicker(ticker);
         }
         var stage = new lark.Stage();

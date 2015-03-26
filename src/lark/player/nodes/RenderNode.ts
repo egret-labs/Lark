@@ -41,6 +41,8 @@ module lark.player {
             this.target = target;
         }
 
+        //对于V8，要控制对象属性的个数在12~128之间才能获得最高的属性查询性能。
+
         /**
          * 目标显示对象
          */

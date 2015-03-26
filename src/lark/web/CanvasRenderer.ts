@@ -39,7 +39,7 @@ module lark.web {
             super();
             if (!canvas) {
                 throw new Error("CanvasRenderer实例化失败，canvas参数不能为空！");
-            }
+            } 
             this.canvas = canvas;
             this.context = canvas.getContext("2d");
             this.stage = stage;

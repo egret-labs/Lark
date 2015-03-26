@@ -37,16 +37,6 @@ module lark.player {
         static $instance:Ticker;
 
         /**
-         * 获取单例，注意只能获取一次，用于初始化。
-         */
-        public static createInstance():Ticker {
-            if (!Ticker.$instance) {
-                return Ticker.$instance = new Ticker();
-            }
-            return null;
-        }
-
-        /**
          * 是否要广播Event.RENDER事件的标志。
          */
         static $invalidateRenderFlag:boolean = false;
