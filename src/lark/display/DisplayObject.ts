@@ -611,9 +611,6 @@ module lark {
         private getOriginalBounds():Rectangle {
             var bounds = this._bounds;
             if (this.$hasFlags(DisplayObjectFlags.InvalidBounds)) {
-                if (this.$renderNode) {
-                    this.$renderNode.moved = true;
-                }
                 bounds.copyFrom(this.$getContentBounds());
                 this.$measureChildBounds(bounds);
                 this.$removeFlags(DisplayObjectFlags.InvalidBounds);
@@ -634,6 +631,9 @@ module lark {
         $getContentBounds():Rectangle {
             var bounds = this._contentBounds;
             if (this.$hasFlags(DisplayObjectFlags.InvalidContentBounds)) {
+                if (this.$renderNode) {
+                    this.$renderNode.moved = true;
+                }
                 this.$measureContentBounds(bounds);
                 this.$removeFlags(DisplayObjectFlags.InvalidContentBounds);
             }
