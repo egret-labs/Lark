@@ -39,7 +39,7 @@ module lark.player {
         /**
          * 获取单例，注意只能获取一次，用于初始化。
          */
-        public static getInstance():Ticker {
+        public static createInstance():Ticker {
             if (!Ticker.$instance) {
                 return Ticker.$instance = new Ticker();
             }

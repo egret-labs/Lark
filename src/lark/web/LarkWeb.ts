@@ -33,20 +33,25 @@ module lark.web {
      * Lark网页版程序入口
      */
     export function createPlayer(canvas:HTMLCanvasElement,entryClassName:string):lark.player.Player {
-        checkTicker();
-        var canvasContext = new CanvasContext(canvas);
-        var player = new lark.player.Player(canvasContext,entryClassName);
+        var ticker = lark.player.Ticker.createInstance();
+        if (ticker) {
+            startTicker(ticker);
+        }
+        var stage = new lark.Stage();
+        var canvasContext = new CanvasRenderer(canvas,stage);
+        if(!TextMetrics.$instance){
+            TextMetrics.$instance = new CanvasTextMetrics(canvasContext,canvas);
+        }
+        var interaction = new lark.player.Interaction(stage);
+        var webInteraction = new WebInteraction(interaction,canvas);
+        var player = new lark.player.Player(canvasContext,stage,entryClassName);
         return player;
     }
 
     /**
-     * 检查心跳计时器，若未初始化则立即初始化并启动。
+     * 启动心跳计时器。
      */
-    function checkTicker():void {
-        var ticker = lark.player.Ticker.getInstance();
-        if (!ticker) {
-            return;
-        }
+    function startTicker(ticker:lark.player.Ticker):void {
         var requestAnimationFrame =
             window["requestAnimationFrame"] ||
             window["webkitRequestAnimationFrame"] ||

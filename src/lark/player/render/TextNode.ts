@@ -40,7 +40,7 @@ module lark.player {
 
         public spans: TextSpan[] = null;
 
-        public render(renderContext: IPlayerContext): void {
+        public render(renderContext: IRenderer): void {
             var spans = this.spans, length = spans.length;
             for (var i = 0; i < length; i++) {
                 var span = spans[i];

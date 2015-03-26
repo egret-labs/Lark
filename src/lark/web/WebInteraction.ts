@@ -27,32 +27,44 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
-    /**
-     * @excluded
-     * 位图渲染节点
-     */
-    export class BitmapNode extends RenderNode {
-        /**
-         * 实例化一个渲染命令
-         */
-        public constructor(target:DisplayObject) {
-            super(target);
+module lark.web {
+
+    export class WebInteraction extends HashObject{
+
+        public constructor(interacion:lark.player.Interaction,canvas:HTMLCanvasElement){
+            super();
+            this.canvas = canvas;
+            this.interaction = interacion;
+            canvas.addEventListener("mousedown",this.onTouchBegin);
+            canvas.addEventListener("mousemove",this.onTouchMove);
+            canvas.addEventListener("mouseup",this.onTouchEnd);
         }
 
-        //对于V8，要控制对象属性的个数在12~128之间才能获得最高的属性查询性能。
+        private canvas:HTMLCanvasElement;
+        private interaction:lark.player.Interaction;
 
-        /**
-         * 要绘制的纹理
-         */
-        public texture:Texture = null;
-
-        public render(renderContext:IRenderer):void{
-            var texture = this.texture;
-            if (texture) {
-                renderContext.drawImage(texture, this.matrix, this.alpha);
-            }
+        private onTouchBegin = (event:any):void => {
+            var location = this.getLocation(event);
+            this.interaction.onTouchBegin(location.x, location.y, event.identifier);
         }
 
+        private onTouchMove = (event:any):void => {
+            var location = this.getLocation(event);
+            this.interaction.onTouchMove(location.x, location.y, event.identifier);
+
+        }
+
+        private onTouchEnd = (event:any):void => {
+            var location = this.getLocation(event);
+            this.interaction.onTouchEnd(location.x, location.y, event.identifier);
+        }
+
+        private getLocation(event:any):Point {
+            var doc = document.documentElement;
+            var box = this.canvas.getBoundingClientRect();
+            var left = box.left + window.pageXOffset - doc.clientLeft;
+            var top = box.top + window.pageYOffset - doc.clientTop;
+            return Point.TEMP.setTo(event.pageX - left,event.pageY - top);
+        }
     }
 }

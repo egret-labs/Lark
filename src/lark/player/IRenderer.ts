@@ -32,12 +32,8 @@ module lark.player {
     /**
      * IPlayerContext接口定义Lark播放器与平台相关的操作，包括绘制，网络，交互操作等。
      */
-    export interface IPlayerContext extends IHashObject {
+    export interface IRenderer extends IHashObject {
 
-        /**
-         * 初始化播放器上下文
-         */
-        initialize(player:Player):void;
         /**
          * 清除整个屏幕
          */

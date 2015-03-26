@@ -29,69 +29,48 @@
 
 
 module lark {
-    var $TextMeasurerInstance: TextMeasurer = null,
-        $TextWidthCache = {}
-    /**
-    * 用于文本宽度测量的辅助类
-    */
-    export class TextMeasurer {
 
-        static $setInstance(it: TextMeasurer) {
-            $TextMeasurerInstance = it;
-        }
+    var $TextWidthCache = {}
+    /**
+     * 用于文本宽度测量的辅助类
+     */
+    export class TextMetrics {
+
+        static $instance:ITextMetrics;
+
         /**
-        * 测量文本在指定样式下的宽度
-        */
-        public static measureText(text: string, style: ITextStyle): number {
-            if ($TextMeasurerInstance == null)
+         * 测量文本在指定样式下的宽度
+         */
+        public static measureText(text:string, style:ITextStyle):number {
+            var instance = TextMetrics.$instance;
+            if (!instance)
                 throw new Error("TextMeasurer.setInstance has not been called");
 
             var width = 0.0;
             var fontCache = $TextWidthCache;
             var font = style.toFontString(true);
-            var cache: { [char: string]: number } = fontCache[font] || (fontCache[font] = {});
-            
-            $TextMeasurerInstance.setupFont(style);
+            var cache:{ [char: string]: number } = fontCache[font] || (fontCache[font] = {});
+
+            instance.setupFont(style);
 
             var length = text.length;
             for (var i = 0; i < length; i++) {
                 var letter = text.charCodeAt(i);
-                var w = cache[letter] || (cache[letter] = $TextMeasurerInstance.measureText(text.charAt(i)));
+                var w = cache[letter] || (cache[letter] = instance.measureText(text.charAt(i)));
                 width += w;
             }
             return width;
         }
-
-        
-        /**
-        * 测量前设置 Context 的文本样式
-        */
-        public setupFont(style: ITextStyle): void {
-
-        }
-
-        /**
-        * 测量文本的宽度
-        */
-        public measureText(text: string): number {
-            return 0;
-        }
     }
 
-    export class CanvasTextMeasurer extends TextMeasurer {
-        protected renderContext: web.CanvasContext;
-        protected ctx: CanvasRenderingContext2D;
-        public constructor(renderContext: web.CanvasContext,ctx:CanvasRenderingContext2D) {
-            super();
-            this.renderContext = renderContext;
-            this.ctx = ctx;
-        }
-
-        public setupFont(style: ITextStyle): void {
-            this.renderContext.setupFont(style);
-        }
-        public measureText(text: string): number {
-            return this.ctx.measureText(text).width;
-        }
+    export interface ITextMetrics {
+        /**
+         * 设置文本样式
+         */
+        setupFont(style:ITextStyle):void;
+        /**
+         * 测量文本在指定样式下的宽度
+         */
+        measureText(text:string):number;
     }
 }
