@@ -706,11 +706,8 @@ module lark {
             if(!this.$touchEnabled||!this.$hasFlags(DisplayObjectFlags.Visible)){
                 return null;
             }
-            var m = this.$getInvertedConcatenatedMatrix();
-            var localX = m.a * stageX + m.c * stageY + m.tx;
-            var localY = m.b * stageX + m.d * stageY + m.ty;
-            var bounds:Rectangle = this.$getContentBounds();
-            if(bounds.contains(localX,localY)){
+            var node = this.$renderNode;
+            if(node&&node.hitTest(stageX,stageY)){
                 return this;
             }
             return null;

@@ -416,8 +416,17 @@ module lark {
                     break;
                 }
             }
-            if(!this.$touchChildren&&target){
+            if(target){
+                if(this.$touchChildren){
+                    return target;
+                }
                 return this;
+            }
+            if(this.$touchEnabled){
+                var node = this.$renderNode;
+                if(node&&node.hitTest(stageX,stageY)){
+                    return this;
+                }
             }
             return target;
         }

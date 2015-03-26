@@ -52,14 +52,20 @@ module lark {
             this.addChild(bitmap);
 
             var container = new DisplayObjectContainer();
-            this.addChild(container);
             container.x = 250;
             container.addChild(new Bitmap(texture));
             bitmap = new Bitmap(texture);
             bitmap.x = 250;
+            bitmap.touchEnabled = false;
             container.addChild(bitmap);
-            container.touchChildren = false;
-            
+            container.touchEnabled = false;
+
+            var container2 = new DisplayObjectContainer();
+            this.addChild(container2);
+            container2.addChild(container);
+            container2.addChild(new Bitmap(texture));
+            container2.x = 250;
+            container2.touchChildren = false;
             //var x = 0, y = 0;
             //for (var i = 0; i < 2000; i++) {
             //    var bitmap = new Bitmap();
@@ -103,7 +109,6 @@ module lark {
             if(this.touchTarget===this.stage){
                 return;
             }
-            this.addChild(this.touchTarget);
             this.offsetX = this.touchTarget.x - event.stageX;
             this.offsetY = this.touchTarget.y - event.stageY;
             this.stage.addEventListener(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);

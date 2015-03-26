@@ -159,7 +159,12 @@ module lark.player {
         public update():void {
             this.target.$updateRenderNode();
         }
+        /**
+         * 执行渲染,绘制自身到屏幕
+         */
+        public render(renderContext:IPlayerContext):void{
 
+        }
         /**
          * 渲染结束，已经绘制到屏幕
          */
@@ -169,10 +174,13 @@ module lark.player {
         }
 
         /**
-         * 执行渲染操作
+         * 碰撞检测，返回是否与舞台坐标相交。
          */
-        public render(renderContext:IPlayerContext):void{
-
+        public hitTest(stageX:number,stageY:number):boolean{
+            var m = this.target.$getInvertedConcatenatedMatrix();
+            var localX = m.a * stageX + m.c * stageY + m.tx;
+            var localY = m.b * stageX + m.d * stageY + m.ty;
+            return this.bounds.contains(localX,localY);
         }
     }
 }
