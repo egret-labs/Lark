@@ -32,7 +32,7 @@ module lark.web {
      * @excluded
      * Lark播放器在Canvas上封装的实现
      */
-    export class CanvasRenderer extends HashObject implements lark.player.IRenderer {
+    export class CanvasRenderer extends HashObject implements lark.player.IRenderer,lark.player.ITextMetrics {
         /**
          * 创建一个Canvas屏幕渲染器
          */
@@ -93,11 +93,6 @@ module lark.web {
             var height = texture.$bitmapHeight;
             this.context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY,width, height,
                 texture.$offsetX+point.x, texture.$offsetY+point.y, width, height);
-        }
-
-        public setupFont(style: ITextStyle): void {
-            var font = style.toFontString(true);
-            this.setFont(font);
         }
 
         /**
@@ -203,6 +198,20 @@ module lark.web {
             }
             this._fillStyle = value;
             this.context.fillStyle = value;
+        }
+
+        /**
+         * 设置文本样式
+         */
+        public setupFont(style: ITextStyle): void {
+            var font = style.toFontString(true);
+            this.setFont(font);
+        }
+        /**
+         * 测量文本在指定样式下的宽度
+         */
+        public measureText(text:string):number {
+            return this.context.measureText(text).width;
         }
     }
 }

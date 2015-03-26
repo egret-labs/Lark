@@ -40,7 +40,7 @@ module lark.web {
         var stage = new lark.Stage();
         var canvasRenderer = new CanvasRenderer(canvas,stage);
         if(!TextMetrics.$instance){
-            TextMetrics.$instance = new CanvasTextMetrics(canvasRenderer,canvas);
+            TextMetrics.$instance = canvasRenderer;
         }
         var interaction = new lark.player.Interaction(stage);
         var webInteraction = new WebInteraction(interaction,canvas);
