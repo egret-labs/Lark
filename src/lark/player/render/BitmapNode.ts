@@ -47,10 +47,10 @@ module lark.player {
          */
         public texture:Texture = null;
 
-        public render(renderContext:IRenderer):void{
+        public render(renderer:IRenderer):void{
             var texture = this.texture;
             if (texture) {
-                renderContext.drawImage(texture, this.matrix, this.alpha);
+                renderer.drawImage(texture, this.matrix, this.alpha);
             }
         }
 

@@ -38,16 +38,16 @@ module lark.web {
             startTicker(ticker);
         }
         var stage = new lark.Stage();
-        var canvasContext = new CanvasRenderer(canvas,stage);
+        var canvasRenderer = new CanvasRenderer(canvas,stage);
         if(!TextMetrics.$instance){
-            TextMetrics.$instance = new CanvasTextMetrics(canvasContext,canvas);
+            TextMetrics.$instance = new CanvasTextMetrics(canvasRenderer,canvas);
         }
         var interaction = new lark.player.Interaction(stage);
         var webInteraction = new WebInteraction(interaction,canvas);
-        var player = new lark.player.Player(canvasContext,stage,entryClassName);
+        var player = new lark.player.Player(canvasRenderer,stage,entryClassName);
         return player;
     }
-
+ 
     /**
      * 启动心跳计时器。
      */
