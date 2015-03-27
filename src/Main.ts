@@ -66,6 +66,10 @@ module lark {
             container2.addChild(new Bitmap(texture));
             container2.x = 250;
             container2.touchChildren = false;
+            this.stage.addEventListener(TouchEvent.TOUCH_TAP,this.onTouchTap,this);
+            this.stage.addEventListener(TouchEvent.TOUCH_RELEASE_OUTSIDE,this.onTouchTap,this);
+            this.stage.addEventListener(TouchEvent.TOUCH_END,this.onTouchTap,this);
+            this.stage.addEventListener(TouchEvent.TOUCH_BEGIN,this.onTouchTap,this);
             //var x = 0, y = 0;
             //for (var i = 0; i < 2000; i++) {
             //    var bitmap = new Bitmap();
@@ -97,7 +101,11 @@ module lark {
             //timer.addEventListener(TimerEvent.TIMER, this.onTick, this);
             //timer.start();
             this.addChild(FPS.display);
-            this.stage.addEventListener(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+           // this.stage.addEventListener(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+        }
+
+        private onTouchTap(event:TouchEvent):void{
+            console.log(event.type);
         }
 
         private touchTarget:DisplayObject;

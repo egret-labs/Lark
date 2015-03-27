@@ -43,15 +43,15 @@ module lark {
          * 创建一个 lark.HashObject 对象
          */
         public constructor() {
-            this._hashCode = hashCount++;
+            this.$hashCode = hashCount++;
         }
 
-        private _hashCode:number;
+        $hashCode:number;
         /**
          * 返回此对象唯一的哈希值,用于唯一确定一个对象。hashCode为大于等于1的整数。
          */
         public get hashCode():number {
-            return this._hashCode;
+            return this.$hashCode;
         }
     }
 }

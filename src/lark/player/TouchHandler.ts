@@ -41,6 +41,9 @@ module lark.player{
 
         private stage:Stage;
 
+        private touchDownTarget:{[key:number]:number} = {};
+
+        private touchMoveTarget:{[key:number]:number} = {};
         /**
          * 触摸开始（按下）
          * @param x 事件发生处相对于舞台的坐标x
@@ -48,9 +51,13 @@ module lark.player{
          * @param touchPointID 分配给触摸点的唯一标识号
          */
         public onTouchBegin(x:number,y:number,touchPointID:number):void {
-            var target = this.findTarget(x,y);
+            var target = this.findTarget(x,y,touchPointID);
+            this.touchDownTarget[touchPointID] = target.$hashCode;
             TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_BEGIN,true,true,x,y,touchPointID,true);
         }
+
+        private lastTouchX:number = -1;
+        private lastTouchY:number = -1;
         /**
          * 触摸移动
          * @param x 事件发生处相对于舞台的坐标x
@@ -58,8 +65,14 @@ module lark.player{
          * @param touchPointID 分配给触摸点的唯一标识号
          */
         public onTouchMove(x:number,y:number,touchPointID:number):void {
-            var target = this.findTarget(x,y);
-            TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_MOVE,true,true,x,y,touchPointID,true);
+            if(this.lastTouchX===x&&this.lastTouchY===y){
+                return;
+            }
+            this.lastTouchX = x;
+            this.lastTouchY = y;
+            var target = this.findTarget(x,y,touchPointID);
+            var touchDown = (this.touchDownTarget[touchPointID]>0);
+            TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_MOVE,true,true,x,y,touchPointID,touchDown);
         }
         /**
          * 触摸结束（弹起）
@@ -68,11 +81,22 @@ module lark.player{
          * @param touchPointID 分配给触摸点的唯一标识号
          */
         public onTouchEnd(x:number,y:number,touchPointID:number):void {
-            var target = this.findTarget(x,y);
+            var target = this.findTarget(x,y,touchPointID);
+            var oldTarget = this.touchDownTarget[touchPointID];
+            this.touchDownTarget[touchPointID] = -1;
             TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_END,true,true,x,y,touchPointID,false);
+            if(oldTarget===target.$hashCode){
+                TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_TAP,true,true,x,y,touchPointID,false);
+            }
+            else{
+                TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_RELEASE_OUTSIDE,true,true,x,y,touchPointID,false);
+            }
         }
 
-        private findTarget(stageX:number,stageY:number):DisplayObject{
+        /**
+         * 获取舞台坐标下的触摸对象
+         */
+        private findTarget(stageX:number,stageY:number,touchPointID:number):DisplayObject{
             var target = this.stage.$hitTest(stageX,stageY);
             if(!target){
                 target = this.stage;

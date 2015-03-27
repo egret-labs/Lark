@@ -41,11 +41,6 @@ module lark {
     export class TouchEvent extends Event {
 
         /**
-         * 轻触
-         */
-        public static TOUCH_TAP:string = "touchTap";
-
-        /**
          * 移动
          */
         public static TOUCH_MOVE:string = "touchMove";
@@ -61,7 +56,12 @@ module lark {
         public static TOUCH_END:string = "touchEnd";
 
         /**
-         * 在对象外部结束触摸
+         * 轻拍，开始和结束触摸都在同一对象上
+         */
+        public static TOUCH_TAP:string = "touchTap";
+
+        /**
+         * 在开始触摸对象的外部结束触摸
          */
         public static TOUCH_RELEASE_OUTSIDE:string = "touchReleaseOutside";
 
@@ -82,7 +82,7 @@ module lark {
         }
 
         $setTo(stageX:number, stageY:number, touchPointID:number, touchDown:boolean):void {
-            this.touchPointID = +touchPointID
+            this.touchPointID = +touchPointID || 0;
             this._stageX = +stageX || 0;
             this._stageY = +stageY || 0;
             this.touchDown = !!touchDown;
@@ -106,14 +106,15 @@ module lark {
 
         private localPoint:Point;
 
-        private getLocalXY():Point{
-            if(!this.localPoint){
+        private getLocalXY():Point {
+            if (!this.localPoint) {
                 this.localPoint = new Point();
                 var m = (<DisplayObject>this.target).$getInvertedConcatenatedMatrix();
-                m.transformPoint(this.stageX,this.stageY,this.localPoint);
+                m.transformPoint(this.stageX, this.stageY, this.localPoint);
             }
             return this.localPoint;
         }
+
         /**
          * 事件发生点相对于currentTarget的水平坐标。
          */
@@ -131,11 +132,11 @@ module lark {
         /**
          * 分配给触摸点的唯一标识号
          */
-        public touchPointID:number = -1;
+        public touchPointID:number;
         /**
          * 表示触摸已按下 (true) 还是未按下 (false)。
          */
-        public touchDown:boolean = false;
+        public touchDown:boolean;
 
         /**
          * 如果已修改显示列表，调用此方法将会忽略帧频限制，在此事件处理完成后立即重绘屏幕。
@@ -155,8 +156,8 @@ module lark {
          * @param touchPointID 分配给触摸点的唯一标识号
          * @param touchDown 是否处于按下状态
          */
-        public static dispatchTouchEvent(target:IEventDispatcher, type:string, bubbles:boolean = true,cancelable:boolean = true,
-                                         stageX?:number,stageY?:number, touchPointID?:number, touchDown?:boolean):boolean {
+        public static dispatchTouchEvent(target:IEventDispatcher, type:string, bubbles:boolean = true, cancelable:boolean = true,
+                                         stageX?:number, stageY?:number, touchPointID?:number, touchDown?:boolean):boolean {
             var event = Event.create(TouchEvent, type, bubbles, cancelable);
             event.$setTo(stageX, stageY, touchPointID, touchDown);
             var result = target.dispatchEvent(event);
