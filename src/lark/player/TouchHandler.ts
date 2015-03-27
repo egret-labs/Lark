@@ -29,6 +29,7 @@
 
 module lark.player{
 
+    var ENTER_LIST:DisplayObject[] = [],LEAVE_LIST:DisplayObject[] = [];
     /**
      * 用户交互操作管理器
      */
@@ -43,7 +44,7 @@ module lark.player{
 
         private touchDownTarget:{[key:number]:number} = {};
 
-        private touchMoveTarget:{[key:number]:number} = {};
+        private touchMoveTarget:{[key:number]:DisplayObject} = {};
         /**
          * 触摸开始（按下）
          * @param x 事件发生处相对于舞台的坐标x
@@ -53,11 +54,12 @@ module lark.player{
         public onTouchBegin(x:number,y:number,touchPointID:number):void {
             var target = this.findTarget(x,y,touchPointID);
             this.touchDownTarget[touchPointID] = target.$hashCode;
-            TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_BEGIN,true,true,x,y,touchPointID,true);
+            TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_BEGIN,true,true,x,y,touchPointID);
         }
 
         private lastTouchX:number = -1;
         private lastTouchY:number = -1;
+
         /**
          * 触摸移动
          * @param x 事件发生处相对于舞台的坐标x
@@ -71,9 +73,33 @@ module lark.player{
             this.lastTouchX = x;
             this.lastTouchY = y;
             var target = this.findTarget(x,y,touchPointID);
-            var touchDown = (this.touchDownTarget[touchPointID]>0);
-            TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_MOVE,true,true,x,y,touchPointID,touchDown);
+            var oldTarget = this.touchMoveTarget[touchPointID];
+            this.touchMoveTarget[touchPointID] = target;
+            TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_MOVE,true,true,x,y,touchPointID);
+            if(oldTarget!==target){
+                var enterList = this.getParentList(target,ENTER_LIST);
+                var leaveList = this.getParentList(oldTarget,LEAVE_LIST);
+                while(enterList[enterList.length-1]===leaveList[leaveList.length-1]){
+                    enterList.pop();
+                    leaveList.pop();
+                }
+                while(leaveList.length){
+                    TouchEvent.dispatchTouchEvent(leaveList.shift(),TouchEvent.TOUCH_LEAVE,false,true,x,y,touchPointID);
+                }
+                while(enterList.length){
+                    TouchEvent.dispatchTouchEvent(enterList.shift(),TouchEvent.TOUCH_ENTER,false,true,x,y,touchPointID);
+                }
+            }
         }
+
+        private getParentList(target:DisplayObject,list):DisplayObject[]{
+            while(target){
+                list.push(target);
+                target = target.$parent;
+            }
+            return list;
+        }
+
         /**
          * 触摸结束（弹起）
          * @param x 事件发生处相对于舞台的坐标x
@@ -82,14 +108,14 @@ module lark.player{
          */
         public onTouchEnd(x:number,y:number,touchPointID:number):void {
             var target = this.findTarget(x,y,touchPointID);
-            var oldTarget = this.touchDownTarget[touchPointID];
+            var oldTargetCode = this.touchDownTarget[touchPointID];
             this.touchDownTarget[touchPointID] = -1;
-            TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_END,true,true,x,y,touchPointID,false);
-            if(oldTarget===target.$hashCode){
-                TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_TAP,true,true,x,y,touchPointID,false);
+            TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_END,true,true,x,y,touchPointID);
+            if(oldTargetCode===target.$hashCode){
+                TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_TAP,true,true,x,y,touchPointID);
             }
             else{
-                TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_RELEASE_OUTSIDE,true,true,x,y,touchPointID,false);
+                TouchEvent.dispatchTouchEvent(target,TouchEvent.TOUCH_RELEASE_OUTSIDE,true,true,x,y,touchPointID);
             }
         }
 

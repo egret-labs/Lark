@@ -51,7 +51,7 @@ module lark {
         public static TOUCH_BEGIN:string = "touchBegin";
 
         /**
-         * 在同一对象上结束触摸
+         * 结束触摸
          */
         public static TOUCH_END:string = "touchEnd";
 
@@ -59,11 +59,19 @@ module lark {
          * 轻拍，开始和结束触摸都在同一对象上
          */
         public static TOUCH_TAP:string = "touchTap";
-
         /**
-         * 在开始触摸对象的外部结束触摸
+         * 在开始触摸的对象的外部结束触摸
          */
         public static TOUCH_RELEASE_OUTSIDE:string = "touchReleaseOutside";
+        /**
+         * 从外部移动进入一个新的显示对象
+         */
+        public static TOUCH_ENTER:string = "touchEnter";
+        /**
+         * 从当前显示对象移出到外部
+         */
+        public static TOUCH_LEAVE:string = "touchLeave";
+
 
         /**
          * 创建一个 TouchEvent 对象，其中包含有关Touch事件的信息
@@ -73,19 +81,17 @@ module lark {
          * @param stageX 事件发生点在全局舞台坐标系中的水平坐标
          * @param stageY 事件发生点在全局舞台坐标系中的垂直坐标
          * @param touchPointID 分配给触摸点的唯一标识号
-         * @param touchDown 是否处于按下状态
          */
         public constructor(type:string, bubbles:boolean = true, cancelable:boolean = true, stageX?:number,
-                           stageY?:number, touchPointID?:number, touchDown?:boolean) {
+                           stageY?:number, touchPointID?:number) {
             super(type, bubbles, cancelable);
-            this.$setTo(stageX, stageY, touchPointID, touchDown);
+            this.$setTo(stageX, stageY, touchPointID);
         }
 
-        $setTo(stageX:number, stageY:number, touchPointID:number, touchDown:boolean):void {
+        $setTo(stageX:number, stageY:number, touchPointID:number):void {
             this.touchPointID = +touchPointID || 0;
             this._stageX = +stageX || 0;
             this._stageY = +stageY || 0;
-            this.touchDown = !!touchDown;
         }
 
         public _stageX:number;
@@ -133,10 +139,6 @@ module lark {
          * 分配给触摸点的唯一标识号
          */
         public touchPointID:number;
-        /**
-         * 表示触摸已按下 (true) 还是未按下 (false)。
-         */
-        public touchDown:boolean;
 
         /**
          * 如果已修改显示列表，调用此方法将会忽略帧频限制，在此事件处理完成后立即重绘屏幕。
@@ -154,12 +156,14 @@ module lark {
          * @param stageX 事件发生点在全局舞台坐标系中的水平坐标
          * @param stageY 事件发生点在全局舞台坐标系中的垂直坐标
          * @param touchPointID 分配给触摸点的唯一标识号
-         * @param touchDown 是否处于按下状态
          */
         public static dispatchTouchEvent(target:IEventDispatcher, type:string, bubbles:boolean = true, cancelable:boolean = true,
-                                         stageX?:number, stageY?:number, touchPointID?:number, touchDown?:boolean):boolean {
+                                         stageX?:number, stageY?:number, touchPointID?:number):boolean {
+            if(!bubbles&&!target.hasEventListener(type)){
+                return;
+            }
             var event = Event.create(TouchEvent, type, bubbles, cancelable);
-            event.$setTo(stageX, stageY, touchPointID, touchDown);
+            event.$setTo(stageX, stageY, touchPointID);
             var result = target.dispatchEvent(event);
             Event.release(event);
             return result;

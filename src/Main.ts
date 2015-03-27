@@ -48,10 +48,15 @@ module lark {
 
         private start(texture:Texture):void {
 
+            this.name = "Main";
             var bitmap = new Bitmap(texture);
+            bitmap.name = "bitmap";
+            bitmap.addEventListener(TouchEvent.TOUCH_ENTER,this.onTouchEnter,this);
+            bitmap.addEventListener(TouchEvent.TOUCH_LEAVE,this.onTouchEnter,this);
             this.addChild(bitmap);
 
             var container = new DisplayObjectContainer();
+            container.name = "container";
             container.x = 250;
             container.addChild(new Bitmap(texture));
             bitmap = new Bitmap(texture);
@@ -61,15 +66,16 @@ module lark {
             container.touchEnabled = false;
 
             var container2 = new DisplayObjectContainer();
+            container2.name  = "container2";
             this.addChild(container2);
             container2.addChild(container);
             container2.addChild(new Bitmap(texture));
             container2.x = 250;
             container2.touchChildren = false;
-            this.stage.addEventListener(TouchEvent.TOUCH_TAP,this.onTouchTap,this);
-            this.stage.addEventListener(TouchEvent.TOUCH_RELEASE_OUTSIDE,this.onTouchTap,this);
-            this.stage.addEventListener(TouchEvent.TOUCH_END,this.onTouchTap,this);
-            this.stage.addEventListener(TouchEvent.TOUCH_BEGIN,this.onTouchTap,this);
+            container2.addEventListener(TouchEvent.TOUCH_ENTER,this.onTouchEnter,this);
+            container2.addEventListener(TouchEvent.TOUCH_LEAVE,this.onTouchEnter,this);
+            this.addEventListener(TouchEvent.TOUCH_ENTER,this.onTouchEnter,this);
+            this.addEventListener(TouchEvent.TOUCH_LEAVE,this.onTouchEnter,this);
             //var x = 0, y = 0;
             //for (var i = 0; i < 2000; i++) {
             //    var bitmap = new Bitmap();
@@ -104,8 +110,8 @@ module lark {
            // this.stage.addEventListener(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
-        private onTouchTap(event:TouchEvent):void{
-            console.log(event.type);
+        private onTouchEnter(event:TouchEvent):void{
+            console.log(event.target.name,event.type);
         }
 
         private touchTarget:DisplayObject;

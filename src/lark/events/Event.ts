@@ -137,22 +137,22 @@ module lark {
             return this.$eventPhase;
         }
 
-        $currentTarget:IEventDispatcher = null;
+        $currentTarget:any = null;
 
         /**
          * 当前正在使用某个事件侦听器处理 Event 对象的对象。例如，如果用户单击“确定”按钮，
          * 则当前目标可以是包含该按钮的节点，也可以是它的已为该事件注册了事件侦听器的始祖之一。
          */
-        public get currentTarget():IEventDispatcher {
+        public get currentTarget():any {
             return this.$currentTarget;
         }
 
-        $target:IEventDispatcher = null;
+        $target:any = null;
 
         /**
          * 事件目标。此属性包含目标节点。例如，如果用户单击“确定”按钮，则目标节点就是包含该按钮的显示列表节点。
          */
-        public get target():IEventDispatcher {
+        public get target():any {
             return this.$target;
         }
 

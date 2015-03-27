@@ -60,6 +60,7 @@ module lark.web {
         }
 
         private getLocation(event:any):Point {
+            event.identifier = +event.identifier||0;
             var doc = document.documentElement;
             var box = this.canvas.getBoundingClientRect();
             var left = box.left + window.pageXOffset - doc.clientLeft;
