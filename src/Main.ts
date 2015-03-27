@@ -48,66 +48,66 @@ module lark {
 
         private start(texture:Texture):void {
 
-            this.name = "Main";
-            var bitmap = new Bitmap(texture);
-            bitmap.name = "bitmap";
-            bitmap.addEventListener(TouchEvent.TOUCH_ENTER,this.onTouchEnter,this);
-            bitmap.addEventListener(TouchEvent.TOUCH_LEAVE,this.onTouchEnter,this);
-            this.addChild(bitmap);
+            //this.name = "Main";
+            //var bitmap = new Bitmap(texture);
+            //bitmap.name = "bitmap";
+            //bitmap.addEventListener(TouchEvent.TOUCH_ENTER,this.onTouchEnter,this);
+            //bitmap.addEventListener(TouchEvent.TOUCH_LEAVE,this.onTouchEnter,this);
+            //this.addChild(bitmap);
+            //
+            //var container = new DisplayObjectContainer();
+            //container.name = "container";
+            //container.x = 250;
+            //container.addChild(new Bitmap(texture));
+            //bitmap = new Bitmap(texture);
+            //bitmap.x = 250;
+            //bitmap.touchEnabled = false;
+            //container.addChild(bitmap);
+            //container.touchEnabled = false;
+            //
+            //var container2 = new DisplayObjectContainer();
+            //container2.name  = "container2";
+            //this.addChild(container2);
+            //container2.addChild(container);
+            //container2.addChild(new Bitmap(texture));
+            //container2.x = 250;
+            //container2.touchChildren = false;
+            //container2.addEventListener(TouchEvent.TOUCH_ENTER,this.onTouchEnter,this);
+            //container2.addEventListener(TouchEvent.TOUCH_LEAVE,this.onTouchEnter,this);
+            //this.addEventListener(TouchEvent.TOUCH_ENTER,this.onTouchEnter,this);
+            //this.addEventListener(TouchEvent.TOUCH_LEAVE,this.onTouchEnter,this);
 
-            var container = new DisplayObjectContainer();
-            container.name = "container";
-            container.x = 250;
-            container.addChild(new Bitmap(texture));
-            bitmap = new Bitmap(texture);
-            bitmap.x = 250;
-            bitmap.touchEnabled = false;
-            container.addChild(bitmap);
-            container.touchEnabled = false;
-
-            var container2 = new DisplayObjectContainer();
-            container2.name  = "container2";
-            this.addChild(container2);
-            container2.addChild(container);
-            container2.addChild(new Bitmap(texture));
-            container2.x = 250;
-            container2.touchChildren = false;
-            container2.addEventListener(TouchEvent.TOUCH_ENTER,this.onTouchEnter,this);
-            container2.addEventListener(TouchEvent.TOUCH_LEAVE,this.onTouchEnter,this);
-            this.addEventListener(TouchEvent.TOUCH_ENTER,this.onTouchEnter,this);
-            this.addEventListener(TouchEvent.TOUCH_LEAVE,this.onTouchEnter,this);
-            //var x = 0, y = 0;
-            //for (var i = 0; i < 2000; i++) {
-            //    var bitmap = new Bitmap();
-            //    bitmap.texture = texture;
-            //    bitmap.x = x;
-            //    bitmap.y = y;
-            //    bitmap.scaleX = bitmap.scaleY = Math.random();
-            //    bitmap.rotation = Math.random() * 360;
-            //    x += texture.width;
-            //    if (x > 1920) {
-            //        x = 0;
-            //        y += texture.height;
-            //        if (y > 960) {
-            //            y = 0;
-            //        }
-            //    }
-            //    this.addChild(bitmap);
-            //    this.iconList.push(bitmap);
-            //}
-            //bitmap = new lark.Bitmap();
-            //bitmap.texture = texture;
-            //bitmap.x = 700;
-            //bitmap.y = 500;
-            //this.iconList.push(bitmap);
-            //this.targetIcon = bitmap;
-            //this.addChild(this.targetIcon);
-            //this.stage.frameRate = 24;
-            //var timer = new Timer(16);
-            //timer.addEventListener(TimerEvent.TIMER, this.onTick, this);
-            //timer.start();
+            var x = 0, y = 0;
+            for (var i = 0; i < 2000; i++) {
+                var bitmap = new Bitmap();
+                bitmap.texture = texture;
+                bitmap.x = x;
+                bitmap.y = y;
+                bitmap.scaleX = bitmap.scaleY = Math.random();
+                bitmap.rotation = Math.random() * 360;
+                x += texture.width;
+                if (x > 1920) {
+                    x = 0;
+                    y += texture.height;
+                    if (y > 960) {
+                        y = 0;
+                    }
+                }
+                this.addChild(bitmap);
+                //this.iconList.push(bitmap);
+            }
+            bitmap = new lark.Bitmap();
+            bitmap.texture = texture;
+            bitmap.x = 700;
+            bitmap.y = 500;
+            this.iconList.push(bitmap);
+            this.targetIcon = bitmap;
+            this.addChild(this.targetIcon);
+            var timer = new Timer(16);
+            timer.addEventListener(TimerEvent.TIMER, this.onTick, this);
+            timer.start();
             this.addChild(FPS.display);
-           // this.stage.addEventListener(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+            this.stage.addEventListener(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
         private onTouchEnter(event:TouchEvent):void{
@@ -120,7 +120,7 @@ module lark {
 
         private onTouchBegin(event:TouchEvent):void {
             this.touchTarget = <DisplayObject>event.target;
-            if(this.touchTarget===this.stage){
+            if(this.touchTarget===this.stage||this.touchTarget===FPS.display){
                 return;
             }
             this.offsetX = this.touchTarget.x - event.stageX;
@@ -138,6 +138,9 @@ module lark {
 
         private onTouchEnd(event:TouchEvent):void {
             this.targetIcon = this.touchTarget;
+            if(this.iconList.indexOf(this.touchTarget)==-1){
+                this.iconList.push(this.touchTarget);
+            }
             this.touchTarget = null;
             this.stage.removeEventListener(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
             this.stage.removeEventListener(TouchEvent.TOUCH_END, this.onTouchEnd, this);
@@ -145,14 +148,14 @@ module lark {
         }
 
         private onTick(event:TimerEvent):void {
-            this.targetIcon.rotation += 2;
+            //this.targetIcon.rotation += 2;
             event.updateAfterEvent();
-            //var list = this.iconList;
-            //var length = list.length;
-            //for(var i=0;i<length;i++){
-            //    var bitmap = list[i];
-            //    bitmap.rotation += 2;
-            //}
+            var list = this.iconList;
+            var length = list.length;
+            for(var i=0;i<length;i++){
+                var bitmap = list[i];
+                bitmap.rotation += 2;
+            }
         }
     }
 

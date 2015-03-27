@@ -40,8 +40,9 @@ module lark {
         public static get display(): lark.TextField {
             if (!FPS._textField) {
                 FPS._textField = new lark.TextField("", {
-                    color: 0xFF0000,
-                    fontSize:24
+                    color: 0x0c8c0c,
+                    fontSize:28,
+                    fontFamily:"monospace"
                 });
                 FPS._textField.x = 20;
                 FPS._textField.y = 20;
@@ -65,7 +66,7 @@ module lark {
                 var lastFPS = Math.round(FPS.totalTick * 1000 / FPS.totalTime);
                 FPS.totalTick = 0;
                 FPS.totalTime = 0;
-                var text = "FPS:" + lastFPS + " draw:" + drawCalls + ","+dirtyRatio+"% cost: " + args.join(",");
+                var text = "FPS: " + lastFPS + "\nDraw: " + drawCalls + ","+dirtyRatio+"%\nCost: " + args.join(",");
                 if (FPS._textField.text != text) {
                     FPS._textField.text = text;
                 }
