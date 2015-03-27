@@ -29,9 +29,9 @@
 
 module lark.web {
 
-    export class WebTouch extends HashObject{
+    export class WebTouchHandler extends HashObject{
 
-        public constructor(touch:lark.player.Touch,canvas:HTMLCanvasElement){
+        public constructor(touch:lark.player.TouchHandler,canvas:HTMLCanvasElement){
             super();
             this.canvas = canvas;
             this.touch = touch;
@@ -41,7 +41,7 @@ module lark.web {
         }
 
         private canvas:HTMLCanvasElement;
-        private touch:lark.player.Touch;
+        private touch:lark.player.TouchHandler;
 
         private onTouchBegin = (event:any):void => {
             var location = this.getLocation(event);
