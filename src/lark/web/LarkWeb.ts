@@ -38,6 +38,7 @@ module lark.web {
             startTicker(ticker);
         }
         var stage = new lark.Stage();
+        stage.$updateStageSize(canvas.width,canvas.height);
         var canvasRenderer = new CanvasRenderer(canvas,stage);
         if(!TextMetrics.$instance){
             TextMetrics.$instance = canvasRenderer;

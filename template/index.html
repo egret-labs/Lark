@@ -13,7 +13,7 @@
     <style>
         body { background: #888888; padding: 0; border: 0; margin: 0; height: 100%; }
         html { -ms-touch-action: none; overflow: hidden;}
-        canvas{ cursor:default;display: block; margin: 0 auto }
+        canvas{ cursor:default;display: block; margin: 0 auto ;width: 100%; height: 100%;}
     </style>
     <script src="lark/utils/getDefinitionByName.js"></script>
     <script src="lark/utils/HashObject.js"></script>
@@ -64,7 +64,7 @@
     <script src="Media.js"></script>
 </head>
 <body>
-    <canvas id="lark_canvas" width="1920" height="960"/>
+    <canvas id="lark_canvas" width="480" height="800"/>
     <script>
         var entryClass = location.search && location.search.match("main=(.+)") ? location.search.match("main=(.+)")[1] : "lark.Main";
         var canvas=document.getElementById("lark_canvas");
