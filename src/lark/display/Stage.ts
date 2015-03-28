@@ -53,19 +53,8 @@ module lark {
             lark.player.Ticker.$instance.$setFrameRate(value);
         }
 
-        private _scaleMode:string = "noScale";
-        /**
-         * 缩放模式
-         */
-        public get scaleMode():string {
-            return this._scaleMode;
-        }
+        $stageWidth:number = 480;
 
-        public set scaleMode(value:string) {
-            this._scaleMode = value;
-        }
-
-        $stageWidth:number = 0;
         /**
          * 舞台的当前宽度（以像素为单位）。
          */
@@ -73,7 +62,8 @@ module lark {
             return this.$stageWidth;
         }
 
-        $stageHeight:number = 0;
+        $stageHeight:number = 800;
+
         /**
          * 舞台的当前高度（以像素为单位）。
          */
@@ -88,6 +78,7 @@ module lark {
         public invalidate():void {
             lark.player.Ticker.$invalidateRenderFlag = true;
         }
+
         /**
          * 显示列表的结构发生改变
          */
@@ -96,18 +87,9 @@ module lark {
          * 显示对象的渲染节点发生改变时，把自身的RenderNode对象注册到此列表上。
          */
         $dirtyRenderNodes:{[key:number]:lark.player.RenderNode} = {};
-
-        $dirtyRegion:lark.player.DirtyRegion;
         /**
          * 一个阈值，当屏幕上脏矩形区域的面积占总面积的百分比小于或等于此值时启用脏矩形绘制，否则直接清空整个屏幕重新绘制所有显示对象。
          */
         $dirtyRatio:number = 80;
-
-        $updateStageSize(width:number, height:number):void {
-            this.$stageWidth = +width || 0;
-            this.$stageHeight = +height || 0;
-            this.$dirtyRegion = new lark.player.DirtyRegion(width,height);
-            this.$markDirty();
-        }
     }
 }

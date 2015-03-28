@@ -59,12 +59,26 @@ module lark.player {
          */
         reset():void;
 
+        /**
+         * 开始绘制脏矩形
+         */
         beginDrawDirtyRect():void;
-
+        /**
+         * 绘制一个脏矩形
+         */
         drawDirtyRect(x:number, y:number, width:number, height:number):void;
-
+        /**
+         * 结束脏矩形绘制
+         */
         endDrawDirtyRect():void;
-
+        /**
+         * 结束屏幕绘制
+         */
         endDrawScreen():void;
+
+        /**
+         * 更新屏幕渲染区域尺寸。
+         */
+        updateDisplaySize(width:number, height:number, displayWidth:number, displayHeight:number):void;
     }
 }

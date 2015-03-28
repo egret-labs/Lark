@@ -32,20 +32,23 @@ module lark.web {
     /**
      * Lark网页版程序入口
      */
-    export function createPlayer(canvas:HTMLCanvasElement,entryClassName:string):lark.player.Player {
+    export function createPlayer(canvas:HTMLCanvasElement,entryClassName:string,screenWidth:number=480,screenHeight:number=800,
+                                 stageScaleMode:number=StageScaleMode.NO_SCALE,stageWidth:number=480,stageHeight:number=800):lark.player.Player {
         if(!lark.player.Ticker.$instance){
             var ticker = lark.player.Ticker.$instance = new lark.player.Ticker();
             startTicker(ticker);
         }
         var stage = new lark.Stage();
-        stage.$updateStageSize(canvas.width,canvas.height);
-        var canvasRenderer = new CanvasRenderer(canvas,stage);
+        stage.$stageWidth = stageWidth;
+        stage.$stageHeight = stageHeight;
+        var canvasRenderer = new CanvasRenderer(canvas);
         if(!TextMetrics.$instance){
             TextMetrics.$instance = canvasRenderer;
         }
         var touch = new lark.player.TouchHandler(stage);
         var webTouch = new WebTouchHandler(touch,canvas);
-        var player = new lark.player.Player(canvasRenderer,stage,entryClassName);
+        var player = new lark.player.Player(canvasRenderer,stage,entryClassName,stageScaleMode);
+        player.updateScreenSize(screenWidth,screenHeight);
         return player;
     }
 

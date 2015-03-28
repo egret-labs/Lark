@@ -36,7 +36,7 @@ module lark.player {
         /**
          * 实例化一个播放器对象。
          */
-        public constructor(renderer:IRenderer, stage:Stage, entryClassName:string) {
+        public constructor(renderer:IRenderer, stage:Stage, entryClassName:string,scaleMode:number) {
             super();
             if (!renderer) {
                 throw new Error("Lark播放器实例化失败，IRenderer不能为空！");
@@ -44,6 +44,7 @@ module lark.player {
             this.renderer = renderer;
             this.entryClassName = entryClassName;
             this.stage = stage;
+            this.scaleMode = scaleMode;
         }
 
         private renderer:IRenderer;
@@ -124,7 +125,7 @@ module lark.player {
             var t1 = lark.getTimer();
             this.drawCalls = 0;
             if (this.dirtyRatio > 0) {
-                var cleanAll:boolean = this.dirtyRatio > this.stage.$dirtyRatio;
+                var cleanAll:boolean = (this.dirtyRatio > this.stage.$dirtyRatio)||this.stageSizeChangedFlag;
                 if (!cleanAll) {
                     this.drawDirtyRect();
                 }
@@ -150,8 +151,10 @@ module lark.player {
 
         private drawCalls:number = 0;
 
+        private dirtyRegion:DirtyRegion;
+
         private computeDirtyRects():void {
-            var dirtyRegion = this.stage.$dirtyRegion;
+            var dirtyRegion = this.dirtyRegion;
             var nodeList = this.stage.$dirtyRenderNodes;
             for (var i in nodeList) {
                 var node = nodeList[i];
@@ -208,10 +211,13 @@ module lark.player {
                     this.checkRenderNode(renderList[i], dirtyRectList, renderer, cleanAll);
                 }
             }
-            if (!cleanAll) {
+            if (cleanAll) {
+                this.stageSizeChangedFlag = false;
+            }
+            else{
                 this.renderer.endDrawScreen();
             }
-            stage.$dirtyRegion.clear();
+            this.dirtyRegion.clear();
             stage.$dirtyRenderNodes = {};
             stage.$displayListTreeChanged = false;
         }
@@ -257,5 +263,89 @@ module lark.player {
                 node.finish();
             }
         }
+
+        /**
+         * 舞台尺寸发生改变的标志
+         */
+        private stageSizeChangedFlag:boolean = false;
+
+        /**
+         * 播放器视口宽度
+         */
+        private screenWidth:number = 480;
+        /**
+         * 播放器视口高度
+         */
+        private screenHeight:number = 800;
+        /**
+         * 缩放模式,默认值为StageScaleMode.NO_SCALE。请参考StageScaleMode中定义的值,若设置的值不是StageScaleMode中的值，将会默认采用StageScaleMode.NO_SCALE。
+         */
+        private scaleMode:number = StageScaleMode.NO_SCALE;
+
+        /**
+         * 更新播放器视口尺寸
+         * @param screenWidth 播放器视口宽度（以像素为单位）
+         * @param screenHeight 播放器视口高度（以像素为单位）
+         */
+        public updateScreenSize(screenWidth:number,screenHeight:number):void{
+            var stage = this.stage
+            var renderer = this.renderer;
+            this.screenWidth = screenWidth;
+            this.screenHeight = screenHeight;
+            var width = stage.$stageWidth;
+            var oldWidth = width;
+            var height = stage.$stageHeight;
+            var oldHeight = height;
+            var scaleX = (screenWidth/width)||0;
+            var scaleY = (screenHeight/height)||0;
+            switch(this.scaleMode){
+                case StageScaleMode.EXACT_FIT:
+                    break;
+                case StageScaleMode.FIXED_HEIGHT:
+                    stage.$stageWidth = width = Math.round(screenWidth/scaleY);
+                    break;
+                case StageScaleMode.FIXED_WIDTH:
+                    stage.$stageHeight = height = Math.round(screenHeight/scaleX);
+                    break;
+                case StageScaleMode.NO_BORDER:
+                    if(scaleX>scaleY){
+                        screenHeight = Math.round(height*scaleX);
+                    }
+                    else{
+                        screenWidth = Math.round(width*scaleY);
+                    }
+                    break;
+                case StageScaleMode.SHOW_ALL:
+                    if(scaleX>scaleY){
+                        screenWidth = Math.round(width*scaleY);
+                    }
+                    else{
+                        screenHeight = Math.round(height*scaleX);
+                    }
+                    break;
+                default :
+                    stage.$stageWidth = width = screenWidth;
+                    stage.$stageHeight = height = screenHeight;
+                    break;
+            }
+
+            renderer.updateDisplaySize(width,height,screenWidth,screenHeight);
+            var sizeChange = (height!==oldHeight||width!==oldWidth);
+            if(sizeChange){
+                this.dirtyRegion = new DirtyRegion(width,height);
+                this.stageSizeChangedFlag = true;
+                var renderList = this.renderNodeList;
+                var length = renderList.length;
+                for (var i = 0; i < length; i++) {
+                    var node = renderList[i];
+                    node.outOfScreen = !node.intersects(0, 0, width, height);
+                }
+                stage.dispatchEventWith(Event.RESIZE);
+            }
+            if(!this.dirtyRegion){
+                this.dirtyRegion = new DirtyRegion(width,height);
+            }
+        }
+
     }
 }

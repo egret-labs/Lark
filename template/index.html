@@ -13,7 +13,7 @@
     <style>
         body { background: #888888; padding: 0; border: 0; margin: 0; height: 100%; }
         html { -ms-touch-action: none; overflow: hidden;}
-        canvas{ cursor:default;display: block; margin: 0 auto ;width: 100%; height: 100%;}
+        canvas {cursor: default; display: block; margin: auto; position: absolute; top: 0; bottom: 0; left: 0; right: 0;}
     </style>
     <script src="lark/utils/getDefinitionByName.js"></script>
     <script src="lark/utils/HashObject.js"></script>
@@ -33,6 +33,7 @@
     <script src="lark/display/DisplayObject.js"></script>
     <script src="lark/display/DisplayObjectContainer.js"></script>
     <script src="lark/display/Bitmap.js"></script>
+    <script src="lark/display/StageScaleMode.js"></script>
     <script src="lark/display/Stage.js"></script>
     <script src="lark/player/nodes/RenderNode.js"></script>
     <script src="lark/player/nodes/BitmapNode.js"></script>
@@ -64,11 +65,14 @@
     <script src="Media.js"></script>
 </head>
 <body>
-    <canvas id="lark_canvas" width="480" height="800"/>
+    <canvas id="larkArea"/>
     <script>
         var entryClass = location.search && location.search.match("main=(.+)") ? location.search.match("main=(.+)")[1] : "lark.Main";
-        var canvas=document.getElementById("lark_canvas");
-        var player = lark.web.createPlayer(canvas, entryClass);
+        var canvas = document.getElementById("larkArea");
+        var player = lark.web.createPlayer(canvas, entryClass,window.innerWidth,window.innerHeight,lark.StageScaleMode.NO_SCALE);
+        window.addEventListener("resize",function(){
+            player.updateScreenSize(window.innerWidth,window.innerHeight);
+        })
         player.start();
     </script>
 </body>

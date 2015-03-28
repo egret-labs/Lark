@@ -35,37 +35,17 @@ module lark.web {
         /**
          * 创建一个Canvas屏幕渲染器
          */
-        public constructor(canvas:HTMLCanvasElement,stage:Stage) {
+        public constructor(canvas:HTMLCanvasElement) {
             super();
             if (!canvas) {
                 throw new Error("CanvasRenderer实例化失败，canvas参数不能为空！");
             }
             this.canvas = canvas;
             this.context = canvas.getContext("2d");
-            this.stage = stage;
-            window.onresize = this.onSizeChanged;
-            this.doResize();
         }
 
         private canvas:HTMLCanvasElement;
         private context:CanvasRenderingContext2D;
-        private stage:Stage;
-
-        private sizeChanged:boolean = false;
-
-        private onSizeChanged = ():void=> {
-            if (!this.sizeChanged) {
-                this.sizeChanged = true;
-                setTimeout(this.doResize, 100)
-            }
-        }
-
-        private doResize = ():void=> {
-            this.sizeChanged = false;
-            this.canvas.width = window.innerWidth;
-            this.canvas.height = window.innerHeight;
-            this.stage.$updateStageSize(window.innerWidth,window.innerHeight);
-        }
 
         /**
          * 清除整个屏幕
@@ -211,6 +191,21 @@ module lark.web {
          */
         public measureText(text:string):number {
             return this.context.measureText(text).width;
+        }
+
+        /**
+         * 更新屏幕渲染尺寸。
+         */
+        public updateDisplaySize(width:number,height:number,displayWidth:number,displayHeight:number):void{
+            var canvas = this.canvas;
+            if(canvas.width!==width){
+                canvas.width = width;
+            }
+            if(canvas.height!==height){
+                canvas.height = height;
+            }
+            canvas.style.width = displayWidth+"px";
+            canvas.style.height = displayHeight+"px";
         }
     }
 }
