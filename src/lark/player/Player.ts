@@ -290,8 +290,8 @@ module lark.player {
         public updateScreenSize(screenWidth:number,screenHeight:number):void{
             var stage = this.stage
             var renderer = this.renderer;
-            this.screenWidth = screenWidth;
-            this.screenHeight = screenHeight;
+            var displayWidth = this.screenWidth = screenWidth;
+            var displayHeight = this.screenHeight = screenHeight;
             var width = stage.$stageWidth;
             var oldWidth = width;
             var height = stage.$stageHeight;
@@ -309,18 +309,18 @@ module lark.player {
                     break;
                 case StageScaleMode.NO_BORDER:
                     if(scaleX>scaleY){
-                        screenHeight = Math.round(height*scaleX);
+                        displayHeight = Math.round(height*scaleX);
                     }
                     else{
-                        screenWidth = Math.round(width*scaleY);
+                        displayWidth = Math.round(width*scaleY);
                     }
                     break;
                 case StageScaleMode.SHOW_ALL:
                     if(scaleX>scaleY){
-                        screenWidth = Math.round(width*scaleY);
+                        displayWidth = Math.round(width*scaleY);
                     }
                     else{
-                        screenHeight = Math.round(height*scaleX);
+                        displayHeight = Math.round(height*scaleX);
                     }
                     break;
                 default :
@@ -329,7 +329,7 @@ module lark.player {
                     break;
             }
 
-            renderer.updateDisplaySize(width,height,screenWidth,screenHeight);
+            renderer.updateScreenSize(width,height,displayWidth,displayHeight,screenWidth,screenHeight);
             var sizeChange = (height!==oldHeight||width!==oldWidth);
             if(sizeChange){
                 this.dirtyRegion = new DirtyRegion(width,height);
@@ -340,7 +340,7 @@ module lark.player {
                     var node = renderList[i];
                     node.outOfScreen = !node.intersects(0, 0, width, height);
                 }
-                stage.dispatchEventWith(Event.RESIZE);
+                stage.emitWith(Event.RESIZE);
             }
             if(!this.dirtyRegion){
                 this.dirtyRegion = new DirtyRegion(width,height);

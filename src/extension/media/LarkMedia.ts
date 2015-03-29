@@ -98,21 +98,21 @@
         }
 
         protected onEvent(eventType: string):void {
-            this.dispatchEventWith(eventType);
+            this.emitWith(eventType);
         }
 
-        public addEventListener(type: "loadstart", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public addEventListener(type: "canplay", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public addEventListener(type: "play", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public addEventListener(type: "playing", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public addEventListener(type: "pause", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public addEventListener(type: "end", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public addEventListener(type: "timeupdate", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public addEventListener(type: "volumechange", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public addEventListener(type: "error", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public addEventListener(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public addEventListener(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number) {
-            super.addEventListener(type, listener, thisObject, useCapture, priority);
+        public on(type: "loadstart", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        public on(type: "canplay", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        public on(type: "play", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        public on(type: "playing", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        public on(type: "pause", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        public on(type: "end", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        public on(type: "timeupdate", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        public on(type: "volumechange", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        public on(type: "error", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        public on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        public on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number) {
+            super.on(type, listener, thisObject, useCapture, priority);
         }
 
     }

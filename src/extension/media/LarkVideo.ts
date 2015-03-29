@@ -17,7 +17,7 @@
                     this.poster = poster;
             }
 
-            this.addEventListener(Event.ENTER_FRAME, e=> this.$markDirty(), this);
+            this.on(Event.ENTER_FRAME, e=> this.$markDirty(), this);
         }
 
 

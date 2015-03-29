@@ -15,7 +15,7 @@ module lark {
         success: (texture: Texture) => void;
     }
 
-    export interface HttpClient extends EventDispatcher {
+    export interface HttpClient extends EventEmitter {
         request(options: IHttpRequestOptions);
         loadImage(options: IImageRequestOptions);
     }

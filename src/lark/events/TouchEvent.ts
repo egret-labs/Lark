@@ -36,7 +36,7 @@ module lark {
      * 类开发响应基本触摸事件（如单个手指点击）的应用程序。使用此类中定义的事件类型创建事件侦听器。
      * 注意：当对象嵌套在显示列表中时，触摸事件的目标将是显示列表中可见的最深的可能嵌套对象。
      * 此对象称为目标节点。要使目标节点的祖代（祖代是一个包含显示列表中所有目标节点的对象，从舞台到目标节点的父节点均包括在内）
-     * 接收触摸事件的通知，请对祖代节点使用 EventDispatcher.addEventListener() 并将 type 参数设置为要检测的特定触摸事件。
+     * 接收触摸事件的通知，请对祖代节点使用 EventEmitter.on() 并将 type 参数设置为要检测的特定触摸事件。
      */
     export class TouchEvent extends Event {
 
@@ -148,7 +148,7 @@ module lark {
         }
 
         /**
-         * 使用指定的EventDispatcher对象来抛出Event事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         * 使用指定的EventEmitter对象来抛出Event事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
          * @param target 派发事件目标
          * @param type 事件的类型，可以作为 Event.type 访问。
          * @param bubbles 确定 Event 对象是否参与事件流的冒泡阶段。默认值为 true。
@@ -157,14 +157,14 @@ module lark {
          * @param stageY 事件发生点在全局舞台坐标系中的垂直坐标
          * @param touchPointID 分配给触摸点的唯一标识号
          */
-        public static dispatchTouchEvent(target:IEventDispatcher, type:string, bubbles:boolean = true, cancelable:boolean = true,
+        public static emitTouchEvent(target:IEventEmitter, type:string, bubbles:boolean = true, cancelable:boolean = true,
                                          stageX?:number, stageY?:number, touchPointID?:number):boolean {
-            if(!bubbles&&!target.hasEventListener(type)){
+            if(!bubbles&&!target.hasListener(type)){
                 return;
             }
             var event = Event.create(TouchEvent, type, bubbles, cancelable);
             event.$setTo(stageX, stageY, touchPointID);
-            var result = target.dispatchEvent(event);
+            var result = target.emit(event);
             Event.release(event);
             return result;
         }
