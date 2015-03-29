@@ -106,7 +106,7 @@ module lark {
         public constructor(format?:ITextFieldStyle) {
             super();
             this._format = TextField.$normalizeStyle(format, BaseStyle);
-            this.addEventListener(Event.ENTER_FRAME, this.update, this);
+            this.on(Event.ENTER_FRAME, this.update, this);
         }
         
         protected _textFieldFlags: number = TextFieldFlags.Dirty;

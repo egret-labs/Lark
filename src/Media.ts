@@ -31,7 +31,7 @@ module lark {
             //video.load();
             //window["video"] = video;
 
-            this.stage.addEventListener(TouchEvent.TOUCH_BEGIN, e=> audio.play(true), this);
+            this.stage.on(TouchEvent.TOUCH_BEGIN, e=> audio.play(true), this);
 
             window.addEventListener("mousewheel", e=> {
                 var volume = audio.volume;

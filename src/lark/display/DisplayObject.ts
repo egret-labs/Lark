@@ -45,7 +45,7 @@ module lark {
     /**
      * 显示对象基类
      */
-    export class DisplayObject extends EventDispatcher {
+    export class DisplayObject extends EventEmitter {
         /**
          * 创建一个显示对象
          */
@@ -737,8 +737,8 @@ module lark {
         static $enterFrameCallBackList:lark.player.EventBin[] = [];
         static $renderCallBackList:lark.player.EventBin[] = [];
 
-        public addEventListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority:number = 0):void {
-            super.addEventListener(type, listener, thisObject, useCapture, priority);
+        public on(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority:number = 0):void {
+            super.on(type, listener, thisObject, useCapture, priority);
             var isEnterFrame = (type == Event.ENTER_FRAME);
             if (isEnterFrame || type == Event.RENDER) {
                 var list:Array<any> = isEnterFrame ? DisplayObject.$enterFrameCallBackList : DisplayObject.$renderCallBackList;
@@ -746,8 +746,8 @@ module lark {
             }
         }
 
-        public removeEventListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean):void {
-            super.removeEventListener(type, listener, thisObject, useCapture);
+        public removeListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean):void {
+            super.removeListener(type, listener, thisObject, useCapture);
             var isEnterFrame:boolean = (type == Event.ENTER_FRAME);
             if (isEnterFrame || type == Event.RENDER) {
                 var list = isEnterFrame ? DisplayObject.$enterFrameCallBackList : DisplayObject.$renderCallBackList;
@@ -755,9 +755,9 @@ module lark {
             }
         }
 
-        public dispatchEvent(event:Event):boolean {
+        public emit(event:Event):boolean {
             if (!event.$bubbles) {
-                return super.dispatchEvent(event);
+                return super.emit(event);
             }
 
             var list:Array<DisplayObject> = [];
@@ -767,11 +767,11 @@ module lark {
                 target = target.$parent;
             }
             event.$target = this;
-            this.dispatchPropagationEvent(event, list);
+            this.emitPropagationEvent(event, list);
             return !event.$isDefaultPrevented;
         }
 
-        private dispatchPropagationEvent(event:Event, list:DisplayObject[]):void {
+        private emitPropagationEvent(event:Event, list:DisplayObject[]):void {
             var length:number = list.length;
             var eventPhase:number = EventPhase.CAPTURING_PHASE;
             for (var i:number = length - 1; i >= 0; i--) {
@@ -808,7 +808,7 @@ module lark {
         public willTrigger(type:string):boolean {
             var parent = this;
             while (parent) {
-                if (parent.hasEventListener(type))
+                if (parent.hasListener(type))
                     return true;
                 parent = parent.$parent;
             }

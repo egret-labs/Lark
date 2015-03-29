@@ -34,7 +34,7 @@ module lark {
      * 可以创建 Timer 对象以运行一次或按指定间隔重复运行，从而按计划执行代码。
      * 根据 Lark 的帧速率或运行时环境（可用内存和其他因素），运行时调度事件的间隔可能稍有不同。
 	 */
-    export class Timer extends EventDispatcher {
+    export class Timer extends EventEmitter {
 
         /**
          * 创建一个 Timer 对象
@@ -133,10 +133,10 @@ module lark {
             this.lastCount += this.updateInterval;
             this._currentCount++;
             var complete = (this.repeatCount > 0 && this._currentCount >= this.repeatCount);
-            TimerEvent.dispatchTimerEvent(this,TimerEvent.TIMER);
+            TimerEvent.emitTimerEvent(this,TimerEvent.TIMER);
             if (complete) {
                 this.stop();
-                TimerEvent.dispatchTimerEvent(this,TimerEvent.TIMER_COMPLETE);
+                TimerEvent.emitTimerEvent(this,TimerEvent.TIMER_COMPLETE);
             }
         }
     }

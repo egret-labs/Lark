@@ -340,7 +340,7 @@ module lark.player {
                     var node = renderList[i];
                     node.outOfScreen = !node.intersects(0, 0, width, height);
                 }
-                stage.dispatchEventWith(Event.RESIZE);
+                stage.emitWith(Event.RESIZE);
             }
             if(!this.dirtyRegion){
                 this.dirtyRegion = new DirtyRegion(width,height);

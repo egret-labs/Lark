@@ -4,7 +4,7 @@ module lark.web {
 
     var ImageTextureCache: { [url: string]: Texture } = {};
 
-    export class WebHttpClinet extends EventDispatcher implements HttpClient {
+    export class WebHttpClinet extends EventEmitter implements HttpClient {
 
         public request(options: IHttpRequestOptions) {
             //todo: post

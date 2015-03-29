@@ -218,7 +218,7 @@ module lark {
          * 外部调用范例：
          *    var event = Event.create(Event,type, bubbles);
          *    event.data = data;   //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
-         *    this.dispatchEvent(event);
+         *    this.emit(event);
          *    Event.release(event);
          */
         public static create<T extends Event>(EventClass:{new (type:string, bubbles?:boolean, cancelable?:boolean): T;eventPool?:Event[]},
@@ -249,7 +249,7 @@ module lark {
          * 外部调用范例：
          *    var event = Event.create(Event,type, bubbles);
          *    event.data = data;   //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
-         *    this.dispatchEvent(event);
+         *    this.emit(event);
          *    Event.release(event);
          */
         public static release(event:Event):void {
