@@ -32,8 +32,10 @@ module lark.web {
     /**
      * Lark网页版程序入口
      */
-    export function createPlayer(canvas:HTMLCanvasElement,entryClassName:string,screenWidth:number=480,screenHeight:number=800,
+    export function createPlayer(container:HTMLElement,entryClassName:string,screenWidth:number=480,screenHeight:number=800,
                                  stageScaleMode:number=StageScaleMode.NO_SCALE,stageWidth:number=480,stageHeight:number=800):lark.player.Player {
+
+        var canvas = createCanvas(container);
         if(!lark.player.Ticker.$instance){
             var ticker = lark.player.Ticker.$instance = new lark.player.Ticker();
             startTicker(ticker);
@@ -55,6 +57,25 @@ module lark.web {
         return player;
     }
 
+    /**
+     * 创建Canvas实例
+     */
+    function createCanvas(container:HTMLElement):HTMLCanvasElement{
+        var canvas:HTMLCanvasElement = document.createElement("canvas");
+        var style = canvas.style;
+        style.cursor = "default";
+        style.margin = "auto";
+        style.position = "absolute";
+        style.top = "0";
+        style.bottom = "0";
+        style.left = "0";
+        style.right = "0";
+        container.appendChild(canvas);
+        style = container.style;
+        style.overflow = "hidden";
+        style.position = "relative";
+        return canvas;
+    }
     /**
      * 启动心跳计时器。
      */

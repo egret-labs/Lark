@@ -11,9 +11,8 @@
     <meta name="x5-fullscreen" content="true"/>
     <meta name="360-fullscreen" content="true"/>
     <style>
-        body { background: #888888; padding: 0; border: 0; margin: 0; height: 100%; }
-        html { -ms-touch-action: none; overflow: hidden;}
-        canvas {cursor: default; display: block; margin: auto; position: absolute; top: 0; bottom: 0; left: 0; right: 0;}
+        body { background: #888888; padding: 0; border: 0; margin: 0; }
+        html { -ms-touch-action: none;}
     </style>
     <script src="lark/utils/getDefinitionByName.js"></script>
     <script src="lark/utils/HashObject.js"></script>
@@ -70,14 +69,15 @@
     <script src="Media.js"></script>
 </head>
 <body>
-    <canvas id="larkArea"/>
+    <div id="lark-container" style="margin: auto;">
+    </div>
     <script>
         var entryClass = location.search && location.search.match("main=(.+)") ? location.search.match("main=(.+)")[1] : "lark.Main";
-        var canvas = document.getElementById("larkArea");
-        var player = lark.web.createPlayer(canvas, entryClass,window.innerWidth,window.innerHeight,lark.StageScaleMode.NO_SCALE);
+        var container = document.getElementById("lark-container");
+        var player = lark.web.createPlayer(container, entryClass,480,800,lark.StageScaleMode.NO_SCALE);
         window.addEventListener("resize",function(){
             player.updateScreenSize(window.innerWidth,window.innerHeight);
-        })
+        });
         player.start();
     </script>
 </body>
