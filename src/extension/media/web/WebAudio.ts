@@ -2,40 +2,60 @@
 
 module lark {
 
-    var AudioContextClass: typeof AudioContext = AudioContext || webkitAudioContext;
-    var $AudioContext = new AudioContextClass();
+    var AudioContextClass: typeof AudioContext = window["AudioContext"] || window["webkitAudioContext"];
+    var $AudioContext = AudioContextClass ? new AudioContextClass() : null;
 
     export class WebAudio extends LarkAudioBase {
+        public audioBuffer: AudioBuffer = null;
         public bufferSource: AudioBufferSourceNode = null;
         public gain: GainNode = null;
         public load() {
+            if (this.loadStart)
+                return;
             var bufferLoader = new BufferLoader(
                 $AudioContext,
                 this.sources.map(s=>s.src),
-                this.finishedLoading
+                this.finishedLoading,
+                this.loadingError
                 );
 
             bufferLoader.load();
+            this.loadStart = true;
+            this.onEvent("loadstart");
         }
-        public finishedLoading = (bufferList:AudioBuffer[])=> {
-            console.log("loaded");
-            var source = $AudioContext.createBufferSource();
-            source.buffer = bufferList[0];
-            var gain = $AudioContext.createGain();
-            gain.gain.value = this._volume;
-            source.connect(gain);
-            gain.connect($AudioContext.destination);
-            this.bufferSource = source;
-            this.gain = gain;
+        protected finishedLoading = (bufferList:AudioBuffer[])=> {
+            this.onLoaded();
+            this.audioBuffer = bufferList[0];
+            this.onCanPlay();
+        }
+
+        protected loadingError = (error) => {
+            this.onError(error);
         }
 
         public play(loop: boolean = false) {
-            this.bufferSource.loop = loop;
-            this.bufferSource.start(0);
+            if (this.canPlay && !this.isPlaying) {
+                var source = $AudioContext.createBufferSource();
+                source.buffer = this.audioBuffer;
+                source.onended = e=> this.onEnded();
+                var gain = $AudioContext.createGain();
+                gain.gain.value = this._volume;
+                source.connect(gain);
+                gain.connect($AudioContext.destination);
+                source.start(0);
+                this.bufferSource = source;
+                this.gain = gain;
+                this.onPlay();
+                this.onPlaying();
+            }
+            else
+                this.playAfterLoad(loop);
+            
         }
 
         public pause() {
-            this.bufferSource.stop(0);
+            this.bufferSource && this.bufferSource.stop(0);
+            this.onPause();
         }
 
         protected getVolume(): number {
@@ -47,20 +67,28 @@ module lark {
         protected setVolume(value: number) {
             super.setVolume(value);
             this.gain.gain.value = value;
+            this.onVolumeChange();
+        }
+
+        protected onEnded(e?: SystemEvent) {
+            super.onEnded(e);
+            this.bufferSource.stop(0);
         }
     }
 
     export class BufferLoader extends HashObject{
-        constructor(context: AudioContext,files:string[],callback:(buffers:AudioBuffer[])=>void) {
+        constructor(context: AudioContext,files:string[],callback:(buffers:AudioBuffer[])=>void,onerror?:Function) {
             super();
             this.context = context;
             this.urlList = files;
             this.onload = callback;
+            this.onError = onerror;
         }
 
         public context: AudioContext;
         public urlList: string[];
         public onload: Function;
+        public onError: Function;
         public bufferList: AudioBuffer[] = [];
         public loadCount = 0;
 
@@ -86,8 +114,8 @@ module lark {
                     if (++this.loadCount == this.urlList.length)
                         this.onload(this.bufferList);
                 },
-                function (error) {
-                    console.error('decodeAudioData error', error);
+                (error)=> {
+                    this.onError && this.onError(error);
                 }
             );
         }

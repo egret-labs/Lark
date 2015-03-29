@@ -18,21 +18,16 @@ module lark {
 
         start(texture:Texture) {
 
-            var audio:LarkMedia = new HtmlAudio({
-                src: "sound/ogg.ogg"
+            var audio = new LarkAudio({
+                src: "sound/mp3.mp3"
             });
-            //var sources = ["sound/ogg.ogg"]
-            //audio.sources = sources.map(s=> { return { src: s } });
             audio.load();
 
             
 
             var video = new LarkVideo({ src: "sound/mov_bbb.mp4", width: 500 });
-            //this.addChild(video);
-            //video.load();
-            //window["video"] = video;
 
-            this.stage.on(TouchEvent.TOUCH_BEGIN, e=> audio.play(true), this);
+            this.stage.on(TouchEvent.TOUCH_BEGIN, e=> audio.play(false), this);
 
             window.addEventListener("mousewheel", e=> {
                 var volume = audio.volume;

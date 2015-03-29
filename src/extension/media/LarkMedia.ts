@@ -29,6 +29,8 @@
         public $option: IMediaOption;
         public sources: IMediaSource[];
         public isPlaying: boolean = false;
+        public canPlay: boolean = false;
+        public loadStart = false;
         
         protected _volume: number = 1;
         public get volume(): number {
@@ -58,47 +60,66 @@
 
         }
 
-        protected onLoaded(e: SystemEvent): void {
+        protected onLoaded(e?: SystemEvent): void {
             this.onEvent("loaded");
         }
 
-        protected onCanPlay(e: SystemEvent): void {
+        protected onCanPlay(e?: SystemEvent): void {
+            this.canPlay = true;
             this.onEvent("canplay");
         }
 
-        protected onPlay(e: SystemEvent): void {
+        protected onPlay(e?: SystemEvent): void {
             this.onEvent("play");
         }
 
-        protected onPlaying(e: SystemEvent): void {
+        protected onPlaying(e?: SystemEvent): void {
             this.isPlaying = true;
             this.onEvent("playing");
         }
 
-        protected onPause(e: SystemEvent): void {
+        protected onPause(e?: SystemEvent): void {
             this.isPlaying = false;
             this.onEvent("pause");
         }
 
-        protected onEnded(e: SystemEvent): void {
+        protected onEnded(e?: SystemEvent): void {
             this.isPlaying = false;
             this.onEvent("ended");
         }
 
-        protected onTimeupdate(e: SystemEvent): void {
+        protected onTimeupdate(e?: SystemEvent): void {
             this.isPlaying = true;
             this.onEvent("timeupdate");
         }
 
-        protected onVolumeChange(e: SystemEvent): void {
+        protected onVolumeChange(e?: SystemEvent): void {
             this.onEvent("volumechange");
         }
-        protected onError(e: SystemEvent): void {
-            this.onEvent("error");
+        protected onError(error?:any): void {
+            this.onEvent("error", error);
         }
 
-        protected onEvent(eventType: string):void {
-            this.emitWith(eventType);
+        protected onEvent(eventType: string,data?:any):void {
+            console.log(eventType, data);
+            this.emitWith(eventType, false, data);
+        }
+
+        protected playAfterLoad(loop: boolean = false) {
+            this.on("canplay", e=> this.play(loop), this);
+            this.load();
+        }
+
+        protected $addDomListeners(media:HTMLMediaElement) {
+            media.addEventListener("loadstart", e=> this.onEvent("loadstart"));
+            media.addEventListener("play", e=> this.onPlay(e));
+            media.addEventListener("playing", e=> this.onPlaying(e));
+            media.addEventListener("canplay", e=> this.onCanPlay(e));
+            media.addEventListener("pause", e=> this.onPause(e));
+            media.addEventListener("ended", e=> this.onEnded(e));
+            media.addEventListener("timeupdate", e=> this.onTimeupdate(e));
+            media.addEventListener("volumechange", e=> this.onVolumeChange(e));
+            media.addEventListener("error", e=> this.onError(e));
         }
 
         public on(type: "loadstart", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
