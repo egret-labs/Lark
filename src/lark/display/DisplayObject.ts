@@ -737,7 +737,7 @@ module lark {
         static $enterFrameCallBackList:lark.player.EventBin[] = [];
         static $renderCallBackList:lark.player.EventBin[] = [];
 
-        public on(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority:number = 0):void {
+        public on(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority?:number):void {
             super.on(type, listener, thisObject, useCapture, priority);
             var isEnterFrame = (type == Event.ENTER_FRAME);
             if (isEnterFrame || type == Event.RENDER) {

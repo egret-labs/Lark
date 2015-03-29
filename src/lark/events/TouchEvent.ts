@@ -76,13 +76,13 @@ module lark {
         /**
          * 创建一个 TouchEvent 对象，其中包含有关Touch事件的信息
          * @param type 事件的类型，可以作为 Event.type 访问。
-         * @param bubbles 确定 Event 对象是否参与事件流的冒泡阶段。默认值为 true。
+         * @param bubbles 确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
          * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
          * @param stageX 事件发生点在全局舞台坐标系中的水平坐标
          * @param stageY 事件发生点在全局舞台坐标系中的垂直坐标
          * @param touchPointID 分配给触摸点的唯一标识号
          */
-        public constructor(type:string, bubbles:boolean = true, cancelable:boolean = true, stageX?:number,
+        public constructor(type:string, bubbles?:boolean, cancelable?:boolean, stageX?:number,
                            stageY?:number, touchPointID?:number) {
             super(type, bubbles, cancelable);
             this.$setTo(stageX, stageY, touchPointID);
@@ -151,13 +151,13 @@ module lark {
          * 使用指定的EventEmitter对象来抛出Event事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
          * @param target 派发事件目标
          * @param type 事件的类型，可以作为 Event.type 访问。
-         * @param bubbles 确定 Event 对象是否参与事件流的冒泡阶段。默认值为 true。
+         * @param bubbles 确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
          * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
          * @param stageX 事件发生点在全局舞台坐标系中的水平坐标
          * @param stageY 事件发生点在全局舞台坐标系中的垂直坐标
          * @param touchPointID 分配给触摸点的唯一标识号
          */
-        public static emitTouchEvent(target:IEventEmitter, type:string, bubbles:boolean = true, cancelable:boolean = true,
+        public static emitTouchEvent(target:IEventEmitter, type:string, bubbles?:boolean, cancelable?:boolean,
                                          stageX?:number, stageY?:number, touchPointID?:number):boolean {
             if(!bubbles&&!target.hasListener(type)){
                 return;
