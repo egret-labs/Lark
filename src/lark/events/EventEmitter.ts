@@ -120,21 +120,13 @@ module lark {
             else if (this.notifyLevel !== 0) {
                 eventMap[type] = list = list.concat();
             }
-            this.$insertEventBin(list, type, listener, thisObject, useCapture, priority,emitOnce);
-        }
-
-        /**
-         * 在一个事件列表中按优先级插入事件对象
-         */
-        $insertEventBin(list:lark.player.EventBin[], type:string, listener:(event:Event)=>void, thisObject:any,
-                        useCapture:boolean, priority:number, emitOnce:boolean):boolean {
             priority = +priority | 0;
             var insertIndex = -1;
             var length = list.length;
             for (var i = 0; i < length; i++) {
                 var bin = list[i];
                 if (bin.listener === listener && bin.thisObject === thisObject && bin.target === this) {
-                    return false;
+                    return;
                 }
                 if (insertIndex === -1 && bin.priority < priority) {
                     insertIndex = i;
@@ -150,7 +142,6 @@ module lark {
             else {
                 list.push(eventBin);
             }
-            return true;
         }
 
         /**
@@ -172,25 +163,17 @@ module lark {
             if (this.notifyLevel !== 0) {
                 eventMap[type] = list = list.concat();
             }
-            this.$removeEventBin(list, listener, thisObject);
-            if (list.length == 0) {
-                eventMap[type] = null;
-            }
-        }
-
-        /**
-         * 在一个事件列表中移除指定的事件对象
-         */
-        $removeEventBin(list:lark.player.EventBin[], listener:(event:Event)=>void, thisObject:any):boolean {
             var length = list.length;
             for (var i = 0; i < length; i++) {
                 var bin = list[i];
-                if (bin.listener === listener && bin.thisObject === thisObject && bin.target == this) {
+                if (bin.listener === listener && bin.thisObject === thisObject && bin.target === this) {
                     list.splice(i, 1);
-                    return true;
+                    break;
                 }
             }
-            return false;
+            if (list.length == 0) {
+                eventMap[type] = null;
+            }
         }
 
         /**
