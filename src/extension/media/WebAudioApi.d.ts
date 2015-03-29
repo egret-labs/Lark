@@ -12,7 +12,7 @@
  *
  *     var context = new AudioContext();
  */
-interface AudioContext extends EventTarget {
+interface AudioContext {
     /**
      * An AudioDestinationNode with a single input representing the final destination for all audio (to be rendered to the audio hardware). All AudioNodes actively rendering audio will directly or indirectly connect to destination.
      */
@@ -32,6 +32,11 @@ interface AudioContext extends EventTarget {
      * An AudioListener which is used for 3D spatialization.
      */
     listener: AudioListener;
+
+    /**
+     * The number of AudioBufferSourceNodes that are currently playing.
+     */
+    activeSourceCount: number;
 
     /**
      * Creates an AudioBuffer of the given size. The audio data in the buffer will be zero-initialized (silent). An exception will be thrown if the numberOfChannels or sampleRate are out-of-bounds.
@@ -64,15 +69,15 @@ interface AudioContext extends EventTarget {
      * 5. The audioData neutered state will be restored to normal
      * 6. The successCallback function will be scheduled to run on the main thread's event loop given the AudioBuffer from step (4) as an argument. 
      *
-     * @param audioData an ArrayBuffer containing audio file data.
-     * @param successCallback callback function which will be invoked when the decoding is finished. The single argument to this callback is an AudioBuffer representing the decoded PCM audio data.
-     * @param errorCallback callback function which will be invoked if there is an error decoding the audio file data.
+     * @param ArrayBuffer containing audio file data.
+     * @param  callback function which will be invoked when the decoding is finished. The single argument to this callback is an AudioBuffer representing the decoded PCM audio data.
+     * @param callback function which will be invoked if there is an error decoding the audio file data.
      */
     decodeAudioData(audioData: ArrayBuffer, successCallback: (decodedData: AudioBuffer) => any, errorCallback?: Function): void;
 
     /**
      * Creates an AudioBufferSourceNode.
-     */    
+     */
     createBufferSource(): AudioBufferSourceNode;
 
     /**
@@ -82,7 +87,7 @@ interface AudioContext extends EventTarget {
 
     /**
      * Creates a MediaStreamAudioSourceNode given a MediaStream. As a consequence of calling this method, audio playback from the MediaStream will be re-routed into the processing graph of the AudioContext.
-     */    
+     */
     createMediaStreamSource(mediaStream: MediaStream): MediaStreamAudioSourceNode;
 
     /**
@@ -96,8 +101,8 @@ interface AudioContext extends EventTarget {
      * @param bufferSize  the buffer size in units of sample-frames. It must be one of the following values: 256, 512, 1024, 2048, 4096, 8192, 16384. This value controls how frequently the onaudioprocess event handler is called and how many sample-frames need to be processed each call. Lower values for bufferSize will result in a lower (better) latency. Higher values will be necessary to avoid audio breakup and glitches. The value chosen must carefully balance between latency and audio quality.
      * @param numberOfInputChannels (defaults to 2) the number of channels for this node's input. Values of up to 32 must be supported.
      * @param numberOfOutputChannels (defaults to 2) the number of channels for this node's output. Values of up to 32 must be supported.
-     */ 
-    createScriptProcessor(bufferSize?: number, numberOfInputChannels?: number, numberOfOutputChannels?: number):  ScriptProcessorNode;
+     */
+    createScriptProcessor(bufferSize: number, numberOfInputChannels?: number, numberOfOutputChannels?: number): ScriptProcessorNode;
 
     /**
      * Creates a AnalyserNode.
@@ -114,6 +119,7 @@ interface AudioContext extends EventTarget {
      * @param maxDelayTime the maximum delay time in seconds allowed for the delay line. If specified, this value must be greater than zero and less than three minutes or a NOT_SUPPORTED_ERR exception will be thrown.
      */
     createDelay(maxDelayTime?: number): DelayNode;
+    //createDelayNode(maxDelayTime?: number): DelayNode;
 
     /**
      * Creates a BiquadFilterNode representing a second order filter which can be configured as one of several common filter types.
@@ -174,41 +180,22 @@ declare var webkitAudioContext: {
     new (): AudioContext;
 }
 
+interface OfflineRenderSuccessCallback {
+    (renderedData: AudioBuffer): void;
+}
+
 /**
  * OfflineAudioContext is a particular type of AudioContext for rendering/mixing-down (potentially) faster than real-time. It does not render to the audio hardware, but instead renders as quickly as possible, calling a render callback function upon completion with the result provided as an AudioBuffer. It is constructed by specifying the numberOfChannels, length, and sampleRate as follows:
  * 
  *     var offlineContext = new OfflineAudioContext(unsigned long numberOfChannels, unsigned long length, float sampleRate);
  */
-interface OfflineAudioContext extends AudioContext{
+interface OfflineAudioContext extends AudioContext {
     startRendering(): void;
-    oncomplete: EventHandler;
-}
-
-declare var OfflineAudioContext: {
-    new (numberOfChannels: number, length: number, sampleRate: number): OfflineAudioContext;
+    oncomplete: OfflineRenderSuccessCallback;
 }
 
 declare var webkitOfflineAudioContext: {
     new (numberOfChannels: number, length: number, sampleRate: number): OfflineAudioContext;
-}
-
-interface OfflineAudioCompletionEvent extends Event {
-    /**
-     * An AudioBuffer containing the rendered audio data once an OfflineAudioContext has finished rendering. It will have a number of channels equal to the numberOfChannels parameter of the OfflineAudioContext constructor.
-     */
-    renderedBuffer: AudioBuffer;
-}
-
-
-declare enum ChannelCountMode {
-    'max',
-    'clamped-max',
-    'explicit'
-}
-
-declare enum ChannelInterpretation {
-    speakers,
-    discrete
 }
 
 /**
@@ -226,7 +213,7 @@ declare enum ChannelInterpretation {
  *
  * For performance reasons, practical implementations will need to use block processing, with each AudioNode processing a fixed number of sample-frames of size block-size. In order to get uniform behavior across implementations, we will define this value explicitly. block-size is defined to be 128 sample-frames which corresponds to roughly 3ms at a sample-rate of 44.1KHz.
  */
-interface AudioNode extends EventTarget {
+interface AudioNode {
     /**
      * Connects the AudioNode to another AudioNode.
      *
@@ -292,25 +279,6 @@ interface AudioNode extends EventTarget {
      * The number of outputs coming out of the AudioNode. This will be 0 for an AudioDestinationNode.
      */
     numberOfOutputs: number;
-
-    /**
-     * The number of channels used when up-mixing and down-mixing connections to any inputs to the node. The default value is 2 except for specific nodes where its value is specially determined. This attribute has no effect for nodes with no inputs. If this value is set to zero, the implementation MUST throw a NOT_SUPPORTED_ERR exception.
-     */
-    channelCount: number;
-
-    /**
-     * Determines how channels will be counted when up-mixing and down-mixing connections to any inputs to the node . This attribute has no effect for nodes with no inputs.
-     *
-     * See the Channel up-mixing and down-mixing section for more information on this attribute.
-     */
-    channelCountMode: ChannelCountMode;
-
-    /**
-     * Determines how individual channels will be treated when up-mixing and down-mixing connections to any inputs to the node. This attribute has no effect for nodes with no inputs.
-     *
-     * See the Channel up-mixing and down-mixing section for more information on this attribute.
-     */
-    channelInterpretation: ChannelInterpretation;
 }
 
 
@@ -403,7 +371,7 @@ interface AudioParam {
      * @param value the value the parameter will linearly ramp to at the given time.
      * @param endTime the time in the same time coordinate system as AudioContext.currentTime.
      */
-    linearRampToValueAtTime(value: number, endTime: number): void;
+    linearRampToValueAtTime(value: number, time: number): void;
     
     /**
      * Schedules an exponential continuous change in parameter value from the previous scheduled parameter value to the given value. Parameters representing filter frequencies and playback rate are best changed exponentially because of the way humans perceive sound.
@@ -452,7 +420,7 @@ interface AudioParam {
      * @param duration the amount of time in seconds (after the time parameter) where values will be calculated according to the values parameter..
      * 
      */
-    setValueCurveAtTime(values: Float32Array, startTime: number, duration: number): void;
+    setValueCurveAtTime(values: Float32Array, time: number, duration: number): void;
 
     /**
      * Cancels all scheduled parameter changes with times greater than or equal to startTime.
@@ -538,12 +506,17 @@ interface AudioBuffer {
 }
 
 /**
- * This interface represents an audio source from an in-memory audio asset in an AudioBuffer. It is useful for playing short audio assets which require a high degree of scheduling flexibility (can playback in rhythmically perfect ways). The start() method is used to schedule when sound playback will happen. The playback will stop automatically when the buffer's audio data has been completely played (if the loop attribute is false), or when the stop() method has been called and the specified time has been reached. Please see more details in the start() and stop() description. start() and stop() may not be issued multiple times for a given AudioBufferSourceNode.
+ * This interface represents an audio source from an in-memory audio asset in an AudioBuffer. It generally will be used for short audio assets which require a high degree of scheduling flexibility (can playback in rhythmically perfect ways). The playback state of an AudioBufferSourceNode goes through distinct stages during its lifetime in this order: UNSCHEDULED_STATE, SCHEDULED_STATE, PLAYING_STATE, FINISHED_STATE. The start() method causes a transition from the UNSCHEDULED_STATE to SCHEDULED_STATE. Depending on the time argument passed to start(), a transition is made from the SCHEDULED_STATE to PLAYING_STATE, at which time sound is first generated. Following this, a transition from the PLAYING_STATE to FINISHED_STATE happens when either the buffer's audio data has been completely played (if the loop attribute is false), or when the stop() method has been called and the specified time has been reached. Please see more details in the start() and stop() description. Once an AudioBufferSourceNode has reached the FINISHED state it will no longer emit any sound. Thus start() and stop() may not be issued multiple times for a given AudioBufferSourceNode.
  *
  *     numberOfInputs  : 0
  *     numberOfOutputs : 1
  */
-interface AudioBufferSourceNode extends AudioNode {
+interface AudioBufferSourceNode extends AudioSourceNode {
+
+    /**
+     * The playback state, initialized to UNSCHEDULED_STATE.
+     */
+    playbackState: number; 
 
     /**
      * Represents the audio asset to be played.
@@ -573,7 +546,7 @@ interface AudioBufferSourceNode extends AudioNode {
     /**
      * A property used to set the EventHandler for the ended event that is dispatched to AudioBufferSourceNode node types. When the playback of the buffer for an AudioBufferSourceNode is finished, an event of type Event will be dispatched to the event handler.
      */
-    onended: EventHandler;
+    onended: EventListener;
 
     /**
      * Schedules a sound to playback at an exact time.
@@ -598,11 +571,7 @@ interface AudioBufferSourceNode extends AudioNode {
  *    numberOfInputs  : 0
  *    numberOfOutputs : 1
  */
-interface MediaElementAudioSourceNode extends AudioNode {
-}
-
-interface AudioProcessingEventHandler {
-    (e: AudioProcessingEvent): void;
+interface MediaElementAudioSourceNode extends AudioSourceNode {
 }
 
 /**
@@ -617,11 +586,11 @@ interface AudioProcessingEventHandler {
  *
  *     var node = context.createScriptProcessor(bufferSize, numberOfInputChannels, numberOfOutputChannels);
  */
-interface ScriptProcessorNode  extends AudioNode {
+interface ScriptProcessorNode extends AudioNode {
     /**
      * An event listener which is called periodically for audio processing. An event of type AudioProcessingEvent will be passed to the event handler.
      */
-    onaudioprocess: AudioProcessingEventHandler;
+    onaudioprocess: EventListener;        
 
     /**
      * The size of the buffer (in sample-frames) which needs to be processed each time onprocessaudio is called. Legal values are (256, 512, 1024, 2048, 4096, 8192, 16384).
@@ -636,6 +605,11 @@ interface ScriptProcessorNode  extends AudioNode {
  */
 interface AudioProcessingEvent extends Event {
     /**
+     * The ScriptProcessorNode associated with this processing event.
+     */
+    node: ScriptProcessorNode;
+    
+    /**
      * The time when the audio will be played in the same time coordinate system as AudioContext.currentTime. playbackTime allows for very tight synchronization between processing directly in JavaScript with the other events in the context's rendering graph.
      */
     playbackTime: number;
@@ -648,7 +622,7 @@ interface AudioProcessingEvent extends Event {
     /**
      * An AudioBuffer where the output audio data should be written. It will have a number of channels equal to the numberOfOutputChannels parameter of the createScriptProcessor() method. Script code within the scope of the onaudioprocess function is expected to modify the Float32Array arrays representing channel data in this AudioBuffer. Any script modifications to this AudioBuffer outside of this scope will not produce any audible effects.
      */
-    outputBuffer: AudioBuffer; 
+    outputBuffer: AudioBuffer;
 }
 
 declare enum PanningModelType {
@@ -660,7 +634,12 @@ declare enum PanningModelType {
     /**
      * A higher quality spatialization algorithm using a convolution with measured impulse responses from human subjects. This panning method renders stereo output.
      */
-    HRTF
+    HRTF,
+
+    /**
+     * An algorithm which spatializes multi-channel audio using sound field algorithms.
+     */
+    soundfield
 }
 
 declare enum DistanceModelType {
@@ -861,7 +840,7 @@ interface AnalyserNode extends AudioNode {
 
     /**
      * The size of the FFT used for frequency-domain analysis. This must be a power of two.
-     */ 
+     */
     fftSize: number;
 
     /**
@@ -1064,7 +1043,7 @@ declare enum BiquadFilterType {
 interface BiquadFilterNode extends AudioNode {
 
     type: BiquadFilterType;
-    frequency: AudioParam; 
+    frequency: AudioParam;
     Q: AudioParam;
     gain: AudioParam;
 
@@ -1075,12 +1054,6 @@ interface BiquadFilterNode extends AudioNode {
      * @param phaseResponse an output array receiving the phase response values in radians.
      */
     getFrequencyResponse(frequencyHz: Float32Array, magResponse: Float32Array, phaseResponse: Float32Array): void;
-}
-
-declare enum OverSampleType {
-    'none',
-    '2x',
-    '4x'
 }
 
 /**
@@ -1096,27 +1069,14 @@ interface WaveShaperNode extends AudioNode {
      * The shaping curve used for the waveshaping effect. The input signal is nominally within the range -1 -> +1. Each input sample within this range will index into the shaping curve with a signal level of zero corresponding to the center value of the curve array. Any sample value less than -1 will correspond to the first value in the curve array. Any sample value less greater than +1 will correspond to the last value in the curve array.
      */
     curve: Float32Array;
-
-    /**
-     * Specifies what type of oversampling (if any) should be used when applying the shaping curve. The default value is "none", meaning the curve will be applied directly to the input samples. A value of "2x" or "4x" can improve the quality of the processing by avoiding some aliasing, with the "4x" value yielding the highest quality. For some applications, it's better to use no oversampling in order to get a very precise shaping curve.
-     *
-     * A value of "2x" or "4x" means that the following steps must be performed:
-     *
-     * 1. Up-sample the input samples to 2x or 4x the sample-rate of the AudioContext. Thus for each processing block of 128 samples, generate 256 (for 2x) or 512 (for 4x) samples.
-     * 2. Apply the shaping curve.
-     * 3. Down-sample the result back to the sample-rate of the AudioContext. Thus taking the 256 (or 512) processed samples, generating 128 as the final result.
-     *
-     * The exact up-sampling and down-sampling filters are not specified, and can be tuned for sound quality (low aliasing, etc.), low latency, and performance.
-     */
-    oversample: OverSampleType
 }
 
 declare enum OscillatorType {
-  sine,
-  square,
-  sawtooth,
-  triangle,
-  custom
+    sine,
+    square,
+    sawtooth,
+    triangle,
+    custom
 }
 
 /**
@@ -1139,11 +1099,17 @@ declare enum OscillatorType {
  *     numberOfInputs  : 0
  *     numberOfOutputs : 1 (mono output)
  */
-interface OscillatorNode extends AudioNode {
+interface OscillatorNode extends AudioSourceNode {
     /**
      * The shape of the periodic waveform. It may directly be set to any of the type constant values except for "custom". The setPeriodicWave() method can be used to set a custom waveform, which results in this attribute being set to "custom". The default value is "sine".
      */
     type: OscillatorType;
+
+    /**
+     * defined as in AudioBufferSourceNode.
+     * @readonly
+     */
+    playbackState: number;
 
     /**
      * The frequency (in Hertz) of the periodic waveform. This parameter is a-rate
@@ -1170,11 +1136,6 @@ interface OscillatorNode extends AudioNode {
      * Sets an arbitrary custom periodic waveform given a PeriodicWave.
      */
     setPeriodicWave(periodicWave: PeriodicWave): void;
-
-    /**
-     * A property used to set the EventHandler (described in HTML) for the ended event that is dispatched to OscillatorNode node types. When the playback of the buffer for an OscillatorNode is finished, an event of type Event (described in HTML) will be dispatched to the event handler.
-     */
-    onended: EventHandler
 }
 
 /**
@@ -1189,7 +1150,7 @@ interface PeriodicWave {
  *    numberOfInputs  : 0
  *    numberOfOutputs : 1
  */
-interface MediaStreamAudioSourceNode extends AudioNode {
+interface MediaStreamAudioSourceNode extends AudioSourceNode {
 }
 
 /**
@@ -1203,5 +1164,5 @@ interface MediaStreamAudioSourceNode extends AudioNode {
  *    channelInterpretation = "speakers";
  */
 interface MediaStreamAudioDestinationNode extends AudioNode {
-  stream: MediaStream;
+    stream: MediaStream;
 }
