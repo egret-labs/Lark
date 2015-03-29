@@ -26,7 +26,7 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-/// <reference path="../lib/node.d.ts"/>
+/// <reference path="node.d.ts"/>
 var FS = require("fs");
 var Path = require("path");
 var charset = "utf-8";

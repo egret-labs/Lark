@@ -372,15 +372,15 @@ module lark {
             return this.$getWidth();
         }
 
-        $getWidth(): number {
+        $getWidth():number {
             return this.$getTransformedBounds(this.$parent, Rectangle.TEMP).width;
         }
 
-        public set width(value: number) {
+        public set width(value:number) {
             this.$setWidth(value);
         }
 
-        $setWidth(value: number) {
+        $setWidth(value:number) {
             value = +value || 0;
             if (value < 0) {
                 return;
@@ -402,19 +402,19 @@ module lark {
          * 表示显示对象的高度，以像素为单位。
          * 高度是根据显示对象内容的范围来计算的。优先顺序为 显式设置高度 > 测量高度。
          */
-        public get height(): number {
+        public get height():number {
             return this.$getHeight();
         }
 
-        $getHeight(): number {
+        $getHeight():number {
             return this.$getTransformedBounds(this.$parent, Rectangle.TEMP).height;
         }
 
-        public set height(value: number) {
+        public set height(value:number) {
             this.$setHeight(value);
         }
 
-        $setHeight(value: number) {
+        $setHeight(value:number) {
             value = +value || 0;
             if (value < 0) {
                 return;
@@ -734,24 +734,29 @@ module lark {
             return null;
         }
 
-        static $enterFrameCallBackList:lark.player.EventBin[] = [];
-        static $renderCallBackList:lark.player.EventBin[] = [];
+        static $enterFrameCallBackList:DisplayObject[] = [];
+        static $renderCallBackList:DisplayObject[] = [];
 
-        public $addListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority?:number,emitOnce?:boolean):void {
-            super.$addListener(type, listener, thisObject, useCapture, priority,emitOnce);
+        public $addListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority?:number, emitOnce?:boolean):void {
+            super.$addListener(type, listener, thisObject, useCapture, priority, emitOnce);
             var isEnterFrame = (type == Event.ENTER_FRAME);
             if (isEnterFrame || type == Event.RENDER) {
-                var list:Array<any> = isEnterFrame ? DisplayObject.$enterFrameCallBackList : DisplayObject.$renderCallBackList;
-                this.$insertEventBin(list,type, listener, thisObject,useCapture, priority,emitOnce);
+                var list = isEnterFrame ? DisplayObject.$enterFrameCallBackList : DisplayObject.$renderCallBackList;
+                if (list.indexOf(this) == -1) {
+                    list.push(this);
+                }
             }
         }
 
         public removeListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean):void {
             super.removeListener(type, listener, thisObject, useCapture);
             var isEnterFrame:boolean = (type == Event.ENTER_FRAME);
-            if (isEnterFrame || type == Event.RENDER) {
+            if ((isEnterFrame || type == Event.RENDER) && !this.hasListener(type)) {
                 var list = isEnterFrame ? DisplayObject.$enterFrameCallBackList : DisplayObject.$renderCallBackList;
-                this.$removeEventBin(list, listener, thisObject);
+                var index = list.indexOf(this);
+                if (index !== -1) {
+                    list.splice(index, 1);
+                }
             }
         }
 

@@ -239,7 +239,7 @@ module lark {
                 return true;
             }
             var length = list.length;
-            if (length == 0) {
+            if (length === 0) {
                 return true;
             }
             var onceList = ONCE_EVENT_LIST;
