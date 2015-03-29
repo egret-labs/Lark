@@ -29,6 +29,7 @@
 
 module lark.player {
 
+    var ONCE_EVENT_LIST:lark.player.EventBin[] = [];
     /**
      * Lark心跳控制器
      */
@@ -171,14 +172,22 @@ module lark.player {
             if (length === 0) {
                 return;
             }
+            var onceList = ONCE_EVENT_LIST;
             list = list.concat();
             var event = this.reuseEvent;
             event.$type = Event.ENTER_FRAME;
             for (var i = 0; i < length; i++) {
                 var eventBin = list[i];
-                event.$target = eventBin.display;
-                event.$currentTarget = eventBin.display;
+                if(eventBin.emitOnce){
+                    onceList.push(eventBin);
+                }
+                event.$target = eventBin.target;
+                event.$currentTarget = eventBin.target;
                 eventBin.listener.call(eventBin.thisObject, event);
+            }
+            while (onceList.length) {
+                eventBin = onceList.pop();
+                eventBin.target.removeListener(eventBin.type, eventBin.listener, eventBin.thisObject, eventBin.useCapture);
             }
         }
 
@@ -191,15 +200,23 @@ module lark.player {
             if (length === 0) {
                 return;
             }
+            var onceList = ONCE_EVENT_LIST;
             list = list.concat();
             var event:Event = this.reuseEvent;
             event.$type = Event.RENDER;
             for (var i = 0; i < length; i++) {
                 var eventBin = list[i];
-                var target = eventBin.display;
+                if(eventBin.emitOnce){
+                    onceList.push(eventBin);
+                }
+                var target = eventBin.target;
                 event.$target = target;
                 event.$currentTarget = target;
                 eventBin.listener.call(eventBin.thisObject, event);
+            }
+            while (onceList.length) {
+                eventBin = onceList.pop();
+                eventBin.target.removeListener(eventBin.type, eventBin.listener, eventBin.thisObject, eventBin.useCapture);
             }
         }
     }

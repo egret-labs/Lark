@@ -737,12 +737,12 @@ module lark {
         static $enterFrameCallBackList:lark.player.EventBin[] = [];
         static $renderCallBackList:lark.player.EventBin[] = [];
 
-        public on(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority?:number):void {
-            super.on(type, listener, thisObject, useCapture, priority);
+        public $addListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority?:number,emitOnce?:boolean):void {
+            super.$addListener(type, listener, thisObject, useCapture, priority,emitOnce);
             var isEnterFrame = (type == Event.ENTER_FRAME);
             if (isEnterFrame || type == Event.RENDER) {
                 var list:Array<any> = isEnterFrame ? DisplayObject.$enterFrameCallBackList : DisplayObject.$renderCallBackList;
-                this.$insertEventBin(list, listener, thisObject, priority, this);
+                this.$insertEventBin(list,type, listener, thisObject,useCapture, priority,emitOnce);
             }
         }
 
@@ -751,7 +751,7 @@ module lark {
             var isEnterFrame:boolean = (type == Event.ENTER_FRAME);
             if (isEnterFrame || type == Event.RENDER) {
                 var list = isEnterFrame ? DisplayObject.$enterFrameCallBackList : DisplayObject.$renderCallBackList;
-                this.$removeEventBin(list, listener, thisObject, this);
+                this.$removeEventBin(list, listener, thisObject);
             }
         }
 

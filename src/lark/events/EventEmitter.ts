@@ -29,6 +29,8 @@
 
 
 module lark {
+
+    var ONCE_EVENT_LIST:lark.player.EventBin[] = [];
     /**
      * EventEmitter 是 Lark 的事件派发器类，负责进行事件的发送和侦听。
      *
@@ -77,6 +79,26 @@ module lark {
          * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
          */
         public on(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority?:number):void {
+            this.$addListener(type,listener,thisObject,useCapture,priority);
+        }
+
+        /**
+         * 添加仅回调一次的事件侦听器，此方法与on()方法不同，on()方法会持续产生回调，而此方法在第一次回调时就会自动移除监听。
+         * @param type 事件的类型。
+         * @param listener 处理事件的侦听器函数。此函数必须接受 Event 对象作为其唯一的参数，并且不能返回任何结果，
+         * 如下面的示例所示： function(evt:Event):void 函数可以有任何名称。
+         * @param thisObject 侦听函数绑定的this对象
+         * @param useCapture 确定侦听器是运行于捕获阶段还是运行于目标和冒泡阶段。如果将 useCapture 设置为 true，
+         * 则侦听器只在捕获阶段处理事件，而不在目标或冒泡阶段处理事件。如果 useCapture 为 false，则侦听器只在目标或冒泡阶段处理事件。
+         * 要在所有三个阶段都侦听事件，请调用 on() 两次：一次将 useCapture 设置为 true，一次将 useCapture 设置为 false。
+         * @param  priority 事件侦听器的优先级。优先级由一个带符号的 32 位整数指定。数字越大，优先级越高。优先级为 n 的所有侦听器会在
+         * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
+         */
+        public once(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority?:number):void {
+            this.$addListener(type,listener,thisObject,useCapture,priority,true);
+        }
+
+        $addListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority?:number,emitOnce?:boolean):void{
             if (!listener) {
                 //Logger.fatalWithErrorId(1010);
             }
@@ -95,32 +117,33 @@ module lark {
             if (!list) {
                 list = eventMap[type] = [];
             }
-            else if(this.notifyLevel!==0){
+            else if (this.notifyLevel !== 0) {
                 eventMap[type] = list = list.concat();
             }
-            this.$insertEventBin(list, listener, thisObject, priority)
+            this.$insertEventBin(list, type, listener, thisObject, useCapture, priority,emitOnce);
         }
 
         /**
          * 在一个事件列表中按优先级插入事件对象
          */
-        $insertEventBin(list:lark.player.EventBin[], listener:(event:Event)=>void, thisObject:any, priority:number, display?:DisplayObject):boolean {
-            priority = +priority|0;
+        $insertEventBin(list:lark.player.EventBin[], type:string, listener:(event:Event)=>void, thisObject:any,
+                        useCapture:boolean, priority:number, emitOnce:boolean):boolean {
+            priority = +priority | 0;
             var insertIndex = -1;
             var length = list.length;
             for (var i = 0; i < length; i++) {
                 var bin = list[i];
-                if (bin.listener === listener && bin.thisObject === thisObject && bin.display === display) {
+                if (bin.listener === listener && bin.thisObject === thisObject && bin.target === this) {
                     return false;
                 }
                 if (insertIndex === -1 && bin.priority < priority) {
                     insertIndex = i;
                 }
             }
-            var eventBin:any = {listener: listener, thisObject: thisObject, priority: priority};
-            if (display) {
-                eventBin.display = display;
-            }
+            var eventBin:lark.player.EventBin = {
+                type: type, listener: listener, thisObject: thisObject, priority: priority,
+                target: this, useCapture: useCapture, emitOnce: !!emitOnce
+            };
             if (insertIndex !== -1) {
                 list.splice(insertIndex, 0, eventBin);
             }
@@ -146,7 +169,7 @@ module lark {
             if (!list) {
                 return;
             }
-            if(this.notifyLevel!==0){
+            if (this.notifyLevel !== 0) {
                 eventMap[type] = list = list.concat();
             }
             this.$removeEventBin(list, listener, thisObject);
@@ -156,13 +179,13 @@ module lark {
         }
 
         /**
-         * 在一个事件列表中按优先级插入事件对象
+         * 在一个事件列表中移除指定的事件对象
          */
-        $removeEventBin(list:lark.player.EventBin[], listener:(event:Event)=>void, thisObject:any, display?:DisplayObject):boolean {
+        $removeEventBin(list:lark.player.EventBin[], listener:(event:Event)=>void, thisObject:any):boolean {
             var length = list.length;
             for (var i = 0; i < length; i++) {
                 var bin = list[i];
-                if (bin.listener === listener && bin.thisObject === thisObject && bin.display == display) {
+                if (bin.listener === listener && bin.thisObject === thisObject && bin.target == this) {
                     list.splice(i, 1);
                     return true;
                 }
@@ -219,16 +242,24 @@ module lark {
             if (length == 0) {
                 return true;
             }
-            //做个标记，防止外部修改原始数组导致便利错误。这里不直接调用list.concat()因为emit()方法调用通常比on()等方法频繁。
+            var onceList = ONCE_EVENT_LIST;
+            //做个标记，防止外部修改原始数组导致遍历错误。这里不直接调用list.concat()因为emit()方法调用通常比on()等方法频繁。
             this.notifyLevel++;
             for (var i = 0; i < length; i++) {
-                var eventBin:any = list[i];
+                var eventBin = list[i];
                 eventBin.listener.call(eventBin.thisObject, event);
+                if(eventBin.emitOnce){
+                    onceList.push(eventBin);
+                }
                 if (event.$isPropagationImmediateStopped) {
                     break;
                 }
             }
             this.notifyLevel--;
+            while (onceList.length) {
+                eventBin = onceList.pop();
+                eventBin.target.removeListener(eventBin.type, eventBin.listener, eventBin.thisObject, eventBin.useCapture);
+            }
             return !event.$isDefaultPrevented;
         }
 
@@ -241,7 +272,7 @@ module lark {
          */
         public emitWith(type:string, bubbles?:boolean, data?:any):boolean {
             if (bubbles || this.hasListener(type)) {
-                var event = Event.create(Event,type, bubbles);
+                var event = Event.create(Event, type, bubbles);
                 event.data = data;
                 var result = this.emit(event);
                 Event.release(event);
@@ -251,14 +282,17 @@ module lark {
     }
 }
 
-module lark.player{
+module lark.player {
     /**
      * 事件信息对象
      */
     export interface EventBin {
+        type:string;
         listener: (event:Event)=>void;
         thisObject:any;
         priority:number;
-        display?:DisplayObject;
+        target:IEventEmitter;
+        useCapture:boolean;
+        emitOnce:boolean;
     }
 }
