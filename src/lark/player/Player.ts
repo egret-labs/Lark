@@ -36,7 +36,7 @@ module lark.player {
         /**
          * 实例化一个播放器对象。
          */
-        public constructor(renderer:IRenderer, stage:Stage, entryClassName:string,scaleMode:number) {
+        public constructor(renderer:IRenderer, stage:Stage, entryClassName:string,scaleMode:number,touchHandler:ITouchHandler) {
             super();
             if (!renderer) {
                 throw new Error("Lark播放器实例化失败，IRenderer不能为空！");
@@ -45,6 +45,7 @@ module lark.player {
             this.entryClassName = entryClassName;
             this.stage = stage;
             this.scaleMode = scaleMode;
+            this.touchHandler = touchHandler;
         }
 
         private renderer:IRenderer;
@@ -60,6 +61,8 @@ module lark.player {
          * 入口类实例
          */
         private root:DisplayObject;
+
+        private touchHandler:ITouchHandler;
 
         private isPlaying:boolean = false;
 
@@ -330,6 +333,7 @@ module lark.player {
             }
 
             renderer.updateScreenSize(width,height,displayWidth,displayHeight,screenWidth,screenHeight);
+            this.touchHandler.updateScaleMode(displayWidth/width,displayHeight/height);
             var sizeChange = (height!==oldHeight||width!==oldWidth);
             if(sizeChange){
                 this.dirtyRegion = new DirtyRegion(width,height);

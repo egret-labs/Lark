@@ -27,59 +27,16 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.web {
-
-    export class WebTouchHandler extends HashObject implements lark.player.ITouchHandler{
-
-        public constructor(touch:lark.player.TouchHandler,canvas:HTMLCanvasElement){
-            super();
-            this.canvas = canvas;
-            this.touch = touch;
-            canvas.addEventListener("mousedown",this.onTouchBegin);
-            canvas.addEventListener("mousemove",this.onTouchMove);
-            canvas.addEventListener("mouseup",this.onTouchEnd);
-        }
-
-        private canvas:HTMLCanvasElement;
-        private touch:lark.player.TouchHandler;
-
-        private onTouchBegin = (event:any):void => {
-            var location = this.getLocation(event);
-            this.touch.onTouchBegin(location.x, location.y, event.identifier);
-        }
-
-        private onTouchMove = (event:any):void => {
-            var location = this.getLocation(event);
-            this.touch.onTouchMove(location.x, location.y, event.identifier);
-
-        }
-
-        private onTouchEnd = (event:any):void => {
-            var location = this.getLocation(event);
-            this.touch.onTouchEnd(location.x, location.y, event.identifier);
-        }
-
-        private getLocation(event:any):Point {
-            event.identifier = +event.identifier||0;
-            var doc = document.documentElement;
-            var box = this.canvas.getBoundingClientRect();
-            var left = box.left + window.pageXOffset - doc.clientLeft;
-            var top = box.top + window.pageYOffset - doc.clientTop;
-            var x = (event.pageX - left)/this.scaleX;
-            var y = (event.pageY - top)/this.scaleY;
-            return Point.TEMP.setTo(x,y);
-        }
-
-        private scaleX:number = 1;
-        private scaleY:number = 1;
+module lark.player{
+    /**
+     * 触摸事件处理器接口
+     */
+    export interface ITouchHandler  extends IHashObject {
         /**
          * 更新屏幕当前的缩放比例，用于计算准确的点击位置。
          * @param scaleX 水平方向的缩放比例。
          * @param scaleY 垂直方向的缩放比例。
          */
-        public updateScaleMode(scaleX:number,scaleY:number):void{
-            this.scaleX = scaleX;
-            this.scaleY = scaleY;
-        }
+        updateScaleMode(scaleX:number,scaleY:number):void;
     }
 }

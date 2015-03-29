@@ -52,7 +52,7 @@ module lark.web {
         LarkVideo = HtmlVideo;
         var touch = new lark.player.TouchHandler(stage);
         var webTouch = new WebTouchHandler(touch,canvas);
-        var player = new lark.player.Player(canvasRenderer,stage,entryClassName,stageScaleMode);
+        var player = new lark.player.Player(canvasRenderer,stage,entryClassName,stageScaleMode,webTouch);
         player.updateScreenSize(screenWidth,screenHeight);
         return player;
     }
