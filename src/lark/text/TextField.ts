@@ -69,8 +69,15 @@ module lark {
         verticalAlign: Align.BOTTOM
     }
     
-    var SplitRegex = /(?=[\u00BF-\u1FFF\u2C00-\uD7FF]|\b)(?![。，！、》…）)}”】\.\,\!\?\]\:])/;
+    var SplitRegex = /(?=[\u00BF-\u1FFF\u2C00-\uD7FF]|\b|\s)(?![。，！、》…）)}”】\.\,\!\?\]\:])/;
     var LineBreaks = /\r|\n/;
+
+    function trimLeft(text: string){
+        for (var i = 0; i < text.length; i++)
+            if (text.charAt(i) != " ")
+                break;
+        return text.substr(i);
+    }
 
     /**
      * TextField 类用于创建显示对象以显示和输入文本。 
@@ -243,12 +250,12 @@ module lark {
                 var w = TextMetrics.measureText(atom, this._style);
                 var testW = currentWidth + w;
                 if (testW < width) {
-                    line += line == "" ? atom.trim() : atom;
+                    line += (line == "" ? trimLeft(atom) : atom);
                     currentWidth = testW;
                 }
                 else {
                     lines.push(new TextSpan(line, style, currentWidth, line.length,0,0));
-                    line = atom.trim();
+                    line = trimLeft(atom);
                     currentWidth = w;
                 }
             }

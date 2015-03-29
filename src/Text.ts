@@ -63,7 +63,7 @@ module lark {
 
 
 
-            var text = "setTimeout(() => rich.width = this.stage? this.stage.stageWidth: 500, 300); \n"
+            var text = "Hi:    3455 \n"
                 + " World setTimeout(() => rich.width = this.stage? this.stage.stageWidth : 500, 300); \n "
                 + " World setTimeout(() => rich.width = this.stage ? this.stage.stageWidth : 500, 300); \\n World";
             var tf = new TextField(text);

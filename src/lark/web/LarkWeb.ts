@@ -45,6 +45,9 @@ module lark.web {
         if(!TextMetrics.$instance){
             TextMetrics.$instance = canvasRenderer;
         }
+        HttpClient = WebHttpClinet;
+        LarkAudio = HtmlAudio;
+        LarkVideo = HtmlVideo;
         var touch = new lark.player.TouchHandler(stage);
         var webTouch = new WebTouchHandler(touch,canvas);
         var player = new lark.player.Player(canvasRenderer,stage,entryClassName,stageScaleMode);

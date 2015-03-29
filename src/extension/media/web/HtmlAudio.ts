@@ -1,5 +1,5 @@
 ﻿module lark {
-    export class HtmlAudio extends LarkAudio {
+    export class HtmlAudio extends LarkAudioBase {
         protected audioElement: HTMLAudioElement;
         public load() {
             var audio = new Audio();
@@ -21,6 +21,4 @@
             this.audioElement.play();
         }
     }
-
-    LarkAudio.setDefaultClass(HtmlAudio);
 }
