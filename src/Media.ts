@@ -18,15 +18,16 @@ module lark {
 
         start(texture:Texture) {
 
-            var audio = new HtmlAudio({
+            var audio:LarkMedia = new HtmlAudio({
                 src: "sound/ogg.ogg"
             });
             //var sources = ["sound/ogg.ogg"]
             //audio.sources = sources.map(s=> { return { src: s } });
             audio.load();
 
+            
 
-            //var video = new LarkVideo({ src: "sound/mov_bbb.mp4",width:500});
+            var video = new LarkVideo({ src: "sound/mov_bbb.mp4", width: 500 });
             //this.addChild(video);
             //video.load();
             //window["video"] = video;

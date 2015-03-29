@@ -29,15 +29,27 @@
                 video.appendChild(sourceElement);
             })
 
-            video.addEventListener("loadedmetadata", this.onLoadedMeta);
             video.load();
 
             
             this.domElement = video;
-            //document.body.appendChild(video);
         }
 
-        protected onLoadedMeta = (e) => {
+        protected addListeners() {
+            var video = this.domElement;
+            video.addEventListener("loadstart", e=>this.onEvent("loadstart"));
+            video.addEventListener("loadedmetadata", e=> this.onLoadedMeta(e));
+            video.addEventListener("play", e=> this.onPlay(e));
+            video.addEventListener("playing", e=> this.onPlaying(e));
+            video.addEventListener("canplay", e=> this.onCanPlay(e));
+            video.addEventListener("pause", e=> this.onPause(e));
+            video.addEventListener("ended", e=> this.onEnded(e));
+            video.addEventListener("timeupdate", e=> this.onTimeupdate(e));
+            video.addEventListener("volumechange", e=> this.onVolumeChange(e));
+            video.addEventListener("error", e=> this.onError(e));
+        }
+
+        protected onLoadedMeta(e:SystemEvent) {
             var video = this.domElement;
             video.height = video.videoHeight;
             video.width = video.videoWidth;
