@@ -36,13 +36,13 @@
             this.setVolume(value);
         }
         
-        protected _volume: number;
+        protected _volume: number = 1;
         protected getVolume(): number {
-            return 0;
+            return this._volume;
         }
 
         protected setVolume(value: number) {
-
+            this._volume = value;
         }
 
         public load() {

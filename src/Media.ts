@@ -2,9 +2,11 @@
 
 module lark {
     export class Media extends DisplayObjectContainer {
+        textfield: TextField;
         constructor() {
             super();
             var textfield = new TextField("Hi Audio", { fontSize: 50 });
+            this.textfield = textfield;
             this.addChild(textfield);
             var poster = new Image();
             poster.src = "image/test.png";
@@ -16,21 +18,34 @@ module lark {
 
         start(texture:Texture) {
 
-
-            var audio = new LarkAudio({
-                src: "sound/mp3.mp3"
+            var audio = new HtmlAudio({
+                src: "sound/ogg.ogg"
             });
-            var sources = ["sound/ogg.ogg", "sound/wav.wav", "sound/weba.weba", "sound/opus.upus", "sound/flac.flac", "sound/mp3.mp3"]
-            audio.sources = sources.map(s=> { return { src: s } });
+            //var sources = ["sound/ogg.ogg"]
+            //audio.sources = sources.map(s=> { return { src: s } });
             audio.load();
 
 
-            var video = new LarkVideo({ src: "sound/mov_bbb.mp4",width:500});
-            this.addChild(video);
-            video.load();
-            window["video"] = video;
+            //var video = new LarkVideo({ src: "sound/mov_bbb.mp4",width:500});
+            //this.addChild(video);
+            //video.load();
+            //window["video"] = video;
 
-            this.stage.addEventListener(TouchEvent.TOUCH_BEGIN, e=>video.play(true), this);
+            this.stage.addEventListener(TouchEvent.TOUCH_BEGIN, e=> audio.play(true), this);
+
+            window.addEventListener("mousewheel", e=> {
+                var volume = audio.volume;
+                if (e.wheelDelta > 0)
+                    volume += 0.01;
+                else
+                    volume -= 0.01;
+                if (volume > 1)
+                    volume = 1;
+                else if (volume < 0)
+                    volume = 0;
+                audio.volume = volume;
+                this.textfield.text = volume.toString();
+            });
         }
     }
 

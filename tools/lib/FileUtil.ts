@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-/// <reference path="../lib/node.d.ts"/>
+/// <reference path="node.d.ts"/>
 
 import FS = require("fs");
 import Path = require("path");
