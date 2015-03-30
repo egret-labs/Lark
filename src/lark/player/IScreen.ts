@@ -27,16 +27,19 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player{
+module lark.player {
+
     /**
-     * 触摸事件处理器接口
+     * 屏幕适配管理器接口
      */
-    export interface ITouchHandler  extends IHashObject {
+    export interface IScreen extends IHashObject {
+
         /**
-         * 更新屏幕当前的缩放比例，用于计算准确的点击位置。
-         * @param scaleX 水平方向的缩放比例。
-         * @param scaleY 垂直方向的缩放比例。
+         * 根据当前播放器视口尺寸计算对应的舞台尺寸
+         * @param screenWidth 播放器视口宽度（以像素为单位）
+         * @param screenHeight 播放器视口高度（以像素为单位）
+         * @returns 返回对应的舞台尺寸。
          */
-        updateScaleMode(scaleX:number,scaleY:number):void;
+        calculateStageSize(screenWidth:number,screenHeight:number):Rectangle;
     }
 }

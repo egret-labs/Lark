@@ -36,7 +36,7 @@ module lark.player {
         /**
          * 实例化一个播放器对象。
          */
-        public constructor(renderer:IRenderer, stage:Stage, entryClassName:string,scaleMode:number,touchHandler:ITouchHandler) {
+        public constructor(renderer:IRenderer,screen:IScreen, stage:Stage, entryClassName:string) {
             super();
             if (!renderer) {
                 throw new Error("Lark播放器实例化失败，IRenderer不能为空！");
@@ -44,8 +44,7 @@ module lark.player {
             this.renderer = renderer;
             this.entryClassName = entryClassName;
             this.stage = stage;
-            this.scaleMode = scaleMode;
-            this.touchHandler = touchHandler;
+            this.screen = screen;
         }
 
         private renderer:IRenderer;
@@ -58,11 +57,13 @@ module lark.player {
          */
         private stage:Stage;
         /**
+         * 屏幕适配器
+         */
+        private screen:IScreen;
+        /**
          * 入口类实例
          */
         private root:DisplayObject;
-
-        private touchHandler:ITouchHandler;
 
         private isPlaying:boolean = false;
 
@@ -273,83 +274,26 @@ module lark.player {
         private stageSizeChangedFlag:boolean = false;
 
         /**
-         * 播放器视口宽度
-         */
-        private screenWidth:number = 480;
-        /**
-         * 播放器视口高度
-         */
-        private screenHeight:number = 800;
-        /**
-         * 缩放模式,默认值为StageScaleMode.NO_SCALE。请参考StageScaleMode中定义的值,若设置的值不是StageScaleMode中的值，将会默认采用StageScaleMode.NO_SCALE。
-         */
-        private scaleMode:number = StageScaleMode.NO_SCALE;
-
-        /**
          * 更新播放器视口尺寸
          * @param screenWidth 播放器视口宽度（以像素为单位）
          * @param screenHeight 播放器视口高度（以像素为单位）
          */
         public updateScreenSize(screenWidth:number,screenHeight:number):void{
-            var stage = this.stage
-            var renderer = this.renderer;
-            var displayWidth = this.screenWidth = screenWidth;
-            var displayHeight = this.screenHeight = screenHeight;
-            var width = stage.$stageWidth;
-            var oldWidth = width;
-            var height = stage.$stageHeight;
-            var oldHeight = height;
-            var scaleX = (screenWidth/width)||0;
-            var scaleY = (screenHeight/height)||0;
-            switch(this.scaleMode){
-                case StageScaleMode.EXACT_FIT:
-                    break;
-                case StageScaleMode.FIXED_HEIGHT:
-                    stage.$stageWidth = width = Math.round(screenWidth/scaleY);
-                    break;
-                case StageScaleMode.FIXED_WIDTH:
-                    stage.$stageHeight = height = Math.round(screenHeight/scaleX);
-                    break;
-                case StageScaleMode.NO_BORDER:
-                    if(scaleX>scaleY){
-                        displayHeight = Math.round(height*scaleX);
-                    }
-                    else{
-                        displayWidth = Math.round(width*scaleY);
-                    }
-                    break;
-                case StageScaleMode.SHOW_ALL:
-                    if(scaleX>scaleY){
-                        displayWidth = Math.round(width*scaleY);
-                    }
-                    else{
-                        displayHeight = Math.round(height*scaleX);
-                    }
-                    break;
-                default :
-                    stage.$stageWidth = width = screenWidth;
-                    stage.$stageHeight = height = screenHeight;
-                    break;
-            }
-
-            renderer.updateScreenSize(width,height,displayWidth,displayHeight,screenWidth,screenHeight);
-            this.touchHandler.updateScaleMode(displayWidth/width,displayHeight/height);
-            var sizeChange = (height!==oldHeight||width!==oldWidth);
-            if(sizeChange){
-                this.dirtyRegion = new DirtyRegion(width,height);
+            var stage = this.stage;
+            var stageSize = this.screen.calculateStageSize(screenWidth,screenHeight);
+            if(stageSize.width!==stage.$stageWidth||stageSize.height!==stage.$stageHeight){
+                stage.$stageWidth = stageSize.width;
+                stage.$stageHeight = stageSize.height;
+                this.dirtyRegion = new DirtyRegion(stageSize.width,stageSize.height);
                 this.stageSizeChangedFlag = true;
                 var renderList = this.renderNodeList;
                 var length = renderList.length;
                 for (var i = 0; i < length; i++) {
                     var node = renderList[i];
-                    node.outOfScreen = !node.intersects(0, 0, width, height);
+                    node.outOfScreen = !node.intersects(0, 0, stageSize.width, stageSize.height);
                 }
                 stage.emitWith(Event.RESIZE);
             }
-            if(!this.dirtyRegion){
-                this.dirtyRegion = new DirtyRegion(width,height);
-            }
         }
-
     }
 }

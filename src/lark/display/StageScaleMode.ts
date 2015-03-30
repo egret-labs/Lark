@@ -32,37 +32,37 @@ module lark {
     /**
      * StageScaleMode 类为 Stage.scaleMode 属性提供值。
      */
-    export enum StageScaleMode {
+    export class StageScaleMode {
         /**
          * 不缩放应用程序内容。即使在更改播放器视口大小时，它仍然保持不变。如果播放器视口比内容小，则可能进行一些裁切。
          * 在此模式下，舞台尺寸（Stage.stageWidth,Stage.stageHeight）始终跟播放器视口大小保持一致。
          */
-        NO_SCALE = 1,
+        public static NO_SCALE:string = "noScale";
         /**
          * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容的较宽方向填满播放器视口，另一个方向的两侧可能会不够宽而留有黑边。
          * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
          */
-        SHOW_ALL = 2,
+        public static SHOW_ALL:string = "showAll";
         /**
          * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容的较窄方向填满播放器视口，另一个方向的两侧可能会超出播放器视口而被裁切。
          * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
          */
-        NO_BORDER = 3,
+        public static NO_BORDER:string = "noBorder";
         /**
          * 不保持原始宽高比缩放应用程序内容，缩放后应用程序内容正好填满播放器视口。
          * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
          */
-        EXACT_FIT = 4,
+        public static EXACT_FIT:string = "exactFit";
 
         /**
          * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容在水平和垂直方向都填满播放器视口，但只保持应用程序内容的原始宽度不变，高度可能会改变。
          * 在此模式下，舞台宽度(Stage.stageWidth)始终等于初始化时外部传入的应用程序内容宽度。舞台高度(Stage.stageHeight)由当前的缩放比例与播放器视口高度决定。
          */
-        FIXED_WIDTH = 5,
+        public static FIXED_WIDTH:string = "fixedWidth";
         /**
          * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容在水平和垂直方向都填满播放器视口，但只保持应用程序内容的原始高度不变，宽度可能会改变。
          * 在此模式下，舞台高度(Stage.stageHeight)始终等于初始化时外部传入的应用程序内容高度。舞台宽度(Stage.stageWidth)由当前的缩放比例与播放器视口宽度决定。
          */
-        FIXED_HEIGHT = 6
+        public static FIXED_HEIGHT:string = "fixedHeight";
     }
 }

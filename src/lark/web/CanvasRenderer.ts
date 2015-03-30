@@ -192,30 +192,5 @@ module lark.web {
         public measureText(text:string):number {
             return this.context.measureText(text).width;
         }
-
-        /**
-         * 更新屏幕渲染区域尺寸。
-         * @param width 舞台宽度
-         * @param height 舞台高度
-         * @param displayWidth 舞台缩放后的显示宽度
-         * @param displayHeight 舞台缩放后的显示高度
-         * @param screenWidth 播放器视口宽度
-         * @param screenHeight 播放器视口高度
-         */
-        public updateScreenSize(width:number, height:number, displayWidth:number,
-                                displayHeight:number,screenWidth:number,screenHeight:number):void{
-            var canvas = this.canvas;
-            var container = canvas.parentElement;
-            if(canvas.width!==width){
-                canvas.width = width;
-            }
-            if(canvas.height!==height){
-                canvas.height = height;
-            }
-            canvas.style.width = displayWidth+"px";
-            canvas.style.height = displayHeight+"px";
-            container.style.width = screenWidth+"px";
-            container.style.height = screenHeight+"px";
-        }
     }
 }

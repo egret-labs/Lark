@@ -30,52 +30,56 @@
 module lark.web {
 
     /**
+     * 根据Lark容器获取对应的播放器实例
+     * @param container 在HTML页面中定义Lark容器标签
+     */
+    export function getPlayer(container:HTMLDivElement):lark.player.Player{
+        return container["lark-player"];
+    }
+
+    window.addEventListener("load", createPlayers)
+
+    function createPlayers():void {
+        var list = document.querySelectorAll(".lark-player");
+        var length = list.length;
+        for (var i = 0; i < length; i++) {
+            var container = <HTMLDivElement>list[i];
+            createPlayer(container);
+        }
+    }
+
+    /**
      * Lark网页版程序入口
      */
-    export function createPlayer(container:HTMLElement,entryClassName:string,screenWidth:number=480,screenHeight:number=800,
-                                 stageScaleMode:number=StageScaleMode.NO_SCALE,stageWidth:number=480,stageHeight:number=800):lark.player.Player {
+    function createPlayer(container:HTMLDivElement):void {
 
-        var canvas = createCanvas(container);
-        if(!lark.player.Ticker.$instance){
+        var entryClassName = container.getAttribute("data-entry-class");
+        var contentWidth = +container.getAttribute("data-content-width")||480;
+        var contentHeight = +container.getAttribute("data-content-height")||800;
+        var screenRect = container.getBoundingClientRect();
+        var scaleMode = container.getAttribute("data-scale-mode");
+        var canvasScreen = new CanvasScreen(container,scaleMode,contentWidth,contentHeight);
+        var canvas = canvasScreen.canvas;
+        if (!lark.player.Ticker.$instance) {
             var ticker = lark.player.Ticker.$instance = new lark.player.Ticker();
             startTicker(ticker);
         }
         var stage = new lark.Stage();
-        stage.$stageWidth = stageWidth;
-        stage.$stageHeight = stageHeight;
         var canvasRenderer = new CanvasRenderer(canvas);
-        if(!TextMetrics.$instance){
+        if (!TextMetrics.$instance) {
             TextMetrics.$instance = canvasRenderer;
         }
         HttpClient = WebHttpClinet;
         LarkAudio = (window["AudioContext"] || window["webkitAudioContext"]) ? WebAudio : HtmlAudio;
         LarkVideo = HtmlVideo;
         var touch = new lark.player.TouchHandler(stage);
-        var webTouch = new WebTouchHandler(touch,canvas);
-        var player = new lark.player.Player(canvasRenderer,stage,entryClassName,stageScaleMode,webTouch);
-        player.updateScreenSize(screenWidth,screenHeight);
-        return player;
+        var webTouch = new WebTouchHandler(touch, canvas);
+        var player = new lark.player.Player(canvasRenderer, canvasScreen, stage, entryClassName);
+        container["lark-player"] = player;
+        player.updateScreenSize(screenRect.width,screenRect.height);
+        player.start();
     }
 
-    /**
-     * 创建Canvas实例
-     */
-    function createCanvas(container:HTMLElement):HTMLCanvasElement{
-        var canvas:HTMLCanvasElement = document.createElement("canvas");
-        var style = canvas.style;
-        style.cursor = "default";
-        style.margin = "auto";
-        style.position = "absolute";
-        style.top = "0";
-        style.bottom = "0";
-        style.left = "0";
-        style.right = "0";
-        container.appendChild(canvas);
-        style = container.style;
-        style.overflow = "hidden";
-        style.position = "relative";
-        return canvas;
-    }
     /**
      * 启动心跳计时器。
      */

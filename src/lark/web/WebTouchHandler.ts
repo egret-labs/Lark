@@ -29,7 +29,7 @@
 
 module lark.web {
 
-    export class WebTouchHandler extends HashObject implements lark.player.ITouchHandler{
+    export class WebTouchHandler extends HashObject{
 
         public constructor(touch:lark.player.TouchHandler,canvas:HTMLCanvasElement){
             super();
@@ -62,24 +62,15 @@ module lark.web {
         private getLocation(event:any):Point {
             event.identifier = +event.identifier||0;
             var doc = document.documentElement;
-            var box = this.canvas.getBoundingClientRect();
+            var canvas = this.canvas;
+            var scaleX = canvas.scrollWidth/canvas.width;
+            var scaleY = canvas.scrollHeight/canvas.height;
+            var box = canvas.getBoundingClientRect();
             var left = box.left + window.pageXOffset - doc.clientLeft;
             var top = box.top + window.pageYOffset - doc.clientTop;
-            var x = (event.pageX - left)/this.scaleX;
-            var y = (event.pageY - top)/this.scaleY;
+            var x = (event.pageX - left)/scaleX;
+            var y = (event.pageY - top)/scaleY;
             return Point.TEMP.setTo(x,y);
-        }
-
-        private scaleX:number = 1;
-        private scaleY:number = 1;
-        /**
-         * 更新屏幕当前的缩放比例，用于计算准确的点击位置。
-         * @param scaleX 水平方向的缩放比例。
-         * @param scaleY 垂直方向的缩放比例。
-         */
-        public updateScaleMode(scaleX:number,scaleY:number):void{
-            this.scaleX = scaleX;
-            this.scaleY = scaleY;
         }
     }
 }

@@ -53,7 +53,7 @@ module lark {
             lark.player.Ticker.$instance.$setFrameRate(value);
         }
 
-        $stageWidth:number = 480;
+        $stageWidth:number = 0;
 
         /**
          * 舞台的当前宽度（以像素为单位）。
@@ -62,7 +62,7 @@ module lark {
             return this.$stageWidth;
         }
 
-        $stageHeight:number = 800;
+        $stageHeight:number = 0;
 
         /**
          * 舞台的当前高度（以像素为单位）。

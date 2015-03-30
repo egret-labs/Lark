@@ -11,8 +11,14 @@
     <meta name="x5-fullscreen" content="true"/>
     <meta name="360-fullscreen" content="true"/>
     <style>
-        body { background: #888888; padding: 0; border: 0; margin: 0; }
-        html { -ms-touch-action: none;}
+        html, body {
+            -ms-touch-action: none;
+            background: #888888;
+            padding: 0;
+            border: 0;
+            margin: 0;
+            height: 100%;
+        }
     </style>
     <script src="lark/utils/getDefinitionByName.js"></script>
     <script src="lark/utils/HashObject.js"></script>
@@ -45,6 +51,7 @@
     <script src="lark/web/WebHttpClient.js"></script>
     <script src="lark/utils/HttpUtils.js"></script>
     <script src="lark/text/TextMetrics.js"></script>
+    <script src="lark/web/CanvasScreen.js"></script>
     <script src="lark/web/CanvasRenderer.js"></script>
     <script src="lark/web/WebTouchHandler.js"></script>
     <script src="lark/web/LarkWeb.js"></script>
@@ -70,16 +77,13 @@
     <script src="Media.js"></script>
 </head>
 <body>
-    <div id="lark-container" style="margin: auto;">
-    </div>
-    <script>
-        var entryClass = location.search && location.search.match("main=(.+)") ? location.search.match("main=(.+)")[1] : "lark.Main";
-        var container = document.getElementById("lark-container");
-        var player = lark.web.createPlayer(container, entryClass,window.innerWidth,window.innerHeight,lark.StageScaleMode.FIXED_HEIGHT);
-        window.addEventListener("resize",function(){
-            player.updateScreenSize(window.innerWidth,window.innerHeight);
-        });
-        player.start();
-    </script>
+<div id="lark-sample" style="margin: auto;width: 100%;height: 100%;" class="lark-player"
+     data-entry-class="lark.Main" data-scale-mode="fixedHeight" data-content-width="480" data-content-height="800">
+</div>
+<script>
+    var entryClass = location.search && location.search.match("main=(.+)") ? location.search.match("main=(.+)")[1] : "lark.Main";
+    var container = document.getElementById("lark-sample");
+    container.setAttribute("data-entry-class", entryClass);
+</script>
 </body>
 </html>

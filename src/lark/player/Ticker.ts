@@ -160,8 +160,6 @@ module lark.player {
             Ticker.$requestRenderingFlag = false;
         }
 
-        private reuseEvent:Event = new Event("")
-
         /**
          * 广播EnterFrame事件。
          */
@@ -172,10 +170,8 @@ module lark.player {
                 return;
             }
             list = list.concat();
-            var event = this.reuseEvent;
-            event.$type = Event.ENTER_FRAME;
             for (var i = 0; i < length; i++) {
-                list[i].emit(event);
+                list[i].emitWith(Event.ENTER_FRAME);
             }
         }
 
@@ -189,10 +185,8 @@ module lark.player {
                 return;
             }
             list = list.concat();
-            var event:Event = this.reuseEvent;
-            event.$type = Event.RENDER;
             for (var i = 0; i < length; i++) {
-                list[i].emit(event);
+                list[i].emitWith(Event.RENDER);
             }
         }
     }
