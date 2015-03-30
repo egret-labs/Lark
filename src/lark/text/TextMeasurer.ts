@@ -34,15 +34,15 @@ module lark {
     /**
      * 用于文本宽度测量的辅助类
      */
-    export class TextMetrics {
+    export class TextMeasurer {
 
-        static $instance:lark.player.ITextMetrics;
+        static $instance:lark.player.ITextMeasurer;
 
         /**
          * 测量文本在指定样式下的宽度
          */
         public static measureText(text:string, style:ITextStyle):number {
-            var instance = TextMetrics.$instance;
+            var instance = TextMeasurer.$instance;
             var width = 0.0;
             var fontCache = $TextWidthCache;
             var font = style.toFontString(true);

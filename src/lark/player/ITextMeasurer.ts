@@ -31,7 +31,7 @@ module lark.player {
     /**
      * 文本测量实例接口
      */
-    export interface ITextMetrics {
+    export interface ITextMeasurer {
         /**
          * 设置文本样式
          */

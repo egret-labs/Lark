@@ -31,7 +31,7 @@ module lark.web {
     /**
      * Canvas屏幕渲染器
      */
-    export class CanvasRenderer extends HashObject implements lark.player.IRenderer,lark.player.ITextMetrics {
+    export class CanvasRenderer extends HashObject implements lark.player.IRenderer{
         /**
          * 创建一个Canvas屏幕渲染器
          */
@@ -177,20 +177,6 @@ module lark.web {
             }
             this._fillStyle = value;
             this.context.fillStyle = value;
-        }
-
-        /**
-         * 设置文本样式
-         */
-        public setupFont(style: ITextStyle): void {
-            var font = style.toFontString(true);
-            this.setFont(font);
-        }
-        /**
-         * 测量文本在指定样式下的宽度
-         */
-        public measureText(text:string):number {
-            return this.context.measureText(text).width;
         }
     }
 }

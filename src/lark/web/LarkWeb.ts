@@ -52,10 +52,18 @@ module lark.web {
         return container["lark-player"];
     }
 
+
     /**
      * 网页加载完成，实例化页面中定义的LarkPlayer标签
      */
-    function onLoad():void {
+    function runLark():void {
+        var ticker = lark.player.Ticker.$instance = new lark.player.Ticker();
+        startTicker(ticker);
+        TextMeasurer.$instance = new CanvasTextMeasurer();
+        HttpClient = WebHttpClinet;
+        LarkAudio = (window["AudioContext"] || window["webkitAudioContext"]) ? WebAudio : HtmlAudio;
+        LarkVideo = HtmlVideo;
+
         var list = document.querySelectorAll(".lark-player");
         var length = list.length;
         for (var i = 0; i < length; i++) {
@@ -76,18 +84,8 @@ module lark.web {
         var scaleMode = container.getAttribute("data-scale-mode");
         var canvasScreen = new CanvasScreen(container,scaleMode,contentWidth,contentHeight);
         var canvas = canvasScreen.canvas;
-        if (!lark.player.Ticker.$instance) {
-            var ticker = lark.player.Ticker.$instance = new lark.player.Ticker();
-            startTicker(ticker);
-        }
         var stage = new lark.Stage();
         var canvasRenderer = new CanvasRenderer(canvas);
-        if (!TextMetrics.$instance) {
-            TextMetrics.$instance = canvasRenderer;
-        }
-        HttpClient = WebHttpClinet;
-        LarkAudio = (window["AudioContext"] || window["webkitAudioContext"]) ? WebAudio : HtmlAudio;
-        LarkVideo = HtmlVideo;
         var touch = new lark.player.TouchHandler(stage);
         var webTouch = new WebTouchHandler(touch, canvas);
         var player = new lark.player.Player(canvasRenderer, canvasScreen, stage, entryClassName);
@@ -120,7 +118,7 @@ module lark.web {
         }
     }
 
-    window.addEventListener("load", onLoad);
+    window.addEventListener("load", runLark);
     window.addEventListener("resize",updateScreenSize);
 
 }
