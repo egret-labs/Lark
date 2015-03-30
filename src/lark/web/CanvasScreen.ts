@@ -54,7 +54,7 @@ module lark.web {
         private container:HTMLElement;
 
         /**
-         * 缩放模式,默认值为StageScaleMode.NO_SCALE。请参考StageScaleMode中定义的值,若设置的值不是StageScaleMode中的值，将会默认采用StageScaleMode.NO_SCALE。
+         * 缩放模式,默认值为player.ScaleMode.NO_SCALE。请参考player.ScaleMode中定义的值,若设置的值不是player.ScaleMode中的值，将会默认采用player.ScaleMode.NO_SCALE。
          */
         private scaleMode:string;
 
@@ -98,15 +98,15 @@ module lark.web {
             var scaleX = (screenWidth / stageWidth) || 0;
             var scaleY = (screenHeight / stageHeight) || 0;
             switch (this.scaleMode) {
-                case StageScaleMode.EXACT_FIT:
+                case player.ScaleMode.EXACT_FIT:
                     break;
-                case StageScaleMode.FIXED_HEIGHT:
+                case player.ScaleMode.FIXED_HEIGHT:
                     stageWidth = Math.round(screenWidth / scaleY);
                     break;
-                case StageScaleMode.FIXED_WIDTH:
+                case player.ScaleMode.FIXED_WIDTH:
                     stageHeight = Math.round(screenHeight / scaleX);
                     break;
-                case StageScaleMode.NO_BORDER:
+                case player.ScaleMode.NO_BORDER:
                     if (scaleX > scaleY) {
                         displayHeight = Math.round(stageHeight * scaleX);
                     }
@@ -114,7 +114,7 @@ module lark.web {
                         displayWidth = Math.round(stageWidth * scaleY);
                     }
                     break;
-                case StageScaleMode.SHOW_ALL:
+                case player.ScaleMode.SHOW_ALL:
                     if (scaleX > scaleY) {
                         displayWidth = Math.round(stageWidth * scaleY);
                     }

@@ -28,11 +28,11 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 
-module lark {
+module lark.player {
     /**
      * StageScaleMode 类为 Stage.scaleMode 属性提供值。
      */
-    export class StageScaleMode {
+    export class ScaleMode {
         /**
          * 不缩放应用程序内容。即使在更改播放器视口大小时，它仍然保持不变。如果播放器视口比内容小，则可能进行一些裁切。
          * 在此模式下，舞台尺寸（Stage.stageWidth,Stage.stageHeight）始终跟播放器视口大小保持一致。
