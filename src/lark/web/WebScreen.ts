@@ -32,25 +32,30 @@ module lark.web {
     /**
      * Canvas屏幕适配器
      */
-    export class CanvasScreen extends HashObject implements lark.player.IScreen {
+    export class WebScreen extends HashObject {
 
-
-        public constructor(container:HTMLElement, scaleMode:string, contentWidth:number, contentHeight:number) {
+        /**
+         * 创建一个WebScreen实例
+         * @param container 播放器外层容器
+         * @param scaleMode 舞台缩放模式
+         * @param contentWidth 初始化内容宽度
+         * @param contentHeight 初始化内容高度
+         */
+        public constructor(container:HTMLElement,scaleMode:string, contentWidth:number, contentHeight:number) {
             super();
             this.container = container;
-            this._canvas = this.createCanvas(container);
             this.scaleMode = scaleMode;
             this.contentWidth = contentWidth;
             this.contentHeight = contentHeight;
         }
 
-
-        private _canvas:HTMLCanvasElement;
-
-        public get canvas():HTMLCanvasElement{
-            return this._canvas;
-        }
-
+        /**
+         * 画布实例
+         */
+        private canvas:HTMLCanvasElement;
+        /**
+         * 播放器容器实例
+         */
         private container:HTMLElement;
 
         /**
@@ -58,16 +63,23 @@ module lark.web {
          */
         private scaleMode:string;
 
-        private stageSize:Rectangle = new Rectangle();
-
+        /**
+         * 初始化内容宽度
+         */
         private contentWidth:number;
-
+        /**
+         * 初始化内容高度
+         */
         private contentHeight:number;
 
         /**
          * 创建Canvas实例
          */
-        private createCanvas(container:HTMLElement):HTMLCanvasElement {
+        public createCanvas():HTMLCanvasElement {
+            if(this.canvas){
+                return this.canvas;
+            }
+            var container = this.container;
             var canvas:HTMLCanvasElement = document.createElement("canvas");
             var style = canvas.style;
             style.cursor = "default";
@@ -81,16 +93,17 @@ module lark.web {
             style = container.style;
             style.overflow = "hidden";
             style.position = "relative";
+            this.canvas = canvas;
             return canvas;
         }
 
         /**
          * 更新播放器视口尺寸
-         * @param screenWidth 播放器视口宽度（以像素为单位）
-         * @param screenHeight 播放器视口高度（以像素为单位）
-         * @returns 返回舞台尺寸
          */
-        public calculateStageSize(screenWidth:number, screenHeight:number):Rectangle {
+        public updateScreenSize(player:lark.player.Player,webTouch:WebTouchHandler):void {
+            var screenRect = this.container.getBoundingClientRect();
+            var screenWidth= screenRect.width;
+            var screenHeight = screenRect.height;
             var displayWidth = screenWidth;
             var displayHeight = screenHeight;
             var stageWidth = this.contentWidth;
@@ -98,15 +111,15 @@ module lark.web {
             var scaleX = (screenWidth / stageWidth) || 0;
             var scaleY = (screenHeight / stageHeight) || 0;
             switch (this.scaleMode) {
-                case player.ScaleMode.EXACT_FIT:
+                case lark.player.ScaleMode.EXACT_FIT:
                     break;
-                case player.ScaleMode.FIXED_HEIGHT:
+                case lark.player.ScaleMode.FIXED_HEIGHT:
                     stageWidth = Math.round(screenWidth / scaleY);
                     break;
-                case player.ScaleMode.FIXED_WIDTH:
+                case lark.player.ScaleMode.FIXED_WIDTH:
                     stageHeight = Math.round(screenHeight / scaleX);
                     break;
-                case player.ScaleMode.NO_BORDER:
+                case lark.player.ScaleMode.NO_BORDER:
                     if (scaleX > scaleY) {
                         displayHeight = Math.round(stageHeight * scaleX);
                     }
@@ -114,7 +127,7 @@ module lark.web {
                         displayWidth = Math.round(stageWidth * scaleY);
                     }
                     break;
-                case player.ScaleMode.SHOW_ALL:
+                case lark.player.ScaleMode.SHOW_ALL:
                     if (scaleX > scaleY) {
                         displayWidth = Math.round(stageWidth * scaleY);
                     }
@@ -127,7 +140,7 @@ module lark.web {
                     stageHeight = screenHeight;
                     break;
             }
-            var canvas = this._canvas;
+            var canvas = this.canvas;
             if (canvas.width !== stageWidth) {
                 canvas.width = stageWidth;
             }
@@ -136,7 +149,8 @@ module lark.web {
             }
             canvas.style.width = displayWidth + "px";
             canvas.style.height = displayHeight + "px";
-            return this.stageSize.setTo(0, 0, stageWidth, stageHeight);
+            player.updateStageSize(stageWidth,stageHeight);
+            webTouch.updateScaleMode(displayWidth/stageWidth,displayHeight/stageHeight);
         }
     }
 }

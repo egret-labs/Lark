@@ -36,7 +36,7 @@ module lark.player {
         /**
          * 实例化一个播放器对象。
          */
-        public constructor(renderer:IRenderer,screen:IScreen, stage:Stage, entryClassName:string) {
+        public constructor(renderer:IRenderer, stage:Stage, entryClassName:string) {
             super();
             if (!renderer) {
                 throw new Error("Lark播放器实例化失败，IRenderer不能为空！");
@@ -44,7 +44,6 @@ module lark.player {
             this.renderer = renderer;
             this.entryClassName = entryClassName;
             this.stage = stage;
-            this.screen = screen;
         }
 
         private renderer:IRenderer;
@@ -56,10 +55,6 @@ module lark.player {
          * 舞台引用
          */
         private stage:Stage;
-        /**
-         * 屏幕适配器
-         */
-        private screen:IScreen;
         /**
          * 入口类实例
          */
@@ -129,7 +124,7 @@ module lark.player {
             var t1 = lark.getTimer();
             this.drawCalls = 0;
             if (this.dirtyRatio > 0) {
-                var cleanAll:boolean = (this.dirtyRatio > this.stage.$dirtyRatio)||this.stageSizeChangedFlag;
+                var cleanAll:boolean = (this.dirtyRatio > this.stage.$dirtyRatio) || this.stageSizeChangedFlag;
                 if (!cleanAll) {
                     this.drawDirtyRect();
                 }
@@ -218,7 +213,7 @@ module lark.player {
             if (cleanAll) {
                 this.stageSizeChangedFlag = false;
             }
-            else{
+            else {
                 this.renderer.endDrawScreen();
             }
             this.dirtyRegion.clear();
@@ -274,23 +269,22 @@ module lark.player {
         private stageSizeChangedFlag:boolean = false;
 
         /**
-         * 更新播放器视口尺寸
-         * @param screenWidth 播放器视口宽度（以像素为单位）
-         * @param screenHeight 播放器视口高度（以像素为单位）
+         * 更新舞台尺寸
+         * @param stageWidth 舞台宽度（以像素为单位）
+         * @param stageHeight 舞台高度（以像素为单位）
          */
-        public updateScreenSize(screenWidth:number,screenHeight:number):void{
+        public updateStageSize(stageWidth:number, stageHeight:number):void {
             var stage = this.stage;
-            var stageSize = this.screen.calculateStageSize(screenWidth,screenHeight);
-            if(stageSize.width!==stage.$stageWidth||stageSize.height!==stage.$stageHeight){
-                stage.$stageWidth = stageSize.width;
-                stage.$stageHeight = stageSize.height;
-                this.dirtyRegion = new DirtyRegion(stageSize.width,stageSize.height);
+            if (stageWidth !== stage.$stageWidth || stageHeight !== stage.$stageHeight) {
+                stage.$stageWidth = stageWidth;
+                stage.$stageHeight = stageHeight;
+                this.dirtyRegion = new DirtyRegion(stageWidth, stageHeight);
                 this.stageSizeChangedFlag = true;
                 var renderList = this.renderNodeList;
                 var length = renderList.length;
                 for (var i = 0; i < length; i++) {
                     var node = renderList[i];
-                    node.outOfScreen = !node.intersects(0, 0, stageSize.width, stageSize.height);
+                    node.outOfScreen = !node.intersects(0, 0, stageWidth, stageHeight);
                 }
                 stage.emitWith(Event.RESIZE);
             }
