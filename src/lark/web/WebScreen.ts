@@ -102,44 +102,12 @@ module lark.web {
          */
         public updateScreenSize(player:lark.player.Player,webTouch:WebTouchHandler):void {
             var screenRect = this.container.getBoundingClientRect();
-            var screenWidth= screenRect.width;
-            var screenHeight = screenRect.height;
-            var displayWidth = screenWidth;
-            var displayHeight = screenHeight;
-            var stageWidth = this.contentWidth;
-            var stageHeight = this.contentHeight;
-            var scaleX = (screenWidth / stageWidth) || 0;
-            var scaleY = (screenHeight / stageHeight) || 0;
-            switch (this.scaleMode) {
-                case lark.player.ScaleMode.EXACT_FIT:
-                    break;
-                case lark.player.ScaleMode.FIXED_HEIGHT:
-                    stageWidth = Math.round(screenWidth / scaleY);
-                    break;
-                case lark.player.ScaleMode.FIXED_WIDTH:
-                    stageHeight = Math.round(screenHeight / scaleX);
-                    break;
-                case lark.player.ScaleMode.NO_BORDER:
-                    if (scaleX > scaleY) {
-                        displayHeight = Math.round(stageHeight * scaleX);
-                    }
-                    else {
-                        displayWidth = Math.round(stageWidth * scaleY);
-                    }
-                    break;
-                case lark.player.ScaleMode.SHOW_ALL:
-                    if (scaleX > scaleY) {
-                        displayWidth = Math.round(stageWidth * scaleY);
-                    }
-                    else {
-                        displayHeight = Math.round(stageHeight * scaleX);
-                    }
-                    break;
-                default :
-                    stageWidth = screenWidth;
-                    stageHeight = screenHeight;
-                    break;
-            }
+            var stageSize = lark.player.screenAdapter.calculateStageSize(this.scaleMode,
+                screenRect.width,screenRect.height,this.contentWidth,this.contentHeight);
+            var stageWidth = stageSize.stageWidth;
+            var stageHeight = stageSize.stageHeight;
+            var displayWidth = stageSize.displayWidth;
+            var displayHeight = stageSize.displayHeight;
             var canvas = this.canvas;
             if (canvas.width !== stageWidth) {
                 canvas.width = stageWidth;

@@ -53,6 +53,9 @@ module lark.web {
         var ticker = lark.player.Ticker.$instance = new lark.player.Ticker();
         startTicker(ticker);
         TextMeasurer.$instance = new CanvasTextMeasurer();
+        if(!lark.player.screenAdapter){
+            lark.player.screenAdapter = new lark.player.ScreenAdapter();
+        }
         HttpClient = WebHttpClinet;
         LarkAudio = (window["AudioContext"] || window["webkitAudioContext"]) ? WebAudio : HtmlAudio;
         LarkVideo = HtmlVideo;
