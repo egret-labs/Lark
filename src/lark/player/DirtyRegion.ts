@@ -68,6 +68,10 @@ module lark.player {
             if (minX >= maxX || minY >= maxY) {
                 return;
             }
+            minX = Math.floor(minX);
+            minY = Math.floor(minY);
+            maxX = Math.ceil(maxX);
+            maxY = Math.ceil(maxY);
             if (minX < 0) {
                 minX = 0;
             }
