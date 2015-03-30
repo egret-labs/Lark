@@ -42,6 +42,13 @@ module lark {
                 audio.volume = volume;
                 this.textfield.text = volume.toString();
             });
+
+            var acc = new Accelerometer();
+            acc.on("change",this.showOrg, this);
+        }
+
+        showOrg(e: AccelerometerEvent) {
+            this.textfield.text = " x:" + e.x.toFixed(1) + "\ny:" + e.y.toFixed(1) + "\nz:" + e.z.toFixed(1);
         }
     }
 

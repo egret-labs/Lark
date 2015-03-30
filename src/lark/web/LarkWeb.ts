@@ -63,6 +63,7 @@ module lark.web {
         HttpClient = WebHttpClinet;
         LarkAudio = (window["AudioContext"] || window["webkitAudioContext"]) ? WebAudio : HtmlAudio;
         LarkVideo = HtmlVideo;
+        Accelerometer = WebAccelerometer;
 
         var list = document.querySelectorAll(".lark-player");
         var length = list.length;
