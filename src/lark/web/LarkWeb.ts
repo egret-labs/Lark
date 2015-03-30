@@ -39,19 +39,12 @@ module lark.web {
         var length = containerList.length;
         for(var i=0;i<length;i++){
             var container = containerList[i];
-            var player = getPlayer(container);
-            var screenRect = container.getBoundingClientRect();
-            player.updateScreenSize(screenRect.width,screenRect.height);
-        }
+            var player = <lark.player.Player>container["lark-player"];
+            var webTouch = <WebTouchHandler>container["lark-touch"];
+            var webScreen = <WebScreen>container["lark-screen"];
+            webScreen.updateScreenSize(player,webTouch);
     }
-    /**
-     * 根据Lark容器获取对应的播放器实例
-     * @param container 在HTML页面中定义Lark容器标签
-     */
-    export function getPlayer(container:HTMLDivElement):lark.player.Player{
-        return container["lark-player"];
     }
-
 
     /**
      * 网页加载完成，实例化页面中定义的LarkPlayer标签
@@ -81,17 +74,18 @@ module lark.web {
         var entryClassName = container.getAttribute("data-entry-class");
         var contentWidth = +container.getAttribute("data-content-width")||480;
         var contentHeight = +container.getAttribute("data-content-height")||800;
-        var screenRect = container.getBoundingClientRect();
         var scaleMode = container.getAttribute("data-scale-mode");
-        var canvasScreen = new CanvasScreen(container,scaleMode,contentWidth,contentHeight);
-        var canvas = canvasScreen.canvas;
+        var webScreen = new WebScreen(container,scaleMode,contentWidth,contentHeight);
+        var canvas = webScreen.createCanvas();
         var stage = new lark.Stage();
         var canvasRenderer = new CanvasRenderer(canvas);
         var touch = new lark.player.TouchHandler(stage);
         var webTouch = new WebTouchHandler(touch, canvas);
-        var player = new lark.player.Player(canvasRenderer, canvasScreen, stage, entryClassName);
+        var player = new lark.player.Player(canvasRenderer, stage, entryClassName);
         container["lark-player"] = player;
-        player.updateScreenSize(screenRect.width,screenRect.height);
+        container["lark-touch"] = webTouch;
+        container["lark-screen"] = webScreen;
+        webScreen.updateScreenSize(player,webTouch);
         player.start();
     }
 
