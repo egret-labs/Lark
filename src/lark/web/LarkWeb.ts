@@ -43,7 +43,7 @@ module lark.web {
             var webTouch = <WebTouchHandler>container["lark-touch"];
             var webScreen = <WebScreen>container["lark-screen"];
             webScreen.updateScreenSize(player,webTouch);
-        }
+    }
     }
 
     /**
@@ -59,6 +59,7 @@ module lark.web {
         HttpClient = WebHttpClinet;
         LarkAudio = (window["AudioContext"] || window["webkitAudioContext"]) ? WebAudio : HtmlAudio;
         LarkVideo = HtmlVideo;
+        Accelerometer = WebAccelerometer;
 
         var list = document.querySelectorAll(".lark-player");
         var length = list.length;
