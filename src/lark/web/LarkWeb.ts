@@ -29,6 +29,7 @@
 
 module lark.web {
 
+    var containerList:HTMLDivElement[] = [];
     /**
      * 根据Lark容器获取对应的播放器实例
      * @param container 在HTML页面中定义Lark容器标签
@@ -37,9 +38,10 @@ module lark.web {
         return container["lark-player"];
     }
 
-    window.addEventListener("load", createPlayers)
-
-    function createPlayers():void {
+    /**
+     * 网页加载完成，实例化页面中定义的LarkPlayer标签
+     */
+    function onLoad():void {
         var list = document.querySelectorAll(".lark-player");
         var length = list.length;
         for (var i = 0; i < length; i++) {
@@ -52,7 +54,7 @@ module lark.web {
      * Lark网页版程序入口
      */
     function createPlayer(container:HTMLDivElement):void {
-
+        containerList.push(container);
         var entryClassName = container.getAttribute("data-entry-class");
         var contentWidth = +container.getAttribute("data-content-width")||480;
         var contentHeight = +container.getAttribute("data-content-height")||800;
@@ -103,4 +105,18 @@ module lark.web {
             requestAnimationFrame.call(window, onTick)
         }
     }
+
+    function onResize():void{
+        var length = containerList.length;
+        for(var i=0;i<length;i++){
+            var container = containerList[i];
+            var player = getPlayer(container);
+            var screenRect = container.getBoundingClientRect();
+            player.updateScreenSize(screenRect.width,screenRect.height);
+        }
+    }
+
+    window.addEventListener("load", onLoad);
+    window.addEventListener("resize",onResize);
+
 }

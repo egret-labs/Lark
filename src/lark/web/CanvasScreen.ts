@@ -128,7 +128,6 @@ module lark.web {
                     break;
             }
             var canvas = this._canvas;
-            var container = canvas.parentElement;
             if (canvas.width !== stageWidth) {
                 canvas.width = stageWidth;
             }
@@ -137,8 +136,6 @@ module lark.web {
             }
             canvas.style.width = displayWidth + "px";
             canvas.style.height = displayHeight + "px";
-            container.style.width = screenWidth + "px";
-            container.style.height = screenHeight + "px";
             return this.stageSize.setTo(0, 0, stageWidth, stageHeight);
         }
     }
