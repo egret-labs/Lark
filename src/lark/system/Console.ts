@@ -27,13 +27,22 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.web {
+declare module lark {
 
-    export class WebDetection {
-
-        public static run():void {
-            var ua = navigator.userAgent.toLowerCase();
-            Capabilities.$isMobile = (ua.indexOf('mobile') != -1 || ua.indexOf('android') != -1);
-        }
-    }
+    /**
+     * 判断第一个参数是否为true，若为false则抛出异常并且在console输出相应信息。
+     */
+    function assert(test?:boolean, message?:string, ...optionalParams:any[]):void;
+    /**
+     * 打印一个警告信息，传入多个参数会输出以空格分隔的字符串。
+     */
+    function warn(message?:any, ...optionalParams:any[]):void;
+    /**
+     * 打印一条错误信息,传入多个参数会输出以空格分隔的字符串。
+     */
+    function error(message?:any, ...optionalParams:any[]): void;
+    /**
+     * 打印字符串,传入多个参数会输出以空格分隔的字符串。
+     */
+    function log(message?:any, ...optionalParams:any[]):void;
 }
