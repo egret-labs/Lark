@@ -11,7 +11,8 @@ module lark {
             var poster = new Image();
             poster.src = "image/test.png";
             poster.onload = () => {
-                var texture = new Texture(poster);
+                var texture = new Texture();
+                texture.$setBitmapData(poster);
                 this.start(texture);
             }
         }
