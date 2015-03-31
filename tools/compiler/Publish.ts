@@ -29,7 +29,7 @@
 
 import TypeScript = require("../lib/typescript/tsc");
 import FileUtil = require("../lib/FileUtil");
-
+import UglifyJS = require("../lib/uglify-js/tools/uglifyjs");
 class Publish {
 
     public constructor(projectDir:string) {
@@ -65,6 +65,13 @@ class Publish {
         FileUtil.save("tsc_config_temp.txt", cmd);
         TypeScript.exit = function ():void {
             FileUtil.remove("tsc_config_temp.txt");
+            var defines = {
+                DEBUG: false,
+                RELEASE:true
+            }
+            var result = UglifyJS.minify(output,{compress:{global_defs:defines}});
+            FileUtil.save(output,result.code);
+            FileUtil.save(output+".map",result.map);
         };
         TypeScript.executeCommandLine(["@tsc_config_temp.txt"]);
     }

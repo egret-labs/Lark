@@ -28,6 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 var TypeScript = require("../lib/typescript/tsc");
 var FileUtil = require("../lib/FileUtil");
+var UglifyJS = require("../lib/uglify-js/tools/uglifyjs");
 var Publish = (function () {
     function Publish(projectDir) {
         this.projectDir = projectDir;
@@ -58,6 +59,13 @@ var Publish = (function () {
         FileUtil.save("tsc_config_temp.txt", cmd);
         TypeScript.exit = function () {
             FileUtil.remove("tsc_config_temp.txt");
+            var defines = {
+                DEBUG: false,
+                RELEASE: true
+            };
+            var result = UglifyJS.minify(output, { compress: { global_defs: defines } });
+            FileUtil.save(output, result.code);
+            FileUtil.save(output + ".map", result.map);
         };
         TypeScript.executeCommandLine(["@tsc_config_temp.txt"]);
     };
