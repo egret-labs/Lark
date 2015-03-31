@@ -26,17 +26,11 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
+module lark {
 
-module lark.web {
+    $locale_strings = $locale_strings||{};
+    var locale_strings = $locale_strings;
 
-    export class WebCapability {
-        /**
-         * 检测系统属性
-         */
-        public static detect():void {
-            var ua = navigator.userAgent.toLowerCase();
-            Capabilities.$isMobile = (ua.indexOf('mobile') != -1 || ua.indexOf('android') != -1);
-        }
 
-    }
+    locale_strings[1010] = "addEventListener listener function should not be empty";
 }

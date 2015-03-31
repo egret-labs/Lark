@@ -27,16 +27,12 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.web {
+module lark {
 
-    export class WebCapability {
-        /**
-         * 检测系统属性
-         */
-        public static detect():void {
-            var ua = navigator.userAgent.toLowerCase();
-            Capabilities.$isMobile = (ua.indexOf('mobile') != -1 || ua.indexOf('android') != -1);
-        }
+    $locale_strings = $locale_strings||{};
+    var locale_strings = $locale_strings;
 
-    }
+
+    locale_strings[1007] = "提供的索引超出范围";
+    locale_strings[1010] = "addEventListener侦听函数不能为空";
 }

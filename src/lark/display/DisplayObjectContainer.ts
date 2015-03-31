@@ -228,7 +228,9 @@ module lark {
                 return this.$doRemoveChild(index);
             }
             else {
-                //lark.Logger.fatalWithErrorId(1007);
+                if(DEBUG){
+                    error(tr(1007));
+                }
                 return null;
             }
         }

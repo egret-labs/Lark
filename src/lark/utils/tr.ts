@@ -27,16 +27,25 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.web {
+module lark {
 
-    export class WebCapability {
-        /**
-         * 检测系统属性
-         */
-        public static detect():void {
-            var ua = navigator.userAgent.toLowerCase();
-            Capabilities.$isMobile = (ua.indexOf('mobile') != -1 || ua.indexOf('android') != -1);
+    export var $locale_strings:any = $locale_strings||{};
+
+    /**
+     * 全局多语言翻译函数
+     * @param code 要查询的字符串代码
+     * @param args 替换字符串中{0}标志的参数列表
+     * @returns 返回拼接后的字符串
+     */
+    export function tr(code:number,...args):string{
+        var text = $locale_strings[code];
+        if(!text){
+            return "lark_string_code:"+code;
         }
-
+        var length = args.length;
+        for(var i=0;i<length;i++){
+            text = text.replace("{" + i + "}", args[i]);
+        }
+        return text;
     }
 }
