@@ -32,7 +32,9 @@ module lark {
     $locale_strings = $locale_strings||{};
     var locale_strings = $locale_strings;
 
-
+    locale_strings[1004] = "一个显示对象不能被添加为它的子项(或子孙项)的子项";
+    locale_strings[1005] = "一个显示对象不能添加自身为子项";
+    locale_strings[1006] = "child不在当前容器内";
     locale_strings[1007] = "提供的索引超出范围";
-    locale_strings[1010] = "addEventListener侦听函数不能为空";
+    locale_strings[1008] = "child未被addChild到该parent";
 }

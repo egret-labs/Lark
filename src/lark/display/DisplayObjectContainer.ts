@@ -99,11 +99,19 @@ module lark {
         }
 
         $doAddChild(child:DisplayObject, index:number, notifyListeners:boolean = true):DisplayObject {
-            if (child == this)
-                return child;
+            if(DEBUG){
+                if (child == this)
+                {
+                    error(tr(1005));
+                }
+                else if(child instanceof DisplayObjectContainer&&(<DisplayObjectContainer>child).contains(this)){
+                    error(tr(1004))
+                }
+            }
+
 
             if (index < 0 || index > this.$children.length) {
-                //lark.Logger.fatalWithErrorId(1007);
+                DEBUG&&error(tr(1007));
                 return child;
             }
 
@@ -170,7 +178,7 @@ module lark {
                 return this.$children[index];
             }
             else {
-                //lark.Logger.fatalWithErrorId(1007);
+                DEBUG&&error(tr(1007));
                 return null;
             }
         }
@@ -212,7 +220,7 @@ module lark {
                 return this.$doRemoveChild(index);
             }
             else {
-                //lark.Logger.fatalWithErrorId(1008);
+                DEBUG&&error(tr(1008));
                 return null;
             }
         }
@@ -228,9 +236,7 @@ module lark {
                 return this.$doRemoveChild(index);
             }
             else {
-                if(DEBUG){
-                    error(tr(1007));
-                }
+                DEBUG&&error(tr(1007));
                 return null;
             }
         }
@@ -274,7 +280,7 @@ module lark {
         private doSetChildIndex(child:DisplayObject, index:number):void {
             var lastIdx = this.$children.indexOf(child);
             if (lastIdx < 0) {
-                //lark.Logger.fatalWithErrorId(1006);
+                DEBUG&&error(tr(1006));
             }
             //从原来的位置删除
             this.$children.splice(lastIdx, 1);
@@ -301,7 +307,7 @@ module lark {
                 this.doSwapChildrenAt(index1, index2);
             }
             else {
-                //lark.Logger.fatalWithErrorId(1007);
+                DEBUG&&error(tr(1007));
             }
 
         }
@@ -315,7 +321,7 @@ module lark {
             var index1:number = this.$children.indexOf(child1);
             var index2:number = this.$children.indexOf(child2);
             if (index1 == -1 || index2 == -1) {
-                //lark.Logger.fatalWithErrorId(1008);
+                DEBUG&&error(tr(1008));
             }
             else {
                 this.doSwapChildrenAt(index1, index2);

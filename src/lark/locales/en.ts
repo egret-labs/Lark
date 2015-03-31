@@ -31,6 +31,11 @@ module lark {
     $locale_strings = $locale_strings||{};
     var locale_strings = $locale_strings;
 
+    locale_strings[1004] = "An object cannot be added as a child to one of it's children (or children's children, etc.)";
+    locale_strings[1005] = "An object cannot be added as a child of itself";
+    locale_strings[1006] = "child is not in current container";
+    locale_strings[1007] = "The provided index is out of range";
+    locale_strings[1008] = "child is not be add to parent by addChild";
 
-    locale_strings[1010] = "addEventListener listener function should not be empty";
+
 }

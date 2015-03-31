@@ -42,7 +42,6 @@
 //
 //  console.log("release");
 //
-//注意：由于uglifyjs编译器原因，自动删除代码的功能暂时只对 if(DEBUG){doSomething()} 的写法有效，不能写成 DEBUG&&doSomething()
 
 declare var DEBUG:boolean;
 declare var RELEASE:boolean;
