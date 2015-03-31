@@ -827,7 +827,7 @@ module lark {
 //    /**
 //     * 碰撞检测类型
 //     */
-//    export enum HitTestingType {
+//    export const enum HitTestingType {
 //        HitTestBounds,
 //        HitTestShape,
 //        Mouse,

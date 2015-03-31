@@ -32,7 +32,7 @@ module lark {
     /**
      * EventPhase 可为 Event 类的 eventPhase 属性提供值。
      */
-    export enum EventPhase{
+    export const enum EventPhase{
 
         /**
          * 捕获阶段，是事件流的第一个阶段。
