@@ -59,13 +59,11 @@ module lark.web {
                     this.prevent(event);
                 }, false);
             }
-            else if (Capabilities.isMobile) {
-                this.addTouchListener();
-
-            }
             else {
+                if (!Capabilities.isMobile) {
+                    this.addMouseListener();
+                }
                 this.addTouchListener();
-                this.addMouseListener();
             }
         }
 
