@@ -128,14 +128,14 @@ module lark {
 
             }
             if (notifyListeners) {
-                //child.emit(Event.ADDED, true);
+                child.emitWith(Event.ADDED, true);
             }
             if(stage){
                 var list = DisplayObjectContainer.$EVENT_ADD_TO_STAGE_LIST;
                 while (list.length) {
                     var childAddToStage = list.shift();
                     if (notifyListeners&&childAddToStage.$stage) {
-                        //childAddToStage.emitWith(Event.ADDED_TO_STAGE);
+                        childAddToStage.emitWith(Event.ADDED_TO_STAGE);
                     }
                 }
             }
@@ -238,7 +238,7 @@ module lark {
             var children = this.$children;
             var child:DisplayObject = children[index];
             if (notifyListeners) {
-                //child.emitWidth(Event.REMOVED, true);
+                child.emitWith(Event.REMOVED, true);
             }
 
             if (this.$stage) {//在舞台上
@@ -247,7 +247,7 @@ module lark {
                 while (list.length > 0) {
                     var childAddToStage = list.shift();
                     if (notifyListeners) {
-                        // childAddToStage.emitWidth(Event.REMOVED_FROM_STAGE);
+                        childAddToStage.emitWith(Event.REMOVED_FROM_STAGE);
                     }
                     childAddToStage.$stage = null;
                 }
