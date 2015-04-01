@@ -55,25 +55,12 @@ module lark.player {
         drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number): void;
 
         /**
-         * 重置所有属性
+         * 绘制脏矩形列表
          */
-        reset():void;
-
-        /**
-         * 开始绘制脏矩形
-         */
-        beginDrawDirtyRect():void;
-        /**
-         * 绘制一个脏矩形
-         */
-        drawDirtyRect(x:number, y:number, width:number, height:number):void;
+        drawDirtyRects(regionList:Region[]):void;
         /**
          * 结束脏矩形绘制
          */
-        endDrawDirtyRect():void;
-        /**
-         * 结束屏幕绘制
-         */
-        endDrawScreen():void;
+        removeDirtyRects():void;
     }
 }
