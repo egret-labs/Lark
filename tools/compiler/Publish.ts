@@ -29,7 +29,7 @@
 
 import TypeScript = require("../lib/typescript/tsc");
 import FileUtil = require("../lib/FileUtil");
-import UglifyJS = require("../lib/uglify-js/tools/uglifyjs");
+import UglifyJS = require("../lib/uglify-js/uglifyjs");
 class Publish {
 
     public constructor(projectDir:string) {
