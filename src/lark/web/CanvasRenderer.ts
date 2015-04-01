@@ -37,8 +37,8 @@ module lark.web {
          */
         public constructor(canvas:HTMLCanvasElement) {
             super();
-            if (!canvas) {
-                throw new Error("CanvasRenderer实例化失败，canvas参数不能为空！");
+            if (DEBUG&&!canvas) {
+                $error(1003,"canvas");
             }
             this.canvas = canvas;
             this.context = canvas.getContext("2d");

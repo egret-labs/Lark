@@ -46,8 +46,8 @@ module lark.player {
         static $requestRenderingFlag:boolean = false;
 
         public constructor() {
-            if (Ticker.$instance) {
-                throw new Error("Ticker实例化出错！不允许实例化多个Ticker对象。");
+            if (DEBUG&&Ticker.$instance) {
+                $error(1008,"lark.player.Ticker");
             }
             lark.$START_TIME = Date.now();
         }

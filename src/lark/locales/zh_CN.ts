@@ -32,8 +32,12 @@ module lark {
     $locale_strings = $locale_strings||{};
     var locale_strings = $locale_strings;
 
+    locale_strings[1001] = "找不到Lark入口类: {0}。";
+    locale_strings[1002] = "Lark入口类 {0} 必须继承自lark.DisplayObject。";
+    locale_strings[1003] = "参数 {0} 不能为 null。";
     locale_strings[1004] = "无法将对象添加为它的一个子对象（或子对象的子对象等）的子对象。";
     locale_strings[1005] = "不能将对象添加为其自身的子对象。";
     locale_strings[1006] = "提供的 DisplayObject 必须是调用者的子级。";
     locale_strings[1007] = "为参数指定的索引不在范围内。";
+    locale_strings[1008] = "实例化单例出错，不允许实例化多个 {0} 对象。";
 }

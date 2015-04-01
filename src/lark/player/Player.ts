@@ -38,8 +38,8 @@ module lark.player {
          */
         public constructor(renderer:IRenderer, stage:Stage, entryClassName:string) {
             super();
-            if (!renderer) {
-                throw new Error("Lark播放器实例化失败，IRenderer不能为空！");
+            if (DEBUG&&!renderer) {
+                $error(1003,"renderer");
             }
             this.renderer = renderer;
             this.entryClassName = entryClassName;
@@ -88,11 +88,11 @@ module lark.player {
                     this.stage.addChild(rootContainer);
                 }
                 else {
-                    throw new Error("Lark入口类必须是lark.DisplayObject的子类: " + this.entryClassName);
+                    DEBUG&&$error(1002,this.entryClassName);
                 }
             }
             else {
-                throw new Error("找不到Lark入口类: " + this.entryClassName);
+                DEBUG&&$error(1001,this.entryClassName);
             }
         }
 
