@@ -32,9 +32,8 @@ module lark {
     $locale_strings = $locale_strings||{};
     var locale_strings = $locale_strings;
 
-    locale_strings[1004] = "一个显示对象不能被添加为它的子项(或子孙项)的子项";
-    locale_strings[1005] = "一个显示对象不能添加自身为子项";
-    locale_strings[1006] = "child不在当前容器内";
-    locale_strings[1007] = "提供的索引超出范围";
-    locale_strings[1008] = "child未被addChild到该parent";
+    locale_strings[1004] = "无法将对象添加为它的一个子对象（或子对象的子对象等）的子对象。";
+    locale_strings[1005] = "不能将对象添加为其自身的子对象。";
+    locale_strings[1006] = "提供的 DisplayObject 必须是调用者的子级。";
+    locale_strings[1007] = "为参数指定的索引不在范围内。";
 }

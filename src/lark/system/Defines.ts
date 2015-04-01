@@ -48,3 +48,16 @@ declare var RELEASE:boolean;
 
 this["DEBUG"] = true;
 this["RELEASE"] = false;
+
+module lark {
+
+    export function $error(code:number,...params:any[]):void{
+        var text:string = lark.tr.apply(null,arguments);
+        error("Error #"+code+": "+text);
+    }
+
+    export function $warn(code:number,...params:any[]):void{
+        var text:string = lark.tr.apply(null,arguments);
+        warn("Warning #"+code+": "+text);
+    }
+}

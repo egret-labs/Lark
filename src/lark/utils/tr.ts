@@ -40,7 +40,7 @@ module lark {
     export function tr(code:number,...args):string{
         var text = $locale_strings[code];
         if(!text){
-            return "lark_string_code:"+code;
+            return "{"+code+"}";
         }
         var length = args.length;
         for(var i=0;i<length;i++){
