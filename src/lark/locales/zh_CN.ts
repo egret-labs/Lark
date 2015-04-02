@@ -27,40 +27,17 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark {
 
-    /**
-     * IPlayerContext接口定义Lark播放器与平台相关的操作，包括绘制，网络，交互操作等。
-     */
-    export interface IRenderer extends IHashObject {
+    $locale_strings = $locale_strings||{};
+    var locale_strings = $locale_strings;
 
-        /**
-         * 清除整个屏幕
-         */
-        clearScreen():void;
-
-        /**
-         * 清除屏幕的部分渲染区域
-         */
-        clearRect(x:number, y:number, width:number, height:number):void;
-
-        /**
-         * 绘制图片到一个区域上
-         */
-        drawImage(texture:Texture, matrix:Matrix, globalAlpha:number): void;
-
-        /**
-         * 绘制文本到一个区域上
-         */
-        drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number): void;
-
-        /**
-         * 绘制脏矩形列表
-         */
-        drawDirtyRects(regionList:Region[]):void;
-        /**
-         * 结束脏矩形绘制
-         */
-        removeDirtyRects():void;
-    }
+    locale_strings[1001] = "找不到Lark入口类: {0}。";
+    locale_strings[1002] = "Lark入口类 {0} 必须继承自lark.DisplayObject。";
+    locale_strings[1003] = "参数 {0} 不能为 null。";
+    locale_strings[1004] = "无法将对象添加为它的一个子对象（或子对象的子对象等）的子对象。";
+    locale_strings[1005] = "不能将对象添加为其自身的子对象。";
+    locale_strings[1006] = "提供的 DisplayObject 必须是调用者的子级。";
+    locale_strings[1007] = "为参数指定的索引不在范围内。";
+    locale_strings[1008] = "实例化单例出错，不允许实例化多个 {0} 对象。";
 }

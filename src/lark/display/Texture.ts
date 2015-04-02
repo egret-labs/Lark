@@ -41,10 +41,8 @@ module lark {
         /**
          * 创建一个 lark.Texture 对象
          */
-        public constructor(bitmapData?: { width: number;height:number}) {
+        public constructor() {
             super();
-            if (bitmapData)
-                this.$setBitmapData(bitmapData);
         }
 
         /**

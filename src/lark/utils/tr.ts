@@ -27,40 +27,25 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark {
+
+    export var $locale_strings:any = $locale_strings||{};
 
     /**
-     * IPlayerContext接口定义Lark播放器与平台相关的操作，包括绘制，网络，交互操作等。
+     * 全局多语言翻译函数
+     * @param code 要查询的字符串代码
+     * @param args 替换字符串中{0}标志的参数列表
+     * @returns 返回拼接后的字符串
      */
-    export interface IRenderer extends IHashObject {
-
-        /**
-         * 清除整个屏幕
-         */
-        clearScreen():void;
-
-        /**
-         * 清除屏幕的部分渲染区域
-         */
-        clearRect(x:number, y:number, width:number, height:number):void;
-
-        /**
-         * 绘制图片到一个区域上
-         */
-        drawImage(texture:Texture, matrix:Matrix, globalAlpha:number): void;
-
-        /**
-         * 绘制文本到一个区域上
-         */
-        drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number): void;
-
-        /**
-         * 绘制脏矩形列表
-         */
-        drawDirtyRects(regionList:Region[]):void;
-        /**
-         * 结束脏矩形绘制
-         */
-        removeDirtyRects():void;
+    export function tr(code:number,...args):string{
+        var text = $locale_strings[code];
+        if(!text){
+            return "{"+code+"}";
+        }
+        var length = args.length;
+        for(var i=0;i<length;i++){
+            text = text.replace("{" + i + "}", args[i]);
+        }
+        return text;
     }
 }

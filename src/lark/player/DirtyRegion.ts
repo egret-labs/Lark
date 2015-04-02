@@ -92,7 +92,7 @@ module lark.player {
             for (var x = startX; x < endX; x++) {
                 for (var y = startY; y < endY; y++) {
                     var region = grid[x][y];
-                    region.union(minX, minY, maxX, maxY);
+                    region.$union(minX, minY, maxX, maxY);
                 }
             }
         }
@@ -103,10 +103,10 @@ module lark.player {
             var areas:number = 0;
             for (var x = 0; x < this.c; x++) {
                 for (var y = 0; y < this.r; y++) {
-                    var region = this.grid[x][y];
-                    if (!region.isEmpty()) {
+                    var region = this.grid[x][y].$update();
+                    if (!region.$isEmpty()) {
                         regions.push(region);
-                        areas += region.area();
+                        areas += region.$area();
                     }
                 }
             }
@@ -137,6 +137,8 @@ module lark.player {
         public maxX:number;
         public maxY:number;
 
+        public width:number;
+        public height:number;
 
         private empty:boolean = false;
 
@@ -145,18 +147,24 @@ module lark.player {
             this.minX = this.minY = this.maxX = this.maxY = 0;
         }
 
-        public isEmpty():boolean {
-            return (this.minX >= this.maxX || this.minY >= this.maxY);
+        $update():Region{
+            this.width = this.maxX-this.minX;
+            this.height = this.maxY-this.minY;
+            return this;
         }
 
-        public area():number {
-            return (this.maxX - this.minX) * (this.maxY - this.minY);
+        $isEmpty():boolean {
+            return this.width<=0 || this.height<=0;
+        }
+
+        $area():number {
+            return this.width * this.height;
         }
 
         /**
          * 合并另一个矩形到当前矩形内
          */
-        public union(targetMinX:number, targetMinY:number, targetMaxX:number, targetMaxY:number):void {
+        $union(targetMinX:number, targetMinY:number, targetMaxX:number, targetMaxY:number):void {
 
             if (this.startX > targetMinX) {
                 targetMinX = this.startX;

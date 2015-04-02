@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 var TypeScript = require("../lib/typescript/tsc");
 var FileUtil = require("../lib/FileUtil");
-var UglifyJS = require("../lib/uglify-js/tools/uglifyjs");
+var UglifyJS = require("../lib/uglify-js/uglifyjs");
 var Publish = (function () {
     function Publish(projectDir) {
         this.projectDir = projectDir;

@@ -50,10 +50,11 @@ module lark.web {
      * 网页加载完成，实例化页面中定义的LarkPlayer标签
      */
     function runLark():void {
-        WebDetection.run();
+        WebCapability.detect();
         var ticker = lark.player.Ticker.$instance = new lark.player.Ticker();
         startTicker(ticker);
-        TextMeasurer.$instance = new CanvasTextMeasurer();
+        var canvas = document.createElement("canvas");
+        $textMeasurer = new CanvasTextMeasurer(canvas)
         if(!lark.player.screenAdapter){
             lark.player.screenAdapter = new lark.player.ScreenAdapter();
         }
@@ -117,7 +118,10 @@ module lark.web {
         }
     }
 
+    lark.assert = console.assert.bind(console);
+    lark.warn = console.warn.bind(console);
+    lark.error = console.error.bind(console);
+    lark.log = console.log.bind(console);
     window.addEventListener("load", runLark);
     window.addEventListener("resize",updateScreenSize);
-
 }

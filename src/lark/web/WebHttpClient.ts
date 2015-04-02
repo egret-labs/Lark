@@ -32,10 +32,11 @@ module lark.web {
 
             var image = new Image();
             image.onload = () => {
-                var texture = new Texture(image);
+                var texture = new Texture();
+                texture.$setBitmapData(image);
                 callback(texture);
             };
             image.src = url;
-        }
+        } 
     }
 }

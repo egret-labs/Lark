@@ -5,8 +5,8 @@ var sys = require("util");
 
 var UglifyJS = vm.createContext({
     sys           : sys,
-    console       : console,
-    MOZ_SourceMap : require("source-map")
+    console       : console
+    //MOZ_SourceMap : require("source-map")
 });
 
 function load_global(file) {
@@ -23,15 +23,15 @@ function load_global(file) {
 };
 
 var FILES = exports.FILES = [
-    "../lib/utils.js",
-    "../lib/ast.js",
-    "../lib/parse.js",
-    "../lib/transform.js",
-    "../lib/scope.js",
-    "../lib/output.js",
-    "../lib/compress.js",
-    "../lib/sourcemap.js",
-    "../lib/mozilla-ast.js"
+    "utils.js",
+    "ast.js",
+    "parse.js",
+    "transform.js",
+    "scope.js",
+    "output.js",
+    "compress.js",
+    "sourcemap.js",
+    "mozilla-ast.js"
 ].map(function(file){
     return path.join(path.dirname(fs.realpathSync(__filename)), file);
 });

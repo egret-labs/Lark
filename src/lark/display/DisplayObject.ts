@@ -385,7 +385,7 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var originalBounds = this.getOriginalBounds();
+            var originalBounds = this.$getOriginalBounds();
             var bounds = this.$getTransformedBounds(this.$parent, Rectangle.TEMP);
             var angle = this._rotation / 180 * Math.PI;
             var baseWidth = originalBounds.$getBaseWidth(angle);
@@ -419,7 +419,7 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var originalBounds = this.getOriginalBounds();
+            var originalBounds = this.$getOriginalBounds();
             var bounds = this.$getTransformedBounds(this.$parent, Rectangle.TEMP);
             var angle = this._rotation / 180 * Math.PI;
             var baseHeight = originalBounds.$getBaseHeight(angle);
@@ -565,7 +565,7 @@ module lark {
         }
 
         $getTransformedBounds(targetCoordinateSpace:DisplayObject, resultRect?:Rectangle):Rectangle {
-            var bounds = this.getOriginalBounds();
+            var bounds = this.$getOriginalBounds();
             if (!resultRect) {
                 resultRect = new Rectangle();
             }
@@ -625,7 +625,7 @@ module lark {
         /**
          * 获取显示对象占用的矩形区域集合，通常包括自身绘制的测量区域，如果是容器，还包括所有子项占据的区域。
          */
-        private getOriginalBounds():Rectangle {
+        $getOriginalBounds():Rectangle {
             var bounds = this._bounds;
             if (this.$hasFlags(DisplayObjectFlags.InvalidBounds)) {
                 bounds.copyFrom(this.$getContentBounds());
@@ -702,22 +702,6 @@ module lark {
                     this.markChildDirty(children[i], dirtyNodes);
                 }
             }
-        }
-
-        /**
-         * 计算显示对象，以确定它是否与 x 和 y 参数指定的点重叠或相交。x 和 y 参数指定舞台的坐标空间中的点，
-         * 而不是包含显示对象的显示对象容器中的点（除非显示对象容器是舞台）。
-         * @param stageX 要测试的舞台 x 坐标。
-         * @param stageY 要测试的舞台 y 坐标。
-         * @param shapeFlag 是检查对象 (true) 的实际像素，还是只检查边框 (false)。
-         * @returns {boolean} 如果显示对象与指定的点重叠或相交，则为 true；否则为 false。
-         */
-        public hitTestPoint(stageX:number, stageY:number, shapeFlag:boolean):boolean {
-            //var testingType = shapeFlag ?
-            //    player.HitTestingType.HitTestShape :
-            //    player.HitTestingType.HitTestBounds;
-            //return this.$containsGlobalPoint(stageX,stageY,testingType,null);
-            return false;
         }
 
         $hitTest(stageX:number, stageY:number):DisplayObject {
@@ -823,13 +807,3 @@ module lark {
     }
 
 }
-//module lark.player{
-//    /**
-//     * 碰撞检测类型
-//     */
-//    export enum HitTestingType {
-//        HitTestBounds,
-//        HitTestShape,
-//        Mouse,
-//    }
-//}

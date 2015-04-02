@@ -42,10 +42,22 @@
 //
 //  console.log("release");
 //
-//注意：由于uglifyjs编译器原因，自动删除代码的功能暂时只对 if(DEBUG){doSomething()} 的写法有效，不能写成 DEBUG&&doSomething()
 
 declare var DEBUG:boolean;
 declare var RELEASE:boolean;
 
 this["DEBUG"] = true;
 this["RELEASE"] = false;
+
+module lark {
+
+    export function $error(code:number,...params:any[]):void{
+        var text:string = lark.tr.apply(null,arguments);
+        error("Error #"+code+": "+text);
+    }
+
+    export function $warn(code:number,...params:any[]):void{
+        var text:string = lark.tr.apply(null,arguments);
+        warn("Warning #"+code+": "+text);
+    }
+}

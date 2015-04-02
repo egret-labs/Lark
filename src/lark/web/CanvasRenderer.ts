@@ -37,8 +37,8 @@ module lark.web {
          */
         public constructor(canvas:HTMLCanvasElement) {
             super();
-            if (!canvas) {
-                throw new Error("CanvasRenderer实例化失败，canvas参数不能为空！");
+            if (DEBUG&&!canvas) {
+                $error(1003,"canvas");
             }
             this.canvas = canvas;
             this.context = canvas.getContext("2d");
@@ -87,7 +87,7 @@ module lark.web {
 
         }
 
-        public reset():void{
+        private reset():void{
             var context = this.context;
             this.setTransform(1, 0, 0, 1, 0, 0);
             this.setGlobalAlpha(1);
@@ -97,22 +97,26 @@ module lark.web {
             context.textBaseline = "middle";
 
         }
-        public beginDrawDirtyRect():void{
+
+        /**
+         * 绘制脏矩形列表
+         */
+        public drawDirtyRects(regionList:lark.player.Region[]):void{
             this.reset();
             this.context.save();
             this.context.beginPath();
-        }
-
-        public drawDirtyRect(x:number,y:number,width:number,height:number):void{
-            this.clearRect(x,y,width,height);
-            this.context.rect(x,y,width,height);
-        }
-
-        public endDrawDirtyRect():void{
+            var length = regionList.length;
+            for (var i = 0; i < length; i++) {
+                var region = regionList[i];
+                this.clearRect(region.minX,region.minY,region.width,region.height);
+                this.context.rect(region.minX,region.minY,region.width,region.height);
+            }
             this.context.clip();
         }
-
-        public endDrawScreen():void{
+        /**
+         * 结束脏矩形绘制
+         */
+        public removeDirtyRects():void{
             this.context.restore();
         }
 

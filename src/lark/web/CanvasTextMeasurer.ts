@@ -30,9 +30,9 @@
 module lark.web {
      export class CanvasTextMeasurer extends HashObject implements lark.player.ITextMeasurer {
 
-         public constructor(){
+         public constructor(canvas:HTMLCanvasElement){
              super();
-             this.canvas = document.createElement("canvas");
+             this.canvas = canvas;
              this.context = this.canvas.getContext("2d");
          }
 

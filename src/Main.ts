@@ -78,13 +78,13 @@ module lark {
             //this.on(TouchEvent.TOUCH_LEAVE,this.onTouchEnter,this);
 
             var x = 0, y = 0;
-            for (var i = 0; i < 2000; i++) {
+            for (var i = 0; i < 20000; i++) {
                 var bitmap = new Bitmap();
                 bitmap.texture = texture;
                 bitmap.x = x;
                 bitmap.y = y;
-                //bitmap.scaleX = bitmap.scaleY = Math.random();
-                //bitmap.rotation = Math.random() * 360;
+                bitmap.scaleX = bitmap.scaleY = Math.random();
+                bitmap.rotation = Math.random() * 360;
                 x += texture.width;
                 if (x > 1920) {
                     x = 0;

@@ -29,11 +29,14 @@
 
 module lark.web {
 
-    export class WebDetection {
-
-        public static run():void {
+    export class WebCapability {
+        /**
+         * 检测系统属性
+         */
+        public static detect():void {
             var ua = navigator.userAgent.toLowerCase();
             Capabilities.$isMobile = (ua.indexOf('mobile') != -1 || ua.indexOf('android') != -1);
         }
+
     }
 }

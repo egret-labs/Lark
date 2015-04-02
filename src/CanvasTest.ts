@@ -27,40 +27,57 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark {
+    export class CanvasTest extends DisplayObjectContainer {
 
-    /**
-     * IPlayerContext接口定义Lark播放器与平台相关的操作，包括绘制，网络，交互操作等。
-     */
-    export interface IRenderer extends IHashObject {
+        public constructor() {
+            super();
+            var img = new Image();
+            img.src = "image/test.png";
+            img.onload = ()=> {
+                var texture:Texture = new Texture();
+                texture.$setBitmapData(img);
+                this.start(texture);
+            }
 
-        /**
-         * 清除整个屏幕
-         */
-        clearScreen():void;
+        }
 
-        /**
-         * 清除屏幕的部分渲染区域
-         */
-        clearRect(x:number, y:number, width:number, height:number):void;
+        private image:any;
 
-        /**
-         * 绘制图片到一个区域上
-         */
-        drawImage(texture:Texture, matrix:Matrix, globalAlpha:number): void;
+        private start(texture:Texture):void {
 
-        /**
-         * 绘制文本到一个区域上
-         */
-        drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number): void;
+            this.image = texture.$bitmapData;
+            var textField = new TextField("", {fontSize: 48, color: 0xFF0000});
+            textField.text = "2";
+            textField.x = 100;
+            this.textField = textField;
+            this.addChild(textField);
+            this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
 
-        /**
-         * 绘制脏矩形列表
-         */
-        drawDirtyRects(regionList:Region[]):void;
-        /**
-         * 结束脏矩形绘制
-         */
-        removeDirtyRects():void;
+        }
+
+        private textField:TextField;
+        private canvasCount:number = 2;
+
+        private createCanvas():void {
+            var canvas:HTMLCanvasElement = document.createElement("canvas");
+            canvas.width = 250;
+            canvas.height = 250;
+            var context:CanvasRenderingContext2D = canvas.getContext("2d");
+            context.drawImage(this.image, 0, 0);
+            var texture = new Texture();
+            texture.$setBitmapData(canvas);
+            var bitmap = new Bitmap(texture);
+            this.addChild(bitmap);
+            bitmap.y = 50+this.canvasCount * 5;
+            this.canvasCount++;
+            this.textField.text = ""+this.canvasCount;
+        }
+
+
+        private onTouchBegin(event:TouchEvent):void {
+            this.createCanvas();
+        }
     }
+
 }

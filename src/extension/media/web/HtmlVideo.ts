@@ -49,8 +49,11 @@
             var video = this.domElement;
             video.height = video.videoHeight;
             video.width = video.videoWidth;
-            if (this.texture == null && this._poster == null)
-                this.$setDefaultTexture(new Texture(video));
+            if (this.texture == null && this._poster == null){
+                var texture = new Texture();
+                texture.$setBitmapData(video);
+                this.$setDefaultTexture(texture);
+            }
         }
 
     }

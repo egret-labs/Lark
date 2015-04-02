@@ -33,7 +33,7 @@ module lark {
      * @excluded
      * 显示对象失效标志
      */
-    export enum DisplayObjectFlags {
+    export const enum DisplayObjectFlags {
         None = 0x0000,
 
         /**
