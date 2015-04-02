@@ -665,6 +665,11 @@ module lark {
 
         }
 
+        /**
+         * cacheAsBitmap创建的缓存位图节点。
+         */
+        $cacheNode:lark.player.BitmapNode = null;
+
         $renderNode:lark.player.RenderNode = null;
 
         /**
