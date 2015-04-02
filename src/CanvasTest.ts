@@ -47,12 +47,15 @@ module lark {
         private start(texture:Texture):void {
 
             this.image = texture.$bitmapData;
-            var textField = new TextField("", {fontSize: 48, color: 0xFF0000});
+            var textField = new TextField("", {fontSize: 12, color: 0xFF0000});
             textField.text = "2";
             textField.x = 100;
+            textField.multiline = true;
+            textField.width = 400;
             this.textField = textField;
             this.addChild(textField);
             this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+            console.log("start");
 
         }
 
@@ -60,10 +63,14 @@ module lark {
         private canvasCount:number = 2;
 
         private createCanvas():void {
-            var canvas:HTMLCanvasElement = document.createElement("canvas");
+            var canvas = this.createCanvasElement();
+            if (canvas == null) {
+                this.log("create error");
+                return;
+            }
             canvas.width = 250;
             canvas.height = 250;
-            var context:CanvasRenderingContext2D = canvas.getContext("2d");
+            var context: CanvasRenderingContext2D = canvas.getContext("2d");
             context.drawImage(this.image, 0, 0);
             var texture = new Texture();
             texture.$setBitmapData(canvas);
@@ -71,12 +78,34 @@ module lark {
             this.addChild(bitmap);
             bitmap.y = 50+this.canvasCount * 5;
             this.canvasCount++;
-            this.textField.text = ""+this.canvasCount;
+            this.log("");
         }
 
 
         private onTouchBegin(event:TouchEvent):void {
             this.createCanvas();
+        }
+
+        private log(msg: string) {
+            var tx = this.textField.text;
+            tx += this.canvasCount + ":" + msg + "\n";
+            var lines = tx.split("\n");
+            if (lines.length > 5) {
+                tx = lines.splice(lines.length - 4).join("\n");
+            }
+            this.textField.text = tx;
+        }
+
+        private createCanvasElement(): HTMLCanvasElement {
+            var canvas = document.createElement("canvas");
+            canvas.height = 1;
+            canvas.width = 1;
+            if (!canvas.getContext || !canvas.getContext("2d"))
+                return null;
+            var data = canvas.toDataURL("image/png");
+            if (data == 'data:,')
+                return null;
+            return canvas;
         }
     }
 
