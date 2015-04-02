@@ -76,7 +76,7 @@ module lark.web {
         private visitDisplayList(displayObject:DisplayObject):void {
             var node = displayObject.$renderNode;
             if (node) {
-                if(displayObject.$hasFlags(DisplayObjectFlags.Dirty)){
+                if(displayObject.$hasFlags(DisplayObjectFlags.RenderNodeDirty)){
                     node.update();
                 }
                 node.render(this);

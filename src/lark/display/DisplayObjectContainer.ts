@@ -147,7 +147,7 @@ module lark {
                     }
                 }
             }
-            child.$propagateFlagsDown(DisplayObjectFlags.InvalidChildren);
+            child.$propagateFlagsDown(DisplayObjectFlags.DownOnAddedOrRemoved);
             this.invalidateChildren();
             return child;
         }
@@ -262,7 +262,7 @@ module lark {
             }
             child.$setParent(null);
             children.splice(index, 1);
-            child.$propagateFlagsDown(DisplayObjectFlags.InvalidChildren);
+            child.$propagateFlagsDown(DisplayObjectFlags.DownOnAddedOrRemoved);
             this.invalidateChildren();
             return child;
         }

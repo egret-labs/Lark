@@ -55,7 +55,7 @@ module lark {
             DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
             DisplayObjectFlags.InvalidConcatenatedAlpha |
-            DisplayObjectFlags.Dirty;
+            DisplayObjectFlags.RenderNodeDirty;
         }
 
         private _displayObjectFlags:number = 0;
@@ -677,7 +677,7 @@ module lark {
          * 注意：此方法里禁止添加移除显示子项或执行其他可能产生新的Dirty标记的操作，仅执行同步操作，否则可能导致屏幕绘制错误。
          */
         $updateRenderNode():void {
-            this.$removeFlagsUp(DisplayObjectFlags.Dirty);
+            this.$removeFlagsUp(DisplayObjectFlags.RenderNodeDirty);
             var node = this.$renderNode;
             node.alpha = this.$getConcatenatedAlpha();
             node.matrix = this.$getConcatenatedMatrix();
@@ -693,10 +693,10 @@ module lark {
         }
 
         private markChildDirty(child:DisplayObject, dirtyNodes:{[key:number]:lark.player.RenderNode}):void {
-            if (child.$hasFlags(DisplayObjectFlags.Dirty)) {
+            if (child.$hasFlags(DisplayObjectFlags.RenderNodeDirty)) {
                 return;
             }
-            child.$setFlags(DisplayObjectFlags.Dirty);
+            child.$setFlags(DisplayObjectFlags.RenderNodeDirty);
             var node = child.$renderNode;
             if (node && dirtyNodes) {
                 dirtyNodes[node.hashCode] = node;

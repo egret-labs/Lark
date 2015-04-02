@@ -46,7 +46,7 @@ module lark.player {
         /**
          * 目标显示对象
          */
-        private target:DisplayObject;
+        protected target:DisplayObject;
         /**
          * 要绘制到屏幕的整体透明度。
          */
