@@ -88,8 +88,9 @@ module lark.web {
 
         public reset():void{
             var context = this.context;
-            this.setTransform(1, 0, 0, 1, 0, 0);
-            this.setGlobalAlpha(1);
+            context.setTransform(1, 0, 0, 1, 0, 0);
+            this._globalAlpha = 1;
+            this.context.globalAlpha = 1;
             this.setFont(null);
             this.setFillStyle(null);
             context.strokeStyle = null;

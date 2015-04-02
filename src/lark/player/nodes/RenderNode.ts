@@ -107,13 +107,12 @@ module lark.player {
          * 更新节点属性
          */
         public update():void {
+            this.target.$updateRenderNode();
             var stage = this.target.$stage;
             if (!stage) {
                 this.finish();
-                this.minX = this.minY = this.maxX = this.maxY = 0;
                 return;
             }
-            this.target.$updateRenderNode();
             if (!this.moved) {
                 return;
             }

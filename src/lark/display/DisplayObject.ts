@@ -478,10 +478,10 @@ module lark {
         /**
          * 获取这个显示对象跟它所有父级透明度的乘积
          */
-        private getConcatenatedAlpha():number {
+        $getConcatenatedAlpha():number {
             if (this.$hasFlags(DisplayObjectFlags.InvalidConcatenatedAlpha)) {
                 if (this.$parent) {
-                    var parentAlpha = this.$parent.getConcatenatedAlpha();
+                    var parentAlpha = this.$parent.$getConcatenatedAlpha();
                     this._concatenatedAlpha = parentAlpha * this._alpha;
                 }
                 else {
@@ -674,7 +674,7 @@ module lark {
         $updateRenderNode():void {
             this.$removeFlagsUp(DisplayObjectFlags.Dirty);
             var node = this.$renderNode;
-            node.alpha = this.getConcatenatedAlpha();
+            node.alpha = this.$getConcatenatedAlpha();
             node.matrix = this.$getConcatenatedMatrix();
             node.bounds = this.$getContentBounds();
         }

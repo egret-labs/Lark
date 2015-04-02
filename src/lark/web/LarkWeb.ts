@@ -54,7 +54,8 @@ module lark.web {
         var ticker = lark.player.Ticker.$instance = new lark.player.Ticker();
         startTicker(ticker);
         var canvas = document.createElement("canvas");
-        $textMeasurer = new CanvasTextMeasurer(canvas)
+        $textMeasurer = new CanvasTextMeasurer(canvas);
+        $textureDrawer = new WebTextureDrawer();
         if(!lark.player.screenAdapter){
             lark.player.screenAdapter = new lark.player.ScreenAdapter();
         }
