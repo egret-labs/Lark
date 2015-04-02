@@ -36,7 +36,7 @@ module lark.player {
         /**
          * 实例化一个播放器对象。
          */
-        public constructor(renderer:IRenderer, stage:Stage, entryClassName:string) {
+        public constructor(renderer:IScreenRenderer, stage:Stage, entryClassName:string) {
             super();
             if (DEBUG&&!renderer) {
                 $error(1003,"renderer");
@@ -46,7 +46,7 @@ module lark.player {
             this.stage = stage;
         }
 
-        private renderer:IRenderer;
+        private renderer:IScreenRenderer;
         /**
          * 入口类的完整类名
          */
@@ -206,6 +206,9 @@ module lark.player {
         }
 
         private visitDisplayList(displayObject:DisplayObject, nodeList:RenderNode[], dirtyRectList:Region[], renderer:IRenderer, cleanAll:boolean):void {
+            if (!displayObject.$hasFlags(DisplayObjectFlags.Visible)) {
+                return;
+            }
             var node = displayObject.$renderNode;
             if (node) {
                 nodeList.push(node);
@@ -216,9 +219,6 @@ module lark.player {
                 var length = children.length;
                 for (var i = 0; i < length; i++) {
                     var child = children[i];
-                    if (!child.$hasFlags(DisplayObjectFlags.Visible)) {
-                        continue;
-                    }
                     this.visitDisplayList(child, nodeList, dirtyRectList, renderer, cleanAll);
                 }
             }

@@ -31,21 +31,20 @@ module lark.web {
     /**
      * Canvas屏幕渲染器
      */
-    export class CanvasRenderer extends HashObject implements lark.player.IRenderer{
+    export class CanvasRenderer extends HashObject implements lark.player.IScreenRenderer{
         /**
          * 创建一个Canvas屏幕渲染器
          */
         public constructor(canvas:HTMLCanvasElement) {
             super();
-            if (DEBUG&&!canvas) {
-                $error(1003,"canvas");
+            if(canvas){
+                this.canvas = canvas;
+                this.context = canvas.getContext("2d");
             }
-            this.canvas = canvas;
-            this.context = canvas.getContext("2d");
         }
 
-        private canvas:HTMLCanvasElement;
-        private context:CanvasRenderingContext2D;
+        protected canvas:HTMLCanvasElement;
+        protected context:CanvasRenderingContext2D;
 
         /**
          * 清除整个屏幕
@@ -67,11 +66,11 @@ module lark.web {
          */
         public drawImage(texture:Texture, matrix:Matrix, globalAlpha:number):void {
             this.setGlobalAlpha(globalAlpha);
-            var point = this.setTransform(matrix.a, matrix.b, matrix.c, matrix.d,matrix.tx,matrix.ty);
+            this.setTransform(matrix.a, matrix.b, matrix.c, matrix.d,matrix.tx,matrix.ty);
             var width = texture.$bitmapWidth;
             var height = texture.$bitmapHeight;
             this.context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY,width, height,
-                texture.$offsetX+point.x, texture.$offsetY+point.y, width, height);
+                texture.$offsetX, texture.$offsetY, width, height);
         }
 
         /**
@@ -82,12 +81,12 @@ module lark.web {
             this.setGlobalAlpha(globalAlpha);
             this.setFont(font);
             this.setFillStyle(color);
-            var point = this.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
-            context.fillText(text, x+point.x, y+point.y, width);
+            this.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+            context.fillText(text, x, y, width);
 
         }
 
-        private reset():void{
+        public reset():void{
             var context = this.context;
             this.setTransform(1, 0, 0, 1, 0, 0);
             this.setGlobalAlpha(1);
@@ -124,7 +123,7 @@ module lark.web {
         /**
          * 设置并缓存globalAlpha属性，所有修改必须统一调用此方法。
          */
-        private setGlobalAlpha(value:number):void{
+        protected setGlobalAlpha(value:number):void{
             if(this._globalAlpha===value){
                 return;
             }
@@ -132,31 +131,11 @@ module lark.web {
             this.context.globalAlpha = value;
         }
 
-        private _a:number = 1;
-        private _b:number = 0;
-        private _c:number = 0;
-        private _d:number = 1;
-        private _ad_bc:number = 1;
-        private TEMP_POINT:Point = new Point();
         /**
-         * 设置并缓存矩阵变换参数，所有修改必须统一调用此方法。注意此方法不会把tx和ty传入Canvas，只传入abcd等属性，请在外部应用返回的偏移量。
-         * 大部分情况下，每次绘制只有tx，ty发生变化，旋转缩放并不会改变。使用此方法会分离出tx，ty属性，从而避免过度调用context.setTransform().
+         * 设置并缓存矩阵变换参数，所有修改必须统一调用此方法。子类有可能会覆盖此方法改为叠加transform方式。
          */
-        private setTransform(a:number,b:number,c:number,d:number,tx:number,ty:number):Point{
-            if(this._a!==a||this._b!==b||this._c!==c||this._d!==d){
-                this._a = a;
-                this._b = b;
-                this._c = c;
-                this._d = d;
-                this._ad_bc = a*d - b*c;
-                this.context.setTransform(a,b,c,d,0,0);
-            }
-            if(a===1&&b==0&&c===0&&d===1){
-                return this.TEMP_POINT.setTo(tx,ty);
-            }
-            var x = (d*tx - c*ty)/this._ad_bc;
-            var y = (a*ty - b*tx)/this._ad_bc;
-            return this.TEMP_POINT.setTo(x,y);
+        protected setTransform(a:number,b:number,c:number,d:number,tx:number,ty:number):void{
+            this.context.setTransform(a,b,c,d,tx,ty);
         }
 
         private _font:string = null;

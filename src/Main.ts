@@ -78,7 +78,7 @@ module lark {
             //this.on(TouchEvent.TOUCH_LEAVE,this.onTouchEnter,this);
 
             var x = 0, y = 0;
-            for (var i = 0; i < 20000; i++) {
+            for (var i = 0; i < 3000; i++) {
                 var bitmap = new Bitmap();
                 bitmap.texture = texture;
                 bitmap.x = x;

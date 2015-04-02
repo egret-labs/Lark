@@ -35,16 +35,6 @@ module lark.player {
     export interface IRenderer extends IHashObject {
 
         /**
-         * 清除整个屏幕
-         */
-        clearScreen():void;
-
-        /**
-         * 清除屏幕的部分渲染区域
-         */
-        clearRect(x:number, y:number, width:number, height:number):void;
-
-        /**
          * 绘制图片到一个区域上
          */
         drawImage(texture:Texture, matrix:Matrix, globalAlpha:number): void;
@@ -54,6 +44,9 @@ module lark.player {
          */
         drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number): void;
 
+    }
+
+    export interface IScreenRenderer extends IRenderer {
         /**
          * 绘制脏矩形列表
          */
@@ -62,5 +55,15 @@ module lark.player {
          * 结束脏矩形绘制
          */
         removeDirtyRects():void;
+
+        /**
+         * 清除整个屏幕
+         */
+        clearScreen():void;
+
+        /**
+         * 清除屏幕的部分渲染区域
+         */
+        clearRect(x:number, y:number, width:number, height:number):void;
     }
 }
