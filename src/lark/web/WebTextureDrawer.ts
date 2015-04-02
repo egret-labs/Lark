@@ -29,6 +29,8 @@
 
 module lark.web {
 
+    var TEMP_RECTANGLE:Rectangle = new Rectangle();
+
     export class WebTextureDrawer extends CanvasRenderer implements lark.player.ITextureDrawer{
 
         public constructor(){
@@ -49,17 +51,23 @@ module lark.web {
                 canvas = document.createElement("canvas");
             }
             var bounds = source.$getOriginalBounds();
-            canvas.width = bounds.width;
-            canvas.height = bounds.height;
+            var m = matrix;
+            if(m){
+                bounds = TEMP_RECTANGLE.copyFrom(bounds);
+                m.$transformBounds(bounds)
+            }
+            canvas.width = bounds.x+bounds.width;
+            canvas.height = bounds.y+bounds.height;
             this.canvas = canvas;
             this.context = canvas.getContext("2d");
             this.reset();//清理父类缓存的属性值，防止新的canvas属性无法设置。
+            if(m){
+                this.context.transform(m.a,m.b,m.c,m.d,m.tx,m.ty);
+            }
+            m = source.$getInvertedConcatenatedMatrix();
+            this.context.transform(m.a,m.b,m.c,m.d,m.tx,m.ty);
             var invertAlpha = alpha===undefined?1:+alpha;
-            invertAlpha *= 1/source.$getConcatenatedAlpha();
-            this.invertAlpha = invertAlpha;
-            var m = source.$getInvertedConcatenatedMatrix();
-            this.context.setTransform(m.a,m.b,m.c,m.d,m.tx,m.ty);
-            this.appendMatrix = matrix;
+            this.invertAlpha = invertAlpha/source.$getConcatenatedAlpha();
             this.visitDisplayList(source);
             texture.$setBitmapData(canvas);
             this.canvas = this.context = null;
@@ -114,7 +122,6 @@ module lark.web {
             super.setGlobalAlpha(value);
         }
 
-        private appendMatrix:Matrix;
         /**
          * 设置并缓存矩阵变换参数，所有修改必须统一调用此方法。子类有可能会覆盖此方法改为叠加transform方式。
          */
@@ -122,10 +129,6 @@ module lark.web {
             var context = this.context;
             context.save();
             context.transform(a,b,c,d,tx,ty);
-            var m = this.appendMatrix;
-            if(m){
-                context.transform(m.a,m.b,m.c,m.d,m.tx,m.ty);
-            }
         }
     }
 }

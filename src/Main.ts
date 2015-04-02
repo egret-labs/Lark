@@ -69,7 +69,8 @@ module lark {
             container2.touchChildren = false;
 
             var t = new Texture();
-            t.draw(container2);
+            var m = new Matrix();
+            t.draw(container2,m,0.5);
             bitmap = new lark.Bitmap(t);
             this.addChild(bitmap);
 
