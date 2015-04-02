@@ -385,7 +385,7 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var originalBounds = this.getOriginalBounds();
+            var originalBounds = this.$getOriginalBounds();
             var bounds = this.$getTransformedBounds(this.$parent, Rectangle.TEMP);
             var angle = this._rotation / 180 * Math.PI;
             var baseWidth = originalBounds.$getBaseWidth(angle);
@@ -419,7 +419,7 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var originalBounds = this.getOriginalBounds();
+            var originalBounds = this.$getOriginalBounds();
             var bounds = this.$getTransformedBounds(this.$parent, Rectangle.TEMP);
             var angle = this._rotation / 180 * Math.PI;
             var baseHeight = originalBounds.$getBaseHeight(angle);
@@ -565,7 +565,7 @@ module lark {
         }
 
         $getTransformedBounds(targetCoordinateSpace:DisplayObject, resultRect?:Rectangle):Rectangle {
-            var bounds = this.getOriginalBounds();
+            var bounds = this.$getOriginalBounds();
             if (!resultRect) {
                 resultRect = new Rectangle();
             }
@@ -625,7 +625,7 @@ module lark {
         /**
          * 获取显示对象占用的矩形区域集合，通常包括自身绘制的测量区域，如果是容器，还包括所有子项占据的区域。
          */
-        private getOriginalBounds():Rectangle {
+        $getOriginalBounds():Rectangle {
             var bounds = this._bounds;
             if (this.$hasFlags(DisplayObjectFlags.InvalidBounds)) {
                 bounds.copyFrom(this.$getContentBounds());

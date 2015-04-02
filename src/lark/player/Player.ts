@@ -206,9 +206,6 @@ module lark.player {
         }
 
         private visitDisplayList(displayObject:DisplayObject, nodeList:RenderNode[], dirtyRectList:Region[], renderer:IRenderer, cleanAll:boolean):void {
-            if (!displayObject.$hasFlags(DisplayObjectFlags.Visible)) {
-                return;
-            }
             var node = displayObject.$renderNode;
             if (node) {
                 nodeList.push(node);
@@ -219,6 +216,9 @@ module lark.player {
                 var length = children.length;
                 for (var i = 0; i < length; i++) {
                     var child = children[i];
+                    if (!child.$hasFlags(DisplayObjectFlags.Visible)) {
+                        continue;
+                    }
                     this.visitDisplayList(child, nodeList, dirtyRectList, renderer, cleanAll);
                 }
             }
