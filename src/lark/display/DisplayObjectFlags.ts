@@ -30,10 +30,16 @@
 
 module lark {
     /**
-     * @excluded
      * 显示对象失效标志
      */
     export const enum DisplayObjectFlags {
+
+        //DisplayObject使用的：0x1,0x2,0x4,0x8,0x10,0x20,0x40,0x80,0x100,0x200,0x400,0x800,0x1000,0x2000,0x4000,0x8000,0x10000
+        // 未使用的：
+        // 0x20000,0x40000,0x80000,0x100000,0x200000,0x400000,0x800000,0x1000000,0x2000000,0x4000000,0x8000000,0x10000000,
+        // 0x20000000,0x40000000,0x80000000,0x100000000,0x200000000,0x400000000,0x800000000,0x1000000000,0x2000000000,
+        // 0x4000000000,0x8000000000,0x10000000000,0x20000000000,0x40000000000,0x80000000000,0x100000000000,0x200000000000
+
         None = 0x0000,
 
         /**
@@ -59,27 +65,27 @@ module lark {
         /**
          * 显示对象祖代的矩阵失效。
          */
-        InvalidConcatenatedMatrix = 0x0020,
+        InvalidConcatenatedMatrix = 0x0010,
 
         /**
          * 显示对象祖代的逆矩阵失效。
          */
-        InvalidInvertedConcatenatedMatrix = 0x0040,
+        InvalidInvertedConcatenatedMatrix = 0x0020,
 
         /**
          * 显示对象祖代的透明度属性失效。
          */
-        InvalidConcatenatedAlpha = 0x0080,
+        InvalidConcatenatedAlpha = 0x0040,
         /**
          * 显示对象应该被缓存成位图的标志，即使没有设置这个标志，也有可能被缓存成位图，例如含有滤镜的情况。
          * 而当设置了这个标志，如果内存不足，也会放弃缓存。
          */
-        CacheAsBitmap = 0x010000,
+        CacheAsBitmap = 0x0080,
 
         /**
          * 显示对象需要重绘的标志
          */
-        RenderNodeDirty = 0x20000000,
+        RenderNodeDirty = 0x0100,
         /**
          * 添加或删除子项时，需要向子项传递的标志。
          */

@@ -452,6 +452,27 @@ module lark {
             this.$toggleFlags(DisplayObjectFlags.Visible, value);
             this.$markDirty();
         }
+        /**
+         * 如果设置为 true，则 Lark 播放器将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
+         * 将 cacheAsBitmap 属性设置为 true 后，呈现并不更改，但是，显示对象将自动执行像素贴紧。执行速度可能会大大加快，
+         * 具体取决于显示对象内容的复杂性。在内存超过上限的情况下，即使将 cacheAsBitmap 属性设置为 true，显示对象也不使用位图缓存。
+         * 最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放和旋转的显示对象一起使用。
+         */
+        public get cacheAsBitmap():boolean {
+            return this.$hasFlags(DisplayObjectFlags.CacheAsBitmap);
+        }
+
+        public set cacheAsBitmap(value:boolean) {
+            value = !!value;
+            if (value === this.$hasFlags(DisplayObjectFlags.CacheAsBitmap)) {
+                return;
+            }
+            if (this.$stage) {
+                this.$stage.$displayListTreeChanged = true;
+            }
+            this.$toggleFlags(DisplayObjectFlags.Visible, value);
+            this.$markDirty();
+        }
 
         private _alpha:number = 1;
         /**
