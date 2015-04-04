@@ -446,9 +446,6 @@ module lark {
             if (value === this.$hasFlags(DisplayObjectFlags.Visible)) {
                 return;
             }
-            if (this.$stage) {
-                this.$stage.$displayListTreeChanged = true;
-            }
             this.$toggleFlags(DisplayObjectFlags.Visible, value);
             this.$markDirty();
         }
@@ -466,9 +463,6 @@ module lark {
             value = !!value;
             if (value === this.$hasFlags(DisplayObjectFlags.CacheAsBitmap)) {
                 return;
-            }
-            if (this.$stage) {
-                this.$stage.$displayListTreeChanged = true;
             }
             this.$toggleFlags(DisplayObjectFlags.Visible, value);
             this.$markDirty();

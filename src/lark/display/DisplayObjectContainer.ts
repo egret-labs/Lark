@@ -48,9 +48,6 @@ module lark {
          * 标记子项列表失效
          */
         private invalidateChildren() {
-            if(this.$stage){
-                this.$stage.$displayListTreeChanged = true;
-            }
             this.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
         }
 

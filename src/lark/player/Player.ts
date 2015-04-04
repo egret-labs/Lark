@@ -28,6 +28,20 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark.player {
+
+    function visitDisplayList(displayObject:DisplayObject, visitor:(DisplayObject) => boolean):void {
+        if (!visitor(displayObject)) {
+            return;
+        }
+        var children = displayObject.$children;
+        if (children) {
+            var length = children.length;
+            for (var i = 0; i < length; i++) {
+                visitDisplayList(children[i],visitor);
+            }
+        }
+    }
+
     /**
      * Lark播放器
      */
@@ -38,8 +52,8 @@ module lark.player {
          */
         public constructor(renderer:IScreenRenderer, stage:Stage, entryClassName:string) {
             super();
-            if (DEBUG&&!renderer) {
-                $error(1003,"renderer");
+            if (DEBUG && !renderer) {
+                $error(1003, "renderer");
             }
             this.renderer = renderer;
             this.entryClassName = entryClassName;
@@ -88,11 +102,11 @@ module lark.player {
                     this.stage.addChild(rootContainer);
                 }
                 else {
-                    DEBUG&&$error(1002,this.entryClassName);
+                    DEBUG && $error(1002, this.entryClassName);
                 }
             }
             else {
-                DEBUG&&$error(1001,this.entryClassName);
+                DEBUG && $error(1001, this.entryClassName);
             }
         }
 
@@ -137,8 +151,6 @@ module lark.player {
             }
         }
 
-        private renderNodeList:RenderNode[] = [];
-
         private dirtyRectList:Region[] = [];
 
         private dirtyRatio:number = 0;
@@ -175,25 +187,38 @@ module lark.player {
             if (cleanAll) {
                 this.renderer.clearScreen();
             }
-            else{
+            else {
                 this.renderer.drawDirtyRects(this.dirtyRectList);
             }
 
             var stage = this.stage;
             var dirtyRectList = this.dirtyRectList;
             var renderer = this.renderer;
-            if (this.stage.$displayListTreeChanged) {
-                var nodeList:RenderNode[] = [];
-                this.visitDisplayList(this.stage, nodeList, dirtyRectList, renderer, cleanAll);
-                this.renderNodeList = nodeList;
-            }
-            else {
-                var renderList = this.renderNodeList;
-                var length = renderList.length;
-                for (var i = 0; i < length; i++) {
-                    this.checkRenderNode(renderList[i], dirtyRectList, renderer, cleanAll);
+            var drawCalls = 0;
+            visitDisplayList(this.stage, function(displayObject:DisplayObject):boolean{
+                if (!displayObject.$hasFlags(DisplayObjectFlags.Visible)) {
+                    return false;
                 }
-            }
+                var node = displayObject.$renderNode;
+                if (node && !node.outOfScreen && !(node.alpha === 0)) {
+                    if (!cleanAll && !node.isDirty) {
+                        for (var j = dirtyRectList.length - 1; j >= 0; j--) {
+                            var region = dirtyRectList[j];
+                            if (node.intersects(region.minX, region.minY, region.maxX, region.maxY)) {
+                                node.isDirty = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (cleanAll || node.isDirty) {
+                        drawCalls++;
+                        node.render(renderer);
+                        node.finish();
+                    }
+                }
+                return true;
+            });
+            this.drawCalls = drawCalls;
             if (cleanAll) {
                 this.stageSizeChangedFlag = false;
             }
@@ -202,49 +227,6 @@ module lark.player {
             }
             this.dirtyRegion.clear();
             stage.$dirtyRenderNodes = {};
-            stage.$displayListTreeChanged = false;
-        }
-
-        private visitDisplayList(displayObject:DisplayObject, nodeList:RenderNode[], dirtyRectList:Region[], renderer:IRenderer, cleanAll:boolean):void {
-            if (!displayObject.$hasFlags(DisplayObjectFlags.Visible)) {
-                return;
-            }
-            var node = displayObject.$renderNode;
-            if (node) {
-                nodeList.push(node);
-                this.checkRenderNode(node, dirtyRectList, renderer, cleanAll);
-            }
-            var children = displayObject.$children;
-            if (children) {
-                var length = children.length;
-                for (var i = 0; i < length; i++) {
-                    var child = children[i];
-                    this.visitDisplayList(child, nodeList, dirtyRectList, renderer, cleanAll);
-                }
-            }
-        }
-
-        /**
-         * 检查一个渲染节点是否需要绘制
-         */
-        private checkRenderNode(node:RenderNode, dirtyRectList:Region[], renderer:IRenderer, cleanAll:boolean):void {
-            if (node.outOfScreen || node.alpha === 0) {
-                return;
-            }
-            if (!cleanAll && !node.isDirty) {
-                for (var j = dirtyRectList.length - 1; j >= 0; j--) {
-                    var region = dirtyRectList[j];
-                    if (node.intersects(region.minX, region.minY, region.maxX, region.maxY)) {
-                        node.isDirty = true;
-                        break;
-                    }
-                }
-            }
-            if (cleanAll || node.isDirty) {
-                this.drawCalls++;
-                node.render(renderer);
-                node.finish();
-            }
         }
 
         /**
@@ -264,12 +246,13 @@ module lark.player {
                 stage.$stageHeight = stageHeight;
                 this.dirtyRegion = new DirtyRegion(stageWidth, stageHeight);
                 this.stageSizeChangedFlag = true;
-                var renderList = this.renderNodeList;
-                var length = renderList.length;
-                for (var i = 0; i < length; i++) {
-                    var node = renderList[i];
-                    node.outOfScreen = !node.intersects(0, 0, stageWidth, stageHeight);
-                }
+                visitDisplayList(this.stage, function(displayObject:DisplayObject):boolean{
+                    var node = displayObject.$renderNode;
+                    if (node) {
+                        node.outOfScreen = !node.intersects(0, 0, stageWidth, stageHeight);
+                    }
+                    return true;
+                });
                 stage.emitWith(Event.RESIZE);
             }
         }

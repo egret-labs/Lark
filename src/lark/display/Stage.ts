@@ -80,10 +80,6 @@ module lark {
         }
 
         /**
-         * 显示列表的结构发生改变
-         */
-        $displayListTreeChanged:boolean = true;
-        /**
          * 显示对象的渲染节点发生改变时，把自身的RenderNode对象注册到此列表上。
          */
         $dirtyRenderNodes:{[key:number]:lark.player.RenderNode} = {};
