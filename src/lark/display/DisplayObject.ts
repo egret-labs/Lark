@@ -241,7 +241,10 @@ module lark {
                 } else {
                     this._concatenatedMatrix.copyFrom(this.$getMatrix());
                 }
-                if (this.$renderNode) {
+                if(this.$cacheNode){
+                    this.$cacheNode.moved = true;
+                }
+                else if (this.$renderNode) {
                     this.$renderNode.moved = true;
                 }
                 this.$removeFlags(DisplayObjectFlags.InvalidConcatenatedMatrix);
@@ -451,6 +454,10 @@ module lark {
             this.$markDirty();
         }
         /**
+         * cacheAsBitmap创建的缓存位图节点。
+         */
+        $cacheNode:lark.player.CacheNode = null;
+        /**
          * 如果设置为 true，则 Lark 播放器将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
          * 将 cacheAsBitmap 属性设置为 true 后，呈现并不更改，但是，显示对象将自动执行像素贴紧。执行速度可能会大大加快，
          * 具体取决于显示对象内容的复杂性。在内存超过上限的情况下，即使将 cacheAsBitmap 属性设置为 true，显示对象也不使用位图缓存。
@@ -462,13 +469,23 @@ module lark {
 
         public set cacheAsBitmap(value:boolean) {
             value = !!value;
-            if (value === this.$hasFlags(DisplayObjectFlags.CacheAsBitmap)) {
+            this.$toggleFlags(DisplayObjectFlags.CacheAsBitmap, value);
+            var hasCacheNode = !!this.$cacheNode;
+            if(hasCacheNode===value){
                 return;
             }
-            this.$toggleFlags(DisplayObjectFlags.CacheAsBitmap, value);
+            if(value){
+                this.$cacheNode = lark.player.CacheNode.$create(this);
+                if(!this.$cacheNode){
+                    return;
+                }
+            }
+            else{
+                lark.player.CacheNode.$release(this.$cacheNode);
+                this.$cacheNode = null;
+            }
             this.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
         }
-
         private _alpha:number = 1;
         /**
          * 表示指定对象的 Alpha 透明度值。
@@ -664,7 +681,10 @@ module lark {
         $getContentBounds():Rectangle {
             var bounds = this._contentBounds;
             if (this.$hasFlags(DisplayObjectFlags.InvalidContentBounds)) {
-                if (this.$renderNode) {
+                if(this.$cacheNode){
+                    this.$cacheNode.moved = true;
+                }
+                else if (this.$renderNode) {
                     this.$renderNode.moved = true;
                 }
                 this.$measureContentBounds(bounds);
@@ -680,11 +700,6 @@ module lark {
         $measureContentBounds(bounds:Rectangle):void {
 
         }
-
-        /**
-         * cacheAsBitmap创建的缓存位图节点。
-         */
-        $cacheNode:lark.player.BitmapNode = null;
 
         $renderNode:lark.player.RenderNode = null;
 

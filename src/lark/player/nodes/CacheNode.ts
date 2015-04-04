@@ -29,23 +29,39 @@
 
 module lark.player {
 
-    export interface ITextureDrawer extends IRenderer {
+    var cacheNodeList:CacheNode[] = [];
 
-        /**
-         * 检测是否允许显示对象启用cacheAsBitmap功能，若超过系统内存上限或触发其他限制，将返回null。否则返回用于缓存的Texture对象实例。
-         */
-        createTextureForCache():Texture;
+    export class CacheNode extends BitmapNode {
 
-        /**
-         * 将显示对象或另一个Texture的图像数据绘制到自身。
-         * @param texture 要绘制到的 Texture 对象。
-         * @param source 要绘制到 Texture 对象的显示对象或 Texture 对象。
-         * @param matrix 一个 Matrix 对象，用于缩放、旋转位图或转换位图的坐标。如果不想将矩阵转换应用于图像，
-         * 请将此参数设置为恒等矩阵（使用默认 new Matrix() 构造函数创建），或传递 null 值。
-         * @param alpha 要叠加的透明度值。如果没有提供任何值，则不会转换位图图像的透明度。如果必须传递此参数但又不想转换图像，请传递值 1。
-         * @param clipRect 一个 Rectangle 对象，定义要绘制的源对象的区域。 如果不提供此值，则不会进行剪裁，并且将绘制整个源对象。
-         * @param forCache 是否为cacheAsBitmap绘制。
-         */
-        drawDisplayObject(texture:Texture, source:DisplayObject, matrix?:Matrix, alpha?:number, clipRect?:Rectangle):void;
+        static $release(node:CacheNode):void{
+            node.target = null;
+            node.matrix = null;
+            node.bounds = null;
+            cacheNodeList.push(node);
+        }
+
+        static $create(target:DisplayObject):CacheNode{
+            var node = cacheNodeList.pop();
+            if(!node){
+                var texture = $textureDrawer.createTextureForCache();
+                if(texture){
+                    node = new CacheNode(target);
+                    node.texture = texture;
+                }
+            }
+            return node;
+        }
+
+        public update():void{
+            var target = this.target;
+            this.matrix = target.$getConcatenatedMatrix();
+            this.alpha = target.$getConcatenatedAlpha();
+            this.bounds = target.$getOriginalBounds();
+            this.updateBounds();
+        }
+
+        public redraw():void{
+            $textureDrawer.drawDisplayObject(this.texture,this.target);
+        }
     }
 }

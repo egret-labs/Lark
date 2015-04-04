@@ -199,7 +199,19 @@ module lark.player {
                 if (!displayObject.$visible) {
                     return false;
                 }
-                var node = displayObject.$renderNode;
+                var node:RenderNode;
+                var cacheNode = displayObject.$cacheNode;
+                if(cacheNode){
+                    cacheNode.update();
+                    if(displayObject.$hasFlags(DisplayObjectFlags.DirtyDescendents)){
+                        cacheNode.redraw();
+                    }
+                    node = cacheNode;
+                }
+                else{
+                    node = displayObject.$renderNode;
+                }
+                displayObject.$removeFlags(DisplayObjectFlags.DirtyDescendents);
                 if (node && !node.outOfScreen && !(node.alpha === 0)) {
                     if (!cleanAll && !node.isDirty) {
                         for (var j = dirtyRectList.length - 1; j >= 0; j--) {
@@ -216,7 +228,7 @@ module lark.player {
                         node.finish();
                     }
                 }
-                return true;
+                return !cacheNode;
             });
             this.drawCalls = drawCalls;
             if (cleanAll) {

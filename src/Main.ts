@@ -75,7 +75,7 @@ module lark {
             //this.addChild(bitmap);
 
 
-
+            var container = new DisplayObjectContainer();
             var x = 0, y = 0;
             for (var i = 0; i < 8000; i++) {
                 var bitmap = new Bitmap();
@@ -92,9 +92,11 @@ module lark {
                         y = 0; 
                     }
                 }
-                this.addChild(bitmap);
+                container.addChild(bitmap);
                 //this.iconList.push(bitmap);
             }
+            container.cacheAsBitmap = true;
+            this.addChild(container);
             bitmap = new lark.Bitmap();
             bitmap.texture = texture;
             bitmap.x = 700;
@@ -118,6 +120,7 @@ module lark {
             if(this.touchTarget===this.stage||this.touchTarget===FPS.display){
                 return;
             }
+            this.addChild(this.touchTarget);
             this.offsetX = this.touchTarget.x - event.stageX;
             this.offsetY = this.touchTarget.y - event.stageY;
             this.stage.on(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
