@@ -51,29 +51,29 @@ module lark {
          */
         public constructor() {
             super();
-            this._displayObjectFlags = DisplayObjectFlags.Visible |
+            this.$displayObjectFlags = DisplayObjectFlags.Visible |
             DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
             DisplayObjectFlags.InvalidConcatenatedAlpha |
             DisplayObjectFlags.RenderNodeDirty;
         }
 
-        private _displayObjectFlags:number = 0;
+        $displayObjectFlags:number = 0;
 
         $setFlags(flags:DisplayObjectFlags):void {
-            this._displayObjectFlags |= flags;
+            this.$displayObjectFlags |= flags;
         }
 
         $toggleFlags(flags:DisplayObjectFlags, on:boolean):void {
             if (on) {
-                this._displayObjectFlags |= flags;
+                this.$displayObjectFlags |= flags;
             } else {
-                this._displayObjectFlags &= ~flags;
+                this.$displayObjectFlags &= ~flags;
             }
         }
 
         $removeFlags(flags:DisplayObjectFlags):void {
-            this._displayObjectFlags &= ~flags;
+            this.$displayObjectFlags &= ~flags;
         }
 
         /**
@@ -91,7 +91,7 @@ module lark {
         }
 
         $hasFlags(flags:DisplayObjectFlags):boolean {
-            return (this._displayObjectFlags & flags) === flags;
+            return (this.$displayObjectFlags & flags) === flags;
         }
 
         /**
@@ -116,7 +116,7 @@ module lark {
         }
 
         $hasAnyFlags(flags:DisplayObjectFlags):boolean {
-            return !!(this._displayObjectFlags & flags);
+            return !!(this.$displayObjectFlags & flags);
         }
 
         private invalidateMatrix():void {
@@ -432,21 +432,22 @@ module lark {
             this.invalidateMatrix();
         }
 
+        $visible:boolean = true;
         /**
          * 显示对象是否可见。
          * 不可见的显示对象已被禁用。例如，如果实例的 visible=false，则无法单击该对象。
          * 默认值为 true 可见
          */
         public get visible():boolean {
-            return this.$hasFlags(DisplayObjectFlags.Visible);
+            return this.$visible;
         }
 
         public set visible(value:boolean) {
             value = !!value;
-            if (value === this.$hasFlags(DisplayObjectFlags.Visible)) {
+            if (value === this.$visible) {
                 return;
             }
-            this.$toggleFlags(DisplayObjectFlags.Visible, value);
+            this.$visible = value;
             this.$markDirty();
         }
         /**
@@ -464,8 +465,8 @@ module lark {
             if (value === this.$hasFlags(DisplayObjectFlags.CacheAsBitmap)) {
                 return;
             }
-            this.$toggleFlags(DisplayObjectFlags.Visible, value);
-            this.$markDirty();
+            this.$toggleFlags(DisplayObjectFlags.CacheAsBitmap, value);
+            this.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
         }
 
         private _alpha:number = 1;
@@ -703,6 +704,7 @@ module lark {
          * 标记此显示对象需要重绘，调用此方法后，在屏幕绘制阶段$updateRenderNode()方法会自动被回调，您可能需要覆盖它来同步自身改变的属性到目标RenderNode。
          */
         $markDirty():void {
+            this.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
             var dirtyNodes = this.$stage ? this.$stage.$dirtyRenderNodes : null;
             this.markChildDirty(this, dirtyNodes);
         }

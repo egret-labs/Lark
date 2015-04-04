@@ -77,7 +77,7 @@ module lark {
 
 
             var x = 0, y = 0;
-            for (var i = 0; i < 9000; i++) {
+            for (var i = 0; i < 8000; i++) {
                 var bitmap = new Bitmap();
                 bitmap.texture = texture;
                 bitmap.x = x;
@@ -89,7 +89,7 @@ module lark {
                     x = 0;
                     y += texture.height;
                     if (y > 960) {
-                        y = 0;
+                        y = 0; 
                     }
                 }
                 this.addChild(bitmap);

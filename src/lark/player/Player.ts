@@ -196,7 +196,7 @@ module lark.player {
             var renderer = this.renderer;
             var drawCalls = 0;
             visitDisplayList(this.stage, function(displayObject:DisplayObject):boolean{
-                if (!displayObject.$hasFlags(DisplayObjectFlags.Visible)) {
+                if (!displayObject.$visible) {
                     return false;
                 }
                 var node = displayObject.$renderNode;

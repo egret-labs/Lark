@@ -145,6 +145,7 @@ module lark {
                 }
             }
             child.$propagateFlagsDown(DisplayObjectFlags.DownOnAddedOrRemoved);
+            this.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
             this.invalidateChildren();
             return child;
         }
@@ -260,6 +261,7 @@ module lark {
             child.$setParent(null);
             children.splice(index, 1);
             child.$propagateFlagsDown(DisplayObjectFlags.DownOnAddedOrRemoved);
+            this.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
             this.invalidateChildren();
             return child;
         }
