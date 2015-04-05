@@ -120,7 +120,6 @@ module lark {
         }
 
         private invalidateMatrix():void {
-            this.$markDirty();
             this.$setFlags(DisplayObjectFlags.InvalidMatrix);
             this.invalidatePosition();
         }
@@ -648,7 +647,7 @@ module lark {
          * 标记自身的测量尺寸失效
          */
         $invalidateContentBounds():void {
-            this.$markDirty();
+            this.$markDirty(true);
             this.$setFlags(DisplayObjectFlags.InvalidContentBounds);
             this.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
         }
@@ -717,9 +716,17 @@ module lark {
 
         /**
          * 标记此显示对象需要重绘，调用此方法后，在屏幕绘制阶段$updateRenderNode()方法会自动被回调，您可能需要覆盖它来同步自身改变的属性到目标RenderNode。
+         * @param cacheDirty 传入true将标记自身的位图缓存失效。否则只标记父级的位图缓存失效
          */
-        $markDirty():void {
-            this.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
+        $markDirty(cacheDirty?:boolean):void {
+            if(cacheDirty){
+                this.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
+            }
+            else{
+                if(this.$parent){
+                    this.$parent.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
+                }
+            }
             var dirtyNodes = this.$stage ? this.$stage.$dirtyRenderNodes : null;
             this.markChildDirty(this, dirtyNodes);
         }
