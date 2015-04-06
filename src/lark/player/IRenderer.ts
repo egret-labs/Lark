@@ -47,23 +47,10 @@ module lark.player {
     }
 
     export interface IScreenRenderer extends IRenderer {
-        /**
-         * 绘制脏矩形列表
-         */
-        drawDirtyRects(regionList:Region[]):void;
-        /**
-         * 结束脏矩形绘制
-         */
-        removeDirtyRects():void;
 
         /**
-         * 清除整个屏幕
+         * 绘制显示列表。
          */
-        clearScreen():void;
-
-        /**
-         * 清除屏幕的部分渲染区域
-         */
-        clearRect(x:number, y:number, width:number, height:number):void;
+        drawDisplayList(root:DisplayObject,dirtyRectList?:lark.player.Region[]):number;
     }
 }

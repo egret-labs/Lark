@@ -113,7 +113,7 @@ module lark.web {
                 for (var i = 0; i < length; i++) {
                     var child = children[i];
                     child.$removeFlags(DisplayObjectFlags.DirtyDescendents);
-                    if (!child.$hasFlags(DisplayObjectFlags.Visible)) {
+                    if (!child.$visible) {
                         continue;
                     }
                     this.visitDisplayList(child);

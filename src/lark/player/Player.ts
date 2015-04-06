@@ -185,60 +185,14 @@ module lark.player {
          */
         private drawDisplayList(cleanAll:boolean):void {
             if (cleanAll) {
-                this.renderer.clearScreen();
-            }
-            else {
-                this.renderer.drawDirtyRects(this.dirtyRectList);
-            }
-
-            var stage = this.stage;
-            var dirtyRectList = this.dirtyRectList;
-            var renderer = this.renderer;
-            var drawCalls = 0;
-            visitDisplayList(this.stage, function(displayObject:DisplayObject):boolean{
-                if (!displayObject.$visible) {
-                    return false;
-                }
-                var node:RenderNode;
-                var cacheNode = displayObject.$cacheNode;
-                if(cacheNode){
-                    cacheNode.update();
-                    if(displayObject.$hasFlags(DisplayObjectFlags.DirtyDescendents)){
-                        cacheNode.redraw();
-                    }
-                    node = cacheNode;
-                }
-                else{
-                    node = displayObject.$renderNode;
-                }
-                displayObject.$removeFlags(DisplayObjectFlags.DirtyDescendents);
-                if (node && !node.outOfScreen && !(node.alpha === 0)) {
-                    if (!cleanAll && !node.isDirty) {
-                        for (var j = dirtyRectList.length - 1; j >= 0; j--) {
-                            var region = dirtyRectList[j];
-                            if (node.intersects(region.minX, region.minY, region.maxX, region.maxY)) {
-                                node.isDirty = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (cleanAll || node.isDirty) {
-                        drawCalls++;
-                        node.render(renderer);
-                        node.finish();
-                    }
-                }
-                return !cacheNode;
-            });
-            this.drawCalls = drawCalls;
-            if (cleanAll) {
+                this.drawCalls = this.renderer.drawDisplayList(this.stage);
                 this.stageSizeChangedFlag = false;
             }
             else {
-                this.renderer.removeDirtyRects();
+                this.drawCalls = this.renderer.drawDisplayList(this.stage,this.dirtyRectList);
             }
             this.dirtyRegion.clear();
-            stage.$dirtyRenderNodes = {};
+            this.stage.$dirtyRenderNodes = {};
         }
 
         /**
