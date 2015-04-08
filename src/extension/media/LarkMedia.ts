@@ -1,14 +1,14 @@
 ﻿module lark {
 
     export interface IMediaSource {
-        src: string;
-        mimeType?: string;
+        [type: string]: string;
+        default?: string;
     }
 
     export interface IMediaOption {
-        src: string;
+        src?: string;
         mimeType?: string;
-        sources?: IMediaSource[];
+        sources?: IMediaSource;
         poster?: string|Texture;
         width?: number;
         height?: number;
@@ -17,15 +17,17 @@
 
     export interface IMedia extends DisplayObject{
         
-        sources: IMediaSource[];
+        sources: IMediaSource;
         isPlaying: boolean;
         canPlay: boolean;
         loadStart: boolean;
         volume: number;
+        position: number;
 
         load():void;
         play(loop?: boolean): void;
         pause(): void;
+        stop(): void;
 
         on(type: "loadstart", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
         on(type: "canplay", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
@@ -45,13 +47,13 @@
             if (!option)
                 return;
             this.$option = option;
-            this.sources = option.sources || [{ src: option.src }];
+            this.sources = option.sources || { default: option.src };
             this._volume = option.volume == undefined ? this._volume : option.volume;
         }
 
 
         public $option: IMediaOption;
-        public sources: IMediaSource[];
+        public sources: IMediaSource;
         public isPlaying: boolean = false;
         public canPlay: boolean = false;
         public loadStart = false;
@@ -71,6 +73,20 @@
         }
 
 
+        protected _position: number = 0;
+        public get position(): number {
+            return this.getPosition();
+        }
+        public set position(value: number) {
+            this.setPosition(value);
+        }
+        protected getPosition(): number {
+            return this._position;
+        }
+        protected setPosition(value: number) {
+            this._position = value;
+        }
+
 
         public load() {
 
@@ -81,6 +97,10 @@
         }
 
         public pause() {
+
+        }
+
+        public stop() {
 
         }
 
@@ -105,6 +125,11 @@
         protected onPause(e?: SystemEvent): void {
             this.isPlaying = false;
             this.onEvent("pause");
+        }
+
+        protected onStop(e?: SystemEvent): void {
+            this.isPlaying = false;
+            this.onEvent("ended");
         }
 
         protected onEnded(e?: SystemEvent): void {

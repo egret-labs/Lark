@@ -1,10 +1,23 @@
 ﻿module lark {
-    interface Video extends IMedia {
+
+    export interface IVideoSource extends IMediaSource {
+        ogg?: string;
+        h264?: string;
+        webm?: string;
+        vp9?: string;
+        hls?: string;
+    }
+
+    export interface IVideoOption extends IMediaOption {
+        sources?: IVideoSource;
+    }
+
+    export interface Video extends IMedia {
         poster: string;
     }
-    export var Video: { new (option: IMediaOption): Video };
+    export var Video: { new (option: IVideoOption): Video };
     export class LarkVideoBase extends LarkMedia implements Video {
-                constructor(option:IMediaOption) {
+        constructor(option:IMediaOption) {
             super(option);
             this.$renderNode = new player.BitmapNode(this);
             this._height = option.height || NaN;

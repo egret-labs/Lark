@@ -94,6 +94,7 @@ module lark {
             this._text = text;
             this._style = TextField.$normalizeStyle(style, BaseStyle);
             this.$renderNode = new lark.player.TextNode(this);
+            this.$invalidateContentBounds();
         }
 
 
@@ -176,6 +177,7 @@ module lark {
                 var lastLine = this.renderLines[this.renderLines.length - 1];
                 height = lastLine.y + lastLine.height
             }
+            this._height = height;
             bounds.setTo(0, 0, this.width, height);
         }
 

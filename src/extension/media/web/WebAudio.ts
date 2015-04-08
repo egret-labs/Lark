@@ -6,6 +6,9 @@ module lark {
     var $AudioContext = AudioContextClass ? new AudioContextClass() : null;
 
     export class WebAudio extends LarkMedia {
+
+        protected startTime: number;
+        protected timer: Timer;
         public audioBuffer: AudioBuffer = null;
         public bufferSource: AudioBufferSourceNode = null;
         public gain: GainNode = null;
@@ -14,13 +17,15 @@ module lark {
                 return;
             var bufferLoader = new BufferLoader(
                 $AudioContext,
-                this.sources.map(s=>s.src),
+                [this.getMediaSource()],
                 this.finishedLoading,
                 this.loadingError
                 );
 
             bufferLoader.load();
             this.loadStart = true;
+            this.timer = new Timer(250);
+            this.timer.on(TimerEvent.TIMER, this.onProgress, this);
             this.onEvent("loadstart");
         }
         protected finishedLoading = (bufferList:AudioBuffer[])=> {
@@ -42,11 +47,14 @@ module lark {
                 gain.gain.value = this._volume;
                 source.connect(gain);
                 gain.connect($AudioContext.destination);
-                source.start(0);
+                source.start(0, this._position || 0);
+
+                this.startTime = $AudioContext.currentTime - (this._position || 0);
                 this.bufferSource = source;
                 this.gain = gain;
                 this.onPlay();
                 this.onPlaying();
+                this.timer.start();
             }
             else
                 this.playAfterLoad(loop);
@@ -55,7 +63,17 @@ module lark {
 
         public pause() {
             this.bufferSource && this.bufferSource.stop(0);
+            this.timer.stop();
+            this.onProgress(null);
             this.onPause();
+        }
+
+        public stop() {
+            this.bufferSource && this.bufferSource.stop(0);
+            this.timer.stop();
+            this.setPosition(0);
+            super.onTimeupdate();
+            this.onStop();
         }
 
         protected getVolume(): number {
@@ -73,6 +91,24 @@ module lark {
         protected onEnded(e?: SystemEvent) {
             super.onEnded(e);
             this.bufferSource.stop(0);
+        }
+
+        protected onProgress(e:Event) {
+            this._position = $AudioContext.currentTime - this.startTime;
+            super.onTimeupdate();
+        }
+
+        protected getMediaSource() {
+            var audioSupport = Capabilities.audio;
+            var sources = this.sources;
+            for (var type in sources) {
+                if (!sources.default)
+                    sources.default = sources[type];
+                var canPlay = audioSupport[type];
+                if (canPlay)
+                    return sources[type];
+            }
+            return sources.default;
         }
     }
 
@@ -121,5 +157,5 @@ module lark {
         }
     }
 }
-if (lark.Capabilities.webAudio && !lark.Audio)
-    lark.Audio = lark.WebAudio;
+//if (lark.Capabilities.webAudio && !lark.Audio)
+//    lark.Audio = lark.WebAudio;

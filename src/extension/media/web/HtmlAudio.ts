@@ -8,12 +8,12 @@ module lark {
             var audio = new $HtmlAudio();
             audio.autoplay = false;
             audio.volume = this._volume;
-            this.sources.forEach(source=> {
+            for (var type in this.sources) {
+                var source = this.sources[type];
                 var sourceElement = document.createElement("SOURCE");
-                sourceElement.src = source.src;
-                sourceElement.type = source.mimeType||"";
+                sourceElement.src = source;
                 audio.appendChild(sourceElement);
-            })
+            }
 
             audio.load();
             this.loadStart = true;
@@ -33,6 +33,24 @@ module lark {
             this.domElement.pause();
         }
 
+        public stop() {
+            this.domElement.pause();
+            this.domElement.currentTime = 0;
+            this.onStop();
+        }
+
+
+        protected getPosition(): number {
+            if (this.domElement)
+                return this.domElement.currentTime;
+            return super.getPosition();
+        }
+        protected setPosition(value: number) {
+            super.setPosition(value);
+            if(this.domElement)
+                this.domElement.currentTime = value;
+        }
+
         protected getVolume(): number {
             if (this.domElement)
                 return this.domElement.volume;
@@ -41,9 +59,10 @@ module lark {
 
         protected setVolume(value: number) {
             super.setVolume(value);
-            this.domElement.volume = value;
+            if(this.domElement)
+                this.domElement.volume = value;
         }
     }
 }
-if ((!lark.Capabilities.webAudio || !lark["WebAudio"]) && !lark.Audio)
+if ( !lark.Audio)
     lark.Audio = lark.HtmlAudio;

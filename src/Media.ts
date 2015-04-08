@@ -2,54 +2,57 @@
 
 module lark {
     export class Media extends DisplayObjectContainer {
-        textfield: TextField;
+        play: TextField;
+        pause: TextField;
+        stop: TextField;
+        progress: TextField;
+        audio: Audio;
         constructor() {
             super();
-            var textfield = new TextField("Hi Audio", { fontSize: 50 });
-            this.textfield = textfield;
-            this.addChild(textfield);
-            var poster = new Image();
-            poster.src = "image/test.png";
-            poster.onload = () => {
-                var texture = new Texture();
-                texture.$setBitmapData(poster);
-                this.start(texture);
-            }
+
+            var play = new TextField("play");
+            var pause = new TextField("pause");
+            pause.y = 30;
+            var stop = new TextField("stop");
+            stop.y = 60;
+            var progress = new TextField("0");
+            progress.y = 90;
+
+            play.on(TouchEvent.TOUCH_BEGIN, e=> this.audio.play(), this);
+            pause.on(TouchEvent.TOUCH_BEGIN, e=> this.audio.pause(), this);
+            stop.on(TouchEvent.TOUCH_BEGIN, e=> this.audio.stop(), this);
+
+            this.addChild(play);
+            this.addChild(pause);
+            this.addChild(stop);
+            this.addChild(progress);
+
+            this.play = play;
+            this.pause = pause;
+            this.stop = stop;
+            this.progress = progress;
+
+            this.start();
         }
 
-        start(texture:Texture) {
+        start() {
 
             var audio = new Audio({
-                src: "sound/mp3.mp3"
+                sources:{
+                    ogg: "sound/ogg.ogg",
+                    mp3: 'sound/mp3.mp3',
+                    wav: 'sound/wav.wav',
+                    m4a:'sound/weba.weba'
+                }
             });
             audio.load();
+            audio.on("timeupdate", this.showOrg, this);
 
-            
-
-            var video = new Video({ src: "sound/mov_bbb.mp4", width: 500 });
-
-            this.stage.on(TouchEvent.TOUCH_BEGIN, e=> audio.play(false), this);
-            
-            window.addEventListener("mousewheel", e=> {
-                var volume = audio.volume;
-                if (e.wheelDelta > 0)
-                    volume += 0.01;
-                else
-                    volume -= 0.01;
-                if (volume > 1)
-                    volume = 1;
-                else if (volume < 0)
-                    volume = 0;
-                audio.volume = volume;
-                this.textfield.text = volume.toString();
-            });
-
-            var acc = new OrientationListener();
-            acc.on("change",this.showOrg, this);
+            this.audio = audio;
         }
 
-        showOrg(e: OrientationEvent) {
-            this.textfield.text = " x:" + e.x.toFixed(1) + "\ny:" + e.y.toFixed(1) + "\nz:" + e.z.toFixed(1);
+        showOrg(e: Event) {
+            this.progress.text = this.audio.position.toString();
         }
     }
 
