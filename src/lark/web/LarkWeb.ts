@@ -50,7 +50,6 @@ module lark.web {
      * 网页加载完成，实例化页面中定义的LarkPlayer标签
      */
     function runLark():void {
-        WebCapability.detect();
         var ticker = lark.player.Ticker.$instance = new lark.player.Ticker();
         startTicker(ticker);
         var canvas = document.createElement("canvas");

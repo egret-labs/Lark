@@ -126,4 +126,5 @@ module lark.web {
             };
         }
     }
+    WebCapability.detect();
 }
