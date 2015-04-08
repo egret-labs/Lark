@@ -19,17 +19,17 @@ module lark {
 
         start(texture:Texture) {
 
-            var audio = new LarkAudio({
+            var audio = new Audio({
                 src: "sound/mp3.mp3"
             });
             audio.load();
 
             
 
-            var video = new LarkVideo({ src: "sound/mov_bbb.mp4", width: 500 });
+            var video = new Video({ src: "sound/mov_bbb.mp4", width: 500 });
 
             this.stage.on(TouchEvent.TOUCH_BEGIN, e=> audio.play(false), this);
-
+            
             window.addEventListener("mousewheel", e=> {
                 var volume = audio.volume;
                 if (e.wheelDelta > 0)
@@ -44,11 +44,11 @@ module lark {
                 this.textfield.text = volume.toString();
             });
 
-            var acc = new Accelerometer();
+            var acc = new OrientationListener();
             acc.on("change",this.showOrg, this);
         }
 
-        showOrg(e: AccelerometerEvent) {
+        showOrg(e: OrientationEvent) {
             this.textfield.text = " x:" + e.x.toFixed(1) + "\ny:" + e.y.toFixed(1) + "\nz:" + e.z.toFixed(1);
         }
     }

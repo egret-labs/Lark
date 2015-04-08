@@ -58,3 +58,5 @@
 
     }
 }
+
+lark.Video = lark.HtmlVideo;

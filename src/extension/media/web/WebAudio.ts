@@ -5,7 +5,7 @@ module lark {
     var AudioContextClass: typeof AudioContext = window["AudioContext"] || window["webkitAudioContext"];
     var $AudioContext = AudioContextClass ? new AudioContextClass() : null;
 
-    export class WebAudio extends LarkAudioBase {
+    export class WebAudio extends LarkMedia {
         public audioBuffer: AudioBuffer = null;
         public bufferSource: AudioBufferSourceNode = null;
         public gain: GainNode = null;
@@ -121,3 +121,5 @@ module lark {
         }
     }
 }
+if (lark.Capabilities.webAudio && !lark.Audio)
+    lark.Audio = lark.WebAudio;

@@ -29,7 +29,6 @@
 
 module lark {
 
-    var html5FeatureSupport = checkHtml5Support();
     export class Capabilities {
 
         static $language:string = "zh-CN";
@@ -68,9 +67,71 @@ module lark {
         public static get isMobile():boolean{
             return Capabilities.$isMobile;
         }
+
+        public static $canvas:boolean;
+
+        public static get canvas(): boolean {
+            return Capabilities.$canvas;
+        }
+
+
+        public static $audio: IAudioSupport;
+
+        public static get audio():IAudioSupport {
+            return Capabilities.$audio;
+        }
+
+
+        public static $video: IVideoSupport;
+
+        public static get video(): IVideoSupport {
+            return Capabilities.$video;
+        }
+
+
+        public static $webGL: boolean;
+
+        public static get webGL(): boolean {
+            return Capabilities.$webGL;
+        }
+
+
+        public static $webAudio: boolean;
+
+        public static get webAudio(): boolean {
+            return Capabilities.$webAudio;
+        }
+
+
+        public static $webSocket: boolean;
+
+        public static get webSocket(): boolean {
+            return Capabilities.$webSocket;
+        }
+
+
+        public static $location: boolean;
+
+        public static get location(): boolean {
+            return Capabilities.$location;
+        }
+
+
+        public static $orientation: boolean;
+
+        public static get orientation(): boolean {
+            return Capabilities.$orientation;
+        }
+
+
+        public static $motion: boolean;
+
+        public static get motion(): boolean {
+            return Capabilities.$motion;
+        }
     }
 
-    interface IAudioSupport {
+    export interface IAudioSupport {
         ogg: boolean;
         mp3: boolean;
         wav: boolean;
@@ -78,85 +139,11 @@ module lark {
         opus: boolean;
     }
 
-    interface IVideoSupport {
+    export interface IVideoSupport {
         ogg: boolean;
         h264:boolean;
         webm:boolean;
         vp9 :boolean;
         hls :boolean;
-    }
-
-    function checkHtml5Support() {
-
-        var createElement = tag => <any>document.createElement(tag);
-        var webaudio = ('webkitAudioContext' in window) || ('AudioContext' in window);
-
-        var websocket = 'WebSocket' in window && window["WebSocket"].CLOSING === 2;
-
-        var canvas = (() => {
-            var elem = <HTMLCanvasElement>createElement("canvas");
-            return !!(elem.getContext && elem.getContext('2d'))
-        })();
-
-        var support = function (elem,mime) {
-            return elem.canPlayType(mime).replace(/^no$/, '');
-        }
-
-        var audio:IAudioSupport = (() => {
-            var elem = createElement('audio');
-            var bool: any = false;
-
-            try {
-                if (bool = !!elem.canPlayType) {
-                    bool = new Boolean(bool);
-                    bool.ogg = support(elem,'audio/ogg; codecs="vorbis"');
-                    bool.mp3 = support(elem,'audio/mpeg;');
-                    bool.opus = support(elem,('audio/ogg; codecs="opus"'));
-                    bool.wav = support(elem,('audio/wav; codecs="1"'));
-                    bool.m4a = support(elem, 'audio/x-m4a;') || support(elem, 'audio/aac;');
-                }
-            } catch (e) { }
-
-            return bool;
-        })();
-
-        var video:IVideoSupport = (() => {
-            var elem = createElement('video');
-            var bool: any = false;
-
-            try {
-                if (bool = !!elem.canPlayType) {
-                    bool = new Boolean(bool);
-                    bool.ogg = support(elem,'video/ogg; codecs="theora"');
-                    bool.h264 = support(elem,'video/mp4; codecs="avc1.42E01E"');
-                    bool.webm = support(elem,'video/webm; codecs="vp8, vorbis"');
-                    bool.vp9 = support(elem,'video/webm; codecs="vp9"');
-                    bool.hls = support(elem,'application/x-mpegURL; codecs="avc1.42E01E"');
-                }
-            } catch (e) { }
-
-            return bool;
-        })();
-
-        var webgl = (() => {
-            var canvas = createElement('canvas');
-            var supports = 'probablySupportsContext' in canvas ? 'probablySupportsContext' : 'supportsContext';
-            if (supports in canvas) {
-                return canvas[supports]('webgl') || canvas[supports]('experimental-webgl');
-            }
-            return 'WebGLRenderingContext' in window;
-        })();
-
-        var geolocation = 'geolocation' in navigator
-
-        return {
-            a: audio,
-            v: video,
-            cvs: canvas,
-            gl: webgl,
-            wa: webaudio,
-            ws: websocket,
-            geo: geolocation
-        };
     }
 }

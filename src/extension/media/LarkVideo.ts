@@ -1,8 +1,9 @@
 ﻿module lark {
-
-    var DefaultVideoClass: typeof LarkVideoBase = null;
-    export var LarkVideo: { new (option: IMediaOption): LarkVideoBase };
-    export class LarkVideoBase extends LarkMedia {
+    interface Video extends IMedia {
+        poster: string;
+    }
+    export var Video: { new (option: IMediaOption): Video };
+    export class LarkVideoBase extends LarkMedia implements Video {
                 constructor(option:IMediaOption) {
             super(option);
             this.$renderNode = new player.BitmapNode(this);

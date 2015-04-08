@@ -1,6 +1,6 @@
 ﻿module lark {
 
-    export class WebAccelerometer extends AccelerometerBase {
+    export class Html5OrientationListener extends EventEmitter implements OrientationListener {
 
         constructor() {
             super();
@@ -8,7 +8,7 @@
         }
 
         protected onChange = (e: DeviceOrientationEvent) => {
-            var event = new AccelerometerEvent("change");
+            var event = new OrientationEvent("change");
             event.x = e.beta;
             event.y = e.gamma;
             event.z = e.alpha;
@@ -16,3 +16,5 @@
         }
     }
 }
+
+lark.OrientationListener = lark.Html5OrientationListener;

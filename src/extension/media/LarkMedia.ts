@@ -15,7 +15,31 @@
         volume?: number;
     }
 
-    export class LarkMedia extends DisplayObject {
+    export interface IMedia extends DisplayObject{
+        
+        sources: IMediaSource[];
+        isPlaying: boolean;
+        canPlay: boolean;
+        loadStart: boolean;
+        volume: number;
+
+        load():void;
+        play(loop?: boolean): void;
+        pause(): void;
+
+        on(type: "loadstart", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        on(type: "canplay", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        on(type: "play", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        on(type: "playing", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        on(type: "pause", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        on(type: "end", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        on(type: "timeupdate", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        on(type: "volumechange", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        on(type: "error", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+    }
+
+    export class LarkMedia extends DisplayObject implements IMedia {
         public constructor(option?: IMediaOption) {
             super();
             if (!option)
@@ -121,20 +145,5 @@
             media.addEventListener("volumechange", e=> this.onVolumeChange(e));
             media.addEventListener("error", e=> this.onError(e));
         }
-
-        public on(type: "loadstart", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public on(type: "canplay", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public on(type: "play", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public on(type: "playing", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public on(type: "pause", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public on(type: "end", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public on(type: "timeupdate", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public on(type: "volumechange", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public on(type: "error", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number) {
-            super.on(type, listener, thisObject, useCapture, priority);
-        }
-
     }
 }

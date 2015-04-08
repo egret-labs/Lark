@@ -31,7 +31,7 @@ module demo {
     
 
     export class Playground extends lark.DisplayObjectContainer {
-        private motionSeed = new lark.Accelerometer();
+        private motionSeed = new lark.OrientationListener();
         private viewport = new Viewport();
         private message = new lark.TextField("", { fontSize: 12 });
         private vx = 0;
@@ -114,7 +114,7 @@ module demo {
 
         }
         initDeviceX = NaN;
-        private onTilted(e: lark.AccelerometerEvent) {
+        private onTilted(e: lark.OrientationEvent) {
             if (isNaN(this.initDeviceX))
                 this.initDeviceX = e.x;
             var offset = Math.abs(e.y);

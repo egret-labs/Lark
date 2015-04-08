@@ -1,10 +1,11 @@
-﻿module lark {
-    export class HtmlAudio extends LarkAudioBase {
+﻿var $HtmlAudio = Audio;
+module lark {
+    export class HtmlAudio extends LarkMedia implements Audio {
         protected domElement: HTMLAudioElement;
         public load() {
             if (this.loadStart)
                 return;
-            var audio = new Audio();
+            var audio = new $HtmlAudio();
             audio.autoplay = false;
             audio.volume = this._volume;
             this.sources.forEach(source=> {
@@ -44,3 +45,5 @@
         }
     }
 }
+if ((!lark.Capabilities.webAudio || !lark["WebAudio"]) && !lark.Audio)
+    lark.Audio = lark.HtmlAudio;
