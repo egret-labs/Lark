@@ -45,10 +45,17 @@ module lark {
         }
 
         /**
-         * 标记子项列表失效
+         * 沿着显示列表向下移除标志量，非容器直接设置自身的flag，此方法会在DisplayObjectContainer中被覆盖。
          */
-        private invalidateChildren() {
-            this.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
+        $removeFlagsDown(flags:DisplayObjectFlags):void{
+            if(this.$hasAnyFlags(flags)){
+                return;
+            }
+            this.$removeFlags(flags);
+            var children = this.$children;
+            for (var i = 0; i < children.length; i++) {
+                children[i].$removeFlagsDown(flags);
+            }
         }
 
         $propagateFlagsDown(flags:DisplayObjectFlags) {
@@ -61,6 +68,7 @@ module lark {
                 children[i].$propagateFlagsDown(flags);
             }
         }
+
 
         /**
          * 返回此对象的子项数目。
@@ -144,9 +152,10 @@ module lark {
                     }
                 }
             }
+            child.$removeFlagsDown(DisplayObjectFlags.Dirty);
+            child.$invalidateChildren();
             child.$propagateFlagsDown(DisplayObjectFlags.DownOnAddedOrRemoved);
-            this.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
-            this.invalidateChildren();
+            this.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
             return child;
         }
 
@@ -258,11 +267,12 @@ module lark {
                     childAddToStage.$stage = null;
                 }
             }
+            child.$removeFlagsDown(DisplayObjectFlags.Dirty);
+            child.$invalidateChildren();
             child.$setParent(null);
             children.splice(index, 1);
             child.$propagateFlagsDown(DisplayObjectFlags.DownOnAddedOrRemoved);
-            this.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
-            this.invalidateChildren();
+            this.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
             return child;
         }
 
@@ -290,8 +300,8 @@ module lark {
             else {
                 this.$children.splice(index, 0, child);
             }
-            child.$markDirty();
-            this.invalidateChildren();
+            child.$invalidateChildren();
+            this.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
         }
 
         /**
@@ -336,9 +346,9 @@ module lark {
             var child2:DisplayObject = list[index2];
             list[index1] = child2;
             list[index2] = child1;
-            child1.$markDirty();
-            child2.$markDirty();
-            this.invalidateChildren();
+            child1.$invalidateChildren();
+            child2.$invalidateChildren();
+            this.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
         }
 
         /**
@@ -415,6 +425,32 @@ module lark {
         public set touchChildren(value:boolean) {
             this.$touchChildren = value;
         }
+        /**
+         * 标记自身和所有子项都失效。
+         */
+        $invalidateChildren():void{
+            var cacheNode = this.$getCacheRoot(this.$parent);
+            this.markChildDirty(this, cacheNode);
+        }
+
+        private markChildDirty(child:DisplayObject, cacheRoot:lark.player.CacheNode):void {
+            if (child.$hasAnyFlags(DisplayObjectFlags.DirtyChildren)) {
+                return;
+            }
+            child.$setFlags(DisplayObjectFlags.DirtyChildren);
+            var node = child.$cacheNode||child.$renderNode;
+            if (node && cacheRoot) {
+                cacheRoot.markDirty(node);
+            }
+            if(child.$cacheNode){
+                return;
+            }
+            var children = child.$children;
+            for (var i = children.length - 1; i >= 0; i--) {
+                this.markChildDirty(children[i], cacheRoot);
+            }
+        }
+
 
         $hitTest(stageX:number,stageY:number):DisplayObject{
             if(!this.$hasFlags(DisplayObjectFlags.Visible)||!this.$touchEnabled&&!this.$touchChildren){

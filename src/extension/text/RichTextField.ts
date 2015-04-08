@@ -113,7 +113,7 @@ module lark {
 
         $setTextFieldFlags(flags: TextFieldFlags) {
             this._textFieldFlags |= flags;
-            this.$markDirty(true);
+            this.$invalidate();
         }
 
 

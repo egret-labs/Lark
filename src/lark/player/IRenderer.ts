@@ -51,6 +51,6 @@ module lark.player {
         /**
          * 绘制显示列表。
          */
-        drawDisplayList(root:DisplayObject,dirtyRectList?:lark.player.Region[]):number;
+        drawDisplayList(root:DisplayObject,cleanAll?:boolean):number;
     }
 }

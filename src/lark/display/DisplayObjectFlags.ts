@@ -83,20 +83,24 @@ module lark {
         CacheAsBitmap = 0x0080,
 
         /**
-         * 显示对象需要重绘的标志
+         * 显示对象自身的RenderNode需要重绘的标志
          */
-        RenderNodeDirty = 0x0100,
+        DirtyRender = 0x0100,
         /**
-         * 子项中含有需要重绘的节点
+         * 子项中已经全部含有DirtyRender标志，无需继续遍历。
          */
-        DirtyDescendents = 0x200,
+        DirtyChildren = 0x200,
+
+        /**
+         * DirtyRender|DirtyChildren
+         */
+        Dirty = DirtyRender|DirtyChildren,
         /**
          * 添加或删除子项时，需要向子项传递的标志。
          */
         DownOnAddedOrRemoved = DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
-            DisplayObjectFlags.InvalidConcatenatedAlpha |
-            DisplayObjectFlags.RenderNodeDirty
+            DisplayObjectFlags.InvalidConcatenatedAlpha
 
     }
 

@@ -46,7 +46,9 @@ module lark.web {
                 return null;
             }
             var texture = new Texture();
-            texture.$bitmapData = canvas;
+            canvas.width = 1920;
+            canvas.height = 900;
+            texture.$setBitmapData(canvas);
             return texture;
         }
 
@@ -102,7 +104,7 @@ module lark.web {
         private visitDisplayList(displayObject:DisplayObject):void {
             var node = displayObject.$renderNode;
             if (node) {
-                if(displayObject.$hasFlags(DisplayObjectFlags.RenderNodeDirty)){
+                if(displayObject.$hasFlags(DisplayObjectFlags.DirtyChildren)){
                     node.update();
                 }
                 node.render(this);
@@ -112,7 +114,6 @@ module lark.web {
                 var length = children.length;
                 for (var i = 0; i < length; i++) {
                     var child = children[i];
-                    child.$removeFlags(DisplayObjectFlags.DirtyDescendents);
                     if (!child.$visible) {
                         continue;
                     }

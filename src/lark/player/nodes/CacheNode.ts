@@ -29,6 +29,8 @@
 
 module lark.player {
 
+    export var $ScreenRenderer:any;
+
     var cacheNodeList:CacheNode[] = [];
 
     export class CacheNode extends BitmapNode {
@@ -37,6 +39,9 @@ module lark.player {
             node.target = null;
             node.matrix = null;
             node.bounds = null;
+            node.needRedraw = true;
+            node.isDirty = true;
+            node.moved = true;
             cacheNodeList.push(node);
         }
 
@@ -47,21 +52,40 @@ module lark.player {
                 if(texture){
                     node = new CacheNode(target);
                     node.texture = texture;
+                    node.renderer = new $ScreenRenderer(texture.$bitmapData);
                 }
             }
             return node;
         }
 
+        /**
+         * 显示对象的渲染节点发生改变时，把自身的RenderNode对象注册到此列表上。
+         */
+        public dirtyNodes:RenderNode[] = [];
+
+        public markDirty(node:RenderNode):void{
+            if(this.dirtyNodes.indexOf(node)==-1){
+                this.dirtyNodes.push(node);
+                this.needRedraw = true;
+            }
+        }
+
         public update():void{
             var target = this.target;
+            target.$removeFlagsUp(DisplayObjectFlags.Dirty);
             this.matrix = target.$getConcatenatedMatrix();
             this.alpha = target.$getConcatenatedAlpha();
             this.bounds = target.$getOriginalBounds();
             this.updateBounds();
         }
 
+        public needRedraw:boolean = false;
+
+        public renderer:IScreenRenderer;
+
         public redraw():void{
-            $textureDrawer.drawDisplayObject(this.texture,this.target);
+            this.renderer.drawDisplayList(this.target);
+            this.needRedraw = false;
         }
     }
 }

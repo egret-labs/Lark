@@ -51,11 +51,10 @@ module lark.web {
          */
         public constructor(canvas?:HTMLCanvasElement) {
             super();
-            if(!canvas) {
-                canvas = document.createElement("canvas");
+            if(canvas) {
+                this.canvas = canvas;
+                this.context = canvas.getContext("2d");
             }
-            this.canvas = canvas;
-            this.context = canvas.getContext("2d");
         }
 
         protected canvas:HTMLCanvasElement;
@@ -64,9 +63,11 @@ module lark.web {
         /**
          * 绘制显示列表。
          */
-        public drawDisplayList(root:DisplayObject,dirtyRectList?:lark.player.Region[]):number {
+        public drawDisplayList(root:DisplayObject,cleanAll?:boolean):number {
             this.reset();
-            var cleanAll = !dirtyRectList;
+            this.computeDirtyRects(root.$cacheNode.dirtyNodes);
+            var dirtyRectList = this.dirtyRectList;
+            cleanAll = cleanAll||this.dirtyRatio>80;
             if (cleanAll) {
                 this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
             }
@@ -82,9 +83,9 @@ module lark.web {
                 }
                 var node:lark.player.RenderNode;
                 var cacheNode = displayObject.$cacheNode;
-                if(cacheNode){
+                if(displayObject!==root&&cacheNode){
                     cacheNode.update();
-                    if(displayObject.$hasFlags(DisplayObjectFlags.DirtyDescendents)){
+                    if(cacheNode.needRedraw){
                         cacheNode.redraw();
                     }
                     node = cacheNode;
@@ -92,7 +93,6 @@ module lark.web {
                 else{
                     node = displayObject.$renderNode;
                 }
-                displayObject.$removeFlags(DisplayObjectFlags.DirtyDescendents);
                 if (node && !node.outOfScreen && !(node.alpha === 0)) {
                     if (!cleanAll && !node.isDirty) {
                         for (var j = dirtyRectList.length - 1; j >= 0; j--) {
@@ -109,13 +109,43 @@ module lark.web {
                         node.finish();
                     }
                 }
-                return !cacheNode;
+                return !cacheNode||displayObject===root;
             });
             if (!cleanAll) {
                 this.context.restore();
             }
+            this.dirtyRegion.clear();
+            root.$cacheNode.dirtyNodes = [];
             return drawCalls;
         }
+
+        private dirtyRectList:lark.player.Region[] = [];
+
+        private dirtyRatio:number = 0;
+
+        private dirtyRegion:lark.player.DirtyRegion = new lark.player.DirtyRegion(1920,900);
+
+        private computeDirtyRects(nodeList:lark.player.RenderNode[]):void {
+            var dirtyRegion = this.dirtyRegion;
+            var length = nodeList.length;
+            for (var i=0;i<length;i++) {
+                var node = nodeList[i];
+                if (!node.outOfScreen && node.alpha !== 0) {
+                    node.isDirty = true;
+                    dirtyRegion.addDirtyRegion(node.minX, node.minY, node.maxX, node.maxY);
+                }
+                node.update();
+                if (node.moved && !node.outOfScreen && node.alpha !== 0) {
+                    node.isDirty = true;
+                    dirtyRegion.addDirtyRegion(node.minX, node.minY, node.maxX, node.maxY);
+                }
+            }
+            var dirtyRectList:lark.player.Region[] = this.dirtyRectList;
+            dirtyRectList.length = 0;
+            dirtyRegion.gatherOptimizedRegions(dirtyRectList);
+            this.dirtyRatio = dirtyRegion.dirtyRatio;
+        }
+
 
         /**
          * 绘制脏矩形列表

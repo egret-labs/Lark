@@ -78,11 +78,6 @@ module lark {
         public invalidate():void {
             lark.player.Ticker.$invalidateRenderFlag = true;
         }
-
-        /**
-         * 显示对象的渲染节点发生改变时，把自身的RenderNode对象注册到此列表上。
-         */
-        $dirtyRenderNodes:{[key:number]:lark.player.RenderNode} = {};
         /**
          * 一个阈值，当屏幕上脏矩形区域的面积占总面积的百分比小于或等于此值时启用脏矩形绘制，否则直接清空整个屏幕重新绘制所有显示对象。
          */

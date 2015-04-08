@@ -55,7 +55,7 @@ module lark {
             DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
             DisplayObjectFlags.InvalidConcatenatedAlpha |
-            DisplayObjectFlags.RenderNodeDirty;
+            DisplayObjectFlags.Dirty;
         }
 
         $displayObjectFlags:number = 0;
@@ -80,7 +80,7 @@ module lark {
          * 沿着显示列表向上移除标志量，如果标志量没被设置过就停止移除。
          */
         $removeFlagsUp(flags:DisplayObjectFlags):void {
-            if (!this.$hasFlags(flags)) {
+            if (!this.$hasAnyFlags(flags)) {
                 return;
             }
             this.$removeFlags(flags)
@@ -88,6 +88,12 @@ module lark {
             if (parent) {
                 parent.$removeFlagsUp(flags);
             }
+        }
+        /**
+         * 沿着显示列表向下移除标志量，非容器直接移除自身的flag，此方法会在DisplayObjectContainer中被覆盖。
+         */
+        $removeFlagsDown(flags:DisplayObjectFlags):void{
+            this.$removeFlags(flags);
         }
 
         $hasFlags(flags:DisplayObjectFlags):boolean {
@@ -128,7 +134,7 @@ module lark {
          * 标记这个显示对象在父级容器的位置发生了改变。
          */
         private invalidatePosition():void {
-            this.$markDirty();
+            this.$invalidateChildren();
             this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
             if (this.$parent) {
@@ -164,18 +170,10 @@ module lark {
         $onAddToStage(stage:Stage):void {
             this.$stage = stage;
             DisplayObjectContainer.$EVENT_ADD_TO_STAGE_LIST.push(this);
-            var node = this.$renderNode;
-            if (node) {
-                stage.$dirtyRenderNodes[node.hashCode] = node;
-            }
         }
 
         $onRemoveFromStage():void {
             DisplayObjectContainer.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
-            var node = this.$renderNode;
-            if (node) {
-                this.$stage.$dirtyRenderNodes[node.hashCode] = node;
-            }
         }
 
         $stage:Stage = null;
@@ -450,7 +448,7 @@ module lark {
                 return;
             }
             this.$visible = value;
-            this.$markDirty();
+            this.$invalidateChildren();
         }
         /**
          * cacheAsBitmap创建的缓存位图节点。
@@ -475,15 +473,12 @@ module lark {
             }
             if(value){
                 this.$cacheNode = lark.player.CacheNode.$create(this);
-                if(!this.$cacheNode){
-                    return;
-                }
+                this.$getCacheRoot(this);
             }
             else{
                 lark.player.CacheNode.$release(this.$cacheNode);
                 this.$cacheNode = null;
             }
-            this.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
         }
         private _alpha:number = 1;
         /**
@@ -502,7 +497,7 @@ module lark {
             }
             this._alpha = value;
             this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedAlpha);
-            this.$markDirty();
+            this.$invalidateChildren();
         }
 
         private _concatenatedAlpha:number = 1;
@@ -647,7 +642,7 @@ module lark {
          * 标记自身的测量尺寸失效
          */
         $invalidateContentBounds():void {
-            this.$markDirty(true);
+            this.$invalidate();
             this.$setFlags(DisplayObjectFlags.InvalidContentBounds);
             this.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
         }
@@ -707,44 +702,57 @@ module lark {
          * 注意：此方法里禁止添加移除显示子项或执行其他可能产生新的Dirty标记的操作，仅执行同步操作，否则可能导致屏幕绘制错误。
          */
         $updateRenderNode():void {
-            this.$removeFlagsUp(DisplayObjectFlags.RenderNodeDirty);
+            this.$removeFlagsUp(DisplayObjectFlags.Dirty);
             var node = this.$renderNode;
             node.alpha = this.$getConcatenatedAlpha();
             node.matrix = this.$getConcatenatedMatrix();
             node.bounds = this.$getContentBounds();
         }
 
+        $getCacheRoot(parent:DisplayObject):lark.player.CacheNode{
+            var cacheNode:lark.player.CacheNode;
+            while(parent){
+                if(parent.$cacheNode){
+                    cacheNode = parent.$cacheNode;
+                    break;
+                }
+                parent = parent.parent;
+            }
+            if(cacheNode&&!cacheNode.needRedraw){
+                var parentCache = this.$getCacheRoot(parent.$parent);
+                if(parentCache){
+                    parentCache.markDirty(cacheNode);
+                }
+            }
+            return cacheNode;
+        }
         /**
          * 标记此显示对象需要重绘，调用此方法后，在屏幕绘制阶段$updateRenderNode()方法会自动被回调，您可能需要覆盖它来同步自身改变的属性到目标RenderNode。
-         * @param cacheDirty 传入true将标记自身的位图缓存失效。否则只标记父级的位图缓存失效
          */
-        $markDirty(cacheDirty?:boolean):void {
-            if(cacheDirty){
-                this.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
-            }
-            else{
-                if(this.$parent){
-                    this.$parent.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
-                }
-            }
-            var dirtyNodes = this.$stage ? this.$stage.$dirtyRenderNodes : null;
-            this.markChildDirty(this, dirtyNodes);
-        }
-
-        private markChildDirty(child:DisplayObject, dirtyNodes:{[key:number]:lark.player.RenderNode}):void {
-            if (child.$hasFlags(DisplayObjectFlags.RenderNodeDirty)) {
+        $invalidate():void{
+            var node = this.$renderNode;
+            if(!node||this.$hasFlags(DisplayObjectFlags.DirtyRender)) {
                 return;
             }
-            child.$setFlags(DisplayObjectFlags.RenderNodeDirty);
-            var node = child.$renderNode;
-            if (node && dirtyNodes) {
-                dirtyNodes[node.hashCode] = node;
+            this.$setFlags(DisplayObjectFlags.DirtyRender);
+            var cacheNode = this.$getCacheRoot(this);
+            if (cacheNode) {
+                cacheNode.markDirty(node);
             }
-            var children = child.$children;
-            if (children) {
-                for (var i = children.length - 1; i >= 0; i--) {
-                    this.markChildDirty(children[i], dirtyNodes);
-                }
+        }
+
+        /**
+         * 标记自身和所有子项都失效。
+         */
+        $invalidateChildren():void{
+            if(this.$hasFlags(DisplayObjectFlags.DirtyChildren)){
+                return;
+            }
+            this.$setFlags(DisplayObjectFlags.DirtyChildren);
+            var node:lark.player.RenderNode = this.$cacheNode||this.$renderNode;
+            var cacheNode = this.$getCacheRoot(this.$parent);
+            if (node&&cacheNode) {
+                cacheNode.markDirty(node);
             }
         }
 

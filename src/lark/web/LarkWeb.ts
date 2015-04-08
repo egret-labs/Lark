@@ -56,6 +56,7 @@ module lark.web {
         var canvas = document.createElement("canvas");
         $textMeasurer = new CanvasTextMeasurer(canvas);
         $textureDrawer = new WebTextureDrawer();
+        lark.player.$ScreenRenderer = CanvasRenderer;
         if(!lark.player.screenAdapter){
             lark.player.screenAdapter = new lark.player.ScreenAdapter();
         }

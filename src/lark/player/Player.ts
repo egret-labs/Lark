@@ -37,7 +37,7 @@ module lark.player {
         if (children) {
             var length = children.length;
             for (var i = 0; i < length; i++) {
-                visitDisplayList(children[i],visitor);
+                visitDisplayList(children[i], visitor);
             }
         }
     }
@@ -58,6 +58,10 @@ module lark.player {
             this.renderer = renderer;
             this.entryClassName = entryClassName;
             this.stage = stage;
+            stage.$cacheNode = new lark.player.CacheNode(stage);
+            stage.$cacheNode.renderer = renderer;
+            stage.$cacheNode.texture = new Texture();
+            stage.$cacheNode.texture.$setBitmapData(renderer["canvas"])
         }
 
         private renderer:IScreenRenderer;
@@ -134,18 +138,11 @@ module lark.player {
          */
         $render(triggerByFrame:boolean):void {
             var t = lark.getTimer();
-            this.computeDirtyRects();
+            //this.computeDirtyRects();
             var t1 = lark.getTimer();
             this.drawCalls = 0;
-            if (this.dirtyRatio > 0) {
-                var cleanAll:boolean = (this.dirtyRatio > this.stage.$dirtyRatio) || this.stageSizeChangedFlag;
-                this.drawDisplayList(cleanAll);
-                var t2 = lark.getTimer();
-            }
-            else {
-                t2 = t1;
-            }
-
+            this.drawDisplayList();
+            var t2 = lark.getTimer();
             if (triggerByFrame) {
                 FPS.update(this.drawCalls, this.dirtyRatio, t1 - t, t2 - t1);
             }
@@ -159,40 +156,13 @@ module lark.player {
 
         private dirtyRegion:DirtyRegion;
 
-        private computeDirtyRects():void {
-            var dirtyRegion = this.dirtyRegion;
-            var nodeList = this.stage.$dirtyRenderNodes;
-            for (var i in nodeList) {
-                var node = nodeList[i];
-                if (!node.outOfScreen && node.alpha !== 0) {
-                    node.isDirty = true;
-                    dirtyRegion.addDirtyRegion(node.minX, node.minY, node.maxX, node.maxY);
-                }
-                node.update();
-                if (node.moved && !node.outOfScreen && node.alpha !== 0) {
-                    node.isDirty = true;
-                    dirtyRegion.addDirtyRegion(node.minX, node.minY, node.maxX, node.maxY);
-                }
-            }
-            var dirtyRectList:Region[] = this.dirtyRectList;
-            dirtyRectList.length = 0;
-            dirtyRegion.gatherOptimizedRegions(dirtyRectList);
-            this.dirtyRatio = dirtyRegion.dirtyRatio;
-        }
 
         /**
          * 同步显示列表。
          */
-        private drawDisplayList(cleanAll:boolean):void {
-            if (cleanAll) {
-                this.drawCalls = this.renderer.drawDisplayList(this.stage);
-                this.stageSizeChangedFlag = false;
-            }
-            else {
-                this.drawCalls = this.renderer.drawDisplayList(this.stage,this.dirtyRectList);
-            }
-            this.dirtyRegion.clear();
-            this.stage.$dirtyRenderNodes = {};
+        private drawDisplayList():void {
+            this.drawCalls = this.renderer.drawDisplayList(this.stage,this.stageSizeChangedFlag);
+            this.stageSizeChangedFlag = false;
         }
 
         /**
@@ -212,7 +182,7 @@ module lark.player {
                 stage.$stageHeight = stageHeight;
                 this.dirtyRegion = new DirtyRegion(stageWidth, stageHeight);
                 this.stageSizeChangedFlag = true;
-                visitDisplayList(this.stage, function(displayObject:DisplayObject):boolean{
+                visitDisplayList(this.stage, function (displayObject:DisplayObject):boolean {
                     var node = displayObject.$renderNode;
                     if (node) {
                         node.outOfScreen = !node.intersects(0, 0, stageWidth, stageHeight);
