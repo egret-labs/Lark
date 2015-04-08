@@ -18,7 +18,7 @@
                     this.poster = poster;
             }
 
-            this.on(Event.ENTER_FRAME, e=> this.$markDirty(), this);
+            this.on(Event.ENTER_FRAME, e=> this.$markDirty(true), this);
         }
 
 

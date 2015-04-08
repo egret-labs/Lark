@@ -48,63 +48,65 @@ module lark {
 
         private start(texture:Texture):void {
 
+            //var container = new DisplayObjectContainer();
+            //container.name = "container";
+            //container.x = 150;
+            //container.addChild(new Bitmap(texture));
+            //var bitmap = new Bitmap(texture);
+            //bitmap.x = 150;
+            //bitmap.touchEnabled = false;
+            //container.addChild(bitmap);
+            //container.touchEnabled = false;
+            //container.scaleX = container.scaleY = 0.5;
+            //
+            //var container2 = new DisplayObjectContainer();
+            //container2.name  = "container2";
+            //container2.addChild(container);
+            //bitmap = new Bitmap(texture);
+            //bitmap.alpha = 0.7;
+            //container2.addChild(bitmap);
+            //container2.x = 250;
+            //container2.touchChildren = false;
+            //
+            //var t = new Texture();
+            //var m = new Matrix();
+            //t.draw(container2,m,0.5);
+            //bitmap = new lark.Bitmap(t);
+            //this.addChild(bitmap);
+
+
             var container = new DisplayObjectContainer();
-            container.name = "container";
-            container.x = 150;
-            container.addChild(new Bitmap(texture));
-            var bitmap = new Bitmap(texture);
-            bitmap.x = 150;
-            bitmap.touchEnabled = false;
-            container.addChild(bitmap);
-            container.touchEnabled = false;
-            container.scaleX = container.scaleY = 0.5;
-
-            var container2 = new DisplayObjectContainer();
-            container2.name  = "container2";
-            container2.addChild(container);
-            bitmap = new Bitmap(texture);
-            bitmap.alpha = 0.7;
-            container2.addChild(bitmap);
-            container2.x = 250;
-            container2.touchChildren = false;
-
-            var t = new Texture();
-            var m = new Matrix();
-            t.draw(container2,m,0.5);
-            bitmap = new lark.Bitmap(t);
-            this.addChild(bitmap);
-
-
-
-            //var x = 0, y = 0;
-            //for (var i = 0; i < 3000; i++) {
-            //    var bitmap = new Bitmap();
-            //    bitmap.texture = texture;
-            //    bitmap.x = x;
-            //    bitmap.y = y;
-            //    bitmap.scaleX = bitmap.scaleY = Math.random();
-            //    bitmap.rotation = Math.random() * 360;
-            //    x += texture.width;
-            //    if (x > 1920) {
-            //        x = 0;
-            //        y += texture.height;
-            //        if (y > 960) {
-            //            y = 0;
-            //        }
-            //    }
-            //    this.addChild(bitmap);
-            //    //this.iconList.push(bitmap);
-            //}
-            //bitmap = new lark.Bitmap();
-            //bitmap.texture = texture;
-            //bitmap.x = 700;
-            //bitmap.y = 500;
-            //this.iconList.push(bitmap);
-            //this.targetIcon = bitmap;
-            //this.addChild(this.targetIcon);
-            //var timer = new Timer(16);
-            //timer.on(TimerEvent.TIMER, this.onTick, this);
-            //timer.start();
+            var x = 0, y = 0;
+            for (var i = 0; i < 8000; i++) {
+                var bitmap = new Bitmap();
+                bitmap.texture = texture;
+                bitmap.x = x;
+                bitmap.y = y;
+                bitmap.scaleX = bitmap.scaleY = Math.random();
+                bitmap.rotation = Math.random() * 360;
+                x += texture.width;
+                if (x > 1920) {
+                    x = 0;
+                    y += texture.height;
+                    if (y > 960) {
+                        y = 0; 
+                    }
+                }
+                container.addChild(bitmap);
+                //this.iconList.push(bitmap);
+            }
+            container.cacheAsBitmap = true;
+            this.addChild(container);
+            bitmap = new lark.Bitmap();
+            bitmap.texture = texture;
+            bitmap.x = 700;
+            bitmap.y = 500;
+            this.iconList.push(bitmap);
+            this.targetIcon = bitmap;
+            this.addChild(this.targetIcon);
+            var timer = new Timer(16);
+            timer.on(TimerEvent.TIMER, this.onTick, this);
+            timer.start();
             this.addChild(FPS.display);
             this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
@@ -118,6 +120,7 @@ module lark {
             if(this.touchTarget===this.stage||this.touchTarget===FPS.display){
                 return;
             }
+            this.addChild(this.touchTarget);
             this.offsetX = this.touchTarget.x - event.stageX;
             this.offsetY = this.touchTarget.y - event.stageY;
             this.stage.on(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);

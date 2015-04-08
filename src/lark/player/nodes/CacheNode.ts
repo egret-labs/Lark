@@ -29,28 +29,39 @@
 
 module lark.player {
 
-    /**
-     * IPlayerContext接口定义Lark播放器与平台相关的操作，包括绘制，网络，交互操作等。
-     */
-    export interface IRenderer extends IHashObject {
+    var cacheNodeList:CacheNode[] = [];
 
-        /**
-         * 绘制图片到一个区域上
-         */
-        drawImage(texture:Texture, matrix:Matrix, globalAlpha:number): void;
+    export class CacheNode extends BitmapNode {
 
-        /**
-         * 绘制文本到一个区域上
-         */
-        drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number): void;
+        static $release(node:CacheNode):void{
+            node.target = null;
+            node.matrix = null;
+            node.bounds = null;
+            cacheNodeList.push(node);
+        }
 
-    }
+        static $create(target:DisplayObject):CacheNode{
+            var node = cacheNodeList.pop();
+            if(!node){
+                var texture = $textureDrawer.createTextureForCache();
+                if(texture){
+                    node = new CacheNode(target);
+                    node.texture = texture;
+                }
+            }
+            return node;
+        }
 
-    export interface IScreenRenderer extends IRenderer {
+        public update():void{
+            var target = this.target;
+            this.matrix = target.$getConcatenatedMatrix();
+            this.alpha = target.$getConcatenatedAlpha();
+            this.bounds = target.$getOriginalBounds();
+            this.updateBounds();
+        }
 
-        /**
-         * 绘制显示列表。
-         */
-        drawDisplayList(root:DisplayObject,dirtyRectList?:lark.player.Region[]):number;
+        public redraw():void{
+            $textureDrawer.drawDisplayObject(this.texture,this.target);
+        }
     }
 }

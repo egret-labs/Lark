@@ -28,6 +28,20 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark.web {
+
+    function visitDisplayList(displayObject:DisplayObject, visitor:(DisplayObject) => boolean):void {
+        if (!visitor(displayObject)) {
+            return;
+        }
+        var children = displayObject.$children;
+        if (children) {
+            var length = children.length;
+            for (var i = 0; i < length; i++) {
+                visitDisplayList(children[i],visitor);
+            }
+        }
+    }
+
     /**
      * Canvas屏幕渲染器
      */
@@ -35,30 +49,100 @@ module lark.web {
         /**
          * 创建一个Canvas屏幕渲染器
          */
-        public constructor(canvas:HTMLCanvasElement) {
+        public constructor(canvas?:HTMLCanvasElement) {
             super();
-            if(canvas){
-                this.canvas = canvas;
-                this.context = canvas.getContext("2d");
+            if(!canvas) {
+                canvas = document.createElement("canvas");
             }
+            this.canvas = canvas;
+            this.context = canvas.getContext("2d");
         }
 
         protected canvas:HTMLCanvasElement;
         protected context:CanvasRenderingContext2D;
 
         /**
-         * 清除整个屏幕
+         * 绘制显示列表。
          */
-        public clearScreen():void {
+        public drawDisplayList(root:DisplayObject,dirtyRectList?:lark.player.Region[]):number {
             this.reset();
-            this.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            var cleanAll = !dirtyRectList;
+            if (cleanAll) {
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+            else {
+                this.drawDirtyRects(dirtyRectList);
+            }
+
+            var renderer = this;
+            var drawCalls = 0;
+            visitDisplayList(root, function(displayObject:DisplayObject):boolean{
+                if (!displayObject.$visible) {
+                    return false;
+                }
+                var node:lark.player.RenderNode;
+                var cacheNode = displayObject.$cacheNode;
+                if(cacheNode){
+                    cacheNode.update();
+                    if(displayObject.$hasFlags(DisplayObjectFlags.DirtyDescendents)){
+                        cacheNode.redraw();
+                    }
+                    node = cacheNode;
+                }
+                else{
+                    node = displayObject.$renderNode;
+                }
+                displayObject.$removeFlags(DisplayObjectFlags.DirtyDescendents);
+                if (node && !node.outOfScreen && !(node.alpha === 0)) {
+                    if (!cleanAll && !node.isDirty) {
+                        for (var j = dirtyRectList.length - 1; j >= 0; j--) {
+                            var region = dirtyRectList[j];
+                            if (node.intersects(region.minX, region.minY, region.maxX, region.maxY)) {
+                                node.isDirty = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (cleanAll || node.isDirty) {
+                        drawCalls++;
+                        node.render(renderer);
+                        node.finish();
+                    }
+                }
+                return !cacheNode;
+            });
+            if (!cleanAll) {
+                this.context.restore();
+            }
+            return drawCalls;
         }
 
         /**
-         * 清除屏幕的部分渲染区域
+         * 绘制脏矩形列表
          */
-        public clearRect(x:number, y:number, width:number, height:number):void {
-            this.context.clearRect(x, y, width, height);
+        private drawDirtyRects(regionList:lark.player.Region[]):void{
+            this.reset();
+            this.context.save();
+            this.context.beginPath();
+            var length = regionList.length;
+            for (var i = 0; i < length; i++) {
+                var region = regionList[i];
+                this.context.clearRect(region.minX,region.minY,region.width,region.height);
+                this.context.rect(region.minX,region.minY,region.width,region.height);
+            }
+            this.context.clip();
+        }
+
+        protected reset():void{
+            var context = this.context;
+            context.setTransform(1, 0, 0, 1, 0, 0);
+            this._globalAlpha = 1;
+            this.context.globalAlpha = 1;
+            this.setFont(null);
+            this.setFillStyle(null);
+            context.strokeStyle = null;
+            context.textBaseline = "middle";
+
         }
 
         /**
@@ -84,40 +168,6 @@ module lark.web {
             this.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
             context.fillText(text, x, y, width);
 
-        }
-
-        public reset():void{
-            var context = this.context;
-            context.setTransform(1, 0, 0, 1, 0, 0);
-            this._globalAlpha = 1;
-            this.context.globalAlpha = 1;
-            this.setFont(null);
-            this.setFillStyle(null);
-            context.strokeStyle = null;
-            context.textBaseline = "middle";
-
-        }
-
-        /**
-         * 绘制脏矩形列表
-         */
-        public drawDirtyRects(regionList:lark.player.Region[]):void{
-            this.reset();
-            this.context.save();
-            this.context.beginPath();
-            var length = regionList.length;
-            for (var i = 0; i < length; i++) {
-                var region = regionList[i];
-                this.clearRect(region.minX,region.minY,region.width,region.height);
-                this.context.rect(region.minX,region.minY,region.width,region.height);
-            }
-            this.context.clip();
-        }
-        /**
-         * 结束脏矩形绘制
-         */
-        public removeDirtyRects():void{
-            this.context.restore();
         }
 
         private _globalAlpha:number = 1;

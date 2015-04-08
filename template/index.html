@@ -38,7 +38,6 @@
     <script src="lark/events/TouchEvent.js"></script>
     <script src="lark/system/Capabilities.js"></script>
     <script src="lark/display/Texture.js"></script>
-    <script src="lark/display/DisplayObjectFlags.js"></script>
     <script src="lark/display/DisplayObject.js"></script>
     <script src="lark/display/DisplayObjectContainer.js"></script>
     <script src="lark/display/Bitmap.js"></script>
@@ -46,6 +45,7 @@
     <script src="lark/player/nodes/RenderNode.js"></script>
     <script src="lark/player/nodes/BitmapNode.js"></script>
     <script src="lark/player/nodes/TextNode.js"></script>
+    <script src="lark/player/nodes/CacheNode.js"></script>
     <script src="lark/player/nodes/GraphicsNode.js"></script>
     <script src="lark/player/ScaleMode.js"></script>
     <script src="lark/player/ScreenAdapter.js"></script>
@@ -81,13 +81,11 @@
     <script src="extension/media/web/HtmlVideo.js"></script>
     <script src="extension/sensers/Accelerometer.js"></script>
     <script src="extension/sensers/web/WebAccelerometer.js"></script>
-    <script src="lark/web/canvasTest.js"></script>
     <script src="FPS.js"></script>
-    <script src="CanvasTest.js?a=2"></script>
+    <script src="CanvasTest.js"></script>
     <script src="Main.js"></script>
     <script src="Text.js"></script>
     <script src="Media.js"></script>
-    <script src="demo/Weixin/MotionDemo.js"></script>
 </head>
 <body>
 <div id="lark-sample" style="margin: auto;width: 100%;height: 100%;" class="lark-player"
@@ -98,6 +96,5 @@
     var container = document.getElementById("lark-sample");
     container.setAttribute("data-entry-class", entryClass);
 </script>
-<script src="http://10.0.4.159:8080/target/target-script-min.js#lark"></script>
 </body>
 </html>

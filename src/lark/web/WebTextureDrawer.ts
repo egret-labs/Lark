@@ -36,6 +36,31 @@ module lark.web {
         public constructor(){
             super(null);
         }
+
+        /**
+         * 检测是否允许显示对象启用cacheAsBitmap功能，若超过系统内存上限或触发其他限制，将返回null。否则返回用于缓存的Texture对象实例。
+         */
+        public createTextureForCache():Texture{
+            var canvas = document.createElement("canvas");
+            if(!this.testCanvasValid(canvas)){
+                return null;
+            }
+            var texture = new Texture();
+            texture.$bitmapData = canvas;
+            return texture;
+        }
+
+        /**
+         * 检测创建的canvas是否有效，QQ浏览器对内存小等于1G的手机，限制Canvas创建的数量为19个。
+         */
+        private testCanvasValid(canvas:HTMLCanvasElement):boolean{
+            canvas.height = 1;
+            canvas.width = 1;
+            var data = canvas.toDataURL("image/png");
+            if (data == 'data:,')
+                return false;
+            return true;
+        }
         /**
          * 将显示对象或另一个Texture的图像数据绘制到自身。
          * @param texture 要绘制到的 Texture 对象。
@@ -44,6 +69,7 @@ module lark.web {
          * 请将此参数设置为恒等矩阵（使用默认 new Matrix() 构造函数创建），或传递 null 值。
          * @param alpha 要叠加的透明度值。如果没有提供任何值，则不会转换位图图像的透明度。如果必须传递此参数但又不想转换图像，请传递值 1。
          * @param clipRect 一个 Rectangle 对象，定义要绘制的源对象的区域。 如果不提供此值，则不会进行剪裁，并且将绘制整个源对象。
+         * @param forCache 是否为cacheAsBitmap绘制。
          */
         public drawDisplayObject(texture:Texture,source:DisplayObject,matrix?:Matrix,alpha?:number,clipRect?:Rectangle):void{
             var canvas:HTMLCanvasElement = texture.$bitmapData
@@ -54,7 +80,7 @@ module lark.web {
             var m = matrix;
             if(m){
                 bounds = TEMP_RECTANGLE.copyFrom(bounds);
-                m.$transformBounds(bounds)
+                m.$transformBounds(bounds);
             }
             canvas.width = bounds.x+bounds.width;
             canvas.height = bounds.y+bounds.height;
@@ -86,7 +112,8 @@ module lark.web {
                 var length = children.length;
                 for (var i = 0; i < length; i++) {
                     var child = children[i];
-                    if (!child.$hasFlags(DisplayObjectFlags.Visible)) {
+                    child.$removeFlags(DisplayObjectFlags.DirtyDescendents);
+                    if (!child.$visible) {
                         continue;
                     }
                     this.visitDisplayList(child);

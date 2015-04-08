@@ -108,6 +108,10 @@ module lark.player {
          */
         public update():void {
             this.target.$updateRenderNode();
+            this.updateBounds();
+        }
+
+        protected updateBounds():void{
             var stage = this.target.$stage;
             if (!stage) {
                 this.finish();

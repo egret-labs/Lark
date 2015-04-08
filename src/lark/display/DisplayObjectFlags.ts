@@ -87,6 +87,10 @@ module lark {
          */
         RenderNodeDirty = 0x0100,
         /**
+         * 子项中含有需要重绘的节点
+         */
+        DirtyDescendents = 0x200,
+        /**
          * 添加或删除子项时，需要向子项传递的标志。
          */
         DownOnAddedOrRemoved = DisplayObjectFlags.InvalidConcatenatedMatrix |
