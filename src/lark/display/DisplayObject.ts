@@ -89,12 +89,6 @@ module lark {
                 parent.$removeFlagsUp(flags);
             }
         }
-        /**
-         * 沿着显示列表向下移除标志量，非容器直接移除自身的flag，此方法会在DisplayObjectContainer中被覆盖。
-         */
-        $removeFlagsDown(flags:DisplayObjectFlags):void{
-            this.$removeFlags(flags);
-        }
 
         $hasFlags(flags:DisplayObjectFlags):boolean {
             return (this.$displayObjectFlags & flags) === flags;
@@ -472,8 +466,13 @@ module lark {
                 return;
             }
             if(value){
-                this.$cacheNode = lark.player.CacheNode.$create(this);
-                this.$getCacheRoot(this);
+                var cacheNode = lark.player.CacheNode.$create(this);
+                if(cacheNode){
+                    this.$cacheNode = cacheNode;
+                    if(this.$parentCacheNode){
+                        this.$parentCacheNode.markDirty(cacheNode);
+                    }
+                }
             }
             else{
                 lark.player.CacheNode.$release(this.$cacheNode);
@@ -709,23 +708,8 @@ module lark {
             node.bounds = this.$getContentBounds();
         }
 
-        $getCacheRoot(parent:DisplayObject):lark.player.CacheNode{
-            var cacheNode:lark.player.CacheNode;
-            while(parent){
-                if(parent.$cacheNode){
-                    cacheNode = parent.$cacheNode;
-                    break;
-                }
-                parent = parent.parent;
-            }
-            if(cacheNode&&!cacheNode.needRedraw){
-                var parentCache = this.$getCacheRoot(parent.$parent);
-                if(parentCache){
-                    parentCache.markDirty(cacheNode);
-                }
-            }
-            return cacheNode;
-        }
+        $parentCacheNode:lark.player.CacheNode;
+
         /**
          * 标记此显示对象需要重绘，调用此方法后，在屏幕绘制阶段$updateRenderNode()方法会自动被回调，您可能需要覆盖它来同步自身改变的属性到目标RenderNode。
          */
@@ -735,7 +719,7 @@ module lark {
                 return;
             }
             this.$setFlags(DisplayObjectFlags.DirtyRender);
-            var cacheNode = this.$getCacheRoot(this);
+            var cacheNode = this.$cacheNode?this.$cacheNode:this.$parentCacheNode;
             if (cacheNode) {
                 cacheNode.markDirty(node);
             }
@@ -750,9 +734,8 @@ module lark {
             }
             this.$setFlags(DisplayObjectFlags.DirtyChildren);
             var node:lark.player.RenderNode = this.$cacheNode||this.$renderNode;
-            var cacheNode = this.$getCacheRoot(this.$parent);
-            if (node&&cacheNode) {
-                cacheNode.markDirty(node);
+            if (node&&this.$parentCacheNode) {
+                this.$parentCacheNode.markDirty(node);
             }
         }
 

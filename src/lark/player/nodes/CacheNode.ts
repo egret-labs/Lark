@@ -66,7 +66,13 @@ module lark.player {
         public markDirty(node:RenderNode):void{
             if(this.dirtyNodes.indexOf(node)==-1){
                 this.dirtyNodes.push(node);
-                this.needRedraw = true;
+                if(!this.needRedraw){
+                    this.needRedraw = true;
+                    var parentCache = this.target.$parentCacheNode;
+                    if(parentCache){
+                        parentCache.markDirty(this);
+                    }
+                }
             }
         }
 

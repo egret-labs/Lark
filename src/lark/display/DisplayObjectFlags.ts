@@ -100,7 +100,8 @@ module lark {
          */
         DownOnAddedOrRemoved = DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
-            DisplayObjectFlags.InvalidConcatenatedAlpha
+            DisplayObjectFlags.InvalidConcatenatedAlpha|
+            DisplayObjectFlags.DirtyChildren
 
     }
 
