@@ -472,13 +472,27 @@ module lark {
                     if(this.$parentCacheNode){
                         this.$parentCacheNode.markDirty(cacheNode);
                     }
+                    this.$cacheAsBitmapChanged();
                 }
             }
             else{
                 lark.player.CacheNode.$release(this.$cacheNode);
                 this.$cacheNode = null;
+                this.$cacheAsBitmapChanged();
             }
         }
+
+        /**
+         * cacheAsBitmap属性改变
+         */
+        $cacheAsBitmapChanged():void{
+            var node = this.$renderNode;
+            var parentCache = this.$cacheNode||this.$parentCacheNode;
+            if(parentCache&&node){
+                parentCache.markDirty(node);
+            }
+        }
+
         private _alpha:number = 1;
         /**
          * 表示指定对象的 Alpha 透明度值。

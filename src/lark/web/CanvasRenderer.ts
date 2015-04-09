@@ -84,7 +84,6 @@ module lark.web {
                 var node:lark.player.RenderNode;
                 var cacheNode = displayObject.$cacheNode;
                 if(displayObject!==root&&cacheNode){
-                    cacheNode.update();
                     if(cacheNode.needRedraw){
                         cacheNode.redraw();
                     }
