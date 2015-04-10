@@ -51,10 +51,11 @@ module lark.web {
          */
         public constructor(canvas?:HTMLCanvasElement) {
             super();
-            if (canvas) {
-                this.canvas = canvas;
-                this.context = canvas.getContext("2d");
+            if (!canvas) {
+                canvas = document.createElement("canvas");
             }
+            this.canvas = canvas;
+            this.context = canvas.getContext("2d");
         }
 
         protected canvas:HTMLCanvasElement;
@@ -114,7 +115,7 @@ module lark.web {
                 this.context.restore();
             }
             this.dirtyRegion.clear();
-            root.$cacheNode.dirtyNodes = [];
+            root.$cacheNode.dirtyNodes = {};
             return drawCalls;
         }
 
