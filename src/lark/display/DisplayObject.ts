@@ -147,7 +147,7 @@ module lark {
          */
         public name:string;
 
-        $parent:DisplayObjectContainer;
+        $parent:DisplayObjectContainer = null;
 
         /**
          * 表示包含此显示对象的 DisplayObjectContainer 对象。
@@ -355,7 +355,6 @@ module lark {
             this._skewY += angle;
             this._rotation = value;
             this.invalidateMatrix();
-
         }
 
         /**
@@ -573,7 +572,7 @@ module lark {
             this._blendMode = value;
         }
 
-        private _mask:DisplayObject;
+        private _mask:DisplayObject = null;
         /**
          * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
          * 但不绘制 mask 对象本身。将 mask 设置为 null 可删除蒙版。要能够缩放遮罩对象，它必须在显示列表中。要能够拖动蒙版
@@ -722,7 +721,7 @@ module lark {
             node.bounds = this.$getContentBounds();
         }
 
-        $parentCacheNode:lark.player.CacheNode;
+        $parentCacheNode:lark.player.CacheNode = null;
 
         /**
          * 标记此显示对象需要重绘，调用此方法后，在屏幕绘制阶段$updateRenderNode()方法会自动被回调，您可能需要覆盖它来同步自身改变的属性到目标RenderNode。

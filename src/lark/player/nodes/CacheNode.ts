@@ -61,17 +61,15 @@ module lark.player {
         /**
          * 显示对象的渲染节点发生改变时，把自身的RenderNode对象注册到此列表上。
          */
-        public dirtyNodes:RenderNode[] = [];
+        public dirtyNodes:any = {};
 
         public markDirty(node:RenderNode):void{
-            if(this.dirtyNodes.indexOf(node)==-1){
-                this.dirtyNodes.push(node);
-                if(!this.needRedraw){
-                    this.needRedraw = true;
-                    var parentCache = this.target.$parentCacheNode;
-                    if(parentCache){
-                        parentCache.markDirty(this);
-                    }
+            this.dirtyNodes[node.$hashCode] = node;
+            if(!this.needRedraw){
+                this.needRedraw = true;
+                var parentCache = this.target.$parentCacheNode;
+                if(parentCache){
+                    parentCache.markDirty(this);
                 }
             }
         }
