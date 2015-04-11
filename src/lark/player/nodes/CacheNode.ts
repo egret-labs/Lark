@@ -81,15 +81,15 @@ module lark.player {
             this.alpha = target.$getConcatenatedAlpha();
             this.bounds = target.$getOriginalBounds();
             this.updateBounds();
+            if(this.moved){
+                this.dirtyRegion = new lark.player.DirtyRegion(this.bounds.width,this.bounds.height);
+            }
         }
 
         public needRedraw:boolean = false;
 
-        public renderer:IScreenRenderer;
+        public dirtyRegion:DirtyRegion;
 
-        public redraw():void{
-            this.renderer.drawDisplayList(this.target);
-            this.needRedraw = false;
-        }
+        public renderer:IScreenRenderer;
     }
 }

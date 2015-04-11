@@ -62,94 +62,9 @@ module lark.web {
         protected context:CanvasRenderingContext2D;
 
         /**
-         * 绘制显示列表。
-         */
-        public drawDisplayList(root:DisplayObject, cleanAll?:boolean):number {
-            this.reset();
-            this.computeDirtyRects(root.$cacheNode.dirtyNodes);
-            var dirtyRectList = this.dirtyRectList;
-            cleanAll = cleanAll || this.dirtyRatio > 80;
-            if (cleanAll) {
-                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            }
-            else {
-                this.drawDirtyRects(dirtyRectList);
-            }
-
-            var renderer = this;
-            var drawCalls = 0;
-            visitDisplayList(root, function (displayObject:DisplayObject):boolean {
-                if (!displayObject.$visible) {
-                    return false;
-                }
-                var node:lark.player.RenderNode;
-                var cacheNode = displayObject.$cacheNode;
-                if (displayObject !== root && cacheNode) {
-                    if (cacheNode.needRedraw) {
-                        cacheNode.redraw();
-                    }
-                    node = cacheNode;
-                }
-                else {
-                    node = displayObject.$renderNode;
-                }
-                if (node && !node.outOfScreen && !(node.alpha === 0)) {
-                    if (!cleanAll && !node.isDirty) {
-                        for (var j = dirtyRectList.length - 1; j >= 0; j--) {
-                            var region = dirtyRectList[j];
-                            if (node.intersects(region.minX, region.minY, region.maxX, region.maxY)) {
-                                node.isDirty = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (cleanAll || node.isDirty) {
-                        drawCalls++;
-                        node.render(renderer);
-                        node.finish();
-                    }
-                }
-                return !cacheNode || displayObject === root;
-            });
-            if (!cleanAll) {
-                this.context.restore();
-            }
-            this.dirtyRegion.clear();
-            root.$cacheNode.dirtyNodes = {};
-            return drawCalls;
-        }
-
-        private dirtyRectList:lark.player.Region[] = [];
-
-        private dirtyRatio:number = 0;
-
-        private dirtyRegion:lark.player.DirtyRegion = new lark.player.DirtyRegion(1920, 900);
-
-        private computeDirtyRects(nodeList:lark.player.RenderNode[]):void {
-            var dirtyRegion = this.dirtyRegion;
-            for (var i in nodeList) {
-                var node = nodeList[i];
-                if (!node.outOfScreen && node.alpha !== 0) {
-                    node.isDirty = true;
-                    dirtyRegion.addDirtyRegion(node.minX, node.minY, node.maxX, node.maxY);
-                }
-                node.update();
-                if (node.moved && !node.outOfScreen && node.alpha !== 0) {
-                    node.isDirty = true;
-                    dirtyRegion.addDirtyRegion(node.minX, node.minY, node.maxX, node.maxY);
-                }
-            }
-            var dirtyRectList:lark.player.Region[] = this.dirtyRectList;
-            dirtyRectList.length = 0;
-            dirtyRegion.gatherOptimizedRegions(dirtyRectList);
-            this.dirtyRatio = dirtyRegion.dirtyRatio;
-        }
-
-
-        /**
          * 绘制脏矩形列表
          */
-        private drawDirtyRects(regionList:lark.player.Region[]):void {
+        public drawDirtyRects(regionList:lark.player.Region[]):void {
             this.reset();
             this.context.save();
             this.context.beginPath();
@@ -160,6 +75,21 @@ module lark.web {
                 this.context.rect(region.minX, region.minY, region.width, region.height);
             }
             this.context.clip();
+        }
+
+        /**
+         * 移除之前绘制的脏矩形区域
+         */
+        public removeDirtyRects():void{
+            this.context.restore();
+        }
+
+        /**
+         * 清空屏幕
+         */
+        public clearScreen():void {
+            this.reset();
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
 
         protected reset():void {

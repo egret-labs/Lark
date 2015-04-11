@@ -133,36 +133,119 @@ module lark.player {
             Ticker.$instance.$removePlayer(this);
         }
 
+        private dirtyRegion:lark.player.DirtyRegion;
+
         /**
          * 渲染屏幕
          */
         $render(triggerByFrame:boolean):void {
+            var stage = this.stage;
             var t = lark.getTimer();
-            //this.computeDirtyRects();
+            this.updateDirtyNodes(stage.$cacheNode.dirtyNodes, this.dirtyRegion);
+            var dirtyRegion = this.dirtyRegion;
+            if (this.stageSizeChangedFlag) {
+                dirtyRegion = null;
+                this.stageSizeChangedFlag = false;
+            }
             var t1 = lark.getTimer();
-            this.drawCalls = 0;
-            this.drawDisplayList();
+            var drawCalls = this.drawDisplayList(this.stage, this.renderer, dirtyRegion);
+            this.dirtyRegion.clear();
+            stage.$cacheNode.dirtyNodes = {};
             var t2 = lark.getTimer();
             if (triggerByFrame) {
-                FPS.update(this.drawCalls, this.dirtyRatio, t1 - t, t2 - t1);
+                FPS.update(drawCalls, this.dirtyRegion.dirtyRatio, t1 - t, t2 - t1);
             }
         }
 
-        private dirtyRectList:Region[] = [];
-
-        private dirtyRatio:number = 0;
-
-        private drawCalls:number = 0;
-
-        private dirtyRegion:DirtyRegion;
-
+        /**
+         * 计算脏矩形区域
+         */
+        private updateDirtyNodes(nodeList:lark.player.RenderNode[], dirtyRegion:DirtyRegion):void {
+            for (var i in nodeList) {
+                var node = nodeList[i];
+                if (!node.outOfScreen && node.alpha !== 0) {
+                    node.isDirty = true;
+                    dirtyRegion.addDirtyRegion(node.minX, node.minY, node.maxX, node.maxY);
+                }
+                node.update();
+                if (node.moved && !node.outOfScreen && node.alpha !== 0) {
+                    node.isDirty = true;
+                    dirtyRegion.addDirtyRegion(node.minX, node.minY, node.maxX, node.maxY);
+                }
+            }
+        }
 
         /**
-         * 同步显示列表。
+         * 绘制显示列表。
          */
-        private drawDisplayList():void {
-            this.drawCalls = this.renderer.drawDisplayList(this.stage,this.stageSizeChangedFlag);
-            this.stageSizeChangedFlag = false;
+        public drawDisplayList(root:DisplayObject, renderer:IScreenRenderer, dirtyRegion:DirtyRegion):number {
+            if (dirtyRegion) {
+                var dirtyRectList:lark.player.Region[] = [];
+                dirtyRegion.gatherOptimizedRegions(dirtyRectList);
+                if (dirtyRegion.dirtyRatio > 80) {
+                    dirtyRectList = null;
+                }
+            }
+            if (dirtyRectList) {
+                renderer.drawDirtyRects(dirtyRectList);
+            }
+            else {
+                renderer.clearScreen();
+            }
+            var drawCalls = this.drawDisplayObject(root, renderer, dirtyRectList, null);
+            if (dirtyRectList) {
+                renderer.removeDirtyRects();
+            }
+            return drawCalls;
+        }
+
+        private drawDisplayObject(displayObject:DisplayObject, renderer:IScreenRenderer, dirtyRectList:lark.player.Region[], cacheNode:CacheNode):number {
+            var drawCalls = 0;
+            var node:lark.player.RenderNode;
+            if (cacheNode) {
+                if (cacheNode.needRedraw) {
+                    this.updateDirtyNodes(cacheNode.dirtyNodes, cacheNode.dirtyRegion);
+                    drawCalls += this.drawDisplayList(displayObject, cacheNode.renderer, cacheNode.dirtyRegion);
+                    cacheNode.dirtyRegion.clear();
+                    cacheNode.dirtyNodes = {};
+                    cacheNode.needRedraw = false;
+                }
+                node = cacheNode;
+            }
+            else {
+                node = displayObject.$renderNode;
+            }
+            if (node && !node.outOfScreen && !(node.alpha === 0)) {
+                if (dirtyRectList && !node.isDirty) {
+                    for (var j = dirtyRectList.length - 1; j >= 0; j--) {
+                        var region = dirtyRectList[j];
+                        if (node.intersects(region.minX, region.minY, region.maxX, region.maxY)) {
+                            node.isDirty = true;
+                            break;
+                        }
+                    }
+                }
+                if (!dirtyRectList || node.isDirty) {
+                    drawCalls++;
+                    node.render(renderer);
+                    node.finish();
+                }
+            }
+            if (cacheNode) {
+                return drawCalls;
+            }
+            var children = displayObject.$children;
+            if (children) {
+                var length = children.length;
+                for (var i = 0; i < length; i++) {
+                    var child = children[i];
+                    if (!child.$visible) {
+                        continue;
+                    }
+                    drawCalls += this.drawDisplayObject(child, renderer, dirtyRectList, child.$cacheNode);
+                }
+            }
+            return drawCalls;
         }
 
         /**
