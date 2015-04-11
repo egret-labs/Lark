@@ -425,22 +425,21 @@ module lark {
             this.invalidateMatrix();
         }
 
-        $visible:boolean = true;
         /**
          * 显示对象是否可见。
          * 不可见的显示对象已被禁用。例如，如果实例的 visible=false，则无法单击该对象。
          * 默认值为 true 可见
          */
         public get visible():boolean {
-            return this.$visible;
+            return this.$hasFlags(DisplayObjectFlags.Visible);
         }
 
         public set visible(value:boolean) {
             value = !!value;
-            if (value === this.$visible) {
+            if (value === this.$hasFlags(DisplayObjectFlags.Visible)) {
                 return;
             }
-            this.$visible = value;
+            this.$toggleFlags(DisplayObjectFlags.Visible,value);
             this.$invalidateChildren();
         }
         /**
