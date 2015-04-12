@@ -77,7 +77,7 @@ module lark {
 
             var container = new DisplayObjectContainer();
             var x = 0, y = 0;
-            for (var i = 0; i < 8000; i++) {
+            for (var i = 0; i < 3000; i++) {
                 var bitmap = new Bitmap();
                 bitmap.texture = texture;
                 bitmap.x = x;
@@ -85,18 +85,20 @@ module lark {
                 bitmap.scaleX = bitmap.scaleY = Math.random();
                 bitmap.rotation = Math.random() * 360;
                 x += texture.width;
-                if (x > 1920) {
+                if (x > 1900) {
                     x = 0;
                     y += texture.height;
                     if (y > 960) {
-                        y = 0; 
+                        y = 0;
                     }
                 }
                 container.addChild(bitmap);
                 //this.iconList.push(bitmap);
             }
-            container.cacheAsBitmap = true;
             this.addChild(container);
+            container.cacheAsBitmap = true;
+            container.x = 300;
+            container.y = 300;
             bitmap = new lark.Bitmap();
             bitmap.texture = texture;
             bitmap.x = 700;
@@ -116,11 +118,16 @@ module lark {
         private offsetY:number = 0;
 
         private onTouchBegin(event:TouchEvent):void {
-            this.touchTarget = <DisplayObject>event.target;
-            if(this.touchTarget===this.stage||this.touchTarget===FPS.display){
+            var target = <DisplayObject>event.target;
+            if(target===this.stage||target===FPS.display){
                 return;
             }
-            this.addChild(this.touchTarget);
+            this.touchTarget = target;
+            var pos = target.parent.localToGlobal(target.x,target.y);
+            this.addChild(target);
+            pos = target.parent.globalToLocal(pos.x,pos.y);
+            target.x = pos.x;
+            target.y = pos.y;
             this.offsetX = this.touchTarget.x - event.stageX;
             this.offsetY = this.touchTarget.y - event.stageY;
             this.stage.on(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);

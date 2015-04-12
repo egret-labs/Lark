@@ -30,7 +30,7 @@
 module lark.player {
 
     /**
-     * IPlayerContext接口定义Lark播放器与平台相关的操作，包括绘制，网络，交互操作等。
+     * 渲染器
      */
     export interface IRenderer extends IHashObject {
 
@@ -46,11 +46,26 @@ module lark.player {
 
     }
 
+    /**
+     * 屏幕渲染器
+     */
     export interface IScreenRenderer extends IRenderer {
 
         /**
-         * 绘制显示列表。
+         * 重置画布
          */
-        drawDisplayList(root:DisplayObject,dirtyRectList?:lark.player.Region[]):number;
+        reset(root:DisplayObject):void;
+        /**
+         * 清空屏幕
+         */
+        clearScreen():void;
+        /**
+         * 绘制脏矩形列表
+         */
+        drawDirtyRects(regionList:lark.player.Region[]):void;
+        /**
+         * 移除之前绘制的脏矩形区域
+         */
+        removeDirtyRects():void;
     }
 }

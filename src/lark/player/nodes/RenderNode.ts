@@ -46,7 +46,7 @@ module lark.player {
         /**
          * 目标显示对象
          */
-        protected target:DisplayObject;
+        public target:DisplayObject;
         /**
          * 要绘制到屏幕的整体透明度。
          */
@@ -62,7 +62,7 @@ module lark.player {
         /**
          * 是否需要重绘
          */
-        public isDirty:boolean = false;
+        public isDirty:boolean = true;
         /**
          * 当前位置在屏幕之外
          */
@@ -70,7 +70,7 @@ module lark.player {
         /**
          * 在屏幕上的矩形区域是否发现改变。
          */
-        public moved:boolean = false;
+        public moved:boolean = true;
         /**
          * 绘制区域在屏幕上的起点x
          */

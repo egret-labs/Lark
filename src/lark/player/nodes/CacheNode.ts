@@ -29,39 +29,76 @@
 
 module lark.player {
 
-    var cacheNodeList:CacheNode[] = [];
+    export var $cacheNodePool:ICacheNodePool;
 
     export class CacheNode extends BitmapNode {
 
-        static $release(node:CacheNode):void{
-            node.target = null;
-            node.matrix = null;
-            node.bounds = null;
-            cacheNodeList.push(node);
-        }
+        public needRedraw:boolean = false;
 
-        static $create(target:DisplayObject):CacheNode{
-            var node = cacheNodeList.pop();
-            if(!node){
-                var texture = $textureDrawer.createTextureForCache();
-                if(texture){
-                    node = new CacheNode(target);
-                    node.texture = texture;
+        public renderer:IScreenRenderer;
+
+        /**
+         * 显示对象的渲染节点发生改变时，把自身的RenderNode对象注册到此列表上。
+         */
+        private dirtyNodes:any = {};
+
+        public markDirty(node:RenderNode):void {
+            this.dirtyNodes[node.$hashCode] = node;
+            if (!this.needRedraw) {
+                this.needRedraw = true;
+                var parentCache = this.target.$parentCacheNode;
+                if (parentCache) {
+                    parentCache.markDirty(this);
                 }
             }
-            return node;
         }
 
-        public update():void{
+        public updateDirtyNodes():Region[] {
+            var nodeList = this.dirtyNodes;
+            this.dirtyNodes = {};
+            var dirtyRectList:Region[] = [];
+            for (var i in nodeList) {
+                var node = nodeList[i];
+                if (!node.outOfScreen && node.alpha !== 0) {
+                    node.isDirty = true;
+                    dirtyRectList.push(new Region(node.minX, node.minY, node.maxX, node.maxY));
+                }
+                node.update();
+                if (node.moved && !node.outOfScreen && node.alpha !== 0) {
+                    node.isDirty = true;
+                    dirtyRectList.push(new Region(node.minX, node.minY, node.maxX, node.maxY));
+                }
+            }
+            return dirtyRectList;
+        }
+
+        public update():void {
             var target = this.target;
+            target.$removeFlagsUp(DisplayObjectFlags.Dirty);
             this.matrix = target.$getConcatenatedMatrix();
-            this.alpha = target.$getConcatenatedAlpha();
             this.bounds = target.$getOriginalBounds();
             this.updateBounds();
         }
+    }
 
-        public redraw():void{
-            $textureDrawer.drawDisplayObject(this.texture,this.target);
+    export class Region {
+
+        constructor(minX:number, minY:number, maxX:number, maxY:number) {
+            this.minX = minX;
+            this.minY = minY;
+            this.maxX = maxX;
+            this.maxY = maxY;
+            this.width = maxX - minX;
+            this.height = maxY - minY;
         }
+
+        public minX:number;
+        public minY:number;
+        public maxX:number;
+        public maxY:number;
+
+        public width:number;
+        public height:number;
+
     }
 }

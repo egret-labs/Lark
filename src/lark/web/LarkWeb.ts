@@ -52,9 +52,8 @@ module lark.web {
     function runLark():void {
         var ticker = lark.player.Ticker.$instance = new lark.player.Ticker();
         startTicker(ticker);
-        var canvas = document.createElement("canvas");
-        $textMeasurer = new CanvasTextMeasurer(canvas);
-        $textureDrawer = new WebTextureDrawer();
+        $textMeasurer = new CanvasTextMeasurer();
+        lark.player.$cacheNodePool = new CacheNodePool();
         if(!lark.player.screenAdapter){
             lark.player.screenAdapter = new lark.player.ScreenAdapter();
         }
@@ -80,10 +79,10 @@ module lark.web {
         var webScreen = new WebScreen(container,scaleMode,contentWidth,contentHeight);
         var canvas = webScreen.createCanvas();
         var stage = new lark.Stage();
-        var canvasRenderer = new CanvasRenderer(canvas);
+        var screenRenderer = new ScreenRenderer(canvas);
         var touch = new lark.player.TouchHandler(stage);
         var webTouch = new WebTouchHandler(touch, canvas);
-        var player = new lark.player.Player(canvasRenderer, stage, entryClassName);
+        var player = new lark.player.Player(screenRenderer, stage, entryClassName);
         container["lark-player"] = player;
         container["lark-touch"] = webTouch;
         container["lark-screen"] = webScreen;
