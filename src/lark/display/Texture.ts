@@ -31,10 +31,6 @@
 module lark {
 
     /**
-     * 纹理绘制器实例
-     */
-    export var $textureDrawer:lark.player.ITextureDrawer;
-    /**
      * 纹理类是对不同平台不同的图片资源的封装
      * 在HTML5中，资源是一个HTMLElement对象
      * 在OpenGL / WebGL中，资源是一个提交GPU后获取的纹理id
@@ -111,20 +107,6 @@ module lark {
             this.$width = this.$bitmapWidth = this.$sourceWidth = w;
             this.$height = this.$bitmapHeight = this.$sourceHeight = h;
             this.$offsetX = this.$offsetY = this.$bitmapX = this.$bitmapY = 0;
-        }
-
-        /**
-         * 将显示对象或另一个Texture的图像数据绘制到自身。
-         * @param source 要绘制到 Texture 对象的显示对象或 Texture 对象。
-         * @param matrix 一个 Matrix 对象，用于缩放、旋转位图或转换位图的坐标。如果不想将矩阵转换应用于图像，
-         * 请将此参数设置为恒等矩阵（使用默认 new Matrix() 构造函数创建），或传递 null 值。
-         * @param alpha 要叠加的透明度值。如果没有提供任何值，则不会转换位图图像的透明度。如果必须传递此参数但又不想转换图像，请传递值 1。
-         * @param clipRect 一个 Rectangle 对象，定义要绘制的源对象的区域。 如果不提供此值，则不会进行剪裁，并且将绘制整个源对象。
-         */
-        public draw(source:DisplayObject|Texture,matrix?:Matrix,alpha?:number,clipRect?:Rectangle):void{
-            if(source instanceof DisplayObject){
-                $textureDrawer.drawDisplayObject(this,source,matrix,alpha,clipRect);
-            }
         }
     }
 }

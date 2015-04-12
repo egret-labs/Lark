@@ -464,7 +464,7 @@ module lark {
                 return;
             }
             if(value){
-                var cacheNode = lark.player.CacheNode.$create(this);
+                var cacheNode = lark.player.$cacheNodePool.create(this);
                 if(cacheNode){
                     this.$cacheNode = cacheNode;
                     if(this.$parentCacheNode){
@@ -474,7 +474,7 @@ module lark {
                 }
             }
             else{
-                lark.player.CacheNode.$release(this.$cacheNode);
+                lark.player.$cacheNodePool.release(this.$cacheNode);
                 this.$cacheNode = null;
                 this.$cacheAsBitmapChanged();
             }
@@ -508,7 +508,7 @@ module lark {
             }
             this._alpha = value;
             this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedAlpha);
-            this.$invalidateChildren();
+            this.$invalidate(true);
         }
 
         private _concatenatedAlpha:number = 1;
@@ -724,8 +724,9 @@ module lark {
 
         /**
          * 标记此显示对象需要重绘，调用此方法后，在屏幕绘制阶段$updateRenderNode()方法会自动被回调，您可能需要覆盖它来同步自身改变的属性到目标RenderNode。
+         * @param notiryChildren 是否标记子项也需要重绘。传入false会不传入，将只标记自身的RenderNode需要重绘。
          */
-        $invalidate():void{
+        $invalidate(notifyChildren?:boolean):void{
             var node = this.$renderNode;
             if(!node||this.$hasFlags(DisplayObjectFlags.DirtyRender)) {
                 return;

@@ -58,10 +58,6 @@ module lark.player {
             this.renderer = renderer;
             this.entryClassName = entryClassName;
             this.stage = stage;
-            stage.$cacheNode = new lark.player.CacheNode(stage);
-            stage.$cacheNode.renderer = renderer;
-            stage.$cacheNode.texture = new Texture();
-            stage.$cacheNode.texture.$setBitmapData(renderer["canvas"])
         }
 
         private renderer:IScreenRenderer;
@@ -186,6 +182,7 @@ module lark.player {
                     dirtyRectList = null;
                 }
             }
+            renderer.reset(root);
             if (dirtyRectList) {
                 renderer.drawDirtyRects(dirtyRectList);
             }

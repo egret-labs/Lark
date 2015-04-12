@@ -413,6 +413,23 @@ module lark {
         }
 
         /**
+         * 标记此显示对象需要重绘，调用此方法后，在屏幕绘制阶段$updateRenderNode()方法会自动被回调，您可能需要覆盖它来同步自身改变的属性到目标RenderNode。
+         * @param notiryChildren 是否标记子项也需要重绘。传入false会不传入，将只标记自身的RenderNode需要重绘。
+         */
+        $invalidate(notifyChildren?:boolean):void{
+            super.$invalidate(notifyChildren);
+            if(!notifyChildren){
+                return;
+            }
+            var cacheRoot = this.$cacheNode||this.$parentCacheNode;
+            var children = this.$children;
+            if (children) {
+                for (var i = children.length - 1; i >= 0; i--) {
+                    this.markChildDirty(children[i], cacheRoot);
+                }
+            }
+        }
+        /**
          * 标记自身和所有子项都失效。
          */
         $invalidateChildren():void {

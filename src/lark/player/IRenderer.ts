@@ -30,7 +30,7 @@
 module lark.player {
 
     /**
-     * IPlayerContext接口定义Lark播放器与平台相关的操作，包括绘制，网络，交互操作等。
+     * 渲染器
      */
     export interface IRenderer extends IHashObject {
 
@@ -46,8 +46,15 @@ module lark.player {
 
     }
 
+    /**
+     * 屏幕渲染器
+     */
     export interface IScreenRenderer extends IRenderer {
 
+        /**
+         * 重置画布
+         */
+        reset(root:DisplayObject):void;
         /**
          * 清空屏幕
          */

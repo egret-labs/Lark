@@ -97,6 +97,8 @@ module lark {
             }
             this.addChild(container);
             container.cacheAsBitmap = true;
+            container.alpha = 0.5;
+            container.x = 400;
             bitmap = new lark.Bitmap();
             bitmap.texture = texture;
             bitmap.x = 700;
@@ -116,11 +118,16 @@ module lark {
         private offsetY:number = 0;
 
         private onTouchBegin(event:TouchEvent):void {
-            this.touchTarget = <DisplayObject>event.target;
-            if(this.touchTarget===this.stage||this.touchTarget===FPS.display){
+            var target = <DisplayObject>event.target;
+            if(target===this.stage||target===FPS.display){
                 return;
             }
-            this.addChild(this.touchTarget);
+            this.touchTarget = target;
+            var pos = target.parent.localToGlobal(target.x,target.y);
+            this.addChild(target);
+            pos = target.parent.globalToLocal(pos.x,pos.y);
+            target.x = pos.x;
+            target.y = pos.y;
             this.offsetX = this.touchTarget.x - event.stageX;
             this.offsetY = this.touchTarget.y - event.stageY;
             this.stage.on(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);

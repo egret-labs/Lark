@@ -27,61 +27,44 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
-    /**
-     * 舞台，显示列表根容器。
-     */
-    export class Stage extends DisplayObjectContainer {
+module lark.web {
+
+    var TEMP_RECTANGLE:Rectangle = new Rectangle();
+
+    export class CacheRenderer extends ScreenRenderer{
 
         /**
-         * 舞台对象不允许自行实例化。
+         * 重置画布
          */
-        public constructor() {
-            super();
-            this.$stage = this;
-            this.$cacheNode = new lark.player.CacheNode(this);
+        public reset(root:DisplayObject):void {
+            super.reset(root);
+            var m = root.$getInvertedConcatenatedMatrix();
+            this.context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
         }
 
         /**
-         * 获取并设置舞台的帧速率。帧速率是指每秒显示的帧数。帧速率的有效范围为每秒 0.01 到 60 个帧。
-         * 注意，若同一个网页中包含多个lark.Stage实例，修改任何一个Stage的frameRate属性都会同步修改其他Stage的帧率。
+         * 绘制图片到一个区域上
          */
-        public get frameRate():number {
-            return lark.player.Ticker.$instance.$frameRate;
-        }
-
-        public set frameRate(value:number) {
-            lark.player.Ticker.$instance.$setFrameRate(value);
-        }
-
-        $stageWidth:number = 0;
-
-        /**
-         * 舞台的当前宽度（以像素为单位）。
-         */
-        public get stageWidth():number {
-            return this.$stageWidth;
-        }
-
-        $stageHeight:number = 0;
-
-        /**
-         * 舞台的当前高度（以像素为单位）。
-         */
-        public get stageHeight():number {
-            return this.$stageHeight;
+        public drawImage(texture:Texture, matrix:Matrix, globalAlpha:number):void {
+            super.drawImage(texture, matrix, globalAlpha);
+            this.context.restore();
         }
 
         /**
-         * 调用 invalidate() 方法后，在显示列表下次呈现时，Lark 会向每个已注册侦听 Event.RENDER 事件的显示对象发送一个 Event.RENDER 事件。
-         * 每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 invalidate() 方法。
+         * 绘制文本到一个区域上
          */
-        public invalidate():void {
-            lark.player.Ticker.$invalidateRenderFlag = true;
+        public drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number):void {
+            super.drawText(text, font, color, x, y, width, matrix, globalAlpha);
+            this.context.restore();
         }
+
         /**
-         * 一个阈值，当屏幕上脏矩形区域的面积占总面积的百分比小于或等于此值时启用脏矩形绘制，否则直接清空整个屏幕重新绘制所有显示对象。
+         * 设置并缓存矩阵变换参数，所有修改必须统一调用此方法。子类有可能会覆盖此方法改为叠加transform方式。
          */
-        $dirtyRatio:number = 80;
+        protected setTransform(a:number, b:number, c:number, d:number, tx:number, ty:number):void {
+            var context = this.context;
+            context.save();
+            context.transform(a, b, c, d, tx, ty);
+        }
     }
 }

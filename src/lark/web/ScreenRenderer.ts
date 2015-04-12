@@ -29,33 +29,20 @@
 
 module lark.web {
 
-    function visitDisplayList(displayObject:DisplayObject, visitor:(DisplayObject) => boolean):void {
-        if (!visitor(displayObject)) {
-            return;
-        }
-        var children = displayObject.$children;
-        if (children) {
-            var length = children.length;
-            for (var i = 0; i < length; i++) {
-                visitDisplayList(children[i], visitor);
-            }
-        }
-    }
-
     /**
      * Canvas屏幕渲染器
      */
-    export class CanvasRenderer extends HashObject implements lark.player.IScreenRenderer {
+    export class ScreenRenderer extends HashObject implements lark.player.IScreenRenderer {
         /**
          * 创建一个Canvas屏幕渲染器
          */
-        public constructor(canvas?:HTMLCanvasElement) {
+        public constructor(canvas:HTMLCanvasElement) {
             super();
-            if (!canvas) {
-                canvas = document.createElement("canvas");
+            if (canvas) {
+                this.canvas = canvas;
+                this.context = canvas.getContext("2d");
             }
-            this.canvas = canvas;
-            this.context = canvas.getContext("2d");
+
         }
 
         protected canvas:HTMLCanvasElement;
@@ -65,7 +52,6 @@ module lark.web {
          * 绘制脏矩形列表
          */
         public drawDirtyRects(regionList:lark.player.Region[]):void {
-            this.reset();
             this.context.save();
             this.context.beginPath();
             var length = regionList.length;
@@ -88,11 +74,10 @@ module lark.web {
          * 清空屏幕
          */
         public clearScreen():void {
-            this.reset();
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
 
-        protected reset():void {
+        public reset(root:DisplayObject):void {
             var context = this.context;
             context.setTransform(1, 0, 0, 1, 0, 0);
             this._globalAlpha = 1;
