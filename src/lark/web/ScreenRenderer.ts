@@ -74,7 +74,10 @@ module lark.web {
          * 清空屏幕
          */
         public clearScreen():void {
+            this.context.save();
+            this.context.setTransform(1,0,0,1,0,0);
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.context.restore();
         }
 
         public reset(root:DisplayObject):void {

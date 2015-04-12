@@ -32,16 +32,24 @@ module lark.player {
     export class DirtyRegion {
 
         private grid:Region[][];
-        private w:number;
-        private h:number;
-        private c:number;
-        private r:number;
+        private w:number = 0;
+        private h:number = 0;
+        private c:number = 0;
+        private r:number = 0;
         private size:number;
         private sizeInBits:number;
 
-        constructor(w, h, sizeInBits = 7) {
-            var size = this.size = 1 << sizeInBits;
+        constructor(sizeInBits = 7) {
+            this.size = 1 << sizeInBits;
             this.sizeInBits = sizeInBits;
+        }
+
+
+        public updateSize(w:number,h:number):void{
+            if(w===this.w&&h===this.h){
+                return;
+            }
+            var size = this.size;
             this.w = w;
             this.h = h;
             this.c = Math.ceil(w / size);
@@ -55,7 +63,7 @@ module lark.player {
             }
         }
 
-        clear() {
+        public clear() {
             for (var x = 0; x < this.c; x++) {
                 for (var y = 0; y < this.r; y++) {
                     this.grid[x][y].clear();
@@ -121,10 +129,10 @@ module lark.player {
     export class Region {
 
         constructor(minX:number, minY:number, size:number) {
-            this.minX = this.startX = minX;
-            this.minY = this.startY = minY;
-            this.maxX = this.endX = minX + size;
-            this.maxY = this.endY = minY + size;
+            this.startX = minX;
+            this.startY = minY;
+            this.endX = minX + size;
+            this.endY = minY + size;
         }
 
         private startX:number;
@@ -132,15 +140,15 @@ module lark.player {
         private endX:number;
         private endY:number;
 
-        public minX:number;
-        public minY:number;
-        public maxX:number;
-        public maxY:number;
+        public minX:number = 0;
+        public minY:number = 0;
+        public maxX:number = 0;
+        public maxY:number = 0;
 
         public width:number;
         public height:number;
 
-        private empty:boolean = false;
+        private empty:boolean = true;
 
         public clear():void {
             this.empty = true;

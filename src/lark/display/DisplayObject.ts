@@ -232,10 +232,10 @@ module lark {
                 } else {
                     this._concatenatedMatrix.copyFrom(this.$getMatrix());
                 }
-                if(this.$cacheNode){
+                if (this.$cacheNode) {
                     this.$cacheNode.moved = true;
                 }
-                else if (this.$renderNode) {
+                if (this.$renderNode) {
                     this.$renderNode.moved = true;
                 }
                 this.$removeFlags(DisplayObjectFlags.InvalidConcatenatedMatrix);
@@ -439,13 +439,15 @@ module lark {
             if (value === this.$hasFlags(DisplayObjectFlags.Visible)) {
                 return;
             }
-            this.$toggleFlags(DisplayObjectFlags.Visible,value);
+            this.$toggleFlags(DisplayObjectFlags.Visible, value);
             this.$invalidateChildren();
         }
+
         /**
          * cacheAsBitmap创建的缓存位图节点。
          */
         $cacheNode:lark.player.CacheNode = null;
+
         /**
          * 如果设置为 true，则 Lark 播放器将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
          * 将 cacheAsBitmap 属性设置为 true 后，呈现并不更改，但是，显示对象将自动执行像素贴紧。执行速度可能会大大加快，
@@ -460,20 +462,20 @@ module lark {
             value = !!value;
             this.$toggleFlags(DisplayObjectFlags.CacheAsBitmap, value);
             var hasCacheNode = !!this.$cacheNode;
-            if(hasCacheNode===value){
+            if (hasCacheNode === value) {
                 return;
             }
-            if(value){
+            if (value) {
                 var cacheNode = lark.player.$cacheNodePool.create(this);
-                if(cacheNode){
+                if (cacheNode) {
                     this.$cacheNode = cacheNode;
-                    if(this.$parentCacheNode){
+                    if (this.$parentCacheNode) {
                         this.$parentCacheNode.markDirty(cacheNode);
                     }
                     this.$cacheAsBitmapChanged();
                 }
             }
-            else{
+            else {
                 lark.player.$cacheNodePool.release(this.$cacheNode);
                 this.$cacheNode = null;
                 this.$cacheAsBitmapChanged();
@@ -483,10 +485,10 @@ module lark {
         /**
          * cacheAsBitmap属性改变
          */
-        $cacheAsBitmapChanged():void{
+        $cacheAsBitmapChanged():void {
             var node = this.$renderNode;
-            var parentCache = this.$cacheNode||this.$parentCacheNode;
-            if(parentCache&&node){
+            var parentCache = this.$cacheNode || this.$parentCacheNode;
+            if (parentCache && node) {
                 parentCache.markDirty(node);
             }
         }
@@ -669,6 +671,9 @@ module lark {
                 bounds.copyFrom(this.$getContentBounds());
                 this.$measureChildBounds(bounds);
                 this.$removeFlags(DisplayObjectFlags.InvalidBounds);
+                if (this.$cacheNode) {
+                    this.$cacheNode.moved = true;
+                }
             }
             return bounds;
         }
@@ -686,10 +691,7 @@ module lark {
         $getContentBounds():Rectangle {
             var bounds = this._contentBounds;
             if (this.$hasFlags(DisplayObjectFlags.InvalidContentBounds)) {
-                if(this.$cacheNode){
-                    this.$cacheNode.moved = true;
-                }
-                else if (this.$renderNode) {
+                if (this.$renderNode) {
                     this.$renderNode.moved = true;
                 }
                 this.$measureContentBounds(bounds);
@@ -726,13 +728,13 @@ module lark {
          * 标记此显示对象需要重绘，调用此方法后，在屏幕绘制阶段$updateRenderNode()方法会自动被回调，您可能需要覆盖它来同步自身改变的属性到目标RenderNode。
          * @param notiryChildren 是否标记子项也需要重绘。传入false会不传入，将只标记自身的RenderNode需要重绘。
          */
-        $invalidate(notifyChildren?:boolean):void{
+        $invalidate(notifyChildren?:boolean):void {
             var node = this.$renderNode;
-            if(!node||this.$hasFlags(DisplayObjectFlags.DirtyRender)) {
+            if (!node || this.$hasFlags(DisplayObjectFlags.DirtyRender)) {
                 return;
             }
             this.$setFlags(DisplayObjectFlags.DirtyRender);
-            var cacheNode = this.$cacheNode?this.$cacheNode:this.$parentCacheNode;
+            var cacheNode = this.$cacheNode ? this.$cacheNode : this.$parentCacheNode;
             if (cacheNode) {
                 cacheNode.markDirty(node);
             }
@@ -741,13 +743,13 @@ module lark {
         /**
          * 标记自身和所有子项都失效。
          */
-        $invalidateChildren():void{
-            if(this.$hasFlags(DisplayObjectFlags.DirtyChildren)){
+        $invalidateChildren():void {
+            if (this.$hasFlags(DisplayObjectFlags.DirtyChildren)) {
                 return;
             }
             this.$setFlags(DisplayObjectFlags.DirtyChildren);
-            var node:lark.player.RenderNode = this.$cacheNode||this.$renderNode;
-            if (node&&this.$parentCacheNode) {
+            var node:lark.player.RenderNode = this.$cacheNode || this.$renderNode;
+            if (node && this.$parentCacheNode) {
                 this.$parentCacheNode.markDirty(node);
             }
         }

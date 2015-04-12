@@ -52,7 +52,7 @@ module lark.web {
         public create(target:DisplayObject):lark.player.CacheNode{
             var node = cacheNodeList.pop();
             if(!node){
-                var texture = this.createTextureForCache();
+                var texture = this.createTextureForCache(target);
                 if(texture){
                     node = new lark.player.CacheNode(target);
                     node.texture = texture;
@@ -65,15 +65,13 @@ module lark.web {
         /**
          * 检测是否允许显示对象启用cacheAsBitmap功能，若超过系统内存上限或触发其他限制，将返回null。否则返回用于缓存的Texture对象实例。
          */
-        private createTextureForCache():Texture{
+        private createTextureForCache(target:DisplayObject):Texture{
             var canvas = document.createElement("canvas");
             if(!this.testCanvasValid(canvas)){
                 return null;
             }
             var texture = new Texture();
-            canvas.width = 1920;
-            canvas.height = 900;
-            texture.$setBitmapData(canvas);
+            texture.$bitmapData = canvas;
             return texture;
         }
 

@@ -129,7 +129,7 @@ module lark.player {
             Ticker.$instance.$removePlayer(this);
         }
 
-        private dirtyRegion:lark.player.DirtyRegion;
+        private dirtyRegion:lark.player.DirtyRegion = new lark.player.DirtyRegion();
 
         /**
          * 渲染屏幕
@@ -201,8 +201,11 @@ module lark.player {
             var node:lark.player.RenderNode;
             if (cacheNode) {
                 if (cacheNode.needRedraw) {
-                    this.updateDirtyNodes(cacheNode.dirtyNodes, cacheNode.dirtyRegion);
-                    drawCalls += this.drawDisplayList(displayObject, cacheNode.renderer, cacheNode.dirtyRegion);
+                    var bounds = cacheNode.bounds;
+                    var dirtyRegion = cacheNode.dirtyRegion;
+                    dirtyRegion.updateSize(1920,bounds.height);
+                    this.updateDirtyNodes(cacheNode.dirtyNodes, dirtyRegion);
+                    drawCalls += this.drawDisplayList(displayObject, cacheNode.renderer, dirtyRegion);
                     cacheNode.dirtyRegion.clear();
                     cacheNode.dirtyNodes = {};
                     cacheNode.needRedraw = false;
@@ -260,7 +263,7 @@ module lark.player {
             if (stageWidth !== stage.$stageWidth || stageHeight !== stage.$stageHeight) {
                 stage.$stageWidth = stageWidth;
                 stage.$stageHeight = stageHeight;
-                this.dirtyRegion = new DirtyRegion(stageWidth, stageHeight);
+                this.dirtyRegion.updateSize(stageWidth, stageHeight);
                 this.stageSizeChangedFlag = true;
                 visitDisplayList(this.stage, function (displayObject:DisplayObject):boolean {
                     var node = displayObject.$renderNode;

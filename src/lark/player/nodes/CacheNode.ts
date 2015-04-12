@@ -55,14 +55,11 @@ module lark.player {
             this.matrix = target.$getConcatenatedMatrix();
             this.bounds = target.$getOriginalBounds();
             this.updateBounds();
-            if(this.moved){
-                this.dirtyRegion = new lark.player.DirtyRegion(this.bounds.width,this.bounds.height);
-            }
         }
 
         public needRedraw:boolean = false;
 
-        public dirtyRegion:DirtyRegion;
+        public dirtyRegion:DirtyRegion = new DirtyRegion();
 
         public renderer:IScreenRenderer;
     }

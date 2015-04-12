@@ -29,17 +29,46 @@
 
 module lark.web {
 
-    var TEMP_RECTANGLE:Rectangle = new Rectangle();
-
     export class CacheRenderer extends ScreenRenderer{
 
+        /**
+         * canvas被绘制过的标志
+         */
+        private drawed:boolean = false;
         /**
          * 重置画布
          */
         public reset(root:DisplayObject):void {
+            var texture = root.$cacheNode.texture;
+            var offsetX = texture.$offsetX;
+            var offsetY = texture.$offsetY;
+            var bounds = root.$getOriginalBounds();
+            var canvas = this.canvas;
+            if(!this.drawed){
+                this.drawed = true;
+                this.changeCacheSize(texture,bounds);
+            }
+            else if(bounds.width!==canvas.width||bounds.height!==canvas.height){
+                var oldCanvas = this.canvas;
+                var oldContext = this.context;
+                this.context = sharedCanvasContext;
+                this.canvas = this.context.canvas;
+                sharedCanvasContext = oldContext;
+                this.changeCacheSize(texture,bounds);
+                this.context.setTransform(1,0,0,1,0,0);
+                this.context.drawImage(oldCanvas,offsetX-bounds.x,offsetY-bounds.y);
+            }
             super.reset(root);
             var m = root.$getInvertedConcatenatedMatrix();
-            this.context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+            this.context.transform(m.a, m.b, m.c, m.d, m.tx-texture.$offsetX, m.ty-texture.$offsetY);
+        }
+
+        private changeCacheSize(texture:Texture,bounds:Rectangle):void{
+            this.canvas.width = bounds.width;
+            this.canvas.height = bounds.height;
+            texture.$setBitmapData(this.canvas);
+            texture.$offsetX = bounds.x;
+            texture.$offsetY = bounds.y;
         }
 
         /**
