@@ -33,34 +33,72 @@ module lark.player {
 
     export class CacheNode extends BitmapNode {
 
+        public needRedraw:boolean = false;
+
+        public renderer:IScreenRenderer;
+
         /**
          * 显示对象的渲染节点发生改变时，把自身的RenderNode对象注册到此列表上。
          */
-        public dirtyNodes:any = {};
+        private dirtyNodes:any = {};
 
-        public markDirty(node:RenderNode):void{
+        public markDirty(node:RenderNode):void {
             this.dirtyNodes[node.$hashCode] = node;
-            if(!this.needRedraw){
+            if (!this.needRedraw) {
                 this.needRedraw = true;
                 var parentCache = this.target.$parentCacheNode;
-                if(parentCache){
+                if (parentCache) {
                     parentCache.markDirty(this);
                 }
             }
         }
 
-        public update():void{
+        public updateDirtyNodes():Region[] {
+            var nodeList = this.dirtyNodes;
+            this.dirtyNodes = {};
+            var dirtyRectList:Region[] = [];
+            for (var i in nodeList) {
+                var node = nodeList[i];
+                if (!node.outOfScreen && node.alpha !== 0) {
+                    node.isDirty = true;
+                    dirtyRectList.push(new Region(node.minX, node.minY, node.maxX, node.maxY));
+                }
+                node.update();
+                if (node.moved && !node.outOfScreen && node.alpha !== 0) {
+                    node.isDirty = true;
+                    dirtyRectList.push(new Region(node.minX, node.minY, node.maxX, node.maxY));
+                }
+            }
+            return dirtyRectList;
+        }
+
+        public update():void {
             var target = this.target;
             target.$removeFlagsUp(DisplayObjectFlags.Dirty);
             this.matrix = target.$getConcatenatedMatrix();
             this.bounds = target.$getOriginalBounds();
             this.updateBounds();
         }
+    }
 
-        public needRedraw:boolean = false;
+    export class Region {
 
-        public dirtyRegion:DirtyRegion = new DirtyRegion();
+        constructor(minX:number, minY:number, maxX:number, maxY:number) {
+            this.minX = minX;
+            this.minY = minY;
+            this.maxX = maxX;
+            this.maxY = maxY;
+            this.width = maxX - minX;
+            this.height = maxY - minY;
+        }
 
-        public renderer:IScreenRenderer;
+        public minX:number;
+        public minY:number;
+        public maxX:number;
+        public maxY:number;
+
+        public width:number;
+        public height:number;
+
     }
 }

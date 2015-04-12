@@ -77,7 +77,7 @@ module lark {
 
             var container = new DisplayObjectContainer();
             var x = 0, y = 0;
-            for (var i = 0; i < 50; i++) {
+            for (var i = 0; i < 3000; i++) {
                 var bitmap = new Bitmap();
                 bitmap.texture = texture;
                 bitmap.x = x;
@@ -85,10 +85,10 @@ module lark {
                 bitmap.scaleX = bitmap.scaleY = Math.random();
                 bitmap.rotation = Math.random() * 360;
                 x += texture.width;
-                if (x > 1000) {
+                if (x > 1900) {
                     x = 0;
                     y += texture.height;
-                    if (y > 460) {
+                    if (y > 960) {
                         y = 0;
                     }
                 }
