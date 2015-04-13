@@ -77,7 +77,7 @@ module lark {
 
             var container = new DisplayObjectContainer();
             var x = 0, y = 0;
-            for (var i = 0; i < 3000; i++) {
+            for (var i = 0; i < 5000; i++) {
                 var bitmap = new Bitmap();
                 bitmap.texture = texture;
                 bitmap.x = x;

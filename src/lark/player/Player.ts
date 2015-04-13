@@ -135,16 +135,24 @@ module lark.player {
         $render(triggerByFrame:boolean):void {
             var stage = this.stage;
             var t = lark.getTimer();
-            var dirtyRectList = stage.$cacheNode.updateDirtyNodes();
+            var dirtyList = stage.$cacheNode.updateDirtyNodes();
             if (this.stageSizeChangedFlag) {
-                dirtyRectList = null;
+                dirtyList = null;
                 this.stageSizeChangedFlag = false;
             }
             var t1 = lark.getTimer();
-            var drawCalls = this.drawDisplayList(this.stage, this.renderer, dirtyRectList);
+            var drawCalls = this.drawDisplayList(this.stage, this.renderer, dirtyList);
             var t2 = lark.getTimer();
             if (triggerByFrame) {
-                FPS.update(drawCalls, 0, t1 - t, t2 - t1);
+                var dirtyRatio:number = 0;
+                if(dirtyList){
+                    var length = dirtyList.length;
+                    for(var i=0;i<length;i++){
+                        dirtyRatio += dirtyList[i].area;
+                    }
+                    dirtyRatio = Math.ceil(dirtyRatio*1000/(stage.stageWidth*stage.stageHeight))/10;
+                }
+                FPS.update(drawCalls, dirtyRatio, t1 - t, t2 - t1);
             }
         }
 

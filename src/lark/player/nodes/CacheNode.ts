@@ -56,20 +56,60 @@ module lark.player {
         public updateDirtyNodes():Region[] {
             var nodeList = this.dirtyNodes;
             this.dirtyNodes = {};
-            var dirtyRectList:Region[] = [];
+            var dirtyList:Region[] = [];
             for (var i in nodeList) {
                 var node = nodeList[i];
                 if (!node.outOfScreen && node.alpha !== 0) {
                     node.isDirty = true;
-                    dirtyRectList.push(new Region(node.minX, node.minY, node.maxX, node.maxY));
+                    dirtyList.push(new Region(node.minX, node.minY, node.maxX, node.maxY));
+                    this.mergeDirtyList(dirtyList);
                 }
                 node.update();
                 if (node.moved && !node.outOfScreen && node.alpha !== 0) {
                     node.isDirty = true;
-                    dirtyRectList.push(new Region(node.minX, node.minY, node.maxX, node.maxY));
+                    dirtyList.push(new Region(node.minX, node.minY, node.maxX, node.maxY));
+                    this.mergeDirtyList(dirtyList);
                 }
             }
-            return dirtyRectList;
+            return dirtyList;
+        }
+
+        /**
+         * 合并脏矩形列表
+         */
+        private mergeDirtyList(dirtyList:Region[]):void {
+            var length = dirtyList.length;
+            if (length < 2) {
+                return;
+            }
+            var bestDelta = length > 3 ? Number.POSITIVE_INFINITY : 0;
+            var mergeA = 0;
+            var mergeB = 0;
+            for (var i = 0; i < length - 1; i++) {
+                for (var j = i + 1; j < length; j++) {
+                    var regionA = dirtyList[i];
+                    var regionB = dirtyList[j];
+                    var delta = this.unionArea(regionA, regionB) - regionA.area - regionB.area;
+                    if (bestDelta > delta) {
+                        mergeA = i;
+                        mergeB = j;
+                        bestDelta = delta;
+                    }
+                }
+            }
+            if(mergeA!=mergeB){
+                dirtyList[mergeA].union(dirtyList[mergeB]);
+                dirtyList.splice(mergeB,1);
+                this.mergeDirtyList(dirtyList);
+            }
+        }
+
+        private unionArea(r1:Region, r2:Region):number {
+            var minX = r1.minX < r2.minX ? r1.minX : r2.minX;
+            var minY = r1.minX < r2.minY ? r1.minX : r2.minY;
+            var maxX = r1.maxX > r2.maxX ? r1.maxX : r2.maxX;
+            var maxY = r1.maxY > r2.maxY ? r1.maxY : r2.maxY;
+            return (maxX - minX) * (maxY - minY);
         }
 
         public update():void {
@@ -88,8 +128,7 @@ module lark.player {
             this.minY = minY;
             this.maxX = maxX;
             this.maxY = maxY;
-            this.width = maxX - minX;
-            this.height = maxY - minY;
+            this.updateArea();
         }
 
         public minX:number;
@@ -99,6 +138,28 @@ module lark.player {
 
         public width:number;
         public height:number;
+        public area:number;
 
+        private updateArea():void{
+            this.width = this.maxX - this.minX;
+            this.height = this.maxY - this.minY;
+            this.area = this.width * this.height;
+        }
+
+        public union(target:Region):void{
+            if (this.minX > target.minX) {
+                this.minX = target.minX;
+            }
+            if (this.minY > target.minY) {
+                this.minY = target.minY;
+            }
+            if (this.maxX < target.maxX) {
+                this.maxX = target.maxX;
+            }
+            if (this.maxY < target.maxY) {
+                this.maxY = target.maxY;
+            }
+            this.updateArea();
+        }
     }
 }
