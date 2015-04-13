@@ -31,6 +31,25 @@ module lark.player {
 
     export var $cacheNodePool:ICacheNodePool;
 
+    var regionPool:Region[] = [];
+
+    /**
+     * 从对象池取出或创建一个新的Region实例。
+     */
+    function getRegion(minX:number, minY:number, maxX:number, maxY:number):Region {
+        var region = regionPool.pop();
+        if(!region){
+            region = new Region();
+        }
+        region.minX = minX;
+        region.minY = minY;
+        region.maxX = maxX;
+        region.maxY = maxY;
+        region.updateArea();
+        return region;
+    }
+
+
     export class CacheNode extends BitmapNode {
 
         public needRedraw:boolean = false;
@@ -41,6 +60,8 @@ module lark.player {
          * 显示对象的渲染节点发生改变时，把自身的RenderNode对象注册到此列表上。
          */
         private dirtyNodes:any = {};
+
+        public dirtyList:Region[] = [];
 
         public markDirty(node:RenderNode):void {
             this.dirtyNodes[node.$hashCode] = node;
@@ -56,22 +77,35 @@ module lark.player {
         public updateDirtyNodes():Region[] {
             var nodeList = this.dirtyNodes;
             this.dirtyNodes = {};
-            var dirtyList:Region[] = [];
+            var dirtyList = this.dirtyList;
             for (var i in nodeList) {
                 var node = nodeList[i];
                 if (!node.outOfScreen && node.alpha !== 0) {
                     node.isDirty = true;
-                    dirtyList.push(new Region(node.minX, node.minY, node.maxX, node.maxY));
+                    dirtyList.push(getRegion(node.minX, node.minY, node.maxX, node.maxY));
                     this.mergeDirtyList(dirtyList);
                 }
                 node.update();
                 if (node.moved && !node.outOfScreen && node.alpha !== 0) {
                     node.isDirty = true;
-                    dirtyList.push(new Region(node.minX, node.minY, node.maxX, node.maxY));
+                    dirtyList.push(getRegion(node.minX, node.minY, node.maxX, node.maxY));
                     this.mergeDirtyList(dirtyList);
                 }
             }
             return dirtyList;
+        }
+
+        /**
+         * 结束重绘,清理缓存。
+         */
+        public cleanCache():void{
+            var dirtyList = this.dirtyList;
+            var length = dirtyList.length;
+            for(var i=0;i<length;i++){
+                regionPool.push(dirtyList[i]);
+            }
+            this.dirtyList = [];
+            this.needRedraw = false;
         }
 
         /**
@@ -99,6 +133,7 @@ module lark.player {
             }
             if(mergeA!=mergeB){
                 dirtyList[mergeA].union(dirtyList[mergeB]);
+                regionPool.push(dirtyList[mergeB]);
                 dirtyList.splice(mergeB,1);
                 this.mergeDirtyList(dirtyList);
             }
@@ -118,18 +153,13 @@ module lark.player {
             this.matrix = target.$getConcatenatedMatrix();
             this.bounds = target.$getOriginalBounds();
             this.updateBounds();
+            if(this.needRedraw){
+                this.updateDirtyNodes();
+            }
         }
     }
 
     export class Region {
-
-        constructor(minX:number, minY:number, maxX:number, maxY:number) {
-            this.minX = minX;
-            this.minY = minY;
-            this.maxX = maxX;
-            this.maxY = maxY;
-            this.updateArea();
-        }
 
         public minX:number;
         public minY:number;
@@ -140,7 +170,7 @@ module lark.player {
         public height:number;
         public area:number;
 
-        private updateArea():void{
+        public updateArea():void{
             this.width = this.maxX - this.minX;
             this.height = this.maxY - this.minY;
             this.area = this.width * this.height;

@@ -77,7 +77,7 @@ module lark {
 
             var container = new DisplayObjectContainer();
             var x = 0, y = 0;
-            for (var i = 0; i < 5000; i++) {
+            for (var i = 0; i < 2400; i++) {
                 var bitmap = new Bitmap();
                 bitmap.texture = texture;
                 bitmap.x = x;
@@ -93,12 +93,12 @@ module lark {
                     }
                 }
                 container.addChild(bitmap);
-                //this.iconList.push(bitmap);
+                this.iconList.push(bitmap);
             }
             this.addChild(container);
-            container.cacheAsBitmap = true;
-            container.x = 300;
-            container.y = 300;
+            //container.cacheAsBitmap = true;
+            //container.x = 300;
+            //container.y = 300;
             bitmap = new lark.Bitmap();
             bitmap.texture = texture;
             bitmap.x = 700;
