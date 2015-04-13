@@ -52,15 +52,16 @@ module lark.web {
          * 绘制脏矩形列表
          */
         public drawDirtyRects(regionList:lark.player.Region[]):void {
-            this.context.save();
-            this.context.beginPath();
+            var context = this.context;
+            context.save();
+            context.beginPath();
             var length = regionList.length;
             for (var i = 0; i < length; i++) {
                 var region = regionList[i];
-                this.context.clearRect(region.minX, region.minY, region.width, region.height);
-                this.context.rect(region.minX, region.minY, region.width, region.height);
+                context.clearRect(region.minX, region.minY, region.width, region.height);
+                context.rect(region.minX, region.minY, region.width, region.height);
             }
-            this.context.clip();
+            context.clip();
         }
 
         /**
@@ -74,10 +75,11 @@ module lark.web {
          * 清空屏幕
          */
         public clearScreen():void {
-            this.context.save();
-            this.context.setTransform(1,0,0,1,0,0);
-            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.context.restore();
+            var context = this.context;
+            context.save();
+            context.setTransform(1,0,0,1,0,0);
+            context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            context.restore();
         }
 
         public reset(root:DisplayObject):void {

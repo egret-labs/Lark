@@ -29,6 +29,9 @@
 
 module lark.player {
 
+    /**
+     * 脏矩形计算工具类
+     */
     export class DirtyRegion {
 
         public constructor() {
@@ -108,22 +111,6 @@ module lark.player {
             return true;
         }
 
-        /**
-         * 获取最终的脏矩形列表
-         */
-        public getDirtyRegions():Region[] {
-            if (this.screenChanged) {
-                this.screenChanged = false;
-                var region:Region = this.regionList.pop();
-                this.dirtyList.push(region.setTo(0,0,this.screenWidth,this.screenHeight));
-            }
-            else {
-                while (this.mergeDirtyList(this.dirtyList)) {
-                }
-            }
-            return this.dirtyList;
-        }
-
         public clear():void {
             var dirtyList = this.dirtyList;
             var length = dirtyList.length;
@@ -131,6 +118,80 @@ module lark.player {
                 this.regionList.push(dirtyList[i]);
             }
             dirtyList.length = 0;
+        }
+
+        /**
+         * 获取最终的脏矩形列表
+         */
+        public getDirtyRegions():Region[] {
+            var dirtyList = this.dirtyList;
+            if (this.screenChanged) {
+                this.screenChanged = false;
+                var region:Region = this.regionList.pop();
+                dirtyList.push(region.setTo(0, 0, this.screenWidth, this.screenHeight));
+            }
+            else {
+                while (this.mergeDirtyList(dirtyList)) {
+                }
+                //将所有相交的矩形变成不相交的
+                var length = dirtyList.length;
+                for (var i = 0; i < length - 1; i++) {
+                    for (var j = i + 1; j < length; j++) {
+                        var regionA = dirtyList[i];
+                        var regionB = dirtyList[j];
+                        if (regionA.intersects(regionB)) {
+                            this.decomposeRegion(regionA, regionB);
+                        }
+                    }
+                }
+            }
+            return this.dirtyList;
+        }
+
+        private decomposeRegion(r1:Region, r2:Region):void {
+            if (r1.minY < r2.minY) {
+                re0.minY = r1.minY;
+                re0.maxY = r2.minY;
+                re0.minX = r1.minX;
+                re0.maxX = r1.maxX;
+            } else {
+                re0.minY = r2.minY;
+                re0.maxY = r1.minY;
+                re0.minX = r2.minX;
+                re0.maxX = r2.maxX;
+            }
+            if (r1.maxY < r2.maxY) {
+                re2.minY = r1.maxY;
+                re2.maxY = r2.maxY;
+                re2.minX = r2.minX;
+                re2.maxX = r2.maxX;
+            } else {
+                re2.minY = r2.maxY;
+                re2.maxY = r1.maxY;
+                re2.minX = r1.minX;
+                re2.maxX = r1.maxX;
+            }
+            re1.minY = re0.maxY;
+            re1.maxY = re2.minY;
+            re1.minX = r1.minX < r2.minX ? r1.minX : r2.minX;
+            re1.maxX = r1.maxX > r2.maxX ? r1.maxX : r2.maxX;
+
+            re0.updateArea();
+            re1.updateArea();
+            re2.updateArea();
+
+            var delta0 = this.unionArea(re0, re1) - re0.area - re1.area;
+            var delta1 = this.unionArea(re1, re2) - re1.area - re2.area;
+            if (delta0 < delta1) {
+                re0.unionFrom(re1);
+                r1.copyFrom(re0);
+                r2.copyFrom(re2);
+            }
+            else {
+                r1.copyFrom(re0);
+                re2.unionFrom(re1);
+                r2.copyFrom(re2);
+            }
         }
 
         /**
@@ -158,7 +219,7 @@ module lark.player {
             }
             if (mergeA != mergeB) {
                 var region = dirtyList[mergeB];
-                dirtyList[mergeA].union(region.minX, region.minY, region.maxX, region.maxY);
+                dirtyList[mergeA].unionFrom(region);
                 this.regionList.push(region);
                 dirtyList.splice(mergeB, 1);
                 return true;
@@ -195,10 +256,18 @@ module lark.player {
             return this;
         }
 
+        public copyFrom(target:Region):void {
+            this.setTo(target.minX, target.minY, target.maxX, target.maxY);
+        }
+
         public updateArea():void {
             this.width = this.maxX - this.minX;
             this.height = this.maxY - this.minY;
             this.area = this.width * this.height;
+        }
+
+        public unionFrom(target:Region):void {
+            this.union(target.minX, target.minY, target.maxX, target.maxY);
         }
 
         public union(targetMinX:number, targetMinY:number, targetMaxX:number, targetMaxY:number):void {
@@ -216,5 +285,24 @@ module lark.player {
             }
             this.updateArea();
         }
+
+        /**
+         * 是否与目标矩形相交
+         */
+        public intersects(target:Region):boolean {
+            var max = this.minX > target.minX ? this.minX : target.minX;
+            var min = this.maxX < target.maxX ? this.maxX : target.maxX;
+            if (max > min) {
+                return false;
+            }
+
+            max = this.minY > target.minY ? this.minY : target.minY;
+            min = this.maxY < target.maxY ? this.maxY : target.maxY;
+            return max <= min;
+        }
     }
+
+    var re0 = new Region();
+    var re1 = new Region();
+    var re2 = new Region();
 }
