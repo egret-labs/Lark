@@ -46,7 +46,7 @@ module lark.player {
         /**
          * 目标显示对象
          */
-        protected target:DisplayObject;
+        public target:DisplayObject;
         /**
          * 要绘制到屏幕的整体透明度。
          */
@@ -63,10 +63,6 @@ module lark.player {
          * 是否需要重绘
          */
         public isDirty:boolean = false;
-        /**
-         * 当前位置在屏幕之外
-         */
-        public outOfScreen:boolean = false;
         /**
          * 在屏幕上的矩形区域是否发现改变。
          */
@@ -134,7 +130,6 @@ module lark.player {
             this.maxX = bounds.x + bounds.width;
             this.minY = bounds.y;
             this.maxY = bounds.y + bounds.height;
-            this.outOfScreen = !this.intersects(0, 0, stage.stageWidth, stage.stageHeight);
         }
 
         /**

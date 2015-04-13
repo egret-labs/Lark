@@ -37,12 +37,12 @@ module lark {
 
         private static _textField:lark.TextField;
 
-        public static get display(): lark.TextField {
+        public static get display():lark.TextField {
             if (!FPS._textField) {
                 FPS._textField = new lark.TextField("", {
                     color: 0x0c8c0c,
-                    fontSize:28,
-                    fontFamily:"monospace"
+                    fontSize: 28,
+                    fontFamily: "monospace"
                 });
                 FPS._textField.x = 20;
                 FPS._textField.y = 20;
@@ -53,23 +53,26 @@ module lark {
         private static totalTime:number = 0;
         private static totalTick:number = 0;
         private static lastTime:number = 0;
+        private static drawCalls:number = 0;
 
-        public static update(drawCalls:number,dirtyRatio:number, ...args):void {
-            if(!FPS._textField){
+        public static update(drawCalls:number, dirtyRatio:number, ...args):void {
+            if (!FPS._textField) {
                 return;
             }
             var current = lark.getTimer();
             FPS.totalTime += current - this.lastTime;
             FPS.lastTime = current;
             FPS.totalTick++;
+            FPS.drawCalls = Math.max(drawCalls, FPS.drawCalls);
             if (FPS.totalTime > 500) {
                 var lastFPS = Math.round(FPS.totalTick * 1000 / FPS.totalTime);
                 FPS.totalTick = 0;
                 FPS.totalTime = 0;
-                var text = "FPS: " + lastFPS + "\nDraw: " + drawCalls + ","+dirtyRatio+"%\nCost: " + args.join(",");
+                var text = "FPS: " + lastFPS + "\nDraw: " + FPS.drawCalls + "," + dirtyRatio + "%\nCost: " + args.join(",");
                 if (FPS._textField.text != text) {
                     FPS._textField.text = text;
                 }
+                FPS.drawCalls = 0;
             }
         }
     }

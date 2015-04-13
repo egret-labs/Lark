@@ -31,7 +31,7 @@
                     this.poster = poster;
             }
 
-            this.on(Event.ENTER_FRAME, e=> this.$markDirty(true), this);
+            this.on(Event.ENTER_FRAME, e=> this.$invalidate(), this);
         }
 
 

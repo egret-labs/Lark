@@ -31,162 +31,173 @@ module lark.player {
 
     export class DirtyRegion {
 
-        private grid:Region[][];
-        private w:number;
-        private h:number;
-        private c:number;
-        private r:number;
-        private size:number;
-        private sizeInBits:number;
-
-        constructor(w, h, sizeInBits = 7) {
-            var size = this.size = 1 << sizeInBits;
-            this.sizeInBits = sizeInBits;
-            this.w = w;
-            this.h = h;
-            this.c = Math.ceil(w / size);
-            this.r = Math.ceil(h / size);
-            this.grid = [];
-            for (var x = 0; x < this.c; x++) {
-                this.grid.push([]);
-                for (var y = 0; y < this.r; y++) {
-                    this.grid[x][y] = new Region(x * size, y * size, size);
-                }
-            }
+        public constructor() {
+            this.regionList = [new Region(), new Region(), new Region()];
         }
 
-        clear() {
-            for (var x = 0; x < this.c; x++) {
-                for (var y = 0; y < this.r; y++) {
-                    this.grid[x][y].clear();
-                }
-            }
+        private regionList:Region[];
+        private dirtyList:Region[] = [];
+        private clipRect:boolean = false;
+        private screenWidth:number = 0;
+        private screenHeight:number = 0;
+        private screenChanged:boolean = false;
+
+        public updateClipRect(width:number, height:number):void {
+            this.clipRect = true;
+            this.screenChanged = true;
+            this.screenWidth = width;
+            this.screenHeight = height;
         }
 
-
-        public addDirtyRegion(minX:number, minY:number, maxX:number, maxY:number):void {
-            if (minX >= maxX || minY >= maxY) {
-                return;
-            }
-            minX = Math.floor(minX);
-            minY = Math.floor(minY);
-            maxX = Math.ceil(maxX);
-            maxY = Math.ceil(maxY);
-            if (minX < 0) {
-                minX = 0;
-            }
-            if (minY < 0) {
-                minY = 0;
-            }
-            if (maxX > this.w) {
-                maxX = this.w;
-            }
-            if (maxY > this.h) {
-                maxY = this.h;
-            }
-            var startX = minX >> this.sizeInBits;
-            var startY = minY >> this.sizeInBits;
-            var endX = Math.ceil(maxX / this.size);
-            var endY = Math.ceil(maxY / this.size);
-            var grid = this.grid;
-            for (var x = startX; x < endX; x++) {
-                for (var y = startY; y < endY; y++) {
-                    var region = grid[x][y];
-                    region.$union(minX, minY, maxX, maxY);
+        /**
+         * 添加一个脏矩形区域，返回是否添加成功，当矩形为空或者在屏幕之外时返回false。
+         */
+        public addRegion(minX:number, minY:number, maxX:number, maxY:number):boolean {
+            if (this.clipRect) {
+                if (minX < 0) {
+                    minX = 0;
+                }
+                if (minY < 0) {
+                    minY = 0;
+                }
+                if (maxX > this.screenWidth) {
+                    maxX = this.screenWidth;
+                }
+                if (maxY > this.screenHeight) {
+                    maxY = this.screenHeight;
                 }
             }
+            var targetArea = (maxX - minX) * (maxY - minY);
+            if (targetArea <= 0) {
+                return false;
+            }
+            if (this.screenChanged) {
+                return true;
+            }
+            var dirtyList = this.dirtyList;
+            var length = dirtyList.length;
+            var merged = false;
+            if (length > 0) {
+                var bestDelta = length >= 3 ? Number.POSITIVE_INFINITY : 0;
+                var targetIndex = -1;
+                for (var i = 0; i < length; i++) {
+                    var r = dirtyList[i];
+                    var xMin = minX < r.minX ? minX : r.minX;
+                    var yMin = minX < r.minY ? minX : r.minY;
+                    var xMax = maxX > r.maxX ? maxX : r.maxX;
+                    var yMax = maxY > r.maxY ? maxY : r.maxY;
+                    var delta = (xMax - xMin) * (yMax - yMin) - targetArea - r.area;
+                    if (delta < bestDelta) {
+                        bestDelta = delta;
+                        targetIndex = i;
+                    }
+                }
+                if (targetIndex !== -1) {
+                    dirtyList[targetIndex].union(minX, minY, maxX, maxY);
+                    merged = true;
+                }
+            }
+            if (!merged) {
+                var region:Region = this.regionList.pop();
+                dirtyList.push(region.setTo(minX, minY, maxX, maxY));
+            }
+            return true;
         }
 
-        public dirtyRatio:number = 0;
+        /**
+         * 获取最终的脏矩形列表
+         */
+        public getDirtyRegions():Region[] {
+            if (this.screenChanged) {
+                this.screenChanged = false;
+                var region:Region = this.regionList.pop();
+                this.dirtyList.push(region.setTo(0,0,this.screenWidth,this.screenHeight));
+            }
+            else {
+                while (this.mergeDirtyList(this.dirtyList)) {
+                }
+            }
+            return this.dirtyList;
+        }
 
-        gatherRegions(regions:Region[]) {
-            var areas:number = 0;
-            for (var x = 0; x < this.c; x++) {
-                for (var y = 0; y < this.r; y++) {
-                    var region = this.grid[x][y].$update();
-                    if (!region.$isEmpty()) {
-                        regions.push(region);
-                        areas += region.$area();
+        public clear():void {
+            var dirtyList = this.dirtyList;
+            var length = dirtyList.length;
+            for (var i = 0; i < length; i++) {
+                this.regionList.push(dirtyList[i]);
+            }
+            dirtyList.length = 0;
+        }
+
+        /**
+         * 合并脏矩形列表
+         */
+        private mergeDirtyList(dirtyList:Region[]):boolean {
+            var length = dirtyList.length;
+            if (length < 2) {
+                return false;
+            }
+            var bestDelta = 0;
+            var mergeA = 0;
+            var mergeB = 0;
+            for (var i = 0; i < length - 1; i++) {
+                for (var j = i + 1; j < length; j++) {
+                    var regionA = dirtyList[i];
+                    var regionB = dirtyList[j];
+                    var delta = this.unionArea(regionA, regionB) - regionA.area - regionB.area;
+                    if (bestDelta > delta) {
+                        mergeA = i;
+                        mergeB = j;
+                        bestDelta = delta;
                     }
                 }
             }
-            this.dirtyRatio = Math.ceil(areas*1000/(this.w*this.h))/10;
+            if (mergeA != mergeB) {
+                var region = dirtyList[mergeB];
+                dirtyList[mergeA].union(region.minX, region.minY, region.maxX, region.maxY);
+                this.regionList.push(region);
+                dirtyList.splice(mergeB, 1);
+                return true;
+            }
+            return false;
         }
 
-        gatherOptimizedRegions(regions:Region[]) {
-            this.gatherRegions(regions);
+        private unionArea(r1:Region, r2:Region):number {
+            var minX = r1.minX < r2.minX ? r1.minX : r2.minX;
+            var minY = r1.minX < r2.minY ? r1.minX : r2.minY;
+            var maxX = r1.maxX > r2.maxX ? r1.maxX : r2.maxX;
+            var maxY = r1.maxY > r2.maxY ? r1.maxY : r2.maxY;
+            return (maxX - minX) * (maxY - minY);
         }
     }
 
     export class Region {
 
-        constructor(minX:number, minY:number, size:number) {
-            this.minX = this.startX = minX;
-            this.minY = this.startY = minY;
-            this.maxX = this.endX = minX + size;
-            this.maxY = this.endY = minY + size;
-        }
+        public minX:number = 0;
+        public minY:number = 0;
+        public maxX:number = 0;
+        public maxY:number = 0;
 
-        private startX:number;
-        private startY:number;
-        private endX:number;
-        private endY:number;
+        public width:number = 0;
+        public height:number = 0;
+        public area:number = 0;
 
-        public minX:number;
-        public minY:number;
-        public maxX:number;
-        public maxY:number;
-
-        public width:number;
-        public height:number;
-
-        private empty:boolean = false;
-
-        public clear():void {
-            this.empty = true;
-            this.minX = this.minY = this.maxX = this.maxY = 0;
-        }
-
-        $update():Region{
-            this.width = this.maxX-this.minX;
-            this.height = this.maxY-this.minY;
+        public setTo(minX:number, minY:number, maxX:number, maxY:number):Region {
+            this.minX = minX;
+            this.minY = minY;
+            this.maxX = maxX;
+            this.maxY = maxY;
+            this.updateArea();
             return this;
         }
 
-        $isEmpty():boolean {
-            return this.width<=0 || this.height<=0;
+        public updateArea():void {
+            this.width = this.maxX - this.minX;
+            this.height = this.maxY - this.minY;
+            this.area = this.width * this.height;
         }
 
-        $area():number {
-            return this.width * this.height;
-        }
-
-        /**
-         * 合并另一个矩形到当前矩形内
-         */
-        $union(targetMinX:number, targetMinY:number, targetMaxX:number, targetMaxY:number):void {
-
-            if (this.startX > targetMinX) {
-                targetMinX = this.startX;
-            }
-            if (this.startY > targetMinY) {
-                targetMinY = this.startY;
-            }
-            if (this.endX < targetMaxX) {
-                targetMaxX = this.endX;
-            }
-            if (this.endY < targetMaxY) {
-                targetMaxY = this.endY;
-            }
-
-            if (this.empty) {
-                this.empty = false;
-                this.minX = targetMinX;
-                this.maxX = targetMaxX;
-                this.minY = targetMinY;
-                this.maxY = targetMaxY;
-            }
-
+        public union(targetMinX:number, targetMinY:number, targetMaxX:number, targetMaxY:number):void {
             if (this.minX > targetMinX) {
                 this.minX = targetMinX;
             }
@@ -199,6 +210,7 @@ module lark.player {
             if (this.maxY < targetMaxY) {
                 this.maxY = targetMaxY;
             }
+            this.updateArea();
         }
     }
 }

@@ -29,39 +29,75 @@
 
 module lark.player {
 
-    var cacheNodeList:CacheNode[] = [];
+    export var $cacheNodePool:ICacheNodePool;
+
+
 
     export class CacheNode extends BitmapNode {
 
-        static $release(node:CacheNode):void{
-            node.target = null;
-            node.matrix = null;
-            node.bounds = null;
-            cacheNodeList.push(node);
-        }
+        public needRedraw:boolean = false;
 
-        static $create(target:DisplayObject):CacheNode{
-            var node = cacheNodeList.pop();
-            if(!node){
-                var texture = $textureDrawer.createTextureForCache();
-                if(texture){
-                    node = new CacheNode(target);
-                    node.texture = texture;
+        public renderer:IScreenRenderer = null;
+        /**
+         * 显示对象的渲染节点发生改变时，把自身的RenderNode对象注册到此列表上。
+         */
+        private dirtyNodes:any = {};
+
+        public dirtyList:Region[] = null;
+
+        public dirtyRegion:DirtyRegion = new DirtyRegion();
+
+        public markDirty(node:RenderNode):void {
+            this.dirtyNodes[node.$hashCode] = node;
+            if (!this.needRedraw) {
+                this.needRedraw = true;
+                var parentCache = this.target.$parentCacheNode;
+                if (parentCache) {
+                    parentCache.markDirty(this);
                 }
             }
-            return node;
         }
 
-        public update():void{
+        public updateDirtyNodes():Region[] {
+            var nodeList = this.dirtyNodes;
+            this.dirtyNodes = {};
+            var dirtyRegion = this.dirtyRegion;
+            for (var i in nodeList) {
+                var node = nodeList[i];
+                if (node.alpha !== 0) {
+                    if(dirtyRegion.addRegion(node.minX, node.minY, node.maxX, node.maxY)){
+                        node.isDirty = true;
+                    }
+                }
+                node.update();
+                if (node.moved && node.alpha !== 0) {
+                    if(dirtyRegion.addRegion(node.minX, node.minY, node.maxX, node.maxY)){
+                        node.isDirty = true;
+                    }
+                }
+            }
+            this.dirtyList = dirtyRegion.getDirtyRegions();
+            return this.dirtyList;
+        }
+
+        /**
+         * 结束重绘,清理缓存。
+         */
+        public cleanCache():void {
+            this.dirtyRegion.clear();
+            this.dirtyList = null;
+            this.needRedraw = false;
+        }
+
+        public update():void {
             var target = this.target;
+            target.$removeFlagsUp(DisplayObjectFlags.Dirty);
             this.matrix = target.$getConcatenatedMatrix();
-            this.alpha = target.$getConcatenatedAlpha();
             this.bounds = target.$getOriginalBounds();
             this.updateBounds();
-        }
-
-        public redraw():void{
-            $textureDrawer.drawDisplayObject(this.texture,this.target);
+            if (this.needRedraw) {
+                this.updateDirtyNodes();
+            }
         }
     }
 }

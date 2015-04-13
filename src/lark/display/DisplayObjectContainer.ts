@@ -44,13 +44,6 @@ module lark {
             this.$children = [];
         }
 
-        /**
-         * 标记子项列表失效
-         */
-        private invalidateChildren() {
-            this.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
-        }
-
         $propagateFlagsDown(flags:DisplayObjectFlags) {
             if (this.$hasFlags(flags)) {
                 return;
@@ -61,6 +54,7 @@ module lark {
                 children[i].$propagateFlagsDown(flags);
             }
         }
+
 
         /**
          * 返回此对象的子项数目。
@@ -96,19 +90,18 @@ module lark {
         }
 
         $doAddChild(child:DisplayObject, index:number, notifyListeners:boolean = true):DisplayObject {
-            if(DEBUG){
-                if (child == this)
-                {
+            if (DEBUG) {
+                if (child == this) {
                     $error(1005);
                 }
-                else if(child instanceof DisplayObjectContainer&&(<DisplayObjectContainer>child).contains(this)){
+                else if (child instanceof DisplayObjectContainer && (<DisplayObjectContainer>child).contains(this)) {
                     $error(1004);
                 }
             }
 
 
             if (index < 0 || index > this.$children.length) {
-                DEBUG&&$error(1007);
+                DEBUG && $error(1007);
                 return child;
             }
 
@@ -135,18 +128,19 @@ module lark {
             if (notifyListeners) {
                 child.emitWith(Event.ADDED, true);
             }
-            if(stage){
+            if (stage) {
                 var list = DisplayObjectContainer.$EVENT_ADD_TO_STAGE_LIST;
                 while (list.length) {
                     var childAddToStage = list.shift();
-                    if (notifyListeners&&childAddToStage.$stage) {
+                    if (notifyListeners && childAddToStage.$stage) {
                         childAddToStage.emitWith(Event.ADDED_TO_STAGE);
                     }
                 }
             }
+            var cacheNode = this.$cacheNode || this.$parentCacheNode;
+            this.assignParentCacheNode(child, cacheNode, cacheNode);
             child.$propagateFlagsDown(DisplayObjectFlags.DownOnAddedOrRemoved);
-            this.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
-            this.invalidateChildren();
+            this.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
             return child;
         }
 
@@ -176,7 +170,7 @@ module lark {
                 return this.$children[index];
             }
             else {
-                DEBUG&&$error(1007);
+                DEBUG && $error(1007);
                 return null;
             }
         }
@@ -218,7 +212,7 @@ module lark {
                 return this.$doRemoveChild(index);
             }
             else {
-                DEBUG&&$error(1006);
+                DEBUG && $error(1006);
                 return null;
             }
         }
@@ -234,7 +228,7 @@ module lark {
                 return this.$doRemoveChild(index);
             }
             else {
-                DEBUG&&$error(1007);
+                DEBUG && $error(1007);
                 return null;
             }
         }
@@ -258,11 +252,12 @@ module lark {
                     childAddToStage.$stage = null;
                 }
             }
+            var cacheNode = this.$cacheNode || this.$parentCacheNode;
+            this.assignParentCacheNode(child, cacheNode, cacheNode);
             child.$setParent(null);
             children.splice(index, 1);
             child.$propagateFlagsDown(DisplayObjectFlags.DownOnAddedOrRemoved);
-            this.$propagateFlagsUp(DisplayObjectFlags.DirtyDescendents);
-            this.invalidateChildren();
+            this.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
             return child;
         }
 
@@ -279,7 +274,7 @@ module lark {
         private doSetChildIndex(child:DisplayObject, index:number):void {
             var lastIdx = this.$children.indexOf(child);
             if (lastIdx < 0) {
-                DEBUG&&$error(1006);
+                DEBUG && $error(1006);
             }
             //从原来的位置删除
             this.$children.splice(lastIdx, 1);
@@ -290,8 +285,8 @@ module lark {
             else {
                 this.$children.splice(index, 0, child);
             }
-            child.$markDirty();
-            this.invalidateChildren();
+            child.$invalidateChildren();
+            this.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
         }
 
         /**
@@ -306,7 +301,7 @@ module lark {
                 this.doSwapChildrenAt(index1, index2);
             }
             else {
-                DEBUG&&$error(1007);
+                DEBUG && $error(1007);
             }
 
         }
@@ -320,7 +315,7 @@ module lark {
             var index1:number = this.$children.indexOf(child1);
             var index2:number = this.$children.indexOf(child2);
             if (index1 == -1 || index2 == -1) {
-                DEBUG&&$error(1006);
+                DEBUG && $error(1006);
             }
             else {
                 this.doSwapChildrenAt(index1, index2);
@@ -336,9 +331,9 @@ module lark {
             var child2:DisplayObject = list[index2];
             list[index1] = child2;
             list[index2] = child1;
-            child1.$markDirty();
-            child2.$markDirty();
-            this.invalidateChildren();
+            child1.$invalidateChildren();
+            child2.$invalidateChildren();
+            this.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
         }
 
         /**
@@ -375,13 +370,13 @@ module lark {
         $measureChildBounds(bounds:Rectangle):void {
             var children = this.$children;
             var length = children.length;
-            if(length===0){
+            if (length === 0) {
                 return;
             }
             var xMin = 0, xMax = 0, yMin = 0, yMax = 0;
             var found:boolean = false;
             for (var i = -1; i < length; i++) {
-                var childBounds = i===-1?bounds:children[i].$getTransformedBounds(this, Rectangle.TEMP);
+                var childBounds = i === -1 ? bounds : children[i].$getTransformedBounds(this, Rectangle.TEMP);
                 if (childBounds.isEmpty()) {
                     continue;
                 }
@@ -404,6 +399,7 @@ module lark {
 
 
         $touchChildren:boolean = true;
+
         /**
          * 指定此对象的子项以及子孙项是否接收鼠标/触摸事件
          * 默认值为 true 即可以接收。
@@ -416,25 +412,100 @@ module lark {
             this.$touchChildren = value;
         }
 
-        $hitTest(stageX:number,stageY:number):DisplayObject{
-            if(!this.$hasFlags(DisplayObjectFlags.Visible)||!this.$touchEnabled&&!this.$touchChildren){
+        /**
+         * 标记此显示对象需要重绘，调用此方法后，在屏幕绘制阶段$updateRenderNode()方法会自动被回调，您可能需要覆盖它来同步自身改变的属性到目标RenderNode。
+         * @param notiryChildren 是否标记子项也需要重绘。传入false会不传入，将只标记自身的RenderNode需要重绘。
+         */
+        $invalidate(notifyChildren?:boolean):void{
+            super.$invalidate(notifyChildren);
+            if(!notifyChildren){
+                return;
+            }
+            var cacheRoot = this.$cacheNode||this.$parentCacheNode;
+            var children = this.$children;
+            if (children) {
+                for (var i = children.length - 1; i >= 0; i--) {
+                    this.markChildDirty(children[i], cacheRoot);
+                }
+            }
+        }
+        /**
+         * 标记自身和所有子项都失效。
+         */
+        $invalidateChildren():void {
+            this.markChildDirty(this, this.$parentCacheNode);
+        }
+
+        private markChildDirty(child:DisplayObject, cacheRoot:lark.player.CacheNode):void {
+            if (child.$hasFlags(DisplayObjectFlags.DirtyChildren)) {
+                return;
+            }
+            child.$setFlags(DisplayObjectFlags.DirtyChildren);
+            var node = child.$cacheNode || child.$renderNode;
+            if (node && cacheRoot) {
+                cacheRoot.markDirty(node);
+            }
+            if (child.$cacheNode) {
+                return;
+            }
+            var children = child.$children;
+            if (children) {
+                for (var i = children.length - 1; i >= 0; i--) {
+                    this.markChildDirty(children[i], cacheRoot);
+                }
+            }
+        }
+
+        /**
+         * cacheAsBitmap属性改变
+         */
+        $cacheAsBitmapChanged():void {
+            super.$cacheAsBitmapChanged();
+            var cacheRoot = this.$cacheNode || this.$parentCacheNode;
+            var children = this.$children;
+            for (var i = children.length - 1; i >= 0; i--) {
+                this.assignParentCacheNode(children[i], cacheRoot, cacheRoot);
+            }
+        }
+
+        private assignParentCacheNode(child:DisplayObject, cacheRoot:lark.player.CacheNode, newParent:lark.player.CacheNode):void {
+            child.$parentCacheNode = newParent;
+            child.$setFlags(DisplayObjectFlags.DirtyChildren);
+            var node = child.$cacheNode || child.$renderNode;
+            if (node && cacheRoot) {
+                cacheRoot.markDirty(node);
+            }
+            if (child.$cacheNode) {
+                return;
+            }
+            var children = child.$children;
+            if (children) {
+                for (var i = children.length - 1; i >= 0; i--) {
+                    this.assignParentCacheNode(children[i], cacheRoot, newParent);
+                }
+            }
+        }
+
+
+        $hitTest(stageX:number, stageY:number):DisplayObject {
+            if (!this.$hasFlags(DisplayObjectFlags.Visible) || !this.$touchEnabled && !this.$touchChildren) {
                 return null;
             }
             var children = this.$children;
-            for(var i = children.length-1;i>=0;i--){
-                var target = children[i].$hitTest(stageX,stageY);
-                if(target){
+            for (var i = children.length - 1; i >= 0; i--) {
+                var target = children[i].$hitTest(stageX, stageY);
+                if (target) {
                     break;
                 }
             }
-            if(target){
-                if(this.$touchChildren){
+            if (target) {
+                if (this.$touchChildren) {
                     return target;
                 }
                 return this;
             }
-            if(this.$touchEnabled){
-                return super.$hitTest(stageX,stageY);
+            if (this.$touchEnabled) {
+                return super.$hitTest(stageX, stageY);
             }
             return null;
         }
