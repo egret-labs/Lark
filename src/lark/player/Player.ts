@@ -128,7 +128,6 @@ module lark.player {
             var stage = this.stage;
             var t = lark.getTimer();
             var dirtyList = stage.$cacheNode.updateDirtyNodes();
-            this.stageSizeChangedFlag = true;
             if (this.stageSizeChangedFlag) {
                 dirtyList = [stage.$cacheNode.screenRegion];
                 this.stageSizeChangedFlag = false;
