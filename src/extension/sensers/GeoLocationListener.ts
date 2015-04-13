@@ -1,13 +1,10 @@
 ﻿
 
 module lark {
-    export interface Position {
+    export class Position {
         timestamp: Date;
         coords: Coordinates;
     }
-    export var Position: {
-        new (): Position;
-    };
 
     export interface Coordinates {
         altitudeAccuracy: number;
@@ -19,20 +16,9 @@ module lark {
         accuracy: number;
     }
 
-    export interface PositionError {
+    export class PositionError {
         code: number;
         message: string;
-        toString(): string;
-        POSITION_UNAVAILABLE: number;
-        PERMISSION_DENIED: number;
-        TIMEOUT: number;
-    }
-    export var PositionError: {
-        prototype: PositionError;
-        new (): PositionError;
-        POSITION_UNAVAILABLE: number;
-        PERMISSION_DENIED: number;
-        TIMEOUT: number;
     }
     export interface PositionOptions {
         enableHighAccuracy?: boolean;

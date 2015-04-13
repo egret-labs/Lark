@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1,
+    user-scalable=no,target-densitydpi=device-dpi" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="full-screen" content="true" />
+    <meta name="screen-orientation" content="portrait" />
+    <meta name="x5-fullscreen" content="true" />
+    <meta name="360-fullscreen" content="true" />
+    <title></title>
+    <script src="stats.min.js"></script>
+    <script src="Benchmark.js"></script>
+    <script src="demo-dom.js"></script>
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        #btnAdd {
+            z-index: 10000;
+            position: absolute;
+            right: 0;
+            top: 100px;
+        }
+
+        #btnLark {
+            z-index: 10000;
+            position: absolute;
+            right: 0;
+            top: 130px;
+        }
+    </style>
+</head>
+<body>
+    <button id="btnAdd">Add 10 Elements</button>
+    <button id="btnLark">Switch to Lark</button>
+    <script>
+        var stats = new demo.Stats();
+        //stats.setMode(0); // 0: fps, 1: ms
+
+        //align top-left
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.right = '0px';
+        stats.domElement.style.top = '0px';
+        stats.domElement.style.zIndex = 9999;
+
+        document.body.appendChild(stats.domElement);
+
+        var update = function () {
+
+            stats.begin();
+
+            demo.Benchmark.animate();
+
+            stats.end();
+
+            requestAnimationFrame(update);
+
+        };
+
+        requestAnimationFrame(update);
+    </script>
+
+</body>
+</html>

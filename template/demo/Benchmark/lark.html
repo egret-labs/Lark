@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hello Lark</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1,
+    user-scalable=no,target-densitydpi=device-dpi" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="full-screen" content="true" />
+    <meta name="screen-orientation" content="portrait" />
+    <meta name="x5-fullscreen" content="true" />
+    <meta name="360-fullscreen" content="true" />
+    <style>
+        html, body {
+            -ms-touch-action: none;
+            background: #888888;
+            padding: 0;
+            border: 0;
+            margin: 0;
+            height: 100%;
+        }
+    </style>
+    <script src="../../lark/system/Defines.js"></script>
+    <script src="../../lark/locales/zh_CN.js"></script>
+    <script src="../../lark/utils/getDefinitionByName.js"></script>
+    <script src="../../lark/utils/HashObject.js"></script>
+    <script src="../../lark/utils/getTimer.js"></script>
+    <script src="../../lark/utils/tr.js"></script>
+    <script src="../../lark/geom/Matrix.js"></script>
+    <script src="../../lark/geom/Point.js"></script>
+    <script src="../../lark/geom/Rectangle.js"></script>
+    <script src="../../lark/player/DirtyRegion.js"></script>
+    <script src="../../lark/events/EventPhase.js"></script>
+    <script src="../../lark/events/Event.js"></script>
+    <script src="../../lark/events/EventEmitter.js"></script>
+    <script src="../../lark/utils/Timer.js"></script>
+    <script src="../../lark/events/TimerEvent.js"></script>
+    <script src="../../lark/events/TouchEvent.js"></script>
+    <script src="../../lark/system/Capabilities.js"></script>
+    <script src="../../lark/web/WebCapability.js"></script>
+    <script src="../../lark/display/Texture.js"></script>
+    <script src="../../lark/display/DisplayObject.js"></script>
+    <script src="../../lark/display/DisplayObjectContainer.js"></script>
+    <script src="../../lark/display/Bitmap.js"></script>
+    <script src="../../lark/display/Stage.js"></script>
+    <script src="../../lark/player/nodes/RenderNode.js"></script>
+    <script src="../../lark/player/nodes/BitmapNode.js"></script>
+    <script src="../../lark/player/nodes/TextNode.js"></script>
+    <script src="../../lark/player/nodes/CacheNode.js"></script>
+    <script src="../../lark/player/nodes/GraphicsNode.js"></script>
+    <script src="../../lark/player/ScaleMode.js"></script>
+    <script src="../../lark/player/ScreenAdapter.js"></script>
+    <script src="../../lark/player/Ticker.js"></script>
+    <script src="../../lark/player/Player.js"></script>
+    <script src="../../lark/player/TouchHandler.js"></script>
+    <script src="../../lark/net/HttpClient.js"></script>
+    <script src="../../lark/web/WebCapability.js"></script>
+    <script src="../../lark/web/WebHttpClient.js"></script>
+    <script src="../../lark/net/Http.js"></script>
+    <script src="../../lark/text/TextMeasurer.js"></script>
+    <script src="../../lark/web/WebScreen.js"></script>
+    <script src="../../lark/web/CanvasRenderer.js"></script>
+    <script src="../../lark/web/WebTouchHandler.js"></script>
+    <script src="../../lark/web/CanvasTextMeasurer.js"></script>
+    <script src="../../lark/web/WebTextureDrawer.js"></script>
+    <script src="../../lark/web/LarkWeb.js"></script>
+    <script src="../../lark/text/TextStyle.js"></script>
+    <script src="../../lark/text/TextSpan.js"></script>
+    <script src="../../lark/text/TextField.js"></script>
+    <script src="../../extension/text/engine/ContentElement.js"></script>
+    <script src="../../extension/text/engine/GraphicElement.js"></script>
+    <script src="../../extension/text/engine/TextElement.js"></script>
+    <script src="../../extension/text/engine/GroupElement.js"></script>
+    <script src="../../extension/text/engine/TextBlock.js"></script>
+    <script src="../../extension/text/engine/TextLine.js"></script>
+    <script src="../../extension/text/RichTextField.js"></script>
+    <script src="../../extension/media/LarkMedia.js"></script>
+    <script src="../../extension/media/LarkAudio.js"></script>
+    <script src="../../extension/media/LarkVideo.js"></script>
+    <script src="../../extension/media/web/WebAudio.js"></script>
+    <script src="../../extension/media/web/HtmlAudio.js"></script>
+    <script src="../../extension/media/web/HtmlVideo.js"></script>
+    <script src="../../extension/sensers/OrientationListener.js"></script>
+    <script src="../../extension/sensers/web/Html5OrientationListener.js"></script>
+    <script src="../../FPS.js"></script>
+    <script src="Benchmark.js"></script>
+    <script src="demo-lark.js"></script>
+    <style>
+        #btnAdd {
+            z-index: 10000;
+            position: absolute;
+            right: 0;
+            top: 100px;
+        }
+
+        #btnDom {
+            z-index: 10000;
+            position: absolute;
+            right: 0;
+            top: 130px;
+        }
+    </style>
+</head>
+<body>
+    <button id="btnAdd">Add 10 Elements</button>
+    <button id="btnDom">Switch to DOM</button>
+    <div id="lark-sample" style="margin: auto;width: 100%;height: 100%;" class="lark-player"
+         data-entry-class="demo.BenchmarkMain" data-scale-mode="fixedHeight" data-content-width="480" data-content-height="800">
+    </div>
+    <script>
+        var stats = new demo.Stats();
+        //stats.setMode(0); // 0: fps, 1: ms
+
+        // align top-left
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.right = '0px';
+        stats.domElement.style.top = '0px';
+        stats.domElement.style.zIndex = 9999;
+
+        document.body.appendChild(stats.domElement);
+
+        var update = function () {
+
+            stats.begin();
+
+            //demo.Benchmark.animate();
+
+            stats.end();
+
+            requestAnimationFrame(update);
+
+        };
+
+        requestAnimationFrame(update);
+    </script>
+</body>
+</html>

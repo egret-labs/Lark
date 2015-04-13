@@ -5,7 +5,7 @@ module lark {
     var AudioContextClass: typeof AudioContext = window["AudioContext"] || window["webkitAudioContext"];
     var $AudioContext = AudioContextClass ? new AudioContextClass() : null;
 
-    export class WebAudio extends LarkMedia {
+    export class WebAudio extends LarkMedia implements Audio {
 
         protected startTime: number;
         protected timer: Timer;

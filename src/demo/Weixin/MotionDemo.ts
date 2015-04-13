@@ -55,8 +55,8 @@ module demo {
             this.initListener();
             lark.loadImage("demo/weixin/image/background.jpg", t=> {
                 this.background.texture = t;
-                this.background.scaleY = 3;
-                this.background.scaleX = 3;
+                this.background.scaleY = 2;
+                this.background.scaleX = 2;
                 this.addChildAt(this.background, 0);
             });
             lark.loadImage("demo/weixin/image/arrowleft.png", t=> this.leftArrow.texture = t);
