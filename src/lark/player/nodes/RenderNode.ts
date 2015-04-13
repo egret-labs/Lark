@@ -64,10 +64,6 @@ module lark.player {
          */
         public isDirty:boolean = true;
         /**
-         * 当前位置在屏幕之外
-         */
-        public outOfScreen:boolean = false;
-        /**
          * 在屏幕上的矩形区域是否发现改变。
          */
         public moved:boolean = true;
@@ -134,7 +130,6 @@ module lark.player {
             this.maxX = bounds.x + bounds.width;
             this.minY = bounds.y;
             this.maxY = bounds.y + bounds.height;
-            this.outOfScreen = !this.intersects(0, 0, stage.stageWidth, stage.stageHeight);
         }
 
         /**

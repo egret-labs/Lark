@@ -39,7 +39,6 @@ module lark {
         public constructor() {
             super();
             this.$stage = this;
-            this.$cacheNode = new lark.player.CacheNode(this);
         }
 
         /**
