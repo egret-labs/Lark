@@ -49,7 +49,6 @@ module lark.player {
         private createCacheNode(stage:Stage, renderer:IScreenRenderer):void {
             var cacheNode = new CacheNode(stage);
             cacheNode.renderer = renderer;
-            cacheNode.screenRegion = new Region();
             stage.$cacheNode = cacheNode;
         }
 
@@ -128,12 +127,9 @@ module lark.player {
             var stage = this.stage;
             var t = lark.getTimer();
             var dirtyList = stage.$cacheNode.updateDirtyNodes();
-            if (this.stageSizeChangedFlag) {
-                dirtyList = [stage.$cacheNode.screenRegion];
-                this.stageSizeChangedFlag = false;
-            }
+            dirtyList = dirtyList.concat();
             var t1 = lark.getTimer();
-            var drawCalls = this.drawDisplayList(stage, stage.$cacheNode,dirtyList);
+            var drawCalls = this.drawDisplayList(stage, stage.$cacheNode);
             var t2 = lark.getTimer();
             if (triggerByFrame) {
                 var dirtyRatio:number = 0;
@@ -151,11 +147,11 @@ module lark.player {
         /**
          * 绘制显示列表。
          */
-        public drawDisplayList(root:DisplayObject, cacheNode:CacheNode, dirtyList:Region[]):number {
+        public drawDisplayList(root:DisplayObject, cacheNode:CacheNode):number {
             var renderer = cacheNode.renderer;
             renderer.reset(root);
-            renderer.drawDirtyRects(dirtyList);
-            var drawCalls = this.drawDisplayObject(root, renderer, dirtyList, null);
+            renderer.drawDirtyRects(cacheNode.dirtyList);
+            var drawCalls = this.drawDisplayObject(root, renderer, cacheNode.dirtyList, null);
             cacheNode.cleanCache();
             renderer.removeDirtyRects();
             return drawCalls;
@@ -166,7 +162,7 @@ module lark.player {
             var node:lark.player.RenderNode;
             if (cacheNode) {
                 if (cacheNode.needRedraw) {
-                    drawCalls += this.drawDisplayList(displayObject, cacheNode, cacheNode.dirtyList);
+                    drawCalls += this.drawDisplayList(displayObject, cacheNode);
                 }
                 node = cacheNode;
             }
@@ -207,11 +203,6 @@ module lark.player {
         }
 
         /**
-         * 舞台尺寸发生改变的标志
-         */
-        private stageSizeChangedFlag:boolean = false;
-
-        /**
          * 更新舞台尺寸
          * @param stageWidth 舞台宽度（以像素为单位）
          * @param stageHeight 舞台高度（以像素为单位）
@@ -221,8 +212,7 @@ module lark.player {
             if (stageWidth !== stage.$stageWidth || stageHeight !== stage.$stageHeight) {
                 stage.$stageWidth = stageWidth;
                 stage.$stageHeight = stageHeight;
-                stage.$cacheNode.screenRegion.setTo(0, 0, stageWidth, stageHeight);
-                this.stageSizeChangedFlag = true;
+                stage.$cacheNode.dirtyRegion.updateClipRect(stageWidth, stageHeight);
                 stage.emitWith(Event.RESIZE);
             }
         }
