@@ -41,8 +41,8 @@ module lark.web {
             node.matrix = null;
             node.bounds = null;
             node.needRedraw = false;
-            node.isDirty = true;
-            node.moved = true;
+            node.isDirty = false;
+            node.moved = false;
             cacheNodeList.push(node);
         }
 

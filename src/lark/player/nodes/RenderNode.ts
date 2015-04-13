@@ -62,11 +62,11 @@ module lark.player {
         /**
          * 是否需要重绘
          */
-        public isDirty:boolean = true;
+        public isDirty:boolean = false;
         /**
          * 在屏幕上的矩形区域是否发现改变。
          */
-        public moved:boolean = true;
+        public moved:boolean = false;
         /**
          * 绘制区域在屏幕上的起点x
          */
