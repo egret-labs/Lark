@@ -83,6 +83,10 @@ module lark.web {
         var touch = new lark.player.TouchHandler(stage);
         var webTouch = new WebTouchHandler(touch, canvas);
         var player = new lark.player.Player(screenRenderer, stage, entryClassName);
+        if(DEBUG){
+            var showPaintRects = container.getAttribute("data-show-paint-rects")=="true";
+            player.showPaintRects(showPaintRects);
+        }
         container["lark-player"] = player;
         container["lark-touch"] = webTouch;
         container["lark-screen"] = webScreen;

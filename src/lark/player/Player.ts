@@ -43,15 +43,81 @@ module lark.player {
             }
             this.entryClassName = entryClassName;
             this.stage = stage;
-            this.createCacheNode(stage, renderer);
+            this.screenCacheNode = this.createCacheNode(stage, renderer);
+
+            if (DEBUG) {//显示重绘区域相关的代码,发行版中移除
+                this._showPaintRects = false;
+                this.stageCacheNode = null;
+
+                this.showPaintRects = function (value:boolean):void {
+                    value = !!value;
+                    if (this._showPaintRects === value) {
+                        return;
+                    }
+                    this._showPaintRects = value;
+                    if (value) {
+                        if (!this.stageCacheNode) {
+                            this.stageCacheNode = $cacheNodePool.create(this.stage);
+                        }
+                        this.stage.$cacheNode = this.stageCacheNode;
+                    }
+                    else {
+                        this.stage.$cacheNode = this.screenCacheNode;
+                    }
+                };
+
+                this.paintList = [];
+
+                this.drawPaintRects = function (dirtyList:Region[]):void {
+                    var length = dirtyList.length;
+                    var list = [];
+                    for (var i = 0; i < length; i++) {
+                        var region:Region = dirtyList[i];
+                        list[i] = [region.minX, region.minY, region.width, region.height];
+                        region.width -= 1;
+                        region.height -= 1;
+                    }
+                    var repaintList = this.paintList;
+                    repaintList.push(list);
+                    if (repaintList.length > 20) {
+                        repaintList.shift();
+                    }
+                    var renderer = this.screenCacheNode.renderer;
+                    renderer.clearScreen();
+                    renderer.reset(this.stage);
+                    var m = Matrix.TEMP;
+                    m.identity();
+                    renderer.drawImage(this.stageCacheNode.texture, m, 1);
+                    length = repaintList.length;
+                    for (i = 0; i < length; i++) {
+                        list = repaintList[i];
+                        for (var j = list.length - 1; j >= 0; j--) {
+                            var r:number[] = list[j];
+                            renderer.drawDirtyRect(r[0], r[1], r[2], r[3]);
+                        }
+                    }
+                    renderer.markDirtyRects(dirtyList);
+                    renderer.drawImage(this.stageCacheNode.texture, m, 1);
+                    renderer.removeDirtyRects();
+                };
+            }
         }
 
-        private createCacheNode(stage:Stage, renderer:IScreenRenderer):void {
+        public showPaintRects:(value:boolean)=>void;
+        private _showPaintRects:boolean;
+        private stageCacheNode:CacheNode;
+        private paintList:any[];
+        private drawPaintRects:(dirtyList:Region[])=>void;
+
+        private createCacheNode(stage:Stage, renderer:IScreenRenderer):CacheNode {
             var cacheNode = new CacheNode(stage);
             cacheNode.renderer = renderer;
             stage.$cacheNode = cacheNode;
+            return cacheNode;
         }
 
+
+        private screenCacheNode:CacheNode;
         /**
          * 入口类的完整类名
          */
@@ -127,22 +193,26 @@ module lark.player {
             var stage = this.stage;
             var t = lark.getTimer();
             var dirtyList = stage.$cacheNode.updateDirtyNodes();
-            dirtyList = dirtyList.concat();
             var t1 = lark.getTimer();
-            var drawCalls = this.drawDisplayList(stage, stage.$cacheNode);
+            if (dirtyList.length > 0) {
+                dirtyList = dirtyList.concat();
+                var drawCalls = this.drawDisplayList(stage, stage.$cacheNode);
+            }
+            if (DEBUG && this._showPaintRects) {
+                this.drawPaintRects(dirtyList);
+            }
             var t2 = lark.getTimer();
             if (triggerByFrame) {
-                var dirtyRatio:number = 0;
-                if (dirtyList) {
-                    var length = dirtyList.length;
-                    for (var i = 0; i < length; i++) {
-                        dirtyRatio += dirtyList[i].area;
-                    }
-                    dirtyRatio = Math.ceil(dirtyRatio * 1000 / (stage.stageWidth * stage.stageHeight)) / 10;
+                var length = dirtyList.length;
+                var dirtyArea = 0;
+                for (var i = 0; i < length; i++) {
+                    dirtyArea += dirtyList[i].area;
                 }
+                var dirtyRatio = Math.ceil(dirtyArea * 1000 / (stage.stageWidth * stage.stageHeight)) / 10;
                 FPS.update(drawCalls, dirtyRatio, t1 - t, t2 - t1);
             }
         }
+
 
         /**
          * 绘制显示列表。
@@ -150,7 +220,7 @@ module lark.player {
         public drawDisplayList(root:DisplayObject, cacheNode:CacheNode):number {
             var renderer = cacheNode.renderer;
             renderer.reset(root);
-            renderer.drawDirtyRects(cacheNode.dirtyList);
+            renderer.markDirtyRects(cacheNode.dirtyList);
             var drawCalls = this.drawDisplayObject(root, renderer, cacheNode.dirtyList, null);
             cacheNode.cleanCache();
             renderer.removeDirtyRects();
@@ -212,7 +282,10 @@ module lark.player {
             if (stageWidth !== stage.$stageWidth || stageHeight !== stage.$stageHeight) {
                 stage.$stageWidth = stageWidth;
                 stage.$stageHeight = stageHeight;
-                stage.$cacheNode.dirtyRegion.updateClipRect(stageWidth, stageHeight);
+                this.screenCacheNode.dirtyRegion.updateClipRect(stageWidth, stageHeight);
+                if (DEBUG&&this.stageCacheNode) {
+                    this.stageCacheNode.dirtyRegion.updateClipRect(stageWidth, stageHeight);
+                }
                 stage.emitWith(Event.RESIZE);
             }
         }
