@@ -126,10 +126,10 @@ module lark.player {
             else{
                 m.$transformBounds(bounds);
             }
-            this.minX = bounds.x;
-            this.maxX = bounds.x + bounds.width;
-            this.minY = bounds.y;
-            this.maxY = bounds.y + bounds.height;
+            this.minX = bounds.x|0;
+            this.maxX = Math.ceil(bounds.x + bounds.width);
+            this.minY = bounds.y|0;
+            this.maxY = Math.ceil(bounds.y + bounds.height);
         }
 
         /**
