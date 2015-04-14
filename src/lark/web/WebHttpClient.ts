@@ -39,4 +39,5 @@ module lark.web {
             image.src = url;
         } 
     }
+    HttpClient = WebHttpClinet;
 }

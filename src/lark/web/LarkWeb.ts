@@ -57,7 +57,6 @@ module lark.web {
         if(!lark.player.screenAdapter){
             lark.player.screenAdapter = new lark.player.ScreenAdapter();
         }
-        HttpClient = WebHttpClinet;
 
         var list = document.querySelectorAll(".lark-player");
         var length = list.length;
