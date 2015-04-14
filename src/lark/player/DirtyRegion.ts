@@ -70,13 +70,13 @@ module lark.player {
                     maxY = this.screenHeight;
                 }
             }
-            var targetArea = (maxX - minX) * (maxY - minY);
-            if (targetArea <= 0) {
+            if (minX >= maxX||minY>=maxY) {
                 return false;
             }
             if (this.screenChanged) {
                 return true;
             }
+            var targetArea = (maxX - minX) * (maxY - minY);
             var dirtyList = this.dirtyList;
             var length = dirtyList.length;
             var merged = false;
