@@ -63,9 +63,9 @@ var Publish = (function () {
                 DEBUG: false,
                 RELEASE: true
             };
-            var result = UglifyJS.minify(output, { compress: { global_defs: defines } });
+            //UglifyJS参数参考这个页面：https://github.com/mishoo/UglifyJS2
+            var result = UglifyJS.minify(output, { compress: { global_defs: defines }, output: { beautify: false } });
             FileUtil.save(output, result.code);
-            FileUtil.save(output + ".map", result.map);
         };
         TypeScript.executeCommandLine(["@tsc_config_temp.txt"]);
     };
