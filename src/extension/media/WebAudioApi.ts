@@ -5,7 +5,7 @@
 //
 // This file refers to the latest published working draft (currently from 10 october 2013) http://www.w3.org/TR/2013/WD-webaudio-20131010/, not to be confused with the latest editor's draft http://webaudio.github.io/web-audio-api/
 
-/// <reference path='MediaStream.d.ts' />
+/// <reference path='MediaStream.ts' />
 
 /**
  * This interface represents a set of AudioNode objects and their connections. It allows for arbitrary routing of signals to the AudioDestinationNode (what the user ultimately hears). Nodes are created from the context and are then connected together. In most use cases, only a single AudioContext is used per document. An AudioContext is constructed as follows:

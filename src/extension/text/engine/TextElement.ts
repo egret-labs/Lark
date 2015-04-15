@@ -98,49 +98,10 @@
             return text.split(TextElement.splitRegex);
         }
 
-        static fontDic: IStringDic = {
-            "Init": {}
-        }
-        static cache = {
-            font:""
-        }
-        static measureText(text: string,font:string) {
-            var width = 0.0;
-            var ctx = TextElement.$bufferContext;
-            if (font != TextElement.cache.font) {
-                ctx.font = font;
-                TextElement.cache.font = font;
-            }
-            var letterdic = TextElement.fontDic[font];
-            if (letterdic == undefined) {
-                letterdic = {};
-                TextElement.fontDic[font] = letterdic
-            }
-            var length = text.length;
-            for (var i = 0; i < length; i++) {
-                var letter = text.charCodeAt(i);
-                var w = letterdic[letter];
-                if (w >= 0) {
-                    width += w;
-                    continue;
-                }
-                w = ctx.measureText(text.charAt(i)).width;
-                letterdic[letter] = w;
-                width += w;
-            }
-            return width;
-        }
 
         static toFontString(style: ITextStyle) {
             return (style.italic ? "italic" : "") + " " + (style.bold ? "bold" : "") +" " + style.fontSize +"px " + (style.fontFamily || "sans-serif") ;
         }
     }
 
-    interface ILetterToWidth {
-        [letter: number]: number
-    }
-
-    interface IStringDic {
-        [key: string]: ILetterToWidth
-    }
 }

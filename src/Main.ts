@@ -96,7 +96,7 @@ module lark {
                 //this.iconList.push(bitmap);
             }
             this.addChild(container);
-            container.cacheAsBitmap = true;
+            //container.cacheAsBitmap = true;
             //container.x = 300;
             //container.y = 300;
             bitmap = new lark.Bitmap();

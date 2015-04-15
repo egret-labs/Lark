@@ -38,5 +38,3 @@ module lark {
 }
 
 lark.GeoLocationListener = lark.Html5GeoLocationListener;
-lark.PositionError = PositionError;
-lark.Position = Position;
