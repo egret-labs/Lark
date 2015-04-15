@@ -145,7 +145,7 @@ module lark {
          * 表示 DisplayObject 的实例名称。
          * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
          */
-        public name:string;
+        public name:string = "";
 
         $parent:DisplayObjectContainer = null;
 
