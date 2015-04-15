@@ -28,21 +28,16 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark.player {
-    /**
-     * @excluded
-     * 矢量渲染节点
-     */
-    export class GraphicsNode extends RenderNode{
 
-        public constructor(target:DisplayObject,graphics:Graphics){
-            super(target);
-            this.graphics = graphics;
+    export class Command {
+
+        public constructor(commandType:number,args:any[]){
+            this.type = commandType;
+            this.arguments = args;
         }
 
-        private graphics:Graphics;
+        public type:number;
 
-        public render(renderer:IRenderer):void{
-            renderer.drawGraphics(this.graphics.$commands,this.matrix,this.alpha);
-        }
+        public arguments:any[];
     }
 }

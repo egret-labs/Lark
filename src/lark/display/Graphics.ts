@@ -29,7 +29,32 @@
 
 module lark {
 
+    /**
+     * Graphics 类包含一组可用来创建矢量形状的方法。支持绘制的显示对象包括 Sprite 和 Shape 对象。这些类中的每一个类都包括 graphics 属性，该属性是一个 Graphics 对象。
+     * 以下是为便于使用而提供的一些辅助函数：drawRect()、drawRoundRect()、drawCircle() 和 drawEllipse()。
+     */
     export class Graphics {
+
+        /**
+         * 目标显示对象
+         */
+        $targetDisplay:DisplayObject;
+        /**
+         * 绘图命令列表
+         */
+        $commands:player.Command[] = [];
+
+        private pushCommand(type:number,args:any):void{
+            this.$commands.push(new player.Command(type,args));
+        }
+
+        $measureContentBounds(bounds:Rectangle,...args):void{
+
+        }
+
+        private invalidate():void{
+            this.$targetDisplay.$invalidate();
+        }
 
         /**
          * 指定一种简单的单一颜色填充，在绘制时该填充将在随后对其他 Graphics 方法（如 lineTo() 或 drawCircle()）的调用中使用。
@@ -38,7 +63,8 @@ module lark {
          * @param alpha 填充的 Alpha 值
          */
         public beginFill(color:number, alpha:number = 1):void {
-
+            this.pushCommand(player.CommandType.BeginFill,arguments);
+            this.invalidate();
         }
 
         /**
@@ -49,7 +75,8 @@ module lark {
          * @param height 矩形的高度（以像素为单位）。
          */
         public drawRect(x:number, y:number, width:number, height:number):void {
-
+            this.pushCommand(player.CommandType.DrawRect,arguments);
+            this.invalidate();
         }
 
         /**
@@ -59,7 +86,8 @@ module lark {
          * @param radius 圆的半径（以像素为单位）。
          */
         public drawCircle(x:number, y:number, radius:number):void {
-
+            this.pushCommand(player.CommandType.DrawCircle,arguments);
+            this.invalidate();
         }
 
         /**
@@ -72,7 +100,8 @@ module lark {
          * @param ellipseHeight 用于绘制圆角的椭圆的高度（以像素为单位）。 （可选）如果未指定值，则默认值与为 ellipseWidth 参数提供的值相匹配。
          */
         public drawRoundRect(x:number, y:number, width:number, height:number, ellipseWidth:number, ellipseHeight?:number):void {
-
+            this.pushCommand(player.CommandType.DrawRoundRect,arguments);
+            this.invalidate();
         }
 
         /**
@@ -83,7 +112,8 @@ module lark {
          * @param height 矩形的高度（以像素为单位）。
          */
         public drawEllipse(x:number, y:number, width:number, height:number):void {
-
+            this.pushCommand(player.CommandType.DrawEllipse,arguments);
+            this.invalidate();
         }
 
         /**
@@ -99,7 +129,8 @@ module lark {
          */
         public lineStyle(thickness:number = NaN, color:number = 0, alpha:number = 1.0, pixelHinting:boolean = false,
                          scaleMode:string = "normal", caps:string = null, joints:string = null, miterLimit:number = 3):void {
-
+            this.pushCommand(player.CommandType.LineStyle,arguments);
+            this.invalidate();
         }
 
         /**
@@ -108,7 +139,8 @@ module lark {
          * @param y 一个表示相对于父显示对象注册点的垂直位置的数字（以像素为单位）。
          */
         public lineTo(x:number, y:number):void {
-
+            this.pushCommand(player.CommandType.LineTo,arguments);
+            this.invalidate();
         }
 
         /**
@@ -121,7 +153,8 @@ module lark {
          * @param anchorY 一个数字，指定下一个锚点相对于父显示对象注册点的垂直位置。
          */
         public curveTo(controlX:number, controlY:number, anchorX:number, anchorY:number):void {
-
+            this.pushCommand(player.CommandType.CurveTo,arguments);
+            this.invalidate();
         }
 
         /**
@@ -130,22 +163,23 @@ module lark {
          * @param y 一个表示相对于父显示对象注册点的垂直位置的数字（以像素为单位）。
          */
         public moveTo(x:number, y:number):void {
-
-        }
-
-        /**
-         * 清除绘制到此 Graphics 对象的图形，并重置填充和线条样式设置。
-         */
-        public clear():void {
-
+            this.pushCommand(player.CommandType.MoveTo,arguments);
+            this.invalidate();
         }
 
         /**
          * 对从上一次调用 beginFill()方法之后添加的直线和曲线应用填充。
          */
         public endFill():void {
-
+            this.pushCommand(player.CommandType.EndFill,arguments);
+            this.invalidate();
         }
-
+        /**
+         * 清除绘制到此 Graphics 对象的图形，并重置填充和线条样式设置。
+         */
+        public clear():void {
+            this.$commands.length = 0;
+            this.invalidate();
+        }
     }
 }

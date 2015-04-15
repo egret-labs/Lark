@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 
-module lark {
+module lark.player {
     /**
      * 显示对象失效标志
      */
@@ -94,14 +94,22 @@ module lark {
         /**
          * DirtyRender|DirtyChildren
          */
-        Dirty = DirtyRender|DirtyChildren,
+        Dirty = DirtyRender | DirtyChildren,
         /**
          * 添加或删除子项时，需要向子项传递的标志。
          */
         DownOnAddedOrRemoved = DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
-            DisplayObjectFlags.InvalidConcatenatedAlpha|
-            DisplayObjectFlags.DirtyChildren
+            DisplayObjectFlags.InvalidConcatenatedAlpha |
+            DisplayObjectFlags.DirtyChildren,
+        /**
+         * 显示对象初始化时的标志量
+         */
+        InitFlags = DisplayObjectFlags.Visible |
+            DisplayObjectFlags.InvalidConcatenatedMatrix |
+            DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
+            DisplayObjectFlags.InvalidConcatenatedAlpha |
+            DisplayObjectFlags.Dirty
 
     }
 

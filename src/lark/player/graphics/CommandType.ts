@@ -28,21 +28,17 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark.player {
-    /**
-     * @excluded
-     * 矢量渲染节点
-     */
-    export class GraphicsNode extends RenderNode{
 
-        public constructor(target:DisplayObject,graphics:Graphics){
-            super(target);
-            this.graphics = graphics;
-        }
-
-        private graphics:Graphics;
-
-        public render(renderer:IRenderer):void{
-            renderer.drawGraphics(this.graphics.$commands,this.matrix,this.alpha);
-        }
+    export const enum CommandType {
+        BeginFill,
+        DrawRect,
+        DrawCircle,
+        DrawRoundRect,
+        DrawEllipse,
+        LineStyle,
+        LineTo,
+        CurveTo,
+        MoveTo,
+        EndFill
     }
 }

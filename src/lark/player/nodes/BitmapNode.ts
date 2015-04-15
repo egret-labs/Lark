@@ -40,8 +40,6 @@ module lark.player {
             super(target);
         }
 
-
-
         /**
          * 要绘制的纹理
          */

@@ -51,20 +51,16 @@ module lark {
          */
         public constructor() {
             super();
-            this.$displayObjectFlags = DisplayObjectFlags.Visible |
-            DisplayObjectFlags.InvalidConcatenatedMatrix |
-            DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
-            DisplayObjectFlags.InvalidConcatenatedAlpha |
-            DisplayObjectFlags.Dirty;
+            this.$displayObjectFlags = player.DisplayObjectFlags.InitFlags;
         }
 
         $displayObjectFlags:number = 0;
 
-        $setFlags(flags:DisplayObjectFlags):void {
+        $setFlags(flags:player.DisplayObjectFlags):void {
             this.$displayObjectFlags |= flags;
         }
 
-        $toggleFlags(flags:DisplayObjectFlags, on:boolean):void {
+        $toggleFlags(flags:player.DisplayObjectFlags, on:boolean):void {
             if (on) {
                 this.$displayObjectFlags |= flags;
             } else {
@@ -72,14 +68,14 @@ module lark {
             }
         }
 
-        $removeFlags(flags:DisplayObjectFlags):void {
+        $removeFlags(flags:player.DisplayObjectFlags):void {
             this.$displayObjectFlags &= ~flags;
         }
 
         /**
          * 沿着显示列表向上移除标志量，如果标志量没被设置过就停止移除。
          */
-        $removeFlagsUp(flags:DisplayObjectFlags):void {
+        $removeFlagsUp(flags:player.DisplayObjectFlags):void {
             if (!this.$hasAnyFlags(flags)) {
                 return;
             }
@@ -90,14 +86,14 @@ module lark {
             }
         }
 
-        $hasFlags(flags:DisplayObjectFlags):boolean {
+        $hasFlags(flags:player.DisplayObjectFlags):boolean {
             return (this.$displayObjectFlags & flags) === flags;
         }
 
         /**
          * 沿着显示列表向上传递标志量，如果标志量已经被设置过就停止传递。
          */
-        $propagateFlagsUp(flags:DisplayObjectFlags):void {
+        $propagateFlagsUp(flags:player.DisplayObjectFlags):void {
             if (this.$hasFlags(flags)) {
                 return;
             }
@@ -111,16 +107,16 @@ module lark {
         /**
          * 沿着显示列表向下传递标志量，非容器直接设置自身的flag，此方法会在DisplayObjectContainer中被覆盖。
          */
-        $propagateFlagsDown(flags:DisplayObjectFlags):void {
+        $propagateFlagsDown(flags:player.DisplayObjectFlags):void {
             this.$setFlags(flags);
         }
 
-        $hasAnyFlags(flags:DisplayObjectFlags):boolean {
+        $hasAnyFlags(flags:player.DisplayObjectFlags):boolean {
             return !!(this.$displayObjectFlags & flags);
         }
 
         private invalidateMatrix():void {
-            this.$setFlags(DisplayObjectFlags.InvalidMatrix);
+            this.$setFlags(player.DisplayObjectFlags.InvalidMatrix);
             this.invalidatePosition();
         }
 
@@ -129,10 +125,10 @@ module lark {
          */
         private invalidatePosition():void {
             this.$invalidateChildren();
-            this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedMatrix |
-            DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
+            this.$propagateFlagsDown(player.DisplayObjectFlags.InvalidConcatenatedMatrix |
+            player.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
             if (this.$parent) {
-                this.$parent.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
+                this.$parent.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
             }
         }
 
@@ -190,9 +186,9 @@ module lark {
         }
 
         $getMatrix():Matrix {
-            if (this.$hasFlags(DisplayObjectFlags.InvalidMatrix)) {
+            if (this.$hasFlags(player.DisplayObjectFlags.InvalidMatrix)) {
                 this._matrix.$updateScaleAndRotation(this._scaleX, this._scaleY, this._skewX, this._skewY);
-                this.$removeFlags(DisplayObjectFlags.InvalidMatrix);
+                this.$removeFlags(player.DisplayObjectFlags.InvalidMatrix);
             }
             return this._matrix;
         }
@@ -215,7 +211,7 @@ module lark {
             this._skewX = matrix.$getSkewX();
             this._skewY = matrix.$getSkewY();
             this._rotation = clampRotation(this._skewY * 180 / Math.PI);
-            this.$removeFlags(DisplayObjectFlags.InvalidMatrix);
+            this.$removeFlags(player.DisplayObjectFlags.InvalidMatrix);
             this.invalidatePosition();
         }
 
@@ -225,7 +221,7 @@ module lark {
          * 获得这个显示对象以及它所有父级对象的连接矩阵。
          */
         $getConcatenatedMatrix():Matrix {
-            if (this.$hasFlags(DisplayObjectFlags.InvalidConcatenatedMatrix)) {
+            if (this.$hasFlags(player.DisplayObjectFlags.InvalidConcatenatedMatrix)) {
                 if (this.$parent) {
                     this.$parent.$getConcatenatedMatrix().$preMultiplyInto(this.$getMatrix(),
                         this._concatenatedMatrix);
@@ -238,7 +234,7 @@ module lark {
                 if (this.$renderNode) {
                     this.$renderNode.moved = true;
                 }
-                this.$removeFlags(DisplayObjectFlags.InvalidConcatenatedMatrix);
+                this.$removeFlags(player.DisplayObjectFlags.InvalidConcatenatedMatrix);
             }
             return this._concatenatedMatrix;
         }
@@ -246,9 +242,9 @@ module lark {
         private _invertedConcatenatedMatrix:Matrix = new Matrix();
 
         $getInvertedConcatenatedMatrix():Matrix {
-            if (this.$hasFlags(DisplayObjectFlags.InvalidInvertedConcatenatedMatrix)) {
+            if (this.$hasFlags(player.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix)) {
                 this.$getConcatenatedMatrix().$invertInto(this._invertedConcatenatedMatrix);
-                this.$removeFlags(DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
+                this.$removeFlags(player.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
             }
             return this._invertedConcatenatedMatrix;
         }
@@ -431,15 +427,15 @@ module lark {
          * 默认值为 true 可见
          */
         public get visible():boolean {
-            return this.$hasFlags(DisplayObjectFlags.Visible);
+            return this.$hasFlags(player.DisplayObjectFlags.Visible);
         }
 
         public set visible(value:boolean) {
             value = !!value;
-            if (value === this.$hasFlags(DisplayObjectFlags.Visible)) {
+            if (value === this.$hasFlags(player.DisplayObjectFlags.Visible)) {
                 return;
             }
-            this.$toggleFlags(DisplayObjectFlags.Visible, value);
+            this.$toggleFlags(player.DisplayObjectFlags.Visible, value);
             this.$invalidateChildren();
         }
 
@@ -455,12 +451,12 @@ module lark {
          * 最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放和旋转的显示对象一起使用。
          */
         public get cacheAsBitmap():boolean {
-            return this.$hasFlags(DisplayObjectFlags.CacheAsBitmap);
+            return this.$hasFlags(player.DisplayObjectFlags.CacheAsBitmap);
         }
 
         public set cacheAsBitmap(value:boolean) {
             value = !!value;
-            this.$toggleFlags(DisplayObjectFlags.CacheAsBitmap, value);
+            this.$toggleFlags(player.DisplayObjectFlags.CacheAsBitmap, value);
             var hasCacheNode = !!this.$cacheNode;
             if (hasCacheNode === value) {
                 return;
@@ -509,7 +505,7 @@ module lark {
                 return;
             }
             this._alpha = value;
-            this.$propagateFlagsDown(DisplayObjectFlags.InvalidConcatenatedAlpha);
+            this.$propagateFlagsDown(player.DisplayObjectFlags.InvalidConcatenatedAlpha);
             this.$invalidate(true);
         }
 
@@ -519,7 +515,7 @@ module lark {
          * 获取这个显示对象跟它所有父级透明度的乘积
          */
         $getConcatenatedAlpha():number {
-            if (this.$hasFlags(DisplayObjectFlags.InvalidConcatenatedAlpha)) {
+            if (this.$hasFlags(player.DisplayObjectFlags.InvalidConcatenatedAlpha)) {
                 if (this.$parent) {
                     var parentAlpha = this.$parent.$getConcatenatedAlpha();
                     this._concatenatedAlpha = parentAlpha * this._alpha;
@@ -527,7 +523,7 @@ module lark {
                 else {
                     this._concatenatedAlpha = this._alpha;
                 }
-                this.$removeFlags(DisplayObjectFlags.InvalidConcatenatedAlpha);
+                this.$removeFlags(player.DisplayObjectFlags.InvalidConcatenatedAlpha);
             }
             return this._concatenatedAlpha;
         }
@@ -656,8 +652,8 @@ module lark {
          */
         $invalidateContentBounds():void {
             this.$invalidate();
-            this.$setFlags(DisplayObjectFlags.InvalidContentBounds);
-            this.$propagateFlagsUp(DisplayObjectFlags.InvalidBounds);
+            this.$setFlags(player.DisplayObjectFlags.InvalidContentBounds);
+            this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
         }
 
         private _bounds:Rectangle = new Rectangle();
@@ -667,10 +663,10 @@ module lark {
          */
         $getOriginalBounds():Rectangle {
             var bounds = this._bounds;
-            if (this.$hasFlags(DisplayObjectFlags.InvalidBounds)) {
+            if (this.$hasFlags(player.DisplayObjectFlags.InvalidBounds)) {
                 bounds.copyFrom(this.$getContentBounds());
                 this.$measureChildBounds(bounds);
-                this.$removeFlags(DisplayObjectFlags.InvalidBounds);
+                this.$removeFlags(player.DisplayObjectFlags.InvalidBounds);
                 if (this.$cacheNode) {
                     this.$cacheNode.moved = true;
                 }
@@ -690,12 +686,12 @@ module lark {
 
         $getContentBounds():Rectangle {
             var bounds = this._contentBounds;
-            if (this.$hasFlags(DisplayObjectFlags.InvalidContentBounds)) {
+            if (this.$hasFlags(player.DisplayObjectFlags.InvalidContentBounds)) {
                 if (this.$renderNode) {
                     this.$renderNode.moved = true;
                 }
                 this.$measureContentBounds(bounds);
-                this.$removeFlags(DisplayObjectFlags.InvalidContentBounds);
+                this.$removeFlags(player.DisplayObjectFlags.InvalidContentBounds);
             }
             return bounds;
         }
@@ -715,7 +711,7 @@ module lark {
          * 注意：此方法里禁止添加移除显示子项或执行其他可能产生新的Dirty标记的操作，仅执行同步操作，否则可能导致屏幕绘制错误。
          */
         $updateRenderNode():void {
-            this.$removeFlagsUp(DisplayObjectFlags.Dirty);
+            this.$removeFlagsUp(player.DisplayObjectFlags.Dirty);
             var node = this.$renderNode;
             node.alpha = this.$getConcatenatedAlpha();
             node.matrix = this.$getConcatenatedMatrix();
@@ -730,10 +726,10 @@ module lark {
          */
         $invalidate(notifyChildren?:boolean):void {
             var node = this.$renderNode;
-            if (!node || this.$hasFlags(DisplayObjectFlags.DirtyRender)) {
+            if (!node || this.$hasFlags(player.DisplayObjectFlags.DirtyRender)) {
                 return;
             }
-            this.$setFlags(DisplayObjectFlags.DirtyRender);
+            this.$setFlags(player.DisplayObjectFlags.DirtyRender);
             var cacheNode = this.$cacheNode ? this.$cacheNode : this.$parentCacheNode;
             if (cacheNode) {
                 cacheNode.markDirty(node);
@@ -744,10 +740,10 @@ module lark {
          * 标记自身和所有子项都失效。
          */
         $invalidateChildren():void {
-            if (this.$hasFlags(DisplayObjectFlags.DirtyChildren)) {
+            if (this.$hasFlags(player.DisplayObjectFlags.DirtyChildren)) {
                 return;
             }
-            this.$setFlags(DisplayObjectFlags.DirtyChildren);
+            this.$setFlags(player.DisplayObjectFlags.DirtyChildren);
             var node:lark.player.RenderNode = this.$cacheNode || this.$renderNode;
             if (node && this.$parentCacheNode) {
                 this.$parentCacheNode.markDirty(node);
@@ -755,7 +751,7 @@ module lark {
         }
 
         $hitTest(stageX:number, stageY:number):DisplayObject {
-            if (!this.$touchEnabled || !this.$renderNode || !this.$hasFlags(DisplayObjectFlags.Visible)) {
+            if (!this.$touchEnabled || !this.$renderNode || !this.$hasFlags(player.DisplayObjectFlags.Visible)) {
                 return null;
             }
             var m = this.$getInvertedConcatenatedMatrix();

@@ -44,6 +44,11 @@ module lark.player {
          */
         drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number): void;
 
+        /**
+         * 绘制矢量图形
+         */
+        drawGraphics(commands:Command[], matrix:Matrix, globalAlpha:number):void;
+
     }
 
     /**
@@ -71,6 +76,6 @@ module lark.player {
         /**
          * 绘制一个脏矩形显示区域，在显示重绘区功能开启时调用。
          */
-        drawDirtyRect(x:number,y:number,width:number,height:number):void;
+        drawDirtyRect(x:number, y:number, width:number, height:number):void;
     }
 }

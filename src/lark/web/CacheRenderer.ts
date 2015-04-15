@@ -92,10 +92,10 @@ module lark.web {
         /**
          * 设置并缓存矩阵变换参数，所有修改必须统一调用此方法。子类有可能会覆盖此方法改为叠加transform方式。
          */
-        protected setTransform(a:number, b:number, c:number, d:number, tx:number, ty:number):void {
+        protected setTransform(m:Matrix):void {
             var context = this.context;
             context.save();
-            context.transform(a, b, c, d, tx, ty);
+            context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
         }
     }
 }

@@ -27,22 +27,34 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
-    /**
-     * @excluded
-     * 矢量渲染节点
-     */
-    export class GraphicsNode extends RenderNode{
 
-        public constructor(target:DisplayObject,graphics:Graphics){
-            super(target);
-            this.graphics = graphics;
+module lark {
+
+    /**
+     * 此类用于使用 Lark 绘图应用程序编程接口 (API) 创建简单形状。Shape 类包括 graphics 属性，该属性使您可以从 Graphics 类访问方法。
+     */
+    export class Shape extends DisplayObject {
+
+        /**
+         * 创建一个 Shape 对象
+         */
+        public constructor() {
+            super();
+            this._graphics = new Graphics();
+            this._graphics.$targetDisplay = this;
+            this.$renderNode = new player.GraphicsNode(this,this._graphics);
         }
 
-        private graphics:Graphics;
+        private _graphics:Graphics;
+        /**
+         * 获取 Shape 中的 Graphics 对象。
+         */
+        public get graphics():Graphics {
+            return this._graphics;
+        }
 
-        public render(renderer:IRenderer):void{
-            renderer.drawGraphics(this.graphics.$commands,this.matrix,this.alpha);
+        $measureContentBounds(bounds:Rectangle):void {
+            this._graphics.$measureContentBounds(bounds);
         }
     }
 }
