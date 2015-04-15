@@ -2,7 +2,6 @@
 module lark {
     export class HtmlAudio extends LarkMedia implements Audio {
         protected domElement: HTMLAudioElement;
-        public static Video:Video = new HtmlVideo({});
         public load() {
             if (this.loadStart)
                 return;
