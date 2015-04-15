@@ -55,8 +55,10 @@ module lark.web {
                 this.canvas = this.context.canvas;
                 sharedCanvasContext = oldContext;
                 this.changeCacheSize(texture,bounds);
-                this.context.setTransform(1,0,0,1,0,0);
-                this.context.drawImage(oldCanvas,offsetX-bounds.x,offsetY-bounds.y);
+                if(oldCanvas.width!==0&&oldCanvas.height!==0){
+                    this.context.setTransform(1,0,0,1,0,0);
+                    this.context.drawImage(oldCanvas,offsetX-bounds.x,offsetY-bounds.y);
+                }
             }
             super.reset(root);
             var m = root.$getInvertedConcatenatedMatrix();

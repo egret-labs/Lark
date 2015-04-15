@@ -38,6 +38,7 @@ module lark {
     locale_strings[1005] = "An object cannot be added as a child of itself.";
     locale_strings[1006] = "The supplied DisplayObject must be a child of the caller.";
     locale_strings[1007] = "An index specified for a parameter was out of range.";
-    locale_strings[1008] = "Instantiate singleton error，singleton class {0} can not create multiple instances。";
+    locale_strings[1008] = "Instantiate singleton error，singleton class {0} can not create multiple instances.";
+    locale_strings[1009] = "The Stage class does not implement this property or method.";
 
 }

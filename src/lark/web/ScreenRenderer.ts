@@ -43,7 +43,25 @@ module lark.web {
                 this.context = canvas.getContext("2d");
             }
 
+            if (DEBUG) {//显示重绘区相关代码，发行版中移除
+
+                /**
+                 * 绘制一个脏矩形显示区域，在显示重绘区功能开启时调用。
+                 */
+                this.drawDirtyRect = function (x:number, y:number, width:number, height:number):void {
+                    var context = this.context;
+                    context.strokeStyle = 'red';
+                    context.lineWidth = 1;
+                    context.strokeRect(x - 0.5, y - 0.5, width, height);
+                }
+
+            }
         }
+
+        /**
+         * 绘制一个脏矩形显示区域，在显示重绘区功能开启时调用。
+         */
+        public drawDirtyRect:(x:number, y:number, width:number, height:number)=>void;
 
         protected canvas:HTMLCanvasElement;
         protected context:CanvasRenderingContext2D;
@@ -51,22 +69,23 @@ module lark.web {
         /**
          * 绘制脏矩形列表
          */
-        public drawDirtyRects(regionList:lark.player.Region[]):void {
-            this.context.save();
-            this.context.beginPath();
+        public markDirtyRects(regionList:lark.player.Region[]):void {
+            var context = this.context;
+            context.save();
+            context.beginPath();
             var length = regionList.length;
             for (var i = 0; i < length; i++) {
                 var region = regionList[i];
-                this.context.clearRect(region.minX, region.minY, region.width, region.height);
-                this.context.rect(region.minX, region.minY, region.width, region.height);
+                context.clearRect(region.minX, region.minY, region.width, region.height);
+                context.rect(region.minX, region.minY, region.width, region.height);
             }
-            this.context.clip();
+            context.clip();
         }
 
         /**
          * 移除之前绘制的脏矩形区域
          */
-        public removeDirtyRects():void{
+        public removeDirtyRects():void {
             this.context.restore();
         }
 
@@ -74,10 +93,11 @@ module lark.web {
          * 清空屏幕
          */
         public clearScreen():void {
-            this.context.save();
-            this.context.setTransform(1,0,0,1,0,0);
-            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.context.restore();
+            var context = this.context;
+            context.save();
+            context.setTransform(1, 0, 0, 1, 0, 0);
+            context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            context.restore();
         }
 
         public reset(root:DisplayObject):void {
@@ -96,10 +116,13 @@ module lark.web {
          * 绘制图片到一个区域上
          */
         public drawImage(texture:Texture, matrix:Matrix, globalAlpha:number):void {
-            this.setGlobalAlpha(globalAlpha);
-            this.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
             var width = texture.$bitmapWidth;
             var height = texture.$bitmapHeight;
+            if (width === 0 || height === 0) {
+                return;
+            }
+            this.setGlobalAlpha(globalAlpha);
+            this.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
             this.context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY, width, height,
                 texture.$offsetX, texture.$offsetY, width, height);
         }

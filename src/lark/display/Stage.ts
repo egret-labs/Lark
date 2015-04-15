@@ -38,7 +38,7 @@ module lark {
          */
         public constructor() {
             super();
-            this.$stage = this;
+            this.$stage = this
         }
 
         /**
@@ -79,4 +79,151 @@ module lark {
             lark.player.Ticker.$invalidateRenderFlag = true;
         }
     }
+
+    if(DEBUG){
+
+        Object.defineProperty(Stage.prototype, "alpha", {
+            get: function () {
+                return 1;
+            },
+            set: function (value) {
+                $error(1009);
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(Stage.prototype, "visible", {
+            get: function () {
+                return true;
+            },
+            set: function (value) {
+                $error(1009);
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(Stage.prototype, "x", {
+            get: function () {
+                return 0;
+            },
+            set: function (value) {
+                $error(1009);
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(Stage.prototype, "y", {
+            get: function () {
+                return 0;
+            },
+            set: function (value) {
+                $error(1009);
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(Stage.prototype, "scaleX", {
+            get: function () {
+                return 1;
+            },
+            set: function (value) {
+                $error(1009);
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(Stage.prototype, "scaleY", {
+            get: function () {
+                return 1;
+            },
+            set: function (value) {
+                $error(1009);
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(Stage.prototype, "rotation", {
+            get: function () {
+                return 0;
+            },
+            set: function (value) {
+                $error(1009);
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(Stage.prototype, "cacheAsBitmap", {
+            get: function () {
+                return false;
+            },
+            set: function (value) {
+                $error(1009);
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(Stage.prototype, "scrollRect", {
+            get: function () {
+                return null;
+            },
+            set: function (value) {
+                $error(1009);
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(Stage.prototype, "filters", {
+            get: function () {
+                return null;
+            },
+            set: function (value) {
+                $error(1009);
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(Stage.prototype, "blendMode", {
+            get: function () {
+                return null;
+            },
+            set: function (value) {
+                $error(1009);
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(Stage.prototype, "matrix", {
+            get: function () {
+                return this.$getMatrix();
+            },
+            set: function (value) {
+                $error(1009);
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(Stage.prototype, "touchEnabled", {
+            get: function () {
+                return true;
+            },
+            set: function (value) {
+                $error(1009);
+            },
+            enumerable: true,
+            configurable: true
+        });
+    }
+
 }

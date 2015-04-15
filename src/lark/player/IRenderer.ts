@@ -62,10 +62,15 @@ module lark.player {
         /**
          * 绘制脏矩形列表
          */
-        drawDirtyRects(regionList:lark.player.Region[]):void;
+        markDirtyRects(regionList:lark.player.Region[]):void;
         /**
          * 移除之前绘制的脏矩形区域
          */
         removeDirtyRects():void;
+
+        /**
+         * 绘制一个脏矩形显示区域，在显示重绘区功能开启时调用。
+         */
+        drawDirtyRect(x:number,y:number,width:number,height:number):void;
     }
 }

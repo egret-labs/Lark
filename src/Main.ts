@@ -101,23 +101,25 @@ module lark {
             //container.y = 300;
             bitmap = new lark.Bitmap();
             bitmap.texture = texture;
-            bitmap.x = 700;
+            bitmap.x = 450;
             bitmap.y = 500;
             this.iconList.push(bitmap);
             this.targetIcon = bitmap;
             this.addChild(this.targetIcon);
-            var timer = new Timer(16);
-            timer.on(TimerEvent.TIMER, this.onTick, this);
-            timer.start();
+            this.timer.on(TimerEvent.TIMER, this.onTick, this);
+            this.timer.start();
             this.addChild(FPS.display);
             this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
+        private timer = new Timer(16);
         private touchTarget:DisplayObject;
         private offsetX:number = 0;
         private offsetY:number = 0;
 
+
         private onTouchBegin(event:TouchEvent):void {
+            this.timer.stop();
             var target = <DisplayObject>event.target;
             if(target===this.stage||target===FPS.display){
                 return;
@@ -150,9 +152,11 @@ module lark {
             this.stage.removeListener(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
             this.stage.removeListener(TouchEvent.TOUCH_END, this.onTouchEnd, this);
             event.updateAfterEvent();
+            this.timer.start();
         }
 
         private onTick(event:TimerEvent):void {
+            this.targetIcon.$invalidate();
             //this.targetIcon.rotation += 2;
             event.updateAfterEvent();
             var list = this.iconList;

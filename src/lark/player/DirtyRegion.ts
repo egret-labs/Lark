@@ -29,6 +29,9 @@
 
 module lark.player {
 
+    /**
+     * 脏矩形计算工具类
+     */
     export class DirtyRegion {
 
         public constructor() {
@@ -67,13 +70,13 @@ module lark.player {
                     maxY = this.screenHeight;
                 }
             }
-            var targetArea = (maxX - minX) * (maxY - minY);
-            if (targetArea <= 0) {
+            if (minX >= maxX || minY >= maxY) {
                 return false;
             }
             if (this.screenChanged) {
                 return true;
             }
+            var targetArea = (maxX - minX) * (maxY - minY);
             var dirtyList = this.dirtyList;
             var length = dirtyList.length;
             var merged = false;
@@ -83,7 +86,7 @@ module lark.player {
                 for (var i = 0; i < length; i++) {
                     var r = dirtyList[i];
                     var xMin = minX < r.minX ? minX : r.minX;
-                    var yMin = minX < r.minY ? minX : r.minY;
+                    var yMin = minY < r.minY ? minY : r.minY;
                     var xMax = maxX > r.maxX ? maxX : r.maxX;
                     var yMax = maxY > r.maxY ? maxY : r.maxY;
                     var delta = (xMax - xMin) * (yMax - yMin) - targetArea - r.area;
@@ -104,22 +107,6 @@ module lark.player {
             return true;
         }
 
-        /**
-         * 获取最终的脏矩形列表
-         */
-        public getDirtyRegions():Region[] {
-            if (this.screenChanged) {
-                this.screenChanged = false;
-                var region:Region = this.regionList.pop();
-                this.dirtyList.push(region.setTo(0,0,this.screenWidth,this.screenHeight));
-            }
-            else {
-                while (this.mergeDirtyList(this.dirtyList)) {
-                }
-            }
-            return this.dirtyList;
-        }
-
         public clear():void {
             var dirtyList = this.dirtyList;
             var length = dirtyList.length;
@@ -127,6 +114,23 @@ module lark.player {
                 this.regionList.push(dirtyList[i]);
             }
             dirtyList.length = 0;
+        }
+
+        /**
+         * 获取最终的脏矩形列表
+         */
+        public getDirtyRegions():Region[] {
+            var dirtyList = this.dirtyList;
+            if (this.screenChanged) {
+                this.screenChanged = false;
+                var region:Region = this.regionList.pop();
+                dirtyList.push(region.setTo(0, 0, this.screenWidth, this.screenHeight));
+            }
+            else {
+                while (this.mergeDirtyList(dirtyList)) {
+                }
+            }
+            return this.dirtyList;
         }
 
         /**
@@ -164,7 +168,7 @@ module lark.player {
 
         private unionArea(r1:Region, r2:Region):number {
             var minX = r1.minX < r2.minX ? r1.minX : r2.minX;
-            var minY = r1.minX < r2.minY ? r1.minX : r2.minY;
+            var minY = r1.minY < r2.minY ? r1.minY : r2.minY;
             var maxX = r1.maxX > r2.maxX ? r1.maxX : r2.maxX;
             var maxY = r1.maxY > r2.maxY ? r1.maxY : r2.maxY;
             return (maxX - minX) * (maxY - minY);
