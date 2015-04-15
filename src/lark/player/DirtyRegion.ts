@@ -86,7 +86,7 @@ module lark.player {
                 for (var i = 0; i < length; i++) {
                     var r = dirtyList[i];
                     var xMin = minX < r.minX ? minX : r.minX;
-                    var yMin = minX < r.minY ? minX : r.minY;
+                    var yMin = minY < r.minY ? minY : r.minY;
                     var xMax = maxX > r.maxX ? maxX : r.maxX;
                     var yMax = maxY > r.maxY ? maxY : r.maxY;
                     var delta = (xMax - xMin) * (yMax - yMin) - targetArea - r.area;
@@ -168,7 +168,7 @@ module lark.player {
 
         private unionArea(r1:Region, r2:Region):number {
             var minX = r1.minX < r2.minX ? r1.minX : r2.minX;
-            var minY = r1.minX < r2.minY ? r1.minX : r2.minY;
+            var minY = r1.minY < r2.minY ? r1.minY : r2.minY;
             var maxX = r1.maxX > r2.maxX ? r1.maxX : r2.maxX;
             var maxY = r1.maxY > r2.maxY ? r1.maxY : r2.maxY;
             return (maxX - minX) * (maxY - minY);
