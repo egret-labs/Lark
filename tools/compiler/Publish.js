@@ -30,8 +30,9 @@ var TypeScript = require("../lib/typescript/tsc");
 var FileUtil = require("../lib/FileUtil");
 var UglifyJS = require("../lib/uglify-js/uglifyjs");
 var Publish = (function () {
-    function Publish(projectDir) {
-        this.projectDir = projectDir;
+    function Publish(options) {
+        this.options = options;
+        this.projectDir = options.projectDir;
     }
     Publish.prototype.run = function () {
         //清理bin-debug目录
@@ -72,3 +73,4 @@ var Publish = (function () {
     return Publish;
 })();
 module.exports = Publish;
+//# sourceMappingURL=Publish.js.map

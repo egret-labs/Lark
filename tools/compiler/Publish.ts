@@ -32,12 +32,13 @@ import FileUtil = require("../lib/FileUtil");
 import UglifyJS = require("../lib/uglify-js/uglifyjs");
 class Publish {
 
-    public constructor(projectDir:string) {
-        this.projectDir = projectDir;
+    public constructor(options: lark.CompileOptions) {
+        this.options = options;
+        this.projectDir = options.projectDir;
     }
 
     private projectDir:string;
-
+    private options: lark.CompileOptions;
     public run():void {
 
         //清理bin-debug目录

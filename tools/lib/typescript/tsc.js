@@ -20146,9 +20146,12 @@ var ts;
     var checker = null;
     //parse
     var classNameToFileMap = {};
+    var interfaceNames = {};
     var fileToClassNameMap = {};
     var classNameToBaseClassMap = {};
     var staticToClassNameMap = {};
+    var fileToClassOrderMap = {};
+    var fileToDependsMap = {};
     //sort
     var typeNodesList = [];
     var classNameToNodeMap = {};
@@ -20159,35 +20162,63 @@ var ts;
         }
         TreeGenerator.prototype.orderFiles = function (chk, program) {
             var _this = this;
+            classNameToFileMap = {};
+            interfaceNames = {};
+            fileToClassNameMap = {};
+            classNameToBaseClassMap = {};
+            staticToClassNameMap = {};
+            typeNodesList = [];
+            classNameToNodeMap = {};
             var files = program.getSourceFiles().concat();
-            files = files.splice(1);
+            var libdts = files.shift();
+            //files = files.splice(1);
+            orderedFileList = files.map(function (f) { return f.filename; });
             checker = chk;
             ts.forEach(files, function (file) { return _this.symbolTabelToFileMap(file, file.locals); });
             this.sortFiles();
             var sources = program.getSourceFiles();
-            sources.length = 0;
+            //sources.length = 0;
+            var lostFiles = [];
+            sources.forEach(function (s) {
+                if (orderedFileList.indexOf(s.filename) < 0)
+                    lostFiles.push(s);
+            });
             orderedFileList.forEach(function (f) {
+                var index = -1;
                 var source = null;
-                files.some(function (s) {
+                sources.some(function (s, i) {
                     if (s.filename == f) {
                         source = s;
+                        index = i;
                         return true;
                     }
                     return false;
                 });
-                sources.push(source);
+                if (index >= 0) {
+                    sources.splice(index, 1);
+                    sources.push(source);
+                }
             });
+            //sources.unshift(libdts);
         };
         TreeGenerator.prototype.symbolToFileMap = function (file, symbol) {
             var _this = this;
             var classtype = checker.getDeclaredTypeOfSymbol(symbol.exportSymbol || symbol);
-            if (symbol.flags & (1536 /* Module */ | 64 /* Interface */))
+            if (symbol.flags & (1536 /* Module */))
                 return;
+            var isInterface = symbol.flags & 64 /* Interface */;
             if (classtype) {
                 var fullName = getFullyQualifiedName(symbol);
                 classNameToFileMap[fullName] = file.filename;
-                fileToClassNameMap[file.filename] = fileToClassNameMap[file.filename] || [];
-                fileToClassNameMap[file.filename].push(fullName);
+                var classes = fileToClassNameMap[file.filename];
+                if (!classes) {
+                    classes = [];
+                    fileToClassNameMap[file.filename] = classes;
+                }
+                if (classes.indexOf(fullName) < 0)
+                    classes.push(fullName);
+                if (isInterface)
+                    return;
                 if (classtype.baseTypes && classtype.baseTypes.length) {
                     ts.forEach(classtype.baseTypes, function (t) { return _this.classNameToBaseClass(fullName, t); });
                 }
@@ -20215,7 +20246,7 @@ var ts;
             var declarExp = symbol.valueDeclaration;
             if (declarExp && declarExp.initializer) {
                 var staticMemberType = checker.checkAndMarkExpression(declarExp.initializer);
-                if (staticMemberType.symbol == undefined)
+                if (staticMemberType.symbol == undefined || (staticMemberType.symbol.flags & 64 /* Interface */))
                     return;
                 var initializerClass = checker.getFullyQualifiedName(staticMemberType.symbol);
                 staticToClassNameMap[fullName] = initializerClass;
@@ -20233,10 +20264,10 @@ var ts;
                 return classNameToNodeMap[className];
             var typeNode = new TypeNode();
             typeNode.name = className;
-            typeNode.file = classNameToFileMap[className];
+            //typeNode.file = classNameToFileMap[className];
             typeNode.subClass = [];
             typeNode.depends = [];
-            typeNode.superClass = [];
+            typeNode.supers = [];
             typeNode.subdepends = [];
             typeNodesList.push(typeNode);
             classNameToNodeMap[className] = typeNode;
@@ -20245,50 +20276,77 @@ var ts;
         TreeGenerator.prototype.sortFiles = function () {
             var _this = this;
             ts.forEachKey(classNameToFileMap, function (className) {
-                var typeNode = _this.getClassNode(className);
+                var file = classNameToFileMap[className];
+                //var typeNode = this.getClassNode(className);
+                var fileNode = _this.getClassNode(file);
                 var supers = classNameToBaseClassMap[className];
                 if (supers) {
                     supers.forEach(function (superClass) {
-                        var superNode = _this.getClassNode(superClass);
-                        superNode.subClass.push(typeNode);
-                        typeNode.superClass.push(superNode);
+                        //var superNode = this.getClassNode(superClass);
+                        //superNode.subClass.push(typeNode);
+                        //typeNode.supers.push(superNode);
+                        var dependFile = classNameToFileMap[superClass];
+                        if (dependFile == file)
+                            return;
+                        var dependNode = _this.getClassNode(dependFile);
+                        dependNode.addSub(fileNode);
+                        fileNode.addSuper(dependNode);
                     });
                 }
                 var staticDepends = staticToClassNameMap[className];
                 if (staticDepends) {
-                    var dependNode = _this.getClassNode(staticDepends);
-                    typeNode.depends.push(dependNode);
-                    dependNode.subdepends.push(typeNode);
+                    //var dependNode = this.getClassNode(staticDepends);
+                    //typeNode.depends.push(dependNode);
+                    //dependNode.subdepends.push(typeNode);
+                    var dependFile = classNameToFileMap[staticDepends];
+                    if (dependFile != file) {
+                        var dependFileNode = _this.getClassNode(dependFile);
+                        fileNode.addDepends(dependFileNode);
+                        dependFileNode.addSubDepends(fileNode);
+                    }
                 }
             });
             var singleTypes = [], bottomTypes = [], topTypes = [], otherTypes = [];
             typeNodesList.forEach(function (t) {
-                if ((t.subClass.length || t.superClass.length || t.depends.length || t.subdepends.length) == 0)
+                if ((t.subClass.length || t.supers.length || t.depends.length || t.subdepends.length) == 0)
                     singleTypes.push(t);
                 else if (t.subClass.length == 0 && t.subdepends.length == 0)
                     bottomTypes.push(t);
-                else if (t.superClass.length == 0 && t.depends.length == 0)
+                else if (t.supers.length == 0 && t.depends.length == 0)
                     topTypes.push(t);
                 else
                     otherTypes.push(t);
             });
-            topTypes.forEach(function (t) { return t.order = 0; });
-            bottomTypes.forEach(function (t) { return t.order = t.order; });
+            topTypes.forEach(function (t) { return t.setOrder(0); });
+            bottomTypes.forEach(function (t) { return t.setOrder(t.order); });
+            //orderedFileList.forEach(f=> {
+            //    var classes = fileToClassNameMap[f];
+            //    var classOrders = [];
+            //    classes.forEach(c=> {
+            //        var order = classNameToNodeMap[c].order;
+            //        if (classOrders.indexOf(order) < 0)
+            //            classOrders.push(order);
+            //    });
+            //    classOrders.sort();
+            //    classOrders.reverse();
+            //    fileToClassOrderMap[f] = classOrders;
+            //});
+            //orderedFileList.sort(compareFile);
             typeNodesList.sort(function (a, b) { return compareType(a, b); });
-            typeNodesList.reverse();
-            typeNodesList.forEach(function (n) {
-                var file = classNameToFileMap[n.name];
-                if (!file)
-                    return;
-                var index = orderedFileList.indexOf(file);
-                if (index < 0)
-                    orderedFileList.push(file);
-                else if (n.hasSubClassOrDepends) {
-                    orderedFileList.splice(index, 1);
-                    orderedFileList.push(file);
-                }
-            });
-            orderedFileList.reverse();
+            //typeNodesList.reverse();
+            //typeNodesList.forEach(n=> {
+            //    var file = classNameToFileMap[n.name];
+            //    if (!file)
+            //        return;
+            //    var index = orderedFileList.indexOf(file);
+            //    if (index < 0)
+            //        orderedFileList.push(file);
+            //    else if(n.hasSubClassOrDepends) {
+            //        orderedFileList.splice(index, 1);
+            //        orderedFileList.push(file);
+            //    }
+            //});
+            orderedFileList = typeNodesList.map(function (f) { return f.name; });
         };
         return TreeGenerator;
     })();
@@ -20296,6 +20354,10 @@ var ts;
     function compareType(a, b) {
         if (a.order != b.order)
             return a.order - b.order;
+        //if (aisDependOnB(a, b))
+        //    return 1;
+        //if (aisDependOnB(b, a))
+        //    return -1;
         if (a.subClass.length == 0 && a.subdepends.length == 0)
             return -1;
         if (b.subClass.length == 0 && b.subdepends.length == 0)
@@ -20318,24 +20380,34 @@ var ts;
         function TypeNode() {
             this._order = 0;
         }
-        Object.defineProperty(TypeNode.prototype, "order", {
-            get: function () {
-                return this._order;
-                ;
-            },
-            set: function (value) {
-                this.setOrder(value);
-            },
-            enumerable: true,
-            configurable: true
-        });
-        TypeNode.prototype.setOrder = function (value) {
+        TypeNode.prototype.addSuper = function (node) {
+            if (this.supers.indexOf(node) >= 0)
+                return;
+            this.supers.push(node);
+        };
+        TypeNode.prototype.addDepends = function (node) {
+            if (this.depends.indexOf(node) >= 0)
+                return;
+            this.depends.push(node);
+        };
+        TypeNode.prototype.addSub = function (node) {
+            if (this.subClass.indexOf(node) >= 0)
+                return;
+            this.subClass.push(node);
+        };
+        TypeNode.prototype.addSubDepends = function (node) {
+            if (this.subdepends.indexOf(node) >= 0)
+                return;
+            this.subdepends.push(node);
+        };
+        TypeNode.prototype.setOrder = function (value, nest) {
             var _this = this;
+            if (nest === void 0) { nest = 0; }
             this.depends.forEach(function (s) {
                 if (s.order > value)
                     value = s.order + 1;
             });
-            this.superClass.forEach(function (s) {
+            this.supers.forEach(function (s) {
                 if (s.order > value)
                     value = s.order + 1;
             });
@@ -20343,15 +20415,23 @@ var ts;
             this._order = value;
             this.subdepends.forEach(function (s) {
                 if (s._order <= _this._order)
-                    s.order = _this._order + 1;
-                s.order += offset;
+                    s.setOrder(_this._order + 1, nest + 1);
+                s.setOrder(s._order + offset, nest + 1);
             });
             this.subClass.forEach(function (s) {
                 if (s._order <= _this._order)
-                    s.order = _this._order + 1;
-                s.order += offset;
+                    s.setOrder(_this._order + 1, nest + 1);
+                s.setOrder(s._order + offset, nest + 1);
             });
         };
+        Object.defineProperty(TypeNode.prototype, "order", {
+            get: function () {
+                return this._order;
+                ;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(TypeNode.prototype, "hasSubClassOrDepends", {
             get: function () {
                 return this.subClass.length > 0 || this.subdepends.length > 0;
