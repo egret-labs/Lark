@@ -7,11 +7,10 @@
     var fileToClassNameMap: Map<string[]> = {};
     var classNameToBaseClassMap: Map<string[]> = {};
     var staticToClassNameMap: Map<string> = {};
-    var fileToClassOrderMap: Map<number[]> = {};
 
     //sort
-    var typeNodesList: TypeNode[] = [];
-    var classNameToNodeMap: Map<TypeNode> = {};
+    var fileNodesList: FileNode[] = [];
+    var fileNameToNodeMap: Map<FileNode> = {};
     var orderedFileList: string[] = [];
 
 
@@ -26,44 +25,27 @@
             classNameToBaseClassMap = {};
             staticToClassNameMap = {};
 
-            typeNodesList = [];
-            classNameToNodeMap = {};
+            fileNodesList = [];
+            fileNameToNodeMap = {};
 
             var files = program.getSourceFiles().concat();
             var libdts = files.shift();
-            files = files.splice(1);
             orderedFileList = files.map(f=> f.filename);
             checker = chk;
             forEach(files, file=> this.symbolTabelToFileMap(file, file.locals));
             this.sortFiles();
 
             var sources = program.getSourceFiles();
-            //sources.length = 0;
-
-            var lostFiles = [];
-
-            sources.forEach(s=> {
-                if (orderedFileList.indexOf(s.filename) < 0)
-                    lostFiles.push(s);
-            })
-
             orderedFileList.forEach(f=> {
-                var index = -1;
-                var source: ts.SourceFile = null;
-                files.some((s,i)=> {
+                for (var i = 0; i < sources.length; i++) {
+                    var s = sources[i];
                     if (s.filename == f) {
-                        source = s;
-                        index = i;
-                        return true;
+                        sources.splice(i, 1);
+                        sources.push(s);
+                        break;
                     }
-                    return false;
-                });
-                if (index >= 0) {
-                    sources.splice(index, 1);
-                    sources.push(source);
                 }
             });
-            sources.unshift(libdts);
         }
 
         private symbolToFileMap(file: SourceFile, symbol:Symbol) {
@@ -138,19 +120,18 @@
 
 
 
-        private getClassNode(className:string) {
-            if (className in classNameToNodeMap)
-                return classNameToNodeMap[className];
-            var typeNode = new TypeNode();
-            typeNode.name = className;
-            //typeNode.file = classNameToFileMap[className];
-            typeNode.subClass = [];
+        private getFileNode(file:string) {
+            if (file in fileNameToNodeMap)
+                return fileNameToNodeMap[file];
+            var typeNode = new FileNode();
+            typeNode.name = file;
+            typeNode.subs = [];
             typeNode.depends = [];
             typeNode.supers = [];
             typeNode.subdepends = [];
 
-            typeNodesList.push(typeNode);
-            classNameToNodeMap[className] = typeNode;
+            fileNodesList.push(typeNode);
+            fileNameToNodeMap[file] = typeNode;
 
             return typeNode;
         }
@@ -158,46 +139,39 @@
         private sortFiles() {
             forEachKey(classNameToFileMap, className=> {
                 var file = classNameToFileMap[className];
-                //var typeNode = this.getClassNode(className);
-                var fileNode = this.getClassNode(file);
+                var fileNode = this.getFileNode(file);
                 var supers = classNameToBaseClassMap[className];
                 if (supers) {
                     supers.forEach(superClass=> {
-                        //var superNode = this.getClassNode(superClass);
-                        //superNode.subClass.push(typeNode);
-                        //typeNode.supers.push(superNode);
                         var dependFile = classNameToFileMap[superClass];
                         if (dependFile == file)
                             return;
-                        var dependNode = this.getClassNode(dependFile);
+                        var dependNode = this.getFileNode(dependFile);
                         dependNode.addSub(fileNode);
                         fileNode.addSuper(dependNode);
                     })
                 }
                 var staticDepends = staticToClassNameMap[className];
                 if (staticDepends) {
-                    //var dependNode = this.getClassNode(staticDepends);
-                    //typeNode.depends.push(dependNode);
-                    //dependNode.subdepends.push(typeNode);
 
                     var dependFile = classNameToFileMap[staticDepends];
                     if (dependFile != file) {
-                        var dependFileNode = this.getClassNode(dependFile);
+                        var dependFileNode = this.getFileNode(dependFile);
                         fileNode.addDepends(dependFileNode);
                         dependFileNode.addSubDepends(fileNode);
                     }
                 }
             });
 
-            var singleTypes: TypeNode[] = [],
-                bottomTypes: TypeNode[] = [],
-                topTypes: TypeNode[] = [],
-                otherTypes: TypeNode[] = [];
+            var singleTypes: FileNode[] = [],
+                bottomTypes: FileNode[] = [],
+                topTypes: FileNode[] = [],
+                otherTypes: FileNode[] = [];
 
-            typeNodesList.forEach(t=> {
-                if ((t.subClass.length || t.supers.length || t.depends.length||t.subdepends.length) == 0)
+            fileNodesList.forEach(t=> {
+                if ((t.subs.length || t.supers.length || t.depends.length||t.subdepends.length) == 0)
                     singleTypes.push(t);
-                else if (t.subClass.length == 0&&t.subdepends.length==0)
+                else if (t.subs.length == 0&&t.subdepends.length==0)
                     bottomTypes.push(t);
                 else if (t.supers.length == 0 && t.depends.length == 0)
                     topTypes.push(t);
@@ -207,58 +181,23 @@
 
             topTypes.forEach(t=> t.setOrder(0));
             bottomTypes.forEach(t=> t.setOrder(t.order));
-            //orderedFileList.forEach(f=> {
-            //    var classes = fileToClassNameMap[f];
-            //    var classOrders = [];
-            //    classes.forEach(c=> {
-            //        var order = classNameToNodeMap[c].order;
-            //        if (classOrders.indexOf(order) < 0)
-            //            classOrders.push(order);
-            //    });
-            //    classOrders.sort();
-            //    classOrders.reverse();
-            //    fileToClassOrderMap[f] = classOrders;
-            //});
-            //orderedFileList.sort(compareFile);
-
-            
-
-            typeNodesList.sort((a, b) => compareType(a, b));
-            //typeNodesList.reverse();
-            //typeNodesList.forEach(n=> {
-            //    var file = classNameToFileMap[n.name];
-            //    if (!file)
-            //        return;
-            //    var index = orderedFileList.indexOf(file);
-            //    if (index < 0)
-            //        orderedFileList.push(file);
-            //    else if(n.hasSubClassOrDepends) {
-            //        orderedFileList.splice(index, 1);
-            //        orderedFileList.push(file);
-            //    }
-            //});
-            orderedFileList = typeNodesList.map(f=> f.name);
+            fileNodesList.sort((a, b) => compareFileNode(a, b));
+            orderedFileList = fileNodesList.map(f=> f.name);
         }
     }
 
 
 
 
-    function compareType(a: TypeNode, b: TypeNode) {
+    function compareFileNode(a: FileNode, b: FileNode) {
         if (a.order != b.order)
             return a.order - b.order;
-        //if (aisDependOnB(a, b))
-        //    return 1;
-        //if (aisDependOnB(b, a))
-        //    return -1;
 
-        if (a.subClass.length == 0 && a.subdepends.length == 0)
+        if (a.subs.length == 0 && a.subdepends.length == 0)
             return -1;
 
-        if (b.subClass.length == 0 && b.subdepends.length == 0)
+        if (b.subs.length == 0 && b.subdepends.length == 0)
             return 1;
-
-        
 
         return 0;
 
@@ -281,34 +220,34 @@
 
     }
 
-    class TypeNode {
+    class FileNode {
         name: string;
-        supers: TypeNode[];
-        subClass: TypeNode[];
-        depends: TypeNode[];
-        subdepends: TypeNode[];
+        supers: FileNode[];
+        subs: FileNode[];
+        depends: FileNode[];
+        subdepends: FileNode[];
         file: string;
 
-        addSuper(node: TypeNode) {
+        addSuper(node: FileNode) {
             if (this.supers.indexOf(node) >= 0)
                 return;
             this.supers.push(node);
         }
 
-        addDepends(node: TypeNode) {
+        addDepends(node: FileNode) {
             if (this.depends.indexOf(node) >= 0)
                 return;
             this.depends.push(node);
         }
 
 
-        addSub(node: TypeNode) {
-            if (this.subClass.indexOf(node) >= 0)
+        addSub(node: FileNode) {
+            if (this.subs.indexOf(node) >= 0)
                 return;
-            this.subClass.push(node);
+            this.subs.push(node);
         }
 
-        addSubDepends(node: TypeNode) {
+        addSubDepends(node: FileNode) {
             if (this.subdepends.indexOf(node) >= 0)
                 return;
             this.subdepends.push(node);
@@ -318,39 +257,23 @@
         
 
         setOrder(value: number,nest:number = 0) {
-
-
-
-            this.depends.forEach(s=> {
-                if (s.order > value)
-                    value = s.order + 1;
-            })
-            this.supers.forEach(s=> {
+            this.depends.concat(this.supers).forEach(s=> {
                 if (s.order > value)
                     value = s.order + 1;
             })
 
             var offset = value - this._order;
             this._order = value;
-            this.subdepends.forEach(s=> {
+
+            this.subdepends.concat(this.subs).forEach(s=> {
                 if (s._order <= this._order)
                     s.setOrder( this._order + 1,nest+1);
-                
-                s.setOrder(s._order + offset, nest + 1);
-            });
-            this.subClass.forEach(s=> {
-                if (s._order <= this._order)
-                    s.setOrder(this._order + 1, nest + 1);
                 s.setOrder(s._order + offset, nest + 1);
             });
         }
 
         get order(): number {
             return this._order;;
-        }
-
-        get hasSubClassOrDepends() {
-            return this.subClass.length > 0 || this.subdepends.length > 0;
         }
     }
 }

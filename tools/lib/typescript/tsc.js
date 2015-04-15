@@ -614,6 +614,220 @@ var ts;
         Debug.fail = fail;
     })(Debug = ts.Debug || (ts.Debug = {}));
 })(ts || (ts = {}));
+var ts;
+(function (ts) {
+    ts.sys = (function () {
+        function getWScriptSystem() {
+            var fso = new ActiveXObject("Scripting.FileSystemObject");
+            var fileStream = new ActiveXObject("ADODB.Stream");
+            fileStream.Type = 2;
+            var binaryStream = new ActiveXObject("ADODB.Stream");
+            binaryStream.Type = 1;
+            var args = [];
+            for (var i = 0; i < WScript.Arguments.length; i++) {
+                args[i] = WScript.Arguments.Item(i);
+            }
+            function readFile(fileName, encoding) {
+                if (!fso.FileExists(fileName)) {
+                    return undefined;
+                }
+                fileStream.Open();
+                try {
+                    if (encoding) {
+                        fileStream.Charset = encoding;
+                        fileStream.LoadFromFile(fileName);
+                    }
+                    else {
+                        // Load file and read the first two bytes into a string with no interpretation
+                        fileStream.Charset = "x-ansi";
+                        fileStream.LoadFromFile(fileName);
+                        var bom = fileStream.ReadText(2) || "";
+                        // Position must be at 0 before encoding can be changed
+                        fileStream.Position = 0;
+                        // [0xFF,0xFE] and [0xFE,0xFF] mean utf-16 (little or big endian), otherwise default to utf-8
+                        fileStream.Charset = bom.length >= 2 && (bom.charCodeAt(0) === 0xFF && bom.charCodeAt(1) === 0xFE || bom.charCodeAt(0) === 0xFE && bom.charCodeAt(1) === 0xFF) ? "unicode" : "utf-8";
+                    }
+                    // ReadText method always strips byte order mark from resulting string
+                    return fileStream.ReadText();
+                }
+                catch (e) {
+                    throw e;
+                }
+                finally {
+                    fileStream.Close();
+                }
+            }
+            function writeFile(fileName, data, writeByteOrderMark) {
+                fileStream.Open();
+                binaryStream.Open();
+                try {
+                    // Write characters in UTF-8 encoding
+                    fileStream.Charset = "utf-8";
+                    fileStream.WriteText(data);
+                    // If we don't want the BOM, then skip it by setting the starting location to 3 (size of BOM).
+                    // If not, start from position 0, as the BOM will be added automatically when charset==utf8.
+                    if (writeByteOrderMark) {
+                        fileStream.Position = 0;
+                    }
+                    else {
+                        fileStream.Position = 3;
+                    }
+                    fileStream.CopyTo(binaryStream);
+                    binaryStream.SaveToFile(fileName, 2);
+                }
+                finally {
+                    binaryStream.Close();
+                    fileStream.Close();
+                }
+            }
+            return {
+                args: args,
+                newLine: "\r\n",
+                useCaseSensitiveFileNames: false,
+                write: function (s) {
+                    WScript.StdOut.Write(s);
+                },
+                readFile: readFile,
+                writeFile: writeFile,
+                resolvePath: function (path) {
+                    return fso.GetAbsolutePathName(path);
+                },
+                fileExists: function (path) {
+                    return fso.FileExists(path);
+                },
+                directoryExists: function (path) {
+                    return fso.FolderExists(path);
+                },
+                createDirectory: function (directoryName) {
+                    if (!this.directoryExists(directoryName)) {
+                        fso.CreateFolder(directoryName);
+                    }
+                },
+                getExecutingFilePath: function () {
+                    return WScript.ScriptFullName;
+                },
+                getCurrentDirectory: function () {
+                    return new ActiveXObject("WScript.Shell").CurrentDirectory;
+                },
+                exit: function (exitCode) {
+                    try {
+                        WScript.Quit(exitCode);
+                    }
+                    catch (e) {
+                    }
+                }
+            };
+        }
+        function getNodeSystem() {
+            var _fs = require("fs");
+            var _path = require("path");
+            var _os = require('os');
+            var platform = _os.platform();
+            // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
+            var useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
+            function readFile(fileName, encoding) {
+                if (!_fs.existsSync(fileName)) {
+                    return undefined;
+                }
+                var buffer = _fs.readFileSync(fileName);
+                var len = buffer.length;
+                if (len >= 2 && buffer[0] === 0xFE && buffer[1] === 0xFF) {
+                    // Big endian UTF-16 byte order mark detected. Since big endian is not supported by node.js,
+                    // flip all byte pairs and treat as little endian.
+                    len &= ~1;
+                    for (var i = 0; i < len; i += 2) {
+                        var temp = buffer[i];
+                        buffer[i] = buffer[i + 1];
+                        buffer[i + 1] = temp;
+                    }
+                    return buffer.toString("utf16le", 2);
+                }
+                if (len >= 2 && buffer[0] === 0xFF && buffer[1] === 0xFE) {
+                    // Little endian UTF-16 byte order mark detected
+                    return buffer.toString("utf16le", 2);
+                }
+                if (len >= 3 && buffer[0] === 0xEF && buffer[1] === 0xBB && buffer[2] === 0xBF) {
+                    // UTF-8 byte order mark detected
+                    return buffer.toString("utf8", 3);
+                }
+                // Default is UTF-8 with no byte order mark
+                return buffer.toString("utf8");
+            }
+            function writeFile(fileName, data, writeByteOrderMark) {
+                // If a BOM is required, emit one
+                if (writeByteOrderMark) {
+                    data = '\uFEFF' + data;
+                }
+                _fs.writeFileSync(fileName, data, "utf8");
+            }
+            return {
+                args: process.argv.slice(2),
+                newLine: _os.EOL,
+                useCaseSensitiveFileNames: useCaseSensitiveFileNames,
+                write: function (s) {
+                    // 1 is a standard descriptor for stdout
+                    _fs.writeSync(1, s);
+                },
+                readFile: readFile,
+                writeFile: writeFile,
+                watchFile: function (fileName, callback) {
+                    // watchFile polls a file every 250ms, picking up file notifications.
+                    _fs.watchFile(fileName, { persistent: true, interval: 250 }, fileChanged);
+                    return {
+                        close: function () {
+                            _fs.unwatchFile(fileName, fileChanged);
+                        }
+                    };
+                    function fileChanged(curr, prev) {
+                        if (+curr.mtime <= +prev.mtime) {
+                            return;
+                        }
+                        callback(fileName);
+                    }
+                    ;
+                },
+                resolvePath: function (path) {
+                    return _path.resolve(path);
+                },
+                fileExists: function (path) {
+                    return _fs.existsSync(path);
+                },
+                directoryExists: function (path) {
+                    return _fs.existsSync(path) && _fs.statSync(path).isDirectory();
+                },
+                createDirectory: function (directoryName) {
+                    if (!this.directoryExists(directoryName)) {
+                        _fs.mkdirSync(directoryName);
+                    }
+                },
+                getExecutingFilePath: function () {
+                    return __filename;
+                },
+                getCurrentDirectory: function () {
+                    return process.cwd();
+                },
+                getMemoryUsage: function () {
+                    if (global.gc) {
+                        global.gc();
+                    }
+                    return process.memoryUsage().heapUsed;
+                },
+                exit: function (exitCode) {
+                    process.exit(exitCode);
+                }
+            };
+        }
+        if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
+            return getWScriptSystem();
+        }
+        else if (typeof module !== "undefined" && module.exports) {
+            return getNodeSystem();
+        }
+        else {
+            return undefined; // Unsupported host
+        }
+    })();
+})(ts || (ts = {}));
 // <auto-generated />
 /// <reference path="types.ts" />
 var ts;
@@ -19682,220 +19896,6 @@ var ts;
     }
     ts.createTypeChecker = createTypeChecker;
 })(ts || (ts = {}));
-var ts;
-(function (ts) {
-    ts.sys = (function () {
-        function getWScriptSystem() {
-            var fso = new ActiveXObject("Scripting.FileSystemObject");
-            var fileStream = new ActiveXObject("ADODB.Stream");
-            fileStream.Type = 2;
-            var binaryStream = new ActiveXObject("ADODB.Stream");
-            binaryStream.Type = 1;
-            var args = [];
-            for (var i = 0; i < WScript.Arguments.length; i++) {
-                args[i] = WScript.Arguments.Item(i);
-            }
-            function readFile(fileName, encoding) {
-                if (!fso.FileExists(fileName)) {
-                    return undefined;
-                }
-                fileStream.Open();
-                try {
-                    if (encoding) {
-                        fileStream.Charset = encoding;
-                        fileStream.LoadFromFile(fileName);
-                    }
-                    else {
-                        // Load file and read the first two bytes into a string with no interpretation
-                        fileStream.Charset = "x-ansi";
-                        fileStream.LoadFromFile(fileName);
-                        var bom = fileStream.ReadText(2) || "";
-                        // Position must be at 0 before encoding can be changed
-                        fileStream.Position = 0;
-                        // [0xFF,0xFE] and [0xFE,0xFF] mean utf-16 (little or big endian), otherwise default to utf-8
-                        fileStream.Charset = bom.length >= 2 && (bom.charCodeAt(0) === 0xFF && bom.charCodeAt(1) === 0xFE || bom.charCodeAt(0) === 0xFE && bom.charCodeAt(1) === 0xFF) ? "unicode" : "utf-8";
-                    }
-                    // ReadText method always strips byte order mark from resulting string
-                    return fileStream.ReadText();
-                }
-                catch (e) {
-                    throw e;
-                }
-                finally {
-                    fileStream.Close();
-                }
-            }
-            function writeFile(fileName, data, writeByteOrderMark) {
-                fileStream.Open();
-                binaryStream.Open();
-                try {
-                    // Write characters in UTF-8 encoding
-                    fileStream.Charset = "utf-8";
-                    fileStream.WriteText(data);
-                    // If we don't want the BOM, then skip it by setting the starting location to 3 (size of BOM).
-                    // If not, start from position 0, as the BOM will be added automatically when charset==utf8.
-                    if (writeByteOrderMark) {
-                        fileStream.Position = 0;
-                    }
-                    else {
-                        fileStream.Position = 3;
-                    }
-                    fileStream.CopyTo(binaryStream);
-                    binaryStream.SaveToFile(fileName, 2);
-                }
-                finally {
-                    binaryStream.Close();
-                    fileStream.Close();
-                }
-            }
-            return {
-                args: args,
-                newLine: "\r\n",
-                useCaseSensitiveFileNames: false,
-                write: function (s) {
-                    WScript.StdOut.Write(s);
-                },
-                readFile: readFile,
-                writeFile: writeFile,
-                resolvePath: function (path) {
-                    return fso.GetAbsolutePathName(path);
-                },
-                fileExists: function (path) {
-                    return fso.FileExists(path);
-                },
-                directoryExists: function (path) {
-                    return fso.FolderExists(path);
-                },
-                createDirectory: function (directoryName) {
-                    if (!this.directoryExists(directoryName)) {
-                        fso.CreateFolder(directoryName);
-                    }
-                },
-                getExecutingFilePath: function () {
-                    return WScript.ScriptFullName;
-                },
-                getCurrentDirectory: function () {
-                    return new ActiveXObject("WScript.Shell").CurrentDirectory;
-                },
-                exit: function (exitCode) {
-                    try {
-                        WScript.Quit(exitCode);
-                    }
-                    catch (e) {
-                    }
-                }
-            };
-        }
-        function getNodeSystem() {
-            var _fs = require("fs");
-            var _path = require("path");
-            var _os = require('os');
-            var platform = _os.platform();
-            // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
-            var useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
-            function readFile(fileName, encoding) {
-                if (!_fs.existsSync(fileName)) {
-                    return undefined;
-                }
-                var buffer = _fs.readFileSync(fileName);
-                var len = buffer.length;
-                if (len >= 2 && buffer[0] === 0xFE && buffer[1] === 0xFF) {
-                    // Big endian UTF-16 byte order mark detected. Since big endian is not supported by node.js,
-                    // flip all byte pairs and treat as little endian.
-                    len &= ~1;
-                    for (var i = 0; i < len; i += 2) {
-                        var temp = buffer[i];
-                        buffer[i] = buffer[i + 1];
-                        buffer[i + 1] = temp;
-                    }
-                    return buffer.toString("utf16le", 2);
-                }
-                if (len >= 2 && buffer[0] === 0xFF && buffer[1] === 0xFE) {
-                    // Little endian UTF-16 byte order mark detected
-                    return buffer.toString("utf16le", 2);
-                }
-                if (len >= 3 && buffer[0] === 0xEF && buffer[1] === 0xBB && buffer[2] === 0xBF) {
-                    // UTF-8 byte order mark detected
-                    return buffer.toString("utf8", 3);
-                }
-                // Default is UTF-8 with no byte order mark
-                return buffer.toString("utf8");
-            }
-            function writeFile(fileName, data, writeByteOrderMark) {
-                // If a BOM is required, emit one
-                if (writeByteOrderMark) {
-                    data = '\uFEFF' + data;
-                }
-                _fs.writeFileSync(fileName, data, "utf8");
-            }
-            return {
-                args: process.argv.slice(2),
-                newLine: _os.EOL,
-                useCaseSensitiveFileNames: useCaseSensitiveFileNames,
-                write: function (s) {
-                    // 1 is a standard descriptor for stdout
-                    _fs.writeSync(1, s);
-                },
-                readFile: readFile,
-                writeFile: writeFile,
-                watchFile: function (fileName, callback) {
-                    // watchFile polls a file every 250ms, picking up file notifications.
-                    _fs.watchFile(fileName, { persistent: true, interval: 250 }, fileChanged);
-                    return {
-                        close: function () {
-                            _fs.unwatchFile(fileName, fileChanged);
-                        }
-                    };
-                    function fileChanged(curr, prev) {
-                        if (+curr.mtime <= +prev.mtime) {
-                            return;
-                        }
-                        callback(fileName);
-                    }
-                    ;
-                },
-                resolvePath: function (path) {
-                    return _path.resolve(path);
-                },
-                fileExists: function (path) {
-                    return _fs.existsSync(path);
-                },
-                directoryExists: function (path) {
-                    return _fs.existsSync(path) && _fs.statSync(path).isDirectory();
-                },
-                createDirectory: function (directoryName) {
-                    if (!this.directoryExists(directoryName)) {
-                        _fs.mkdirSync(directoryName);
-                    }
-                },
-                getExecutingFilePath: function () {
-                    return __filename;
-                },
-                getCurrentDirectory: function () {
-                    return process.cwd();
-                },
-                getMemoryUsage: function () {
-                    if (global.gc) {
-                        global.gc();
-                    }
-                    return process.memoryUsage().heapUsed;
-                },
-                exit: function (exitCode) {
-                    process.exit(exitCode);
-                }
-            };
-        }
-        if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
-            return getWScriptSystem();
-        }
-        else if (typeof module !== "undefined" && module.exports) {
-            return getNodeSystem();
-        }
-        else {
-            return undefined; // Unsupported host
-        }
-    })();
-})(ts || (ts = {}));
 /// <reference path="sys.ts"/>
 /// <reference path="types.ts"/>
 /// <reference path="core.ts"/>
@@ -20150,11 +20150,9 @@ var ts;
     var fileToClassNameMap = {};
     var classNameToBaseClassMap = {};
     var staticToClassNameMap = {};
-    var fileToClassOrderMap = {};
-    var fileToDependsMap = {};
     //sort
-    var typeNodesList = [];
-    var classNameToNodeMap = {};
+    var fileNodesList = [];
+    var fileNameToNodeMap = {};
     var orderedFileList = [];
     var TreeGenerator = (function () {
         function TreeGenerator() {
@@ -20167,39 +20165,25 @@ var ts;
             fileToClassNameMap = {};
             classNameToBaseClassMap = {};
             staticToClassNameMap = {};
-            typeNodesList = [];
-            classNameToNodeMap = {};
+            fileNodesList = [];
+            fileNameToNodeMap = {};
             var files = program.getSourceFiles().concat();
             var libdts = files.shift();
-            //files = files.splice(1);
             orderedFileList = files.map(function (f) { return f.filename; });
             checker = chk;
             ts.forEach(files, function (file) { return _this.symbolTabelToFileMap(file, file.locals); });
             this.sortFiles();
             var sources = program.getSourceFiles();
-            //sources.length = 0;
-            var lostFiles = [];
-            sources.forEach(function (s) {
-                if (orderedFileList.indexOf(s.filename) < 0)
-                    lostFiles.push(s);
-            });
             orderedFileList.forEach(function (f) {
-                var index = -1;
-                var source = null;
-                sources.some(function (s, i) {
+                for (var i = 0; i < sources.length; i++) {
+                    var s = sources[i];
                     if (s.filename == f) {
-                        source = s;
-                        index = i;
-                        return true;
+                        sources.splice(i, 1);
+                        sources.push(s);
+                        break;
                     }
-                    return false;
-                });
-                if (index >= 0) {
-                    sources.splice(index, 1);
-                    sources.push(source);
                 }
             });
-            //sources.unshift(libdts);
         };
         TreeGenerator.prototype.symbolToFileMap = function (file, symbol) {
             var _this = this;
@@ -20259,58 +20243,50 @@ var ts;
                 bases.push(fullName);
             classNameToBaseClassMap[className] = bases;
         };
-        TreeGenerator.prototype.getClassNode = function (className) {
-            if (className in classNameToNodeMap)
-                return classNameToNodeMap[className];
-            var typeNode = new TypeNode();
-            typeNode.name = className;
-            //typeNode.file = classNameToFileMap[className];
-            typeNode.subClass = [];
+        TreeGenerator.prototype.getFileNode = function (file) {
+            if (file in fileNameToNodeMap)
+                return fileNameToNodeMap[file];
+            var typeNode = new FileNode();
+            typeNode.name = file;
+            typeNode.subs = [];
             typeNode.depends = [];
             typeNode.supers = [];
             typeNode.subdepends = [];
-            typeNodesList.push(typeNode);
-            classNameToNodeMap[className] = typeNode;
+            fileNodesList.push(typeNode);
+            fileNameToNodeMap[file] = typeNode;
             return typeNode;
         };
         TreeGenerator.prototype.sortFiles = function () {
             var _this = this;
             ts.forEachKey(classNameToFileMap, function (className) {
                 var file = classNameToFileMap[className];
-                //var typeNode = this.getClassNode(className);
-                var fileNode = _this.getClassNode(file);
+                var fileNode = _this.getFileNode(file);
                 var supers = classNameToBaseClassMap[className];
                 if (supers) {
                     supers.forEach(function (superClass) {
-                        //var superNode = this.getClassNode(superClass);
-                        //superNode.subClass.push(typeNode);
-                        //typeNode.supers.push(superNode);
                         var dependFile = classNameToFileMap[superClass];
                         if (dependFile == file)
                             return;
-                        var dependNode = _this.getClassNode(dependFile);
+                        var dependNode = _this.getFileNode(dependFile);
                         dependNode.addSub(fileNode);
                         fileNode.addSuper(dependNode);
                     });
                 }
                 var staticDepends = staticToClassNameMap[className];
                 if (staticDepends) {
-                    //var dependNode = this.getClassNode(staticDepends);
-                    //typeNode.depends.push(dependNode);
-                    //dependNode.subdepends.push(typeNode);
                     var dependFile = classNameToFileMap[staticDepends];
                     if (dependFile != file) {
-                        var dependFileNode = _this.getClassNode(dependFile);
+                        var dependFileNode = _this.getFileNode(dependFile);
                         fileNode.addDepends(dependFileNode);
                         dependFileNode.addSubDepends(fileNode);
                     }
                 }
             });
             var singleTypes = [], bottomTypes = [], topTypes = [], otherTypes = [];
-            typeNodesList.forEach(function (t) {
-                if ((t.subClass.length || t.supers.length || t.depends.length || t.subdepends.length) == 0)
+            fileNodesList.forEach(function (t) {
+                if ((t.subs.length || t.supers.length || t.depends.length || t.subdepends.length) == 0)
                     singleTypes.push(t);
-                else if (t.subClass.length == 0 && t.subdepends.length == 0)
+                else if (t.subs.length == 0 && t.subdepends.length == 0)
                     bottomTypes.push(t);
                 else if (t.supers.length == 0 && t.depends.length == 0)
                     topTypes.push(t);
@@ -20319,48 +20295,18 @@ var ts;
             });
             topTypes.forEach(function (t) { return t.setOrder(0); });
             bottomTypes.forEach(function (t) { return t.setOrder(t.order); });
-            //orderedFileList.forEach(f=> {
-            //    var classes = fileToClassNameMap[f];
-            //    var classOrders = [];
-            //    classes.forEach(c=> {
-            //        var order = classNameToNodeMap[c].order;
-            //        if (classOrders.indexOf(order) < 0)
-            //            classOrders.push(order);
-            //    });
-            //    classOrders.sort();
-            //    classOrders.reverse();
-            //    fileToClassOrderMap[f] = classOrders;
-            //});
-            //orderedFileList.sort(compareFile);
-            typeNodesList.sort(function (a, b) { return compareType(a, b); });
-            //typeNodesList.reverse();
-            //typeNodesList.forEach(n=> {
-            //    var file = classNameToFileMap[n.name];
-            //    if (!file)
-            //        return;
-            //    var index = orderedFileList.indexOf(file);
-            //    if (index < 0)
-            //        orderedFileList.push(file);
-            //    else if(n.hasSubClassOrDepends) {
-            //        orderedFileList.splice(index, 1);
-            //        orderedFileList.push(file);
-            //    }
-            //});
-            orderedFileList = typeNodesList.map(function (f) { return f.name; });
+            fileNodesList.sort(function (a, b) { return compareFileNode(a, b); });
+            orderedFileList = fileNodesList.map(function (f) { return f.name; });
         };
         return TreeGenerator;
     })();
     ts.TreeGenerator = TreeGenerator;
-    function compareType(a, b) {
+    function compareFileNode(a, b) {
         if (a.order != b.order)
             return a.order - b.order;
-        //if (aisDependOnB(a, b))
-        //    return 1;
-        //if (aisDependOnB(b, a))
-        //    return -1;
-        if (a.subClass.length == 0 && a.subdepends.length == 0)
+        if (a.subs.length == 0 && a.subdepends.length == 0)
             return -1;
-        if (b.subClass.length == 0 && b.subdepends.length == 0)
+        if (b.subs.length == 0 && b.subdepends.length == 0)
             return 1;
         return 0;
     }
@@ -20376,55 +20322,46 @@ var ts;
         }
         return name;
     }
-    var TypeNode = (function () {
-        function TypeNode() {
+    var FileNode = (function () {
+        function FileNode() {
             this._order = 0;
         }
-        TypeNode.prototype.addSuper = function (node) {
+        FileNode.prototype.addSuper = function (node) {
             if (this.supers.indexOf(node) >= 0)
                 return;
             this.supers.push(node);
         };
-        TypeNode.prototype.addDepends = function (node) {
+        FileNode.prototype.addDepends = function (node) {
             if (this.depends.indexOf(node) >= 0)
                 return;
             this.depends.push(node);
         };
-        TypeNode.prototype.addSub = function (node) {
-            if (this.subClass.indexOf(node) >= 0)
+        FileNode.prototype.addSub = function (node) {
+            if (this.subs.indexOf(node) >= 0)
                 return;
-            this.subClass.push(node);
+            this.subs.push(node);
         };
-        TypeNode.prototype.addSubDepends = function (node) {
+        FileNode.prototype.addSubDepends = function (node) {
             if (this.subdepends.indexOf(node) >= 0)
                 return;
             this.subdepends.push(node);
         };
-        TypeNode.prototype.setOrder = function (value, nest) {
+        FileNode.prototype.setOrder = function (value, nest) {
             var _this = this;
             if (nest === void 0) { nest = 0; }
-            this.depends.forEach(function (s) {
-                if (s.order > value)
-                    value = s.order + 1;
-            });
-            this.supers.forEach(function (s) {
+            this.depends.concat(this.supers).forEach(function (s) {
                 if (s.order > value)
                     value = s.order + 1;
             });
             var offset = value - this._order;
             this._order = value;
-            this.subdepends.forEach(function (s) {
-                if (s._order <= _this._order)
-                    s.setOrder(_this._order + 1, nest + 1);
-                s.setOrder(s._order + offset, nest + 1);
-            });
-            this.subClass.forEach(function (s) {
+            this.subdepends.concat(this.subs).forEach(function (s) {
                 if (s._order <= _this._order)
                     s.setOrder(_this._order + 1, nest + 1);
                 s.setOrder(s._order + offset, nest + 1);
             });
         };
-        Object.defineProperty(TypeNode.prototype, "order", {
+        Object.defineProperty(FileNode.prototype, "order", {
             get: function () {
                 return this._order;
                 ;
@@ -20432,14 +20369,7 @@ var ts;
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(TypeNode.prototype, "hasSubClassOrDepends", {
-            get: function () {
-                return this.subClass.length > 0 || this.subdepends.length > 0;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        return TypeNode;
+        return FileNode;
     })();
 })(ts || (ts = {}));
 /// <reference path="core.ts"/>
@@ -20791,8 +20721,8 @@ var ts;
     }
 })(ts || (ts = {}));
 exports.executeCommandLine = ts.executeCommandLine;
-exports.executeApi = ts.executeApi;
+//exports.executeApi = ts.executeApi;
 exports.exit = null;
 ts.sys.exit = function (code) {
     exports.exit(code);
-}
+};
