@@ -82,7 +82,10 @@ module lark.web {
             var container = this.container;
             var canvas:HTMLCanvasElement = document.createElement("canvas");
             var style = canvas.style;
-            style.cursor = "default";
+            style["-moz-user-select"] = "-moz-none";
+            style["-webkit-user-select"] = "none";
+            style["-ms-user-select"] = "none";
+            style["user-select"] = "none";
             style.margin = "auto";
             style.position = "absolute";
             style.top = "0";
