@@ -221,18 +221,6 @@ module lark.web {
         map[player.GraphicsCommandType.stroke] = context.stroke;
         map[player.GraphicsCommandType.strokeRect] = context.strokeRect;
 
-        map[player.GraphicsCommandType.shadowBlur] = function (value) {
-            context.shadowBlur = value
-        };
-        map[player.GraphicsCommandType.shadowColor] = function (value) {
-            context.shadowColor = value
-        };
-        map[player.GraphicsCommandType.shadowOffsetX] = function (value) {
-            context.shadowOffsetX = value
-        };
-        map[player.GraphicsCommandType.shadowOffsetY] = function (value) {
-            context.shadowOffsetY = value
-        };
         map[player.GraphicsCommandType.lineWidth] = function (value) {
             context.lineWidth = value
         };

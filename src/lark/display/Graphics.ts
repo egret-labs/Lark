@@ -29,52 +29,43 @@
 
 module lark {
 
+    var PI = Math.PI;
+    var HalfPI = PI / 2;
+    var PacPI = PI + HalfPI;
+    var TwoPI = PI * 2;
+
+    /**
+     * 格式化弧线角度的值
+     */
+    function clampAngle(value):number {
+        value %= PI*2;
+        if (value <0) {
+            value += PI*2;
+        }
+        return value;
+    }
     /**
      * Graphics 类包含一组可用来创建矢量形状的方法。支持绘制的显示对象包括 Sprite 和 Shape 对象。这些类中的每一个类都包括 graphics 属性，该属性是一个 Graphics 对象。
      */
-    export class Graphics extends HashObject{
+    export class Graphics extends HashObject {
 
         /**
          * 创建一个放射状渐变填充
          */
-        public static createRadialGradient(x0:number, y0:number, r0:number, x1:number, y1:number, r1:number):GraphicsGradient{
+        public static createRadialGradient(x0:number, y0:number, r0:number, x1:number, y1:number, r1:number):GraphicsGradient {
             return null;
         }
 
         /**
          * 创建一个线性填充
          */
-        public static createLinearGradient(x0:number, y0:number, x1:number, y1:number):GraphicsGradient{
+        public static createLinearGradient(x0:number, y0:number, x1:number, y1:number):GraphicsGradient {
             return null;
         }
 
-        public constructor(){
+        public constructor() {
             super();
             this.reset();
-        }
-
-        private reset():void{
-            this._fillStyle = "#000000";
-            this._lineCap = "butt";
-            this._lineJoin = "miter";
-            this._lineWidth = 1;
-            this._miterLimit = 10;
-            this._shadowBlur = 0;
-            this._shadowColor = "rgba(0, 0, 0, 0)";
-            this._shadowOffsetX = 0;
-            this._shadowOffsetY = 0;
-            this._strokeStyle = "#000000";
-        }
-
-        private _shadowOffsetY:number;
-
-        public get shadowOffsetY():number {
-            return this._shadowOffsetY;
-        }
-
-        public set shadowOffsetY(value:number) {
-            this._shadowOffsetY = value;
-            this.pushCommand(player.GraphicsCommandType.shadowOffsetY,arguments);
         }
 
         private _fillStyle:any;
@@ -85,7 +76,7 @@ module lark {
 
         public set fillStyle(value:any) {
             this._fillStyle = value;
-            this.pushCommand(player.GraphicsCommandType.fillStyle,arguments);
+            this.pushCommand(player.GraphicsCommandType.fillStyle, arguments);
         }
 
         private _lineWidth:number;
@@ -96,7 +87,7 @@ module lark {
 
         public set lineWidth(value:number) {
             this._lineWidth = value;
-            this.pushCommand(player.GraphicsCommandType.lineWidth,arguments);
+            this.pushCommand(player.GraphicsCommandType.lineWidth, arguments);
         }
 
         private _lineCap:string;
@@ -107,7 +98,7 @@ module lark {
 
         public set lineCap(value:string) {
             this._lineCap = value;
-            this.pushCommand(player.GraphicsCommandType.lineCap,arguments);
+            this.pushCommand(player.GraphicsCommandType.lineCap, arguments);
         }
 
         private _strokeStyle:any;
@@ -118,18 +109,7 @@ module lark {
 
         public set strokeStyle(value:any) {
             this._strokeStyle = value;
-            this.pushCommand(player.GraphicsCommandType.strokeStyle,arguments);
-        }
-
-        private _shadowBlur:number;
-
-        public get shadowBlur():number {
-            return this._shadowBlur;
-        }
-
-        public set shadowBlur(value:number) {
-            this._shadowBlur = value;
-            this.pushCommand(player.GraphicsCommandType.shadowBlur,arguments);
+            this.pushCommand(player.GraphicsCommandType.strokeStyle, arguments);
         }
 
         private _lineJoin:string;
@@ -140,29 +120,7 @@ module lark {
 
         public set lineJoin(value:string) {
             this._lineJoin = value;
-            this.pushCommand(player.GraphicsCommandType.lineJoin,arguments);
-        }
-
-        private _shadowColor:string;
-
-        public get shadowColor():string {
-            return this._shadowColor;
-        }
-
-        public set shadowColor(value:string) {
-            this._shadowColor = value;
-            this.pushCommand(player.GraphicsCommandType.shadowColor,arguments);
-        }
-
-        private _shadowOffsetX:number;
-
-        public get shadowOffsetX():number {
-            return this._shadowOffsetX;
-        }
-
-        public set shadowOffsetX(value:number) {
-            this._shadowOffsetX = value;
-            this.pushCommand(player.GraphicsCommandType.shadowOffsetX,arguments);
+            this.pushCommand(player.GraphicsCommandType.lineJoin, arguments);
         }
 
         private _miterLimit:number;
@@ -173,60 +131,124 @@ module lark {
 
         public set miterLimit(value:number) {
             this._miterLimit = value;
-            this.pushCommand(player.GraphicsCommandType.miterLimit,arguments);
+            this.pushCommand(player.GraphicsCommandType.miterLimit, arguments);
         }
 
 
-        public arc(x:number, y:number, radius:number, startAngle:number, endAngle:number, anticlockwise?:boolean):void{
-            this.pushCommand(player.GraphicsCommandType.arc,arguments);
+        public arc(x:number, y:number, radius:number, startAngle:number, endAngle:number, anticlockwise?:boolean):void {
+            this.pushCommand(player.GraphicsCommandType.arc, arguments);
+            if(radius<0){
+                return;
+            }
+            startAngle = clampAngle(startAngle);
+            endAngle = clampAngle(endAngle);
+            if(anticlockwise){
+                var temp = endAngle;
+                endAngle = startAngle;
+                startAngle = temp;
+            }
+            var offset = 0;
+            if(startAngle>endAngle){
+                offset = TwoPI;
+                endAngle += offset;
+            }
+            var startX = Math.cos(startAngle)*radius;
+            var endX = Math.cos(endAngle)*radius;
+            if(startAngle<=(PI+offset)&&endAngle>=(PI+offset)){
+                var xMin = -radius;
+            }
+            else{
+                xMin = Math.min(startX,endX,0);
+            }
+            if(startAngle<=offset&&endAngle>=offset){
+                var xMax = radius;
+            }
+            else{
+                xMax = Math.max(startX,endX,0);
+            }
+            var startY = Math.sin(startAngle)*radius;
+            var endY = Math.sin(endAngle)*radius;
+            if(startAngle<=(PacPI+offset)&&endAngle>=(PacPI+offset)){
+                var yMin = -radius;
+            }
+            else{
+                yMin = Math.min(0,startY,endY);
+            }
+            if(startAngle<=(HalfPI+offset)&&endAngle>=(HalfPI+offset)){
+                var yMax = radius;
+            }
+            else{
+                yMax = Math.max(startY,endY,0);
+            }
+            this.extendByPoint(xMin+x,yMin+y);
+            this.extendByPoint(xMax+x,yMax+y);
         }
 
-        public quadraticCurveTo(cpx:number, cpy:number, x:number, y:number):void{
-            this.pushCommand(player.GraphicsCommandType.quadraticCurveTo,arguments);
+
+
+
+        public quadraticCurveTo(cpx:number, cpy:number, x:number, y:number):void {
+            this.pushCommand(player.GraphicsCommandType.quadraticCurveTo, arguments);
+            this.checkMoveTo();
+            this.extendByPoint(cpx,cpy);
+            this.extendByPoint(x,y);
         }
 
-        public lineTo(x:number, y:number):void{
-            this.pushCommand(player.GraphicsCommandType.lineTo,arguments);
+        public bezierCurveTo(cp1x:number, cp1y:number, cp2x:number, cp2y:number, x:number, y:number):void {
+            this.pushCommand(player.GraphicsCommandType.bezierCurveTo, arguments);
+            this.checkMoveTo();
+            this.extendByPoint(cp1x,cp1y);
+            this.extendByPoint(cp2x,cp2y);
+            this.extendByPoint(x,y);
         }
 
-        public fill(fillRule?:string):void{
-            this.pushCommand(player.GraphicsCommandType.fill,arguments);
+
+        public lineTo(x:number, y:number):void {
+            this.pushCommand(player.GraphicsCommandType.lineTo, arguments);
+            this.checkMoveTo();
+            this.extendByPoint(x,y);
         }
 
-        public closePath():void{
-            this.pushCommand(player.GraphicsCommandType.closePath,arguments);
+        public fill(fillRule?:string):void {
+            this.pushCommand(player.GraphicsCommandType.fill, arguments);
         }
 
-        public rect(x:number, y:number, w:number, h:number):void{
-            this.pushCommand(player.GraphicsCommandType.rect,arguments);
+        public closePath():void {
+            this.pushCommand(player.GraphicsCommandType.closePath, arguments);
         }
 
-        public moveTo(x:number, y:number):void{
-            this.pushCommand(player.GraphicsCommandType.moveTo,arguments);
+        public rect(x:number, y:number, w:number, h:number):void {
+            this.pushCommand(player.GraphicsCommandType.rect, arguments);
         }
 
-        public fillRect(x:number, y:number, w:number, h:number):void{
-            this.pushCommand(player.GraphicsCommandType.fillRect,arguments);
+        public moveTo(x:number, y:number):void {
+            this.pushCommand(player.GraphicsCommandType.moveTo, arguments);
+            this.moveToX = x;
+            this.moveToY = y;
+            this.hasMoved = true;
         }
 
-        public bezierCurveTo(cp1x:number, cp1y:number, cp2x:number, cp2y:number, x:number, y:number):void{
-            this.pushCommand(player.GraphicsCommandType.bezierCurveTo,arguments);
+        public fillRect(x:number, y:number, w:number, h:number):void {
+            this.pushCommand(player.GraphicsCommandType.fillRect, arguments);
         }
 
-        public stroke():void{
-            this.pushCommand(player.GraphicsCommandType.stroke,arguments);
+        public stroke():void {
+            this.pushCommand(player.GraphicsCommandType.stroke, arguments);
+            this.hasStroke = true;
         }
 
-        public strokeRect(x:number, y:number, w:number, h:number):void{
-            this.pushCommand(player.GraphicsCommandType.strokeRect,arguments);
+        public strokeRect(x:number, y:number, w:number, h:number):void {
+            this.pushCommand(player.GraphicsCommandType.strokeRect, arguments);
+            this.hasStroke = true;
         }
 
-        public beginPath():void{
-            this.pushCommand(player.GraphicsCommandType.beginPath,arguments);
+        public beginPath():void {
+            this.pushCommand(player.GraphicsCommandType.beginPath, arguments);
+            this.hasMoved = false;
         }
 
-        public arcTo(x1:number, y1:number, x2:number, y2:number, radius:number):void{
-            this.pushCommand(player.GraphicsCommandType.arcTo,arguments);
+        public arcTo(x1:number, y1:number, x2:number, y2:number, radius:number):void {
+            this.pushCommand(player.GraphicsCommandType.arcTo, arguments);
         }
 
         /**
@@ -236,6 +258,32 @@ module lark {
             this.reset();
             this.$commands.length = 0;
             this.$targetDisplay.$invalidate();
+        }
+
+        private isFirst:boolean;
+        private minX:number;
+        private minY:number;
+        private maxX:number;
+        private maxY:number;
+        private hasMoved:boolean;
+        private moveToX:number = 0;
+        private moveToY:number = 0;
+        private hasStroke:boolean;
+
+        private reset():void {
+            this._fillStyle = "#000000";
+            this._lineCap = "butt";
+            this._lineJoin = "miter";
+            this._lineWidth = 1;
+            this._miterLimit = 10;
+            this._strokeStyle = "#000000";
+            this.hasMoved = false;
+            this.minX = 0;
+            this.minY = 0;
+            this.maxX = 0;
+            this.maxY = 0;
+            this.isFirst = true;
+            this.hasStroke = false;
         }
 
         /**
@@ -248,14 +296,40 @@ module lark {
         $commands:player.GraphicsCommand[] = [];
 
         private pushCommand(graphicsType:number, args:any):void {
-            this.$commands.push({type:graphicsType,arguments:args});
+            this.$commands.push({type: graphicsType, arguments: args});
             this.$targetDisplay.$invalidate();
         }
 
-        private minX:number = 0
+        private checkMoveTo():void{
+            if(this.hasMoved){
+                this.hasMoved = false;
+                this.extendByPoint(this.moveToX,this.moveToY);
+            }
+        }
+
+        private extendByPoint(x:number,y:number):void{
+            if(this.isFirst){
+                this.isFirst = false;
+                this.maxX = this.minX = x;
+                this.maxY = this.minY = y;
+            }
+            else{
+                this.minX = Math.min(this.minX, x);
+                this.minY = Math.min(this.minY, y);
+                this.maxX = Math.max(this.maxX, x);
+                this.maxY = Math.max(this.maxY, y);
+            }
+        }
 
         $measureContentBounds(bounds:Rectangle):void {
-
+            if(this.hasStroke){
+                var lineWidth = this._lineWidth;
+                var half = lineWidth*0.5;
+            }
+            else{
+                half = lineWidth = 0;
+            }
+            bounds.setTo(this.minX-half, this.minY-half, this.maxX - this.minX+lineWidth, this.maxY - this.minY+lineWidth);
         }
     }
 }
