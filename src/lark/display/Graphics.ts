@@ -184,9 +184,6 @@ module lark {
             this.extendByPoint(xMax+x,yMax+y);
         }
 
-
-
-
         public quadraticCurveTo(cpx:number, cpy:number, x:number, y:number):void {
             this.pushCommand(player.GraphicsCommandType.quadraticCurveTo, arguments);
             this.checkMoveTo();
@@ -219,6 +216,8 @@ module lark {
 
         public rect(x:number, y:number, w:number, h:number):void {
             this.pushCommand(player.GraphicsCommandType.rect, arguments);
+            this.extendByPoint(x,y);
+            this.extendByPoint(x+w,y+h);
         }
 
         public moveTo(x:number, y:number):void {
@@ -230,6 +229,8 @@ module lark {
 
         public fillRect(x:number, y:number, w:number, h:number):void {
             this.pushCommand(player.GraphicsCommandType.fillRect, arguments);
+            this.extendByPoint(x,y);
+            this.extendByPoint(x+w,y+h);
         }
 
         public stroke():void {
@@ -240,6 +241,8 @@ module lark {
         public strokeRect(x:number, y:number, w:number, h:number):void {
             this.pushCommand(player.GraphicsCommandType.strokeRect, arguments);
             this.hasStroke = true;
+            this.extendByPoint(x,y);
+            this.extendByPoint(x+w,y+h);
         }
 
         public beginPath():void {
@@ -249,6 +252,9 @@ module lark {
 
         public arcTo(x1:number, y1:number, x2:number, y2:number, radius:number):void {
             this.pushCommand(player.GraphicsCommandType.arcTo, arguments);
+            this.checkMoveTo();
+            this.extendByPoint(x1,y1);
+            this.extendByPoint(x2,y2);
         }
 
         /**
