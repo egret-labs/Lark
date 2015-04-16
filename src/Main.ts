@@ -95,6 +95,16 @@ module lark {
                 container.addChild(bitmap);
                 //this.iconList.push(bitmap);
             }
+            var shape = new Shape();
+            shape.x = 500+0.5;
+            shape.y = 50+0.5;
+            var g = shape.graphics;
+            g.beginPath();
+            g.fillStyle="green";
+            g.fillRect(50,50,75,50);
+            g.fillStyle="blue";
+            g.strokeRect(80,80,75,50);
+            container.addChild(shape);
             this.addChild(container);
             //container.cacheAsBitmap = true;
             //container.x = 300;
