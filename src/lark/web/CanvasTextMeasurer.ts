@@ -40,6 +40,7 @@ module lark.web {
             super();
             var canvas = document.createElement("canvas");
             sharedCanvasContext = canvas.getContext("2d");
+            mapGraphicsFunction(sharedCanvasContext);
         }
 
         /**

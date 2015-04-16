@@ -31,9 +31,212 @@ module lark {
 
     /**
      * Graphics 类包含一组可用来创建矢量形状的方法。支持绘制的显示对象包括 Sprite 和 Shape 对象。这些类中的每一个类都包括 graphics 属性，该属性是一个 Graphics 对象。
-     * 以下是为便于使用而提供的一些辅助函数：drawRect()、drawRoundRect()、drawCircle() 和 drawEllipse()。
      */
-    export class Graphics {
+    export class Graphics extends HashObject{
+
+        /**
+         * 创建一个放射状渐变填充
+         */
+        public static createRadialGradient(x0:number, y0:number, r0:number, x1:number, y1:number, r1:number):GraphicsGradient{
+            return null;
+        }
+
+        /**
+         * 创建一个线性填充
+         */
+        public static createLinearGradient(x0:number, y0:number, x1:number, y1:number):GraphicsGradient{
+            return null;
+        }
+
+        public constructor(){
+            super();
+            this.reset();
+        }
+
+        private reset():void{
+            this._fillStyle = "#000000";
+            this._lineCap = "butt";
+            this._lineJoin = "miter";
+            this._lineWidth = 1;
+            this._miterLimit = 10;
+            this._shadowBlur = 0;
+            this._shadowColor = "rgba(0, 0, 0, 0)";
+            this._shadowOffsetX = 0;
+            this._shadowOffsetY = 0;
+            this._strokeStyle = "#000000";
+        }
+
+        private _shadowOffsetY:number;
+
+        public get shadowOffsetY():number {
+            return this._shadowOffsetY;
+        }
+
+        public set shadowOffsetY(value:number) {
+            this._shadowOffsetY = value;
+            this.pushCommand(player.GraphicsCommandType.shadowOffsetY,arguments);
+        }
+
+        private _fillStyle:any;
+
+        public get fillStyle():any {
+            return this._fillStyle;
+        }
+
+        public set fillStyle(value:any) {
+            this._fillStyle = value;
+            this.pushCommand(player.GraphicsCommandType.fillStyle,arguments);
+        }
+
+        private _lineWidth:number;
+
+        public get lineWidth():number {
+            return this._lineWidth;
+        }
+
+        public set lineWidth(value:number) {
+            this._lineWidth = value;
+            this.pushCommand(player.GraphicsCommandType.lineWidth,arguments);
+        }
+
+        private _lineCap:string;
+
+        public get lineCap():string {
+            return this._lineCap;
+        }
+
+        public set lineCap(value:string) {
+            this._lineCap = value;
+            this.pushCommand(player.GraphicsCommandType.lineCap,arguments);
+        }
+
+        private _strokeStyle:any;
+
+        public get strokeStyle():any {
+            return this._strokeStyle;
+        }
+
+        public set strokeStyle(value:any) {
+            this._strokeStyle = value;
+            this.pushCommand(player.GraphicsCommandType.strokeStyle,arguments);
+        }
+
+        private _shadowBlur:number;
+
+        public get shadowBlur():number {
+            return this._shadowBlur;
+        }
+
+        public set shadowBlur(value:number) {
+            this._shadowBlur = value;
+            this.pushCommand(player.GraphicsCommandType.shadowBlur,arguments);
+        }
+
+        private _lineJoin:string;
+
+        public get lineJoin():string {
+            return this._lineJoin;
+        }
+
+        public set lineJoin(value:string) {
+            this._lineJoin = value;
+            this.pushCommand(player.GraphicsCommandType.lineJoin,arguments);
+        }
+
+        private _shadowColor:string;
+
+        public get shadowColor():string {
+            return this._shadowColor;
+        }
+
+        public set shadowColor(value:string) {
+            this._shadowColor = value;
+            this.pushCommand(player.GraphicsCommandType.shadowColor,arguments);
+        }
+
+        private _shadowOffsetX:number;
+
+        public get shadowOffsetX():number {
+            return this._shadowOffsetX;
+        }
+
+        public set shadowOffsetX(value:number) {
+            this._shadowOffsetX = value;
+            this.pushCommand(player.GraphicsCommandType.shadowOffsetX,arguments);
+        }
+
+        private _miterLimit:number;
+
+        public get miterLimit():number {
+            return this._miterLimit;
+        }
+
+        public set miterLimit(value:number) {
+            this._miterLimit = value;
+            this.pushCommand(player.GraphicsCommandType.miterLimit,arguments);
+        }
+
+
+        public arc(x:number, y:number, radius:number, startAngle:number, endAngle:number, anticlockwise?:boolean):void{
+            this.pushCommand(player.GraphicsCommandType.arc,arguments);
+        }
+
+        public quadraticCurveTo(cpx:number, cpy:number, x:number, y:number):void{
+            this.pushCommand(player.GraphicsCommandType.quadraticCurveTo,arguments);
+        }
+
+        public lineTo(x:number, y:number):void{
+            this.pushCommand(player.GraphicsCommandType.lineTo,arguments);
+        }
+
+        public fill(fillRule?:string):void{
+            this.pushCommand(player.GraphicsCommandType.fill,arguments);
+        }
+
+        public closePath():void{
+            this.pushCommand(player.GraphicsCommandType.closePath,arguments);
+        }
+
+        public rect(x:number, y:number, w:number, h:number):void{
+            this.pushCommand(player.GraphicsCommandType.rect,arguments);
+        }
+
+        public moveTo(x:number, y:number):void{
+            this.pushCommand(player.GraphicsCommandType.moveTo,arguments);
+        }
+
+        public fillRect(x:number, y:number, w:number, h:number):void{
+            this.pushCommand(player.GraphicsCommandType.fillRect,arguments);
+        }
+
+        public bezierCurveTo(cp1x:number, cp1y:number, cp2x:number, cp2y:number, x:number, y:number):void{
+            this.pushCommand(player.GraphicsCommandType.bezierCurveTo,arguments);
+        }
+
+        public stroke():void{
+            this.pushCommand(player.GraphicsCommandType.stroke,arguments);
+        }
+
+        public strokeRect(x:number, y:number, w:number, h:number):void{
+            this.pushCommand(player.GraphicsCommandType.strokeRect,arguments);
+        }
+
+        public beginPath():void{
+            this.pushCommand(player.GraphicsCommandType.beginPath,arguments);
+        }
+
+        public arcTo(x1:number, y1:number, x2:number, y2:number, radius:number):void{
+            this.pushCommand(player.GraphicsCommandType.arcTo,arguments);
+        }
+
+        /**
+         * 清除绘制到此 Graphics 对象的图形，并重置填充和线条样式设置。
+         */
+        public clear():void {
+            this.reset();
+            this.$commands.length = 0;
+            this.$targetDisplay.$invalidate();
+        }
 
         /**
          * 目标显示对象
@@ -42,144 +245,17 @@ module lark {
         /**
          * 绘图命令列表
          */
-        $commands:player.Command[] = [];
+        $commands:player.GraphicsCommand[] = [];
 
-        private pushCommand(type:number,args:any):void{
-            this.$commands.push(new player.Command(type,args));
-        }
-
-        $measureContentBounds(bounds:Rectangle,...args):void{
-
-        }
-
-        private invalidate():void{
+        private pushCommand(graphicsType:number, args:any):void {
+            this.$commands.push({type:graphicsType,arguments:args});
             this.$targetDisplay.$invalidate();
         }
 
-        /**
-         * 指定一种简单的单一颜色填充，在绘制时该填充将在随后对其他 Graphics 方法（如 lineTo() 或 drawCircle()）的调用中使用。
-         * 调用 clear() 方法会清除填充。
-         * @param color 填充的颜色
-         * @param alpha 填充的 Alpha 值
-         */
-        public beginFill(color:number, alpha:number = 1):void {
-            this.pushCommand(player.CommandType.BeginFill,arguments);
-            this.invalidate();
-        }
+        private minX:number = 0
 
-        /**
-         * 绘制一个矩形
-         * @param x 圆心相对于父显示对象注册点的 x 位置（以像素为单位）。
-         * @param y 相对于父显示对象注册点的圆心的 y 位置（以像素为单位）。
-         * @param width 矩形的宽度（以像素为单位）。
-         * @param height 矩形的高度（以像素为单位）。
-         */
-        public drawRect(x:number, y:number, width:number, height:number):void {
-            this.pushCommand(player.CommandType.DrawRect,arguments);
-            this.invalidate();
-        }
+        $measureContentBounds(bounds:Rectangle):void {
 
-        /**
-         * 绘制一个圆。
-         * @param x 圆心相对于父显示对象注册点的 x 位置（以像素为单位）。
-         * @param y 相对于父显示对象注册点的圆心的 y 位置（以像素为单位）。
-         * @param radius 圆的半径（以像素为单位）。
-         */
-        public drawCircle(x:number, y:number, radius:number):void {
-            this.pushCommand(player.CommandType.DrawCircle,arguments);
-            this.invalidate();
-        }
-
-        /**
-         * 绘制一个圆角矩形
-         * @param x 圆心相对于父显示对象注册点的 x 位置（以像素为单位）。
-         * @param y 相对于父显示对象注册点的圆心的 y 位置（以像素为单位）。
-         * @param width 矩形的宽度（以像素为单位）。
-         * @param height 矩形的高度（以像素为单位）。
-         * @param ellipseWidth 用于绘制圆角的椭圆的宽度（以像素为单位）。
-         * @param ellipseHeight 用于绘制圆角的椭圆的高度（以像素为单位）。 （可选）如果未指定值，则默认值与为 ellipseWidth 参数提供的值相匹配。
-         */
-        public drawRoundRect(x:number, y:number, width:number, height:number, ellipseWidth:number, ellipseHeight?:number):void {
-            this.pushCommand(player.CommandType.DrawRoundRect,arguments);
-            this.invalidate();
-        }
-
-        /**
-         * 绘制一个椭圆。
-         * @param x 一个表示相对于父显示对象注册点的水平位置的数字（以像素为单位）。
-         * @param y 一个表示相对于父显示对象注册点的垂直位置的数字（以像素为单位）。
-         * @param width 矩形的宽度（以像素为单位）。
-         * @param height 矩形的高度（以像素为单位）。
-         */
-        public drawEllipse(x:number, y:number, width:number, height:number):void {
-            this.pushCommand(player.CommandType.DrawEllipse,arguments);
-            this.invalidate();
-        }
-
-        /**
-         * 指定一种线条样式以用于随后对 lineTo() 或 drawCircle() 等 Graphics 方法的调用。
-         * @param thickness 一个整数，以点为单位表示线条的粗细，有效值为 0 到 255。如果未指定数字，或者未定义该参数，则不绘制线条。如果传递的值小于 0，则默认值为 0。值 0 表示极细的粗细；最大粗细为 255。如果传递的值大于 255，则默认值为 255。
-         * @param color 线条的十六进制颜色值（例如，红色为 0xFF0000，蓝色为 0x0000FF 等）。如果未指明值，则默认值为 0x000000（黑色）。可选。
-         * @param alpha 表示线条颜色的 Alpha 值的数字；有效值为 0 到 1。如果未指明值，则默认值为 1（纯色）。如果值小于 0，则默认值为 0。如果值大于 1，则默认值为 1。
-         * @param pixelHinting {boolean} 布尔型值，指定是否提示笔触采用完整像素。它同时影响曲线锚点的位置以及线条笔触大小本身。在 pixelHinting 设置为 true 的情况下，线条宽度会调整到完整像素宽度。在 pixelHinting 设置为 false 的情况下，对于曲线和直线可能会出现脱节。
-         * @param scaleMode {string} 用于指定要使用的比例模式
-         * @param caps {string} 用于指定线条末端处端点类型的 CapsStyle 类的值。
-         * @param joints {string} 指定用于拐角的连接外观的类型。
-         * @param miterLimit 用于表示剪切斜接的极限值的数字。
-         */
-        public lineStyle(thickness:number = NaN, color:number = 0, alpha:number = 1.0, pixelHinting:boolean = false,
-                         scaleMode:string = "normal", caps:string = null, joints:string = null, miterLimit:number = 3):void {
-            this.pushCommand(player.CommandType.LineStyle,arguments);
-            this.invalidate();
-        }
-
-        /**
-         * 使用当前线条样式绘制一条从当前绘图位置开始到 (x, y) 结束的直线；当前绘图位置随后会设置为 (x, y)。
-         * @param x 一个表示相对于父显示对象注册点的水平位置的数字（以像素为单位）。
-         * @param y 一个表示相对于父显示对象注册点的垂直位置的数字（以像素为单位）。
-         */
-        public lineTo(x:number, y:number):void {
-            this.pushCommand(player.CommandType.LineTo,arguments);
-            this.invalidate();
-        }
-
-        /**
-         * 使用当前线条样式和由 (controlX, controlY) 指定的控制点绘制一条从当前绘图位置开始到 (anchorX, anchorY) 结束的二次贝塞尔曲线。当前绘图位置随后设置为 (anchorX, anchorY)。
-         * 如果在调用 moveTo() 方法之前调用了 curveTo() 方法，则当前绘图位置的默认值为 (0, 0)。如果缺少任何一个参数，则此方法将失败，并且当前绘图位置不改变。
-         * 绘制的曲线是二次贝塞尔曲线。二次贝塞尔曲线包含两个锚点和一个控制点。该曲线内插这两个锚点，并向控制点弯曲。
-         * @param controlX 一个数字，指定控制点相对于父显示对象注册点的水平位置。
-         * @param controlY 一个数字，指定控制点相对于父显示对象注册点的垂直位置。
-         * @param anchorX 一个数字，指定下一个锚点相对于父显示对象注册点的水平位置。
-         * @param anchorY 一个数字，指定下一个锚点相对于父显示对象注册点的垂直位置。
-         */
-        public curveTo(controlX:number, controlY:number, anchorX:number, anchorY:number):void {
-            this.pushCommand(player.CommandType.CurveTo,arguments);
-            this.invalidate();
-        }
-
-        /**
-         * 将当前绘图位置移动到 (x, y)。如果缺少任何一个参数，则此方法将失败，并且当前绘图位置不改变。
-         * @param x 一个表示相对于父显示对象注册点的水平位置的数字（以像素为单位）。
-         * @param y 一个表示相对于父显示对象注册点的垂直位置的数字（以像素为单位）。
-         */
-        public moveTo(x:number, y:number):void {
-            this.pushCommand(player.CommandType.MoveTo,arguments);
-            this.invalidate();
-        }
-
-        /**
-         * 对从上一次调用 beginFill()方法之后添加的直线和曲线应用填充。
-         */
-        public endFill():void {
-            this.pushCommand(player.CommandType.EndFill,arguments);
-            this.invalidate();
-        }
-        /**
-         * 清除绘制到此 Graphics 对象的图形，并重置填充和线条样式设置。
-         */
-        public clear():void {
-            this.$commands.length = 0;
-            this.invalidate();
         }
     }
 }

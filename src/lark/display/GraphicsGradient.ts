@@ -27,18 +27,9 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark {
 
-    export const enum CommandType {
-        BeginFill,
-        DrawRect,
-        DrawCircle,
-        DrawRoundRect,
-        DrawEllipse,
-        LineStyle,
-        LineTo,
-        CurveTo,
-        MoveTo,
-        EndFill
+    export interface GraphicsGradient {
+        addColorStop(offset:number, color:string): void;
     }
 }

@@ -29,53 +29,10 @@
 
 module lark.player {
 
-    /**
-     * 渲染器
-     */
-    export interface IRenderer extends IHashObject {
+    export interface GraphicsCommand {
 
-        /**
-         * 绘制图片到一个区域上
-         */
-        drawImage(texture:Texture, matrix:Matrix, globalAlpha:number): void;
+        type:number;
 
-        /**
-         * 绘制文本到一个区域上
-         */
-        drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number): void;
-
-        /**
-         * 绘制矢量图形
-         */
-        drawGraphics(commands:Command[], matrix:Matrix, globalAlpha:number):void;
-
-    }
-
-    /**
-     * 屏幕渲染器
-     */
-    export interface IScreenRenderer extends IRenderer {
-
-        /**
-         * 重置画布
-         */
-        reset(root:DisplayObject):void;
-        /**
-         * 清空屏幕
-         */
-        clearScreen():void;
-        /**
-         * 绘制脏矩形列表
-         */
-        markDirtyRects(regionList:lark.player.Region[]):void;
-        /**
-         * 移除之前绘制的脏矩形区域
-         */
-        removeDirtyRects():void;
-
-        /**
-         * 绘制一个脏矩形显示区域，在显示重绘区功能开启时调用。
-         */
-        drawDirtyRect(x:number, y:number, width:number, height:number):void;
+        arguments:any[];
     }
 }
