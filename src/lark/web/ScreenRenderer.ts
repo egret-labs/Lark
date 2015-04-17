@@ -179,8 +179,9 @@ module lark.web {
         /**
          * 设置并缓存矩阵变换参数，所有修改必须统一调用此方法。子类有可能会覆盖此方法改为叠加transform方式。
          */
-        protected setTransform(m:Matrix):void {
-            this.context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+        protected setTransform(matrix:Matrix):void {
+            var m = matrix.$data;
+            this.context.setTransform(m[0], m[1], m[2], m[3], m[4], m[5]);
         }
 
         private _font:string = null;

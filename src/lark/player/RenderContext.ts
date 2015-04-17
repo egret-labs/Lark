@@ -47,7 +47,7 @@ module lark.player {
         /**
          * 绘制矢量图形
          */
-        drawGraphics(commands:Command[], matrix:Matrix, globalAlpha:number):void;
+        drawGraphics(commands:GraphicsCommand[], matrix:Matrix, globalAlpha:number):void;
 
     }
 

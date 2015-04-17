@@ -61,8 +61,8 @@ module lark.web {
                 }
             }
             super.reset(root);
-            var m = root.$getInvertedConcatenatedMatrix();
-            this.context.transform(m.a, m.b, m.c, m.d, m.tx-texture.$offsetX, m.ty-texture.$offsetY);
+            var m = root.$getInvertedConcatenatedMatrix().$data;
+            this.context.transform(m[0], m[1], m[2], m[3], m[4]-texture.$offsetX, m[5]-texture.$offsetY);
         }
 
         private changeCacheSize(texture:Texture,bounds:Rectangle):void{
@@ -100,10 +100,11 @@ module lark.web {
         /**
          * 设置并缓存矩阵变换参数，所有修改必须统一调用此方法。子类有可能会覆盖此方法改为叠加transform方式。
          */
-        protected setTransform(m:Matrix):void {
+        protected setTransform(matrix:Matrix):void {
             var context = this.context;
             context.save();
-            context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+            var m = matrix.$data;
+            context.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
         }
     }
 }

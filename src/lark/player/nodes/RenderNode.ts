@@ -117,14 +117,15 @@ module lark.player {
                 return;
             }
             var bounds = TempBounds.copyFrom(this.bounds);
-            var m = this.matrix;
+            var matrix = this.matrix;
+            var m = matrix.$data;
             //优化，通常情况下不缩放旋转的对象占多数，直接加上偏移量即可。
-            if(m.a===1&&m.b===0&&m.c===0&&m.d===1){
-                bounds.x += m.tx;
-                bounds.y += m.ty;
+            if(m[0]===1.0&&m[1]===0.0&&m[2]===0.0&&m[3]===1.0){
+                bounds.x += m[4];
+                bounds.y += m[5];
             }
             else{
-                m.$transformBounds(bounds);
+                matrix.$transformBounds(bounds);
             }
             this.minX = bounds.x|0;
             this.maxX = Math.ceil(bounds.x + bounds.width);

@@ -255,15 +255,15 @@ module lark {
          * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
          */
         public get x():number {
-            return this._matrix.tx;
+            return this._matrix.$data[4];
         }
 
         public set x(value:number) {
             value = +value || 0;
-            if (value === this._matrix.tx) {
+            if (value === this._matrix.$data[4]) {
                 return;
             }
-            this._matrix.tx = value;
+            this._matrix.$data[4] = value;
             this.invalidatePosition();
         }
 
@@ -754,10 +754,10 @@ module lark {
             if (!this.$touchEnabled || !this.$renderNode || !this.$hasFlags(player.DisplayObjectFlags.Visible)) {
                 return null;
             }
-            var m = this.$getInvertedConcatenatedMatrix();
+            var m = this.$getInvertedConcatenatedMatrix().$data;
             var bounds = this.$getContentBounds();
-            var localX = m.a * stageX + m.c * stageY + m.tx;
-            var localY = m.b * stageX + m.d * stageY + m.ty;
+            var localX = m[0] * stageX + m[2] * stageY + m[4];
+            var localY = m[1] * stageX + m[3] * stageY + m[5];
             if (bounds.contains(localX, localY)) {
                 return this;
             }
