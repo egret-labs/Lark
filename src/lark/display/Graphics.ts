@@ -303,7 +303,7 @@ module lark {
 
         private pushCommand(graphicsType:number, args:any):void {
             this.$commands.push({type: graphicsType, arguments: args});
-            this.$targetDisplay.$invalidate();
+            this.$targetDisplay.$invalidateContentBounds();
         }
 
         private checkMoveTo():void{

@@ -78,7 +78,8 @@ module lark {
         /**
          * 只允许在局部变量中使用，使用完要立即释放，并要防止嵌套调用导致对象在其他位置被修改的可能性。
          */
-        public static TEMP: Matrix = new Matrix();
+        public static TEMP:Matrix = new Matrix();
+
         /**
          * 创建一个 Matrix 对象
          * @param a 缩放或旋转图像时影响像素沿 x 轴定位的值。
@@ -240,11 +241,11 @@ module lark {
          * 执行原始矩阵的逆转换。
          * 您可以将一个逆矩阵应用于对象来撤消在应用原始矩阵时执行的转换。
          */
-        public invert(): void {
+        public invert():void {
             this.$invertInto(this);
         }
 
-        $invertInto(target: Matrix): void {
+        $invertInto(target:Matrix):void {
             var a = this.a;
             var b = this.b;
             var c = this.c;
@@ -267,10 +268,10 @@ module lark {
             }
             determinant = 1 / determinant;
             var k = 0;
-            k = target.a =  d * determinant;
+            k = target.a = d * determinant;
             b = target.b = -b * determinant;
             c = target.c = -c * determinant;
-            d = target.d =  a * determinant;
+            d = target.d = a * determinant;
             target.tx = -(k * tx + c * ty);
             target.ty = -(b * tx + d * ty);
         }
@@ -371,24 +372,24 @@ module lark {
          * @param other 要比较的另一个矩阵对象。
          * @returns 是否相等，ture表示相等。
          */
-        public equals(other: Matrix): boolean {
+        public equals(other:Matrix):boolean {
             return this.a === other.a && this.b === other.b &&
                 this.c === other.c && this.d === other.d &&
                 this.tx === other.tx && this.ty === other.ty;
         }
 
-        $transformBounds(bounds: Rectangle): void {
-            var a  = this.a;
-            var b  = this.b;
-            var c  = this.c;
-            var d  = this.d;
+        $transformBounds(bounds:Rectangle):void {
+            var a = this.a;
+            var b = this.b;
+            var c = this.c;
+            var d = this.d;
             var tx = this.tx;
             var ty = this.ty;
 
             var x = bounds.x;
             var y = bounds.y;
             var xMax = x + bounds.width;
-            var yMax = bounds.height;
+            var yMax = y + bounds.height;
 
             var round = Math.round;
             var x0 = round(a * x + c * y + tx);
@@ -402,17 +403,33 @@ module lark {
 
             var tmp = 0;
 
-            if (x0 > x1) { tmp = x0; x0 = x1; x1 = tmp; }
-            if (x2 > x3) { tmp = x2; x2 = x3; x3 = tmp; }
+            if (x0 > x1) {
+                tmp = x0;
+                x0 = x1;
+                x1 = tmp;
+            }
+            if (x2 > x3) {
+                tmp = x2;
+                x2 = x3;
+                x3 = tmp;
+            }
 
             bounds.x = x0 < x2 ? x0 : x2;
             bounds.width = (x1 > x3 ? x1 : x3) - bounds.x;
 
-            if (y0 > y1) { tmp = y0; y0 = y1; y1 = tmp; }
-            if (y2 > y3) { tmp = y2; y2 = y3; y3 = tmp; }
+            if (y0 > y1) {
+                tmp = y0;
+                y0 = y1;
+                y1 = tmp;
+            }
+            if (y2 > y3) {
+                tmp = y2;
+                y2 = y3;
+                y3 = tmp;
+            }
 
             bounds.y = y0 < y2 ? y0 : y2;
-            bounds.height = (y1 > y3 ? y1 : y3)-bounds.y;
+            bounds.height = (y1 > y3 ? y1 : y3) - bounds.y;
         }
 
         private getDeterminant() {
@@ -471,7 +488,7 @@ module lark {
         /**
          * target = other * this
          */
-        $preMultiplyInto(other: Matrix, target: Matrix): void {
+        $preMultiplyInto(other:Matrix, target:Matrix):void {
             var a0 = this.a;
             var b0 = this.b;
             var c0 = this.c;
@@ -486,23 +503,23 @@ module lark {
             var tx1 = other.tx;
             var ty1 = other.ty;
 
-            var a =  a1 * a0;
-            var b =  0.0;
-            var c =  0.0;
-            var d =  d1 * d0;
+            var a = a1 * a0;
+            var b = 0.0;
+            var c = 0.0;
+            var d = d1 * d0;
             var tx = tx1 * a0 + tx0;
             var ty = ty1 * d0 + ty0;
 
             if (b1 !== 0.0 || c1 !== 0.0 || b0 !== 0.0 || c0 !== 0.0) {
-                a  += b1 * c0;
-                d  += c1 * b0;
-                b  += a1 * b0 + b1 * d0;
-                c  += c1 * a0 + d1 * c0;
+                a += b1 * c0;
+                d += c1 * b0;
+                b += a1 * b0 + b1 * d0;
+                c += c1 * a0 + d1 * c0;
                 tx += ty1 * c0;
                 ty += tx1 * b0;
             }
 
-            target.setTo(a,b,c,d,tx,ty);
+            target.setTo(a, b, c, d, tx, ty);
         }
 
     }

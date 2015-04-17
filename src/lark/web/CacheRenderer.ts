@@ -82,6 +82,14 @@ module lark.web {
         }
 
         /**
+         * 绘制矢量图形
+         */
+        public drawGraphics(commands:player.GraphicsCommand[], matrix:Matrix, globalAlpha:number):void {
+            super.drawGraphics(commands,matrix,globalAlpha);
+            this.context.restore();
+        }
+
+        /**
          * 绘制文本到一个区域上
          */
         public drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number):void {
