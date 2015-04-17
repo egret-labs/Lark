@@ -54,6 +54,7 @@ module lark.player {
         private hasClipRect:boolean = false;
         private clipWidth:number = 0;
         private clipHeight:number = 0;
+        private clipArea:number = 0;
         private clipRectChanged:boolean = false;
 
         /**
@@ -64,6 +65,7 @@ module lark.player {
             this.clipRectChanged = true;
             this.clipWidth = width;
             this.clipHeight = height;
+            this.clipArea = width*height;
         }
 
         /**
@@ -113,6 +115,7 @@ module lark.player {
             var dirtyList = this.dirtyList;
             if (this.clipRectChanged) {
                 this.clipRectChanged = false;
+                this.clear();
                 var region:Region = this.regionList.pop();
                 dirtyList.push(region.setTo(0, 0, this.clipWidth, this.clipHeight));
             }
@@ -131,11 +134,14 @@ module lark.player {
             if (length < 2) {
                 return false;
             }
+            var hasClipRect = this.hasClipRect;
             var bestDelta = length > 3 ? Number.POSITIVE_INFINITY : 0;
             var mergeA = 0;
             var mergeB = 0;
+            var totalArea = 0;
             for (var i = 0; i < length - 1; i++) {
                 var regionA = dirtyList[i];
+                hasClipRect&&(totalArea += regionA.area);
                 for (var j = i + 1; j < length; j++) {
                     var regionB = dirtyList[j];
                     var delta = unionArea(regionA, regionB) - regionA.area - regionB.area;
@@ -145,6 +151,9 @@ module lark.player {
                         bestDelta = delta;
                     }
                 }
+            }
+            if(hasClipRect&&(totalArea/this.clipArea)>0.95){//当脏矩形的面积已经超过屏幕95%时，直接放弃后续的所有标记。
+                this.clipRectChanged = true;
             }
             if (mergeA != mergeB) {
                 var region = dirtyList[mergeB];
