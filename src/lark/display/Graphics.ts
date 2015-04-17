@@ -38,12 +38,54 @@ module lark {
      * 格式化弧线角度的值
      */
     function clampAngle(value):number {
-        value %= PI*2;
-        if (value <0) {
-            value += PI*2;
+        value %= PI * 2;
+        if (value < 0) {
+            value += PI * 2;
         }
         return value;
     }
+
+    /**
+     * 两个点距离
+     */
+    function distanceOf(p1:P, p2:P) {
+        return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2))
+    }
+
+    /**
+     * 取两点之间的向量
+     */
+    function getVector(p1:P, p2:P) {
+        var l = distanceOf(p1, p2);
+        var v = {
+            x: (p2.x - p1.x) / l,
+            y: (p2.y - p1.y) / l
+        };
+        return v;
+    }
+
+
+    interface P {
+        x: number;
+        y: number;
+    }
+
+    interface V extends P {
+    }
+
+    /**
+     * 两个向量夹角
+     */
+    function angleOf(v1:V, v2:V) {
+        var cross = v1.x * v2.x + v1.y * v2.y;
+        var l1 = distanceOf(v1, {x: 0, y: 0});
+        var l2 = distanceOf(v2, {x: 0, y: 0});
+
+        var cos = cross / (l1 * l2);
+        var a = Math.acos(cos);
+        return a;
+    }
+
     /**
      * Graphics 类包含一组可用来创建矢量形状的方法。支持绘制的显示对象包括 Sprite 和 Shape 对象。这些类中的每一个类都包括 graphics 属性，该属性是一个 Graphics 对象。
      */
@@ -137,77 +179,83 @@ module lark {
 
         public arc(x:number, y:number, radius:number, startAngle:number, endAngle:number, anticlockwise?:boolean):void {
             this.pushCommand(player.GraphicsCommandType.arc, arguments);
-            if(radius<0){
+            if (radius < 0) {
                 return;
             }
-            startAngle = clampAngle(startAngle);
-            endAngle = clampAngle(endAngle);
-            if(anticlockwise){
+            if (anticlockwise) {
                 var temp = endAngle;
                 endAngle = startAngle;
                 startAngle = temp;
             }
+            this.arcBounds(x,y,radius,startAngle,endAngle);
+        }
+
+        private arcBounds(x:number, y:number, radius:number, startAngle:number, endAngle:number):void{
+            startAngle = clampAngle(startAngle);
+            endAngle = clampAngle(endAngle);
+
             var offset = 0;
-            if(startAngle>endAngle){
+            if (startAngle > endAngle) {
                 offset = TwoPI;
                 endAngle += offset;
             }
-            var startX = Math.cos(startAngle)*radius;
-            var endX = Math.cos(endAngle)*radius;
-            if(startAngle<=(PI+offset)&&endAngle>=(PI+offset)){
+            var startX = Math.cos(startAngle) * radius;
+            var endX = Math.cos(endAngle) * radius;
+            if (startAngle <= (PI + offset) && endAngle >= (PI + offset)) {
                 var xMin = -radius;
             }
-            else{
-                xMin = Math.min(startX,endX,0);
+            else {
+                xMin = Math.min(startX, endX, 0);
             }
-            if(startAngle<=offset&&endAngle>=offset){
+            if (startAngle <= offset && endAngle >= offset) {
                 var xMax = radius;
             }
-            else{
-                xMax = Math.max(startX,endX,0);
+            else {
+                xMax = Math.max(startX, endX, 0);
             }
-            var startY = Math.sin(startAngle)*radius;
-            var endY = Math.sin(endAngle)*radius;
-            if(startAngle<=(PacPI+offset)&&endAngle>=(PacPI+offset)){
+            var startY = Math.sin(startAngle) * radius;
+            var endY = Math.sin(endAngle) * radius;
+            if (startAngle <= (PacPI + offset) && endAngle >= (PacPI + offset)) {
                 var yMin = -radius;
             }
-            else{
-                yMin = Math.min(0,startY,endY);
+            else {
+                yMin = Math.min(0, startY, endY);
             }
-            if(startAngle<=(HalfPI+offset)&&endAngle>=(HalfPI+offset)){
+            if (startAngle <= (HalfPI + offset) && endAngle >= (HalfPI + offset)) {
                 var yMax = radius;
             }
-            else{
-                yMax = Math.max(startY,endY,0);
+            else {
+                yMax = Math.max(startY, endY, 0);
             }
-            this.extendByPoint(xMin+x,yMin+y);
-            this.extendByPoint(xMax+x,yMax+y);
+            this.extendByPoint(xMin + x, yMin + y);
+            this.extendByPoint(xMax + x, yMax + y);
         }
 
         public quadraticCurveTo(cpx:number, cpy:number, x:number, y:number):void {
             this.pushCommand(player.GraphicsCommandType.quadraticCurveTo, arguments);
             this.checkMoveTo();
-            this.extendByPoint(cpx,cpy);
-            this.extendByPoint(x,y);
+            this.extendByPoint(cpx, cpy);
+            this.extendByPoint(x, y);
         }
 
         public bezierCurveTo(cp1x:number, cp1y:number, cp2x:number, cp2y:number, x:number, y:number):void {
             this.pushCommand(player.GraphicsCommandType.bezierCurveTo, arguments);
             this.checkMoveTo();
-            this.extendByPoint(cp1x,cp1y);
-            this.extendByPoint(cp2x,cp2y);
-            this.extendByPoint(x,y);
+            this.extendByPoint(cp1x, cp1y);
+            this.extendByPoint(cp2x, cp2y);
+            this.extendByPoint(x, y);
         }
 
 
         public lineTo(x:number, y:number):void {
             this.pushCommand(player.GraphicsCommandType.lineTo, arguments);
             this.checkMoveTo();
-            this.extendByPoint(x,y);
+            this.extendByPoint(x, y);
         }
 
         public fill(fillRule?:string):void {
             this.pushCommand(player.GraphicsCommandType.fill, arguments);
+            this.hasFill = true;
         }
 
         public closePath():void {
@@ -216,8 +264,8 @@ module lark {
 
         public rect(x:number, y:number, w:number, h:number):void {
             this.pushCommand(player.GraphicsCommandType.rect, arguments);
-            this.extendByPoint(x,y);
-            this.extendByPoint(x+w,y+h);
+            this.extendByPoint(x, y);
+            this.extendByPoint(x + w, y + h);
         }
 
         public moveTo(x:number, y:number):void {
@@ -229,8 +277,9 @@ module lark {
 
         public fillRect(x:number, y:number, w:number, h:number):void {
             this.pushCommand(player.GraphicsCommandType.fillRect, arguments);
-            this.extendByPoint(x,y);
-            this.extendByPoint(x+w,y+h);
+            this.extendByPoint(x, y);
+            this.extendByPoint(x + w, y + h);
+            this.hasFill = true;
         }
 
         public stroke():void {
@@ -241,20 +290,66 @@ module lark {
         public strokeRect(x:number, y:number, w:number, h:number):void {
             this.pushCommand(player.GraphicsCommandType.strokeRect, arguments);
             this.hasStroke = true;
-            this.extendByPoint(x,y);
-            this.extendByPoint(x+w,y+h);
+            this.extendByPoint(x, y);
+            this.extendByPoint(x + w, y + h);
         }
 
         public beginPath():void {
             this.pushCommand(player.GraphicsCommandType.beginPath, arguments);
             this.hasMoved = false;
+            this.moveToX = 0x8000000;
+            this.moveToY = 0x8000000;
         }
 
         public arcTo(x1:number, y1:number, x2:number, y2:number, radius:number):void {
             this.pushCommand(player.GraphicsCommandType.arcTo, arguments);
+            if (this.moveToX === 0x8000000) {//没有调用过moveTo()方法
+                return;
+            }
             this.checkMoveTo();
-            this.extendByPoint(x1,y1);
-            this.extendByPoint(x2,y2);
+
+            var p1 = {x: this.moveToX, y: this.moveToY},
+                p2 = {x: x1, y: y1},
+                p3 = {x: x2, y: y2};
+            var R = radius;
+
+            var vx1 = getVector(p1, p2),
+                vx3 = getVector(p3, p2);
+            //角平分线
+            var v = {x: vx1.x + vx3.x, y: vx1.y + vx3.y};
+            //角平分向量归1
+            v = getVector(v, {x: 0, y: 0});
+            var a = angleOf(vx1, v);
+
+            //var halfa = a / 2;
+            var l = R / Math.sin(a);
+            var target = {
+                x: p2.x + v.x * l,
+                y: p2.y + v.y * l
+            };
+
+            var L21 = R / Math.tan(a);
+            var p21 = {
+                x: p2.x + vx1.x * L21,
+                y: p2.y + vx1.y * L21
+            };
+            var p23 = {
+                x: p2.x + vx3.x * L21,
+                y: p2.y + vx3.y * L21
+            };
+
+            v = getVector(target,p21);
+            var startAngle = Math.atan2(v.y,v.x);
+            v = getVector(target,p23);
+            var endAngle = Math.atan2(v.y,v.x);
+            var offset = endAngle - startAngle;
+            offset = clampAngle(offset);
+            if(offset>PI){
+                var temp = endAngle;
+                endAngle = startAngle;
+                startAngle = temp;
+            }
+            this.arcBounds(target.x,target.y,R,startAngle,endAngle);
         }
 
         /**
@@ -272,9 +367,11 @@ module lark {
         private maxX:number;
         private maxY:number;
         private hasMoved:boolean;
-        private moveToX:number = 0;
-        private moveToY:number = 0;
+        private moveToX:number;
+        private moveToY:number;
         private hasStroke:boolean;
+        private hasFill:boolean;
+
 
         private reset():void {
             this._fillStyle = "#000000";
@@ -289,7 +386,10 @@ module lark {
             this.maxX = 0;
             this.maxY = 0;
             this.isFirst = true;
+            this.moveToX = 0x8000000;
+            this.moveToY = 0x8000000;
             this.hasStroke = false;
+            this.hasFill = false;
         }
 
         /**
@@ -306,20 +406,20 @@ module lark {
             this.$targetDisplay.$invalidateContentBounds();
         }
 
-        private checkMoveTo():void{
-            if(this.hasMoved){
+        private checkMoveTo():void {
+            if (this.hasMoved) {
                 this.hasMoved = false;
-                this.extendByPoint(this.moveToX,this.moveToY);
+                this.extendByPoint(this.moveToX, this.moveToY);
             }
         }
 
-        private extendByPoint(x:number,y:number):void{
-            if(this.isFirst){
+        private extendByPoint(x:number, y:number):void {
+            if (this.isFirst) {
                 this.isFirst = false;
                 this.maxX = this.minX = x;
                 this.maxY = this.minY = y;
             }
-            else{
+            else {
                 this.minX = Math.min(this.minX, x);
                 this.minY = Math.min(this.minY, y);
                 this.maxX = Math.max(this.maxX, x);
@@ -328,14 +428,18 @@ module lark {
         }
 
         $measureContentBounds(bounds:Rectangle):void {
-            if(this.hasStroke){
-                var lineWidth = this._lineWidth;
-                var half = lineWidth*0.5;
+            if (!this.hasFill && !this.hasStroke) {
+                bounds.setEmpty();
+                return;
             }
-            else{
+            if (this.hasStroke) {
+                var lineWidth = this._lineWidth;
+                var half = lineWidth * 0.5;
+            }
+            else {
                 half = lineWidth = 0;
             }
-            bounds.setTo(this.minX-half, this.minY-half, this.maxX - this.minX+lineWidth, this.maxY - this.minY+lineWidth);
+            bounds.setTo(this.minX - half, this.minY - half, this.maxX - this.minX + lineWidth, this.maxY - this.minY + lineWidth);
         }
     }
 }
