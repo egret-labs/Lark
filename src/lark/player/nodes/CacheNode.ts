@@ -43,12 +43,19 @@ module lark.player {
          */
         private dirtyNodes:any = {};
 
+        private dirtyNodeList:RenderNode[] = [];
+
         public dirtyList:Region[] = null;
 
         public dirtyRegion:DirtyRegion = new DirtyRegion();
 
         public markDirty(node:RenderNode):void {
-            this.dirtyNodes[node.$hashCode] = node;
+            var key = node.$hashCode;
+            if(this.dirtyNodes[key]){
+                return;
+            }
+            this.dirtyNodes[key] = true;
+            this.dirtyNodeList.push(node);
             if (!this.needRedraw) {
                 this.needRedraw = true;
                 var parentCache = this.target.$parentCacheNode;
@@ -59,10 +66,12 @@ module lark.player {
         }
 
         public updateDirtyNodes():Region[] {
-            var nodeList = this.dirtyNodes;
+            var nodeList = this.dirtyNodeList;
+            this.dirtyNodeList = [];
             this.dirtyNodes = {};
             var dirtyRegion = this.dirtyRegion;
-            for (var i in nodeList) {
+            var length = nodeList.length;
+            for (var i=0;i<length;i++) {
                 var node = nodeList[i];
                 if (node.alpha !== 0) {
                     if(dirtyRegion.addRegion(node.minX, node.minY, node.maxX, node.maxY)){
