@@ -282,9 +282,9 @@ module lark.player {
             if (stageWidth !== stage.$stageWidth || stageHeight !== stage.$stageHeight) {
                 stage.$stageWidth = stageWidth;
                 stage.$stageHeight = stageHeight;
-                this.screenCacheNode.dirtyRegion.updateClipRect(stageWidth, stageHeight);
+                this.screenCacheNode.dirtyRegion.setClipRect(stageWidth, stageHeight);
                 if (DEBUG&&this.stageCacheNode) {
-                    this.stageCacheNode.dirtyRegion.updateClipRect(stageWidth, stageHeight);
+                    this.stageCacheNode.dirtyRegion.setClipRect(stageWidth, stageHeight);
                 }
                 stage.emitWith(Event.RESIZE);
             }
