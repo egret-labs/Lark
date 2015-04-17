@@ -135,8 +135,8 @@ module lark.player {
             var mergeA = 0;
             var mergeB = 0;
             for (var i = 0; i < length - 1; i++) {
+                var regionA = dirtyList[i];
                 for (var j = i + 1; j < length; j++) {
-                    var regionA = dirtyList[i];
                     var regionB = dirtyList[j];
                     var delta = unionArea(regionA, regionB) - regionA.area - regionB.area;
                     if (bestDelta > delta) {
