@@ -33,6 +33,9 @@ module lark {
     var HalfPI = PI / 2;
     var PacPI = PI + HalfPI;
     var TwoPI = PI * 2;
+    var vector = {x:0,y:0};
+    var vector1 = {x:0,y:0};
+    var vector3 = {x:0,y:0};
 
     /**
      * 格式化弧线角度的值
@@ -48,42 +51,23 @@ module lark {
     /**
      * 两个点距离
      */
-    function distanceOf(p1:P, p2:P) {
-        return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2))
+    function distance(x1:number, y1:number, x2:number, y2:number):number {
+        return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
     /**
      * 取两点之间的向量
      */
-    function getVector(p1:P, p2:P) {
-        var l = distanceOf(p1, p2);
-        var v = {
-            x: (p2.x - p1.x) / l,
-            y: (p2.y - p1.y) / l
-        };
-        return v;
+    function getVector(x1:number, y1:number, x2:number, y2:number,v:Vector):void {
+        var l = distance(x1, y1, x2, y2);
+        v.x = (x2 - x1) / l;
+        v.y = (y2 - y1) / l;
     }
 
 
-    interface P {
+    interface Vector {
         x: number;
         y: number;
-    }
-
-    interface V extends P {
-    }
-
-    /**
-     * 两个向量夹角
-     */
-    function angleOf(v1:V, v2:V) {
-        var cross = v1.x * v2.x + v1.y * v2.y;
-        var l1 = distanceOf(v1, {x: 0, y: 0});
-        var l2 = distanceOf(v2, {x: 0, y: 0});
-
-        var cos = cross / (l1 * l2);
-        var a = Math.acos(cos);
-        return a;
     }
 
     /**
@@ -205,31 +189,23 @@ module lark {
             }
             var startX = Math.cos(startAngle) * radius;
             var endX = Math.cos(endAngle) * radius;
+            var xMin = Math.min(startX,endX);
+            var xMax = Math.max(startX,endX);
             if (startAngle <= (PI + offset) && endAngle >= (PI + offset)) {
-                var xMin = -radius;
+                xMin = -radius;
             }
-            else {
-                xMin = Math.min(startX, endX, 0);
-            }
-            if (startAngle <= offset && endAngle >= offset) {
-                var xMax = radius;
-            }
-            else {
-                xMax = Math.max(startX, endX, 0);
+            if(startAngle <= offset && endAngle >= offset){
+                xMax = radius;
             }
             var startY = Math.sin(startAngle) * radius;
             var endY = Math.sin(endAngle) * radius;
+            var yMin = Math.min(startY,endY);
+            var yMax = Math.max(startY,endY);
             if (startAngle <= (PacPI + offset) && endAngle >= (PacPI + offset)) {
-                var yMin = -radius;
-            }
-            else {
-                yMin = Math.min(0, startY, endY);
+                yMin = -radius;
             }
             if (startAngle <= (HalfPI + offset) && endAngle >= (HalfPI + offset)) {
-                var yMax = radius;
-            }
-            else {
-                yMax = Math.max(startY, endY, 0);
+                yMax = radius;
             }
             this.extendByPoint(xMin + x, yMin + y);
             this.extendByPoint(xMax + x, yMax + y);
@@ -312,40 +288,34 @@ module lark {
             }
             this.checkMoveTo();
 
-            var p1 = {x: this.moveToX, y: this.moveToY},
-                p2 = {x: x1, y: y1},
-                p3 = {x: x2, y: y2};
-            var R = radius;
-
-            var vx1 = getVector(p1, p2),
-                vx3 = getVector(p3, p2);
+            getVector(this.moveToX, this.moveToY, x1, y1,vector1);
+            getVector(x2, y2, x1, y1,vector3);
             //角平分线
-            var v = {x: vx1.x + vx3.x, y: vx1.y + vx3.y};
+            vector.x = vector1.x + vector3.x;
+            vector.y = vector1.y + vector3.y;
             //角平分向量归1
-            v = getVector(v, {x: 0, y: 0});
-            var a = angleOf(vx1, v);
+            getVector(vector.x, vector.y, 0, 0,vector);
+            //向量夹角
+            var cross = vector1.x * vector.x + vector1.y * vector.y;
+            var l1 = distance(vector1.x, vector1.y, 0, 0);
+            var l2 = distance(vector.x, vector.y, 0, 0);
+            var cos = cross / (l1 * l2);
+            var a = Math.acos(cos);
 
-            //var halfa = a / 2;
-            var l = R / Math.sin(a);
-            var target = {
-                x: p2.x + v.x * l,
-                y: p2.y + v.y * l
-            };
+            var l = radius / Math.sin(a);
+            //圆心
+            var centerX = x1 + vector.x * l;
+            var centerY = y1 + vector.y * l;
+            var L10 = radius / Math.tan(a);
+            var x10 = x1 + vector1.x * L10;
+            var y10 = y1 + vector1.y * L10;
+            var x12 = x1 + vector3.x * L10;
+            var y12 = y1 + vector3.y * L10;
 
-            var L21 = R / Math.tan(a);
-            var p21 = {
-                x: p2.x + vx1.x * L21,
-                y: p2.y + vx1.y * L21
-            };
-            var p23 = {
-                x: p2.x + vx3.x * L21,
-                y: p2.y + vx3.y * L21
-            };
-
-            v = getVector(target, p21);
-            var startAngle = Math.atan2(v.y, v.x);
-            v = getVector(target, p23);
-            var endAngle = Math.atan2(v.y, v.x);
+            getVector(centerX, centerY, x10, y10,vector);
+            var startAngle = Math.atan2(vector.y, vector.x);
+            getVector(centerX, centerY, x12, y12,vector);
+            var endAngle = Math.atan2(vector.y, vector.x);
             var offset = endAngle - startAngle;
             offset = clampAngle(offset);
             if (offset > PI) {
@@ -353,7 +323,7 @@ module lark {
                 endAngle = startAngle;
                 startAngle = temp;
             }
-            this.arcBounds(target.x, target.y, R, startAngle, endAngle);
+            this.arcBounds(centerX, centerY, radius, startAngle, endAngle);
         }
 
         /**

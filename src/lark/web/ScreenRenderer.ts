@@ -148,6 +148,12 @@ module lark.web {
             this.setTransform(matrix);
             var context = this.context;
             context.save();
+            context.fillStyle = "#000000";
+            context.lineCap = "butt";
+            context.lineJoin = "miter";
+            context.lineWidth = 1;
+            context.miterLimit = 10;
+            context.strokeStyle = "#000000";
             var map = context["graphicsMap"];
             var length = commands.length;
             for (var i = 0; i < length; i++) {

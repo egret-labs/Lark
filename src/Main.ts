@@ -99,15 +99,18 @@ module lark {
             shape.x = 500+0.5;
             shape.y = 50+0.5;
             var g = shape.graphics;
-            g.beginPath();
-            g.arc(100, 100, 50, 0, 1.75*Math.PI, false);
-            g.lineWidth = 5;
-            g.stroke();
             //g.beginPath();
-            //g.moveTo(50, 50);
-            //g.arcTo(0, 50, 0,100, 100);
+            //g.arc(100, 100, 50, 0, 0.75*Math.PI, false);
             //g.lineWidth = 5;
             //g.stroke();
+            g.beginPath();
+            g.moveTo(50, 50);
+            g.arcTo(100, 50, 100,100, 50);
+            g.lineWidth = 5
+            g.fillStyle = "red";
+            g.fill();
+            g.strokeStyle = "green";
+            g.stroke();
             container.addChild(shape);
             this.addChild(container);
             //container.cacheAsBitmap = true;
