@@ -187,13 +187,17 @@ module lark {
                 endAngle = startAngle;
                 startAngle = temp;
             }
-            this.arcBounds(x,y,radius,startAngle,endAngle);
+            this.arcBounds(x, y, radius, startAngle, endAngle);
         }
 
-        private arcBounds(x:number, y:number, radius:number, startAngle:number, endAngle:number):void{
+        private arcBounds(x:number, y:number, radius:number, startAngle:number, endAngle:number):void {
             startAngle = clampAngle(startAngle);
             endAngle = clampAngle(endAngle);
-
+            if (startAngle == endAngle) {
+                this.extendByPoint(x - radius, y - radius);
+                this.extendByPoint(x + radius, y + radius);
+                return;
+            }
             var offset = 0;
             if (startAngle > endAngle) {
                 offset = TwoPI;
@@ -338,18 +342,18 @@ module lark {
                 y: p2.y + vx3.y * L21
             };
 
-            v = getVector(target,p21);
-            var startAngle = Math.atan2(v.y,v.x);
-            v = getVector(target,p23);
-            var endAngle = Math.atan2(v.y,v.x);
+            v = getVector(target, p21);
+            var startAngle = Math.atan2(v.y, v.x);
+            v = getVector(target, p23);
+            var endAngle = Math.atan2(v.y, v.x);
             var offset = endAngle - startAngle;
             offset = clampAngle(offset);
-            if(offset>PI){
+            if (offset > PI) {
                 var temp = endAngle;
                 endAngle = startAngle;
                 startAngle = temp;
             }
-            this.arcBounds(target.x,target.y,R,startAngle,endAngle);
+            this.arcBounds(target.x, target.y, R, startAngle, endAngle);
         }
 
         /**
