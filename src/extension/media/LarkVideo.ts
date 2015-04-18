@@ -19,7 +19,7 @@
     export class LarkVideoBase extends LarkMedia implements Video {
         constructor(option:IMediaOption) {
             super(option);
-            this.$renderNode = new player.BitmapNode(this);
+            this.$stageRegion = new player.Region();
             this._height = option.height || NaN;
             this._width = option.width || NaN;
             
@@ -103,10 +103,11 @@
 
         }
 
-        $updateRenderNode(): void {
-            super.$updateRenderNode()
-            var node = <lark.player.BitmapNode>this.$renderNode;
-            node.texture = this.texture;
+        $render(renderer:player.IRenderer):void{
+            var texture = this.texture;
+            if (texture) {
+                renderer.drawImage(texture, this.$getConcatenatedMatrix(), this.$getConcatenatedAlpha());
+            }
         }
     }
 }

@@ -47,7 +47,10 @@ module lark.player {
          */
         $stageRegion:Region;
 
-        $update():void;
+        /**
+         * 更新对象在舞台上的显示区域
+         */
+        $updateRegion():void;
         /**
          * 执行绘制
          */

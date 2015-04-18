@@ -237,7 +237,7 @@ module lark.player {
                 node = displayList;
             }
             else {
-                node = displayObject.$renderNode;
+                node = displayObject.$stageRegion ? displayObject : null;
             }
             if (node && !(node.$alpha === 0)) {
                 if (!node.$isDirty) {
@@ -284,7 +284,7 @@ module lark.player {
                 stage.$stageWidth = stageWidth;
                 stage.$stageHeight = stageHeight;
                 this.screenDisplayList.dirtyRegion.setClipRect(stageWidth, stageHeight);
-                if (DEBUG&&this.stageDisplayList) {
+                if (DEBUG && this.stageDisplayList) {
                     this.stageDisplayList.dirtyRegion.setClipRect(stageWidth, stageHeight);
                 }
                 stage.emitWith(Event.RESIZE);

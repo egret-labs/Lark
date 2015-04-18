@@ -42,10 +42,12 @@ module lark {
         return value;
     }
 
+    var TempBounds = new Rectangle();
+
     /**
      * 显示对象基类
      */
-    export class DisplayObject extends EventEmitter {
+    export class DisplayObject extends EventEmitter implements player.IRenderable{
         /**
          * 创建一个显示对象
          */
@@ -231,9 +233,7 @@ module lark {
                 if (this.$displayList) {
                     this.$displayList.$moved = true;
                 }
-                if (this.$renderNode) {
-                    this.$renderNode.$moved = true;
-                }
+                this.$moved = true;
                 this.$removeFlags(player.DisplayObjectFlags.InvalidConcatenatedMatrix);
             }
             return this._concatenatedMatrix;
@@ -482,10 +482,9 @@ module lark {
          * cacheAsBitmap属性改变
          */
         $cacheAsBitmapChanged():void {
-            var node = this.$renderNode;
             var parentCache = this.$displayList || this.$parentDisplayList;
-            if (parentCache && node) {
-                parentCache.markDirty(node);
+            if(this.$stageRegion){
+                parentCache.markDirty(this);
             }
         }
 
@@ -687,9 +686,7 @@ module lark {
         $getContentBounds():Rectangle {
             var bounds = this._contentBounds;
             if (this.$hasFlags(player.DisplayObjectFlags.InvalidContentBounds)) {
-                if (this.$renderNode) {
-                    this.$renderNode.$moved = true;
-                }
+                this.$moved = true;
                 this.$measureContentBounds(bounds);
                 this.$removeFlags(player.DisplayObjectFlags.InvalidContentBounds);
             }
@@ -704,35 +701,20 @@ module lark {
 
         }
 
-        $renderNode:lark.player.RenderNode = null;
-
-        /**
-         * 之前若调用过$markDirty()方法，此方法在绘制阶段会自动被调用，它负责将自身的属性改变同步到RenderNode，并清空相关的Dirty标记。
-         * 注意：此方法里禁止添加移除显示子项或执行其他可能产生新的Dirty标记的操作，仅执行同步操作，否则可能导致屏幕绘制错误。
-         */
-        $updateRenderNode():void {
-            this.$removeFlagsUp(player.DisplayObjectFlags.Dirty);
-            var node = this.$renderNode;
-            node.$alpha = this.$getConcatenatedAlpha();
-            node.matrix = this.$getConcatenatedMatrix();
-            node.bounds = this.$getContentBounds();
-        }
-
         $parentDisplayList:lark.player.DisplayList = null;
 
         /**
-         * 标记此显示对象需要重绘，调用此方法后，在屏幕绘制阶段$updateRenderNode()方法会自动被回调，您可能需要覆盖它来同步自身改变的属性到目标RenderNode。
+         * 标记此显示对象需要重绘。
          * @param notiryChildren 是否标记子项也需要重绘。传入false会不传入，将只标记自身的RenderNode需要重绘。
          */
         $invalidate(notifyChildren?:boolean):void {
-            var node = this.$renderNode;
-            if (!node || this.$hasFlags(player.DisplayObjectFlags.DirtyRender)) {
+            if (!this.$stageRegion || this.$hasFlags(player.DisplayObjectFlags.DirtyRender)) {
                 return;
             }
             this.$setFlags(player.DisplayObjectFlags.DirtyRender);
             var displayList = this.$displayList ? this.$displayList : this.$parentDisplayList;
             if (displayList) {
-                displayList.markDirty(node);
+                displayList.markDirty(this);
             }
         }
 
@@ -744,14 +726,70 @@ module lark {
                 return;
             }
             this.$setFlags(player.DisplayObjectFlags.DirtyChildren);
-            var node:lark.player.IRenderable = this.$displayList || this.$renderNode;
-            if (node && this.$parentDisplayList) {
-                this.$parentDisplayList.markDirty(node);
+            var displayList = this.$displayList;
+            if ((displayList||this.$stageRegion)&&this.$parentDisplayList) {
+                this.$parentDisplayList.markDirty(displayList||this);
             }
+        }
+        /**
+         * 在屏幕上的矩形区域是否发现改变。
+         */
+        $moved:boolean = false;
+        /**
+         * 要绘制到屏幕的整体透明度。
+         */
+        $alpha:number = 1;
+        /**
+         * 是否需要重绘
+         */
+        $isDirty:boolean = false;
+
+        $stageRegion:player.Region = null;
+        /**
+         * 更新对象在舞台上的显示区域
+         */
+        $updateRegion():void {
+            this.$removeFlagsUp(player.DisplayObjectFlags.Dirty);
+            var matrix = this.$getConcatenatedMatrix();
+            var contentBounds = this.$getContentBounds();
+            var stage = this.$stage;
+            if (!stage) {
+                this.$finish();
+                return;
+            }
+            if (!this.$moved) {
+                return;
+            }
+            var bounds = TempBounds.copyFrom(contentBounds);
+            var m = matrix.$data;
+            //优化，通常情况下不缩放旋转的对象占多数，直接加上偏移量即可。
+            if(m[0]===1.0&&m[1]===0.0&&m[2]===0.0&&m[3]===1.0){
+                bounds.x += m[4];
+                bounds.y += m[5];
+            }
+            else{
+                matrix.$transformBounds(bounds);
+            }
+            this.$stageRegion.setTo(bounds.x|0,bounds.y|0,Math.ceil(bounds.x + bounds.width),Math.ceil(bounds.y + bounds.height));
+        }
+
+        /**
+         * 执行渲染,绘制自身到屏幕
+         */
+        $render(context:player.IRenderer):void {
+
+        }
+
+        /**
+         * 渲染结束，已经绘制到屏幕
+         */
+        $finish():void {
+            this.$isDirty = false;
+            this.$moved = false;
         }
 
         $hitTest(stageX:number, stageY:number):DisplayObject {
-            if (!this.$touchEnabled || !this.$renderNode || !this.$hasFlags(player.DisplayObjectFlags.Visible)) {
+            if (!this.$touchEnabled || !this.$stageRegion || !this.$hasFlags(player.DisplayObjectFlags.Visible)) {
                 return null;
             }
             var m = this.$getInvertedConcatenatedMatrix().$data;

@@ -116,7 +116,7 @@ module lark.player {
                         node.$isDirty = true;
                     }
                 }
-                node.$update();
+                node.$updateRegion();
                 if (node.$moved && node.$alpha !== 0) {
                     if(dirtyRegion.addRegion(region.minX, region.minY, region.maxX, region.maxY)){
                         node.$isDirty = true;
@@ -128,9 +128,9 @@ module lark.player {
         }
 
         /**
-         * 更新节点属性
+         * 更新对象在舞台上的显示区域
          */
-        $update():void {
+        $updateRegion():void {
             var target = this.root;
             target.$removeFlagsUp(DisplayObjectFlags.Dirty);
             this.matrix = target.$getConcatenatedMatrix();

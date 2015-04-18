@@ -435,22 +435,22 @@ module lark {
             this.markChildDirty(this, this.$parentDisplayList);
         }
 
-        private markChildDirty(child:DisplayObject, displayListRoot:lark.player.DisplayList):void {
+        private markChildDirty(child:DisplayObject, parentCache:lark.player.DisplayList):void {
             if (child.$hasFlags(player.DisplayObjectFlags.DirtyChildren)) {
                 return;
             }
             child.$setFlags(player.DisplayObjectFlags.DirtyChildren);
-            var node = child.$displayList || child.$renderNode;
-            if (node && displayListRoot) {
-                displayListRoot.markDirty(node);
+            var displayList = child.$displayList;
+            if ((displayList||child.$stageRegion) && parentCache) {
+                parentCache.markDirty(displayList||child);
             }
-            if (child.$displayList) {
+            if (displayList) {
                 return;
             }
             var children = child.$children;
             if (children) {
                 for (var i = children.length - 1; i >= 0; i--) {
-                    this.markChildDirty(children[i], displayListRoot);
+                    this.markChildDirty(children[i], parentCache);
                 }
             }
         }
@@ -467,12 +467,12 @@ module lark {
             }
         }
 
-        private assignParentDisplayList(child:DisplayObject, cacheRoot:lark.player.DisplayList, newParent:lark.player.DisplayList):void {
+        private assignParentDisplayList(child:DisplayObject, parentCache:lark.player.DisplayList, newParent:lark.player.DisplayList):void {
             child.$parentDisplayList = newParent;
             child.$setFlags(player.DisplayObjectFlags.DirtyChildren);
-            var node = child.$displayList || child.$renderNode;
-            if (node && cacheRoot) {
-                cacheRoot.markDirty(node);
+            var displayList = child.$displayList;
+            if ((child.$stageRegion||displayList) && parentCache) {
+                parentCache.markDirty(displayList||child);
             }
             if (child.$displayList) {
                 return;
@@ -480,7 +480,7 @@ module lark {
             var children = child.$children;
             if (children) {
                 for (var i = children.length - 1; i >= 0; i--) {
-                    this.assignParentDisplayList(children[i], cacheRoot, newParent);
+                    this.assignParentDisplayList(children[i], parentCache, newParent);
                 }
             }
         }
