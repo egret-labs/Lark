@@ -42,8 +42,6 @@ module lark {
         return value;
     }
 
-    var TempBounds = new Rectangle();
-
     /**
      * 显示对象基类
      */
@@ -143,7 +141,7 @@ module lark {
          * 表示 DisplayObject 的实例名称。
          * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
          */
-        public name:string = "";
+        public name:string;
 
         $parent:DisplayObjectContainer = null;
 
@@ -217,7 +215,6 @@ module lark {
             this.invalidatePosition();
         }
 
-        private _concatenatedMatrix:Matrix = new Matrix();
 
         /**
          * 获得这个显示对象以及它所有父级对象的连接矩阵。
@@ -226,17 +223,14 @@ module lark {
             if (this.$hasFlags(player.DisplayObjectFlags.InvalidConcatenatedMatrix)) {
                 if (this.$parent) {
                     this.$parent.$getConcatenatedMatrix().$preMultiplyInto(this.$getMatrix(),
-                        this._concatenatedMatrix);
+                        this.$stageMatrix);
                 } else {
-                    this._concatenatedMatrix.copyFrom(this.$getMatrix());
+                    this.$stageMatrix.copyFrom(this.$getMatrix());
                 }
-                if (this.$displayList) {
-                    this.$displayList.$moved = true;
-                }
-                this.$moved = true;
+                this.$setFlags(player.DisplayObjectFlags.InvalidContentRegion|player.DisplayObjectFlags.InvalidRegion);
                 this.$removeFlags(player.DisplayObjectFlags.InvalidConcatenatedMatrix);
             }
-            return this._concatenatedMatrix;
+            return this.$stageMatrix;
         }
 
         private _invertedConcatenatedMatrix:Matrix = new Matrix();
@@ -508,8 +502,6 @@ module lark {
             this.$invalidate(true);
         }
 
-        private _concatenatedAlpha:number = 1;
-
         /**
          * 获取这个显示对象跟它所有父级透明度的乘积
          */
@@ -517,14 +509,14 @@ module lark {
             if (this.$hasFlags(player.DisplayObjectFlags.InvalidConcatenatedAlpha)) {
                 if (this.$parent) {
                     var parentAlpha = this.$parent.$getConcatenatedAlpha();
-                    this._concatenatedAlpha = parentAlpha * this._alpha;
+                    this.$stageAlpha = parentAlpha * this._alpha;
                 }
                 else {
-                    this._concatenatedAlpha = this._alpha;
+                    this.$stageAlpha = this._alpha;
                 }
                 this.$removeFlags(player.DisplayObjectFlags.InvalidConcatenatedAlpha);
             }
-            return this._concatenatedAlpha;
+            return this.$stageAlpha;
         }
 
         $touchEnabled:boolean = true;
@@ -666,9 +658,7 @@ module lark {
                 bounds.copyFrom(this.$getContentBounds());
                 this.$measureChildBounds(bounds);
                 this.$removeFlags(player.DisplayObjectFlags.InvalidBounds);
-                if (this.$displayList) {
-                    this.$displayList.$moved = true;
-                }
+                this.$setFlags(player.DisplayObjectFlags.InvalidRegion);
             }
             return bounds;
         }
@@ -686,8 +676,8 @@ module lark {
         $getContentBounds():Rectangle {
             var bounds = this._contentBounds;
             if (this.$hasFlags(player.DisplayObjectFlags.InvalidContentBounds)) {
-                this.$moved = true;
                 this.$measureContentBounds(bounds);
+                this.$setFlags(player.DisplayObjectFlags.InvalidContentRegion);
                 this.$removeFlags(player.DisplayObjectFlags.InvalidContentBounds);
             }
             return bounds;
@@ -732,45 +722,40 @@ module lark {
             }
         }
         /**
-         * 在屏幕上的矩形区域是否发现改变。
-         */
-        $moved:boolean = false;
-        /**
-         * 要绘制到屏幕的整体透明度。
-         */
-        $alpha:number = 1;
-        /**
          * 是否需要重绘
          */
         $isDirty:boolean = false;
-
+        /**
+         * 这个对象在舞台上的整体透明度
+         */
+        $stageAlpha:number = 1;
+        /**
+         * 在舞台上的矩阵对象
+         */
+        $stageMatrix:Matrix = new Matrix();
+        /**
+         * 此显示对象自身（不包括子项）在舞台上的显示尺寸。
+         */
         $stageRegion:player.Region = null;
         /**
-         * 更新对象在舞台上的显示区域
+         * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
          */
-        $updateRegion():void {
+        $update():boolean {
             this.$removeFlagsUp(player.DisplayObjectFlags.Dirty);
+            this.$getConcatenatedAlpha();
             var matrix = this.$getConcatenatedMatrix();
-            var contentBounds = this.$getContentBounds();
+            var bounds = this.$getContentBounds();
+            var moved = this.$hasFlags(player.DisplayObjectFlags.InvalidContentRegion);
+            if (!moved) {
+                return moved;
+            }
+            this.$removeFlags(player.DisplayObjectFlags.InvalidContentRegion);
             var stage = this.$stage;
             if (!stage) {
-                this.$finish();
-                return;
+                return false;
             }
-            if (!this.$moved) {
-                return;
-            }
-            var bounds = TempBounds.copyFrom(contentBounds);
-            var m = matrix.$data;
-            //优化，通常情况下不缩放旋转的对象占多数，直接加上偏移量即可。
-            if(m[0]===1.0&&m[1]===0.0&&m[2]===0.0&&m[3]===1.0){
-                bounds.x += m[4];
-                bounds.y += m[5];
-            }
-            else{
-                matrix.$transformBounds(bounds);
-            }
-            this.$stageRegion.setTo(bounds.x|0,bounds.y|0,Math.ceil(bounds.x + bounds.width),Math.ceil(bounds.y + bounds.height));
+            this.$stageRegion.transformBounds(bounds,matrix);
+            return true;
         }
 
         /**
@@ -778,14 +763,6 @@ module lark {
          */
         $render(context:player.IRenderer):void {
 
-        }
-
-        /**
-         * 渲染结束，已经绘制到屏幕
-         */
-        $finish():void {
-            this.$isDirty = false;
-            this.$moved = false;
         }
 
         $hitTest(stageX:number, stageY:number):DisplayObject {

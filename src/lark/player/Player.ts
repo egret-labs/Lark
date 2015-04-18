@@ -222,7 +222,7 @@ module lark.player {
             renderer.reset(root);
             renderer.markDirtyRects(displayList.dirtyList);
             var drawCalls = this.drawDisplayObject(root, renderer, displayList.dirtyList, null);
-            displayList.cleanCache();
+            displayList.finish();
             renderer.removeDirtyRects();
             return drawCalls;
         }
@@ -239,7 +239,7 @@ module lark.player {
             else {
                 node = displayObject.$stageRegion ? displayObject : null;
             }
-            if (node && !(node.$alpha === 0)) {
+            if (node && !(node.$stageAlpha === 0)) {
                 if (!node.$isDirty) {
                     var stageRegion = node.$stageRegion;
                     for (var j = dirtyList.length - 1; j >= 0; j--) {
@@ -253,7 +253,7 @@ module lark.player {
                 if (node.$isDirty) {
                     drawCalls++;
                     node.$render(renderer);
-                    node.$finish();
+                    node.$isDirty = false;
                 }
             }
             if (displayList) {

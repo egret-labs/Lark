@@ -58,7 +58,7 @@ module lark {
         }
 
         $render(renderer:player.IRenderer):void{
-            renderer.drawGraphics(this._graphics.$commands,this.$getConcatenatedMatrix(),this.$getConcatenatedAlpha());
+            renderer.drawGraphics(this._graphics.$commands,this.$stageMatrix, this.$stageAlpha);
         }
     }
 }

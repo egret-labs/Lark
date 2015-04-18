@@ -37,26 +37,25 @@ module lark.player {
          */
         $isDirty:boolean;
         /**
-         * 在屏幕上的透明度
+         * 在舞台上的透明度
          */
-        $alpha:number;
-
-        $moved:boolean;
+        $stageAlpha:number;
+        /**
+         * 在舞台上的矩阵对象
+         */
+        $stageMatrix:Matrix;
         /**
          * 在舞台上的显示区域
          */
         $stageRegion:Region;
 
         /**
-         * 更新对象在舞台上的显示区域
+         * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
          */
-        $updateRegion():void;
+        $update():boolean;
         /**
          * 执行绘制
          */
         $render(context:IRenderer):void;
-
-        $finish():void;
-
     }
 }

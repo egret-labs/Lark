@@ -29,8 +29,6 @@
 
 module lark.player {
 
-    var TempBounds = new Rectangle();
-
     export var $displayListPool:IDisplayListPool;
 
     export class DisplayList extends HashObject implements IRenderable{
@@ -39,19 +37,22 @@ module lark.player {
             super();
             this.root = root;
         }
-
         /**
-         * 在屏幕上的透明度
+         * 在舞台上的透明度
          */
-        $alpha:number = 1;
+        $stageAlpha:number = 1;
+        /**
+         * 在舞台上的矩阵对象
+         */
+        $stageMatrix:Matrix;
+        /**
+         * 在舞台上的显示区域
+         */
+        $stageRegion:Region = new Region();
         /**
          * 显示列表根节点
          */
         public root:DisplayObject;
-        /**
-         * 目标显示对象以及它所有父级对象的连接矩阵。
-         */
-        public matrix:Matrix = null;
         /**
          * 目标显示对象的测量边界
          */
@@ -60,12 +61,6 @@ module lark.player {
          * 是否需要重绘
          */
         $isDirty:boolean = false;
-        /**
-         * 在屏幕上的矩形区域是否发现改变。
-         */
-        $moved:boolean = false;
-
-        $stageRegion:Region = new Region();
 
         /**
          * 要绘制的纹理
@@ -102,6 +97,30 @@ module lark.player {
             }
         }
 
+        /**
+         * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
+         */
+        $update():boolean {
+            var target = this.root;
+            target.$removeFlagsUp(DisplayObjectFlags.Dirty);
+            this.$stageAlpha = target.$getConcatenatedAlpha();
+            this.$stageMatrix = target.$getConcatenatedMatrix();
+            this.bounds = target.$getOriginalBounds();
+            var moved = target.$hasFlags(player.DisplayObjectFlags.InvalidRegion);
+            if (this.needRedraw) {
+                this.updateDirtyNodes();
+            }
+            if (!moved) {
+                return moved;
+            }
+            target.$removeFlags(player.DisplayObjectFlags.InvalidRegion);
+            if(!target.$stage){
+                return false;
+            }
+            this.$stageRegion.transformBounds(this.bounds,this.$stageMatrix);
+            return moved;
+        }
+
         public updateDirtyNodes():Region[] {
             var nodeList = this.dirtyNodeList;
             this.dirtyNodeList = [];
@@ -111,13 +130,13 @@ module lark.player {
             for (var i=0;i<length;i++) {
                 var node = nodeList[i];
                 var region = node.$stageRegion;
-                if (node.$alpha !== 0) {
+                if (node.$stageAlpha !== 0) {
                     if(dirtyRegion.addRegion(region.minX, region.minY, region.maxX, region.maxY)){
                         node.$isDirty = true;
                     }
                 }
-                node.$updateRegion();
-                if (node.$moved && node.$alpha !== 0) {
+                var moved = node.$update();
+                if (moved && node.$stageAlpha !== 0) {
                     if(dirtyRegion.addRegion(region.minX, region.minY, region.maxX, region.maxY)){
                         node.$isDirty = true;
                     }
@@ -127,60 +146,17 @@ module lark.player {
             return this.dirtyList;
         }
 
-        /**
-         * 更新对象在舞台上的显示区域
-         */
-        $updateRegion():void {
-            var target = this.root;
-            target.$removeFlagsUp(DisplayObjectFlags.Dirty);
-            this.matrix = target.$getConcatenatedMatrix();
-            this.bounds = target.$getOriginalBounds();
-            this.updateBounds();
-            if (this.needRedraw) {
-                this.updateDirtyNodes();
-            }
-        }
-
-        private updateBounds():void{
-            var stage = this.root.$stage;
-            if (!stage) {
-                this.$finish();
-                return;
-            }
-            if (!this.$moved) {
-                return;
-            }
-            var bounds = TempBounds.copyFrom(this.bounds);
-            var matrix = this.matrix;
-            var m = matrix.$data;
-            //优化，通常情况下不缩放旋转的对象占多数，直接加上偏移量即可。
-            if(m[0]===1.0&&m[1]===0.0&&m[2]===0.0&&m[3]===1.0){
-                bounds.x += m[4];
-                bounds.y += m[5];
-            }
-            else{
-                matrix.$transformBounds(bounds);
-            }
-            this.$stageRegion.setTo(bounds.x|0,bounds.y|0,Math.ceil(bounds.x + bounds.width),Math.ceil(bounds.y + bounds.height));
-        }
-
         $render(context:IRenderer):void{
             var texture = this.texture;
             if (texture) {
-                context.drawImage(texture, this.matrix, this.$alpha);
+                context.drawImage(texture, this.$stageMatrix, 1);
             }
         }
-        /**
-         * 渲染结束，已经绘制到屏幕
-         */
-        $finish():void {
-            this.$isDirty = false;
-            this.$moved = false;
-        }
+
         /**
          * 结束重绘,清理缓存。
          */
-        public cleanCache():void {
+        public finish():void {
             this.dirtyRegion.clear();
             this.dirtyList = null;
             this.needRedraw = false;

@@ -90,7 +90,14 @@ module lark.player {
          * 子项中已经全部含有DirtyRender标志，无需继续遍历。
          */
         DirtyChildren = 0x200,
-
+        /**
+         * 对象自身在舞台上的显示尺寸发生改变。
+         */
+        InvalidContentRegion = 0x400,
+        /**
+         * 对象自身以及子项在舞台上显示尺寸发生改变。
+         */
+        InvalidRegion = 0x800,
         /**
          * DirtyRender|DirtyChildren
          */

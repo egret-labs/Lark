@@ -38,11 +38,10 @@ module lark.web {
          */
         public release(node:lark.player.DisplayList):void{
             node.root = null;
-            node.matrix = null;
+            node.$stageMatrix = null;
             node.bounds = null;
             node.needRedraw = false;
             node.$isDirty = false;
-            node.$moved = false;
             pool.push(node);
         }
 

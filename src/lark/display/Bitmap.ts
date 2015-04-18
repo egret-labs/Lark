@@ -71,7 +71,7 @@ module lark {
         $render(renderer:player.IRenderer):void{
             var texture = this.$texture;
             if (texture) {
-                renderer.drawImage(texture, this.$getConcatenatedMatrix(), this.$getConcatenatedAlpha());
+                renderer.drawImage(texture, this.$stageMatrix, this.$stageAlpha);
             }
         }
     }

@@ -15,14 +15,14 @@
     export interface Video extends IMedia {
         poster: string;
     }
-    export var Video: { new (option: IVideoOption): Video };
+    export var Video:{ new (option:IVideoOption): Video };
     export class LarkVideoBase extends LarkMedia implements Video {
         constructor(option:IMediaOption) {
             super(option);
             this.$stageRegion = new player.Region();
             this._height = option.height || NaN;
             this._width = option.width || NaN;
-            
+
             if (option.poster) {
                 var poster:any = option.poster;
                 if (poster instanceof Texture)
@@ -35,13 +35,13 @@
         }
 
 
-        protected texture: Texture;
-        protected _poster: string;
-        public get poster(): string {
+        protected texture:Texture;
+        protected _poster:string;
+        public get poster():string {
             return this._poster;
         }
 
-        public set poster(value: string) {
+        public set poster(value:string) {
             if (value == this._poster)
                 return;
             this._poster = value;
@@ -49,13 +49,15 @@
         }
 
 
-        protected _width: number = NaN;
-        $getWidth(): number {
+        protected _width:number = NaN;
+
+        $getWidth():number {
             if (this.texture)
                 return super.$getWidth();
             return this._width || 0;
         }
-        $setWidth(value: number) {
+
+        $setWidth(value:number) {
             if (value == this._width)
                 return;
             this._width = +value || 0;
@@ -66,13 +68,15 @@
                 this.$invalidateContentBounds();
         }
 
-        protected _height: number = NaN;
-        $getHeight(): number {
+        protected _height:number = NaN;
+
+        $getHeight():number {
             if (this.texture)
                 return super.$getHeight();
             return this._height || 0;
         }
-        $setHeight(value: number) {
+
+        $setHeight(value:number) {
             if (value == this._height)
                 return;
             this._height = value;
@@ -82,7 +86,7 @@
                 this.$invalidateContentBounds();
         }
 
-        $setDefaultTexture(texture:Texture,force:boolean = false) {
+        $setDefaultTexture(texture:Texture, force:boolean = false) {
             if (this.texture != null && force == false)
                 return;
             this.texture = texture;
@@ -95,7 +99,7 @@
             this.$invalidateContentBounds();
         }
 
-        $measureContentBounds(bounds: Rectangle): void {
+        $measureContentBounds(bounds:Rectangle):void {
             if (this.texture)
                 bounds.setTo(0, 0, this.texture.$bitmapWidth, this.texture.$bitmapHeight);
             else
@@ -103,10 +107,10 @@
 
         }
 
-        $render(renderer:player.IRenderer):void{
+        $render(renderer:player.IRenderer):void {
             var texture = this.texture;
             if (texture) {
-                renderer.drawImage(texture, this.$getConcatenatedMatrix(), this.$getConcatenatedAlpha());
+                renderer.drawImage(texture, this.$stageMatrix, this.$stageAlpha);
             }
         }
     }
