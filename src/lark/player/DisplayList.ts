@@ -31,12 +31,14 @@ module lark.player {
 
     export var $displayListPool:IDisplayListPool;
 
-    export class DisplayList extends HashObject implements IRenderable{
+    export class DisplayList extends HashObject implements IRenderable {
 
         public constructor(root:DisplayObject) {
             super();
             this.root = root;
         }
+
+        $drawed:boolean = false;
         /**
          * 在舞台上的透明度
          */
@@ -69,7 +71,7 @@ module lark.player {
 
         public needRedraw:boolean = false;
 
-        public renderer:IScreenRenderer = null;
+        public renderContext:ScreenRenderContext;
         /**
          * 显示对象的渲染节点发生改变时，把自身的IRenderable对象注册到此列表上。
          */
@@ -83,7 +85,7 @@ module lark.player {
 
         public markDirty(node:IRenderable):void {
             var key = node.$hashCode;
-            if(this.dirtyNodes[key]){
+            if (this.dirtyNodes[key]) {
                 return;
             }
             this.dirtyNodes[key] = true;
@@ -114,10 +116,10 @@ module lark.player {
                 return moved;
             }
             target.$removeFlags(player.DisplayObjectFlags.InvalidRegion);
-            if(!target.$stage){
+            if (!target.$stage) {
                 return false;
             }
-            this.$stageRegion.transformBounds(this.bounds,this.$stageMatrix);
+            this.$stageRegion.transformBounds(this.bounds, this.$stageMatrix);
             return moved;
         }
 
@@ -127,17 +129,17 @@ module lark.player {
             this.dirtyNodes = {};
             var dirtyRegion = this.dirtyRegion;
             var length = nodeList.length;
-            for (var i=0;i<length;i++) {
+            for (var i = 0; i < length; i++) {
                 var node = nodeList[i];
                 var region = node.$stageRegion;
                 if (node.$stageAlpha !== 0) {
-                    if(dirtyRegion.addRegion(region.minX, region.minY, region.maxX, region.maxY)){
+                    if (dirtyRegion.addRegion(region.minX, region.minY, region.maxX, region.maxY)) {
                         node.$isDirty = true;
                     }
                 }
                 var moved = node.$update();
                 if (moved && node.$stageAlpha !== 0) {
-                    if(dirtyRegion.addRegion(region.minX, region.minY, region.maxX, region.maxY)){
+                    if (dirtyRegion.addRegion(region.minX, region.minY, region.maxX, region.maxY)) {
                         node.$isDirty = true;
                     }
                 }
@@ -146,13 +148,19 @@ module lark.player {
             return this.dirtyList;
         }
 
-        $render(context:RenderContext):void{
+        $render(context:RenderContext):void {
             var texture = this.texture;
             if (texture) {
                 context.drawTexture(texture);
             }
         }
 
+        /**
+         * 准备开始重绘
+         */
+        public prepare():void{
+            $displayListPool.prepare(this);
+        }
         /**
          * 结束重绘,清理缓存。
          */

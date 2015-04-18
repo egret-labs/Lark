@@ -123,4 +123,36 @@ module lark.web {
             webTouch.updateScaleMode(displayWidth / stageWidth, displayHeight / stageHeight);
         }
     }
+    export function createRenderContext(context:CanvasRenderingContext2D):player.ScreenRenderContext {
+
+        context["drawTexture"] = function (texture:Texture):void {
+            var width = texture.$bitmapWidth;
+            var height = texture.$bitmapHeight;
+            if (width === 0 || height === 0) {
+                return;
+            }
+            context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY, width, height,
+                texture.$offsetX, texture.$offsetY, width, height);
+        };
+        context["surface"] = context.canvas;
+        if (!context.hasOwnProperty("imageSmoothingEnabled")) {
+            var keys = ["webkitImageSmoothingEnabled", "mozImageSmoothingEnabled", "msImageSmoothingEnabled"];
+            for (var i = keys.length - 1; i >= 0; i--) {
+                var key = keys[i];
+                if (context.hasOwnProperty(key)) {
+                    break;
+                }
+            }
+            Object.defineProperty(context, "imageSmoothingEnabled", {
+                get: function () {
+                    return this[key];
+                },
+                set: function (value) {
+                    this[key] = value;
+                }
+            });
+        }
+        return <player.ScreenRenderContext><any>context;
+    }
+
 }

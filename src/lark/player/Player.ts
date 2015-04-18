@@ -36,14 +36,14 @@ module lark.player {
         /**
          * 实例化一个播放器对象。
          */
-        public constructor(renderer:IScreenRenderer, stage:Stage, entryClassName:string) {
+        public constructor(context:ScreenRenderContext, stage:Stage, entryClassName:string) {
             super();
-            if (DEBUG && !renderer) {
-                $error(1003, "renderer");
+            if (DEBUG && !context) {
+                $error(1003, "context");
             }
             this.entryClassName = entryClassName;
             this.stage = stage;
-            this.screenDisplayList = this.createDisplayList(stage, renderer);
+            this.screenDisplayList = this.createDisplayList(stage, context);
 
             if (DEBUG) {//显示重绘区域相关的代码,发行版中移除
                 this._showPaintRects = false;
@@ -121,9 +121,9 @@ module lark.player {
          */
         public drawDirtyRect:(x:number, y:number, width:number, height:number,context:RenderContext)=>void;
 
-        private createDisplayList(stage:Stage, renderer:IScreenRenderer):DisplayList {
+        private createDisplayList(stage:Stage, context:ScreenRenderContext):DisplayList {
             var displayList = new DisplayList(stage);
-            displayList.renderer = renderer;
+            displayList.renderContext = context;
             stage.$displayList = displayList;
             return displayList;
         }
@@ -230,12 +230,11 @@ module lark.player {
          * 绘制显示列表。
          */
         public drawDisplayList(root:DisplayObject, displayList:DisplayList):number {
-            var renderer = displayList.renderer;
-            renderer.reset(root);
-            this.markDirtyRects(displayList.dirtyList,renderer.renderContext);
-            var drawCalls = this.drawDisplayObject(root, renderer.renderContext, displayList.dirtyList, null);
+            var context = displayList.renderContext;
+            this.markDirtyRects(displayList.dirtyList,context);
+            var drawCalls = this.drawDisplayObject(root, context, displayList.dirtyList, null);
             displayList.finish();
-            renderer.renderContext.restore();
+            context.restore();
             return drawCalls;
         }
 
@@ -244,6 +243,7 @@ module lark.player {
             var node:IRenderable;
             if (displayList) {
                 if (displayList.needRedraw) {
+                    displayList.prepare();
                     drawCalls += this.drawDisplayList(displayObject, displayList);
                 }
                 node = displayList;

@@ -78,10 +78,10 @@ module lark.web {
         var webScreen = new WebScreen(container,scaleMode,contentWidth,contentHeight);
         var canvas = webScreen.createCanvas();
         var stage = new lark.Stage();
-        var screenRenderer = new ScreenRenderer(canvas);
         var touch = new lark.player.TouchHandler(stage);
         var webTouch = new WebTouchHandler(touch, canvas);
-        var player = new lark.player.Player(screenRenderer, stage, entryClassName);
+        var renderContext = createRenderContext(canvas.getContext("2d"));
+        var player = new lark.player.Player(renderContext, stage, entryClassName);
         if(DEBUG){
             var showPaintRects = container.getAttribute("data-show-paint-rects")=="true";
             player.showPaintRects(showPaintRects);

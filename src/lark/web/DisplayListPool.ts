@@ -51,27 +51,16 @@ module lark.web {
         public create(target:DisplayObject):lark.player.DisplayList{
             var node = pool.pop();
             if(!node){
-                var texture = this.createTextureForCache(target);
-                if(texture){
+                var canvas:HTMLCanvasElement = document.createElement("canvas");
+                if(this.testCanvasValid(canvas)){
                     node = new lark.player.DisplayList(target);
-                    node.texture = texture;
-                    node.renderer = new CacheRenderer(texture.$bitmapData);
+                    node.texture = new Texture();
+                    node.texture.$bitmapData = canvas;
+                    var context = canvas.getContext("2d");
+                    node.renderContext = createRenderContext(context);
                 }
             }
             return node;
-        }
-
-        /**
-         * 检测是否允许显示对象启用cacheAsBitmap功能，若超过系统内存上限或触发其他限制，将返回null。否则返回用于缓存的Texture对象实例。
-         */
-        private createTextureForCache(target:DisplayObject):Texture{
-            var canvas = document.createElement("canvas");
-            if(!this.testCanvasValid(canvas)){
-                return null;
-            }
-            var texture = new Texture();
-            texture.$bitmapData = canvas;
-            return texture;
         }
 
         /**
@@ -84,6 +73,42 @@ module lark.web {
             if (data == 'data:,')
                 return false;
             return true;
+        }
+
+        /**
+         * 即将开始重绘显示列表
+         */
+        public prepare(displayList:player.DisplayList):void{
+            var root = displayList.root;
+            var texture = displayList.texture;
+            var bounds = root.$getOriginalBounds();
+            var oldSurface = displayList.renderContext.surface;
+            if(!displayList.$drawed){
+                displayList.$drawed = true;
+                this.changeCacheSize(texture,bounds,oldSurface);
+            }
+            else if(bounds.width!==oldSurface.width||bounds.height!==oldSurface.height){
+                var oldContext:any = displayList.renderContext;
+                var newContext = <player.ScreenRenderContext><any>sharedCanvasContext;
+                displayList.renderContext = newContext;
+                var newSurface = newContext.surface;
+                sharedCanvasContext = oldContext;
+                this.changeCacheSize(texture,bounds,newSurface);
+                if(oldSurface.width!==0&&oldSurface.height!==0){
+                    newContext.setTransform(1,0,0,1,0,0);
+                    newContext.drawTexture(texture);
+                }
+            }
+            var m = root.$getInvertedConcatenatedMatrix().$data;
+            displayList.renderContext.setTransform(m[0], m[1], m[2], m[3], m[4]-texture.$offsetX, m[5]-texture.$offsetY);
+        }
+
+        private changeCacheSize(texture:Texture,bounds:Rectangle,surface:player.Surface):void{
+            surface.width = bounds.width;
+            surface.height = bounds.height;
+            texture.$setBitmapData(surface);
+            texture.$offsetX = bounds.x;
+            texture.$offsetY = bounds.y;
         }
     }
 }
