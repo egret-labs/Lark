@@ -53,7 +53,7 @@ module lark.web {
         var ticker = lark.player.Ticker.$instance = new lark.player.Ticker();
         startTicker(ticker);
         $textMeasurer = new CanvasTextMeasurer();
-        lark.player.$cacheNodePool = new CacheNodePool();
+        lark.player.$displayListPool = new DisplayListPool();
         if(!lark.player.screenAdapter){
             lark.player.screenAdapter = new lark.player.ScreenAdapter();
         }

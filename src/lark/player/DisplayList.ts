@@ -30,19 +30,22 @@
 module lark.player {
 
     var TempBounds = new Rectangle();
-    /**
-     * @excluded
-     * 渲染节点基类
-     */
-    export class RenderNode extends HashObject implements IRenderable{
 
-        public constructor(target:DisplayObject) {
+    export var $displayListPool:IDisplayListPool;
+
+    export class DisplayList extends HashObject implements IRenderable{
+
+        public constructor(root:DisplayObject) {
             super();
-            this.root = target;
+            this.root = root;
         }
 
         /**
-         * 目标显示对象
+         * 在屏幕上的透明度
+         */
+        $alpha:number = 1;
+        /**
+         * 显示列表根节点
          */
         public root:DisplayObject;
         /**
@@ -54,29 +57,91 @@ module lark.player {
          */
         public bounds:Rectangle = null;
         /**
-         * 在屏幕上的矩形区域是否发现改变。
-         */
-        $moved:boolean = false;
-        /**
-         * 要绘制到屏幕的整体透明度。
-         */
-        $alpha:number = 1;
-        /**
          * 是否需要重绘
          */
         $isDirty:boolean = false;
+        /**
+         * 在屏幕上的矩形区域是否发现改变。
+         */
+        $moved:boolean = false;
 
         $stageRegion:Region = new Region();
+
+        /**
+         * 要绘制的纹理
+         */
+        public texture:Texture = null;
+
+        public needRedraw:boolean = false;
+
+        public renderer:IScreenRenderer = null;
+        /**
+         * 显示对象的渲染节点发生改变时，把自身的IRenderable对象注册到此列表上。
+         */
+        private dirtyNodes:any = {};
+
+        private dirtyNodeList:IRenderable[] = [];
+
+        public dirtyList:Region[] = null;
+
+        public dirtyRegion:DirtyRegion = new DirtyRegion();
+
+        public markDirty(node:IRenderable):void {
+            var key = node.$hashCode;
+            if(this.dirtyNodes[key]){
+                return;
+            }
+            this.dirtyNodes[key] = true;
+            this.dirtyNodeList.push(node);
+            if (!this.needRedraw) {
+                this.needRedraw = true;
+                var parentCache = this.root.$parentDisplayList;
+                if (parentCache) {
+                    parentCache.markDirty(this);
+                }
+            }
+        }
+
+        public updateDirtyNodes():Region[] {
+            var nodeList = this.dirtyNodeList;
+            this.dirtyNodeList = [];
+            this.dirtyNodes = {};
+            var dirtyRegion = this.dirtyRegion;
+            var length = nodeList.length;
+            for (var i=0;i<length;i++) {
+                var node = nodeList[i];
+                var region = node.$stageRegion;
+                if (node.$alpha !== 0) {
+                    if(dirtyRegion.addRegion(region.minX, region.minY, region.maxX, region.maxY)){
+                        node.$isDirty = true;
+                    }
+                }
+                node.$update();
+                if (node.$moved && node.$alpha !== 0) {
+                    if(dirtyRegion.addRegion(region.minX, region.minY, region.maxX, region.maxY)){
+                        node.$isDirty = true;
+                    }
+                }
+            }
+            this.dirtyList = dirtyRegion.getDirtyRegions();
+            return this.dirtyList;
+        }
 
         /**
          * 更新节点属性
          */
         $update():void {
-            this.root.$updateRenderNode();
+            var target = this.root;
+            target.$removeFlagsUp(DisplayObjectFlags.Dirty);
+            this.matrix = target.$getConcatenatedMatrix();
+            this.bounds = target.$getOriginalBounds();
             this.updateBounds();
+            if (this.needRedraw) {
+                this.updateDirtyNodes();
+            }
         }
 
-        protected updateBounds():void{
+        private updateBounds():void{
             var stage = this.root.$stage;
             if (!stage) {
                 this.$finish();
@@ -99,19 +164,26 @@ module lark.player {
             this.$stageRegion.setTo(bounds.x|0,bounds.y|0,Math.ceil(bounds.x + bounds.width),Math.ceil(bounds.y + bounds.height));
         }
 
-        /**
-         * 执行渲染,绘制自身到屏幕
-         */
-        $render(context:IRenderer):void {
-
+        $render(context:IRenderer):void{
+            var texture = this.texture;
+            if (texture) {
+                context.drawImage(texture, this.matrix, this.$alpha);
+            }
         }
-
         /**
          * 渲染结束，已经绘制到屏幕
          */
         $finish():void {
             this.$isDirty = false;
             this.$moved = false;
+        }
+        /**
+         * 结束重绘,清理缓存。
+         */
+        public cleanCache():void {
+            this.dirtyRegion.clear();
+            this.dirtyList = null;
+            this.needRedraw = false;
         }
     }
 }

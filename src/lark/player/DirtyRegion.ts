@@ -207,5 +207,17 @@ module lark.player {
             }
             this.updateArea();
         }
+
+        public intersects(target:Region):boolean {
+            var max = this.minX > target.minX ? this.minX : target.minX;
+            var min = this.maxX < target.maxX ? this.maxX : target.maxX;
+            if (max > min) {
+                return false;
+            }
+
+            max = this.minY > target.minY ? this.minY : target.minY;
+            min = this.maxY < target.maxY ? this.maxY : target.maxY;
+            return max <= min;
+        }
     }
 }

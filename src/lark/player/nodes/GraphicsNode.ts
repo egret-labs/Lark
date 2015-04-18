@@ -41,8 +41,8 @@ module lark.player {
 
         private graphics:Graphics;
 
-        public render(renderer:IRenderer):void{
-            renderer.drawGraphics(this.graphics.$commands,this.matrix,this.alpha);
+        $render(renderer:IRenderer):void{
+            renderer.drawGraphics(this.graphics.$commands,this.matrix,this.$alpha);
         }
     }
 }

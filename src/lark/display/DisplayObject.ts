@@ -228,11 +228,11 @@ module lark {
                 } else {
                     this._concatenatedMatrix.copyFrom(this.$getMatrix());
                 }
-                if (this.$cacheNode) {
-                    this.$cacheNode.moved = true;
+                if (this.$displayList) {
+                    this.$displayList.$moved = true;
                 }
                 if (this.$renderNode) {
-                    this.$renderNode.moved = true;
+                    this.$renderNode.$moved = true;
                 }
                 this.$removeFlags(player.DisplayObjectFlags.InvalidConcatenatedMatrix);
             }
@@ -442,7 +442,7 @@ module lark {
         /**
          * cacheAsBitmap创建的缓存位图节点。
          */
-        $cacheNode:lark.player.CacheNode = null;
+        $displayList:lark.player.DisplayList = null;
 
         /**
          * 如果设置为 true，则 Lark 播放器将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
@@ -457,23 +457,23 @@ module lark {
         public set cacheAsBitmap(value:boolean) {
             value = !!value;
             this.$toggleFlags(player.DisplayObjectFlags.CacheAsBitmap, value);
-            var hasCacheNode = !!this.$cacheNode;
-            if (hasCacheNode === value) {
+            var hasDisplayList = !!this.$displayList;
+            if (hasDisplayList === value) {
                 return;
             }
             if (value) {
-                var cacheNode = lark.player.$cacheNodePool.create(this);
-                if (cacheNode) {
-                    this.$cacheNode = cacheNode;
-                    if (this.$parentCacheNode) {
-                        this.$parentCacheNode.markDirty(cacheNode);
+                var displayList = lark.player.$displayListPool.create(this);
+                if (displayList) {
+                    this.$displayList = displayList;
+                    if (this.$parentDisplayList) {
+                        this.$parentDisplayList.markDirty(displayList);
                     }
                     this.$cacheAsBitmapChanged();
                 }
             }
             else {
-                lark.player.$cacheNodePool.release(this.$cacheNode);
-                this.$cacheNode = null;
+                lark.player.$displayListPool.release(this.$displayList);
+                this.$displayList = null;
                 this.$cacheAsBitmapChanged();
             }
         }
@@ -483,7 +483,7 @@ module lark {
          */
         $cacheAsBitmapChanged():void {
             var node = this.$renderNode;
-            var parentCache = this.$cacheNode || this.$parentCacheNode;
+            var parentCache = this.$displayList || this.$parentDisplayList;
             if (parentCache && node) {
                 parentCache.markDirty(node);
             }
@@ -667,8 +667,8 @@ module lark {
                 bounds.copyFrom(this.$getContentBounds());
                 this.$measureChildBounds(bounds);
                 this.$removeFlags(player.DisplayObjectFlags.InvalidBounds);
-                if (this.$cacheNode) {
-                    this.$cacheNode.moved = true;
+                if (this.$displayList) {
+                    this.$displayList.$moved = true;
                 }
             }
             return bounds;
@@ -688,7 +688,7 @@ module lark {
             var bounds = this._contentBounds;
             if (this.$hasFlags(player.DisplayObjectFlags.InvalidContentBounds)) {
                 if (this.$renderNode) {
-                    this.$renderNode.moved = true;
+                    this.$renderNode.$moved = true;
                 }
                 this.$measureContentBounds(bounds);
                 this.$removeFlags(player.DisplayObjectFlags.InvalidContentBounds);
@@ -713,12 +713,12 @@ module lark {
         $updateRenderNode():void {
             this.$removeFlagsUp(player.DisplayObjectFlags.Dirty);
             var node = this.$renderNode;
-            node.alpha = this.$getConcatenatedAlpha();
+            node.$alpha = this.$getConcatenatedAlpha();
             node.matrix = this.$getConcatenatedMatrix();
             node.bounds = this.$getContentBounds();
         }
 
-        $parentCacheNode:lark.player.CacheNode = null;
+        $parentDisplayList:lark.player.DisplayList = null;
 
         /**
          * 标记此显示对象需要重绘，调用此方法后，在屏幕绘制阶段$updateRenderNode()方法会自动被回调，您可能需要覆盖它来同步自身改变的属性到目标RenderNode。
@@ -730,9 +730,9 @@ module lark {
                 return;
             }
             this.$setFlags(player.DisplayObjectFlags.DirtyRender);
-            var cacheNode = this.$cacheNode ? this.$cacheNode : this.$parentCacheNode;
-            if (cacheNode) {
-                cacheNode.markDirty(node);
+            var displayList = this.$displayList ? this.$displayList : this.$parentDisplayList;
+            if (displayList) {
+                displayList.markDirty(node);
             }
         }
 
@@ -744,9 +744,9 @@ module lark {
                 return;
             }
             this.$setFlags(player.DisplayObjectFlags.DirtyChildren);
-            var node:lark.player.RenderNode = this.$cacheNode || this.$renderNode;
-            if (node && this.$parentCacheNode) {
-                this.$parentCacheNode.markDirty(node);
+            var node:lark.player.IRenderable = this.$displayList || this.$renderNode;
+            if (node && this.$parentDisplayList) {
+                this.$parentDisplayList.markDirty(node);
             }
         }
 

@@ -136,8 +136,8 @@ module lark {
                     }
                 }
             }
-            var cacheNode = this.$cacheNode || this.$parentCacheNode;
-            this.assignParentCacheNode(child, cacheNode, cacheNode);
+            var displayList = this.$displayList || this.$parentDisplayList;
+            this.assignParentDisplayList(child, displayList, displayList);
             child.$propagateFlagsDown(player.DisplayObjectFlags.DownOnAddedOrRemoved);
             this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
             return child;
@@ -251,8 +251,8 @@ module lark {
                     childAddToStage.$stage = null;
                 }
             }
-            var cacheNode = this.$cacheNode || this.$parentCacheNode;
-            this.assignParentCacheNode(child, cacheNode, cacheNode);
+            var displayList = this.$displayList || this.$parentDisplayList;
+            this.assignParentDisplayList(child, displayList, displayList);
             child.$setParent(null);
             children.splice(index, 1);
             child.$propagateFlagsDown(player.DisplayObjectFlags.DownOnAddedOrRemoved);
@@ -420,7 +420,7 @@ module lark {
             if(!notifyChildren){
                 return;
             }
-            var cacheRoot = this.$cacheNode||this.$parentCacheNode;
+            var cacheRoot = this.$displayList||this.$parentDisplayList;
             var children = this.$children;
             if (children) {
                 for (var i = children.length - 1; i >= 0; i--) {
@@ -432,25 +432,25 @@ module lark {
          * 标记自身和所有子项都失效。
          */
         $invalidateChildren():void {
-            this.markChildDirty(this, this.$parentCacheNode);
+            this.markChildDirty(this, this.$parentDisplayList);
         }
 
-        private markChildDirty(child:DisplayObject, cacheRoot:lark.player.CacheNode):void {
+        private markChildDirty(child:DisplayObject, displayListRoot:lark.player.DisplayList):void {
             if (child.$hasFlags(player.DisplayObjectFlags.DirtyChildren)) {
                 return;
             }
             child.$setFlags(player.DisplayObjectFlags.DirtyChildren);
-            var node = child.$cacheNode || child.$renderNode;
-            if (node && cacheRoot) {
-                cacheRoot.markDirty(node);
+            var node = child.$displayList || child.$renderNode;
+            if (node && displayListRoot) {
+                displayListRoot.markDirty(node);
             }
-            if (child.$cacheNode) {
+            if (child.$displayList) {
                 return;
             }
             var children = child.$children;
             if (children) {
                 for (var i = children.length - 1; i >= 0; i--) {
-                    this.markChildDirty(children[i], cacheRoot);
+                    this.markChildDirty(children[i], displayListRoot);
                 }
             }
         }
@@ -460,27 +460,27 @@ module lark {
          */
         $cacheAsBitmapChanged():void {
             super.$cacheAsBitmapChanged();
-            var cacheRoot = this.$cacheNode || this.$parentCacheNode;
+            var cacheRoot = this.$displayList || this.$parentDisplayList;
             var children = this.$children;
             for (var i = children.length - 1; i >= 0; i--) {
-                this.assignParentCacheNode(children[i], cacheRoot, cacheRoot);
+                this.assignParentDisplayList(children[i], cacheRoot, cacheRoot);
             }
         }
 
-        private assignParentCacheNode(child:DisplayObject, cacheRoot:lark.player.CacheNode, newParent:lark.player.CacheNode):void {
-            child.$parentCacheNode = newParent;
+        private assignParentDisplayList(child:DisplayObject, cacheRoot:lark.player.DisplayList, newParent:lark.player.DisplayList):void {
+            child.$parentDisplayList = newParent;
             child.$setFlags(player.DisplayObjectFlags.DirtyChildren);
-            var node = child.$cacheNode || child.$renderNode;
+            var node = child.$displayList || child.$renderNode;
             if (node && cacheRoot) {
                 cacheRoot.markDirty(node);
             }
-            if (child.$cacheNode) {
+            if (child.$displayList) {
                 return;
             }
             var children = child.$children;
             if (children) {
                 for (var i = children.length - 1; i >= 0; i--) {
-                    this.assignParentCacheNode(children[i], cacheRoot, newParent);
+                    this.assignParentDisplayList(children[i], cacheRoot, newParent);
                 }
             }
         }

@@ -29,32 +29,32 @@
 
 module lark.web {
 
-    var cacheNodeList:lark.player.CacheNode[] = [];
+    var pool:lark.player.DisplayList[] = [];
 
-    export class CacheNodePool implements lark.player.ICacheNodePool{
+    export class DisplayListPool implements lark.player.IDisplayListPool{
 
         /**
-         * 释放一个CacheNode实例到对象池
+         * 释放一个DisplayList实例到对象池
          */
-        public release(node:lark.player.CacheNode):void{
-            node.target = null;
+        public release(node:lark.player.DisplayList):void{
+            node.root = null;
             node.matrix = null;
             node.bounds = null;
             node.needRedraw = false;
-            node.isDirty = false;
-            node.moved = false;
-            cacheNodeList.push(node);
+            node.$isDirty = false;
+            node.$moved = false;
+            pool.push(node);
         }
 
         /**
-         * 从对象池中取出或创建一个新的CacheNode对象。
+         * 从对象池中取出或创建一个新的DisplayList对象。
          */
-        public create(target:DisplayObject):lark.player.CacheNode{
-            var node = cacheNodeList.pop();
+        public create(target:DisplayObject):lark.player.DisplayList{
+            var node = pool.pop();
             if(!node){
                 var texture = this.createTextureForCache(target);
                 if(texture){
-                    node = new lark.player.CacheNode(target);
+                    node = new lark.player.DisplayList(target);
                     node.texture = texture;
                     node.renderer = new CacheRenderer(texture.$bitmapData);
                 }

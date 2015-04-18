@@ -28,29 +28,32 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark.player {
-    /**
-     * @excluded
-     * 位图渲染节点
-     */
-    export class BitmapNode extends RenderNode {
-        /**
-         * 实例化一个渲染命令
-         */
-        public constructor(target:DisplayObject) {
-            super(target);
-        }
 
-        /**
-         * 要绘制的纹理
-         */
-        public texture:Texture = null;
+    export interface IRenderable{
 
-        $render(renderer:IRenderer):void{
-            var texture = this.texture;
-            if (texture) {
-                renderer.drawImage(texture, this.matrix, this.$alpha);
-            }
-        }
+        $hashCode:number;
+        /**
+         * 是否需要重绘的标志
+         */
+        $isDirty:boolean;
+        /**
+         * 在屏幕上的透明度
+         */
+        $alpha:number;
+
+        $moved:boolean;
+        /**
+         * 在舞台上的显示区域
+         */
+        $stageRegion:Region;
+
+        $update():void;
+        /**
+         * 执行绘制
+         */
+        $render(context:IRenderer):void;
+
+        $finish():void;
 
     }
 }

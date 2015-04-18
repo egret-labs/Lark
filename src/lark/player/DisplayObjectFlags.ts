@@ -83,7 +83,7 @@ module lark.player {
         CacheAsBitmap = 0x0080,
 
         /**
-         * 显示对象自身的RenderNode需要重绘的标志
+         * 显示对象自身需要重绘的标志
          */
         DirtyRender = 0x0100,
         /**

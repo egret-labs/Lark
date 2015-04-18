@@ -40,12 +40,12 @@ module lark.player {
 
         public spans: TextSpan[] = null;
 
-        public render(renderer: IRenderer): void {
+        $render(renderer: IRenderer): void {
             var spans = this.spans, length = spans.length;
             for (var i = 0; i < length; i++) {
                 var span = spans[i];
                 renderer.drawText(span.text, span.$toFontString(true), span.$toColorString(), span.x,
-                    span.style.fontSize / 2 + span.y, span.textWidth, this.matrix, this.alpha);
+                    span.style.fontSize / 2 + span.y, span.textWidth, this.matrix, this.$alpha);
             }
         }
     }

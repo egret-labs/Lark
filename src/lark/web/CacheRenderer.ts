@@ -39,7 +39,7 @@ module lark.web {
          * 重置画布
          */
         public reset(root:DisplayObject):void {
-            var texture = root.$cacheNode.texture;
+            var texture = root.$displayList.texture;
             var offsetX = texture.$offsetX;
             var offsetY = texture.$offsetY;
             var bounds = root.$getOriginalBounds();

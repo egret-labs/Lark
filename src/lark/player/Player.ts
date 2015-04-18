@@ -43,11 +43,11 @@ module lark.player {
             }
             this.entryClassName = entryClassName;
             this.stage = stage;
-            this.screenCacheNode = this.createCacheNode(stage, renderer);
+            this.screenDisplayList = this.createDisplayList(stage, renderer);
 
             if (DEBUG) {//显示重绘区域相关的代码,发行版中移除
                 this._showPaintRects = false;
-                this.stageCacheNode = null;
+                this.stageDisplayList = null;
 
                 this.showPaintRects = function (value:boolean):void {
                     value = !!value;
@@ -56,13 +56,13 @@ module lark.player {
                     }
                     this._showPaintRects = value;
                     if (value) {
-                        if (!this.stageCacheNode) {
-                            this.stageCacheNode = $cacheNodePool.create(this.stage);
+                        if (!this.stageDisplayList) {
+                            this.stageDisplayList = $displayListPool.create(this.stage);
                         }
-                        this.stage.$cacheNode = this.stageCacheNode;
+                        this.stage.$displayList = this.stageDisplayList;
                     }
                     else {
-                        this.stage.$cacheNode = this.screenCacheNode;
+                        this.stage.$displayList = this.screenDisplayList;
                     }
                 };
 
@@ -82,12 +82,12 @@ module lark.player {
                     if (repaintList.length > 20) {
                         repaintList.shift();
                     }
-                    var renderer = this.screenCacheNode.renderer;
+                    var renderer = this.screenDisplayList.renderer;
                     renderer.clearScreen();
                     renderer.reset(this.stage);
                     var m = Matrix.TEMP;
                     m.identity();
-                    renderer.drawImage(this.stageCacheNode.texture, m, 1);
+                    renderer.drawImage(this.stageDisplayList.texture, m, 1);
                     length = repaintList.length;
                     for (i = 0; i < length; i++) {
                         list = repaintList[i];
@@ -97,7 +97,7 @@ module lark.player {
                         }
                     }
                     renderer.markDirtyRects(dirtyList);
-                    renderer.drawImage(this.stageCacheNode.texture, m, 1);
+                    renderer.drawImage(this.stageDisplayList.texture, m, 1);
                     renderer.removeDirtyRects();
                 };
             }
@@ -105,19 +105,19 @@ module lark.player {
 
         public showPaintRects:(value:boolean)=>void;
         private _showPaintRects:boolean;
-        private stageCacheNode:CacheNode;
+        private stageDisplayList:DisplayList;
         private paintList:any[];
         private drawPaintRects:(dirtyList:Region[])=>void;
 
-        private createCacheNode(stage:Stage, renderer:IScreenRenderer):CacheNode {
-            var cacheNode = new CacheNode(stage);
-            cacheNode.renderer = renderer;
-            stage.$cacheNode = cacheNode;
-            return cacheNode;
+        private createDisplayList(stage:Stage, renderer:IScreenRenderer):DisplayList {
+            var displayList = new DisplayList(stage);
+            displayList.renderer = renderer;
+            stage.$displayList = displayList;
+            return displayList;
         }
 
 
-        private screenCacheNode:CacheNode;
+        private screenDisplayList:DisplayList;
         /**
          * 入口类的完整类名
          */
@@ -192,11 +192,11 @@ module lark.player {
         $render(triggerByFrame:boolean):void {
             var stage = this.stage;
             var t = lark.getTimer();
-            var dirtyList = stage.$cacheNode.updateDirtyNodes();
+            var dirtyList = stage.$displayList.updateDirtyNodes();
             var t1 = lark.getTimer();
             if (dirtyList.length > 0) {
                 dirtyList = dirtyList.concat();
-                var drawCalls = this.drawDisplayList(stage, stage.$cacheNode);
+                var drawCalls = this.drawDisplayList(stage, stage.$displayList);
             }
             if (DEBUG && this._showPaintRects) {
                 this.drawPaintRects(dirtyList);
@@ -217,45 +217,46 @@ module lark.player {
         /**
          * 绘制显示列表。
          */
-        public drawDisplayList(root:DisplayObject, cacheNode:CacheNode):number {
-            var renderer = cacheNode.renderer;
+        public drawDisplayList(root:DisplayObject, displayList:DisplayList):number {
+            var renderer = displayList.renderer;
             renderer.reset(root);
-            renderer.markDirtyRects(cacheNode.dirtyList);
-            var drawCalls = this.drawDisplayObject(root, renderer, cacheNode.dirtyList, null);
-            cacheNode.cleanCache();
+            renderer.markDirtyRects(displayList.dirtyList);
+            var drawCalls = this.drawDisplayObject(root, renderer, displayList.dirtyList, null);
+            displayList.cleanCache();
             renderer.removeDirtyRects();
             return drawCalls;
         }
 
-        private drawDisplayObject(displayObject:DisplayObject, renderer:IScreenRenderer, dirtyList:lark.player.Region[], cacheNode:CacheNode):number {
+        private drawDisplayObject(displayObject:DisplayObject, renderer:IScreenRenderer, dirtyList:lark.player.Region[], displayList:DisplayList):number {
             var drawCalls = 0;
-            var node:lark.player.RenderNode;
-            if (cacheNode) {
-                if (cacheNode.needRedraw) {
-                    drawCalls += this.drawDisplayList(displayObject, cacheNode);
+            var node:IRenderable;
+            if (displayList) {
+                if (displayList.needRedraw) {
+                    drawCalls += this.drawDisplayList(displayObject, displayList);
                 }
-                node = cacheNode;
+                node = displayList;
             }
             else {
                 node = displayObject.$renderNode;
             }
-            if (node && !(node.alpha === 0)) {
-                if (!node.isDirty) {
+            if (node && !(node.$alpha === 0)) {
+                if (!node.$isDirty) {
+                    var stageRegion = node.$stageRegion;
                     for (var j = dirtyList.length - 1; j >= 0; j--) {
                         var region = dirtyList[j];
-                        if (node.intersects(region.minX, region.minY, region.maxX, region.maxY)) {
-                            node.isDirty = true;
+                        if (stageRegion.intersects(region)) {
+                            node.$isDirty = true;
                             break;
                         }
                     }
                 }
-                if (node.isDirty) {
+                if (node.$isDirty) {
                     drawCalls++;
-                    node.render(renderer);
-                    node.finish();
+                    node.$render(renderer);
+                    node.$finish();
                 }
             }
-            if (cacheNode) {
+            if (displayList) {
                 return drawCalls;
             }
             var children = displayObject.$children;
@@ -266,7 +267,7 @@ module lark.player {
                     if (!(child.$displayObjectFlags & DisplayObjectFlags.Visible)) {
                         continue;
                     }
-                    drawCalls += this.drawDisplayObject(child, renderer, dirtyList, child.$cacheNode);
+                    drawCalls += this.drawDisplayObject(child, renderer, dirtyList, child.$displayList);
                 }
             }
             return drawCalls;
@@ -282,9 +283,9 @@ module lark.player {
             if (stageWidth !== stage.$stageWidth || stageHeight !== stage.$stageHeight) {
                 stage.$stageWidth = stageWidth;
                 stage.$stageHeight = stageHeight;
-                this.screenCacheNode.dirtyRegion.setClipRect(stageWidth, stageHeight);
-                if (DEBUG&&this.stageCacheNode) {
-                    this.stageCacheNode.dirtyRegion.setClipRect(stageWidth, stageHeight);
+                this.screenDisplayList.dirtyRegion.setClipRect(stageWidth, stageHeight);
+                if (DEBUG&&this.stageDisplayList) {
+                    this.stageDisplayList.dirtyRegion.setClipRect(stageWidth, stageHeight);
                 }
                 stage.emitWith(Event.RESIZE);
             }

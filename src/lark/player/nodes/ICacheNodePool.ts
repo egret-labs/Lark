@@ -29,10 +29,10 @@
 
 module lark.player {
 
-    export interface ICacheNodePool {
+    export interface IDisplayListPool {
 
-        release(node:CacheNode):void;
+        release(node:DisplayList):void;
 
-        create(target:DisplayObject):CacheNode;
+        create(target:DisplayObject):DisplayList;
     }
 }
