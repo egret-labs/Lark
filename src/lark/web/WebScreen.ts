@@ -41,7 +41,7 @@ module lark.web {
          * @param contentWidth 初始化内容宽度
          * @param contentHeight 初始化内容高度
          */
-        public constructor(container:HTMLElement,scaleMode:string, contentWidth:number, contentHeight:number) {
+        public constructor(container:HTMLElement, scaleMode:string, contentWidth:number, contentHeight:number) {
             super();
             this.container = container;
             this.scaleMode = scaleMode;
@@ -76,16 +76,15 @@ module lark.web {
          * 创建Canvas实例
          */
         public createCanvas():HTMLCanvasElement {
-            if(this.canvas){
+            if (this.canvas) {
                 return this.canvas;
             }
             var container = this.container;
             var canvas:HTMLCanvasElement = document.createElement("canvas");
+            container.onselectstart = function () {
+                return false;
+            };
             var style = canvas.style;
-            style["-moz-user-select"] = "-moz-none";
-            style["-webkit-user-select"] = "none";
-            style["-ms-user-select"] = "none";
-            style["user-select"] = "none";
             style.margin = "auto";
             style.position = "absolute";
             style.top = "0";
@@ -103,10 +102,10 @@ module lark.web {
         /**
          * 更新播放器视口尺寸
          */
-        public updateScreenSize(player:lark.player.Player,webTouch:WebTouchHandler):void {
+        public updateScreenSize(player:lark.player.Player, webTouch:WebTouchHandler):void {
             var screenRect = this.container.getBoundingClientRect();
             var stageSize = lark.player.screenAdapter.calculateStageSize(this.scaleMode,
-                screenRect.width,screenRect.height,this.contentWidth,this.contentHeight);
+                screenRect.width, screenRect.height, this.contentWidth, this.contentHeight);
             var stageWidth = stageSize.stageWidth;
             var stageHeight = stageSize.stageHeight;
             var displayWidth = stageSize.displayWidth;
@@ -120,8 +119,8 @@ module lark.web {
             }
             canvas.style.width = displayWidth + "px";
             canvas.style.height = displayHeight + "px";
-            player.updateStageSize(stageWidth,stageHeight);
-            webTouch.updateScaleMode(displayWidth/stageWidth,displayHeight/stageHeight);
+            player.updateStageSize(stageWidth, stageHeight);
+            webTouch.updateScaleMode(displayWidth / stageWidth, displayHeight / stageHeight);
         }
     }
 }
