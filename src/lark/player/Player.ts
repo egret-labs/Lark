@@ -194,9 +194,10 @@ module lark.player {
             var t = lark.getTimer();
             var dirtyList = stage.$displayList.updateDirtyNodes();
             var t1 = lark.getTimer();
+            var drawCalls = 0;
             if (dirtyList.length > 0) {
                 dirtyList = dirtyList.concat();
-                var drawCalls = this.drawDisplayList(stage, stage.$displayList);
+                drawCalls = this.drawDisplayList(stage, stage.$displayList);
             }
             if (DEBUG && this._showPaintRects) {
                 this.drawPaintRects(dirtyList);

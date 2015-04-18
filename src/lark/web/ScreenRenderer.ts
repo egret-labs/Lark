@@ -41,7 +41,7 @@ module lark.web {
             if (canvas) {
                 this.canvas = canvas;
                 this.context = canvas.getContext("2d");
-                this.renderContext = createRenderContext(this.context);
+                this.renderContext = this.createRenderContext(this.context);
             }
 
             if (DEBUG) {//显示重绘区相关代码，发行版中移除
@@ -102,81 +102,42 @@ module lark.web {
 
         public reset(root:DisplayObject):void {
         }
-    }
 
-    export function createRenderContext(context:CanvasRenderingContext2D):player.ScreenRenderContext {
-        var map = context["graphicsMap"] = {};
-        map[player.GraphicsCommandType.arc] = context.arc;
-        map[player.GraphicsCommandType.arcTo] = context.arcTo;
-        map[player.GraphicsCommandType.beginPath] = context.beginPath;
-        map[player.GraphicsCommandType.bezierCurveTo] = context.bezierCurveTo;
-        map[player.GraphicsCommandType.closePath] = context.closePath;
-        map[player.GraphicsCommandType.fill] = context.fill;
-        map[player.GraphicsCommandType.fillRect] = context.fillRect;
-        map[player.GraphicsCommandType.lineTo] = context.lineTo;
-        map[player.GraphicsCommandType.moveTo] = context.moveTo;
-        map[player.GraphicsCommandType.quadraticCurveTo] = context.quadraticCurveTo;
-        map[player.GraphicsCommandType.rect] = context.rect;
-        map[player.GraphicsCommandType.stroke] = context.stroke;
-        map[player.GraphicsCommandType.strokeRect] = context.strokeRect;
+        private createRenderContext(context:CanvasRenderingContext2D):player.ScreenRenderContext {
 
-        map[player.GraphicsCommandType.lineWidth] = function (value) {
-            context.lineWidth = value
-        };
-        map[player.GraphicsCommandType.miterLimit] = function (value) {
-            context.miterLimit = value
-        };
-        map[player.GraphicsCommandType.fillStyle] = function (value) {
-            context.fillStyle = value
-        };
-        map[player.GraphicsCommandType.lineCap] = function (value) {
-            context.lineCap = value
-        };
-        map[player.GraphicsCommandType.lineJoin] = function (value) {
-            context.lineJoin = value
-        };
-        map[player.GraphicsCommandType.strokeStyle] = function (value) {
-            context.strokeStyle = value
-        };
-        context["drawTexture"] = function (texture:Texture):void {
-            var width = texture.$bitmapWidth;
-            var height = texture.$bitmapHeight;
-            if (width === 0 || height === 0) {
-                return;
-            }
-            context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY, width, height,
-                texture.$offsetX, texture.$offsetY, width, height);
-        };
-        context["drawGraphics"] = function (commands:player.GraphicsCommand[]):void {
-            var map = context["graphicsMap"];
-            var length = commands.length;
-            for (var i = 0; i < length; i++) {
-                var command = commands[i];
-                map[command.type].apply(context, command.arguments);
-            }
-        };
-        context["setMatrix"] = function (matrix:Matrix):void {
-            var m = matrix.$data;
-            context.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
-        };
-
-        if (!context.hasOwnProperty("imageSmoothingEnabled")) {
-            var keys = ["webkitImageSmoothingEnabled", "mozImageSmoothingEnabled", "msImageSmoothingEnabled"];
-            for (var i = keys.length - 1; i >= 0; i--) {
-                var key = keys[i];
-                if (context.hasOwnProperty(key)) {
-                    break;
+            context["drawTexture"] = function (texture:Texture):void {
+                var width = texture.$bitmapWidth;
+                var height = texture.$bitmapHeight;
+                if (width === 0 || height === 0) {
+                    return;
                 }
-            }
-            Object.defineProperty(context, "imageSmoothingEnabled", {
-                get: function () {
-                    return this[key];
-                },
-                set: function (value) {
-                    this[key] = value;
+                context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY, width, height,
+                    texture.$offsetX, texture.$offsetY, width, height);
+            };
+            context["setMatrix"] = function (matrix:Matrix):void {
+                var m = matrix.$data;
+                context.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
+            };
+
+            if (!context.hasOwnProperty("imageSmoothingEnabled")) {
+                var keys = ["webkitImageSmoothingEnabled", "mozImageSmoothingEnabled", "msImageSmoothingEnabled"];
+                for (var i = keys.length - 1; i >= 0; i--) {
+                    var key = keys[i];
+                    if (context.hasOwnProperty(key)) {
+                        break;
+                    }
                 }
-            });
+                Object.defineProperty(context, "imageSmoothingEnabled", {
+                    get: function () {
+                        return this[key];
+                    },
+                    set: function (value) {
+                        this[key] = value;
+                    }
+                });
+            }
+            return <player.ScreenRenderContext><any>context;
         }
-        return <player.ScreenRenderContext><any>context;
     }
+
 }

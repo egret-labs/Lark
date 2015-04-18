@@ -415,5 +415,55 @@ module lark {
             }
             bounds.setTo(this.minX - half, this.minY - half, this.maxX - this.minX + lineWidth, this.maxY - this.minY + lineWidth);
         }
+
+        $render(context:player.RenderContext):void{
+            var map = context["graphicsMap"];
+            if(!map){
+                map = mapGraphicsFunction(context);
+            }
+            var commands = this.$commands;
+            var length = commands.length;
+            for (var i = 0; i < length; i++) {
+                var command = commands[i];
+                map[command.type].apply(context, command.arguments);
+            }
+        }
+    }
+
+    function mapGraphicsFunction(context:player.RenderContext):any{
+        var map = context["graphicsMap"] = {};
+        map[player.GraphicsCommandType.arc] = context.arc;
+        map[player.GraphicsCommandType.arcTo] = context.arcTo;
+        map[player.GraphicsCommandType.beginPath] = context.beginPath;
+        map[player.GraphicsCommandType.bezierCurveTo] = context.bezierCurveTo;
+        map[player.GraphicsCommandType.closePath] = context.closePath;
+        map[player.GraphicsCommandType.fill] = context.fill;
+        map[player.GraphicsCommandType.fillRect] = context.fillRect;
+        map[player.GraphicsCommandType.lineTo] = context.lineTo;
+        map[player.GraphicsCommandType.moveTo] = context.moveTo;
+        map[player.GraphicsCommandType.quadraticCurveTo] = context.quadraticCurveTo;
+        map[player.GraphicsCommandType.rect] = context.rect;
+        map[player.GraphicsCommandType.stroke] = context.stroke;
+        map[player.GraphicsCommandType.strokeRect] = context.strokeRect;
+
+        map[player.GraphicsCommandType.lineWidth] = function (value) {
+            context.lineWidth = value
+        };
+        map[player.GraphicsCommandType.miterLimit] = function (value) {
+            context.miterLimit = value
+        };
+        map[player.GraphicsCommandType.fillStyle] = function (value) {
+            context.fillStyle = value
+        };
+        map[player.GraphicsCommandType.lineCap] = function (value) {
+            context.lineCap = value
+        };
+        map[player.GraphicsCommandType.lineJoin] = function (value) {
+            context.lineJoin = value
+        };
+        map[player.GraphicsCommandType.strokeStyle] = function (value) {
+            context.strokeStyle = value
+        };
+        return map;
     }
 }

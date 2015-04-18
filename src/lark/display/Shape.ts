@@ -58,7 +58,7 @@ module lark {
         }
 
         $render(context:player.RenderContext):void{
-            context.drawGraphics(this._graphics.$commands);
+            this._graphics.$render(context);
         }
     }
 }
