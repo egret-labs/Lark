@@ -83,23 +83,31 @@ module lark.player {
                         repaintList.shift();
                     }
                     var renderer = this.screenDisplayList.renderer;
-                    renderer.clearScreen();
+                    var context = renderer.renderContext;
+                    this.clearScreen(renderer.renderContext);
                     renderer.reset(this.stage);
-                    var m = Matrix.TEMP;
-                    m.identity();
-                    renderer.drawImage(this.stageDisplayList.texture, m, 1);
+                    context.drawTexture(this.stageDisplayList.texture);
                     length = repaintList.length;
                     for (i = 0; i < length; i++) {
                         list = repaintList[i];
                         for (var j = list.length - 1; j >= 0; j--) {
                             var r:number[] = list[j];
-                            renderer.drawDirtyRect(r[0], r[1], r[2], r[3]);
+                            this.drawDirtyRect(r[0], r[1], r[2], r[3],context);
                         }
                     }
-                    renderer.markDirtyRects(dirtyList);
-                    renderer.drawImage(this.stageDisplayList.texture, m, 1);
-                    renderer.removeDirtyRects();
+                    this.markDirtyRects(dirtyList,context);
+                    context.drawTexture(this.stageDisplayList.texture);
+                    context.restore();
                 };
+
+                /**
+                 * 绘制一个脏矩形显示区域，在显示重绘区功能开启时调用。
+                 */
+                this.drawDirtyRect = function (x:number, y:number, width:number, height:number,context:RenderContext):void {
+                    context.strokeStyle = 'red';
+                    context.lineWidth = 1;
+                    context.strokeRect(x - 0.5, y - 0.5, width, height);
+                }
             }
         }
 
@@ -108,6 +116,10 @@ module lark.player {
         private stageDisplayList:DisplayList;
         private paintList:any[];
         private drawPaintRects:(dirtyList:Region[])=>void;
+        /**
+         * 绘制一个脏矩形显示区域，在显示重绘区功能开启时调用。
+         */
+        public drawDirtyRect:(x:number, y:number, width:number, height:number,context:RenderContext)=>void;
 
         private createDisplayList(stage:Stage, renderer:IScreenRenderer):DisplayList {
             var displayList = new DisplayList(stage);
@@ -214,17 +226,16 @@ module lark.player {
             }
         }
 
-
         /**
          * 绘制显示列表。
          */
         public drawDisplayList(root:DisplayObject, displayList:DisplayList):number {
             var renderer = displayList.renderer;
             renderer.reset(root);
-            renderer.markDirtyRects(displayList.dirtyList);
+            this.markDirtyRects(displayList.dirtyList,renderer.renderContext);
             var drawCalls = this.drawDisplayObject(root, renderer.renderContext, displayList.dirtyList, null);
             displayList.finish();
-            renderer.removeDirtyRects();
+            renderer.renderContext.restore();
             return drawCalls;
         }
 
@@ -255,7 +266,8 @@ module lark.player {
                     drawCalls++;
                     context.save();
                     context.globalAlpha = displayList?1:node.$stageAlpha;
-                    context.setMatrix(node.$stageMatrix);
+                    var m = node.$stageMatrix.$data;
+                    context.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
                     node.$render(context);
                     context.restore();
                     node.$isDirty = false;
@@ -276,6 +288,31 @@ module lark.player {
                 }
             }
             return drawCalls;
+        }
+
+        /**
+         * 绘制脏矩形列表
+         */
+        private markDirtyRects(regionList:lark.player.Region[],context:ScreenRenderContext):void {
+            context.save();
+            context.beginPath();
+            var length = regionList.length;
+            for (var i = 0; i < length; i++) {
+                var region = regionList[i];
+                context.clearRect(region.minX, region.minY, region.width, region.height);
+                context.rect(region.minX, region.minY, region.width, region.height);
+            }
+            context.clip();
+        }
+
+        /**
+         * 清空屏幕
+         */
+        public clearScreen(context:ScreenRenderContext):void {
+            context.save();
+            context.setTransform(1, 0, 0, 1, 0, 0);
+            context.clearRect(0, 0, context.surface.width, context.surface.height);
+            context.restore();
         }
 
         /**

@@ -39,23 +39,6 @@ module lark.player {
          * 重置画布
          */
         reset(root:DisplayObject):void;
-        /**
-         * 清空屏幕
-         */
-        clearScreen():void;
-        /**
-         * 绘制脏矩形列表
-         */
-        markDirtyRects(regionList:lark.player.Region[]):void;
-        /**
-         * 移除之前绘制的脏矩形区域
-         */
-        removeDirtyRects():void;
-
-        /**
-         * 绘制一个脏矩形显示区域，在显示重绘区功能开启时调用。
-         */
-        drawDirtyRect(x:number, y:number, width:number, height:number):void;
     }
 
     export interface RenderContext {
@@ -69,6 +52,7 @@ module lark.player {
         textAlign: string;
         textBaseline: string;
         font: string;
+
         arc(x:number, y:number, radius:number, startAngle:number, endAngle:number, anticlockwise?:boolean): void;
         quadraticCurveTo(cpx:number, cpy:number, x:number, y:number): void;
         lineTo(x:number, y:number): void;
@@ -82,19 +66,35 @@ module lark.player {
         strokeRect(x:number, y:number, w:number, h:number): void;
         beginPath(): void;
         arcTo(x1:number, y1:number, x2:number, y2:number, radius:number): void;
+
         fillText(text:string, x:number, y:number, maxWidth?:number): void;
         drawTexture(texture:Texture): void;
-        drawGraphics(commands:player.GraphicsCommand[]):void;
+
+        transform(m11:number, m12:number, m21:number, m22:number, dx:number, dy:number): void;
+        translate(x:number, y:number): void;
+        scale(x:number, y:number): void;
+        rotate(angle:number): void;
+        //createLinearGradient(x0:number, y0:number, x1:number, y1:number): CanvasGradient;
+        //createRadialGradient(x0:number, y0:number, r0:number, x1:number, y1:number, r1:number): CanvasGradient;
+        //createPattern(texture:Texture, repetition:string): CanvasPattern;
     }
 
     export interface ScreenRenderContext extends RenderContext{
+        surface:Surface;
         globalCompositeOperation: string;
         globalAlpha: number;
         restore(): void;
         save(): void;
         clip(fillRule?:string): void;
         clearRect(x:number, y:number, w:number, h:number): void;
-        setMatrix(matrix:Matrix):void;
+        setTransform(m11:number, m12:number, m21:number, m22:number, dx:number, dy:number): void;
     }
 
+    /**
+     * 呈现绘图结果的对象
+     */
+    export interface Surface {
+        width:number;
+        height:number;
+    }
 }

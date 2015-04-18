@@ -43,62 +43,13 @@ module lark.web {
                 this.context = canvas.getContext("2d");
                 this.renderContext = this.createRenderContext(this.context);
             }
-
-            if (DEBUG) {//显示重绘区相关代码，发行版中移除
-                /**
-                 * 绘制一个脏矩形显示区域，在显示重绘区功能开启时调用。
-                 */
-                this.drawDirtyRect = function (x:number, y:number, width:number, height:number):void {
-                    var context = this.context;
-                    context.strokeStyle = 'red';
-                    context.lineWidth = 1;
-                    context.strokeRect(x - 0.5, y - 0.5, width, height);
-                }
-            }
         }
 
-        /**
-         * 绘制一个脏矩形显示区域，在显示重绘区功能开启时调用。
-         */
-        public drawDirtyRect:(x:number, y:number, width:number, height:number)=>void;
+
 
         protected canvas:HTMLCanvasElement;
         protected context:CanvasRenderingContext2D;
         public renderContext:player.ScreenRenderContext;
-
-        /**
-         * 绘制脏矩形列表
-         */
-        public markDirtyRects(regionList:lark.player.Region[]):void {
-            var context = this.context;
-            context.save();
-            context.beginPath();
-            var length = regionList.length;
-            for (var i = 0; i < length; i++) {
-                var region = regionList[i];
-                context.clearRect(region.minX, region.minY, region.width, region.height);
-                context.rect(region.minX, region.minY, region.width, region.height);
-            }
-            context.clip();
-        }
-
-        /**
-         * 移除之前绘制的脏矩形区域
-         */
-        public removeDirtyRects():void {
-            this.context.restore();
-        }
-
-        /**
-         * 清空屏幕
-         */
-        public clearScreen():void {
-            var context = this.context;
-            context.save();
-            context.setTransform(1, 0, 0, 1, 0, 0);
-            context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            context.restore();
-        }
 
         public reset(root:DisplayObject):void {
         }
@@ -114,11 +65,7 @@ module lark.web {
                 context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY, width, height,
                     texture.$offsetX, texture.$offsetY, width, height);
             };
-            context["setMatrix"] = function (matrix:Matrix):void {
-                var m = matrix.$data;
-                context.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
-            };
-
+            context["surface"] = context.canvas;
             if (!context.hasOwnProperty("imageSmoothingEnabled")) {
                 var keys = ["webkitImageSmoothingEnabled", "mozImageSmoothingEnabled", "msImageSmoothingEnabled"];
                 for (var i = keys.length - 1; i >= 0; i--) {
