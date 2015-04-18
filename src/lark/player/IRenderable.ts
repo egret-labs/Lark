@@ -56,6 +56,6 @@ module lark.player {
         /**
          * 执行绘制
          */
-        $render(context:IRenderer):void;
+        $render(context:RenderContext):void;
     }
 }

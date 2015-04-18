@@ -221,13 +221,13 @@ module lark.player {
             var renderer = displayList.renderer;
             renderer.reset(root);
             renderer.markDirtyRects(displayList.dirtyList);
-            var drawCalls = this.drawDisplayObject(root, renderer, displayList.dirtyList, null);
+            var drawCalls = this.drawDisplayObject(root, renderer.renderContext, displayList.dirtyList, null);
             displayList.finish();
             renderer.removeDirtyRects();
             return drawCalls;
         }
 
-        private drawDisplayObject(displayObject:DisplayObject, renderer:IScreenRenderer, dirtyList:lark.player.Region[], displayList:DisplayList):number {
+        private drawDisplayObject(displayObject:DisplayObject, context:ScreenRenderContext, dirtyList:lark.player.Region[], displayList:DisplayList):number {
             var drawCalls = 0;
             var node:IRenderable;
             if (displayList) {
@@ -252,7 +252,11 @@ module lark.player {
                 }
                 if (node.$isDirty) {
                     drawCalls++;
-                    node.$render(renderer);
+                    context.save();
+                    context.globalAlpha = displayList?1:node.$stageAlpha;
+                    context.setMatrix(node.$stageMatrix);
+                    node.$render(context);
+                    context.restore();
                     node.$isDirty = false;
                 }
             }
@@ -267,7 +271,7 @@ module lark.player {
                     if (!(child.$displayObjectFlags & DisplayObjectFlags.Visible)) {
                         continue;
                     }
-                    drawCalls += this.drawDisplayObject(child, renderer, dirtyList, child.$displayList);
+                    drawCalls += this.drawDisplayObject(child, context, dirtyList, child.$displayList);
                 }
             }
             return drawCalls;

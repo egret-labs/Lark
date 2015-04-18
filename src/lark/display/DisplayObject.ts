@@ -761,7 +761,7 @@ module lark {
         /**
          * 执行渲染,绘制自身到屏幕
          */
-        $render(context:player.IRenderer):void {
+        $render(context:player.RenderContext):void {
 
         }
 

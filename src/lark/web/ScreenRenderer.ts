@@ -41,11 +41,10 @@ module lark.web {
             if (canvas) {
                 this.canvas = canvas;
                 this.context = canvas.getContext("2d");
-                mapGraphicsFunction(this.context);
+                this.renderContext = createRenderContext(this.context);
             }
 
             if (DEBUG) {//显示重绘区相关代码，发行版中移除
-
                 /**
                  * 绘制一个脏矩形显示区域，在显示重绘区功能开启时调用。
                  */
@@ -65,6 +64,7 @@ module lark.web {
 
         protected canvas:HTMLCanvasElement;
         protected context:CanvasRenderingContext2D;
+        public renderContext:player.ScreenRenderContext;
 
         /**
          * 绘制脏矩形列表
@@ -101,118 +101,10 @@ module lark.web {
         }
 
         public reset(root:DisplayObject):void {
-            var context = this.context;
-            context.setTransform(1, 0, 0, 1, 0, 0);
-            this._globalAlpha = 1;
-            this.context.globalAlpha = 1;
-            this.setFont(null);
-            this.setFillStyle(null);
-            context.strokeStyle = null;
-            context.textBaseline = "middle";
-
         }
-
-        /**
-         * 绘制图片到一个区域上
-         */
-        public drawImage(texture:Texture, matrix:Matrix, globalAlpha:number):void {
-            var width = texture.$bitmapWidth;
-            var height = texture.$bitmapHeight;
-            if (width === 0 || height === 0) {
-                return;
-            }
-            this.setGlobalAlpha(globalAlpha);
-            this.setTransform(matrix);
-            this.context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY, width, height,
-                texture.$offsetX, texture.$offsetY, width, height);
-        }
-
-        /**
-         * 绘制文本到一个区域上
-         */
-        public drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number):void {
-            var context = this.context;
-            this.setGlobalAlpha(globalAlpha);
-            this.setFont(font);
-            this.setFillStyle(color);
-            this.setTransform(matrix);
-            context.fillText(text, x, y, width);
-
-        }
-
-        /**
-         * 绘制矢量图形
-         */
-        public drawGraphics(commands:player.GraphicsCommand[], matrix:Matrix, globalAlpha:number):void {
-            this.setGlobalAlpha(globalAlpha);
-            this.setTransform(matrix);
-            var context = this.context;
-            context.save();
-            context.fillStyle = "#000000";
-            context.lineCap = "butt";
-            context.lineJoin = "miter";
-            context.lineWidth = 1;
-            context.miterLimit = 10;
-            context.strokeStyle = "#000000";
-            var map = context["graphicsMap"];
-            var length = commands.length;
-            for (var i = 0; i < length; i++) {
-                var command = commands[i];
-                map[command.type].apply(context, command.arguments);
-            }
-            context.restore();
-        }
-
-        private _globalAlpha:number = 1;
-
-        /**
-         * 设置并缓存globalAlpha属性，所有修改必须统一调用此方法。
-         */
-        protected setGlobalAlpha(value:number):void {
-            if (this._globalAlpha === value) {
-                return;
-            }
-            this._globalAlpha = value;
-            this.context.globalAlpha = value;
-        }
-
-        /**
-         * 设置并缓存矩阵变换参数，所有修改必须统一调用此方法。子类有可能会覆盖此方法改为叠加transform方式。
-         */
-        protected setTransform(matrix:Matrix):void {
-            var m = matrix.$data;
-            this.context.setTransform(m[0], m[1], m[2], m[3], m[4], m[5]);
-        }
-
-        private _font:string = null;
-
-        /**
-         * 设置并缓存font属性，所有修改必须统一调用此方法。
-         */
-        private setFont(value:string):void {
-            if (this._font == value) {
-                return;
-            }
-            this._font = value;
-            this.context.font = value;
-        }
-
-        private _fillStyle:string = null;
-
-        /**
-         * 设置并缓存fillStyle属性，所有修改必须统一调用此方法。
-         */
-        private setFillStyle(value:string):void {
-            if (this._fillStyle == value) {
-                return;
-            }
-            this._fillStyle = value;
-            this.context.fillStyle = value;
-        }
-
     }
 
-    export function mapGraphicsFunction(context:CanvasRenderingContext2D):void {
+    export function createRenderContext(context:CanvasRenderingContext2D):player.ScreenRenderContext {
         var map = context["graphicsMap"] = {};
         map[player.GraphicsCommandType.arc] = context.arc;
         map[player.GraphicsCommandType.arcTo] = context.arcTo;
@@ -246,5 +138,45 @@ module lark.web {
         map[player.GraphicsCommandType.strokeStyle] = function (value) {
             context.strokeStyle = value
         };
+        context["drawTexture"] = function (texture:Texture):void {
+            var width = texture.$bitmapWidth;
+            var height = texture.$bitmapHeight;
+            if (width === 0 || height === 0) {
+                return;
+            }
+            context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY, width, height,
+                texture.$offsetX, texture.$offsetY, width, height);
+        };
+        context["drawGraphics"] = function (commands:player.GraphicsCommand[]):void {
+            var map = context["graphicsMap"];
+            var length = commands.length;
+            for (var i = 0; i < length; i++) {
+                var command = commands[i];
+                map[command.type].apply(context, command.arguments);
+            }
+        };
+        context["setMatrix"] = function (matrix:Matrix):void {
+            var m = matrix.$data;
+            context.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
+        };
+
+        if (!context.hasOwnProperty("imageSmoothingEnabled")) {
+            var keys = ["webkitImageSmoothingEnabled", "mozImageSmoothingEnabled", "msImageSmoothingEnabled"];
+            for (var i = keys.length - 1; i >= 0; i--) {
+                var key = keys[i];
+                if (context.hasOwnProperty(key)) {
+                    break;
+                }
+            }
+            Object.defineProperty(context, "imageSmoothingEnabled", {
+                get: function () {
+                    return this[key];
+                },
+                set: function (value) {
+                    this[key] = value;
+                }
+            });
+        }
+        return <player.ScreenRenderContext><any>context;
     }
 }

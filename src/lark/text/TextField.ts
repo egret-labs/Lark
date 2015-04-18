@@ -181,7 +181,7 @@ module lark {
             bounds.setTo(0, 0, this.width, height);
         }
 
-        $render(renderer: player.IRenderer): void {
+        $render(context: player.RenderContext): void {
             if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0) {
                 this.$updateLines();
                 this._textFieldFlags = 0;
@@ -190,8 +190,9 @@ module lark {
             var length = spans.length;
             for (var i = 0; i < length; i++) {
                 var span = spans[i];
-                renderer.drawText(span.text, span.$toFontString(true), span.$toColorString(), span.x,
-                    span.style.fontSize / 2 + span.y, span.textWidth, this.matrix, this.$stageAlpha);
+                context.font = span.$toFontString(true);
+                context.fillStyle = span.$toColorString();
+                context.fillText(span.text, span.x, span.style.fontSize / 2 + span.y, span.textWidth);
             }
         }
 

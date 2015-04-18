@@ -57,8 +57,8 @@ module lark {
             this._graphics.$measureContentBounds(bounds);
         }
 
-        $render(renderer:player.IRenderer):void{
-            renderer.drawGraphics(this._graphics.$commands,this.$stageMatrix, this.$stageAlpha);
+        $render(context:player.RenderContext):void{
+            context.drawGraphics(this._graphics.$commands);
         }
     }
 }

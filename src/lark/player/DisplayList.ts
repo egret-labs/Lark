@@ -146,10 +146,10 @@ module lark.player {
             return this.dirtyList;
         }
 
-        $render(context:IRenderer):void{
+        $render(context:RenderContext):void{
             var texture = this.texture;
             if (texture) {
-                context.drawImage(texture, this.$stageMatrix, 1);
+                context.drawTexture(texture);
             }
         }
 

@@ -68,10 +68,10 @@ module lark {
             }
         }
 
-        $render(renderer:player.IRenderer):void{
+        $render(context:player.RenderContext):void{
             var texture = this.$texture;
             if (texture) {
-                renderer.drawImage(texture, this.$stageMatrix, this.$stageAlpha);
+                context.drawTexture(texture);
             }
         }
     }

@@ -30,32 +30,11 @@
 module lark.player {
 
     /**
-     * 渲染器
-     */
-    export interface IRenderer extends IHashObject {
-
-        /**
-         * 绘制图片到一个区域上
-         */
-        drawImage(texture:Texture, matrix:Matrix, globalAlpha:number): void;
-
-        /**
-         * 绘制文本到一个区域上
-         */
-        drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number): void;
-
-        /**
-         * 绘制矢量图形
-         */
-        drawGraphics(commands:GraphicsCommand[], matrix:Matrix, globalAlpha:number):void;
-
-    }
-
-    /**
      * 屏幕渲染器
      */
-    export interface IScreenRenderer extends IRenderer {
+    export interface IScreenRenderer {
 
+        renderContext:ScreenRenderContext;
         /**
          * 重置画布
          */
@@ -82,14 +61,14 @@ module lark.player {
     export interface RenderContext {
         miterLimit: number;
         lineCap: string;
-        shadowColor: string;
         lineJoin: string;
-        shadowOffsetX: number;
         lineWidth: number;
         strokeStyle: any;
-        shadowOffsetY: number;
         fillStyle: any;
-        shadowBlur: number;
+        imageSmoothingEnabled: boolean;
+        textAlign: string;
+        textBaseline: string;
+        font: string;
         arc(x:number, y:number, radius:number, startAngle:number, endAngle:number, anticlockwise?:boolean): void;
         quadraticCurveTo(cpx:number, cpy:number, x:number, y:number): void;
         lineTo(x:number, y:number): void;
@@ -103,31 +82,19 @@ module lark.player {
         strokeRect(x:number, y:number, w:number, h:number): void;
         beginPath(): void;
         arcTo(x1:number, y1:number, x2:number, y2:number, radius:number): void;
+        fillText(text:string, x:number, y:number, maxWidth?:number): void;
+        drawTexture(texture:Texture): void;
+        drawGraphics(commands:player.GraphicsCommand[]):void;
     }
 
     export interface ScreenRenderContext extends RenderContext{
-        font: string;
         globalCompositeOperation: string;
-        imageSmoothingEnabled: boolean;
-        lineDashOffset: number;
         globalAlpha: number;
-        textAlign: string;
-        textBaseline: string;
         restore(): void;
         save(): void;
-        fillText(text:string, x:number, y:number, maxWidth?:number): void;
-        measureText(text:string): TextMetrics;
-        rotate(angle:number): void;
-        setTransform(m11:number, m12:number, m21:number, m22:number, dx:number, dy:number): void;
-        transform(m11:number, m12:number, m21:number, m22:number, dx:number, dy:number): void;
-        translate(x:number, y:number): void;
-        scale(x:number, y:number): void;
         clip(fillRule?:string): void;
         clearRect(x:number, y:number, w:number, h:number): void;
-        drawImage(image:HTMLElement, offsetX:number, offsetY:number, width?:number, height?:number, canvasOffsetX?:number, canvasOffsetY?:number, canvasImageWidth?:number, canvasImageHeight?:number): void;
-        createLinearGradient(x0:number, y0:number, x1:number, y1:number): CanvasGradient;
-        createRadialGradient(x0:number, y0:number, r0:number, x1:number, y1:number, r1:number): CanvasGradient;
-        createPattern(texture:Texture, repetition:string): CanvasPattern;
+        setMatrix(matrix:Matrix):void;
     }
 
 }
