@@ -32,28 +32,31 @@ module lark.web {
     /**
      * 公用的CanvasRenderingContext2D对象。CacheRenderer在改变Canvas宽高时可能会使用它作为缓存。
      */
-    export var sharedCanvasContext:CanvasRenderingContext2D;
+    var canvasContext:CanvasRenderingContext2D;
+
+    export var sharedRenderContext:player.ScreenRenderContext;
 
     export class CanvasTextMeasurer extends HashObject implements lark.player.ITextMeasurer {
 
         public constructor() {
             super();
             var canvas = document.createElement("canvas");
-            sharedCanvasContext = canvas.getContext("2d");
+            canvasContext = canvas.getContext("2d");
+            sharedRenderContext = createRenderContext(canvasContext);
         }
 
         /**
          * 设置文本样式
          */
         public setupFont(style:ITextStyle):void {
-            sharedCanvasContext.font = style.toFontString(true);
+            canvasContext.font = style.toFontString(true);
         }
 
         /**
          * 测量文本在指定样式下的宽度
          */
         public measureText(text:string):number {
-            return sharedCanvasContext.measureText(text).width;
+            return canvasContext.measureText(text).width;
         }
     }
 }

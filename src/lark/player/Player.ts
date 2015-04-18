@@ -82,10 +82,9 @@ module lark.player {
                     if (repaintList.length > 20) {
                         repaintList.shift();
                     }
-                    var renderer = this.screenDisplayList.renderer;
-                    var context = renderer.renderContext;
-                    this.clearScreen(renderer.renderContext);
-                    renderer.reset(this.stage);
+                    var context = this.screenDisplayList.renderContext;
+                    this.clearScreen(context);
+                    context.setTransform(1,0,0,1,0,0);
                     context.drawTexture(this.stageDisplayList.texture);
                     length = repaintList.length;
                     for (i = 0; i < length; i++) {
@@ -209,6 +208,9 @@ module lark.player {
             var drawCalls = 0;
             if (dirtyList.length > 0) {
                 dirtyList = dirtyList.concat();
+                if(DEBUG&&this._showPaintRects){
+                    this.stageDisplayList.prepare();
+                }
                 drawCalls = this.drawDisplayList(stage, stage.$displayList);
             }
             if (DEBUG && this._showPaintRects) {

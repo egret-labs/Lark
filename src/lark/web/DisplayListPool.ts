@@ -88,11 +88,11 @@ module lark.web {
                 this.changeCacheSize(texture,bounds,oldSurface);
             }
             else if(bounds.width!==oldSurface.width||bounds.height!==oldSurface.height){
-                var oldContext:any = displayList.renderContext;
-                var newContext = <player.ScreenRenderContext><any>sharedCanvasContext;
-                displayList.renderContext = newContext;
+                var oldContext = displayList.renderContext;
+                var newContext = sharedRenderContext;
+                displayList.renderContext = newContext; 
                 var newSurface = newContext.surface;
-                sharedCanvasContext = oldContext;
+                sharedRenderContext = oldContext;
                 this.changeCacheSize(texture,bounds,newSurface);
                 if(oldSurface.width!==0&&oldSurface.height!==0){
                     newContext.setTransform(1,0,0,1,0,0);
