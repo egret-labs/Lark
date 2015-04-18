@@ -29,6 +29,7 @@
 
 /// <reference path="../lib/node.d.ts"/>
 /// <reference path="../lib/es6-promise.d.ts" />
+/// <reference path="../lib/types.d.ts" />
 
 import TypeScript = require("../lib/typescript/tsc");
 import FileUtil = require("../lib/FileUtil");
@@ -52,7 +53,9 @@ class Build {
         var task = Promise.resolve(0);
         if (this.options.includeLark)
             task = task.then((r) => this.buildLark());
-        task.then(r=> this.buildProject());
+        task.then(r=> this.buildProject()).then(code=>{
+            process.exit(code);
+        })
     }
 
     public clean() {

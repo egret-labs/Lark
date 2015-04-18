@@ -73,4 +73,3 @@ var Publish = (function () {
     return Publish;
 })();
 module.exports = Publish;
-//# sourceMappingURL=Publish.js.map

@@ -28,6 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 /// <reference path="../lib/node.d.ts"/>
 /// <reference path="../lib/es6-promise.d.ts" />
+/// <reference path="../lib/types.d.ts" />
 var TypeScript = require("../lib/typescript/tsc");
 var FileUtil = require("../lib/FileUtil");
 var Build = (function () {
@@ -41,7 +42,9 @@ var Build = (function () {
         var task = Promise.resolve(0);
         if (this.options.includeLark)
             task = task.then(function (r) { return _this.buildLark(); });
-        task.then(function (r) { return _this.buildProject(); });
+        task.then(function (r) { return _this.buildProject(); }).then(function (code) {
+            process.exit(code);
+        });
     };
     Build.prototype.clean = function () {
         //清理bin-debug目录
@@ -122,4 +125,3 @@ var Build = (function () {
     return Build;
 })();
 module.exports = Build;
-//# sourceMappingURL=Build.js.map
