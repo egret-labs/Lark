@@ -229,8 +229,8 @@ module lark.player {
          * 绘制显示列表。
          */
         public drawDisplayList(root:DisplayObject, displayList:DisplayList):number {
-            var context = displayList.renderContext;
             displayList.prepare();
+            var context = displayList.renderContext;
             this.markDirtyRects(displayList.dirtyList,context);
             var drawCalls = this.drawDisplayObject(root, context, displayList.dirtyList, null);
             context.restore();
