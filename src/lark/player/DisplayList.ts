@@ -59,6 +59,8 @@ module lark.player {
          * 目标显示对象的测量边界
          */
         public bounds:Rectangle = null;
+
+        public moved:boolean = false;
         /**
          * 是否需要重绘
          */
@@ -126,19 +128,17 @@ module lark.player {
             this.$stageAlpha = target.$getConcatenatedAlpha();
             this.$stageMatrix = target.$getConcatenatedMatrix();
             this.bounds = target.$getOriginalBounds();
-            var moved = target.$hasFlags(player.DisplayObjectFlags.InvalidRegion);
             if (this.needRedraw) {
                 this.updateDirtyNodes();
             }
-            if (!moved) {
-                return moved;
+            if (!this.moved) {
+                return false;
             }
-            target.$removeFlags(player.DisplayObjectFlags.InvalidRegion);
             if (!target.$stage) {
                 return false;
             }
             this.$stageRegion.transformBounds(this.bounds, this.$stageMatrix);
-            return moved;
+            return true;
         }
 
         public updateDirtyNodes():Region[] {

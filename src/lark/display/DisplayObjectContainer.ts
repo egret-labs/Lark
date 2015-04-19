@@ -396,19 +396,16 @@ module lark {
             bounds.setTo(xMin, yMin, xMax - xMin, yMax - yMin);
         }
 
-
-        $touchChildren:boolean = true;
-
         /**
          * 指定此对象的子项以及子孙项是否接收鼠标/触摸事件
          * 默认值为 true 即可以接收。
          */
         public get touchChildren():boolean {
-            return this.$touchChildren;
+            return this.$hasFlags(player.DisplayObjectFlags.TouchChildren);
         }
 
         public set touchChildren(value:boolean) {
-            this.$touchChildren = value;
+            this.$toggleFlags(player.DisplayObjectFlags.TouchChildren, !!value);
         }
 
         /**
@@ -487,7 +484,9 @@ module lark {
 
 
         $hitTest(stageX:number, stageY:number):DisplayObject {
-            if (!this.$hasFlags(player.DisplayObjectFlags.Visible) || !this.$touchEnabled && !this.$touchChildren) {
+            if (!this.$hasAnyFlags(player.DisplayObjectFlags.Visible|
+                    player.DisplayObjectFlags.TouchEnabled|
+                    player.DisplayObjectFlags.TouchChildren)) {
                 return null;
             }
             var children = this.$children;
@@ -498,15 +497,15 @@ module lark {
                 }
             }
             if (target) {
-                if (this.$touchChildren) {
+                if (this.$hasFlags(player.DisplayObjectFlags.TouchChildren)) {
                     return target;
                 }
                 return this;
             }
-            if (this.$touchEnabled) {
+            if (this.$hasFlags(player.DisplayObjectFlags.TouchEnabled)) {
                 return super.$hitTest(stageX, stageY);
             }
-            return null;
+            return null; 
         }
 
     }

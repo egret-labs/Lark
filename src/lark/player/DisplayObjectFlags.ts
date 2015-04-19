@@ -93,11 +93,11 @@ module lark.player {
         /**
          * 对象自身在舞台上的显示尺寸发生改变。
          */
-        InvalidContentRegion = 0x400,
+        TouchEnabled = 0x400,
         /**
          * 对象自身以及子项在舞台上显示尺寸发生改变。
          */
-        InvalidRegion = 0x800,
+        TouchChildren = 0x800,
         /**
          * DirtyRender|DirtyChildren
          */
@@ -113,6 +113,8 @@ module lark.player {
          * 显示对象初始化时的标志量
          */
         InitFlags = DisplayObjectFlags.Visible |
+            DisplayObjectFlags.TouchEnabled |
+            DisplayObjectFlags.TouchChildren |
             DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
             DisplayObjectFlags.InvalidConcatenatedAlpha |
