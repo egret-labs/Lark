@@ -99,6 +99,8 @@ module lark.web {
                     newContext.setTransform(1,0,0,1,0,0);
                     newContext.drawImage(oldSurface,oldOffsetX,oldOffsetY);
                 }
+                oldSurface.height = 1;
+                oldSurface.width = 1;
             }
             var m = root.$getInvertedConcatenatedMatrix().$data;
             displayList.renderContext.setTransform(m[0], m[1], m[2], m[3], m[4]-displayList.offsetX, m[5]-displayList.offsetY);
