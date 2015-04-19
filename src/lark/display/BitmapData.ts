@@ -27,11 +27,10 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark{
-    /**
-     * GraphicsPattern 接口表示描述一个模板（基于BitmapData）的不透明对象，通过 Graphics.createPattern() 静态方法创建.
-     */
-    export interface GraphicsPattern{
+module lark {
 
+    export interface BitmapData {
+        width: number;
+        height: number;
     }
 }

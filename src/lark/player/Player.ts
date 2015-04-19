@@ -85,7 +85,7 @@ module lark.player {
                     var context = this.screenDisplayList.renderContext;
                     this.clearScreen(context);
                     context.setTransform(1,0,0,1,0,0);
-                    context.drawTexture(this.stageDisplayList.texture);
+                    context.drawImage(this.stageDisplayList.bitmapData,0,0);
                     length = repaintList.length;
                     for (i = 0; i < length; i++) {
                         list = repaintList[i];
@@ -95,7 +95,7 @@ module lark.player {
                         }
                     }
                     this.markDirtyRects(dirtyList,context);
-                    context.drawTexture(this.stageDisplayList.texture);
+                    context.drawImage(this.stageDisplayList.bitmapData,0,0);
                     context.restore();
                 };
 

@@ -35,9 +35,7 @@ module lark {
             var img = new Image();
             img.src = "image/test.png";
             img.onload = ()=> {
-                var texture:Texture = new Texture();
-                texture.$setBitmapData(img);
-                this.start(texture);
+                this.start(img);
             }
 
         }
@@ -46,13 +44,13 @@ module lark {
 
         private iconList:DisplayObject[] = [];
 
-        private start(texture:Texture):void {
+        private start(bitmapData:BitmapData):void {
 
             //var container = new DisplayObjectContainer();
             //container.name = "container";
             //container.x = 150;
-            //container.addChild(new Bitmap(texture));
-            //var bitmap = new Bitmap(texture);
+            //container.addChild(new Bitmap(bitmapData));
+            //var bitmap = new Bitmap(bitmapData);
             //bitmap.x = 150;
             //bitmap.touchEnabled = false;
             //container.addChild(bitmap);
@@ -62,7 +60,7 @@ module lark {
             //var container2 = new DisplayObjectContainer();
             //container2.name  = "container2";
             //container2.addChild(container);
-            //bitmap = new Bitmap(texture);
+            //bitmap = new Bitmap(bitmapData);
             //bitmap.alpha = 0.7;
             //container2.addChild(bitmap);
             //container2.x = 250;
@@ -79,15 +77,15 @@ module lark {
             var x = 0, y = 0;
             for (var i = 0; i < 1000; i++) {
                 var bitmap = new Bitmap();
-                bitmap.texture = texture;
+                bitmap.bitmapData = bitmapData;
                 bitmap.x = x;
                 bitmap.y = y;
                 bitmap.scaleX = bitmap.scaleY = Math.random();
                 bitmap.rotation = Math.random() * 360;
-                x += texture.width;
+                x += bitmapData.width;
                 if (x > 1900) {
                     x = 0;
-                    y += texture.height;
+                    y += bitmapData.height;
                     if (y > 960) {
                         y = 0;
                     }
@@ -117,7 +115,7 @@ module lark {
             //container.x = 300;
             //container.y = 300;
             bitmap = new lark.Bitmap();
-            bitmap.texture = texture;
+            bitmap.bitmapData = bitmapData;
             bitmap.x = 450;
             bitmap.y = 500;
             this.iconList.push(bitmap);

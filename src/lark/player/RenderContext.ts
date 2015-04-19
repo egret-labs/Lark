@@ -78,17 +78,15 @@ module lark.player {
 
         fillText(text:string, x:number, y:number, maxWidth?:number): void;
         measureText(text:string): TextMetrics;
-        
-        drawTexture(texture:Texture): void;
-        createTexturePattern(texture:Texture, repetition:string): GraphicsPattern;
+        drawImage(image: BitmapData, offsetX: number, offsetY: number, width?: number, height?: number, surfaceOffsetX?:
+            number, surfaceOffsetY?: number, surfaceImageWidth?: number, surfaceImageHeight?:number):void;
+        createPattern(image:BitmapData, repetition:string): GraphicsPattern;
     }
 
     /**
      * 呈现最终绘图结果的画布
      */
-    export interface Surface {
-        width:number;
-        height:number;
+    export interface Surface extends BitmapData{
     }
 
     export interface TextMetrics {

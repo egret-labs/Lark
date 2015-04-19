@@ -30,38 +30,38 @@
 module lark {
     /**
      * Bitmap 类表示用于表示位图图像的显示对象。这些图像可以是使用 Bitmap() 构造函数创建的图像。
-     * 利用 Bitmap() 构造函数，可以创建包含对 Texture 对象的引用的 Bitmap 对象。创建了 Bitmap 对象后，
+     * 利用 Bitmap() 构造函数，可以创建包含对 BitmapData 对象的引用的 Bitmap 对象。创建了 Bitmap 对象后，
      * 使用父 DisplayObjectContainer 实例的 addChild() 或 addChildAt() 方法将位图放在显示列表中。
-     * 一个 Bitmap 对象可在若干 Bitmap 对象之中共享其 Texture 引用，与转换属性或旋转属性无关。
-     * 由于能够创建引用相同 Texture 对象的多个 Bitmap 对象，因此，多个显示对象可以使用相同的复杂 Texture 对象，
-     * 而不会因为每个显示对象实例使用一个 Texture 对象而产生内存开销。
+     * 一个 Bitmap 对象可在若干 Bitmap 对象之中共享其 BitmapData 引用，与转换属性或旋转属性无关。
+     * 由于能够创建引用相同 BitmapData 对象的多个 Bitmap 对象，因此，多个显示对象可以使用相同的复杂 BitmapData 对象，
+     * 而不会因为每个显示对象实例使用一个 BitmapData 对象而产生内存开销。
      */
     export class Bitmap extends DisplayObject {
 
         /**
          * 创建一个Bitmap对象
          */
-        public constructor(texture?:Texture) {
+        public constructor(bitmapData?:BitmapData) {
             super();
             this.$stageRegion = new player.Region();
-            this.texture = texture;
+            this.bitmapData = bitmapData;
         }
 
-        $texture:Texture = null;
+        $bitmapData:BitmapData;
 
-        public get texture():Texture{
-            return this.$texture;
+        public get bitmapData():BitmapData{
+            return this.$bitmapData;
         }
 
-        public set texture(value:Texture){
-            this.$texture = value;
+        public set bitmapData(value:BitmapData){
+            this.$bitmapData = value;
             this.$invalidateContentBounds();
         }
 
         $measureContentBounds(bounds:Rectangle):void {
-            var texture:Texture = this.$texture;
-            if(texture){
-                bounds.setTo(0,0,texture.width,texture.height);
+            var bitmapData:BitmapData = this.$bitmapData;
+            if(bitmapData){
+                bounds.setTo(0,0,bitmapData.width,bitmapData.height);
             }
             else{
                 bounds.setEmpty();
@@ -69,9 +69,9 @@ module lark {
         }
 
         $render(context:player.RenderContext):void{
-            var texture = this.$texture;
-            if (texture) {
-                context.drawTexture(texture);
+            var bitmapData = this.$bitmapData;
+            if (bitmapData) {
+                context.drawImage(bitmapData,0,0);
             }
         }
     }

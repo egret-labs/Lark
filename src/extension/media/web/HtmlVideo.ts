@@ -9,8 +9,8 @@
             }
                 
             var video = this.domElement;
-            this.texture.$setBitmapData(video);
-            this.$setDefaultTexture(this.texture, true);
+            this.bitmapData = video;
+            this.$setDefaultBitmapData(video, true);
             video.loop = loop;
             video.play();
         }
@@ -67,10 +67,8 @@
             var video = this.domElement;
             video.height = video.videoHeight;
             video.width = video.videoWidth;
-            if (this.texture == null && this._poster == null){
-                var texture = new Texture();
-                texture.$setBitmapData(video);
-                this.$setDefaultTexture(texture);
+            if (this.bitmapData == null && this._poster == null){
+                this.$setDefaultBitmapData(video);
             }
         }
 

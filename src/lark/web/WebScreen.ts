@@ -125,17 +125,13 @@ module lark.web {
     }
     export function createRenderContext(context:CanvasRenderingContext2D):player.RenderContext {
 
-        context["drawTexture"] = function (texture:Texture):void {
-            var width = texture.$bitmapWidth;
-            var height = texture.$bitmapHeight;
-            if (width === 0 || height === 0) {
+        var drawImage = context.drawImage;
+        context.drawImage = function(image: HTMLElement, offsetX: number, offsetY: number, width?: number, height?: number, surfaceOffsetX?:
+            number, surfaceOffsetY?: number, surfaceImageWidth?: number, surfaceImageHeight?:number):void{
+            if(image["width"]===0||image["height"]===0){//屏蔽IE下对绘制空canvas的报错。
                 return;
             }
-            context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY, width, height,
-                texture.$offsetX, texture.$offsetY, width, height);
-        };
-        context["createTexturePattern"] = function(texture:Texture, repetition:string): GraphicsPattern{
-            return <any>context.createPattern(texture.$bitmapData,repetition);
+            drawImage.apply(context,arguments);
         }
         context["surface"] = context.canvas;
         if (!context.hasOwnProperty("imageSmoothingEnabled")) {

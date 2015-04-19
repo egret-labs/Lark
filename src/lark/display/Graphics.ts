@@ -90,13 +90,13 @@ module lark {
         }
 
         /**
-         * 基于指定的源图象(Texture)创建一个模板，通过repetition参数指定源图像在什么方向上进行重复，返回一个GraphicsPattern对象。
-         * @param texture 做为重复图像源的 Texture 对象。
+         * 基于指定的源图象(BitmapData)创建一个模板，通过repetition参数指定源图像在什么方向上进行重复，返回一个GraphicsPattern对象。
+         * @param bitmapData 做为重复图像源的 BitmapData 对象。
          * @param repetition 指定如何重复图像。
          * 可能的值有："repeat" (两个方向重复),"repeat-x" (仅水平方向重复),"repeat-y" (仅垂直方向重复),"no-repeat" (不重复).
          */
-        public static createTexturePattern(texture:Texture, repetition:string):GraphicsPattern {
-            return player.sharedRenderContext.createTexturePattern(texture,repetition);
+        public static createPattern(bitmapData:BitmapData, repetition:string):GraphicsPattern {
+            return player.sharedRenderContext.createPattern(bitmapData,repetition);
         }
 
         public constructor() {

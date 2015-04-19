@@ -54,7 +54,7 @@ module lark.web {
                 var canvas:HTMLCanvasElement = document.createElement("canvas");
                 if(this.testCanvasValid(canvas)){
                     node = new lark.player.DisplayList(target);
-                    node.texture.$bitmapData = canvas;
+                    node.bitmapData = canvas;
                     var context = canvas.getContext("2d");
                     node.renderContext = createRenderContext(context);
                 }
@@ -79,12 +79,13 @@ module lark.web {
          */
         public prepare(displayList:player.DisplayList):void{
             var root = displayList.root;
-            var texture = displayList.texture;
             var bounds = root.$getOriginalBounds();
             var oldSurface = displayList.renderContext.surface;
+            var oldOffsetX = displayList.offsetX;
+            var oldOffsetY = displayList.offsetY;
             if(!displayList.$drawed){
                 displayList.$drawed = true;
-                this.changeCacheSize(texture,bounds,oldSurface);
+                this.changeCacheSize(displayList,bounds);
             }
             else if(bounds.width!==oldSurface.width||bounds.height!==oldSurface.height){
                 var oldContext = displayList.renderContext;
@@ -92,22 +93,23 @@ module lark.web {
                 displayList.renderContext = newContext; 
                 var newSurface = newContext.surface;
                 player.sharedRenderContext = oldContext;
-                this.changeCacheSize(texture,bounds,newSurface);
+                displayList.bitmapData = newSurface;
+                this.changeCacheSize(displayList,bounds);
                 if(oldSurface.width!==0&&oldSurface.height!==0){
                     newContext.setTransform(1,0,0,1,0,0);
-                    newContext.drawTexture(texture);
+                    newContext.drawImage(oldSurface,oldOffsetX,oldOffsetY);
                 }
             }
             var m = root.$getInvertedConcatenatedMatrix().$data;
-            displayList.renderContext.setTransform(m[0], m[1], m[2], m[3], m[4]-texture.$offsetX, m[5]-texture.$offsetY);
+            displayList.renderContext.setTransform(m[0], m[1], m[2], m[3], m[4]-displayList.offsetX, m[5]-displayList.offsetY);
         }
 
-        private changeCacheSize(texture:Texture,bounds:Rectangle,surface:player.Surface):void{
+        private changeCacheSize(displayList:player.DisplayList,bounds:Rectangle):void{
+            var surface = displayList.bitmapData;
             surface.width = bounds.width;
             surface.height = bounds.height;
-            texture.$setBitmapData(surface);
-            texture.$offsetX = bounds.x;
-            texture.$offsetY = bounds.y;
+            displayList.offsetX = bounds.x;
+            displayList.offsetY = bounds.y;
         }
     }
 }

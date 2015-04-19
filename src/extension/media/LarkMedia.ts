@@ -9,7 +9,7 @@
         src?: string;
         mimeType?: string;
         sources?: IMediaSource;
-        poster?: string|Texture;
+        poster?: string|BitmapData;
         width?: number;
         height?: number;
         volume?: number;

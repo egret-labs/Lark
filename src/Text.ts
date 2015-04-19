@@ -31,28 +31,26 @@
 
 module lark {
     export class Text extends DisplayObjectContainer {
-        texture: Texture = null;
+        bitmapData: BitmapData = null;
         public constructor() {
             super();
             var img = new Image();
             img.src = "http://tp2.sinaimg.cn/2078341137/50/5619181703/1";
             img.onload = () => {
-                var texture: Texture = new Texture();
-                texture.$setBitmapData(img);
-                this.texture = texture;
-                this.createChildren(texture)
+                this.bitmapData = img;
+                this.createChildren(img)
             }
             
         }
 
-        createChildren(texture: Texture) {
+        createChildren(bitmapData: BitmapData) {
             this.removeChildren();
             this.addChild(FPS.display);
             var bitmap = new Bitmap();
-            bitmap.texture = texture;
+            bitmap.bitmapData = bitmapData;
             bitmap.width = bitmap.height = 200;
             var bitmap2 = new Bitmap();
-            bitmap2.texture = texture;
+            bitmap2.bitmapData = bitmapData;
 
 
 

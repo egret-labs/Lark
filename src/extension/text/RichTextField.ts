@@ -304,7 +304,7 @@ module lark {
         protected parseImage(node: IRichTextNode) {
             var width = node.width, height = node.height;
             var bitmap = new Bitmap();
-            bitmap.texture = getTexture(node.src, bitmap);
+            bitmap.bitmapData = getBitmapData(node.src, bitmap);
             bitmap.width = width;
             bitmap.height = height;
             return this.parseGraphic(bitmap, node.style);
@@ -346,25 +346,21 @@ module lark {
 
     var img1px = new Image(1, 1);
     img1px.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQIW2NkAAIAAAoAAggA9GkAAAAASUVORK5CYII=";
-    var texture: Texture = new Texture();
-    texture.$setBitmapData(img1px);
-    var $1px: Texture = texture;
-    var $TextureCache: { [src: string]: Texture } = {};
+    var $1px: BitmapData = img1px;
+    var $BitmapDataCache: { [src: string]: BitmapData } = {};
 
-    function getTexture(src: string, bitmap: Bitmap): Texture {
-        if (src in $TextureCache) 
-            return $TextureCache[src];
+    function getBitmapData(src: string, bitmap: Bitmap): BitmapData {
+        if (src in $BitmapDataCache)
+            return $BitmapDataCache[src];
 
         var image = new Image();
         image.src = src;
         image.onload = e=> {
-            var texture = new Texture();
-            texture.$setBitmapData(image);
-            $TextureCache[src] = texture;
+            $BitmapDataCache[src] = image;
 
             var width = bitmap.width;
             var height = bitmap.height;
-            bitmap.texture = texture;
+            bitmap.bitmapData = image;
             bitmap.width = width;
             bitmap.height = height;
         };
