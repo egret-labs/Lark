@@ -29,8 +29,6 @@
 
 module lark.player {
 
-    var TempBounds = new Rectangle();
-
     export class Region {
 
         public minX:number = 0;
@@ -85,18 +83,66 @@ module lark.player {
             return max <= min;
         }
 
-        public transformBounds(contentBounds:Rectangle,matrix:Matrix):void{
-            var bounds = TempBounds.copyFrom(contentBounds);
+        public transformBounds(bounds:Rectangle, matrix:Matrix):void {
             var m = matrix.$data;
+            var a = m[0];
+            var b = m[1];
+            var c = m[2];
+            var d = m[3];
+            var tx = m[4];
+            var ty = m[5];
+            var x = bounds.x;
+            var y = bounds.y;
+            var xMax = x + bounds.width;
+            var yMax = y + bounds.height;
             //优化，通常情况下不缩放旋转的对象占多数，直接加上偏移量即可。
-            if(m[0]===1.0&&m[1]===0.0&&m[2]===0.0&&m[3]===1.0){
-                bounds.x += m[4];
-                bounds.y += m[5];
+            if (a === 1.0 && b === 0.0 && c === 0.0 && d === 1.0) {
+                this.minX = x + tx;
+                this.minY = y + ty;
+                this.maxX = xMax + tx;
+                this.maxY = yMax + ty;
             }
-            else{
-                matrix.$transformBounds(bounds);
+            else {
+                var x0 = a * x + c * y + tx;
+                var y0 = b * x + d * y + ty;
+                var x1 = a * xMax + c * y + tx;
+                var y1 = b * xMax + d * y + ty;
+                var x2 = a * xMax + c * yMax + tx;
+                var y2 = b * xMax + d * yMax + ty;
+                var x3 = a * x + c * yMax + tx;
+                var y3 = b * x + d * yMax + ty;
+
+                var tmp = 0;
+
+                if (x0 > x1) {
+                    tmp = x0;
+                    x0 = x1;
+                    x1 = tmp;
+                }
+                if (x2 > x3) {
+                    tmp = x2;
+                    x2 = x3;
+                    x3 = tmp;
+                }
+
+                this.minX = (x0 < x2 ? x0 : x2) | 0;
+                this.maxX = Math.ceil(x1 > x3 ? x1 : x3);
+
+                if (y0 > y1) {
+                    tmp = y0;
+                    y0 = y1;
+                    y1 = tmp;
+                }
+                if (y2 > y3) {
+                    tmp = y2;
+                    y2 = y3;
+                    y3 = tmp;
+                }
+
+                this.minY = (y0 < y2 ? y0 : y2) | 0;
+                this.maxY = Math.ceil(y1 > y3 ? y1 : y3);
             }
-            this.setTo(bounds.x|0,bounds.y|0,Math.ceil(bounds.x + bounds.width),Math.ceil(bounds.y + bounds.height));
+            this.updateArea();
         }
     }
 }
