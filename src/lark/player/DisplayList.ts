@@ -67,11 +67,11 @@ module lark.player {
         /**
          * 要绘制的纹理
          */
-        public texture:Texture = null;
+        public texture:Texture = new Texture();
 
         public needRedraw:boolean = false;
 
-        public renderContext:ScreenRenderContext;
+        public renderContext:RenderContext;
         /**
          * 显示对象的渲染节点发生改变时，把自身的IRenderable对象注册到此列表上。
          */
@@ -81,7 +81,21 @@ module lark.player {
 
         public dirtyList:Region[] = null;
 
-        public dirtyRegion:DirtyRegion = new DirtyRegion();
+        private dirtyRegion:DirtyRegion = new DirtyRegion();
+
+        private hasClipRect:boolean = false;
+
+        /**
+         * 设置剪裁边界，不再绘制完整目标对象，画布尺寸由外部决定，超过边界的节点将跳过绘制。
+         */
+        public setClipRect(width:number, height:number):void {
+            this.dirtyRegion.setClipRect(width,height);
+            this.hasClipRect = true;
+            var surface = this.renderContext.surface;
+            surface.width = width;
+            surface.height = height;
+            this.texture.$setBitmapData(surface);
+        }
 
         public markDirty(node:IRenderable):void {
             var key = node.$hashCode;
@@ -159,6 +173,9 @@ module lark.player {
          * 准备开始重绘
          */
         public prepare():void{
+            if(this.hasClipRect){
+                return;
+            }
             $displayListPool.prepare(this);
         }
         /**

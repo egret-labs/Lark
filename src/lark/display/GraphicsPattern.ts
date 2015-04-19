@@ -27,18 +27,11 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark{
     /**
-     * 文本测量实例接口
+     * GraphicsPattern 接口表示描述一个模板（基于Texture）的不透明对象，通过 Graphics.createTexturePattern() 静态方法创建.
      */
-    export interface ITextMeasurer {
-        /**
-         * 设置文本样式
-         */
-        setupFont(style:ITextStyle):void;
-        /**
-         * 测量文本在指定样式下的宽度
-         */
-        measureText(text:string):number;
+    export interface GraphicsPattern{
+
     }
 }

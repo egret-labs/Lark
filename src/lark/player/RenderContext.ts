@@ -30,18 +30,14 @@
 module lark.player {
 
     /**
-     * 屏幕渲染器
+     * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
      */
-    export interface IScreenRenderer {
-
-        renderContext:ScreenRenderContext;
-        /**
-         * 重置画布
-         */
-        reset(root:DisplayObject):void;
-    }
+    export var sharedRenderContext:player.RenderContext;
 
     export interface RenderContext {
+        surface:Surface;
+        globalCompositeOperation: string;
+        globalAlpha: number;
         miterLimit: number;
         lineCap: string;
         lineJoin: string;
@@ -67,34 +63,35 @@ module lark.player {
         beginPath(): void;
         arcTo(x1:number, y1:number, x2:number, y2:number, radius:number): void;
 
-        fillText(text:string, x:number, y:number, maxWidth?:number): void;
-        drawTexture(texture:Texture): void;
-
         transform(m11:number, m12:number, m21:number, m22:number, dx:number, dy:number): void;
         translate(x:number, y:number): void;
         scale(x:number, y:number): void;
         rotate(angle:number): void;
-        //createLinearGradient(x0:number, y0:number, x1:number, y1:number): CanvasGradient;
-        //createRadialGradient(x0:number, y0:number, r0:number, x1:number, y1:number, r1:number): CanvasGradient;
-        //createPattern(texture:Texture, repetition:string): CanvasPattern;
-    }
 
-    export interface ScreenRenderContext extends RenderContext{
-        surface:Surface;
-        globalCompositeOperation: string;
-        globalAlpha: number;
         restore(): void;
         save(): void;
         clip(fillRule?:string): void;
         clearRect(x:number, y:number, w:number, h:number): void;
         setTransform(m11:number, m12:number, m21:number, m22:number, dx:number, dy:number): void;
+        createLinearGradient(x0:number, y0:number, x1:number, y1:number): GraphicsGradient;
+        createRadialGradient(x0:number, y0:number, r0:number, x1:number, y1:number, r1:number): GraphicsGradient;
+
+        fillText(text:string, x:number, y:number, maxWidth?:number): void;
+        measureText(text:string): TextMetrics;
+        
+        drawTexture(texture:Texture): void;
+        createTexturePattern(texture:Texture, repetition:string): GraphicsPattern;
     }
 
     /**
-     * 呈现绘图结果的对象
+     * 呈现最终绘图结果的画布
      */
     export interface Surface {
         width:number;
         height:number;
+    }
+
+    export interface TextMetrics {
+        width: number;
     }
 }

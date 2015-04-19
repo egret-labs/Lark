@@ -54,7 +54,6 @@ module lark.web {
                 var canvas:HTMLCanvasElement = document.createElement("canvas");
                 if(this.testCanvasValid(canvas)){
                     node = new lark.player.DisplayList(target);
-                    node.texture = new Texture();
                     node.texture.$bitmapData = canvas;
                     var context = canvas.getContext("2d");
                     node.renderContext = createRenderContext(context);
@@ -89,10 +88,10 @@ module lark.web {
             }
             else if(bounds.width!==oldSurface.width||bounds.height!==oldSurface.height){
                 var oldContext = displayList.renderContext;
-                var newContext = sharedRenderContext;
+                var newContext = player.sharedRenderContext;
                 displayList.renderContext = newContext; 
                 var newSurface = newContext.surface;
-                sharedRenderContext = oldContext;
+                player.sharedRenderContext = oldContext;
                 this.changeCacheSize(texture,bounds,newSurface);
                 if(oldSurface.width!==0&&oldSurface.height!==0){
                     newContext.setTransform(1,0,0,1,0,0);

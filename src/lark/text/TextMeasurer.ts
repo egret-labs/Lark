@@ -30,8 +30,6 @@
 
 module lark {
 
-    export var $textMeasurer:lark.player.ITextMeasurer;
-
     var $TextWidthCache = {}
     /**
      * 用于文本宽度测量的辅助类
@@ -42,18 +40,18 @@ module lark {
          * 测量文本在指定样式下的宽度
          */
         public static measureText(text:string, style:ITextStyle):number {
-            var instance = $textMeasurer;
+            var context = player.sharedRenderContext;
             var width = 0.0;
             var fontCache = $TextWidthCache;
             var font = style.toFontString(true);
             var cache:{ [char: string]: number } = fontCache[font] || (fontCache[font] = {});
 
-            instance.setupFont(style);
+            context.font = style.toFontString(true);
 
             var length = text.length;
             for (var i = 0; i < length; i++) {
                 var letter = text.charCodeAt(i);
-                var w = cache[letter] || (cache[letter] = instance.measureText(text.charAt(i)));
+                var w = cache[letter] || (cache[letter] = context.measureText(text.charAt(i)).width);
                 width += w;
             }
             return width;

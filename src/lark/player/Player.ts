@@ -36,7 +36,7 @@ module lark.player {
         /**
          * 实例化一个播放器对象。
          */
-        public constructor(context:ScreenRenderContext, stage:Stage, entryClassName:string) {
+        public constructor(context:RenderContext, stage:Stage, entryClassName:string) {
             super();
             if (DEBUG && !context) {
                 $error(1003, "context");
@@ -120,7 +120,7 @@ module lark.player {
          */
         public drawDirtyRect:(x:number, y:number, width:number, height:number,context:RenderContext)=>void;
 
-        private createDisplayList(stage:Stage, context:ScreenRenderContext):DisplayList {
+        private createDisplayList(stage:Stage, context:RenderContext):DisplayList {
             var displayList = new DisplayList(stage);
             displayList.renderContext = context;
             stage.$displayList = displayList;
@@ -208,9 +208,6 @@ module lark.player {
             var drawCalls = 0;
             if (dirtyList.length > 0) {
                 dirtyList = dirtyList.concat();
-                if(DEBUG&&this._showPaintRects){
-                    this.stageDisplayList.prepare();
-                }
                 drawCalls = this.drawDisplayList(stage, stage.$displayList);
             }
             if (DEBUG && this._showPaintRects) {
@@ -233,19 +230,19 @@ module lark.player {
          */
         public drawDisplayList(root:DisplayObject, displayList:DisplayList):number {
             var context = displayList.renderContext;
+            displayList.prepare();
             this.markDirtyRects(displayList.dirtyList,context);
             var drawCalls = this.drawDisplayObject(root, context, displayList.dirtyList, null);
-            displayList.finish();
             context.restore();
+            displayList.finish();
             return drawCalls;
         }
 
-        private drawDisplayObject(displayObject:DisplayObject, context:ScreenRenderContext, dirtyList:lark.player.Region[], displayList:DisplayList):number {
+        private drawDisplayObject(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.player.Region[], displayList:DisplayList):number {
             var drawCalls = 0;
             var node:IRenderable;
             if (displayList) {
                 if (displayList.needRedraw) {
-                    displayList.prepare();
                     drawCalls += this.drawDisplayList(displayObject, displayList);
                 }
                 node = displayList;
@@ -295,7 +292,7 @@ module lark.player {
         /**
          * 绘制脏矩形列表
          */
-        private markDirtyRects(regionList:lark.player.Region[],context:ScreenRenderContext):void {
+        private markDirtyRects(regionList:lark.player.Region[],context:RenderContext):void {
             context.save();
             context.beginPath();
             var length = regionList.length;
@@ -310,7 +307,7 @@ module lark.player {
         /**
          * 清空屏幕
          */
-        public clearScreen(context:ScreenRenderContext):void {
+        public clearScreen(context:RenderContext):void {
             context.save();
             context.setTransform(1, 0, 0, 1, 0, 0);
             context.clearRect(0, 0, context.surface.width, context.surface.height);
@@ -327,9 +324,9 @@ module lark.player {
             if (stageWidth !== stage.$stageWidth || stageHeight !== stage.$stageHeight) {
                 stage.$stageWidth = stageWidth;
                 stage.$stageHeight = stageHeight;
-                this.screenDisplayList.dirtyRegion.setClipRect(stageWidth, stageHeight);
+                this.screenDisplayList.setClipRect(stageWidth, stageHeight);
                 if (DEBUG && this.stageDisplayList) {
-                    this.stageDisplayList.dirtyRegion.setClipRect(stageWidth, stageHeight);
+                    this.stageDisplayList.setClipRect(stageWidth, stageHeight);
                 }
                 stage.emitWith(Event.RESIZE);
             }

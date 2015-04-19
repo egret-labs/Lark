@@ -33,9 +33,9 @@ module lark {
     var HalfPI = PI / 2;
     var PacPI = PI + HalfPI;
     var TwoPI = PI * 2;
-    var vector = {x:0,y:0};
-    var vector1 = {x:0,y:0};
-    var vector3 = {x:0,y:0};
+    var vector = {x: 0, y: 0};
+    var vector1 = {x: 0, y: 0};
+    var vector3 = {x: 0, y: 0};
 
     /**
      * 格式化弧线角度的值
@@ -58,7 +58,7 @@ module lark {
     /**
      * 取两点之间的向量
      */
-    function getVector(x1:number, y1:number, x2:number, y2:number,v:Vector):void {
+    function getVector(x1:number, y1:number, x2:number, y2:number, v:Vector):void {
         var l = distance(x1, y1, x2, y2);
         v.x = (x2 - x1) / l;
         v.y = (y2 - y1) / l;
@@ -76,17 +76,27 @@ module lark {
     export class Graphics extends HashObject {
 
         /**
-         * 创建一个放射状渐变填充
+         * 创建一个放射状渐变填充对象
          */
         public static createRadialGradient(x0:number, y0:number, r0:number, x1:number, y1:number, r1:number):GraphicsGradient {
-            return null;
+            return player.sharedRenderContext.createRadialGradient(x0,y0,r0,x1,y1,r1);
         }
 
         /**
-         * 创建一个线性填充
+         * 创建一个沿参数坐标指定的直线的渐变。该方法返回一个线性 GraphicsGradient 对象。
          */
         public static createLinearGradient(x0:number, y0:number, x1:number, y1:number):GraphicsGradient {
-            return null;
+            return player.sharedRenderContext.createLinearGradient(x0,y0,x1,y1);
+        }
+
+        /**
+         * 基于指定的源图象(Texture)创建一个模板，通过repetition参数指定源图像在什么方向上进行重复，返回一个GraphicsPattern对象。
+         * @param texture 做为重复图像源的 Texture 对象。
+         * @param repetition 指定如何重复图像。
+         * 可能的值有："repeat" (两个方向重复),"repeat-x" (仅水平方向重复),"repeat-y" (仅垂直方向重复),"no-repeat" (不重复).
+         */
+        public static createTexturePattern(texture:Texture, repetition:string):GraphicsPattern {
+            return player.sharedRenderContext.createTexturePattern(texture,repetition);
         }
 
         public constructor() {
@@ -189,18 +199,18 @@ module lark {
             }
             var startX = Math.cos(startAngle) * radius;
             var endX = Math.cos(endAngle) * radius;
-            var xMin = Math.min(startX,endX);
-            var xMax = Math.max(startX,endX);
+            var xMin = Math.min(startX, endX);
+            var xMax = Math.max(startX, endX);
             if (startAngle <= (PI + offset) && endAngle >= (PI + offset)) {
                 xMin = -radius;
             }
-            if(startAngle <= offset && endAngle >= offset){
+            if (startAngle <= offset && endAngle >= offset) {
                 xMax = radius;
             }
             var startY = Math.sin(startAngle) * radius;
             var endY = Math.sin(endAngle) * radius;
-            var yMin = Math.min(startY,endY);
-            var yMax = Math.max(startY,endY);
+            var yMin = Math.min(startY, endY);
+            var yMax = Math.max(startY, endY);
             if (startAngle <= (PacPI + offset) && endAngle >= (PacPI + offset)) {
                 yMin = -radius;
             }
@@ -288,13 +298,13 @@ module lark {
             }
             this.checkMoveTo();
 
-            getVector(this.moveToX, this.moveToY, x1, y1,vector1);
-            getVector(x2, y2, x1, y1,vector3);
+            getVector(this.moveToX, this.moveToY, x1, y1, vector1);
+            getVector(x2, y2, x1, y1, vector3);
             //角平分线
             vector.x = vector1.x + vector3.x;
             vector.y = vector1.y + vector3.y;
             //角平分向量归1
-            getVector(vector.x, vector.y, 0, 0,vector);
+            getVector(vector.x, vector.y, 0, 0, vector);
             //向量夹角
             var cross = vector1.x * vector.x + vector1.y * vector.y;
             var l1 = distance(vector1.x, vector1.y, 0, 0);
@@ -312,9 +322,9 @@ module lark {
             var x12 = x1 + vector3.x * L10;
             var y12 = y1 + vector3.y * L10;
 
-            getVector(centerX, centerY, x10, y10,vector);
+            getVector(centerX, centerY, x10, y10, vector);
             var startAngle = Math.atan2(vector.y, vector.x);
-            getVector(centerX, centerY, x12, y12,vector);
+            getVector(centerX, centerY, x12, y12, vector);
             var endAngle = Math.atan2(vector.y, vector.x);
             var offset = endAngle - startAngle;
             offset = clampAngle(offset);
@@ -416,9 +426,9 @@ module lark {
             bounds.setTo(this.minX - half, this.minY - half, this.maxX - this.minX + lineWidth, this.maxY - this.minY + lineWidth);
         }
 
-        $render(context:player.RenderContext):void{
+        $render(context:player.RenderContext):void {
             var map = context["graphicsMap"];
-            if(!map){
+            if (!map) {
                 map = mapGraphicsFunction(context);
             }
             var commands = this.$commands;
@@ -430,7 +440,7 @@ module lark {
         }
     }
 
-    function mapGraphicsFunction(context:player.RenderContext):any{
+    function mapGraphicsFunction(context:player.RenderContext):any {
         var map = context["graphicsMap"] = {};
         map[player.GraphicsCommandType.arc] = context.arc;
         map[player.GraphicsCommandType.arcTo] = context.arcTo;

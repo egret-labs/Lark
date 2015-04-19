@@ -29,7 +29,15 @@
 
 module lark {
 
+    /**
+     * GraphicsGradient 接口表示描述渐变的不透明对象。通过 Graphics.createLinearGradient() 或 Graphics.createRadialGradient() 等静态方法的返回值得到.
+     */
     export interface GraphicsGradient {
+        /**
+         * 添加一个由偏移值和颜色值指定的断点到渐变。如果偏移值不在0到1之间，将抛出错误，如果颜色值不能被解析为有效的CSS颜色值 <color>，也将抛出错误。
+         * @param offset 0到1之间的值，超出范围将抛出错误
+         * @param color CSS颜色值 <color>。如果颜色值不能被解析为有效的CSS颜色值 <color>，将抛出错误。
+         */
         addColorStop(offset:number, color:string): void;
     }
 }

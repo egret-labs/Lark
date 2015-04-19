@@ -123,7 +123,7 @@ module lark.web {
             webTouch.updateScaleMode(displayWidth / stageWidth, displayHeight / stageHeight);
         }
     }
-    export function createRenderContext(context:CanvasRenderingContext2D):player.ScreenRenderContext {
+    export function createRenderContext(context:CanvasRenderingContext2D):player.RenderContext {
 
         context["drawTexture"] = function (texture:Texture):void {
             var width = texture.$bitmapWidth;
@@ -134,6 +134,9 @@ module lark.web {
             context.drawImage(texture.$bitmapData, texture.$bitmapX, texture.$bitmapY, width, height,
                 texture.$offsetX, texture.$offsetY, width, height);
         };
+        context["createTexturePattern"] = function(texture:Texture, repetition:string): GraphicsPattern{
+            return <any>context.createPattern(texture.$bitmapData,repetition);
+        }
         context["surface"] = context.canvas;
         if (!context.hasOwnProperty("imageSmoothingEnabled")) {
             var keys = ["webkitImageSmoothingEnabled", "mozImageSmoothingEnabled", "msImageSmoothingEnabled"];
@@ -152,7 +155,7 @@ module lark.web {
                 }
             });
         }
-        return <player.ScreenRenderContext><any>context;
+        return <player.RenderContext><any>context;
     }
 
 }
