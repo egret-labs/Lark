@@ -83,9 +83,12 @@ module lark.web {
             var oldSurface = displayList.renderContext.surface;
             var oldOffsetX = displayList.offsetX;
             var oldOffsetY = displayList.offsetY;
+            displayList.offsetX = bounds.x;
+            displayList.offsetY = bounds.y;
             if(!displayList.$drawed){
                 displayList.$drawed = true;
-                this.changeCacheSize(displayList,bounds);
+                oldSurface.width = bounds.width;
+                oldSurface.height = bounds.height;
             }
             else if(bounds.width!==oldSurface.width||bounds.height!==oldSurface.height){
                 var oldContext = displayList.renderContext;
@@ -94,24 +97,18 @@ module lark.web {
                 var newSurface = newContext.surface;
                 player.sharedRenderContext = oldContext;
                 displayList.bitmapData = newSurface;
-                this.changeCacheSize(displayList,bounds);
+                newSurface.width = bounds.width;
+                newSurface.height = bounds.height;
                 if(oldSurface.width!==0&&oldSurface.height!==0){
                     newContext.setTransform(1,0,0,1,0,0);
-                    newContext.drawImage(oldSurface,oldOffsetX,oldOffsetY);
+                    newContext.drawImage(oldSurface,oldOffsetX-bounds.x,oldOffsetY-bounds.y);
                 }
                 oldSurface.height = 1;
                 oldSurface.width = 1;
             }
             var m = root.$getInvertedConcatenatedMatrix().$data;
-            displayList.renderContext.setTransform(m[0], m[1], m[2], m[3], m[4]-displayList.offsetX, m[5]-displayList.offsetY);
+            displayList.renderContext.setTransform(m[0], m[1], m[2], m[3], m[4]-bounds.x, m[5]-bounds.y);
         }
 
-        private changeCacheSize(displayList:player.DisplayList,bounds:Rectangle):void{
-            var surface = displayList.bitmapData;
-            surface.width = bounds.width;
-            surface.height = bounds.height;
-            displayList.offsetX = bounds.x;
-            displayList.offsetY = bounds.y;
-        }
     }
 }
