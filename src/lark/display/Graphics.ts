@@ -427,6 +427,13 @@ module lark {
         }
 
         $render(context:player.RenderContext):void {
+            context.save();
+            context.fillStyle = "#000000";
+            context.lineCap = "butt";
+            context.lineJoin = "miter";
+            context.lineWidth = 1;
+            context.miterLimit = 10;
+            context.strokeStyle = "#000000";
             var map = context["graphicsMap"];
             if (!map) {
                 map = mapGraphicsFunction(context);
@@ -437,6 +444,7 @@ module lark {
                 var command = commands[i];
                 map[command.type].apply(context, command.arguments);
             }
+            context.restore();
         }
     }
 

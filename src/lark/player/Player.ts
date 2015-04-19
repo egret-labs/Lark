@@ -232,23 +232,26 @@ module lark.player {
             displayList.prepare();
             var context = displayList.renderContext;
             this.markDirtyRects(displayList.dirtyList,context);
-            var drawCalls = this.drawDisplayObject(root, context, displayList.dirtyList, null);
+            var drawCalls = this.drawDisplayObject(root, context, displayList.dirtyList, null,displayList.hasClipRect);
             context.restore();
             displayList.finish();
             return drawCalls;
         }
 
-        private drawDisplayObject(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.player.Region[], displayList:DisplayList):number {
+        private drawDisplayObject(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.player.Region[], displayList:DisplayList,hasClipRect:boolean):number {
             var drawCalls = 0;
             var node:IRenderable;
+            var globalAlpha:number;
             if (displayList) {
+                globalAlpha = 1;
                 if (displayList.needRedraw) {
                     drawCalls += this.drawDisplayList(displayObject, displayList);
                 }
                 node = displayList;
             }
-            else {
-                node = displayObject.$stageRegion ? displayObject : null;
+            else if(displayObject.$stageRegion){
+                node = displayObject;
+                globalAlpha = displayObject.$stageAlpha;
             }
             if (node && !(node.$stageAlpha === 0)) {
                 if (!node.$isDirty) {
@@ -263,12 +266,18 @@ module lark.player {
                 }
                 if (node.$isDirty) {
                     drawCalls++;
-                    context.save();
-                    context.globalAlpha = displayList?1:node.$stageAlpha;
+                    context.globalAlpha = globalAlpha;
                     var m = node.$stageMatrix.$data;
-                    context.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
-                    node.$render(context);
-                    context.restore();
+                    if(hasClipRect){
+                        context.setTransform(m[0], m[1], m[2], m[3], m[4], m[5]);
+                        node.$render(context);
+                    }
+                    else{
+                        context.save();
+                        context.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
+                        node.$render(context);
+                        context.restore();
+                    }
                     node.$isDirty = false;
                 }
             }
@@ -283,7 +292,7 @@ module lark.player {
                     if (!(child.$displayObjectFlags & DisplayObjectFlags.Visible)) {
                         continue;
                     }
-                    drawCalls += this.drawDisplayObject(child, context, dirtyList, child.$displayList);
+                    drawCalls += this.drawDisplayObject(child, context, dirtyList, child.$displayList,hasClipRect);
                 }
             }
             return drawCalls;
