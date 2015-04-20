@@ -54,7 +54,6 @@ module lark.web {
         startTicker(ticker);
         var surfaceFactory = new CanvasFactory();
         player.surfaceFactory = surfaceFactory;
-        player.sharedRenderContext = surfaceFactory.create().renderContext;
         if(!lark.player.screenAdapter){
             lark.player.screenAdapter = new lark.player.ScreenAdapter();
         }

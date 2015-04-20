@@ -33,6 +33,10 @@ module lark.web {
 
     export class CanvasFactory implements player.SurfaceFactory {
 
+        public constructor(){
+            player.sharedRenderContext = this.create().renderContext;
+        }
+
         /**
          * 从对象池取出或创建一个新的Surface实例
          */

@@ -30,6 +30,10 @@
 module lark.player {
 
     /**
+     * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
+     */
+    export var sharedRenderContext:player.RenderContext;
+    /**
      * surfaceFactory实例
      */
     export var surfaceFactory:SurfaceFactory;
