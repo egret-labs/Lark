@@ -15,7 +15,7 @@ module ts {
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
         getMemoryUsage? (): number;
-        exit(exitCode?: number): void;
+        exit(exitCode?: number): number;
     }
 
     export interface FileWatcher {
@@ -129,9 +129,10 @@ module ts {
                 getCurrentDirectory() {
                     return new ActiveXObject("WScript.Shell").CurrentDirectory;
                 },
-                exit(exitCode?: number): void {
+                exit(exitCode?: number): number {
                     try {
                         WScript.Quit(exitCode);
+                        return exitCode;
                     }
                     catch (e) {
                     }
@@ -237,8 +238,9 @@ module ts {
                     }
                     return process.memoryUsage().heapUsed;
                 },
-                exit(exitCode?: number): void {
+                exit(exitCode?: number): number {
                     process.exit(exitCode);
+                    return exitCode;
                 }
             };
         }

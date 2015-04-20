@@ -26,12 +26,13 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-/// <reference path="../lib/node.d.ts"/>
+/// <reference path="../lib/types.d.ts" />
+require('../locales/en');
+var CompileOptions = require("./CompileOptions");
 var Build = require("./Build");
 var Publish = require("./Publish");
 var Create = require("./Create");
 var utils = require('../lib/utils');
-var FileUtil = require('../lib/FileUtil');
 var optionDeclarations = [
     {
         name: "action",
@@ -69,6 +70,11 @@ var optionDeclarations = [
     {
         name: 'modules',
         type: 'string'
+    },
+    {
+        name: 'declaration',
+        type: 'booleam',
+        shortName: "d"
     }
 ];
 var shortOptionNames = {};
@@ -99,14 +105,7 @@ function executeCommandLine(args) {
 executeCommandLine(process.argv.slice(2));
 function parseCommandLine(commandLine) {
     // Set default compiler option values
-    var options = {
-        esTarget: "ES5",
-        action: null,
-        projectDir: null,
-        srcDir: null,
-        debugDir: null,
-        templateDir: null
-    };
+    var options = new CompileOptions();
     var filenames = [];
     var errors = [];
     parseStrings(commandLine);
@@ -157,9 +156,7 @@ function parseCommandLine(commandLine) {
         }
         if (options.projectDir == null)
             options.projectDir = process.cwd();
-        options.srcDir = FileUtil.joinPath(options.projectDir, "src");
-        options.debugDir = FileUtil.joinPath(options.projectDir, "bin-debug");
-        options.templateDir = FileUtil.joinPath(options.projectDir, "template");
     }
 }
 module.exports = executeCommandLine;
+//# sourceMappingURL=Entry.js.map
