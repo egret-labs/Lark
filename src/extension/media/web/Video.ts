@@ -1,5 +1,5 @@
-﻿module lark {
-    export class HtmlVideo extends LarkVideoBase {
+﻿module lark.web {
+    export class Video extends player.LarkVideoBase {
         protected domElement: HTMLVideoElement;
 
         public play(loop: boolean = false) {
@@ -75,4 +75,4 @@
     }
 }
 
-lark.Video = lark.HtmlVideo;
+lark.Video = lark.web.Video;

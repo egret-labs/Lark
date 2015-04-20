@@ -484,7 +484,7 @@ module lark {
         return map;
     }
 
-    interface GraphicsCommand {
+    export interface GraphicsCommand {
 
         type:number;
 

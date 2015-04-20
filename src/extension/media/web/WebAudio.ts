@@ -1,11 +1,11 @@
 ﻿
 
-module lark {
+module lark.web {
 
     var AudioContextClass: typeof AudioContext = window["AudioContext"] || window["webkitAudioContext"];
     var $AudioContext = AudioContextClass ? new AudioContextClass() : null;
 
-    export class WebAudio extends LarkMedia implements Audio {
+    export class WebAudio extends player.MediaBase implements lark.Audio {
 
         protected startTime: number;
         protected timer: Timer;
@@ -112,7 +112,7 @@ module lark {
         }
     }
 
-    export class BufferLoader extends HashObject{
+    class BufferLoader extends HashObject{
         constructor(context: AudioContext,files:string[],callback:(buffers:AudioBuffer[])=>void,onerror?:Function) {
             super();
             this.context = context;
