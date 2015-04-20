@@ -27,54 +27,29 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
+/// <reference path="../lib/types.d.ts" />
+
+import Action = require('./Action');
 import TypeScript = require("../lib/typescript/tsc");
 import FileUtil = require("../lib/FileUtil");
 import UglifyJS = require("../lib/uglify-js/uglifyjs");
-class Publish {
 
-    public constructor(options: lark.CompileOptions) {
-        this.options = options;
-        this.projectDir = options.projectDir;
-    }
+class Publish extends Action{
 
-    private projectDir:string;
-    private options: lark.CompileOptions;
     public run():void {
 
+        var option = this.options;
+        option.minify = true;
+        option.publish = true;
+
         //清理bin-debug目录
-        var releasePath = FileUtil.joinPath(this.projectDir, "bin-release/");
-        var fileList = FileUtil.getDirectoryListing(releasePath);
-        var length = fileList.length;
-        for (var i = 0; i < length; i++) {
-            var path = fileList[i];
-            FileUtil.remove(path);
-        }
+        this.clean(option.releaseDir);
+        
         //拷贝模板文件
-        var tempatePath = FileUtil.joinPath(this.projectDir, "template/");
-        fileList = FileUtil.getDirectoryListing(tempatePath);
-        length = fileList.length;
-        for (i = 0; i < length; i++) {
-            path = fileList[i];
-            var destPath = path.substring(tempatePath.length);
-            destPath = FileUtil.joinPath(releasePath, destPath);
-            FileUtil.copy(path, destPath);
-        }
-        var srcPath:string = FileUtil.joinPath(this.projectDir, "src");
-        var tsList:string[] = FileUtil.search(srcPath, "ts");
-        var output = FileUtil.joinPath(releasePath, "lark_min.js");
-        var cmd = tsList.join(" ") + " -t ES5 --out " + "\"" + output + "\"";
-        FileUtil.save("tsc_config_temp.txt", cmd);
-        TypeScript.exit = function ():void {
-            FileUtil.remove("tsc_config_temp.txt");
-            var defines = {
-                DEBUG: false,
-                RELEASE:true
-            }
-            //UglifyJS参数参考这个页面：https://github.com/mishoo/UglifyJS2
-            var result = UglifyJS.minify(output,{compress:{global_defs:defines},output:{beautify:false}});
-            FileUtil.save(output,result.code);
-        };
-        TypeScript.executeCommandLine(["@tsc_config_temp.txt"]);
+        this.copyDirectory(option.templateDir, option.releaseDir);
+
+        this.buildLark();
+        this.buildProject();
     }
 }
 

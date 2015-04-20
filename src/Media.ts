@@ -1,7 +1,7 @@
 ﻿
 
 module lark {
-    export class Media extends DisplayObjectContainer {
+    export class MediaMain extends DisplayObjectContainer {
         play: TextField;
         pause: TextField;
         stop: TextField;

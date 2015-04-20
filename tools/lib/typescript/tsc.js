@@ -712,6 +712,7 @@ var ts;
                 exit: function (exitCode) {
                     try {
                         WScript.Quit(exitCode);
+                        return exitCode;
                     }
                     catch (e) {
                     }
@@ -814,6 +815,7 @@ var ts;
                 },
                 exit: function (exitCode) {
                     process.exit(exitCode);
+                    return exitCode;
                 }
             };
         }
@@ -10739,6 +10741,23 @@ var ts;
                     emitEnd(node);
                     write(";");
                 }
+                writeLine();
+                emit(node.name);
+                write(".prototype.__class__ = \"");
+                var stack = [], parent = node.parent;
+                while (parent != null) {
+                    stack.push(parent);
+                    parent = parent.parent;
+                }
+                for (var i = stack.length - 1; i >= 0; i--) {
+                    parent = stack[i];
+                    if (parent["name"] && parent["name"].text) {
+                        write(parent["name"].text);
+                        write(".");
+                    }
+                }
+                write(node.name.text);
+                write("\";");
                 emitTrailingComments(node);
                 function emitConstructorOfClass() {
                     // Emit the constructor overload pinned comments
@@ -20382,6 +20401,7 @@ var ts;
 /// <reference path="emitter.ts"/>
 /// <reference path="commandLineParser.ts"/>
 /// <reference path="tree.ts" />
+/// <reference path="../../types.d.ts" />
 var ts;
 (function (ts) {
     var version = "1.4.0.0";
@@ -20484,6 +20504,10 @@ var ts;
     }
     function executeCommandLine(args) {
         var commandLine = ts.parseCommandLine(args);
+        executeWithOption(commandLine);
+    }
+    ts.executeCommandLine = executeCommandLine;
+    function executeWithOption(commandLine) {
         var compilerOptions = commandLine.options;
         if (compilerOptions.locale) {
             if (typeof JSON === "undefined") {
@@ -20525,7 +20549,7 @@ var ts;
             return ts.sys.exit(result);
         }
     }
-    ts.executeCommandLine = executeCommandLine;
+    ts.executeWithOption = executeWithOption;
     /**
      * Compiles the program once, and then watches all given and referenced files for changes.
      * Upon detecting a file change, watchProgram will queue up file modification events for the next
@@ -20720,9 +20744,37 @@ var ts;
         }
     }
 })(ts || (ts = {}));
-exports.executeCommandLine = ts.executeCommandLine;
-//exports.executeApi = ts.executeApi;
-exports.exit = null;
+var TSC = (function () {
+    function TSC() {
+    }
+    TSC.executeWithOption = function (options, files, out, outDir) {
+        var target = options.esTarget.toLowerCase();
+        var targetEnum = 1 /* ES5 */;
+        if (target == 'es6')
+            targetEnum = 2 /* ES6 */;
+        var parsedCmd = {
+            filenames: files,
+            options: {
+                sourceMap: options.sourceMap,
+                target: targetEnum,
+                removeComments: options.removeComments,
+                declaration: options.declaration
+            },
+            errors: []
+        };
+        if (out) {
+            parsedCmd.options.out = out;
+        }
+        else {
+            parsedCmd.options.outDir = outDir;
+        }
+        return ts.executeWithOption(parsedCmd);
+    };
+    TSC.executeCommandLine = ts.executeCommandLine;
+    TSC.exit = null;
+    return TSC;
+})();
+module.exports = TSC;
 ts.sys.exit = function (code) {
-    exports.exit(code);
+    return TSC.exit(code);
 };

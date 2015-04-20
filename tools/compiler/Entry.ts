@@ -27,8 +27,11 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-/// <reference path="../lib/node.d.ts"/>
+/// <reference path="../lib/types.d.ts" />
 
+require('../locales/en');
+
+import CompileOptions = require("./CompileOptions");
 import Build = require("./Build");
 import Publish = require("./Publish");
 import Create = require("./Create");
@@ -65,6 +68,10 @@ var optionDeclarations: lark.CommandLineOption[] = [
     }, {
         name: 'modules',
         type: 'string'
+    }, {
+        name: 'declaration',
+        type: 'booleam',
+        shortName: "d"
     }
 ];
 
@@ -107,14 +114,7 @@ export = executeCommandLine;
 
 function parseCommandLine(commandLine: string[]) {
     // Set default compiler option values
-    var options: lark.CompileOptions = {
-        esTarget: "ES5",
-        action: null,
-        projectDir: null,
-        srcDir: null,
-        debugDir: null,
-        templateDir: null
-    };
+    var options = new CompileOptions();
     var filenames: string[] = [];
     var errors: string[] = [];
     parseStrings(commandLine);
@@ -182,9 +182,6 @@ function parseCommandLine(commandLine: string[]) {
 
         if (options.projectDir == null)
             options.projectDir = process.cwd();
-        options.srcDir = FileUtil.joinPath(options.projectDir, "src");
-        options.debugDir = FileUtil.joinPath(options.projectDir, "bin-debug");
-        options.templateDir = FileUtil.joinPath(options.projectDir, "template");
     }
 
 }

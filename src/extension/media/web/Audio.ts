@@ -1,6 +1,6 @@
 ﻿var $HtmlAudio = Audio;
-module lark {
-    export class HtmlAudio extends LarkMedia implements Audio {
+module lark.web {
+    export class Audio extends player.MediaBase implements Audio {
         protected domElement: HTMLAudioElement;
         public load() {
             if (this.loadStart)
@@ -65,4 +65,4 @@ module lark {
     }
 }
 if ( !lark.Audio)
-    lark.Audio = lark.HtmlAudio;
+    lark.Audio = lark.web.Audio;

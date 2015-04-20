@@ -1,6 +1,16 @@
 ﻿
 
 module lark {
+
+    export interface GeoLocationListener extends EventEmitter {
+        on(type: "change", listener: (event: LocationEvent) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        on(type: "error", listener: (event: LocationEvent) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        getLocation(callback: (position: lark.Position, error: PositionError) => void);
+    }
+
+    export var GeoLocationListener: { new (): GeoLocationListener };
+
     export class Position {
         timestamp: Date;
         coords: Coordinates;
@@ -35,13 +45,4 @@ module lark {
         public location: Position;
         public error: PositionError;
     }
-
-    export interface GeoLocationListener extends EventEmitter {
-        on(type: "change", listener: (event: LocationEvent) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        on(type: "error", listener: (event: LocationEvent) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        getLocation(callback: (position: lark.Position,error:PositionError) => void);
-    }
-
-    export var GeoLocationListener: { new (): GeoLocationListener };
 }

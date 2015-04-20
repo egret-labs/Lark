@@ -26,50 +26,31 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-var TypeScript = require("../lib/typescript/tsc");
-var FileUtil = require("../lib/FileUtil");
-var UglifyJS = require("../lib/uglify-js/uglifyjs");
-var Publish = (function () {
-    function Publish(options) {
-        this.options = options;
-        this.projectDir = options.projectDir;
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+/// <reference path="../lib/types.d.ts" />
+var Action = require('./Action');
+var Publish = (function (_super) {
+    __extends(Publish, _super);
+    function Publish() {
+        _super.apply(this, arguments);
     }
     Publish.prototype.run = function () {
+        var option = this.options;
+        option.minify = true;
+        option.publish = true;
         //清理bin-debug目录
-        var releasePath = FileUtil.joinPath(this.projectDir, "bin-release/");
-        var fileList = FileUtil.getDirectoryListing(releasePath);
-        var length = fileList.length;
-        for (var i = 0; i < length; i++) {
-            var path = fileList[i];
-            FileUtil.remove(path);
-        }
+        this.clean(option.releaseDir);
         //拷贝模板文件
-        var tempatePath = FileUtil.joinPath(this.projectDir, "template/");
-        fileList = FileUtil.getDirectoryListing(tempatePath);
-        length = fileList.length;
-        for (i = 0; i < length; i++) {
-            path = fileList[i];
-            var destPath = path.substring(tempatePath.length);
-            destPath = FileUtil.joinPath(releasePath, destPath);
-            FileUtil.copy(path, destPath);
-        }
-        var srcPath = FileUtil.joinPath(this.projectDir, "src");
-        var tsList = FileUtil.search(srcPath, "ts");
-        var output = FileUtil.joinPath(releasePath, "lark_min.js");
-        var cmd = tsList.join(" ") + " -t ES5 --out " + "\"" + output + "\"";
-        FileUtil.save("tsc_config_temp.txt", cmd);
-        TypeScript.exit = function () {
-            FileUtil.remove("tsc_config_temp.txt");
-            var defines = {
-                DEBUG: false,
-                RELEASE: true
-            };
-            //UglifyJS参数参考这个页面：https://github.com/mishoo/UglifyJS2
-            var result = UglifyJS.minify(output, { compress: { global_defs: defines }, output: { beautify: false } });
-            FileUtil.save(output, result.code);
-        };
-        TypeScript.executeCommandLine(["@tsc_config_temp.txt"]);
+        this.copyDirectory(option.templateDir, option.releaseDir);
+        this.buildLark();
+        this.buildProject();
     };
     return Publish;
-})();
+})(Action);
 module.exports = Publish;
+//# sourceMappingURL=Publish.js.map

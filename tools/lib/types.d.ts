@@ -1,4 +1,8 @@
-﻿
+﻿/// <reference path="node.d.ts" />
+/// <reference path="es6-promise.d.ts" />
+
+
+
 
 declare module lark {
 
@@ -18,14 +22,22 @@ declare module lark {
         Error,
         Message,
     }
-    export interface CompileOptions {
+    export interface ICompileOptions {
         action: string;
         projectDir: string;
         srcDir: string;
+        srcLarkFile: string;
         debugDir: string;
+        debugLarkFile: string;
+        releaseDir: string;
+        releaseLarkFile: string;
         templateDir: string;
+        out: string;
+        outDir: string;
+        outLarkFile: string;
         larkRoot?: string;
 
+        publish?: boolean;
         includeLark?: boolean;
         runtime?: string;
         watch?: boolean;
@@ -34,6 +46,7 @@ declare module lark {
         removeComments?: boolean;
         esTarget?: string;
         showUI?: boolean;
+        declaration?: boolean;
 
         //modules
         modules?: string;
@@ -48,3 +61,4 @@ declare module lark {
         error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'.
     }
 }
+

@@ -8,6 +8,7 @@
 /// <reference path="emitter.ts"/>
 /// <reference path="commandLineParser.ts"/>
 /// <reference path="tree.ts" />
+/// <reference path="../../types.d.ts" />
 
 module ts {
     var version = "1.4.0.0";
@@ -136,10 +137,16 @@ module ts {
 
     export function executeCommandLine(args: string[]): void {
         var commandLine = parseCommandLine(args);
+        executeWithOption(commandLine);
+    }
+
+    export function executeWithOption(commandLine: ParsedCommandLine): number {
         var compilerOptions = commandLine.options;
 
-        if (compilerOptions.locale) {
-            if (typeof JSON === "undefined") {
+        if (compilerOptions.locale)
+        {
+            if (typeof JSON === "undefined")
+            {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
                 return sys.exit(1);
             }
@@ -149,23 +156,27 @@ module ts {
 
         // If there are any errors due to command line parsing and/or
         // setting up localization, report them and quit.
-        if (commandLine.errors.length > 0) {
+        if (commandLine.errors.length > 0)
+        {
             reportDiagnostics(commandLine.errors);
             return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
         }
 
-        if (compilerOptions.version) {
+        if (compilerOptions.version)
+        {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
             return sys.exit(EmitReturnStatus.Succeeded);
         }
 
-        if (compilerOptions.help) {
+        if (compilerOptions.help)
+        {
             printVersion();
             printHelp();
             return sys.exit(EmitReturnStatus.Succeeded);
         }
 
-        if (commandLine.filenames.length === 0) {
+        if (commandLine.filenames.length === 0)
+        {
             printVersion();
             printHelp();
             return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
@@ -173,15 +184,18 @@ module ts {
 
         var defaultCompilerHost = createCompilerHost(compilerOptions);
 
-        if (compilerOptions.watch) {
-            if (!sys.watchFile) {
+        if (compilerOptions.watch)
+        {
+            if (!sys.watchFile)
+            {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
                 return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
             }
 
             watchProgram(commandLine, defaultCompilerHost);
         }
-        else {
+        else
+        {
             var result = compile(commandLine, defaultCompilerHost).exitStatus
             return sys.exit(result);
         }
@@ -424,9 +438,41 @@ module ts {
     }
 }
 
-exports.executeCommandLine = ts.executeCommandLine;
-//exports.executeApi = ts.executeApi;
-exports.exit = null;
+
+
+class TSC {
+    static executeCommandLine = ts.executeCommandLine;
+    static executeWithOption(options: lark.ICompileOptions, files: string[], out?: string, outDir?: string):number {
+
+        var target = options.esTarget.toLowerCase();
+        var targetEnum = ts.ScriptTarget.ES5;
+        if (target == 'es6')
+            targetEnum = ts.ScriptTarget.ES6;
+
+        var parsedCmd:ts.ParsedCommandLine = {
+            filenames: files,
+            options: {
+                sourceMap: options.sourceMap,
+                target: targetEnum ,
+                removeComments: options.removeComments,
+                declaration: options.declaration
+            },
+            errors: []
+        };
+
+        if (out)
+        {
+            parsedCmd.options.out = out;
+        }
+        else
+        {
+            parsedCmd.options.outDir = outDir;
+        }
+        return ts.executeWithOption(parsedCmd);
+    }
+    static exit: (exitCode: number) => number = null;
+}
+module.exports = TSC;
 ts.sys.exit = function (code) {
-    exports.exit(code);
+    return TSC.exit(code);
 }

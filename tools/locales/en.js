@@ -31,4 +31,6 @@ global["$locale_strings"] = global["$locale_strings"] || {};
 var locale_strings = global["$locale_strings"];
 locale_strings[10001] = "Compiler option {0} expects an argument";
 locale_strings[10002] = "Unknown Compiler option {0}";
+locale_strings[10003] = "TSC is trying to exit, exit code is: {0}";
+locale_strings[10004] = "No output file name when minify flag is true";
 //# sourceMappingURL=en.js.map

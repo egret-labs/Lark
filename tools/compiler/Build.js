@@ -26,106 +26,35 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-/// <reference path="../lib/node.d.ts"/>
-/// <reference path="../lib/es6-promise.d.ts" />
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
 /// <reference path="../lib/types.d.ts" />
+var Action = require('./Action');
 var TypeScript = require("../lib/typescript/tsc");
-var FileUtil = require("../lib/FileUtil");
-var Build = (function () {
-    function Build(options) {
-        this.options = options;
-        this.projectDir = options.projectDir;
+var utils = require('../lib/utils');
+var Build = (function (_super) {
+    __extends(Build, _super);
+    function Build() {
+        _super.apply(this, arguments);
     }
     Build.prototype.run = function () {
-        var _this = this;
-        this.clean();
-        var task = Promise.resolve(0);
+        var exitCode = 0;
+        this.clean(this.options.debugDir);
         if (this.options.includeLark)
-            task = task.then(function (r) { return Build.buildLark(_this.options); });
-        task.then(function (r) { return Build.buildProject(_this.options); }).then(function (code) {
-            process.exit(code);
-        });
-    };
-    Build.prototype.clean = function () {
-        //清理bin-debug目录
-        var debugPath = FileUtil.joinPath(this.projectDir, "bin-debug/");
-        var fileList = FileUtil.getDirectoryListing(debugPath);
-        var length = fileList.length;
-        for (var i = 0; i < length; i++) {
-            var path = fileList[i];
-            FileUtil.remove(path);
-        }
-    };
-    Build.buildProject = function (option) {
-        //拷贝模板文件
-        var debugPath = FileUtil.joinPath(option.projectDir, "bin-debug/");
-        var tempatePath = FileUtil.joinPath(option.projectDir, "template/");
-        var fileList = FileUtil.getDirectoryListing(tempatePath);
-        length = fileList.length;
-        for (var i = 0; i < length; i++) {
-            var path = fileList[i];
-            var destPath = path.substring(tempatePath.length);
-            destPath = FileUtil.joinPath(debugPath, destPath);
-            FileUtil.copy(path, destPath);
-        }
-        //拷贝lark.js
-        var output = FileUtil.joinPath(option.projectDir, "src/lark/lark.js");
-        if (FileUtil.exists(output)) {
-            var destOut = FileUtil.joinPath(option.projectDir, "bin-debug/lark/lark.js");
-            FileUtil.copy(output, destOut);
-        }
-        var srcPath = FileUtil.joinPath(option.projectDir, "src");
-        var tsList = FileUtil.search(srcPath, "ts");
-        output = FileUtil.joinPath(option.projectDir, "bin-debug");
-        return Build.compile(option, tsList, null, output);
-    };
-    Build.buildLark = function (options) {
-        var larkRoot = options.larkRoot;
-        var srcPath = FileUtil.joinPath(larkRoot, "src");
-        var tsList = FileUtil.search(srcPath, "ts");
-        var output = FileUtil.joinPath(options.projectDir, "src/lark/lark.js");
-        var destOut = FileUtil.joinPath(options.projectDir, "bin-debug/lark/lark.js");
-        if (FileUtil.exists(output))
-            FileUtil.remove(output);
-        return Build.compile(options, tsList, output, null, true).then(function (code) {
-            if (code == 0) {
-                FileUtil.copy(output, destOut);
-            }
-            return code;
-        });
-        ;
-    };
-    Build.compile = function (options, files, out, outDir, def) {
-        var promise = new Promise(function (resolve, reject) {
-            var cmd = files.join(" ") + " -t " + options.esTarget;
-            if (options.sourceMap)
-                cmd += ' --sourcemap';
-            //if (options.removeComments)
-            cmd += ' --removeComments';
-            if (out)
-                cmd += " --out " + '"' + out + '"';
-            if (outDir)
-                cmd += " --outDir " + '"' + outDir + '"';
-            if (def)
-                cmd += ' -d';
-            console.log("start build");
-            FileUtil.save("tsc_config_temp.txt", cmd);
-            TypeScript.exit = function (exitCode) {
-                FileUtil.remove("tsc_config_temp.txt");
-                console.log("delete");
-                resolve(exitCode);
-            };
-            try {
-                TypeScript.executeCommandLine(["@tsc_config_temp.txt"]);
-            }
-            catch (e) {
-                console.log(e, e.stack);
-                resolve(0);
-            }
-        });
-        return promise;
+            exitCode = this.buildLark();
+        this.copyDirectory(this.options.templateDir, this.options.debugDir);
+        exitCode = this.buildProject();
+        process.exit(exitCode);
     };
     return Build;
-})();
+})(Action);
+TypeScript.exit = function (exitCode) {
+    if (exitCode != 0)
+        console.log(utils.tr(10003));
+    return exitCode;
+};
 module.exports = Build;
-//# sourceMappingURL=Build.js.map

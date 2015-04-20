@@ -81,7 +81,7 @@ module lark.player {
         createPattern(image:BitmapData, repetition:string): GraphicsPattern;
     }
 
-    interface TextMetrics {
+    export interface TextMetrics {
         width: number;
     }
 }

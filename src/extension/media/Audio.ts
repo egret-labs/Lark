@@ -1,4 +1,9 @@
 ﻿module lark {
+
+    export interface Audio extends Media { }
+
+    export var Audio: { new (option?: IAudioOption): Media };
+
     export interface IAudioSource extends IMediaSource {
         ogg?: string;
         mp3?: string;
@@ -10,7 +15,4 @@
     export interface IAudioOption extends IMediaOption {
         sources?: IAudioSource;
     }
-
-    export interface Audio extends IMedia {    }
-    export var Audio: { new (option?: IAudioOption): IMedia };
 }
