@@ -50,11 +50,10 @@ module lark.web {
      * 网页加载完成，实例化页面中定义的LarkPlayer标签
      */
     function runLark():void {
-        var ticker = lark.player.Ticker.$instance = new lark.player.Ticker();
+        var ticker = lark.player.Ticker.$instance = new player.Ticker();
         startTicker(ticker);
-        var canvas = document.createElement("canvas");
-        player.sharedRenderContext = createRenderContext(canvas.getContext("2d"));
-        lark.player.$displayListPool = new DisplayListPool();
+        var surfaceFactory = new CanvasFactory();
+        player.surfaceFactory = surfaceFactory;
         if(!lark.player.screenAdapter){
             lark.player.screenAdapter = new lark.player.ScreenAdapter();
         }
@@ -76,13 +75,13 @@ module lark.web {
         var contentWidth = +container.getAttribute("data-content-width")||480;
         var contentHeight = +container.getAttribute("data-content-height")||800;
         var scaleMode = container.getAttribute("data-scale-mode");
-        var webScreen = new WebScreen(container,scaleMode,contentWidth,contentHeight);
-        var canvas = webScreen.createCanvas();
+        var surface = lark.player.surfaceFactory.create();
+        var canvas = <HTMLCanvasElement><any>surface;
+        var webScreen = new WebScreen(container,canvas,scaleMode,contentWidth,contentHeight);
         var stage = new lark.Stage();
         var touch = new lark.player.TouchHandler(stage);
         var webTouch = new WebTouchHandler(touch, canvas);
-        var renderContext = createRenderContext(canvas.getContext("2d"));
-        var player = new lark.player.Player(renderContext, stage, entryClassName);
+        var player = new lark.player.Player(surface.renderContext, stage, entryClassName);
         if(DEBUG){
             var showPaintRects = container.getAttribute("data-show-paint-rects")=="true";
             player.showPaintRects(showPaintRects);

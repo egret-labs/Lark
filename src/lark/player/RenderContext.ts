@@ -30,10 +30,8 @@
 module lark.player {
 
     /**
-     * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
+     * 绘图上下文
      */
-    export var sharedRenderContext:player.RenderContext;
-
     export interface RenderContext {
         surface:Surface;
         globalCompositeOperation: string;
@@ -83,13 +81,7 @@ module lark.player {
         createPattern(image:BitmapData, repetition:string): GraphicsPattern;
     }
 
-    /**
-     * 呈现最终绘图结果的画布
-     */
-    export interface Surface extends BitmapData{
-    }
-
-    export interface TextMetrics {
+    interface TextMetrics {
         width: number;
     }
 }

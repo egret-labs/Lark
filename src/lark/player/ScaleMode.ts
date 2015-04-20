@@ -30,7 +30,7 @@
 
 module lark.player {
     /**
-     * StageScaleMode 类为 Stage.scaleMode 属性提供值。
+     * StageScaleMode 类为舞台缩放模式提供值。
      */
     export class ScaleMode {
         /**

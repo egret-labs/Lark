@@ -19,7 +19,7 @@
     export class LarkVideoBase extends LarkMedia implements Video {
         constructor(option:IMediaOption) {
             super(option);
-            this.$stageRegion = new player.Region();
+            this.$renderRegion = new player.Region();
             this._height = option.height || NaN;
             this._width = option.width || NaN;
 

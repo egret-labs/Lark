@@ -438,7 +438,7 @@ module lark {
             }
             child.$setFlags(player.DisplayObjectFlags.DirtyChildren);
             var displayList = child.$displayList;
-            if ((displayList||child.$stageRegion) && parentCache) {
+            if ((displayList||child.$renderRegion) && parentCache) {
                 parentCache.markDirty(displayList||child);
             }
             if (displayList) {
@@ -468,7 +468,7 @@ module lark {
             child.$parentDisplayList = newParent;
             child.$setFlags(player.DisplayObjectFlags.DirtyChildren);
             var displayList = child.$displayList;
-            if ((child.$stageRegion||displayList) && parentCache) {
+            if ((child.$renderRegion||displayList) && parentCache) {
                 parentCache.markDirty(displayList||child);
             }
             if (child.$displayList) {
@@ -484,8 +484,7 @@ module lark {
 
 
         $hitTest(stageX:number, stageY:number):DisplayObject {
-            if (!this.$hasAnyFlags(player.DisplayObjectFlags.Visible|
-                    player.DisplayObjectFlags.TouchEnabled|
+            if (!this.visible||!this.$hasAnyFlags(player.DisplayObjectFlags.TouchEnabled|
                     player.DisplayObjectFlags.TouchChildren)) {
                 return null;
             }

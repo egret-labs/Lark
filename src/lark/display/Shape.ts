@@ -42,7 +42,7 @@ module lark {
             super();
             this._graphics = new Graphics();
             this._graphics.$targetDisplay = this;
-            this.$stageRegion = new player.Region();
+            this.$renderRegion = new player.Region();
         }
 
         private _graphics:Graphics;

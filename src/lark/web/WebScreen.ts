@@ -41,12 +41,14 @@ module lark.web {
          * @param contentWidth 初始化内容宽度
          * @param contentHeight 初始化内容高度
          */
-        public constructor(container:HTMLElement, scaleMode:string, contentWidth:number, contentHeight:number) {
+        public constructor(container:HTMLElement, canvas:HTMLCanvasElement, scaleMode:string, contentWidth:number, contentHeight:number) {
             super();
             this.container = container;
+            this.canvas = canvas;
             this.scaleMode = scaleMode;
             this.contentWidth = contentWidth;
             this.contentHeight = contentHeight;
+            this.attachCanvas(container,canvas);
         }
 
         /**
@@ -73,15 +75,10 @@ module lark.web {
         private contentHeight:number;
 
         /**
-         * 创建Canvas实例
+         * 添加canvas到container。
          */
-        public createCanvas():HTMLCanvasElement {
-            if (this.canvas) {
-                return this.canvas;
-            }
-            var container = this.container;
-            var canvas:HTMLCanvasElement = document.createElement("canvas");
-            container.onselectstart = function () {
+        private attachCanvas(container:HTMLElement,canvas:HTMLCanvasElement):void {
+            container.onselectstart = function () {//屏蔽网页的文本选择
                 return false;
             };
             var style = canvas.style;
@@ -95,8 +92,6 @@ module lark.web {
             style = container.style;
             style.overflow = "hidden";
             style.position = "relative";
-            this.canvas = canvas;
-            return canvas;
         }
 
         /**
@@ -123,35 +118,4 @@ module lark.web {
             webTouch.updateScaleMode(displayWidth / stageWidth, displayHeight / stageHeight);
         }
     }
-    export function createRenderContext(context:CanvasRenderingContext2D):player.RenderContext {
-
-        var drawImage = context.drawImage;
-        context.drawImage = function(image: HTMLElement, offsetX: number, offsetY: number, width?: number, height?: number, surfaceOffsetX?:
-            number, surfaceOffsetY?: number, surfaceImageWidth?: number, surfaceImageHeight?:number):void{
-            if(image["width"]===0||image["height"]===0){//屏蔽IE下对绘制空canvas的报错。
-                return;
-            }
-            drawImage.apply(context,arguments);
-        }
-        context["surface"] = context.canvas;
-        if (!context.hasOwnProperty("imageSmoothingEnabled")) {
-            var keys = ["webkitImageSmoothingEnabled", "mozImageSmoothingEnabled", "msImageSmoothingEnabled"];
-            for (var i = keys.length - 1; i >= 0; i--) {
-                var key = keys[i];
-                if (context.hasOwnProperty(key)) {
-                    break;
-                }
-            }
-            Object.defineProperty(context, "imageSmoothingEnabled", {
-                get: function () {
-                    return this[key];
-                },
-                set: function (value) {
-                    this[key] = value;
-                }
-            });
-        }
-        return <player.RenderContext><any>context;
-    }
-
 }

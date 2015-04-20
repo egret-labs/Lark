@@ -29,10 +29,25 @@
 
 module lark.player {
 
-    export interface GraphicsCommand {
+    /**
+     * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
+     */
+    export var sharedRenderContext:player.RenderContext;
+    /**
+     * surfaceFactory实例
+     */
+    export var surfaceFactory:SurfaceFactory;
 
-        type:number;
+    export interface SurfaceFactory {
 
-        arguments:any[];
+        /**
+         * 从对象池取出或创建一个新的Surface实例
+         */
+        create():Surface;
+        /**
+         * 释放一个Surface实例
+         * @param surface 要释放的Surface实例
+         */
+        release(surface:Surface):void;
     }
 }

@@ -93,7 +93,7 @@ module lark {
             super();
             this._text = text;
             this._style = TextField.$normalizeStyle(style, BaseStyle);
-            this.$stageRegion = new player.Region();
+            this.$renderRegion = new player.Region();
             this.$invalidateContentBounds();
         }
 

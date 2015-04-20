@@ -28,34 +28,13 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark.player {
-
-    export interface IRenderable{
-
-        $hashCode:number;
+    /**
+     * 呈现最终绘图结果的画布
+     */
+    export interface Surface extends BitmapData{
         /**
-         * 是否需要重绘的标志
+         * 绘图上下文
          */
-        $isDirty:boolean;
-        /**
-         * 在舞台上的透明度
-         */
-        $stageAlpha:number;
-        /**
-         * 在舞台上的矩阵对象
-         */
-        $stageMatrix:Matrix;
-        /**
-         * 在舞台上的显示区域
-         */
-        $stageRegion:Region;
-
-        /**
-         * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
-         */
-        $update():boolean;
-        /**
-         * 执行绘制
-         */
-        $render(context:RenderContext):void;
+        renderContext:RenderContext;
     }
 }

@@ -29,14 +29,33 @@
 
 module lark.player {
 
-    export interface IDisplayListPool {
+    export interface Renderable{
 
-        release(node:DisplayList):void;
-
-        create(target:DisplayObject):DisplayList;
+        $hashCode:number;
         /**
-         * 即将开始重绘显示列表
+         * 是否需要重绘的标志
          */
-        prepare(node:DisplayList):void;
+        $isDirty:boolean;
+        /**
+         * 在舞台上的透明度
+         */
+        $renderAlpha:number;
+        /**
+         * 在舞台上的矩阵对象
+         */
+        $renderMatrix:Matrix;
+        /**
+         * 在屏幕上的显示区域
+         */
+        $renderRegion:Region;
+
+        /**
+         * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
+         */
+        $update():boolean;
+        /**
+         * 执行绘制
+         */
+        $render(context:RenderContext):void;
     }
 }

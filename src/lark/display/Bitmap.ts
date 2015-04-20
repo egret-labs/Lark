@@ -43,7 +43,7 @@ module lark {
          */
         public constructor(bitmapData?:BitmapData) {
             super();
-            this.$stageRegion = new player.Region();
+            this.$renderRegion = new player.Region();
             this.bitmapData = bitmapData;
         }
 

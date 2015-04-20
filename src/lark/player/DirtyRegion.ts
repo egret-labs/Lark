@@ -71,7 +71,8 @@ module lark.player {
         /**
          * 添加一个脏矩形区域，返回是否添加成功，当矩形为空或者在屏幕之外时返回false。
          */
-        public addRegion(minX:number, minY:number, maxX:number, maxY:number):boolean {
+        public addRegion(target:Region):boolean {
+            var minX = target.minX, minY = target.minY, maxX = target.maxX, maxY = target.maxY;
             if (this.hasClipRect) {
                 if (minX < 0) {
                     minX = 0;

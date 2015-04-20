@@ -49,7 +49,7 @@ module lark {
     /**
      * 显示对象基类
      */
-    export class DisplayObject extends EventEmitter implements player.IRenderable{
+    export class DisplayObject extends EventEmitter implements player.Renderable{
         /**
          * 创建一个显示对象
          */
@@ -232,17 +232,19 @@ module lark {
             if (this.$hasFlags(player.DisplayObjectFlags.InvalidConcatenatedMatrix)) {
                 if (this.$parent) {
                     this.$parent.$getConcatenatedMatrix().$preMultiplyInto(this.$getMatrix(),
-                        this.$stageMatrix);
+                        this.$renderMatrix);
                 } else {
-                    this.$stageMatrix.copyFrom(this.$getMatrix());
+                    this.$renderMatrix.copyFrom(this.$getMatrix());
                 }
                 if(this.$displayList){
-                    this.$displayList.moved = true;
+                    this.$displayList.$renderRegion.moved = true;
                 }
-                this.$moved = true;
+                if(this.$renderRegion){
+                    this.$renderRegion.moved = true;
+                }
                 this.$removeFlags(player.DisplayObjectFlags.InvalidConcatenatedMatrix);
             }
-            return this.$stageMatrix;
+            return this.$renderMatrix;
         }
 
         private _invertedConcatenatedMatrix:Matrix = new Matrix();
@@ -426,21 +428,22 @@ module lark {
             this.invalidateMatrix();
         }
 
+        $visible:boolean = true;
         /**
          * 显示对象是否可见。
          * 不可见的显示对象已被禁用。例如，如果实例的 visible=false，则无法单击该对象。
          * 默认值为 true 可见
          */
         public get visible():boolean {
-            return this.$hasFlags(player.DisplayObjectFlags.Visible);
+            return this.$visible;
         }
 
         public set visible(value:boolean) {
             value = !!value;
-            if (value === this.$hasFlags(player.DisplayObjectFlags.Visible)) {
+            if (value === this.$visible) {
                 return;
             }
-            this.$toggleFlags(player.DisplayObjectFlags.Visible, value);
+            this.$visible = value;
             this.$invalidateChildren();
         }
 
@@ -467,7 +470,7 @@ module lark {
                 return;
             }
             if (value) {
-                var displayList = lark.player.$displayListPool.create(this);
+                var displayList = player.DisplayList.create(this);
                 if (displayList) {
                     this.$displayList = displayList;
                     if (this.$parentDisplayList) {
@@ -477,7 +480,7 @@ module lark {
                 }
             }
             else {
-                lark.player.$displayListPool.release(this.$displayList);
+                player.DisplayList.release(this.$displayList);
                 this.$displayList = null;
                 this.$cacheAsBitmapChanged();
             }
@@ -488,7 +491,7 @@ module lark {
          */
         $cacheAsBitmapChanged():void {
             var parentCache = this.$displayList || this.$parentDisplayList;
-            if(this.$stageRegion){
+            if(this.$renderRegion){
                 parentCache.markDirty(this);
             }
         }
@@ -520,14 +523,14 @@ module lark {
             if (this.$hasFlags(player.DisplayObjectFlags.InvalidConcatenatedAlpha)) {
                 if (this.$parent) {
                     var parentAlpha = this.$parent.$getConcatenatedAlpha();
-                    this.$stageAlpha = parentAlpha * this.$values[Values.alpha];
+                    this.$renderAlpha = parentAlpha * this.$values[Values.alpha];
                 }
                 else {
-                    this.$stageAlpha = this.$values[Values.alpha];
+                    this.$renderAlpha = this.$values[Values.alpha];
                 }
                 this.$removeFlags(player.DisplayObjectFlags.InvalidConcatenatedAlpha);
             }
-            return this.$stageAlpha;
+            return this.$renderAlpha;
         }
 
         /**
@@ -667,7 +670,7 @@ module lark {
                 this.$measureChildBounds(bounds);
                 this.$removeFlags(player.DisplayObjectFlags.InvalidBounds);
                 if(this.$displayList){
-                    this.$displayList.moved = true;
+                    this.$displayList.$renderRegion.moved = true;
                 }
             }
             return bounds;
@@ -687,7 +690,9 @@ module lark {
             var bounds = this._contentBounds;
             if (this.$hasFlags(player.DisplayObjectFlags.InvalidContentBounds)) {
                 this.$measureContentBounds(bounds);
-                this.$moved = true;
+                if(this.$renderRegion){
+                    this.$renderRegion.moved = true;
+                }
                 this.$removeFlags(player.DisplayObjectFlags.InvalidContentBounds);
             }
             return bounds;
@@ -708,7 +713,7 @@ module lark {
          * @param notiryChildren 是否标记子项也需要重绘。传入false会不传入，将只标记自身的RenderNode需要重绘。
          */
         $invalidate(notifyChildren?:boolean):void {
-            if (!this.$stageRegion || this.$hasFlags(player.DisplayObjectFlags.DirtyRender)) {
+            if (!this.$renderRegion || this.$hasFlags(player.DisplayObjectFlags.DirtyRender)) {
                 return;
             }
             this.$setFlags(player.DisplayObjectFlags.DirtyRender);
@@ -727,28 +732,26 @@ module lark {
             }
             this.$setFlags(player.DisplayObjectFlags.DirtyChildren);
             var displayList = this.$displayList;
-            if ((displayList||this.$stageRegion)&&this.$parentDisplayList) {
+            if ((displayList||this.$renderRegion)&&this.$parentDisplayList) {
                 this.$parentDisplayList.markDirty(displayList||this);
             }
         }
         /**
-         * 是否需要重绘
+         * 是否需要重绘的标志，此属性在渲染时会被访问，所以单独声明一个直接的变量。
          */
         $isDirty:boolean = false;
         /**
          * 这个对象在舞台上的整体透明度
          */
-        $stageAlpha:number = 1;
+        $renderAlpha:number = 1;
         /**
          * 在舞台上的矩阵对象
          */
-        $stageMatrix:Matrix = new Matrix();
+        $renderMatrix:Matrix = new Matrix();
         /**
-         * 此显示对象自身（不包括子项）在舞台上的显示尺寸。
+         * 此显示对象自身（不包括子项）在屏幕上的显示尺寸。
          */
-        $stageRegion:player.Region = null;
-
-        $moved:boolean = false;
+        $renderRegion:player.Region = null;
         /**
          * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
          */
@@ -757,15 +760,11 @@ module lark {
             this.$getConcatenatedAlpha();
             var matrix = this.$getConcatenatedMatrix();
             var bounds = this.$getContentBounds();
-            if (!this.$moved) {
-                return false;
-            }
             var stage = this.$stage;
             if (!stage) {
                 return false;
             }
-            this.$stageRegion.transformBounds(bounds,matrix);
-            return true;
+            return this.$renderRegion.updateRegion(bounds,matrix);
         }
 
         /**
@@ -776,8 +775,8 @@ module lark {
         }
 
         $hitTest(stageX:number, stageY:number):DisplayObject {
-            if (!this.$stageRegion||!this.$hasAnyFlags(player.DisplayObjectFlags.TouchEnabled|
-                    player.DisplayObjectFlags.Visible)) {
+            if (!this.$renderRegion||!this.$visible||
+                !this.$hasFlags(player.DisplayObjectFlags.TouchEnabled)) {
                 return null;
             }
             var m = this.$getInvertedConcatenatedMatrix().$data;
