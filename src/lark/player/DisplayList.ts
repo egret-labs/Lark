@@ -40,6 +40,9 @@ module lark.player {
          * 释放一个DisplayList实例到对象池
          */
         public static release(displayList:DisplayList):void{
+            surfaceFactory.release(displayList.surface);
+            displayList.surface = null;
+            displayList.renderContext = null;
             displayList.root = null;
             displayList.$renderMatrix = null;
             displayList.needRedraw = false;

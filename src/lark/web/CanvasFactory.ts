@@ -40,7 +40,7 @@ module lark.web {
             var surface = surfacePool.pop();
             if (!surface) {
                 var canvas:HTMLCanvasElement = document.createElement("canvas");
-                if(!this.testCanvasValid(canvas)){
+                if (!this.testCanvasValid(canvas)) {
                     warn("failed to create canvas!");
                     return null;
                 }
@@ -54,6 +54,7 @@ module lark.web {
          * @param surface 要释放的Surface实例
          */
         public release(surface:player.Surface):void {
+            surface.width = surface.height = 1;
             surfacePool.push(surface);
         }
 
