@@ -30,7 +30,26 @@
 
 module lark {
 
+    class EventDataHost {
+
+        public constructor(target:IEventEmitter) {
+            this.eventTarget = target;
+        }
+
+        /**
+         * 事件抛出对象
+         */
+        public eventTarget:IEventEmitter;
+
+        public eventsMap:any = {};
+
+        public captureEventsMap:any = {};
+
+        public notifyLevel:number = 0;
+    }
+
     var ONCE_EVENT_LIST:lark.player.EventBin[] = [];
+
     /**
      * EventEmitter 是 Lark 的事件派发器类，负责进行事件的发送和侦听。
      *
@@ -48,23 +67,11 @@ module lark {
          */
         public constructor(target:IEventEmitter = null) {
             super();
-            if (target) {
-                this._eventTarget = target;
-            }
-            else {
-                this._eventTarget = this;
-            }
+            this.eventDataHost = new EventDataHost(target ? target : this);
 
         }
 
-        /**
-         * 事件抛出对象
-         */
-        private _eventTarget:IEventEmitter;
-
-        $eventsMap:any = null;
-
-        $captureEventsMap:any = null;
+        private eventDataHost:EventDataHost;
 
         /**
          * 添加事件侦听器
@@ -78,11 +85,8 @@ module lark {
          * @param  priority 事件侦听器的优先级。优先级由一个带符号的 32 位整数指定。数字越大，优先级越高。优先级为 n 的所有侦听器会在
          * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
          */
-        public on(type: "timer", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public on(type: "timerComplete", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        public on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
         public on(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority?:number):void {
-            this.$addListener(type,listener,thisObject,useCapture,priority);
+            this.$addListener(type, listener, thisObject, useCapture, priority);
         }
 
         /**
@@ -98,29 +102,20 @@ module lark {
          * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
          */
         public once(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority?:number):void {
-            this.$addListener(type,listener,thisObject,useCapture,priority,true);
+            this.$addListener(type, listener, thisObject, useCapture, priority, true);
         }
 
-        $addListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority?:number,emitOnce?:boolean):void{
-            if (!listener) {
-                //Logger.fatalWithErrorId(1010);
+        $addListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority?:number, emitOnce?:boolean):void {
+            if (DEBUG && !listener) {
+                $error(1003, "listener");
             }
-            var eventMap:any;
-            if (useCapture) {
-                if (!this.$captureEventsMap)
-                    this.$captureEventsMap = {};
-                eventMap = this.$captureEventsMap;
-            }
-            else {
-                if (!this.$eventsMap)
-                    this.$eventsMap = {};
-                eventMap = this.$eventsMap;
-            }
+            var host = this.eventDataHost;
+            var eventMap:any = useCapture ? host.captureEventsMap : host.eventsMap;
             var list:lark.player.EventBin[] = eventMap[type];
             if (!list) {
                 list = eventMap[type] = [];
             }
-            else if (this.notifyLevel !== 0) {
+            else if (host.notifyLevel !== 0) {
                 eventMap[type] = list = list.concat();
             }
             priority = +priority | 0;
@@ -156,14 +151,13 @@ module lark {
          */
         public removeListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean):void {
 
-            var eventMap:Object = useCapture ? this.$captureEventsMap : this.$eventsMap;
-            if (!eventMap)
-                return;
+            var host = this.eventDataHost;
+            var eventMap:Object = useCapture ? host.captureEventsMap : host.eventsMap;
             var list:lark.player.EventBin[] = eventMap[type];
             if (!list) {
                 return;
             }
-            if (this.notifyLevel !== 0) {
+            if (host.notifyLevel !== 0) {
                 eventMap[type] = list = list.concat();
             }
             var length = list.length;
@@ -185,8 +179,8 @@ module lark {
          * @returns 是否存在监听器，若存在返回true，反之返回false。
          */
         public hasListener(type:string):boolean {
-            return (this.$eventsMap && this.$eventsMap[type] ||
-            this.$captureEventsMap && this.$captureEventsMap[type]);
+            var host = this.eventDataHost;
+            return (host.eventsMap[type] || host.captureEventsMap[type]);
         }
 
         /**
@@ -204,22 +198,17 @@ module lark {
 
         /**
          * 将事件分派到事件流中。事件目标是对其调用 emit() 方法的 EventEmitter 对象。
-         * @param event 调度到事件流中的 Event 对象。如果正在重新分派事件，则会自动创建此事件的一个克隆。
-         * 在调度了事件后，其 _eventTarget 属性将无法更改，因此您必须创建此事件的一个新副本以能够重新调度。
+         * @param event 调度到事件流中的 Event 对象。
          * @returns 如果成功调度了事件，则值为 true。值 false 表示失败或对事件调用了 preventDefault()。
          */
         public emit(event:Event):boolean {
-            event.$target = event.$currentTarget = this._eventTarget;
+            event.$target = event.$currentTarget = this.eventDataHost.eventTarget;
             return this.$notifyListener(event);
         }
 
-        private notifyLevel:number = 0;
-
         $notifyListener(event:Event):boolean {
-            var eventMap:Object = event.$eventPhase == 1 ? this.$captureEventsMap : this.$eventsMap;
-            if (!eventMap) {
-                return true;
-            }
+            var host = this.eventDataHost;
+            var eventMap:Object = event.$eventPhase == 1 ? host.captureEventsMap : host.eventsMap;
             var list:lark.player.EventBin[] = eventMap[event.$type];
             if (!list) {
                 return true;
@@ -230,18 +219,18 @@ module lark {
             }
             var onceList = ONCE_EVENT_LIST;
             //做个标记，防止外部修改原始数组导致遍历错误。这里不直接调用list.concat()因为emit()方法调用通常比on()等方法频繁。
-            this.notifyLevel++;
+            host.notifyLevel++;
             for (var i = 0; i < length; i++) {
                 var eventBin = list[i];
                 eventBin.listener.call(eventBin.thisObject, event);
-                if(eventBin.emitOnce){
+                if (eventBin.emitOnce) {
                     onceList.push(eventBin);
                 }
                 if (event.$isPropagationImmediateStopped) {
                     break;
                 }
             }
-            this.notifyLevel--;
+            host.notifyLevel--;
             while (onceList.length) {
                 eventBin = onceList.pop();
                 eventBin.target.removeListener(eventBin.type, eventBin.listener, eventBin.thisObject, eventBin.useCapture);

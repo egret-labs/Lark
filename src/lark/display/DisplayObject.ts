@@ -56,10 +56,10 @@ module lark {
         public constructor() {
             super();
             this.$displayObjectFlags = player.DisplayObjectFlags.InitFlags;
-            this.$values = new Float64Array([1,1,0,0,0,1]);
+            this._values = new Float64Array([1,1,0,0,0,1]);
         }
 
-        $values:Float64Array;
+        private _values:Float64Array;
 
         $displayObjectFlags:number = 0;
 
@@ -194,7 +194,7 @@ module lark {
 
         $getMatrix():Matrix {
             if (this.$hasFlags(player.DisplayObjectFlags.InvalidMatrix)) {
-                var values = this.$values;
+                var values = this._values;
                 this._matrix.$updateScaleAndRotation(values[Values.scaleX],values[Values.scaleY],values[Values.skewX],values[Values.skewY]);
                 this.$removeFlags(player.DisplayObjectFlags.InvalidMatrix);
             }
@@ -214,7 +214,7 @@ module lark {
             }
             var m = this._matrix;
             m.copyFrom(matrix);
-            var values = this.$values;
+            var values = this._values;
             values[Values.scaleX] = m.$getScaleX();
             values[Values.scaleY] = m.$getScaleY();
             values[Values.skewX] = matrix.$getSkewX();
@@ -301,12 +301,12 @@ module lark {
          * @default 1
          */
         public get scaleX():number {
-            return this.$values[Values.scaleX];
+            return this._values[Values.scaleX];
         }
 
         public set scaleX(value:number) {
             value = +value || 0;
-            var values = this.$values;
+            var values = this._values;
             if (value === values[Values.scaleX]) {
                 return;
             }
@@ -321,15 +321,15 @@ module lark {
          * @default 1
          */
         public get scaleY():number {
-            return this.$values[Values.scaleY];
+            return this._values[Values.scaleY];
         }
 
         public set scaleY(value:number) {
             value = +value || 0;
-            if (value === this.$values[Values.scaleY]) {
+            if (value === this._values[Values.scaleY]) {
                 return;
             }
-            this.$values[Values.scaleY] = value;
+            this._values[Values.scaleY] = value;
             this.invalidateMatrix();
         }
 
@@ -340,13 +340,13 @@ module lark {
          * @default 0 默认值为 0 不旋转。
          */
         public get rotation():number {
-            return this.$values[Values.rotation];
+            return this._values[Values.rotation];
         }
 
         public set rotation(value:number) {
             value = +value || 0;
             value = clampRotation(value);
-            var values = this.$values;
+            var values = this._values;
             if (value === values[Values.rotation]) {
                 return;
             }
@@ -379,7 +379,7 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var values = this.$values;
+            var values = this._values;
             var originalBounds = this.$getOriginalBounds();
             var bounds = this.$getTransformedBounds(this.$parent, Rectangle.TEMP);
             var angle = values[Values.rotation] / 180 * Math.PI;
@@ -414,7 +414,7 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var values = this.$values;
+            var values = this._values;
             var originalBounds = this.$getOriginalBounds();
             var bounds = this.$getTransformedBounds(this.$parent, Rectangle.TEMP);
             var angle = values[Values.rotation] / 180 * Math.PI;
@@ -502,12 +502,12 @@ module lark {
          *  @default 1 默认值为 1。
          */
         public get alpha():number {
-            return this.$values[Values.alpha];
+            return this._values[Values.alpha];
         }
 
         public set alpha(value:number) {
             value = +value || 0;
-            var values = this.$values;
+            var values = this._values;
             if (value === values[Values.alpha]) {
                 return;
             }
@@ -523,10 +523,10 @@ module lark {
             if (this.$hasFlags(player.DisplayObjectFlags.InvalidConcatenatedAlpha)) {
                 if (this.$parent) {
                     var parentAlpha = this.$parent.$getConcatenatedAlpha();
-                    this.$renderAlpha = parentAlpha * this.$values[Values.alpha];
+                    this.$renderAlpha = parentAlpha * this._values[Values.alpha];
                 }
                 else {
-                    this.$renderAlpha = this.$values[Values.alpha];
+                    this.$renderAlpha = this._values[Values.alpha];
                 }
                 this.$removeFlags(player.DisplayObjectFlags.InvalidConcatenatedAlpha);
             }
