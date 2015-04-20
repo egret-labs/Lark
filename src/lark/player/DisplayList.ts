@@ -38,7 +38,10 @@ module lark.player {
             this.root = root;
         }
 
-        $drawed:boolean = false;
+        /**
+         * 是否需要重绘
+         */
+        $isDirty:boolean = false;
         /**
          * 在舞台上的透明度
          */
@@ -51,32 +54,65 @@ module lark.player {
          * 在舞台上的显示区域
          */
         $renderRegion:Region = new Region();
+
+        /**
+         * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
+         */
+        $update():boolean {
+            var target = this.root;
+            target.$removeFlagsUp(DisplayObjectFlags.Dirty);
+            this.$renderAlpha = target.$getConcatenatedAlpha();
+            this.$renderMatrix = target.$getConcatenatedMatrix();
+            var bounds = target.$getOriginalBounds();
+            if (this.needRedraw) {
+                this.updateDirtyRegions();
+            }
+            if (!target.$stage) {
+                return false;
+            }
+            return this.$renderRegion.updateRegion(bounds, this.$renderMatrix);
+        }
+
+        /**
+         * 呈现绘制结果的目标画布
+         */
+        public surface:Surface = null;
+        public offsetX:number = 0;
+        public offsetY:number = 0;
+
+        $render(context:RenderContext):void {
+            var data = this.surface;
+            if (data) {
+                context.drawImage(data, this.offsetX, this.offsetY);
+            }
+        }
+
         /**
          * 显示列表根节点
          */
         public root:DisplayObject;
-        /**
-         * 目标显示对象的测量边界
-         */
-        public bounds:Rectangle = null;
-
-        /**
-         * 是否需要重绘
-         */
-        $isDirty:boolean = false;
-
-        /**
-         * 要绘制的纹理
-         */
-        public bitmapData:BitmapData = null;
-
-        public offsetX:number = 0;
-
-        public offsetY:number = 0;
 
         public needRedraw:boolean = false;
 
+        private drawToStage:boolean = false;
+
+        /**
+         * 绘图上下文
+         */
         public renderContext:RenderContext;
+
+        /**
+         * 设置剪裁边界，不再绘制完整目标对象，画布尺寸由外部决定，超过边界的节点将跳过绘制。
+         */
+        public setClipRect(width:number, height:number):void {
+            this.dirtyRegion.setClipRect(width, height);
+            this.drawToStage = true;//只有舞台画布才能设置ClipRect
+            var surface = this.renderContext.surface;
+            surface.width = width;
+            surface.height = height;
+            this.surface = surface;
+        }
+
         /**
          * 显示对象的渲染节点发生改变时，把自身的IRenderable对象注册到此列表上。
          */
@@ -84,24 +120,9 @@ module lark.player {
 
         private dirtyNodeList:Renderable[] = [];
 
-        public dirtyList:Region[] = null;
-
-        private dirtyRegion:DirtyRegion = new DirtyRegion();
-
-        public hasClipRect:boolean = false;
-
         /**
-         * 设置剪裁边界，不再绘制完整目标对象，画布尺寸由外部决定，超过边界的节点将跳过绘制。
+         * 标记一个节点需要重新渲染
          */
-        public setClipRect(width:number, height:number):void {
-            this.dirtyRegion.setClipRect(width, height);
-            this.hasClipRect = true;
-            var surface = this.renderContext.surface;
-            surface.width = width;
-            surface.height = height;
-            this.bitmapData = surface;
-        }
-
         public markDirty(node:Renderable):void {
             var key = node.$hashCode;
             if (this.dirtyNodes[key]) {
@@ -118,25 +139,14 @@ module lark.player {
             }
         }
 
-        /**
-         * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
-         */
-        $update():boolean {
-            var target = this.root;
-            target.$removeFlagsUp(DisplayObjectFlags.Dirty);
-            this.$renderAlpha = target.$getConcatenatedAlpha();
-            this.$renderMatrix = target.$getConcatenatedMatrix();
-            this.bounds = target.$getOriginalBounds();
-            if (this.needRedraw) {
-                this.updateDirtyNodes();
-            }
-            if (!target.$stage) {
-                return false;
-            }
-            return this.$renderRegion.updateRegion(this.bounds, this.$renderMatrix);
-        }
+        private dirtyList:Region[] = null;
 
-        public updateDirtyNodes():Region[] {
+        private dirtyRegion:DirtyRegion = new DirtyRegion();
+
+        /**
+         * 更新节点属性并返回脏矩形列表。
+         */
+        public updateDirtyRegions():Region[] {
             var nodeList = this.dirtyNodeList;
             this.dirtyNodeList = [];
             this.dirtyNodes = {};
@@ -146,13 +156,13 @@ module lark.player {
                 var node = nodeList[i];
                 var region = node.$renderRegion;
                 if (node.$renderAlpha !== 0) {
-                    if (dirtyRegion.addRegion(region.minX, region.minY, region.maxX, region.maxY)) {
+                    if (dirtyRegion.addRegion(region)) {
                         node.$isDirty = true;
                     }
                 }
                 var moved = node.$update();
                 if (moved && node.$renderAlpha !== 0) {
-                    if (dirtyRegion.addRegion(region.minX, region.minY, region.maxX, region.maxY)) {
+                    if (dirtyRegion.addRegion(region)) {
                         node.$isDirty = true;
                     }
                 }
@@ -161,30 +171,136 @@ module lark.player {
             return this.dirtyList;
         }
 
-        $render(context:RenderContext):void {
-            var data = this.bitmapData;
-            if (data) {
-                context.drawImage(data, this.offsetX, this.offsetY);
-            }
-        }
-
         /**
-         * 准备开始重绘
+         * 绘制根节点显示对象到目标画布，返回draw的次数。
          */
-        public prepare():void {
-            if (this.hasClipRect) {
-                return;
+        public drawToSurface():number {
+            if (!this.drawToStage) {//对非舞台画布要根据目标显示对象尺寸改变而改变。
+                this.changeSurfaceSize();
             }
-            $displayListPool.prepare(this);
-        }
-
-        /**
-         * 结束重绘,清理缓存。
-         */
-        public finish():void {
-            this.dirtyRegion.clear();
+            var context = this.renderContext;
+            //绘制脏矩形区域
+            context.save();
+            context.beginPath();
+            var dirtyList = this.dirtyList;
             this.dirtyList = null;
+            var length = dirtyList.length;
+            for (var i = 0; i < length; i++) {
+                var region = dirtyList[i];
+                context.clearRect(region.minX, region.minY, region.width, region.height);
+                context.rect(region.minX, region.minY, region.width, region.height);
+            }
+            context.clip();
+            //绘制显示对象
+            var drawCalls = this.drawDisplayObject(this.root, context, dirtyList, this.drawToStage, null);
+            //清除脏矩形区域
+            context.restore();
+            this.dirtyRegion.clear();
             this.needRedraw = false;
+            return drawCalls;
         }
+
+        /**
+         * 绘制一个显示对象
+         */
+        private drawDisplayObject(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.player.Region[],
+                                  drawToStage:boolean, displayList:DisplayList):number {
+            var drawCalls = 0;
+            var node:Renderable;
+            var globalAlpha:number;
+            if (displayList) {
+                if (displayList.needRedraw) {
+                    drawCalls += displayList.drawToSurface();
+                }
+                node = displayList;
+                globalAlpha = 1;//这里不用读取displayList.$renderAlpha,因为它已经绘制到了displayList.surface的内部。
+            }
+            else if (displayObject.$renderRegion) {
+                node = displayObject;
+                globalAlpha = displayObject.$renderAlpha;
+            }
+            if (node && !(node.$renderAlpha === 0)) {
+                if (!node.$isDirty) {
+                    var renderRegion = node.$renderRegion;
+                    var l = dirtyList.length;
+                    for (var j = 0; j < l; j++) {
+                        if (renderRegion.intersects(dirtyList[j])) {
+                            node.$isDirty = true;
+                            break;
+                        }
+                    }
+                }
+                if (node.$isDirty) {
+                    drawCalls++;
+                    context.globalAlpha = globalAlpha;
+                    var m = node.$renderMatrix.$data;
+                    if (drawToStage) {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
+                        context.setTransform(m[0], m[1], m[2], m[3], m[4], m[5]);
+                        node.$render(context);
+                    }
+                    else {
+                        context.save();
+                        context.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
+                        node.$render(context);
+                        context.restore();
+                    }
+                    node.$isDirty = false;
+                }
+            }
+            if (displayList) {
+                return drawCalls;
+            }
+            var children = displayObject.$children;
+            if (children) {
+                var length = children.length;
+                for (var i = 0; i < length; i++) {
+                    var child = children[i];
+                    if (!(child.$displayObjectFlags & DisplayObjectFlags.Visible)) {
+                        continue;
+                    }
+                    drawCalls += this.drawDisplayObject(child, context, dirtyList, drawToStage, child.$displayList);
+                }
+            }
+            return drawCalls;
+        }
+
+        private sizeChanged:boolean = false;
+
+        /**
+         * 改变画布的尺寸，由于画布尺寸修改会清空原始画布。所以这里将原始画布绘制到一个新画布上，再与原始画布交换。
+         */
+        public changeSurfaceSize():void {
+            var root = this.root;
+            var oldOffsetX = this.offsetX;
+            var oldOffsetY = this.offsetY;
+            var bounds = this.root.$getOriginalBounds();
+            this.offsetX = bounds.x;
+            this.offsetY = bounds.y;
+            var oldContext = this.renderContext;
+            var oldSurface = oldContext.surface;
+            if (!this.sizeChanged) {
+                this.sizeChanged = true;
+                oldSurface.width = bounds.width;
+                oldSurface.height = bounds.height;
+            }
+            else if (bounds.width !== oldSurface.width || bounds.height !== oldSurface.height) {
+                var newContext = player.sharedRenderContext;
+                var newSurface = newContext.surface;
+                player.sharedRenderContext = oldContext;
+                this.renderContext = newContext;
+                this.surface = newSurface;
+                newSurface.width = bounds.width;
+                newSurface.height = bounds.height;
+                if (oldSurface.width !== 0 && oldSurface.height !== 0) {
+                    newContext.setTransform(1, 0, 0, 1, 0, 0);
+                    newContext.drawImage(oldSurface, oldOffsetX - bounds.x, oldOffsetY - bounds.y);
+                }
+                oldSurface.height = 1;
+                oldSurface.width = 1;
+            }
+            var m = root.$getInvertedConcatenatedMatrix().$data;
+            this.renderContext.setTransform(m[0], m[1], m[2], m[3], m[4] - bounds.x, m[5] - bounds.y);
+        }
+
     }
 }

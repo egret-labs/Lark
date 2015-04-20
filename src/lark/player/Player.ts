@@ -83,9 +83,9 @@ module lark.player {
                         repaintList.shift();
                     }
                     var context = this.screenDisplayList.renderContext;
-                    this.clearScreen(context);
                     context.setTransform(1,0,0,1,0,0);
-                    context.drawImage(this.stageDisplayList.bitmapData,0,0);
+                    context.clearRect(0, 0, context.surface.width, context.surface.height);
+                    context.drawImage(this.stageDisplayList.surface,0,0);
                     length = repaintList.length;
                     for (i = 0; i < length; i++) {
                         list = repaintList[i];
@@ -95,7 +95,7 @@ module lark.player {
                         }
                     }
                     this.markDirtyRects(dirtyList,context);
-                    context.drawImage(this.stageDisplayList.bitmapData,0,0);
+                    context.drawImage(this.stageDisplayList.surface,0,0);
                     context.restore();
                 };
 
@@ -203,12 +203,12 @@ module lark.player {
         $render(triggerByFrame:boolean):void {
             var stage = this.stage;
             var t = lark.getTimer();
-            var dirtyList = stage.$displayList.updateDirtyNodes();
+            var dirtyList = stage.$displayList.updateDirtyRegions();
             var t1 = lark.getTimer();
             var drawCalls = 0;
             if (dirtyList.length > 0) {
                 dirtyList = dirtyList.concat();
-                drawCalls = this.drawDisplayList(stage, stage.$displayList);
+                drawCalls = stage.$displayList.drawToSurface();
             }
             if (DEBUG && this._showPaintRects) {
                 this.drawPaintRects(dirtyList);
@@ -223,104 +223,6 @@ module lark.player {
                 var dirtyRatio = Math.ceil(dirtyArea * 1000 / (stage.stageWidth * stage.stageHeight)) / 10;
                 FPS.update(drawCalls, dirtyRatio, t1 - t, t2 - t1);
             }
-        }
-
-        /**
-         * 绘制显示列表。
-         */
-        public drawDisplayList(root:DisplayObject, displayList:DisplayList):number {
-            displayList.prepare();
-            var context = displayList.renderContext;
-            this.markDirtyRects(displayList.dirtyList,context);
-            var drawCalls = this.drawDisplayObject(root, context, displayList.dirtyList, null,displayList.hasClipRect);
-            context.restore();
-            displayList.finish();
-            return drawCalls;
-        }
-
-        private drawDisplayObject(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.player.Region[], displayList:DisplayList,hasClipRect:boolean):number {
-            var drawCalls = 0;
-            var node:Renderable;
-            var globalAlpha:number;
-            if (displayList) {
-                globalAlpha = 1;
-                if (displayList.needRedraw) {
-                    drawCalls += this.drawDisplayList(displayObject, displayList);
-                }
-                node = displayList;
-            }
-            else if(displayObject.$renderRegion){
-                node = displayObject;
-                globalAlpha = displayObject.$renderAlpha;
-            }
-            if (node && !(node.$renderAlpha === 0)) {
-                if (!node.$isDirty) {
-                    var renderRegion = node.$renderRegion;
-                    for (var j = dirtyList.length - 1; j >= 0; j--) {
-                        var region = dirtyList[j];
-                        if (renderRegion.intersects(region)) {
-                            node.$isDirty = true;
-                            break;
-                        }
-                    }
-                }
-                if (node.$isDirty) {
-                    drawCalls++;
-                    context.globalAlpha = globalAlpha;
-                    var m = node.$renderMatrix.$data;
-                    if(hasClipRect){
-                        context.setTransform(m[0], m[1], m[2], m[3], m[4], m[5]);
-                        node.$render(context);
-                    }
-                    else{
-                        context.save();
-                        context.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
-                        node.$render(context);
-                        context.restore();
-                    }
-                    node.$isDirty = false;
-                }
-            }
-            if (displayList) {
-                return drawCalls;
-            }
-            var children = displayObject.$children;
-            if (children) {
-                var length = children.length;
-                for (var i = 0; i < length; i++) {
-                    var child = children[i];
-                    if (!(child.$displayObjectFlags & DisplayObjectFlags.Visible)) {
-                        continue;
-                    }
-                    drawCalls += this.drawDisplayObject(child, context, dirtyList, child.$displayList,hasClipRect);
-                }
-            }
-            return drawCalls;
-        }
-
-        /**
-         * 绘制脏矩形列表
-         */
-        private markDirtyRects(regionList:lark.player.Region[],context:RenderContext):void {
-            context.save();
-            context.beginPath();
-            var length = regionList.length;
-            for (var i = 0; i < length; i++) {
-                var region = regionList[i];
-                context.clearRect(region.minX, region.minY, region.width, region.height);
-                context.rect(region.minX, region.minY, region.width, region.height);
-            }
-            context.clip();
-        }
-
-        /**
-         * 清空屏幕
-         */
-        public clearScreen(context:RenderContext):void {
-            context.save();
-            context.setTransform(1, 0, 0, 1, 0, 0);
-            context.clearRect(0, 0, context.surface.width, context.surface.height);
-            context.restore();
         }
 
         /**

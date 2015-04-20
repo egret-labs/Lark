@@ -27,53 +27,10 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.web {
-
-    var pool:lark.player.DisplayList[] = [];
-
-    export class DisplayListPool implements lark.player.IDisplayListPool{
-
-        /**
-         * 释放一个DisplayList实例到对象池
-         */
-        public release(node:lark.player.DisplayList):void{
-            node.root = null;
-            node.$renderMatrix = null;
-            node.needRedraw = false;
-            node.$isDirty = false;
-            pool.push(node);
-        }
-
-        /**
-         * 从对象池中取出或创建一个新的DisplayList对象。
-         */
-        public create(target:DisplayObject):lark.player.DisplayList{
-            var node = pool.pop();
-            if(!node){
-                var canvas:HTMLCanvasElement = document.createElement("canvas");
-                if(this.testCanvasValid(canvas)){
-                    node = new lark.player.DisplayList(target);
-                    node.surface = canvas;
-                    var context = canvas.getContext("2d");
-                    node.renderContext = createRenderContext(context);
-                }
-            }
-            return node;
-        }
-
-        /**
-         * 检测创建的canvas是否有效，QQ浏览器对内存小等于1G的手机，限制Canvas创建的数量为19个。
-         */
-        private testCanvasValid(canvas:HTMLCanvasElement):boolean{
-            canvas.height = 1;
-            canvas.width = 1;
-            var data = canvas.toDataURL("image/png");
-            if (data == 'data:,')
-                return false;
-            return true;
-        }
-
-
-
+module lark.player {
+    /**
+     * 呈现最终绘图结果的画布
+     */
+    export interface Surface extends BitmapData{
     }
 }

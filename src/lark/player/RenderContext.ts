@@ -34,6 +34,9 @@ module lark.player {
      */
     export var sharedRenderContext:player.RenderContext;
 
+    /**
+     * 绘图上下文
+     */
     export interface RenderContext {
         surface:Surface;
         globalCompositeOperation: string;
@@ -81,12 +84,6 @@ module lark.player {
         drawImage(image: BitmapData, offsetX: number, offsetY: number, width?: number, height?: number, surfaceOffsetX?:
             number, surfaceOffsetY?: number, surfaceImageWidth?: number, surfaceImageHeight?:number):void;
         createPattern(image:BitmapData, repetition:string): GraphicsPattern;
-    }
-
-    /**
-     * 呈现最终绘图结果的画布
-     */
-    interface Surface extends BitmapData{
     }
 
     interface TextMetrics {

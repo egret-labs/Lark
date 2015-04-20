@@ -34,9 +34,5 @@ module lark.player {
         release(node:DisplayList):void;
 
         create(target:DisplayObject):DisplayList;
-        /**
-         * 即将开始重绘显示列表
-         */
-        prepare(node:DisplayList):void;
     }
 }
