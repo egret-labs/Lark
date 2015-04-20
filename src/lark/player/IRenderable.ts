@@ -28,21 +28,34 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark.player {
-    /**
-     * @excluded
-     * 矢量渲染节点
-     */
-    export class GraphicsNode extends RenderNode{
 
-        public constructor(target:DisplayObject,graphics:Graphics){
-            super(target);
-            this.graphics = graphics;
-        }
+    export interface IRenderable{
 
-        private graphics:Graphics;
+        $hashCode:number;
+        /**
+         * 是否需要重绘的标志
+         */
+        $isDirty:boolean;
+        /**
+         * 在舞台上的透明度
+         */
+        $stageAlpha:number;
+        /**
+         * 在舞台上的矩阵对象
+         */
+        $stageMatrix:Matrix;
+        /**
+         * 在舞台上的显示区域
+         */
+        $stageRegion:Region;
 
-        public render(renderer:IRenderer):void{
-            renderer.drawGraphics(this.graphics.$commands,this.matrix,this.alpha);
-        }
+        /**
+         * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
+         */
+        $update():boolean;
+        /**
+         * 执行绘制
+         */
+        $render(context:RenderContext):void;
     }
 }

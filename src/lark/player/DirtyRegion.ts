@@ -29,81 +29,73 @@
 
 module lark.player {
 
+    function unionArea(r1:Region, r2:Region):number {
+        var minX = r1.minX < r2.minX ? r1.minX : r2.minX;
+        var minY = r1.minY < r2.minY ? r1.minY : r2.minY;
+        var maxX = r1.maxX > r2.maxX ? r1.maxX : r2.maxX;
+        var maxY = r1.maxY > r2.maxY ? r1.maxY : r2.maxY;
+        return (maxX - minX) * (maxY - minY);
+    }
+
     /**
      * 脏矩形计算工具类
      */
     export class DirtyRegion {
 
         public constructor() {
-            this.regionList = [new Region(), new Region(), new Region()];
+            var list = this.regionList = [];
+            while (list.length < 4) {
+                list.push(new Region());
+            }
         }
 
         private regionList:Region[];
         private dirtyList:Region[] = [];
-        private clipRect:boolean = false;
-        private screenWidth:number = 0;
-        private screenHeight:number = 0;
-        private screenChanged:boolean = false;
+        private hasClipRect:boolean = false;
+        private clipWidth:number = 0;
+        private clipHeight:number = 0;
+        private clipArea:number = 0;
+        private clipRectChanged:boolean = false;
 
-        public updateClipRect(width:number, height:number):void {
-            this.clipRect = true;
-            this.screenChanged = true;
-            this.screenWidth = width;
-            this.screenHeight = height;
+        /**
+         * 设置剪裁边界，超过边界的节点将跳过绘制。
+         */
+        public setClipRect(width:number, height:number):void {
+            this.hasClipRect = true;
+            this.clipRectChanged = true;
+            this.clipWidth = width;
+            this.clipHeight = height;
+            this.clipArea = width*height;
         }
 
         /**
          * 添加一个脏矩形区域，返回是否添加成功，当矩形为空或者在屏幕之外时返回false。
          */
         public addRegion(minX:number, minY:number, maxX:number, maxY:number):boolean {
-            if (this.clipRect) {
+            if (this.hasClipRect) {
                 if (minX < 0) {
                     minX = 0;
                 }
                 if (minY < 0) {
                     minY = 0;
                 }
-                if (maxX > this.screenWidth) {
-                    maxX = this.screenWidth;
+                if (maxX > this.clipWidth) {
+                    maxX = this.clipWidth;
                 }
-                if (maxY > this.screenHeight) {
-                    maxY = this.screenHeight;
+                if (maxY > this.clipHeight) {
+                    maxY = this.clipHeight;
                 }
             }
             if (minX >= maxX || minY >= maxY) {
                 return false;
             }
-            if (this.screenChanged) {
+            if (this.clipRectChanged) {
                 return true;
             }
-            var targetArea = (maxX - minX) * (maxY - minY);
             var dirtyList = this.dirtyList;
-            var length = dirtyList.length;
-            var merged = false;
-            if (length > 0) {
-                var bestDelta = length >= 3 ? Number.POSITIVE_INFINITY : 0;
-                var targetIndex = -1;
-                for (var i = 0; i < length; i++) {
-                    var r = dirtyList[i];
-                    var xMin = minX < r.minX ? minX : r.minX;
-                    var yMin = minY < r.minY ? minY : r.minY;
-                    var xMax = maxX > r.maxX ? maxX : r.maxX;
-                    var yMax = maxY > r.maxY ? maxY : r.maxY;
-                    var delta = (xMax - xMin) * (yMax - yMin) - targetArea - r.area;
-                    if (delta < bestDelta) {
-                        bestDelta = delta;
-                        targetIndex = i;
-                    }
-                }
-                if (targetIndex !== -1) {
-                    dirtyList[targetIndex].union(minX, minY, maxX, maxY);
-                    merged = true;
-                }
-            }
-            if (!merged) {
-                var region:Region = this.regionList.pop();
-                dirtyList.push(region.setTo(minX, minY, maxX, maxY));
-            }
+            var region:Region = this.regionList.pop();
+            dirtyList.push(region.setTo(minX, minY, maxX, maxY));
+            this.mergeDirtyList(dirtyList);
             return true;
         }
 
@@ -121,10 +113,11 @@ module lark.player {
          */
         public getDirtyRegions():Region[] {
             var dirtyList = this.dirtyList;
-            if (this.screenChanged) {
-                this.screenChanged = false;
+            if (this.clipRectChanged) {
+                this.clipRectChanged = false;
+                this.clear();
                 var region:Region = this.regionList.pop();
-                dirtyList.push(region.setTo(0, 0, this.screenWidth, this.screenHeight));
+                dirtyList.push(region.setTo(0, 0, this.clipWidth, this.clipHeight));
             }
             else {
                 while (this.mergeDirtyList(dirtyList)) {
@@ -141,14 +134,17 @@ module lark.player {
             if (length < 2) {
                 return false;
             }
-            var bestDelta = 0;
+            var hasClipRect = this.hasClipRect;
+            var bestDelta = length > 3 ? Number.POSITIVE_INFINITY : 0;
             var mergeA = 0;
             var mergeB = 0;
+            var totalArea = 0;
             for (var i = 0; i < length - 1; i++) {
+                var regionA = dirtyList[i];
+                hasClipRect&&(totalArea += regionA.area);
                 for (var j = i + 1; j < length; j++) {
-                    var regionA = dirtyList[i];
                     var regionB = dirtyList[j];
-                    var delta = this.unionArea(regionA, regionB) - regionA.area - regionB.area;
+                    var delta = unionArea(regionA, regionB) - regionA.area - regionB.area;
                     if (bestDelta > delta) {
                         mergeA = i;
                         mergeB = j;
@@ -156,65 +152,18 @@ module lark.player {
                     }
                 }
             }
+            if(hasClipRect&&(totalArea/this.clipArea)>0.95){//当脏矩形的面积已经超过屏幕95%时，直接放弃后续的所有标记。
+                this.clipRectChanged = true;
+            }
             if (mergeA != mergeB) {
                 var region = dirtyList[mergeB];
-                dirtyList[mergeA].union(region.minX, region.minY, region.maxX, region.maxY);
+                dirtyList[mergeA].union(region);
                 this.regionList.push(region);
                 dirtyList.splice(mergeB, 1);
                 return true;
             }
             return false;
         }
-
-        private unionArea(r1:Region, r2:Region):number {
-            var minX = r1.minX < r2.minX ? r1.minX : r2.minX;
-            var minY = r1.minY < r2.minY ? r1.minY : r2.minY;
-            var maxX = r1.maxX > r2.maxX ? r1.maxX : r2.maxX;
-            var maxY = r1.maxY > r2.maxY ? r1.maxY : r2.maxY;
-            return (maxX - minX) * (maxY - minY);
-        }
     }
 
-    export class Region {
-
-        public minX:number = 0;
-        public minY:number = 0;
-        public maxX:number = 0;
-        public maxY:number = 0;
-
-        public width:number = 0;
-        public height:number = 0;
-        public area:number = 0;
-
-        public setTo(minX:number, minY:number, maxX:number, maxY:number):Region {
-            this.minX = minX;
-            this.minY = minY;
-            this.maxX = maxX;
-            this.maxY = maxY;
-            this.updateArea();
-            return this;
-        }
-
-        public updateArea():void {
-            this.width = this.maxX - this.minX;
-            this.height = this.maxY - this.minY;
-            this.area = this.width * this.height;
-        }
-
-        public union(targetMinX:number, targetMinY:number, targetMaxX:number, targetMaxY:number):void {
-            if (this.minX > targetMinX) {
-                this.minX = targetMinX;
-            }
-            if (this.minY > targetMinY) {
-                this.minY = targetMinY;
-            }
-            if (this.maxX < targetMaxX) {
-                this.maxX = targetMaxX;
-            }
-            if (this.maxY < targetMaxY) {
-                this.maxY = targetMaxY;
-            }
-            this.updateArea();
-        }
-    }
 }

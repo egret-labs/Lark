@@ -30,66 +30,25 @@
 module lark.player {
 
     /**
-     * 渲染器
+     * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
      */
-    export interface IRenderer extends IHashObject {
-
-        /**
-         * 绘制图片到一个区域上
-         */
-        drawImage(texture:Texture, matrix:Matrix, globalAlpha:number): void;
-
-        /**
-         * 绘制文本到一个区域上
-         */
-        drawText(text:string, font:string, color:string, x:number, y:number, width:number, matrix:Matrix, globalAlpha:number): void;
-
-        /**
-         * 绘制矢量图形
-         */
-        drawGraphics(commands: GraphicsCommand[], matrix:Matrix, globalAlpha:number):void;
-
-    }
-
-    /**
-     * 屏幕渲染器
-     */
-    export interface IScreenRenderer extends IRenderer {
-
-        /**
-         * 重置画布
-         */
-        reset(root:DisplayObject):void;
-        /**
-         * 清空屏幕
-         */
-        clearScreen():void;
-        /**
-         * 绘制脏矩形列表
-         */
-        markDirtyRects(regionList:lark.player.Region[]):void;
-        /**
-         * 移除之前绘制的脏矩形区域
-         */
-        removeDirtyRects():void;
-
-        /**
-         * 绘制一个脏矩形显示区域，在显示重绘区功能开启时调用。
-         */
-        drawDirtyRect(x:number, y:number, width:number, height:number):void;
-    }
+    export var sharedRenderContext:player.RenderContext;
 
     export interface RenderContext {
+        surface:Surface;
+        globalCompositeOperation: string;
+        globalAlpha: number;
         miterLimit: number;
         lineCap: string;
-        shadowColor: string;
         lineJoin: string;
-        shadowOffsetX: number;
         lineWidth: number;
         strokeStyle: any;
-        shadowOffsetY: number;
         fillStyle: any;
-        shadowBlur: number;
+        imageSmoothingEnabled: boolean;
+        textAlign: string;
+        textBaseline: string;
+        font: string;
+
         arc(x:number, y:number, radius:number, startAngle:number, endAngle:number, anticlockwise?:boolean): void;
         quadraticCurveTo(cpx:number, cpy:number, x:number, y:number): void;
         lineTo(x:number, y:number): void;
@@ -103,31 +62,34 @@ module lark.player {
         strokeRect(x:number, y:number, w:number, h:number): void;
         beginPath(): void;
         arcTo(x1:number, y1:number, x2:number, y2:number, radius:number): void;
-    }
 
-    export interface ScreenRenderContext extends RenderContext{
-        font: string;
-        globalCompositeOperation: string;
-        imageSmoothingEnabled: boolean;
-        lineDashOffset: number;
-        globalAlpha: number;
-        textAlign: string;
-        textBaseline: string;
-        restore(): void;
-        save(): void;
-        fillText(text:string, x:number, y:number, maxWidth?:number): void;
-        measureText(text:string): TextMetrics;
-        rotate(angle:number): void;
-        setTransform(m11:number, m12:number, m21:number, m22:number, dx:number, dy:number): void;
         transform(m11:number, m12:number, m21:number, m22:number, dx:number, dy:number): void;
         translate(x:number, y:number): void;
         scale(x:number, y:number): void;
+        rotate(angle:number): void;
+
+        restore(): void;
+        save(): void;
         clip(fillRule?:string): void;
         clearRect(x:number, y:number, w:number, h:number): void;
-        drawImage(image:HTMLElement, offsetX:number, offsetY:number, width?:number, height?:number, canvasOffsetX?:number, canvasOffsetY?:number, canvasImageWidth?:number, canvasImageHeight?:number): void;
-        createLinearGradient(x0:number, y0:number, x1:number, y1:number): CanvasGradient;
-        createRadialGradient(x0:number, y0:number, r0:number, x1:number, y1:number, r1:number): CanvasGradient;
-        createPattern(texture:Texture, repetition:string): CanvasPattern;
+        setTransform(m11:number, m12:number, m21:number, m22:number, dx:number, dy:number): void;
+        createLinearGradient(x0:number, y0:number, x1:number, y1:number): GraphicsGradient;
+        createRadialGradient(x0:number, y0:number, r0:number, x1:number, y1:number, r1:number): GraphicsGradient;
+
+        fillText(text:string, x:number, y:number, maxWidth?:number): void;
+        measureText(text:string): TextMetrics;
+        drawImage(image: BitmapData, offsetX: number, offsetY: number, width?: number, height?: number, surfaceOffsetX?:
+            number, surfaceOffsetY?: number, surfaceImageWidth?: number, surfaceImageHeight?:number):void;
+        createPattern(image:BitmapData, repetition:string): GraphicsPattern;
     }
 
+    /**
+     * 呈现最终绘图结果的画布
+     */
+    export interface Surface extends BitmapData{
+    }
+
+    export interface TextMetrics {
+        width: number;
+    }
 }

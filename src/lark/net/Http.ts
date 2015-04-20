@@ -19,7 +19,7 @@ module lark {
 
     }
 
-    export function loadImage(url: string, success: (texture: Texture) => void) {
+    export function loadImage(url: string, success: (bitmapData: BitmapData) => void) {
         new HttpClient().loadImage({
             url: url,
             success: success

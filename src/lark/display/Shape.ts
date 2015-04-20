@@ -42,7 +42,7 @@ module lark {
             super();
             this._graphics = new Graphics();
             this._graphics.$targetDisplay = this;
-            this.$renderNode = new player.GraphicsNode(this,this._graphics);
+            this.$stageRegion = new player.Region();
         }
 
         private _graphics:Graphics;
@@ -55,6 +55,10 @@ module lark {
 
         $measureContentBounds(bounds:Rectangle):void {
             this._graphics.$measureContentBounds(bounds);
+        }
+
+        $render(context:player.RenderContext):void{
+            this._graphics.$render(context);
         }
     }
 }

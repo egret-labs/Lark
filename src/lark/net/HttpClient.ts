@@ -12,7 +12,7 @@ module lark {
     }
 
     export interface IImageRequestOptions extends IHttpRequestOptions {
-        success: (texture: Texture) => void;
+        success: (bitmapData: BitmapData) => void;
     }
 
     export interface HttpClient extends EventEmitter {

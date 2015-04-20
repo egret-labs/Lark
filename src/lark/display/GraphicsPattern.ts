@@ -27,26 +27,11 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark{
     /**
-     * @excluded
-     * 文本渲染节点
+     * GraphicsPattern 接口表示描述一个模板（基于BitmapData）的不透明对象，通过 Graphics.createPattern() 静态方法创建.
      */
-    export class TextNode extends RenderNode {
+    export interface GraphicsPattern{
 
-        public constructor(target:DisplayObject) {
-            super(target);
-        }
-
-        public spans: TextSpan[] = null;
-
-        public render(renderer: IRenderer): void {
-            var spans = this.spans, length = spans.length;
-            for (var i = 0; i < length; i++) {
-                var span = spans[i];
-                renderer.drawText(span.text, span.$toFontString(true), span.$toColorString(), span.x,
-                    span.style.fontSize / 2 + span.y, span.textWidth, this.matrix, this.alpha);
-            }
-        }
     }
 }

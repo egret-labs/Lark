@@ -83,14 +83,21 @@ module lark.player {
         CacheAsBitmap = 0x0080,
 
         /**
-         * 显示对象自身的RenderNode需要重绘的标志
+         * 显示对象自身需要重绘的标志
          */
         DirtyRender = 0x0100,
         /**
          * 子项中已经全部含有DirtyRender标志，无需继续遍历。
          */
         DirtyChildren = 0x200,
-
+        /**
+         * 对象自身在舞台上的显示尺寸发生改变。
+         */
+        TouchEnabled = 0x400,
+        /**
+         * 对象自身以及子项在舞台上显示尺寸发生改变。
+         */
+        TouchChildren = 0x800,
         /**
          * DirtyRender|DirtyChildren
          */
@@ -106,6 +113,8 @@ module lark.player {
          * 显示对象初始化时的标志量
          */
         InitFlags = DisplayObjectFlags.Visible |
+            DisplayObjectFlags.TouchEnabled |
+            DisplayObjectFlags.TouchChildren |
             DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
             DisplayObjectFlags.InvalidConcatenatedAlpha |

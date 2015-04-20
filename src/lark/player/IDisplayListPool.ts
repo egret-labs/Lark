@@ -28,17 +28,15 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark.player {
-    /**
-     * 文本测量实例接口
-     */
-    export interface ITextMeasurer {
+
+    export interface IDisplayListPool {
+
+        release(node:DisplayList):void;
+
+        create(target:DisplayObject):DisplayList;
         /**
-         * 设置文本样式
+         * 即将开始重绘显示列表
          */
-        setupFont(style:ITextStyle):void;
-        /**
-         * 测量文本在指定样式下的宽度
-         */
-        measureText(text:string):number;
+        prepare(node:DisplayList):void;
     }
 }

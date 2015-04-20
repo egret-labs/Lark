@@ -35,18 +35,16 @@ module lark {
             var img = new Image();
             img.src = "image/test.png";
             img.onload = ()=> {
-                var texture:Texture = new Texture();
-                texture.$setBitmapData(img);
-                this.start(texture);
+                this.start(img);
             }
 
         }
 
         private image:any;
 
-        private start(texture:Texture):void {
+        private start(bitmapData:BitmapData):void {
 
-            this.image = texture.$bitmapData;
+            this.image = bitmapData;
             var textField = new TextField("", {fontSize: 12, color: 0xFF0000});
             textField.text = "2";
             textField.x = 100;
@@ -72,9 +70,7 @@ module lark {
             canvas.height = 250;
             var context: CanvasRenderingContext2D = canvas.getContext("2d");
             context.drawImage(this.image, 0, 0);
-            var texture = new Texture();
-            texture.$setBitmapData(canvas);
-            var bitmap = new Bitmap(texture);
+            var bitmap = new Bitmap(canvas);
             this.addChild(bitmap);
             bitmap.y = 50+this.canvasCount * 5;
             this.canvasCount++;

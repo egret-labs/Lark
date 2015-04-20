@@ -31,10 +31,7 @@
 module lark {
 
     /**
-     * 纹理类是对不同平台不同的图片资源的封装
-     * 在HTML5中，资源是一个HTMLElement对象
-     * 在OpenGL / WebGL中，资源是一个提交GPU后获取的纹理id
-     * Texture类封装了这些底层实现的细节，开发者只需要关心接口即可
+     * 纹理类是对BitmapData图片资源的封装,可以将它指定为目标BitmapData上的一个子区域。
      */
     export class Texture extends HashObject {
 
@@ -98,7 +95,15 @@ module lark {
          */
         $sourceHeight:number = 0;
 
-        $bitmapData:any = null;
+        $bitmapData:BitmapData = null;
+
+        public get bitmapData():BitmapData{
+            return this.$bitmapData;
+        }
+
+        public set bitmapData(value:BitmapData){
+            this.$setBitmapData(value);
+        }
 
         $setBitmapData(value:any) {
             var w = +value.width | 0;

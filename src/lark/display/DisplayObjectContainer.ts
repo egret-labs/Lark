@@ -136,8 +136,8 @@ module lark {
                     }
                 }
             }
-            var cacheNode = this.$cacheNode || this.$parentCacheNode;
-            this.assignParentCacheNode(child, cacheNode, cacheNode);
+            var displayList = this.$displayList || this.$parentDisplayList;
+            this.assignParentDisplayList(child, displayList, displayList);
             child.$propagateFlagsDown(player.DisplayObjectFlags.DownOnAddedOrRemoved);
             this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
             return child;
@@ -251,8 +251,8 @@ module lark {
                     childAddToStage.$stage = null;
                 }
             }
-            var cacheNode = this.$cacheNode || this.$parentCacheNode;
-            this.assignParentCacheNode(child, cacheNode, cacheNode);
+            var displayList = this.$displayList || this.$parentDisplayList;
+            this.assignParentDisplayList(child, displayList, displayList);
             child.$setParent(null);
             children.splice(index, 1);
             child.$propagateFlagsDown(player.DisplayObjectFlags.DownOnAddedOrRemoved);
@@ -396,19 +396,16 @@ module lark {
             bounds.setTo(xMin, yMin, xMax - xMin, yMax - yMin);
         }
 
-
-        $touchChildren:boolean = true;
-
         /**
          * 指定此对象的子项以及子孙项是否接收鼠标/触摸事件
          * 默认值为 true 即可以接收。
          */
         public get touchChildren():boolean {
-            return this.$touchChildren;
+            return this.$hasFlags(player.DisplayObjectFlags.TouchChildren);
         }
 
         public set touchChildren(value:boolean) {
-            this.$touchChildren = value;
+            this.$toggleFlags(player.DisplayObjectFlags.TouchChildren, !!value);
         }
 
         /**
@@ -420,7 +417,7 @@ module lark {
             if(!notifyChildren){
                 return;
             }
-            var cacheRoot = this.$cacheNode||this.$parentCacheNode;
+            var cacheRoot = this.$displayList||this.$parentDisplayList;
             var children = this.$children;
             if (children) {
                 for (var i = children.length - 1; i >= 0; i--) {
@@ -432,25 +429,25 @@ module lark {
          * 标记自身和所有子项都失效。
          */
         $invalidateChildren():void {
-            this.markChildDirty(this, this.$parentCacheNode);
+            this.markChildDirty(this, this.$parentDisplayList);
         }
 
-        private markChildDirty(child:DisplayObject, cacheRoot:lark.player.CacheNode):void {
+        private markChildDirty(child:DisplayObject, parentCache:lark.player.DisplayList):void {
             if (child.$hasFlags(player.DisplayObjectFlags.DirtyChildren)) {
                 return;
             }
             child.$setFlags(player.DisplayObjectFlags.DirtyChildren);
-            var node = child.$cacheNode || child.$renderNode;
-            if (node && cacheRoot) {
-                cacheRoot.markDirty(node);
+            var displayList = child.$displayList;
+            if ((displayList||child.$stageRegion) && parentCache) {
+                parentCache.markDirty(displayList||child);
             }
-            if (child.$cacheNode) {
+            if (displayList) {
                 return;
             }
             var children = child.$children;
             if (children) {
                 for (var i = children.length - 1; i >= 0; i--) {
-                    this.markChildDirty(children[i], cacheRoot);
+                    this.markChildDirty(children[i], parentCache);
                 }
             }
         }
@@ -460,34 +457,36 @@ module lark {
          */
         $cacheAsBitmapChanged():void {
             super.$cacheAsBitmapChanged();
-            var cacheRoot = this.$cacheNode || this.$parentCacheNode;
+            var cacheRoot = this.$displayList || this.$parentDisplayList;
             var children = this.$children;
             for (var i = children.length - 1; i >= 0; i--) {
-                this.assignParentCacheNode(children[i], cacheRoot, cacheRoot);
+                this.assignParentDisplayList(children[i], cacheRoot, cacheRoot);
             }
         }
 
-        private assignParentCacheNode(child:DisplayObject, cacheRoot:lark.player.CacheNode, newParent:lark.player.CacheNode):void {
-            child.$parentCacheNode = newParent;
+        private assignParentDisplayList(child:DisplayObject, parentCache:lark.player.DisplayList, newParent:lark.player.DisplayList):void {
+            child.$parentDisplayList = newParent;
             child.$setFlags(player.DisplayObjectFlags.DirtyChildren);
-            var node = child.$cacheNode || child.$renderNode;
-            if (node && cacheRoot) {
-                cacheRoot.markDirty(node);
+            var displayList = child.$displayList;
+            if ((child.$stageRegion||displayList) && parentCache) {
+                parentCache.markDirty(displayList||child);
             }
-            if (child.$cacheNode) {
+            if (child.$displayList) {
                 return;
             }
             var children = child.$children;
             if (children) {
                 for (var i = children.length - 1; i >= 0; i--) {
-                    this.assignParentCacheNode(children[i], cacheRoot, newParent);
+                    this.assignParentDisplayList(children[i], parentCache, newParent);
                 }
             }
         }
 
 
         $hitTest(stageX:number, stageY:number):DisplayObject {
-            if (!this.$hasFlags(player.DisplayObjectFlags.Visible) || !this.$touchEnabled && !this.$touchChildren) {
+            if (!this.$hasAnyFlags(player.DisplayObjectFlags.Visible|
+                    player.DisplayObjectFlags.TouchEnabled|
+                    player.DisplayObjectFlags.TouchChildren)) {
                 return null;
             }
             var children = this.$children;
@@ -498,15 +497,15 @@ module lark {
                 }
             }
             if (target) {
-                if (this.$touchChildren) {
+                if (this.$hasFlags(player.DisplayObjectFlags.TouchChildren)) {
                     return target;
                 }
                 return this;
             }
-            if (this.$touchEnabled) {
+            if (this.$hasFlags(player.DisplayObjectFlags.TouchEnabled)) {
                 return super.$hitTest(stageX, stageY);
             }
-            return null;
+            return null; 
         }
 
     }

@@ -93,7 +93,7 @@ module lark {
             super();
             this._text = text;
             this._style = TextField.$normalizeStyle(style, BaseStyle);
-            this.$renderNode = new lark.player.TextNode(this);
+            this.$stageRegion = new player.Region();
             this.$invalidateContentBounds();
         }
 
@@ -181,16 +181,19 @@ module lark {
             bounds.setTo(0, 0, this.width, height);
         }
 
-        /**
-         * 获取渲染节点
-         */
-        $updateRenderNode(): void {
+        $render(context: player.RenderContext): void {
             if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0) {
                 this.$updateLines();
                 this._textFieldFlags = 0;
             }
-            (<player.TextNode>this.$renderNode).spans = this.renderLines;
-            super.$updateRenderNode();
+            var spans = this.renderLines;
+            var length = spans.length;
+            for (var i = 0; i < length; i++) {
+                var span = spans[i];
+                context.font = span.$toFontString(true);
+                context.fillStyle = span.$toColorString();
+                context.fillText(span.text, span.x, span.style.fontSize / 2 + span.y, span.textWidth);
+            }
         }
 
         private textLines: Array<TextSpan> = [];

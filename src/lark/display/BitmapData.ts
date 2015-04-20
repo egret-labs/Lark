@@ -27,30 +27,10 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
-    /**
-     * @excluded
-     * 位图渲染节点
-     */
-    export class BitmapNode extends RenderNode {
-        /**
-         * 实例化一个渲染命令
-         */
-        public constructor(target:DisplayObject) {
-            super(target);
-        }
+module lark {
 
-        /**
-         * 要绘制的纹理
-         */
-        public texture:Texture = null;
-
-        public render(renderer:IRenderer):void{
-            var texture = this.texture;
-            if (texture) {
-                renderer.drawImage(texture, this.matrix, this.alpha);
-            }
-        }
-
+    export interface BitmapData {
+        width: number;
+        height: number;
     }
 }

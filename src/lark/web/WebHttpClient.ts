@@ -2,7 +2,7 @@
 
 module lark.web {
 
-    var ImageTextureCache: { [url: string]: Texture } = {};
+    var ImageCache: { [url: string]: BitmapData } = {};
 
     export class WebHttpClinet extends EventEmitter implements HttpClient {
 
@@ -24,17 +24,15 @@ module lark.web {
             var url = options.url;
             var callback = options.success;
 
-            if (url in ImageTextureCache) {
-                var texture = ImageTextureCache[url];
-                callback(texture);
+            if (url in ImageCache) {
+                var bitmapData = ImageCache[url];
+                callback(bitmapData);
                 return;
             }
 
             var image = new Image();
             image.onload = () => {
-                var texture = new Texture();
-                texture.$setBitmapData(image);
-                callback(texture);
+                callback(image);
             };
             image.src = url;
         } 
