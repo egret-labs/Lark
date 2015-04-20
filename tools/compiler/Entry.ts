@@ -37,6 +37,7 @@ import Publish = require("./Publish");
 import Create = require("./Create");
 import utils = require('../lib/utils');
 import FileUtil = require('../lib/FileUtil');
+import server = require('../server/server');
 
 
 var optionDeclarations: lark.CommandLineOption[] = [
@@ -90,6 +91,12 @@ optionDeclarations.forEach(option => {
 
 function executeCommandLine(args: string[]): void {
     var options = parseCommandLine(args);
+    console.log(options);
+    server.start({
+        projectDir: options.projectDir,
+        port:3001
+    });
+
     switch (options.action) {
         case "publish":
             var publish = new Publish(options);

@@ -33,6 +33,7 @@ var Build = require("./Build");
 var Publish = require("./Publish");
 var Create = require("./Create");
 var utils = require('../lib/utils');
+var server = require('../server/server');
 var optionDeclarations = [
     {
         name: "action",
@@ -87,6 +88,11 @@ optionDeclarations.forEach(function (option) {
 });
 function executeCommandLine(args) {
     var options = parseCommandLine(args);
+    console.log(options);
+    server.start({
+        projectDir: options.projectDir,
+        port: 3001
+    });
     switch (options.action) {
         case "publish":
             var publish = new Publish(options);
