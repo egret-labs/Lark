@@ -1,0 +1,42 @@
+﻿body {
+    padding:30px;
+    background: #555;
+    background-image: url("../images/bg.svg");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center center;
+    min-width: 320px;
+    font: 400 14px/1.6 "Open Sans",sans-serif;
+}
+
+#main-container{
+    background:#EEE;
+    border-radius:4px;
+    padding:30px;
+    width:800px;
+    min-height:500px;
+    margin:auto;
+    position:relative;
+}
+
+.nav-bar{
+    position:absolute;
+    bottom:10px;
+    right:10px;
+}
+
+section{
+    display:none;
+}
+
+section.active{
+    display:block;
+}
+
+section label{
+    display:block;
+}
+
+input[type=button]{
+    margin:10px;
+}
