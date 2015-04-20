@@ -94,7 +94,15 @@ module lark.player {
                             this.drawDirtyRect(r[0], r[1], r[2], r[3],context);
                         }
                     }
-                    this.markDirtyRects(dirtyList,context);
+                    context.save();
+                    context.beginPath();
+                    var length = dirtyList.length;
+                    for (var i = 0; i < length; i++) {
+                        var region = dirtyList[i];
+                        context.clearRect(region.minX, region.minY, region.width, region.height);
+                        context.rect(region.minX, region.minY, region.width, region.height);
+                    }
+                    context.clip();
                     context.drawImage(this.stageDisplayList.surface,0,0);
                     context.restore();
                 };
