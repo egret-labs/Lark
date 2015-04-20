@@ -64,7 +64,6 @@ module lark {
         v.y = (y2 - y1) / l;
     }
 
-
     interface Vector {
         x: number;
         y: number;
@@ -112,7 +111,7 @@ module lark {
 
         public set fillStyle(value:any) {
             this._fillStyle = value;
-            this.pushCommand(player.GraphicsCommandType.fillStyle, arguments);
+            this.pushCommand(GraphicsCommandType.fillStyle, arguments);
         }
 
         private _lineWidth:number;
@@ -123,7 +122,7 @@ module lark {
 
         public set lineWidth(value:number) {
             this._lineWidth = value;
-            this.pushCommand(player.GraphicsCommandType.lineWidth, arguments);
+            this.pushCommand(GraphicsCommandType.lineWidth, arguments);
         }
 
         private _lineCap:string;
@@ -134,7 +133,7 @@ module lark {
 
         public set lineCap(value:string) {
             this._lineCap = value;
-            this.pushCommand(player.GraphicsCommandType.lineCap, arguments);
+            this.pushCommand(GraphicsCommandType.lineCap, arguments);
         }
 
         private _strokeStyle:any;
@@ -145,7 +144,7 @@ module lark {
 
         public set strokeStyle(value:any) {
             this._strokeStyle = value;
-            this.pushCommand(player.GraphicsCommandType.strokeStyle, arguments);
+            this.pushCommand(GraphicsCommandType.strokeStyle, arguments);
         }
 
         private _lineJoin:string;
@@ -156,7 +155,7 @@ module lark {
 
         public set lineJoin(value:string) {
             this._lineJoin = value;
-            this.pushCommand(player.GraphicsCommandType.lineJoin, arguments);
+            this.pushCommand(GraphicsCommandType.lineJoin, arguments);
         }
 
         private _miterLimit:number;
@@ -167,12 +166,12 @@ module lark {
 
         public set miterLimit(value:number) {
             this._miterLimit = value;
-            this.pushCommand(player.GraphicsCommandType.miterLimit, arguments);
+            this.pushCommand(GraphicsCommandType.miterLimit, arguments);
         }
 
 
         public arc(x:number, y:number, radius:number, startAngle:number, endAngle:number, anticlockwise?:boolean):void {
-            this.pushCommand(player.GraphicsCommandType.arc, arguments);
+            this.pushCommand(GraphicsCommandType.arc, arguments);
             if (radius < 0) {
                 return;
             }
@@ -222,14 +221,14 @@ module lark {
         }
 
         public quadraticCurveTo(cpx:number, cpy:number, x:number, y:number):void {
-            this.pushCommand(player.GraphicsCommandType.quadraticCurveTo, arguments);
+            this.pushCommand(GraphicsCommandType.quadraticCurveTo, arguments);
             this.checkMoveTo();
             this.extendByPoint(cpx, cpy);
             this.extendByPoint(x, y);
         }
 
         public bezierCurveTo(cp1x:number, cp1y:number, cp2x:number, cp2y:number, x:number, y:number):void {
-            this.pushCommand(player.GraphicsCommandType.bezierCurveTo, arguments);
+            this.pushCommand(GraphicsCommandType.bezierCurveTo, arguments);
             this.checkMoveTo();
             this.extendByPoint(cp1x, cp1y);
             this.extendByPoint(cp2x, cp2y);
@@ -238,61 +237,61 @@ module lark {
 
 
         public lineTo(x:number, y:number):void {
-            this.pushCommand(player.GraphicsCommandType.lineTo, arguments);
+            this.pushCommand(GraphicsCommandType.lineTo, arguments);
             this.checkMoveTo();
             this.extendByPoint(x, y);
         }
 
         public fill(fillRule?:string):void {
-            this.pushCommand(player.GraphicsCommandType.fill, arguments);
+            this.pushCommand(GraphicsCommandType.fill, arguments);
             this.hasFill = true;
         }
 
         public closePath():void {
-            this.pushCommand(player.GraphicsCommandType.closePath, arguments);
+            this.pushCommand(GraphicsCommandType.closePath, arguments);
         }
 
         public rect(x:number, y:number, w:number, h:number):void {
-            this.pushCommand(player.GraphicsCommandType.rect, arguments);
+            this.pushCommand(GraphicsCommandType.rect, arguments);
             this.extendByPoint(x, y);
             this.extendByPoint(x + w, y + h);
         }
 
         public moveTo(x:number, y:number):void {
-            this.pushCommand(player.GraphicsCommandType.moveTo, arguments);
+            this.pushCommand(GraphicsCommandType.moveTo, arguments);
             this.moveToX = x;
             this.moveToY = y;
             this.hasMoved = true;
         }
 
         public fillRect(x:number, y:number, w:number, h:number):void {
-            this.pushCommand(player.GraphicsCommandType.fillRect, arguments);
+            this.pushCommand(GraphicsCommandType.fillRect, arguments);
             this.extendByPoint(x, y);
             this.extendByPoint(x + w, y + h);
             this.hasFill = true;
         }
 
         public stroke():void {
-            this.pushCommand(player.GraphicsCommandType.stroke, arguments);
+            this.pushCommand(GraphicsCommandType.stroke, arguments);
             this.hasStroke = true;
         }
 
         public strokeRect(x:number, y:number, w:number, h:number):void {
-            this.pushCommand(player.GraphicsCommandType.strokeRect, arguments);
+            this.pushCommand(GraphicsCommandType.strokeRect, arguments);
             this.hasStroke = true;
             this.extendByPoint(x, y);
             this.extendByPoint(x + w, y + h);
         }
 
         public beginPath():void {
-            this.pushCommand(player.GraphicsCommandType.beginPath, arguments);
+            this.pushCommand(GraphicsCommandType.beginPath, arguments);
             this.hasMoved = false;
             this.moveToX = 0x8000000;
             this.moveToY = 0x8000000;
         }
 
         public arcTo(x1:number, y1:number, x2:number, y2:number, radius:number):void {
-            this.pushCommand(player.GraphicsCommandType.arcTo, arguments);
+            this.pushCommand(GraphicsCommandType.arcTo, arguments);
             if (this.moveToX === 0x8000000) {//没有调用过moveTo()方法
                 return;
             }
@@ -383,7 +382,7 @@ module lark {
         /**
          * 绘图命令列表
          */
-        $commands:player.GraphicsCommand[] = [];
+        $commands:GraphicsCommand[] = [];
 
         private pushCommand(graphicsType:number, args:any):void {
             this.$commands.push({type: graphicsType, arguments: args});
@@ -450,38 +449,68 @@ module lark {
 
     function mapGraphicsFunction(context:player.RenderContext):any {
         var map = context["graphicsMap"] = {};
-        map[player.GraphicsCommandType.arc] = context.arc;
-        map[player.GraphicsCommandType.arcTo] = context.arcTo;
-        map[player.GraphicsCommandType.beginPath] = context.beginPath;
-        map[player.GraphicsCommandType.bezierCurveTo] = context.bezierCurveTo;
-        map[player.GraphicsCommandType.closePath] = context.closePath;
-        map[player.GraphicsCommandType.fill] = context.fill;
-        map[player.GraphicsCommandType.fillRect] = context.fillRect;
-        map[player.GraphicsCommandType.lineTo] = context.lineTo;
-        map[player.GraphicsCommandType.moveTo] = context.moveTo;
-        map[player.GraphicsCommandType.quadraticCurveTo] = context.quadraticCurveTo;
-        map[player.GraphicsCommandType.rect] = context.rect;
-        map[player.GraphicsCommandType.stroke] = context.stroke;
-        map[player.GraphicsCommandType.strokeRect] = context.strokeRect;
+        map[GraphicsCommandType.arc] = context.arc;
+        map[GraphicsCommandType.arcTo] = context.arcTo;
+        map[GraphicsCommandType.beginPath] = context.beginPath;
+        map[GraphicsCommandType.bezierCurveTo] = context.bezierCurveTo;
+        map[GraphicsCommandType.closePath] = context.closePath;
+        map[GraphicsCommandType.fill] = context.fill;
+        map[GraphicsCommandType.fillRect] = context.fillRect;
+        map[GraphicsCommandType.lineTo] = context.lineTo;
+        map[GraphicsCommandType.moveTo] = context.moveTo;
+        map[GraphicsCommandType.quadraticCurveTo] = context.quadraticCurveTo;
+        map[GraphicsCommandType.rect] = context.rect;
+        map[GraphicsCommandType.stroke] = context.stroke;
+        map[GraphicsCommandType.strokeRect] = context.strokeRect;
 
-        map[player.GraphicsCommandType.lineWidth] = function (value) {
+        map[GraphicsCommandType.lineWidth] = function (value) {
             context.lineWidth = value
         };
-        map[player.GraphicsCommandType.miterLimit] = function (value) {
+        map[GraphicsCommandType.miterLimit] = function (value) {
             context.miterLimit = value
         };
-        map[player.GraphicsCommandType.fillStyle] = function (value) {
+        map[GraphicsCommandType.fillStyle] = function (value) {
             context.fillStyle = value
         };
-        map[player.GraphicsCommandType.lineCap] = function (value) {
+        map[GraphicsCommandType.lineCap] = function (value) {
             context.lineCap = value
         };
-        map[player.GraphicsCommandType.lineJoin] = function (value) {
+        map[GraphicsCommandType.lineJoin] = function (value) {
             context.lineJoin = value
         };
-        map[player.GraphicsCommandType.strokeStyle] = function (value) {
+        map[GraphicsCommandType.strokeStyle] = function (value) {
             context.strokeStyle = value
         };
         return map;
     }
+
+    interface GraphicsCommand {
+
+        type:number;
+
+        arguments:any[];
+    }
+
+    const enum GraphicsCommandType {
+        miterLimit,
+        lineCap,
+        lineJoin,
+        lineWidth,
+        strokeStyle,
+        fillStyle,
+        arc,
+        quadraticCurveTo,
+        lineTo,
+        fill,
+        closePath,
+        rect,
+        moveTo,
+        fillRect,
+        bezierCurveTo,
+        stroke,
+        strokeRect,
+        beginPath,
+        arcTo
+    }
+
 }

@@ -86,10 +86,10 @@ module lark.player {
     /**
      * 呈现最终绘图结果的画布
      */
-    export interface Surface extends BitmapData{
+    interface Surface extends BitmapData{
     }
 
-    export interface TextMetrics {
+    interface TextMetrics {
         width: number;
     }
 }

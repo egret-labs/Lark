@@ -29,7 +29,7 @@
 
 module lark.player {
 
-    export interface IRenderable{
+    export interface Renderable{
 
         $hashCode:number;
         /**
@@ -39,15 +39,15 @@ module lark.player {
         /**
          * 在舞台上的透明度
          */
-        $stageAlpha:number;
+        $renderAlpha:number;
         /**
          * 在舞台上的矩阵对象
          */
-        $stageMatrix:Matrix;
+        $renderMatrix:Matrix;
         /**
-         * 在舞台上的显示区域
+         * 在屏幕上的显示区域
          */
-        $stageRegion:Region;
+        $renderRegion:Region;
 
         /**
          * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。

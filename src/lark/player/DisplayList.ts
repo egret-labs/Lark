@@ -31,7 +31,7 @@ module lark.player {
 
     export var $displayListPool:IDisplayListPool;
 
-    export class DisplayList extends HashObject implements IRenderable {
+    export class DisplayList extends HashObject implements Renderable {
 
         public constructor(root:DisplayObject) {
             super();
@@ -42,15 +42,15 @@ module lark.player {
         /**
          * 在舞台上的透明度
          */
-        $stageAlpha:number = 1;
+        $renderAlpha:number = 1;
         /**
          * 在舞台上的矩阵对象
          */
-        $stageMatrix:Matrix;
+        $renderMatrix:Matrix;
         /**
          * 在舞台上的显示区域
          */
-        $stageRegion:Region = new Region();
+        $renderRegion:Region = new Region();
         /**
          * 显示列表根节点
          */
@@ -60,7 +60,6 @@ module lark.player {
          */
         public bounds:Rectangle = null;
 
-        public moved:boolean = false;
         /**
          * 是否需要重绘
          */
@@ -83,7 +82,7 @@ module lark.player {
          */
         private dirtyNodes:any = {};
 
-        private dirtyNodeList:IRenderable[] = [];
+        private dirtyNodeList:Renderable[] = [];
 
         public dirtyList:Region[] = null;
 
@@ -103,7 +102,7 @@ module lark.player {
             this.bitmapData = surface;
         }
 
-        public markDirty(node:IRenderable):void {
+        public markDirty(node:Renderable):void {
             var key = node.$hashCode;
             if (this.dirtyNodes[key]) {
                 return;
@@ -125,20 +124,16 @@ module lark.player {
         $update():boolean {
             var target = this.root;
             target.$removeFlagsUp(DisplayObjectFlags.Dirty);
-            this.$stageAlpha = target.$getConcatenatedAlpha();
-            this.$stageMatrix = target.$getConcatenatedMatrix();
+            this.$renderAlpha = target.$getConcatenatedAlpha();
+            this.$renderMatrix = target.$getConcatenatedMatrix();
             this.bounds = target.$getOriginalBounds();
             if (this.needRedraw) {
                 this.updateDirtyNodes();
             }
-            if (!this.moved) {
-                return false;
-            }
             if (!target.$stage) {
                 return false;
             }
-            this.$stageRegion.transformBounds(this.bounds, this.$stageMatrix);
-            return true;
+            return this.$renderRegion.updateRegion(this.bounds, this.$renderMatrix);
         }
 
         public updateDirtyNodes():Region[] {
@@ -149,14 +144,14 @@ module lark.player {
             var length = nodeList.length;
             for (var i = 0; i < length; i++) {
                 var node = nodeList[i];
-                var region = node.$stageRegion;
-                if (node.$stageAlpha !== 0) {
+                var region = node.$renderRegion;
+                if (node.$renderAlpha !== 0) {
                     if (dirtyRegion.addRegion(region.minX, region.minY, region.maxX, region.maxY)) {
                         node.$isDirty = true;
                     }
                 }
                 var moved = node.$update();
-                if (moved && node.$stageAlpha !== 0) {
+                if (moved && node.$renderAlpha !== 0) {
                     if (dirtyRegion.addRegion(region.minX, region.minY, region.maxX, region.maxY)) {
                         node.$isDirty = true;
                     }

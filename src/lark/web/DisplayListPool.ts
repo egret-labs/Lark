@@ -38,7 +38,7 @@ module lark.web {
          */
         public release(node:lark.player.DisplayList):void{
             node.root = null;
-            node.$stageMatrix = null;
+            node.$renderMatrix = null;
             node.bounds = null;
             node.needRedraw = false;
             node.$isDirty = false;

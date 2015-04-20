@@ -240,7 +240,7 @@ module lark.player {
 
         private drawDisplayObject(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.player.Region[], displayList:DisplayList,hasClipRect:boolean):number {
             var drawCalls = 0;
-            var node:IRenderable;
+            var node:Renderable;
             var globalAlpha:number;
             if (displayList) {
                 globalAlpha = 1;
@@ -249,16 +249,16 @@ module lark.player {
                 }
                 node = displayList;
             }
-            else if(displayObject.$stageRegion){
+            else if(displayObject.$renderRegion){
                 node = displayObject;
-                globalAlpha = displayObject.$stageAlpha;
+                globalAlpha = displayObject.$renderAlpha;
             }
-            if (node && !(node.$stageAlpha === 0)) {
+            if (node && !(node.$renderAlpha === 0)) {
                 if (!node.$isDirty) {
-                    var stageRegion = node.$stageRegion;
+                    var renderRegion = node.$renderRegion;
                     for (var j = dirtyList.length - 1; j >= 0; j--) {
                         var region = dirtyList[j];
-                        if (stageRegion.intersects(region)) {
+                        if (renderRegion.intersects(region)) {
                             node.$isDirty = true;
                             break;
                         }
@@ -267,7 +267,7 @@ module lark.player {
                 if (node.$isDirty) {
                     drawCalls++;
                     context.globalAlpha = globalAlpha;
-                    var m = node.$stageMatrix.$data;
+                    var m = node.$renderMatrix.$data;
                     if(hasClipRect){
                         context.setTransform(m[0], m[1], m[2], m[3], m[4], m[5]);
                         node.$render(context);

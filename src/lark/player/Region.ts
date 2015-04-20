@@ -40,6 +40,11 @@ module lark.player {
         public height:number = 0;
         public area:number = 0;
 
+        /**
+         * 是否发生移动
+         */
+        moved:boolean = false;
+
         public setTo(minX:number, minY:number, maxX:number, maxY:number):Region {
             this.minX = minX;
             this.minY = minY;
@@ -83,7 +88,10 @@ module lark.player {
             return max <= min;
         }
 
-        public transformBounds(bounds:Rectangle, matrix:Matrix):void {
+        public updateRegion(bounds:Rectangle, matrix:Matrix):boolean {
+            if(!this.moved){
+                return false;
+            }
             var m = matrix.$data;
             var a = m[0];
             var b = m[1];
@@ -143,6 +151,7 @@ module lark.player {
                 this.maxY = Math.ceil(y1 > y3 ? y1 : y3);
             }
             this.updateArea();
+            return true;
         }
     }
 }
