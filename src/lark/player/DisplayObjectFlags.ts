@@ -40,13 +40,6 @@ module lark.player {
         // 0x20000000,0x40000000,0x80000000,0x100000000,0x200000000,0x400000000,0x800000000,0x1000000000,0x2000000000,
         // 0x4000000000,0x8000000000,0x10000000000,0x20000000000,0x40000000000,0x80000000000,0x100000000000,0x200000000000
 
-        None = 0x0000,
-
-        /**
-         * 显示对象可见的标志
-         */
-        Visible = 0x0001,
-
         /**
          * 显示对象自身的绘制区域尺寸失效
          */
@@ -112,8 +105,7 @@ module lark.player {
         /**
          * 显示对象初始化时的标志量
          */
-        InitFlags = DisplayObjectFlags.Visible |
-            DisplayObjectFlags.TouchEnabled |
+        InitFlags = DisplayObjectFlags.TouchEnabled |
             DisplayObjectFlags.TouchChildren |
             DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |

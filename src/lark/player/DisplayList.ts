@@ -292,7 +292,7 @@ module lark.player {
                 var length = children.length;
                 for (var i = 0; i < length; i++) {
                     var child = children[i];
-                    if (!(child.$displayObjectFlags & DisplayObjectFlags.Visible)) {
+                    if (!(child.$visible)) {
                         continue;
                     }
                     drawCalls += this.drawDisplayObject(child, context, dirtyList, drawToStage, child.$displayList);

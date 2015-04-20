@@ -484,8 +484,7 @@ module lark {
 
 
         $hitTest(stageX:number, stageY:number):DisplayObject {
-            if (!this.$hasAnyFlags(player.DisplayObjectFlags.Visible|
-                    player.DisplayObjectFlags.TouchEnabled|
+            if (!this.visible||!this.$hasAnyFlags(player.DisplayObjectFlags.TouchEnabled|
                     player.DisplayObjectFlags.TouchChildren)) {
                 return null;
             }

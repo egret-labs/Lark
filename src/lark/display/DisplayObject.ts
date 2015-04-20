@@ -428,21 +428,22 @@ module lark {
             this.invalidateMatrix();
         }
 
+        $visible:boolean = true;
         /**
          * 显示对象是否可见。
          * 不可见的显示对象已被禁用。例如，如果实例的 visible=false，则无法单击该对象。
          * 默认值为 true 可见
          */
         public get visible():boolean {
-            return this.$hasFlags(player.DisplayObjectFlags.Visible);
+            return this.$visible;
         }
 
         public set visible(value:boolean) {
             value = !!value;
-            if (value === this.$hasFlags(player.DisplayObjectFlags.Visible)) {
+            if (value === this.$visible) {
                 return;
             }
-            this.$toggleFlags(player.DisplayObjectFlags.Visible, value);
+            this.$visible = value;
             this.$invalidateChildren();
         }
 
@@ -736,7 +737,7 @@ module lark {
             }
         }
         /**
-         * 是否需要重绘
+         * 是否需要重绘的标志，此属性在渲染时会被访问，所以单独声明一个直接的变量。
          */
         $isDirty:boolean = false;
         /**
@@ -774,8 +775,8 @@ module lark {
         }
 
         $hitTest(stageX:number, stageY:number):DisplayObject {
-            if (!this.$renderRegion||!this.$hasAnyFlags(player.DisplayObjectFlags.TouchEnabled|
-                    player.DisplayObjectFlags.Visible)) {
+            if (!this.$renderRegion||!this.$visible||
+                !this.$hasFlags(player.DisplayObjectFlags.TouchEnabled)) {
                 return null;
             }
             var m = this.$getInvertedConcatenatedMatrix().$data;
