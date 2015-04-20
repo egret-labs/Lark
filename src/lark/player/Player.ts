@@ -57,7 +57,7 @@ module lark.player {
                     this._showPaintRects = value;
                     if (value) {
                         if (!this.stageDisplayList) {
-                            this.stageDisplayList = $displayListPool.create(this.stage);
+                            this.stageDisplayList = player.DisplayList.create(this.stage);
                         }
                         this.stage.$displayList = this.stageDisplayList;
                     }

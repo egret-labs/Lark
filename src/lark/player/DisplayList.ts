@@ -29,10 +29,44 @@
 
 module lark.player {
 
-    export var $displayListPool:IDisplayListPool;
+    var displayListPool:DisplayList[] = [];
 
+    /**
+     * 显示列表
+     */
     export class DisplayList extends HashObject implements Renderable {
 
+        /**
+         * 释放一个DisplayList实例到对象池
+         */
+        public static release(displayList:DisplayList):void{
+            displayList.root = null;
+            displayList.$renderMatrix = null;
+            displayList.needRedraw = false;
+            displayList.$isDirty = false;
+            displayListPool.push(displayList);
+        }
+
+        /**
+         * 从对象池中取出或创建一个新的DisplayList对象。
+         */
+        public static create(target:DisplayObject):DisplayList{
+            var displayList = displayListPool.pop();
+            if(!displayList){
+                var surface = surfaceFactory.create();
+                if(surface){
+                    displayList = new lark.player.DisplayList(target);
+                    displayList.surface = surface;
+                    displayList.renderContext = surface.renderContext;
+                }
+            }
+            return displayList;
+        }
+
+
+        /**
+         * 创建一个DisplayList对象
+         */
         public constructor(root:DisplayObject) {
             super();
             this.root = root;

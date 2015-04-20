@@ -32,5 +32,9 @@ module lark.player {
      * 呈现最终绘图结果的画布
      */
     export interface Surface extends BitmapData{
+        /**
+         * 绘图上下文
+         */
+        renderContext:RenderContext;
     }
 }

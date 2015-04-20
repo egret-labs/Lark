@@ -469,7 +469,7 @@ module lark {
                 return;
             }
             if (value) {
-                var displayList = lark.player.$displayListPool.create(this);
+                var displayList = player.DisplayList.create(this);
                 if (displayList) {
                     this.$displayList = displayList;
                     if (this.$parentDisplayList) {
@@ -479,7 +479,7 @@ module lark {
                 }
             }
             else {
-                lark.player.$displayListPool.release(this.$displayList);
+                player.DisplayList.release(this.$displayList);
                 this.$displayList = null;
                 this.$cacheAsBitmapChanged();
             }
