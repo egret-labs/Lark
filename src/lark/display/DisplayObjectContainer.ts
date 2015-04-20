@@ -488,6 +488,14 @@ module lark {
                     player.DisplayObjectFlags.TouchChildren)) {
                 return null;
             }
+            if(this.$scrollRect){
+                var m = this.$getInvertedConcatenatedMatrix().$data;
+                var localX = m[0] * stageX + m[2] * stageY + m[4];
+                var localY = m[1] * stageX + m[3] * stageY + m[5];
+                if(!this.$scrollRect.contains(localX,localY)){
+                    return null;
+                }
+            }
             var children = this.$children;
             for (var i = children.length - 1; i >= 0; i--) {
                 var target = children[i].$hitTest(stageX, stageY);

@@ -29,7 +29,27 @@
 
 module lark.player {
 
+    var regionPool:Region[] = [];
+
     export class Region {
+
+        /**
+         * 释放一个DisplayList实例到对象池
+         */
+        public static release(region:Region):void{
+            regionPool.push(region);
+        }
+
+        /**
+         * 从对象池中取出或创建一个新的DisplayList对象。
+         */
+        public static create():Region{
+            var region = regionPool.pop();
+            if(!region){
+               region = new Region();
+            }
+            return region;
+        }
 
         public minX:number = 0;
         public minY:number = 0;
@@ -88,10 +108,7 @@ module lark.player {
             return max <= min;
         }
 
-        public updateRegion(bounds:Rectangle, matrix:Matrix):boolean {
-            if(!this.moved){
-                return false;
-            }
+        public updateRegion(bounds:Rectangle, matrix:Matrix):void {
             var m = matrix.$data;
             var a = m[0];
             var b = m[1];
@@ -151,7 +168,6 @@ module lark.player {
                 this.maxY = Math.ceil(y1 > y3 ? y1 : y3);
             }
             this.updateArea();
-            return true;
         }
     }
 }

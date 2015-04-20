@@ -74,8 +74,9 @@ module lark {
 
 
             var container = new DisplayObjectContainer();
+            container.scrollRect = new lark.Rectangle(-300,300,500,500);
             var x = 0, y = 0;
-            for (var i = 0; i < 2600; i++) {
+            for (var i = 0; i < 1300; i++) {
                 var bitmap = new Bitmap();
                 bitmap.bitmapData = bitmapData;
                 bitmap.x = x;
@@ -91,7 +92,7 @@ module lark {
                     }
                 }
                 container.addChild(bitmap);
-                this.iconList.push(bitmap);
+                //this.iconList.push(bitmap);
             }
             var shape = new Shape();
             shape.x = 500+0.5;
@@ -125,8 +126,10 @@ module lark {
             this.timer.start();
             this.addChild(FPS.display);
             this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+            this.container = container;
         }
 
+        private container:DisplayObjectContainer;
         private timer = new Timer(16);
         private touchTarget:DisplayObject;
         private offsetX:number = 0;
@@ -134,36 +137,40 @@ module lark {
 
 
         private onTouchBegin(event:TouchEvent):void {
-            this.timer.stop();
             var target = <DisplayObject>event.target;
             if(target===this.stage||target===FPS.display){
                 return;
             }
-            this.touchTarget = target;
-            var pos = target.parent.localToGlobal(target.x,target.y);
-            this.addChild(target);
-            pos = target.parent.globalToLocal(pos.x,pos.y);
-            target.x = pos.x;
-            target.y = pos.y;
-            this.offsetX = this.touchTarget.x - event.stageX;
-            this.offsetY = this.touchTarget.y - event.stageY;
+            this.timer.stop();
+            //this.touchTarget = target;
+            //var pos = target.parent.localToGlobal(target.x,target.y);
+            //this.addChild(target);
+            //pos = target.parent.globalToLocal(pos.x,pos.y);
+            //target.x = pos.x;
+            //target.y = pos.y;
+            this.offsetX = event.stageX;
+            this.offsetY = event.stageY;
             this.stage.on(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
             this.stage.on(TouchEvent.TOUCH_END, this.onTouchEnd, this);
             event.updateAfterEvent();
         }
 
+        private rect = new Rectangle(-300,300,500,500);
         private onTouchMove(event:TouchEvent):void {
-            this.touchTarget.x = event.stageX + this.offsetX;
-            this.touchTarget.y = event.stageY + this.offsetY;
+            this.rect.x -= event.stageX-this.offsetX;
+            this.rect.y -= event.stageY-this.offsetY;
+            this.offsetX = event.stageX;
+            this.offsetY = event.stageY;
+            this.container.scrollRect = this.rect;
             event.updateAfterEvent();
         }
 
         private onTouchEnd(event:TouchEvent):void {
-            this.targetIcon = this.touchTarget;
-            if(this.iconList.indexOf(this.touchTarget)==-1){
-                this.iconList.push(this.touchTarget);
-            }
-            this.touchTarget = null;
+            //this.targetIcon = this.touchTarget;
+            //if(this.iconList.indexOf(this.touchTarget)==-1){
+            //    this.iconList.push(this.touchTarget);
+            //}
+            //this.touchTarget = null;
             this.stage.removeListener(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
             this.stage.removeListener(TouchEvent.TOUCH_END, this.onTouchEnd, this);
             event.updateAfterEvent();

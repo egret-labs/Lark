@@ -42,14 +42,6 @@ module lark.player {
      */
     export class DirtyRegion {
 
-        public constructor() {
-            var list = this.regionList = [];
-            while (list.length < 4) {
-                list.push(new Region());
-            }
-        }
-
-        private regionList:Region[];
         private dirtyList:Region[] = [];
         private hasClipRect:boolean = false;
         private clipWidth:number = 0;
@@ -94,7 +86,7 @@ module lark.player {
                 return true;
             }
             var dirtyList = this.dirtyList;
-            var region:Region = this.regionList.pop();
+            var region:Region = Region.create();
             dirtyList.push(region.setTo(minX, minY, maxX, maxY));
             this.mergeDirtyList(dirtyList);
             return true;
@@ -104,7 +96,7 @@ module lark.player {
             var dirtyList = this.dirtyList;
             var length = dirtyList.length;
             for (var i = 0; i < length; i++) {
-                this.regionList.push(dirtyList[i]);
+                Region.release(dirtyList[i]);
             }
             dirtyList.length = 0;
         }
@@ -117,7 +109,7 @@ module lark.player {
             if (this.clipRectChanged) {
                 this.clipRectChanged = false;
                 this.clear();
-                var region:Region = this.regionList.pop();
+                var region:Region = Region.create();
                 dirtyList.push(region.setTo(0, 0, this.clipWidth, this.clipHeight));
             }
             else {
@@ -159,7 +151,7 @@ module lark.player {
             if (mergeA != mergeB) {
                 var region = dirtyList[mergeB];
                 dirtyList[mergeA].union(region);
-                this.regionList.push(region);
+                Region.release(region);
                 dirtyList.splice(mergeB, 1);
                 return true;
             }

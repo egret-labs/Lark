@@ -107,7 +107,13 @@ module lark.player {
             if (!target.$stage) {
                 return false;
             }
-            return this.$renderRegion.updateRegion(bounds, this.$renderMatrix);
+            var region = this.$renderRegion;
+            if(!region.moved){
+                return false;
+            }
+            region.moved = false;
+            region.updateRegion(bounds,this.$renderMatrix);
+            return true;
         }
 
         /**
@@ -229,7 +235,7 @@ module lark.player {
             }
             context.clip();
             //绘制显示对象
-            var drawCalls = this.drawDisplayObject(this.root, context, dirtyList, this.drawToStage, null);
+            var drawCalls = this.drawDisplayObject(this.root, context, dirtyList, this.drawToStage, null,null);
             //清除脏矩形区域
             context.restore();
             this.dirtyRegion.clear();
@@ -241,7 +247,7 @@ module lark.player {
          * 绘制一个显示对象
          */
         private drawDisplayObject(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.player.Region[],
-                                  drawToStage:boolean, displayList:DisplayList):number {
+                                  drawToStage:boolean, displayList:DisplayList,scrollRegion:Region):number {
             var drawCalls = 0;
             var node:Renderable;
             var globalAlpha:number;
@@ -257,8 +263,11 @@ module lark.player {
                 globalAlpha = displayObject.$renderAlpha;
             }
             if (node && !(node.$renderAlpha === 0)) {
-                if (!node.$isDirty) {
-                    var renderRegion = node.$renderRegion;
+                var renderRegion = node.$renderRegion;
+                if(scrollRegion&&!scrollRegion.intersects(renderRegion)){
+                    node.$isDirty = false;
+                }
+                else if (!node.$isDirty) {
                     var l = dirtyList.length;
                     for (var j = 0; j < l; j++) {
                         if (renderRegion.intersects(dirtyList[j])) {
@@ -295,7 +304,32 @@ module lark.player {
                     if (!(child.$visible)) {
                         continue;
                     }
-                    drawCalls += this.drawDisplayObject(child, context, dirtyList, drawToStage, child.$displayList);
+                    if(child.$scrollRect){
+                        var rect = child.$scrollRect;
+                        context.save();
+                        var region = Region.create();
+                        region.updateRegion(rect,child.$renderMatrix);
+                        m = child.$renderMatrix.$data;
+                        if (drawToStage) {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
+                            context.setTransform(m[0], m[1], m[2], m[3], m[4], m[5]);
+                        }
+                        else {
+                            context.save();
+                            context.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
+                        }
+                        context.beginPath();
+                        context.rect(rect.x,rect.y,rect.width,rect.height);
+                        if(!drawToStage){
+                            context.restore();
+                        }
+                        context.clip();
+                        drawCalls += this.drawDisplayObject(child, context, dirtyList, drawToStage, child.$displayList,region);
+                        context.restore();
+                        Region.release(region);
+                    }
+                    else{
+                        drawCalls += this.drawDisplayObject(child, context, dirtyList, drawToStage, child.$displayList,scrollRegion);
+                    }
                 }
             }
             return drawCalls;

@@ -43,7 +43,7 @@ module lark {
     }
 
     const enum Values {
-        scaleX, scaleY, skewX, skewY, rotation,alpha
+        scaleX, scaleY, skewX, skewY, rotation,alpha,x,y
     }
 
     /**
@@ -56,7 +56,7 @@ module lark {
         public constructor() {
             super();
             this.$displayObjectFlags = player.DisplayObjectFlags.InitFlags;
-            this._values = new Float64Array([1,1,0,0,0,1]);
+            this._values = new Float64Array([1,1,0,0,0,1,0,0]);
         }
 
         private _values:Float64Array;
@@ -187,9 +187,10 @@ module lark {
         private _matrix:Matrix = new Matrix();
         /**
          * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。
+         * 注意：必须对matrix属性重新赋值改变的值才能生效，若获取matrix引用来修改对象属性，将不会发生任何改变。
          */
         public get matrix():Matrix {
-            return this.$getMatrix();
+            return this.$getMatrix().clone();
         }
 
         $getMatrix():Matrix {
@@ -263,13 +264,18 @@ module lark {
          * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
          */
         public get x():number {
-            return this._matrix.$data[4];
+            return this._values[Values.x];
         }
 
         public set x(value:number) {
             value = +value || 0;
-            if (value === this._matrix.$data[4]) {
+            var values = this._values;
+            if (value === values[Values.x]) {
                 return;
+            }
+            values[Values.x] = value;
+            if(this.$scrollRect){
+                value -= this.$scrollRect.x;
             }
             this._matrix.$data[4] = value;
             this.invalidatePosition();
@@ -281,15 +287,20 @@ module lark {
          * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
          */
         public get y():number {
-            return this._matrix.ty;
+            return this._values[Values.y];
         }
 
         public set y(value:number) {
             value = +value || 0;
-            if (value === this._matrix.ty) {
+            var values = this._values;
+            if (value === values[Values.y]) {
                 return;
             }
-            this._matrix.ty = value;
+            values[Values.y] = value;
+            if(this.$scrollRect){
+                value -= this.$scrollRect.y;
+            }
+            this._matrix.$data[5] = value;
             this.invalidatePosition();
         }
 
@@ -545,16 +556,32 @@ module lark {
             this.$toggleFlags(player.DisplayObjectFlags.TouchEnabled, !!value);
         }
 
-        private _scrollRect:Rectangle = null;
+        $scrollRect:Rectangle = null;
         /**
          * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
+         * 注意：必须对scrollRect属性重新赋值改变的值才能生效，若获取scrollRect引用来修改对象属性，将不会发生任何改变。
          */
         public get scrollRect():Rectangle {
-            return this._scrollRect;
+            return this.$scrollRect?this.$scrollRect.clone():null;
         }
 
         public set scrollRect(value:Rectangle) {
-            this._scrollRect = value;
+            var values = this._values;
+            var m = this._matrix.$data;
+            if(value){
+                if(!this.$scrollRect){
+                    this.$scrollRect = new lark.Rectangle();
+                }
+                this.$scrollRect.copyFrom(value);
+                m[4] = values[Values.x]-value.x;
+                m[5] = values[Values.y]-value.y;
+            }
+            else{
+                this.$scrollRect = null;
+                m[4] = values[Values.x];
+                m[5] = values[Values.y];
+            }
+            this.invalidatePosition();
         }
 
         private _blendMode:string = null;
@@ -764,7 +791,13 @@ module lark {
             if (!stage) {
                 return false;
             }
-            return this.$renderRegion.updateRegion(bounds,matrix);
+            var region = this.$renderRegion;
+            if(!region.moved){
+                return false;
+            }
+            region.moved = false;
+            region.updateRegion(bounds,matrix);
+            return true;
         }
 
         /**
@@ -783,7 +816,7 @@ module lark {
             var bounds = this.$getContentBounds();
             var localX = m[0] * stageX + m[2] * stageY + m[4];
             var localY = m[1] * stageX + m[3] * stageY + m[5];
-            if (bounds.contains(localX, localY)) {
+            if (bounds.contains(localX, localY)&&(!this.$scrollRect||this.$scrollRect.contains(localX,localY))) {
                 return this;
             }
             return null;
