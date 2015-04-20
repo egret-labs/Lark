@@ -40,8 +40,8 @@ var Build = (function () {
         this.clean();
         var task = Promise.resolve(0);
         if (this.options.includeLark)
-            task = task.then(function (r) { return _this.buildLark(); });
-        task.then(function (r) { return _this.buildProject(); });
+            task = task.then(function (r) { return Build.buildLark(_this.options); });
+        task.then(function (r) { return Build.buildProject(_this.options); });
     };
     Build.prototype.clean = function () {
         //清理bin-debug目录
@@ -53,10 +53,10 @@ var Build = (function () {
             FileUtil.remove(path);
         }
     };
-    Build.prototype.buildProject = function () {
+    Build.buildProject = function (option) {
         //拷贝模板文件
-        var debugPath = FileUtil.joinPath(this.projectDir, "bin-debug/");
-        var tempatePath = FileUtil.joinPath(this.projectDir, "template/");
+        var debugPath = FileUtil.joinPath(option.projectDir, "bin-debug/");
+        var tempatePath = FileUtil.joinPath(option.projectDir, "template/");
         var fileList = FileUtil.getDirectoryListing(tempatePath);
         length = fileList.length;
         for (var i = 0; i < length; i++) {
@@ -65,37 +65,40 @@ var Build = (function () {
             destPath = FileUtil.joinPath(debugPath, destPath);
             FileUtil.copy(path, destPath);
         }
-        var srcPath = FileUtil.joinPath(this.projectDir, "src");
+        //拷贝lark.js
+        var output = FileUtil.joinPath(option.projectDir, "src/lark/lark.js");
+        if (FileUtil.exists(output)) {
+            var destOut = FileUtil.joinPath(option.projectDir, "bin-debug/lark/lark.js");
+            FileUtil.copy(output, destOut);
+        }
+        var srcPath = FileUtil.joinPath(option.projectDir, "src");
         var tsList = FileUtil.search(srcPath, "ts");
-        var output = FileUtil.joinPath(this.projectDir, "bin-debug");
-        return this.compile(tsList, null, output);
+        output = FileUtil.joinPath(option.projectDir, "bin-debug");
+        return Build.compile(option, tsList, null, output);
     };
-    Build.prototype.buildLark = function () {
-        var larkRoot = this.options.larkRoot;
+    Build.buildLark = function (options) {
+        var larkRoot = options.larkRoot;
         var srcPath = FileUtil.joinPath(larkRoot, "src");
         var tsList = FileUtil.search(srcPath, "ts");
-        var output = FileUtil.joinPath(this.projectDir, "bin-debug/lark/lark.js");
-        var outDef = FileUtil.joinPath(this.projectDir, "bin-debug/lark/lark.d.ts");
-        var destDef = FileUtil.joinPath(this.projectDir, "src/lark/lark.d.ts");
+        var output = FileUtil.joinPath(options.projectDir, "src/lark/lark.js");
+        var destOut = FileUtil.joinPath(options.projectDir, "bin-debug/lark/lark.js");
         if (FileUtil.exists(output))
             FileUtil.remove(output);
-        return this.compile(tsList, output, null, true).then(function (code) {
+        return Build.compile(options, tsList, output, null, true).then(function (code) {
             if (code == 0) {
-                FileUtil.copy(outDef, destDef);
-                FileUtil.remove(outDef);
+                FileUtil.copy(output, destOut);
             }
             return code;
         });
         ;
     };
-    Build.prototype.compile = function (files, out, outDir, def) {
-        var _this = this;
+    Build.compile = function (options, files, out, outDir, def) {
         var promise = new Promise(function (resolve, reject) {
-            var cmd = files.join(" ") + " -t " + _this.options.esTarget;
-            if (_this.options.sourceMap)
+            var cmd = files.join(" ") + " -t " + options.esTarget;
+            if (options.sourceMap)
                 cmd += ' --sourcemap';
-            if (_this.options.removeComments)
-                cmd += ' --removeComments';
+            //if (options.removeComments)
+            cmd += ' --removeComments';
             if (out)
                 cmd += " --out " + '"' + out + '"';
             if (outDir)

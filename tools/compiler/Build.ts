@@ -51,8 +51,8 @@ class Build {
 
         var task = Promise.resolve(0);
         if (this.options.includeLark)
-            task = task.then((r) => this.buildLark());
-        task.then(r=> this.buildProject());
+            task = task.then((r) => Build.buildLark(this.options));
+        task.then(r=> Build.buildProject(this.options));
     }
 
     public clean() {
@@ -66,11 +66,11 @@ class Build {
         }
     }
 
-    public buildProject(): Promise<number> {
+    public static buildProject(option: lark.CompileOptions): Promise<number> {
         
         //拷贝模板文件
-        var debugPath = FileUtil.joinPath(this.projectDir, "bin-debug/");
-        var tempatePath = FileUtil.joinPath(this.projectDir, "template/");
+        var debugPath = FileUtil.joinPath(option.projectDir, "bin-debug/");
+        var tempatePath = FileUtil.joinPath(option.projectDir, "template/");
         var fileList = FileUtil.getDirectoryListing(tempatePath);
         length = fileList.length;
         for (var i = 0; i < length; i++) {
@@ -79,38 +79,44 @@ class Build {
             destPath = FileUtil.joinPath(debugPath, destPath);
             FileUtil.copy(path, destPath);
         }
-        var srcPath: string = FileUtil.joinPath(this.projectDir, "src");
+
+        //拷贝lark.js
+        var output = FileUtil.joinPath(option.projectDir, "src/lark/lark.js");
+        if (FileUtil.exists(output)) {
+            var destOut = FileUtil.joinPath(option.projectDir, "bin-debug/lark/lark.js");
+            FileUtil.copy(output, destOut);
+        }
+
+        var srcPath: string = FileUtil.joinPath(option.projectDir, "src");
         var tsList: string[] = FileUtil.search(srcPath, "ts");
-        var output = FileUtil.joinPath(this.projectDir, "bin-debug");
-        return this.compile(tsList, null, output);
+        output = FileUtil.joinPath(option.projectDir, "bin-debug");
+        return Build.compile(option,tsList, null, output);
     }
 
-    public buildLark(): Promise<number> {
-        var larkRoot = this.options.larkRoot;
+    public static buildLark(options: lark.CompileOptions): Promise<number> {
+        var larkRoot = options.larkRoot;
         var srcPath: string = FileUtil.joinPath(larkRoot, "src");
         var tsList: string[] = FileUtil.search(srcPath, "ts");
-        var output = FileUtil.joinPath(this.projectDir, "bin-debug/lark/lark.js");
-        var outDef = FileUtil.joinPath(this.projectDir, "bin-debug/lark/lark.d.ts");
-        var destDef = FileUtil.joinPath(this.projectDir, "src/lark/lark.d.ts");
+        var output = FileUtil.joinPath(options.projectDir, "src/lark/lark.js");
+        var destOut = FileUtil.joinPath(options.projectDir, "bin-debug/lark/lark.js");
 
         if (FileUtil.exists(output))
             FileUtil.remove(output);
-        return this.compile(tsList, output, null, true).then(code=> {
+        return Build.compile(options,tsList, output, null, true).then(code=> {
             if (code == 0) {
-                FileUtil.copy(outDef, destDef);
-                FileUtil.remove(outDef);
+                FileUtil.copy(output, destOut);
             }
             return code;
         });;
     }
 
-    private compile(files: string[], out?: string, outDir?: string, def?: boolean): Promise<number> {
+    private static compile(options:lark.CompileOptions, files: string[], out?: string, outDir?: string, def?: boolean): Promise<number> {
 
         var promise = new Promise<number>((resolve, reject) => {
-            var cmd = files.join(" ") + " -t " + this.options.esTarget;
-            if (this.options.sourceMap)
+            var cmd = files.join(" ") + " -t " + options.esTarget;
+            if (options.sourceMap)
                 cmd += ' --sourcemap';
-            if (this.options.removeComments)
+            //if (options.removeComments)
                 cmd += ' --removeComments';
             if (out)
                 cmd += " --out " + '"' + out + '"';

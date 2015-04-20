@@ -29,7 +29,9 @@
 /// <reference path="../lib/node.d.ts"/>
 var Build = require("./Build");
 var Publish = require("./Publish");
+var Create = require("./Create");
 var utils = require('../lib/utils');
+var FileUtil = require('../lib/FileUtil');
 var optionDeclarations = [
     {
         name: "action",
@@ -59,6 +61,14 @@ var optionDeclarations = [
     {
         name: "esTarget",
         type: "string"
+    },
+    {
+        name: 'showUI',
+        type: "boolean"
+    },
+    {
+        name: 'modules',
+        type: 'string'
     }
 ];
 var shortOptionNames = {};
@@ -76,6 +86,10 @@ function executeCommandLine(args) {
             var publish = new Publish(options);
             publish.run();
             break;
+        case "create":
+            var create = new Create(options);
+            create.run();
+            break;
         default:
             var build = new Build(options);
             build.run();
@@ -88,13 +102,14 @@ function parseCommandLine(commandLine) {
     var options = {
         esTarget: "ES5",
         action: null,
-        projectDir: null
+        projectDir: null,
+        srcDir: null,
+        debugDir: null,
+        templateDir: null
     };
     var filenames = [];
     var errors = [];
     parseStrings(commandLine);
-    if (options.projectDir == null)
-        options.projectDir = process.cwd();
     options.larkRoot = utils.getLarkRoot();
     return options;
     function parseStrings(args) {
@@ -140,6 +155,11 @@ function parseCommandLine(commandLine) {
                     filenames.push(s);
             }
         }
+        if (options.projectDir == null)
+            options.projectDir = process.cwd();
+        options.srcDir = FileUtil.joinPath(options.projectDir, "src");
+        options.debugDir = FileUtil.joinPath(options.projectDir, "bin-debug");
+        options.templateDir = FileUtil.joinPath(options.projectDir, "template");
     }
 }
 module.exports = executeCommandLine;

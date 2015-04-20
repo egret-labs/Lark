@@ -31,13 +31,15 @@
 
 import Build = require("./Build");
 import Publish = require("./Publish");
+import Create = require("./Create");
 import utils = require('../lib/utils');
+import FileUtil = require('../lib/FileUtil');
 
 
 var optionDeclarations: lark.CommandLineOption[] = [
     {
         name: "action",
-        type:"string"
+        type: "string"
     }, {
         name: "includeLark",
         type: "boolean",
@@ -57,6 +59,12 @@ var optionDeclarations: lark.CommandLineOption[] = [
     }, {
         name: "esTarget",
         type: "string"
+    }, {
+        name: 'showUI',
+        type: "boolean"
+    }, {
+        name: 'modules',
+        type: 'string'
     }
 ];
 
@@ -80,6 +88,10 @@ function executeCommandLine(args: string[]): void {
             var publish = new Publish(options);
             publish.run();
             break;
+        case "create":
+            var create = new Create(options);
+            create.run();
+            break;
         default :
             var build = new Build(options);
             build.run();
@@ -98,13 +110,14 @@ function parseCommandLine(commandLine: string[]) {
     var options: lark.CompileOptions = {
         esTarget: "ES5",
         action: null,
-        projectDir: null
+        projectDir: null,
+        srcDir: null,
+        debugDir: null,
+        templateDir: null
     };
     var filenames: string[] = [];
     var errors: string[] = [];
     parseStrings(commandLine);
-    if (options.projectDir == null)
-        options.projectDir = process.cwd();
     options.larkRoot = utils.getLarkRoot();
     return options;
 
@@ -165,6 +178,13 @@ function parseCommandLine(commandLine: string[]) {
                     filenames.push(s);
             }
         }
+
+
+        if (options.projectDir == null)
+            options.projectDir = process.cwd();
+        options.srcDir = FileUtil.joinPath(options.projectDir, "src");
+        options.debugDir = FileUtil.joinPath(options.projectDir, "bin-debug");
+        options.templateDir = FileUtil.joinPath(options.projectDir, "template");
     }
 
 }

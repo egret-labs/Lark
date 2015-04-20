@@ -21,6 +21,9 @@ declare module lark {
     export interface CompileOptions {
         action: string;
         projectDir: string;
+        srcDir: string;
+        debugDir: string;
+        templateDir: string;
         larkRoot?: string;
 
         includeLark?: boolean;
@@ -30,6 +33,10 @@ declare module lark {
         sourceMap?: boolean;
         removeComments?: boolean;
         esTarget?: string;
+        showUI?: boolean;
+
+        //modules
+        modules?: string;
     }
 
     export interface CommandLineOption {
