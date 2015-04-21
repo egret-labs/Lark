@@ -484,7 +484,7 @@ module lark {
         }
 
 
-        $hitTest(stageX:number, stageY:number):DisplayObject {
+        $hitTest(stageX:number, stageY:number,shapeFlag?:boolean):DisplayObject {
             if (!this.$visible || !this.$hasAnyFlags(player.DisplayObjectFlags.TouchEnabled |
                     player.DisplayObjectFlags.TouchChildren)) {
                 return null;
@@ -498,12 +498,16 @@ module lark {
             if(!this.$getOriginalBounds().contains(localX,localY)){
                 return null;
             }
-            if (this.$mask && !this.$mask.$hitTestMask(stageX, stageY)) {
+            if (this.$mask && !this.$mask.$hitTest(stageX, stageY,true)) {
                 return null
             }
             var children = this.$children;
             for (var i = children.length - 1; i >= 0; i--) {
-                var target = children[i].$hitTest(stageX, stageY);
+                var child = children[i];
+                if(child.$maskedObject){
+                    continue;
+                }
+                var target = child.$hitTest(stageX, stageY,shapeFlag);
                 if (target) {
                     break;
                 }
@@ -515,7 +519,7 @@ module lark {
                 return this;
             }
             if (this.$hasFlags(player.DisplayObjectFlags.TouchEnabled)) {
-                return super.$hitTest(stageX, stageY);
+                return super.$hitTest(stageX, stageY,shapeFlag);
             }
             return null;
         }

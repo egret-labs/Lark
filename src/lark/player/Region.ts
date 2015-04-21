@@ -150,7 +150,7 @@ module lark.player {
                     x3 = tmp;
                 }
 
-                this.minX = (x0 < x2 ? x0 : x2) | 0;
+                this.minX = Math.floor(x0 < x2 ? x0 : x2);
                 this.maxX = Math.ceil(x1 > x3 ? x1 : x3);
 
                 if (y0 > y1) {
@@ -164,7 +164,7 @@ module lark.player {
                     y3 = tmp;
                 }
 
-                this.minY = (y0 < y2 ? y0 : y2) | 0;
+                this.minY = Math.floor(y0 < y2 ? y0 : y2);
                 this.maxY = Math.ceil(y1 > y3 ? y1 : y3);
             }
             this.updateArea();

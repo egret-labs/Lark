@@ -32,7 +32,7 @@ module lark.player {
     var displayListPool:DisplayList[] = [];
 
     var blendModes = ["source-over","source-atop","destination-over",
-        "destination-out","lighter","darker","xor",/*""source-in","source-out",destination-atop","destination-in","copy"*/];
+        "destination-out","lighter","darken","xor",/*""source-in","source-out",destination-atop","destination-in","copy"*/];
 
     /**
      * 显示列表
@@ -306,7 +306,7 @@ module lark.player {
                 var length = children.length;
                 for (var i = 0; i < length; i++) {
                     var child = children[i];
-                    if (!(child.$visible)) {
+                    if (!child.$visible||child.$maskedObject) {
                         continue;
                     }
                     if (child.$scrollRect) {
@@ -352,26 +352,35 @@ module lark.player {
 
         private drawWidthMask(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.player.Region[], drawToStage:boolean):number {
             var drawCalls = 0;
+            var displayContext = sharedRenderContexts[0];
+            var maskContext = sharedRenderContexts[1];
             var mask = displayObject.$mask;
-            var bounds = mask.$getContentBounds();
+            var bounds = mask.$getOriginalBounds();
             var region = Region.create();
-            region.updateRegion(bounds, mask.$renderMatrix);
-            context.save();
-            context.globalAlpha = 0;
-            var m = mask.$renderMatrix.$data;
+            region.updateRegion(bounds, mask.$getConcatenatedMatrix());
+            maskContext.surface.width = displayContext.surface.width = region.width;
+            maskContext.surface.height = displayContext.surface.height = region.height;
+            displayContext.translate(-region.minX,-region.minY);
+            maskContext.translate(-region.minX,-region.minY);
+            drawCalls += this.drawDisplayObject(displayObject, displayContext, dirtyList, false, displayObject.$displayList, region);
+            drawCalls += this.drawDisplayObject(mask, maskContext, dirtyList, false, mask.$displayList, region);
+            displayContext.globalCompositeOperation = "destination-in";
+            displayContext.setTransform(1,0,0,1,0,0);
+            displayContext.globalAlpha = 1;
+            displayContext.drawImage(maskContext.surface,0,0);
+            drawCalls++;
             if (drawToStage) {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
-                context.setTransform(m[0], m[1], m[2], m[3], m[4], m[5]);
-                mask.$graphics.$render(context,true);
+                context.setTransform(1, 0, 0, 1, region.minX, region.minY);
+                context.drawImage(displayContext.surface,0,0);
             }
             else {
                 context.save();
-                context.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
-                mask.$graphics.$render(context,true);
+                context.translate(region.minX, region.minY)
+                context.drawImage(displayContext.surface,0,0);
                 context.restore();
             }
-            context.clip();
-            drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, drawToStage, displayObject.$displayList, region);
-            context.restore();
+            maskContext.surface.width = displayContext.surface.width = 1;
+            maskContext.surface.height = displayContext.surface.height = 1;
             Region.release(region);
             return drawCalls;
         }
@@ -396,9 +405,9 @@ module lark.player {
                 oldSurface.height = bounds.height;
             }
             else if (bounds.width !== oldSurface.width || bounds.height !== oldSurface.height) {
-                var newContext = player.sharedRenderContext;
+                var newContext = player.sharedRenderContexts[0];
                 var newSurface = newContext.surface;
-                player.sharedRenderContext = oldContext;
+                player.sharedRenderContexts[0] = oldContext;
                 this.renderContext = newContext;
                 this.surface = newSurface;
                 newSurface.width = bounds.width;

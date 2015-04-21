@@ -40,7 +40,7 @@ module lark {
          * 测量文本在指定样式下的宽度
          */
         public static measureText(text:string, style:ITextStyle):number {
-            var context = player.sharedRenderContext;
+            var context = player.sharedRenderContexts[0];
             var width = 0.0;
             var fontCache = $TextWidthCache;
             var font = style.toFontString(true);

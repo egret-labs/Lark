@@ -116,8 +116,8 @@ module lark {
             bitmap.x = 250;
             bitmap.y = 250;
             bitmap.bitmapData = bitmapData;
-            bitmap.blendMode = BlendMode.Darker;
-            this.iconList.push(bitmap);
+            //bitmap.blendMode = BlendMode.Darken;
+            //this.iconList.push(bitmap);
             this.targetIcon = bitmap;
             this.addChild(this.targetIcon);
             this.timer.on(TimerEvent.TIMER, this.onTick, this);
@@ -128,7 +128,7 @@ module lark {
             //container.addChild(shape);
             //shape.cacheAsBitmap = true;
 
-            //container.mask = shape;
+            container.mask = this.targetIcon;
         }
 
         private container:DisplayObjectContainer;
@@ -160,7 +160,6 @@ module lark {
         private onTouchMove(event:TouchEvent):void {
             this.touchTarget.x = this.offsetX + event.stageX;
             this.touchTarget.y = this.offsetY + event.stageY;
-            log("move");
             event.updateAfterEvent();
         }
 
