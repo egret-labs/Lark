@@ -38,7 +38,7 @@ import FileUtil = require('../lib/FileUtil');
 class Config extends Action {
 
     public run() {
-        super.run();
+        return super.run();
     }
 }
 

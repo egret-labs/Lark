@@ -47,7 +47,8 @@ var Create = (function (_super) {
         FileUtil.createDirectory(option.debugDir);
         var templateDir = FileUtil.joinPath(option.larkRoot, 'template');
         FileUtil.copy(templateDir, option.templateDir);
-        this.buildLark();
+        var exitcode = this.buildLark();
+        return exitcode;
     };
     return Create;
 })(Action);

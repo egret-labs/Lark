@@ -47,6 +47,10 @@ class CompileOptions implements lark.ICompileOptions {
     get templateDir(): string {
         return FileUtil.joinPath(this.projectDir, "template");
     }
+
+    port: number;
+    ip: string;
+
     larkRoot: string;
     publish: boolean;
     includeLark: boolean;
@@ -62,6 +66,14 @@ class CompileOptions implements lark.ICompileOptions {
     //modules
     modules: string;
 
+    static parse(option: lark.ICompileOptions) {
+        var it = new CompileOptions();
+        for (var p in option)
+        {
+            it[p] = option[p];
+        }
+        return it;
+    }
 }
 
 export = CompileOptions;

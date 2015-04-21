@@ -34,8 +34,6 @@ var __extends = this.__extends || function (d, b) {
 };
 /// <reference path="../lib/types.d.ts" />
 var Action = require('./Action');
-var TypeScript = require("../lib/typescript/tsc");
-var utils = require('../lib/utils');
 var Build = (function (_super) {
     __extends(Build, _super);
     function Build() {
@@ -43,19 +41,15 @@ var Build = (function (_super) {
     }
     Build.prototype.run = function () {
         var exitCode = 0;
+        console.log('test log');
         this.clean(this.options.debugDir);
         if (this.options.includeLark)
             exitCode = this.buildLark();
         this.copyDirectory(this.options.templateDir, this.options.debugDir);
         exitCode = this.buildProject();
-        process.exit(exitCode);
+        return exitCode;
     };
     return Build;
 })(Action);
-TypeScript.exit = function (exitCode) {
-    if (exitCode != 0)
-        console.log(utils.tr(10003));
-    return exitCode;
-};
 module.exports = Build;
 //# sourceMappingURL=Build.js.map

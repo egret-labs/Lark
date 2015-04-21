@@ -1,2 +1,2 @@
 #! /usr/bin/env node
-require('../compiler/Entry.js')
+require('../compiler/Entry.js').executeCommandLine(process.argv.slice(2))

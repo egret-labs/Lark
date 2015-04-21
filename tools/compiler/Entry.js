@@ -28,136 +28,37 @@
 //////////////////////////////////////////////////////////////////////////////////////
 /// <reference path="../lib/types.d.ts" />
 require('../locales/en');
-var CompileOptions = require("./CompileOptions");
+var Parser = require("./Parser");
+var Run = require("./Run");
 var Build = require("./Build");
 var Publish = require("./Publish");
 var Create = require("./Create");
-var utils = require('../lib/utils');
-var optionDeclarations = [
-    {
-        name: "action",
-        type: "string"
-    },
-    {
-        name: "includeLark",
-        type: "boolean",
-        shortName: "e"
-    },
-    {
-        name: "runtime",
-        type: "string"
-    },
-    {
-        name: "watch",
-        type: "boolean"
-    },
-    {
-        name: "minify",
-        type: "boolean"
-    },
-    {
-        name: "sourceMap",
-        type: "boolean"
-    },
-    {
-        name: "esTarget",
-        type: "string"
-    },
-    {
-        name: 'showUI',
-        type: "boolean"
-    },
-    {
-        name: 'modules',
-        type: 'string'
-    },
-    {
-        name: 'declaration',
-        type: 'booleam',
-        shortName: "d"
-    }
-];
-var shortOptionNames = {};
-var optionNameMap = {};
-optionDeclarations.forEach(function (option) {
-    optionNameMap[option.name] = option;
-    if (option.shortName) {
-        shortOptionNames[option.shortName] = option.name;
-    }
-});
+var server = require('../server/server');
 function executeCommandLine(args) {
-    var options = parseCommandLine(args);
-    console.log(options);
+    var options = Parser.parseCommandLine(args);
+    if (options.action == 'startserver')
+        server.startServer(options);
+    else
+        new Run(options).run();
+}
+exports.executeCommandLine = executeCommandLine;
+function executeOption(options) {
+    var exitCode = 0;
     switch (options.action) {
         case "publish":
             var publish = new Publish(options);
-            publish.run();
+            exitCode = publish.run();
             break;
         case "create":
             var create = new Create(options);
-            create.run();
+            exitCode = create.run();
             break;
         default:
             var build = new Build(options);
-            build.run();
+            exitCode = build.run();
             break;
     }
+    return exitCode;
 }
-executeCommandLine(process.argv.slice(2));
-function parseCommandLine(commandLine) {
-    // Set default compiler option values
-    var options = new CompileOptions();
-    var filenames = [];
-    var errors = [];
-    parseStrings(commandLine);
-    options.larkRoot = utils.getLarkRoot();
-    return options;
-    function parseStrings(args) {
-        var i = 0;
-        while (i < args.length) {
-            var s = args[i++];
-            if (s.charAt(0) === '-') {
-                s = s.slice(s.charAt(1) === '-' ? 2 : 1).toLowerCase();
-                // Try to translate short option names to their full equivalents.
-                if (s in shortOptionNames) {
-                    s = shortOptionNames[s];
-                }
-                if (s in optionNameMap) {
-                    var opt = optionNameMap[s];
-                    // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
-                    if (!args[i] && opt.type !== "boolean") {
-                        errors.push(utils.tr(10001, opt.name));
-                    }
-                    switch (opt.type) {
-                        case "number":
-                            options[opt.name] = parseInt(args[i++]);
-                            break;
-                        case "boolean":
-                            options[opt.name] = true;
-                            break;
-                        case "string":
-                            options[opt.name] = args[i++] || "";
-                            break;
-                    }
-                    console.log(opt.name, options[opt.name]);
-                }
-                else {
-                    //Unknown option
-                    errors.push(utils.tr(10002, s));
-                }
-            }
-            else {
-                if (options.action == null)
-                    options.action = s;
-                else if (options.projectDir == null)
-                    options.projectDir = s;
-                else
-                    filenames.push(s);
-            }
-        }
-        if (options.projectDir == null)
-            options.projectDir = process.cwd();
-    }
-}
-module.exports = executeCommandLine;
+exports.executeOption = executeOption;
 //# sourceMappingURL=Entry.js.map

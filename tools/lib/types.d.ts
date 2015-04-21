@@ -37,6 +37,8 @@ declare module lark {
         outDir: string;
         outLarkFile: string;
         larkRoot?: string;
+        port: number;
+        ip: string;
 
         publish?: boolean;
         includeLark?: boolean;
@@ -51,6 +53,10 @@ declare module lark {
 
         //modules
         modules?: string;
+
+
+
+        //工具用
     }
 
     export interface CommandLineOption {
@@ -60,6 +66,13 @@ declare module lark {
         description?: DiagnosticMessage;    // The message describing what the command line switch does
         paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter.
         error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'.
+    }
+
+    export interface CommandResult {
+        exitCode?: number;
+        message?: string;
+        data?: any;
+        type: string;
     }
 }
 

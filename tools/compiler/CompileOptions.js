@@ -76,6 +76,13 @@ var CompileOptions = (function () {
         enumerable: true,
         configurable: true
     });
+    CompileOptions.parse = function (option) {
+        var it = new CompileOptions();
+        for (var p in option) {
+            it[p] = option[p];
+        }
+        return it;
+    };
     return CompileOptions;
 })();
 module.exports = CompileOptions;

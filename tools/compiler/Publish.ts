@@ -30,13 +30,10 @@
 /// <reference path="../lib/types.d.ts" />
 
 import Action = require('./Action');
-import TypeScript = require("../lib/typescript/tsc");
-import FileUtil = require("../lib/FileUtil");
-import UglifyJS = require("../lib/uglify-js/uglifyjs");
 
 class Publish extends Action{
 
-    public run():void {
+    public run():number {
 
         var option = this.options;
         option.minify = true;
@@ -48,8 +45,9 @@ class Publish extends Action{
         //拷贝模板文件
         this.copyDirectory(option.templateDir, option.releaseDir);
 
-        this.buildLark();
-        this.buildProject();
+        var exitcode = this.buildLark();
+        exitcode = this.buildProject();
+        return exitcode;
     }
 }
 

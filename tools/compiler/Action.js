@@ -37,6 +37,7 @@ var Action = (function () {
         this.projectDir = options.projectDir;
     }
     Action.prototype.run = function () {
+        return 0;
     };
     Action.prototype.clean = function (path) {
         var fileList = FileUtil.getDirectoryListing(path);
@@ -102,5 +103,10 @@ var Action = (function () {
     };
     return Action;
 })();
+TypeScript.exit = function (exitCode) {
+    if (exitCode != 0)
+        console.log(utils.tr(10003));
+    return exitCode;
+};
 module.exports = Action;
 //# sourceMappingURL=Action.js.map

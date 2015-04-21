@@ -44,8 +44,8 @@ class Action {
     public projectDir: string;
     public options: lark.ICompileOptions;
 
-    public run(): void {
-
+    public run(): number {
+        return 0;
     }
 
 
@@ -136,5 +136,12 @@ class Action {
         }
     }
 }
+
+TypeScript.exit = exitCode => {
+    if (exitCode != 0)
+        console.log(utils.tr(10003));
+    return exitCode;
+};
+
 
 export = Action;

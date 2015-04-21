@@ -30,15 +30,12 @@
 /// <reference path="../lib/types.d.ts" />
 
 import Action = require('./Action');
-import TypeScript = require("../lib/typescript/tsc");
-import FileUtil = require("../lib/FileUtil");
-import utils = require('../lib/utils');
 
 class Build extends Action {
 
-    public run(): void {
+    public run() {
         var exitCode = 0;
-
+        console.log('test log');
         this.clean(this.options.debugDir);
 
         if (this.options.includeLark)
@@ -47,18 +44,10 @@ class Build extends Action {
         this.copyDirectory(this.options.templateDir, this.options.debugDir);
 
         exitCode = this.buildProject();
-
-        process.exit(exitCode);
-
+        return exitCode;
     }
 
 
 }
-
-TypeScript.exit = exitCode => {
-    if (exitCode != 0)
-        console.log(utils.tr(10003));
-    return exitCode;
-};
 
 export = Build;

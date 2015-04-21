@@ -40,7 +40,7 @@ var Config = (function (_super) {
         _super.apply(this, arguments);
     }
     Config.prototype.run = function () {
-        _super.prototype.run.call(this);
+        return _super.prototype.run.call(this);
     };
     return Config;
 })(Action);

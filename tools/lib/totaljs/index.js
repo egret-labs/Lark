@@ -11606,7 +11606,7 @@ WebSocketClient.prototype.prepare = function(flags, protocols, allow, length, ve
 
 	self.length = length;
 
-	var origin = self.req.headers['origin'] || '';
+	var origin = self.req.headers['origin'] || self.req.headers.host;
 
 	if (allow.length > 0) {
 

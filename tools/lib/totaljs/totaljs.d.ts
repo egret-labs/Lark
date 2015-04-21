@@ -1044,7 +1044,7 @@ declare module TotalJS {
         /**
          * Current HTTP response.
          */
-        res: any;
+        res: Response;
         
         /**
          * Current HTTP session.
