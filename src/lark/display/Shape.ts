@@ -72,5 +72,16 @@ module lark {
         $renderMask(context:player.RenderContext):void{
             this._graphics.$renderMask(context);
         }
+
+        $hitTest(stageX:number, stageY:number):DisplayObject{
+            if(this.$maskedObject){
+                return null;
+            }
+            return super.$hitTest(stageX,stageY);
+        }
+
+        $hitTestMask(stageX:number,stageY:number):DisplayObject{
+            return super.$hitTest(stageX,stageY);
+        }
     }
 }

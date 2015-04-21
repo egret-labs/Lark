@@ -823,7 +823,15 @@ module lark {
             var bounds = this.$getContentBounds();
             var localX = m[0] * stageX + m[2] * stageY + m[4];
             var localY = m[1] * stageX + m[3] * stageY + m[5];
-            if (bounds.contains(localX, localY)&&(!this.$scrollRect||this.$scrollRect.contains(localX,localY))) {
+            if (bounds.contains(localX, localY)) {
+                if(!this.$children){//容器已经检查过scrollRect和mask，避免重复对遮罩进行碰撞。
+                    if(this.$scrollRect&&!this.$scrollRect.contains(localX,localY)){
+                        return null;
+                    }
+                    if(this.$mask&&!this.$mask.$hitTestMask(stageX,stageY)){
+                        return null;
+                    }
+                }
                 return this;
             }
             return null;

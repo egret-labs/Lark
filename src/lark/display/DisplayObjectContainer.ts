@@ -484,7 +484,7 @@ module lark {
 
 
         $hitTest(stageX:number, stageY:number):DisplayObject {
-            if (!this.visible||!this.$hasAnyFlags(player.DisplayObjectFlags.TouchEnabled|
+            if (!this.$visible||!this.$hasAnyFlags(player.DisplayObjectFlags.TouchEnabled|
                     player.DisplayObjectFlags.TouchChildren)) {
                 return null;
             }
@@ -494,6 +494,11 @@ module lark {
                 var localY = m[1] * stageX + m[3] * stageY + m[5];
                 if(!this.$scrollRect.contains(localX,localY)){
                     return null;
+                }
+            }
+            if(this.$mask){
+                if(!this.$mask.$hitTestMask(stageX,stageY)){
+                    return null
                 }
             }
             var children = this.$children;
