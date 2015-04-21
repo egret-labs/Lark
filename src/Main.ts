@@ -112,9 +112,9 @@ module lark {
             g.stroke();
             //container.addChild(shape);
             this.addChild(container);
-            //container.cacheAsBitmap = true;
-            //container.x = 300;
-            //container.y = 300;
+            container.x = 200;
+            container.y = 200;
+            container.cacheAsBitmap = true;
             bitmap = new lark.Bitmap();
             bitmap.bitmapData = bitmapData;
             bitmap.x = 450;
