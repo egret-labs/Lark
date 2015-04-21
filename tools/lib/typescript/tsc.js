@@ -20772,7 +20772,7 @@ var TSC = (function () {
     };
     TSC.executeCommandLine = ts.executeCommandLine;
     TSC.exit = null;
-    TSC.write = null;
+    TSC.write = function (msg) { console.log(msg) };
     return TSC;
 })();
 module.exports = TSC;

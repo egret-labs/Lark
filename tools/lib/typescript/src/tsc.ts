@@ -471,8 +471,13 @@ class TSC {
         return ts.executeWithOption(parsedCmd);
     }
     static exit: (exitCode: number) => number = null;
+    static write = msg=> console.log(msg);
 }
 module.exports = TSC;
 ts.sys.exit = function (code) {
     return TSC.exit(code);
 }
+
+ts.sys.write = function (msg) {
+    return TSC.write(msg);
+};
