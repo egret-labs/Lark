@@ -352,8 +352,8 @@ module lark.player {
 
         private drawWidthMask(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.player.Region[], drawToStage:boolean):number {
             var drawCalls = 0;
-            var displayContext = sharedRenderContexts[0];
-            var maskContext = sharedRenderContexts[1];
+            var displayContext = sharedRenderContexts[1];
+            var maskContext = sharedRenderContexts[2];
             var mask = displayObject.$mask;
             var bounds = mask.$getOriginalBounds();
             var region = Region.create();

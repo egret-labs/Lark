@@ -34,7 +34,7 @@ module lark.web {
     export class CanvasFactory implements player.SurfaceFactory {
 
         public constructor(){
-            player.sharedRenderContexts = [this.create().renderContext,this.create().renderContext];
+            player.sharedRenderContexts = [this.create().renderContext,this.create().renderContext,this.create().renderContext];
         }
 
         /**
