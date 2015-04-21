@@ -186,7 +186,7 @@ module lark {
         private arcBounds(x:number, y:number, radius:number, startAngle:number, endAngle:number):void {
             startAngle = clampAngle(startAngle);
             endAngle = clampAngle(endAngle);
-            if (startAngle == endAngle) {
+            if (Math.abs(startAngle - endAngle)<0.01) {
                 this.extendByPoint(x - radius, y - radius);
                 this.extendByPoint(x + radius, y + radius);
                 return;
