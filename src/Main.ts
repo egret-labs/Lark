@@ -104,6 +104,9 @@ module lark {
             g.lineTo(150, 150);
             g.lineTo(150, 50);
             g.lineTo(50, 50);
+            g.lineWidth = 10;
+            g.stroke();
+            g.strokeRect(0,0,100,100);
             g.fillStyle = "green";
             g.fill();
             this.addChild(container);
@@ -113,6 +116,7 @@ module lark {
             bitmap.x = 250;
             bitmap.y = 250;
             bitmap.bitmapData = bitmapData;
+            bitmap.blendMode = BlendMode.DestinationIn;
             this.iconList.push(bitmap);
             this.targetIcon = bitmap;
             this.addChild(this.targetIcon);
@@ -121,9 +125,10 @@ module lark {
             this.stage.addChild(FPS.display);
             this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
             this.container = container;
-            container.addChild(shape);
+            //container.addChild(shape);
+            //shape.cacheAsBitmap = true;
 
-           // container.mask = shape;
+            //container.mask = shape;
         }
 
         private container:DisplayObjectContainer;
@@ -152,7 +157,7 @@ module lark {
             event.updateAfterEvent();
         }
 
-        private onTouchMove(event:TouchEvent):void {
+        private onTouchMove(event:TouchEvent):void { 
             this.touchTarget.x = this.offsetX + event.stageX;
             this.touchTarget.y = this.offsetY + event.stageY;
             log("move");

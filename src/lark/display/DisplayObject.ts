@@ -597,18 +597,21 @@ module lark {
             this.invalidatePosition();
         }
 
-        private _blendMode:string = null;
+        $blendMode:number = 0;
         /**
-         * BlendMode 类中的一个值，用于指定要使用的混合模式。
-         * 内部绘制位图的方法有两种。 如果启用了混合模式或外部剪辑遮罩，则将通过向矢量渲染器添加有位图填充的正方形来绘制位图。
-         * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
+         * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上
+         * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.SourceOver。
          */
-        public get blendMode():string {
-            return this._blendMode;
+        public get blendMode():number {
+            return this.$blendMode;
         }
 
-        public set blendMode(value:string) {
-            this._blendMode = value;
+        public set blendMode(value:number) {
+            if(value===this.$blendMode){
+                return;
+            }
+            this.$blendMode = value;
+            this.$invalidateChildren();
         }
 
         $mask:Shape = null;
