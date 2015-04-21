@@ -116,7 +116,7 @@ module lark {
             bitmap.x = 250;
             bitmap.y = 250;
             bitmap.bitmapData = bitmapData;
-            bitmap.blendMode = BlendMode.DestinationIn;
+            bitmap.blendMode = BlendMode.Darker;
             this.iconList.push(bitmap);
             this.targetIcon = bitmap;
             this.addChild(this.targetIcon);
@@ -157,7 +157,7 @@ module lark {
             event.updateAfterEvent();
         }
 
-        private onTouchMove(event:TouchEvent):void { 
+        private onTouchMove(event:TouchEvent):void {
             this.touchTarget.x = this.offsetX + event.stageX;
             this.touchTarget.y = this.offsetY + event.stageY;
             log("move");

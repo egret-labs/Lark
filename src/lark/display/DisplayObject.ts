@@ -607,6 +607,9 @@ module lark {
         }
 
         public set blendMode(value:number) {
+            if(value<BlendMode.SourceOver&&value>BlendMode.Xor){
+                value = 0;
+            }
             if(value===this.$blendMode){
                 return;
             }

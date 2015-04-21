@@ -31,8 +31,8 @@ module lark.player {
 
     var displayListPool:DisplayList[] = [];
 
-    var blendModes = ["source-over","source-atop","source-in","source-out","destination-over",
-        "destination-atop","destination-in","destination-out","lighter","darker","xor","copy"];
+    var blendModes = ["source-over","source-atop","destination-over",
+        "destination-out","lighter","darker","xor",/*""source-in","source-out",destination-atop","destination-in","copy"*/];
 
     /**
      * 显示列表
