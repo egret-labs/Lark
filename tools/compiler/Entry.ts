@@ -92,10 +92,10 @@ optionDeclarations.forEach(option => {
 function executeCommandLine(args: string[]): void {
     var options = parseCommandLine(args);
     console.log(options);
-    server.start({
-        projectDir: options.projectDir,
-        port:3001
-    });
+    //server.start({
+    //    projectDir: options.projectDir,
+    //    port:3001
+    //});
 
     switch (options.action) {
         case "publish":
