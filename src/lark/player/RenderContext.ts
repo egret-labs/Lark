@@ -76,12 +76,18 @@ module lark.player {
 
         fillText(text:string, x:number, y:number, maxWidth?:number): void;
         measureText(text:string): TextMetrics;
-        drawImage(image: BitmapData, offsetX: number, offsetY: number, width?: number, height?: number, surfaceOffsetX?:
-            number, surfaceOffsetY?: number, surfaceImageWidth?: number, surfaceImageHeight?:number):void;
+        drawImage(image:BitmapData, offsetX:number, offsetY:number, width?:number, height?:number, surfaceOffsetX?:number, surfaceOffsetY?:number, surfaceImageWidth?:number, surfaceImageHeight?:number):void;
         createPattern(image:BitmapData, repetition:string): GraphicsPattern;
+        getImageData(sx:number, sy:number, sw:number, sh:number): ImageData;
     }
 
     export interface TextMetrics {
         width: number;
+    }
+
+    export interface ImageData {
+        width: number;
+        data: Uint8Array;
+        height: number;
     }
 }

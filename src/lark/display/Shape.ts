@@ -43,6 +43,7 @@ module lark {
             this._graphics = new Graphics();
             this._graphics.$targetDisplay = this;
             this.$renderRegion = new player.Region();
+            this.pixelHitTest = true;
         }
 
         /**
@@ -62,8 +63,10 @@ module lark {
             this._graphics.$measureContentBounds(bounds);
         }
 
+        private ignoreMask:boolean = false;
+
         $render(context:player.RenderContext):void{
-            if(this.$maskedObject){
+            if(!this.ignoreMask&&this.$maskedObject){
                 return;
             }
             this._graphics.$render(context);
@@ -81,7 +84,10 @@ module lark {
         }
 
         $hitTestMask(stageX:number,stageY:number):DisplayObject{
-            return super.$hitTest(stageX,stageY);
+            this.ignoreMask = true;
+            var result = super.$hitTest(stageX,stageY);
+            this.ignoreMask = false;
+            return result;
         }
     }
 }

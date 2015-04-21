@@ -75,7 +75,7 @@ module lark {
 
             var container = new DisplayObjectContainer();
             var x = 0, y = 0;
-            for (var i = 0; i < 1300; i++) {
+            for (var i = 0; i < 2300; i++) {
                 var bitmap = new Bitmap();
                 bitmap.bitmapData = bitmapData;
                 bitmap.x = x;
@@ -91,7 +91,7 @@ module lark {
                     }
                 }
                 container.addChild(bitmap);
-                this.iconList.push(bitmap);
+                //this.iconList.push(bitmap);
             }
             var shape = new Shape();
             shape.x = 150;
@@ -104,11 +104,10 @@ module lark {
             g.lineTo(150, 150);
             g.lineTo(150, 50);
             g.lineTo(50, 50);
-            g.lineWidth = 10;
-            g.stroke();
+            g.fillStyle = "green";
+            g.fill();
             this.addChild(container);
-            container.x = 200;
-            container.y = 200;
+            container.y = 150;
             //container.cacheAsBitmap = true;
             bitmap = new lark.Bitmap();
             bitmap.bitmapData = bitmapData;
@@ -154,6 +153,7 @@ module lark {
         private onTouchMove(event:TouchEvent):void {
             this.touchTarget.x = this.offsetX + event.stageX;
             this.touchTarget.y = this.offsetY + event.stageY;
+            log("move");
             event.updateAfterEvent();
         }
 

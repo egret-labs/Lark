@@ -50,6 +50,7 @@ module lark {
      * 显示对象基类
      */
     export class DisplayObject extends EventEmitter implements player.Renderable{
+
         /**
          * 创建一个显示对象
          */
@@ -556,6 +557,18 @@ module lark {
             this.$toggleFlags(player.DisplayObjectFlags.TouchEnabled, !!value);
         }
 
+        /**
+         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，设置为false将只检查显示对象测量的最大矩形区域。
+         * 开启此属性将会有一定量的额外性能损耗，Shape和Sprite等含有矢量图的类默认开启此属性，其他类默认关闭。
+         */
+        public get pixelHitTest():boolean {
+            return this.$hasFlags(player.DisplayObjectFlags.PixelHitTest);
+        }
+
+        public set pixelHitTest(value:boolean) {
+            this.$toggleFlags(player.DisplayObjectFlags.PixelHitTest, !!value);
+        }
+
         $scrollRect:Rectangle = null;
         /**
          * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
@@ -832,9 +845,28 @@ module lark {
                         return null;
                     }
                 }
+                if(this.$displayObjectFlags & player.DisplayObjectFlags.PixelHitTest){
+                  return this.hitTestPixel(localX,localY);
+                }
                 return this;
             }
             return null;
+        }
+
+        private hitTestPixel(localX:number,localY:number):DisplayObject{
+            var alpha = this.$getConcatenatedAlpha();
+            if(alpha===0){
+                return null;
+            }
+            var context = player.sharedRenderContext;
+            context.surface.width = context.surface.height = 3;
+            context.translate(1-localX,1-localY);
+            this.$render(context);
+            var data = context.getImageData(1,1,1,1).data;
+            if(data[3]===0){
+                return null;
+            }
+            return this;
         }
 
         static $enterFrameCallBackList:DisplayObject[] = [];
