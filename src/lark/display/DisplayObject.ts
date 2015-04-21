@@ -858,11 +858,20 @@ module lark {
             if(alpha===0){
                 return null;
             }
-            var context = player.sharedRenderContext;
-            context.surface.width = context.surface.height = 3;
-            context.translate(1-localX,1-localY);
-            this.$render(context);
-            var data = context.getImageData(1,1,1,1).data;
+            var context:player.RenderContext;
+            var data:Uint8Array;
+            var displayList = this.$displayList;
+            if(displayList){
+                context = displayList.renderContext;
+                data = context.getImageData(localX-displayList.offsetX,localY-displayList.offsetY,1,1).data;
+            }
+            else{
+                context = player.sharedRenderContext;
+                context.surface.width = context.surface.height = 3;
+                context.translate(1-localX,1-localY);
+                this.$render(context);
+                data = context.getImageData(1,1,1,1).data;
+            }
             if(data[3]===0){
                 return null;
             }
