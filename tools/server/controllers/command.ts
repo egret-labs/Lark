@@ -3,6 +3,8 @@
 
 import CompileOptions = require('../../compiler/CompileOptions')
 import Entry = require('../../compiler/Entry')
+import TypeScript = require("../../lib/typescript/tsc");
+
 
 
 class Command extends TotalJS.Controller {
@@ -28,11 +30,14 @@ class Command extends TotalJS.Controller {
 
                 console['rawLog'].apply(console, [msg].concat(params));
             }
+
             if (!console['rawLog'])
             {
                 console['rawLog'] = console.log;
                 console.log = log.bind(console);
             }
+
+            TypeScript.write = msg=> console.log(msg);
         });
 
         controller.on('close', function (client) {

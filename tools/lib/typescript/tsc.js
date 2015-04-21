@@ -20772,9 +20772,14 @@ var TSC = (function () {
     };
     TSC.executeCommandLine = ts.executeCommandLine;
     TSC.exit = null;
+    TSC.write = null;
     return TSC;
 })();
 module.exports = TSC;
 ts.sys.exit = function (code) {
     return TSC.exit(code);
+};
+
+ts.sys.write = function (msg) {
+    return TSC.write(msg);
 };

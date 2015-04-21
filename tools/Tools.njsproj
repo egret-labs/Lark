@@ -36,6 +36,7 @@
     <TypeScriptCompile Include="lib\types.d.ts" />
     <TypeScriptCompile Include="lib\typescript\tsc.d.ts" />
     <TypeScriptCompile Include="lib\utils.ts" />
+    <TypeScriptCompile Include="lib\websocket\index.d.ts" />
     <TypeScriptCompile Include="locales\en.ts" />
     <TypeScriptCompile Include="locales\zh_CN.ts" />
     <Compile Include="locales\en.js" />
@@ -64,6 +65,7 @@
     <TypeScriptCompile Include="lib\typescript\src\tsc.ts" />
     <TypeScriptCompile Include="lib\typescript\src\types.ts" />
     <TypeScriptCompile Include="lib\typescript\src\utilities.ts" />
+    <TypeScriptCompile Include="server\controllers\command.ts" />
     <TypeScriptCompile Include="server\controllers\create.ts" />
     <TypeScriptCompile Include="server\controllers\default.ts" />
     <TypeScriptCompile Include="server\server.ts" />
@@ -76,6 +78,7 @@
     <Folder Include="lib\typescript" />
     <Folder Include="lib\typescript\src" />
     <Folder Include="lib\uglify-js" />
+    <Folder Include="lib\websocket\" />
     <Folder Include="locales" />
     <Folder Include="server\" />
     <Folder Include="server\content\" />

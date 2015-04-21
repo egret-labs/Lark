@@ -7,6 +7,7 @@ var __extends = this.__extends || function (d, b) {
 };
 var CompileOptions = require('../../compiler/CompileOptions');
 var Entry = require('../../compiler/Entry');
+var TypeScript = require("../../lib/typescript/tsc");
 var Command = (function (_super) {
     __extends(Command, _super);
     function Command() {
@@ -39,6 +40,7 @@ var Command = (function (_super) {
                 console['rawLog'] = console.log;
                 console.log = log.bind(console);
             }
+            TypeScript.write = function (msg) { return console.log(msg); };
         });
         controller.on('close', function (client) {
             console.log('Disconnect / Online:', controller.online);
