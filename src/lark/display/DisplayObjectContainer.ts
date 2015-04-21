@@ -412,12 +412,12 @@ module lark {
          * 标记此显示对象需要重绘，调用此方法后，在屏幕绘制阶段$updateRenderNode()方法会自动被回调，您可能需要覆盖它来同步自身改变的属性到目标RenderNode。
          * @param notiryChildren 是否标记子项也需要重绘。传入false会不传入，将只标记自身的RenderNode需要重绘。
          */
-        $invalidate(notifyChildren?:boolean):void{
+        $invalidate(notifyChildren?:boolean):void {
             super.$invalidate(notifyChildren);
-            if(!notifyChildren){
+            if (!notifyChildren) {
                 return;
             }
-            var cacheRoot = this.$displayList||this.$parentDisplayList;
+            var cacheRoot = this.$displayList || this.$parentDisplayList;
             var children = this.$children;
             if (children) {
                 for (var i = children.length - 1; i >= 0; i--) {
@@ -425,6 +425,7 @@ module lark {
                 }
             }
         }
+
         /**
          * 标记自身和所有子项都失效。
          */
@@ -438,8 +439,8 @@ module lark {
             }
             child.$setFlags(player.DisplayObjectFlags.DirtyChildren);
             var displayList = child.$displayList;
-            if ((displayList||child.$renderRegion) && parentCache) {
-                parentCache.markDirty(displayList||child);
+            if ((displayList || child.$renderRegion) && parentCache) {
+                parentCache.markDirty(displayList || child);
             }
             if (displayList) {
                 return;
@@ -468,8 +469,8 @@ module lark {
             child.$parentDisplayList = newParent;
             child.$setFlags(player.DisplayObjectFlags.DirtyChildren);
             var displayList = child.$displayList;
-            if ((child.$renderRegion||displayList) && parentCache) {
-                parentCache.markDirty(displayList||child);
+            if ((child.$renderRegion || displayList) && parentCache) {
+                parentCache.markDirty(displayList || child);
             }
             if (child.$displayList) {
                 return;
@@ -484,22 +485,21 @@ module lark {
 
 
         $hitTest(stageX:number, stageY:number):DisplayObject {
-            if (!this.$visible||!this.$hasAnyFlags(player.DisplayObjectFlags.TouchEnabled|
+            if (!this.$visible || !this.$hasAnyFlags(player.DisplayObjectFlags.TouchEnabled |
                     player.DisplayObjectFlags.TouchChildren)) {
                 return null;
             }
-            if(this.$scrollRect){
-                var m = this.$getInvertedConcatenatedMatrix().$data;
-                var localX = m[0] * stageX + m[2] * stageY + m[4];
-                var localY = m[1] * stageX + m[3] * stageY + m[5];
-                if(!this.$scrollRect.contains(localX,localY)){
-                    return null;
-                }
+            var m = this.$getInvertedConcatenatedMatrix().$data;
+            var localX = m[0] * stageX + m[2] * stageY + m[4];
+            var localY = m[1] * stageX + m[3] * stageY + m[5];
+            if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
+                return null;
             }
-            if(this.$mask){
-                if(!this.$mask.$hitTestMask(stageX,stageY)){
-                    return null
-                }
+            if(!this.$getOriginalBounds().contains(localX,localY)){
+                return null;
+            }
+            if (this.$mask && !this.$mask.$hitTestMask(stageX, stageY)) {
+                return null
             }
             var children = this.$children;
             for (var i = children.length - 1; i >= 0; i--) {
@@ -517,7 +517,7 @@ module lark {
             if (this.$hasFlags(player.DisplayObjectFlags.TouchEnabled)) {
                 return super.$hitTest(stageX, stageY);
             }
-            return null; 
+            return null;
         }
 
     }
