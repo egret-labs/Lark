@@ -40,8 +40,8 @@ module lark {
          */
         public constructor() {
             super();
-            this._graphics = new Graphics();
-            this._graphics.$targetDisplay = this;
+            this.$graphics = new Graphics();
+            this.$graphics.$targetDisplay = this;
             this.$renderRegion = new player.Region();
             this.pixelHitTest = true;
         }
@@ -51,29 +51,25 @@ module lark {
          */
         $maskedObject:DisplayObject;
 
-        private _graphics:Graphics;
+        $graphics:Graphics;
         /**
          * 获取 Shape 中的 Graphics 对象。
          */
         public get graphics():Graphics {
-            return this._graphics;
+            return this.$graphics;
         }
 
         $measureContentBounds(bounds:Rectangle):void {
-            this._graphics.$measureContentBounds(bounds);
+            this.$graphics.$measureContentBounds(bounds);
         }
 
-        private ignoreMask:boolean = false;
+        private renderAsMask:boolean = false;
 
         $render(context:player.RenderContext):void{
-            if(!this.ignoreMask&&this.$maskedObject){
+            if(this.$maskedObject&&!this.renderAsMask){
                 return;
             }
-            this._graphics.$render(context);
-        }
-
-        $renderMask(context:player.RenderContext):void{
-            this._graphics.$renderMask(context);
+            this.$graphics.$render(context,this.renderAsMask);
         }
 
         $hitTest(stageX:number, stageY:number):DisplayObject{
@@ -84,9 +80,9 @@ module lark {
         }
 
         $hitTestMask(stageX:number,stageY:number):DisplayObject{
-            this.ignoreMask = true;
+            this.renderAsMask = true;
             var result = super.$hitTest(stageX,stageY);
-            this.ignoreMask = false;
+            this.renderAsMask = false;
             return result;
         }
     }

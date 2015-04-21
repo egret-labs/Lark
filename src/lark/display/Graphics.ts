@@ -78,14 +78,14 @@ module lark {
          * 创建一个放射状渐变填充对象
          */
         public static createRadialGradient(x0:number, y0:number, r0:number, x1:number, y1:number, r1:number):GraphicsGradient {
-            return player.sharedRenderContext.createRadialGradient(x0,y0,r0,x1,y1,r1);
+            return player.sharedRenderContext.createRadialGradient(x0, y0, r0, x1, y1, r1);
         }
 
         /**
          * 创建一个沿参数坐标指定的直线的渐变。该方法返回一个线性 GraphicsGradient 对象。
          */
         public static createLinearGradient(x0:number, y0:number, x1:number, y1:number):GraphicsGradient {
-            return player.sharedRenderContext.createLinearGradient(x0,y0,x1,y1);
+            return player.sharedRenderContext.createLinearGradient(x0, y0, x1, y1);
         }
 
         /**
@@ -95,7 +95,7 @@ module lark {
          * 可能的值有："repeat" (两个方向重复),"repeat-x" (仅水平方向重复),"repeat-y" (仅垂直方向重复),"no-repeat" (不重复).
          */
         public static createPattern(bitmapData:BitmapData, repetition:string):GraphicsPattern {
-            return player.sharedRenderContext.createPattern(bitmapData,repetition);
+            return player.sharedRenderContext.createPattern(bitmapData, repetition);
         }
 
         public constructor() {
@@ -186,7 +186,7 @@ module lark {
         private arcBounds(x:number, y:number, radius:number, startAngle:number, endAngle:number):void {
             startAngle = clampAngle(startAngle);
             endAngle = clampAngle(endAngle);
-            if (Math.abs(startAngle - endAngle)<0.01) {
+            if (Math.abs(startAngle - endAngle) < 0.01) {
                 this.extendByPoint(x - radius, y - radius);
                 this.extendByPoint(x + radius, y + radius);
                 return;
@@ -425,14 +425,20 @@ module lark {
             bounds.setTo(this.minX - half, this.minY - half, this.maxX - this.minX + lineWidth, this.maxY - this.minY + lineWidth);
         }
 
-        $render(context:player.RenderContext):void {
+        $render(context:player.RenderContext, asMask?:boolean):void {
+            asMask = !!asMask;
             context.save();
-            context.fillStyle = "#000000";
-            context.lineCap = "butt";
-            context.lineJoin = "miter";
-            context.lineWidth = 1;
-            context.miterLimit = 10;
-            context.strokeStyle = "#000000";
+            if (!asMask) {
+                context.fillStyle = "#000000";
+                context.lineCap = "butt";
+                context.lineJoin = "miter";
+                context.lineWidth = 1;
+                context.miterLimit = 10;
+                context.strokeStyle = "#000000";
+            }
+            else if(!this.hasStroke){//没有线条，遍历时直接跳过判断。
+                asMask = false;
+            }
             var map = context["graphicsMap"];
             if (!map) {
                 map = mapGraphicsFunction(context);
@@ -441,14 +447,18 @@ module lark {
             var length = commands.length;
             for (var i = 0; i < length; i++) {
                 var command = commands[i];
-                map[command.type].apply(context, command.arguments);
+                var cmdType = command.type;
+                if (asMask) {
+                    if (cmdType === GraphicsCommandType.stroke) {
+                        continue;
+                    }
+                    if(cmdType===GraphicsCommandType.strokeRect){
+                        cmdType = GraphicsCommandType.rect;
+                    }
+                }
+                map[cmdType].apply(context, command.arguments);
             }
             context.restore();
-        }
-
-        $renderMask(context:player.RenderContext):void{
-            context.globalAlpha = 0;
-            this.$render(context);
         }
     }
 

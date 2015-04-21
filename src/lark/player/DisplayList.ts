@@ -353,15 +353,16 @@ module lark.player {
             var region = Region.create();
             region.updateRegion(bounds, mask.$renderMatrix);
             context.save();
+            context.globalAlpha = 0;
             var m = mask.$renderMatrix.$data;
             if (drawToStage) {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
                 context.setTransform(m[0], m[1], m[2], m[3], m[4], m[5]);
-                mask.$renderMask(context);
+                mask.$graphics.$render(context,true);
             }
             else {
                 context.save();
                 context.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
-                mask.$renderMask(context);
+                mask.$graphics.$render(context,true);
                 context.restore();
             }
             context.clip();
