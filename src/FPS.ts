@@ -46,6 +46,7 @@ module lark {
                 });
                 FPS._textField.x = 20;
                 FPS._textField.y = 20;
+                FPS._textField.touchEnabled = false;
             }
             return FPS._textField;
         }
@@ -70,7 +71,10 @@ module lark {
                 var lastFPS = Math.round(FPS.totalTick * 1000 / FPS.totalTime);
                 FPS.totalTick = 0;
                 FPS.totalTime = 0;
-                var text = "FPS: " + lastFPS + "\nDraw: " + FPS.drawCalls + "," + dirtyRatio + "%\nCost: " + args.join(",")+"\nInfo: "+FPS.info;
+                var text = "FPS: " + lastFPS + "\nDraw: " + FPS.drawCalls + "," + dirtyRatio + "%\nCost: " + args.join(",");
+                if(FPS.info){
+                    text += "\nInfo: "+FPS.info;
+                }
                 if (FPS._textField.text != text) {
                     FPS._textField.text = text;
                 }

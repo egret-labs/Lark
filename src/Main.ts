@@ -108,20 +108,22 @@ module lark {
             g.fill();
             this.addChild(container);
             container.y = 150;
-            //container.cacheAsBitmap = true;
+            container.cacheAsBitmap = true;
             bitmap = new lark.Bitmap();
+            bitmap.x = 250;
+            bitmap.y = 250;
             bitmap.bitmapData = bitmapData;
             this.iconList.push(bitmap);
             this.targetIcon = bitmap;
-            container.addChild(this.targetIcon);
+            this.addChild(this.targetIcon);
             this.timer.on(TimerEvent.TIMER, this.onTick, this);
             this.timer.start();
-            this.addChild(FPS.display);
+            this.stage.addChild(FPS.display);
             this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
             this.container = container;
             container.addChild(shape);
 
-            container.mask = shape;
+           // container.mask = shape;
         }
 
         private container:DisplayObjectContainer;
