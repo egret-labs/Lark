@@ -50,6 +50,7 @@ module lark {
      * 显示对象基类
      */
     export class DisplayObject extends EventEmitter implements player.Renderable{
+
         /**
          * 创建一个显示对象
          */
@@ -556,6 +557,18 @@ module lark {
             this.$toggleFlags(player.DisplayObjectFlags.TouchEnabled, !!value);
         }
 
+        /**
+         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，设置为false将只检查显示对象测量的最大矩形区域。
+         * 开启此属性将会有一定量的额外性能损耗，Shape和Sprite等含有矢量图的类默认开启此属性，其他类默认关闭。
+         */
+        public get pixelHitTest():boolean {
+            return this.$hasFlags(player.DisplayObjectFlags.PixelHitTest);
+        }
+
+        public set pixelHitTest(value:boolean) {
+            this.$toggleFlags(player.DisplayObjectFlags.PixelHitTest, !!value);
+        }
+
         $scrollRect:Rectangle = null;
         /**
          * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
@@ -598,7 +611,7 @@ module lark {
             this._blendMode = value;
         }
 
-        private _mask:DisplayObject = null;
+        $mask:Shape = null;
         /**
          * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
          * 但不绘制 mask 对象本身。将 mask 设置为 null 可删除蒙版。要能够缩放遮罩对象，它必须在显示列表中。要能够拖动蒙版
@@ -606,12 +619,22 @@ module lark {
          * 注意：单个 mask 对象不能用于遮罩多个执行调用的显示对象。在将 mask 分配给第二个显示对象时，会撤消其作为第一个对象的遮罩，
          * 该对象的 mask 属性将变为 null。
          */
-        public get mask():DisplayObject {
-            return this._mask;
+        public get mask():Shape {
+            return this.$mask;
         }
 
-        public set mask(value:DisplayObject) {
-            this._mask = value;
+        public set mask(value:Shape) {
+            if(value===this.$mask||value===this){
+                return;
+            }
+            if(value){
+                if(value.$maskedObject){
+                    value.$maskedObject.mask = null;
+                }
+                value.$maskedObject = this;
+            }
+            this.$mask = value;
+            this.$invalidateChildren();
         }
 
         /**
@@ -813,10 +836,46 @@ module lark {
             var bounds = this.$getContentBounds();
             var localX = m[0] * stageX + m[2] * stageY + m[4];
             var localY = m[1] * stageX + m[3] * stageY + m[5];
-            if (bounds.contains(localX, localY)&&(!this.$scrollRect||this.$scrollRect.contains(localX,localY))) {
+            if (bounds.contains(localX, localY)) {
+                if(!this.$children){//容器已经检查过scrollRect和mask，避免重复对遮罩进行碰撞。
+                    if(this.$scrollRect&&!this.$scrollRect.contains(localX,localY)){
+                        return null;
+                    }
+                    if(this.$mask&&!this.$mask.$hitTestMask(stageX,stageY)){
+                        return null;
+                    }
+                }
+                if(this.$displayObjectFlags & player.DisplayObjectFlags.PixelHitTest){
+                  return this.hitTestPixel(localX,localY);
+                }
                 return this;
             }
             return null;
+        }
+
+        private hitTestPixel(localX:number,localY:number):DisplayObject{
+            var alpha = this.$getConcatenatedAlpha();
+            if(alpha===0){
+                return null;
+            }
+            var context:player.RenderContext;
+            var data:Uint8Array;
+            var displayList = this.$displayList;
+            if(displayList){
+                context = displayList.renderContext;
+                data = context.getImageData(localX-displayList.offsetX,localY-displayList.offsetY,1,1).data;
+            }
+            else{
+                context = player.sharedRenderContext;
+                context.surface.width = context.surface.height = 3;
+                context.translate(1-localX,1-localY);
+                this.$render(context);
+                data = context.getImageData(1,1,1,1).data;
+            }
+            if(data[3]===0){
+                return null;
+            }
+            return this;
         }
 
         static $enterFrameCallBackList:DisplayObject[] = [];

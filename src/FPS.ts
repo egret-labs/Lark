@@ -46,6 +46,7 @@ module lark {
                 });
                 FPS._textField.x = 20;
                 FPS._textField.y = 20;
+                FPS._textField.touchEnabled = false;
             }
             return FPS._textField;
         }
@@ -54,6 +55,8 @@ module lark {
         private static totalTick:number = 0;
         private static lastTime:number = 0;
         private static drawCalls:number = 0;
+
+        public static info:string = "";
 
         public static update(drawCalls:number, dirtyRatio:number, ...args):void {
             if (!FPS._textField) {
@@ -69,6 +72,9 @@ module lark {
                 FPS.totalTick = 0;
                 FPS.totalTime = 0;
                 var text = "FPS: " + lastFPS + "\nDraw: " + FPS.drawCalls + "," + dirtyRatio + "%\nCost: " + args.join(",");
+                if(FPS.info){
+                    text += "\nInfo: "+FPS.info;
+                }
                 if (FPS._textField.text != text) {
                     FPS._textField.text = text;
                 }

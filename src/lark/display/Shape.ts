@@ -40,25 +40,50 @@ module lark {
          */
         public constructor() {
             super();
-            this._graphics = new Graphics();
-            this._graphics.$targetDisplay = this;
+            this.$graphics = new Graphics();
+            this.$graphics.$targetDisplay = this;
             this.$renderRegion = new player.Region();
+            this.pixelHitTest = true;
         }
 
-        private _graphics:Graphics;
+        /**
+         * 被遮罩的对象
+         */
+        $maskedObject:DisplayObject;
+
+        $graphics:Graphics;
         /**
          * 获取 Shape 中的 Graphics 对象。
          */
         public get graphics():Graphics {
-            return this._graphics;
+            return this.$graphics;
         }
 
         $measureContentBounds(bounds:Rectangle):void {
-            this._graphics.$measureContentBounds(bounds);
+            this.$graphics.$measureContentBounds(bounds);
         }
 
+        private renderAsMask:boolean = false;
+
         $render(context:player.RenderContext):void{
-            this._graphics.$render(context);
+            if(this.$maskedObject&&!this.renderAsMask){
+                return;
+            }
+            this.$graphics.$render(context,this.renderAsMask);
+        }
+
+        $hitTest(stageX:number, stageY:number):DisplayObject{
+            if(this.$maskedObject){
+                return null;
+            }
+            return super.$hitTest(stageX,stageY);
+        }
+
+        $hitTestMask(stageX:number,stageY:number):DisplayObject{
+            this.renderAsMask = true;
+            var result = super.$hitTest(stageX,stageY);
+            this.renderAsMask = false;
+            return result;
         }
     }
 }
