@@ -598,7 +598,7 @@ module lark {
             this._blendMode = value;
         }
 
-        private _mask:DisplayObject = null;
+        $mask:Shape = null;
         /**
          * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
          * 但不绘制 mask 对象本身。将 mask 设置为 null 可删除蒙版。要能够缩放遮罩对象，它必须在显示列表中。要能够拖动蒙版
@@ -606,12 +606,22 @@ module lark {
          * 注意：单个 mask 对象不能用于遮罩多个执行调用的显示对象。在将 mask 分配给第二个显示对象时，会撤消其作为第一个对象的遮罩，
          * 该对象的 mask 属性将变为 null。
          */
-        public get mask():DisplayObject {
-            return this._mask;
+        public get mask():Shape {
+            return this.$mask;
         }
 
-        public set mask(value:DisplayObject) {
-            this._mask = value;
+        public set mask(value:Shape) {
+            if(value===this.$mask||value===this){
+                return;
+            }
+            if(value){
+                if(value.$maskedObject){
+                    value.$maskedObject.mask = null;
+                }
+                value.$maskedObject = this;
+            }
+            this.$mask = value;
+            this.$invalidateChildren();
         }
 
         /**

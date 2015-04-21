@@ -445,6 +445,11 @@ module lark {
             }
             context.restore();
         }
+
+        $renderMask(context:player.RenderContext):void{
+            context.globalAlpha = 0;
+            this.$render(context);
+        }
     }
 
     function mapGraphicsFunction(context:player.RenderContext):any {

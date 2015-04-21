@@ -45,6 +45,11 @@ module lark {
             this.$renderRegion = new player.Region();
         }
 
+        /**
+         * 被遮罩的对象
+         */
+        $maskedObject:DisplayObject;
+
         private _graphics:Graphics;
         /**
          * 获取 Shape 中的 Graphics 对象。
@@ -58,7 +63,14 @@ module lark {
         }
 
         $render(context:player.RenderContext):void{
+            if(this.$maskedObject){
+                return;
+            }
             this._graphics.$render(context);
+        }
+
+        $renderMask(context:player.RenderContext):void{
+            this._graphics.$renderMask(context);
         }
     }
 }

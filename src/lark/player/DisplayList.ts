@@ -306,33 +306,68 @@ module lark.player {
                         continue;
                     }
                     if (child.$scrollRect) {
-                        var rect = child.$scrollRect;
-                        context.save();
-                        var region = Region.create();
-                        region.updateRegion(rect, child.$renderMatrix);
-                        m = child.$renderMatrix.$data;
-                        if (drawToStage) {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
-                            context.setTransform(m[0], m[1], m[2], m[3], m[4], m[5]);
-                        }
-                        else {
-                            context.save();
-                            context.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
-                        }
-                        context.beginPath();
-                        context.rect(rect.x, rect.y, rect.width, rect.height);
-                        if (!drawToStage) {
-                            context.restore();
-                        }
-                        context.clip();
-                        drawCalls += this.drawDisplayObject(child, context, dirtyList, drawToStage, child.$displayList, region);
-                        context.restore();
-                        Region.release(region);
+                        drawCalls += this.drawWidthScrollRect(child, context, dirtyList, drawToStage);
+
+                    }
+                    else if(child.$mask){
+                        drawCalls += this.drawWidthMask(child, context, dirtyList, drawToStage);
                     }
                     else {
                         drawCalls += this.drawDisplayObject(child, context, dirtyList, drawToStage, child.$displayList, scrollRegion);
                     }
                 }
             }
+            return drawCalls;
+        }
+
+        private drawWidthScrollRect(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.player.Region[], drawToStage:boolean):number {
+            var drawCalls = 0;
+            var rect = displayObject.$scrollRect;
+            context.save();
+            var region = Region.create();
+            region.updateRegion(rect, displayObject.$renderMatrix);
+            var m = displayObject.$renderMatrix.$data;
+            if (drawToStage) {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
+                context.setTransform(m[0], m[1], m[2], m[3], m[4], m[5]);
+            }
+            else {
+                context.save();
+                context.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
+            }
+            context.beginPath();
+            context.rect(rect.x, rect.y, rect.width, rect.height);
+            if (!drawToStage) {
+                context.restore();
+            }
+            context.clip();
+            drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, drawToStage, displayObject.$displayList, region);
+            context.restore();
+            Region.release(region);
+            return drawCalls;
+        }
+
+        private drawWidthMask(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.player.Region[], drawToStage:boolean):number {
+            var drawCalls = 0;
+            var mask = displayObject.$mask;
+            var bounds = mask.$getContentBounds();
+            var region = Region.create();
+            region.updateRegion(bounds, mask.$renderMatrix);
+            context.save();
+            var m = mask.$renderMatrix.$data;
+            if (drawToStage) {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
+                context.setTransform(m[0], m[1], m[2], m[3], m[4], m[5]);
+                mask.$renderMask(context);
+            }
+            else {
+                context.save();
+                context.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
+                mask.$renderMask(context);
+                context.restore();
+            }
+            context.clip();
+            drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, drawToStage, displayObject.$displayList, region);
+            context.restore();
+            Region.release(region);
             return drawCalls;
         }
 
