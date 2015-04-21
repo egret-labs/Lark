@@ -46,10 +46,11 @@ import server = require('../server/server');
 
 export function executeCommandLine(args: string[]): void {
     var options = Parser.parseCommandLine(args);
-    if (options.action == 'startserver')
-        server.startServer(options);
-    else
-        new Run(options).run();
+    //if (options.action == 'startserver')
+    //    server.startServer(options);
+    //else
+    //    new Run(options).run();
+    executeOption(options);
 
 }
 

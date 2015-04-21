@@ -29,17 +29,16 @@
 /// <reference path="../lib/types.d.ts" />
 require('../locales/en');
 var Parser = require("./Parser");
-var Run = require("./Run");
 var Build = require("./Build");
 var Publish = require("./Publish");
 var Create = require("./Create");
-var server = require('../server/server');
 function executeCommandLine(args) {
     var options = Parser.parseCommandLine(args);
-    if (options.action == 'startserver')
-        server.startServer(options);
-    else
-        new Run(options).run();
+    //if (options.action == 'startserver')
+    //    server.startServer(options);
+    //else
+    //    new Run(options).run();
+    executeOption(options);
 }
 exports.executeCommandLine = executeCommandLine;
 function executeOption(options) {
