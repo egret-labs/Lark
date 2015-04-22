@@ -282,11 +282,6 @@ module lark.player {
                 if (node.$isDirty) {
                     drawCalls++;
                     context.globalAlpha = globalAlpha;
-                    var compositeOp = blendModes[displayObject.$blendMode];
-                    if(!compositeOp){
-                        compositeOp = "source-over";
-                    }
-                    context.globalCompositeOperation = compositeOp;
                     var m = node.$renderMatrix.$data;
                     if (drawToStage) {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
                         context.setTransform(m[0], m[1], m[2], m[3], m[4], m[5]);
@@ -315,6 +310,9 @@ module lark.player {
                     if (child.$scrollRect||child.$mask) {
                         drawCalls += this.drawWidthClip(child, context, dirtyList, drawToStage,clipRegion);
                     }
+                    else if(child.$blendMode!==0){
+                        drawCalls += this.drawWidthBlendMode(child,context,dirtyList,drawToStage,clipRegion);
+                    }
                     else {
                         drawCalls += this.drawDisplayObject(child, context, dirtyList, drawToStage, child.$displayList, clipRegion);
                     }
@@ -323,6 +321,50 @@ module lark.player {
             return drawCalls;
         }
 
+        private drawWidthBlendMode(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.player.Region[],
+                              drawToStage:boolean,clipRegion:Region):number {
+            var drawCalls = 0;
+            var region:Region;
+            var bounds = displayObject.$getOriginalBounds();
+            if(!bounds.isEmpty()){
+                region = Region.create();
+                region.updateRegion(bounds,displayObject.$getConcatenatedMatrix());
+            }
+            if(!region||(clipRegion&&!clipRegion.intersects(region))){
+                return drawCalls;
+            }
+            var displayContext = this.createRenderContext(region.width,region.height);
+            if(!displayContext){//RenderContext创建失败，放弃绘制遮罩。
+                drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, drawToStage, displayObject.$displayList, clipRegion);
+                Region.release(region);
+                return drawCalls;
+            }
+            displayContext.setTransform(1,0,0,1,-region.minX,-region.minY);
+            drawCalls += this.drawDisplayObject(displayObject, displayContext, dirtyList, false, displayObject.$displayList, region);
+            if(drawCalls>0){
+                drawCalls++;
+                var defaultCompositeOp = "source-over";
+                var compositeOp = blendModes[displayObject.$blendMode];
+                if(!compositeOp){
+                    compositeOp = defaultCompositeOp;
+                }
+                context.globalCompositeOperation = compositeOp;
+                if (drawToStage) {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
+                    context.setTransform(1, 0, 0, 1, region.minX, region.minY);
+                    context.drawImage(displayContext.surface,0,0);
+                }
+                else {
+                    context.save();
+                    context.translate(region.minX, region.minY)
+                    context.drawImage(displayContext.surface,0,0);
+                    context.restore();
+                }
+                context.globalCompositeOperation = defaultCompositeOp;
+            }
+            surfaceFactory.release(displayContext.surface);
+            Region.release(region);
+            return drawCalls;
+        }
         private drawWidthClip(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.player.Region[],
                               drawToStage:boolean,clipRegion:Region):number {
             var drawCalls = 0;
@@ -372,19 +414,13 @@ module lark.player {
                 return drawCalls;
             }
 
-            var surfaceWidth = Math.max(257,region.width);
-            var surfaceHeight = Math.max(257,region.height);
             //绘制显示对象自身，若有scrollRect，应用clip
-            var surface = surfaceFactory.create(true);
-            if(!surface){//Surface创建失败，放弃绘制遮罩。
+            var displayContext = this.createRenderContext(region.width,region.height);
+            if(!displayContext){//RenderContext创建失败，放弃绘制遮罩。
                 drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, drawToStage, displayObject.$displayList, clipRegion);
                 Region.release(region);
                 return drawCalls;
             }
-            surface.width = surfaceWidth;
-            surface.height = surfaceHeight;
-            var displayContext = surface.renderContext;
-
             if(scrollRect){
                 var m = displayMatrix.$data;
                 displayContext.setTransform(m[0], m[1], m[2], m[3], m[4]-region.minX, m[5]-region.minY);
@@ -396,16 +432,13 @@ module lark.player {
             drawCalls += this.drawDisplayObject(displayObject, displayContext, dirtyList, false, displayObject.$displayList, region);
             //绘制遮罩
             if(mask){
-                surface = surfaceFactory.create(true);
-                if(!surface){//Surface创建失败，放弃绘制遮罩。
+                var maskContext = this.createRenderContext(region.width,region.height);
+                if(!displayContext){//RenderContext创建失败，放弃绘制遮罩。
                     drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, drawToStage, displayObject.$displayList, clipRegion);
                     surfaceFactory.release(displayContext.surface);
                     Region.release(region);
                     return drawCalls;
                 }
-                surface.width = surfaceWidth;
-                surface.height = surfaceHeight;
-                var maskContext = surface.renderContext;
                 maskContext.setTransform(1,0,0,1,-region.minX,-region.minY);
                 var calls = this.drawDisplayObject(mask, maskContext, dirtyList, false, mask.$displayList, region);
                 if(calls>0){
@@ -436,6 +469,16 @@ module lark.player {
             surfaceFactory.release(displayContext.surface);
             Region.release(region);
             return drawCalls;
+        }
+
+        private createRenderContext(width:number,height:number):RenderContext{
+            var surface = surfaceFactory.create(true);
+            if(!surface){
+                return null;
+            }
+            surface.width = Math.max(257,width);
+            surface.height = Math.max(257,height);
+            return surface.renderContext;
         }
 
         private sizeChanged:boolean = false;
