@@ -32,7 +32,7 @@ module lark.player {
     /**
      * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
      */
-    export var sharedRenderContexts:player.RenderContext[];
+    export var sharedRenderContext:player.RenderContext;
     /**
      * surfaceFactory实例
      */
@@ -42,8 +42,9 @@ module lark.player {
 
         /**
          * 从对象池取出或创建一个新的Surface实例
+         * @param useOnce 表示对取出实例的使用是一次性的，用完后立即会释放。
          */
-        create():Surface;
+        create(useOnce?:boolean):Surface;
         /**
          * 释放一个Surface实例
          * @param surface 要释放的Surface实例

@@ -883,7 +883,7 @@ module lark {
                 data = context.getImageData(localX - displayList.offsetX, localY - displayList.offsetY, 1, 1).data;
             }
             else {
-                context = player.sharedRenderContexts[0];
+                context = player.sharedRenderContext;
                 context.surface.width = context.surface.height = 3;
                 context.translate(1 - localX, 1 - localY);
                 this.$render(context);

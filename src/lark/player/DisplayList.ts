@@ -375,9 +375,15 @@ module lark.player {
             var surfaceWidth = Math.max(257,region.width);
             var surfaceHeight = Math.max(257,region.height);
             //绘制显示对象自身，若有scrollRect，应用clip
-            var displayContext = sharedRenderContexts[1];
-            displayContext.surface.width = surfaceWidth;
-            displayContext.surface.height = surfaceHeight;
+            var surface = surfaceFactory.create(true);
+            if(!surface){//Surface创建失败，放弃绘制遮罩。
+                drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, drawToStage, displayObject.$displayList, clipRegion);
+                Region.release(region);
+                return drawCalls;
+            }
+            surface.width = surfaceWidth;
+            surface.height = surfaceHeight;
+            var displayContext = surface.renderContext;
 
             if(scrollRect){
                 var m = displayMatrix.$data;
@@ -390,9 +396,16 @@ module lark.player {
             drawCalls += this.drawDisplayObject(displayObject, displayContext, dirtyList, false, displayObject.$displayList, region);
             //绘制遮罩
             if(mask){
-                var maskContext = sharedRenderContexts[2];
-                maskContext.surface.width = surfaceWidth;
-                maskContext.surface.height = surfaceHeight;
+                surface = surfaceFactory.create(true);
+                if(!surface){//Surface创建失败，放弃绘制遮罩。
+                    drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, drawToStage, displayObject.$displayList, clipRegion);
+                    surfaceFactory.release(displayContext.surface);
+                    Region.release(region);
+                    return drawCalls;
+                }
+                surface.width = surfaceWidth;
+                surface.height = surfaceHeight;
+                var maskContext = surface.renderContext;
                 maskContext.setTransform(1,0,0,1,-region.minX,-region.minY);
                 var calls = this.drawDisplayObject(mask, maskContext, dirtyList, false, mask.$displayList, region);
                 if(calls>0){
@@ -402,8 +415,7 @@ module lark.player {
                     displayContext.globalAlpha = 1;
                     displayContext.drawImage(maskContext.surface,0,0);
                 }
-                maskContext.surface.width = 1;
-                maskContext.surface.height = 1;
+                surfaceFactory.release(maskContext.surface);
             }
 
 
@@ -421,8 +433,7 @@ module lark.player {
                     context.restore();
                 }
             }
-            displayContext.surface.width = 1;
-            displayContext.surface.height = 1;
+            surfaceFactory.release(displayContext.surface);
             Region.release(region);
             return drawCalls;
         }
@@ -447,9 +458,9 @@ module lark.player {
                 oldSurface.height = bounds.height;
             }
             else if (bounds.width !== oldSurface.width || bounds.height !== oldSurface.height) {
-                var newContext = player.sharedRenderContexts[0];
+                var newContext = player.sharedRenderContext;
                 var newSurface = newContext.surface;
-                player.sharedRenderContexts[0] = oldContext;
+                player.sharedRenderContext = oldContext;
                 this.renderContext = newContext;
                 this.surface = newSurface;
                 newSurface.width = bounds.width;

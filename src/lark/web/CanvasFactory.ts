@@ -34,14 +34,18 @@ module lark.web {
     export class CanvasFactory implements player.SurfaceFactory {
 
         public constructor(){
-            player.sharedRenderContexts = [this.create().renderContext,this.create().renderContext,this.create().renderContext];
+            player.sharedRenderContext = this.create().renderContext;
+            for(var i=0;i<3;i++){
+                surfacePool.push(this.create());
+            }
         }
 
         /**
          * 从对象池取出或创建一个新的Surface实例
+         * @param useOnce 表示对取出实例的使用是一次性的，用完后立即会释放。
          */
-        public create():player.Surface {
-            var surface = surfacePool.pop();
+        public create(useOnce?:boolean):player.Surface {
+            var surface = (useOnce||surfacePool.length>3)?surfacePool.pop():null;
             if (!surface) {
                 var canvas:HTMLCanvasElement = document.createElement("canvas");
                 if (!this.testCanvasValid(canvas)) {
@@ -58,12 +62,20 @@ module lark.web {
          * @param surface 要释放的Surface实例
          */
         public release(surface:player.Surface):void {
+            if(!surface){
+                return;
+            }
             surface.width = surface.height = 1;
             surfacePool.push(surface);
         }
 
         /**
-         * 检测创建的canvas是否有效，QQ浏览器对内存小等于1G的手机，限制Canvas创建的数量为19个。
+         * 检测创建的canvas是否有效，QQ浏览器对硬件内存小等于1G的手机，限制Canvas创建的数量为19个。
+         * 针对这个限制,同时满足以下两个条件就不会对显示造成任何影响：
+         * 1.不要嵌套使用BlendMode，即使用了混合模式的容器内部不要再设置另一个子项的混合模式。
+         * 2.不要嵌套使用遮罩，即遮罩对象或被遮罩对象的内部子项不要再设置另一个遮罩。
+         * cacheAsBitmap功能已经自动对这个限制做了兼容，即使设置cacheAsBitmap为true，若Canvas数量不足，将会放弃缓存，以保证渲染显示正确。
+         * 另外，如果要销毁一个开启过cacheAsBitmap的显示对象，在断开引用前建议显式将cacheAsBitmap置为false，这样可以回收一个Canvas对象。
          */
         private testCanvasValid(canvas:HTMLCanvasElement):boolean {
             canvas.height = 1;
