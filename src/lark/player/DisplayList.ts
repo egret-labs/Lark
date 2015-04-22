@@ -399,8 +399,8 @@ module lark.player {
                     displayContext.globalAlpha = 1;
                     displayContext.drawImage(maskContext.surface,0,0);
                 }
-                maskContext.surface.width = 257;
-                maskContext.surface.height = 257;
+                maskContext.surface.width = 1;
+                maskContext.surface.height = 1;
             }
 
 
@@ -418,8 +418,8 @@ module lark.player {
                     context.restore();
                 }
             }
-            displayContext.surface.width = 257;
-            displayContext.surface.height = 257;
+            displayContext.surface.width = 1;
+            displayContext.surface.height = 1;
             Region.release(region);
             return drawCalls;
         }
