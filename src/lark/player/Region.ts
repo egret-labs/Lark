@@ -136,6 +136,13 @@ module lark.player {
             this.area = 0;
         }
 
+        /**
+         * 确定此 Region 对象是否为空。
+         */
+        public isEmpty():boolean {
+            return this.width <= 0 || this.height <= 0;
+        }
+
         public intersects(target:Region):boolean {
             var max = this.minX > target.minX ? this.minX : target.minX;
             var min = this.maxX < target.maxX ? this.maxX : target.maxX;

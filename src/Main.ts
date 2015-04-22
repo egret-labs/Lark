@@ -74,7 +74,6 @@ module lark {
 
 
             var container = new DisplayObjectContainer();
-            container.y = 300;
             var x = 0, y = 0;
             for (var i = 0; i < 2300; i++) {
                 var bitmap = new Bitmap();
@@ -114,7 +113,7 @@ module lark {
             //container.y = 150;
             //container.cacheAsBitmap = true;
             bitmap = new lark.Bitmap();
-            bitmap.x = 1350;
+            bitmap.x = 350;
             bitmap.y = 350;
             bitmap.bitmapData = bitmapData;
             //bitmap.blendMode = BlendMode.Darken;
@@ -128,8 +127,7 @@ module lark {
             this.container = container;
             //container.addChild(shape);
             //shape.cacheAsBitmap = true;
-            container.scrollRect = new lark.Rectangle(-300, 300, 500, 500);
-            //container.mask = this.targetIcon;
+            container.mask = this.targetIcon;
         }
 
         private container:DisplayObjectContainer;
@@ -145,40 +143,40 @@ module lark {
                 return;
             }
             this.timer.stop();
-            //this.touchTarget = target;
-            //var pos = target.parent.localToGlobal(target.x, target.y);
-            //this.addChild(target);
-            //pos = target.parent.globalToLocal(pos.x, pos.y);
-            //target.x = pos.x;
-            //target.y = pos.y;
-            //this.offsetX = target.x - event.stageX;
-            //this.offsetY = target.y - event.stageY;
-            this.offsetX = event.stageX;
-            this.offsetY = event.stageY;
+            this.touchTarget = target;
+            var pos = target.parent.localToGlobal(target.x, target.y);
+            this.addChild(target);
+            pos = target.parent.globalToLocal(pos.x, pos.y);
+            target.x = pos.x;
+            target.y = pos.y;
+            this.offsetX = target.x - event.stageX;
+            this.offsetY = target.y - event.stageY;
+            //this.offsetX = event.stageX;
+            //this.offsetY = event.stageY;
             this.stage.on(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
             this.stage.on(TouchEvent.TOUCH_END, this.onTouchEnd, this);
             event.updateAfterEvent();
         }
 
-        private rect = new Rectangle(-300, 300, 500, 500);
+        private rect = new Rectangle(300, 300, 500, 500);
 
         private onTouchMove(event:TouchEvent):void {
-            //this.touchTarget.x = this.offsetX + event.stageX;
-            //this.touchTarget.y = this.offsetY + event.stageY;
-            this.rect.x -= event.stageX - this.offsetX;
-            this.rect.y -= event.stageY - this.offsetY;
-            this.offsetX = event.stageX;
-            this.offsetY = event.stageY;
-            this.container.scrollRect = this.rect;
+            this.touchTarget.x = this.offsetX + event.stageX;
+            this.touchTarget.y = this.offsetY + event.stageY;
+            //this.rect.x -= event.stageX - this.offsetX;
+            //this.rect.y -= event.stageY - this.offsetY;
+            //this.offsetX = event.stageX;
+            //this.offsetY = event.stageY;
+            //this.container.scrollRect = this.rect;
             event.updateAfterEvent();
         }
 
         private onTouchEnd(event:TouchEvent):void {
-            //this.targetIcon = this.touchTarget;
-            //if (this.iconList.indexOf(this.touchTarget) == -1) {
-            //    this.iconList.push(this.touchTarget);
-            //}
-            //this.touchTarget = null;
+            this.targetIcon = this.touchTarget;
+            if (this.iconList.indexOf(this.touchTarget) == -1) {
+                this.iconList.push(this.touchTarget);
+            }
+            this.touchTarget = null;
             this.stage.removeListener(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
             this.stage.removeListener(TouchEvent.TOUCH_END, this.onTouchEnd, this);
             event.updateAfterEvent();
