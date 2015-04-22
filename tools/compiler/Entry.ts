@@ -50,7 +50,8 @@ export function executeCommandLine(args: string[]): void {
     //    server.startServer(options);
     //else
     //    new Run(options).run();
-    executeOption(options);
+    var exitCode = executeOption(options);
+    process.exit(exitCode);
 
 }
 

@@ -41,12 +41,13 @@ var Build = (function (_super) {
     }
     Build.prototype.run = function () {
         var exitCode = 0;
-        console.log('test log');
+        console.log('Build Start');
         this.clean(this.options.debugDir);
         if (this.options.includeLark)
             exitCode = this.buildLark();
         this.copyDirectory(this.options.templateDir, this.options.debugDir);
         exitCode = this.buildProject();
+        console.log('Build End');
         return exitCode;
     };
     return Build;

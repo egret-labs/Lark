@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{9feb9ad5-2e17-4441-a83c-3d3cfe89aeeb}</ProjectGuid>
+    <ProjectGuid>{f294756a-1f94-43ab-bf47-a77480d650e1}</ProjectGuid>
     <ProjectHome />
     <ProjectView>ShowAllFiles</ProjectView>
     <StartupFile />

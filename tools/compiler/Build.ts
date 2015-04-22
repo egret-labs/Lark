@@ -35,7 +35,7 @@ class Build extends Action {
 
     public run() {
         var exitCode = 0;
-        console.log('test log');
+        console.log('Build Start');
         this.clean(this.options.debugDir);
 
         if (this.options.includeLark)
@@ -44,6 +44,7 @@ class Build extends Action {
         this.copyDirectory(this.options.templateDir, this.options.debugDir);
 
         exitCode = this.buildProject();
+        console.log('Build End');
         return exitCode;
     }
 
