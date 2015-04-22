@@ -38,7 +38,8 @@ function executeCommandLine(args) {
     //    server.startServer(options);
     //else
     //    new Run(options).run();
-    executeOption(options);
+    var exitCode = executeOption(options);
+    process.exit(exitCode);
 }
 exports.executeCommandLine = executeCommandLine;
 function executeOption(options) {
