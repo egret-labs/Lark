@@ -349,16 +349,7 @@ module lark.player {
                     compositeOp = defaultCompositeOp;
                 }
                 context.globalCompositeOperation = compositeOp;
-                if (drawToStage) {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
-                    context.setTransform(1, 0, 0, 1, region.minX, region.minY);
-                    context.drawImage(displayContext.surface,0,0);
-                }
-                else {
-                    context.save();
-                    context.translate(region.minX, region.minY)
-                    context.drawImage(displayContext.surface,0,0);
-                    context.restore();
-                }
+                this.drawWidthSurface(context,displayContext.surface,drawToStage,region.minX,region.minY);
                 context.globalCompositeOperation = defaultCompositeOp;
             }
             surfaceFactory.release(displayContext.surface);
@@ -455,16 +446,7 @@ module lark.player {
             //绘制结果到屏幕
             if(drawCalls>0){
                 drawCalls++;
-                if (drawToStage) {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
-                    context.setTransform(1, 0, 0, 1, region.minX, region.minY);
-                    context.drawImage(displayContext.surface,0,0);
-                }
-                else {
-                    context.save();
-                    context.translate(region.minX, region.minY)
-                    context.drawImage(displayContext.surface,0,0);
-                    context.restore();
-                }
+                this.drawWidthSurface(context,displayContext.surface,drawToStage,region.minX,region.minY);
             }
             surfaceFactory.release(displayContext.surface);
             Region.release(region);
@@ -479,6 +461,19 @@ module lark.player {
             surface.width = Math.max(257,width);
             surface.height = Math.max(257,height);
             return surface.renderContext;
+        }
+
+        private drawWidthSurface(context:RenderContext,surface:Surface,drawToStage:boolean,offsetX:number,offsetY:number):void{
+            if (drawToStage) {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
+                context.setTransform(1, 0, 0, 1, offsetX, offsetY);
+                context.drawImage(surface,0,0);
+            }
+            else {
+                context.save();
+                context.translate(offsetX, offsetY)
+                context.drawImage(surface,0,0);
+                context.restore();
+            }
         }
 
         private sizeChanged:boolean = false;
