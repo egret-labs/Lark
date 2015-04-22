@@ -607,16 +607,13 @@ module lark {
 
         /**
          * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上
-         * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.SourceOver。
+         * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
          */
         public get blendMode():number {
             return this.$blendMode;
         }
 
         public set blendMode(value:number) {
-            if (value < BlendMode.SourceOver && value > BlendMode.Xor) {
-                value = 0;
-            }
             if (value === this.$blendMode) {
                 return;
             }

@@ -31,8 +31,7 @@ module lark.player {
 
     var displayListPool:DisplayList[] = [];
 
-    var blendModes = ["source-over","source-atop","destination-over",
-        "destination-out","lighter","darken","xor",/*""source-in","source-out",destination-atop","destination-in","copy"*/];
+    var blendModes = ["source-over","lighter","destination-out"];
 
     /**
      * 显示列表
@@ -283,7 +282,11 @@ module lark.player {
                 if (node.$isDirty) {
                     drawCalls++;
                     context.globalAlpha = globalAlpha;
-                    context.globalCompositeOperation = blendModes[displayObject.$blendMode];
+                    var compositeOp = blendModes[displayObject.$blendMode];
+                    if(!compositeOp){
+                        compositeOp = "source-over";
+                    }
+                    context.globalCompositeOperation = compositeOp;
                     var m = node.$renderMatrix.$data;
                     if (drawToStage) {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
                         context.setTransform(m[0], m[1], m[2], m[3], m[4], m[5]);
