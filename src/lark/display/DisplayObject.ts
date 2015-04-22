@@ -43,7 +43,7 @@ module lark {
     }
 
     const enum Values {
-        scaleX, scaleY, skewX, skewY, rotation, alpha, x, y
+        scaleX, scaleY, skewX, skewY, rotation, x, y
     }
 
     /**
@@ -57,7 +57,7 @@ module lark {
         public constructor() {
             super();
             this.$displayObjectFlags = player.DisplayObjectFlags.InitFlags;
-            this._values = new Float64Array([1, 1, 0, 0, 0, 1, 0, 0]);
+            this._values = new Float64Array([1, 1, 0, 0, 0, 0, 0]);
         }
 
         private _values:Float64Array;
@@ -510,21 +510,25 @@ module lark {
         }
 
         /**
+         * 渲染时会用到的属性，独立声明一个变量
+         */
+        $alpha:number = 1;
+
+        /**
          * 表示指定对象的 Alpha 透明度值。
          * 有效值为 0（完全透明）到 1（完全不透明）。alpha 设置为 0 的显示对象是活动的，即使它们不可见。
          *  @default 1 默认值为 1。
          */
         public get alpha():number {
-            return this._values[Values.alpha];
+            return this.$alpha;
         }
 
         public set alpha(value:number) {
             value = +value || 0;
-            var values = this._values;
-            if (value === values[Values.alpha]) {
+            if (value === this.$alpha) {
                 return;
             }
-            values[Values.alpha] = value;
+            this.$alpha = value;
             this.$propagateFlagsDown(player.DisplayObjectFlags.InvalidConcatenatedAlpha);
             this.$invalidate(true);
         }
@@ -536,10 +540,10 @@ module lark {
             if (this.$hasFlags(player.DisplayObjectFlags.InvalidConcatenatedAlpha)) {
                 if (this.$parent) {
                     var parentAlpha = this.$parent.$getConcatenatedAlpha();
-                    this.$renderAlpha = parentAlpha * this._values[Values.alpha];
+                    this.$renderAlpha = parentAlpha * this.$alpha;
                 }
                 else {
-                    this.$renderAlpha = this._values[Values.alpha];
+                    this.$renderAlpha = this.$alpha;
                 }
                 this.$removeFlags(player.DisplayObjectFlags.InvalidConcatenatedAlpha);
             }
@@ -844,7 +848,7 @@ module lark {
 
         }
 
-        $hitTest(stageX:number, stageY:number,shapeFlag?:boolean):DisplayObject {
+        $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):DisplayObject {
             if (!this.$renderRegion || !this.$visible || !this.$hasFlags(player.DisplayObjectFlags.TouchEnabled)) {
                 return null;
             }
@@ -857,11 +861,11 @@ module lark {
                     if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
                         return null;
                     }
-                    if (this.$mask && !this.$mask.$hitTest(stageX, stageY,true)) {
+                    if (this.$mask && !this.$mask.$hitTest(stageX, stageY, true)) {
                         return null;
                     }
                 }
-                if (shapeFlag||this.$displayObjectFlags & player.DisplayObjectFlags.PixelHitTest) {
+                if (shapeFlag || this.$displayObjectFlags & player.DisplayObjectFlags.PixelHitTest) {
                     return this.hitTestPixel(localX, localY);
                 }
                 return this;

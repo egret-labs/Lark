@@ -36,17 +36,17 @@ module lark.player {
         /**
          * 释放一个DisplayList实例到对象池
          */
-        public static release(region:Region):void{
+        public static release(region:Region):void {
             regionPool.push(region);
         }
 
         /**
          * 从对象池中取出或创建一个新的DisplayList对象。
          */
-        public static create():Region{
+        public static create():Region {
             var region = regionPool.pop();
-            if(!region){
-               region = new Region();
+            if (!region) {
+                region = new Region();
             }
             return region;
         }
@@ -80,6 +80,9 @@ module lark.player {
             this.area = this.width * this.height;
         }
 
+        /**
+         * 注意！由于性能优化，此方法不判断自身是否为空，必须在外部确认自身和目标区域都不为空再调用合并。否则结果始终从0，0点开始。
+         */
         public union(target:Region):void {
             if (this.minX > target.minX) {
                 this.minX = target.minX;
@@ -94,6 +97,43 @@ module lark.player {
                 this.maxY = target.maxY;
             }
             this.updateArea();
+        }
+        /**
+         * 注意！由于性能优化，此方法不判断自身是否为空，必须在外部确认自身和目标区域都不为空再调用合并。否则结果始终从0，0点开始。
+         */
+        public intersect(target:Region):void {
+            if (this.minX < target.minX) {
+                this.minX = target.minX;
+            }
+            if (this.maxX > target.maxX) {
+                this.maxX = target.maxX;
+            }
+            if (this.minX >= this.maxX) {
+                this.setEmpty();
+                return;
+            }
+            if (this.minY < target.minY) {
+                this.minY = target.minY;
+            }
+
+            if (this.maxY > target.maxY) {
+                this.maxY = target.maxY;
+            }
+            if(this.minY>=this.maxY){
+                this.setEmpty();
+                return;
+            }
+            this.updateArea();
+        }
+
+        private setEmpty():void {
+            this.minX = 0;
+            this.minY = 0;
+            this.maxX = 0;
+            this.maxY = 0;
+            this.width = 0;
+            this.height = 0;
+            this.area = 0;
         }
 
         public intersects(target:Region):boolean {
