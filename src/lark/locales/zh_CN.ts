@@ -41,4 +41,5 @@ module lark {
     locale_strings[1007] = "为参数指定的索引不在范围内。";
     locale_strings[1008] = "实例化单例出错，不允许实例化多个 {0} 对象。";
     locale_strings[1009] = "Stage 类不实现此属性或方法。";
+    locale_strings[1010] = "{0} 是只读的";
 }

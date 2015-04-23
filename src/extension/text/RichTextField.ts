@@ -32,7 +32,13 @@ module lark {
     import TextBlock = text.TextBlock;
     import TF = lark.TextField;
 
-    export enum TextFieldFlags {
+    export enum RichTextFieldFlags {
+        None = 0x000000,
+        TextDirty = 0x000001,
+        FormatDirty = 0x000002,
+        MultilineDirty = 0x000004,
+        LineDirty = TextDirty | FormatDirty | MultilineDirty,
+        Dirty = LineDirty,
         WordWrapDirty = 0x000008,
         ScrollVDirty = 0x000010,
         RichNodeDirty = 0x000010,
@@ -67,6 +73,11 @@ module lark {
          * 段落的右边距，以像素为单位。
          */
         rightMargin?: number;
+        
+        /**
+         * 行的前间距
+         */
+        leading?: number;
 
         /**
          * 表示显示超链接的目标窗口。
@@ -109,9 +120,9 @@ module lark {
             this.on(Event.ENTER_FRAME, this.update, this);
         }
         
-        protected _textFieldFlags: number = TextFieldFlags.Dirty;
+        protected _textFieldFlags: number = RichTextFieldFlags.Dirty;
 
-        $setTextFieldFlags(flags: TextFieldFlags) {
+        $setTextFieldFlags(flags: RichTextFieldFlags) {
             this._textFieldFlags |= flags;
             this.$invalidate();
         }
@@ -127,7 +138,7 @@ module lark {
         public set format(value: ITextFieldStyle) {
             value = TextField.$normalizeStyle(value);
             this._format = value;
-            this.$setTextFieldFlags(TextFieldFlags.FormatDirty);
+            this.$setTextFieldFlags(RichTextFieldFlags.FormatDirty);
         }
 
 
@@ -156,7 +167,7 @@ module lark {
             if (value == this._width)
                 return;
             this._width = +value || 0;
-            this.$setTextFieldFlags(TextFieldFlags.Dirty);
+            this.$setTextFieldFlags(RichTextFieldFlags.Dirty);
         }
 
         protected _height: number = NaN;
@@ -170,7 +181,7 @@ module lark {
             if (value == this._height)
                 return;
             this._height = value;
-            this.$setTextFieldFlags(TextFieldFlags.Dirty);
+            this.$setTextFieldFlags(RichTextFieldFlags.Dirty);
         }
 
         protected _scrollV: number = 0;
@@ -184,7 +195,7 @@ module lark {
             if (this._scrollV == value)
                 return;
             this._scrollV = value;
-            this.$setTextFieldFlags(TextFieldFlags.ScrollVDirty);
+            this.$setTextFieldFlags(RichTextFieldFlags.ScrollVDirty);
         }
 
         /**
@@ -192,9 +203,9 @@ module lark {
         * 当您需要立即更新对 RichTextField 做的更改时，请调用此方法
         */
         public update() {
-            if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0)
+            if ((this._textFieldFlags & RichTextFieldFlags.LineDirty) != 0)
                 this.$generateTextLines();
-            if ((this._textFieldFlags & TextFieldFlags.ScrollVDirty) == TextFieldFlags.ScrollVDirty)
+            if ((this._textFieldFlags & RichTextFieldFlags.ScrollVDirty) == RichTextFieldFlags.ScrollVDirty)
                 this.$updateChildren();
         }
 
@@ -261,15 +272,15 @@ module lark {
             }
             this.addChild(textfield);
             textfield.$setRenderLines(textLines);
-            this._textFieldFlags &= ~TextFieldFlags.ScrollVDirty;
+            this._textFieldFlags &= ~RichTextFieldFlags.ScrollVDirty;
         }
 
 
 
         protected parseContents() {
-            if (!hasFlag(this._textFieldFlags, TextFieldFlags.TextDirty)
-                && !hasFlag(this._textFieldFlags, TextFieldFlags.MultilineDirty)
-                && !hasFlag(this._textFieldFlags, TextFieldFlags.RichNodeDirty))
+            if (!hasFlag(this._textFieldFlags, RichTextFieldFlags.TextDirty)
+                && !hasFlag(this._textFieldFlags, RichTextFieldFlags.MultilineDirty)
+                && !hasFlag(this._textFieldFlags, RichTextFieldFlags.RichNodeDirty))
                 return;
             var contents: text.ContentElement[] = [];
             var nodes = this._nodes, length = this._nodes.length;

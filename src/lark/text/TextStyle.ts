@@ -86,7 +86,12 @@ module lark {
         * 设置段落中文本的水平对齐方式
         */
         align?: string;
-        
+
+        /**
+         * 行高
+         */
+        lineHeight?: number;
+
         /**
         * 根据样式生成 Context 需要的字体字符串
         */

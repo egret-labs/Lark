@@ -43,7 +43,7 @@ module lark {
             super();
             this.text = text;
             this.style = style;
-            this.textWidth = textWidth;
+            this.width = textWidth;
             this.x = +x || 0;
             this.y = +y || 0;
         }
@@ -64,7 +64,7 @@ module lark {
         /**
          * 需要显示的文本宽度
          */
-        public textWidth: number;
+        public width: number;
         /**
          * 文本的样式
          */
@@ -74,14 +74,7 @@ module lark {
          * 文本块的高度
          */
         public get height() {
-            return this.style.fontSize * 1.2;
-        }
-        
-        /**
-         * 文本块的宽度
-         */
-        public get width() {
-            return this.textWidth;
+            return Math.max(this.style.lineHeight, this.style.fontSize);
         }
 
         $toFontString(includeSize = false) {

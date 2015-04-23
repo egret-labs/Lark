@@ -64,11 +64,11 @@ module lark {
 
         $displayObjectFlags:number = 0;
 
-        $setFlags(flags:player.DisplayObjectFlags):void {
+        $setFlags(flags:number):void {
             this.$displayObjectFlags |= flags;
         }
 
-        $toggleFlags(flags:player.DisplayObjectFlags, on:boolean):void {
+        $toggleFlags(flags:number, on:boolean):void {
             if (on) {
                 this.$displayObjectFlags |= flags;
             } else {
@@ -76,14 +76,14 @@ module lark {
             }
         }
 
-        $removeFlags(flags:player.DisplayObjectFlags):void {
+        $removeFlags(flags:number):void {
             this.$displayObjectFlags &= ~flags;
         }
 
         /**
          * 沿着显示列表向上移除标志量，如果标志量没被设置过就停止移除。
          */
-        $removeFlagsUp(flags:player.DisplayObjectFlags):void {
+        $removeFlagsUp(flags:number):void {
             if (!this.$hasAnyFlags(flags)) {
                 return;
             }
@@ -94,14 +94,14 @@ module lark {
             }
         }
 
-        $hasFlags(flags:player.DisplayObjectFlags):boolean {
+        $hasFlags(flags:number):boolean {
             return (this.$displayObjectFlags & flags) === flags;
         }
 
         /**
          * 沿着显示列表向上传递标志量，如果标志量已经被设置过就停止传递。
          */
-        $propagateFlagsUp(flags:player.DisplayObjectFlags):void {
+        $propagateFlagsUp(flags:number):void {
             if (this.$hasFlags(flags)) {
                 return;
             }
@@ -115,11 +115,11 @@ module lark {
         /**
          * 沿着显示列表向下传递标志量，非容器直接设置自身的flag，此方法会在DisplayObjectContainer中被覆盖。
          */
-        $propagateFlagsDown(flags:player.DisplayObjectFlags):void {
+        $propagateFlagsDown(flags:number):void {
             this.$setFlags(flags);
         }
 
-        $hasAnyFlags(flags:player.DisplayObjectFlags):boolean {
+        $hasAnyFlags(flags:number):boolean {
             return !!(this.$displayObjectFlags & flags);
         }
 
