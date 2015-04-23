@@ -5,3 +5,7 @@ bin-release
 /.ntvs_analysis.dat
 /bin
 /obj/Debug
+*.js.map
+*.dll
+/tools/obj/Debug
+/tools/.ntvs_analysis.dat

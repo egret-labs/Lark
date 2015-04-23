@@ -1,6 +1,6 @@
 ﻿module lark {
 
-    export interface Media extends DisplayObject {
+    export interface Media extends EventEmitter {
         sources: IMediaSource;
         isPlaying: boolean;
         canPlay: boolean;
@@ -41,137 +41,17 @@
     }
 
 
-    export module player {
-        export class MediaBase extends DisplayObject implements Media {
-            public constructor(option?: IMediaOption) {
-                super();
-                if (!option)
-                    return;
-                this.$option = option;
-                this.sources = option.sources || { default: option.src };
-                this._volume = option.volume == undefined ? this._volume : option.volume;
-            }
-
-
-            public $option: IMediaOption;
-            public sources: IMediaSource;
-            public isPlaying: boolean = false;
-            public canPlay: boolean = false;
-            public loadStart = false;
-
-            protected _volume: number = 1;
-            public get volume(): number {
-                return this.getVolume();
-            }
-            public set volume(value: number) {
-                this.setVolume(value);
-            }
-            protected getVolume(): number {
-                return this._volume;
-            }
-            protected setVolume(value: number) {
-                this._volume = value;
-            }
-
-
-            protected _position: number = 0;
-            public get position(): number {
-                return this.getPosition();
-            }
-            public set position(value: number) {
-                this.setPosition(value);
-            }
-            protected getPosition(): number {
-                return this._position;
-            }
-            protected setPosition(value: number) {
-                this._position = value;
-            }
-
-
-            public load() {
-
-            }
-
-            public play(loop: boolean = false) {
-
-            }
-
-            public pause() {
-
-            }
-
-            public stop() {
-
-            }
-
-            protected onLoaded(e?: SystemEvent): void {
-                this.onEvent("loaded");
-            }
-
-            protected onCanPlay(e?: SystemEvent): void {
-                this.canPlay = true;
-                this.onEvent("canplay");
-            }
-
-            protected onPlay(e?: SystemEvent): void {
-                this.onEvent("play");
-            }
-
-            protected onPlaying(e?: SystemEvent): void {
-                this.isPlaying = true;
-                this.onEvent("playing");
-            }
-
-            protected onPause(e?: SystemEvent): void {
-                this.isPlaying = false;
-                this.onEvent("pause");
-            }
-
-            protected onStop(e?: SystemEvent): void {
-                this.isPlaying = false;
-                this.onEvent("ended");
-            }
-
-            protected onEnded(e?: SystemEvent): void {
-                this.isPlaying = false;
-                this.onEvent("ended");
-            }
-
-            protected onTimeupdate(e?: SystemEvent): void {
-                this.isPlaying = true;
-                this.onEvent("timeupdate");
-            }
-
-            protected onVolumeChange(e?: SystemEvent): void {
-                this.onEvent("volumechange");
-            }
-            protected onError(error?: any): void {
-                this.onEvent("error", error);
-            }
-
-            protected onEvent(eventType: string, data?: any): void {
-                console.log(eventType, data);
-                this.emitWith(eventType, false, data);
-            }
-
-            protected playAfterLoad(loop: boolean = false) {
-                this.on("canplay", e=> this.play(loop), this);
-                this.load();
-            }
-
-            protected $addDomListeners(media: HTMLMediaElement) {
-                media.addEventListener("loadstart", e=> this.onEvent("loadstart"));
-                media.addEventListener("play", e=> this.onPlay(e));
-                media.addEventListener("playing", e=> this.onPlaying(e));
-                media.addEventListener("canplay", e=> this.onCanPlay(e));
-                media.addEventListener("pause", e=> this.onPause(e));
-                media.addEventListener("ended", e=> this.onEnded(e));
-                media.addEventListener("timeupdate", e=> this.onTimeupdate(e));
-                media.addEventListener("volumechange", e=> this.onVolumeChange(e));
-                media.addEventListener("error", e=> this.onError(e));
-            }
-        }
+    export class MediaEvent extends Event {
+        public static VOLUME_CHANGE = 'volumechange';
+        public static LOAD_START = 'loadstart';
+        public static CAN_PLAY = 'canplay';
+        public static PLAY = 'play';
+        public static PLAYING = 'playing';
+        public static PAUSE = 'pause';
+        public static ENDED = 'ended';
+        public static TIME_UPDATE = 'timeupdate';
+        public static ERROR = 'error';
+        public static RESIZE = 'resize';
     }
 
 }
