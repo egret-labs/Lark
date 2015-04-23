@@ -32,7 +32,7 @@ module lark.web {
     /**
      * Canvas屏幕适配器
      */
-    export class WebScreen extends HashObject {
+    export class WebScreen extends LarkObject {
 
         /**
          * 创建一个WebScreen实例

@@ -32,7 +32,7 @@ module lark {
     /**
      * 用于渲染的文本块
      */
-    export class TextSpan extends HashObject {
+    export class TextSpan extends LarkObject {
         constructor(
             text: string ,
             style:ITextStyle,

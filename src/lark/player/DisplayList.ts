@@ -36,7 +36,7 @@ module lark.player {
     /**
      * 显示列表
      */
-    export class DisplayList extends HashObject implements Renderable {
+    export class DisplayList extends LarkObject implements Renderable {
 
         /**
          * 释放一个DisplayList实例到对象池

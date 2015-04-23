@@ -31,7 +31,7 @@ module lark.player {
     /**
      * Lark播放器
      */
-    export class Player extends HashObject {
+    export class Player extends LarkObject {
 
         /**
          * 实例化一个播放器对象。
@@ -174,7 +174,7 @@ module lark.player {
             if (rootClass) {
                 var rootContainer:any = new rootClass();
                 this.root = rootContainer;
-                if (rootContainer instanceof lark.DisplayObject) {
+                if (rootContainer.isType(Types.DisplayObject)) {
                     this.stage.addChild(rootContainer);
                 }
                 else {

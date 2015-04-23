@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark {
-    export class Main extends DisplayObjectContainer {
+    export class Main extends Container {
 
         public constructor() {
             super();
@@ -37,7 +37,6 @@ module lark {
             img.onload = ()=> {
                 this.start(img);
             }
-
         }
 
         private targetIcon:DisplayObject;
@@ -46,7 +45,7 @@ module lark {
 
         private start(bitmapData:BitmapData):void {
 
-            //var container = new DisplayObjectContainer();
+            //var container = new Container();
             //container.name = "container";
             //container.x = 150;
             //container.addChild(new Bitmap(bitmapData));
@@ -57,7 +56,7 @@ module lark {
             //container.touchEnabled = false;
             //container.scaleX = container.scaleY = 0.5;
             //
-            //var container2 = new DisplayObjectContainer();
+            //var container2 = new Container();
             //container2.name  = "container2";
             //container2.addChild(container);
             //bitmap = new Bitmap(bitmapData);
@@ -72,8 +71,8 @@ module lark {
             //bitmap = new lark.Bitmap(t);
             //this.addChild(bitmap);
 
-
-            var container = new DisplayObjectContainer();
+            log(this.isType(lark.Types.DisplayObject));
+            var container = new Container();
             var x = 0, y = 0;
             for (var i = 0; i < 8000; i++) {
                 var bitmap = new Bitmap();
@@ -130,7 +129,7 @@ module lark {
             //container.mask = this.targetIcon;
         }
 
-        private container:DisplayObjectContainer;
+        private container:Container;
         private timer = new Timer(16);
         private touchTarget:DisplayObject;
         private offsetX:number = 0;
@@ -194,6 +193,7 @@ module lark {
                 bitmap.rotation += 2;
             }
         }
+
     }
 
 }

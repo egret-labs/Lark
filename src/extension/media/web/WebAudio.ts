@@ -55,7 +55,7 @@ module lark.web {
                 this.on(MediaEvent.CAN_PLAY, e=> this.play(loop), this);
                 this.load();
             }
-            
+
         }
 
         public pause() {
@@ -103,7 +103,7 @@ module lark.web {
             this.emitWith(MediaEvent.ENDED);
         }
 
-        protected onProgress(e:Event) {
+        protected onProgress(e: Event) {
             this._position = $AudioContext.currentTime - this.startTime;
             this.onTimeupdate();
         }
@@ -116,7 +116,8 @@ module lark.web {
         protected getMediaSource() {
             var audioSupport = Capabilities.audio;
             var sources = this.sources;
-            for (var type in sources) {
+            for (var type in sources)
+            {
                 if (!sources.default)
                     sources.default = sources[type];
                 var canPlay = audioSupport[type];
@@ -127,11 +128,11 @@ module lark.web {
         }
 
         protected loadAudioData(url) {
-            lark.get(url, null, response=> { },() => alert('BufferLoader: XHR error'), "arraybuffer");
+            lark.get(url, null, this.onLoadedAudioData,() => alert('BufferLoader: XHR error'), "arraybuffer");
         }
 
-        protected onLoadedAudioData(response:ArrayBuffer,url:string) {
-            $AudioContext.decodeAudioData(response,this.finishedLoading,this.loadingError);
+        protected onLoadedAudioData = (response: ArrayBuffer) => {
+            $AudioContext.decodeAudioData(response, this.finishedLoading, this.loadingError);
         }
 
         protected finishedLoading = (bufferList: AudioBuffer) => {

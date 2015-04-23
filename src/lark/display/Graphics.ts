@@ -70,9 +70,10 @@ module lark {
     }
 
     /**
-     * Graphics 类包含一组可用来创建矢量形状的方法。支持绘制的显示对象包括 Sprite 和 Shape 对象。这些类中的每一个类都包括 graphics 属性，该属性是一个 Graphics 对象。
+     * Graphics 类包含一组可用来创建矢量形状的方法。支持绘制的显示对象包括 Sprite 和 Shape 对象。
+     * 这些类中的每一个类都包括 graphics 属性，该属性是一个 Graphics 对象。
      */
-    export class Graphics extends HashObject {
+    export class Graphics extends LarkObject {
 
         /**
          * 创建一个放射状渐变填充对象
@@ -100,6 +101,7 @@ module lark {
 
         public constructor() {
             super();
+            this.$typeFlags = Types.Graphics;
             this.reset();
         }
 

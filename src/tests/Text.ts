@@ -30,7 +30,7 @@
 
 
 module lark {
-    export class Text extends DisplayObjectContainer {
+    export class Text extends Container {
         bitmapData: BitmapData = null;
         public constructor() {
             super();

@@ -33,7 +33,6 @@ module lark {
      * TextField 类用于创建显示对象以显示和输入文本。 
      * 可以使用 TextField 类的方法和属性对文本字段进行操作。
      * Lark 提供了多种在运行时设置文本格式的方法。TextFormat 类允许您设置 TextField 对象的字符和段落格式。
-     * 
      */
     export class TextField extends DisplayObject {
         /**
@@ -41,6 +40,7 @@ module lark {
          */
         public constructor(text:string,style?:ITextStyle) {
             super();
+            this.$typeFlags = Types.TextField;
             this._text = text;
             this._style = TextField.$normalizeStyle(style, BaseStyle);
             this.$renderRegion = new player.Region();
