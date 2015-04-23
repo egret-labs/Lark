@@ -17,8 +17,9 @@ var Default = (function (_super) {
         framework.file('Lark manage static files', self.staticFiles);
     };
     Default.prototype.staticFiles = function (req, res, isValidation) {
-        if (isValidation)
+        if (isValidation) {
             return req.url.indexOf(Default.LarkStaticContentPath) !== -1;
+        }
         var filePath = getLarkContentFullName(req);
         framework.responseFile(req, res, filePath);
     };

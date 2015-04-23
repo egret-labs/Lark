@@ -16,7 +16,9 @@ class Default extends TotalJS.Controller {
     staticFiles(req, res, isValidation) {
 
         if (isValidation)
+        {
             return req.url.indexOf(Default.LarkStaticContentPath) !== -1;
+        }
 
         var filePath = getLarkContentFullName(req);
         framework.responseFile(req, res, filePath);
