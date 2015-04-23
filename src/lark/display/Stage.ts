@@ -80,7 +80,7 @@ module lark {
          * 每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 invalidate() 方法。
          */
         public invalidate():void {
-            lark.player.Ticker.$invalidateRenderFlag = true;
+            player.Ticker.$invalidateRenderFlag = true;
         }
     }
 
