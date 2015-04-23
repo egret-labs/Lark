@@ -42,8 +42,9 @@ module lark.player {
 
         /**
          * 从对象池取出或创建一个新的Surface实例
+         * @param useOnce 表示对取出实例的使用是一次性的，用完后立即会释放。
          */
-        create():Surface;
+        create(useOnce?:boolean):Surface;
         /**
          * 释放一个Surface实例
          * @param surface 要释放的Surface实例

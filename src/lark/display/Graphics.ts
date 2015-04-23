@@ -425,20 +425,14 @@ module lark {
             bounds.setTo(this.minX - half, this.minY - half, this.maxX - this.minX + lineWidth, this.maxY - this.minY + lineWidth);
         }
 
-        $render(context:player.RenderContext, asMask?:boolean):void {
-            asMask = !!asMask;
+        $render(context:player.RenderContext):void {
             context.save();
-            if (!asMask) {
-                context.fillStyle = "#000000";
-                context.lineCap = "butt";
-                context.lineJoin = "miter";
-                context.lineWidth = 1;
-                context.miterLimit = 10;
-                context.strokeStyle = "#000000";
-            }
-            else if(!this.hasStroke){//没有线条，遍历时直接跳过判断。
-                asMask = false;
-            }
+            context.fillStyle = "#000000";
+            context.lineCap = "butt";
+            context.lineJoin = "miter";
+            context.lineWidth = 1;
+            context.miterLimit = 10;
+            context.strokeStyle = "#000000";
             var map = context["graphicsMap"];
             if (!map) {
                 map = mapGraphicsFunction(context);
@@ -447,16 +441,7 @@ module lark {
             var length = commands.length;
             for (var i = 0; i < length; i++) {
                 var command = commands[i];
-                var cmdType = command.type;
-                if (asMask) {
-                    if (cmdType === GraphicsCommandType.stroke) {
-                        continue;
-                    }
-                    if(cmdType===GraphicsCommandType.strokeRect){
-                        cmdType = GraphicsCommandType.rect;
-                    }
-                }
-                map[cmdType].apply(context, command.arguments);
+                map[command.type].apply(context, command.arguments);
             }
             context.restore();
         }

@@ -46,11 +46,6 @@ module lark {
             this.pixelHitTest = true;
         }
 
-        /**
-         * 被遮罩的对象
-         */
-        $maskedObject:DisplayObject;
-
         $graphics:Graphics;
         /**
          * 获取 Shape 中的 Graphics 对象。
@@ -63,27 +58,8 @@ module lark {
             this.$graphics.$measureContentBounds(bounds);
         }
 
-        private renderAsMask:boolean = false;
-
         $render(context:player.RenderContext):void{
-            if(this.$maskedObject&&!this.renderAsMask){
-                return;
-            }
-            this.$graphics.$render(context,this.renderAsMask);
-        }
-
-        $hitTest(stageX:number, stageY:number):DisplayObject{
-            if(this.$maskedObject){
-                return null;
-            }
-            return super.$hitTest(stageX,stageY);
-        }
-
-        $hitTestMask(stageX:number,stageY:number):DisplayObject{
-            this.renderAsMask = true;
-            var result = super.$hitTest(stageX,stageY);
-            this.renderAsMask = false;
-            return result;
+            this.$graphics.$render(context);
         }
     }
 }

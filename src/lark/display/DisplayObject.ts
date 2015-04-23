@@ -43,13 +43,13 @@ module lark {
     }
 
     const enum Values {
-        scaleX, scaleY, skewX, skewY, rotation,alpha,x,y
+        scaleX, scaleY, skewX, skewY, rotation, x, y
     }
 
     /**
      * 显示对象基类
      */
-    export class DisplayObject extends EventEmitter implements player.Renderable{
+    export class DisplayObject extends EventEmitter implements player.Renderable {
 
         /**
          * 创建一个显示对象
@@ -57,7 +57,7 @@ module lark {
         public constructor() {
             super();
             this.$displayObjectFlags = player.DisplayObjectFlags.InitFlags;
-            this._values = new Float64Array([1,1,0,0,0,1,0,0]);
+            this._values = new Float64Array([1, 1, 0, 0, 0, 0, 0]);
         }
 
         private _values:Float64Array;
@@ -197,7 +197,7 @@ module lark {
         $getMatrix():Matrix {
             if (this.$hasFlags(player.DisplayObjectFlags.InvalidMatrix)) {
                 var values = this._values;
-                this._matrix.$updateScaleAndRotation(values[Values.scaleX],values[Values.scaleY],values[Values.skewX],values[Values.skewY]);
+                this._matrix.$updateScaleAndRotation(values[Values.scaleX], values[Values.scaleY], values[Values.skewX], values[Values.skewY]);
                 this.$removeFlags(player.DisplayObjectFlags.InvalidMatrix);
             }
             return this._matrix;
@@ -238,10 +238,10 @@ module lark {
                 } else {
                     this.$renderMatrix.copyFrom(this.$getMatrix());
                 }
-                if(this.$displayList){
+                if (this.$displayList) {
                     this.$displayList.$renderRegion.moved = true;
                 }
-                if(this.$renderRegion){
+                if (this.$renderRegion) {
                     this.$renderRegion.moved = true;
                 }
                 this.$removeFlags(player.DisplayObjectFlags.InvalidConcatenatedMatrix);
@@ -275,7 +275,7 @@ module lark {
                 return;
             }
             values[Values.x] = value;
-            if(this.$scrollRect){
+            if (this.$scrollRect) {
                 value -= this.$scrollRect.x;
             }
             this._matrix.$data[4] = value;
@@ -298,7 +298,7 @@ module lark {
                 return;
             }
             values[Values.y] = value;
-            if(this.$scrollRect){
+            if (this.$scrollRect) {
                 value -= this.$scrollRect.y;
             }
             this._matrix.$data[5] = value;
@@ -441,6 +441,7 @@ module lark {
         }
 
         $visible:boolean = true;
+
         /**
          * 显示对象是否可见。
          * 不可见的显示对象已被禁用。例如，如果实例的 visible=false，则无法单击该对象。
@@ -503,10 +504,15 @@ module lark {
          */
         $cacheAsBitmapChanged():void {
             var parentCache = this.$displayList || this.$parentDisplayList;
-            if(this.$renderRegion){
+            if (this.$renderRegion) {
                 parentCache.markDirty(this);
             }
         }
+
+        /**
+         * 渲染时会用到的属性，独立声明一个变量
+         */
+        $alpha:number = 1;
 
         /**
          * 表示指定对象的 Alpha 透明度值。
@@ -514,16 +520,15 @@ module lark {
          *  @default 1 默认值为 1。
          */
         public get alpha():number {
-            return this._values[Values.alpha];
+            return this.$alpha;
         }
 
         public set alpha(value:number) {
             value = +value || 0;
-            var values = this._values;
-            if (value === values[Values.alpha]) {
+            if (value === this.$alpha) {
                 return;
             }
-            values[Values.alpha] = value;
+            this.$alpha = value;
             this.$propagateFlagsDown(player.DisplayObjectFlags.InvalidConcatenatedAlpha);
             this.$invalidate(true);
         }
@@ -535,10 +540,10 @@ module lark {
             if (this.$hasFlags(player.DisplayObjectFlags.InvalidConcatenatedAlpha)) {
                 if (this.$parent) {
                     var parentAlpha = this.$parent.$getConcatenatedAlpha();
-                    this.$renderAlpha = parentAlpha * this._values[Values.alpha];
+                    this.$renderAlpha = parentAlpha * this.$alpha;
                 }
                 else {
-                    this.$renderAlpha = this._values[Values.alpha];
+                    this.$renderAlpha = this.$alpha;
                 }
                 this.$removeFlags(player.DisplayObjectFlags.InvalidConcatenatedAlpha);
             }
@@ -570,26 +575,27 @@ module lark {
         }
 
         $scrollRect:Rectangle = null;
+
         /**
          * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
          * 注意：必须对scrollRect属性重新赋值改变的值才能生效，若获取scrollRect引用来修改对象属性，将不会发生任何改变。
          */
         public get scrollRect():Rectangle {
-            return this.$scrollRect?this.$scrollRect.clone():null;
+            return this.$scrollRect ? this.$scrollRect.clone() : null;
         }
 
         public set scrollRect(value:Rectangle) {
             var values = this._values;
             var m = this._matrix.$data;
-            if(value){
-                if(!this.$scrollRect){
+            if (value) {
+                if (!this.$scrollRect) {
                     this.$scrollRect = new lark.Rectangle();
                 }
                 this.$scrollRect.copyFrom(value);
-                m[4] = values[Values.x]-value.x;
-                m[5] = values[Values.y]-value.y;
+                m[4] = values[Values.x] - value.x;
+                m[5] = values[Values.y] - value.y;
             }
-            else{
+            else {
                 this.$scrollRect = null;
                 m[4] = values[Values.x];
                 m[5] = values[Values.y];
@@ -598,26 +604,30 @@ module lark {
         }
 
         $blendMode:number = 0;
+
         /**
          * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上
-         * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.SourceOver。
+         * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
          */
         public get blendMode():number {
             return this.$blendMode;
         }
 
         public set blendMode(value:number) {
-            if(value<BlendMode.SourceOver&&value>BlendMode.Xor){
-                value = 0;
-            }
-            if(value===this.$blendMode){
+            if (value === this.$blendMode) {
                 return;
             }
             this.$blendMode = value;
             this.$invalidateChildren();
         }
 
-        $mask:Shape = null;
+        /**
+         * 被遮罩的对象
+         */
+        $maskedObject:DisplayObject = null;
+
+        $mask:DisplayObject = null;
+
         /**
          * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
          * 但不绘制 mask 对象本身。将 mask 设置为 null 可删除蒙版。要能够缩放遮罩对象，它必须在显示列表中。要能够拖动蒙版
@@ -625,16 +635,16 @@ module lark {
          * 注意：单个 mask 对象不能用于遮罩多个执行调用的显示对象。在将 mask 分配给第二个显示对象时，会撤消其作为第一个对象的遮罩，
          * 该对象的 mask 属性将变为 null。
          */
-        public get mask():Shape {
+        public get mask():DisplayObject {
             return this.$mask;
         }
 
-        public set mask(value:Shape) {
-            if(value===this.$mask||value===this){
+        public set mask(value:DisplayObject) {
+            if (value === this.$mask || value === this) {
                 return;
             }
-            if(value){
-                if(value.$maskedObject){
+            if (value) {
+                if (value.$maskedObject) {
                     value.$maskedObject.mask = null;
                 }
                 value.$maskedObject = this;
@@ -722,7 +732,7 @@ module lark {
                 bounds.copyFrom(this.$getContentBounds());
                 this.$measureChildBounds(bounds);
                 this.$removeFlags(player.DisplayObjectFlags.InvalidBounds);
-                if(this.$displayList){
+                if (this.$displayList) {
                     this.$displayList.$renderRegion.moved = true;
                 }
             }
@@ -743,7 +753,7 @@ module lark {
             var bounds = this._contentBounds;
             if (this.$hasFlags(player.DisplayObjectFlags.InvalidContentBounds)) {
                 this.$measureContentBounds(bounds);
-                if(this.$renderRegion){
+                if (this.$renderRegion) {
                     this.$renderRegion.moved = true;
                 }
                 this.$removeFlags(player.DisplayObjectFlags.InvalidContentBounds);
@@ -785,10 +795,11 @@ module lark {
             }
             this.$setFlags(player.DisplayObjectFlags.DirtyChildren);
             var displayList = this.$displayList;
-            if ((displayList||this.$renderRegion)&&this.$parentDisplayList) {
-                this.$parentDisplayList.markDirty(displayList||this);
+            if ((displayList || this.$renderRegion) && this.$parentDisplayList) {
+                this.$parentDisplayList.markDirty(displayList || this);
             }
         }
+
         /**
          * 是否需要重绘的标志，此属性在渲染时会被访问，所以单独声明一个直接的变量。
          */
@@ -805,6 +816,7 @@ module lark {
          * 此显示对象自身（不包括子项）在屏幕上的显示尺寸。
          */
         $renderRegion:player.Region = null;
+
         /**
          * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
          */
@@ -818,11 +830,11 @@ module lark {
                 return false;
             }
             var region = this.$renderRegion;
-            if(!region.moved){
+            if (!region.moved) {
                 return false;
             }
             region.moved = false;
-            region.updateRegion(bounds,matrix);
+            region.updateRegion(bounds, matrix);
             return true;
         }
 
@@ -833,9 +845,8 @@ module lark {
 
         }
 
-        $hitTest(stageX:number, stageY:number):DisplayObject {
-            if (!this.$renderRegion||!this.$visible||
-                !this.$hasFlags(player.DisplayObjectFlags.TouchEnabled)) {
+        $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):DisplayObject {
+            if (!this.$renderRegion || !this.$visible || !this.$hasFlags(player.DisplayObjectFlags.TouchEnabled)) {
                 return null;
             }
             var m = this.$getInvertedConcatenatedMatrix().$data;
@@ -843,42 +854,42 @@ module lark {
             var localX = m[0] * stageX + m[2] * stageY + m[4];
             var localY = m[1] * stageX + m[3] * stageY + m[5];
             if (bounds.contains(localX, localY)) {
-                if(!this.$children){//容器已经检查过scrollRect和mask，避免重复对遮罩进行碰撞。
-                    if(this.$scrollRect&&!this.$scrollRect.contains(localX,localY)){
+                if (!this.$children) {//容器已经检查过scrollRect和mask，避免重复对遮罩进行碰撞。
+                    if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
                         return null;
                     }
-                    if(this.$mask&&!this.$mask.$hitTestMask(stageX,stageY)){
+                    if (this.$mask && !this.$mask.$hitTest(stageX, stageY, true)) {
                         return null;
                     }
                 }
-                if(this.$displayObjectFlags & player.DisplayObjectFlags.PixelHitTest){
-                  return this.hitTestPixel(localX,localY);
+                if (shapeFlag || this.$displayObjectFlags & player.DisplayObjectFlags.PixelHitTest) {
+                    return this.hitTestPixel(localX, localY);
                 }
                 return this;
             }
             return null;
         }
 
-        private hitTestPixel(localX:number,localY:number):DisplayObject{
+        private hitTestPixel(localX:number, localY:number):DisplayObject {
             var alpha = this.$getConcatenatedAlpha();
-            if(alpha===0){
+            if (alpha === 0) {
                 return null;
             }
             var context:player.RenderContext;
             var data:Uint8Array;
             var displayList = this.$displayList;
-            if(displayList){
+            if (displayList) {
                 context = displayList.renderContext;
-                data = context.getImageData(localX-displayList.offsetX,localY-displayList.offsetY,1,1).data;
+                data = context.getImageData(localX - displayList.offsetX, localY - displayList.offsetY, 1, 1).data;
             }
-            else{
+            else {
                 context = player.sharedRenderContext;
                 context.surface.width = context.surface.height = 3;
-                context.translate(1-localX,1-localY);
+                context.translate(1 - localX, 1 - localY);
                 this.$render(context);
-                data = context.getImageData(1,1,1,1).data;
+                data = context.getImageData(1, 1, 1, 1).data;
             }
-            if(data[3]===0){
+            if (data[3] === 0) {
                 return null;
             }
             return this;
