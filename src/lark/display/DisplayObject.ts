@@ -151,27 +151,27 @@ module lark {
          */
         public name:string;
 
-        $parent:DisplayObjectContainer = null;
+        $parent:Container = null;
 
         /**
          * 表示包含此显示对象的 DisplayObjectContainer 对象。
          * 使用 parent 属性可以指定高于显示列表层次结构中当前显示对象的显示对象的相对路径。
          */
-        public get parent():DisplayObjectContainer {
+        public get parent():Container {
             return this.$parent;
         }
 
-        $setParent(parent:DisplayObjectContainer):void {
+        $setParent(parent:Container):void {
             this.$parent = parent;
         }
 
         $onAddToStage(stage:Stage):void {
             this.$stage = stage;
-            DisplayObjectContainer.$EVENT_ADD_TO_STAGE_LIST.push(this);
+            Container.$EVENT_ADD_TO_STAGE_LIST.push(this);
         }
 
         $onRemoveFromStage():void {
-            DisplayObjectContainer.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
+            Container.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
         }
 
         $stage:Stage = null;

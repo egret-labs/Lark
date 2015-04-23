@@ -31,7 +31,7 @@ module lark {
     /**
      * 容器基类
      */
-    export class DisplayObjectContainer extends DisplayObject {
+    export class Container extends DisplayObject {
 
         static $EVENT_ADD_TO_STAGE_LIST:DisplayObject[] = [];
         static $EVENT_REMOVE_FROM_STAGE_LIST:DisplayObject[] = [];
@@ -93,7 +93,7 @@ module lark {
                 if (child == this) {
                     $error(1005);
                 }
-                else if (child instanceof DisplayObjectContainer && (<DisplayObjectContainer>child).contains(this)) {
+                else if (child instanceof Container && (<Container>child).contains(this)) {
                     $error(1004);
                 }
             }
@@ -104,7 +104,7 @@ module lark {
                 return child;
             }
 
-            var host:DisplayObjectContainer = child.$parent;
+            var host:Container = child.$parent;
             if (host == this) {
                 this.doSetChildIndex(child, index);
                 return child;
@@ -128,7 +128,7 @@ module lark {
                 child.emitWith(Event.ADDED, true);
             }
             if (stage) {
-                var list = DisplayObjectContainer.$EVENT_ADD_TO_STAGE_LIST;
+                var list = Container.$EVENT_ADD_TO_STAGE_LIST;
                 while (list.length) {
                     var childAddToStage = list.shift();
                     if (notifyListeners && childAddToStage.$stage) {
@@ -242,7 +242,7 @@ module lark {
 
             if (this.$stage) {//在舞台上
                 child.$onRemoveFromStage();
-                var list = DisplayObjectContainer.$EVENT_REMOVE_FROM_STAGE_LIST
+                var list = Container.$EVENT_REMOVE_FROM_STAGE_LIST
                 while (list.length > 0) {
                     var childAddToStage = list.shift();
                     if (notifyListeners) {

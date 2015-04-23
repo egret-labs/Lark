@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark {
-    export class CanvasTest extends DisplayObjectContainer {
+    export class CanvasTest extends Container {
 
         public constructor() {
             super();

@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark {
-    export class Main extends DisplayObjectContainer {
+    export class Main extends Container {
 
         public constructor() {
             super();
@@ -37,7 +37,6 @@ module lark {
             img.onload = ()=> {
                 this.start(img);
             }
-
         }
 
         private targetIcon:DisplayObject;
@@ -73,7 +72,7 @@ module lark {
             //this.addChild(bitmap);
 
 
-            var container = new DisplayObjectContainer();
+            var container = new Container();
             var x = 0, y = 0;
             for (var i = 0; i < 8000; i++) {
                 var bitmap = new Bitmap();
@@ -130,7 +129,7 @@ module lark {
             //container.mask = this.targetIcon;
         }
 
-        private container:DisplayObjectContainer;
+        private container:Container;
         private timer = new Timer(16);
         private touchTarget:DisplayObject;
         private offsetX:number = 0;
