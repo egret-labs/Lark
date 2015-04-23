@@ -73,7 +73,7 @@ module lark {
      * 您可以对一个显示对象执行不同的图形转换，方法是设置 Matrix 对象的属性，将该 Matrix
      * 对象应用于显示对象的 matrix 属性。这些转换函数包括平移（x 和 y 重新定位）、旋转、缩放和倾斜。
      */
-    export class Matrix extends HashObject {
+    export class Matrix extends LarkObject {
 
         /**
          * 只允许在局部变量中使用，使用完要立即释放，并要防止嵌套调用导致对象在其他位置被修改的可能性。

@@ -58,7 +58,7 @@ module lark {
      * 然后从这一点开始其在显示列表中的回程。在概念上，到事件目标的此往返行程被划分为三个阶段：
      * 捕获阶段包括从根到事件目标节点之前的最后一个节点的行程，目标阶段仅包括事件目标节点，冒泡阶段包括回程上遇到的任何后续节点到显示列表的根。
      */
-    export class EventEmitter extends HashObject implements IEventEmitter {
+    export class EventEmitter extends LarkObject implements IEventEmitter {
 
         /**
          * EventEmitter 类是可调度事件的所有类的基类。

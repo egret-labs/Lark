@@ -36,7 +36,7 @@ module lark {
      * 但是，right 和 bottom 属性与这四个属性是整体相关的。例如，如果更改 right 属性的值，则 width
      * 属性的值将发生变化；如果更改 bottom 属性，则 height 属性的值将发生变化。
      */
-    export class Rectangle extends HashObject {
+    export class Rectangle extends LarkObject {
 
         /**
          * 只允许在局部变量中使用，使用完要立即释放，并要防止嵌套调用导致对象在其他位置被修改的可能性。

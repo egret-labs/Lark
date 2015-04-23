@@ -45,7 +45,7 @@ module lark {
 
         private start(bitmapData:BitmapData):void {
 
-            //var container = new DisplayObjectContainer();
+            //var container = new Container();
             //container.name = "container";
             //container.x = 150;
             //container.addChild(new Bitmap(bitmapData));
@@ -56,7 +56,7 @@ module lark {
             //container.touchEnabled = false;
             //container.scaleX = container.scaleY = 0.5;
             //
-            //var container2 = new DisplayObjectContainer();
+            //var container2 = new Container();
             //container2.name  = "container2";
             //container2.addChild(container);
             //bitmap = new Bitmap(bitmapData);
@@ -193,6 +193,7 @@ module lark {
                 bitmap.rotation += 2;
             }
         }
+
     }
 
 }

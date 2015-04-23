@@ -2,7 +2,7 @@
 
 module lark.text {
     
-    export class TextBlock extends HashObject {
+    export class TextBlock extends LarkObject {
         constructor(content:ContentElement = null) {
             super();
             this._content = content;

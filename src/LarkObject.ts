@@ -35,9 +35,9 @@ module lark {
     var hashCount:number = 1;
 
     /**
-     * 哈希对象。引擎内所有对象的基类，为对象实例提供唯一的hashCode值,提高对象比较的性能。
+     * Lark顶级对象。引擎内所有对象的基类，为对象实例提供唯一的hashCode值，以及isType()快速类型判断方法。
      */
-    export class HashObject implements IHashObject {
+    export class LarkObject {
 
         /**
          * 创建一个 lark.HashObject 对象
@@ -52,6 +52,17 @@ module lark {
          */
         public get hashCode():number {
             return this.$hashCode;
+        }
+
+        $typeFlags:number = 0;
+
+        /**
+         * 检查当前对象是否为Lark引擎内指定接口或类或其子类的实例。此方法与使用instanceOf关键字相比具有更高的性能，并且能判断接口的实现。
+         * @param typeFlag 类或接口的枚举值，请参考lark.Types定义的枚举常量。
+         * @returns 返回true表示当前对象是指定类或接口的实例。
+         */
+        public isType(typeFlag:Types):boolean{
+            return (this.$typeFlags & typeFlag) === typeFlag;
         }
     }
 }

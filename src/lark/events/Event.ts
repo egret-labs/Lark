@@ -41,26 +41,26 @@ module lark {
      * 某些事件有关联的默认行为，通过调用 preventDefault() 方法，您的事件侦听器可以取消此行为。
      * 可以通过调用 stopPropagation() 或 stopImmediatePropagation() 方法，将当前事件侦听器作为处理事件的最后一个事件侦听器。
      */
-    export class Event extends HashObject {
+    export class Event extends LarkObject {
 
         /**
          * 在将显示对象直接添加到舞台显示列表或将包含显示对象的子树添加至舞台显示列表中时调度。
-         * 以下方法会触发此事件：DisplayObjectContainer.addChild()、DisplayObjectContainer.addChildAt()。
+         * 以下方法会触发此事件：Container.addChild()、Container.addChildAt()。
          */
         public static ADDED_TO_STAGE:string = "addedToStage";
         /**
-         * 在从显示列表中直接删除显示对象或删除包含显示对象的子树时调度。DisplayObjectContainer 类的以下两个方法会生成此事件：removeChild() 和 removeChildAt()。
-         * 如果必须删除某个对象来为新对象提供空间，则 DisplayObjectContainer 对象的下列方法也会生成此事件：addChild()、addChildAt() 和 setChildIndex()。
+         * 在从显示列表中直接删除显示对象或删除包含显示对象的子树时调度。Container 类的以下两个方法会生成此事件：removeChild() 和 removeChildAt()。
+         * 如果必须删除某个对象来为新对象提供空间，则 Container 对象的下列方法也会生成此事件：addChild()、addChildAt() 和 setChildIndex()。
          */
         public static REMOVED_FROM_STAGE:string = "removedFromStage";
         /**
          * 将显示对象添加到显示列表中时调度。以下方法会触发此事件：
-         * DisplayObjectContainer.addChild()、DisplayObjectContainer.addChildAt()。
+         * Container.addChild()、Container.addChildAt()。
          */
         public static ADDED:string = "added";
         /**
-         * 将要从显示列表中删除显示对象时调度。DisplayObjectContainer 类的以下两个方法会生成此事件：removeChild() 和 removeChildAt()。
-         * 如果必须删除某个对象来为新对象提供空间，则 DisplayObjectContainer 对象的下列方法也会生成此事件：addChild()、addChildAt() 和 setChildIndex()。
+         * 将要从显示列表中删除显示对象时调度。Container 类的以下两个方法会生成此事件：removeChild() 和 removeChildAt()。
+         * 如果必须删除某个对象来为新对象提供空间，则 Container 对象的下列方法也会生成此事件：addChild()、addChildAt() 和 setChildIndex()。
          */
         public static REMOVED:string = "removed";
         /**

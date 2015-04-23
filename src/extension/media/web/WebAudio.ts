@@ -112,7 +112,7 @@ module lark.web {
         }
     }
 
-    class BufferLoader extends HashObject{
+    class BufferLoader extends LarkObject{
         constructor(context: AudioContext,files:string[],callback:(buffers:AudioBuffer[])=>void,onerror?:Function) {
             super();
             this.context = context;
