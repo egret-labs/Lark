@@ -40,6 +40,7 @@ module lark {
          */
         public constructor() {
             super();
+            this.$typeFlags = Types.Shape;
             this.$graphics = new Graphics();
             this.$graphics.$targetDisplay = this;
             this.$renderRegion = new player.Region();

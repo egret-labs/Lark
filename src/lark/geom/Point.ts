@@ -46,6 +46,7 @@ module lark {
          */
         public constructor(x:number = 0, y:number = 0) {
             super();
+            this.$typeFlags = Types.Point;
             this.x = x;
             this.y = y;
         }

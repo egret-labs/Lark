@@ -60,6 +60,7 @@ module lark {
          */
         public constructor() {
             super();
+            this.$typeFlags = Types.DisplayObject;
             this.$displayObjectFlags = player.DisplayObjectFlags.InitFlags;
             this._values = new Float64Array([1, 1, 0, 0, 0, 0, 0]);
         }

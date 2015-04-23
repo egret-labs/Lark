@@ -174,7 +174,7 @@ module lark.player {
             if (rootClass) {
                 var rootContainer:any = new rootClass();
                 this.root = rootContainer;
-                if (rootContainer instanceof lark.DisplayObject) {
+                if (rootContainer.isType(Types.DisplayObject)) {
                     this.stage.addChild(rootContainer);
                 }
                 else {

@@ -43,6 +43,7 @@ module lark {
          */
         public constructor(bitmapData?:BitmapData) {
             super();
+            this.$typeFlags = Types.Bitmap;
             this.$renderRegion = new player.Region();
             this.bitmapData = bitmapData;
         }

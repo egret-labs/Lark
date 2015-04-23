@@ -71,7 +71,7 @@ module lark {
             //bitmap = new lark.Bitmap(t);
             //this.addChild(bitmap);
 
-
+            log(this.isType(lark.Types.DisplayObject));
             var container = new Container();
             var x = 0, y = 0;
             for (var i = 0; i < 8000; i++) {

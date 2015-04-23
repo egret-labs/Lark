@@ -74,7 +74,6 @@ module lark {
             this.addChild(bitmap);
             bitmap.y = 50+this.canvasCount * 5;
             this.canvasCount++;
-            this.log("");
         }
 
 
