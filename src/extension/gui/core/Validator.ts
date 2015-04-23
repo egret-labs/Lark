@@ -211,9 +211,8 @@ module lark.player {
 		}
 		/**
 		 * 使大于等于指定组件层级的元素立即应用属性 
-		 * @method egret.gui.LayoutManager#validateClient
-		 * @param target {UIComponent} 要立即应用属性的组件
-		 * @param skipDisplayList {boolean} 是否跳过更新显示列表阶段
+		 * @param target 要立即应用属性的组件
+		 * @param skipDisplayList 是否跳过更新显示列表阶段
 		 */			
 		public validateClient(target:UIComponent, skipDisplayList:boolean = false):void{
 			
@@ -329,14 +328,9 @@ module lark.player {
 
 
 	/**
-	 * @class egret.gui.DepthQueue
-	 * @classdesc
 	 * 显示列表嵌套深度排序队列
 	 */
 	class DepthQueue{
-		/**
-		 * @method egret.gui.DepthQueue#constructor
-		 */
 		public constructor(){
 		}
 
@@ -356,8 +350,6 @@ module lark.player {
 		private maxDepth:number = -1;
 		/**
 		 * 插入一个元素
-		 * @method egret.gui.DepthQueue#insert
-		 * @param client {UIComponent}
 		 */
 		public insert(client:UIComponent):void{
 			var depth:number = client.nestLevel;
@@ -389,8 +381,6 @@ module lark.player {
 		}
 		/**
 		 * 从队列尾弹出深度最大的一个对象
-		 * @method egret.gui.DepthQueue#pop
-		 * @returns {UIComponent}
 		 */
 		public pop():UIComponent{
 			var client:UIComponent = null;
@@ -423,8 +413,6 @@ module lark.player {
 		}
 		/**
 		 * 从队列首弹出深度最小的一个对象
-		 * @method egret.gui.DepthQueue#shift
-		 * @returns {UIComponent}
 		 */
 		public shift():UIComponent{
 			var client:UIComponent = null;
@@ -458,9 +446,6 @@ module lark.player {
 
 		/**
 		 * 移除大于等于指定组件层级的元素中最大的元素
-		 * @method egret.gui.DepthQueue#removeLargestChild
-		 * @param client {UIComponent}
-		 * @returns {any}
 		 */
 		public removeLargestChild(client:UIComponent ):any{
 			var max:number = this.maxDepth;
@@ -503,9 +488,6 @@ module lark.player {
 
 		/**
 		 * 移除大于等于指定组件层级的元素中最小的元素
-		 * @method egret.gui.DepthQueue#removeSmallestChild
-		 * @param client {UIComponent}
-		 * @returns {any}
 		 */
 		public removeSmallestChild(client:UIComponent ):any{
 			var min:number = client.nestLevel;
@@ -547,10 +529,6 @@ module lark.player {
 
 		/**
 		 * 移除一个元素
-		 * @method egret.gui.DepthQueue#remove
-		 * @param client {UIComponent}
-		 * @param level {number}
-		 * @returns {UIComponent}
 		 */
 		public remove(client:UIComponent,level:number=-1):UIComponent{
 			var depth:number = (level >= 0) ? level : client.nestLevel;
@@ -566,7 +544,6 @@ module lark.player {
 
 		/**
 		 * 清空队列
-		 * @method egret.gui.DepthQueue#removeAll
 		 */
 		public removeAll():void{
 			this.depthBins.length = 0;
@@ -575,8 +552,6 @@ module lark.player {
 		}
 		/**
 		 * 队列是否为空
-		 * @method egret.gui.DepthQueue#isEmpty
-		 * @returns {boolean}
 		 */
 		public isEmpty():boolean{
 			return this.minDepth > this.maxDepth;

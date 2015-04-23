@@ -45,108 +45,6 @@ module lark.gui {
             this.checkInvalidateFlag();
         }
 
-        $onRemoveFromStage():void {
-            super.$onRemoveFromStage();
-        }
-        /**
-         * 添加到舞台
-         */
-        private onAddedToStage(e:Event):void {
-            this.removeListener(Event.ADDED_TO_STAGE, this.onAddedToStage, this);
-            this._initialize();
-            if (this._nestLevel > 0)
-                this.checkInvalidateFlag();
-        }
-
-        private _id:string = null;
-        /**
-         * 组件 ID。此值将作为对象的实例名称，因此不应包含任何空格或特殊字符。应用程序中的每个组件都应具有唯一的 ID。
-         * @constant egret.gui.UIComponent#id
-         */
-        public get id():string {
-            return this._id;
-        }
-
-        public set id(value:string) {
-            this._id = value;
-        }
-
-        private _isPopUp:boolean = false;
-        /**
-         * @member egret.gui.UIComponent#isPopUp
-         */
-        public get isPopUp():boolean {
-            return this._isPopUp;
-        }
-
-        public set isPopUp(value:boolean) {
-            this._isPopUp = value;
-        }
-
-        private _owner:any = null;
-        /**
-         * @member egret.gui.UIComponent#owner
-         */
-        public get owner():any {
-            return this._owner ? this._owner : this.parent;
-        }
-
-        /**
-         * @method egret.gui.UIComponent#ownerChanged
-         * @param value {any}
-         */
-        public ownerChanged(value:any):void {
-            this._owner = value;
-        }
-
-
-        private _updateCompletePendingFlag:boolean = false;
-        /**
-         * @member egret.gui.UIComponent#updateCompletePendingFlag
-         */
-        public get updateCompletePendingFlag():boolean {
-            return this._updateCompletePendingFlag;
-        }
-
-        public set updateCompletePendingFlag(value:boolean) {
-            this._updateCompletePendingFlag = value;
-        }
-
-        private _initialized:boolean = false;
-
-        /**
-         * @member egret.gui.UIComponent#initialized
-         */
-        public get initialized():boolean {
-            return this._initialized;
-        }
-
-        public set initialized(value:boolean) {
-            if (this._initialized == value)
-                return;
-            this._initialized = value;
-            if (value) {
-                this.childrenCreated()
-                UIEvent.dispatchUIEvent(this, UIEvent.CREATION_COMPLETE);
-            }
-        }
-
-        /**
-         * _initialize()方法被调用过的标志。
-         */
-        private initializeCalled:boolean = false;
-
-        /**
-         * 初始化组件
-         * @method egret.gui.UIComponent#_initialize
-         */
-        public initialize():void {
-
-            this.invalidateProperties();
-            this.invalidateSize();
-            this.invalidateDisplayList();
-        }
-
         /**
          * 创建子项,子类覆盖此方法以完成组件子项的初始化操作，
          * 请务必调用super.createChildren()以完成父类组件的初始化
@@ -155,15 +53,6 @@ module lark.gui {
         public createChildren():void {
 
         }
-
-        /**
-         * 子项创建完成
-         * @method egret.gui.UIComponent#childrenCreated
-         */
-        public childrenCreated():void {
-
-        }
-
 
         private _nestLevel:number = 0;
         /**
@@ -177,11 +66,6 @@ module lark.gui {
             if (this._nestLevel == value)
                 return;
             this._nestLevel = value;
-
-            if (this._nestLevel == 0)
-                this.on(Event.ADDED_TO_STAGE, this.checkInvalidateFlag, this);
-            else
-                this.removeListener(Event.ADDED_TO_STAGE, this.checkInvalidateFlag, this);
             this._updateChildrenNestLevel();
         }
 
@@ -190,326 +74,10 @@ module lark.gui {
          */
         public _updateChildrenNestLevel():void {
             for (var i:number = this.numChildren - 1; i >= 0; i--) {
-                var child:ILayoutManagerClient = <ILayoutManagerClient><any> (this.getChildAt(i));
+                var child:UIComponent = <UIComponent><any> (this.getChildAt(i));
                 if (child && "nestLevel" in child) {
                     child.nestLevel = this._nestLevel + 1;
                 }
-            }
-        }
-
-        /**
-         * 是否已经创建了自身的样式原型链
-         */
-        public _hasOwnStyleChain:boolean = false;
-        /**
-         * 样式原型链引用
-         */
-        public _styleProtoChain:any = null;
-
-        /**
-         * 获取指定的名称的样式属性值
-         */
-        public getStyle(styleProp:string):any {
-            var chain:any = this._styleProtoChain;
-            if (!chain) {
-                return undefined;
-            }
-            return chain[styleProp];
-        }
-
-        /**
-         * 对此组件实例设置样式属性。在此组件上设置的样式会覆盖父级容器的同名样式。推荐在子项较少的组件上使用，尽量避免在全局调用此方法，有可能造成性能问题。
-         */
-        public setStyle(styleProp:string, newValue:any):void {
-            var chain:any = this._styleProtoChain;
-            if (!this._hasOwnStyleChain) {
-                chain = this._createOwnStyleProtoChain(chain);
-            }
-            chain[styleProp] = newValue;
-            this.styleChanged(styleProp);
-            this.notifyStyleChangeInChildren(styleProp);
-        }
-
-        public styleChanged(styleProp:string):void {
-
-        }
-
-        /**
-         * 一个性能优化的标志变量。某些子类可以设置为true显式表明自己不含有可设置样式的子项。
-         */
-        public _hasNoStyleChild:boolean = false;
-
-        /**
-         * 通知子项列表样式发生改变
-         */
-        public notifyStyleChangeInChildren(styleProp:string):void {
-            if (this._hasNoStyleChild) {
-                return;
-            }
-            for (var i:number = this.numChildren - 1; i >= 0; i--) {
-                var child:IStyleClient = <IStyleClient><any> (this.getChildAt(i));
-                if (!child) {
-                    continue;
-                }
-                if ("styleChanged" in child) {
-                    child.styleChanged(styleProp);
-                    child.notifyStyleChangeInChildren(styleProp);
-                }
-            }
-        }
-
-        public _createOwnStyleProtoChain(chain:any):any {
-            this._hasOwnStyleChain = true;
-            if (UIComponent.prototypeCanSet) {
-                this._styleProtoChain = {};
-                this._styleProtoChain.__proto__ = chain ? chain : UIComponent.emptyStyleChain;
-            }
-            else {
-                this._styleProtoChain = this.createProtoChain(chain);
-            }
-            chain = this._styleProtoChain;
-            if (!this._hasNoStyleChild) {
-                for (var i:number = this.numChildren - 1; i >= 0; i--) {
-                    var child:IStyleClient = <IStyleClient><any> (this.getChildAt(i));
-                    if (child && "regenerateStyleCache" in child) {
-                        child["regenerateStyleCache"](chain);
-                    }
-                }
-            }
-            return chain;
-        }
-
-        /**
-         * 创建一个原型链节点
-         */
-        private createProtoChain(parentChain:any):any {
-            function factory():void {
-            };
-            factory.prototype = parentChain;
-            var childChain:Object = new factory();
-            factory.prototype = null;
-            return childChain
-        }
-
-        /**
-         * 清除在此组件实例上设置过的指定样式名。
-         */
-        public clearStyle(styleProp:string):void {
-            if (!this._hasOwnStyleChain) {
-                return;
-            }
-            var chain:any = this._styleProtoChain;
-            delete chain[styleProp];
-            this.styleChanged(styleProp);
-            this.notifyStyleChangeInChildren(styleProp);
-        }
-
-        private static emptyStyleChain:any = {};
-
-        /**
-         * 重新生成自身以及所有子项的原型链
-         */
-        public regenerateStyleCache(parentChain:any):void {
-            if (!UIComponent.prototypeCanSet) {
-                this.regenerateStyleCacheForIE(parentChain);
-                return;
-            }
-            if (this._hasOwnStyleChain) {
-                this._styleProtoChain.__proto__ = parentChain ? parentChain : UIComponent.emptyStyleChain;
-            }
-            else if (this._styleProtoChain != parentChain) {
-                this._styleProtoChain = parentChain;
-                for (var i:number = this.numChildren - 1; i >= 0; i--) {
-                    var child:IStyleClient = <IStyleClient><any> (this.getChildAt(i));
-                    if (child && "regenerateStyleCache" in child) {
-                        child.regenerateStyleCache(parentChain);
-                    }
-                }
-            }
-        }
-
-        /**
-         * 兼容IE9，10的写法。
-         */
-        public regenerateStyleCacheForIE(parentChain:any):void {
-            if (this._hasOwnStyleChain) {
-                var chain:any = this._styleProtoChain;
-                var childChain:any = this.createProtoChain(parentChain);
-                for (var key in chain) {
-                    if (chain.hasOwnProperty(key)) {
-                        childChain[key] = chain[key];
-                    }
-                }
-                this._styleProtoChain = childChain;
-                parentChain = childChain;
-            }
-            else {
-                this._styleProtoChain = parentChain;
-            }
-            if (!this._hasNoStyleChild) {
-                for (var i:number = this.numChildren - 1; i >= 0; i--) {
-                    var child:IStyleClient = <IStyleClient><any> this.getChildAt(i);
-                    if (child && "regenerateStyleCacheForIE" in child) {
-                        child["regenerateStyleCacheForIE"](parentChain);
-                    }
-                }
-            }
-        }
-
-
-        /**
-         * 添加对象到显示列表,此接口仅预留给框架内部使用
-         * 如果需要管理子项，若有，请使用容器的addElement()方法，非法使用有可能造成无法自动布局。
-         */
-        public _addToDisplayList(child:DisplayObject, notifyListeners:boolean = true):DisplayObject {
-            var index:number = this.numChildren;
-
-            if (child.parent == this)
-                index--;
-            this._addingChild(child);
-            this._doAddChild(child, index, notifyListeners);
-            this._childAdded(child);
-            return child;
-        }
-
-        /**
-         * 添加对象到显示列表,此接口仅预留给框架内部使用
-         * 如果需要管理子项，若有，请使用容器的addElementAt()方法，非法使用有可能造成无法自动布局。
-         */
-        public _addToDisplayListAt(child:DisplayObject, index:number, notifyListeners:boolean = true):DisplayObject {
-            this._addingChild(child);
-            this._doAddChild(child, index, notifyListeners);
-            this._childAdded(child);
-            return child;
-        }
-
-        /**
-         * 添加对象到显示列表,此接口仅预留给框架内部使用
-         * 如果需要管理子项，若有，请使用容器的removeElement()方法,非法使用有可能造成无法自动布局。
-         */
-        public _removeFromDisplayList(child:DisplayObject, notifyListeners:boolean = true):DisplayObject {
-            var index = this._children.indexOf(child);
-            if (index >= 0) {
-                this._doRemoveChild(index, notifyListeners);
-                this._childRemoved(child);
-                return child;
-            }
-            else {
-                egret.Logger.fatalWithErrorId(1008);
-                return null;
-            }
-        }
-
-        /**
-         * 从显示列表移除指定索引的子项,此接口仅预留给框架内部使用
-         * 如果需要管理子项，若有，请使用容器的removeElementAt()方法,非法使用有可能造成无法自动布局。
-         */
-        public _removeFromDisplayListAt(index:number, notifyListeners:boolean = true):DisplayObject {
-            if (index >= 0 && index < this._children.length) {
-                var child:DisplayObject = this._doRemoveChild(index, notifyListeners);
-                this._childRemoved(child);
-                return child;
-            }
-            else {
-                egret.Logger.fatalWithErrorId(1007);
-                return null;
-            }
-        }
-
-        /**
-         * GUI范围内，请不要调用任何addChild方法，若是容器，请用addElement,若需要包装普通显示对象，请把显示对象赋值给UIAsset.source。
-         * @deprecated
-         * @method egret.gui.UIComponent#addChild
-         * @param child {DisplayObject}
-         * @returns {DisplayObject}
-         */
-        public addChild(child:DisplayObject):DisplayObject {
-            this._addingChild(child);
-            super.addChild(child);
-            this._childAdded(child);
-            return child;
-        }
-
-        /**
-         * GUI范围内，请不要调用任何addChildAt方法，若是容器，请用addElementAt,若需要包装普通显示对象，请把显示对象赋值给UIAsset.source。
-         * @deprecated
-         * @method egret.gui.UIComponent#addChildAt
-         * @param child {DisplayObject}
-         * @param index {number}
-         * @returns {DisplayObject}
-         */
-        public addChildAt(child:DisplayObject, index:number):DisplayObject {
-            this._addingChild(child);
-            super.addChildAt(child, index);
-            this._childAdded(child);
-            return child;
-        }
-
-        /**
-         * 即将添加一个子项
-         */
-        public _addingChild(child:DisplayObject):void {
-            if (!child) {
-                return;
-            }
-            if ("nestLevel" in child) {
-                (<ILayoutManagerClient><any>child).nestLevel = this._nestLevel + 1;
-            }
-            if ("styleChanged" in child) {
-                var chain:any = this._styleProtoChain;
-                if (chain || child["_styleProtoChain"]) {
-                    child["regenerateStyleCache"](chain);
-                    child["styleChanged"](null);
-                    child["notifyStyleChangeInChildren"](null);
-                }
-            }
-        }
-
-        /**
-         * 已经添加一个子项
-         */
-        public _childAdded(child:DisplayObject):void {
-            if (child instanceof UIComponent) {
-                (<UIComponent><any> child)._initialize();
-                (<UIComponent><any> child).checkInvalidateFlag();
-            }
-        }
-
-        /**
-         * GUI范围内，请不要调用任何removeChild方法，若是容器，请用removeElement
-         * @deprecated
-         * @method egret.gui.UIComponent#removeChild
-         * @param child {DisplayObject}
-         * @returns {DisplayObject}
-         */
-        public removeChild(child:DisplayObject):DisplayObject {
-            super.removeChild(child);
-            this._childRemoved(child);
-            return child;
-        }
-
-        /**
-         * GUI范围内，请不要调用任何removeChildAt方法，若是容器，请用removeElementAt
-         * @deprecated
-         * @method egret.gui.UIComponent#removeChildAt
-         * @param index {number}
-         * @returns {DisplayObject}
-         */
-        public removeChildAt(index:number):DisplayObject {
-            var child:DisplayObject = super.removeChildAt(index);
-            this._childRemoved(child);
-            return child;
-        }
-
-        /**
-         * 已经移除一个子项
-         */
-        public _childRemoved(child:DisplayObject):void {
-            if (!child) {
-                return;
-            }
-            if ("nestLevel" in child) {
-                (<ILayoutManagerClient> <any>child).nestLevel = 0;
             }
         }
 
@@ -828,7 +396,7 @@ module lark.gui {
             if (!this.$invalidatePropertiesFlag) {
                 this.$invalidatePropertiesFlag = true;
                 if (this.$stage)
-                    UIGlobals._layoutManager.invalidateProperties(this);
+                    player.validator.invalidateProperties(this);
             }
         }
 
@@ -855,23 +423,12 @@ module lark.gui {
             if (!this.$invalidateSizeFlag) {
                 this.$invalidateSizeFlag = true;
 
-                if (this.parent && UIGlobals._layoutManager)
-                    UIGlobals._layoutManager.invalidateSize(this);
+                if (this.$stage)
+                    player.validator.invalidateSize(this);
             }
         }
 
-        /**
-         * @method egret.gui.UIComponent#validateSize
-         * @param recursive {boolean}
-         */
-        public validateSize(recursive:boolean = false):void {
-            if (recursive) {
-                for (var i:number = 0; i < this.numChildren; i++) {
-                    var child:DisplayObject = this.getChildAt(i);
-                    if ("validateSize" in child)
-                        (<ILayoutManagerClient> <any>child ).validateSize(true);
-                }
-            }
+        public validateSize():void {
             if (this.$invalidateSizeFlag) {
                 var changed:boolean = this.measureSizes();
                 if (changed) {
