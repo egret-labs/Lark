@@ -41,7 +41,6 @@ module lark {
          */
         public constructor() {
             super();
-            this.$typeFlags = Types.Stage;
             this.$stage = this
         }
 
@@ -229,5 +228,5 @@ module lark {
             configurable: true
         });
     }
-
+    player.registerType(Stage,[Types.Stage]);
 }

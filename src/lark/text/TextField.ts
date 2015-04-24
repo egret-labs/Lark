@@ -40,7 +40,6 @@ module lark {
          */
         public constructor(text:string,style?:ITextStyle) {
             super();
-            this.$typeFlags = Types.TextField;
             this._text = text;
             this._style = TextField.$normalizeStyle(style, BaseStyle);
             this.$renderRegion = new player.Region();
@@ -237,6 +236,8 @@ module lark {
             return style;
         }
     }
+
+    player.registerType(TextField,[Types.TextField]);
 
     var BaseStyle: ITextStyle = {
         fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',

@@ -127,6 +127,11 @@ module lark {
             //container.addChild(shape);
             //shape.cacheAsBitmap = true;
             //container.mask = this.targetIcon;
+            log(this.container.isType(Types.Container));
+            log(this.container.isType(Types.DisplayObject));
+            log(this.container.isType(Types.Bitmap));
+            log(this.isType(Types.Bitmap));
+            log(this.isType(Types.Container));
         }
 
         private container:Container;

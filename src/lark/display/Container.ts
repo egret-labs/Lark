@@ -44,7 +44,6 @@ module lark {
          */
         public constructor() {
             super();
-            this.$typeFlags = Types.Container;
             this.$children = [];
         }
 
@@ -530,4 +529,5 @@ module lark {
         }
 
     }
+    player.registerType(Container,[Types.Container]);
 }

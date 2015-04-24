@@ -101,7 +101,6 @@ module lark {
 
         public constructor() {
             super();
-            this.$typeFlags = Types.Graphics;
             this.reset();
         }
 
@@ -448,6 +447,8 @@ module lark {
             context.restore();
         }
     }
+
+    player.registerType(Graphics,[Types.Graphics]);
 
     function mapGraphicsFunction(context:player.RenderContext):any {
         var map = context["graphicsMap"] = {};

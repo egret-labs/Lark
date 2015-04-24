@@ -91,7 +91,6 @@ module lark {
          */
         public constructor(type:string, bubbles?:boolean, cancelable?:boolean) {
             super();
-            this.$typeFlags = Types.Event;
             this.$type = type;
             this.$bubbles = !!bubbles;
             this._cancelable = !!cancelable;
@@ -262,4 +261,6 @@ module lark {
         }
 
     }
+
+    player.registerType(Event,[Types.Event]);
 }

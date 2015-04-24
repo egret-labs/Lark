@@ -53,7 +53,6 @@ module lark {
          */
         public constructor(type:string, bubbles?:boolean, cancelable?:boolean) {
             super(type, bubbles, cancelable);
-            this.$typeFlags = Types.TimerEvent;
         }
 
         /**
@@ -75,4 +74,6 @@ module lark {
             return result;
         }
     }
+
+    player.registerType(TimerEvent,[Types.TimerEvent]);
 }
