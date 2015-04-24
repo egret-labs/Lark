@@ -65,7 +65,9 @@ module lark {
          * 可确定哪个对象绘制在前，哪个对象绘制在后等。
          */
         DisplayObjectContainer,
-
+        /**
+         * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
+         */
         Sprite,
         /**
          * Bitmap 类表示用于表示位图图像的显示对象。这些图像可以是使用 Bitmap() 构造函数创建的图像。
