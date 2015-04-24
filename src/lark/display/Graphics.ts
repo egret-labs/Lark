@@ -448,7 +448,7 @@ module lark {
         }
     }
 
-    player.registerType(Graphics,[Types.Graphics]);
+    registerType(Graphics,[Types.Graphics]);
 
     function mapGraphicsFunction(context:player.RenderContext):any {
         var map = context["graphicsMap"] = {};

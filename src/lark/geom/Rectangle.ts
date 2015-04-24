@@ -208,5 +208,5 @@ module lark {
             return v * this.width + u * this.height;
         }
     }
-    player.registerType(Rectangle,[Types.Rectangle]);
+    registerType(Rectangle,[Types.Rectangle]);
 }

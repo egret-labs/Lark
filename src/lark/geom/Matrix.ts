@@ -518,5 +518,5 @@ module lark {
         }
 
     }
-    player.registerType(Matrix,[Types.Matrix]);
+    registerType(Matrix,[Types.Matrix]);
 }

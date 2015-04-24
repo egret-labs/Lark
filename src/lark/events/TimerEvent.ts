@@ -75,5 +75,5 @@ module lark {
         }
     }
 
-    player.registerType(TimerEvent,[Types.TimerEvent]);
+    registerType(TimerEvent,[Types.TimerEvent]);
 }

@@ -76,5 +76,5 @@ module lark {
         }
     }
 
-    player.registerType(Bitmap,[Types.Bitmap]);
+    registerType(Bitmap,[Types.Bitmap]);
 }

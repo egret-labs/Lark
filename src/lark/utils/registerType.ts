@@ -27,40 +27,32 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-
 module lark {
-
     /**
-     * 此类用于使用 Lark 绘图应用程序编程接口 (API) 创建简单形状。Shape 类包括 graphics 属性，该属性使您可以从 Graphics 类访问方法。
+     * 为一个类定义注册运行时类信息,用此方法往类定义上注册它自身以及所有接口对应的枚举值。
+     * 在运行时，这个类的实例将可以使用isType()方法传入一个枚举值来判断实例类型。
+     * 例如：
+     * //为lark.EventEmitter类注册运行时类信息，由于它实现了IEventEmitter接口，这里应同时传入两个枚举值。
+     * lark.registerType(lark.EventEmitter,[lark.Types.EventEmitter,lark.Types.IEventEmitter]);
+     * var emitter = new lark.EventEmitter();
+     * lark.log(emitter.isType(lark.Types.IEventEmitter));  //输出true。
+     * lark.log(emitter.isType(lark.Types.EventEmitter));   //输出true。
+     * lark.log(emitter.isType(lark.Types.Bitmap));   //输出false。
+     *
+     * @param clazz 继承自LarkObject的类定义，注意：接口在运行时不存在，因此不能传入接口定义。
+     * @param typeFlags 要注册的枚举值列表。注意：传入的自定义枚举数值范围要避免与Lark引擎(1~2000的数值)或其他第三方库的数值范围重合,
+     * 否则有可能会导致运行时isType()方法类型判断错误。
      */
-    export class Shape extends DisplayObject {
-
-        /**
-         * 创建一个 Shape 对象
-         */
-        public constructor() {
-            super();
-            this.$graphics = new Graphics();
-            this.$graphics.$targetDisplay = this;
-            this.$renderRegion = new player.Region();
-            this.pixelHitTest = true;
+    export function registerType(clazz:any,typeFlags:number[]):void{
+        if (DEBUG) {
+            if(!clazz){
+                $error(1003, "clazz");
+            }
+            if(!typeFlags){
+                $error(1003, "typeFlags");
+            }
         }
-
-        $graphics:Graphics;
-        /**
-         * 获取 Shape 中的 Graphics 对象。
-         */
-        public get graphics():Graphics {
-            return this.$graphics;
-        }
-
-        $measureContentBounds(bounds:Rectangle):void {
-            this.$graphics.$measureContentBounds(bounds);
-        }
-
-        $render(context:player.RenderContext):void{
-            this.$graphics.$render(context);
-        }
+        var prototype: any = clazz.prototype;
+        prototype.__meta__ = typeFlags.concat(prototype.__meta__);
     }
-    registerType(Shape,[Types.Shape]);
 }

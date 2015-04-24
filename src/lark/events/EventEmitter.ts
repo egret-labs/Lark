@@ -253,7 +253,7 @@ module lark {
             }
         }
     }
-    player.registerType(EventEmitter,[Types.EventEmitter,Types.IEventEmitter]);
+    registerType(EventEmitter,[Types.EventEmitter,Types.IEventEmitter]);
 }
 
 module lark.player {

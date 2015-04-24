@@ -526,5 +526,5 @@ module lark {
         }
 
     }
-    player.registerType(Sprite,[Types.Sprite,Types.DisplayObjectContainer]);
+    registerType(Sprite,[Types.Sprite,Types.DisplayObjectContainer]);
 }

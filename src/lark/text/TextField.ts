@@ -237,7 +237,7 @@ module lark {
         }
     }
 
-    player.registerType(TextField,[Types.TextField]);
+    registerType(TextField,[Types.TextField]);
 
     var BaseStyle: ITextStyle = {
         fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
