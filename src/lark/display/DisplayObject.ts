@@ -273,10 +273,14 @@ module lark {
         }
 
         public set x(value:number) {
+            this.$setX(value);
+        }
+
+        $setX(value:number):boolean{
             value = +value || 0;
             var values = this._values;
             if (value === values[Values.x]) {
-                return;
+                return false;
             }
             values[Values.x] = value;
             if (this.$scrollRect) {
@@ -284,6 +288,7 @@ module lark {
             }
             this._matrix.$data[4] = value;
             this.invalidatePosition();
+            return true;
         }
 
         /**
@@ -296,10 +301,14 @@ module lark {
         }
 
         public set y(value:number) {
+           this.$setY(value);
+        }
+
+        $setY(value:number):boolean{
             value = +value || 0;
             var values = this._values;
             if (value === values[Values.y]) {
-                return;
+                return false;
             }
             values[Values.y] = value;
             if (this.$scrollRect) {
@@ -307,6 +316,7 @@ module lark {
             }
             this._matrix.$data[5] = value;
             this.invalidatePosition();
+            return true;
         }
 
 
@@ -321,13 +331,18 @@ module lark {
         }
 
         public set scaleX(value:number) {
+            this.$setScaleX(value);
+        }
+
+        $setScaleX(value:number):boolean{
             value = +value || 0;
             var values = this._values;
             if (value === values[Values.scaleX]) {
-                return;
+                return false;
             }
             values[Values.scaleX] = value;
             this.invalidateMatrix();
+            return true;
         }
 
         /**
@@ -341,12 +356,17 @@ module lark {
         }
 
         public set scaleY(value:number) {
+            this.$setScaleY(value);
+        }
+
+        $setScaleY(value:number):boolean{
             value = +value || 0;
             if (value === this._values[Values.scaleY]) {
-                return;
+                return false;
             }
             this._values[Values.scaleY] = value;
             this.invalidateMatrix();
+            return true;
         }
 
         /**

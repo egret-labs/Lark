@@ -68,4 +68,5 @@ module lark.gui {
             return result;
         }
     }
+    registerType(ResizeEvent,[Types.ReiszeEvent]);
 }

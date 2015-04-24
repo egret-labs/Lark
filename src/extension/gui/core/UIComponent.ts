@@ -41,17 +41,24 @@ module lark.gui {
         }
 
         /**
+         * 创建子项,子类覆盖此方法以完成组件子项的初始化操作，
+         * 请务必调用super.createChildren()以完成父类组件的初始化
+         */
+        protected createChildren():void {
+
+        }
+
+        /**
          * 嵌套深度，失效验证是根据这个深度来进行队列排序。
          */
         $nestLevel:number = 0;
 
         $onAddToStage(stage:Stage):void {
             super.$onAddToStage(stage);
-            this.$nestLevel = (<UIComponent><any>this.$parent).$nestLevel + 1;
             this.checkInvalidateFlag();
         }
 
-        $onRemoveFromStage():void{
+        $onRemoveFromStage():void {
             super.$onRemoveFromStage();
             this.$nestLevel = 0;
         }
@@ -60,7 +67,7 @@ module lark.gui {
          * 检查属性失效标记并应用
          */
         private checkInvalidateFlag(event:Event = null):void {
-            var validator = lark.player.validator;
+            var validator = lark.gui.validator;
             if (this.$invalidatePropertiesFlag) {
                 validator.invalidateProperties(this);
             }
@@ -77,136 +84,118 @@ module lark.gui {
         }
 
 
-        public _enabled:boolean = true;
+        $enabled:boolean = true;
+
         /**
-         * @member egret.gui.UIComponent#enabled
+         * 组件是否可以接受用户交互。
          */
         public get enabled():boolean {
-            return this._enabled;
+            return this.$enabled;
         }
 
         public set enabled(value:boolean) {
-            this._enabled = value;
+            this.$enabled = value;
+        }
+
+        $explicitWidth:number = NONE;
+
+        /**
+         * 外部显式指定的宽度
+         */
+        public explicitWidth():number {
+            return this.$explicitWidth;
+        }
+
+        $explicitHeight:number = NONE;
+
+        /**
+         * 外部显式指定的高度
+         */
+        public explicitHeight():number {
+            return this.$explicitHeight;
         }
 
         /**
          * 属性提交前组件旧的宽度
          */
-        private oldWidth:number = NaN;
+        private oldWidth:number = NONE;
 
-        public _width:number = 0;
+        $width:number = 0;
+
         /**
-         * 组件宽度,默认值为NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
+         * 组件宽度,默认值为lark.NONE,设置为lark.NONE将使用组件的measure()方法自动计算尺寸
          */
-        public set width(value:number) {
-            this._setWidth(value);
+        public get width():number {
+            return this.$width;
         }
 
-        public _setWidth(value:number):void {
-            if (this._width == value && this._explicitWidth == value)
+        public set width(value:number) {
+            value = +value || 0;
+            if (this.$width === value && this.$explicitWidth === value)
                 return;
-            super._setWidth(value);
-            if (isNaN(value))
+            this.$width = value;
+            this.$explicitWidth = value;
+            if (isNone(value))
                 this.invalidateSize();
-            else
-                this._width = value;
             this.invalidateProperties();
             this.invalidateDisplayList();
             this.invalidateParentSizeAndDisplayList();
-        }
-
-        /**
-         * @member egret.gui.UIComponent#width
-         */
-        public get width():number {
-            return this._width;
         }
 
         /**
          * 属性提交前组件旧的高度
          */
-        private oldHeight:number = NaN;
+        private oldHeight:number = NONE;
 
-        public _height:number = 0;
+        $height:number = 0;
+
         /**
          * 组件高度,默认值为NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
          */
-        public set height(value:number) {
-            this._setHeight(value);
+        public get height():number {
+            return this.$height;
         }
 
-        public _setHeight(value:number):void {
-            if (this._height == value && this._explicitHeight == value)
+        public set height(value:number) {
+            value = +value || 0;
+            if (this.$height === value && this.$explicitHeight === value)
                 return;
-            super._setHeight(value);
+            this.$height = value;
+            this.$explicitWidth = value;
             if (isNaN(value))
                 this.invalidateSize();
-            else
-                this._height = value;
             this.invalidateProperties();
             this.invalidateDisplayList();
             this.invalidateParentSizeAndDisplayList();
         }
 
-        /**
-         * @member egret.gui.UIComponent#height
-         */
-        public get height():number {
-            return this._height;
+        $setScaleX(value:number):boolean {
+            var change = super.$setScaleX(value);
+            if (change) {
+                this.invalidateParentSizeAndDisplayList();
+            }
+            return change;
         }
 
-        /**
-         * @member egret.gui.UIComponent#scaleX
-         */
-        public get scaleX():number {
-            return this._scaleX;
-        }
-
-        /**
-         * @inheritDoc
-         */
-        public set scaleX(value:number) {
-            this._setScaleX(value);
-        }
-
-        public _setScaleX(value:number):void {
-            if (this._scaleX == value)
-                return;
-            this._scaleX = value;
-            this.invalidateParentSizeAndDisplayList();
-        }
-
-        /**
-         * @member egret.gui.UIComponent#scaleY
-         */
-        public get scaleY():number {
-            return this._scaleY;
-        }
-
-        /**
-         * @inheritDoc
-         */
-        public set scaleY(value:number) {
-            this._setScaleY(value);
-        }
-
-        public _setScaleY(value:number):void {
-            if (this._scaleY == value)
-                return;
-            this._scaleY = value;
-            this.invalidateParentSizeAndDisplayList();
+        $setScaleY(value:number):boolean {
+            var change = super.$setScaleY(value);
+            if (change) {
+                this.invalidateParentSizeAndDisplayList();
+            }
+            return change;
         }
 
         private _minWidth:number = 0;
         /**
-         * @member egret.gui.UIComponent#minWidth
+         * 组件的最小测量宽度,此属性设置为大于maxWidth的值时无效。仅影响measuredWidth属性的取值范围。
          */
         public get minWidth():number {
             return this._minWidth;
         }
 
         public set minWidth(value:number) {
-            if (this._minWidth == value)
+            value = +value || 0;
+            if (this._minWidth === value)
                 return;
             this._minWidth = value;
             this.invalidateSize();
@@ -214,18 +203,15 @@ module lark.gui {
 
         private _maxWidth:number = 10000;
         /**
-         * @member egret.gui.UIComponent#maxWidth
+         * 组件的最大测量高度,仅影响measuredWidth属性的取值范围。
          */
         public get maxWidth():number {
             return this._maxWidth;
         }
 
-        public _getMaxWidth():number {
-            return this._maxWidth;
-        }
-
         public set maxWidth(value:number) {
-            if (this._maxWidth == value)
+            value = +value || 0;
+            if (this._maxWidth === value)
                 return;
             this._maxWidth = value;
             this.invalidateSize();
@@ -233,14 +219,15 @@ module lark.gui {
 
         private _minHeight:number = 0;
         /**
-         * @member egret.gui.UIComponent#minHeight
+         * 组件的最小测量高度,此属性设置为大于maxHeight的值时无效。仅影响measuredHeight属性的取值范围。
          */
         public get minHeight():number {
             return this._minHeight;
         }
 
         public set minHeight(value:number) {
-            if (this._minHeight == value)
+            value = +value || 0;
+            if (this._minHeight === value)
                 return;
             this._minHeight = value;
             this.invalidateSize();
@@ -248,135 +235,114 @@ module lark.gui {
 
         private _maxHeight:number = 10000;
         /**
-         * @member egret.gui.UIComponent#maxHeight
+         * 组件的最大测量高度,仅影响measuredHeight属性的取值范围。
          */
         public get maxHeight():number {
             return this._maxHeight;
         }
 
         public set maxHeight(value:number) {
-            if (this._maxHeight == value)
+            value = +value || 0;
+            if (this._maxHeight === value)
                 return;
             this._maxHeight = value;
             this.invalidateSize();
         }
 
-
         private _measuredWidth:number = 0;
         /**
-         * 组件的默认宽度（以像素为单位）。此值由 measure() 方法设置。
-         * @member egret.gui.UIComponent#measuredWidth
+         * 组件的测量宽度（以像素为单位）。此值由 measure() 方法设置。
          */
         public get measuredWidth():number {
             return this._measuredWidth;
         }
 
-        public set measuredWidth(value:number) {
+        public setMeasuredWidth(value:number):void {
             this._measuredWidth = value;
         }
 
         private _measuredHeight:number = 0;
         /**
          * 组件的默认高度（以像素为单位）。此值由 measure() 方法设置。
-         * @member egret.gui.UIComponent#measuredHeight
          */
         public get measuredHeight():number {
             return this._measuredHeight;
         }
 
-        public set measuredHeight(value:number) {
+        public setMeasuredHeight(value:number):void {
             this._measuredHeight = value;
         }
 
         /**
-         * @method egret.gui.UIComponent#setActualSize
-         * @param w {number}
-         * @param h {number}
+         * 设置组件的宽高。此方法不同于直接设置width,height属性，
+         * 不会影响显式标记尺寸属性
          */
         public setActualSize(w:number, h:number):void {
-            var change:boolean = false;
-            if (this._width != w) {
-                this._width = w;
+            w = +w || 0;
+            h = +h || 0;
+            var change = false;
+            if (this.$width !== w) {
+                this.$width = w;
                 change = true;
             }
-            if (this._height != h) {
-                this._height = h;
+            if (this.$height !== h) {
+                this.$height = h;
                 change = true;
             }
             if (change) {
                 this.invalidateDisplayList();
-                this.dispatchResizeEvent();
+                this.emitResizeEvent();
             }
         }
 
         /**
          * 属性提交前组件旧的X
-         * @member egret.gui.UIComponent#oldX
          */
-        private oldX:number = NaN;
+        private oldX:number = NONE;
 
-        /**
-         * @constant egret.gui.UIComponent#x
-         */
-        public get x():number {
-            return this._x;
-        }
-
-        /**
-         * @inheritDoc
-         */
-        public set x(value:number) {
-            if (this._x == value)
-                return;
-            this._setX(value);
-            this.invalidateProperties();
-            if (this._includeInLayout && this.parent && this.parent instanceof UIComponent)
-                (<UIComponent><any> (this.parent))._childXYChanged();
+        $setX(value:number):boolean {
+            var change = super.$setX(value);
+            if (change) {
+                this.invalidateProperties();
+                var parent = this.$parent;
+                if (this.$includeInLayout && parent && parent.isType(Types.UIComponent))
+                    (<UIComponent><any> parent).$childXYChanged();
+            }
+            return change;
         }
 
         /**
          * 属性提交前组件旧的Y
-         * @member egret.gui.UIComponent#oldY
          */
-        private oldY:number = NaN;
+        private oldY:number = NONE;
 
-        /**
-         * @constant egret.gui.UIComponent#y
-         */
-        public get y():number {
-            return this._y;
+        $setY(value:number):boolean {
+            var change = super.$setY(value);
+            if (change) {
+                this.invalidateProperties();
+                var parent = this.$parent;
+                if (this.$includeInLayout && parent && parent.isType(Types.UIComponent))
+                    (<UIComponent><any> parent).$childXYChanged();
+            }
+            return;
         }
 
-        /**
-         * @inheritDoc
-         */
-        public set y(value:number) {
-            if (this._y == value)
-                return;
-            this._setY(value);
-            this.invalidateProperties();
-            if (this._includeInLayout && this.parent && this.parent instanceof UIComponent)
-                (<UIComponent> (this.parent))._childXYChanged();
-        }
 
-        /**
-         * @member egret.gui.UIComponent#$invalidatePropertiesFlag
-         */
         $invalidatePropertiesFlag:boolean = true;
 
         /**
-         * @method egret.gui.UIComponent#invalidateProperties
+         * 标记提交过需要延迟应用的属性
          */
         public invalidateProperties():void {
             if (!this.$invalidatePropertiesFlag) {
                 this.$invalidatePropertiesFlag = true;
                 if (this.$stage)
-                    player.validator.invalidateProperties(this);
+                    validator.invalidateProperties(this);
             }
         }
 
         /**
-         * @method egret.gui.UIComponent#validateProperties
+         * 验证组件的属性
          */
         public validateProperties():void {
             if (this.$invalidatePropertiesFlag) {
@@ -386,26 +352,26 @@ module lark.gui {
             }
         }
 
-        /**
-         * @member egret.gui.UIComponent#$invalidateSizeFlag
-         */
-        public $invalidateSizeFlag:boolean = true;
+        $invalidateSizeFlag:boolean = true;
 
         /**
-         * @method egret.gui.UIComponent#invalidateSize
+         * 标记提交过需要验证组件尺寸
          */
         public invalidateSize():void {
             if (!this.$invalidateSizeFlag) {
                 this.$invalidateSizeFlag = true;
 
                 if (this.$stage)
-                    player.validator.invalidateSize(this);
+                    validator.invalidateSize(this);
             }
         }
 
+        /**
+         * 验证组件的尺寸
+         */
         public validateSize():void {
             if (this.$invalidateSizeFlag) {
-                var changed:boolean = this.measureSizes();
+                var changed = this.measureSizes();
                 if (changed) {
                     this.invalidateDisplayList();
                     this.invalidateParentSizeAndDisplayList();
@@ -417,46 +383,48 @@ module lark.gui {
         /**
          * 上一次测量的首选宽度
          */
-        public _oldPreferWidth:number = NaN;
+        $oldPreferWidth:number = NONE;
         /**
          * 上一次测量的首选高度
          */
-        public _oldPreferHeight:number = NaN;
+        $oldPreferHeight:number = NONE;
 
         /**
          * 测量组件尺寸，返回尺寸是否发生变化
          */
         private measureSizes():boolean {
-            var changed:boolean = false;
+            var changed = false;
 
             if (!this.$invalidateSizeFlag)
                 return changed;
 
-            if (!this.canSkipMeasurement()) {
+            if (isNone(this.$explicitWidth) || isNone(this.$explicitHeight)) {
                 this.measure();
-                if (this.measuredWidth < this.minWidth) {
-                    this.measuredWidth = this.minWidth;
+                if (this._measuredWidth < this._minWidth) {
+                    this._measuredWidth = this._minWidth;
                 }
-                if (this.measuredWidth > this.maxWidth) {
-                    this.measuredWidth = this.maxWidth;
+                if (this._measuredWidth > this._maxWidth) {
+                    this._measuredWidth = this._maxWidth;
                 }
-                if (this.measuredHeight < this.minHeight) {
-                    this.measuredHeight = this.minHeight;
+                if (this._measuredHeight < this._minHeight) {
+                    this._measuredHeight = this._minHeight;
                 }
-                if (this.measuredHeight > this.maxHeight) {
-                    this.measuredHeight = this.maxHeight
+                if (this._measuredHeight > this._maxHeight) {
+                    this._measuredHeight = this._maxHeight
                 }
             }
-            if (isNaN(this._oldPreferWidth)) {
-                this._oldPreferWidth = this.preferredWidth;
-                this._oldPreferHeight = this.preferredHeight;
+            var preferredW = this.getPreferredWidth();
+            var preferredH = this.getPreferredHeight();
+            if (isNone(this.$oldPreferWidth)) {
+                this.$oldPreferWidth = preferredW;
+                this.$oldPreferHeight = preferredH;
                 changed = true;
             }
             else {
-                if (this.preferredWidth != this._oldPreferWidth || this.preferredHeight != this._oldPreferHeight)
+                if (preferredW != this.$oldPreferWidth || preferredH != this.$oldPreferHeight)
                     changed = true;
-                this._oldPreferWidth = this.preferredWidth;
-                this._oldPreferHeight = this.preferredHeight;
+                this.$oldPreferWidth = preferredW;
+                this.$oldPreferHeight = preferredH;
             }
             return changed;
         }
@@ -464,48 +432,41 @@ module lark.gui {
         public $invalidateDisplayListFlag:boolean = true;
 
         /**
-         * @method egret.gui.UIComponent#invalidateDisplayList
+         * 标记需要验证显示列表
          */
         public invalidateDisplayList():void {
             if (!this.$invalidateDisplayListFlag) {
                 this.$invalidateDisplayListFlag = true;
-
-                if (this.parent && UIGlobals._layoutManager)
-                    UIGlobals._layoutManager.invalidateDisplayList(this);
-
-                this._setSizeDirty();
+                if (this.$stage)
+                    validator.invalidateDisplayList(this);
             }
         }
 
         /**
-         * @method egret.gui.UIComponent#validateDisplayList
+         * 验证子项的位置和大小，并绘制其他可视内容
          */
         public validateDisplayList():void {
             if (this.$invalidateDisplayListFlag) {
                 var unscaledWidth:number = 0;
                 var unscaledHeight:number = 0;
-                if (this._layoutWidthExplicitlySet) {
-                    unscaledWidth = this._width;
+                if (this.$layoutWidthExplicitlySet) {
+                    unscaledWidth = this.$width;
                 }
-                else if (!isNaN(this.explicitWidth)) {
-                    unscaledWidth = this._explicitWidth;
-                }
-                else {
-                    unscaledWidth = this.measuredWidth;
-                }
-                if (this._layoutHeightExplicitlySet) {
-                    unscaledHeight = this._height;
-                }
-                else if (!isNaN(this.explicitHeight)) {
-                    unscaledHeight = this._explicitHeight;
+                else if (!isNone(this.$explicitWidth)) {
+                    unscaledWidth = this.$explicitWidth;
                 }
                 else {
-                    unscaledHeight = this.measuredHeight;
+                    unscaledWidth = this._measuredWidth;
                 }
-                if (isNaN(unscaledWidth))
-                    unscaledWidth = 0;
-                if (isNaN(unscaledHeight))
-                    unscaledHeight = 0;
+                if (this.$layoutHeightExplicitlySet) {
+                    unscaledHeight = this.$height;
+                }
+                else if (!isNone(this.$explicitHeight)) {
+                    unscaledHeight = this.$explicitHeight;
+                }
+                else {
+                    unscaledHeight = this._measuredHeight;
+                }
                 this.setActualSize(unscaledWidth, unscaledHeight);
                 this.updateDisplayList(unscaledWidth, unscaledHeight);
                 this.$invalidateDisplayListFlag = false;
@@ -515,50 +476,38 @@ module lark.gui {
         public $validateNowFlag:boolean = true;
 
         /**
-         * @method egret.gui.UIComponent#validateNow
-         * @param skipDisplayList {boolean}
+         * 立即应用组件及其子项的所有属性
          */
-        public validateNow(skipDisplayList:boolean = false):void {
+        public validateNow():void {
             if (!this.$validateNowFlag)
-                UIGlobals._layoutManager.validateClient(this, skipDisplayList);
+                validator.validateClient(this);
             else
                 this.$validateNowFlag = true;
         }
 
         /**
          * 标记父级容器的尺寸和显示列表为失效
-         * @method egret.gui.UIComponent#invalidateParentSizeAndDisplayList
          */
         public invalidateParentSizeAndDisplayList():void {
-            if (!this.parent || !this._includeInLayout || !("invalidateSize" in this.parent))
+            var parent = this.$parent;
+            if (!parent || !this.$includeInLayout || !(parent.isType(Types.UIComponent)))
                 return;
-            var p:IInvalidating = <IInvalidating><any>(this.parent);
-            p.invalidateSize();
-            p.invalidateDisplayList();
+            (<UIComponent><any>parent).invalidateSize();
+            (<UIComponent><any>parent).invalidateDisplayList();
         }
 
         /**
          * 更新显示列表
-         * @method egret.gui.UIComponent#updateDisplayList
-         * @param unscaledWidth {number}
-         * @param unscaledHeight {number}
          */
         public updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
-        }
-
-        /**
-         * 是否可以跳过测量尺寸阶段,返回true则不执行measure()方法
-         */
-        public canSkipMeasurement():boolean {
-            return !isNaN(this._explicitWidth) && !isNaN(this._explicitHeight);
         }
 
         /**
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         public commitProperties():void {
-            if (this.oldWidth != this._width || this.oldHeight != this._height) {
-                this.dispatchResizeEvent();
+            if (this.oldWidth != this.$width || this.oldHeight != this.$height) {
+                this.emitResizeEvent();
             }
             if (this.oldX != this.x || this.oldY != this.y) {
                 this.emitMoveEvent();
@@ -567,7 +516,6 @@ module lark.gui {
 
         /**
          * 测量组件尺寸
-         * @method egret.gui.UIComponent#measure
          */
         public measure():void {
             this._measuredHeight = 0;
@@ -588,93 +536,100 @@ module lark.gui {
         /**
          * 子项的xy位置发生改变
          */
-        public _childXYChanged():void {
+        $childXYChanged():void {
 
         }
 
         /**
          *  抛出尺寸改变事件
          */
-        private dispatchResizeEvent():void {
+        private emitResizeEvent():void {
             if (this.hasListener(ResizeEvent.RESIZE)) {
                 ResizeEvent.emitResizeEvent(this, this.oldWidth, this.oldHeight);
             }
-            this.oldWidth = this._width;
-            this.oldHeight = this._height;
+            this.oldWidth = this.$width;
+            this.oldHeight = this.$height;
         }
 
-        public _includeInLayout:boolean = true;
+        $includeInLayout:boolean = true;
+
         /**
-         * @member egret.gui.UIComponent#includeInLayout
+         * 指定此组件是否包含在父容器的布局中。若为false，则父级容器在测量和布局阶段都忽略此组件。默认值为true。
+         * 注意，visible属性与此属性不同，设置visible为false，父级容器仍会对其布局。
          */
         public get includeInLayout():boolean {
-            return this._includeInLayout;
+            return this.$includeInLayout;
         }
 
         public set includeInLayout(value:boolean) {
-            if (this._includeInLayout == value)
+            value = !!value;
+            if (this.$includeInLayout === value)
                 return;
-            this._includeInLayout = true;
+            this.$includeInLayout = true;
             this.invalidateParentSizeAndDisplayList();
-            this._includeInLayout = value;
+            this.$includeInLayout = value;
         }
 
 
-        private _left:number = NaN;
+        private _left:number = NONE;
 
         /**
-         * @member egret.gui.UIComponent#left
+         * 距父级容器离左边距离
          */
         public get left():number {
             return this._left;
         }
 
         public set left(value:number) {
-            if (this._left == value)
+            value = +value || 0;
+            if (this._left === value)
                 return;
             this._left = value;
             this.invalidateParentSizeAndDisplayList();
         }
 
-        private _right:number = NaN;
+        private _right:number = NONE;
         /**
-         * @member egret.gui.UIComponent#right
+         * 距父级容器右边距离
          */
         public get right():number {
             return this._right;
         }
 
         public set right(value:number) {
-            if (this._right == value)
+            value = +value || 0;
+            if (this._right === value)
                 return;
             this._right = value;
             this.invalidateParentSizeAndDisplayList();
         }
 
-        private _top:number = NaN;
+        private _top:number = NONE;
         /**
-         * @member egret.gui.UIComponent#top
+         * 距父级容器顶部距离
          */
         public get top():number {
             return this._top;
         }
 
         public set top(value:number) {
-            if (this._top == value)
+            value = +value || 0;
+            if (this._top === value)
                 return;
             this._top = value;
             this.invalidateParentSizeAndDisplayList();
         }
 
-        private _bottom:number = NaN;
+        private _bottom:number = NONE;
         /**
-         * @member egret.gui.UIComponent#bottom
+         * 距父级容器底部距离
          */
         public get bottom():number {
             return this._bottom;
         }
 
         public set bottom(value:number) {
+            value = +value || 0;
             if (this._bottom == value)
                 return;
             this._bottom = value;
@@ -682,64 +637,67 @@ module lark.gui {
         }
 
 
-        private _horizontalCenter:number = NaN;
+        private _horizontalCenter:number = NONE;
         /**
-         * @member egret.gui.UIComponent#horizontalCenter
+         * 在父级容器中距水平中心位置的距离
          */
         public get horizontalCenter():number {
             return this._horizontalCenter;
         }
 
         public set horizontalCenter(value:number) {
-            if (this._horizontalCenter == value)
+            value = +value || 0;
+            if (this._horizontalCenter === value)
                 return;
             this._horizontalCenter = value;
             this.invalidateParentSizeAndDisplayList();
         }
 
-        private _verticalCenter:number = NaN;
+        private _verticalCenter:number = NONE;
         /**
-         * @member egret.gui.UIComponent#verticalCenter
+         * 在父级容器中距竖直中心位置的距离
          */
         public get verticalCenter():number {
             return this._verticalCenter;
         }
 
         public set verticalCenter(value:number) {
-            if (this._verticalCenter == value)
+            value = +value || 0;
+            if (this._verticalCenter === value)
                 return;
             this._verticalCenter = value;
             this.invalidateParentSizeAndDisplayList();
         }
 
 
-        private _percentWidth:number = NaN;
+        private _percentWidth:number = NONE;
         /**
-         * @member egret.gui.UIComponent#percentWidth
+         * 相对父级容器宽度的百分比
          */
         public get percentWidth():number {
             return this._percentWidth;
         }
 
         public set percentWidth(value:number) {
-            if (this._percentWidth == value)
+            value = +value || 0;
+            if (this._percentWidth === value)
                 return;
             this._percentWidth = value;
             this.invalidateParentSizeAndDisplayList();
         }
 
 
-        private _percentHeight:number = NaN;
-
+        private _percentHeight:number = NONE;
         /**
-         * @member egret.gui.UIComponent#percentHeight
+         * 相对父级容器高度的百分比
          */
         public get percentHeight():number {
             return this._percentHeight;
         }
 
         public set percentHeight(value:number) {
-            if (this._percentHeight == value)
+            value = +value||0;
+            if (this._percentHeight === value)
                 return;
             this._percentHeight = value;
             this.invalidateParentSizeAndDisplayList();
@@ -747,176 +705,127 @@ module lark.gui {
 
         /**
          * 父级布局管理器设置了组件的宽度标志，尺寸设置优先级：自动布局>显式设置>自动测量
-         * @member egret.gui.UIComponent#_layoutWidthExplicitlySet
          */
-        public _layoutWidthExplicitlySet:boolean = false;
+        $layoutWidthExplicitlySet:boolean = false;
 
         /**
          * 父级布局管理器设置了组件的高度标志，尺寸设置优先级：自动布局>显式设置>自动测量
-         * @member egret.gui.UIComponent#_layoutHeightExplicitlySet
          */
-        public _layoutHeightExplicitlySet:boolean = false;
+        $layoutHeightExplicitlySet:boolean = false;
 
         /**
-         * @method egret.gui.UIComponent#setLayoutBoundsSize
-         * @param layoutWidth {number}
-         * @param layoutHeight {number}
+         * 设置组件的布局宽高
          */
         public setLayoutBoundsSize(layoutWidth:number, layoutHeight:number):void {
-            if (isNaN(layoutWidth)) {
-                this._layoutWidthExplicitlySet = false;
-                layoutWidth = this.preferredWidth;
+            if (isNone(layoutWidth)) {
+                this.$layoutWidthExplicitlySet = false;
+                layoutWidth = this.getPreferredWidth();
             }
             else {
-                this._layoutWidthExplicitlySet = true;
+                this.$layoutWidthExplicitlySet = true;
             }
-            if (isNaN(layoutHeight)) {
-                this._layoutHeightExplicitlySet = false;
-                layoutHeight = this.preferredHeight;
+            if (isNone(layoutHeight)) {
+                this.$layoutHeightExplicitlySet = false;
+                layoutHeight = this.getPreferredHeight();
             }
             else {
-                this._layoutHeightExplicitlySet = true;
+                this.$layoutHeightExplicitlySet = true;
             }
-
-            this.setActualSize(layoutWidth / this._scaleX, layoutHeight / this._scaleY);
+            this.setActualSize(layoutWidth, layoutHeight);
         }
 
         /**
-         * @method egret.gui.UIComponent#setLayoutBoundsPosition
-         * @param x {number}
-         * @param y {number}
+         * 设置组件的布局位置
          */
         public setLayoutBoundsPosition(x:number, y:number):void {
-            if (this._scaleX < 0) {
-                x += this.layoutBoundsWidth;
-            }
-            if (this._scaleY < 0) {
-                y += this.layoutBoundsHeight;
-            }
             var changed:boolean = false;
-            if (this._x != x) {
-                this._setX(x);
-                changed = true;
-            }
-            if (this._y != y) {
-                this._setY(y);
-                changed = true;
-            }
+            changed = super.$setX(x);
+            changed = super.$setY(y)||changed;
             if (changed) {
                 this.emitMoveEvent();
             }
         }
 
         /**
-         * @member egret.gui.UIComponent#preferredWidth
+         * 组件的首选宽度,常用于父级的measure()方法中
+         * 按照：外部显式设置宽度>测量宽度 的优先级顺序返回宽度
          */
-        public get preferredWidth():number {
-            var w:number = this._hasWidthSet ? this._explicitWidth : this._measuredWidth;
-            var scaleX:number = this._scaleX;
-            if (scaleX < 0) {
-                scaleX = -scaleX;
-            }
-            return w * scaleX;
+        public getPreferredWidth():number {
+            return isNone(this.$explicitWidth) ? this._measuredWidth : this.$explicitWidth;
         }
 
         /**
-         * @member egret.gui.UIComponent#preferredHeight
+         * 组件的首选高度,常用于父级的measure()方法中
+         * 按照：外部显式设置高度>测量高度 的优先级顺序返回高度
          */
-        public get preferredHeight():number {
-            var h:number = this._hasHeightSet ? this._explicitHeight : this._measuredHeight;
-            var scaleY:number = this._scaleY;
-            if (scaleY < 0) {
-                scaleY = -scaleY;
-            }
-            return h * scaleY;
+        public getPreferredHeight():number {
+            return isNone(this.$explicitHeight) ? this._measuredHeight : this.$explicitHeight;
         }
 
         /**
-         * @member egret.gui.UIComponent#preferredX
+         * 组件的首选x坐标,常用于父级的measure()方法中
          */
-        public get preferredX():number {
-            if (this._scaleX >= 0) {
-                return this._x;
-            }
-            var w:number = this.preferredWidth;
-            return this._x - w;
+        public getPreferredX():number {
+            return this.x;
         }
 
         /**
-         * @member egret.gui.UIComponent#preferredY
+         * 组件的首选y坐标,常用于父级的measure()方法中
          */
-        public get preferredY():number {
-            if (this._scaleY >= 0) {
-                return this._y;
-            }
-            var h:number = this.preferredHeight;
-            return this._y - h;
+        public getPreferredY():number {
+            return this.y;
         }
 
         /**
-         * @member egret.gui.UIComponent#layoutBoundsX
+         * 组件在父级容器中水平方向起始坐标
          */
-        public get layoutBoundsX():number {
-            if (this._scaleX >= 0) {
-                return this._x;
-            }
-            var w:number = this.layoutBoundsWidth;
-            return this._x - w;
+        public getLayoutBoundsX():number {
+            return this.x;
         }
 
         /**
-         * @member egret.gui.UIComponent#layoutBoundsY
+         * 组件在父级容器中竖直方向起始坐标
          */
-        public get layoutBoundsY():number {
-            if (this._scaleY >= 0) {
-                return this._y;
-            }
-            var h:number = this.layoutBoundsHeight;
-            return this._y - h;
+        public getLayoutBoundsY():number {
+            return this.y;
         }
 
         /**
-         * @member egret.gui.UIComponent#layoutBoundsWidth
+         * 组件的布局宽度,常用于父级的updateDisplayList()方法中
+         * 按照：布局宽度>外部显式设置宽度>测量宽度 的优先级顺序返回宽度
          */
-        public get layoutBoundsWidth():number {
+        public getLayoutBoundsWidth():number {
             var w:number = 0;
-            if (this._layoutWidthExplicitlySet) {
-                w = this._width;
+            if (this.$layoutWidthExplicitlySet) {
+                w = this.$width;
             }
-            else if (this._hasWidthSet) {
-                w = this._explicitWidth;
+            else if (!isNone(this.$explicitWidth)) {
+                w = this.$explicitWidth;
             }
             else {
                 w = this._measuredWidth;
             }
-            var scaleX:number = this._scaleX;
-            if (scaleX < 0) {
-                scaleX = -scaleX;
-            }
-            return w * scaleX;
+            return w;
         }
 
         /**
          * 组件的布局高度,常用于父级的updateDisplayList()方法中
          * 按照：布局高度>外部显式设置高度>测量高度 的优先级顺序返回高度
-         * @member egret.gui.UIComponent#layoutBoundsHeight
          */
-        public get layoutBoundsHeight():number {
+        public getLayoutBoundsHeight():number {
             var h:number = 0
-            if (this._layoutHeightExplicitlySet) {
-                h = this._height;
+            if (this.$layoutHeightExplicitlySet) {
+                h = this.$height;
             }
-            else if (this._hasHeightSet) {
-                h = this._explicitHeight;
+            else if (isNone(this.$explicitHeight)) {
+                h = this.$explicitHeight;
             }
             else {
                 h = this._measuredHeight;
             }
-            var scaleY:number = this.scaleY;
-            if (scaleY < 0) {
-                scaleY = -scaleY;
-            }
-            return h * scaleY;
+            return h;
         }
     }
+
+    registerType(UIComponent, [Types.UIComponent]);
 }
