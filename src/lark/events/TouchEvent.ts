@@ -170,5 +170,5 @@ module lark {
         }
     }
 
-    player.registerType(TouchEvent,[Types.TouchEvent]);
+    registerType(TouchEvent,[Types.TouchEvent]);
 }

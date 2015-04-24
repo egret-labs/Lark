@@ -228,5 +228,5 @@ module lark {
             configurable: true
         });
     }
-    player.registerType(Stage,[Types.Stage]);
+    registerType(Stage,[Types.Stage]);
 }

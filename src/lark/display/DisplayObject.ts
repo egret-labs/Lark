@@ -986,5 +986,5 @@ module lark {
         }
 
     }
-    player.registerType(DisplayObject,[Types.DisplayObject]);
+    registerType(DisplayObject,[Types.DisplayObject]);
 }

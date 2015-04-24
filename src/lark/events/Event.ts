@@ -262,5 +262,5 @@ module lark {
 
     }
 
-    player.registerType(Event,[Types.Event]);
+    registerType(Event,[Types.Event]);
 }

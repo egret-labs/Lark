@@ -67,24 +67,3 @@ module lark {
 
     LarkObject.prototype["__meta__"] = [];
 }
-
-module lark.player {
-    /**
-     * 注册枚举值列表到一个类定义,用此方法往类定义上添加它自身以及所有接口对应的枚举值。
-     * 在运行时，这个类的实例将可以使用isType()方法传入一个枚举值来判断实例类型。
-     * @param clazz 继承自LarkObject的类定义
-     * @param typeFlags 要注册的枚举值列表
-     */
-    export function registerType(clazz:any,typeFlags:number[]):void{
-        if (DEBUG) {
-            if(!clazz){
-                $error(1003, "clazz");
-            }
-            if(!typeFlags){
-                $error(1003, "typeFlags");
-            }
-        }
-        var prototype: any = clazz.prototype;
-        prototype.__meta__ = typeFlags.concat(prototype.__meta__);
-    }
-}

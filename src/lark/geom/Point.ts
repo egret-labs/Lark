@@ -105,5 +105,5 @@ module lark {
 
     }
 
-    player.registerType(Point,[Types.Point]);
+    registerType(Point,[Types.Point]);
 }
