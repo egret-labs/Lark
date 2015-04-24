@@ -31,19 +31,15 @@ var Run = (function (_super) {
         req.setTimeout(100);
     };
     Run.prototype.startServer = function (options) {
-        var nodePath = process.execPath, larkPath = FileUtil.joinPath(options.larkRoot, 'tools/bin/lark'), params = '"' + options.projectDir + '"';
-        var cmd = 'cmd "' + nodePath + '" "' + larkPath + '" ' + params;
-        console.log(cmd);
-        childProcess.spawn(nodePath, [larkPath, 'startserver', params], { detached: true, stdio: ['ignore', 'ignore', 'ignore'] });
-        //var serverFile = FileUtil.joinPath(options.larkRoot, 'tools/server/server.js');
-        //var n = childProcess.fork(serverFile);
-        //n.on('message', function (m) {
-        //    console.log('PARENT got message:', m);
-        //});
-        //n.send(options, null);
+        var nodePath = process.execPath, larkPath = FileUtil.joinPath(options.larkRoot, 'tools/bin/lark');
+        console.log(process.cwd());
+        childProcess.spawn(nodePath, [larkPath, 'startserver', options.projectDir], {
+            detached: true,
+            stdio: ['ignore', 'ignore', 'ignore'],
+            cwd: process.cwd()
+        });
         var exitCode = Entry.executeOption(options);
         this.exit(exitCode);
-        //server.startServer(options);
     };
     Run.prototype.sendCMD = function (options) {
         var _this = this;

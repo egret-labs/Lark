@@ -32,30 +32,17 @@ class Run extends Action {
     startServer(options: lark.ICompileOptions) {
 
         var nodePath = process.execPath,
-            larkPath = FileUtil.joinPath(options.larkRoot, 'tools/bin/lark'),
-            params = '"' + options.projectDir + '"';
-        var cmd = 'cmd "' + nodePath + '" "' + larkPath + '" ' + params;
+            larkPath = FileUtil.joinPath(options.larkRoot, 'tools/bin/lark');
+        console.log(process.cwd());
 
-        console.log(cmd);
-
-        childProcess.spawn(nodePath, [larkPath, 'startserver', params], { detached: true, stdio: ['ignore', 'ignore', 'ignore'] });
-
-        //var serverFile = FileUtil.joinPath(options.larkRoot, 'tools/server/server.js');
-        //var n = childProcess.fork(serverFile);
-
-        //n.on('message', function (m) {
-        //    console.log('PARENT got message:', m);
-        //});
-
-        //n.send(options, null);
-
-
+        childProcess.spawn(nodePath, [larkPath, 'startserver', options.projectDir], {
+            detached: true,
+            stdio: ['ignore', 'ignore', 'ignore'],
+            cwd: process.cwd()
+        });
 
         var exitCode = Entry.executeOption(options);
         this.exit(exitCode);
-
-
-        //server.startServer(options);
     }
 
     sendCMD(options: lark.ICompileOptions) {

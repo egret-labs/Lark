@@ -74,6 +74,7 @@
     <TypeScriptCompile Include="src\FPS.ts" />
     <TypeScriptCompile Include="src\lark\display\Bitmap.ts" />
     <TypeScriptCompile Include="src\lark\display\BitmapData.ts" />
+    <TypeScriptCompile Include="src\lark\display\BlendMode.ts" />
     <TypeScriptCompile Include="src\lark\display\DisplayObject.ts" />
     <TypeScriptCompile Include="src\lark\display\DisplayObjectContainer.ts" />
     <TypeScriptCompile Include="src\lark\display\Graphics.ts" />

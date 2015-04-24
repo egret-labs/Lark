@@ -5,6 +5,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+var file = require('../../lib/FileUtil');
 var Default = (function (_super) {
     __extends(Default, _super);
     function Default() {
@@ -15,6 +16,7 @@ var Default = (function (_super) {
         framework.route('$/');
         framework.route('$/ping/', self.ping);
         framework.file('Lark manage static files', self.staticFiles);
+        framework.file('User project static files', self.projectFiles);
     };
     Default.prototype.staticFiles = function (req, res, isValidation) {
         if (isValidation) {
@@ -23,18 +25,34 @@ var Default = (function (_super) {
         var filePath = getLarkContentFullName(req);
         framework.responseFile(req, res, filePath);
     };
+    Default.prototype.projectFiles = function (req, res, isValidation) {
+        if (isValidation) {
+            if (req.url.indexOf('$/') >= 0)
+                return false;
+            var path = getUserProjectContentFullName(req);
+            return file.exists(path);
+        }
+        var path = getUserProjectContentFullName(req);
+        framework.responseFile(req, res, path);
+    };
     Default.prototype.ping = function () {
         console.log('call ping');
         var res = this.res;
         res.send(200, 'OK');
     };
     Default.LarkStaticContentPath = '$/content/';
+    Default.UserProjectPath = null;
     return Default;
 })(TotalJS.Controller);
 function getLarkContentFullName(req) {
     var url = req.url;
     var path = url.replace(Default.LarkStaticContentPath, '');
     var fullpath = utils.combine('~', __dirname, '../content/', path);
+    return fullpath;
+}
+function getUserProjectContentFullName(req) {
+    var url = req.url;
+    var fullpath = utils.combine('~', Default.UserProjectPath, url);
     return fullpath;
 }
 module.exports = Default;
