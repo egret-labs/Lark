@@ -3,7 +3,7 @@
 
     //parse
     var classNameToFileMap: Map<string> = {};
-    var interfaceNames: Map<boolean> = {};
+    var classNames: Map<number> = {};
     var fileToClassNameMap: Map<string[]> = {};
     var classNameToBaseClassMap: Map<string[]> = {};
     var staticToClassNameMap: Map<string> = {};
@@ -20,7 +20,6 @@
         public orderFiles(chk: TypeChecker, program: Program) {
 
             classNameToFileMap = {};
-            interfaceNames = {};
             fileToClassNameMap = {};
             classNameToBaseClassMap = {};
             staticToClassNameMap = {};
@@ -34,7 +33,7 @@
             checker = chk;
             forEach(files, file=> this.symbolTabelToFileMap(file, file.locals));
             this.sortFiles();
-
+            this.emitTypesEnum();
             var sources = program.getSourceFiles();
             orderedFileList.forEach(f=> {
                 for (var i = 0; i < sources.length; i++) {
@@ -46,6 +45,30 @@
                     }
                 }
             });
+        }
+
+
+        private emitTypesEnum() {
+            var types = 'export const enum Types { $types$ }';
+            var typeNames: string[] = [];
+            forEachKey(classNames, name=> {
+                var names = name.split('.');
+                for (var i = 1; i < names.length; i++)
+                {
+                    names[i] = names[i][0].toUpperCase() + names[i].substr(1);
+                }
+                typeNames.push(names.join('') + ' = ' + classNames[name]);
+            });
+            var typesString = typeNames.join(',\r\n');
+            types = types.replace('$types$', typesString);
+            console.log(types);
+        }
+
+        private isTypeOf(className,baseClassName) {
+            var bases = classNameToBaseClassMap[className];
+            if (bases.indexOf(baseClassName) >= 0)
+                return true;
+            return bases.some(clazz=> this.isTypeOf(clazz, baseClassName));
         }
 
         private symbolToFileMap(file: SourceFile, symbol:Symbol) {
@@ -184,8 +207,24 @@
             fileNodesList.sort((a, b) => compareFileNode(a, b));
             orderedFileList = fileNodesList.map(f=> f.name);
         }
+
     }
 
+    var fileToFileMap: Map<Map<boolean>> = {};
+
+    export class UsedFileResolver{
+        
+        static mapFile(source: string, used: string) {
+            var depends = fileToFileMap[source];
+            if (!depends)
+            {
+                depends = {};
+                fileToFileMap[source] = depends;
+            }
+            depends[used] = true;
+        }
+
+    }
 
 
 
@@ -208,14 +247,25 @@
     * no export properties may have same name, add id after the name
     */
     function getFullyQualifiedName(symbol: Symbol) {
+        var name:string = null;
         if (symbol.exportSymbol)
-            return checker.getFullyQualifiedName(symbol.exportSymbol);
-
-
-        var name = checker.getFullyQualifiedName(symbol);
-        if (!(symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.Module))) {
-            name += symbol.id;
+        {
+            name = checker.getFullyQualifiedName(symbol.exportSymbol);
+            classNames[name] = Object.keys(classNames).length;
         }
+        else
+        {
+            name = checker.getFullyQualifiedName(symbol);
+            if (!(symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.Module)))
+            {
+                name += symbol.id;
+            }
+            else
+            {
+                classNames[name] = Object.keys(classNames).length;
+            }
+        }
+            
         return name;
 
     }

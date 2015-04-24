@@ -11897,6 +11897,13 @@ var ts;
                     }
                 }
             }
+            if (result.declarations) {
+                var sourceFile = getSourceFile(lastLocation);
+                var dependFile = getSourceFile(result.declarations[0]);
+                if (sourceFile && dependFile) {
+                    ts.UsedFileResolver.mapFile(sourceFile.filename, dependFile.filename);
+                }
+            }
             return result;
         }
         function resolveImport(symbol) {
@@ -17781,6 +17788,13 @@ var ts;
         }
         function checkTypeReference(node) {
             var type = getTypeFromTypeReferenceNode(node);
+            if (type && type.symbol && type.symbol.declarations) {
+                var sourceFile = getSourceFile(node);
+                var dependFile = getSourceFile(type.symbol.declarations[0]);
+                if (sourceFile && dependFile) {
+                    ts.UsedFileResolver.mapFile(sourceFile.filename, dependFile.filename);
+                }
+            }
             if (type !== unknownType && node.typeArguments) {
                 // Do type argument local checks only if referenced type is successfully resolved
                 var len = node.typeArguments.length;
@@ -20165,7 +20179,7 @@ var ts;
     var checker = null;
     //parse
     var classNameToFileMap = {};
-    var interfaceNames = {};
+    var classNames = {};
     var fileToClassNameMap = {};
     var classNameToBaseClassMap = {};
     var staticToClassNameMap = {};
@@ -20180,7 +20194,6 @@ var ts;
         TreeGenerator.prototype.orderFiles = function (chk, program) {
             var _this = this;
             classNameToFileMap = {};
-            interfaceNames = {};
             fileToClassNameMap = {};
             classNameToBaseClassMap = {};
             staticToClassNameMap = {};
@@ -20192,6 +20205,7 @@ var ts;
             checker = chk;
             ts.forEach(files, function (file) { return _this.symbolTabelToFileMap(file, file.locals); });
             this.sortFiles();
+            this.emitTypesEnum();
             var sources = program.getSourceFiles();
             orderedFileList.forEach(function (f) {
                 for (var i = 0; i < sources.length; i++) {
@@ -20203,6 +20217,27 @@ var ts;
                     }
                 }
             });
+        };
+        TreeGenerator.prototype.emitTypesEnum = function () {
+            var types = 'export const enum Types { $types$ }';
+            var typeNames = [];
+            ts.forEachKey(classNames, function (name) {
+                var names = name.split('.');
+                for (var i = 1; i < names.length; i++) {
+                    names[i] = names[i][0].toUpperCase() + names[i].substr(1);
+                }
+                typeNames.push(names.join('') + ' = ' + classNames[name]);
+            });
+            var typesString = typeNames.join(',\r\n');
+            types = types.replace('$types$', typesString);
+            console.log(types);
+        };
+        TreeGenerator.prototype.isTypeOf = function (className, baseClassName) {
+            var _this = this;
+            var bases = classNameToBaseClassMap[className];
+            if (bases.indexOf(baseClassName) >= 0)
+                return true;
+            return bases.some(function (clazz) { return _this.isTypeOf(clazz, baseClassName); });
         };
         TreeGenerator.prototype.symbolToFileMap = function (file, symbol) {
             var _this = this;
@@ -20320,6 +20355,21 @@ var ts;
         return TreeGenerator;
     })();
     ts.TreeGenerator = TreeGenerator;
+    var fileToFileMap = {};
+    var UsedFileResolver = (function () {
+        function UsedFileResolver() {
+        }
+        UsedFileResolver.mapFile = function (source, used) {
+            var depends = fileToFileMap[source];
+            if (!depends) {
+                depends = {};
+                fileToFileMap[source] = depends;
+            }
+            depends[used] = true;
+        };
+        return UsedFileResolver;
+    })();
+    ts.UsedFileResolver = UsedFileResolver;
     function compareFileNode(a, b) {
         if (a.order != b.order)
             return a.order - b.order;
@@ -20333,11 +20383,19 @@ var ts;
     * no export properties may have same name, add id after the name
     */
     function getFullyQualifiedName(symbol) {
-        if (symbol.exportSymbol)
-            return checker.getFullyQualifiedName(symbol.exportSymbol);
-        var name = checker.getFullyQualifiedName(symbol);
-        if (!(symbol.flags & (32 /* Class */ | 64 /* Interface */ | 1536 /* Module */))) {
-            name += symbol.id;
+        var name = null;
+        if (symbol.exportSymbol) {
+            name = checker.getFullyQualifiedName(symbol.exportSymbol);
+            classNames[name] = Object.keys(classNames).length;
+        }
+        else {
+            name = checker.getFullyQualifiedName(symbol);
+            if (!(symbol.flags & (32 /* Class */ | 64 /* Interface */ | 1536 /* Module */))) {
+                name += symbol.id;
+            }
+            else {
+                classNames[name] = Object.keys(classNames).length;
+            }
         }
         return name;
     }
@@ -20772,14 +20830,13 @@ var TSC = (function () {
     };
     TSC.executeCommandLine = ts.executeCommandLine;
     TSC.exit = null;
-    TSC.write = function (msg) { console.log(msg) };
+    TSC.write = function (msg) { return console.log(msg); };
     return TSC;
 })();
 module.exports = TSC;
 ts.sys.exit = function (code) {
     return TSC.exit(code);
 };
-
 ts.sys.write = function (msg) {
     return TSC.write(msg);
 };

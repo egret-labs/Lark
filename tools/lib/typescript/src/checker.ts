@@ -411,6 +411,18 @@ module ts {
                     }
                 }
             }
+
+
+            if (result.declarations)
+            {
+                var sourceFile = getSourceFile(lastLocation);
+                var dependFile = getSourceFile(result.declarations[0]);
+                if (sourceFile && dependFile)
+                {
+                    ts.UsedFileResolver.mapFile(sourceFile.filename, dependFile.filename);
+                }
+            }
+
             return result;
         }
 
@@ -6981,6 +6993,17 @@ module ts {
 
         function checkTypeReference(node: TypeReferenceNode) {
             var type = getTypeFromTypeReferenceNode(node);
+
+            if (type && type.symbol&&type.symbol.declarations)
+            {
+                var sourceFile = getSourceFile(node);
+                var dependFile = getSourceFile(type.symbol.declarations[0]);
+                if (sourceFile && dependFile)
+                {
+                    ts.UsedFileResolver.mapFile(sourceFile.filename, dependFile.filename);
+                }
+            }
+
             if (type !== unknownType && node.typeArguments) {
                 // Do type argument local checks only if referenced type is successfully resolved
                 var len = node.typeArguments.length;
