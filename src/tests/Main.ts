@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark {
-    export class Main extends Container {
+    export class Main extends Sprite {
 
         public constructor() {
             super();
@@ -45,7 +45,7 @@ module lark {
 
         private start(bitmapData:BitmapData):void {
 
-            //var container = new Container();
+            //var container = new DisplayObjectContainer();
             //container.name = "container";
             //container.x = 150;
             //container.addChild(new Bitmap(bitmapData));
@@ -56,7 +56,7 @@ module lark {
             //container.touchEnabled = false;
             //container.scaleX = container.scaleY = 0.5;
             //
-            //var container2 = new Container();
+            //var container2 = new DisplayObjectContainer();
             //container2.name  = "container2";
             //container2.addChild(container);
             //bitmap = new Bitmap(bitmapData);
@@ -71,8 +71,7 @@ module lark {
             //bitmap = new lark.Bitmap(t);
             //this.addChild(bitmap);
 
-            log(this.isType(lark.Types.DisplayObject));
-            var container = new Container();
+            var container = new Sprite();
             var x = 0, y = 0;
             for (var i = 0; i < 8000; i++) {
                 var bitmap = new Bitmap();
@@ -127,14 +126,9 @@ module lark {
             //container.addChild(shape);
             //shape.cacheAsBitmap = true;
             //container.mask = this.targetIcon;
-            log(this.container.isType(Types.Container));
-            log(this.container.isType(Types.DisplayObject));
-            log(this.container.isType(Types.Bitmap));
-            log(this.isType(Types.Bitmap));
-            log(this.isType(Types.Container));
         }
 
-        private container:Container;
+        private container:DisplayObjectContainer;
         private timer = new Timer(16);
         private touchTarget:DisplayObject;
         private offsetX:number = 0;

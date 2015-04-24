@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark {
-    export class CanvasTest extends Container {
+    export class CanvasTest extends Sprite {
 
         public constructor() {
             super();
