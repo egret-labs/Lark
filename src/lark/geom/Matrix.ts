@@ -91,7 +91,6 @@ module lark {
          */
         constructor(a:number = 1, b:number = 0, c:number = 0, d:number = 1, tx:number = 0, ty:number = 0) {
             super();
-            this.$typeFlags = Types.Matrix;
             var m = this.$data = new Float64Array(6);
             m[0] = a;
             m[1] = b;
@@ -519,4 +518,5 @@ module lark {
         }
 
     }
+    player.registerType(Matrix,[Types.Matrix]);
 }

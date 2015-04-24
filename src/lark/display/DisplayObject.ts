@@ -47,8 +47,8 @@ module lark {
     }
 
     /**
-     * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时显示的所有对象。使用 Container 类排列显示列表中的显示对象。
-     * Container 对象可以有子显示对象，而其他显示对象是“叶”节点，只有父级和同级，没有子级。
+     * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时显示的所有对象。使用 DisplayObjectContainer 类排列显示列表中的显示对象。
+     * DisplayObjectContainer 对象可以有子显示对象，而其他显示对象是“叶”节点，只有父级和同级，没有子级。
      * DisplayObject 类支持基本功能（如对象的 x 和 y 位置），也支持更高级的对象属性（如它的转换矩阵），所有显示对象都继承自 DisplayObject 类。
      * DisplayObject 类包含若干广播事件。通常，任何特定事件的目标均为一个特定的 DisplayObject 实例。
      * 若只有一个目标，则会将事件侦听器限制为只能放置到该目标上（在某些情况下，可放置到显示列表中该目标的祖代上），这意味着您可以向任何 DisplayObject 实例添加侦听器来侦听广播事件。
@@ -60,7 +60,6 @@ module lark {
          */
         public constructor() {
             super();
-            this.$typeFlags = Types.DisplayObject;
             this.$displayObjectFlags = player.DisplayObjectFlags.InitFlags;
             this._values = new Float64Array([1, 1, 0, 0, 0, 0, 0]);
         }
@@ -118,7 +117,7 @@ module lark {
         }
 
         /**
-         * 沿着显示列表向下传递标志量，非容器直接设置自身的flag，此方法会在 Container 中被覆盖。
+         * 沿着显示列表向下传递标志量，非容器直接设置自身的flag，此方法会在 DisplayObjectContainer 中被覆盖。
          */
         $propagateFlagsDown(flags:number):void {
             this.$setFlags(flags);
@@ -156,27 +155,27 @@ module lark {
          */
         public name:string;
 
-        $parent:Container = null;
+        $parent:DisplayObjectContainer = null;
 
         /**
-         * 表示包含此显示对象的 Container 对象。
+         * 表示包含此显示对象的 DisplayObjectContainer 对象。
          * 使用 parent 属性可以指定高于显示列表层次结构中当前显示对象的显示对象的相对路径。
          */
-        public get parent():Container {
+        public get parent():DisplayObjectContainer {
             return this.$parent;
         }
 
-        $setParent(parent:Container):void {
+        $setParent(parent:DisplayObjectContainer):void {
             this.$parent = parent;
         }
 
         $onAddToStage(stage:Stage):void {
             this.$stage = stage;
-            Container.$EVENT_ADD_TO_STAGE_LIST.push(this);
+            Sprite.$EVENT_ADD_TO_STAGE_LIST.push(this);
         }
 
         $onRemoveFromStage():void {
-            Container.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
+            Sprite.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
         }
 
         $stage:Stage = null;
@@ -265,9 +264,9 @@ module lark {
         }
 
         /**
-         * 表示 DisplayObject 实例相对于父级 Container 本地坐标的 x 坐标。
-         * 如果该对象位于具有变形的 Container 内，则它也位于包含 Container 的本地坐标系中。
-         * 因此，对于逆时针旋转 90 度的 Container，该 Container 的子级将继承逆时针旋转 90 度的坐标系。
+         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。
+         * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
+         * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
          */
         public get x():number {
             return this._values[Values.x];
@@ -288,9 +287,9 @@ module lark {
         }
 
         /**
-         * 表示 DisplayObject 实例相对于父级 Container 本地坐标的 y 坐标。
-         * 如果该对象位于具有变形的 Container 内，则它也位于包含 Container 的本地坐标系中。
-         * 因此，对于逆时针旋转 90 度的 Container，该 Container 的子级将继承逆时针旋转 90 度的坐标系。
+         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 y 坐标。
+         * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
+         * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
          */
         public get y():number {
             return this._values[Values.y];
@@ -987,4 +986,5 @@ module lark {
         }
 
     }
+    player.registerType(DisplayObject,[Types.DisplayObject]);
 }

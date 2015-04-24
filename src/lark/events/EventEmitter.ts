@@ -66,7 +66,6 @@ module lark {
          */
         public constructor(target:IEventEmitter = null) {
             super();
-            this.$typeFlags = Types.EventEmitter;
             this.eventDataHost = new EventDataHost(target ? target : this);
         }
 
@@ -254,6 +253,7 @@ module lark {
             }
         }
     }
+    player.registerType(EventEmitter,[Types.EventEmitter,Types.IEventEmitter]);
 }
 
 module lark.player {

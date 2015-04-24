@@ -29,12 +29,9 @@
 
 module lark {
     /**
-     * Container 类是可用作显示列表中显示对象容器的所有对象的基类。
-     * 该显示列表管理运行时中显示的所有对象。使用 Container 类排列显示列表中的显示对象。
-     * 每个 Container 对象都有自己的子级列表，用于组织对象的 Z 轴顺序。Z 轴顺序是由前至后的顺序，
-     * 可确定哪个对象绘制在前，哪个对象绘制在后等。
+     * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
      */
-    export class Container extends DisplayObject {
+    export class Sprite extends DisplayObject implements DisplayObjectContainer{
 
         static $EVENT_ADD_TO_STAGE_LIST:DisplayObject[] = [];
         static $EVENT_REMOVE_FROM_STAGE_LIST:DisplayObject[] = [];
@@ -44,7 +41,6 @@ module lark {
          */
         public constructor() {
             super();
-            this.$typeFlags = Types.Container;
             this.$children = [];
         }
 
@@ -67,8 +63,8 @@ module lark {
         }
 
         /**
-         * 将一个 DisplayObject 子实例添加到该 Container 实例中。子项将被添加到该 Container 实例中其他所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
-         * @param child 要作为该 Container 实例的子项添加的 DisplayObject 实例。
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
+         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
          */
         public addChild(child:DisplayObject):DisplayObject {
@@ -82,9 +78,9 @@ module lark {
 
 
         /**
-         * 将一个 DisplayObject 子实例添加到该 Container 实例中。该子项将被添加到指定的索引位置。索引为 0 表示该 Container 对象的显示列表的后（底）部。
-         * 如果索引值为-1，则表示该 Container 对象的显示列表的前（上）部。
-         * @param child 要作为该 Container 实例的子项添加的 DisplayObject 实例。
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。索引为 0 表示该 DisplayObjectContainer 对象的显示列表的后（底）部。
+         * 如果索引值为-1，则表示该 DisplayObjectContainer 对象的显示列表的前（上）部。
+         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
          * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
          */
@@ -98,7 +94,7 @@ module lark {
                 if (child == this) {
                     $error(1005);
                 }
-                else if (child.isType(Types.Container) && (<Container>child).contains(this)) {
+                else if (child.isType(Types.DisplayObjectContainer) && (<DisplayObjectContainer>child).contains(this)) {
                     $error(1004);
                 }
             }
@@ -109,7 +105,7 @@ module lark {
                 return child;
             }
 
-            var host:Container = child.$parent;
+            var host:DisplayObjectContainer = child.$parent;
             if (host == this) {
                 this.doSetChildIndex(child, index);
                 return child;
@@ -133,7 +129,7 @@ module lark {
                 child.emitWith(Event.ADDED, true);
             }
             if (stage) {
-                var list = Container.$EVENT_ADD_TO_STAGE_LIST;
+                var list = Sprite.$EVENT_ADD_TO_STAGE_LIST;
                 while (list.length) {
                     var childAddToStage = list.shift();
                     if (notifyListeners && childAddToStage.$stage) {
@@ -149,9 +145,9 @@ module lark {
         }
 
         /**
-         * 确定指定显示对象是 Container 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 Container 实例）。孙项、曾孙项等，每项都返回 true。
+         * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。孙项、曾孙项等，每项都返回 true。
          * @param child 要测试的子对象。
-         * @returns 如果指定的显示对象为 Container 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
+         * @returns 如果指定的显示对象为 DisplayObjectContainer 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
          */
         public contains(child:DisplayObject):boolean {
             while (child) {
@@ -206,7 +202,7 @@ module lark {
         }
 
         /**
-         * 将一个 DisplayObject 子实例从 Container 实例中移除。
+         * 将一个 DisplayObject 子实例从 DisplayObjectContainer 实例中移除。
          * @param child 要删除的 DisplayObject 实例。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
          */
@@ -222,7 +218,7 @@ module lark {
         }
 
         /**
-         * 从 Container 的子列表中指定的 index 位置删除子 DisplayObject。
+         * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject。
          * @param index 要删除的 DisplayObject 的子索引。
          * @returns 已删除的 DisplayObject 实例。
          */
@@ -247,7 +243,7 @@ module lark {
 
             if (this.$stage) {//在舞台上
                 child.$onRemoveFromStage();
-                var list = Container.$EVENT_REMOVE_FROM_STAGE_LIST
+                var list = Sprite.$EVENT_REMOVE_FROM_STAGE_LIST
                 while (list.length > 0) {
                     var childAddToStage = list.shift();
                     if (notifyListeners) {
@@ -341,7 +337,7 @@ module lark {
         }
 
         /**
-         * 从 Container 实例的子级列表中删除所有 child DisplayObject 实例。
+         * 从 DisplayObjectContainer 实例的子级列表中删除所有 child DisplayObject 实例。
          */
         public removeChildren():void {
             var children = this.$children;
@@ -530,4 +526,5 @@ module lark {
         }
 
     }
+    player.registerType(Sprite,[Types.Sprite,Types.DisplayObjectContainer]);
 }

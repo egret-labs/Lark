@@ -85,7 +85,6 @@ module lark {
         public constructor(type:string, bubbles?:boolean, cancelable?:boolean, stageX?:number,
                            stageY?:number, touchPointID?:number) {
             super(type, bubbles, cancelable);
-            this.$typeFlags = Types.TouchEvent;
             this.$setTo(stageX, stageY, touchPointID);
         }
 
@@ -170,4 +169,6 @@ module lark {
             return result;
         }
     }
+
+    player.registerType(TouchEvent,[Types.TouchEvent]);
 }

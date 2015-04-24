@@ -52,7 +52,6 @@ module lark {
          */
         public constructor(x:number = 0, y:number = 0, width:number = 0, height:number = 0) {
             super();
-            this.$typeFlags = Types.Rectangle;
             this.x = x;
             this.y = y;
             this.width = width;
@@ -209,4 +208,5 @@ module lark {
             return v * this.width + u * this.height;
         }
     }
+    player.registerType(Rectangle,[Types.Rectangle]);
 }

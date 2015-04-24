@@ -110,7 +110,7 @@ module lark {
      * Lark 提供了多种在运行时设置文本格式的方法。ITextFieldStyle 允许您设置 RichTextField 对象的字符和段落格式。
      * 
      */
-    export class RichTextField extends Container {
+    export class RichTextField extends Sprite {
         /**
          * 创建一个RichTextField对象
          */

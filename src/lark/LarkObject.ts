@@ -54,15 +54,37 @@ module lark {
             return this.$hashCode;
         }
 
-        $typeFlags:number = 0;
-
         /**
          * 检查当前对象是否为Lark引擎内指定接口或类或其子类的实例。此方法与使用instanceOf关键字相比具有更高的性能，并且能判断接口的实现。
-         * @param typeFlag 类或接口的枚举值，请参考lark.Types定义的枚举常量。
+         * @param typeFlag 类或接口的枚举值，请参考lark.Types或lark.gui.Types定义的枚举常量。
          * @returns 返回true表示当前对象是指定类或接口的实例。
          */
-        public isType(typeFlag:Types):boolean{
-            return (this.$typeFlags & typeFlag) === typeFlag;
+        public isType(typeFlag:number):boolean{
+            var prototype: any = Object.getPrototypeOf(this);
+            return (prototype.__meta__.indexOf(typeFlag)!==-1);
         }
+    }
+
+    LarkObject.prototype["__meta__"] = [];
+}
+
+module lark.player {
+    /**
+     * 注册枚举值列表到一个类定义,用此方法往类定义上添加它自身以及所有接口对应的枚举值。
+     * 在运行时，这个类的实例将可以使用isType()方法传入一个枚举值来判断实例类型。
+     * @param clazz 继承自LarkObject的类定义
+     * @param typeFlags 要注册的枚举值列表
+     */
+    export function registerType(clazz:any,typeFlags:number[]):void{
+        if (DEBUG) {
+            if(!clazz){
+                $error(1003, "clazz");
+            }
+            if(!typeFlags){
+                $error(1003, "typeFlags");
+            }
+        }
+        var prototype: any = clazz.prototype;
+        prototype.__meta__ = typeFlags.concat(prototype.__meta__);
     }
 }

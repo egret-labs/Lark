@@ -31,17 +31,16 @@ module lark {
     /**
      * Stage 类代表主绘图区，表示显示 Lark 内容的整个区域。
      * 可以利用 DisplayObject 实例的 stage 属性进行访问。
-     * Stage 类具有多个祖代类 -- Container、DisplayObject 和 EventDispatcher，属性和方法便是从这些类继承而来的。
+     * Stage 类具有多个祖代类 -- DisplayObjectContainer、DisplayObject 和 EventDispatcher，属性和方法便是从这些类继承而来的。
      * 从这些继承的许多属性和方法不适用于 Stage 对象。
      */
-    export class Stage extends Container {
+    export class Stage extends Sprite {
 
         /**
          * 舞台对象不允许自行实例化。
          */
         public constructor() {
             super();
-            this.$typeFlags = Types.Stage;
             this.$stage = this
         }
 
@@ -229,5 +228,5 @@ module lark {
             configurable: true
         });
     }
-
+    player.registerType(Stage,[Types.Stage]);
 }
