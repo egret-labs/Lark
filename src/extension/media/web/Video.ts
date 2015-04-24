@@ -1,77 +1,36 @@
 ﻿module lark.web {
-    export class Video extends player.LarkVideoBase {
-        protected domElement: HTMLVideoElement;
-
-        public play(loop: boolean = false) {
-            if (!this.canPlay) {
-                this.playAfterLoad(loop);
-                return;
-            }
-                
-            var video = this.domElement;
-            this.bitmapData = video;
-            this.$setDefaultBitmapData(video, true);
-            video.loop = loop;
-            video.play();
+    export class Video extends WebMedia implements lark.Video {
+        /**
+        * 创建一个Video对象
+        */
+        public constructor(option: IVideoOption) {
+            super(option);
         }
 
-        public pause() {
-            this.domElement.pause();
+        public get bitmapData(): BitmapData {
+            return <HTMLVideoElement>this.domElement;
         }
 
-        public load() {
-            if (this.loadStart)
-                return;
-            var video = document.createElement("video");
-            video.width = this._width;
-            video.height = this._height;
-            video.autoplay = false;
-            video.setAttribute("webkit-playsinline", "");
-            video.volume = this._volume;
-            if (this._poster)
-                video.poster = this._poster;
-            for (var type in this.sources) {
-                var source = this.sources[type];
-                var sourceElement = document.createElement("SOURCE");
-                sourceElement.src = source;
-                video.appendChild(sourceElement);
-            }
+        public set bitmapData(video) {
+            // Read only
+            error(tr(1010, 'Video.bitmapData'));
+        }
+
+        protected createDomElement(): HTMLMediaElement {
+            var video = document.createElement('video');
+            video.height = this.$option.height;
+            video.width = this.$option.width;
             video.addEventListener("loadedmetadata", e=> this.onLoadedMeta(e));
-            this.$addDomListeners(video);
-            this.loadStart = true;
-            video.load();
-
-            
             this.domElement = video;
-        }
-
-        public stop() {
-            this.domElement.pause();
-            this.domElement.currentTime = 0;
-            this.onStop();
-        }
-
-
-        protected getPosition(): number {
-            if (this.domElement)
-                return this.domElement.currentTime;
-            return super.getPosition();
-        }
-        protected setPosition(value: number) {
-            super.setPosition(value);
-            if (this.domElement)
-                this.domElement.currentTime = value;
+            return video;
         }
 
         protected onLoadedMeta(e:SystemEvent) {
-            var video = this.domElement;
+            var video = <HTMLVideoElement>this.domElement;
             video.height = video.videoHeight;
             video.width = video.videoWidth;
-            if (this.bitmapData == null && this._poster == null){
-                this.$setDefaultBitmapData(video);
-            }
+            this.emitWith(MediaEvent.RESIZE);
         }
-
     }
 }
 
