@@ -35,7 +35,7 @@ module lark.gui {
 	 */
 	export class UIEvent extends Event{
 
-		public constructor(type:string, bubbles:boolean=false, cancelable:boolean=false){
+		public constructor(type:string, bubbles?:boolean, cancelable?:boolean){
 			super(type, bubbles, cancelable);
 		}
 
@@ -83,10 +83,10 @@ module lark.gui {
 		/**
 		 * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
 		 * @param target 事件派发目标
-		 * @param type 事件类型
+		 * @param eventType 事件类型
 		 */
-		public static emitUIEvent(target:IEventEmitter, type:string, bubbles?:boolean, cancelable?:boolean):boolean {
-			var event = Event.create(TimerEvent, type, bubbles, cancelable);
+		public static emitUIEvent(target:IEventEmitter, eventType:string):boolean {
+			var event = Event.create(UIEvent, eventType);
 			var result = target.emit(event);
 			Event.release(event);
 			return result;

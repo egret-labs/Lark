@@ -31,7 +31,7 @@ module lark.gui {
     /**
      * GUI显示对象基类
      */
-    export class UIComponent extends DisplayObject{
+    export class UIComponent extends DisplayObject {
         /**
          * 构造函数
          */
@@ -40,45 +40,20 @@ module lark.gui {
             this.createChildren();
         }
 
+        /**
+         * 嵌套深度，失效验证是根据这个深度来进行队列排序。
+         */
+        $nestLevel:number = 0;
+
         $onAddToStage(stage:Stage):void {
             super.$onAddToStage(stage);
+            this.$nestLevel = (<UIComponent><any>this.$parent).$nestLevel + 1;
             this.checkInvalidateFlag();
         }
 
-        /**
-         * 创建子项,子类覆盖此方法以完成组件子项的初始化操作，
-         * 请务必调用super.createChildren()以完成父类组件的初始化
-         * @method egret.gui.UIComponent#createChildren
-         */
-        public createChildren():void {
-
-        }
-
-        private _nestLevel:number = 0;
-        /**
-         * @member egret.gui.UIComponent#nestLevel
-         */
-        public get nestLevel():number {
-            return this._nestLevel;
-        }
-
-        public set nestLevel(value:number) {
-            if (this._nestLevel == value)
-                return;
-            this._nestLevel = value;
-            this._updateChildrenNestLevel();
-        }
-
-        /**
-         * 更新子项的nestLevel属性
-         */
-        public _updateChildrenNestLevel():void {
-            for (var i:number = this.numChildren - 1; i >= 0; i--) {
-                var child:UIComponent = <UIComponent><any> (this.getChildAt(i));
-                if (child && "nestLevel" in child) {
-                    child.nestLevel = this._nestLevel + 1;
-                }
-            }
+        $onRemoveFromStage():void{
+            super.$onRemoveFromStage();
+            this.$nestLevel = 0;
         }
 
         /**
@@ -441,12 +416,10 @@ module lark.gui {
 
         /**
          * 上一次测量的首选宽度
-         * @member egret.gui.UIComponent#_oldPreferWidth
          */
         public _oldPreferWidth:number = NaN;
         /**
          * 上一次测量的首选高度
-         * @member egret.gui.UIComponent#_oldPreferHeight
          */
         public _oldPreferHeight:number = NaN;
 
@@ -588,7 +561,7 @@ module lark.gui {
                 this.dispatchResizeEvent();
             }
             if (this.oldX != this.x || this.oldY != this.y) {
-                this.dispatchMoveEvent();
+                this.emitMoveEvent();
             }
         }
 
@@ -604,9 +577,9 @@ module lark.gui {
         /**
          *  抛出移动事件
          */
-        private dispatchMoveEvent():void {
-            if (this.hasEventListener(MoveEvent.MOVE)) {
-                MoveEvent.dispatchMoveEvent(this, this.oldX, this.oldY);
+        private emitMoveEvent():void {
+            if (this.hasListener(MoveEvent.MOVE)) {
+                MoveEvent.emitMoveEvent(this, this.oldX, this.oldY);
             }
             this.oldX = this.x;
             this.oldY = this.y;
@@ -623,8 +596,8 @@ module lark.gui {
          *  抛出尺寸改变事件
          */
         private dispatchResizeEvent():void {
-            if (this.hasEventListener(ResizeEvent.RESIZE)) {
-                ResizeEvent.dispatchResizeEvent(this, this.oldWidth, this.oldHeight);
+            if (this.hasListener(ResizeEvent.RESIZE)) {
+                ResizeEvent.emitResizeEvent(this, this.oldWidth, this.oldHeight);
             }
             this.oldWidth = this._width;
             this.oldHeight = this._height;
@@ -830,7 +803,7 @@ module lark.gui {
                 changed = true;
             }
             if (changed) {
-                this.dispatchMoveEvent();
+                this.emitMoveEvent();
             }
         }
 
