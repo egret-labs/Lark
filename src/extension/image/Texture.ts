@@ -33,7 +33,7 @@ module lark {
     /**
      * 纹理类是对BitmapData图片资源的封装,可以将它指定为目标BitmapData上的一个子区域。
      */
-    export class Texture extends HashObject {
+    export class Texture extends LarkObject {
 
         /**
          * 创建一个 lark.Texture 对象

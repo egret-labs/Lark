@@ -27,28 +27,18 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark.gui {
+    /**
+     * 数值默认值。通常用于标识一个数字属性未被显式设置。例如对UIComponent.right赋值None，将会取消右对齐。
+     * 这里不直接使用NaN，是由于isNaN()方法有严重的性能问题。
+     */
+    export var NONE = -0x8000000;
 
     /**
-     * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
+     * 判断数字是否为NONE
+     * @param value 要判断的数字
      */
-    export var sharedRenderContext:player.RenderContext;
-    /**
-     * surfaceFactory实例
-     */
-    export var surfaceFactory:SurfaceFactory;
-
-    export interface SurfaceFactory {
-
-        /**
-         * 从对象池取出或创建一个新的Surface实例
-         * @param useOnce 表示对取出实例的使用是一次性的，用完后立即会释放。
-         */
-        create(useOnce?:boolean):Surface;
-        /**
-         * 释放一个Surface实例
-         * @param surface 要释放的Surface实例
-         */
-        release(surface:Surface):void;
+    export function isNone(value:number):boolean{
+        return value===NONE;
     }
 }

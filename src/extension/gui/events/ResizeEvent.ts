@@ -1,4 +1,4 @@
-﻿//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
 //  All rights reserved.
@@ -27,71 +27,46 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
+module lark.gui {
 
-module lark {
     /**
-     * 用于渲染的文本块
+     * 尺寸改变事件
      */
-    export class TextSpan extends LarkObject {
-        constructor(
-            text: string ,
-            style:ITextStyle,
-            textWidth: number ,
-            length: number ,
-            x: number,
-            y:number) {
-            super();
-            this.text = text;
-            this.style = style;
-            this.width = textWidth;
-            this.x = +x || 0;
-            this.y = +y || 0;
+    export class ResizeEvent extends Event {
+
+        public static RESIZE:string = "UIResize";
+
+
+        public constructor(type:string, bubbles?:boolean, cancelable?:boolean, oldWidth?:number, oldHeight?:number) {
+            super(type, bubbles, cancelable);
+
+            this.oldWidth = oldWidth;
+            this.oldHeight = oldHeight;
         }
 
-        
         /**
-         * 需要显示的文本
+         * 旧的高度
          */
-        public text: string;
-        /**
-         * 文本块相对于父级的 x 坐标
-         */
-        public x: number;
-        /**
-         * 文本块相对于父级的 y 坐标
-         */
-        public y: number;
-        /**
-         * 需要显示的文本宽度
-         */
-        public width: number;
-        /**
-         * 文本的样式
-         */
-        public style: ITextStyle;
-        
-        /**
-         * 文本块的高度
-         */
-        public get height() {
-            return Math.max(this.style.lineHeight, this.style.fontSize);
-        }
+        public oldHeight:number;
 
-        $toFontString(includeSize = false) {
-            return this.style.toFontString(includeSize);
-        }
+        /**
+         * 旧的宽度
+         */
+        public oldWidth:number;
 
-        $toColorString() {
-            var value = this.style.color;
-            if(value < 0)
-                value = 0;
-            if(value > 16777215)
-                value = 16777215;
-            var color:string = value.toString(16).toUpperCase();
-            while(color.length<6){
-                color = "0"+color;
-            }
-            return "#"+color;
+        /**
+         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         * @param oldWidth 旧的宽度
+         * @param oldHeight 旧的高度
+         */
+        public static emitResizeEvent(target:IEventEmitter, oldWidth?:number, oldHeight?:number):boolean {
+            var event = Event.create(ResizeEvent, ResizeEvent.RESIZE);
+            event.oldWidth = oldWidth;
+            event.oldHeight = oldHeight;
+            var result = target.emit(event);
+            Event.release(event);
+            return result;
         }
     }
+    registerType(ResizeEvent,[Types.ReiszeEvent]);
 }

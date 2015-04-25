@@ -169,4 +169,6 @@ module lark {
             return result;
         }
     }
+
+    registerType(TouchEvent,[Types.TouchEvent]);
 }

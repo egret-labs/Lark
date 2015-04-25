@@ -2,7 +2,7 @@
 
 module lark.text {
 
-    export class TextLine extends HashObject {
+    export class TextLine extends LarkObject {
         constructor() {
             super();
         }

@@ -29,9 +29,8 @@
 
 module lark.player {
 
-    export interface Renderable{
+    export interface Renderable extends LarkObject{
 
-        $hashCode:number;
         /**
          * 是否需要重绘的标志
          */

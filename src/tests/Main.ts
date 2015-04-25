@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark {
-    export class Main extends DisplayObjectContainer {
+    export class Main extends Sprite {
 
         public constructor() {
             super();
@@ -37,7 +37,6 @@ module lark {
             img.onload = ()=> {
                 this.start(img);
             }
-
         }
 
         private targetIcon:DisplayObject;
@@ -72,10 +71,9 @@ module lark {
             //bitmap = new lark.Bitmap(t);
             //this.addChild(bitmap);
 
-
-            var container = new DisplayObjectContainer();
+            var container = new Sprite();
             var x = 0, y = 0;
-            for (var i = 0; i < 2300; i++) {
+            for (var i = 0; i < 8000; i++) {
                 var bitmap = new Bitmap();
                 bitmap.bitmapData = bitmapData;
                 bitmap.x = x;
@@ -106,17 +104,17 @@ module lark {
             g.lineTo(50, 50);
             g.lineWidth = 10;
             g.stroke();
-            g.strokeRect(0,0,100,100);
+            g.strokeRect(0, 0, 100, 100);
             g.fillStyle = "green";
             g.fill();
             this.addChild(container);
-            container.y = 150;
+            //container.y = 150;
             container.cacheAsBitmap = true;
             bitmap = new lark.Bitmap();
-            bitmap.x = 250;
-            bitmap.y = 250;
+            bitmap.x = 350;
+            bitmap.y = 350;
             bitmap.bitmapData = bitmapData;
-            bitmap.blendMode = BlendMode.Darker;
+            bitmap.blendMode = BlendMode.ADD;
             this.iconList.push(bitmap);
             this.targetIcon = bitmap;
             this.addChild(this.targetIcon);
@@ -127,8 +125,7 @@ module lark {
             this.container = container;
             //container.addChild(shape);
             //shape.cacheAsBitmap = true;
-
-            //container.mask = shape;
+            //container.mask = this.targetIcon;
         }
 
         private container:DisplayObjectContainer;
@@ -152,15 +149,23 @@ module lark {
             target.y = pos.y;
             this.offsetX = target.x - event.stageX;
             this.offsetY = target.y - event.stageY;
+            //this.offsetX = event.stageX;
+            //this.offsetY = event.stageY;
             this.stage.on(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
             this.stage.on(TouchEvent.TOUCH_END, this.onTouchEnd, this);
             event.updateAfterEvent();
         }
 
+        private rect = new Rectangle(300, 300, 500, 500);
+
         private onTouchMove(event:TouchEvent):void {
             this.touchTarget.x = this.offsetX + event.stageX;
             this.touchTarget.y = this.offsetY + event.stageY;
-            log("move");
+            //this.rect.x -= event.stageX - this.offsetX;
+            //this.rect.y -= event.stageY - this.offsetY;
+            //this.offsetX = event.stageX;
+            //this.offsetY = event.stageY;
+            //this.container.scrollRect = this.rect;
             event.updateAfterEvent();
         }
 
@@ -187,6 +192,7 @@ module lark {
                 bitmap.rotation += 2;
             }
         }
+
     }
 
 }

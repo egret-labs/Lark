@@ -29,7 +29,7 @@
 
 module lark.web {
 
-    export class WebTouchHandler extends HashObject {
+    export class WebTouchHandler extends LarkObject {
 
         public constructor(touch:lark.player.TouchHandler, canvas:HTMLCanvasElement) {
             super();

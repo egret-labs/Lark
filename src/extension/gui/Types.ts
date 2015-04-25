@@ -27,18 +27,32 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
-
-    $locale_strings = $locale_strings||{};
-    var locale_strings = $locale_strings;
-
-    locale_strings[1001] = "找不到Lark入口类: {0}。";
-    locale_strings[1002] = "Lark入口类 {0} 必须继承自lark.DisplayObject。";
-    locale_strings[1003] = "参数 {0} 不能为 null。";
-    locale_strings[1004] = "无法将对象添加为它的一个子对象（或子对象的子对象等）的子对象。";
-    locale_strings[1005] = "不能将对象添加为其自身的子对象。";
-    locale_strings[1006] = "提供的 DisplayObject 必须是调用者的子级。";
-    locale_strings[1007] = "为参数指定的索引不在范围内。";
-    locale_strings[1008] = "实例化单例出错，不允许实例化多个 {0} 对象。";
-    locale_strings[1009] = "Stage 类不实现此属性或方法。";
+module lark.gui {
+    //1001~2000预留给lark.gui包下的类和接口
+    /**
+     * 为Lark引擎内的类或接口定义的枚举值。通常作为实例检查类型的方法 isType() 的参数。
+     */
+    export enum Types {
+        /**
+         * IEventEmitter 接口定义用于添加或删除事件侦听器的方法，检查是否已注册特定类型的事件侦听器，并调度事件。
+         * 事件目标是 Lark 事件模型的重要组成部分。事件目标是事件如何通过显示列表层次结构这一问题的焦点。当发生鼠标单击或按键等事件时，
+         * 会将事件对象调度到从显示列表根开始的事件流中。事件对象进行到事件目标的往返行程，在概念上，此往返行程被划分为三个阶段：
+         * 捕获阶段包括从根到事件目标节点之前的最后一个节点的行程，目标阶段仅包括事件目标节点，冒泡阶段包括到显示列表的根的回程上遇到的任何后续节点。
+         * 通常，使用户定义的类能够调度事件的最简单方法是扩展 EventEmitter。如果无法扩展（即，如果该类已经扩展了另一个类），
+         * 则可以实现 IEventEmitter 接口，创建 EventEmitter 成员，并编写一些简单的挂钩，将调用连接到聚合的 EventEmitter 中。
+         */
+        UIComponent = 1001,
+        /**
+         * UI事件
+         */
+        UIEvent,
+        /**
+         * UI尺寸改变事件
+         */
+        ReiszeEvent,
+        /**
+         * UI移动事件
+         */
+        MoveEvent
+    }
 }
