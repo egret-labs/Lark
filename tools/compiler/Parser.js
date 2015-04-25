@@ -1,6 +1,8 @@
 /// <reference path="../lib/types.d.ts" />
 var utils = require('../lib/utils');
+var file = require('../lib/FileUtil');
 var CompileOptions = require("./CompileOptions");
+var Properties = require("./Properties");
 var optionDeclarations = [
     {
         name: "action",
@@ -106,7 +108,26 @@ function parseCommandLine(commandLine) {
         }
         if (options.projectDir == null)
             options.projectDir = process.cwd();
+        options.host = 'localhost';
         options.port = 3001;
+        var props = new Properties();
+        if (file.exists(options.larkPropertiesFile)) {
+            var json = file.read(options.larkPropertiesFile);
+            var data = null;
+            try {
+                data = JSON.parse(json);
+            }
+            catch (e) {
+                console.error(utils.tr(10005));
+                process.exit(10005);
+            }
+            props.parse(data);
+        }
+        else {
+            props.host = 'localhost';
+            props.port = 3001;
+        }
+        options.projectProperties = props;
     }
 }
 exports.parseCommandLine = parseCommandLine;

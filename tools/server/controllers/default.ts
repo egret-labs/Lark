@@ -9,13 +9,27 @@ class Default extends TotalJS.Controller {
 
     static install() {
         var self = Default.prototype;
-        framework.route('$/');
+        framework.route('$/', self.manage);
+        framework.route('$/shutdown', self.shutdown);
         framework.route('$/ping/', self.ping);
         framework.file('Lark manage static files', self.staticFiles);
         framework.file('User project static files', self.projectFiles);
 
     }
 
+    manage() {
+        var viewdata: lark.server.ViewModel = {
+            options: lark.server.options.toJSON()
+        };
+        this.repository = viewdata;
+        this.view('index');
+    }
+
+    shutdown() {
+        console.log('The server has been shutdown');
+        this.res.send(200, '');
+        setTimeout(() => process.exit(0), 200);
+    }
 
     staticFiles(req, res, isValidation) {
 

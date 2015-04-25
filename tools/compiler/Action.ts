@@ -33,6 +33,7 @@ import TypeScript = require("../lib/typescript/tsc");
 import FileUtil = require("../lib/FileUtil");
 import utils = require('../lib/utils');
 import UglifyJS = require("../lib/uglify-js/uglifyjs");
+import TsService = require("./TsService");
 
 class Action {
 
@@ -139,7 +140,7 @@ class Action {
 
 TypeScript.exit = exitCode => {
     if (exitCode != 0)
-        console.log(utils.tr(10003));
+        console.log(utils.tr(10003, exitCode));
     return exitCode;
 };
 

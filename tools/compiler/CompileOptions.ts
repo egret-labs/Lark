@@ -10,6 +10,10 @@ class CompileOptions implements lark.ICompileOptions {
         return FileUtil.joinPath(this.projectDir, "src/");
     }
 
+    get larkPropertiesFile(): string {
+        return FileUtil.joinPath(this.projectDir, "lark.json");
+    }
+
     get srcLarkFile(): string {
         var filename = this.publish ? 'lark.min.js' : 'lark.js';
         return FileUtil.joinPath(this.srcDir, "lark/" + filename);
@@ -48,8 +52,20 @@ class CompileOptions implements lark.ICompileOptions {
         return FileUtil.joinPath(this.projectDir, "template");
     }
 
-    port: number;
-    ip: string;
+    get host(): string {
+        return this.projectProperties.host;
+    }
+    get port(): number {
+        return this.projectProperties.port;
+    }
+    get websocketUrl(): string {
+        var url = "ws://" + this.host + ':' + this.port;
+        return url;
+    }
+    get manageUrl(): string {
+        var url = "http://" + this.host + ':' + this.port + '/$/';
+        return url;
+    }
 
     larkRoot: string;
     publish: boolean;
@@ -63,8 +79,7 @@ class CompileOptions implements lark.ICompileOptions {
     showUI: boolean;
     declaration: boolean;
 
-    //modules
-    modules: string;
+    projectProperties: lark.ILarkProperties;
 
     static parse(option: lark.ICompileOptions) {
         var it = new CompileOptions();
@@ -73,6 +88,22 @@ class CompileOptions implements lark.ICompileOptions {
             it[p] = option[p];
         }
         return it;
+    }
+
+    toJSON(): lark.ICompileOptions {
+        var options = this;
+        var json: any = {};
+        for (var k in this) {
+            var disc = Object.getOwnPropertyDescriptor(options, k) || Object.getOwnPropertyDescriptor(CompileOptions.prototype, k);
+            if (!disc)
+                continue;
+            if (disc.enumerable == false)
+                continue;
+            if (typeof disc.value == 'function')
+                continue;
+            json[k] = options[k]
+        }
+        return json;
     }
 }
 

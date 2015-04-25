@@ -20,7 +20,7 @@ class Run extends Action {
     }
 
     checkState(options: lark.ICompileOptions) {
-        var req = http.get('http://127.0.0.1:' + options.port + '/$/ping',(res: http.ClientResponse) => {
+        var req = http.get('http://'+ options.host +':' + options.port + '/$/ping',(res: http.ClientResponse) => {
             this.sendCMD(options);
         });
         req.on('error', e => {
@@ -46,10 +46,13 @@ class Run extends Action {
     }
 
     sendCMD(options: lark.ICompileOptions) {
-        var wshost = 'ws://127.0.0.1:' + options.port + "/";
+        var wshost = 'ws://' + options.host +':' + options.port + "/";
         var ws = Websocket.connect(wshost);
 
-        var data = JSON.stringify(options);
+        var data = JSON.stringify({
+            type: 'cmd',
+            data: options
+        });
         ws.on("connect", e=> {
             ws.sendText(data);
         });
@@ -57,7 +60,6 @@ class Run extends Action {
     }
 
     gotResult(msg) {
-        msg = decodeURIComponent(msg);
         var result:lark.CommandResult = null;
         try {
             result = JSON.parse(msg);
@@ -68,7 +70,7 @@ class Run extends Action {
         }
         if (result.type == 'log')
         {
-            console.log.apply(console, [result.data.msg].concat(result.data.params));
+            console.log.apply(console, result.data);
         }
         if (result.exitCode != undefined)
             this.exit(result.exitCode);

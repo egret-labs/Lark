@@ -38,7 +38,9 @@ declare module lark {
         outLarkFile: string;
         larkRoot?: string;
         port: number;
-        ip: string;
+        host: string;
+        websocketUrl: string;
+        manageUrl: string;
 
         publish?: boolean;
         includeLark?: boolean;
@@ -51,12 +53,23 @@ declare module lark {
         showUI?: boolean;
         declaration?: boolean;
 
-        //modules
-        modules?: string;
+        projectProperties: ILarkProperties;
 
-
+        toJSON: () => any;
 
         //工具用
+    }
+
+    export interface ILarkModule {
+        name: string;
+    }
+
+    export interface ILarkProperties {
+        version: string;
+        entry: string;
+        modules: ILarkModule[];
+        port: number;
+        host: string;
     }
 
     export interface CommandLineOption {
@@ -73,6 +86,13 @@ declare module lark {
         message?: string;
         data?: any;
         type: string;
+    }
+
+    module server {
+        export var options: ICompileOptions;
+        export interface ViewModel {
+            options: ICompileOptions;
+        }
     }
 }
 

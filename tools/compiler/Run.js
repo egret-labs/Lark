@@ -22,7 +22,7 @@ var Run = (function (_super) {
     };
     Run.prototype.checkState = function (options) {
         var _this = this;
-        var req = http.get('http://127.0.0.1:' + options.port + '/$/ping', function (res) {
+        var req = http.get('http://' + options.host + ':' + options.port + '/$/ping', function (res) {
             _this.sendCMD(options);
         });
         req.on('error', function (e) {
@@ -43,16 +43,18 @@ var Run = (function (_super) {
     };
     Run.prototype.sendCMD = function (options) {
         var _this = this;
-        var wshost = 'ws://127.0.0.1:' + options.port + "/";
+        var wshost = 'ws://' + options.host + ':' + options.port + "/";
         var ws = Websocket.connect(wshost);
-        var data = JSON.stringify(options);
+        var data = JSON.stringify({
+            type: 'cmd',
+            data: options
+        });
         ws.on("connect", function (e) {
             ws.sendText(data);
         });
         ws.on("text", function (e) { return _this.gotResult(e); });
     };
     Run.prototype.gotResult = function (msg) {
-        msg = decodeURIComponent(msg);
         var result = null;
         try {
             result = JSON.parse(msg);
@@ -61,7 +63,7 @@ var Run = (function (_super) {
             console.log(e);
         }
         if (result.type == 'log') {
-            console.log.apply(console, [result.data.msg].concat(result.data.params));
+            console.log.apply(console, result.data);
         }
         if (result.exitCode != undefined)
             this.exit(result.exitCode);

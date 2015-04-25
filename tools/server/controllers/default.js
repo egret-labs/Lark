@@ -13,10 +13,23 @@ var Default = (function (_super) {
     }
     Default.install = function () {
         var self = Default.prototype;
-        framework.route('$/');
+        framework.route('$/', self.manage);
+        framework.route('$/shutdown', self.shutdown);
         framework.route('$/ping/', self.ping);
         framework.file('Lark manage static files', self.staticFiles);
         framework.file('User project static files', self.projectFiles);
+    };
+    Default.prototype.manage = function () {
+        var viewdata = {
+            options: lark.server.options.toJSON()
+        };
+        this.repository = viewdata;
+        this.view('index');
+    };
+    Default.prototype.shutdown = function () {
+        console.log('The server has been shutdown');
+        this.res.send(200, '');
+        setTimeout(function () { return process.exit(0); }, 200);
     };
     Default.prototype.staticFiles = function (req, res, isValidation) {
         if (isValidation) {

@@ -105,7 +105,7 @@ var Action = (function () {
 })();
 TypeScript.exit = function (exitCode) {
     if (exitCode != 0)
-        console.log(utils.tr(10003));
+        console.log(utils.tr(10003, exitCode));
     return exitCode;
 };
 module.exports = Action;
