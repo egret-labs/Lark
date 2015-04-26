@@ -67,7 +67,6 @@ module lark {
         }
     }
 
-
     /**
      * Matrix 类表示一个转换矩阵，它确定如何将点从一个坐标空间映射到另一个坐标空间。
      * 您可以对一个显示对象执行不同的图形转换，方法是设置 Matrix 对象的属性，将该 Matrix
@@ -519,4 +518,9 @@ module lark {
 
     }
     registerType(Matrix,[Types.Matrix]);
+
+    /**
+     * 仅供引擎内复用，要防止暴露引用到外部。
+     */
+    export var $TempMatrix = new Matrix();
 }

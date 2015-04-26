@@ -376,7 +376,7 @@ module lark {
             var xMin = 0, xMax = 0, yMin = 0, yMax = 0;
             var found:boolean = false;
             for (var i = -1; i < length; i++) {
-                var childBounds = i === -1 ? bounds : children[i].$getTransformedBounds(this, Rectangle.TEMP);
+                var childBounds = i === -1 ? bounds : children[i].$getTransformedBounds(this, $TempRectangle);
                 if (childBounds.isEmpty()) {
                     continue;
                 }

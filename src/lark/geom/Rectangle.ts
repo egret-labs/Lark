@@ -209,4 +209,8 @@ module lark {
         }
     }
     registerType(Rectangle,[Types.Rectangle]);
+    /**
+     * 仅供引擎内复用，要防止暴露引用到外部。
+     */
+    export var $TempRectangle = new Rectangle();
 }

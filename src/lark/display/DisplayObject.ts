@@ -403,7 +403,7 @@ module lark {
         }
 
         $getWidth():number {
-            return this.$getTransformedBounds(this.$parent, Rectangle.TEMP).width;
+            return this.$getTransformedBounds(this.$parent,$TempRectangle).width;
         }
 
         public set width(value:number) {
@@ -417,7 +417,7 @@ module lark {
             }
             var values = this._values;
             var originalBounds = this.$getOriginalBounds();
-            var bounds = this.$getTransformedBounds(this.$parent, Rectangle.TEMP);
+            var bounds = this.$getTransformedBounds(this.$parent, $TempRectangle);
             var angle = values[Values.rotation] / 180 * Math.PI;
             var baseWidth = originalBounds.$getBaseWidth(angle);
             if (!baseWidth) {
@@ -438,7 +438,7 @@ module lark {
         }
 
         $getHeight():number {
-            return this.$getTransformedBounds(this.$parent, Rectangle.TEMP).height;
+            return this.$getTransformedBounds(this.$parent, $TempRectangle).height;
         }
 
         public set height(value:number) {
@@ -452,7 +452,7 @@ module lark {
             }
             var values = this._values;
             var originalBounds = this.$getOriginalBounds();
-            var bounds = this.$getTransformedBounds(this.$parent, Rectangle.TEMP);
+            var bounds = this.$getTransformedBounds(this.$parent, $TempRectangle);
             var angle = values[Values.rotation] / 180 * Math.PI;
             var baseHeight = originalBounds.$getBaseHeight(angle);
             if (!baseHeight) {
@@ -700,7 +700,7 @@ module lark {
             }
             var m:Matrix;
             if (targetCoordinateSpace) {
-                m = Matrix.TEMP;
+                m = $TempMatrix;
                 var invertedTargetMatrix = targetCoordinateSpace.$getInvertedConcatenatedMatrix();
                 invertedTargetMatrix.$preMultiplyInto(this.$getConcatenatedMatrix(), m);
             } else {
