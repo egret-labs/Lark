@@ -172,68 +172,114 @@ module lark.gui {
             return change;
         }
 
-        private _minWidth:number = 0;
+        private _explicitMinWidth:number = NONE;
+
+        /**
+         * 显式设置的最小宽度。
+         */
+        public get explicitMinWidth():number {
+            return this._explicitMinWidth;
+        }
+
         /**
          * 组件的最小测量宽度,此属性设置为大于maxWidth的值时无效。仅影响measuredWidth属性的取值范围。
          */
         public get minWidth():number {
-            return this._minWidth;
+            return isNone(this._explicitMinWidth) ? this._measuredMinWidth : this._explicitMinWidth;
         }
 
         public set minWidth(value:number) {
             value = +value || 0;
-            if (this._minWidth === value)
+            if (this._explicitMinWidth === value) {
                 return;
-            this._minWidth = value;
+            }
+            this._explicitMinWidth = value;
             this.invalidateSize();
+            this.invalidateParentSizeAndDisplayList();
         }
 
-        private _maxWidth:number = 10000;
+        private _explicitMaxWidth:number = NONE;
+
+        /**
+         * 显式设置的最大宽度
+         */
+        public get explicitMaxWidth():number {
+            return this._explicitMaxWidth;
+        }
+
         /**
          * 组件的最大测量高度,仅影响measuredWidth属性的取值范围。
          */
         public get maxWidth():number {
-            return this._maxWidth;
+            return isNone(this._explicitMaxWidth) ? 10000 : this._explicitMaxWidth;
         }
 
         public set maxWidth(value:number) {
             value = +value || 0;
-            if (this._maxWidth === value)
+            if (this._explicitMaxWidth === value) {
                 return;
-            this._maxWidth = value;
+            }
+            this._explicitMaxWidth = value;
             this.invalidateSize();
+            this.invalidateParentSizeAndDisplayList();
         }
 
-        private _minHeight:number = 0;
+        private _explicitMinHeight:number = 0;
+        /**
+         * 显式设置的最小高度
+         */
+        public get explicitMinHeight():number {
+            return this._explicitMinHeight;
+        }
+
         /**
          * 组件的最小测量高度,此属性设置为大于maxHeight的值时无效。仅影响measuredHeight属性的取值范围。
          */
         public get minHeight():number {
-            return this._minHeight;
+            return isNone(this._explicitMinHeight) ? this._measuredMinHeight : this._explicitMinHeight;
         }
 
         public set minHeight(value:number) {
             value = +value || 0;
-            if (this._minHeight === value)
+            if (this._explicitMinHeight === value) {
                 return;
-            this._minHeight = value;
+            }
+            this._explicitMinHeight = value;
             this.invalidateSize();
+            this.invalidateParentSizeAndDisplayList();
         }
 
-        private _maxHeight:number = 10000;
+        private _explicitMaxHeight:number = 0;
+        /**
+         * 显式设置的最大高度
+         */
+        public get explicitMaxHeight():number {
+            return this._explicitMaxHeight;
+        }
+
         /**
          * 组件的最大测量高度,仅影响measuredHeight属性的取值范围。
          */
         public get maxHeight():number {
-            return this._maxHeight;
+            return isNone(this._explicitMaxHeight) ? 10000 : this._explicitMaxHeight;
         }
 
         public set maxHeight(value:number) {
             value = +value || 0;
-            if (this._maxHeight === value)
+            if (this._explicitMaxHeight === value) {
                 return;
-            this._maxHeight = value;
+            }
+            this._explicitMaxHeight = value;
             this.invalidateSize();
+            this.invalidateParentSizeAndDisplayList();
+        }
+
+        private _measuredMinWidth:number = 0;
+        /**
+         * 组件的测量最小宽度
+         */
+        public get measuredMinWidth():number {
+            return this._measuredMinWidth;
         }
 
         private _measuredWidth:number = 0;
@@ -244,8 +290,12 @@ module lark.gui {
             return this._measuredWidth;
         }
 
-        public setMeasuredWidth(value:number):void {
-            this._measuredWidth = value;
+        private _measuredMinHeight:number = 0;
+        /**
+         * 组件的测量最小高度
+         */
+        public get measuredMinHeight():number {
+            return this._measuredMinHeight;
         }
 
         private _measuredHeight:number = 0;
@@ -256,9 +306,20 @@ module lark.gui {
             return this._measuredHeight;
         }
 
-        public setMeasuredHeight(value:number):void {
-            this._measuredHeight = value;
+        /**
+         * 设置测量结果。
+         * @param width 测量宽度
+         * @param height 测量高度
+         * @param minWidth 测量的最小宽度
+         * @param minHeight 测量的最小高度
+         */
+        public setMeasuredSize(width:number, height:number, minWidth:number, minHeight:number):void {
+            this._measuredWidth = width;
+            this._measuredHeight = height;
+            this._measuredMinWidth = minWidth;
+            this._measuredMinHeight = minHeight;
         }
+
 
         /**
          * 设置组件的宽高。此方法不同于直接设置width,height属性，
@@ -291,9 +352,7 @@ module lark.gui {
             var change = super.$setX(value);
             if (change) {
                 this.invalidateProperties();
-                var parent = this.$parent;
-                if (this.$includeInLayout && parent && parent.isType(Types.UIComponent))
-                    (<UIComponent><any> parent).$childXYChanged();
+                this.invalidateParentSizeAndDisplayList();
             }
             return change;
         }
@@ -307,11 +366,9 @@ module lark.gui {
             var change = super.$setY(value);
             if (change) {
                 this.invalidateProperties();
-                var parent = this.$parent;
-                if (this.$includeInLayout && parent && parent.isType(Types.UIComponent))
-                    (<UIComponent><any> parent).$childXYChanged();
+                this.invalidateParentSizeAndDisplayList();
             }
-            return;
+            return change;
         }
 
 
@@ -370,11 +427,15 @@ module lark.gui {
         /**
          * 上一次测量的首选宽度
          */
-        $oldPreferWidth:number = NONE;
+        private oldPreferWidth:number = NONE;
         /**
          * 上一次测量的首选高度
          */
-        $oldPreferHeight:number = NONE;
+        private oldPreferHeight:number = NONE;
+
+        private oldMinWidth:number = NONE;
+
+        private oldMinHeight:number = NONE;
 
         /**
          * 测量组件尺寸，返回尺寸是否发生变化
@@ -387,32 +448,32 @@ module lark.gui {
 
             if (isNone(this.$explicitWidth) || isNone(this.$explicitHeight)) {
                 this.measure();
-                if (this._measuredWidth < this._minWidth) {
-                    this._measuredWidth = this._minWidth;
+
+                if (this._measuredWidth < this._explicitMinWidth) {
+                    this._measuredWidth = this._explicitMinWidth;
                 }
-                if (this._measuredWidth > this._maxWidth) {
-                    this._measuredWidth = this._maxWidth;
+                if (this._measuredWidth > this._explicitMaxWidth) {
+                    this._measuredWidth = this._explicitMaxWidth;
                 }
-                if (this._measuredHeight < this._minHeight) {
-                    this._measuredHeight = this._minHeight;
+                if (this._measuredHeight < this._explicitMinHeight) {
+                    this._measuredHeight = this._explicitMinHeight;
                 }
-                if (this._measuredHeight > this._maxHeight) {
-                    this._measuredHeight = this._maxHeight
+                if (this._measuredHeight > this._explicitMaxHeight) {
+                    this._measuredHeight = this._explicitMaxHeight
                 }
             }
-            var preferredW = this.getUPreferredWidth();
-            var preferredH = this.getUPreferredHeight();
-            if (isNone(this.$oldPreferWidth)) {
-                this.$oldPreferWidth = preferredW;
-                this.$oldPreferHeight = preferredH;
+            var preferredW = this.getPreferredUWidth();
+            var preferredH = this.getPreferredUHeight();
+            var minW = isNone(this._explicitMinWidth) ? this._measuredMinWidth : this._explicitMinWidth;
+            var minH = isNone(this._explicitMinHeight) ? this._measuredMinHeight : this._explicitMinHeight;
+            if (preferredW !== this.oldPreferWidth || preferredH !== this.oldPreferHeight ||
+                minW !== this.oldMinWidth || minH !== this.oldMinHeight) {
                 changed = true;
             }
-            else {
-                if (preferredW != this.$oldPreferWidth || preferredH != this.$oldPreferHeight)
-                    changed = true;
-                this.$oldPreferWidth = preferredW;
-                this.$oldPreferHeight = preferredH;
-            }
+            this.oldMinWidth = minW;
+            this.oldMinHeight = minH;
+            this.oldPreferWidth = preferredW;
+            this.oldPreferHeight = preferredH;
             return changed;
         }
 
@@ -475,7 +536,7 @@ module lark.gui {
         /**
          * 标记父级容器的尺寸和显示列表为失效
          */
-        public invalidateParentSizeAndDisplayList():void {
+        protected invalidateParentSizeAndDisplayList():void {
             var parent = this.$parent;
             if (!parent || !this.$includeInLayout || !(parent.isType(Types.UIComponent)))
                 return;
@@ -486,13 +547,13 @@ module lark.gui {
         /**
          * 更新显示列表
          */
-        public updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
+        protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
         }
 
         /**
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
-        public commitProperties():void {
+        protected commitProperties():void {
             if (this.oldWidth != this.$width || this.oldHeight != this.$height) {
                 this.emitResizeEvent();
             }
@@ -504,7 +565,7 @@ module lark.gui {
         /**
          * 测量组件尺寸
          */
-        public measure():void {
+        protected measure():void {
             this._measuredHeight = 0;
             this._measuredWidth = 0;
         }
@@ -518,13 +579,6 @@ module lark.gui {
             }
             this.oldX = this.x;
             this.oldY = this.y;
-        }
-
-        /**
-         * 子项的xy位置发生改变
-         */
-        $childXYChanged():void {
-
         }
 
         /**
@@ -706,14 +760,14 @@ module lark.gui {
         public setLayoutBoundsSize(layoutWidth:number, layoutHeight:number):void {
             if (isNone(layoutWidth)) {
                 this.$layoutWidthExplicitlySet = false;
-                layoutWidth = this.getUPreferredWidth();
+                layoutWidth = this.getPreferredUWidth();
             }
             else {
                 this.$layoutWidthExplicitlySet = true;
             }
             if (isNone(layoutHeight)) {
                 this.$layoutHeightExplicitlySet = false;
-                layoutHeight = this.getUPreferredHeight();
+                layoutHeight = this.getPreferredUHeight();
             }
             else {
                 this.$layoutHeightExplicitlySet = true;
@@ -765,11 +819,11 @@ module lark.gui {
         }
 
 
-        private getUPreferredWidth():number {
+        private getPreferredUWidth():number {
             return isNone(this.$explicitWidth) ? this._measuredWidth : this.$explicitWidth;
         }
 
-        private getUPreferredHeight():number {
+        private getPreferredUHeight():number {
             return isNone(this.$explicitHeight) ? this._measuredHeight : this.$explicitHeight;
         }
 
@@ -781,8 +835,8 @@ module lark.gui {
          * 注意此方法返回值已经包含scale和rotation。
          */
         public getPreferredBounds():Rectangle {
-            var w = this.getUPreferredWidth();
-            var h = this.getUPreferredHeight();
+            var w = this.getPreferredUWidth();
+            var h = this.getPreferredUHeight();
             return this.applyMatrix(this._preferredBounds, w, h);
         }
 
