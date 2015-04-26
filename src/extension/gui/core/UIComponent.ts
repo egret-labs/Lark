@@ -66,7 +66,7 @@ module lark.gui {
         /**
          * 检查属性失效标记并应用
          */
-        private checkInvalidateFlag(event:Event = null):void {
+        private checkInvalidateFlag(event?:Event):void {
             var validator = lark.gui.validator;
             if (this.$invalidatePropertiesFlag) {
                 validator.invalidateProperties(this);
@@ -83,19 +83,6 @@ module lark.gui {
             }
         }
 
-
-        $enabled:boolean = true;
-
-        /**
-         * 组件是否可以接受用户交互。
-         */
-        public get enabled():boolean {
-            return this.$enabled;
-        }
-
-        public set enabled(value:boolean) {
-            this.$enabled = value;
-        }
 
         $explicitWidth:number = NONE;
 
@@ -413,8 +400,8 @@ module lark.gui {
                     this._measuredHeight = this._maxHeight
                 }
             }
-            var preferredW = this.getPreferredWidth();
-            var preferredH = this.getPreferredHeight();
+            var preferredW = this.getUPreferredWidth();
+            var preferredH = this.getUPreferredHeight();
             if (isNone(this.$oldPreferWidth)) {
                 this.$oldPreferWidth = preferredW;
                 this.$oldPreferHeight = preferredH;
@@ -696,7 +683,7 @@ module lark.gui {
         }
 
         public set percentHeight(value:number) {
-            value = +value||0;
+            value = +value || 0;
             if (this._percentHeight === value)
                 return;
             this._percentHeight = value;
@@ -719,14 +706,14 @@ module lark.gui {
         public setLayoutBoundsSize(layoutWidth:number, layoutHeight:number):void {
             if (isNone(layoutWidth)) {
                 this.$layoutWidthExplicitlySet = false;
-                layoutWidth = this.getPreferredWidth();
+                layoutWidth = this.getUPreferredWidth();
             }
             else {
                 this.$layoutWidthExplicitlySet = true;
             }
             if (isNone(layoutHeight)) {
                 this.$layoutHeightExplicitlySet = false;
-                layoutHeight = this.getPreferredHeight();
+                layoutHeight = this.getUPreferredHeight();
             }
             else {
                 this.$layoutHeightExplicitlySet = true;
@@ -740,62 +727,21 @@ module lark.gui {
         public setLayoutBoundsPosition(x:number, y:number):void {
             var changed:boolean = false;
             changed = super.$setX(x);
-            changed = super.$setY(y)||changed;
+            changed = super.$setY(y) || changed;
             if (changed) {
                 this.emitMoveEvent();
             }
         }
 
-        /**
-         * 组件的首选宽度,常用于父级的measure()方法中
-         * 按照：外部显式设置宽度>测量宽度 的优先级顺序返回宽度
-         */
-        public getPreferredWidth():number {
-            return isNone(this.$explicitWidth) ? this._measuredWidth : this.$explicitWidth;
-        }
+        private _layoutBounds:Rectangle = new Rectangle();
 
         /**
-         * 组件的首选高度,常用于父级的measure()方法中
-         * 按照：外部显式设置高度>测量高度 的优先级顺序返回高度
+         * 组件的布局尺寸,常用于父级的updateDisplayList()方法中
+         * 按照：布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸,
+         * 注意此方法返回值已经包含scale和rotation。
          */
-        public getPreferredHeight():number {
-            return isNone(this.$explicitHeight) ? this._measuredHeight : this.$explicitHeight;
-        }
-
-        /**
-         * 组件的首选x坐标,常用于父级的measure()方法中
-         */
-        public getPreferredX():number {
-            return this.x;
-        }
-
-        /**
-         * 组件的首选y坐标,常用于父级的measure()方法中
-         */
-        public getPreferredY():number {
-            return this.y;
-        }
-
-        /**
-         * 组件在父级容器中水平方向起始坐标
-         */
-        public getLayoutBoundsX():number {
-            return this.x;
-        }
-
-        /**
-         * 组件在父级容器中竖直方向起始坐标
-         */
-        public getLayoutBoundsY():number {
-            return this.y;
-        }
-
-        /**
-         * 组件的布局宽度,常用于父级的updateDisplayList()方法中
-         * 按照：布局宽度>外部显式设置宽度>测量宽度 的优先级顺序返回宽度
-         */
-        public getLayoutBoundsWidth():number {
-            var w:number = 0;
+        public getLayoutBounds():Rectangle {
+            var w:number;
             if (this.$layoutWidthExplicitlySet) {
                 w = this.$width;
             }
@@ -805,15 +751,7 @@ module lark.gui {
             else {
                 w = this._measuredWidth;
             }
-            return w;
-        }
-
-        /**
-         * 组件的布局高度,常用于父级的updateDisplayList()方法中
-         * 按照：布局高度>外部显式设置高度>测量高度 的优先级顺序返回高度
-         */
-        public getLayoutBoundsHeight():number {
-            var h:number = 0
+            var h:number;
             if (this.$layoutHeightExplicitlySet) {
                 h = this.$height;
             }
@@ -823,7 +761,48 @@ module lark.gui {
             else {
                 h = this._measuredHeight;
             }
-            return h;
+            return this.applyMatrix(this._layoutBounds, w, h);
+        }
+
+
+        private getUPreferredWidth():number {
+            return isNone(this.$explicitWidth) ? this._measuredWidth : this.$explicitWidth;
+        }
+
+        private getUPreferredHeight():number {
+            return isNone(this.$explicitHeight) ? this._measuredHeight : this.$explicitHeight;
+        }
+
+        private _preferredBounds:Rectangle = new Rectangle();
+
+        /**
+         * 获取组件的首选尺寸,常用于父级的measure()方法中
+         * 按照：外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸，
+         * 注意此方法返回值已经包含scale和rotation。
+         */
+        public getPreferredBounds():Rectangle {
+            var w = this.getUPreferredWidth();
+            var h = this.getUPreferredHeight();
+            return this.applyMatrix(this._preferredBounds, w, h);
+        }
+
+        private applyMatrix(bounds:Rectangle, w:number, h:number):Rectangle {
+            var x = 0, y = 0;
+            if (this.$scrollRect) {
+                x = this.$scrollRect.x;
+                y = this.$scrollRect.y;
+            }
+            var bounds = bounds.setTo(x, y, w, h);
+            var matrix = this.$getMatrix();
+            var m = matrix.$data;
+            if (m[0] === 1 && m[1] === 0 && m[2] === 0 && m[3] === 1) {
+                bounds.x += m[4];
+                bounds.y += m[5];
+            }
+            else {
+                matrix.$transformBounds(bounds);
+            }
+            return bounds;
         }
     }
 
