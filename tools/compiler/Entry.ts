@@ -39,7 +39,7 @@ import Create = require("./Create");
 import utils = require('../lib/utils');
 import FileUtil = require('../lib/FileUtil');
 import server = require('../server/server');
-import TsService = require("./TsService");
+import BuildService = require("./BuildService");
 
 
 
@@ -58,8 +58,9 @@ export function executeCommandLine(args: string[]): void {
 
 export function executeOption(options: lark.ICompileOptions): number {
     var exitCode = 0;
-    if (TsService.instance == null) {
-        TsService.instance = new TsService(options);
+    if (BuildService.instance == null) {
+        BuildService.instance = new BuildService();
+        BuildService.instance.start(options);
     }
     switch (options.action) {
         case "publish":

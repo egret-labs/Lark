@@ -32,7 +32,7 @@ var Parser = require("./Parser");
 var Build = require("./Build");
 var Publish = require("./Publish");
 var Create = require("./Create");
-var TsService = require("./TsService");
+var BuildService = require("./BuildService");
 function executeCommandLine(args) {
     var options = Parser.parseCommandLine(args);
     //if (options.action == 'startserver')
@@ -45,8 +45,9 @@ function executeCommandLine(args) {
 exports.executeCommandLine = executeCommandLine;
 function executeOption(options) {
     var exitCode = 0;
-    if (TsService.instance == null) {
-        TsService.instance = new TsService(options);
+    if (BuildService.instance == null) {
+        BuildService.instance = new BuildService();
+        BuildService.instance.start(options);
     }
     switch (options.action) {
         case "publish":

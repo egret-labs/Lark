@@ -88,10 +88,11 @@ var textTemp = {};
  * 读取文本文件,返回打开文本的字符串内容，若失败，返回"".
  * @param path 要打开的文件路径
  */
-function read(path) {
+function read(path, ignoreCache) {
+    if (ignoreCache === void 0) { ignoreCache = false; }
     path = escapePath(path);
     var text = textTemp[path];
-    if (text) {
+    if (text && !ignoreCache) {
         return text;
     }
     try {
