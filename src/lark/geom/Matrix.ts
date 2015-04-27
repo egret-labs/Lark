@@ -391,15 +391,14 @@ module lark {
             var xMax = x + bounds.width;
             var yMax = y + bounds.height;
 
-            var round = Math.round;
-            var x0 = round(a * x + c * y + tx);
-            var y0 = round(b * x + d * y + ty);
-            var x1 = round(a * xMax + c * y + tx);
-            var y1 = round(b * xMax + d * y + ty);
-            var x2 = round(a * xMax + c * yMax + tx);
-            var y2 = round(b * xMax + d * yMax + ty);
-            var x3 = round(a * x + c * yMax + tx);
-            var y3 = round(b * x + d * yMax + ty);
+            var x0 = a * x + c * y + tx;
+            var y0 = b * x + d * y + ty;
+            var x1 = a * xMax + c * y + tx;
+            var y1 = b * xMax + d * y + ty;
+            var x2 = a * xMax + c * yMax + tx;
+            var y2 = b * xMax + d * yMax + ty;
+            var x3 = a * x + c * yMax + tx;
+            var y3 = b * x + d * yMax + ty;
 
             var tmp = 0;
 
@@ -414,8 +413,8 @@ module lark {
                 x3 = tmp;
             }
 
-            bounds.x = x0 < x2 ? x0 : x2;
-            bounds.width = (x1 > x3 ? x1 : x3) - bounds.x;
+            bounds.x = Math.floor(x0 < x2 ? x0 : x2);
+            bounds.width = Math.ceil((x1 > x3 ? x1 : x3) - bounds.x);
 
             if (y0 > y1) {
                 tmp = y0;
@@ -428,8 +427,8 @@ module lark {
                 y3 = tmp;
             }
 
-            bounds.y = y0 < y2 ? y0 : y2;
-            bounds.height = (y1 > y3 ? y1 : y3) - bounds.y;
+            bounds.y = Math.floor(y0 < y2 ? y0 : y2);
+            bounds.height = Math.ceil((y1 > y3 ? y1 : y3) - bounds.y);
         }
 
         private getDeterminant() {
