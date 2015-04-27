@@ -29,80 +29,21 @@
 
 module lark {
 
-    export enum TextFieldFlags {
-        None = 0x000000,
-        TextDirty = 0x000001,
-        FormatDirty = 0x000002,
-        MultilineDirty = 0x000004,
-        LineDirty = TextDirty | FormatDirty | MultilineDirty ,
-        Dirty = LineDirty
-    }
-
-
-    /**
-     * ITextFieldStyle 接口述字符格式设置信息。使用 ITextFieldStyle 可以为文本字段创建特定的文本格式。
-     */
-    export interface ITextFieldStyle extends ITextStyle {
-
-        /**
-         * 表示段落的对齐方式。left, right 或 center, 参考 lark.Align
-         */
-        align?: string;
-
-        /**
-         * 行间距
-         * 该值为行间距与字体大小的比值，比如 当 fontSize 为 20 时 0.2 代表 4px;
-         */
-        leading?: number;
-    }
-
-
-    var BaseStyle: ITextFieldStyle = {
-        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-        fontSize: 14,
-        color: 0x000000,
-        bold: false,
-        italic: false,
-        float: "",
-        align: Align.LEFT,
-        leading: 0.2,
-        verticalAlign: Align.BOTTOM
-    }
-    
-    var SplitRegex = /(?=[\u00BF-\u1FFF\u2C00-\uD7FF]|\b|\s)(?![。，！、》…）)}”】\.\,\!\?\]\:])/;
-    var LineBreaks = /\r|\n/;
-
-    function trimLeft(text: string){
-        for (var i = 0; i < text.length; i++)
-            if (text.charAt(i) != " ")
-                break;
-        return text.substr(i);
-    }
-
     /**
      * TextField 类用于创建显示对象以显示和输入文本。 
      * 可以使用 TextField 类的方法和属性对文本字段进行操作。
      * Lark 提供了多种在运行时设置文本格式的方法。TextFormat 类允许您设置 TextField 对象的字符和段落格式。
-     * 
      */
     export class TextField extends DisplayObject {
         /**
          * 创建一个TextField对象
          */
-        public constructor(text:string,style?:ITextFieldStyle) {
+        public constructor(text:string,style?:ITextStyle) {
             super();
             this._text = text;
             this._style = TextField.$normalizeStyle(style, BaseStyle);
             this.$renderRegion = new player.Region();
-            this.$invalidateContentBounds();
-        }
-
-
-        protected _textFieldFlags: number = TextFieldFlags.Dirty;
-
-        $setTextFieldFlags(flags: TextFieldFlags) {
-            this._textFieldFlags |= flags;
-            this.$invalidateContentBounds();
+            this.$setFlags(player.TextFieldFlags.LineDirty);
         }
 
         protected _text: string;
@@ -113,7 +54,8 @@ module lark {
             if (value == this._text)
                 return;
             this._text = value;
-            this.$setTextFieldFlags(TextFieldFlags.TextDirty);
+            this.$setFlags(player.TextFieldFlags.LineDirty);
+            this.$invalidateContentBounds();
         }
 
         protected _style: ITextFieldStyle;
@@ -123,7 +65,8 @@ module lark {
         public set style(value: ITextFieldStyle) {
             value = TextField.$normalizeStyle(value, BaseStyle);
             this._style = value;
-            this.$setTextFieldFlags(TextFieldFlags.FormatDirty);
+            this.$setFlags(player.TextFieldFlags.LineDirty);
+            this.$invalidateContentBounds();
         }
 
         protected _multiline = true;
@@ -138,61 +81,70 @@ module lark {
             if (value == this._multiline)
                 return;
             this._multiline = value;
-            this.$setTextFieldFlags(TextFieldFlags.MultilineDirty);
+            this.$setFlags(player.TextFieldFlags.LineDirty);
+            this.$invalidateContentBounds();
         }
 
-        protected _width:number = 400;
+        protected _explicitWidth: number = NaN;
         public get width(): number {
-            return this._width;
+            return this.$hasFlags(player.TextFieldFlags.IsWidthSet) ? this._explicitWidth : super.$getWidth();
         }
         public set width(value: number) {
-            if (value == this._width)
+            if (value == this._explicitWidth)
                 return;
-            this._width = +value || 0;
-            this.$setTextFieldFlags(TextFieldFlags.Dirty);
+            this._explicitWidth = +value || 0;
+            this.$setFlags(player.TextFieldFlags.IsWidthSet | player.TextFieldFlags.LineDirty);
+            this.$invalidateContentBounds();
         }
 
-        protected _height: number = NaN;
+        protected _explicitHeight: number = NaN;
         public get height(): number {
-            return this._height;
+            return this.$hasFlags(player.TextFieldFlags.IsHeightSet) ? this._explicitHeight : super.$getHeight();
         }
         public set height(value: number) {
-            if (value == this._height)
+            if (value == this._explicitHeight)
                 return;
-            this._height = value;
-            this.$setTextFieldFlags(TextFieldFlags.Dirty);
+            this._explicitHeight = +value || 0;
+            this.$setFlags(player.TextFieldFlags.IsHeightSet | player.TextFieldFlags.LineDirty);
+            this.$invalidateContentBounds();
         }
 
         $setRenderLines(lines: TextSpan[]) {
             this.renderLines = lines;
-            this._textFieldFlags &= ~TextFieldFlags.LineDirty;
+            this.$removeFlags(player.TextFieldFlags.LineDirty);
             this.$invalidateContentBounds();
         }
 
         $measureContentBounds(bounds: Rectangle): void {
-            if (this._textFieldFlags > 0)
+            if (this.$hasFlags(player.TextFieldFlags.LineDirty))
+            {
                 this.$updateLines();
-            var height = 0;
-            if (this.renderLines.length) {
-                var lastLine = this.renderLines[this.renderLines.length - 1];
-                height = lastLine.y + lastLine.height
+                this.$removeFlags(player.TextFieldFlags.LineDirty)
             }
-            this._height = height;
-            bounds.setTo(0, 0, this.width, height);
+            var height = 0;
+            var width = 0;
+            var renderLines = this.renderLines;
+            var length = renderLines.length;
+            for (var i = 0; i < length; i++)
+            {
+                var line = renderLines[i];
+                width = Math.max(width, line.width);
+                if (i == length - 1)
+                    height = line.y + line.height;
+            }
+            bounds.setTo(0, 0, width, height);
         }
 
         $render(context: player.RenderContext): void {
-            if ((this._textFieldFlags & TextFieldFlags.LineDirty) != 0) {
-                this.$updateLines();
-                this._textFieldFlags = 0;
-            }
             var spans = this.renderLines;
             var length = spans.length;
+            context.textAlign = "left";
+            context.textBaseline = "middle";
             for (var i = 0; i < length; i++) {
                 var span = spans[i];
                 context.font = span.$toFontString(true);
                 context.fillStyle = span.$toColorString();
-                context.fillText(span.text, span.x, span.style.fontSize / 2 + span.y, span.textWidth);
+                context.fillText(span.text, span.x, span.height / 2 + span.y, span.width);
             }
         }
 
@@ -202,14 +154,14 @@ module lark {
         $updateLines() {
 
 
-            var width = this._width;
-            var height = this._height || 10000;
+            var width = this.$hasFlags(player.TextFieldFlags.IsWidthSet) ? this._explicitWidth : 10000;
+            var height = this.$hasFlags(player.TextFieldFlags.IsHeightSet) ? this._explicitHeight : 10000;
 
 
             this.createLines(width);
             this.renderLines.length = 0;
             var lines = this.textLines, format = this._style;
-            var lineHeight = format.fontSize * (1 + format.leading);
+            var lineHeight = Math.max(format.lineHeight, format.fontSize);
 
 
 
@@ -221,11 +173,11 @@ module lark {
 
 
 
-            var y = format.leading * format.fontSize / 2;
+            var y = 0;
             for (var i = 0; i < lines.length; i++) {
                 var line = lines[i];
                 line.y = y;
-                line.x = (width - line.textWidth) * xRate;
+                line.x = (width - line.width) * xRate;
                 y += lineHeight
                 this.renderLines.push(line);
                 if (this._multiline == false || y > height)
@@ -250,6 +202,7 @@ module lark {
             var style = this._style;
             var lines: TextSpan[] = [];
             var line = "";
+            var lineHeight = Math.max(style.lineHeight, style.fontSize);
             for (var i = 0; i < textAtoms.length; i++) {
                 var atom = textAtoms[i];
                 var w = TextMeasurer.measureText(atom, this._style);
@@ -282,5 +235,29 @@ module lark {
 
             return style;
         }
+    }
+
+    registerType(TextField,[Types.TextField]);
+
+    var BaseStyle: ITextStyle = {
+        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+        fontSize: 14,
+        color: 0x000000,
+        bold: false,
+        italic: false,
+        float: "",
+        align: Align.LEFT,
+        lineHeight: 18,
+        verticalAlign: Align.BOTTOM
+    }
+
+    var SplitRegex = /(?=[\u00BF-\u1FFF\u2C00-\uD7FF]|\b|\s)(?![。，！、》…）)}”】\.\,\!\?\]\:])/;
+    var LineBreaks = /\r|\n/;
+
+    function trimLeft(text: string) {
+        for (var i = 0; i < text.length; i++)
+            if (text.charAt(i) != " ")
+                break;
+        return text.substr(i);
     }
 }

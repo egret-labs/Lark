@@ -37,7 +37,7 @@ module lark {
      * 通常，使用户定义的类能够调度事件的最简单方法是扩展 EventEmitter。如果无法扩展（即，如果该类已经扩展了另一个类），
      * 则可以实现 IEventEmitter 接口，创建 EventEmitter 成员，并编写一些简单的挂钩，将调用连接到聚合的 EventEmitter 中。
      */
-    export interface IEventEmitter extends IHashObject{
+    export interface IEventEmitter extends LarkObject{
 
         /**
          * 添加事件侦听器

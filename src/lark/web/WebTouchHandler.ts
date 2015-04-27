@@ -29,7 +29,7 @@
 
 module lark.web {
 
-    export class WebTouchHandler extends HashObject {
+    export class WebTouchHandler extends LarkObject {
 
         public constructor(touch:lark.player.TouchHandler, canvas:HTMLCanvasElement) {
             super();
@@ -135,7 +135,7 @@ module lark.web {
             var top = box.top + window.pageYOffset - doc.clientTop;
             var x = (event.pageX - left) / this.scaleX;
             var y = (event.pageY - top) / this.scaleY;
-            return Point.TEMP.setTo(Math.round(x), Math.round(y));
+            return $TempPoint.setTo(Math.round(x), Math.round(y));
         }
 
         private scaleX:number = 1;

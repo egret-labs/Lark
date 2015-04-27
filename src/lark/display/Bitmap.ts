@@ -75,4 +75,6 @@ module lark {
             }
         }
     }
+
+    registerType(Bitmap,[Types.Bitmap]);
 }

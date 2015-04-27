@@ -27,28 +27,70 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
 
-    /**
-     * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
-     */
-    export var sharedRenderContext:player.RenderContext;
-    /**
-     * surfaceFactory实例
-     */
-    export var surfaceFactory:SurfaceFactory;
+module lark.gui {
 
-    export interface SurfaceFactory {
+	/**
+	 * UI事件
+	 */
+	export class UIEvent extends Event{
 
-        /**
-         * 从对象池取出或创建一个新的Surface实例
-         * @param useOnce 表示对取出实例的使用是一次性的，用完后立即会释放。
-         */
-        create(useOnce?:boolean):Surface;
-        /**
-         * 释放一个Surface实例
-         * @param surface 要释放的Surface实例
-         */
-        release(surface:Surface):void;
-    }
+		public constructor(type:string, bubbles?:boolean, cancelable?:boolean){
+			super(type, bubbles, cancelable);
+		}
+
+		/**
+		 * 当用户按下ButtonBase控件时分派。如果 autoRepeat属性为 true，则只要按钮处于按下状态，就将重复分派此事件。
+		 */
+		public static BUTTON_DOWN:string = "buttonDown";
+		/**
+		 * 改变结束
+		 */
+		public static CHANGE_END:string = "changeEnd";
+		
+		/**
+		 * 改变开始
+		 */
+		public static CHANGE_START:string = "changeStart";
+		
+		/**
+		 * 正在改变中
+		 */
+		public static CHANGING:string = "changing";
+		/**
+		 * 值发生改变
+		 */
+		public static VALUE_COMMIT:string = "valueCommit";
+		/**
+		 * SkinnableComponent皮肤发生改变
+		 */
+		public static SKIN_CHANGED:string = "skinChanged";
+
+		/**
+		 * UIAsset的content属性解析完成
+		 */
+		public static CONTENT_CHANGED:string = "contentChanged";
+
+		/**
+		 * 下拉框弹出事件
+		 */
+		public static OPEN:string = "open";
+		/**
+		 * 下拉框关闭事件
+		 */
+		public static CLOSE:string = "close";
+		
+		/**
+		 * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+		 * @param target 事件派发目标
+		 * @param eventType 事件类型
+		 */
+		public static emitUIEvent(target:IEventEmitter, eventType:string):boolean {
+			var event = Event.create(UIEvent, eventType);
+			var result = target.emit(event);
+			Event.release(event);
+			return result;
+		}
+	}
+	registerType(UIEvent,[Types.UIEvent]);
 }

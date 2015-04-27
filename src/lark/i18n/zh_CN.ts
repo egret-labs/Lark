@@ -27,28 +27,19 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark {
 
-    /**
-     * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
-     */
-    export var sharedRenderContext:player.RenderContext;
-    /**
-     * surfaceFactory实例
-     */
-    export var surfaceFactory:SurfaceFactory;
+    $locale_strings = $locale_strings||{};
+    var locale_strings = $locale_strings;
 
-    export interface SurfaceFactory {
-
-        /**
-         * 从对象池取出或创建一个新的Surface实例
-         * @param useOnce 表示对取出实例的使用是一次性的，用完后立即会释放。
-         */
-        create(useOnce?:boolean):Surface;
-        /**
-         * 释放一个Surface实例
-         * @param surface 要释放的Surface实例
-         */
-        release(surface:Surface):void;
-    }
+    locale_strings[1001] = "找不到Lark入口类: {0}。";
+    locale_strings[1002] = "Lark入口类 {0} 必须继承自lark.DisplayObject。";
+    locale_strings[1003] = "参数 {0} 不能为 null。";
+    locale_strings[1004] = "无法将对象添加为它的一个子对象（或子对象的子对象等）的子对象。";
+    locale_strings[1005] = "不能将对象添加为其自身的子对象。";
+    locale_strings[1006] = "提供的 DisplayObject 必须是调用者的子级。";
+    locale_strings[1007] = "为参数指定的索引不在范围内。";
+    locale_strings[1008] = "实例化单例出错，不允许实例化多个 {0} 对象。";
+    locale_strings[1009] = "Stage 类不实现此属性或方法。";
+    locale_strings[1010] = "{0} 是只读的";
 }

@@ -33,7 +33,7 @@ module lark {
     /**
      * Point 对象表示二维坐标系统中的某个位置，其中 x 表示水平轴，y 表示垂直轴。
      */
-    export class Point extends HashObject {
+    export class Point extends LarkObject {
 
         /**
          * 只允许在局部变量中使用，使用完要立即释放，并要防止嵌套调用导致对象在其他位置被修改的可能性。
@@ -104,4 +104,11 @@ module lark {
         }
 
     }
+
+    registerType(Point,[Types.Point]);
+
+    /**
+     * 仅供引擎内复用，要防止暴露引用到外部。
+     */
+    export var $TempPoint = new Point();
 }

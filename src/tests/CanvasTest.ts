@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark {
-    export class CanvasTest extends DisplayObjectContainer {
+    export class CanvasTest extends Sprite {
 
         public constructor() {
             super();
@@ -74,7 +74,6 @@ module lark {
             this.addChild(bitmap);
             bitmap.y = 50+this.canvasCount * 5;
             this.canvasCount++;
-            this.log("");
         }
 
 

@@ -1,5 +1,5 @@
 ﻿module lark.text {
-    export class ContentElement extends HashObject {
+    export class ContentElement extends LarkObject {
         public constructor() {
             super();
         }

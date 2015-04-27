@@ -29,14 +29,30 @@
 
 module lark {
     /**
-     * IHashObject是哈希对象接口。引擎内所有接口的基类,为对象实例提供唯一的hashCode值,提高对象比较的性能。
-     * 注意：自定义对象请直接继承HashObject，而不是实现此接口,否则会导致hashCode不唯一。
-     * 此接口主要用于供IEventEmitter等接口继承。
+     * 为一个类定义注册运行时类信息,用此方法往类定义上注册它自身以及所有接口对应的枚举值。
+     * 在运行时，这个类的实例将可以使用isType()方法传入一个枚举值来判断实例类型。
+     * 例如：
+     * //为lark.EventEmitter类注册运行时类信息，由于它实现了IEventEmitter接口，这里应同时传入两个枚举值。
+     * lark.registerType(lark.EventEmitter,[lark.Types.EventEmitter,lark.Types.IEventEmitter]);
+     * var emitter = new lark.EventEmitter();
+     * lark.log(emitter.isType(lark.Types.IEventEmitter));  //输出true。
+     * lark.log(emitter.isType(lark.Types.EventEmitter));   //输出true。
+     * lark.log(emitter.isType(lark.Types.Bitmap));   //输出false。
+     *
+     * @param clazz 继承自LarkObject的类定义，注意：接口在运行时不存在，因此不能传入接口定义。
+     * @param typeFlags 要注册的枚举值列表。注意：传入的自定义枚举数值范围要避免与Lark引擎(1~2000的数值)或其他第三方库的数值范围重合,
+     * 否则有可能会导致运行时isType()方法类型判断错误。
      */
-    export interface IHashObject {
-        /**
-         * 返回此对象唯一的哈希值,用于唯一确定一个对象。hashCode为大于等于1的整数。
-         */
-        hashCode:number;
+    export function registerType(clazz:any,typeFlags:number[]):void{
+        if (DEBUG) {
+            if(!clazz){
+                $error(1003, "clazz");
+            }
+            if(!typeFlags){
+                $error(1003, "typeFlags");
+            }
+        }
+        var prototype: any = clazz.prototype;
+        prototype.__meta__ = typeFlags.concat(prototype.__meta__);
     }
 }

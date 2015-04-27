@@ -29,9 +29,12 @@
 
 module lark {
     /**
-     * 舞台，显示列表根容器。
+     * Stage 类代表主绘图区，表示显示 Lark 内容的整个区域。
+     * 可以利用 DisplayObject 实例的 stage 属性进行访问。
+     * Stage 类具有多个祖代类 -- DisplayObjectContainer、DisplayObject 和 EventDispatcher，属性和方法便是从这些类继承而来的。
+     * 从这些继承的许多属性和方法不适用于 Stage 对象。
      */
-    export class Stage extends DisplayObjectContainer {
+    export class Stage extends Sprite {
 
         /**
          * 舞台对象不允许自行实例化。
@@ -76,7 +79,7 @@ module lark {
          * 每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 invalidate() 方法。
          */
         public invalidate():void {
-            lark.player.Ticker.$invalidateRenderFlag = true;
+            player.Ticker.$invalidateRenderFlag = true;
         }
     }
 
@@ -225,5 +228,5 @@ module lark {
             configurable: true
         });
     }
-
+    registerType(Stage,[Types.Stage]);
 }

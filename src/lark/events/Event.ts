@@ -41,7 +41,7 @@ module lark {
      * 某些事件有关联的默认行为，通过调用 preventDefault() 方法，您的事件侦听器可以取消此行为。
      * 可以通过调用 stopPropagation() 或 stopImmediatePropagation() 方法，将当前事件侦听器作为处理事件的最后一个事件侦听器。
      */
-    export class Event extends HashObject {
+    export class Event extends LarkObject {
 
         /**
          * 在将显示对象直接添加到舞台显示列表或将包含显示对象的子树添加至舞台显示列表中时调度。
@@ -261,4 +261,6 @@ module lark {
         }
 
     }
+
+    registerType(Event,[Types.Event]);
 }

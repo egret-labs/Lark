@@ -1,9 +1,17 @@
 ﻿module lark {
 
     export interface Video extends Media {
-        poster: string;
+        /**
+        * 用来渲染的 bitmapData,可以赋值给 Bitmap 等对象完成渲染
+        */
+        bitmapData: BitmapData;
+        on(type: "resize", listener: (event: MediaEvent) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
     }
 
+    /**
+    * 创建一个Video对象，Video 本身不是一个显示对象。可以使用 Video 的 bitmapData 属性来做渲染
+    */
     export var Video: { new (option: IVideoOption): Video };
 
 
@@ -17,110 +25,8 @@
 
     export interface IVideoOption extends IMediaOption {
         sources?: IVideoSource;
-    }
-
-
-    export module player {
-        export class LarkVideoBase extends MediaBase implements Video {
-            constructor(option: IMediaOption) {
-                super(option);
-                this.$renderRegion = new player.Region();
-                this._height = option.height || NaN;
-                this._width = option.width || NaN;
-
-                if (option.poster)
-                {
-                    var poster: any = option.poster;
-                    if (typeof poster === "string")
-                        this.poster = poster;
-                    else
-                        this.$setDefaultBitmapData(poster);
-                }
-
-                this.on(Event.ENTER_FRAME, e=> this.$invalidate(), this);
-            }
-
-
-            protected bitmapData: BitmapData;
-            protected _poster: string;
-            public get poster(): string {
-                return this._poster;
-            }
-
-            public set poster(value: string) {
-                if (value == this._poster)
-                    return;
-                this._poster = value;
-                loadImage(value, t=> this.$setDefaultBitmapData(t));
-            }
-
-
-            protected _width: number = NaN;
-
-            $getWidth(): number {
-                if (this.bitmapData)
-                    return super.$getWidth();
-                return this._width || 0;
-            }
-
-            $setWidth(value: number) {
-                if (value == this._width)
-                    return;
-                this._width = +value || 0;
-
-                if (this.bitmapData)
-                    super.$setWidth(value);
-                else
-                    this.$invalidateContentBounds();
-            }
-
-            protected _height: number = NaN;
-
-            $getHeight(): number {
-                if (this.bitmapData)
-                    return super.$getHeight();
-                return this._height || 0;
-            }
-
-            $setHeight(value: number) {
-                if (value == this._height)
-                    return;
-                this._height = value;
-                if (this.bitmapData)
-                    super.$setHeight(value);
-                else
-                    this.$invalidateContentBounds();
-            }
-
-            $setDefaultBitmapData(bitmapData: BitmapData, force: boolean = false) {
-                if (this.bitmapData != null && force == false)
-                    return;
-                this.bitmapData = bitmapData;
-                if (!this._height)
-                    this.height = bitmapData.height;
-                if (!this._width)
-                    this.width = bitmapData.width;
-                this.scaleX = this._width / bitmapData.width;
-                this.scaleY = this._height / bitmapData.height;
-                this.$invalidateContentBounds();
-            }
-
-            $measureContentBounds(bounds: Rectangle): void {
-                if (this.bitmapData)
-                    bounds.setTo(0, 0, this.bitmapData.width, this.bitmapData.height);
-                else
-                    bounds.setTo(0, 0, this.width, this.height);
-
-            }
-
-            $render(context: player.RenderContext): void {
-                var bitmapData = this.bitmapData;
-                if (bitmapData)
-                {
-                    context.drawImage(bitmapData, 0, 0);
-                }
-            }
-        }
+        height: number;
+        width: number;
     }
     
 }

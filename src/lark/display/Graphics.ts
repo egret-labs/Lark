@@ -70,9 +70,10 @@ module lark {
     }
 
     /**
-     * Graphics 类包含一组可用来创建矢量形状的方法。支持绘制的显示对象包括 Sprite 和 Shape 对象。这些类中的每一个类都包括 graphics 属性，该属性是一个 Graphics 对象。
+     * Graphics 类包含一组可用来创建矢量形状的方法。支持绘制的显示对象包括 Sprite 和 Shape 对象。
+     * 这些类中的每一个类都包括 graphics 属性，该属性是一个 Graphics 对象。
      */
-    export class Graphics extends HashObject {
+    export class Graphics extends LarkObject {
 
         /**
          * 创建一个放射状渐变填充对象
@@ -425,20 +426,14 @@ module lark {
             bounds.setTo(this.minX - half, this.minY - half, this.maxX - this.minX + lineWidth, this.maxY - this.minY + lineWidth);
         }
 
-        $render(context:player.RenderContext, asMask?:boolean):void {
-            asMask = !!asMask;
+        $render(context:player.RenderContext):void {
             context.save();
-            if (!asMask) {
-                context.fillStyle = "#000000";
-                context.lineCap = "butt";
-                context.lineJoin = "miter";
-                context.lineWidth = 1;
-                context.miterLimit = 10;
-                context.strokeStyle = "#000000";
-            }
-            else if(!this.hasStroke){//没有线条，遍历时直接跳过判断。
-                asMask = false;
-            }
+            context.fillStyle = "#000000";
+            context.lineCap = "butt";
+            context.lineJoin = "miter";
+            context.lineWidth = 1;
+            context.miterLimit = 10;
+            context.strokeStyle = "#000000";
             var map = context["graphicsMap"];
             if (!map) {
                 map = mapGraphicsFunction(context);
@@ -447,20 +442,13 @@ module lark {
             var length = commands.length;
             for (var i = 0; i < length; i++) {
                 var command = commands[i];
-                var cmdType = command.type;
-                if (asMask) {
-                    if (cmdType === GraphicsCommandType.stroke) {
-                        continue;
-                    }
-                    if(cmdType===GraphicsCommandType.strokeRect){
-                        cmdType = GraphicsCommandType.rect;
-                    }
-                }
-                map[cmdType].apply(context, command.arguments);
+                map[command.type].apply(context, command.arguments);
             }
             context.restore();
         }
     }
+
+    registerType(Graphics,[Types.Graphics]);
 
     function mapGraphicsFunction(context:player.RenderContext):any {
         var map = context["graphicsMap"] = {};

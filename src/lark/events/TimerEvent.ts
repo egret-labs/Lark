@@ -74,4 +74,6 @@ module lark {
             return result;
         }
     }
+
+    registerType(TimerEvent,[Types.TimerEvent]);
 }
