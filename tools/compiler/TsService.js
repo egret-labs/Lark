@@ -46,9 +46,9 @@ var TsService = (function () {
     };
     TsService.prototype.convertOption = function (options) {
         var target = options.esTarget.toLowerCase();
-        var targetEnum = ts.ScriptTarget.ES5;
+        var targetEnum = 1 /* ES5 */;
         if (target == 'es6')
-            targetEnum = ts.ScriptTarget.ES6;
+            targetEnum = 2 /* ES6 */;
         var tsOption = {
             sourceMap: options.sourceMap,
             target: targetEnum,

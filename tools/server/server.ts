@@ -30,6 +30,6 @@ export function startServer(options: lark.ICompileOptions) {
     framework.config['directory-controllers'] = '~' + __dirname + '/controllers/';
     framework.config['default-websocket-encodedecode'] = false;
     framework.config['default-interval-websocket-ping'] = 60 * 1000;
-    total.http('debug', { port: options.port });
+    total.http('debug', { port: options.port, ip: '0.0.0.0' });
     utils.open(options.manageUrl);
 }
