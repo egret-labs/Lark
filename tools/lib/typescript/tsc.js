@@ -9291,6 +9291,7 @@ var ts;
             var decreaseIndent = writer.decreaseIndent;
             var currentSourceFile;
             var extendsEmitted = false;
+            var defineEmitted = false;
             /** write emitted output to disk*/
             var writeEmittedFiles = writeJavaScriptFile;
             /** Emit leading comments of the node */
@@ -10617,6 +10618,9 @@ var ts;
                 });
             }
             function emitMemberFunctions(node) {
+                write('var d = __define,c=');
+                emitNode(node.name);
+                write(';p=c.prototype;');
                 ts.forEach(node.members, function (member) {
                     if (member.kind === 125 /* Method */) {
                         if (!member.body) {
@@ -10626,10 +10630,11 @@ var ts;
                         emitLeadingComments(member);
                         emitStart(member);
                         emitStart(member.name);
-                        emitNode(node.name);
                         if (!(member.flags & 128 /* Static */)) {
-                            write(".prototype");
+                            write("p");
                         }
+                        else
+                            emitNode(node.name);
                         emitMemberAccessForPropertyName(member.name);
                         emitEnd(member.name);
                         write(" = ");
@@ -10645,12 +10650,13 @@ var ts;
                         if (member === accessors.firstAccessor) {
                             writeLine();
                             emitStart(member);
-                            write("Object.defineProperty(");
+                            write("d(");
                             emitStart(member.name);
-                            emitNode(node.name);
                             if (!(member.flags & 128 /* Static */)) {
-                                write(".prototype");
+                                write("p");
                             }
+                            else
+                                emitNode(node.name);
                             write(", ");
                             emitExpressionForPropertyName(member.name);
                             emitEnd(member.name);
@@ -10659,7 +10665,7 @@ var ts;
                             if (accessors.getAccessor) {
                                 writeLine();
                                 emitLeadingComments(accessors.getAccessor);
-                                write("get: ");
+                                write("g: ");
                                 emitStart(accessors.getAccessor);
                                 write("function ");
                                 emitSignatureAndBody(accessors.getAccessor);
@@ -10670,7 +10676,7 @@ var ts;
                             if (accessors.setAccessor) {
                                 writeLine();
                                 emitLeadingComments(accessors.setAccessor);
-                                write("set: ");
+                                write("s: ");
                                 emitStart(accessors.setAccessor);
                                 write("function ");
                                 emitSignatureAndBody(accessors.setAccessor);
@@ -10678,10 +10684,6 @@ var ts;
                                 emitTrailingComments(accessors.setAccessor);
                                 write(",");
                             }
-                            writeLine();
-                            write("enumerable: true,");
-                            writeLine();
-                            write("configurable: true");
                             decreaseIndent();
                             writeLine();
                             write("});");
@@ -11105,6 +11107,11 @@ var ts;
                     writeLine();
                     write("};");
                     extendsEmitted = true;
+                }
+                if (!defineEmitted) {
+                    writeLine();
+                    write('var __define = function (o, p, a) { Object.defineProperty(o, p, { configurable:true,enumerable:true,get:a.g,set:a.s }) };');
+                    defineEmitted = true;
                 }
                 if (ts.isExternalModule(node)) {
                     if (compilerOptions.module === 2 /* AMD */) {

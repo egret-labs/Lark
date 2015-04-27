@@ -29,23 +29,25 @@
 /// <reference path="../lib/types.d.ts" />
 require('../locales/en');
 var Parser = require("./Parser");
-var Run = require("./Run");
 var Build = require("./Build");
 var Publish = require("./Publish");
 var Create = require("./Create");
-var server = require('../server/server');
+var TsService = require("./TsService");
 function executeCommandLine(args) {
     var options = Parser.parseCommandLine(args);
-    if (options.action == 'startserver')
-        server.startServer(options);
-    else
-        new Run(options).run();
-    //    var exitCode = executeOption(options);
-    //    process.exit(exitCode);
+    //if (options.action == 'startserver')
+    //    server.startServer(options);
+    //else
+    //    new Run(options).run();
+    var exitCode = executeOption(options);
+    //process.exit(exitCode);
 }
 exports.executeCommandLine = executeCommandLine;
 function executeOption(options) {
     var exitCode = 0;
+    if (TsService.instance == null) {
+        TsService.instance = new TsService(options);
+    }
     switch (options.action) {
         case "publish":
             var publish = new Publish(options);

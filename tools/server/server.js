@@ -16,7 +16,9 @@ function startServer(options) {
     framework.config['directory-views'] = '~' + __dirname + '/views/';
     framework.config['directory-controllers'] = '~' + __dirname + '/controllers/';
     framework.config['default-websocket-encodedecode'] = false;
-    framework.config['default-interval-websocket-ping'] = 60 * 1000;
+    framework.config['allow-compile-js'] = false;
+    framework.config['allow-compile-html'] = false;
+    framework.config['allow-compile-css'] = false;
     total.http('debug', { port: options.port, ip: '0.0.0.0' });
     utils.open(options.manageUrl);
 }

@@ -39,6 +39,7 @@ import Create = require("./Create");
 import utils = require('../lib/utils');
 import FileUtil = require('../lib/FileUtil');
 import server = require('../server/server');
+import TsService = require("./TsService");
 
 
 
@@ -46,17 +47,20 @@ import server = require('../server/server');
 
 export function executeCommandLine(args: string[]): void {
     var options = Parser.parseCommandLine(args);
-    if (options.action == 'startserver')
-        server.startServer(options);
-    else
-        new Run(options).run();
-//    var exitCode = executeOption(options);
-//    process.exit(exitCode);
+    //if (options.action == 'startserver')
+    //    server.startServer(options);
+    //else
+    //    new Run(options).run();
+    var exitCode = executeOption(options);
+    //process.exit(exitCode);
 
 }
 
 export function executeOption(options: lark.ICompileOptions): number {
     var exitCode = 0;
+    if (TsService.instance == null) {
+        TsService.instance = new TsService(options);
+    }
     switch (options.action) {
         case "publish":
             var publish = new Publish(options);

@@ -1,4 +1,5 @@
 /// <reference path="../lib/types.d.ts" />
+/// <reference path="../lib/typescript/typescriptServices.d.ts" />
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -8,9 +9,10 @@ var __extends = this.__extends || function (d, b) {
 var events = require('events');
 var watch = require("../lib/watch");
 var FileUtil = require("../lib/FileUtil");
-var ts = require("../lib/typescript/typescriptServices");
+require("../lib/typescript/typescriptServices");
 var TsService = (function () {
     function TsService(settings) {
+        var _this = this;
         var host = new Host();
         var tss = ts.createLanguageService(host, ts.createDocumentRegistry());
         host.settings = this.convertOption(settings);
@@ -18,12 +20,21 @@ var TsService = (function () {
         this.tss = tss;
         this.settings = settings;
         var fw = new FileWatcher();
-        fw.watch(settings.projectDir);
+        fw.service = this;
+        fw.watch(settings.srcDir);
+        var tslib = FileUtil.joinPath(settings.larkRoot, 'tools/lib/typescript/lib.d.ts');
+        var tsList = FileUtil.search(settings.srcDir, "ts");
+        tsList.unshift(tslib);
+        tsList.forEach(function (file) {
+            var content = FileUtil.read(file);
+            _this.host.addScript(file, content);
+        });
     }
     /**
     * 添加 修改 删除
     */
     TsService.prototype.fileChanged = function (fileName) {
+        fileName = FileUtil.escapePath(fileName);
         var exist = FileUtil.exists(fileName);
         if (!exist) {
             this.host.removeScript(fileName);
@@ -41,8 +52,11 @@ var TsService = (function () {
             errors.forEach(function (error) { return console.log(error.messageText, error.file.filename); });
         });
         var content = this.tss.getEmitOutput(fileName);
-        var fileToSave = fileName || this.settings.out;
-        FileUtil.save(fileName, content);
+        fileName = FileUtil.escapePath(fileName);
+        var relativePath = fileName.replace(FileUtil.escapePath(this.settings.srcDir), '');
+        var output = FileUtil.joinPath(this.settings.debugDir, relativePath);
+        var fileToSave = output || this.settings.out;
+        FileUtil.save(fileToSave, content.outputFiles[0].text);
     };
     TsService.prototype.convertOption = function (options) {
         var target = options.esTarget.toLowerCase();
@@ -63,6 +77,7 @@ var TsService = (function () {
         }
         return tsOption;
     };
+    TsService.instance = null;
     return TsService;
 })();
 var FileWatcher = (function (_super) {
@@ -72,31 +87,50 @@ var FileWatcher = (function (_super) {
     }
     FileWatcher.prototype.watch = function (folder) {
         var _this = this;
-        watch.createMonitor(folder, {
+        this.folder = folder;
+        //watch.createMonitor(folder, {
+        //    filter: f=>this.filter(f)
+        //}, monitor=> {
+        //    monitor.on("created", this.onFileCreated);
+        //    monitor.on("changed", this.onFileChanged);
+        //    monitor.on("removed", this.onRemoved);
+        //    this.monitor = monitor;
+        //    });
+        watch.watchTree(folder, {
             filter: function (f) { return _this.filter(f); }
-        }, function (monitor) {
-            monitor.on("created", _this.onFileCreated);
-            monitor.on("changed", _this.onFileChanged);
-            monitor.on("removed", _this.onRemoved);
-            _this.monitor = monitor;
+        }, function (f, curr, prev) {
+            if (typeof f == "object" && prev === null && curr === null) {
+            }
+            else if (prev === null) {
+                _this.onFileCreated(f, curr);
+            }
+            else if (curr.nlink === 0) {
+                _this.onRemoved(f, curr);
+            }
+            else {
+                _this.onFileChanged(f, curr, prev);
+            }
         });
     };
     FileWatcher.prototype.filter = function (filename) {
-        if (filename.endsWith('.ts'))
+        if (filename.lastIndexOf('.ts') == (filename.length - 3))
             return true;
         return false;
     };
     FileWatcher.prototype.stop = function () {
-        this.monitor.stop();
+        watch.unwatchTree(this.folder);
     };
     FileWatcher.prototype.onFileCreated = function (fileName, stat) {
         this.service.fileChanged(fileName);
         this.service.emit(fileName);
     };
     FileWatcher.prototype.onFileChanged = function (fileName, curr, prev) {
+        console.log(fileName, ' is changed');
+        this.service.fileChanged(fileName);
         this.service.emit(fileName);
     };
     FileWatcher.prototype.onRemoved = function (fileName, stat) {
+        this.service.fileChanged(fileName);
         this.service.host.removeScript(fileName);
     };
     return FileWatcher;
@@ -212,7 +246,7 @@ var ScriptInfo = (function () {
     }
     ScriptInfo.prototype.setContent = function (content) {
         this.content = content;
-        this.lineMap = ts.computeLineStarts(content);
+        this.lineMap = computeLineStarts(content);
     };
     ScriptInfo.prototype.updateContent = function (content) {
         this.editRanges = [];
@@ -228,7 +262,7 @@ var ScriptInfo = (function () {
         // Store edit range + new length of script
         this.editRanges.push({
             length: this.content.length,
-            textChangeRange: new ts.TextChangeRange(ts.TextSpan.fromBounds(minChar, limChar), newText.length)
+            textChangeRange: new global.TypeScript.TextChangeRange(ts.TextSpan.fromBounds(minChar, limChar), newText.length)
         });
         // Update version #
         this.version++;
@@ -236,12 +270,12 @@ var ScriptInfo = (function () {
     ScriptInfo.prototype.getTextChangeRangeBetweenVersions = function (startVersion, endVersion) {
         if (startVersion === endVersion) {
             // No edits!
-            return ts.TextChangeRange.unchanged;
+            return global.TypeScript.TextChangeRange.unchanged;
         }
         var initialEditRangeIndex = this.editRanges.length - (this.version - startVersion);
         var lastEditRangeIndex = this.editRanges.length - (this.version - endVersion);
         var entries = this.editRanges.slice(initialEditRangeIndex, lastEditRangeIndex);
-        return ts.TextChangeRange.collapseChangesAcrossMultipleVersions(entries.map(function (e) { return e.textChangeRange; }));
+        return global.TypeScript.TextChangeRange.collapseChangesAcrossMultipleVersions(entries.map(function (e) { return e.textChangeRange; }));
     };
     return ScriptInfo;
 })();
@@ -270,7 +304,7 @@ var ScriptSnapshot = (function () {
     };
     ScriptSnapshot.prototype.getLineStartPositions = function () {
         if (this.lineMap === null) {
-            this.lineMap = ts.computeLineStarts(this.textSnapshot);
+            this.lineMap = computeLineStarts(this.textSnapshot);
         }
         return this.lineMap;
     };
@@ -284,5 +318,31 @@ var ScriptSnapshot = (function () {
     };
     return ScriptSnapshot;
 })();
+function computeLineStarts(text) {
+    var result = new Array();
+    var pos = 0;
+    var lineStart = 0;
+    while (pos < text.length) {
+        var ch = text.charCodeAt(pos++);
+        switch (ch) {
+            case 13 /* carriageReturn */:
+                if (text.charCodeAt(pos) === 10 /* lineFeed */) {
+                    pos++;
+                }
+            case 10 /* lineFeed */:
+                result.push(lineStart);
+                lineStart = pos;
+                break;
+            default:
+                if (ch > 127 /* maxAsciiCharacter */ && ts.isLineBreak(ch)) {
+                    result.push(lineStart);
+                    lineStart = pos;
+                }
+                break;
+        }
+    }
+    result.push(lineStart);
+    return result;
+}
 module.exports = TsService;
 //# sourceMappingURL=TsService.js.map

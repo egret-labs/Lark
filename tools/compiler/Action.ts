@@ -33,7 +33,6 @@ import TypeScript = require("../lib/typescript/tsc");
 import FileUtil = require("../lib/FileUtil");
 import utils = require('../lib/utils');
 import UglifyJS = require("../lib/uglify-js/uglifyjs");
-import TsService = require("./TsService");
 
 class Action {
 
