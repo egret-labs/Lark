@@ -40,8 +40,12 @@ var optionDeclarations: lark.CommandLineOption[] = [
         type: 'string'
     }, {
         name: 'declaration',
-        type: 'booleam',
+        type: 'boolean',
         shortName: "d"
+    }, {
+        name: 'autoCompile',
+        type: 'boolean',
+        shortName: "a"
     }
 ];
 

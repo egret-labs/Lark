@@ -34,6 +34,7 @@ var __extends = this.__extends || function (d, b) {
 };
 /// <reference path="../lib/types.d.ts" />
 var Action = require('./Action');
+var FileUtil = require("../lib/FileUtil");
 var Build = (function (_super) {
     __extends(Build, _super);
     function Build() {
@@ -46,9 +47,25 @@ var Build = (function (_super) {
         if (this.options.includeLark)
             exitCode = this.buildLark();
         this.copyDirectory(this.options.templateDir, this.options.debugDir);
-        exitCode = this.buildProject();
+        var compileResult = this.buildProject();
+        this.compileTemplates(compileResult.files);
+        exitCode = compileResult.exitCode;
         console.log('Build End');
         return exitCode;
+    };
+    Build.prototype.compileTemplates = function (projectFiles) {
+        var larkFilesJson = FileUtil.joinPath(this.options.srcDir, 'lark/lark.json');
+        var json = FileUtil.read(larkFilesJson);
+        var lark = JSON.parse(json);
+        var files = lark.files;
+        var templateFile = FileUtil.joinPath(this.options.templateDir, this.options.projectProperties.startupHtml);
+        var content = FileUtil.read(templateFile);
+        var larkScripts = files.map(function (f) { return ['<script src="', f, '"></script>'].join(''); }).join('\r\n');
+        var projectScripts = projectFiles.map(function (f) { return ['<script src="', f, '"></script>'].join(''); }).join('\r\n');
+        content = content.replace('<script id="lark"></script>', larkScripts);
+        content = content.replace('<script id="project"></script>', projectScripts);
+        var outputFile = FileUtil.joinPath(this.options.debugDir, this.options.projectProperties.startupHtml);
+        FileUtil.save(outputFile, content);
     };
     return Build;
 })(Action);

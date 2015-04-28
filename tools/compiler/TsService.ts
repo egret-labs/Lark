@@ -33,8 +33,8 @@ class TsService {
     * 添加 修改 删除
     */
     fileChanged(fileName: string, emit = true, output?: string) {
-        console.log('changed ',fileName, output);
         fileName = FileUtil.escapePath(fileName);
+        console.log('Compile: ',fileName,'\n     to: ', output);
         var exist = FileUtil.exists(fileName);
         if (!exist) {
             this.host.removeScript(fileName);
@@ -58,8 +58,9 @@ class TsService {
 
         var content = this.tss.getEmitOutput(fileName);
         var fileToSave = output || this.settings.out;
-
-        FileUtil.save(fileToSave, content.outputFiles[0].text);
+        if (content.outputFiles && content.outputFiles.length > 0) {
+            FileUtil.save(fileToSave, content.outputFiles[0].text);
+        }
     }
 
     private convertOption(options: lark.ICompileOptions) {

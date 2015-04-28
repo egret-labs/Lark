@@ -30,6 +30,8 @@
 /// <reference path="../lib/types.d.ts" />
 
 import Action = require('./Action');
+import Properties = require('./Properties');
+import FileUtil = require("../lib/FileUtil");
 
 class Build extends Action {
 
@@ -43,12 +45,31 @@ class Build extends Action {
 
         this.copyDirectory(this.options.templateDir, this.options.debugDir);
 
-        exitCode = this.buildProject();
+        var compileResult = this.buildProject();
+
+        this.compileTemplates(compileResult.files);
+
+        exitCode = compileResult.exitCode;
         console.log('Build End');
         return exitCode;
     }
 
+    public compileTemplates(projectFiles:string[]) {
+        var larkFilesJson = FileUtil.joinPath(this.options.srcDir, 'lark/lark.json');
+        var json = FileUtil.read(larkFilesJson);
+        var lark = JSON.parse(json);
+        var files: string[] = lark.files;
 
+        var templateFile = FileUtil.joinPath(this.options.templateDir, this.options.projectProperties.startupHtml);
+        var content = FileUtil.read(templateFile);
+        var larkScripts = files.map(f=> ['<script src="', f, '"></script>'].join('')).join('\r\n');
+        var projectScripts = projectFiles.map(f=> ['<script src="', f, '"></script>'].join('')).join('\r\n');
+
+        content = content.replace('<script id="lark"></script>', larkScripts);
+        content = content.replace('<script id="project"></script>', projectScripts);
+        var outputFile = FileUtil.joinPath(this.options.debugDir, this.options.projectProperties.startupHtml);
+        FileUtil.save(outputFile, content);
+    }
 }
 
 export = Build;

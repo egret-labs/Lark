@@ -16,6 +16,11 @@
 
 
     export class TreeGenerator {
+
+        static getOrderedFiles() {
+            return orderedFileList;
+        }
+
         classNameToFileMap = classNameToFileMap;
         public orderFiles(chk: TypeChecker, program: Program) {
 
@@ -33,7 +38,6 @@
             checker = chk;
             forEach(files, file=> this.symbolTabelToFileMap(file, file.locals));
             this.sortFiles();
-            this.emitTypesEnum();
             var sources = program.getSourceFiles();
             orderedFileList.forEach(f=> {
                 for (var i = 0; i < sources.length; i++) {
@@ -47,29 +51,6 @@
             });
         }
 
-
-        private emitTypesEnum() {
-            var types = 'export const enum Types { $types$ }';
-            var typeNames: string[] = [];
-            forEachKey(classNames, name=> {
-                var names = name.split('.');
-                for (var i = 1; i < names.length; i++)
-                {
-                    names[i] = names[i][0].toUpperCase() + names[i].substr(1);
-                }
-                typeNames.push(names.join('') + ' = ' + classNames[name]);
-            });
-            var typesString = typeNames.join(',\r\n');
-            types = types.replace('$types$', typesString);
-            console.log(types);
-        }
-
-        private isTypeOf(className,baseClassName) {
-            var bases = classNameToBaseClassMap[className];
-            if (bases.indexOf(baseClassName) >= 0)
-                return true;
-            return bases.some(clazz=> this.isTypeOf(clazz, baseClassName));
-        }
 
         private symbolToFileMap(file: SourceFile, symbol:Symbol) {
             var classtype = <InterfaceType>checker.getDeclaredTypeOfSymbol(symbol.exportSymbol || symbol);

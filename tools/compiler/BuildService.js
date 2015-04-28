@@ -39,8 +39,9 @@ var BuildService = (function () {
         return output;
     };
     BuildService.prototype.onTemplateFileChanged = function (f) {
+        f = FileUtil.escapePath(f);
         var output = this.getTemplateOutputFileName(f);
-        console.log('changed ', f, output);
+        console.log('Copy: ', f, "\n  to: ", output);
         if (FileUtil.exists(f)) {
             FileUtil.copy(f, output);
         }

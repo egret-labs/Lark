@@ -43,8 +43,13 @@ var optionDeclarations = [
     },
     {
         name: 'declaration',
-        type: 'booleam',
+        type: 'boolean',
         shortName: "d"
+    },
+    {
+        name: 'autoCompile',
+        type: 'boolean',
+        shortName: "a"
     }
 ];
 var shortOptionNames = {};

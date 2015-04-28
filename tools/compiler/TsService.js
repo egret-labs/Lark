@@ -24,8 +24,8 @@ var TsService = (function () {
     */
     TsService.prototype.fileChanged = function (fileName, emit, output) {
         if (emit === void 0) { emit = true; }
-        console.log('changed ', fileName, output);
         fileName = FileUtil.escapePath(fileName);
+        console.log('Compile: ', fileName, '\n     to: ', output);
         var exist = FileUtil.exists(fileName);
         if (!exist) {
             this.host.removeScript(fileName);
@@ -46,7 +46,9 @@ var TsService = (function () {
         });
         var content = this.tss.getEmitOutput(fileName);
         var fileToSave = output || this.settings.out;
-        FileUtil.save(fileToSave, content.outputFiles[0].text);
+        if (content.outputFiles && content.outputFiles.length > 0) {
+            FileUtil.save(fileToSave, content.outputFiles[0].text);
+        }
     };
     TsService.prototype.convertOption = function (options) {
         var target = options.esTarget.toLowerCase();

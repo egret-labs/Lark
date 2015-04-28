@@ -11110,7 +11110,7 @@ var ts;
                 }
                 if (!defineEmitted) {
                     writeLine();
-                    write('var __define = function (o, p, a) { Object.defineProperty(o, p, { configurable:true,enumerable:true,get:a.g,set:a.s }) };');
+                    write('var __define =this.__define || function (o, p, a) { Object.defineProperty(o, p, { configurable:true,enumerable:true,get:a.g,set:a.s }) };');
                     defineEmitted = true;
                 }
                 if (ts.isExternalModule(node)) {
@@ -20198,6 +20198,9 @@ var ts;
         function TreeGenerator() {
             this.classNameToFileMap = classNameToFileMap;
         }
+        TreeGenerator.getOrderedFiles = function () {
+            return orderedFileList;
+        };
         TreeGenerator.prototype.orderFiles = function (chk, program) {
             var _this = this;
             classNameToFileMap = {};
@@ -20212,7 +20215,6 @@ var ts;
             checker = chk;
             ts.forEach(files, function (file) { return _this.symbolTabelToFileMap(file, file.locals); });
             this.sortFiles();
-            this.emitTypesEnum();
             var sources = program.getSourceFiles();
             orderedFileList.forEach(function (f) {
                 for (var i = 0; i < sources.length; i++) {
@@ -20224,27 +20226,6 @@ var ts;
                     }
                 }
             });
-        };
-        TreeGenerator.prototype.emitTypesEnum = function () {
-            var types = 'export const enum Types { $types$ }';
-            var typeNames = [];
-            ts.forEachKey(classNames, function (name) {
-                var names = name.split('.');
-                for (var i = 1; i < names.length; i++) {
-                    names[i] = names[i][0].toUpperCase() + names[i].substr(1);
-                }
-                typeNames.push(names.join('') + ' = ' + classNames[name]);
-            });
-            var typesString = typeNames.join(',\r\n');
-            types = types.replace('$types$', typesString);
-            console.log(types);
-        };
-        TreeGenerator.prototype.isTypeOf = function (className, baseClassName) {
-            var _this = this;
-            var bases = classNameToBaseClassMap[className];
-            if (bases.indexOf(baseClassName) >= 0)
-                return true;
-            return bases.some(function (clazz) { return _this.isTypeOf(clazz, baseClassName); });
         };
         TreeGenerator.prototype.symbolToFileMap = function (file, symbol) {
             var _this = this;
@@ -20833,7 +20814,10 @@ var TSC = (function () {
         else {
             parsedCmd.options.outDir = outDir;
         }
-        return ts.executeWithOption(parsedCmd);
+        return {
+            exitCode: ts.executeWithOption(parsedCmd),
+            files: ts.TreeGenerator.getOrderedFiles()
+        };
     };
     TSC.executeCommandLine = ts.executeCommandLine;
     TSC.exit = null;

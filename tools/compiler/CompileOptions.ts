@@ -78,6 +78,7 @@ class CompileOptions implements lark.ICompileOptions {
     esTarget: string = 'ES5';
     showUI: boolean;
     declaration: boolean;
+    autoCompile: boolean;
 
     projectProperties: lark.ILarkProperties;
 
