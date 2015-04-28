@@ -61,10 +61,10 @@ module lark {
         public constructor() {
             super();
             this.$displayObjectFlags = player.DisplayObjectFlags.InitFlags;
-            this._values = new Float64Array([1, 1, 0, 0, 0, 0, 0]);
+            this.displayObjectValues = new Float64Array([1, 1, 0, 0, 0, 0, 0]);
         }
 
-        private _values:Float64Array;
+        private displayObjectValues:Float64Array;
 
         $displayObjectFlags:number = 0;
 
@@ -200,7 +200,7 @@ module lark {
 
         $getMatrix():Matrix {
             if (this.$hasFlags(player.DisplayObjectFlags.InvalidMatrix)) {
-                var values = this._values;
+                var values = this.displayObjectValues;
                 this._matrix.$updateScaleAndRotation(values[Values.scaleX], values[Values.scaleY], values[Values.skewX], values[Values.skewY]);
                 this.$removeFlags(player.DisplayObjectFlags.InvalidMatrix);
             }
@@ -220,7 +220,7 @@ module lark {
             }
             var m = this._matrix;
             m.copyFrom(matrix);
-            var values = this._values;
+            var values = this.displayObjectValues;
             values[Values.scaleX] = m.$getScaleX();
             values[Values.scaleY] = m.$getScaleY();
             values[Values.skewX] = matrix.$getSkewX();
@@ -269,7 +269,11 @@ module lark {
          * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
          */
         public get x():number {
-            return this._values[Values.x];
+            return this.$getX();
+        }
+
+        $getX():number{
+            return this.displayObjectValues[Values.x];
         }
 
         public set x(value:number) {
@@ -278,7 +282,7 @@ module lark {
 
         $setX(value:number):boolean{
             value = +value || 0;
-            var values = this._values;
+            var values = this.displayObjectValues;
             if (value === values[Values.x]) {
                 return false;
             }
@@ -297,7 +301,11 @@ module lark {
          * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
          */
         public get y():number {
-            return this._values[Values.y];
+            return this.$getY();
+        }
+
+        $getY():number{
+            return this.displayObjectValues[Values.y];
         }
 
         public set y(value:number) {
@@ -306,7 +314,7 @@ module lark {
 
         $setY(value:number):boolean{
             value = +value || 0;
-            var values = this._values;
+            var values = this.displayObjectValues;
             if (value === values[Values.y]) {
                 return false;
             }
@@ -327,7 +335,7 @@ module lark {
          * @default 1
          */
         public get scaleX():number {
-            return this._values[Values.scaleX];
+            return this.displayObjectValues[Values.scaleX];
         }
 
         public set scaleX(value:number) {
@@ -336,7 +344,7 @@ module lark {
 
         $setScaleX(value:number):boolean{
             value = +value || 0;
-            var values = this._values;
+            var values = this.displayObjectValues;
             if (value === values[Values.scaleX]) {
                 return false;
             }
@@ -352,7 +360,7 @@ module lark {
          * @default 1
          */
         public get scaleY():number {
-            return this._values[Values.scaleY];
+            return this.displayObjectValues[Values.scaleY];
         }
 
         public set scaleY(value:number) {
@@ -361,10 +369,10 @@ module lark {
 
         $setScaleY(value:number):boolean{
             value = +value || 0;
-            if (value === this._values[Values.scaleY]) {
+            if (value === this.displayObjectValues[Values.scaleY]) {
                 return false;
             }
-            this._values[Values.scaleY] = value;
+            this.displayObjectValues[Values.scaleY] = value;
             this.invalidateMatrix();
             return true;
         }
@@ -376,13 +384,13 @@ module lark {
          * @default 0 默认值为 0 不旋转。
          */
         public get rotation():number {
-            return this._values[Values.rotation];
+            return this.displayObjectValues[Values.rotation];
         }
 
         public set rotation(value:number) {
             value = +value || 0;
             value = clampRotation(value);
-            var values = this._values;
+            var values = this.displayObjectValues;
             if (value === values[Values.rotation]) {
                 return;
             }
@@ -415,7 +423,7 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var values = this._values;
+            var values = this.displayObjectValues;
             var originalBounds = this.$getOriginalBounds();
             var bounds = this.$getTransformedBounds(this.$parent, $TempRectangle);
             var angle = values[Values.rotation] / 180 * Math.PI;
@@ -450,7 +458,7 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var values = this._values;
+            var values = this.displayObjectValues;
             var originalBounds = this.$getOriginalBounds();
             var bounds = this.$getTransformedBounds(this.$parent, $TempRectangle);
             var angle = values[Values.rotation] / 180 * Math.PI;
@@ -609,7 +617,7 @@ module lark {
         }
 
         public set scrollRect(value:Rectangle) {
-            var values = this._values;
+            var values = this.displayObjectValues;
             var m = this._matrix.$data;
             if (value) {
                 if (!this.$scrollRect) {
