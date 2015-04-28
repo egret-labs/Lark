@@ -1,7 +1,7 @@
 ﻿/// <reference path="../lib/types.d.ts" />
 
 import events = require('events');
-import watch = require("../lib/watch");
+import chokidar = require("../lib/chokidar/index");
 import typeScriptService = require("./TsService");
 import FileUtil = require("../lib/FileUtil");
 
@@ -9,7 +9,7 @@ import FileUtil = require("../lib/FileUtil");
 
 class BuildService {
     static instance: BuildService = null;
-    fileMonitor: watch.FileMonitor;
+    fileMonitor: chokidar.FSWatcher;
     tss: typeScriptService;
     setting: lark.ICompileOptions;
     start(settings: lark.ICompileOptions) {
@@ -20,14 +20,11 @@ class BuildService {
     }
 
 
-    createTypeScriptMonitor(folder:string) {
-        watch.createMonitor(folder, {
-            filter: f=> this.typeScriptFilter(f)
-        }, monitor=> {
-                monitor.on("created", f=> this.tss.fileChanged(f, true, this.getTypeScriptOutputFileName(f)));
-                monitor.on("changed", f=> this.tss.fileChanged(f, true, this.getTypeScriptOutputFileName(f)));
-                monitor.on("removed", f=> this.tss.fileChanged(f, true, this.getTypeScriptOutputFileName(f)));
-            });
+    createTypeScriptMonitor(folder: string) {
+        chokidar.watch(folder, { ignoreInitial:true,ignored: [f=> !this.typeScriptFilter(f)] })
+            .on('add', f=> this.tss.fileChanged(f, true, this.getTypeScriptOutputFileName(f)))
+            .on('change', f=> this.tss.fileChanged(f, true, this.getTypeScriptOutputFileName(f)))
+            .on('unlink', f=> this.tss.fileChanged(f, true, this.getTypeScriptOutputFileName(f)));
     }
 
     typeScriptFilter(fileName:string):boolean {
@@ -46,11 +43,10 @@ class BuildService {
 
 
     createTemplateMonitor(folder: string) {
-        watch.createMonitor(folder, {} , monitor=> {
-            monitor.on("created", f=> this.onTemplateFileChanged(f));
-            monitor.on("changed", f=> this.onTemplateFileChanged(f));
-            monitor.on("removed", f=> this.onTemplateFileChanged(f));
-        });
+        chokidar.watch(folder, { ignoreInitial: true })
+            .on('add', f=> this.onTemplateFileChanged(f))
+            .on('change', f=> this.onTemplateFileChanged(f))
+            .on('unlink', f=> this.onTemplateFileChanged(f));
     }
     getTemplateOutputFileName(fileName:string) {
         fileName = FileUtil.escapePath(fileName);

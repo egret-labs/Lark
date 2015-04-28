@@ -1,5 +1,5 @@
 /// <reference path="../lib/types.d.ts" />
-var watch = require("../lib/watch");
+var chokidar = require("../lib/chokidar/index");
 var typeScriptService = require("./TsService");
 var FileUtil = require("../lib/FileUtil");
 var BuildService = (function () {
@@ -13,13 +13,7 @@ var BuildService = (function () {
     };
     BuildService.prototype.createTypeScriptMonitor = function (folder) {
         var _this = this;
-        watch.createMonitor(folder, {
-            filter: function (f) { return _this.typeScriptFilter(f); }
-        }, function (monitor) {
-            monitor.on("created", function (f) { return _this.tss.fileChanged(f, true, _this.getTypeScriptOutputFileName(f)); });
-            monitor.on("changed", function (f) { return _this.tss.fileChanged(f, true, _this.getTypeScriptOutputFileName(f)); });
-            monitor.on("removed", function (f) { return _this.tss.fileChanged(f, true, _this.getTypeScriptOutputFileName(f)); });
-        });
+        chokidar.watch(folder, { ignoreInitial: true, ignored: [function (f) { return !_this.typeScriptFilter(f); }] }).on('add', function (f) { return _this.tss.fileChanged(f, true, _this.getTypeScriptOutputFileName(f)); }).on('change', function (f) { return _this.tss.fileChanged(f, true, _this.getTypeScriptOutputFileName(f)); }).on('unlink', function (f) { return _this.tss.fileChanged(f, true, _this.getTypeScriptOutputFileName(f)); });
     };
     BuildService.prototype.typeScriptFilter = function (fileName) {
         if (FileUtil.isDirectory(fileName))
@@ -36,11 +30,7 @@ var BuildService = (function () {
     };
     BuildService.prototype.createTemplateMonitor = function (folder) {
         var _this = this;
-        watch.createMonitor(folder, {}, function (monitor) {
-            monitor.on("created", function (f) { return _this.onTemplateFileChanged(f); });
-            monitor.on("changed", function (f) { return _this.onTemplateFileChanged(f); });
-            monitor.on("removed", function (f) { return _this.onTemplateFileChanged(f); });
-        });
+        chokidar.watch(folder, { ignoreInitial: true }).on('add', function (f) { return _this.onTemplateFileChanged(f); }).on('change', function (f) { return _this.onTemplateFileChanged(f); }).on('unlink', function (f) { return _this.onTemplateFileChanged(f); });
     };
     BuildService.prototype.getTemplateOutputFileName = function (fileName) {
         fileName = FileUtil.escapePath(fileName);
