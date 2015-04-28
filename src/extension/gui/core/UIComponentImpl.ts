@@ -59,6 +59,11 @@ module lark.player {
         oldMinWidth,        //NONE
         oldMinHeight        //NONE
     }
+
+    function isDeltaIdentity(m:Float64Array):boolean {
+        return (m[0] === 1 && m[1] === 0 && m[2] === 0 && m[3] === 1);
+    }
+
     /**
      * GUI显示对象基类模板，这个类不需要添加到加载列表。仅作为gui.UIComponent的默认实现，为lark.player.implemenetUIComponenet()方法提供代码模板。
      */
@@ -779,7 +784,7 @@ module lark.player {
                 this.$setFlags(UIComponentFlags.LayoutHeightExplicitlySet);
             }
             var matrix = this.$getMatrix();
-            if (this.isDeltaIdentity(matrix.$data)) {
+            if (isDeltaIdentity(matrix.$data)) {
                 this.setActualSize(width, height);
                 return;
             }
@@ -805,7 +810,7 @@ module lark.player {
         public setLayoutBoundsPosition(x:number, y:number):void {
             var changed = false;
             var matrix = this.$getMatrix();
-            if (!this.isDeltaIdentity(matrix.$data)) {
+            if (!isDeltaIdentity(matrix.$data)) {
                 var bounds = this.getLayoutBounds($TempRectangle);
                 x += this.$getX() - bounds.x;
                 y += this.$getY() - bounds.y;
@@ -881,7 +886,7 @@ module lark.player {
             var bounds = bounds.setTo(x, y, w, h);
             var matrix = this.$getMatrix();
             var m = matrix.$data;
-            if (this.isDeltaIdentity(m)) {
+            if (isDeltaIdentity(m)) {
                 bounds.x += m[4];
                 bounds.y += m[5];
             }
@@ -889,10 +894,6 @@ module lark.player {
                 matrix.$transformBounds(bounds);
             }
             return bounds;
-        }
-
-        private isDeltaIdentity(m:Float64Array):boolean {
-            return (m[0] === 1 && m[1] === 0 && m[2] === 0 && m[3] === 1);
         }
 
     }
