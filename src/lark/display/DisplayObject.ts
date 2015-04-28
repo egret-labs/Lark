@@ -169,17 +169,23 @@ module lark {
             this.$parent = parent;
         }
 
-        $onAddToStage(stage:Stage):void {
+        $onAddToStage(stage:Stage,nestLevel:number):void {
             this.$stage = stage;
+            this.$nestLevel = nestLevel;
             Sprite.$EVENT_ADD_TO_STAGE_LIST.push(this);
         }
 
         $onRemoveFromStage():void {
+            this.$nestLevel = 0;
             Sprite.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
         }
 
         $stage:Stage = null;
 
+        /**
+         * 这个对象在显示列表中的嵌套深度，舞台为1，它的子项为2，子项的子项为3，以此类推。当对象不在显示列表中时此属性值为0.
+         */
+        $nestLevel:number = 0;
         /**
          * 显示对象的舞台。
          * 例如，您可以创建多个显示对象并加载到显示列表中，每个显示对象的 stage 属性是指相同的 Stage 对象。

@@ -114,11 +114,36 @@ module lark.player {
 
         }
 
-        $uiComponentValues:Float64Array;
         /**
-         * 嵌套深度，失效验证是根据这个深度来进行队列排序。
+         * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
-        $nestLevel:number = 0;
+        protected commitProperties():void {
+            var values = this.$uiComponentValues;
+            if (values[UIComponentValues.oldWidth] != values[UIComponentValues.width] ||
+                values[UIComponentValues.oldHeight] != values[UIComponentValues.height]) {
+                this.emitResizeEvent();
+            }
+            if (values[UIComponentValues.oldX] != this.$getX() || values[UIComponentValues.oldY] != this.$getY()) {
+                this.emitMoveEvent();
+            }
+        }
+
+        /**
+         * 测量组件尺寸
+         */
+        protected measure():void {
+            var values = this.$uiComponentValues;
+            values[UIComponentValues.measuredHeight] = 0;
+            values[UIComponentValues.measuredWidth] = 0;
+        }
+
+        /**
+         * 更新显示列表
+         */
+        protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
+        }
+
+        $uiComponentValues:Float64Array;
 
         $includeInLayout:boolean = true;
 
@@ -139,14 +164,9 @@ module lark.player {
             this.$includeInLayout = value;
         }
 
-        $onAddToStage(stage:Stage):void {
-            super.$onAddToStage(stage);
+        $onAddToStage(stage:Stage,nestLevel:number):void {
+            super.$onAddToStage(stage,nestLevel);
             this.checkInvalidateFlag();
-        }
-
-        $onRemoveFromStage():void {
-            super.$onRemoveFromStage();
-            this.$nestLevel = 0;
         }
 
         /**
@@ -708,35 +728,6 @@ module lark.player {
                 return;
             (<gui.UIComponent><any>parent).invalidateSize();
             (<gui.UIComponent><any>parent).invalidateDisplayList();
-        }
-
-        /**
-         * 更新显示列表
-         */
-        protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
-        }
-
-        /**
-         * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
-         */
-        protected commitProperties():void {
-            var values = this.$uiComponentValues;
-            if (values[UIComponentValues.oldWidth] != values[UIComponentValues.width] ||
-                values[UIComponentValues.oldHeight] != values[UIComponentValues.height]) {
-                this.emitResizeEvent();
-            }
-            if (values[UIComponentValues.oldX] != this.$getX() || values[UIComponentValues.oldY] != this.$getY()) {
-                this.emitMoveEvent();
-            }
-        }
-
-        /**
-         * 测量组件尺寸
-         */
-        protected measure():void {
-            var values = this.$uiComponentValues;
-            values[UIComponentValues.measuredHeight] = 0;
-            values[UIComponentValues.measuredWidth] = 0;
         }
 
         /**

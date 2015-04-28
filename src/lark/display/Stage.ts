@@ -41,7 +41,8 @@ module lark {
          */
         public constructor() {
             super();
-            this.$stage = this
+            this.$stage = this;
+            this.$nestLevel = 1;
         }
 
         /**

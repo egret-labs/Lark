@@ -60,11 +60,6 @@ module lark.gui {
         // protected measure():void;
 
 
-        /**
-         * 嵌套深度，失效验证是根据这个深度来进行队列排序。
-         */
-        $nestLevel:number;
-
         $includeInLayout:boolean;
 
         /**
@@ -262,7 +257,6 @@ module lark.player {
     }
 
     export function UIComponent():void {
-        this.$nestLevel = 0;
         this.$includeInLayout = true;
         this.$uiComponentValues = new Float64Array([
             lark.NONE,
@@ -303,12 +297,32 @@ module lark.player {
     export function implementUIComponent(componentClass:any, _super:any):void {
         var prototype = componentClass.prototype;
 
+        var commitProperties = prototype.commitProperties;
         /**
-         * 创建子项,子类覆盖此方法以完成组件子项的初始化操作，
-         * 请务必调用super.createChildren()以完成父类组件的初始化
+         * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
-        prototype.createChildren = function () {
+        prototype.commitProperties = function () {
+            var values = this.$uiComponentValues;
+            if (values[10 /* oldWidth */] != values[11 /* width */] || values[12 /* oldHeight */] != values[13 /* height */]) {
+                this.emitResizeEvent();
+            }
+            if (values[22 /* oldX */] != this.$getX() || values[23 /* oldY */] != this.$getY()) {
+                this.emitMoveEvent();
+            }
+            commitProperties();
         };
+
+        var measure = prototype.measure;
+        /**
+         * 测量组件尺寸
+         */
+        prototype.measure = function () {
+            var values = this.$uiComponentValues;
+            values[21 /* measuredHeight */] = 0;
+            values[19 /* measuredWidth */] = 0;
+            measure();
+        };
+
         Object.defineProperty(prototype, "includeInLayout", {
             /**
              * 指定此组件是否包含在父容器的布局中。若为false，则父级容器在测量和布局阶段都忽略此组件。默认值为true。
@@ -328,13 +342,9 @@ module lark.player {
             enumerable: true,
             configurable: true
         });
-        prototype.$onAddToStage = function (stage) {
-            _super.prototype.$onAddToStage.call(this, stage);
+        prototype.$onAddToStage = function (stage, nestLevel) {
+            _super.prototype.$onAddToStage.call(this, stage, nestLevel);
             this.checkInvalidateFlag();
-        };
-        prototype.$onRemoveFromStage = function () {
-            _super.prototype.$onRemoveFromStage.call(this);
-            this.$nestLevel = 0;
         };
         /**
          * 检查属性失效标记并应用
@@ -924,31 +934,6 @@ module lark.player {
                 return;
             parent.invalidateSize();
             parent.invalidateDisplayList();
-        };
-        /**
-         * 更新显示列表
-         */
-        prototype.updateDisplayList = function (unscaledWidth, unscaledHeight) {
-        };
-        /**
-         * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
-         */
-        prototype.commitProperties = function () {
-            var values = this.$uiComponentValues;
-            if (values[10 /* oldWidth */] != values[11 /* width */] || values[12 /* oldHeight */] != values[13 /* height */]) {
-                this.emitResizeEvent();
-            }
-            if (values[22 /* oldX */] != this.$getX() || values[23 /* oldY */] != this.$getY()) {
-                this.emitMoveEvent();
-            }
-        };
-        /**
-         * 测量组件尺寸
-         */
-        prototype.measure = function () {
-            var values = this.$uiComponentValues;
-            values[21 /* measuredHeight */] = 0;
-            values[19 /* measuredWidth */] = 0;
         };
         /**
          *  抛出移动事件

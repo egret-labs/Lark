@@ -34,48 +34,39 @@ module lark.gui {
      */
     export class Group extends Sprite implements UIComponent {
 
-        public constructor(){
+        public constructor() {
             super();
             player.UIComponent.call(this);
         }
 
+        //=======================UIComponent接口实现===========================
         /**
          * 创建子项,子类覆盖此方法以完成组件子项的初始化操作，
          * 请务必调用super.createChildren()以完成父类组件的初始化
          */
         protected createChildren():void {
-
         }
 
         /**
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
-        protected commitProperties():void{
+        protected commitProperties():void {
 
         }
 
         /**
          * 测量组件尺寸
          */
-        protected measure():void{
+        protected measure():void {
 
         }
 
         /**
          * 更新显示列表
          */
-        protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void{
+        protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
 
         }
-
-        /**
-         * 标记父级容器的尺寸和显示列表为失效
-         */
-        protected invalidateParentSizeAndDisplayList:()=>void;
-        /**
-         * 嵌套深度，失效验证是根据这个深度来进行队列排序。
-         */
-        $nestLevel:number;
 
         $includeInLayout:boolean;
 
@@ -262,7 +253,11 @@ module lark.gui {
          * 注意此方法返回值已经包含scale和rotation。
          */
         public getPreferredBounds:(bounds:Rectangle)=>Rectangle;
+        /**
+         * 标记父级容器的尺寸和显示列表为失效
+         */
+        protected invalidateParentSizeAndDisplayList:()=>void;
     }
-    player.implementUIComponent(Group,Sprite);
-    registerType(Group,[Types.UIComponent,Types.Group]);
+    player.implementUIComponent(Group, Sprite);
+    registerType(Group, [Types.UIComponent, Types.Group]);
 }
