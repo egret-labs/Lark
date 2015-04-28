@@ -43,6 +43,10 @@ module lark.gui {
          */
         UIComponent = 1001,
         /**
+         * GUI容器基类
+         */
+        Group,
+        /**
          * UI事件
          */
         UIEvent,

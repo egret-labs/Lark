@@ -127,11 +127,11 @@ module lark {
             //shape.cacheAsBitmap = true;
             //container.mask = this.targetIcon;
 
-            //var ui = new gui.UIComponent();
-            //ui.rotation = 45;
-            //ui.setLayoutBoundsSize(100,100);
-            //ui.setLayoutBoundsPosition(100,100);
-            //log(ui.x,ui.y,ui.width,ui.height);
+            var ui = new gui.Group();
+            ui.rotation = 45;
+            ui.setLayoutBoundsSize(100,100);
+            ui.setLayoutBoundsPosition(100,100);
+            log(ui.x,ui.y,ui.width,ui.height);
         }
 
         private container:DisplayObjectContainer;

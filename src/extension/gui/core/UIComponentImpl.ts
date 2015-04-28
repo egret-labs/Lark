@@ -62,7 +62,7 @@ module lark.player {
     /**
      * GUI显示对象基类模板，这个类不需要添加到加载列表。仅作为gui.UIComponent的默认实现，为lark.player.implemenetUIComponenet()方法提供代码模板。
      */
-    export class UIBase extends DisplayObject implements gui.UIComponent {
+    export class UIComponentImpl extends DisplayObject implements gui.UIComponent {
         /**
          * 构造函数
          */

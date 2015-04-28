@@ -296,7 +296,9 @@ module lark.player {
     /**
      * UIComponent代码复用工具方法
      */
-    export function implementUIComponent(prototype:any, _super:any):void {
+    export function implementUIComponent(componentClass:any, superClass:any):void {
+        var prototype = componentClass.prototype;
+        
         /**
          * 创建子项,子类覆盖此方法以完成组件子项的初始化操作，
          * 请务必调用super.createChildren()以完成父类组件的初始化
@@ -323,11 +325,11 @@ module lark.player {
             configurable: true
         });
         prototype.$onAddToStage = function (stage) {
-            _super.prototype.$onAddToStage.call(this, stage);
+            superClass.prototype.$onAddToStage.call(this, stage);
             this.checkInvalidateFlag();
         };
         prototype.$onRemoveFromStage = function () {
-            _super.prototype.$onRemoveFromStage.call(this);
+            superClass.prototype.$onRemoveFromStage.call(this);
             this.$nestLevel = 0;
         };
         /**
@@ -556,14 +558,14 @@ module lark.player {
             configurable: true
         });
         prototype.$setScaleX = function (value) {
-            var change = _super.prototype.$setScaleX.call(this, value);
+            var change = superClass.prototype.$setScaleX.call(this, value);
             if (change) {
                 this.invalidateParentSizeAndDisplayList();
             }
             return change;
         };
         prototype.$setScaleY = function (value) {
-            var change = _super.prototype.$setScaleY.call(this, value);
+            var change = superClass.prototype.$setScaleY.call(this, value);
             if (change) {
                 this.invalidateParentSizeAndDisplayList();
             }
@@ -768,7 +770,7 @@ module lark.player {
             }
         };
         prototype.$setX = function (value) {
-            var change = _super.prototype.$setX.call(this, value);
+            var change = superClass.prototype.$setX.call(this, value);
             if (change) {
                 this.invalidateProperties();
                 this.invalidateParentSizeAndDisplayList();
@@ -776,7 +778,7 @@ module lark.player {
             return change;
         };
         prototype.$setY = function (value) {
-            var change = _super.prototype.$setY.call(this, value);
+            var change = superClass.prototype.$setY.call(this, value);
             if (change) {
                 this.invalidateProperties();
                 this.invalidateParentSizeAndDisplayList();
@@ -1013,8 +1015,8 @@ module lark.player {
                 x += this.$getX() - bounds.x;
                 y += this.$getY() - bounds.y;
             }
-            changed = _super.prototype.$setX.call(this, x);
-            changed = _super.prototype.$setY.call(this, y) || changed;
+            changed = superClass.prototype.$setX.call(this, x);
+            changed = superClass.prototype.$setY.call(this, y) || changed;
             if (changed) {
                 this.emitMoveEvent();
             }
