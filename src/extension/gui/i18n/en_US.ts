@@ -26,10 +26,11 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
+module lark.gui {
 
-module lark.gui{
+    $locale_strings = $locale_strings||{};
+    var locale_strings = $locale_strings;
 
-    export class Group extends GroupBase{
+    locale_strings[2001] = "BasicLayout doesn't support virtualization.";
 
-    }
 }

@@ -245,6 +245,18 @@ module lark.gui {
          * 注意此方法返回值已经包含scale和rotation。
          */
         getPreferredBounds(bounds:Rectangle):Rectangle;
+        /**
+         * 获取组件的最小尺寸
+         * 按照：外部显式设置的最小尺寸>测量的最小尺寸的优先级返回尺寸，
+         * 注意此方法返回值已经包含scale和rotation。
+         */
+        getMinBounds(bounds:Rectangle):Rectangle;
+        /**
+         * 获取组件的最大尺寸
+         * 按照：外部显式设置的最大尺寸>测量的最大尺寸的优先级返回尺寸，
+         * 注意此方法返回值已经包含scale和rotation。
+         */
+        getMaxBounds(bounds:Rectangle):Rectangle;
 
     }
 
@@ -1056,6 +1068,30 @@ module lark.player {
             var w = this.getPreferredUWidth();
             var h = this.getPreferredUHeight();
             return this.applyMatrix(bounds, w, h);
+        };
+        /**
+         * 获取组件的最小尺寸
+         * 按照：外部显式设置的最小尺寸>测量的最小尺寸的优先级返回尺寸，
+         * 注意此方法返回值已经包含scale和rotation。
+         */
+        prototype.getMinBounds = function (bounds) {
+            var w = this.minWidth;
+            if (!lark.isNone(this.explicitMaxWidth)) {
+                w = Math.min((w, this.explicitMaxWidth));
+            }
+            var h = this.minHeight;
+            if (!lark.isNone(this.explicitMaxHeight)) {
+                h = Math.min(h, this.explicitMaxHeight);
+            }
+            return this.applyMatrix(bounds, w, h);
+        };
+        /**
+         * 获取组件的最大尺寸
+         * 按照：外部显式设置的最大尺寸>测量的最大尺寸的优先级返回尺寸，
+         * 注意此方法返回值已经包含scale和rotation。
+         */
+        prototype.getMaxBounds = function (bounds) {
+            return this.applyMatrix(bounds, this.maxWidth, this.maxHeight);
         };
         prototype.applyMatrix = function (bounds, w, h) {
             var x = 0, y = 0;

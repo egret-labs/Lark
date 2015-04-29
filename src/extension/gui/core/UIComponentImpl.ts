@@ -867,6 +867,32 @@ module lark.player {
             return this.applyMatrix(bounds, w, h);
         }
 
+        /**
+         * 获取组件的最小尺寸
+         * 按照：外部显式设置的最小尺寸>测量的最小尺寸的优先级返回尺寸，
+         * 注意此方法返回值已经包含scale和rotation。
+         */
+        public getMinBounds(bounds:Rectangle):Rectangle{
+            var w = this.minWidth;
+            if(!isNone(this.explicitMaxWidth)){
+                w = Math.min((w,this.explicitMaxWidth));
+            }
+            var h = this.minHeight;
+            if(!isNone(this.explicitMaxHeight)){
+                h = Math.min(h,this.explicitMaxHeight);
+            }
+            return this.applyMatrix(bounds,w,h);
+        }
+        /**
+         * 获取组件的最大尺寸
+         * 按照：外部显式设置的最大尺寸>测量的最大尺寸的优先级返回尺寸，
+         * 注意此方法返回值已经包含scale和rotation。
+         */
+        public getMaxBounds(bounds:Rectangle):Rectangle{
+            return this.applyMatrix(bounds,this.maxWidth,this.maxHeight);
+        }
+
+
         private applyMatrix(bounds:Rectangle, w:number, h:number):Rectangle {
             var x = 0, y = 0;
             var scrollRect = this.$scrollRect;

@@ -27,9 +27,10 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.gui{
+module lark.gui {
 
-    export class Group extends GroupBase{
+    $locale_strings = $locale_strings||{};
+    var locale_strings = $locale_strings;
 
-    }
+    locale_strings[2001] = "BasicLayout 不支持虚拟化。";
 }

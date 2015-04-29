@@ -114,7 +114,7 @@ module lark {
             bitmap.x = 350;
             bitmap.y = 350;
             bitmap.bitmapData = bitmapData;
-            bitmap.blendMode = BlendMode.ADD;
+            //bitmap.blendMode = BlendMode.ADD;
             this.iconList.push(bitmap);
             this.targetIcon = bitmap;
             this.addChild(this.targetIcon);
