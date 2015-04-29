@@ -11569,7 +11569,8 @@ var ts;
             getAliasedSymbol: resolveImport,
             hasEarlyErrors: hasEarlyErrors,
             isEmitBlocked: isEmitBlocked,
-            checkAndMarkExpression: checkAndMarkExpression
+            checkAndMarkExpression: checkAndMarkExpression,
+            egretGetResolveSymbol: egretGetResolveSymbol
         };
         var undefinedSymbol = createSymbol(4 /* Property */ | 268435456 /* Transient */, "undefined");
         var argumentsSymbol = createSymbol(4 /* Property */ | 268435456 /* Transient */, "arguments");
@@ -11912,6 +11913,23 @@ var ts;
                 }
             }
             return result;
+        }
+        var egretNodesLink = [];
+        /**
+        *
+        */
+        function egretGetResolveSymbol(node) {
+            var links = getNodeLinks(node);
+            if (links.resolvedSymbol) {
+                return links.resolvedSymbol;
+            }
+            if (!node.id)
+                node.id = nextNodeId++;
+            links = egretNodesLink[node.id] || (egretNodesLink[node.id] = {});
+            links.resolvedSymbol = (ts.getFullWidth(node) > 0 && resolveName(node, node.text, 32 /* Class */ | 29360128 /* Export */, null, node)) || unknownSymbol;
+            if (links.resolvedSymbol) {
+                return links.resolvedSymbol;
+            }
         }
         function resolveImport(symbol) {
             ts.Debug.assert((symbol.flags & 33554432 /* Import */) !== 0, "Should only get Imports here.");
@@ -20189,6 +20207,7 @@ var ts;
     var classNames = {};
     var fileToClassNameMap = {};
     var classNameToBaseClassMap = {};
+    var constructorToClassMap = {};
     var staticToClassNameMap = {};
     //sort
     var fileNodesList = [];
@@ -20206,6 +20225,7 @@ var ts;
             classNameToFileMap = {};
             fileToClassNameMap = {};
             classNameToBaseClassMap = {};
+            constructorToClassMap = {};
             staticToClassNameMap = {};
             fileNodesList = [];
             fileNameToNodeMap = {};
@@ -20248,6 +20268,7 @@ var ts;
                 if (classtype.baseTypes && classtype.baseTypes.length) {
                     ts.forEach(classtype.baseTypes, function (t) { return _this.classNameToBaseClass(fullName, t); });
                 }
+                this.constructorToClassName(file, symbol.valueDeclaration);
             }
         };
         TreeGenerator.prototype.symbolTabelToFileMap = function (file, symbolTable) {
@@ -20266,6 +20287,57 @@ var ts;
                 }
             });
         };
+        TreeGenerator.prototype.constructorToClassName = function (file, classNode) {
+            if (!classNode || !classNode.symbol)
+                return;
+            var className = checker.getFullyQualifiedName(classNode.symbol);
+            var nodesToCheck = [];
+            ts.forEachChild(classNode, function (node) {
+                if (node.kind == 126 /* Constructor */) {
+                    nodesToCheck.push(node.body);
+                }
+                if (node.kind == 124 /* Property */ && node.initializer) {
+                    nodesToCheck.push(node);
+                }
+            });
+            if (!nodesToCheck.length) {
+                return;
+            }
+            var findUsedClasses;
+            findUsedClasses = function (node) { return ts.forEachChild(node, function (n) {
+                var nodeToGet = null;
+                switch (n.kind) {
+                    case 143 /* PropertyAccessExpression */:
+                        nodeToGet = n.expression;
+                        break;
+                    case 145 /* CallExpression */:
+                    case 146 /* NewExpression */:
+                        nodeToGet = n.expression;
+                        break;
+                    default:
+                        nodeToGet = null;
+                }
+                if (nodeToGet) {
+                    var definedSymbol = checker.egretGetResolveSymbol(nodeToGet);
+                    if (definedSymbol && (definedSymbol.flags & 107455 /* Value */ || definedSymbol.flags & 29360128 /* Export */)) {
+                        var name = checker.getFullyQualifiedName(definedSymbol);
+                        if (name == "unknown")
+                            return;
+                        var classes = constructorToClassMap[className] || [];
+                        classes.push(name);
+                        constructorToClassMap[className] = classes;
+                        if (!(name in classNameToFileMap) && definedSymbol.declarations && definedSymbol.declarations.length) {
+                            var source = ts.getAncestor(definedSymbol.declarations[0], 201 /* SourceFile */);
+                            classNameToFileMap[name] = source.filename;
+                        }
+                    }
+                }
+                else {
+                    findUsedClasses(n);
+                }
+            }); };
+            nodesToCheck.forEach(function (node) { return findUsedClasses(node); });
+        };
         TreeGenerator.prototype.staticMemberToClassName = function (file, symbol) {
             symbol = symbol.exportSymbol || symbol;
             var fullName = getFullyQualifiedName(symbol);
@@ -20277,6 +20349,8 @@ var ts;
                 var initializerClass = checker.getFullyQualifiedName(staticMemberType.symbol);
                 staticToClassNameMap[fullName] = initializerClass;
             }
+        };
+        TreeGenerator.prototype.addStaticDepend = function (staticMemberName, className) {
         };
         TreeGenerator.prototype.classNameToBaseClass = function (className, baseType) {
             var fullName = checker.getFullyQualifiedName(baseType.symbol);
@@ -20316,12 +20390,16 @@ var ts;
                 }
                 var staticDepends = staticToClassNameMap[className];
                 if (staticDepends) {
-                    var dependFile = classNameToFileMap[staticDepends];
-                    if (dependFile != file) {
-                        var dependFileNode = _this.getFileNode(dependFile);
-                        fileNode.addDepends(dependFileNode);
-                        dependFileNode.addSubDepends(fileNode);
-                    }
+                    var constructorDepends = constructorToClassMap[staticDepends] || [];
+                    constructorDepends.push(staticDepends);
+                    constructorDepends.forEach(function (depend) {
+                        var dependFile = classNameToFileMap[depend];
+                        if (dependFile != file) {
+                            var dependFileNode = _this.getFileNode(dependFile);
+                            fileNode.addDepends(dependFileNode);
+                            dependFileNode.addSubDepends(fileNode);
+                        }
+                    });
                 }
             });
             var singleTypes = [], bottomTypes = [], topTypes = [], otherTypes = [];

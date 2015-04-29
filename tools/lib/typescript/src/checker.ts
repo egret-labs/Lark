@@ -66,7 +66,8 @@ module ts {
             getAliasedSymbol: resolveImport,
             hasEarlyErrors,
             isEmitBlocked,
-            checkAndMarkExpression
+            checkAndMarkExpression,
+            egretGetResolveSymbol
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -425,6 +426,29 @@ module ts {
 
             return result;
         }
+
+
+        var egretNodesLink: NodeLinks[] = [];
+
+        /**
+        * 
+        */
+        function egretGetResolveSymbol(node: Identifier): Symbol {
+
+            var links = getNodeLinks(node);
+            if (links.resolvedSymbol) {
+                return links.resolvedSymbol;
+            }
+
+            if (!node.id) node.id = nextNodeId++;
+            links = egretNodesLink[node.id] || (egretNodesLink[node.id] = {});
+            links.resolvedSymbol = (getFullWidth(node) > 0 && resolveName(node, node.text, SymbolFlags.Class | SymbolFlags.Export, null, node)) || unknownSymbol;
+
+            if (links.resolvedSymbol) {
+                return links.resolvedSymbol;
+            }
+        }
+
 
         function resolveImport(symbol: Symbol): Symbol {
             Debug.assert((symbol.flags & SymbolFlags.Import) !== 0, "Should only get Imports here.");

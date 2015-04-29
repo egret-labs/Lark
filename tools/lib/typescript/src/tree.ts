@@ -6,6 +6,7 @@
     var classNames: Map<number> = {};
     var fileToClassNameMap: Map<string[]> = {};
     var classNameToBaseClassMap: Map<string[]> = {};
+    var constructorToClassMap: Map<string[]> = {};
     var staticToClassNameMap: Map<string> = {};
 
     //sort
@@ -27,6 +28,7 @@
             classNameToFileMap = {};
             fileToClassNameMap = {};
             classNameToBaseClassMap = {};
+            constructorToClassMap = {};
             staticToClassNameMap = {};
 
             fileNodesList = [];
@@ -76,6 +78,7 @@
                 if (classtype.baseTypes && classtype.baseTypes.length) {
                     forEach(classtype.baseTypes,(t: InterfaceType) => this.classNameToBaseClass(fullName, t));
                 }
+                this.constructorToClassName(file, <ClassDeclaration>symbol.valueDeclaration);
             }
             
 
@@ -97,6 +100,63 @@
             });
         }
 
+        private constructorToClassName(file: SourceFile, classNode: ClassDeclaration) {
+            if (!classNode || !classNode.symbol)
+                return;
+            var className = checker.getFullyQualifiedName(classNode.symbol);
+            var nodesToCheck: Node[] = [];
+            forEachChild(classNode, node=> {
+                if (node.kind == SyntaxKind.Constructor) {
+                    nodesToCheck.push((<ConstructorDeclaration>node).body);
+                }
+
+                if (node.kind == SyntaxKind.Property && (<PropertyDeclaration>node).initializer) {
+                    nodesToCheck.push((<PropertyDeclaration>node).initializer);
+                }
+            });
+            if (!nodesToCheck.length) {
+                return;
+            }
+            
+            var findUsedClasses: (node: Node) => void;
+            findUsedClasses = node=> forEachChild(node, n=> {
+                var nodeToGet: Node = null;
+                switch (n.kind) {
+                    case SyntaxKind.PropertyAccessExpression:
+                        nodeToGet = (<PropertyAccessExpression>n).expression;
+                        break;
+                    case SyntaxKind.CallExpression:
+                    case SyntaxKind.NewExpression:
+                        nodeToGet = (<CallExpression>n).expression;
+                        break;
+                    default:
+                        nodeToGet = null;
+                }
+
+                if (nodeToGet) {
+                    var definedSymbol = checker.egretGetResolveSymbol(<Identifier>nodeToGet);
+
+                    if (definedSymbol && (definedSymbol.flags & SymbolFlags.Value || definedSymbol.flags & SymbolFlags.Export)) {
+                        var name = checker.getFullyQualifiedName(definedSymbol);
+                        if (name == "unknown")
+                            return;
+                        var classes = constructorToClassMap[className] || [];
+                        classes.push(name);
+                        constructorToClassMap[className] = classes;
+                        if (!(name in classNameToFileMap) && definedSymbol.declarations && definedSymbol.declarations.length) {
+                            var source = <SourceFile>getAncestor(definedSymbol.declarations[0], SyntaxKind.SourceFile);
+                            classNameToFileMap[name] = source.filename;
+                        }
+                    }
+                }
+                else {
+                    findUsedClasses(n);
+                }
+            });
+
+            nodesToCheck.forEach(node=> findUsedClasses(node));
+        }
+
         private staticMemberToClassName(file: SourceFile, symbol: Symbol) {
             symbol = symbol.exportSymbol || symbol;
             var fullName = getFullyQualifiedName(symbol);
@@ -109,6 +169,10 @@
                 staticToClassNameMap[fullName] = initializerClass;
                 
             }
+        }
+
+        private addStaticDepend(staticMemberName: string, className: string) {
+
         }
 
         private classNameToBaseClass(className, baseType:InterfaceType) {
@@ -157,13 +221,17 @@
                 }
                 var staticDepends = staticToClassNameMap[className];
                 if (staticDepends) {
+                    var constructorDepends = constructorToClassMap[staticDepends] || [];
+                    constructorDepends.push(staticDepends);
+                    constructorDepends.forEach(depend=> {
+                        var dependFile = classNameToFileMap[depend];
 
-                    var dependFile = classNameToFileMap[staticDepends];
-                    if (dependFile != file) {
-                        var dependFileNode = this.getFileNode(dependFile);
-                        fileNode.addDepends(dependFileNode);
-                        dependFileNode.addSubDepends(fileNode);
-                    }
+                        if (dependFile != file) {
+                            var dependFileNode = this.getFileNode(dependFile);
+                            fileNode.addDepends(dependFileNode);
+                            dependFileNode.addSubDepends(fileNode);
+                        }
+                    });
                 }
             });
 
