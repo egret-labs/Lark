@@ -884,9 +884,10 @@ module lark.player {
             }
             var fitSize = player.MatrixUtil.fitBounds(layoutWidth, layoutHeight, matrix, values[8 /* explicitWidth */], values[9 /* explicitHeight */], this.getPreferredUWidth(), this.getPreferredUHeight(), minWidth, minHeight, maxWidth, maxHeight);
             if (!fitSize) {
-                fitSize = new lark.Point(minWidth, minHeight);
+                fitSize = lark.Point.create(minWidth, minHeight);
             }
             this.setActualSize(fitSize.x, fitSize.y);
+            lark.Point.release(fitSize);
         };
         /**
          * 设置组件的布局位置

@@ -44,7 +44,7 @@ module lark.player {
                                 minWidth:number, minHeight:number,
                                 maxWidth:number, maxHeight:number):Point {
             if (isNone(width) && isNone(height))
-                return new Point(preferredWidth, preferredHeight);
+                return Point.create(preferredWidth, preferredHeight);
 
             var newMinWidth = (minWidth < MIN_MAX_TOLERANCE) ? 0 : minWidth - MIN_MAX_TOLERANCE;
             var newMinHeight = (minHeight < MIN_MAX_TOLERANCE) ? 0 : minHeight - MIN_MAX_TOLERANCE;
@@ -69,7 +69,10 @@ module lark.player {
                     if (actualSize1) {
                         var fitHeight = transformSize(actualSize1.x, actualSize1.y, matrix).height;
                         if (fitHeight - SOLUTION_TOLERANCE > height)
+                        {
+                            Point.release(actualSize1);
                             actualSize1 = null;
+                        }
                     }
 
                     var actualSize2:Point
@@ -82,7 +85,10 @@ module lark.player {
                     if (actualSize2) {
                         var fitWidth = transformSize(actualSize2.x, actualSize2.y, matrix).width;
                         if (fitWidth - SOLUTION_TOLERANCE > width)
+                        {
+                            Point.release(actualSize2);
                             actualSize2 = null;
+                        }
                     }
 
                     if (actualSize1 && actualSize2) {
@@ -94,6 +100,8 @@ module lark.player {
                     else {
                         actualSize = actualSize2;
                     }
+                    Point.release(actualSize1);
+                    Point.release(actualSize2);
                 }
                 return actualSize;
             }
@@ -205,9 +213,9 @@ module lark.player {
             return null;
 
         if (b == 0)
-            return new Point(preferredX, h / Math.abs(d));
+            return Point.create(preferredX, h / Math.abs(d));
         else if (d == 0)
-            return new Point(h / Math.abs(b), preferredY);
+            return Point.create(h / Math.abs(b), preferredY);
 
         var d1 = (b * d >= 0) ? d : -d;
 
@@ -223,14 +231,17 @@ module lark.player {
             y = (h - b * x) * invD1;
             if (minY <= y && y <= maxY &&
                 b * x + d1 * y >= 0) {
-                s = new Point(x, y);
+                s = Point.create(x, y);
             }
 
             y = (-h - b * x) * invD1;
             if (minY <= y && y <= maxY &&
                 b * x + d1 * y < 0) {
                 if (!s || transformSize(s.x, s.y, matrix).width > transformSize(x, y, matrix).width)
-                    s = new Point(x, y);
+                {
+                    Point.release(s);
+                    s = Point.create(x, y);
+                }
             }
         }
 
@@ -243,14 +254,17 @@ module lark.player {
             if (minX <= x && x <= maxX &&
                 b * x + d1 * y >= 0) {
                 if (!s || transformSize(s.x, s.y, matrix).width > transformSize(x, y, matrix).width)
-                    s = new Point(x, y);
+                    s = Point.create(x, y);
             }
 
             x = ( -h - d1 * y ) * invB;
             if (minX <= x && x <= maxX &&
                 b * x + d1 * y < 0) {
                 if (!s || transformSize(s.x, s.y, matrix).width > transformSize(x, y, matrix).width)
-                    s = new Point(x, y);
+                {
+                    Point.release(s);
+                    s = Point.create(x, y);
+                }
             }
         }
 
@@ -285,9 +299,9 @@ module lark.player {
             return null;
 
         if (a == 0)
-            return new Point(preferredX, w / Math.abs(c));
+            return Point.create(preferredX, w / Math.abs(c));
         else if (c == 0)
-            return new Point(w / Math.abs(a), preferredY);
+            return Point.create(w / Math.abs(a), preferredY);
 
         var c1 = ( a * c >= 0 ) ? c : -c;
 
@@ -303,14 +317,17 @@ module lark.player {
             y = (w - a * x) * invC1;
             if (minY <= y && y <= maxY &&
                 a * x + c1 * y >= 0) {
-                s = new Point(x, y);
+                s = Point.create(x, y);
             }
 
             y = (-w - a * x) * invC1;
             if (minY <= y && y <= maxY &&
                 a * x + c1 * y < 0) {
                 if (!s || transformSize(s.x, s.y, matrix).height > transformSize(x, y, matrix).height)
-                    s = new Point(x, y);
+                {
+                    Point.release(s);
+                    s = Point.create(x, y);
+                }
             }
         }
 
@@ -323,14 +340,20 @@ module lark.player {
             if (minX <= x && x <= maxX &&
                 a * x + c1 * y >= 0) {
                 if (!s || transformSize(s.x, s.y, matrix).height > transformSize(x, y, matrix).height)
-                    s = new Point(x, y);
+                {
+                    Point.release(s);
+                    s = Point.create(x, y);
+                }
             }
 
             x = (-w - c1 * y ) * invA;
             if (minX <= x && x <= maxX &&
                 a * x + c1 * y < 0) {
                 if (!s || transformSize(s.x, s.y, matrix).height > transformSize(x, y, matrix).height)
-                    s = new Point(x, y);
+                {
+                    Point.release(s);
+                    s = Point.create(x, y);
+                }
             }
         }
 
@@ -357,7 +380,6 @@ module lark.player {
 
         var x:number;
         var y:number;
-        var s:Point;
 
         var A = (w - minX * a) / c;
         var B = (w - maxX * a) / c;
@@ -376,7 +398,7 @@ module lark.player {
             y = Math.max(rangeMinY, Math.min(y, rangeMaxY));
 
             x = (w - c * y) / a;
-            return new Point(x, y);
+            return Point.create(x, y);
         }
 
         A = -(minX * a + w) / c;
@@ -394,7 +416,7 @@ module lark.player {
 
             y = Math.max(rangeMinY, Math.min(y, rangeMaxY));
             x = (-w - c * y) / a;
-            return new Point(x, y);
+            return Point.create(x, y);
 
         }
         return null;
@@ -427,14 +449,14 @@ module lark.player {
             if (a == 0 || d == 0)
                 return null;
 
-            return new Point(w / Math.abs(a), h / Math.abs(d));
+            return Point.create(w / Math.abs(a), h / Math.abs(d));
         }
 
         if (a == 0 && d == 0) {
             if (b == 0 || c == 0)
                 return null;
 
-            return new Point(h / Math.abs(b), w / Math.abs(c));
+            return Point.create(h / Math.abs(b), w / Math.abs(c));
         }
 
         var c1 = ( a * c >= 0 ) ? c : -c;
@@ -484,6 +506,7 @@ module lark.player {
             b * s.x + d1 * s.y < 0)
             return s;
 
+        Point.release(s);
         return null;
     }
 
@@ -500,7 +523,7 @@ module lark.player {
                          d:number,
                          mOverDet:number,
                          nOverDet:number):Point {
-        return new Point(d * mOverDet - c * nOverDet,
+        return Point.create(d * mOverDet - c * nOverDet,
             a * nOverDet - b * mOverDet);
     }
 }
