@@ -98,10 +98,11 @@ var Action = (function () {
                         return;
                     f = FileUtil.escapePath(f);
                     f = f.replace(larkRootSrc, '').replace(/\.ts$/, '.js');
+                    f = "lark/" + f;
                     larkFiles.files.push(f);
                 });
                 defineFiles.forEach(function (f) { return FileUtil.remove(f); });
-                FileUtil.copy(outDir, FileUtil.joinPath(options.debugDir, ''));
+                FileUtil.copy(outDir, FileUtil.joinPath(options.templateDir, 'lark/'));
                 FileUtil.remove(outDir);
             }
             else {
