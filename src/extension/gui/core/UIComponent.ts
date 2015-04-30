@@ -247,6 +247,8 @@ module lark.player {
             lark.NONE,
             lark.NONE,
             0,
+            0,
+            0,
             0
         ]);
         this.createChildren();

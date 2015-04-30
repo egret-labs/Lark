@@ -30,7 +30,8 @@
 module lark.gui {
 
     /**
-     * 基本布局
+     * BasicLayout 类根据其各个设置彼此独立地排列布局元素。
+     * BasicLayout（也称为绝对布局）要求显式定位每个容器子代。可以使用子代的 x 和 y 属性，或使用约束来定位每个子代。
      */
     export class BasicLayout extends LayoutBase {
         /**
@@ -83,7 +84,7 @@ module lark.gui {
             configurable: true
         });
     }
-
+    registerType(BasicLayout, [Types.BasicLayout]);
 }
 
 module lark.player {
@@ -91,7 +92,7 @@ module lark.player {
     /**
      * 一个工具方法，使用BasicLayout规则测量目标对象。
      */
-    export function measure(target:gui.GroupBase|gui.SkinnableComponent):void{
+    export function measure(target:gui.Group|gui.SkinnableComponent):void{
         if(!target){
             return;
         }
@@ -158,7 +159,7 @@ module lark.player {
     /**
      * 一个工具方法，使用BasicLayout规则布局目标对象。
      */
-    export function updateDisplayList(target:gui.GroupBase|gui.SkinnableComponent,
+    export function updateDisplayList(target:gui.Group|gui.SkinnableComponent,
                                                  unscaledWidth:number, unscaledHeight:number):Point{
         if (!target)
             return;
@@ -235,4 +236,4 @@ module lark.player {
         }
         return $TempPoint.setTo(maxX,maxY);
     }
-}
+} 

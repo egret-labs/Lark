@@ -627,6 +627,9 @@ module lark {
         }
 
         public set scrollRect(value:Rectangle) {
+            if(!value&&!this.$scrollRect){
+                return;
+            }
             var values = this.displayObjectValues;
             var m = this._matrix.$data;
             if (value) {

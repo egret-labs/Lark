@@ -30,7 +30,8 @@
 module lark.gui {
 
     /**
-     * 容器布局基类
+     * 容器布局基类。若要创建使用 Group 容器的自定义布局，必须扩展 LayoutBase 或其子类之一。
+     * 子类必须实现 updateDisplayList() 方法（定位 target Group 的子项并调整这些子项的大小）和 measure() 方法（计算 target 的默认大小）。
      */
     export class LayoutBase extends EventEmitter{
 
@@ -38,15 +39,15 @@ module lark.gui {
             super();
         }
 
-        $target: GroupBase = null;
+        $target: Group = null;
         /**
          * 目标容器
          */
-        public get target():GroupBase{
+        public get target():Group{
             return this.$target;
         }
 
-        public set target(value:GroupBase){
+        public set target(value:Group){
             if (this.$target === value)
                 return;
             this.$target = value;
@@ -97,7 +98,7 @@ module lark.gui {
         /**
          * 滚动条位置改变
          */
-        protected scrollPositionChanged():void{
+        public scrollPositionChanged():void{
         }
 
         /**
@@ -131,4 +132,6 @@ module lark.gui {
         public updateDisplayList(width:number, height:number):void{
         }
     }
+
+    registerType(LayoutBase, [Types.LayoutBase]);
 }

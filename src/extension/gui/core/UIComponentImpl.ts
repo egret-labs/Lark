@@ -30,28 +30,30 @@
 module lark.player {
 
     export const enum UIValues {
-        left,               //NONE
-        right,              //NONE
-        top,                //NONE
-        bottom,             //NONE
-        horizontalCenter,   //NONE
-        verticalCenter,     //NONE
-        percentWidth,       //NONE
-        percentHeight,      //NONE
-        explicitWidth,      //NONE
-        explicitHeight,     //NONE
-        width,              //0
-        height,             //0
-        minWidth,           //0
-        maxWidth,           //100000
-        minHeight,          //0
-        maxHeight,          //100000
-        measuredWidth,      //0
-        measuredHeight,     //0
-        oldPreferWidth,     //NONE
-        oldPreferHeight,     //NONE
-        contentWidth,       //0
-        contentHeight       //0
+        left,                       //NONE
+        right,                      //NONE
+        top,                        //NONE
+        bottom,                     //NONE
+        horizontalCenter,           //NONE
+        verticalCenter,             //NONE
+        percentWidth,               //NONE
+        percentHeight,              //NONE
+        explicitWidth,              //NONE
+        explicitHeight,             //NONE
+        width,                      //0
+        height,                     //0
+        minWidth,                   //0
+        maxWidth,                   //100000
+        minHeight,                  //0
+        maxHeight,                  //100000
+        measuredWidth,              //0
+        measuredHeight,             //0
+        oldPreferWidth,             //NONE
+        oldPreferHeight,            //NONE
+        contentWidth,               //0
+        contentHeight,              //0
+        horizontalScrollPosition,   //0
+        verticalScrollPosition      //0
     }
 
     function isDeltaIdentity(m:Float64Array):boolean {
@@ -68,28 +70,30 @@ module lark.player {
         public constructor() {
             super();
             this.$uiValues = new Float64Array([
-                NONE,    //left
-                NONE,    //right
-                NONE,    //top
-                NONE,    //bottom
-                NONE,    //horizontalCenter
-                NONE,    //verticalCenter
-                NONE,    //percentWidth
-                NONE,    //percentHeight
-                NONE,    //explicitWidth
-                NONE,    //explicitHeight
-                0,       //width
-                0,       //height
-                0,       //minWidth
-                100000,  //maxWidth
-                0,       //minHeight
-                100000,  //maxHeight
-                0,       //measuredWidth
-                0,       //measuredHeight
-                NONE,    //oldPreferWidth
-                NONE,    //oldPreferHeight
-                0,       //contentWidth
-                0        //contentHeight
+                NONE,       //left
+                NONE,       //right
+                NONE,       //top
+                NONE,       //bottom
+                NONE,       //horizontalCenter
+                NONE,       //verticalCenter
+                NONE,       //percentWidth
+                NONE,       //percentHeight
+                NONE,       //explicitWidth
+                NONE,       //explicitHeight
+                0,          //width
+                0,          //height
+                0,          //minWidth
+                100000,     //maxWidth
+                0,          //minHeight
+                100000,     //maxHeight
+                0,          //measuredWidth
+                0,          //measuredHeight
+                NONE,       //oldPreferWidth
+                NONE,       //oldPreferHeight
+                0,          //contentWidth
+                0,          //contentHeight
+                0,          //horizontalScrollPosition,
+                0           //verticalScrollPosition
             ]);
             this.createChildren();
         }
