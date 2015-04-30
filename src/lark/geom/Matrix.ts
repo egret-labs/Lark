@@ -66,9 +66,12 @@ module lark {
                 return Math.sin(angle);
         }
     }
+
     const enum M {
         a, b, c, d, tx, ty
     }
+
+    var matrixPool:Matrix[] = [];
     /**
      * Matrix 类表示一个转换矩阵，它确定如何将点从一个坐标空间映射到另一个坐标空间。
      * 您可以对一个显示对象执行不同的图形转换，方法是设置 Matrix 对象的属性，将该 Matrix
@@ -77,9 +80,27 @@ module lark {
     export class Matrix extends LarkObject {
 
         /**
-         * 只允许在局部变量中使用，使用完要立即释放，并要防止嵌套调用导致对象在其他位置被修改的可能性。
+         * 释放一个Matrix实例到对象池
          */
-        public static TEMP:Matrix = new Matrix();
+        public static release(matrix:Matrix):void {
+            if(!matrix){
+                return;
+            }
+            matrixPool.push(matrix);
+        }
+
+        /**
+         * 从对象池中取出或创建一个新的Matrix对象。
+         * 建议对于一次性使用的对象，均使用此方法创建，而不是直接new一个。
+         * 使用完后调用对应的release()静态方法回收对象，能有效减少对象创建数量造成的性能开销。
+         */
+        public static create():Matrix {
+            var matrix = matrixPool.pop();
+            if (!matrix) {
+                matrix = new Matrix();
+            }
+            return matrix;
+        }
 
         /**
          * 创建一个 Matrix 对象
@@ -92,13 +113,7 @@ module lark {
          */
         constructor(a:number = 1, b:number = 0, c:number = 0, d:number = 1, tx:number = 0, ty:number = 0) {
             super();
-            var m = this.$data = new Float64Array(6);
-            m[M.a] = a;
-            m[M.b] = b;
-            m[M.c] = c;
-            m[M.d] = d;
-            m[M.tx] = tx;
-            m[M.ty] = ty;
+            this.$data = new Float64Array([a,b,c,d,tx,ty]);
         }
 
         /**
@@ -244,20 +259,26 @@ module lark {
 
         $invertInto(target:Matrix):void {
             var m = this.$data, t = target.$data;
+            var a = m[M.a];
             var b  = m[M.b];
             var c  = m[M.c];
+            var d = m[M.d];
             var tx = m[M.tx];
             var ty = m[M.ty];
             if (b === 0 && c === 0) {
-                var a = t[M.a] = 1 / m[M.a];
-                var d = t[M.d] = 1 / m[M.d];
                 t[M.b] = t[M.c] = 0;
-                t[M.tx] = -a * tx;
-                t[M.ty] = -d * ty;
+                if(a===0||d===0){
+                    t[M.a] = t[M.d] = t[M.tx] = t[M.ty] = 0;
+                }
+                else{
+                    a = t[M.a] = 1 / a;
+                    d = t[M.d] = 1 / d;
+                    t[M.tx] = -a * tx;
+                    t[M.ty] = -d * ty;
+                }
+
                 return;
             }
-            var a = m[M.a];
-            var d = m[M.d];
             var determinant = a * d - b * c;
             if (determinant === 0) {
                 target.identity();

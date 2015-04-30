@@ -30,15 +30,35 @@
 
 module lark {
 
+    var pointPool:Point[] = [];
+
     /**
      * Point 对象表示二维坐标系统中的某个位置，其中 x 表示水平轴，y 表示垂直轴。
      */
     export class Point extends LarkObject {
 
         /**
-         * 只允许在局部变量中使用，使用完要立即释放，并要防止嵌套调用导致对象在其他位置被修改的可能性。
+         * 释放一个Point实例到对象池
          */
-        public static TEMP: Point = new Point();
+        public static release(point:Point):void {
+            if(!point){
+                return;
+            }
+            pointPool.push(point);
+        }
+
+        /**
+         * 从对象池中取出或创建一个新的Point对象。
+         * 建议对于一次性使用的对象，均使用此方法创建，而不是直接new一个。
+         * 使用完后调用对应的release()静态方法回收对象，能有效减少对象创建数量造成的性能开销。
+         */
+        public static create(x:number,y:number):Point {
+            var point = pointPool.pop();
+            if (!point) {
+                point = new Point();
+            }
+            return point.setTo(x,y);
+        }
         /**
          * 创建一个 lark.Point 对象
          * @param x 该对象的x属性值，默认为0

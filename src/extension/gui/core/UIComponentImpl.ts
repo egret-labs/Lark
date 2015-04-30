@@ -727,9 +727,10 @@ module lark.player {
                 this.getPreferredUWidth(), this.getPreferredUHeight(),
                 minWidth, minHeight, maxWidth, maxHeight);
             if (!fitSize) {
-                fitSize = new Point(minWidth, minHeight);
+                fitSize = Point.create(minWidth, minHeight);
             }
             this.setActualSize(fitSize.x, fitSize.y);
+            Point.release(fitSize);
         }
 
         /**
