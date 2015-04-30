@@ -46,6 +46,10 @@ module lark {
         scaleX, scaleY, skewX, skewY, rotation, x, y
     }
 
+    const enum M {
+        a, b, c, d, tx, ty
+    }
+
     /**
      * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时显示的所有对象。使用 DisplayObjectContainer 类排列显示列表中的显示对象。
      * DisplayObjectContainer 对象可以有子显示对象，而其他显示对象是“叶”节点，只有父级和同级，没有子级。
@@ -296,7 +300,7 @@ module lark {
             if (this.$scrollRect) {
                 value -= this.$scrollRect.x;
             }
-            this._matrix.$data[4] = value;
+            this._matrix.$data[M.tx] = value;
             this.invalidatePosition();
             return true;
         }
@@ -328,7 +332,7 @@ module lark {
             if (this.$scrollRect) {
                 value -= this.$scrollRect.y;
             }
-            this._matrix.$data[5] = value;
+            this._matrix.$data[M.ty] = value;
             this.invalidatePosition();
             return true;
         }
@@ -630,13 +634,13 @@ module lark {
                     this.$scrollRect = new lark.Rectangle();
                 }
                 this.$scrollRect.copyFrom(value);
-                m[4] = values[Values.x] - value.x;
-                m[5] = values[Values.y] - value.y;
+                m[M.tx] = values[Values.x] - value.x;
+                m[M.ty] = values[Values.y] - value.y;
             }
             else {
                 this.$scrollRect = null;
-                m[4] = values[Values.x];
-                m[5] = values[Values.y];
+                m[M.tx] = values[Values.x];
+                m[M.ty] = values[Values.y];
             }
             this.invalidatePosition();
         }
@@ -889,8 +893,8 @@ module lark {
             }
             var m = this.$getInvertedConcatenatedMatrix().$data;
             var bounds = this.$getContentBounds();
-            var localX = m[0] * stageX + m[2] * stageY + m[4];
-            var localY = m[1] * stageX + m[3] * stageY + m[5];
+            var localX = m[M.a] * stageX + m[M.c] * stageY + m[M.tx];
+            var localY = m[M.b] * stageX + m[M.d] * stageY + m[M.ty];
             if (bounds.contains(localX, localY)) {
                 if (!this.$children) {//容器已经检查过scrollRect和mask，避免重复对遮罩进行碰撞。
                     if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
