@@ -259,20 +259,26 @@ module lark {
 
         $invertInto(target:Matrix):void {
             var m = this.$data, t = target.$data;
+            var a = m[M.a];
             var b  = m[M.b];
             var c  = m[M.c];
+            var d = m[M.d];
             var tx = m[M.tx];
             var ty = m[M.ty];
             if (b === 0 && c === 0) {
-                var a = t[M.a] = 1 / m[M.a];
-                var d = t[M.d] = 1 / m[M.d];
                 t[M.b] = t[M.c] = 0;
-                t[M.tx] = -a * tx;
-                t[M.ty] = -d * ty;
+                if(a===0||d===0){
+                    t[M.a] = t[M.d] = t[M.tx] = t[M.ty] = 0;
+                }
+                else{
+                    a = t[M.a] = 1 / a;
+                    d = t[M.d] = 1 / d;
+                    t[M.tx] = -a * tx;
+                    t[M.ty] = -d * ty;
+                }
+
                 return;
             }
-            var a = m[M.a];
-            var d = m[M.d];
             var determinant = a * d - b * c;
             if (determinant === 0) {
                 target.identity();
