@@ -236,4 +236,4 @@ module lark.player {
         }
         return $TempPoint.setTo(maxX,maxY);
     }
-} 
+}
