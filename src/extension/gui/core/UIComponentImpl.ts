@@ -44,20 +44,16 @@ module lark.player {
         width,              //0
         oldHeight,          //NONE
         height,             //0
-        explicitMinWidth,   //NONE
-        explicitMaxWidth,   //NONE
-        explicitMinHeight,  //NONE
-        explicitMaxHeight,  //NONE
-        measuredMinWidth,   //0
+        minWidth,           //0
+        maxWidth,           //100000
+        minHeight,          //0
+        maxHeight,          //100000
         measuredWidth,      //0
-        measuredMinHeight,  //0
         measuredHeight,     //0
         oldX,               //NONE
         oldY,               //NONE
         oldPreferWidth,     //NONE
         oldPreferHeight,    //NONE
-        oldMinWidth,        //NONE
-        oldMinHeight        //NONE
     }
 
     function isDeltaIdentity(m:Float64Array):boolean {
@@ -88,20 +84,16 @@ module lark.player {
                 0,       //width
                 NONE,    //oldHeight
                 0,       //height
-                NONE,    //explicitMinWidth
-                NONE,    //explicitMaxWidth
-                NONE,    //explicitMinHeight
-                NONE,    //explicitMaxHeight
-                0,       //measuredMinWidth
+                0,       //minWidth
+                100000,  //maxWidth
+                0,       //minHeight
+                100000,  //maxHeight
                 0,       //measuredWidth
-                0,       //measuredMinHeight
                 0,       //measuredHeight
                 NONE,    //oldX
                 NONE,    //oldY
                 NONE,    //oldPreferWidth
                 NONE,    //oldPreferHeight
-                NONE,    //oldMinWidth
-                NONE     //oldMinHeight
             ]);
             this.createChildren();
         }
@@ -388,116 +380,76 @@ module lark.player {
         }
 
         /**
-         * 显式设置的最小宽度。
-         */
-        public get explicitMinWidth():number {
-            return this.$uiComponentValues[UIComponentValues.explicitMinWidth];
-        }
-
-        /**
-         * 组件的最小测量宽度,此属性设置为大于maxWidth的值时无效。仅影响measuredWidth属性的取值范围。
+         * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
          */
         public get minWidth():number {
-            var values = this.$uiComponentValues;
-            return isNone(values[UIComponentValues.explicitMinWidth]) ?
-                values[UIComponentValues.measuredMinWidth] : values[UIComponentValues.explicitMinWidth];
+            return this.$uiComponentValues[UIComponentValues.minWidth];
         }
 
         public set minWidth(value:number) {
             value = +value || 0;
             var values = this.$uiComponentValues;
-            if (values[UIComponentValues.explicitMinWidth] === value) {
+            if (values[UIComponentValues.minWidth] === value) {
                 return;
             }
-            values[UIComponentValues.explicitMinWidth] = value;
+            values[UIComponentValues.minWidth] = value;
             this.invalidateSize();
             this.invalidateParentSizeAndDisplayList();
         }
 
         /**
-         * 显式设置的最大宽度
-         */
-        public get explicitMaxWidth():number {
-            return this.$uiComponentValues[UIComponentValues.explicitMaxWidth];
-        }
-
-        /**
-         * 组件的最大测量高度,仅影响measuredWidth属性的取值范围。
+         * 组件的最大高度。同时影响测量和自动布局的尺寸。
          */
         public get maxWidth():number {
-            var values = this.$uiComponentValues;
-            return isNone(values[UIComponentValues.explicitMaxWidth]) ? 10000 : values[UIComponentValues.explicitMaxWidth];
+            return this.$uiComponentValues[UIComponentValues.maxWidth];
         }
 
         public set maxWidth(value:number) {
             value = +value || 0;
             var values = this.$uiComponentValues;
-            if (values[UIComponentValues.explicitMaxWidth] === value) {
+            if (values[UIComponentValues.maxWidth] === value) {
                 return;
             }
-            values[UIComponentValues.explicitMaxWidth] = value;
+            values[UIComponentValues.maxWidth] = value;
             this.invalidateSize();
             this.invalidateParentSizeAndDisplayList();
         }
 
         /**
-         * 显式设置的最小高度
-         */
-        public get explicitMinHeight():number {
-            return this.$uiComponentValues[UIComponentValues.explicitMinHeight];
-        }
-
-        /**
-         * 组件的最小测量高度,此属性设置为大于maxHeight的值时无效。仅影响measuredHeight属性的取值范围。
+         * 组件的最小高度,此属性设置为大于maxHeight的值时无效。同时影响测量和自动布局的尺寸。
          */
         public get minHeight():number {
-            var values = this.$uiComponentValues;
-            return isNone(values[UIComponentValues.explicitMinHeight]) ?
-                values[UIComponentValues.measuredMinHeight] : values[UIComponentValues.explicitMinHeight];
+            return this.$uiComponentValues[UIComponentValues.minHeight];
         }
 
         public set minHeight(value:number) {
             value = +value || 0;
             var values = this.$uiComponentValues;
-            if (values[UIComponentValues.explicitMinHeight] === value) {
+            if (values[UIComponentValues.minHeight] === value) {
                 return;
             }
-            values[UIComponentValues.explicitMinHeight] = value;
+            values[UIComponentValues.minHeight] = value;
             this.invalidateSize();
             this.invalidateParentSizeAndDisplayList();
         }
 
-        /**
-         * 显式设置的最大高度
-         */
-        public get explicitMaxHeight():number {
-            return this.$uiComponentValues[UIComponentValues.explicitMaxHeight];
-        }
 
         /**
-         * 组件的最大测量高度,仅影响measuredHeight属性的取值范围。
+         * 组件的最大高度,同时影响测量和自动布局的尺寸。
          */
         public get maxHeight():number {
-            var values = this.$uiComponentValues;
-            return isNone(values[UIComponentValues.explicitMaxHeight]) ? 10000 : values[UIComponentValues.explicitMaxHeight];
+            return this.$uiComponentValues[UIComponentValues.maxHeight];
         }
 
         public set maxHeight(value:number) {
             value = +value || 0;
             var values = this.$uiComponentValues;
-            if (values[UIComponentValues.explicitMaxHeight] === value) {
+            if (values[UIComponentValues.maxHeight] === value) {
                 return;
             }
-            values[UIComponentValues.explicitMaxHeight] = value;
+            values[UIComponentValues.maxHeight] = value;
             this.invalidateSize();
             this.invalidateParentSizeAndDisplayList();
-        }
-
-        /**
-         * 组件的测量最小宽度
-         */
-        public get measuredMinWidth():number {
-            return this.$uiComponentValues[UIComponentValues.measuredMinWidth];
         }
 
         /**
@@ -505,13 +457,6 @@ module lark.player {
          */
         public get measuredWidth():number {
             return this.$uiComponentValues[UIComponentValues.measuredWidth];
-        }
-
-        /**
-         * 组件的测量最小高度
-         */
-        public get measuredMinHeight():number {
-            return this.$uiComponentValues[UIComponentValues.measuredMinHeight];
         }
 
         /**
@@ -525,15 +470,11 @@ module lark.player {
          * 设置测量结果。
          * @param width 测量宽度
          * @param height 测量高度
-         * @param minWidth 测量的最小宽度
-         * @param minHeight 测量的最小高度
          */
-        public setMeasuredSize(width:number, height:number, minWidth:number, minHeight:number):void {
+        public setMeasuredSize(width:number, height:number):void {
             var values = this.$uiComponentValues;
-            values[UIComponentValues.measuredWidth] = +width || 0;
-            values[UIComponentValues.measuredHeight] = +height || 0;
-            values[UIComponentValues.measuredMinWidth] = +minWidth || 0;
-            values[UIComponentValues.measuredMinHeight] = +minHeight || 0;
+            values[UIComponentValues.measuredWidth] = Math.ceil(+width || 0);
+            values[UIComponentValues.measuredHeight] = Math.ceil(+height || 0);
         }
 
 
@@ -636,35 +577,27 @@ module lark.player {
             if (isNone(values[UIComponentValues.explicitWidth]) || isNone(values[UIComponentValues.explicitHeight])) {
                 this.measure();
 
-                if (values[UIComponentValues.measuredWidth] < values[UIComponentValues.explicitMinWidth]) {
-                    values[UIComponentValues.measuredWidth] = values[UIComponentValues.explicitMinWidth];
+                if (values[UIComponentValues.measuredWidth] < values[UIComponentValues.minWidth]) {
+                    values[UIComponentValues.measuredWidth] = values[UIComponentValues.minWidth];
                 }
-                if (values[UIComponentValues.measuredWidth] > values[UIComponentValues.explicitMaxWidth]) {
-                    values[UIComponentValues.measuredWidth] = values[UIComponentValues.explicitMaxWidth];
+                if (values[UIComponentValues.measuredWidth] > values[UIComponentValues.maxWidth]) {
+                    values[UIComponentValues.measuredWidth] = values[UIComponentValues.maxWidth];
                 }
-                if (values[UIComponentValues.measuredHeight] < values[UIComponentValues.explicitMinHeight]) {
-                    values[UIComponentValues.measuredHeight] = values[UIComponentValues.explicitMinHeight];
+                if (values[UIComponentValues.measuredHeight] < values[UIComponentValues.minHeight]) {
+                    values[UIComponentValues.measuredHeight] = values[UIComponentValues.minHeight];
                 }
-                if (values[UIComponentValues.measuredHeight] > values[UIComponentValues.explicitMaxHeight]) {
-                    values[UIComponentValues.measuredHeight] = values[UIComponentValues.explicitMaxHeight]
+                if (values[UIComponentValues.measuredHeight] > values[UIComponentValues.maxHeight]) {
+                    values[UIComponentValues.measuredHeight] = values[UIComponentValues.maxHeight]
                 }
             }
             var preferredW = this.getPreferredUWidth();
             var preferredH = this.getPreferredUHeight();
-            var minW = isNone(values[UIComponentValues.explicitMinWidth]) ?
-                values[UIComponentValues.measuredMinWidth] : values[UIComponentValues.explicitMinWidth];
-            var minH = isNone(values[UIComponentValues.explicitMinHeight]) ?
-                values[UIComponentValues.measuredMinHeight] : values[UIComponentValues.explicitMinHeight];
             if (preferredW !== values[UIComponentValues.oldPreferWidth] ||
-                preferredH !== values[UIComponentValues.oldPreferHeight] ||
-                minW !== values[UIComponentValues.oldMinWidth] ||
-                minH !== values[UIComponentValues.oldMinHeight]) {
+                preferredH !== values[UIComponentValues.oldPreferHeight]) {
+                values[UIComponentValues.oldPreferWidth] = preferredW;
+                values[UIComponentValues.oldPreferHeight] = preferredH;
                 changed = true;
             }
-            values[UIComponentValues.oldMinWidth] = minW;
-            values[UIComponentValues.oldMinHeight] = minH;
-            values[UIComponentValues.oldPreferWidth] = preferredW;
-            values[UIComponentValues.oldPreferHeight] = preferredH;
             return changed;
         }
 
@@ -758,14 +691,22 @@ module lark.player {
          * 设置组件的布局宽高
          */
         public setLayoutBoundsSize(layoutWidth:number, layoutHeight:number):void {
-            var width = layoutHeight = +layoutHeight || 0;
-            var height = layoutWidth = +layoutWidth || 0;
+            layoutHeight = +layoutHeight || 0;
+            layoutWidth = +layoutWidth || 0;
+            var values = this.$uiComponentValues;
+            var maxWidth = values[UIComponentValues.maxWidth];
+            var maxHeight = values[UIComponentValues.maxHeight];
+            var minWidth = Math.min(values[UIComponentValues.minWidth], maxWidth);
+            var minHeight = Math.min(values[UIComponentValues.minHeight], maxHeight);
+            var width:number;
+            var height:number;
             if (isNone(layoutWidth)) {
                 this.$removeFlags(UIComponentFlags.LayoutWidthExplicitlySet);
                 width = this.getPreferredUWidth();
             }
             else {
                 this.$setFlags(UIComponentFlags.LayoutWidthExplicitlySet);
+                width = Math.max(minWidth, Math.min(maxWidth, layoutWidth));
             }
             if (isNone(layoutHeight)) {
                 this.$removeFlags(UIComponentFlags.LayoutHeightExplicitlySet);
@@ -773,6 +714,7 @@ module lark.player {
             }
             else {
                 this.$setFlags(UIComponentFlags.LayoutHeightExplicitlySet);
+                height = Math.max(minHeight,Math.min(maxHeight,layoutHeight));
             }
             var matrix = this.$getMatrix();
             if (isDeltaIdentity(matrix.$data)) {
@@ -780,11 +722,6 @@ module lark.player {
                 return;
             }
 
-            var maxWidth = this.maxWidth;
-            var maxHeight = this.maxHeight;
-            var minWidth = Math.min(this.minWidth, maxWidth);
-            var minHeight = Math.min(this.minHeight, maxHeight);
-            var values = this.$uiComponentValues;
             var fitSize = player.MatrixUtil.fitBounds(layoutWidth, layoutHeight, matrix,
                 values[UIComponentValues.explicitWidth], values[UIComponentValues.explicitHeight],
                 this.getPreferredUWidth(), this.getPreferredUHeight(),
@@ -865,31 +802,6 @@ module lark.player {
             var w = this.getPreferredUWidth();
             var h = this.getPreferredUHeight();
             return this.applyMatrix(bounds, w, h);
-        }
-
-        /**
-         * 获取组件的最小尺寸
-         * 按照：外部显式设置的最小尺寸>测量的最小尺寸的优先级返回尺寸，
-         * 注意此方法返回值已经包含scale和rotation。
-         */
-        public getMinBounds(bounds:Rectangle):Rectangle{
-            var w = this.minWidth;
-            if(!isNone(this.explicitMaxWidth)){
-                w = Math.min((w,this.explicitMaxWidth));
-            }
-            var h = this.minHeight;
-            if(!isNone(this.explicitMaxHeight)){
-                h = Math.min(h,this.explicitMaxHeight);
-            }
-            return this.applyMatrix(bounds,w,h);
-        }
-        /**
-         * 获取组件的最大尺寸
-         * 按照：外部显式设置的最大尺寸>测量的最大尺寸的优先级返回尺寸，
-         * 注意此方法返回值已经包含scale和rotation。
-         */
-        public getMaxBounds(bounds:Rectangle):Rectangle{
-            return this.applyMatrix(bounds,this.maxWidth,this.maxHeight);
         }
 
 

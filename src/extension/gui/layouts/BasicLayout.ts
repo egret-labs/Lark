@@ -88,16 +88,6 @@ module lark.gui {
 
 module lark.player {
 
-    function constraintsDetermineWidth(layoutElement:gui.UIComponent):Boolean {
-        return !isNone(layoutElement.percentWidth) ||
-            !isNone(layoutElement.left) && !isNone(layoutElement.right);
-    }
-
-    function constraintsDetermineHeight(layoutElement:gui.UIComponent):Boolean {
-        return !isNone(layoutElement.percentHeight) ||
-            !isNone(layoutElement.top) && !isNone(layoutElement.bottom);
-    }
-
     /**
      * 一个工具方法，使用BasicLayout规则测量目标对象。
      */
@@ -107,8 +97,6 @@ module lark.player {
         }
         var width = 0;
         var height = 0;
-        var minWidth = 0;
-        var minHeight = 0;
 
         var count = target.numChildren;
         for (var i = 0; i < count; i++) {
@@ -117,12 +105,13 @@ module lark.player {
                 continue;
             }
 
-            var hCenter = layoutElement.horizontalCenter;
-            var vCenter = layoutElement.verticalCenter;
-            var left = layoutElement.left;
-            var right = layoutElement.right;
-            var top = layoutElement.top;
-            var bottom = layoutElement.bottom;
+            var values = layoutElement.$uiComponentValues;
+            var hCenter = values[player.UIComponentValues.horizontalCenter];
+            var vCenter = values[player.UIComponentValues.verticalCenter];
+            var left = values[player.UIComponentValues.left];
+            var right = values[player.UIComponentValues.right];
+            var top = values[player.UIComponentValues.top];
+            var bottom = values[player.UIComponentValues.bottom];
 
             var extX:number;
             var extY:number;
@@ -161,15 +150,9 @@ module lark.player {
             var preferredHeight = bounds.height;
             width = Math.ceil(Math.max(width, extX + preferredWidth));
             height = Math.ceil(Math.max(height, extY + preferredHeight));
-
-            layoutElement.getMinBounds(bounds);
-            var elementMinWidth = constraintsDetermineWidth(layoutElement) ? bounds.width : preferredWidth;
-            var elementMinHeight = constraintsDetermineHeight(layoutElement) ? bounds.height : preferredHeight;
-            minWidth = Math.max(minWidth, extX + elementMinWidth);
-            minHeight = Math.max(minHeight, extY + elementMinHeight);
         }
 
-        target.setMeasuredSize(Math.ceil(width),Math.ceil(height),Math.ceil(minWidth),Math.ceil(minHeight));
+        target.setMeasuredSize(width,height);
     }
 
     /**
@@ -191,14 +174,15 @@ module lark.player {
                 continue;
             }
 
-            var hCenter = layoutElement.horizontalCenter;
-            var vCenter = layoutElement.verticalCenter;
-            var left = layoutElement.left;
-            var right = layoutElement.right;
-            var top = layoutElement.top;
-            var bottom = layoutElement.bottom;
-            var percentWidth = layoutElement.percentWidth;
-            var percentHeight = layoutElement.percentHeight;
+            var values = layoutElement.$uiComponentValues;
+            var hCenter = values[player.UIComponentValues.horizontalCenter];
+            var vCenter = values[player.UIComponentValues.verticalCenter];
+            var left = values[player.UIComponentValues.left];
+            var right = values[player.UIComponentValues.right];
+            var top = values[player.UIComponentValues.top];
+            var bottom = values[player.UIComponentValues.bottom];
+            var percentWidth = values[player.UIComponentValues.percentWidth];
+            var percentHeight = values[player.UIComponentValues.percentHeight];
 
             var childWidth = NONE;
             var childHeight = NONE;
@@ -215,19 +199,6 @@ module lark.player {
             }
             else if (!isNone(percentHeight)) {
                 childHeight = Math.round(unscaledHeight * Math.min(percentHeight * 0.01, 1));
-            }
-
-            layoutElement.getMaxBounds(bounds);
-            var elementMaxWidth = bounds.width;
-            var elementMaxHeight = bounds.height;
-            layoutElement.getMinBounds(bounds);
-            if (!isNone(childWidth))
-            {
-                childWidth = Math.max(bounds.width, Math.min(elementMaxWidth, childWidth));
-            }
-            if (!isNone(childHeight))
-            {
-                childHeight = Math.max(bounds.height, Math.min(elementMaxHeight, childHeight));
             }
 
             layoutElement.setLayoutBoundsSize(childWidth, childHeight);

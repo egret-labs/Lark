@@ -59,6 +59,7 @@ module lark.gui {
         // */
         // protected measure():void;
 
+        $uiComponentValues:Float64Array;
 
         $includeInLayout:boolean;
 
@@ -117,60 +118,29 @@ module lark.gui {
          */
         explicitHeight:number;
 
-        /**
-         * 显式设置的最小宽度。
-         */
-        explicitMinWidth:number;
 
         /**
-         * 组件的最小测量宽度,此属性设置为大于maxWidth的值时无效。仅影响measuredWidth属性的取值范围。
+         * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
          */
         minWidth:number;
-
         /**
-         * 显式设置的最大宽度
-         */
-        explicitMaxWidth:number;
-
-        /**
-         * 组件的最大测量高度,仅影响measuredWidth属性的取值范围。
+         * 组件的最大高度。同时影响测量和自动布局的尺寸。
          */
         maxWidth:number;
 
         /**
-         * 显式设置的最小高度
-         */
-        explicitMinHeight:number;
-
-        /**
-         * 组件的最小测量高度,此属性设置为大于maxHeight的值时无效。仅影响measuredHeight属性的取值范围。
+         * 组件的最小高度,此属性设置为大于maxHeight的值时无效。同时影响测量和自动布局的尺寸。
          */
         minHeight:number;
-
         /**
-         * 显式设置的最大高度
-         */
-        explicitMaxHeight:number;
-
-        /**
-         * 组件的最大测量高度,仅影响measuredHeight属性的取值范围。
+         * 组件的最大高度,同时影响测量和自动布局的尺寸。
          */
         maxHeight:number;
-
-        /**
-         * 组件的测量最小宽度
-         */
-        measuredMinWidth:number;
 
         /**
          * 组件的测量宽度（以像素为单位）。此值由 measure() 方法设置。
          */
         measuredWidth:number;
-
-        /**
-         * 组件的测量最小高度
-         */
-        measuredMinHeight:number;
 
         /**
          * 组件的默认高度（以像素为单位）。此值由 measure() 方法设置。
@@ -181,10 +151,8 @@ module lark.gui {
          * 设置测量结果。
          * @param width 测量宽度
          * @param height 测量高度
-         * @param minWidth 测量的最小宽度
-         * @param minHeight 测量的最小高度
          */
-        setMeasuredSize(width:number, height:number, minWidth:number, minHeight:number):void;
+        setMeasuredSize(width:number, height:number):void;
 
 
         /**
@@ -245,19 +213,6 @@ module lark.gui {
          * 注意此方法返回值已经包含scale和rotation。
          */
         getPreferredBounds(bounds:Rectangle):Rectangle;
-        /**
-         * 获取组件的最小尺寸
-         * 按照：外部显式设置的最小尺寸>测量的最小尺寸的优先级返回尺寸，
-         * 注意此方法返回值已经包含scale和rotation。
-         */
-        getMinBounds(bounds:Rectangle):Rectangle;
-        /**
-         * 获取组件的最大尺寸
-         * 按照：外部显式设置的最大尺寸>测量的最大尺寸的优先级返回尺寸，
-         * 注意此方法返回值已经包含scale和rotation。
-         */
-        getMaxBounds(bounds:Rectangle):Rectangle;
-
     }
 
 }
@@ -285,20 +240,16 @@ module lark.player {
             0,
             lark.NONE,
             0,
-            lark.NONE,
-            lark.NONE,
-            lark.NONE,
-            lark.NONE,
+            0,
+            100000,
+            0,
+            100000,
             0,
             0,
-            0,
-            0,
             lark.NONE,
             lark.NONE,
             lark.NONE,
             lark.NONE,
-            lark.NONE,
-            lark.NONE
         ]);
         this.createChildren();
     }
@@ -318,7 +269,7 @@ module lark.player {
             if (values[10 /* oldWidth */] != values[11 /* width */] || values[12 /* oldHeight */] != values[13 /* height */]) {
                 this.emitResizeEvent();
             }
-            if (values[22 /* oldX */] != this.$getX() || values[23 /* oldY */] != this.$getY()) {
+            if (values[20 /* oldX */] != this.$getX() || values[21 /* oldY */] != this.$getY()) {
                 this.emitMoveEvent();
             }
             commitProperties();
@@ -330,8 +281,8 @@ module lark.player {
          */
         prototype.measure = function () {
             var values = this.$uiComponentValues;
-            values[21 /* measuredHeight */] = 0;
-            values[19 /* measuredWidth */] = 0;
+            values[19 /* measuredHeight */] = 0;
+            values[18 /* measuredWidth */] = 0;
             measure();
         };
 
@@ -597,136 +548,82 @@ module lark.player {
             }
             return change;
         };
-        Object.defineProperty(prototype, "explicitMinWidth", {
-            /**
-             * 显式设置的最小宽度。
-             */
-            get: function () {
-                return this.$uiComponentValues[14 /* explicitMinWidth */];
-            },
-            enumerable: true,
-            configurable: true
-        });
         Object.defineProperty(prototype, "minWidth", {
             /**
-             * 组件的最小测量宽度,此属性设置为大于maxWidth的值时无效。仅影响measuredWidth属性的取值范围。
+             * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
              */
             get: function () {
-                var values = this.$uiComponentValues;
-                return lark.isNone(values[14 /* explicitMinWidth */]) ? values[18 /* measuredMinWidth */] : values[14 /* explicitMinWidth */];
+                return this.$uiComponentValues[14 /* minWidth */];
             },
             set: function (value) {
                 value = +value || 0;
                 var values = this.$uiComponentValues;
-                if (values[14 /* explicitMinWidth */] === value) {
+                if (values[14 /* minWidth */] === value) {
                     return;
                 }
-                values[14 /* explicitMinWidth */] = value;
+                values[14 /* minWidth */] = value;
                 this.invalidateSize();
                 this.invalidateParentSizeAndDisplayList();
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(prototype, "explicitMaxWidth", {
-            /**
-             * 显式设置的最大宽度
-             */
-            get: function () {
-                return this.$uiComponentValues[15 /* explicitMaxWidth */];
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(prototype, "maxWidth", {
             /**
-             * 组件的最大测量高度,仅影响measuredWidth属性的取值范围。
+             * 组件的最大高度。同时影响测量和自动布局的尺寸。
              */
             get: function () {
-                var values = this.$uiComponentValues;
-                return lark.isNone(values[15 /* explicitMaxWidth */]) ? 10000 : values[15 /* explicitMaxWidth */];
+                return this.$uiComponentValues[15 /* maxWidth */];
             },
             set: function (value) {
                 value = +value || 0;
                 var values = this.$uiComponentValues;
-                if (values[15 /* explicitMaxWidth */] === value) {
+                if (values[15 /* maxWidth */] === value) {
                     return;
                 }
-                values[15 /* explicitMaxWidth */] = value;
+                values[15 /* maxWidth */] = value;
                 this.invalidateSize();
                 this.invalidateParentSizeAndDisplayList();
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(prototype, "explicitMinHeight", {
-            /**
-             * 显式设置的最小高度
-             */
-            get: function () {
-                return this.$uiComponentValues[16 /* explicitMinHeight */];
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(prototype, "minHeight", {
             /**
-             * 组件的最小测量高度,此属性设置为大于maxHeight的值时无效。仅影响measuredHeight属性的取值范围。
+             * 组件的最小高度,此属性设置为大于maxHeight的值时无效。同时影响测量和自动布局的尺寸。
              */
             get: function () {
-                var values = this.$uiComponentValues;
-                return lark.isNone(values[16 /* explicitMinHeight */]) ? values[20 /* measuredMinHeight */] : values[16 /* explicitMinHeight */];
+                return this.$uiComponentValues[16 /* minHeight */];
             },
             set: function (value) {
                 value = +value || 0;
                 var values = this.$uiComponentValues;
-                if (values[16 /* explicitMinHeight */] === value) {
+                if (values[16 /* minHeight */] === value) {
                     return;
                 }
-                values[16 /* explicitMinHeight */] = value;
+                values[16 /* minHeight */] = value;
                 this.invalidateSize();
                 this.invalidateParentSizeAndDisplayList();
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(prototype, "explicitMaxHeight", {
-            /**
-             * 显式设置的最大高度
-             */
-            get: function () {
-                return this.$uiComponentValues[17 /* explicitMaxHeight */];
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(prototype, "maxHeight", {
             /**
-             * 组件的最大测量高度,仅影响measuredHeight属性的取值范围。
+             * 组件的最大高度,同时影响测量和自动布局的尺寸。
              */
             get: function () {
-                var values = this.$uiComponentValues;
-                return lark.isNone(values[17 /* explicitMaxHeight */]) ? 10000 : values[17 /* explicitMaxHeight */];
+                return this.$uiComponentValues[17 /* maxHeight */];
             },
             set: function (value) {
                 value = +value || 0;
                 var values = this.$uiComponentValues;
-                if (values[17 /* explicitMaxHeight */] === value) {
+                if (values[17 /* maxHeight */] === value) {
                     return;
                 }
-                values[17 /* explicitMaxHeight */] = value;
+                values[17 /* maxHeight */] = value;
                 this.invalidateSize();
                 this.invalidateParentSizeAndDisplayList();
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(prototype, "measuredMinWidth", {
-            /**
-             * 组件的测量最小宽度
-             */
-            get: function () {
-                return this.$uiComponentValues[18 /* measuredMinWidth */];
             },
             enumerable: true,
             configurable: true
@@ -736,17 +633,7 @@ module lark.player {
              * 组件的测量宽度（以像素为单位）。此值由 measure() 方法设置。
              */
             get: function () {
-                return this.$uiComponentValues[19 /* measuredWidth */];
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(prototype, "measuredMinHeight", {
-            /**
-             * 组件的测量最小高度
-             */
-            get: function () {
-                return this.$uiComponentValues[20 /* measuredMinHeight */];
+                return this.$uiComponentValues[18 /* measuredWidth */];
             },
             enumerable: true,
             configurable: true
@@ -756,7 +643,7 @@ module lark.player {
              * 组件的默认高度（以像素为单位）。此值由 measure() 方法设置。
              */
             get: function () {
-                return this.$uiComponentValues[21 /* measuredHeight */];
+                return this.$uiComponentValues[19 /* measuredHeight */];
             },
             enumerable: true,
             configurable: true
@@ -765,15 +652,11 @@ module lark.player {
          * 设置测量结果。
          * @param width 测量宽度
          * @param height 测量高度
-         * @param minWidth 测量的最小宽度
-         * @param minHeight 测量的最小高度
          */
-        prototype.setMeasuredSize = function (width, height, minWidth, minHeight) {
+        prototype.setMeasuredSize = function (width, height) {
             var values = this.$uiComponentValues;
-            values[19 /* measuredWidth */] = +width || 0;
-            values[21 /* measuredHeight */] = +height || 0;
-            values[18 /* measuredMinWidth */] = +minWidth || 0;
-            values[20 /* measuredMinHeight */] = +minHeight || 0;
+            values[18 /* measuredWidth */] = Math.ceil(+width || 0);
+            values[19 /* measuredHeight */] = Math.ceil(+height || 0);
         };
         /**
          * 设置组件的宽高。此方法不同于直接设置width,height属性，
@@ -863,30 +746,26 @@ module lark.player {
             var values = this.$uiComponentValues;
             if (lark.isNone(values[8 /* explicitWidth */]) || lark.isNone(values[9 /* explicitHeight */])) {
                 this.measure();
-                if (values[19 /* measuredWidth */] < values[14 /* explicitMinWidth */]) {
-                    values[19 /* measuredWidth */] = values[14 /* explicitMinWidth */];
+                if (values[18 /* measuredWidth */] < values[14 /* minWidth */]) {
+                    values[18 /* measuredWidth */] = values[14 /* minWidth */];
                 }
-                if (values[19 /* measuredWidth */] > values[15 /* explicitMaxWidth */]) {
-                    values[19 /* measuredWidth */] = values[15 /* explicitMaxWidth */];
+                if (values[18 /* measuredWidth */] > values[15 /* maxWidth */]) {
+                    values[18 /* measuredWidth */] = values[15 /* maxWidth */];
                 }
-                if (values[21 /* measuredHeight */] < values[16 /* explicitMinHeight */]) {
-                    values[21 /* measuredHeight */] = values[16 /* explicitMinHeight */];
+                if (values[19 /* measuredHeight */] < values[16 /* minHeight */]) {
+                    values[19 /* measuredHeight */] = values[16 /* minHeight */];
                 }
-                if (values[21 /* measuredHeight */] > values[17 /* explicitMaxHeight */]) {
-                    values[21 /* measuredHeight */] = values[17 /* explicitMaxHeight */];
+                if (values[19 /* measuredHeight */] > values[17 /* maxHeight */]) {
+                    values[19 /* measuredHeight */] = values[17 /* maxHeight */];
                 }
             }
             var preferredW = this.getPreferredUWidth();
             var preferredH = this.getPreferredUHeight();
-            var minW = lark.isNone(values[14 /* explicitMinWidth */]) ? values[18 /* measuredMinWidth */] : values[14 /* explicitMinWidth */];
-            var minH = lark.isNone(values[16 /* explicitMinHeight */]) ? values[20 /* measuredMinHeight */] : values[16 /* explicitMinHeight */];
-            if (preferredW !== values[24 /* oldPreferWidth */] || preferredH !== values[25 /* oldPreferHeight */] || minW !== values[26 /* oldMinWidth */] || minH !== values[27 /* oldMinHeight */]) {
+            if (preferredW !== values[22 /* oldPreferWidth */] || preferredH !== values[23 /* oldPreferHeight */]) {
+                values[22 /* oldPreferWidth */] = preferredW;
+                values[23 /* oldPreferHeight */] = preferredH;
                 changed = true;
             }
-            values[26 /* oldMinWidth */] = minW;
-            values[27 /* oldMinHeight */] = minH;
-            values[24 /* oldPreferWidth */] = preferredW;
-            values[25 /* oldPreferHeight */] = preferredH;
             return changed;
         };
         /**
@@ -914,7 +793,7 @@ module lark.player {
                     unscaledWidth = values[8 /* explicitWidth */];
                 }
                 else {
-                    unscaledWidth = values[19 /* measuredWidth */];
+                    unscaledWidth = values[18 /* measuredWidth */];
                 }
                 if (this.$hasFlags(2097152 /* LayoutHeightExplicitlySet */)) {
                     unscaledHeight = values[13 /* height */];
@@ -923,7 +802,7 @@ module lark.player {
                     unscaledHeight = values[9 /* explicitHeight */];
                 }
                 else {
-                    unscaledHeight = values[21 /* measuredHeight */];
+                    unscaledHeight = values[19 /* measuredHeight */];
                 }
                 this.setActualSize(unscaledWidth, unscaledHeight);
                 this.updateDisplayList(unscaledWidth, unscaledHeight);
@@ -953,10 +832,10 @@ module lark.player {
         prototype.emitMoveEvent = function () {
             var values = this.$uiComponentValues;
             if (this.hasListener(lark.gui.MoveEvent.MOVE)) {
-                lark.gui.MoveEvent.emitMoveEvent(this, values[22 /* oldX */], values[23 /* oldY */]);
+                lark.gui.MoveEvent.emitMoveEvent(this, values[20 /* oldX */], values[21 /* oldY */]);
             }
-            values[22 /* oldX */] = this.$getX();
-            values[23 /* oldY */] = this.$getY();
+            values[20 /* oldX */] = this.$getX();
+            values[21 /* oldY */] = this.$getY();
         };
         /**
          *  抛出尺寸改变事件
@@ -973,14 +852,22 @@ module lark.player {
          * 设置组件的布局宽高
          */
         prototype.setLayoutBoundsSize = function (layoutWidth, layoutHeight) {
-            var width = layoutHeight = +layoutHeight || 0;
-            var height = layoutWidth = +layoutWidth || 0;
+            layoutHeight = +layoutHeight || 0;
+            layoutWidth = +layoutWidth || 0;
+            var values = this.$uiComponentValues;
+            var maxWidth = values[15 /* maxWidth */];
+            var maxHeight = values[17 /* maxHeight */];
+            var minWidth = Math.min(values[14 /* minWidth */], maxWidth);
+            var minHeight = Math.min(values[16 /* minHeight */], maxHeight);
+            var width;
+            var height;
             if (lark.isNone(layoutWidth)) {
                 this.$removeFlags(1048576 /* LayoutWidthExplicitlySet */);
                 width = this.getPreferredUWidth();
             }
             else {
                 this.$setFlags(1048576 /* LayoutWidthExplicitlySet */);
+                width = Math.max(minWidth, Math.min(maxWidth, layoutWidth));
             }
             if (lark.isNone(layoutHeight)) {
                 this.$removeFlags(2097152 /* LayoutHeightExplicitlySet */);
@@ -988,17 +875,13 @@ module lark.player {
             }
             else {
                 this.$setFlags(2097152 /* LayoutHeightExplicitlySet */);
+                height = Math.max(minHeight, Math.min(maxHeight, layoutHeight));
             }
             var matrix = this.$getMatrix();
             if (isDeltaIdentity(matrix.$data)) {
                 this.setActualSize(width, height);
                 return;
             }
-            var maxWidth = this.maxWidth;
-            var maxHeight = this.maxHeight;
-            var minWidth = Math.min(this.minWidth, maxWidth);
-            var minHeight = Math.min(this.minHeight, maxHeight);
-            var values = this.$uiComponentValues;
             var fitSize = player.MatrixUtil.fitBounds(layoutWidth, layoutHeight, matrix, values[8 /* explicitWidth */], values[9 /* explicitHeight */], this.getPreferredUWidth(), this.getPreferredUHeight(), minWidth, minHeight, maxWidth, maxHeight);
             if (!fitSize) {
                 fitSize = new lark.Point(minWidth, minHeight);
@@ -1037,7 +920,7 @@ module lark.player {
                 w = values[8 /* explicitWidth */];
             }
             else {
-                w = values[19 /* measuredWidth */];
+                w = values[18 /* measuredWidth */];
             }
             var h;
             if (this.$hasFlags(2097152 /* LayoutHeightExplicitlySet */)) {
@@ -1047,17 +930,17 @@ module lark.player {
                 h = values[9 /* explicitHeight */];
             }
             else {
-                h = values[21 /* measuredHeight */];
+                h = values[19 /* measuredHeight */];
             }
             return this.applyMatrix(bounds, w, h);
         };
         prototype.getPreferredUWidth = function () {
             var values = this.$uiComponentValues;
-            return lark.isNone(values[8 /* explicitWidth */]) ? values[19 /* measuredWidth */] : values[8 /* explicitWidth */];
+            return lark.isNone(values[8 /* explicitWidth */]) ? values[18 /* measuredWidth */] : values[8 /* explicitWidth */];
         };
         prototype.getPreferredUHeight = function () {
             var values = this.$uiComponentValues;
-            return lark.isNone(values[9 /* explicitHeight */]) ? values[21 /* measuredHeight */] : values[9 /* explicitHeight */];
+            return lark.isNone(values[9 /* explicitHeight */]) ? values[19 /* measuredHeight */] : values[9 /* explicitHeight */];
         };
         /**
          * 获取组件的首选尺寸,常用于父级的measure()方法中
@@ -1068,30 +951,6 @@ module lark.player {
             var w = this.getPreferredUWidth();
             var h = this.getPreferredUHeight();
             return this.applyMatrix(bounds, w, h);
-        };
-        /**
-         * 获取组件的最小尺寸
-         * 按照：外部显式设置的最小尺寸>测量的最小尺寸的优先级返回尺寸，
-         * 注意此方法返回值已经包含scale和rotation。
-         */
-        prototype.getMinBounds = function (bounds) {
-            var w = this.minWidth;
-            if (!lark.isNone(this.explicitMaxWidth)) {
-                w = Math.min((w, this.explicitMaxWidth));
-            }
-            var h = this.minHeight;
-            if (!lark.isNone(this.explicitMaxHeight)) {
-                h = Math.min(h, this.explicitMaxHeight);
-            }
-            return this.applyMatrix(bounds, w, h);
-        };
-        /**
-         * 获取组件的最大尺寸
-         * 按照：外部显式设置的最大尺寸>测量的最大尺寸的优先级返回尺寸，
-         * 注意此方法返回值已经包含scale和rotation。
-         */
-        prototype.getMaxBounds = function (bounds) {
-            return this.applyMatrix(bounds, this.maxWidth, this.maxHeight);
         };
         prototype.applyMatrix = function (bounds, w, h) {
             var x = 0, y = 0;

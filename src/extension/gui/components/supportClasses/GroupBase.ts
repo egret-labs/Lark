@@ -43,7 +43,8 @@ module lark.gui {
          * 设置 contentWidth 和 contentHeight 属性，此方法由Layout类调用
          */
         public setContentSize(width:number, height:number):void{
-
+            width = Math.ceil(width);
+            height = Math.ceil(height);
         }
 
         //=======================UIComponent接口实现===========================
@@ -75,6 +76,8 @@ module lark.gui {
         protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
 
         }
+
+        $uiComponentValues:Float64Array;
 
         $includeInLayout:boolean;
 
@@ -134,59 +137,27 @@ module lark.gui {
         public explicitHeight:number;
 
         /**
-         * 显式设置的最小宽度。
-         */
-        public explicitMinWidth:number;
-
-        /**
-         * 组件的最小测量宽度,此属性设置为大于maxWidth的值时无效。仅影响measuredWidth属性的取值范围。
+         * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
          */
         public minWidth:number;
-
         /**
-         * 显式设置的最大宽度
-         */
-        public explicitMaxWidth:number;
-
-        /**
-         * 组件的最大测量高度,仅影响measuredWidth属性的取值范围。
+         * 组件的最大高度。同时影响测量和自动布局的尺寸。
          */
         public maxWidth:number;
 
         /**
-         * 显式设置的最小高度
-         */
-        public explicitMinHeight:number;
-
-        /**
-         * 组件的最小测量高度,此属性设置为大于maxHeight的值时无效。仅影响measuredHeight属性的取值范围。
+         * 组件的最小高度,此属性设置为大于maxHeight的值时无效。同时影响测量和自动布局的尺寸。
          */
         public minHeight:number;
-
         /**
-         * 显式设置的最大高度
-         */
-        public explicitMaxHeight:number;
-
-        /**
-         * 组件的最大测量高度,仅影响measuredHeight属性的取值范围。
+         * 组件的最大高度,同时影响测量和自动布局的尺寸。
          */
         public maxHeight:number;
-
-        /**
-         * 组件的测量最小宽度
-         */
-        public measuredMinWidth:number;
 
         /**
          * 组件的测量宽度（以像素为单位）。此值由 measure() 方法设置。
          */
         public measuredWidth:number;
-
-        /**
-         * 组件的测量最小高度
-         */
-        public measuredMinHeight:number;
 
         /**
          * 组件的默认高度（以像素为单位）。此值由 measure() 方法设置。
@@ -197,10 +168,8 @@ module lark.gui {
          * 设置测量结果。
          * @param width 测量宽度
          * @param height 测量高度
-         * @param minWidth 测量的最小宽度
-         * @param minHeight 测量的最小高度
          */
-        public setMeasuredSize:(width:number, height:number, minWidth:number, minHeight:number)=>void;
+        public setMeasuredSize:(width:number, height:number)=>void;
 
 
         /**
@@ -261,18 +230,6 @@ module lark.gui {
          * 注意此方法返回值已经包含scale和rotation。
          */
         public getPreferredBounds:(bounds:Rectangle)=>Rectangle;
-        /**
-         * 获取组件的最小尺寸
-         * 按照：外部显式设置的最小尺寸>测量的最小尺寸的优先级返回尺寸，
-         * 注意此方法返回值已经包含scale和rotation。
-         */
-        public getMinBounds:(bounds:Rectangle)=>Rectangle;
-        /**
-         * 获取组件的最大尺寸
-         * 按照：外部显式设置的最大尺寸>测量的最大尺寸的优先级返回尺寸，
-         * 注意此方法返回值已经包含scale和rotation。
-         */
-        public getMaxBounds:(bounds:Rectangle)=>Rectangle;
         /**
          * 标记父级容器的尺寸和显示列表为失效
          */
