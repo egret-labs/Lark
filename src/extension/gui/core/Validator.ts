@@ -31,11 +31,11 @@
 module lark.gui {
 
     /**
-     * 布局管理器
+     * 失效验证管理器
      */
     class Validator extends EventEmitter {
         /**
-         * 创建一个LayoutManager对象
+         * 创建一个Validator对象
          */
         public constructor() {
             super();
