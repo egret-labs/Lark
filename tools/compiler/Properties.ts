@@ -22,7 +22,9 @@ class Properties implements lark.ILarkProperties {
         this.keepLarkInSeparatedFiles = json.keepLarkInSeparatedFiles;
         this.entry = json.entry;
         this.modules = json.modules;
-        this.startupHtml = json.startupHtml;
+        this.startupHtml = json.startupHtml || 'index.html';
+        this.port = json.port || 3001;
+        this.host = json.host || 'localhost';
     }
 
     toJSON() {
