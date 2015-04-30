@@ -30,7 +30,6 @@
 module lark.gui {
 
     export class SkinnableComponent extends Sprite implements UIComponent{
-
         public constructor(){
             super();
             player.UIComponent.call(this);
@@ -66,7 +65,7 @@ module lark.gui {
             player.updateDisplayList(this,unscaledWidth,unscaledHeight);
         }
 
-        $uiComponentValues:Float64Array;
+        $uiValues:Float64Array;
 
         $includeInLayout:boolean;
 

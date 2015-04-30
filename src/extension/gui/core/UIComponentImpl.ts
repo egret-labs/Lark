@@ -29,7 +29,7 @@
 
 module lark.player {
 
-    export const enum UIComponentValues {
+    export const enum UIValues {
         left,               //NONE
         right,              //NONE
         top,                //NONE
@@ -40,9 +40,7 @@ module lark.player {
         percentHeight,      //NONE
         explicitWidth,      //NONE
         explicitHeight,     //NONE
-        oldWidth,           //NONE
         width,              //0
-        oldHeight,          //NONE
         height,             //0
         minWidth,           //0
         maxWidth,           //100000
@@ -50,10 +48,10 @@ module lark.player {
         maxHeight,          //100000
         measuredWidth,      //0
         measuredHeight,     //0
-        oldX,               //NONE
-        oldY,               //NONE
         oldPreferWidth,     //NONE
-        oldPreferHeight,    //NONE
+        oldPreferHeight,     //NONE
+        contentWidth,       //0
+        contentHeight       //0
     }
 
     function isDeltaIdentity(m:Float64Array):boolean {
@@ -69,7 +67,7 @@ module lark.player {
          */
         public constructor() {
             super();
-            this.$uiComponentValues = new Float64Array([
+            this.$uiValues = new Float64Array([
                 NONE,    //left
                 NONE,    //right
                 NONE,    //top
@@ -80,9 +78,7 @@ module lark.player {
                 NONE,    //percentHeight
                 NONE,    //explicitWidth
                 NONE,    //explicitHeight
-                NONE,    //oldWidth
                 0,       //width
-                NONE,    //oldHeight
                 0,       //height
                 0,       //minWidth
                 100000,  //maxWidth
@@ -90,10 +86,10 @@ module lark.player {
                 100000,  //maxHeight
                 0,       //measuredWidth
                 0,       //measuredHeight
-                NONE,    //oldX
-                NONE,    //oldY
                 NONE,    //oldPreferWidth
                 NONE,    //oldPreferHeight
+                0,       //contentWidth
+                0        //contentHeight
             ]);
             this.createChildren();
         }
@@ -110,23 +106,14 @@ module lark.player {
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         protected commitProperties():void {
-            var values = this.$uiComponentValues;
-            if (values[UIComponentValues.oldWidth] != values[UIComponentValues.width] ||
-                values[UIComponentValues.oldHeight] != values[UIComponentValues.height]) {
-                this.emitResizeEvent();
-            }
-            if (values[UIComponentValues.oldX] != this.$getX() || values[UIComponentValues.oldY] != this.$getY()) {
-                this.emitMoveEvent();
-            }
+
         }
 
         /**
          * 测量组件尺寸
          */
         protected measure():void {
-            var values = this.$uiComponentValues;
-            values[UIComponentValues.measuredHeight] = 0;
-            values[UIComponentValues.measuredWidth] = 0;
+
         }
 
         /**
@@ -135,7 +122,7 @@ module lark.player {
         protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
         }
 
-        $uiComponentValues:Float64Array;
+        $uiValues:Float64Array;
 
         $includeInLayout:boolean = true;
 
@@ -181,15 +168,15 @@ module lark.player {
          * 距父级容器离左边距离
          */
         public get left():number {
-            return this.$uiComponentValues[UIComponentValues.left];
+            return this.$uiValues[UIValues.left];
         }
 
         public set left(value:number) {
             value = +value || 0;
-            var values = this.$uiComponentValues;
-            if (values[UIComponentValues.left] === value)
+            var values = this.$uiValues;
+            if (values[UIValues.left] === value)
                 return;
-            values[UIComponentValues.left] = value;
+            values[UIValues.left] = value;
             this.invalidateParentSizeAndDisplayList();
         }
 
@@ -197,15 +184,15 @@ module lark.player {
          * 距父级容器右边距离
          */
         public get right():number {
-            return this.$uiComponentValues[UIComponentValues.right];
+            return this.$uiValues[UIValues.right];
         }
 
         public set right(value:number) {
             value = +value || 0;
-            var values = this.$uiComponentValues;
-            if (values[UIComponentValues.right] === value)
+            var values = this.$uiValues;
+            if (values[UIValues.right] === value)
                 return;
-            values[UIComponentValues.right] = value;
+            values[UIValues.right] = value;
             this.invalidateParentSizeAndDisplayList();
         }
 
@@ -213,15 +200,15 @@ module lark.player {
          * 距父级容器顶部距离
          */
         public get top():number {
-            return this.$uiComponentValues[UIComponentValues.top];
+            return this.$uiValues[UIValues.top];
         }
 
         public set top(value:number) {
             value = +value || 0;
-            var values = this.$uiComponentValues;
-            if (values[UIComponentValues.top] === value)
+            var values = this.$uiValues;
+            if (values[UIValues.top] === value)
                 return;
-            values[UIComponentValues.top] = value;
+            values[UIValues.top] = value;
             this.invalidateParentSizeAndDisplayList();
         }
 
@@ -229,15 +216,15 @@ module lark.player {
          * 距父级容器底部距离
          */
         public get bottom():number {
-            return this.$uiComponentValues[UIComponentValues.bottom];
+            return this.$uiValues[UIValues.bottom];
         }
 
         public set bottom(value:number) {
             value = +value || 0;
-            var values = this.$uiComponentValues;
-            if (values[UIComponentValues.bottom] == value)
+            var values = this.$uiValues;
+            if (values[UIValues.bottom] == value)
                 return;
-            values[UIComponentValues.bottom] = value;
+            values[UIValues.bottom] = value;
             this.invalidateParentSizeAndDisplayList();
         }
 
@@ -246,15 +233,15 @@ module lark.player {
          * 在父级容器中距水平中心位置的距离
          */
         public get horizontalCenter():number {
-            return this.$uiComponentValues[UIComponentValues.horizontalCenter];
+            return this.$uiValues[UIValues.horizontalCenter];
         }
 
         public set horizontalCenter(value:number) {
             value = +value || 0;
-            var values = this.$uiComponentValues;
-            if (values[UIComponentValues.horizontalCenter] === value)
+            var values = this.$uiValues;
+            if (values[UIValues.horizontalCenter] === value)
                 return;
-            values[UIComponentValues.horizontalCenter] = value;
+            values[UIValues.horizontalCenter] = value;
             this.invalidateParentSizeAndDisplayList();
         }
 
@@ -262,15 +249,15 @@ module lark.player {
          * 在父级容器中距竖直中心位置的距离
          */
         public get verticalCenter():number {
-            return this.$uiComponentValues[UIComponentValues.verticalCenter];
+            return this.$uiValues[UIValues.verticalCenter];
         }
 
         public set verticalCenter(value:number) {
             value = +value || 0;
-            var values = this.$uiComponentValues;
-            if (values[UIComponentValues.verticalCenter] === value)
+            var values = this.$uiValues;
+            if (values[UIValues.verticalCenter] === value)
                 return;
-            values[UIComponentValues.verticalCenter] = value;
+            values[UIValues.verticalCenter] = value;
             this.invalidateParentSizeAndDisplayList();
         }
 
@@ -279,15 +266,15 @@ module lark.player {
          * 相对父级容器宽度的百分比
          */
         public get percentWidth():number {
-            return this.$uiComponentValues[UIComponentValues.percentWidth];
+            return this.$uiValues[UIValues.percentWidth];
         }
 
         public set percentWidth(value:number) {
             value = +value || 0;
-            var values = this.$uiComponentValues;
-            if (values[UIComponentValues.percentWidth] === value)
+            var values = this.$uiValues;
+            if (values[UIValues.percentWidth] === value)
                 return;
-            values[UIComponentValues.percentWidth] = value;
+            values[UIValues.percentWidth] = value;
             this.invalidateParentSizeAndDisplayList();
         }
 
@@ -295,15 +282,15 @@ module lark.player {
          * 相对父级容器高度的百分比
          */
         public get percentHeight():number {
-            return this.$uiComponentValues[UIComponentValues.percentHeight];
+            return this.$uiValues[UIValues.percentHeight];
         }
 
         public set percentHeight(value:number) {
             value = +value || 0;
-            var values = this.$uiComponentValues;
-            if (values[UIComponentValues.percentHeight] === value)
+            var values = this.$uiValues;
+            if (values[UIValues.percentHeight] === value)
                 return;
-            values[UIComponentValues.percentHeight] = value;
+            values[UIValues.percentHeight] = value;
             this.invalidateParentSizeAndDisplayList();
         }
 
@@ -311,33 +298,32 @@ module lark.player {
          * 外部显式指定的宽度
          */
         public get explicitWidth():number {
-            return this.$uiComponentValues[UIComponentValues.explicitWidth];
+            return this.$uiValues[UIValues.explicitWidth];
         }
 
         /**
          * 外部显式指定的高度
          */
         public get explicitHeight():number {
-            return this.$uiComponentValues[UIComponentValues.explicitHeight];
+            return this.$uiValues[UIValues.explicitHeight];
         }
 
         /**
          * 组件宽度,默认值为lark.NONE,设置为lark.NONE将使用组件的measure()方法自动计算尺寸
          */
         public get width():number {
-            return this.$uiComponentValues[UIComponentValues.width];
+            return this.$uiValues[UIValues.width];
         }
 
         public set width(value:number) {
             value = +value || 0;
-            var values = this.$uiComponentValues;
-            if (values[UIComponentValues.width] === value && values[UIComponentValues.explicitWidth] === value)
+            var values = this.$uiValues;
+            if (values[UIValues.width] === value && values[UIValues.explicitWidth] === value)
                 return;
-            values[UIComponentValues.width] = value;
-            values[UIComponentValues.explicitWidth] = value;
+            values[UIValues.width] = value;
+            values[UIValues.explicitWidth] = value;
             if (isNone(value))
                 this.invalidateSize();
-            this.invalidateProperties();
             this.invalidateDisplayList();
             this.invalidateParentSizeAndDisplayList();
         }
@@ -346,19 +332,18 @@ module lark.player {
          * 组件高度,默认值为NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
          */
         public get height():number {
-            return this.$uiComponentValues[UIComponentValues.height];
+            return this.$uiValues[UIValues.height];
         }
 
         public set height(value:number) {
             value = +value || 0;
-            var values = this.$uiComponentValues;
-            if (values[UIComponentValues.height] === value && values[UIComponentValues.explicitHeight] === value)
+            var values = this.$uiValues;
+            if (values[UIValues.height] === value && values[UIValues.explicitHeight] === value)
                 return;
-            values[UIComponentValues.height] = value;
-            values[UIComponentValues.explicitWidth] = value;
+            values[UIValues.height] = value;
+            values[UIValues.explicitWidth] = value;
             if (isNaN(value))
                 this.invalidateSize();
-            this.invalidateProperties();
             this.invalidateDisplayList();
             this.invalidateParentSizeAndDisplayList();
         }
@@ -383,16 +368,16 @@ module lark.player {
          * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
          */
         public get minWidth():number {
-            return this.$uiComponentValues[UIComponentValues.minWidth];
+            return this.$uiValues[UIValues.minWidth];
         }
 
         public set minWidth(value:number) {
             value = +value || 0;
-            var values = this.$uiComponentValues;
-            if (values[UIComponentValues.minWidth] === value) {
+            var values = this.$uiValues;
+            if (values[UIValues.minWidth] === value) {
                 return;
             }
-            values[UIComponentValues.minWidth] = value;
+            values[UIValues.minWidth] = value;
             this.invalidateSize();
             this.invalidateParentSizeAndDisplayList();
         }
@@ -401,16 +386,16 @@ module lark.player {
          * 组件的最大高度。同时影响测量和自动布局的尺寸。
          */
         public get maxWidth():number {
-            return this.$uiComponentValues[UIComponentValues.maxWidth];
+            return this.$uiValues[UIValues.maxWidth];
         }
 
         public set maxWidth(value:number) {
             value = +value || 0;
-            var values = this.$uiComponentValues;
-            if (values[UIComponentValues.maxWidth] === value) {
+            var values = this.$uiValues;
+            if (values[UIValues.maxWidth] === value) {
                 return;
             }
-            values[UIComponentValues.maxWidth] = value;
+            values[UIValues.maxWidth] = value;
             this.invalidateSize();
             this.invalidateParentSizeAndDisplayList();
         }
@@ -419,16 +404,16 @@ module lark.player {
          * 组件的最小高度,此属性设置为大于maxHeight的值时无效。同时影响测量和自动布局的尺寸。
          */
         public get minHeight():number {
-            return this.$uiComponentValues[UIComponentValues.minHeight];
+            return this.$uiValues[UIValues.minHeight];
         }
 
         public set minHeight(value:number) {
             value = +value || 0;
-            var values = this.$uiComponentValues;
-            if (values[UIComponentValues.minHeight] === value) {
+            var values = this.$uiValues;
+            if (values[UIValues.minHeight] === value) {
                 return;
             }
-            values[UIComponentValues.minHeight] = value;
+            values[UIValues.minHeight] = value;
             this.invalidateSize();
             this.invalidateParentSizeAndDisplayList();
         }
@@ -438,16 +423,16 @@ module lark.player {
          * 组件的最大高度,同时影响测量和自动布局的尺寸。
          */
         public get maxHeight():number {
-            return this.$uiComponentValues[UIComponentValues.maxHeight];
+            return this.$uiValues[UIValues.maxHeight];
         }
 
         public set maxHeight(value:number) {
             value = +value || 0;
-            var values = this.$uiComponentValues;
-            if (values[UIComponentValues.maxHeight] === value) {
+            var values = this.$uiValues;
+            if (values[UIValues.maxHeight] === value) {
                 return;
             }
-            values[UIComponentValues.maxHeight] = value;
+            values[UIValues.maxHeight] = value;
             this.invalidateSize();
             this.invalidateParentSizeAndDisplayList();
         }
@@ -456,14 +441,14 @@ module lark.player {
          * 组件的测量宽度（以像素为单位）。此值由 measure() 方法设置。
          */
         public get measuredWidth():number {
-            return this.$uiComponentValues[UIComponentValues.measuredWidth];
+            return this.$uiValues[UIValues.measuredWidth];
         }
 
         /**
          * 组件的默认高度（以像素为单位）。此值由 measure() 方法设置。
          */
         public get measuredHeight():number {
-            return this.$uiComponentValues[UIComponentValues.measuredHeight];
+            return this.$uiValues[UIValues.measuredHeight];
         }
 
         /**
@@ -472,9 +457,9 @@ module lark.player {
          * @param height 测量高度
          */
         public setMeasuredSize(width:number, height:number):void {
-            var values = this.$uiComponentValues;
-            values[UIComponentValues.measuredWidth] = Math.ceil(+width || 0);
-            values[UIComponentValues.measuredHeight] = Math.ceil(+height || 0);
+            var values = this.$uiValues;
+            values[UIValues.measuredWidth] = Math.ceil(+width || 0);
+            values[UIValues.measuredHeight] = Math.ceil(+height || 0);
         }
 
 
@@ -484,25 +469,23 @@ module lark.player {
          */
         private setActualSize(w:number, h:number):void {
             var change = false;
-            var values = this.$uiComponentValues;
-            if (values[UIComponentValues.width] !== w) {
-                values[UIComponentValues.width] = w;
+            var values = this.$uiValues;
+            if (values[UIValues.width] !== w) {
+                values[UIValues.width] = w;
                 change = true;
             }
-            if (values[UIComponentValues.height] !== h) {
-                values[UIComponentValues.height] = h;
+            if (values[UIValues.height] !== h) {
+                values[UIValues.height] = h;
                 change = true;
             }
             if (change) {
                 this.invalidateDisplayList();
-                this.emitResizeEvent();
             }
         }
 
         $setX(value:number):boolean {
             var change = super.$setX(value);
             if (change) {
-                this.invalidateProperties();
                 this.invalidateParentSizeAndDisplayList();
             }
             return change;
@@ -511,7 +494,6 @@ module lark.player {
         $setY(value:number):boolean {
             var change = super.$setY(value);
             if (change) {
-                this.invalidateProperties();
                 this.invalidateParentSizeAndDisplayList();
             }
             return change;
@@ -573,29 +555,29 @@ module lark.player {
             if (!this.$hasFlags(UIComponentFlags.InvalidateSizeFlag))
                 return changed;
 
-            var values = this.$uiComponentValues;
-            if (isNone(values[UIComponentValues.explicitWidth]) || isNone(values[UIComponentValues.explicitHeight])) {
+            var values = this.$uiValues;
+            if (isNone(values[UIValues.explicitWidth]) || isNone(values[UIValues.explicitHeight])) {
                 this.measure();
 
-                if (values[UIComponentValues.measuredWidth] < values[UIComponentValues.minWidth]) {
-                    values[UIComponentValues.measuredWidth] = values[UIComponentValues.minWidth];
+                if (values[UIValues.measuredWidth] < values[UIValues.minWidth]) {
+                    values[UIValues.measuredWidth] = values[UIValues.minWidth];
                 }
-                if (values[UIComponentValues.measuredWidth] > values[UIComponentValues.maxWidth]) {
-                    values[UIComponentValues.measuredWidth] = values[UIComponentValues.maxWidth];
+                if (values[UIValues.measuredWidth] > values[UIValues.maxWidth]) {
+                    values[UIValues.measuredWidth] = values[UIValues.maxWidth];
                 }
-                if (values[UIComponentValues.measuredHeight] < values[UIComponentValues.minHeight]) {
-                    values[UIComponentValues.measuredHeight] = values[UIComponentValues.minHeight];
+                if (values[UIValues.measuredHeight] < values[UIValues.minHeight]) {
+                    values[UIValues.measuredHeight] = values[UIValues.minHeight];
                 }
-                if (values[UIComponentValues.measuredHeight] > values[UIComponentValues.maxHeight]) {
-                    values[UIComponentValues.measuredHeight] = values[UIComponentValues.maxHeight]
+                if (values[UIValues.measuredHeight] > values[UIValues.maxHeight]) {
+                    values[UIValues.measuredHeight] = values[UIValues.maxHeight]
                 }
             }
             var preferredW = this.getPreferredUWidth();
             var preferredH = this.getPreferredUHeight();
-            if (preferredW !== values[UIComponentValues.oldPreferWidth] ||
-                preferredH !== values[UIComponentValues.oldPreferHeight]) {
-                values[UIComponentValues.oldPreferWidth] = preferredW;
-                values[UIComponentValues.oldPreferHeight] = preferredH;
+            if (preferredW !== values[UIValues.oldPreferWidth] ||
+                preferredH !== values[UIValues.oldPreferHeight]) {
+                values[UIValues.oldPreferWidth] = preferredW;
+                values[UIValues.oldPreferHeight] = preferredH;
                 changed = true;
             }
             return changed;
@@ -619,24 +601,24 @@ module lark.player {
             if (this.$hasFlags(UIComponentFlags.InvalidateDisplayListFlag)) {
                 var unscaledWidth:number = 0;
                 var unscaledHeight:number = 0;
-                var values = this.$uiComponentValues;
+                var values = this.$uiValues;
                 if (this.$hasFlags(UIComponentFlags.LayoutWidthExplicitlySet)) {
-                    unscaledWidth = values[UIComponentValues.width];
+                    unscaledWidth = values[UIValues.width];
                 }
-                else if (!isNone(values[UIComponentValues.explicitWidth])) {
-                    unscaledWidth = values[UIComponentValues.explicitWidth];
+                else if (!isNone(values[UIValues.explicitWidth])) {
+                    unscaledWidth = values[UIValues.explicitWidth];
                 }
                 else {
-                    unscaledWidth = values[UIComponentValues.measuredWidth];
+                    unscaledWidth = values[UIValues.measuredWidth];
                 }
                 if (this.$hasFlags(UIComponentFlags.LayoutHeightExplicitlySet)) {
-                    unscaledHeight = values[UIComponentValues.height];
+                    unscaledHeight = values[UIValues.height];
                 }
-                else if (!isNone(values[UIComponentValues.explicitHeight])) {
-                    unscaledHeight = values[UIComponentValues.explicitHeight];
+                else if (!isNone(values[UIValues.explicitHeight])) {
+                    unscaledHeight = values[UIValues.explicitHeight];
                 }
                 else {
-                    unscaledHeight = values[UIComponentValues.measuredHeight];
+                    unscaledHeight = values[UIValues.measuredHeight];
                 }
                 this.setActualSize(unscaledWidth, unscaledHeight);
                 this.updateDisplayList(unscaledWidth, unscaledHeight);
@@ -664,40 +646,16 @@ module lark.player {
         }
 
         /**
-         *  抛出移动事件
-         */
-        private emitMoveEvent():void {
-            var values = this.$uiComponentValues;
-            if (this.hasListener(gui.MoveEvent.MOVE)) {
-                gui.MoveEvent.emitMoveEvent(this, values[UIComponentValues.oldX], values[UIComponentValues.oldY]);
-            }
-            values[UIComponentValues.oldX] = this.$getX();
-            values[UIComponentValues.oldY] = this.$getY();
-        }
-
-        /**
-         *  抛出尺寸改变事件
-         */
-        private emitResizeEvent():void {
-            var values = this.$uiComponentValues;
-            if (this.hasListener(gui.ResizeEvent.RESIZE)) {
-                gui.ResizeEvent.emitResizeEvent(this, values[UIComponentValues.oldWidth], values[UIComponentValues.oldHeight]);
-            }
-            values[UIComponentValues.oldWidth] = values[UIComponentValues.width];
-            values[UIComponentValues.oldHeight] = values[UIComponentValues.height];
-        }
-
-        /**
          * 设置组件的布局宽高
          */
         public setLayoutBoundsSize(layoutWidth:number, layoutHeight:number):void {
             layoutHeight = +layoutHeight || 0;
             layoutWidth = +layoutWidth || 0;
-            var values = this.$uiComponentValues;
-            var maxWidth = values[UIComponentValues.maxWidth];
-            var maxHeight = values[UIComponentValues.maxHeight];
-            var minWidth = Math.min(values[UIComponentValues.minWidth], maxWidth);
-            var minHeight = Math.min(values[UIComponentValues.minHeight], maxHeight);
+            var values = this.$uiValues;
+            var maxWidth = values[UIValues.maxWidth];
+            var maxHeight = values[UIValues.maxHeight];
+            var minWidth = Math.min(values[UIValues.minWidth], maxWidth);
+            var minHeight = Math.min(values[UIValues.minHeight], maxHeight);
             var width:number;
             var height:number;
             if (isNone(layoutWidth)) {
@@ -723,7 +681,7 @@ module lark.player {
             }
 
             var fitSize = player.MatrixUtil.fitBounds(layoutWidth, layoutHeight, matrix,
-                values[UIComponentValues.explicitWidth], values[UIComponentValues.explicitHeight],
+                values[UIValues.explicitWidth], values[UIValues.explicitHeight],
                 this.getPreferredUWidth(), this.getPreferredUHeight(),
                 minWidth, minHeight, maxWidth, maxHeight);
             if (!fitSize) {
@@ -737,18 +695,14 @@ module lark.player {
          * 设置组件的布局位置
          */
         public setLayoutBoundsPosition(x:number, y:number):void {
-            var changed = false;
             var matrix = this.$getMatrix();
             if (!isDeltaIdentity(matrix.$data)) {
                 var bounds = this.getLayoutBounds($TempRectangle);
                 x += this.$getX() - bounds.x;
                 y += this.$getY() - bounds.y;
             }
-            changed = super.$setX(x);
-            changed = super.$setY(y) || changed;
-            if (changed) {
-                this.emitMoveEvent();
-            }
+            super.$setX(x);
+            super.$setY(y);
         }
 
         /**
@@ -757,41 +711,41 @@ module lark.player {
          * 注意此方法返回值已经包含scale和rotation。
          */
         public getLayoutBounds(bounds:Rectangle):Rectangle {
-            var values = this.$uiComponentValues;
+            var values = this.$uiValues;
             var w:number;
             if (this.$hasFlags(UIComponentFlags.LayoutWidthExplicitlySet)) {
-                w = values[UIComponentValues.width];
+                w = values[UIValues.width];
             }
-            else if (!isNone(values[UIComponentValues.explicitWidth])) {
-                w = values[UIComponentValues.explicitWidth];
+            else if (!isNone(values[UIValues.explicitWidth])) {
+                w = values[UIValues.explicitWidth];
             }
             else {
-                w = values[UIComponentValues.measuredWidth];
+                w = values[UIValues.measuredWidth];
             }
             var h:number;
             if (this.$hasFlags(UIComponentFlags.LayoutHeightExplicitlySet)) {
-                h = values[UIComponentValues.height];
+                h = values[UIValues.height];
             }
-            else if (!isNone(values[UIComponentValues.explicitHeight])) {
-                h = values[UIComponentValues.explicitHeight];
+            else if (!isNone(values[UIValues.explicitHeight])) {
+                h = values[UIValues.explicitHeight];
             }
             else {
-                h = values[UIComponentValues.measuredHeight];
+                h = values[UIValues.measuredHeight];
             }
             return this.applyMatrix(bounds, w, h);
         }
 
 
         private getPreferredUWidth():number {
-            var values = this.$uiComponentValues;
-            return isNone(values[UIComponentValues.explicitWidth]) ?
-                values[UIComponentValues.measuredWidth] : values[UIComponentValues.explicitWidth];
+            var values = this.$uiValues;
+            return isNone(values[UIValues.explicitWidth]) ?
+                values[UIValues.measuredWidth] : values[UIValues.explicitWidth];
         }
 
         private getPreferredUHeight():number {
-            var values = this.$uiComponentValues;
-            return isNone(values[UIComponentValues.explicitHeight]) ?
-                values[UIComponentValues.measuredHeight] : values[UIComponentValues.explicitHeight];
+            var values = this.$uiValues;
+            return isNone(values[UIValues.explicitHeight]) ?
+                values[UIValues.measuredHeight] : values[UIValues.explicitHeight];
         }
 
         /**

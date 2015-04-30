@@ -59,7 +59,7 @@ module lark.gui {
         // */
         // protected measure():void;
 
-        $uiComponentValues:Float64Array;
+        $uiValues:Float64Array;
 
         $includeInLayout:boolean;
 
@@ -225,8 +225,7 @@ module lark.player {
 
     export function UIComponent():void {
         this.$includeInLayout = true;
-        this.$uiComponentValues = new Float64Array([
-            lark.NONE,
+        this.$uiValues = new Float64Array([
             lark.NONE,
             lark.NONE,
             lark.NONE,
@@ -238,7 +237,6 @@ module lark.player {
             lark.NONE,
             lark.NONE,
             0,
-            lark.NONE,
             0,
             0,
             100000,
@@ -248,8 +246,8 @@ module lark.player {
             0,
             lark.NONE,
             lark.NONE,
-            lark.NONE,
-            lark.NONE,
+            0,
+            0
         ]);
         this.createChildren();
     }
@@ -259,32 +257,6 @@ module lark.player {
      */
     export function implementUIComponent(componentClass:any, _super:any):void {
         var prototype = componentClass.prototype;
-
-        var commitProperties = prototype.commitProperties;
-        /**
-         * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
-         */
-        prototype.commitProperties = function () {
-            var values = this.$uiComponentValues;
-            if (values[10 /* oldWidth */] != values[11 /* width */] || values[12 /* oldHeight */] != values[13 /* height */]) {
-                this.emitResizeEvent();
-            }
-            if (values[20 /* oldX */] != this.$getX() || values[21 /* oldY */] != this.$getY()) {
-                this.emitMoveEvent();
-            }
-            commitProperties();
-        };
-
-        var measure = prototype.measure;
-        /**
-         * 测量组件尺寸
-         */
-        prototype.measure = function () {
-            var values = this.$uiComponentValues;
-            values[19 /* measuredHeight */] = 0;
-            values[18 /* measuredWidth */] = 0;
-            measure();
-        };
 
         Object.defineProperty(prototype, "includeInLayout", {
             /**
@@ -329,11 +301,11 @@ module lark.player {
              * 距父级容器离左边距离
              */
             get: function () {
-                return this.$uiComponentValues[0 /* left */];
+                return this.$uiValues[0 /* left */];
             },
             set: function (value) {
                 value = +value || 0;
-                var values = this.$uiComponentValues;
+                var values = this.$uiValues;
                 if (values[0 /* left */] === value)
                     return;
                 values[0 /* left */] = value;
@@ -347,11 +319,11 @@ module lark.player {
              * 距父级容器右边距离
              */
             get: function () {
-                return this.$uiComponentValues[1 /* right */];
+                return this.$uiValues[1 /* right */];
             },
             set: function (value) {
                 value = +value || 0;
-                var values = this.$uiComponentValues;
+                var values = this.$uiValues;
                 if (values[1 /* right */] === value)
                     return;
                 values[1 /* right */] = value;
@@ -365,11 +337,11 @@ module lark.player {
              * 距父级容器顶部距离
              */
             get: function () {
-                return this.$uiComponentValues[2 /* top */];
+                return this.$uiValues[2 /* top */];
             },
             set: function (value) {
                 value = +value || 0;
-                var values = this.$uiComponentValues;
+                var values = this.$uiValues;
                 if (values[2 /* top */] === value)
                     return;
                 values[2 /* top */] = value;
@@ -383,11 +355,11 @@ module lark.player {
              * 距父级容器底部距离
              */
             get: function () {
-                return this.$uiComponentValues[3 /* bottom */];
+                return this.$uiValues[3 /* bottom */];
             },
             set: function (value) {
                 value = +value || 0;
-                var values = this.$uiComponentValues;
+                var values = this.$uiValues;
                 if (values[3 /* bottom */] == value)
                     return;
                 values[3 /* bottom */] = value;
@@ -401,11 +373,11 @@ module lark.player {
              * 在父级容器中距水平中心位置的距离
              */
             get: function () {
-                return this.$uiComponentValues[4 /* horizontalCenter */];
+                return this.$uiValues[4 /* horizontalCenter */];
             },
             set: function (value) {
                 value = +value || 0;
-                var values = this.$uiComponentValues;
+                var values = this.$uiValues;
                 if (values[4 /* horizontalCenter */] === value)
                     return;
                 values[4 /* horizontalCenter */] = value;
@@ -419,11 +391,11 @@ module lark.player {
              * 在父级容器中距竖直中心位置的距离
              */
             get: function () {
-                return this.$uiComponentValues[5 /* verticalCenter */];
+                return this.$uiValues[5 /* verticalCenter */];
             },
             set: function (value) {
                 value = +value || 0;
-                var values = this.$uiComponentValues;
+                var values = this.$uiValues;
                 if (values[5 /* verticalCenter */] === value)
                     return;
                 values[5 /* verticalCenter */] = value;
@@ -437,11 +409,11 @@ module lark.player {
              * 相对父级容器宽度的百分比
              */
             get: function () {
-                return this.$uiComponentValues[6 /* percentWidth */];
+                return this.$uiValues[6 /* percentWidth */];
             },
             set: function (value) {
                 value = +value || 0;
-                var values = this.$uiComponentValues;
+                var values = this.$uiValues;
                 if (values[6 /* percentWidth */] === value)
                     return;
                 values[6 /* percentWidth */] = value;
@@ -455,11 +427,11 @@ module lark.player {
              * 相对父级容器高度的百分比
              */
             get: function () {
-                return this.$uiComponentValues[7 /* percentHeight */];
+                return this.$uiValues[7 /* percentHeight */];
             },
             set: function (value) {
                 value = +value || 0;
-                var values = this.$uiComponentValues;
+                var values = this.$uiValues;
                 if (values[7 /* percentHeight */] === value)
                     return;
                 values[7 /* percentHeight */] = value;
@@ -473,7 +445,7 @@ module lark.player {
              * 外部显式指定的宽度
              */
             get: function () {
-                return this.$uiComponentValues[8 /* explicitWidth */];
+                return this.$uiValues[8 /* explicitWidth */];
             },
             enumerable: true,
             configurable: true
@@ -483,7 +455,7 @@ module lark.player {
              * 外部显式指定的高度
              */
             get: function () {
-                return this.$uiComponentValues[9 /* explicitHeight */];
+                return this.$uiValues[9 /* explicitHeight */];
             },
             enumerable: true,
             configurable: true
@@ -493,18 +465,17 @@ module lark.player {
              * 组件宽度,默认值为lark.NONE,设置为lark.NONE将使用组件的measure()方法自动计算尺寸
              */
             get: function () {
-                return this.$uiComponentValues[11 /* width */];
+                return this.$uiValues[10 /* width */];
             },
             set: function (value) {
                 value = +value || 0;
-                var values = this.$uiComponentValues;
-                if (values[11 /* width */] === value && values[8 /* explicitWidth */] === value)
+                var values = this.$uiValues;
+                if (values[10 /* width */] === value && values[8 /* explicitWidth */] === value)
                     return;
-                values[11 /* width */] = value;
+                values[10 /* width */] = value;
                 values[8 /* explicitWidth */] = value;
                 if (lark.isNone(value))
                     this.invalidateSize();
-                this.invalidateProperties();
                 this.invalidateDisplayList();
                 this.invalidateParentSizeAndDisplayList();
             },
@@ -516,18 +487,17 @@ module lark.player {
              * 组件高度,默认值为NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
              */
             get: function () {
-                return this.$uiComponentValues[13 /* height */];
+                return this.$uiValues[11 /* height */];
             },
             set: function (value) {
                 value = +value || 0;
-                var values = this.$uiComponentValues;
-                if (values[13 /* height */] === value && values[9 /* explicitHeight */] === value)
+                var values = this.$uiValues;
+                if (values[11 /* height */] === value && values[9 /* explicitHeight */] === value)
                     return;
-                values[13 /* height */] = value;
+                values[11 /* height */] = value;
                 values[8 /* explicitWidth */] = value;
                 if (isNaN(value))
                     this.invalidateSize();
-                this.invalidateProperties();
                 this.invalidateDisplayList();
                 this.invalidateParentSizeAndDisplayList();
             },
@@ -553,15 +523,15 @@ module lark.player {
              * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
              */
             get: function () {
-                return this.$uiComponentValues[14 /* minWidth */];
+                return this.$uiValues[12 /* minWidth */];
             },
             set: function (value) {
                 value = +value || 0;
-                var values = this.$uiComponentValues;
-                if (values[14 /* minWidth */] === value) {
+                var values = this.$uiValues;
+                if (values[12 /* minWidth */] === value) {
                     return;
                 }
-                values[14 /* minWidth */] = value;
+                values[12 /* minWidth */] = value;
                 this.invalidateSize();
                 this.invalidateParentSizeAndDisplayList();
             },
@@ -573,15 +543,15 @@ module lark.player {
              * 组件的最大高度。同时影响测量和自动布局的尺寸。
              */
             get: function () {
-                return this.$uiComponentValues[15 /* maxWidth */];
+                return this.$uiValues[13 /* maxWidth */];
             },
             set: function (value) {
                 value = +value || 0;
-                var values = this.$uiComponentValues;
-                if (values[15 /* maxWidth */] === value) {
+                var values = this.$uiValues;
+                if (values[13 /* maxWidth */] === value) {
                     return;
                 }
-                values[15 /* maxWidth */] = value;
+                values[13 /* maxWidth */] = value;
                 this.invalidateSize();
                 this.invalidateParentSizeAndDisplayList();
             },
@@ -593,15 +563,15 @@ module lark.player {
              * 组件的最小高度,此属性设置为大于maxHeight的值时无效。同时影响测量和自动布局的尺寸。
              */
             get: function () {
-                return this.$uiComponentValues[16 /* minHeight */];
+                return this.$uiValues[14 /* minHeight */];
             },
             set: function (value) {
                 value = +value || 0;
-                var values = this.$uiComponentValues;
-                if (values[16 /* minHeight */] === value) {
+                var values = this.$uiValues;
+                if (values[14 /* minHeight */] === value) {
                     return;
                 }
-                values[16 /* minHeight */] = value;
+                values[14 /* minHeight */] = value;
                 this.invalidateSize();
                 this.invalidateParentSizeAndDisplayList();
             },
@@ -613,15 +583,15 @@ module lark.player {
              * 组件的最大高度,同时影响测量和自动布局的尺寸。
              */
             get: function () {
-                return this.$uiComponentValues[17 /* maxHeight */];
+                return this.$uiValues[15 /* maxHeight */];
             },
             set: function (value) {
                 value = +value || 0;
-                var values = this.$uiComponentValues;
-                if (values[17 /* maxHeight */] === value) {
+                var values = this.$uiValues;
+                if (values[15 /* maxHeight */] === value) {
                     return;
                 }
-                values[17 /* maxHeight */] = value;
+                values[15 /* maxHeight */] = value;
                 this.invalidateSize();
                 this.invalidateParentSizeAndDisplayList();
             },
@@ -633,7 +603,7 @@ module lark.player {
              * 组件的测量宽度（以像素为单位）。此值由 measure() 方法设置。
              */
             get: function () {
-                return this.$uiComponentValues[18 /* measuredWidth */];
+                return this.$uiValues[16 /* measuredWidth */];
             },
             enumerable: true,
             configurable: true
@@ -643,7 +613,7 @@ module lark.player {
              * 组件的默认高度（以像素为单位）。此值由 measure() 方法设置。
              */
             get: function () {
-                return this.$uiComponentValues[19 /* measuredHeight */];
+                return this.$uiValues[17 /* measuredHeight */];
             },
             enumerable: true,
             configurable: true
@@ -654,9 +624,9 @@ module lark.player {
          * @param height 测量高度
          */
         prototype.setMeasuredSize = function (width, height) {
-            var values = this.$uiComponentValues;
-            values[18 /* measuredWidth */] = Math.ceil(+width || 0);
-            values[19 /* measuredHeight */] = Math.ceil(+height || 0);
+            var values = this.$uiValues;
+            values[16 /* measuredWidth */] = Math.ceil(+width || 0);
+            values[17 /* measuredHeight */] = Math.ceil(+height || 0);
         };
         /**
          * 设置组件的宽高。此方法不同于直接设置width,height属性，
@@ -664,24 +634,22 @@ module lark.player {
          */
         prototype.setActualSize = function (w, h) {
             var change = false;
-            var values = this.$uiComponentValues;
-            if (values[11 /* width */] !== w) {
-                values[11 /* width */] = w;
+            var values = this.$uiValues;
+            if (values[10 /* width */] !== w) {
+                values[10 /* width */] = w;
                 change = true;
             }
-            if (values[13 /* height */] !== h) {
-                values[13 /* height */] = h;
+            if (values[11 /* height */] !== h) {
+                values[11 /* height */] = h;
                 change = true;
             }
             if (change) {
                 this.invalidateDisplayList();
-                this.emitResizeEvent();
             }
         };
         prototype.$setX = function (value) {
             var change = _super.prototype.$setX.call(this, value);
             if (change) {
-                this.invalidateProperties();
                 this.invalidateParentSizeAndDisplayList();
             }
             return change;
@@ -689,7 +657,6 @@ module lark.player {
         prototype.$setY = function (value) {
             var change = _super.prototype.$setY.call(this, value);
             if (change) {
-                this.invalidateProperties();
                 this.invalidateParentSizeAndDisplayList();
             }
             return change;
@@ -743,27 +710,27 @@ module lark.player {
             var changed = false;
             if (!this.$hasFlags(262144 /* InvalidateSizeFlag */))
                 return changed;
-            var values = this.$uiComponentValues;
+            var values = this.$uiValues;
             if (lark.isNone(values[8 /* explicitWidth */]) || lark.isNone(values[9 /* explicitHeight */])) {
                 this.measure();
-                if (values[18 /* measuredWidth */] < values[14 /* minWidth */]) {
-                    values[18 /* measuredWidth */] = values[14 /* minWidth */];
+                if (values[16 /* measuredWidth */] < values[12 /* minWidth */]) {
+                    values[16 /* measuredWidth */] = values[12 /* minWidth */];
                 }
-                if (values[18 /* measuredWidth */] > values[15 /* maxWidth */]) {
-                    values[18 /* measuredWidth */] = values[15 /* maxWidth */];
+                if (values[16 /* measuredWidth */] > values[13 /* maxWidth */]) {
+                    values[16 /* measuredWidth */] = values[13 /* maxWidth */];
                 }
-                if (values[19 /* measuredHeight */] < values[16 /* minHeight */]) {
-                    values[19 /* measuredHeight */] = values[16 /* minHeight */];
+                if (values[17 /* measuredHeight */] < values[14 /* minHeight */]) {
+                    values[17 /* measuredHeight */] = values[14 /* minHeight */];
                 }
-                if (values[19 /* measuredHeight */] > values[17 /* maxHeight */]) {
-                    values[19 /* measuredHeight */] = values[17 /* maxHeight */];
+                if (values[17 /* measuredHeight */] > values[15 /* maxHeight */]) {
+                    values[17 /* measuredHeight */] = values[15 /* maxHeight */];
                 }
             }
             var preferredW = this.getPreferredUWidth();
             var preferredH = this.getPreferredUHeight();
-            if (preferredW !== values[22 /* oldPreferWidth */] || preferredH !== values[23 /* oldPreferHeight */]) {
-                values[22 /* oldPreferWidth */] = preferredW;
-                values[23 /* oldPreferHeight */] = preferredH;
+            if (preferredW !== values[18 /* oldPreferWidth */] || preferredH !== values[19 /* oldPreferHeight */]) {
+                values[18 /* oldPreferWidth */] = preferredW;
+                values[19 /* oldPreferHeight */] = preferredH;
                 changed = true;
             }
             return changed;
@@ -785,24 +752,24 @@ module lark.player {
             if (this.$hasFlags(524288 /* InvalidateDisplayListFlag */)) {
                 var unscaledWidth = 0;
                 var unscaledHeight = 0;
-                var values = this.$uiComponentValues;
+                var values = this.$uiValues;
                 if (this.$hasFlags(1048576 /* LayoutWidthExplicitlySet */)) {
-                    unscaledWidth = values[11 /* width */];
+                    unscaledWidth = values[10 /* width */];
                 }
                 else if (!lark.isNone(values[8 /* explicitWidth */])) {
                     unscaledWidth = values[8 /* explicitWidth */];
                 }
                 else {
-                    unscaledWidth = values[18 /* measuredWidth */];
+                    unscaledWidth = values[16 /* measuredWidth */];
                 }
                 if (this.$hasFlags(2097152 /* LayoutHeightExplicitlySet */)) {
-                    unscaledHeight = values[13 /* height */];
+                    unscaledHeight = values[11 /* height */];
                 }
                 else if (!lark.isNone(values[9 /* explicitHeight */])) {
                     unscaledHeight = values[9 /* explicitHeight */];
                 }
                 else {
-                    unscaledHeight = values[19 /* measuredHeight */];
+                    unscaledHeight = values[17 /* measuredHeight */];
                 }
                 this.setActualSize(unscaledWidth, unscaledHeight);
                 this.updateDisplayList(unscaledWidth, unscaledHeight);
@@ -827,38 +794,16 @@ module lark.player {
             parent.invalidateDisplayList();
         };
         /**
-         *  抛出移动事件
-         */
-        prototype.emitMoveEvent = function () {
-            var values = this.$uiComponentValues;
-            if (this.hasListener(lark.gui.MoveEvent.MOVE)) {
-                lark.gui.MoveEvent.emitMoveEvent(this, values[20 /* oldX */], values[21 /* oldY */]);
-            }
-            values[20 /* oldX */] = this.$getX();
-            values[21 /* oldY */] = this.$getY();
-        };
-        /**
-         *  抛出尺寸改变事件
-         */
-        prototype.emitResizeEvent = function () {
-            var values = this.$uiComponentValues;
-            if (this.hasListener(lark.gui.ResizeEvent.RESIZE)) {
-                lark.gui.ResizeEvent.emitResizeEvent(this, values[10 /* oldWidth */], values[12 /* oldHeight */]);
-            }
-            values[10 /* oldWidth */] = values[11 /* width */];
-            values[12 /* oldHeight */] = values[13 /* height */];
-        };
-        /**
          * 设置组件的布局宽高
          */
         prototype.setLayoutBoundsSize = function (layoutWidth, layoutHeight) {
             layoutHeight = +layoutHeight || 0;
             layoutWidth = +layoutWidth || 0;
-            var values = this.$uiComponentValues;
-            var maxWidth = values[15 /* maxWidth */];
-            var maxHeight = values[17 /* maxHeight */];
-            var minWidth = Math.min(values[14 /* minWidth */], maxWidth);
-            var minHeight = Math.min(values[16 /* minHeight */], maxHeight);
+            var values = this.$uiValues;
+            var maxWidth = values[13 /* maxWidth */];
+            var maxHeight = values[15 /* maxHeight */];
+            var minWidth = Math.min(values[12 /* minWidth */], maxWidth);
+            var minHeight = Math.min(values[14 /* minHeight */], maxHeight);
             var width;
             var height;
             if (lark.isNone(layoutWidth)) {
@@ -893,18 +838,14 @@ module lark.player {
          * 设置组件的布局位置
          */
         prototype.setLayoutBoundsPosition = function (x, y) {
-            var changed = false;
             var matrix = this.$getMatrix();
             if (!isDeltaIdentity(matrix.$data)) {
                 var bounds = this.getLayoutBounds(lark.$TempRectangle);
                 x += this.$getX() - bounds.x;
                 y += this.$getY() - bounds.y;
             }
-            changed = _super.prototype.$setX.call(this, x);
-            changed = _super.prototype.$setY.call(this, y) || changed;
-            if (changed) {
-                this.emitMoveEvent();
-            }
+            _super.prototype.$setX.call(this, x);
+            _super.prototype.$setY.call(this, y);
         };
         /**
          * 组件的布局尺寸,常用于父级的updateDisplayList()方法中
@@ -912,36 +853,36 @@ module lark.player {
          * 注意此方法返回值已经包含scale和rotation。
          */
         prototype.getLayoutBounds = function (bounds) {
-            var values = this.$uiComponentValues;
+            var values = this.$uiValues;
             var w;
             if (this.$hasFlags(1048576 /* LayoutWidthExplicitlySet */)) {
-                w = values[11 /* width */];
+                w = values[10 /* width */];
             }
             else if (!lark.isNone(values[8 /* explicitWidth */])) {
                 w = values[8 /* explicitWidth */];
             }
             else {
-                w = values[18 /* measuredWidth */];
+                w = values[16 /* measuredWidth */];
             }
             var h;
             if (this.$hasFlags(2097152 /* LayoutHeightExplicitlySet */)) {
-                h = values[13 /* height */];
+                h = values[11 /* height */];
             }
             else if (!lark.isNone(values[9 /* explicitHeight */])) {
                 h = values[9 /* explicitHeight */];
             }
             else {
-                h = values[19 /* measuredHeight */];
+                h = values[17 /* measuredHeight */];
             }
             return this.applyMatrix(bounds, w, h);
         };
         prototype.getPreferredUWidth = function () {
-            var values = this.$uiComponentValues;
-            return lark.isNone(values[8 /* explicitWidth */]) ? values[18 /* measuredWidth */] : values[8 /* explicitWidth */];
+            var values = this.$uiValues;
+            return lark.isNone(values[8 /* explicitWidth */]) ? values[16 /* measuredWidth */] : values[8 /* explicitWidth */];
         };
         prototype.getPreferredUHeight = function () {
-            var values = this.$uiComponentValues;
-            return lark.isNone(values[9 /* explicitHeight */]) ? values[19 /* measuredHeight */] : values[9 /* explicitHeight */];
+            var values = this.$uiValues;
+            return lark.isNone(values[9 /* explicitHeight */]) ? values[17 /* measuredHeight */] : values[9 /* explicitHeight */];
         };
         /**
          * 获取组件的首选尺寸,常用于父级的measure()方法中

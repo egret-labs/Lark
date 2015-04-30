@@ -105,13 +105,13 @@ module lark.player {
                 continue;
             }
 
-            var values = layoutElement.$uiComponentValues;
-            var hCenter = values[player.UIComponentValues.horizontalCenter];
-            var vCenter = values[player.UIComponentValues.verticalCenter];
-            var left = values[player.UIComponentValues.left];
-            var right = values[player.UIComponentValues.right];
-            var top = values[player.UIComponentValues.top];
-            var bottom = values[player.UIComponentValues.bottom];
+            var values = layoutElement.$uiValues;
+            var hCenter = values[player.UIValues.horizontalCenter];
+            var vCenter = values[player.UIValues.verticalCenter];
+            var left = values[player.UIValues.left];
+            var right = values[player.UIValues.right];
+            var top = values[player.UIValues.top];
+            var bottom = values[player.UIValues.bottom];
 
             var extX:number;
             var extY:number;
@@ -174,15 +174,15 @@ module lark.player {
                 continue;
             }
 
-            var values = layoutElement.$uiComponentValues;
-            var hCenter = values[player.UIComponentValues.horizontalCenter];
-            var vCenter = values[player.UIComponentValues.verticalCenter];
-            var left = values[player.UIComponentValues.left];
-            var right = values[player.UIComponentValues.right];
-            var top = values[player.UIComponentValues.top];
-            var bottom = values[player.UIComponentValues.bottom];
-            var percentWidth = values[player.UIComponentValues.percentWidth];
-            var percentHeight = values[player.UIComponentValues.percentHeight];
+            var values = layoutElement.$uiValues;
+            var hCenter = values[player.UIValues.horizontalCenter];
+            var vCenter = values[player.UIValues.verticalCenter];
+            var left = values[player.UIValues.left];
+            var right = values[player.UIValues.right];
+            var top = values[player.UIValues.top];
+            var bottom = values[player.UIValues.bottom];
+            var percentWidth = values[player.UIValues.percentWidth];
+            var percentHeight = values[player.UIValues.percentHeight];
 
             var childWidth = NONE;
             var childHeight = NONE;
