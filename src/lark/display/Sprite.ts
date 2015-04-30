@@ -89,7 +89,7 @@ module lark {
             return this.$doAddChild(child, index);
         }
 
-        $doAddChild(child:DisplayObject, index:number, notifyListeners:boolean = true):DisplayObject {
+        $doAddChild(child:DisplayObject, index:number):DisplayObject {
             if (DEBUG) {
                 if (child == this) {
                     $error(1005);
@@ -122,17 +122,15 @@ module lark {
             child.$setParent(this);
             var stage:Stage = this.$stage;
             if (stage) {//当前容器在舞台
-                child.$onAddToStage(stage);
+                child.$onAddToStage(stage,this.$nestLevel+1);
 
             }
-            if (notifyListeners) {
-                child.emitWith(Event.ADDED, true);
-            }
+            child.emitWith(Event.ADDED, true);
             if (stage) {
                 var list = Sprite.$EVENT_ADD_TO_STAGE_LIST;
                 while (list.length) {
                     var childAddToStage = list.shift();
-                    if (notifyListeners && childAddToStage.$stage) {
+                    if (childAddToStage.$stage) {
                         childAddToStage.emitWith(Event.ADDED_TO_STAGE);
                     }
                 }
@@ -233,22 +231,18 @@ module lark {
             }
         }
 
-        $doRemoveChild(index:number, notifyListeners:boolean = true):DisplayObject {
+        $doRemoveChild(index:number):DisplayObject {
             index = +index | 0;
             var children = this.$children;
             var child:DisplayObject = children[index];
-            if (notifyListeners) {
-                child.emitWith(Event.REMOVED, true);
-            }
+            child.emitWith(Event.REMOVED, true);
 
             if (this.$stage) {//在舞台上
                 child.$onRemoveFromStage();
                 var list = Sprite.$EVENT_REMOVE_FROM_STAGE_LIST
                 while (list.length > 0) {
                     var childAddToStage = list.shift();
-                    if (notifyListeners) {
-                        childAddToStage.emitWith(Event.REMOVED_FROM_STAGE);
-                    }
+                    childAddToStage.emitWith(Event.REMOVED_FROM_STAGE);
                     childAddToStage.$stage = null;
                 }
             }
@@ -346,13 +340,14 @@ module lark {
             }
         }
 
-        $onAddToStage(stage:Stage):void {
-            super.$onAddToStage(stage);
+        $onAddToStage(stage:Stage,nestLevel:number):void {
+            super.$onAddToStage(stage,nestLevel);
             var children = this.$children;
             var length = children.length;
+            nestLevel++;
             for (var i = 0; i < length; i++) {
                 var child:DisplayObject = this.$children[i];
-                child.$onAddToStage(stage);
+                child.$onAddToStage(stage,nestLevel);
             }
         }
 

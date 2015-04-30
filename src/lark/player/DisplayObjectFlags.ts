@@ -34,10 +34,7 @@ module lark.player {
      */
     export const enum DisplayObjectFlags {
 
-        //DisplayObject使用的：0x1,0x2,0x4,0x8,0x10,0x20,0x40,0x80,0x100,0x200,0x400,0x800,0x1000,0x2000,0x4000,0x8000,0x10000
-        // 未使用的：
-        // 0x20000000,0x40000000,0x80000000,0x100000000,0x200000000,0x400000000,0x800000000,0x1000000000,0x2000000000,
-        // 0x4000000000,0x8000000000,0x10000000000,0x20000000000,0x40000000000,0x80000000000,0x100000000000,0x200000000000
+        //DisplayObject剩余可用的：
 
         /**
          * 显示对象是否开启像素级精确碰撞，开启后显示对象的透明区域将可以穿透，Graphics默认开启此功能，。
@@ -119,12 +116,14 @@ module lark.player {
 
 
     export const enum TextFieldFlags {
-        // 可用
-        // 0x100000,0x200000,0x400000,0x800000,0x1000000,0x2000000,0x4000000,0x8000000,0x10000000,
+        // TextFiled剩余可用
+        // 0x8000,0x10000
 
-        LineDirty = 0x20000,
-        IsHeightSet = 0x40000,
-        IsWidthSet = 0x80000
+        LineDirty = 0x1000,
+        IsHeightSet = 0x2000,
+        IsWidthSet = 0x4000
     }
+
+
 
 }

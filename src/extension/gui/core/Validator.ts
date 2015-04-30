@@ -294,7 +294,7 @@ module lark.gui {
         /**
          * 深度队列
          */
-        private depthBins:Array<any> = [];
+        private depthBins:any = {};
 
         /**
          * 最小深度
@@ -311,7 +311,7 @@ module lark.gui {
          */
         public insert(client:UIComponent):void {
             var depth:number = client.$nestLevel;
-            var hashCode:number = client.hashCode;
+            var hashCode:number = client.$hashCode;
             if (this.maxDepth < this.minDepth) {
                 this.minDepth = this.maxDepth = depth;
             }
@@ -325,8 +325,7 @@ module lark.gui {
             var bin:DepthBin = this.depthBins[depth];
 
             if (!bin) {
-                bin = new DepthBin();
-                this.depthBins[depth] = bin;
+                bin = this.depthBins[depth] = new DepthBin();;
                 bin.items[hashCode] = client;
                 bin.length++;
             }
@@ -410,7 +409,7 @@ module lark.gui {
         public removeLargestChild(client:UIComponent):any {
             var max:number = this.maxDepth;
             var min:number = client.$nestLevel;
-            var hashCode:number = client.hashCode;
+            var hashCode:number = client.$hashCode;
             while (min <= max) {
                 var bin:DepthBin = this.depthBins[max];
                 if (bin && bin.length > 0) {
@@ -451,7 +450,7 @@ module lark.gui {
          */
         public removeSmallestChild(client:UIComponent):any {
             var min:number = client.$nestLevel;
-            var hashCode:number = client.hashCode;
+            var hashCode:number = client.$hashCode;
             while (min <= this.maxDepth) {
                 var bin:DepthBin = this.depthBins[min];
                 if (bin && bin.length > 0) {
@@ -492,7 +491,7 @@ module lark.gui {
          */
         public remove(client:UIComponent, level:number = -1):UIComponent {
             var depth:number = (level >= 0) ? level : client.$nestLevel;
-            var hashCode:number = client.hashCode;
+            var hashCode:number = client.$hashCode;
             var bin:DepthBin = this.depthBins[depth];
             if (bin && bin.items[hashCode] != null) {
                 delete bin.items[hashCode];

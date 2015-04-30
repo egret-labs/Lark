@@ -65,10 +65,12 @@
     <script src="lark/text/TextSpan.js"></script>
     <script src="lark/text/TextField.js"></script>
 
+    <script src="extension/gui/i18n/zh_CN.js"></script>
     <script src="extension/gui/utils/NONE.js"></script>
     <script src="extension/gui/utils/MatrixUtil.js"></script>
     <script src="extension/gui/core/UIComponent.js"></script>
     <script src="extension/gui/core/validator.js"></script>
+    <script src="extension/gui/components/Group.js"></script>
     <script src="extension/gui/events/MoveEvent.js"></script>
     <script src="extension/gui/events/ResizeEvent.js"></script>
     <script src="extension/gui/events/UIEvent.js"></script>
@@ -99,7 +101,7 @@
 <body>
 <div id="lark-sample" style="margin: auto;width: 100%;height: 100%;" class="lark-player"
      data-entry-class="lark.Main" data-scale-mode="fixedHeight" data-content-width="480" data-content-height="800"
-     data-show-paint-rects="false">
+     data-show-paint-rects="true">
 </div>
 <script>
     var entryClass = location.search && location.search.match("main=(.+)") ? location.search.match("main=(.+)")[1] : "lark.Main";

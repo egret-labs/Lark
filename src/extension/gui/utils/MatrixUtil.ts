@@ -32,6 +32,10 @@ module lark.player {
     var SOLUTION_TOLERANCE = 0.1;
     var MIN_MAX_TOLERANCE = 0.1;
 
+    const enum M {
+        a, b, c, d, tx, ty
+    }
+
     export class MatrixUtil {
 
         public static fitBounds(width:number, height:number, matrix:Matrix,
@@ -185,8 +189,9 @@ module lark.player {
                                            minY:number,
                                            maxX:number,
                                            maxY:number):Point {
-        var b = matrix.b;
-        var d = matrix.d;
+        var m = matrix.$data;
+        var b = m[M.b];
+        var d = m[M.d];
 
         if (-1.0e-9 < b && b < +1.0e-9)
             b = 0;
@@ -252,8 +257,8 @@ module lark.player {
         if (s)
             return s;
 
-        var a = matrix.a;
-        var c = matrix.c;
+        var a = m[M.a];
+        var c = m[M.c];
         var c1 = ( a * c >= 0 ) ? c : -c;
         return solveEquation(b, d1, h, minX, minY, maxX, maxY, a, c1);
     }
@@ -267,8 +272,9 @@ module lark.player {
                                           maxX:number,
                                           maxY:number):Point {
 
-        var a = matrix.a;
-        var c = matrix.c;
+        var m = matrix.$data;
+        var a = m[M.a];
+        var c = m[M.c];
 
         if (-1.0e-9 < a && a < +1.0e-9)
             a = 0;
@@ -331,8 +337,8 @@ module lark.player {
         if (s)
             return s;
 
-        var b = matrix.b;
-        var d = matrix.d;
+        var b = m[M.b];
+        var d = m[M.d];
         var d1 = (b * d >= 0) ? d : -d;
         return solveEquation(a, c1, w, minX, minY, maxX, maxY, b, d1);
     }
@@ -402,10 +408,11 @@ module lark.player {
                                      maxX:number,
                                      maxY:number):Point {
 
-        var a = matrix.a;
-        var b = matrix.b;
-        var c = matrix.c;
-        var d = matrix.d;
+        var m = matrix.$data;
+        var a = m[M.a];
+        var b = m[M.b];
+        var c = m[M.c];
+        var d = m[M.d];
 
         if (-1.0e-9 < a && a < +1.0e-9)
             a = 0;

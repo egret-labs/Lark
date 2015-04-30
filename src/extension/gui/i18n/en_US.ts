@@ -26,19 +26,11 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
+module lark.gui {
 
-module lark {
-    /**
-     * 数值默认值。通常用于标识一个数字属性未被显式设置。例如对UIComponent.right赋值None，将会取消右对齐。
-     * 这里不直接使用NaN，是由于isNaN()方法有严重的性能问题。
-     */
-    export var NONE = 0x8000000;
+    $locale_strings = $locale_strings||{};
+    var locale_strings = $locale_strings;
 
-    /**
-     * 判断数字是否为NONE
-     * @param value 要判断的数字
-     */
-    export function isNone(value:number):boolean{
-        return value===NONE;
-    }
+    locale_strings[2001] = "BasicLayout doesn't support virtualization.";
+
 }

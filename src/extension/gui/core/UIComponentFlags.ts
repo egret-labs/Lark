@@ -27,18 +27,33 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
-    /**
-     * 数值默认值。通常用于标识一个数字属性未被显式设置。例如对UIComponent.right赋值None，将会取消右对齐。
-     * 这里不直接使用NaN，是由于isNaN()方法有严重的性能问题。
-     */
-    export var NONE = 0x8000000;
+module lark.player {
 
-    /**
-     * 判断数字是否为NONE
-     * @param value 要判断的数字
-     */
-    export function isNone(value:number):boolean{
-        return value===NONE;
+    //UIComponent剩余可用的：
+    // 0x400000,0x800000,0x1000000,0x2000000,0x4000000,0x8000000,0x10000000,
+    // 0x20000000,0x40000000,0x80000000,0x100000000,0x200000000,0x400000000,0x800000000,0x1000000000,0x2000000000,
+    // 0x4000000000,0x8000000000,0x10000000000,0x20000000000,0x40000000000,0x80000000000,0x100000000000,0x200000000000
+
+    export const enum UIComponentFlags{
+        /**
+         * 属性失效标志
+         */
+        InvalidatePropertiesFlag = 0x20000,
+        /**
+         * 尺寸失效标志
+         */
+        InvalidateSizeFlag = 0x40000,
+        /**
+         * 布局失效标志
+         */
+        InvalidateDisplayListFlag = 0x80000,
+        /**
+         * 布局宽度被显式设置的标记
+         */
+        LayoutWidthExplicitlySet = 0x100000,
+        /**
+         * 布局高度被显式设置的标记
+         */
+        LayoutHeightExplicitlySet = 0x200000
     }
 }
