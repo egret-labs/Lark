@@ -128,7 +128,7 @@ module lark {
             for (var i = 0; i < length; i++)
             {
                 var line = renderLines[i];
-                width = Math.max(width, line.width);
+                width = Math.max(width, line.x + line.width);
                 if (i == length - 1)
                     height = line.y + line.height;
             }
