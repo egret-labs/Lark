@@ -339,21 +339,6 @@ module lark {
             }
         }
 
-        /**
-         * 一个子项被添加到容器内，此方法不仅在操作addChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
-         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
-         */
-        $childAdded(child:DisplayObject,index:number):void{
-
-        }
-        /**
-         * 一个子项从容器内移除，此方法不仅在操作removeChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
-         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
-         */
-        $childRemoved(child:DisplayObject,index:number):void{
-
-        }
-
         $onAddToStage(stage:Stage,nestLevel:number):void {
             super.$onAddToStage(stage,nestLevel);
             var children = this.$children;
