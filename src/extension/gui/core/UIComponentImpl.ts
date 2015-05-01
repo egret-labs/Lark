@@ -765,13 +765,7 @@ module lark.player {
 
 
         private applyMatrix(bounds:Rectangle, w:number, h:number):Rectangle {
-            var x = 0, y = 0;
-            var scrollRect = this.$scrollRect;
-            if (scrollRect) {
-                x = scrollRect.x;
-                y = scrollRect.y;
-            }
-            var bounds = bounds.setTo(x, y, w, h);
+            var bounds = bounds.setTo(0, 0, w, h);
             var matrix = this.$getMatrix();
             var m = matrix.$data;
             if (isDeltaIdentity(m)) {

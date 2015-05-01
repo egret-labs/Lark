@@ -43,7 +43,7 @@ module lark {
     }
 
     const enum Values {
-        scaleX, scaleY, skewX, skewY, rotation, x, y
+        scaleX, scaleY, skewX, skewY, rotation
     }
 
     const enum M {
@@ -65,7 +65,7 @@ module lark {
         public constructor() {
             super();
             this.$displayObjectFlags = player.DisplayObjectFlags.InitFlags;
-            this.displayObjectValues = new Float64Array([1, 1, 0, 0, 0, 0, 0]);
+            this.displayObjectValues = new Float64Array([1, 1, 0, 0, 0]);
         }
 
         private displayObjectValues:Float64Array;
@@ -249,6 +249,10 @@ module lark {
                 if (this.$parent) {
                     this.$parent.$getConcatenatedMatrix().$preMultiplyInto(this.$getMatrix(),
                         this.$renderMatrix);
+                    var rect = this.$scrollRect;
+                    if(rect){
+                        this.$renderMatrix.$preMultiplyInto($TempMatrix.setTo(1,0,0,1,-rect.x,-rect.y),this.$renderMatrix)
+                    }
                 } else {
                     this.$renderMatrix.copyFrom(this.$getMatrix());
                 }
@@ -283,7 +287,7 @@ module lark {
         }
 
         $getX():number{
-            return this.displayObjectValues[Values.x];
+            return this._matrix.$data[M.tx];
         }
 
         public set x(value:number) {
@@ -292,15 +296,11 @@ module lark {
 
         $setX(value:number):boolean{
             value = +value || 0;
-            var values = this.displayObjectValues;
-            if (value === values[Values.x]) {
+            var values = this._matrix.$data;;
+            if (value === values[M.tx]) {
                 return false;
             }
-            values[Values.x] = value;
-            if (this.$scrollRect) {
-                value -= this.$scrollRect.x;
-            }
-            this._matrix.$data[M.tx] = value;
+            values[M.tx] = value;
             this.invalidatePosition();
             return true;
         }
@@ -315,7 +315,7 @@ module lark {
         }
 
         $getY():number{
-            return this.displayObjectValues[Values.y];
+            return this._matrix.$data[M.ty];
         }
 
         public set y(value:number) {
@@ -324,15 +324,11 @@ module lark {
 
         $setY(value:number):boolean{
             value = +value || 0;
-            var values = this.displayObjectValues;
-            if (value === values[Values.y]) {
+            var values = this._matrix.$data;
+            if (value === values[M.ty]) {
                 return false;
             }
-            values[Values.y] = value;
-            if (this.$scrollRect) {
-                value -= this.$scrollRect.y;
-            }
-            this._matrix.$data[M.ty] = value;
+            values[M.ty] = value;
             this.invalidatePosition();
             return true;
         }
@@ -630,20 +626,14 @@ module lark {
             if(!value&&!this.$scrollRect){
                 return;
             }
-            var values = this.displayObjectValues;
-            var m = this._matrix.$data;
             if (value) {
                 if (!this.$scrollRect) {
                     this.$scrollRect = new lark.Rectangle();
                 }
                 this.$scrollRect.copyFrom(value);
-                m[M.tx] = values[Values.x] - value.x;
-                m[M.ty] = values[Values.y] - value.y;
             }
             else {
                 this.$scrollRect = null;
-                m[M.tx] = values[Values.x];
-                m[M.ty] = values[Values.y];
             }
             this.invalidatePosition();
         }
