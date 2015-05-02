@@ -35,6 +35,7 @@ module lark.web {
             super();
             this._xhr = new XMLHttpRequest();
             this._xhr.onreadystatechange = this.onReadyStateChange;
+            this._xhr.onprogress = this.updateProgress
         }
 
         private _xhr:XMLHttpRequest;
@@ -72,6 +73,7 @@ module lark.web {
         }
 
         private _url:string = "";
+
         /**
          * 初始化一个请求.注意，若在已经发出请求的对象上调用此方法，相当于立即调用abort().
          * @param url 该请求所要访问的URL该请求所要访问的URL
@@ -126,18 +128,22 @@ module lark.web {
 
         private onReadyStateChange = ():void=> {
             var xhr = this._xhr;
-            if (xhr.readyState == 4)
-            {// 4 = "loaded"
-                if (xhr.status >= 400 || xhr.status == 0)
-                {//请求错误
-                    if(DEBUG&&!this.hasListener(Event.IO_ERROR)){
-                        $error(1011,this._url);
+            if (xhr.readyState == 4) {// 4 = "loaded"
+                if (xhr.status >= 400 || xhr.status == 0) {//请求错误
+                    if (DEBUG && !this.hasListener(Event.IO_ERROR)) {
+                        $error(1011, this._url);
                     }
                     this.emitWith(Event.IO_ERROR);
                 }
                 else {
                     this.emitWith(Event.COMPLETE);
                 }
+            }
+        }
+
+        private updateProgress = (event):void=> {
+            if (event.lengthComputable) {
+                ProgressEvent.emitProgressEvent(this,ProgressEvent.PROGRESS,event.loaded,event.total);
             }
         }
 

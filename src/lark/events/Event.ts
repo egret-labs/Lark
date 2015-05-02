@@ -94,9 +94,9 @@ module lark {
 
         /**
          * 创建一个作为参数传递给事件侦听器的 Event 对象。
-         * @param type {string} 事件的类型，可以作为 Event.type 访问。
-         * @param bubbles {boolean} 确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
-         * @param cancelable {boolean} 确定是否可以取消 Event 对象。默认值为 false。
+         * @param type  事件的类型，可以作为 Event.type 访问。
+         * @param bubbles  确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
+         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
          */
         public constructor(type:string, bubbles?:boolean, cancelable?:boolean) {
             super();
