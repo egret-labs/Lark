@@ -33,7 +33,7 @@ module lark {
      * HttpRequest 对象会先从 URL 中下载所有数据，然后才将数据用于应用程序中的代码。它会发出有关下载进度的通知，
      * 通过 bytesLoaded 和 bytesTotal 属性以及已调度的事件，可以监视下载进度。
      */
-    export interface HttpRequest extends IEventEmitter {
+    export interface HttpRequest extends EventEmitter {
         /**
          * 本次请求返回的数据，数据类型根据responseType设置的值确定。
          */
@@ -72,6 +72,11 @@ module lark {
          * @param header 要返回的响应头名称
          */
         getResponseHeader(header:string): string;
+
+        on(type: "complete", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        on(type: "ioError", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        on(type: "progress", listener: (event: ProgressEvent) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
     }
 
     export var HttpRequest:{ new (): HttpRequest };
