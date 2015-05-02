@@ -82,6 +82,15 @@ module lark {
          */
         public static RESIZE:string = "resize";
 
+        /**
+         * 网络请求加载完成
+         */
+        public static COMPLETE:string = "complete";
+
+        /**
+         * 输入或输出操作失败
+         */
+        public static IO_ERROR:string = "ioError";
 
         /**
          * 创建一个作为参数传递给事件侦听器的 Event 对象。

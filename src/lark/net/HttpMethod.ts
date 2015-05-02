@@ -29,18 +29,20 @@
 
 module lark {
 
-    $locale_strings = $locale_strings||{};
-    var locale_strings = $locale_strings;
+    /**
+     * HttpRequestMethod 类提供了一些值，这些值可指定在将数据发送到服务器时，
+     * HttpRequest 对象应使用 POST 方法还是 GET 方法。
+     */
+    export const enum HttpMethod {
 
-    locale_strings[1001] = "找不到Lark入口类: {0}。";
-    locale_strings[1002] = "Lark入口类 {0} 必须继承自lark.DisplayObject。";
-    locale_strings[1003] = "参数 {0} 不能为 null。";
-    locale_strings[1004] = "无法将对象添加为它的一个子对象（或子对象的子对象等）的子对象。";
-    locale_strings[1005] = "不能将对象添加为其自身的子对象。";
-    locale_strings[1006] = "提供的 DisplayObject 必须是调用者的子级。";
-    locale_strings[1007] = "为参数指定的索引不在范围内。";
-    locale_strings[1008] = "实例化单例出错，不允许实例化多个 {0} 对象。";
-    locale_strings[1009] = "Stage 类不实现此属性或方法。";
-    locale_strings[1010] = "{0} 是只读的";
-    locale_strings[1011] = "流错误。URL: {0}";
+        /**
+         * 表示 HttpRequest 对象是一个 GET。
+         */
+        GET,
+
+        /**
+         * 表示 HttpRequest 对象是一个 POST。
+         */
+        POST
+    }
 }

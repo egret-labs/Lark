@@ -132,6 +132,17 @@ module lark {
             ui.setLayoutBoundsSize(100,100);
             ui.setLayoutBoundsPosition(100,100);
             log(ui.x,ui.y,ui.width,ui.height);
+
+            var request = new HttpRequest();
+            request.open("http://httpbin.org/post",HttpMethod.POST);
+            request.responseType = HttpResponseType.TEXT;
+            request.once(Event.COMPLETE,this.onRequest,this);
+            request.send("test=ok");
+        }
+
+        private onRequest(event:Event):void{
+            var request:HttpRequest = event.target;
+            log(request.response);
         }
 
         private container:DisplayObjectContainer;

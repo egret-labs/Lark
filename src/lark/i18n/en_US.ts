@@ -41,5 +41,6 @@ module lark {
     locale_strings[1008] = "Instantiate singleton error，singleton class {0} can not create multiple instances.";
     locale_strings[1009] = "The Stage class does not implement this property or method.";
     locale_strings[1010] = "{0} is readonly";
+    locale_strings[1011] = "Socket Error. URL: {0}";
 
 }
