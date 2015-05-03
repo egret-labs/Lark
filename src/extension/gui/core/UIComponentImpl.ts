@@ -52,8 +52,8 @@ module lark.player {
         oldPreferHeight,            //NONE
         contentWidth,               //0
         contentHeight,              //0
-        horizontalScrollPosition,   //0
-        verticalScrollPosition      //0
+        scrollH,                    //0
+        scrollV                     //0
     }
 
     function isDeltaIdentity(m:Float64Array):boolean {
@@ -92,8 +92,8 @@ module lark.player {
                 NONE,       //oldPreferHeight
                 0,          //contentWidth
                 0,          //contentHeight
-                0,          //horizontalScrollPosition,
-                0           //verticalScrollPosition
+                0,          //scrollH,
+                0           //scrollV
             ]);
             this.createChildren();
         }

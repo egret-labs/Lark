@@ -98,33 +98,34 @@ module lark.gui {
         }
 
         /**
-         * 如果为 true，指定将子代剪切到视区的边界。如果为 false，则容器子代会从容器边界扩展过去，而不管组件的大小规范。默认false
+         * 是否启用容器滚动。如果为 true，则将子项剪切到视区的边界，配合设置scrollH和scrollV属性将能滚动视区。
+         * 如果为 false，则容器子代会从容器边界扩展过去，而设置scrollH和scrollV也无效。默认false。
          */
-        public get clipAndEnableScrolling():boolean {
-            return this.$hasFlags(player.UIComponentFlags.clipAndEnableScrolling);
+        public get scrollEnabled():boolean {
+            return this.$hasFlags(player.UIComponentFlags.scrollEnabled);
         }
 
-        public set clipAndEnableScrolling(value:boolean) {
+        public set scrollEnabled(value:boolean) {
             value = !!value;
-            if (value === this.$hasFlags(player.UIComponentFlags.clipAndEnableScrolling))
+            if (value === this.$hasFlags(player.UIComponentFlags.scrollEnabled))
                 return;
-            this.$toggleFlags(player.UIComponentFlags.clipAndEnableScrolling,value);
+            this.$toggleFlags(player.UIComponentFlags.scrollEnabled,value);
             this.updateScrollRect();
         }
 
         /**
          * 可视区域水平方向起始点
          */
-        public get horizontalScrollPosition():number {
-            return this.$uiValues[player.UIValues.horizontalScrollPosition];
+        public get scrollH():number {
+            return this.$uiValues[player.UIValues.scrollH];
         }
 
-        public set horizontalScrollPosition(value:number) {
+        public set scrollH(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (value === values[player.UIValues.horizontalScrollPosition])
+            if (value === values[player.UIValues.scrollH])
                 return;
-            values[player.UIValues.horizontalScrollPosition] = value;
+            values[player.UIValues.scrollH] = value;
             if (this.updateScrollRect()&&this._layout) {
                 this._layout.scrollPositionChanged();
             }
@@ -134,16 +135,16 @@ module lark.gui {
         /**
          * 可视区域竖直方向起始点
          */
-        public get verticalScrollPosition():number {
-            return this.$uiValues[player.UIValues.verticalScrollPosition];
+        public get scrollV():number {
+            return this.$uiValues[player.UIValues.scrollV];
         }
 
-        public set verticalScrollPosition(value:number) {
+        public set scrollV(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (value == values[player.UIValues.verticalScrollPosition])
+            if (value == values[player.UIValues.scrollV])
                 return;
-            values[player.UIValues.verticalScrollPosition] = value;
+            values[player.UIValues.scrollV] = value;
             if (this.updateScrollRect()&&this._layout) {
                 this._layout.scrollPositionChanged();
             }
@@ -152,10 +153,10 @@ module lark.gui {
 
         private updateScrollRect():boolean{
             var values = this.$uiValues;
-            var hasClip = this.$hasFlags(player.UIComponentFlags.clipAndEnableScrolling)
+            var hasClip = this.$hasFlags(player.UIComponentFlags.scrollEnabled)
             if (hasClip) {
-                this.scrollRect = $TempRectangle.setTo(values[player.UIValues.horizontalScrollPosition],
-                    values[player.UIValues.verticalScrollPosition],
+                this.scrollRect = $TempRectangle.setTo(values[player.UIValues.scrollH],
+                    values[player.UIValues.scrollV],
                     values[player.UIValues.width], values[player.UIValues.height]);
             }
             else if(this.$scrollRect){
