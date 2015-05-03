@@ -80,4 +80,5 @@ module lark {
             return result;
         }
     }
+    registerType(ProgressEvent,[Types.ProgressEvent]);
 }

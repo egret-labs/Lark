@@ -28,65 +28,33 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark {
+
     /**
-     * HttpRequest 类以文本、二进制数据或 JSON对象的形式从 URL 下载数据。。
-     * HttpRequest 对象会先从 URL 中下载所有数据，然后才将数据用于应用程序中的代码。它会发出有关下载进度的通知，
-     * 通过 bytesLoaded 和 bytesTotal 属性以及已调度的事件，可以监视下载进度。
+     * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
      */
-    export interface HttpRequest extends EventEmitter {
+    export interface ImageLoader extends EventEmitter {
         /**
-         * 本次请求返回的数据，数据类型根据responseType设置的值确定。
+         * 使用 load() 方法加载成功的 BitmapData 图像数据。
          */
-        response: any;
+        data:BitmapData;
         /**
-         * 设置返回的数据格式，请使用 HttpResponseType 里定义的枚举值。设置非法的值或不设置，都将使用HttpResponseType.TEXT。
+         * 当从其他站点加载一个图片时，指定是否启用跨域资源共享(CORS)，默认值为null。
+         * 可以设置为"anonymous","use-credentials"或null,设置为其他值将等同于"anonymous"。
          */
-        responseType: number;
+        crossOrigin:string;
         /**
-         * 表明在进行跨站(cross-site)的访问控制(Access-Control)请求时，是否使用认证信息(例如cookie或授权的header)。 默认为 false。(这个标志不会影响同站的请求)
+         * 启动一次图像加载。注意：若之前已经调用过加载请求，重新调用 load() 将终止先前的请求，并开始新的加载。
+         * @param url 要加载的图像文件的地址。
          */
-        withCredentials: boolean;
-        /**
-         * 初始化一个请求.注意，若在已经发出请求的对象上调用此方法，相当于立即调用abort().
-         * @param url 该请求所要访问的URL该请求所要访问的URL
-         * @param method 请求所使用的HTTP方法， 请使用 HttpMethod 定义的枚举值.
-         */
-        open(url:string, method?:number): void;
-        /**
-         * 发送请求.
-         * @param data 需要发送的数据
-         */
-        send(data?:any): void;
-        /**
-         * 如果请求已经被发送,则立刻中止请求.
-         */
-        abort(): void;
-        /**
-         * 返回所有响应头信息(响应头名和值), 如果响应头还没接受,则返回"".
-         */
-        getAllResponseHeaders(): string;
-        /**
-         * 给指定的HTTP请求头赋值.在这之前,您必须确认已经调用 open() 方法打开了一个url.
-         * @param header 将要被赋值的请求头名称.
-         * @param value 给指定的请求头赋的值.
-         */
-        setRequestHeader(header:string, value:string): void;
-        /**
-         * 返回指定的响应头的值, 如果响应头还没被接受,或该响应头不存在,则返回"".
-         * @param header 要返回的响应头名称
-         */
-        getResponseHeader(header:string): string;
+        load(url:string):void;
 
         on(type: "complete", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
         on(type: "ioError", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        on(type: "progress", listener: (event: ProgressEvent) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
         on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
         once(type: "complete", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
         once(type: "ioError", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        once(type: "progress", listener: (event: ProgressEvent) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
         once(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
     }
 
-    export var HttpRequest:{ new (): HttpRequest };
-
+    export var ImageLoader:{new():ImageLoader};
 }

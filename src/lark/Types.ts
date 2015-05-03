@@ -120,6 +120,11 @@ module lark {
          */
         TouchEvent,
         /**
+         * 当加载操作已开始或套接字已接收到数据时，将调度 ProgressEvent 对象。
+         * 有两种类型的进程事件：ProgressEvent.PROGRESS 和 ProgressEvent.SOCKET_DATA。
+         */
+        ProgressEvent,
+        /**
          * Matrix 类表示一个转换矩阵，它确定如何将点从一个坐标空间映射到另一个坐标空间。
          * 您可以对一个显示对象执行不同的图形转换，方法是设置 Matrix 对象的属性，将该 Matrix
          * 对象应用于显示对象的 matrix 属性。这些转换函数包括平移（x 和 y 重新定位）、旋转、缩放和倾斜。
@@ -140,7 +145,17 @@ module lark {
          * TextField 类用于创建显示对象以显示文本。
          * 可以使用 TextField 类的方法和属性对文本字段进行操作。
          */
-        TextField
+        TextField,
+        /**
+         * HttpRequest 类以文本、二进制数据或 JSON对象的形式从 URL 下载数据。。
+         * HttpRequest 对象会先从 URL 中下载所有数据，然后才将数据用于应用程序中的代码。它会发出有关下载进度的通知，
+         * 通过 bytesLoaded 和 bytesTotal 属性以及已调度的事件，可以监视下载进度。
+         */
+        HttpRequest,
+        /**
+         * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
+         */
+        ImageLoader
 
     }
 }

@@ -72,6 +72,17 @@ module lark.web {
             this._xhr.responseType = stringType;
         }
 
+        /**
+         * 表明在进行跨站(cross-site)的访问控制(Access-Control)请求时，是否使用认证信息(例如cookie或授权的header)。 默认为 false。(这个标志不会影响同站的请求)
+         */
+        public get withCredentials(): boolean{
+            return this._xhr.withCredentials;
+        }
+
+        public set withCredentials(value:boolean){
+            this._xhr.withCredentials = !!value;
+        }
+
         private _url:string = "";
 
         /**
@@ -148,6 +159,6 @@ module lark.web {
         }
 
     }
-
+    registerType(WebHttpRequest,[Types.HttpRequest]);
     HttpRequest = WebHttpRequest;
 }

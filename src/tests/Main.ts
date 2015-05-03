@@ -32,44 +32,18 @@ module lark {
 
         public constructor() {
             super();
-            var img = new Image();
-            img.src = "image/test.png";
-            img.onload = ()=> {
-                this.start(img);
-            }
+            var loader = new ImageLoader();
+            loader.once(Event.COMPLETE,this.start,this);
+            loader.load("image/test2.png");
         }
 
         private targetIcon:DisplayObject;
 
         private iconList:DisplayObject[] = [];
 
-        private start(bitmapData:BitmapData):void {
-
-            //var container = new DisplayObjectContainer();
-            //container.name = "container";
-            //container.x = 150;
-            //container.addChild(new Bitmap(bitmapData));
-            //var bitmap = new Bitmap(bitmapData);
-            //bitmap.x = 150;
-            //bitmap.touchEnabled = false;
-            //container.addChild(bitmap);
-            //container.touchEnabled = false;
-            //container.scaleX = container.scaleY = 0.5;
-            //
-            //var container2 = new DisplayObjectContainer();
-            //container2.name  = "container2";
-            //container2.addChild(container);
-            //bitmap = new Bitmap(bitmapData);
-            //bitmap.alpha = 0.7;
-            //container2.addChild(bitmap);
-            //container2.x = 250;
-            //container2.touchChildren = false;
-            //
-            //var t = new Texture();
-            //var m = new Matrix();
-            //t.draw(container2,m,0.5);
-            //bitmap = new lark.Bitmap(t);
-            //this.addChild(bitmap);
+        private start(event:Event):void {
+            var loader:ImageLoader = event.target;
+            var bitmapData = loader.data;
 
             var container = new Sprite();
             var x = 0, y = 0;
@@ -127,17 +101,6 @@ module lark {
             //shape.cacheAsBitmap = true;
             //container.mask = this.targetIcon;
 
-            var ui = new gui.Group();
-            ui.rotation = 45;
-            ui.setLayoutBoundsSize(100,100);
-            ui.setLayoutBoundsPosition(100,100);
-            log(ui.x,ui.y,ui.width,ui.height);
-
-            var request = new HttpRequest();
-            request.open("http://httpbin.org/post",HttpMethod.POST);
-            request.responseType = HttpResponseType.TEXT;
-            request.once(Event.COMPLETE,this.onRequest,this);
-            request.send("test=ok");
         }
 
         private onRequest(event:Event):void{
