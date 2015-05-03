@@ -489,7 +489,7 @@ module lark.player {
             set: function (value) {
                 value = +value || 0;
                 var values = this.$uiValues;
-                if (values[10 /* width */] === value && values[8 /* explicitWidth */] === value)
+                if (value < 0 || values[10 /* width */] === value && values[8 /* explicitWidth */] === value)
                     return;
                 values[10 /* width */] = value;
                 values[8 /* explicitWidth */] = value;
@@ -511,7 +511,7 @@ module lark.player {
             set: function (value) {
                 value = +value || 0;
                 var values = this.$uiValues;
-                if (values[11 /* height */] === value && values[9 /* explicitHeight */] === value)
+                if (value < 0 || values[11 /* height */] === value && values[9 /* explicitHeight */] === value)
                     return;
                 values[11 /* height */] = value;
                 values[8 /* explicitWidth */] = value;
@@ -547,7 +547,7 @@ module lark.player {
             set: function (value) {
                 value = +value || 0;
                 var values = this.$uiValues;
-                if (values[12 /* minWidth */] === value) {
+                if (value < 0 || values[12 /* minWidth */] === value) {
                     return;
                 }
                 values[12 /* minWidth */] = value;
@@ -567,7 +567,7 @@ module lark.player {
             set: function (value) {
                 value = +value || 0;
                 var values = this.$uiValues;
-                if (values[13 /* maxWidth */] === value) {
+                if (value < 0 || values[13 /* maxWidth */] === value) {
                     return;
                 }
                 values[13 /* maxWidth */] = value;
@@ -587,7 +587,7 @@ module lark.player {
             set: function (value) {
                 value = +value || 0;
                 var values = this.$uiValues;
-                if (values[14 /* minHeight */] === value) {
+                if (value < 0 || values[14 /* minHeight */] === value) {
                     return;
                 }
                 values[14 /* minHeight */] = value;
@@ -607,7 +607,7 @@ module lark.player {
             set: function (value) {
                 value = +value || 0;
                 var values = this.$uiValues;
-                if (values[15 /* maxHeight */] === value) {
+                if (value < 0 || values[15 /* maxHeight */] === value) {
                     return;
                 }
                 values[15 /* maxHeight */] = value;

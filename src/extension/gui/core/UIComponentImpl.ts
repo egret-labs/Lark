@@ -322,7 +322,7 @@ module lark.player {
         public set width(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (values[UIValues.width] === value && values[UIValues.explicitWidth] === value)
+            if (value<0||values[UIValues.width] === value && values[UIValues.explicitWidth] === value)
                 return;
             values[UIValues.width] = value;
             values[UIValues.explicitWidth] = value;
@@ -342,7 +342,7 @@ module lark.player {
         public set height(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (values[UIValues.height] === value && values[UIValues.explicitHeight] === value)
+            if (value<0||values[UIValues.height] === value && values[UIValues.explicitHeight] === value)
                 return;
             values[UIValues.height] = value;
             values[UIValues.explicitWidth] = value;
@@ -378,7 +378,7 @@ module lark.player {
         public set minWidth(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (values[UIValues.minWidth] === value) {
+            if (value<0||values[UIValues.minWidth] === value) {
                 return;
             }
             values[UIValues.minWidth] = value;
@@ -396,7 +396,7 @@ module lark.player {
         public set maxWidth(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (values[UIValues.maxWidth] === value) {
+            if (value<0||values[UIValues.maxWidth] === value) {
                 return;
             }
             values[UIValues.maxWidth] = value;
@@ -414,7 +414,7 @@ module lark.player {
         public set minHeight(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (values[UIValues.minHeight] === value) {
+            if (value<0||values[UIValues.minHeight] === value) {
                 return;
             }
             values[UIValues.minHeight] = value;
@@ -433,7 +433,7 @@ module lark.player {
         public set maxHeight(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (values[UIValues.maxHeight] === value) {
+            if (value<0||values[UIValues.maxHeight] === value) {
                 return;
             }
             values[UIValues.maxHeight] = value;

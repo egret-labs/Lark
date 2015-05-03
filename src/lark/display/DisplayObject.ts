@@ -410,7 +410,6 @@ module lark {
 
         /**
          * 表示显示对象的宽度，以像素为单位。
-         * 宽度是根据显示对象内容的范围来计算的。优先顺序为 显式设置宽度 > 测量宽度。
          */
         public get width():number {
             return this.$getWidth();
@@ -445,7 +444,6 @@ module lark {
 
         /**
          * 表示显示对象的高度，以像素为单位。
-         * 高度是根据显示对象内容的范围来计算的。优先顺序为 显式设置高度 > 测量高度。
          */
         public get height():number {
             return this.$getHeight();
