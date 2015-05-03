@@ -111,12 +111,27 @@ module lark {
      * 
      */
     export class RichTextField extends Sprite {
+
+        static $normalizeStyle(change:ITextStyle, base:ITextStyle = BaseStyle):ITextStyle {
+            var style:ITextStyle = {};
+            for (var p in base) {
+                if (base[p] !== undefined)
+                    style[p] = base[p];
+            }
+
+            for (var p in change) {
+                if (change[p] !== undefined)
+                    style[p] = change[p];
+            }
+
+            return style;
+        }
         /**
          * 创建一个RichTextField对象
          */
         public constructor(format?:ITextFieldStyle) {
             super();
-            this._format = TextField.$normalizeStyle(format, BaseStyle);
+            this._format = RichTextField.$normalizeStyle(format, BaseStyle);
             this.on(Event.ENTER_FRAME, this.update, this);
         }
         
@@ -136,7 +151,7 @@ module lark {
             return this._format;
         }
         public set format(value: ITextFieldStyle) {
-            value = TextField.$normalizeStyle(value);
+            value = RichTextField.$normalizeStyle(value);
             this._format = value;
             this.$setTextFieldFlags(RichTextFieldFlags.FormatDirty);
         }
@@ -271,7 +286,7 @@ module lark {
                     break;
             }
             this.addChild(textfield);
-            textfield.$setRenderLines(textLines);
+            //textfield.$setRenderLines(textLines);
             this._textFieldFlags &= ~RichTextFieldFlags.ScrollVDirty;
         }
 
@@ -326,7 +341,7 @@ module lark {
         }
 
         protected parseTextNode(node: IRichTextNode) {
-            var textElement = new text.TextElement(node.text, TextField.$normalizeStyle(node.style, this._format));
+            var textElement = new text.TextElement(node.text, RichTextField.$normalizeStyle(node.style, this._format));
             return textElement;
         }
     }

@@ -65,9 +65,9 @@ module lark {
                 + " World setTimeout(() => rich.width = this.stage? this.stage.stageWidth : 500, 300); \n "
                 + " World setTimeout(() => rich.width = this.stage ? this.stage.stageWidth : 500, 300); \\n World";
             var tf = new TextField(text);
-            tf.style = { align: "left", color: 0xFF0000 };
+            tf.textAlignH = "left";
+            tf.textColor = 0xFF0000;
             tf.width = 400;
-            tf.multiline = true;
             tf.y = 200;
             this.addChild(tf);
 
