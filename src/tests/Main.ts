@@ -34,7 +34,7 @@ module lark {
             super();
             var loader = new ImageLoader();
             loader.once(Event.COMPLETE,this.start,this);
-            loader.load("image/test2.png");
+            loader.load("image/test.png");
         }
 
         private targetIcon:DisplayObject;
