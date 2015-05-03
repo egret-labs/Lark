@@ -278,7 +278,7 @@ module lark {
             else {
                 this.$children.splice(index, 0, child);
             }
-            child.$invalidateChildren();
+            child.$invalidateTransform();
             this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
         }
 
@@ -324,8 +324,8 @@ module lark {
             var child2:DisplayObject = list[index2];
             list[index1] = child2;
             list[index2] = child1;
-            child1.$invalidateChildren();
-            child2.$invalidateChildren();
+            child1.$invalidateTransform();
+            child2.$invalidateTransform();
             this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
         }
 
@@ -404,8 +404,8 @@ module lark {
         }
 
         /**
-         * 标记此显示对象需要重绘，调用此方法后，在屏幕绘制阶段$updateRenderNode()方法会自动被回调，您可能需要覆盖它来同步自身改变的属性到目标RenderNode。
-         * @param notiryChildren 是否标记子项也需要重绘。传入false会不传入，将只标记自身的RenderNode需要重绘。
+         * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
+         * @param notiryChildren 是否标记子项也需要重绘。传入false或不传入，将只标记自身需要重绘。通常只有alpha属性改变会需要通知子项重绘。
          */
         $invalidate(notifyChildren?:boolean):void {
             super.$invalidate(notifyChildren);
@@ -422,9 +422,10 @@ module lark {
         }
 
         /**
-         * 标记自身和所有子项都失效。
+         * 标记自身以及所有子项在父级中变换叠加的显示内容失效。此方法不会触发自身的cacheAsBitmap重绘。
+         * 通常用于矩阵改变或从显示列表添加和移除时。若自身的显示内容已经改变需要重绘，应该调用$invalidate()。
          */
-        $invalidateChildren():void {
+        $invalidateTransform():void {
             this.markChildDirty(this, this.$parentDisplayList);
         }
 

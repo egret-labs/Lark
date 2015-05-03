@@ -140,7 +140,7 @@ module lark {
          * 标记这个显示对象在父级容器的位置发生了改变。
          */
         private invalidatePosition():void {
-            this.$invalidateChildren();
+            this.$invalidateTransform();
             this.$propagateFlagsDown(player.DisplayObjectFlags.InvalidConcatenatedMatrix |
             player.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
             if (this.$parent) {
@@ -495,7 +495,7 @@ module lark {
                 return;
             }
             this.$visible = value;
-            this.$invalidateChildren();
+            this.$invalidateTransform();
         }
 
         /**
@@ -653,7 +653,7 @@ module lark {
                 return;
             }
             this.$blendMode = value;
-            this.$invalidateChildren();
+            this.$invalidateTransform();
         }
 
         /**
@@ -685,7 +685,7 @@ module lark {
                 value.$maskedObject = this;
             }
             this.$mask = value;
-            this.$invalidateChildren();
+            this.$invalidateTransform();
         }
 
         /**
@@ -807,8 +807,8 @@ module lark {
         $parentDisplayList:lark.player.DisplayList = null;
 
         /**
-         * 标记此显示对象需要重绘。
-         * @param notiryChildren 是否标记子项也需要重绘。传入false会不传入，将只标记自身的RenderNode需要重绘。
+         * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
+         * @param notiryChildren 是否标记子项也需要重绘。传入false或不传入，将只标记自身需要重绘。通常只有alpha属性改变会需要通知子项重绘。
          */
         $invalidate(notifyChildren?:boolean):void {
             if (!this.$renderRegion || this.$hasFlags(player.DisplayObjectFlags.DirtyRender)) {
@@ -822,9 +822,10 @@ module lark {
         }
 
         /**
-         * 标记自身和所有子项都失效。
+         * 标记自身以及所有子项在父级中变换叠加的显示内容失效。此方法不会触发自身的cacheAsBitmap重绘。
+         * 通常用于矩阵改变或从显示列表添加和移除时。若自身的显示内容已经改变需要重绘，应该调用$invalidate()。
          */
-        $invalidateChildren():void {
+        $invalidateTransform():void {
             if (this.$hasFlags(player.DisplayObjectFlags.DirtyChildren)) {
                 return;
             }
