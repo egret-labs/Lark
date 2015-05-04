@@ -239,6 +239,22 @@ module lark {
             return this.textLines.length;
         }
 
+        /**
+         * 文本内容宽度
+         */
+        public get textWidth():number {
+            this.updateTextLines();
+            return this.$textFieldValues[Values.textWidth];
+        }
+        
+        /**
+         * 文本内容高度
+         */
+        public get textHeight():number {
+            this.updateTextLines();
+            return this.$textFieldValues[Values.textHeight];
+        }
+
         ///**
         // * 文本显示宽度，以像素为单位。注意:TextField与其他显示对象不同，返回的文本显示宽度并不包含旋转和缩放值。
         // * 其他显示对象返回的宽度始终等于getBounds(parent)方法返回的宽度。
