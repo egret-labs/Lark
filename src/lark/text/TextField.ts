@@ -76,8 +76,7 @@ module lark {
                 return;
             }
             this._fontFamily = value;
-            this.fontStringChanged = true;
-            this.$invalidateContentBounds();
+            this.invalidateFontString();
         }
 
         /**
@@ -94,55 +93,54 @@ module lark {
                 return;
             }
             values[Values.fontSize] = value;
-            this.fontStringChanged = true;
-            this.$invalidateContentBounds();
+            this.invalidateFontString();
         }
 
-        private _bold:boolean = false;
         /**
          * 是否显示为粗体，默认false。
          */
         public get bold():boolean {
-            return this._bold;
+            return this.$hasFlags(player.TextFieldFlags.Bold);
         }
 
         public set bold(value:boolean) {
             value = !!value;
-            if (value === this._bold) {
+            if (value === this.$hasFlags(player.TextFieldFlags.Bold)) {
                 return;
             }
-            this._bold = value;
-            this.fontStringChanged = true;
-            this.$invalidateContentBounds();
+            this.$toggleFlags(player.TextFieldFlags.Bold, value);
+            this.invalidateFontString();
         }
 
-        private _italic:boolean = false;
         /**
          * 是否显示为斜体，默认false。
          */
         public get italic():boolean {
-            return this._italic;
+            return this.$hasFlags(player.TextFieldFlags.Italic);
         }
 
         public set italic(value:boolean) {
             value = !!value;
-            if (value === this._italic) {
+            if (value === this.$hasFlags(player.TextFieldFlags.Italic)) {
                 return;
             }
-            this._italic = value;
-            this.fontStringChanged = true;
+            this.$toggleFlags(player.TextFieldFlags.Italic, value);
+            this.invalidateFontString();
+        }
+
+        private invalidateFontString():void {
+            this.$setFlags(player.TextFieldFlags.FontStringChanged);
             this.$invalidateContentBounds();
         }
 
         private fontString:string = "";
-        private fontStringChanged:boolean = true;
 
         /**
          * 获取字体信息的字符串形式。
          */
         private getFontString():string {
-            if (this.fontStringChanged) {
-                this.fontStringChanged = false;
+            if (this.$hasFlags(player.TextFieldFlags.FontStringChanged)) {
+                this.$removeFlags(player.TextFieldFlags.FontStringChanged);
                 this.fontString = player.toFontString(this);
             }
             return this.fontString;
@@ -282,7 +280,7 @@ module lark {
 
         $invalidateContentBounds():void {
             super.$invalidateContentBounds();
-            this.textLinesChanged = true;
+            this.$setFlags(player.TextFieldFlags.TextLinesChanged);
         }
 
         $measureContentBounds(bounds:Rectangle):void {
@@ -345,8 +343,6 @@ module lark {
             }
         }
 
-        private textLinesChanged:boolean = true;
-
         private textLines:string[] = [];
 
         private measuredWidths:number[] = [];
@@ -354,11 +350,11 @@ module lark {
 
         private updateTextLines():string[] {
 
-            if (!this.textLinesChanged) {
+            if (!this.$hasFlags(player.TextFieldFlags.TextLinesChanged)) {
                 return this.textLines;
             }
 
-            this.textLinesChanged = false;
+            this.$removeFlags(player.TextFieldFlags.TextLinesChanged);
             this.textLines.length = 0;
             var values = this.$textFieldValues;
             var measuredWidths = this.measuredWidths;

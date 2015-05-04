@@ -116,12 +116,12 @@ module lark.player {
 
 
     export const enum TextFieldFlags {
-        // TextFiled剩余可用
-        // 0x8000,0x10000
+        // TextFiled剩余可用:
 
-        LineDirty = 0x1000,
-        IsHeightSet = 0x2000,
-        IsWidthSet = 0x4000
+        Bold = 0x1000,
+        Italic = 0x2000,
+        FontStringChanged = 0x4000,
+        TextLinesChanged = 0x8000
     }
 
 
