@@ -1,39 +1,43 @@
 /// <reference path="../lib/types.d.ts" />
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
-var events = require('events');
-var watch = require("../lib/watch");
+/// <reference path="../lib/typescript/typescriptServices.d.ts" />
 var FileUtil = require("../lib/FileUtil");
-var ts = require("../lib/typescript/typescriptServices");
+require("../lib/typescript/typescriptServices");
 var TsService = (function () {
     function TsService(settings) {
+        var _this = this;
         var host = new Host();
         var tss = ts.createLanguageService(host, ts.createDocumentRegistry());
         host.settings = this.convertOption(settings);
         this.host = host;
         this.tss = tss;
         this.settings = settings;
-        var fw = new FileWatcher();
-        fw.watch(settings.projectDir);
+        var tslib = FileUtil.joinPath(settings.larkRoot, 'tools/lib/typescript/lib.d.ts');
+        var tsList = FileUtil.search(settings.srcDir, "ts");
+        tsList.unshift(tslib);
+        tsList.forEach(function (file) {
+            var content = FileUtil.read(file);
+            _this.host.addScript(file, content);
+        });
     }
     /**
     * 添加 修改 删除
     */
-    TsService.prototype.fileChanged = function (fileName) {
+    TsService.prototype.fileChanged = function (fileName, emit, output) {
+        if (emit === void 0) { emit = true; }
+        fileName = FileUtil.escapePath(fileName);
+        console.log('Compile: ', fileName, '\n     to: ', output);
         var exist = FileUtil.exists(fileName);
         if (!exist) {
             this.host.removeScript(fileName);
         }
         else {
-            var content = FileUtil.read(fileName);
+            var content = FileUtil.read(fileName, true);
             this.host.updateScript(fileName, content);
+            if (emit)
+                this.emit(fileName, output);
         }
     };
-    TsService.prototype.emit = function (fileName) {
+    TsService.prototype.emit = function (fileName, output) {
         var _this = this;
         var files = this.host.getScriptFileNames();
         files.forEach(function (file) {
@@ -41,14 +45,16 @@ var TsService = (function () {
             errors.forEach(function (error) { return console.log(error.messageText, error.file.filename); });
         });
         var content = this.tss.getEmitOutput(fileName);
-        var fileToSave = fileName || this.settings.out;
-        FileUtil.save(fileName, content);
+        var fileToSave = output || this.settings.out;
+        if (content.outputFiles && content.outputFiles.length > 0) {
+            FileUtil.save(fileToSave, content.outputFiles[0].text);
+        }
     };
     TsService.prototype.convertOption = function (options) {
         var target = options.esTarget.toLowerCase();
-        var targetEnum = ts.ScriptTarget.ES5;
+        var targetEnum = 1 /* ES5 */;
         if (target == 'es6')
-            targetEnum = ts.ScriptTarget.ES6;
+            targetEnum = 2 /* ES6 */;
         var tsOption = {
             sourceMap: options.sourceMap,
             target: targetEnum,
@@ -63,44 +69,9 @@ var TsService = (function () {
         }
         return tsOption;
     };
+    TsService.instance = null;
     return TsService;
 })();
-var FileWatcher = (function (_super) {
-    __extends(FileWatcher, _super);
-    function FileWatcher() {
-        _super.apply(this, arguments);
-    }
-    FileWatcher.prototype.watch = function (folder) {
-        var _this = this;
-        watch.createMonitor(folder, {
-            filter: function (f) { return _this.filter(f); }
-        }, function (monitor) {
-            monitor.on("created", _this.onFileCreated);
-            monitor.on("changed", _this.onFileChanged);
-            monitor.on("removed", _this.onRemoved);
-            _this.monitor = monitor;
-        });
-    };
-    FileWatcher.prototype.filter = function (filename) {
-        if (filename.endsWith('.ts'))
-            return true;
-        return false;
-    };
-    FileWatcher.prototype.stop = function () {
-        this.monitor.stop();
-    };
-    FileWatcher.prototype.onFileCreated = function (fileName, stat) {
-        this.service.fileChanged(fileName);
-        this.service.emit(fileName);
-    };
-    FileWatcher.prototype.onFileChanged = function (fileName, curr, prev) {
-        this.service.emit(fileName);
-    };
-    FileWatcher.prototype.onRemoved = function (fileName, stat) {
-        this.service.host.removeScript(fileName);
-    };
-    return FileWatcher;
-})(events.EventEmitter);
 var Host = (function () {
     function Host(cancellationToken) {
         if (cancellationToken === void 0) { cancellationToken = CancellationToken.None; }

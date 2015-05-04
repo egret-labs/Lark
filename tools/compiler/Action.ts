@@ -33,7 +33,6 @@ import TypeScript = require("../lib/typescript/tsc");
 import FileUtil = require("../lib/FileUtil");
 import utils = require('../lib/utils');
 import UglifyJS = require("../lib/uglify-js/uglifyjs");
-import TsService = require("./TsService");
 
 class Action {
 
@@ -62,7 +61,7 @@ class Action {
     }
 
 
-    public buildProject(): number {
+    public buildProject() {
         var option: lark.ICompileOptions = this.options;
 
         //拷贝lark.js
@@ -72,7 +71,20 @@ class Action {
         }
 
         var tsList: string[] = FileUtil.search(option.srcDir, "ts");
-        return this.compile(option, tsList, option.out, option.outDir);
+        var compileResult = this.compile(option, tsList, option.out, option.outDir);
+        var larkRootSrc = FileUtil.escapePath(this.options.srcDir);
+        var files: string[] = [];
+        compileResult.files.forEach(f=> {
+            if (!f)
+                return;
+            if (/\.d\.ts$/.test(f))
+                return;
+            f = FileUtil.escapePath(f);
+            f = f.replace(larkRootSrc, '').replace(/\.ts$/, '.js');
+            files.push(f);
+        });
+        compileResult.files = files;
+        return compileResult;
 
     }
 
@@ -82,35 +94,79 @@ class Action {
         var larkRoot = options.larkRoot;
         var srcPath: string = FileUtil.joinPath(larkRoot, "src");
         var tsList: string[] = FileUtil.search(srcPath, "ts");
-        var output = options.srcLarkFile;
-        var destOut = options.outLarkFile;
+
+        var separate = options.projectProperties.keepLarkInSeparatedFiles;
+
+
+        var output = separate ? null : options.srcLarkFile;
+        var outDir = separate ? FileUtil.joinPath(options.projectDir,'temp') : null;
 
         if (FileUtil.exists(output))
             FileUtil.remove(output);
-        var exitCode = this.compile(options, tsList, output, null, !options.publish);
-        if (exitCode == 0)
+
+        var larkFiles = {
+            files: []
+        };
+
+        var compileResult = this.compile(options, tsList, output, outDir, !options.publish);
+        if (compileResult.exitCode == 0)
         {
-            FileUtil.copy(output, destOut);
+            if (separate) {
+
+                var defineFiles = FileUtil.searchByFunction(outDir,(f: string) => /\.d\.ts$/.test(f));
+                var contents = [];
+                defineFiles.forEach(f=> contents.push(FileUtil.read(f)));
+                var defFileContent = contents.join('\r\n');
+                FileUtil.save(FileUtil.joinPath(options.srcDir, 'lark/lark.d.ts'), defFileContent);
+
+
+                var larkRootSrc = FileUtil.escapePath(options.larkRoot) + '/src/';
+                compileResult.files.forEach(f=> {
+                    if (!f)
+                        return;
+                    if (/\.d\.ts$/.test(f))
+                        return;
+                    f = FileUtil.escapePath(f);
+                    f = f.replace(larkRootSrc, '').replace(/\.ts$/, '.js');
+                    f = "lark/" + f;
+                    larkFiles.files.push(f);
+                });
+
+
+                defineFiles.forEach(f=> FileUtil.remove(f));
+                FileUtil.copy(outDir, FileUtil.joinPath(options.templateDir, 'lark/'));
+                FileUtil.remove(outDir);
+            }
+            else {
+                FileUtil.copy(output, options.outLarkFile);
+                var file = options.outLarkFile.replace(options.outDir, '');
+                if (file.indexOf('/') == 0)
+                    file = file.substr(1);
+                larkFiles.files.push(file);
+            }
+
+            var json = JSON.stringify(larkFiles, null, '   ');
+            FileUtil.save(FileUtil.joinPath(options.srcDir, 'lark/lark.json'), json);
         }
-        return exitCode;
+        return compileResult.exitCode;
     }
 
-    private compile(options: lark.ICompileOptions, files: string[], out?: string, outDir?: string, def?: boolean): number {
+    private compile(options: lark.ICompileOptions, files: string[], out?: string, outDir?: string, def?: boolean) {
         var defTemp = options.declaration;
         options.declaration = def;
 
-        var exitCode = TypeScript.executeWithOption(options, files, out, outDir, def);
+        var compileResult = TypeScript.executeWithOption(options, files, out, outDir, def);
 
         options.declaration = defTemp;
 
         if (!options.minify)
-            return exitCode;
+            return compileResult;
 
         
         if (!out)
         {
             console.log(utils.tr(10004));
-            return exitCode;
+            return compileResult;
         }
 
         var defines = {
@@ -121,7 +177,7 @@ class Action {
         var result = UglifyJS.minify(out, { compress: { global_defs: defines }, output: { beautify: false } });
         FileUtil.save(out, result.code);
 
-        return exitCode;
+        return compileResult;
     }
 
     public copyDirectory(from: string, to: string) {

@@ -32,44 +32,18 @@ module lark {
 
         public constructor() {
             super();
-            var img = new Image();
-            img.src = "image/test.png";
-            img.onload = ()=> {
-                this.start(img);
-            }
+            var loader = new ImageLoader();
+            loader.once(Event.COMPLETE,this.start,this);
+            loader.load("image/test.png");
         }
 
         private targetIcon:DisplayObject;
 
         private iconList:DisplayObject[] = [];
 
-        private start(bitmapData:BitmapData):void {
-
-            //var container = new DisplayObjectContainer();
-            //container.name = "container";
-            //container.x = 150;
-            //container.addChild(new Bitmap(bitmapData));
-            //var bitmap = new Bitmap(bitmapData);
-            //bitmap.x = 150;
-            //bitmap.touchEnabled = false;
-            //container.addChild(bitmap);
-            //container.touchEnabled = false;
-            //container.scaleX = container.scaleY = 0.5;
-            //
-            //var container2 = new DisplayObjectContainer();
-            //container2.name  = "container2";
-            //container2.addChild(container);
-            //bitmap = new Bitmap(bitmapData);
-            //bitmap.alpha = 0.7;
-            //container2.addChild(bitmap);
-            //container2.x = 250;
-            //container2.touchChildren = false;
-            //
-            //var t = new Texture();
-            //var m = new Matrix();
-            //t.draw(container2,m,0.5);
-            //bitmap = new lark.Bitmap(t);
-            //this.addChild(bitmap);
+        private start(event:Event):void {
+            var loader:ImageLoader = event.target;
+            var bitmapData = loader.data;
 
             var container = new Sprite();
             var x = 0, y = 0;
@@ -114,7 +88,7 @@ module lark {
             bitmap.x = 350;
             bitmap.y = 350;
             bitmap.bitmapData = bitmapData;
-            bitmap.blendMode = BlendMode.ADD;
+            //bitmap.blendMode = BlendMode.ADD;
             this.iconList.push(bitmap);
             this.targetIcon = bitmap;
             this.addChild(this.targetIcon);
@@ -126,6 +100,12 @@ module lark {
             //container.addChild(shape);
             //shape.cacheAsBitmap = true;
             //container.mask = this.targetIcon;
+
+        }
+
+        private onRequest(event:Event):void{
+            var request:HttpRequest = event.target;
+            log(request.response);
         }
 
         private container:DisplayObjectContainer;

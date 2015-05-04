@@ -207,7 +207,7 @@ module lark.player {
                     }
                 }
                 var moved = node.$update();
-                if (moved && node.$renderAlpha > 0) {
+                if (node.$renderAlpha > 0&&(moved || !node.$isDirty)) {
                     if (dirtyRegion.addRegion(region)) {
                         node.$isDirty = true;
                     }

@@ -1,11 +1,14 @@
-﻿/// <reference path="../lib/types.d.ts" />
+﻿
+/// <reference path="../lib/types.d.ts" />
+/// <reference path="../lib/typescript/typescriptServices.d.ts" />
 
 import events = require('events');
 import watch = require("../lib/watch");
 import FileUtil = require("../lib/FileUtil");
-import ts = require("../lib/typescript/typescriptServices");
+require("../lib/typescript/typescriptServices");
 
 class TsService {
+    static instance: TsService = null;
     tss: ts.LanguageService;
     host: Host;
     settings: lark.ICompileOptions;
@@ -17,39 +20,50 @@ class TsService {
         this.host = host;
         this.tss = tss;
         this.settings = settings;
-        var fw = new FileWatcher();
-        fw.watch(settings.projectDir);
+        var tslib = FileUtil.joinPath(settings.larkRoot, 'tools/lib/typescript/lib.d.ts');
+        var tsList: string[] = FileUtil.search(settings.srcDir, "ts");
+        tsList.unshift(tslib);
+        tsList.forEach(file=> {
+            var content = FileUtil.read(file);
+            this.host.addScript(file, content);
+        });
     }
 
     /**
     * 添加 修改 删除
     */
-    fileChanged(fileName: string) {
+    fileChanged(fileName: string, emit = true, output?: string) {
+        fileName = FileUtil.escapePath(fileName);
+        console.log('Compile: ',fileName,'\n     to: ', output);
         var exist = FileUtil.exists(fileName);
         if (!exist) {
             this.host.removeScript(fileName);
         }
         else {
-            var content = FileUtil.read(fileName);
+            var content = FileUtil.read(fileName,true);
             this.host.updateScript(fileName, content);
+            if (emit)
+                this.emit(fileName, output);
         }
     }
 
-    emit(fileName: string) {
+    emit(fileName: string, output?: string) {
 
         var files = this.host.getScriptFileNames();
 
         files.forEach(file=> {
             var errors = this.tss.getSemanticDiagnostics(file);
-            errors.forEach(error=> console.log(error.messageText,error.file.filename));
+            errors.forEach(error=> console.log(error.messageText, error.file.filename));
         })
 
         var content = this.tss.getEmitOutput(fileName);
-        var fileToSave = fileName || this.settings.out;
-        FileUtil.save(fileName, content);
+        var fileToSave = output || this.settings.out;
+        if (content.outputFiles && content.outputFiles.length > 0) {
+            FileUtil.save(fileToSave, content.outputFiles[0].text);
+        }
     }
 
-    private convertOption(options:lark.ICompileOptions) {
+    private convertOption(options: lark.ICompileOptions) {
 
         var target = options.esTarget.toLowerCase();
         var targetEnum = ts.ScriptTarget.ES5;
@@ -70,41 +84,6 @@ class TsService {
             tsOption.outDir = options.outDir;
         }
         return tsOption;
-    }
-}
-
-class FileWatcher extends events.EventEmitter {
-    monitor: watch.FileMonitor;
-    service: TsService;
-    watch(folder: string) {
-        watch.createMonitor(folder, {
-            filter: f=>this.filter(f)
-        }, monitor=> {
-            monitor.on("created", this.onFileCreated);
-            monitor.on("changed", this.onFileChanged);
-            monitor.on("removed", this.onRemoved);
-            this.monitor = monitor;
-        });
-    }
-
-    filter(filename: string): boolean {
-        if (filename.endsWith('.ts'))
-            return true;
-        return false;
-    }
-
-    stop() {
-        this.monitor.stop();
-    }
-    onFileCreated(fileName: string, stat) {
-        this.service.fileChanged(fileName);
-        this.service.emit(fileName);
-    }
-    onFileChanged(fileName: string, curr, prev) {
-        this.service.emit(fileName);
-    }
-    onRemoved(fileName: string, stat) {
-        this.service.host.removeScript(fileName);
     }
 }
 

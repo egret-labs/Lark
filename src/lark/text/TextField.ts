@@ -58,11 +58,11 @@ module lark {
             this.$invalidateContentBounds();
         }
 
-        protected _style: ITextFieldStyle;
-        public get style(): ITextFieldStyle {
+        protected _style: ITextStyle;
+        public get style(): ITextStyle {
             return this._style;
         }
-        public set style(value: ITextFieldStyle) {
+        public set style(value: ITextStyle) {
             value = TextField.$normalizeStyle(value, BaseStyle);
             this._style = value;
             this.$setFlags(player.TextFieldFlags.LineDirty);
@@ -128,7 +128,7 @@ module lark {
             for (var i = 0; i < length; i++)
             {
                 var line = renderLines[i];
-                width = Math.max(width, line.width);
+                width = Math.max(width, line.x + line.width);
                 if (i == length - 1)
                     height = line.y + line.height;
             }
@@ -221,7 +221,7 @@ module lark {
             return lines;
         }
 
-        static $normalizeStyle(change: ITextFieldStyle,base:ITextFieldStyle = BaseStyle): ITextFieldStyle {
+        static $normalizeStyle(change: ITextStyle, base: ITextStyle = BaseStyle): ITextStyle {
             var style: ITextStyle = {};
             for (var p in base) {
                 if (base[p] !== undefined)

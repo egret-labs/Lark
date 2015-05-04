@@ -9291,6 +9291,7 @@ var ts;
             var decreaseIndent = writer.decreaseIndent;
             var currentSourceFile;
             var extendsEmitted = false;
+            var defineEmitted = false;
             /** write emitted output to disk*/
             var writeEmittedFiles = writeJavaScriptFile;
             /** Emit leading comments of the node */
@@ -10617,6 +10618,9 @@ var ts;
                 });
             }
             function emitMemberFunctions(node) {
+                write('var d = __define,c=');
+                emitNode(node.name);
+                write(';p=c.prototype;');
                 ts.forEach(node.members, function (member) {
                     if (member.kind === 125 /* Method */) {
                         if (!member.body) {
@@ -10626,10 +10630,11 @@ var ts;
                         emitLeadingComments(member);
                         emitStart(member);
                         emitStart(member.name);
-                        emitNode(node.name);
                         if (!(member.flags & 128 /* Static */)) {
-                            write(".prototype");
+                            write("p");
                         }
+                        else
+                            emitNode(node.name);
                         emitMemberAccessForPropertyName(member.name);
                         emitEnd(member.name);
                         write(" = ");
@@ -10645,12 +10650,13 @@ var ts;
                         if (member === accessors.firstAccessor) {
                             writeLine();
                             emitStart(member);
-                            write("Object.defineProperty(");
+                            write("d(");
                             emitStart(member.name);
-                            emitNode(node.name);
                             if (!(member.flags & 128 /* Static */)) {
-                                write(".prototype");
+                                write("p");
                             }
+                            else
+                                emitNode(node.name);
                             write(", ");
                             emitExpressionForPropertyName(member.name);
                             emitEnd(member.name);
@@ -10659,7 +10665,7 @@ var ts;
                             if (accessors.getAccessor) {
                                 writeLine();
                                 emitLeadingComments(accessors.getAccessor);
-                                write("get: ");
+                                write("g: ");
                                 emitStart(accessors.getAccessor);
                                 write("function ");
                                 emitSignatureAndBody(accessors.getAccessor);
@@ -10670,7 +10676,7 @@ var ts;
                             if (accessors.setAccessor) {
                                 writeLine();
                                 emitLeadingComments(accessors.setAccessor);
-                                write("set: ");
+                                write("s: ");
                                 emitStart(accessors.setAccessor);
                                 write("function ");
                                 emitSignatureAndBody(accessors.setAccessor);
@@ -10678,10 +10684,6 @@ var ts;
                                 emitTrailingComments(accessors.setAccessor);
                                 write(",");
                             }
-                            writeLine();
-                            write("enumerable: true,");
-                            writeLine();
-                            write("configurable: true");
                             decreaseIndent();
                             writeLine();
                             write("});");
@@ -11105,6 +11107,11 @@ var ts;
                     writeLine();
                     write("};");
                     extendsEmitted = true;
+                }
+                if (!defineEmitted) {
+                    writeLine();
+                    write('var __define =this.__define || function (o, p, a) { Object.defineProperty(o, p, { configurable:true,enumerable:true,get:a.g,set:a.s }) };');
+                    defineEmitted = true;
                 }
                 if (ts.isExternalModule(node)) {
                     if (compilerOptions.module === 2 /* AMD */) {
@@ -11562,7 +11569,8 @@ var ts;
             getAliasedSymbol: resolveImport,
             hasEarlyErrors: hasEarlyErrors,
             isEmitBlocked: isEmitBlocked,
-            checkAndMarkExpression: checkAndMarkExpression
+            checkAndMarkExpression: checkAndMarkExpression,
+            egretGetResolveSymbol: egretGetResolveSymbol
         };
         var undefinedSymbol = createSymbol(4 /* Property */ | 268435456 /* Transient */, "undefined");
         var argumentsSymbol = createSymbol(4 /* Property */ | 268435456 /* Transient */, "arguments");
@@ -11905,6 +11913,23 @@ var ts;
                 }
             }
             return result;
+        }
+        var egretNodesLink = [];
+        /**
+        *
+        */
+        function egretGetResolveSymbol(node) {
+            var links = getNodeLinks(node);
+            if (links.resolvedSymbol) {
+                return links.resolvedSymbol;
+            }
+            if (!node.id)
+                node.id = nextNodeId++;
+            links = egretNodesLink[node.id] || (egretNodesLink[node.id] = {});
+            links.resolvedSymbol = (ts.getFullWidth(node) > 0 && resolveName(node, node.text, 32 /* Class */ | 29360128 /* Export */, null, node)) || unknownSymbol;
+            if (links.resolvedSymbol) {
+                return links.resolvedSymbol;
+            }
         }
         function resolveImport(symbol) {
             ts.Debug.assert((symbol.flags & 33554432 /* Import */) !== 0, "Should only get Imports here.");
@@ -20182,6 +20207,7 @@ var ts;
     var classNames = {};
     var fileToClassNameMap = {};
     var classNameToBaseClassMap = {};
+    var constructorToClassMap = {};
     var staticToClassNameMap = {};
     //sort
     var fileNodesList = [];
@@ -20191,11 +20217,15 @@ var ts;
         function TreeGenerator() {
             this.classNameToFileMap = classNameToFileMap;
         }
+        TreeGenerator.getOrderedFiles = function () {
+            return orderedFileList;
+        };
         TreeGenerator.prototype.orderFiles = function (chk, program) {
             var _this = this;
             classNameToFileMap = {};
             fileToClassNameMap = {};
             classNameToBaseClassMap = {};
+            constructorToClassMap = {};
             staticToClassNameMap = {};
             fileNodesList = [];
             fileNameToNodeMap = {};
@@ -20205,7 +20235,6 @@ var ts;
             checker = chk;
             ts.forEach(files, function (file) { return _this.symbolTabelToFileMap(file, file.locals); });
             this.sortFiles();
-            this.emitTypesEnum();
             var sources = program.getSourceFiles();
             orderedFileList.forEach(function (f) {
                 for (var i = 0; i < sources.length; i++) {
@@ -20217,27 +20246,6 @@ var ts;
                     }
                 }
             });
-        };
-        TreeGenerator.prototype.emitTypesEnum = function () {
-            var types = 'export const enum Types { $types$ }';
-            var typeNames = [];
-            ts.forEachKey(classNames, function (name) {
-                var names = name.split('.');
-                for (var i = 1; i < names.length; i++) {
-                    names[i] = names[i][0].toUpperCase() + names[i].substr(1);
-                }
-                typeNames.push(names.join('') + ' = ' + classNames[name]);
-            });
-            var typesString = typeNames.join(',\r\n');
-            types = types.replace('$types$', typesString);
-            console.log(types);
-        };
-        TreeGenerator.prototype.isTypeOf = function (className, baseClassName) {
-            var _this = this;
-            var bases = classNameToBaseClassMap[className];
-            if (bases.indexOf(baseClassName) >= 0)
-                return true;
-            return bases.some(function (clazz) { return _this.isTypeOf(clazz, baseClassName); });
         };
         TreeGenerator.prototype.symbolToFileMap = function (file, symbol) {
             var _this = this;
@@ -20260,6 +20268,7 @@ var ts;
                 if (classtype.baseTypes && classtype.baseTypes.length) {
                     ts.forEach(classtype.baseTypes, function (t) { return _this.classNameToBaseClass(fullName, t); });
                 }
+                this.constructorToClassName(file, symbol.valueDeclaration);
             }
         };
         TreeGenerator.prototype.symbolTabelToFileMap = function (file, symbolTable) {
@@ -20278,6 +20287,57 @@ var ts;
                 }
             });
         };
+        TreeGenerator.prototype.constructorToClassName = function (file, classNode) {
+            if (!classNode || !classNode.symbol)
+                return;
+            var className = checker.getFullyQualifiedName(classNode.symbol);
+            var nodesToCheck = [];
+            ts.forEachChild(classNode, function (node) {
+                if (node.kind == 126 /* Constructor */) {
+                    nodesToCheck.push(node.body);
+                }
+                if (node.kind == 124 /* Property */ && node.initializer) {
+                    nodesToCheck.push(node);
+                }
+            });
+            if (!nodesToCheck.length) {
+                return;
+            }
+            var findUsedClasses;
+            findUsedClasses = function (node) { return ts.forEachChild(node, function (n) {
+                var nodeToGet = null;
+                switch (n.kind) {
+                    case 143 /* PropertyAccessExpression */:
+                        nodeToGet = n.expression;
+                        break;
+                    case 145 /* CallExpression */:
+                    case 146 /* NewExpression */:
+                        nodeToGet = n.expression;
+                        break;
+                    default:
+                        nodeToGet = null;
+                }
+                if (nodeToGet) {
+                    var definedSymbol = checker.egretGetResolveSymbol(nodeToGet);
+                    if (definedSymbol && (definedSymbol.flags & 107455 /* Value */ || definedSymbol.flags & 29360128 /* Export */)) {
+                        var name = checker.getFullyQualifiedName(definedSymbol);
+                        if (name == "unknown")
+                            return;
+                        var classes = constructorToClassMap[className] || [];
+                        classes.push(name);
+                        constructorToClassMap[className] = classes;
+                        if (!(name in classNameToFileMap) && definedSymbol.declarations && definedSymbol.declarations.length) {
+                            var source = ts.getAncestor(definedSymbol.declarations[0], 201 /* SourceFile */);
+                            classNameToFileMap[name] = source.filename;
+                        }
+                    }
+                }
+                else {
+                    findUsedClasses(n);
+                }
+            }); };
+            nodesToCheck.forEach(function (node) { return findUsedClasses(node); });
+        };
         TreeGenerator.prototype.staticMemberToClassName = function (file, symbol) {
             symbol = symbol.exportSymbol || symbol;
             var fullName = getFullyQualifiedName(symbol);
@@ -20289,6 +20349,8 @@ var ts;
                 var initializerClass = checker.getFullyQualifiedName(staticMemberType.symbol);
                 staticToClassNameMap[fullName] = initializerClass;
             }
+        };
+        TreeGenerator.prototype.addStaticDepend = function (staticMemberName, className) {
         };
         TreeGenerator.prototype.classNameToBaseClass = function (className, baseType) {
             var fullName = checker.getFullyQualifiedName(baseType.symbol);
@@ -20328,12 +20390,16 @@ var ts;
                 }
                 var staticDepends = staticToClassNameMap[className];
                 if (staticDepends) {
-                    var dependFile = classNameToFileMap[staticDepends];
-                    if (dependFile != file) {
-                        var dependFileNode = _this.getFileNode(dependFile);
-                        fileNode.addDepends(dependFileNode);
-                        dependFileNode.addSubDepends(fileNode);
-                    }
+                    var constructorDepends = constructorToClassMap[staticDepends] || [];
+                    constructorDepends.push(staticDepends);
+                    constructorDepends.forEach(function (depend) {
+                        var dependFile = classNameToFileMap[depend];
+                        if (dependFile != file) {
+                            var dependFileNode = _this.getFileNode(dependFile);
+                            fileNode.addDepends(dependFileNode);
+                            dependFileNode.addSubDepends(fileNode);
+                        }
+                    });
                 }
             });
             var singleTypes = [], bottomTypes = [], topTypes = [], otherTypes = [];
@@ -20826,7 +20892,10 @@ var TSC = (function () {
         else {
             parsedCmd.options.outDir = outDir;
         }
-        return ts.executeWithOption(parsedCmd);
+        return {
+            exitCode: ts.executeWithOption(parsedCmd),
+            files: ts.TreeGenerator.getOrderedFiles()
+        };
     };
     TSC.executeCommandLine = ts.executeCommandLine;
     TSC.exit = null;

@@ -40,8 +40,12 @@ var optionDeclarations: lark.CommandLineOption[] = [
         type: 'string'
     }, {
         name: 'declaration',
-        type: 'booleam',
+        type: 'boolean',
         shortName: "d"
+    }, {
+        name: 'autoCompile',
+        type: 'boolean',
+        shortName: "a"
     }
 ];
 
@@ -136,9 +140,6 @@ export function parseCommandLine(commandLine: string[]) {
 
         if (options.projectDir == null)
             options.projectDir = process.cwd();
-
-        options.host = 'localhost';
-        options.port = 3001;
 
         var props = new Properties();
         if (file.exists(options.larkPropertiesFile)) {

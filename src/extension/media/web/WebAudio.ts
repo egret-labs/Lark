@@ -128,7 +128,11 @@ module lark.web {
         }
 
         protected loadAudioData(url) {
-            lark.get(url, null, this.onLoadedAudioData,() => alert('BufferLoader: XHR error'), "arraybuffer");
+            var request = new HttpRequest();
+            request.responseType = HttpResponseType.ARRAY_BUFFER;
+            request.open(url);
+            request.once(Event.COMPLETE,(event:Event)=>{this.onLoadedAudioData(request.response)},null);
+            request.send();
         }
 
         protected onLoadedAudioData = (response: ArrayBuffer) => {

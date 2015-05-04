@@ -35,7 +35,7 @@ var CompileOptions = (function () {
     });
     Object.defineProperty(CompileOptions.prototype, "debugLarkFile", {
         get: function () {
-            return FileUtil.joinPath(this.debugDir, "lark/lark.js");
+            return FileUtil.joinPath(this.templateDir, "lark/lark.js");
         },
         enumerable: true,
         configurable: true
@@ -49,7 +49,7 @@ var CompileOptions = (function () {
     });
     Object.defineProperty(CompileOptions.prototype, "releaseLarkFile", {
         get: function () {
-            return FileUtil.joinPath(this.releaseDir, "lark/lark.min.js");
+            return FileUtil.joinPath(this.templateDir, "lark/lark.min.js");
         },
         enumerable: true,
         configurable: true

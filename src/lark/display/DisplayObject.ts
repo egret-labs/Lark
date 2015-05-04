@@ -43,7 +43,11 @@ module lark {
     }
 
     const enum Values {
-        scaleX, scaleY, skewX, skewY, rotation, x, y
+        scaleX, scaleY, skewX, skewY, rotation
+    }
+
+    const enum M {
+        a, b, c, d, tx, ty
     }
 
     /**
@@ -61,10 +65,10 @@ module lark {
         public constructor() {
             super();
             this.$displayObjectFlags = player.DisplayObjectFlags.InitFlags;
-            this._values = new Float64Array([1, 1, 0, 0, 0, 0, 0]);
+            this.displayObjectValues = new Float64Array([1, 1, 0, 0, 0]);
         }
 
-        private _values:Float64Array;
+        private displayObjectValues:Float64Array;
 
         $displayObjectFlags:number = 0;
 
@@ -136,7 +140,7 @@ module lark {
          * 标记这个显示对象在父级容器的位置发生了改变。
          */
         private invalidatePosition():void {
-            this.$invalidateChildren();
+            this.$invalidateTransform();
             this.$propagateFlagsDown(player.DisplayObjectFlags.InvalidConcatenatedMatrix |
             player.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
             if (this.$parent) {
@@ -169,17 +173,23 @@ module lark {
             this.$parent = parent;
         }
 
-        $onAddToStage(stage:Stage):void {
+        $onAddToStage(stage:Stage,nestLevel:number):void {
             this.$stage = stage;
+            this.$nestLevel = nestLevel;
             Sprite.$EVENT_ADD_TO_STAGE_LIST.push(this);
         }
 
         $onRemoveFromStage():void {
+            this.$nestLevel = 0;
             Sprite.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
         }
 
         $stage:Stage = null;
 
+        /**
+         * 这个对象在显示列表中的嵌套深度，舞台为1，它的子项为2，子项的子项为3，以此类推。当对象不在显示列表中时此属性值为0.
+         */
+        $nestLevel:number = 0;
         /**
          * 显示对象的舞台。
          * 例如，您可以创建多个显示对象并加载到显示列表中，每个显示对象的 stage 属性是指相同的 Stage 对象。
@@ -200,7 +210,7 @@ module lark {
 
         $getMatrix():Matrix {
             if (this.$hasFlags(player.DisplayObjectFlags.InvalidMatrix)) {
-                var values = this._values;
+                var values = this.displayObjectValues;
                 this._matrix.$updateScaleAndRotation(values[Values.scaleX], values[Values.scaleY], values[Values.skewX], values[Values.skewY]);
                 this.$removeFlags(player.DisplayObjectFlags.InvalidMatrix);
             }
@@ -220,7 +230,7 @@ module lark {
             }
             var m = this._matrix;
             m.copyFrom(matrix);
-            var values = this._values;
+            var values = this.displayObjectValues;
             values[Values.scaleX] = m.$getScaleX();
             values[Values.scaleY] = m.$getScaleY();
             values[Values.skewX] = matrix.$getSkewX();
@@ -239,6 +249,10 @@ module lark {
                 if (this.$parent) {
                     this.$parent.$getConcatenatedMatrix().$preMultiplyInto(this.$getMatrix(),
                         this.$renderMatrix);
+                    var rect = this.$scrollRect;
+                    if(rect){
+                        this.$renderMatrix.$preMultiplyInto($TempMatrix.setTo(1,0,0,1,-rect.x,-rect.y),this.$renderMatrix)
+                    }
                 } else {
                     this.$renderMatrix.copyFrom(this.$getMatrix());
                 }
@@ -269,7 +283,11 @@ module lark {
          * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
          */
         public get x():number {
-            return this._values[Values.x];
+            return this.$getX();
+        }
+
+        $getX():number{
+            return this._matrix.$data[M.tx];
         }
 
         public set x(value:number) {
@@ -278,15 +296,11 @@ module lark {
 
         $setX(value:number):boolean{
             value = +value || 0;
-            var values = this._values;
-            if (value === values[Values.x]) {
+            var values = this._matrix.$data;;
+            if (value === values[M.tx]) {
                 return false;
             }
-            values[Values.x] = value;
-            if (this.$scrollRect) {
-                value -= this.$scrollRect.x;
-            }
-            this._matrix.$data[4] = value;
+            values[M.tx] = value;
             this.invalidatePosition();
             return true;
         }
@@ -297,7 +311,11 @@ module lark {
          * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
          */
         public get y():number {
-            return this._values[Values.y];
+            return this.$getY();
+        }
+
+        $getY():number{
+            return this._matrix.$data[M.ty];
         }
 
         public set y(value:number) {
@@ -306,15 +324,11 @@ module lark {
 
         $setY(value:number):boolean{
             value = +value || 0;
-            var values = this._values;
-            if (value === values[Values.y]) {
+            var values = this._matrix.$data;
+            if (value === values[M.ty]) {
                 return false;
             }
-            values[Values.y] = value;
-            if (this.$scrollRect) {
-                value -= this.$scrollRect.y;
-            }
-            this._matrix.$data[5] = value;
+            values[M.ty] = value;
             this.invalidatePosition();
             return true;
         }
@@ -327,7 +341,7 @@ module lark {
          * @default 1
          */
         public get scaleX():number {
-            return this._values[Values.scaleX];
+            return this.displayObjectValues[Values.scaleX];
         }
 
         public set scaleX(value:number) {
@@ -336,7 +350,7 @@ module lark {
 
         $setScaleX(value:number):boolean{
             value = +value || 0;
-            var values = this._values;
+            var values = this.displayObjectValues;
             if (value === values[Values.scaleX]) {
                 return false;
             }
@@ -352,7 +366,7 @@ module lark {
          * @default 1
          */
         public get scaleY():number {
-            return this._values[Values.scaleY];
+            return this.displayObjectValues[Values.scaleY];
         }
 
         public set scaleY(value:number) {
@@ -361,10 +375,10 @@ module lark {
 
         $setScaleY(value:number):boolean{
             value = +value || 0;
-            if (value === this._values[Values.scaleY]) {
+            if (value === this.displayObjectValues[Values.scaleY]) {
                 return false;
             }
-            this._values[Values.scaleY] = value;
+            this.displayObjectValues[Values.scaleY] = value;
             this.invalidateMatrix();
             return true;
         }
@@ -376,13 +390,13 @@ module lark {
          * @default 0 默认值为 0 不旋转。
          */
         public get rotation():number {
-            return this._values[Values.rotation];
+            return this.displayObjectValues[Values.rotation];
         }
 
         public set rotation(value:number) {
             value = +value || 0;
             value = clampRotation(value);
-            var values = this._values;
+            var values = this.displayObjectValues;
             if (value === values[Values.rotation]) {
                 return;
             }
@@ -396,14 +410,13 @@ module lark {
 
         /**
          * 表示显示对象的宽度，以像素为单位。
-         * 宽度是根据显示对象内容的范围来计算的。优先顺序为 显式设置宽度 > 测量宽度。
          */
         public get width():number {
             return this.$getWidth();
         }
 
         $getWidth():number {
-            return this.$getTransformedBounds(this.$parent, Rectangle.TEMP).width;
+            return this.$getTransformedBounds(this.$parent,$TempRectangle).width;
         }
 
         public set width(value:number) {
@@ -415,9 +428,9 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var values = this._values;
+            var values = this.displayObjectValues;
             var originalBounds = this.$getOriginalBounds();
-            var bounds = this.$getTransformedBounds(this.$parent, Rectangle.TEMP);
+            var bounds = this.$getTransformedBounds(this.$parent, $TempRectangle);
             var angle = values[Values.rotation] / 180 * Math.PI;
             var baseWidth = originalBounds.$getBaseWidth(angle);
             if (!baseWidth) {
@@ -431,14 +444,13 @@ module lark {
 
         /**
          * 表示显示对象的高度，以像素为单位。
-         * 高度是根据显示对象内容的范围来计算的。优先顺序为 显式设置高度 > 测量高度。
          */
         public get height():number {
             return this.$getHeight();
         }
 
         $getHeight():number {
-            return this.$getTransformedBounds(this.$parent, Rectangle.TEMP).height;
+            return this.$getTransformedBounds(this.$parent, $TempRectangle).height;
         }
 
         public set height(value:number) {
@@ -450,9 +462,9 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var values = this._values;
+            var values = this.displayObjectValues;
             var originalBounds = this.$getOriginalBounds();
-            var bounds = this.$getTransformedBounds(this.$parent, Rectangle.TEMP);
+            var bounds = this.$getTransformedBounds(this.$parent, $TempRectangle);
             var angle = values[Values.rotation] / 180 * Math.PI;
             var baseHeight = originalBounds.$getBaseHeight(angle);
             if (!baseHeight) {
@@ -481,7 +493,7 @@ module lark {
                 return;
             }
             this.$visible = value;
-            this.$invalidateChildren();
+            this.$invalidateTransform();
         }
 
         /**
@@ -609,20 +621,17 @@ module lark {
         }
 
         public set scrollRect(value:Rectangle) {
-            var values = this._values;
-            var m = this._matrix.$data;
+            if(!value&&!this.$scrollRect){
+                return;
+            }
             if (value) {
                 if (!this.$scrollRect) {
                     this.$scrollRect = new lark.Rectangle();
                 }
                 this.$scrollRect.copyFrom(value);
-                m[4] = values[Values.x] - value.x;
-                m[5] = values[Values.y] - value.y;
             }
             else {
                 this.$scrollRect = null;
-                m[4] = values[Values.x];
-                m[5] = values[Values.y];
             }
             this.invalidatePosition();
         }
@@ -642,7 +651,7 @@ module lark {
                 return;
             }
             this.$blendMode = value;
-            this.$invalidateChildren();
+            this.$invalidateTransform();
         }
 
         /**
@@ -674,7 +683,7 @@ module lark {
                 value.$maskedObject = this;
             }
             this.$mask = value;
-            this.$invalidateChildren();
+            this.$invalidateTransform();
         }
 
         /**
@@ -700,7 +709,7 @@ module lark {
             }
             var m:Matrix;
             if (targetCoordinateSpace) {
-                m = Matrix.TEMP;
+                m = $TempMatrix;
                 var invertedTargetMatrix = targetCoordinateSpace.$getInvertedConcatenatedMatrix();
                 invertedTargetMatrix.$preMultiplyInto(this.$getConcatenatedMatrix(), m);
             } else {
@@ -796,8 +805,8 @@ module lark {
         $parentDisplayList:lark.player.DisplayList = null;
 
         /**
-         * 标记此显示对象需要重绘。
-         * @param notiryChildren 是否标记子项也需要重绘。传入false会不传入，将只标记自身的RenderNode需要重绘。
+         * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
+         * @param notiryChildren 是否标记子项也需要重绘。传入false或不传入，将只标记自身需要重绘。通常只有alpha属性改变会需要通知子项重绘。
          */
         $invalidate(notifyChildren?:boolean):void {
             if (!this.$renderRegion || this.$hasFlags(player.DisplayObjectFlags.DirtyRender)) {
@@ -811,9 +820,10 @@ module lark {
         }
 
         /**
-         * 标记自身和所有子项都失效。
+         * 标记自身以及所有子项在父级中变换叠加的显示内容失效。此方法不会触发自身的cacheAsBitmap重绘。
+         * 通常用于矩阵改变或从显示列表添加和移除时。若自身的显示内容已经改变需要重绘，应该调用$invalidate()。
          */
-        $invalidateChildren():void {
+        $invalidateTransform():void {
             if (this.$hasFlags(player.DisplayObjectFlags.DirtyChildren)) {
                 return;
             }
@@ -875,8 +885,8 @@ module lark {
             }
             var m = this.$getInvertedConcatenatedMatrix().$data;
             var bounds = this.$getContentBounds();
-            var localX = m[0] * stageX + m[2] * stageY + m[4];
-            var localY = m[1] * stageX + m[3] * stageY + m[5];
+            var localX = m[M.a] * stageX + m[M.c] * stageY + m[M.tx];
+            var localY = m[M.b] * stageX + m[M.d] * stageY + m[M.ty];
             if (bounds.contains(localX, localY)) {
                 if (!this.$children) {//容器已经检查过scrollRect和mask，避免重复对遮罩进行碰撞。
                     if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {

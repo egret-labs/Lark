@@ -52,7 +52,7 @@ declare module lark {
         esTarget?: string;
         showUI?: boolean;
         declaration?: boolean;
-
+        autoCompile?: boolean;
         projectProperties: ILarkProperties;
 
         toJSON: () => any;
@@ -70,6 +70,9 @@ declare module lark {
         modules: ILarkModule[];
         port: number;
         host: string;
+        keepLarkInSeparatedFiles: boolean;
+        larkVersion: string;
+        startupHtml: string;
     }
 
     export interface CommandLineOption {

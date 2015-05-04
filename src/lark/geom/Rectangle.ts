@@ -30,6 +30,7 @@
 
 module lark {
 
+    var rectanglePool:Rectangle[] = [];
     /**
      * Rectangle 对象是按其位置（由它左上角的点 (x, y) 确定）以及宽度和高度定义的区域。
      * Rectangle 类的 x、y、width 和 height 属性相互独立；更改一个属性的值不会影响其他属性。
@@ -39,9 +40,27 @@ module lark {
     export class Rectangle extends LarkObject {
 
         /**
-         * 只允许在局部变量中使用，使用完要立即释放，并要防止嵌套调用导致对象在其他位置被修改的可能性。
+         * 释放一个Rectangle实例到对象池
          */
-        public static TEMP:Rectangle = new Rectangle();
+        public static release(rect:Rectangle):void {
+            if(!rect){
+                return;
+            }
+            rectanglePool.push(rect);
+        }
+
+        /**
+         * 从对象池中取出或创建一个新的Rectangle对象。
+         * 建议对于一次性使用的对象，均使用此方法创建，而不是直接new一个。
+         * 使用完后调用对应的release()静态方法回收对象，能有效减少对象创建数量造成的性能开销。
+         */
+        public static create():Rectangle {
+            var rect = rectanglePool.pop();
+            if (!rect) {
+                rect = new Rectangle();
+            }
+            return rect;
+        }
 
         /**
          * 创建一个新 Rectangle 对象，其左上角由 x 和 y 参数指定，并具有指定的 width 和 height 参数。
@@ -209,4 +228,8 @@ module lark {
         }
     }
     registerType(Rectangle,[Types.Rectangle]);
+    /**
+     * 仅供引擎内复用，要防止暴露引用到外部。
+     */
+    export var $TempRectangle = new Rectangle();
 }

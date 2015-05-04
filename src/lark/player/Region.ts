@@ -34,14 +34,16 @@ module lark.player {
     export class Region {
 
         /**
-         * 释放一个DisplayList实例到对象池
+         * 释放一个Region实例到对象池
          */
         public static release(region:Region):void {
             regionPool.push(region);
         }
 
         /**
-         * 从对象池中取出或创建一个新的DisplayList对象。
+         * 从对象池中取出或创建一个新的Region对象。
+         * 建议对于一次性使用的对象，均使用此方法创建，而不是直接new一个。
+         * 使用完后调用对应的release()静态方法回收对象，能有效减少对象创建数量造成的性能开销。
          */
         public static create():Region {
             var region = regionPool.pop();
@@ -169,10 +171,10 @@ module lark.player {
             var yMax = y + bounds.height;
             //优化，通常情况下不缩放旋转的对象占多数，直接加上偏移量即可。
             if (a === 1.0 && b === 0.0 && c === 0.0 && d === 1.0) {
-                this.minX = x + tx;
-                this.minY = y + ty;
-                this.maxX = xMax + tx;
-                this.maxY = yMax + ty;
+                this.minX = Math.floor(x + tx);
+                this.minY = Math.floor(y + ty);
+                this.maxX = Math.ceil(xMax + tx);
+                this.maxY = Math.ceil(yMax + ty);
             }
             else {
                 var x0 = a * x + c * y + tx;

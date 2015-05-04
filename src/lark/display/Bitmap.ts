@@ -49,6 +49,9 @@ module lark {
 
         $bitmapData:BitmapData;
 
+        /**
+         * 被引用的 BitmapData 对象。
+         */
         public get bitmapData():BitmapData{
             return this.$bitmapData;
         }

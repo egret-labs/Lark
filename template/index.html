@@ -27,6 +27,7 @@
     <script src="lark/utils/getDefinitionByName.js"></script>
     <script src="lark/utils/getTimer.js"></script>
     <script src="lark/utils/tr.js"></script>
+    <script src="lark/utils/NONE.js"></script>
     <script src="lark/geom/Matrix.js"></script>
     <script src="lark/geom/Point.js"></script>
     <script src="lark/geom/Rectangle.js"></script>
@@ -34,6 +35,7 @@
     <script src="lark/events/Event.js"></script>
     <script src="lark/events/EventEmitter.js"></script>
     <script src="lark/utils/Timer.js"></script>
+    <script src="lark/events/ProgressEvent.js"></script>
     <script src="lark/events/TimerEvent.js"></script>
     <script src="lark/events/TouchEvent.js"></script>
     <script src="lark/system/Capabilities.js"></script>
@@ -52,11 +54,9 @@
     <script src="lark/player/Ticker.js"></script>
     <script src="lark/player/Player.js"></script>
     <script src="lark/player/TouchHandler.js"></script>
-    <script src="lark/net/HttpClient.js"></script>
-    <script src="lark/web/WebCapability.js"></script>
-    <script src="lark/web/WebHttpClient.js"></script>
-    <script src="lark/net/Http.js"></script>
     <script src="lark/text/TextMeasurer.js"></script>
+    <script src="lark/web/WebHttpRequest.js"></script>
+    <script src="lark/web/WebImageLoader.js"></script>
     <script src="lark/web/WebScreen.js"></script>
     <script src="lark/web/WebTouchHandler.js"></script>
     <script src="lark/web/CanvasFactory.js"></script>
@@ -64,6 +64,17 @@
     <script src="lark/text/TextStyle.js"></script>
     <script src="lark/text/TextSpan.js"></script>
     <script src="lark/text/TextField.js"></script>
+
+    <script src="extension/gui/i18n/zh_CN.js"></script>
+    <script src="extension/gui/utils/MatrixUtil.js"></script>
+    <script src="extension/gui/core/UIComponent.js"></script>
+    <script src="extension/gui/core/validator.js"></script>
+    <script src="extension/gui/components/Group.js"></script>
+    <script src="extension/gui/components/SkinnableComponent.js"></script>
+    <script src="extension/gui/events/UIEvent.js"></script>
+    <script src="extension/gui/layouts/supportClasses/LayoutBase.js"></script>
+    <script src="extension/gui/layouts/BasicLayout.js"></script>
+
     <script src="extension/image/Texture.js"></script>
     <script src="extension/text/engine/ContentElement.js"></script>
     <script src="extension/text/engine/GraphicElement.js"></script>
@@ -90,7 +101,7 @@
 <body>
 <div id="lark-sample" style="margin: auto;width: 100%;height: 100%;" class="lark-player"
      data-entry-class="lark.Main" data-scale-mode="fixedHeight" data-content-width="480" data-content-height="800"
-     data-show-paint-rects="false">
+     data-show-paint-rects="true">
 </div>
 <script>
     var entryClass = location.search && location.search.match("main=(.+)") ? location.search.match("main=(.+)")[1] : "lark.Main";

@@ -43,16 +43,26 @@ module lark.gui {
          */
         UIComponent = 1001,
         /**
+         * GUI容器基类
+         */
+        Group,
+        /**
+         * SkinnableComponent 类定义可设置外观的组件的基类。SkinnableComponent 类所使用的外观通常是 Skin 类的子类。
+         */
+        SkinnableComponent,
+        /**
          * UI事件
          */
         UIEvent,
         /**
-         * UI尺寸改变事件
+         * 容器布局基类。若要创建使用 Group 容器的自定义布局，必须扩展 LayoutBase 或其子类之一。
+         * 子类必须实现 updateDisplayList() 方法（定位 target Group 的子项并调整这些子项的大小）和 measure() 方法（计算 target 的默认大小）。
          */
-        ReiszeEvent,
+        LayoutBase,
         /**
-         * UI移动事件
+         * BasicLayout 类根据其各个设置彼此独立地排列布局元素。
+         * BasicLayout（也称为绝对布局）要求显式定位每个容器子代。可以使用子代的 x 和 y 属性，或使用约束来定位每个子代。
          */
-        MoveEvent
+        BasicLayout
     }
 }

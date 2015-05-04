@@ -130,8 +130,5 @@ module lark {
          */
         touchChildren:boolean;
 
-        $doRemoveChild(index:number, notifyListeners?:boolean):DisplayObject;
-
-        $doAddChild(child:DisplayObject, index:number, notifyListeners?:boolean):DisplayObject;
     }
 }

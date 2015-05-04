@@ -24,7 +24,7 @@ class CompileOptions implements lark.ICompileOptions {
     }
 
     get debugLarkFile(): string {
-        return FileUtil.joinPath(this.debugDir, "lark/lark.js");
+        return FileUtil.joinPath(this.templateDir, "lark/lark.js");
     }
 
     get releaseDir(): string {
@@ -32,7 +32,7 @@ class CompileOptions implements lark.ICompileOptions {
     }
 
     get releaseLarkFile(): string {
-        return FileUtil.joinPath(this.releaseDir, "lark/lark.min.js");
+        return FileUtil.joinPath(this.templateDir, "lark/lark.min.js");
     }
 
     get out(): string {
@@ -78,6 +78,7 @@ class CompileOptions implements lark.ICompileOptions {
     esTarget: string = 'ES5';
     showUI: boolean;
     declaration: boolean;
+    autoCompile: boolean;
 
     projectProperties: lark.ILarkProperties;
 

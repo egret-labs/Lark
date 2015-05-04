@@ -33,7 +33,7 @@ var Run = (function (_super) {
     Run.prototype.startServer = function (options) {
         var nodePath = process.execPath, larkPath = FileUtil.joinPath(options.larkRoot, 'tools/bin/lark');
         console.log(process.cwd());
-        childProcess.spawn(nodePath, [larkPath, 'startserver', options.projectDir], {
+        childProcess.spawn(nodePath, [larkPath, 'startserver', options.projectDir, '-a'], {
             detached: true,
             stdio: ['ignore', 'ignore', 'ignore'],
             cwd: process.cwd()

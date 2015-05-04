@@ -72,6 +72,14 @@ module lark.gui {
 		public static CONTENT_CHANGED:string = "contentChanged";
 
 		/**
+		 * 容器的内容尺寸发生改变
+		 */
+		public static CONTENT_SIZE_CHANGED:string = "contentSizeChanged";
+		/**
+		 * 容器的滚动位置发生改变
+		 */
+		public static SCROLL_POSITION_CHANGED:string = "scrollPositionChanged";
+		/**
 		 * 下拉框弹出事件
 		 */
 		public static OPEN:string = "open";
@@ -86,6 +94,9 @@ module lark.gui {
 		 * @param eventType 事件类型
 		 */
 		public static emitUIEvent(target:IEventEmitter, eventType:string):boolean {
+            if(!target.hasListener(eventType)){
+                return;
+            }
 			var event = Event.create(UIEvent, eventType);
 			var result = target.emit(event);
 			Event.release(event);

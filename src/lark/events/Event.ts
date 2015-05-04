@@ -82,12 +82,21 @@ module lark {
          */
         public static RESIZE:string = "resize";
 
+        /**
+         * 网络请求加载完成
+         */
+        public static COMPLETE:string = "complete";
+
+        /**
+         * 输入或输出操作失败
+         */
+        public static IO_ERROR:string = "ioError";
 
         /**
          * 创建一个作为参数传递给事件侦听器的 Event 对象。
-         * @param type {string} 事件的类型，可以作为 Event.type 访问。
-         * @param bubbles {boolean} 确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
-         * @param cancelable {boolean} 确定是否可以取消 Event 对象。默认值为 false。
+         * @param type  事件的类型，可以作为 Event.type 访问。
+         * @param bubbles  确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
+         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
          */
         public constructor(type:string, bubbles?:boolean, cancelable?:boolean) {
             super();

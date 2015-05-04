@@ -1480,6 +1480,7 @@ module ts {
             var currentSourceFile: SourceFile;
 
             var extendsEmitted = false;
+            var defineEmitted = false;
 
             /** write emitted output to disk*/
             var writeEmittedFiles = writeJavaScriptFile;
@@ -2997,6 +2998,9 @@ module ts {
             }
 
             function emitMemberFunctions(node: ClassDeclaration) {
+                write('var d = __define,c=');
+                emitNode(node.name);
+                write(';p=c.prototype;');
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.Method) {
                         if (!(<MethodDeclaration>member).body) {
@@ -3007,10 +3011,12 @@ module ts {
                         emitLeadingComments(member);
                         emitStart(member);
                         emitStart((<MethodDeclaration>member).name);
-                        emitNode(node.name);
+                        
                         if (!(member.flags & NodeFlags.Static)) {
-                            write(".prototype");
+                            write("p");
                         }
+                        else
+                            emitNode(node.name);
                         emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
                         emitEnd((<MethodDeclaration>member).name);
                         write(" = ");
@@ -3026,12 +3032,15 @@ module ts {
                         if (member === accessors.firstAccessor) {
                             writeLine();
                             emitStart(member);
-                            write("Object.defineProperty(");
+                            write("d(");
                             emitStart((<AccessorDeclaration>member).name);
-                            emitNode(node.name);
+
                             if (!(member.flags & NodeFlags.Static)) {
-                                write(".prototype");
+                                write("p");
                             }
+                            else
+                                emitNode(node.name);
+
                             write(", ");
                             emitExpressionForPropertyName((<AccessorDeclaration>member).name);
                             emitEnd((<AccessorDeclaration>member).name);
@@ -3040,7 +3049,7 @@ module ts {
                             if (accessors.getAccessor) {
                                 writeLine();
                                 emitLeadingComments(accessors.getAccessor);
-                                write("get: ");
+                                write("g: ");
                                 emitStart(accessors.getAccessor);
                                 write("function ");
                                 emitSignatureAndBody(accessors.getAccessor);
@@ -3051,7 +3060,7 @@ module ts {
                             if (accessors.setAccessor) {
                                 writeLine();
                                 emitLeadingComments(accessors.setAccessor);
-                                write("set: ");
+                                write("s: ");
                                 emitStart(accessors.setAccessor);
                                 write("function ");
                                 emitSignatureAndBody(accessors.setAccessor);
@@ -3059,10 +3068,6 @@ module ts {
                                 emitTrailingComments(accessors.setAccessor);
                                 write(",");
                             }
-                            writeLine();
-                            write("enumerable: true,");
-                            writeLine();
-                            write("configurable: true");
                             decreaseIndent();
                             writeLine();
                             write("});");
@@ -3507,6 +3512,11 @@ module ts {
                     writeLine();
                     write("};");
                     extendsEmitted = true;
+                }
+                if (!defineEmitted) {
+                    writeLine();
+                    write('var __define =this.__define || function (o, p, a) { Object.defineProperty(o, p, { configurable:true,enumerable:true,get:a.g,set:a.s }) };');
+                    defineEmitted = true;
                 }
                 if (isExternalModule(node)) {
                     if (compilerOptions.module === ModuleKind.AMD) {

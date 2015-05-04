@@ -46,7 +46,7 @@ class Publish extends Action{
         this.copyDirectory(option.templateDir, option.releaseDir);
 
         var exitcode = this.buildLark();
-        exitcode = this.buildProject();
+        exitcode = this.buildProject().exitCode;
         return exitcode;
     }
 }

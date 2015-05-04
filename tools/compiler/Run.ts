@@ -35,7 +35,7 @@ class Run extends Action {
             larkPath = FileUtil.joinPath(options.larkRoot, 'tools/bin/lark');
         console.log(process.cwd());
 
-        childProcess.spawn(nodePath, [larkPath, 'startserver', options.projectDir], {
+        childProcess.spawn(nodePath, [larkPath, 'startserver', options.projectDir,'-a'], {
             detached: true,
             stdio: ['ignore', 'ignore', 'ignore'],
             cwd: process.cwd()
