@@ -43,7 +43,11 @@ module lark {
     }
 
     const enum Values {
-        scaleX, scaleY, skewX, skewY, rotation
+        scaleX,     //1
+        scaleY,     //1
+        skewX,      //0
+        skewY,      //0
+        rotation    //0
     }
 
     const enum M {
@@ -65,7 +69,13 @@ module lark {
         public constructor() {
             super();
             this.$displayObjectFlags = player.DisplayObjectFlags.InitFlags;
-            this.displayObjectValues = new Float64Array([1, 1, 0, 0, 0]);
+            this.displayObjectValues = new Float64Array([
+                1,  //scaleX,
+                1,  //scaleY,
+                0,  //skewX,
+                0,  //skewY,
+                0   //rotation
+            ]);
         }
 
         private displayObjectValues:Float64Array;
@@ -142,7 +152,7 @@ module lark {
         private invalidatePosition():void {
             this.$invalidateTransform();
             this.$propagateFlagsDown(player.DisplayObjectFlags.InvalidConcatenatedMatrix |
-            player.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
+                player.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
             if (this.$parent) {
                 this.$parent.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
             }
@@ -173,7 +183,7 @@ module lark {
             this.$parent = parent;
         }
 
-        $onAddToStage(stage:Stage,nestLevel:number):void {
+        $onAddToStage(stage:Stage, nestLevel:number):void {
             this.$stage = stage;
             this.$nestLevel = nestLevel;
             Sprite.$EVENT_ADD_TO_STAGE_LIST.push(this);
@@ -190,6 +200,7 @@ module lark {
          * 这个对象在显示列表中的嵌套深度，舞台为1，它的子项为2，子项的子项为3，以此类推。当对象不在显示列表中时此属性值为0.
          */
         $nestLevel:number = 0;
+
         /**
          * 显示对象的舞台。
          * 例如，您可以创建多个显示对象并加载到显示列表中，每个显示对象的 stage 属性是指相同的 Stage 对象。
@@ -250,8 +261,8 @@ module lark {
                     this.$parent.$getConcatenatedMatrix().$preMultiplyInto(this.$getMatrix(),
                         this.$renderMatrix);
                     var rect = this.$scrollRect;
-                    if(rect){
-                        this.$renderMatrix.$preMultiplyInto($TempMatrix.setTo(1,0,0,1,-rect.x,-rect.y),this.$renderMatrix)
+                    if (rect) {
+                        this.$renderMatrix.$preMultiplyInto($TempMatrix.setTo(1, 0, 0, 1, -rect.x, -rect.y), this.$renderMatrix)
                     }
                 } else {
                     this.$renderMatrix.copyFrom(this.$getMatrix());
@@ -286,7 +297,7 @@ module lark {
             return this.$getX();
         }
 
-        $getX():number{
+        $getX():number {
             return this._matrix.$data[M.tx];
         }
 
@@ -294,9 +305,10 @@ module lark {
             this.$setX(value);
         }
 
-        $setX(value:number):boolean{
+        $setX(value:number):boolean {
             value = +value || 0;
-            var values = this._matrix.$data;;
+            var values = this._matrix.$data;
+            ;
             if (value === values[M.tx]) {
                 return false;
             }
@@ -314,15 +326,15 @@ module lark {
             return this.$getY();
         }
 
-        $getY():number{
+        $getY():number {
             return this._matrix.$data[M.ty];
         }
 
         public set y(value:number) {
-           this.$setY(value);
+            this.$setY(value);
         }
 
-        $setY(value:number):boolean{
+        $setY(value:number):boolean {
             value = +value || 0;
             var values = this._matrix.$data;
             if (value === values[M.ty]) {
@@ -348,7 +360,7 @@ module lark {
             this.$setScaleX(value);
         }
 
-        $setScaleX(value:number):boolean{
+        $setScaleX(value:number):boolean {
             value = +value || 0;
             var values = this.displayObjectValues;
             if (value === values[Values.scaleX]) {
@@ -373,7 +385,7 @@ module lark {
             this.$setScaleY(value);
         }
 
-        $setScaleY(value:number):boolean{
+        $setScaleY(value:number):boolean {
             value = +value || 0;
             if (value === this.displayObjectValues[Values.scaleY]) {
                 return false;
@@ -416,7 +428,7 @@ module lark {
         }
 
         $getWidth():number {
-            return this.$getTransformedBounds(this.$parent,$TempRectangle).width;
+            return this.$getTransformedBounds(this.$parent, $TempRectangle).width;
         }
 
         public set width(value:number) {
@@ -621,7 +633,7 @@ module lark {
         }
 
         public set scrollRect(value:Rectangle) {
-            if(!value&&!this.$scrollRect){
+            if (!value && !this.$scrollRect) {
                 return;
             }
             if (value) {
@@ -1016,5 +1028,5 @@ module lark {
         }
 
     }
-    registerType(DisplayObject,[Types.DisplayObject]);
+    registerType(DisplayObject, [Types.DisplayObject]);
 }
