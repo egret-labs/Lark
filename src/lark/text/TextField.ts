@@ -288,7 +288,12 @@ module lark {
             var values = this.$textFieldValues;
             var height = isNone(values[Values.textFieldHeight]) ?
                 values[Values.textHeight] : values[Values.textFieldHeight];
-            bounds.setTo(0, 0, values[Values.textWidth], height);
+            var width = isNone(values[Values.textFieldWidth])?
+                values[Values.textWidth]:values[Values.textFieldWidth];
+            if(width<values[Values.textWidth]){
+                width = values[Values.textWidth];
+            }
+            bounds.setTo(0, 0, width, height);
         }
 
         $render(context:player.RenderContext):void {
