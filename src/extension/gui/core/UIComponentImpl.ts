@@ -316,6 +316,7 @@ module lark.player {
          * 组件宽度,默认值为lark.NONE,设置为lark.NONE将使用组件的measure()方法自动计算尺寸
          */
         public get width():number {
+            this.validateSizeNow();
             return this.$uiValues[UIValues.width];
         }
 
@@ -333,9 +334,21 @@ module lark.player {
         }
 
         /**
+         * 立即验证自身的尺寸。
+         */
+        private validateSizeNow():void{
+            var parent:DisplayObject = this.$parent;
+            if(!parent||!parent.isType(gui.Types.UIComponent)){
+                parent = this;
+            }
+            (<gui.UIComponent>parent).validateNow();
+        }
+
+        /**
          * 组件高度,默认值为NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
          */
         public get height():number {
+            this.validateSizeNow();
             return this.$uiValues[UIValues.height];
         }
 

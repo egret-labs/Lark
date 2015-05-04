@@ -231,7 +231,7 @@ module lark.player {
     // 1.在UIComponentImpl修改，编译生成UICOmponentImpl.js
     // 2.拷贝构造函数内容到 export function UIComponent()内。
     // 3.拷贝属性和方法体（从includeInLayout属性开始，之前的方法不拷贝）声明部分到 implementUIComponent() 内。
-    // 4.全局替换UIComponentImpl.prototype为prototype。
+    // 4.全局替换UIComponentImpI.prototype为prototype。
     //
     // 自定义类实现UIComponent的步骤：
     // 1.在自定义类的构造函数里调用：player.UIComponent.call(this);
@@ -484,6 +484,7 @@ module lark.player {
              * 组件宽度,默认值为lark.NONE,设置为lark.NONE将使用组件的measure()方法自动计算尺寸
              */
             get: function () {
+                this.validateSizeNow();
                 return this.$uiValues[10 /* width */];
             },
             set: function (value) {
@@ -501,11 +502,22 @@ module lark.player {
             enumerable: true,
             configurable: true
         });
+        /**
+         * 立即验证自身的尺寸。
+         */
+        prototype.validateSizeNow = function () {
+            var parent = this.$parent;
+            if (!parent || !parent.isType(1001 /* UIComponent */)) {
+                parent = this;
+            }
+            parent.validateNow();
+        };
         Object.defineProperty(prototype, "height", {
             /**
              * 组件高度,默认值为NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
              */
             get: function () {
+                this.validateSizeNow();
                 return this.$uiValues[11 /* height */];
             },
             set: function (value) {

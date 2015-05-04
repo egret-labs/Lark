@@ -43,9 +43,9 @@ module lark {
             this.$renderRegion = new player.Region();
         }
 
-        private _fontFamily:string = "SimSun";
+        private _fontFamily:string = "sans-serif";
         /**
-         * 字体名称 。默认值：SimSun
+         * 字体名称 。默认值：sans-serif
          */
         public get fontFamily():string {
             return this._fontFamily;
@@ -164,7 +164,7 @@ module lark {
 
         private _colorString:string = "#000000";
         /**
-         * 文本颜色
+         * 文本颜色，默认值0x000000
          */
         public get textColor():number {
             return this._textColor;
