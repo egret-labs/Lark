@@ -286,7 +286,9 @@ module lark {
         $measureContentBounds(bounds:Rectangle):void {
             this.updateTextLines();
             var values = this.$textFieldValues;
-            bounds.setTo(0, 0, values[Values.textWidth], values[Values.textHeight]);
+            var height = isNone(values[Values.textFieldHeight]) ?
+                values[Values.textHeight] : values[Values.textFieldHeight];
+            bounds.setTo(0, 0, values[Values.textWidth], height);
         }
 
         $render(context:player.RenderContext):void {
@@ -373,14 +375,14 @@ module lark {
             var length = lines.length;
             var maxWidth = 0;
             if (!isNone(textFieldWidth)) {
-                for (var i:number = 0; i < length; i++) {
+                for (var i = 0; i < length; i++) {
                     var line = lines[i];
                     var measureW = TextMeasurer.measureText(line, font);
                     if (measureW > textFieldWidth) {
                         var newLine = "";
                         var lineWidth = 0;
                         var len = line.length;
-                        for (var j:number = 0; j < len; j++) {
+                        for (var j = 0; j < len; j++) {
                             var word = line.charAt(j);
                             measureW = TextMeasurer.measureText(word, font);
                             if (lineWidth + measureW > textFieldWidth) {
