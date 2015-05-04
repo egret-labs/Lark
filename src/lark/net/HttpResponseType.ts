@@ -32,19 +32,19 @@ module lark {
     /**
      * HttpResponseType 定义HttpRequest.responseType属性的值。确定Http请求返回的数据格式。
      */
-    export const enum HttpResponseType{
+    export class HttpResponseType{
 
         /**
          * 返回字符串。HttpRequest.responseType属性的默认值。
          */
-        TEXT,
+        public static TEXT = "text";
         /**
          * 返回二进制的ArrayBuffer对象。
          */
-        ARRAY_BUFFER,
+        public static ARRAY_BUFFER = "arraybuffer";
         /**
          * 返回 JavaScript 对象，将自动解析自服务器传递回来的 JSON 字符串。
          */
-        JSON
+        public static JSON = "json";
     }
 }

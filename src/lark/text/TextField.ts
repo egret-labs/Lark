@@ -39,8 +39,13 @@ module lark {
         textHeight          //0
     }
     /**
-     * TextField 类用于创建显示对象以显示文本。
-     * 可以使用 TextField 类的方法和属性对文本字段进行操作。
+     * TextField 类用于创建显示对象以显示文本。可以使用 TextField 类的方法和属性对文本字段进行操作。
+     * 注意:TextField.width和TextField.height与其他显示对象的定义不同。
+     * 其他显示对象的width，height属性始终等于getBounds(parent)方法返回的尺寸，即包含旋转和缩放值，若设置width或height也将会直接修改scaleX和scaleY的值。
+     * 而 TextField 返回的宽高值并不包含旋转和缩放值，设置TextField.width和TextField.height也不会影响scaleX或scaleY的值。
+     * 设置TextField.width可以强制让文本换行，若文本显示宽度超过您显式设置的值，将会自动换行。
+     * 设置TextField.height可以截断文本，若文本显示高度超过您显式设置的值，将会截断不显示。
+     * 若您需要重置文本宽高为未设置状态，请将宽高属性赋值为 lark.NONE 即可。
      */
     export class TextField extends DisplayObject {
         /**
@@ -76,8 +81,7 @@ module lark {
                 return;
             }
             this._fontFamily = value;
-            this.fontStringChanged = true;
-            this.$invalidateContentBounds();
+            this.invalidateFontString();
         }
 
         /**
@@ -94,96 +98,95 @@ module lark {
                 return;
             }
             values[Values.fontSize] = value;
-            this.fontStringChanged = true;
-            this.$invalidateContentBounds();
+            this.invalidateFontString();
         }
 
-        private _bold:boolean = false;
         /**
          * 是否显示为粗体，默认false。
          */
         public get bold():boolean {
-            return this._bold;
+            return this.$hasFlags(player.TextFieldFlags.Bold);
         }
 
         public set bold(value:boolean) {
             value = !!value;
-            if (value === this._bold) {
+            if (value === this.$hasFlags(player.TextFieldFlags.Bold)) {
                 return;
             }
-            this._bold = value;
-            this.fontStringChanged = true;
-            this.$invalidateContentBounds();
+            this.$toggleFlags(player.TextFieldFlags.Bold, value);
+            this.invalidateFontString();
         }
 
-        private _italic:boolean = false;
         /**
          * 是否显示为斜体，默认false。
          */
         public get italic():boolean {
-            return this._italic;
+            return this.$hasFlags(player.TextFieldFlags.Italic);
         }
 
         public set italic(value:boolean) {
             value = !!value;
-            if (value === this._italic) {
+            if (value === this.$hasFlags(player.TextFieldFlags.Italic)) {
                 return;
             }
-            this._italic = value;
-            this.fontStringChanged = true;
+            this.$toggleFlags(player.TextFieldFlags.Italic, value);
+            this.invalidateFontString();
+        }
+
+        private invalidateFontString():void {
+            this.$setFlags(player.TextFieldFlags.FontStringChanged);
             this.$invalidateContentBounds();
         }
 
         private fontString:string = "";
-        private fontStringChanged:boolean = true;
 
         /**
          * 获取字体信息的字符串形式。
          */
         private getFontString():string {
-            if (this.fontStringChanged) {
-                this.fontStringChanged = false;
+            if (this.$hasFlags(player.TextFieldFlags.FontStringChanged)) {
+                this.$removeFlags(player.TextFieldFlags.FontStringChanged);
                 this.fontString = player.toFontString(this);
             }
             return this.fontString;
         }
 
-        private _textAlignH:string = HorizontalAlign.LEFT;
+        private _horizontalAlign:string = HorizontalAlign.LEFT;
         /**
          * 文字的水平对齐方式 ,请使用HorizontalAlign中定义的常量。
          * 默认值：HorizontalAlign.LEFT。
          */
-        public get textAlignH():string {
-            return this._textAlignH;
+        public get horizontalAlign():string {
+            return this._horizontalAlign;
         }
 
-        public set textAlignH(value:string) {
-            if (this._textAlignH == value) {
+        public set horizontalAlign(value:string) {
+            if (this._horizontalAlign == value) {
                 return;
             }
-            this._textAlignH = value;
+            this._horizontalAlign = value;
             this.$invalidateContentBounds();
         }
 
-        private _textAlignV:string = VerticalAlign.TOP;
+        private _verticalAlign:string = VerticalAlign.TOP;
         /**
          * 文字的垂直对齐方式 ,请使用VerticalAlign中定义的常量。
          * 默认值：VerticalAlign.TOP。
          */
-        public get textAlignV():string {
-            return this._textAlignV;
+        public get verticalAlign():string {
+            return this._verticalAlign;
         }
 
-        public set textAlignV(value:string) {
-            if (this._textAlignV == value) {
+        public set verticalAlign(value:string) {
+            if (this._verticalAlign == value) {
                 return;
             }
-            this._textAlignV = value;
+            this._verticalAlign = value;
             this.$invalidateContentBounds();
         }
 
         /**
-         * 行间距
+         * 行间距。标准行高通常等于fontSize的值，设置此属性，将会在标准行高之间添加指定像素的空白间隔。可以设置为负值。默认值0.
          */
         public get lineSpacing():number {
             return this.$textFieldValues[Values.lineSpacing];
@@ -241,16 +244,21 @@ module lark {
             return this.textLines.length;
         }
 
-        ///**
-        // * 文本显示宽度，以像素为单位。注意:TextField与其他显示对象不同，返回的文本显示宽度并不包含旋转和缩放值。
-        // * 其他显示对象返回的宽度始终等于getBounds(parent)方法返回的宽度。
-        // */
-        //public width:number;//声明变量用来覆盖父类的注释。
-        ///**
-        // * 文本显示高度，以像素为单位。注意:TextField与其他显示对象不同，返回的文本显示高度并不包含旋转和缩放值。
-        // * 其他显示对象返回的高度始终等于getBounds(parent)方法返回的高度。
-        // */
-        //public height:number;//声明变量用来覆盖父类的注释。
+        /**
+         * 文本内容宽度
+         */
+        public get textWidth():number {
+            this.updateTextLines();
+            return this.$textFieldValues[Values.textWidth];
+        }
+
+        /**
+         * 文本内容高度
+         */
+        public get textHeight():number {
+            this.updateTextLines();
+            return this.$textFieldValues[Values.textHeight];
+        }
 
         $getWidth():number {
             return this.$getContentBounds().width;
@@ -282,13 +290,20 @@ module lark {
 
         $invalidateContentBounds():void {
             super.$invalidateContentBounds();
-            this.textLinesChanged = true;
+            this.$setFlags(player.TextFieldFlags.TextLinesChanged);
         }
 
         $measureContentBounds(bounds:Rectangle):void {
             this.updateTextLines();
             var values = this.$textFieldValues;
-            bounds.setTo(0, 0, values[Values.textWidth], values[Values.textHeight]);
+            var height = isNone(values[Values.textFieldHeight]) ?
+                values[Values.textHeight] : values[Values.textFieldHeight];
+            var width = isNone(values[Values.textFieldWidth])?
+                values[Values.textWidth]:values[Values.textFieldWidth];
+            if(width<values[Values.textWidth]){
+                width = values[Values.textWidth];
+            }
+            bounds.setTo(0, 0, width, height);
         }
 
         $render(context:player.RenderContext):void {
@@ -309,18 +324,18 @@ module lark {
             var explicitHeight = hasHeightSet ? values[Values.textFieldHeight] : Number.POSITIVE_INFINITY;
             if (hasHeightSet && textHeight < explicitHeight) {
                 var vAlign = 0;
-                if (this._textAlignV == VerticalAlign.MIDDLE)
+                if (this._verticalAlign == VerticalAlign.MIDDLE)
                     vAlign = 0.5;
-                else if (this._textAlignV == VerticalAlign.BOTTOM)
+                else if (this._verticalAlign == VerticalAlign.BOTTOM)
                     vAlign = 1;
                 drawY += vAlign * (explicitHeight - textHeight);
             }
             drawY = Math.round(drawY);
             var hAlign:number = 0;
-            if (this._textAlignH == HorizontalAlign.CENTER) {
+            if (this._horizontalAlign == HorizontalAlign.CENTER) {
                 hAlign = 0.5;
             }
-            else if (this._textAlignH == HorizontalAlign.RIGHT) {
+            else if (this._horizontalAlign == HorizontalAlign.RIGHT) {
                 hAlign = 1;
             }
             var measuredWidths = this.measuredWidths;
@@ -345,8 +360,6 @@ module lark {
             }
         }
 
-        private textLinesChanged:boolean = true;
-
         private textLines:string[] = [];
 
         private measuredWidths:number[] = [];
@@ -354,11 +367,11 @@ module lark {
 
         private updateTextLines():string[] {
 
-            if (!this.textLinesChanged) {
+            if (!this.$hasFlags(player.TextFieldFlags.TextLinesChanged)) {
                 return this.textLines;
             }
 
-            this.textLinesChanged = false;
+            this.$removeFlags(player.TextFieldFlags.TextLinesChanged);
             this.textLines.length = 0;
             var values = this.$textFieldValues;
             var measuredWidths = this.measuredWidths;
@@ -377,14 +390,14 @@ module lark {
             var length = lines.length;
             var maxWidth = 0;
             if (!isNone(textFieldWidth)) {
-                for (var i:number = 0; i < length; i++) {
+                for (var i = 0; i < length; i++) {
                     var line = lines[i];
                     var measureW = TextMeasurer.measureText(line, font);
                     if (measureW > textFieldWidth) {
                         var newLine = "";
                         var lineWidth = 0;
                         var len = line.length;
-                        for (var j:number = 0; j < len; j++) {
+                        for (var j = 0; j < len; j++) {
                             var word = line.charAt(j);
                             measureW = TextMeasurer.measureText(word, font);
                             if (lineWidth + measureW > textFieldWidth) {
