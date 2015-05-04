@@ -32,6 +32,9 @@
     <TypeScriptCompile Include="compiler\Run.ts" />
     <TypeScriptCompile Include="compiler\TsService.ts" />
     <TypeScriptCompile Include="lib\es6-promise.d.ts" />
+    <TypeScriptCompile Include="lib\exml\exmlc.ts" />
+    <TypeScriptCompile Include="lib\exml\exml_config.ts" />
+    <TypeScriptCompile Include="lib\exml\src\code\components\Group.ts" />
     <TypeScriptCompile Include="lib\FileUtil.ts" />
     <TypeScriptCompile Include="lib\node.d.ts" />
     <TypeScriptCompile Include="lib\totaljs\nosql.d.ts" />
@@ -43,6 +46,12 @@
     <TypeScriptCompile Include="lib\websocket\index.d.ts" />
     <TypeScriptCompile Include="locales\en.ts" />
     <TypeScriptCompile Include="locales\zh_CN.ts" />
+    <Compile Include="lib\code_util.ts" />
+    <Compile Include="lib\exml\exmlc.js" />
+    <Compile Include="lib\exml\exmlcTest.js" />
+    <Compile Include="lib\exml\exml_config.js" />
+    <Compile Include="lib\exml\src\code\components\Group.js" />
+    <Compile Include="lib\sax\sax.js" />
     <Compile Include="lib\watch.js" />
     <Compile Include="locales\en.js" />
     <Compile Include="locales\zh_CN.js" />
@@ -68,6 +77,12 @@
     <Folder Include="bin" />
     <Folder Include="compiler" />
     <Folder Include="lib" />
+    <Folder Include="lib\exml\" />
+    <Folder Include="lib\exml\src\" />
+    <Folder Include="lib\exml\src\code\" />
+    <Folder Include="lib\exml\src\code\components\" />
+    <Folder Include="lib\exml\src\code\skins\" />
+    <Folder Include="lib\sax\" />
     <Folder Include="lib\totaljs\" />
     <Folder Include="lib\typescript" />
     <Folder Include="lib\uglify-js" />
@@ -83,6 +98,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\lark" />
+    <Content Include="lib\exml\egret-manifest.xml" />
+    <None Include="lib\exml\exml.xsd" />
+    <Content Include="lib\exml\properties.json" />
+    <Content Include="lib\exml\src\code\skins\Panel.exml" />
     <Content Include="server\content\images\bg.svg" />
     <Content Include="server\content\style\larkserver.css" />
     <Content Include="server\views\create.html" />
