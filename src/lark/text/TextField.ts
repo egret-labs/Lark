@@ -151,37 +151,37 @@ module lark {
             return this.fontString;
         }
 
-        private _textAlignH:string = HorizontalAlign.LEFT;
+        private _horizontalAlign:string = HorizontalAlign.LEFT;
         /**
          * 文字的水平对齐方式 ,请使用HorizontalAlign中定义的常量。
          * 默认值：HorizontalAlign.LEFT。
          */
-        public get textAlignH():string {
-            return this._textAlignH;
+        public get horizontalAlign():string {
+            return this._horizontalAlign;
         }
 
-        public set textAlignH(value:string) {
-            if (this._textAlignH == value) {
+        public set horizontalAlign(value:string) {
+            if (this._horizontalAlign == value) {
                 return;
             }
-            this._textAlignH = value;
+            this._horizontalAlign = value;
             this.$invalidateContentBounds();
         }
 
-        private _textAlignV:string = VerticalAlign.TOP;
+        private _verticalAlign:string = VerticalAlign.TOP;
         /**
          * 文字的垂直对齐方式 ,请使用VerticalAlign中定义的常量。
          * 默认值：VerticalAlign.TOP。
          */
-        public get textAlignV():string {
-            return this._textAlignV;
+        public get verticalAlign():string {
+            return this._verticalAlign;
         }
 
-        public set textAlignV(value:string) {
-            if (this._textAlignV == value) {
+        public set verticalAlign(value:string) {
+            if (this._verticalAlign == value) {
                 return;
             }
-            this._textAlignV = value;
+            this._verticalAlign = value;
             this.$invalidateContentBounds();
         }
 
@@ -324,18 +324,18 @@ module lark {
             var explicitHeight = hasHeightSet ? values[Values.textFieldHeight] : Number.POSITIVE_INFINITY;
             if (hasHeightSet && textHeight < explicitHeight) {
                 var vAlign = 0;
-                if (this._textAlignV == VerticalAlign.MIDDLE)
+                if (this._verticalAlign == VerticalAlign.MIDDLE)
                     vAlign = 0.5;
-                else if (this._textAlignV == VerticalAlign.BOTTOM)
+                else if (this._verticalAlign == VerticalAlign.BOTTOM)
                     vAlign = 1;
                 drawY += vAlign * (explicitHeight - textHeight);
             }
             drawY = Math.round(drawY);
             var hAlign:number = 0;
-            if (this._textAlignH == HorizontalAlign.CENTER) {
+            if (this._horizontalAlign == HorizontalAlign.CENTER) {
                 hAlign = 0.5;
             }
-            else if (this._textAlignH == HorizontalAlign.RIGHT) {
+            else if (this._horizontalAlign == HorizontalAlign.RIGHT) {
                 hAlign = 1;
             }
             var measuredWidths = this.measuredWidths;
