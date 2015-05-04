@@ -36,7 +36,7 @@ module lark.gui {
 
         public constructor() {
             super();
-            player.UIComponent.call(this);
+            player.UIComponentImpl.call(this);
         }
 
         private _layout:LayoutBase = null;
@@ -102,14 +102,14 @@ module lark.gui {
          * 如果为 false，则容器子代会从容器边界扩展过去，而设置scrollH和scrollV也无效。默认false。
          */
         public get scrollEnabled():boolean {
-            return this.$hasFlags(player.UIComponentFlags.scrollEnabled);
+            return this.$hasFlags(player.UIFlags.scrollEnabled);
         }
 
         public set scrollEnabled(value:boolean) {
             value = !!value;
-            if (value === this.$hasFlags(player.UIComponentFlags.scrollEnabled))
+            if (value === this.$hasFlags(player.UIFlags.scrollEnabled))
                 return;
-            this.$toggleFlags(player.UIComponentFlags.scrollEnabled,value);
+            this.$toggleFlags(player.UIFlags.scrollEnabled, value);
             this.updateScrollRect();
         }
 
@@ -126,7 +126,7 @@ module lark.gui {
             if (value === values[player.UIValues.scrollH])
                 return;
             values[player.UIValues.scrollH] = value;
-            if (this.updateScrollRect()&&this._layout) {
+            if (this.updateScrollRect() && this._layout) {
                 this._layout.scrollPositionChanged();
             }
             UIEvent.emitUIEvent(this, UIEvent.SCROLL_POSITION_CHANGED);
@@ -145,21 +145,21 @@ module lark.gui {
             if (value == values[player.UIValues.scrollV])
                 return;
             values[player.UIValues.scrollV] = value;
-            if (this.updateScrollRect()&&this._layout) {
+            if (this.updateScrollRect() && this._layout) {
                 this._layout.scrollPositionChanged();
             }
             UIEvent.emitUIEvent(this, UIEvent.SCROLL_POSITION_CHANGED);
         }
 
-        private updateScrollRect():boolean{
+        private updateScrollRect():boolean {
             var values = this.$uiValues;
-            var hasClip = this.$hasFlags(player.UIComponentFlags.scrollEnabled)
+            var hasClip = this.$hasFlags(player.UIFlags.scrollEnabled)
             if (hasClip) {
                 this.scrollRect = $TempRectangle.setTo(values[player.UIValues.scrollH],
                     values[player.UIValues.scrollV],
                     values[player.UIValues.width], values[player.UIValues.height]);
             }
-            else if(this.$scrollRect){
+            else if (this.$scrollRect) {
                 this.scrollRect = null;
             }
             return hasClip;
@@ -198,10 +198,17 @@ module lark.gui {
          * 更新显示列表
          */
         protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
-            if(this._layout){
-                this._layout.updateDisplayList(unscaledWidth,unscaledHeight);
+            if (this._layout) {
+                this._layout.updateDisplayList(unscaledWidth, unscaledHeight);
             }
             this.updateScrollRect();
+        }
+
+
+        /**
+         * 标记父级容器的尺寸和显示列表为失效
+         */
+        protected invalidateParentSizeAndDisplayList():void {
         }
 
         $uiValues:Float64Array;
@@ -263,6 +270,7 @@ module lark.gui {
          */
         public explicitHeight:number;
 
+
         /**
          * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
          */
@@ -296,74 +304,81 @@ module lark.gui {
          * @param width 测量宽度
          * @param height 测量高度
          */
-        public setMeasuredSize:(width:number, height:number)=>void;
-
+        public setMeasuredSize(width:number, height:number):void {
+        }
 
         /**
          * 标记提交过需要延迟应用的属性
          */
-        public invalidateProperties:()=>void;
+        public invalidateProperties():void {
+        }
 
         /**
          * 验证组件的属性
          */
-        public validateProperties:()=>void;
+        public validateProperties():void {
+        }
 
         /**
          * 标记提交过需要验证组件尺寸
          */
-        public invalidateSize:()=>void;
+        public invalidateSize():void {
+        }
 
         /**
          * 验证组件的尺寸
          */
-        public validateSize:()=>void;
+        public validateSize():void {
+        }
 
         /**
          * 标记需要验证显示列表
          */
-        public invalidateDisplayList:()=>void;
+        public invalidateDisplayList():void {
+        }
 
         /**
          * 验证子项的位置和大小，并绘制其他可视内容
          */
-        public validateDisplayList:()=>void;
+        public validateDisplayList():void {
+        }
 
         /**
          * 立即应用组件及其子项的所有属性
          */
-        public validateNow:()=>void;
+        public validateNow():void {
+        }
 
         /**
          * 设置组件的布局宽高
          */
-        public setLayoutBoundsSize:(layoutWidth:number, layoutHeight:number)=>void;
+        public setLayoutBoundsSize(layoutWidth:number, layoutHeight:number):void {
+        }
 
         /**
          * 设置组件的布局位置
          */
-        public setLayoutBoundsPosition:(x:number, y:number)=>void;
+        public setLayoutBoundsPosition(x:number, y:number):void {
+        }
 
         /**
          * 组件的布局尺寸,常用于父级的updateDisplayList()方法中
          * 按照：布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸,
          * 注意此方法返回值已经包含scale和rotation。
          */
-        public getLayoutBounds:(bounds:Rectangle)=>Rectangle;
+        public getLayoutBounds(bounds:Rectangle):void {
+        }
 
         /**
          * 获取组件的首选尺寸,常用于父级的measure()方法中
          * 按照：外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸，
          * 注意此方法返回值已经包含scale和rotation。
          */
-        public getPreferredBounds:(bounds:Rectangle)=>Rectangle;
-        /**
-         * 标记父级容器的尺寸和显示列表为失效
-         */
-        protected invalidateParentSizeAndDisplayList:()=>void;
+        public getPreferredBounds(bounds:Rectangle):void {
+        }
     }
 
-    player.implementUIComponent(Group, Sprite);
+    player.implementUIComponent(Group,Sprite);
 
     registerType(Group, [Types.UIComponent, Types.Group]);
 }
