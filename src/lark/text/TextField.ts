@@ -39,8 +39,13 @@ module lark {
         textHeight          //0
     }
     /**
-     * TextField 类用于创建显示对象以显示文本。
-     * 可以使用 TextField 类的方法和属性对文本字段进行操作。
+     * TextField 类用于创建显示对象以显示文本。可以使用 TextField 类的方法和属性对文本字段进行操作。
+     * 注意:TextField.width和TextField.height与其他显示对象的定义不同。
+     * 其他显示对象的width，height属性始终等于getBounds(parent)方法返回的尺寸，即包含旋转和缩放值，若设置width或height也将会直接修改scaleX和scaleY的值。
+     * 而 TextField 返回的宽高值并不包含旋转和缩放值，设置TextField.width和TextField.height也不会影响scaleX或scaleY的值。
+     * 设置TextField.width可以强制让文本换行，若文本显示宽度超过您显式设置的值，将会自动换行。
+     * 设置TextField.height可以截断文本，若文本显示高度超过您显式设置的值，将会截断不显示。
+     * 若您需要重置文本宽高为未设置状态，请将宽高属性赋值为 lark.NONE 即可。
      */
     export class TextField extends DisplayObject {
         /**
@@ -246,7 +251,7 @@ module lark {
             this.updateTextLines();
             return this.$textFieldValues[Values.textWidth];
         }
-        
+
         /**
          * 文本内容高度
          */
@@ -254,17 +259,6 @@ module lark {
             this.updateTextLines();
             return this.$textFieldValues[Values.textHeight];
         }
-
-        ///**
-        // * 文本显示宽度，以像素为单位。注意:TextField与其他显示对象不同，返回的文本显示宽度并不包含旋转和缩放值。
-        // * 其他显示对象返回的宽度始终等于getBounds(parent)方法返回的宽度。
-        // */
-        //public width:number;//声明变量用来覆盖父类的注释。
-        ///**
-        // * 文本显示高度，以像素为单位。注意:TextField与其他显示对象不同，返回的文本显示高度并不包含旋转和缩放值。
-        // * 其他显示对象返回的高度始终等于getBounds(parent)方法返回的高度。
-        // */
-        //public height:number;//声明变量用来覆盖父类的注释。
 
         $getWidth():number {
             return this.$getContentBounds().width;
