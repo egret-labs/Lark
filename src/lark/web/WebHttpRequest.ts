@@ -47,29 +47,15 @@ module lark.web {
             return this._xhr.response;
         }
 
-        private _responseType:number = 0;
         /**
          * 设置返回的数据格式，请使用 HttpResponseType 里定义的枚举值。设置非法的值或不设置，都将使用HttpResponseType.TEXT。
          */
-        public get responseType():number {
-            return this._responseType;
+        public get responseType():string {
+            return this._xhr.responseType;
         }
 
-        public set responseType(value:number) {
-            var stringType;
-            switch (value) {
-                case HttpResponseType.ARRAY_BUFFER:
-                    stringType = "arraybuffer";
-                    break;
-                case HttpResponseType.JSON:
-                    stringType = "json";
-                    break;
-                default :
-                    stringType = "text";
-                    break;
-            }
-            this._responseType = value;
-            this._xhr.responseType = stringType;
+        public set responseType(value:string) {
+            this._xhr.responseType = value;
         }
 
         /**
@@ -90,10 +76,9 @@ module lark.web {
          * @param url 该请求所要访问的URL该请求所要访问的URL
          * @param method 请求所使用的HTTP方法， 请使用 HttpMethod 定义的枚举值.
          */
-        public open(url:string, method?:number):void {
+        public open(url:string, method?:string):void {
             this._url = url;
-            var stringMethod = method === HttpMethod.POST ? "POST" : "GET";
-            this._xhr.open(stringMethod, url, true);
+            this._xhr.open(method, url, true);
         }
 
         /**

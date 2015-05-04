@@ -36,28 +36,51 @@ module lark {
     /**
      * 提供混合模式可视效果的常量值的类。
      */
-    export const enum BlendMode {
-        ///**
-        // * 强制为该显示对象创建一个透明度组。此值通常在容器上设置，可以限制容器内部的混合模式只作用于容器内部的子项。
-        // */
-        //Layer,
-        ///**
-        // * 将显示对象的每个像素的 Alpha 值应用于背景。
-        // */
-        //Alpha,
+    export class BlendMode {
         /**
          * 该显示对象出现在背景前面。显示对象的像素值会覆盖背景的像素值。在显示对象为透明的区域，背景是可见的。
          */
-        NORMAL,
+        public static NORMAL = "normal";
         /**
          * 将显示对象的原色值添加到它的背景颜色中，上限值为 0xFF。此设置通常用于使两个对象间的加亮溶解产生动画效果。
          * 例如，如果显示对象的某个像素的 RGB 值为 0xAAA633，背景像素的 RGB 值为 0xDD2200，则显示像素的结果 RGB 值为 0xFFC833（因为 0xAA + 0xDD > 0xFF，0xA6 + 0x22 = 0xC8，且 0x33 + 0x00 = 0x33）。
          */
-        ADD,
+        public static ADD = "add";
         /**
          * 根据显示对象的 Alpha 值擦除背景。Alpha 值不为0的区域将被擦除。
          */
-        ERASE
+        public static ERASE = "erase";
+
+        ///**
+        // * 强制为该显示对象创建一个透明度组。此值通常在容器上设置，可以限制容器内部的混合模式只作用于容器内部的子项。
+        // */
+        //public Layer = "layer";
+        ///**
+        // * 将显示对象的每个像素的 Alpha 值应用于背景。
+        // */
+        //public static Alpha = "alpha";
 
     }
+}
+
+module lark.player {
+
+    var blendModeString = ["normal","add","erase"];
+    var blendModeNumber = {};
+    var length = blendModeString.length;
+    for(var i=0;i<length;i++){
+        var str = blendModeString[i];
+        blendModeNumber[str] = i;
+    }
+
+    export function blendModeToNumber(blendMode:string):number{
+        var num = blendModeNumber[blendMode];
+        return num===undefined?0:num;
+    }
+
+    export function numberToBlendMode(blendMode:number):string{
+        var str = blendModeString[blendMode];
+        return str===undefined?"normal":str;
+    }
+
 }

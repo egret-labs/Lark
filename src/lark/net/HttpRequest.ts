@@ -41,7 +41,7 @@ module lark {
         /**
          * 设置返回的数据格式，请使用 HttpResponseType 里定义的枚举值。设置非法的值或不设置，都将使用HttpResponseType.TEXT。
          */
-        responseType: number;
+        responseType: string;
         /**
          * 表明在进行跨站(cross-site)的访问控制(Access-Control)请求时，是否使用认证信息(例如cookie或授权的header)。 默认为 false。(这个标志不会影响同站的请求)
          */
@@ -51,7 +51,7 @@ module lark {
          * @param url 该请求所要访问的URL该请求所要访问的URL
          * @param method 请求所使用的HTTP方法， 请使用 HttpMethod 定义的枚举值.
          */
-        open(url:string, method?:number): void;
+        open(url:string, method?:string): void;
         /**
          * 发送请求.
          * @param data 需要发送的数据
