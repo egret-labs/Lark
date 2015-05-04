@@ -186,7 +186,7 @@ module lark {
         }
 
         /**
-         * 行间距
+         * 行间距。标准行高通常等于fontSize的值，设置此属性，将会在标准行高之间添加指定像素的空白间隔。可以设置为负值。默认值0.
          */
         public get lineSpacing():number {
             return this.$textFieldValues[Values.lineSpacing];
