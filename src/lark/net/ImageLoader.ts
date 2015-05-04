@@ -29,18 +29,32 @@
 
 module lark {
 
-    $locale_strings = $locale_strings||{};
-    var locale_strings = $locale_strings;
+    /**
+     * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
+     */
+    export interface ImageLoader extends EventEmitter {
+        /**
+         * 使用 load() 方法加载成功的 BitmapData 图像数据。
+         */
+        data:BitmapData;
+        /**
+         * 当从其他站点加载一个图片时，指定是否启用跨域资源共享(CORS)，默认值为null。
+         * 可以设置为"anonymous","use-credentials"或null,设置为其他值将等同于"anonymous"。
+         */
+        crossOrigin:string;
+        /**
+         * 启动一次图像加载。注意：若之前已经调用过加载请求，重新调用 load() 将终止先前的请求，并开始新的加载。
+         * @param url 要加载的图像文件的地址。
+         */
+        load(url:string):void;
 
-    locale_strings[1001] = "找不到Lark入口类: {0}。";
-    locale_strings[1002] = "Lark入口类 {0} 必须继承自lark.DisplayObject。";
-    locale_strings[1003] = "参数 {0} 不能为 null。";
-    locale_strings[1004] = "无法将对象添加为它的一个子对象（或子对象的子对象等）的子对象。";
-    locale_strings[1005] = "不能将对象添加为其自身的子对象。";
-    locale_strings[1006] = "提供的 DisplayObject 必须是调用者的子级。";
-    locale_strings[1007] = "为参数指定的索引不在范围内。";
-    locale_strings[1008] = "实例化单例出错，不允许实例化多个 {0} 对象。";
-    locale_strings[1009] = "Stage 类不实现此属性或方法。";
-    locale_strings[1010] = "{0} 是只读的";
-    locale_strings[1011] = "流错误。URL: {0}";
+        on(type: "complete", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        on(type: "ioError", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        once(type: "complete", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        once(type: "ioError", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        once(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+    }
+
+    export var ImageLoader:{new():ImageLoader};
 }

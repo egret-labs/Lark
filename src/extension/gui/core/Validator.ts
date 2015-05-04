@@ -31,11 +31,11 @@
 module lark.gui {
 
     /**
-     * 布局管理器
+     * 失效验证管理器
      */
     class Validator extends EventEmitter {
         /**
-         * 创建一个LayoutManager对象
+         * 创建一个Validator对象
          */
         public constructor() {
             super();
@@ -67,14 +67,15 @@ module lark.gui {
          * 验证失效的属性
          */
         private validateProperties():void {
-            var client:UIComponent = this.invalidatePropertiesQueue.shift();
+            var queue = this.invalidatePropertiesQueue;
+            var client:UIComponent = queue.shift();
             while (client) {
-                if (client.parent) {
+                if (client.$stage) {
                     client.validateProperties();
                 }
-                client = this.invalidatePropertiesQueue.shift();
+                client = queue.shift();
             }
-            if (this.invalidatePropertiesQueue.isEmpty())
+            if (queue.isEmpty())
                 this.invalidatePropertiesFlag = false;
         }
 
@@ -102,14 +103,15 @@ module lark.gui {
          * 测量尺寸
          */
         private validateSize():void {
-            var client:UIComponent = this.invalidateSizeQueue.pop();
+            var queue = this.invalidateSizeQueue;
+            var client:UIComponent = queue.pop();
             while (client) {
-                if (client.parent) {
+                if (client.$stage) {
                     client.validateSize();
                 }
-                client = this.invalidateSizeQueue.pop();
+                client = queue.pop();
             }
-            if (this.invalidateSizeQueue.isEmpty())
+            if (queue.isEmpty())
                 this.invalidateSizeFlag = false;
         }
 
@@ -134,14 +136,15 @@ module lark.gui {
          * 重新布局
          */
         private validateDisplayList():void {
-            var client:UIComponent = this.invalidateDisplayListQueue.shift();
+            var queue = this.invalidateDisplayListQueue;
+            var client:UIComponent = queue.shift();
             while (client) {
-                if (client.parent) {
+                if (client.$stage) {
                     client.validateDisplayList();
                 }
-                client = this.invalidateDisplayListQueue.shift();
+                client = queue.shift();
             }
-            if (this.invalidateDisplayListQueue.isEmpty())
+            if (queue.isEmpty())
                 this.invalidateDisplayListFlag = false;
         }
 
@@ -199,85 +202,88 @@ module lark.gui {
         public validateClient(target:UIComponent):void {
 
             var obj:UIComponent;
-            var done:boolean = false;
-            var oldTargetLevel:number = this.targetLevel;
+            var done = false;
+            var oldTargetLevel = this.targetLevel;
 
-            if (this.targetLevel == Number.MAX_VALUE)
+            if (this.targetLevel === Number.POSITIVE_INFINITY)
                 this.targetLevel = target.$nestLevel;
 
+            var propertiesQueue = this.invalidatePropertiesQueue;
+            var sizeQueue = this.invalidateSizeQueue;
+            var displayListQueue = this.invalidateDisplayListQueue;
             while (!done) {
                 done = true;
 
-                obj = <UIComponent> (this.invalidatePropertiesQueue.removeSmallestChild(target));
+                obj = propertiesQueue.removeSmallestChild(target);
                 while (obj) {
-                    if (obj.parent) {
+                    if (obj.$stage) {
                         obj.validateProperties();
                     }
-                    obj = <UIComponent> (this.invalidatePropertiesQueue.removeSmallestChild(target));
+                    obj = propertiesQueue.removeSmallestChild(target);
                 }
 
-                if (this.invalidatePropertiesQueue.isEmpty()) {
+                if (propertiesQueue.isEmpty()) {
                     this.invalidatePropertiesFlag = false;
                 }
                 this.invalidateClientPropertiesFlag = false;
 
-                obj = <UIComponent> (this.invalidateSizeQueue.removeLargestChild(target));
+                obj = sizeQueue.removeLargestChild(target);
                 while (obj) {
-                    if (obj.parent) {
+                    if (obj.$stage) {
                         obj.validateSize();
                     }
                     if (this.invalidateClientPropertiesFlag) {
-                        obj = <UIComponent> (this.invalidatePropertiesQueue.removeSmallestChild(target));
+                        obj = <UIComponent> (propertiesQueue.removeSmallestChild(target));
                         if (obj) {
-                            this.invalidatePropertiesQueue.insert(obj);
+                            propertiesQueue.insert(obj);
                             done = false;
                             break;
                         }
                     }
 
-                    obj = <UIComponent> (this.invalidateSizeQueue.removeLargestChild(target));
+                    obj = sizeQueue.removeLargestChild(target);
                 }
 
-                if (this.invalidateSizeQueue.isEmpty()) {
+                if (sizeQueue.isEmpty()) {
                     this.invalidateSizeFlag = false;
                 }
                 this.invalidateClientPropertiesFlag = false;
                 this.invalidateClientSizeFlag = false;
 
-                obj = <UIComponent> (this.invalidateDisplayListQueue.removeSmallestChild(target));
+                obj = displayListQueue.removeSmallestChild(target);
                 while (obj) {
-                    if (obj.parent) {
+                    if (obj.$stage) {
                         obj.validateDisplayList();
                     }
                     if (this.invalidateClientPropertiesFlag) {
-                        obj = <UIComponent> (this.invalidatePropertiesQueue.removeSmallestChild(target));
+                        obj = propertiesQueue.removeSmallestChild(target);
                         if (obj) {
-                            this.invalidatePropertiesQueue.insert(obj);
+                            propertiesQueue.insert(obj);
                             done = false;
                             break;
                         }
                     }
 
                     if (this.invalidateClientSizeFlag) {
-                        obj = <UIComponent> (this.invalidateSizeQueue.removeLargestChild(target));
+                        obj =sizeQueue.removeLargestChild(target);
                         if (obj) {
-                            this.invalidateSizeQueue.insert(obj);
+                            sizeQueue.insert(obj);
                             done = false;
                             break;
                         }
                     }
 
-                    obj = <UIComponent> (this.invalidateDisplayListQueue.removeSmallestChild(target));
+                    obj = displayListQueue.removeSmallestChild(target);
                 }
 
 
-                if (this.invalidateDisplayListQueue.isEmpty()) {
+                if (displayListQueue.isEmpty()) {
                     this.invalidateDisplayListFlag = false;
                 }
             }
 
-            if (oldTargetLevel == Number.MAX_VALUE) {
-                this.targetLevel = Number.MAX_VALUE;
+            if (oldTargetLevel === Number.POSITIVE_INFINITY) {
+                this.targetLevel = Number.POSITIVE_INFINITY;
             }
         }
 
@@ -288,13 +294,10 @@ module lark.gui {
      * 显示列表嵌套深度排序队列
      */
     class DepthQueue {
-        public constructor() {
-        }
-
         /**
          * 深度队列
          */
-        private depthBins:any = {};
+        private depthBins:{[key:number]:DepthBin} = {};
 
         /**
          * 最小深度
@@ -310,8 +313,7 @@ module lark.gui {
          * 插入一个元素
          */
         public insert(client:UIComponent):void {
-            var depth:number = client.$nestLevel;
-            var hashCode:number = client.$hashCode;
+            var depth = client.$nestLevel;
             if (this.maxDepth < this.minDepth) {
                 this.minDepth = this.maxDepth = depth;
             }
@@ -322,45 +324,35 @@ module lark.gui {
                     this.maxDepth = depth;
             }
 
-            var bin:DepthBin = this.depthBins[depth];
+            var bin = this.depthBins[depth];
 
             if (!bin) {
-                bin = this.depthBins[depth] = new DepthBin();;
-                bin.items[hashCode] = client;
-                bin.length++;
+                bin = this.depthBins[depth] = new DepthBin();
             }
-            else {
-                if (bin.items[hashCode] == null) {
-                    bin.items[hashCode] = client;
-                    bin.length++;
-                }
-            }
+            bin.insert(client);
         }
 
         /**
          * 从队列尾弹出深度最大的一个对象
          */
         public pop():UIComponent {
-            var client:UIComponent = null;
+            var client:UIComponent;
 
-            if (this.minDepth <= this.maxDepth) {
-                var bin:DepthBin = this.depthBins[this.maxDepth];
-                while (!bin || bin.length == 0) {
+            var minDepth = this.minDepth;
+            if (minDepth <= this.maxDepth) {
+                var bin = this.depthBins[this.maxDepth];
+                while (!bin || bin.length === 0) {
                     this.maxDepth--;
-                    if (this.maxDepth < this.minDepth)
+                    if (this.maxDepth < minDepth)
                         return null;
                     bin = this.depthBins[this.maxDepth];
                 }
-                var items:Array<any> = bin.items;
-                for (var key in items) {
-                    client = <UIComponent> items[key];
-                    this.remove(client, this.maxDepth);
-                    break;
-                }
+
+                client = bin.shift();
 
                 while (!bin || bin.length == 0) {
                     this.maxDepth--;
-                    if (this.maxDepth < this.minDepth)
+                    if (this.maxDepth < minDepth)
                         break;
                     bin = this.depthBins[this.maxDepth];
                 }
@@ -374,27 +366,23 @@ module lark.gui {
          * 从队列首弹出深度最小的一个对象
          */
         public shift():UIComponent {
-            var client:UIComponent = null;
+            var client:UIComponent;
 
-            if (this.minDepth <= this.maxDepth) {
-                var bin:DepthBin = this.depthBins[this.minDepth];
-                while (!bin || bin.length == 0) {
+            var maxDepth = this.maxDepth;
+            if (this.minDepth <= maxDepth) {
+                var bin = this.depthBins[this.minDepth];
+                while (!bin || bin.length === 0) {
                     this.minDepth++;
-                    if (this.minDepth > this.maxDepth)
+                    if (this.minDepth > maxDepth)
                         return null;
                     bin = this.depthBins[this.minDepth];
                 }
 
-                var items:Array<any> = bin.items;
-                for (var key in items) {
-                    client = <UIComponent> items[key];
-                    this.remove(client, this.minDepth);
-                    break;
-                }
+                client = bin.shift();
 
                 while (!bin || bin.length == 0) {
                     this.minDepth++;
-                    if (this.minDepth > this.maxDepth)
+                    if (this.minDepth > maxDepth)
                         break;
                     bin = this.depthBins[this.minDepth];
                 }
@@ -406,36 +394,42 @@ module lark.gui {
         /**
          * 移除大于等于指定组件层级的元素中最大的元素
          */
-        public removeLargestChild(client:UIComponent):any {
-            var max:number = this.maxDepth;
-            var min:number = client.$nestLevel;
-            var hashCode:number = client.$hashCode;
+        public removeLargestChild(client:UIComponent):UIComponent {
+            var hashCode = client.$hashCode;
+            var nestLevel = client.$nestLevel;
+            var max = this.maxDepth;
+            var min = nestLevel;
+
             while (min <= max) {
-                var bin:DepthBin = this.depthBins[max];
+                var bin = this.depthBins[max];
                 if (bin && bin.length > 0) {
-                    if (max == client.$nestLevel) {
-                        if (bin.items[hashCode]) {
-                            this.remove(<UIComponent> client, max);
+                    if (max === nestLevel) {
+                        if (bin.map[hashCode]) {
+                            bin.remove(client);
                             return client;
                         }
                     }
-                    else {
-                        var items:Array<any> = bin.items;
-                        for (var key in items) {
-                            var value:any = items[key];
-                            if ((value instanceof DisplayObject) && (client.isType(lark.Types.DisplayObjectContainer))
-                                && (<DisplayObjectContainer><any> client).contains(<DisplayObject><any> value)) {
-                                this.remove(<UIComponent><any> value, max);
+                    else if(client.isType(lark.Types.DisplayObjectContainer)){
+
+                        var items = bin.items;
+                        var length = bin.length;
+                        for (var i = 0; i < length; i++) {
+                            var value = items[i];
+                            if ((<DisplayObjectContainer><any> client).contains(value)) {
+                                bin.remove(value);
                                 return value;
                             }
                         }
                     }
-
+                    else{
+                        break;
+                    }
                     max--;
                 }
                 else {
-                    if (max == this.maxDepth)
+                    if (max == this.maxDepth){
                         this.maxDepth--;
+                    }
                     max--;
                     if (max < min)
                         break;
@@ -448,28 +442,33 @@ module lark.gui {
         /**
          * 移除大于等于指定组件层级的元素中最小的元素
          */
-        public removeSmallestChild(client:UIComponent):any {
-            var min:number = client.$nestLevel;
-            var hashCode:number = client.$hashCode;
-            while (min <= this.maxDepth) {
-                var bin:DepthBin = this.depthBins[min];
+        public removeSmallestChild(client:UIComponent):UIComponent {
+            var nestLevel = client.$nestLevel;
+            var min = nestLevel;
+            var max = this.maxDepth;
+            var hashCode = client.$hashCode;
+            while (min <= max) {
+                var bin = this.depthBins[min];
                 if (bin && bin.length > 0) {
-                    if (min == client.$nestLevel) {
-                        if (bin.items[hashCode]) {
-                            this.remove(<UIComponent> client, min);
+                    if (min === nestLevel) {
+                        if (bin.map[hashCode]) {
+                            bin.remove(client);
                             return client;
                         }
                     }
-                    else {
-                        var items:Array<any> = bin.items;
-                        for (var key in items) {
-                            var value = items[key];
-                            if ((value instanceof DisplayObject) && (client.isType(lark.Types.DisplayObjectContainer))
-                                && (<DisplayObjectContainer> <any>client).contains(<DisplayObject> <any>value)) {
-                                this.remove(<UIComponent> <any>value, min);
+                    else if(client.isType(lark.Types.DisplayObjectContainer)){
+                        var items = bin.items;
+                        var length = bin.length;
+                        for (var i = 0; i < length; i++) {
+                            var value = items[i];
+                            if ((<DisplayObjectContainer><any> client).contains(value)) {
+                                bin.remove(value);
                                 return value;
                             }
                         }
+                    }
+                    else{
+                        break;
                     }
 
                     min++;
@@ -478,36 +477,12 @@ module lark.gui {
                     if (min == this.minDepth)
                         this.minDepth++;
                     min++;
-                    if (min > this.maxDepth)
+                    if (min > max)
                         break;
                 }
             }
 
-            return null; 
-        }
-
-        /**
-         * 移除一个元素
-         */
-        public remove(client:UIComponent, level:number = -1):UIComponent {
-            var depth:number = (level >= 0) ? level : client.$nestLevel;
-            var hashCode:number = client.$hashCode;
-            var bin:DepthBin = this.depthBins[depth];
-            if (bin && bin.items[hashCode] != null) {
-                delete bin.items[hashCode];
-                bin.length--;
-                return client;
-            }
             return null;
-        }
-
-        /**
-         * 清空队列
-         */
-        public removeAll():void {
-            this.depthBins.length = 0;
-            this.minDepth = 0;
-            this.maxDepth = -1;
         }
 
         /**
@@ -521,8 +496,37 @@ module lark.gui {
      * 列表项
      */
     class DepthBin {
+        public map:{[key:number]:boolean} = {};
+        public items:UIComponent[] = [];
         public length:number = 0;
-        public items:any = [];
+
+        public insert(client:UIComponent):void {
+            var hashCode = client.$hashCode;
+            if (this.map[hashCode]) {
+                return;
+            }
+            this.map[hashCode] = true;
+            this.length++;
+            this.items.push(client);
+        }
+
+        public shift():UIComponent {
+            var client = this.items.shift();
+            if (client) {
+                this.map[client.$hashCode] = false;
+                this.length--;
+            }
+            return client;
+        }
+
+        public remove(client:UIComponent):void {
+            var index = this.items.indexOf(client);
+            if (index >= 0) {
+                this.items.splice(index, 1);
+                this.map[client.$hashCode] = false;
+                this.length--;
+            }
+        }
     }
 
     export var validator:Validator = new Validator();

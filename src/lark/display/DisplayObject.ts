@@ -43,7 +43,7 @@ module lark {
     }
 
     const enum Values {
-        scaleX, scaleY, skewX, skewY, rotation, x, y
+        scaleX, scaleY, skewX, skewY, rotation
     }
 
     const enum M {
@@ -65,7 +65,7 @@ module lark {
         public constructor() {
             super();
             this.$displayObjectFlags = player.DisplayObjectFlags.InitFlags;
-            this.displayObjectValues = new Float64Array([1, 1, 0, 0, 0, 0, 0]);
+            this.displayObjectValues = new Float64Array([1, 1, 0, 0, 0]);
         }
 
         private displayObjectValues:Float64Array;
@@ -140,7 +140,7 @@ module lark {
          * 标记这个显示对象在父级容器的位置发生了改变。
          */
         private invalidatePosition():void {
-            this.$invalidateChildren();
+            this.$invalidateTransform();
             this.$propagateFlagsDown(player.DisplayObjectFlags.InvalidConcatenatedMatrix |
             player.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
             if (this.$parent) {
@@ -249,6 +249,10 @@ module lark {
                 if (this.$parent) {
                     this.$parent.$getConcatenatedMatrix().$preMultiplyInto(this.$getMatrix(),
                         this.$renderMatrix);
+                    var rect = this.$scrollRect;
+                    if(rect){
+                        this.$renderMatrix.$preMultiplyInto($TempMatrix.setTo(1,0,0,1,-rect.x,-rect.y),this.$renderMatrix)
+                    }
                 } else {
                     this.$renderMatrix.copyFrom(this.$getMatrix());
                 }
@@ -283,7 +287,7 @@ module lark {
         }
 
         $getX():number{
-            return this.displayObjectValues[Values.x];
+            return this._matrix.$data[M.tx];
         }
 
         public set x(value:number) {
@@ -292,15 +296,11 @@ module lark {
 
         $setX(value:number):boolean{
             value = +value || 0;
-            var values = this.displayObjectValues;
-            if (value === values[Values.x]) {
+            var values = this._matrix.$data;;
+            if (value === values[M.tx]) {
                 return false;
             }
-            values[Values.x] = value;
-            if (this.$scrollRect) {
-                value -= this.$scrollRect.x;
-            }
-            this._matrix.$data[M.tx] = value;
+            values[M.tx] = value;
             this.invalidatePosition();
             return true;
         }
@@ -315,7 +315,7 @@ module lark {
         }
 
         $getY():number{
-            return this.displayObjectValues[Values.y];
+            return this._matrix.$data[M.ty];
         }
 
         public set y(value:number) {
@@ -324,15 +324,11 @@ module lark {
 
         $setY(value:number):boolean{
             value = +value || 0;
-            var values = this.displayObjectValues;
-            if (value === values[Values.y]) {
+            var values = this._matrix.$data;
+            if (value === values[M.ty]) {
                 return false;
             }
-            values[Values.y] = value;
-            if (this.$scrollRect) {
-                value -= this.$scrollRect.y;
-            }
-            this._matrix.$data[M.ty] = value;
+            values[M.ty] = value;
             this.invalidatePosition();
             return true;
         }
@@ -414,7 +410,6 @@ module lark {
 
         /**
          * 表示显示对象的宽度，以像素为单位。
-         * 宽度是根据显示对象内容的范围来计算的。优先顺序为 显式设置宽度 > 测量宽度。
          */
         public get width():number {
             return this.$getWidth();
@@ -449,7 +444,6 @@ module lark {
 
         /**
          * 表示显示对象的高度，以像素为单位。
-         * 高度是根据显示对象内容的范围来计算的。优先顺序为 显式设置高度 > 测量高度。
          */
         public get height():number {
             return this.$getHeight();
@@ -499,7 +493,7 @@ module lark {
                 return;
             }
             this.$visible = value;
-            this.$invalidateChildren();
+            this.$invalidateTransform();
         }
 
         /**
@@ -627,20 +621,17 @@ module lark {
         }
 
         public set scrollRect(value:Rectangle) {
-            var values = this.displayObjectValues;
-            var m = this._matrix.$data;
+            if(!value&&!this.$scrollRect){
+                return;
+            }
             if (value) {
                 if (!this.$scrollRect) {
                     this.$scrollRect = new lark.Rectangle();
                 }
                 this.$scrollRect.copyFrom(value);
-                m[M.tx] = values[Values.x] - value.x;
-                m[M.ty] = values[Values.y] - value.y;
             }
             else {
                 this.$scrollRect = null;
-                m[M.tx] = values[Values.x];
-                m[M.ty] = values[Values.y];
             }
             this.invalidatePosition();
         }
@@ -660,7 +651,7 @@ module lark {
                 return;
             }
             this.$blendMode = value;
-            this.$invalidateChildren();
+            this.$invalidateTransform();
         }
 
         /**
@@ -692,7 +683,7 @@ module lark {
                 value.$maskedObject = this;
             }
             this.$mask = value;
-            this.$invalidateChildren();
+            this.$invalidateTransform();
         }
 
         /**
@@ -814,8 +805,8 @@ module lark {
         $parentDisplayList:lark.player.DisplayList = null;
 
         /**
-         * 标记此显示对象需要重绘。
-         * @param notiryChildren 是否标记子项也需要重绘。传入false会不传入，将只标记自身的RenderNode需要重绘。
+         * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
+         * @param notiryChildren 是否标记子项也需要重绘。传入false或不传入，将只标记自身需要重绘。通常只有alpha属性改变会需要通知子项重绘。
          */
         $invalidate(notifyChildren?:boolean):void {
             if (!this.$renderRegion || this.$hasFlags(player.DisplayObjectFlags.DirtyRender)) {
@@ -829,9 +820,10 @@ module lark {
         }
 
         /**
-         * 标记自身和所有子项都失效。
+         * 标记自身以及所有子项在父级中变换叠加的显示内容失效。此方法不会触发自身的cacheAsBitmap重绘。
+         * 通常用于矩阵改变或从显示列表添加和移除时。若自身的显示内容已经改变需要重绘，应该调用$invalidate()。
          */
-        $invalidateChildren():void {
+        $invalidateTransform():void {
             if (this.$hasFlags(player.DisplayObjectFlags.DirtyChildren)) {
                 return;
             }

@@ -27,38 +27,58 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
 
-    //UIComponent剩余可用的：
-    // 0x800000,0x1000000,0x2000000,0x4000000,0x8000000,0x10000000,
-    // 0x20000000,0x40000000,0x80000000,0x100000000,0x200000000,0x400000000,0x800000000,0x1000000000,0x2000000000,
-    // 0x4000000000,0x8000000000,0x10000000000,0x20000000000,0x40000000000,0x80000000000,0x100000000000,0x200000000000
+module lark {
+    /**
+     * 当加载操作已开始或套接字已接收到数据时，将调度 ProgressEvent 对象。
+     * 有两种类型的进程事件：ProgressEvent.PROGRESS 和 ProgressEvent.SOCKET_DATA。
+     */
+    export class ProgressEvent extends Event {
 
-    export const enum UIComponentFlags{
         /**
-         * 属性失效标志
+         * 在下载操作过程中收到数据时调度。
          */
-        InvalidatePropertiesFlag = 0x20000,
+        public static PROGRESS:string = "progress";
+
         /**
-         * 尺寸失效标志
+         * 在套接字接收到数据后调度。
          */
-        InvalidateSizeFlag = 0x40000,
+        public static SOCKET_DATA:string = "socketData";
+
         /**
-         * 布局失效标志
+         * 在侦听器处理事件时加载的项数或字节数。
          */
-        InvalidateDisplayListFlag = 0x80000,
+        public bytesLoaded:number = 0;
         /**
-         * 布局宽度被显式设置的标记
+         * 如果加载过程成功，将加载的总项数或总字节数。
          */
-        LayoutWidthExplicitlySet = 0x100000,
+        public bytesTotal:number = 0;
+
         /**
-         * 布局高度被显式设置的标记
+         * 创建一个 ProgressEvent 对象
          */
-        LayoutHeightExplicitlySet = 0x200000,
+        public constructor(type:string, bubbles?:boolean, cancelable?:boolean, bytesLoaded?:number, bytesTotal?:number) {
+            super(type, bubbles, cancelable);
+
+            this.bytesLoaded = +bytesLoaded||0;
+            this.bytesTotal = +bytesTotal||0;
+        }
+
         /**
-         * 是否启用容器滚动。如果为 true，则将子项剪切到视区的边界，配合设置scrollH和scrollV属性将能滚动视区。
-         * 如果为 false，则容器子代会从容器边界扩展过去，而设置scrollH和scrollV也无效。默认false。
+         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         * @param target 派发事件目标
+         * @param type 事件类型
+         * @param bytesLoaded 加载的项数或字节数
+         * @param bytesTotal 加载的总项数或总字节数
          */
-        scrollEnabled = 0x400000
+        public static emitProgressEvent(target:IEventEmitter, type:string,  bytesLoaded?:number, bytesTotal?:number):boolean {
+            var event = Event.create(ProgressEvent, type);
+            event.bytesLoaded = +bytesLoaded||0;
+            event.bytesTotal = +bytesTotal||0;
+            var result = target.emit(event);
+            Event.release(event);
+            return result;
+        }
     }
+    registerType(ProgressEvent,[Types.ProgressEvent]);
 }

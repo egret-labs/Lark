@@ -29,8 +29,10 @@
 
 module lark.gui {
 
+    /**
+     * SkinnableComponent 类定义可设置外观的组件的基类。SkinnableComponent 类所使用的外观通常是 Skin 类的子类。
+     */
     export class SkinnableComponent extends Sprite implements UIComponent{
-
         public constructor(){
             super();
             player.UIComponent.call(this);
@@ -66,7 +68,7 @@ module lark.gui {
             player.updateDisplayList(this,unscaledWidth,unscaledHeight);
         }
 
-        $uiComponentValues:Float64Array;
+        $uiValues:Float64Array;
 
         $includeInLayout:boolean;
 
@@ -225,4 +227,5 @@ module lark.gui {
         protected invalidateParentSizeAndDisplayList:()=>void;
     }
     player.implementUIComponent(SkinnableComponent, Sprite);
+    registerType(Group, [Types.UIComponent, Types.SkinnableComponent]);
 }

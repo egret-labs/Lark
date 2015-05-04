@@ -63,7 +63,8 @@ module lark {
         }
 
         /**
-         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他所有子项的前（上）面。
+         * （要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
          * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
          */
@@ -73,23 +74,23 @@ module lark {
             if (child.$parent == this)
                 index--;
 
-            return this.$doAddChild(child, index);
+            return this.doAddChild(child, index);
         }
 
 
         /**
-         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。索引为 0 表示该 DisplayObjectContainer 对象的显示列表的后（底）部。
-         * 如果索引值为-1，则表示该 DisplayObjectContainer 对象的显示列表的前（上）部。
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。
+         * 索引为 0 表示该 DisplayObjectContainer 对象的显示列表的后（底）部。
          * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
          * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
          */
         public addChildAt(child:DisplayObject, index:number):DisplayObject {
             index = +index | 0;
-            return this.$doAddChild(child, index);
+            return this.doAddChild(child, index);
         }
 
-        $doAddChild(child:DisplayObject, index:number):DisplayObject {
+        private doAddChild(child:DisplayObject, index:number):DisplayObject {
             if (DEBUG) {
                 if (child == this) {
                     $error(1005);
@@ -112,10 +113,7 @@ module lark {
             }
 
             if (host) {
-                var hostIndex = host.$children.indexOf(child);
-                if (hostIndex >= 0) {
-                    host.$doRemoveChild(hostIndex);
-                }
+                host.removeChild(child);
             }
 
             this.$children.splice(index, 0, child);
@@ -143,7 +141,8 @@ module lark {
         }
 
         /**
-         * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。孙项、曾孙项等，每项都返回 true。
+         * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。
+         * 孙项、曾孙项等，每项都返回 true。
          * @param child 要测试的子对象。
          * @returns 如果指定的显示对象为 DisplayObjectContainer 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
          */
@@ -207,7 +206,7 @@ module lark {
         public removeChild(child:DisplayObject):DisplayObject {
             var index = this.$children.indexOf(child);
             if (index >= 0) {
-                return this.$doRemoveChild(index);
+                return this.doRemoveChild(index);
             }
             else {
                 DEBUG && $error(1006);
@@ -223,7 +222,7 @@ module lark {
         public removeChildAt(index:number):DisplayObject {
             index = +index | 0;
             if (index >= 0 && index < this.$children.length) {
-                return this.$doRemoveChild(index);
+                return this.doRemoveChild(index);
             }
             else {
                 DEBUG && $error(1007);
@@ -231,7 +230,7 @@ module lark {
             }
         }
 
-        $doRemoveChild(index:number):DisplayObject {
+        private doRemoveChild(index:number):DisplayObject {
             index = +index | 0;
             var children = this.$children;
             var child:DisplayObject = children[index];
@@ -279,7 +278,7 @@ module lark {
             else {
                 this.$children.splice(index, 0, child);
             }
-            child.$invalidateChildren();
+            child.$invalidateTransform();
             this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
         }
 
@@ -325,8 +324,8 @@ module lark {
             var child2:DisplayObject = list[index2];
             list[index1] = child2;
             list[index2] = child1;
-            child1.$invalidateChildren();
-            child2.$invalidateChildren();
+            child1.$invalidateTransform();
+            child2.$invalidateTransform();
             this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
         }
 
@@ -336,7 +335,7 @@ module lark {
         public removeChildren():void {
             var children = this.$children;
             for (var i:number = children.length - 1; i >= 0; i--) {
-                this.$doRemoveChild(i);
+                this.doRemoveChild(i);
             }
         }
 
@@ -405,8 +404,8 @@ module lark {
         }
 
         /**
-         * 标记此显示对象需要重绘，调用此方法后，在屏幕绘制阶段$updateRenderNode()方法会自动被回调，您可能需要覆盖它来同步自身改变的属性到目标RenderNode。
-         * @param notiryChildren 是否标记子项也需要重绘。传入false会不传入，将只标记自身的RenderNode需要重绘。
+         * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
+         * @param notiryChildren 是否标记子项也需要重绘。传入false或不传入，将只标记自身需要重绘。通常只有alpha属性改变会需要通知子项重绘。
          */
         $invalidate(notifyChildren?:boolean):void {
             super.$invalidate(notifyChildren);
@@ -423,9 +422,10 @@ module lark {
         }
 
         /**
-         * 标记自身和所有子项都失效。
+         * 标记自身以及所有子项在父级中变换叠加的显示内容失效。此方法不会触发自身的cacheAsBitmap重绘。
+         * 通常用于矩阵改变或从显示列表添加和移除时。若自身的显示内容已经改变需要重绘，应该调用$invalidate()。
          */
-        $invalidateChildren():void {
+        $invalidateTransform():void {
             this.markChildDirty(this, this.$parentDisplayList);
         }
 
