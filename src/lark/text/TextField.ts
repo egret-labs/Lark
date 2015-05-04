@@ -39,8 +39,8 @@ module lark {
          */
         public constructor(text?:string) {
             super();
-            this.text = text;
             this.$renderRegion = new player.Region();
+            this.text = text;
         }
 
         private _fontFamily:string = "sans-serif";
@@ -56,6 +56,7 @@ module lark {
                 return;
             }
             this._fontFamily = value;
+            this.fontStringChanged = true;
             this.$invalidateContentBounds();
         }
 
@@ -73,6 +74,7 @@ module lark {
                 return;
             }
             this._fontSize = value;
+            this.fontStringChanged = true;
             this.$invalidateContentBounds();
         }
 
@@ -90,6 +92,7 @@ module lark {
                 return;
             }
             this._bold = value;
+            this.fontStringChanged = true;
             this.$invalidateContentBounds();
         }
 
@@ -107,7 +110,22 @@ module lark {
                 return;
             }
             this._italic = value;
+            this.fontStringChanged = true;
             this.$invalidateContentBounds();
+        }
+
+        private fontString:string = "";
+        private fontStringChanged:boolean = true;
+
+        /**
+         * 获取字体信息的字符串形式。
+         */
+        private getFontString():string{
+            if(this.fontStringChanged){
+                this.fontStringChanged = false;
+                this.fontString = player.toFontString(this);
+            }
+            return this.fontString;
         }
 
         private _textAlignH:string = HorizontalAlign.LEFT;
@@ -163,6 +181,7 @@ module lark {
         private _textColor:number = 0x000000;
 
         private _colorString:string = "#000000";
+
         /**
          * 文本颜色，默认值0x000000
          */
@@ -176,7 +195,7 @@ module lark {
                 return;
             }
             this._textColor = value;
-            this._colorString = this.toColorString(value);
+            this._colorString = player.toColorString(value);
             this.$invalidate();
         }
 
@@ -317,28 +336,6 @@ module lark {
 
         private measuredWidths:number[] = [];
 
-        private getFontString():string {
-            var font = "";
-            if (this._italic)
-                font += "italic ";
-            if (this._bold)
-                font += "bold ";
-            font += this._fontSize + "px ";
-            font += this._fontFamily;
-            return font;
-        }
-
-        private toColorString(value:number):string {
-            if(value < 0)
-                value = 0;
-            if(value > 16777215)
-                value = 16777215;
-            var color = value.toString(16).toUpperCase();
-            while(color.length<6){
-                color = "0"+color;
-            }
-            return "#"+color;
-        }
 
         private updateTextLines():string[] {
 
@@ -430,4 +427,30 @@ module lark {
     }
 
     registerType(TextField, [Types.TextField]);
+}
+
+module lark.player {
+
+    export function toFontString(style:{fontFamily:string;fontSize:number;bold:boolean;italic:boolean}):string {
+        var font = "";
+        if (style.italic)
+            font += "italic ";
+        if (style.bold)
+            font += "bold ";
+        font += (style.fontSize || 12) + "px ";
+        font += (style.fontFamily || "sans-serif");
+        return font;
+    }
+
+    export function toColorString(value:number):string {
+        if (value < 0)
+            value = 0;
+        if (value > 16777215)
+            value = 16777215;
+        var color = value.toString(16).toUpperCase();
+        while (color.length < 6) {
+            color = "0" + color;
+        }
+        return "#" + color;
+    }
 }

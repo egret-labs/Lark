@@ -223,7 +223,14 @@ module lark.gui {
 
 module lark.player {
 
-    export function mixin(descendant:any, base:any):void{
+    /**
+     * 自定义类实现UIComponent的步骤：
+     * 1.在自定义类的构造函数里调用：player.UIComponent.call(this);
+     * 2.拷贝UIComponent接口定义的所有内容(包括注释掉的protected函数)到自定义类，将非注释掉的部分都加上public，并把函数声明改为=>变量声明方式。
+     * @param descendant 自定义子类
+     * @param base
+     */
+    export function implementUIComponent2(descendant:any, base:any):void{
         for (var property in base) {
             if (base.hasOwnProperty(property)) {
                 descendant[property] = base[property];
@@ -235,13 +242,8 @@ module lark.player {
         var length = keys.length;
         for(var i=0;i<length;i++){
             var key = keys[i];
-            if(typeof protoBase[key]=="function"){
-                prototype[key] = protoBase[key];
-            }
-            else{
-                var value = Object.getOwnPropertyDescriptor(protoBase,key);
-                Object.defineProperty(prototype,key,value);
-            }
+            var value = Object.getOwnPropertyDescriptor(protoBase,key);
+            Object.defineProperty(prototype,key,value);
         }
     }
 
