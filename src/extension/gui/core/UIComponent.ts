@@ -223,6 +223,28 @@ module lark.gui {
 
 module lark.player {
 
+    export function mixin(descendant:any, base:any):void{
+        for (var property in base) {
+            if (base.hasOwnProperty(property)) {
+                descendant[property] = base[property];
+            }
+        }
+        var prototype = descendant.prototype;
+        var protoBase = base.prototype;
+        var keys = Object.keys(protoBase);
+        var length = keys.length;
+        for(var i=0;i<length;i++){
+            var key = keys[i];
+            if(typeof protoBase[key]=="function"){
+                prototype[key] = protoBase[key];
+            }
+            else{
+                var value = Object.getOwnPropertyDescriptor(protoBase,key);
+                Object.defineProperty(prototype,key,value);
+            }
+        }
+    }
+
     function isDeltaIdentity(m) {
         return (m[0] === 1 && m[1] === 0 && m[2] === 0 && m[3] === 1);
     }
