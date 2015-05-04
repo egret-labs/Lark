@@ -514,16 +514,7 @@ module lark.player {
         }
 
         public set width(value:number) {
-            value = +value || 0;
-            var values = this.$uiValues;
-            if (value < 0 || values[UIValues.width] === value && values[UIValues.explicitWidth] === value)
-                return;
-            values[UIValues.width] = value;
-            values[UIValues.explicitWidth] = value;
-            if (isNone(value))
-                this.invalidateSize();
-            this.invalidateDisplayList();
-            this.invalidateParentSizeAndDisplayList();
+
         }
 
         /**
