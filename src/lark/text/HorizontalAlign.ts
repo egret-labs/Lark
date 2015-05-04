@@ -46,6 +46,11 @@ module lark {
         /**
          * 水平居中对齐
          */
-        public static CENTER:string = "center";
+        public static CENTER: string = "center";
+
+        /**
+         * 未设置
+         */
+        public static NONE: string = undefined;
 	}
 }

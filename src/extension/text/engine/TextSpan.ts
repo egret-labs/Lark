@@ -74,15 +74,11 @@ module lark {
          * 文本块的高度
          */
         public get height() {
-            return Math.max(this.style.lineHeight, this.style.fontSize);
-        }
-
-        $toFontString(includeSize = false) {
-            return this.style.toFontString(includeSize);
+            return this.style.fontSize;
         }
 
         $toColorString() {
-            var value = this.style.color;
+            var value = this.style.textColor;
             if(value < 0)
                 value = 0;
             if(value > 16777215)

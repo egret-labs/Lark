@@ -7,20 +7,6 @@
         }
 
 
-        static $bufferCanvas = (function () {
-            var canvas = document.createElement("canvas");
-            canvas.width = 200;
-            canvas.height = 200;
-            return canvas;
-        })();
-
-        static $bufferContext = TextElement.$bufferCanvas.getContext("2d");
-
-        public get rawText(): string {
-            return this._text;
-        }
-
-
         protected _text: string = null;
         public get text(): string {
             return this._text;
@@ -59,7 +45,7 @@
             var full = false;
             for (var i = 0; i < textAtoms.length; i++) {
                 var atom = textAtoms[i];
-                var w = TextMeasurer.measureText(atom, format);
+                var w = TextMeasurer.measureText(atom, TextElement.toFontString(format));
                 var testW = currentWidth + w;
                 if (testW <= width || isFirstSpan) {
                     currentWidth = testW;
@@ -100,7 +86,14 @@
 
 
         static toFontString(style: ITextStyle) {
-            return (style.italic ? "italic" : "") + " " + (style.bold ? "bold" : "") +" " + style.fontSize +"px " + (style.fontFamily || "sans-serif") ;
+            var font = "";
+            if (style.italic)
+                font += "italic ";
+            if (style.bold)
+                font += "bold ";
+            font += style.fontSize + "px ";
+            font += style.fontFamily;
+            return font;
         }
     }
 

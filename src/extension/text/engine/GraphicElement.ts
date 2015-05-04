@@ -9,15 +9,6 @@
         }
 
 
-        public get rawText(): string {
-            return " ";
-        }
-
-
-        public get text(): string {
-            return "";
-        }
-
         public get length(): number {
             return 1;
         }

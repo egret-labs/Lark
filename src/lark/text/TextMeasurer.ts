@@ -39,11 +39,10 @@ module lark {
         /**
          * 测量文本在指定样式下的宽度
          */
-        public static measureText(text:string, style:ITextStyle|string):number {
+        public static measureText(text:string, font:string):number {
             var context = player.sharedRenderContext;
             var width = 0.0;
             var fontCache = $TextWidthCache;
-            var font = (typeof style=="string")?<string>style:(<ITextStyle>style).toFontString(true);
             var cache:{ [char: string]: number } = fontCache[font] || (fontCache[font] = {});
 
             context.font = font;

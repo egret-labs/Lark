@@ -30,19 +30,6 @@
 module lark {
     
     /**
-    * 文本的对齐方式
-    */
-    export class Align {
-        static LEFT: string = "left";
-        static CENTER: string = "left";
-        static RIGHT: string = "right";
-        static TOP = "top";
-        static MIDDLE = "middle";
-        static BOTTOM = "bottom";
-        static NONE = "";
-    }
-    
-    /**
     * 定义多样式文本的样式
     */
     export interface ITextStyle {
@@ -69,7 +56,7 @@ module lark {
         /**
         * 设置文本颜色，数字格式 如 0x000000 表示黑色
         */
-        color?: number;
+        textColor?: number;
 
         /**
         * 设置显示对象浮动的位置
@@ -80,38 +67,37 @@ module lark {
         /**
         * 设置一行中不同高度的文本或显示对象的纵向对齐方式，请参照 lark.Align
         */
-        verticalAlign?: string;
+        textAlignV?: string;
 
-        /**
-        * 设置段落中文本的水平对齐方式
-        */
-        align?: string;
-
-        /**
-         * 行高
-         */
-        lineHeight?: number;
-
-        /**
-        * 根据样式生成 Context 需要的字体字符串
-        */
-        toFontString?(includeSize?:boolean):string;
+        fontString?: string;
+        colorString?: string;
     }
 
-    Object.defineProperty(Object.prototype, "toFontString", {
-        value: function (includeSize = false) {
-            var style = <ITextStyle>this;
-            var font = "";
-            if (style.italic)
-                font += "italic ";
-            if (style.bold)
-                font += "bold ";
-            if (includeSize)
-                font += (style.fontSize || 12) + "px ";
-            font += (style.fontFamily || "sans-serif");
-            return font;
-        },
-        enumerable: false,
-        writable:false
-    });
+    export class TextStyleWarpper<T extends ITextStyle> extends LarkObject implements ITextStyle {
+        baseStyle: T;
+        currentStyle: T;
+
+        get fontFamily() {
+            return this.currentStyle.fontFamily || this.baseStyle.fontFamily || '"Helvetica Neue", Helvetica, Arial, sans-serif';
+        }
+
+        get fontSize() {
+            return this.currentStyle.fontSize || this.baseStyle.fontSize || 30;
+        }
+        get textColor() {
+            return this.currentStyle.textColor || this.baseStyle.textColor || 0x000000;
+        }
+        get bold() {
+            return this.currentStyle.bold || this.baseStyle.bold || false;
+        }
+        get italic() {
+            return this.currentStyle.italic || this.baseStyle.italic || false;
+        }
+        get float() {
+            return this.currentStyle.float || this.baseStyle.float || HorizontalAlign.NONE;
+        }
+        get textAlignV() {
+            return this.currentStyle.textAlignV || this.baseStyle.textAlignV || VerticalAlign.TOP;
+        }
+    }
 }

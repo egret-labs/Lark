@@ -18,7 +18,7 @@ module lark.text {
             this._content = value;
         }
 
-        createTextLine(previousLine: TextLine = null, width = 1000000, lineOffset = 0.0, format?: ITextFieldStyle): TextLine {
+        createTextLine(previousLine: TextLine = null, width = 1000000, lineOffset = 0.0, format?: RichTextFieldStyle): TextLine {
 
 
             var start = previousLine == null ? 0 : previousLine.atomCount + previousLine.textBlockBeginIndex;
@@ -51,15 +51,15 @@ module lark.text {
 
                 var arrayToInsert = results[1];
                 if (isGraphic) {
-                    if (result.format.float == Align.LEFT)
+                    if (result.format.float == HorizontalAlign.LEFT)
                         arrayToInsert = results[0];
-                    else if (result.format.float == Align.RIGHT)
+                    else if (result.format.float == HorizontalAlign.NONE)
                         arrayToInsert = results[2];
                 }
 
                 arrayToInsert.push(result);
 
-                if (!isGraphic || result.format.float == Align.NONE) {
+                if (!isGraphic || !result.format.float) {
                     var h = span.height;
                     maxHeight = Math.max(maxHeight, h);
                     minHeight = Math.min(minHeight, h);
@@ -82,7 +82,7 @@ module lark.text {
                 spans = spans.concat(rights.spans);
                 var endxForMiddle = rights.offset;
 
-                var middles = this.layoutMiddleSpans(results[1], format.align, offset, endxForMiddle, maxHeight);
+                var middles = this.layoutMiddleSpans(results[1], format.textAlignH, offset, endxForMiddle, maxHeight);
                 offset = middles.offset;
                 spans = spans.concat(middles.spans);
                 
@@ -113,16 +113,16 @@ module lark.text {
             for (var i = 0; i < middles.length; i++) {
                 var result = middles[i];
                 var span = result.span;
-                switch (result.format.verticalAlign) {
-                    case Align.BOTTOM: {
+                switch (result.format.textAlignV) {
+                    case VerticalAlign.BOTTOM: {
                         span.y = maxHeight - span.height;
                         break;
                     }
-                    case Align.MIDDLE: {
+                    case VerticalAlign.MIDDLE: {
                         span.y = (maxHeight - span.height) / 2;
                         break;
                     }
-                    case Align.TOP: {
+                    case VerticalAlign.TOP: {
                         span.y = 0;
                         break;
                     }
@@ -176,14 +176,14 @@ module lark.text {
         }
 
 
-        createAllTextLines(width = 1000000, format?:ITextFieldStyle): text.TextLine[]{
+        createAllTextLines(width = 1000000, format?:RichTextFieldStyle): text.TextLine[]{
             var line: text.TextLine = null;
             var lines: text.TextLine[] = [];
             var leftBlockAreas: Rectangle[] = [];
             var rightBlockAreas: Rectangle[] = [];
             var offset = format.indent || 0;
             var rightOffset = width
-            var leading = format.leading || 0;
+            var leading = format.lineSpacing || 0;
             var y = leading;
 
 

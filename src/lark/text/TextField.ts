@@ -447,7 +447,7 @@ module lark {
 
 module lark.player {
 
-    export function toFontString(style:{fontFamily:string;fontSize:number;bold:boolean;italic:boolean}):string {
+    export function toFontString(style:{fontFamily?:string;fontSize?:number;bold?:boolean;italic?:boolean}):string {
         var font = "";
         if (style.italic)
             font += "italic ";

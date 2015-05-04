@@ -69,15 +69,15 @@ module lark {
             tf.textColor = 0xFF0000;
             tf.width = 400;
             tf.y = 200;
-            this.addChild(tf);
+            //this.addChild(tf);
 
-            var rich = new lark.RichTextField({ fontSize: 30,align:"right" });
+            var rich = new lark.RichTextField({ fontSize: 30,textAlignH:"right" });
             rich.y = 50;
             rich.width = 500;
             rich.height = 500;
             rich.nodes = ['Hi ', {
                     text: " Hi how are you",
-                    style: { color: 0xFF0000 }
+                    style: { textColor: 0xFF0000 }
             }, bitmap, {
                     graphic: bitmap2,
                     style: {
