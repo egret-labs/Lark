@@ -39,11 +39,9 @@ module lark {
 
         public static get display():lark.TextField {
             if (!FPS._textField) {
-                FPS._textField = new lark.TextField("", {
-                    color: 0x0c8c0c,
-                    fontSize: 28,
-                    fontFamily: "monospace"
-                });
+                FPS._textField = new lark.TextField();
+                FPS._textField.textColor = 0x0c8c0c;
+                FPS._textField.fontFamily = "monospace";
                 FPS._textField.x = 20;
                 FPS._textField.y = 20;
                 FPS._textField.touchEnabled = false;

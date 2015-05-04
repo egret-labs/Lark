@@ -116,12 +116,23 @@ module lark.player {
 
 
     export const enum TextFieldFlags {
-        // TextFiled剩余可用
-        // 0x8000,0x10000
-
-        LineDirty = 0x1000,
-        IsHeightSet = 0x2000,
-        IsWidthSet = 0x4000
+        // TextFiled剩余可用:
+        /**
+         * 是否显示为粗体。
+         */
+        Bold = 0x1000,
+        /**
+         * 是否显示为斜体。
+         */
+        Italic = 0x2000,
+        /**
+         * 字体信息的字符串形式发生改变。
+         */
+        FontStringChanged = 0x4000,
+        /**
+         * 文本行列表发生改变
+         */
+        TextLinesChanged = 0x8000
     }
 
 

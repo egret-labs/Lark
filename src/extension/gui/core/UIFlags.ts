@@ -27,24 +27,38 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
+module lark.player {
 
-    /**
-     * HttpResponseType 定义HttpRequest.responseType属性的值。确定Http请求返回的数据格式。
-     */
-    export class HttpResponseType{
+    //UIComponent剩余可用的：
+    // 0x10000,0x800000,0x1000000,0x2000000,0x4000000,0x8000000,0x10000000,
+    // 0x20000000,0x40000000,0x80000000,0x100000000,0x200000000,0x400000000,0x800000000,0x1000000000,0x2000000000,
+    // 0x4000000000,0x8000000000,0x10000000000,0x20000000000,0x40000000000,0x80000000000,0x100000000000,0x200000000000
 
+    export const enum UIFlags{
         /**
-         * 返回字符串。HttpRequest.responseType属性的默认值。
+         * 属性失效标志
          */
-        public static TEXT = "text";
+        InvalidatePropertiesFlag = 0x20000,
         /**
-         * 返回二进制的ArrayBuffer对象。
+         * 尺寸失效标志
          */
-        public static ARRAY_BUFFER = "arraybuffer";
+        InvalidateSizeFlag = 0x40000,
         /**
-         * 返回 JavaScript 对象，将自动解析自服务器传递回来的 JSON 字符串。
+         * 布局失效标志
          */
-        public static JSON = "json";
+        InvalidateDisplayListFlag = 0x80000,
+        /**
+         * 布局宽度被显式设置的标记
+         */
+        LayoutWidthExplicitlySet = 0x100000,
+        /**
+         * 布局高度被显式设置的标记
+         */
+        LayoutHeightExplicitlySet = 0x200000,
+        /**
+         * 是否启用容器滚动。如果为 true，则将子项剪切到视区的边界，配合设置scrollH和scrollV属性将能滚动视区。
+         * 如果为 false，则容器子代会从容器边界扩展过去，而设置scrollH和scrollV也无效。默认false。
+         */
+        scrollEnabled = 0x400000
     }
 }

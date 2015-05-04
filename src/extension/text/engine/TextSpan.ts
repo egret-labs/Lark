@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
 //  All rights reserved.
@@ -27,24 +27,67 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
+
 module lark {
-
     /**
-     * HttpResponseType 定义HttpRequest.responseType属性的值。确定Http请求返回的数据格式。
+     * 用于渲染的文本块
      */
-    export class HttpResponseType{
+    export class TextSpan extends LarkObject {
+        constructor(
+            text: string ,
+            style:ITextStyle,
+            textWidth: number ,
+            length: number ,
+            x: number,
+            y:number) {
+            super();
+            this.text = text;
+            this.style = style;
+            this.width = textWidth;
+            this.x = +x || 0;
+            this.y = +y || 0;
+        }
 
+        
         /**
-         * 返回字符串。HttpRequest.responseType属性的默认值。
+         * 需要显示的文本
          */
-        public static TEXT = "text";
+        public text: string;
         /**
-         * 返回二进制的ArrayBuffer对象。
+         * 文本块相对于父级的 x 坐标
          */
-        public static ARRAY_BUFFER = "arraybuffer";
+        public x: number;
         /**
-         * 返回 JavaScript 对象，将自动解析自服务器传递回来的 JSON 字符串。
+         * 文本块相对于父级的 y 坐标
          */
-        public static JSON = "json";
+        public y: number;
+        /**
+         * 需要显示的文本宽度
+         */
+        public width: number;
+        /**
+         * 文本的样式
+         */
+        public style: ITextStyle;
+        
+        /**
+         * 文本块的高度
+         */
+        public get height() {
+            return this.style.fontSize;
+        }
+
+        $toColorString() {
+            var value = this.style.textColor;
+            if(value < 0)
+                value = 0;
+            if(value > 16777215)
+                value = 16777215;
+            var color:string = value.toString(16).toUpperCase();
+            while(color.length<6){
+                color = "0"+color;
+            }
+            return "#"+color;
+        }
     }
 }

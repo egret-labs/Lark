@@ -9,3 +9,6 @@ bin-release
 *.dll
 /tools/obj/Debug
 /tools/.ntvs_analysis.dat
+*.sln
+*.suo
+/tools/lib/typescript/src/*.js

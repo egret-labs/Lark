@@ -98,7 +98,7 @@ module lark.player {
         }
         var width = 0;
         var height = 0;
-
+        var bounds = $TempRectangle;
         var count = target.numChildren;
         for (var i = 0; i < count; i++) {
             var layoutElement = <gui.UIComponent> (target.getChildAt(i));
@@ -117,7 +117,7 @@ module lark.player {
             var extX:number;
             var extY:number;
 
-            var bounds = layoutElement.getPreferredBounds($TempRectangle);
+            layoutElement.getPreferredBounds(bounds);
 
             if (!isNone(left) && !isNone(right)) {
                 extX = left + right;

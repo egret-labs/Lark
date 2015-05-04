@@ -26,25 +26,27 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-
 module lark {
 
-    /**
-     * HttpResponseType 定义HttpRequest.responseType属性的值。确定Http请求返回的数据格式。
-     */
-    export class HttpResponseType{
+	/**
+	 * 垂直对齐方式
+	 */
+	export class VerticalAlign{
 
         /**
-         * 返回字符串。HttpRequest.responseType属性的默认值。
+         * 顶对齐
          */
-        public static TEXT = "text";
+        public static TOP:string = "top";
+
         /**
-         * 返回二进制的ArrayBuffer对象。
+         * 底对齐
          */
-        public static ARRAY_BUFFER = "arraybuffer";
+        public static BOTTOM:string = "bottom";
+
         /**
-         * 返回 JavaScript 对象，将自动解析自服务器传递回来的 JSON 字符串。
+         * 垂直居中对齐
          */
-        public static JSON = "json";
-    }
+        public static MIDDLE:string = "middle";
+
+	}
 }

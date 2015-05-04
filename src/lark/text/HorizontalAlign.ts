@@ -29,22 +29,28 @@
 
 module lark {
 
-    /**
-     * HttpResponseType 定义HttpRequest.responseType属性的值。确定Http请求返回的数据格式。
-     */
-    export class HttpResponseType{
+	/**
+	 * 水平对齐方式
+	 */
+	export class HorizontalAlign{
+        /**
+         * 左对齐
+         */
+        public static LEFT:string = "left";
 
         /**
-         * 返回字符串。HttpRequest.responseType属性的默认值。
+         * 右对齐
          */
-        public static TEXT = "text";
+        public static RIGHT:string = "right";
+
         /**
-         * 返回二进制的ArrayBuffer对象。
+         * 水平居中对齐
          */
-        public static ARRAY_BUFFER = "arraybuffer";
+        public static CENTER: string = "center";
+
         /**
-         * 返回 JavaScript 对象，将自动解析自服务器传递回来的 JSON 字符串。
+         * 未设置
          */
-        public static JSON = "json";
-    }
+        public static NONE: string = undefined;
+	}
 }

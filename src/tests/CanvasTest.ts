@@ -45,10 +45,9 @@ module lark {
         private start(bitmapData:BitmapData):void {
 
             this.image = bitmapData;
-            var textField = new TextField("", {fontSize: 12, color: 0xFF0000});
+            var textField = new TextField();
             textField.text = "2";
             textField.x = 100;
-            textField.multiline = true;
             textField.width = 400;
             this.textField = textField;
             this.addChild(textField);

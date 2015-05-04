@@ -33,16 +33,16 @@ module lark {
      * HttpRequestMethod 类提供了一些值，这些值可指定在将数据发送到服务器时，
      * HttpRequest 对象应使用 POST 方法还是 GET 方法。
      */
-    export const enum HttpMethod {
+    export class HttpMethod {
 
         /**
          * 表示 HttpRequest 对象是一个 GET。
          */
-        GET,
+        public static GET = "GET";
 
         /**
          * 表示 HttpRequest 对象是一个 POST。
          */
-        POST
+        public static POST = "POST";
     }
 }

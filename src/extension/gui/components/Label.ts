@@ -28,143 +28,23 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark.gui {
-
     /**
-     * GUI容器基类
+     * Label 是可以呈示一行或多行统一格式文本的UI组件。要显示的文本由 text 属性确定。文本格式由样式属性指定，例如 fontFamily 和 fontSize。
+     * 因为 Label 运行速度快且占用内存少，所以它特别适合用于显示多个小型非交互式文本的情况，例如，项呈示器和 Button 外观中的标签。
+     * 在 Label 中，将以下三个字符序列识别为显式换行符：CR（“\r”）、LF（“\n”）和 CR+LF（“\r\n”）。
+     * 如果没有为 Label 指定宽度，则由这些显式换行符确定的最长行确定 Label 的宽度。
+     * 如果指定了宽度，则指定文本将在组件边界的右边缘换行，如果文本扩展到低于组件底部，则将被剪切。
      */
-    export class Group extends Sprite implements UIComponent {
-
+    export class Label extends TextField implements UIComponent {
         public constructor() {
             super();
             player.UIComponentImpl.call(this);
         }
 
-        private _layout:LayoutBase = null;
-        /**
-         * 此容器的布局对象
-         */
-        public get layout():LayoutBase {
-            return this._layout;
-        }
-
-        public set layout(value:LayoutBase) {
-            this.$setLayout(value);
-        }
-
-        $setLayout(value:LayoutBase):void {
-            if (this._layout == value)
-                return;
-            if (this._layout) {
-                this._layout.target = null;
-            }
-
-            this._layout = value;
-
-            if (value) {
-                value.target = this;
-            }
+        $invalidateContentBounds():void {
+            super.$invalidateContentBounds();
             this.invalidateSize();
-            this.invalidateDisplayList();
-            this.emitWith("layoutChanged");
         }
-
-        /**
-         * 视域的内容的宽度
-         */
-        public get contentWidth():number {
-            return this.$uiValues[player.UIValues.contentWidth];
-        }
-
-        /**
-         * 视域的内容的高度
-         */
-        public get contentHeight():number {
-            return this.$uiValues[player.UIValues.contentHeight];
-        }
-
-        /**
-         * 设置 contentWidth 和 contentHeight 属性，此方法由Layout类调用
-         */
-        public setContentSize(width:number, height:number):void {
-            width = Math.ceil(+width || 0);
-            height = Math.ceil(+height || 0);
-            var values = this.$uiValues;
-            if (values[player.UIValues.contentWidth] === width && values[player.UIValues.contentHeight] === height) {
-                return;
-            }
-            values[player.UIValues.contentWidth] = width;
-            values[player.UIValues.contentHeight] = height;
-            UIEvent.emitUIEvent(this, UIEvent.CONTENT_SIZE_CHANGED);
-        }
-
-        /**
-         * 是否启用容器滚动。如果为 true，则将子项剪切到视区的边界，配合设置scrollH和scrollV属性将能滚动视区。
-         * 如果为 false，则容器子代会从容器边界扩展过去，而设置scrollH和scrollV也无效。默认false。
-         */
-        public get scrollEnabled():boolean {
-            return this.$hasFlags(player.UIFlags.scrollEnabled);
-        }
-
-        public set scrollEnabled(value:boolean) {
-            value = !!value;
-            if (value === this.$hasFlags(player.UIFlags.scrollEnabled))
-                return;
-            this.$toggleFlags(player.UIFlags.scrollEnabled, value);
-            this.updateScrollRect();
-        }
-
-        /**
-         * 可视区域水平方向起始点
-         */
-        public get scrollH():number {
-            return this.$uiValues[player.UIValues.scrollH];
-        }
-
-        public set scrollH(value:number) {
-            value = +value || 0;
-            var values = this.$uiValues;
-            if (value === values[player.UIValues.scrollH])
-                return;
-            values[player.UIValues.scrollH] = value;
-            if (this.updateScrollRect() && this._layout) {
-                this._layout.scrollPositionChanged();
-            }
-            UIEvent.emitUIEvent(this, UIEvent.SCROLL_POSITION_CHANGED);
-        }
-
-        /**
-         * 可视区域竖直方向起始点
-         */
-        public get scrollV():number {
-            return this.$uiValues[player.UIValues.scrollV];
-        }
-
-        public set scrollV(value:number) {
-            value = +value || 0;
-            var values = this.$uiValues;
-            if (value == values[player.UIValues.scrollV])
-                return;
-            values[player.UIValues.scrollV] = value;
-            if (this.updateScrollRect() && this._layout) {
-                this._layout.scrollPositionChanged();
-            }
-            UIEvent.emitUIEvent(this, UIEvent.SCROLL_POSITION_CHANGED);
-        }
-
-        private updateScrollRect():boolean {
-            var values = this.$uiValues;
-            var hasClip = this.$hasFlags(player.UIFlags.scrollEnabled)
-            if (hasClip) {
-                this.scrollRect = $TempRectangle.setTo(values[player.UIValues.scrollH],
-                    values[player.UIValues.scrollV],
-                    values[player.UIValues.width], values[player.UIValues.height]);
-            }
-            else if (this.$scrollRect) {
-                this.scrollRect = null;
-            }
-            return hasClip;
-        }
-
 
         //=======================UIComponent接口实现===========================
         /**
@@ -172,38 +52,30 @@ module lark.gui {
          * 请务必调用super.createChildren()以完成父类组件的初始化
          */
         protected createChildren():void {
-            if (!this._layout) {
-                this.$setLayout(new BasicLayout());
-            }
+
         }
 
         /**
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         protected commitProperties():void {
+
         }
 
         /**
          * 测量组件尺寸
          */
         protected measure():void {
-            if (!this._layout) {
-                this.setMeasuredSize(0, 0);
-                return;
-            }
-            this._layout.measure();
+            this.setMeasuredSize(this.textWidth,this.textHeight);
         }
 
         /**
          * 更新显示列表
          */
         protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
-            if (this._layout) {
-                this._layout.updateDisplayList(unscaledWidth, unscaledHeight);
-            }
-            this.updateScrollRect();
+            super.$setWidth(unscaledWidth);
+            super.$setHeight(unscaledHeight);
         }
-
 
         /**
          * 标记父级容器的尺寸和显示列表为失效
@@ -378,7 +250,6 @@ module lark.gui {
         }
     }
 
-    player.implementUIComponent(Group,Sprite);
-
-    registerType(Group, [Types.UIComponent, Types.Group]);
+    player.implementUIComponent(Label, TextField);
+    registerType(Group, [Types.UIComponent, Types.Label]);
 }
