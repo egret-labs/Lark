@@ -66,6 +66,8 @@ module lark {
                 0,              //textWidth
                 0               //textHeight
             ]);
+            this.$displayObjectFlags |= player.TextFieldFlags.wordWrap|
+                player.TextFieldFlags.FontStringChanged;
             this.text = text;
         }
 
@@ -224,6 +226,23 @@ module lark {
             this.$invalidate();
         }
 
+        /**
+         * 一个布尔值，表示文本字段是否自动换行。如果 wordWrap 的值为 true，则该文本字段自动换行；
+         * 如果值为 false，则该文本字段不自动换行,如果同时显式设置过宽度，超出宽度的部分将被截断。默认值为 true。
+         */
+        public get wordWrap():boolean{
+            return this.$hasFlags(player.TextFieldFlags.wordWrap);
+        }
+
+        public set wordWrap(value:boolean){
+            value = !!value;
+            if (value === this.$hasFlags(player.TextFieldFlags.wordWrap)) {
+                return;
+            }
+            this.$toggleFlags(player.TextFieldFlags.wordWrap, value);
+            this.$invalidateContentBounds();
+        }
+
         private _text:string = "";
         /**
          * 要显示的文本内容
@@ -359,7 +378,7 @@ module lark {
                     drawX = 0;
                 }
                 if (drawY < explicitHeight) {
-                    context.fillText(line, drawX, drawY, maxWidth);
+                    context.fillText(line, drawX, drawY);
                 }
                 drawY += vGap;
             }
@@ -390,26 +409,32 @@ module lark {
                 return null;
             }
 
+            var hasWidthSet = !isNone(textFieldWidth);
             var font = this.getFontString();
             var lines = text.split(/(?:\r\n|\r|\n)/);
             var length = lines.length;
             var maxWidth = 0;
-            if (!isNone(textFieldWidth)) {
+            var index:number;
+            if (hasWidthSet&&this.$hasFlags(player.TextFieldFlags.wordWrap)) {
                 for (var i = 0; i < length; i++) {
                     var line = lines[i];
                     var measureW = TextMeasurer.measureText(line, font);
                     if (measureW > textFieldWidth) {
                         var newLine = "";
                         var lineWidth = 0;
-                        var len = line.length;
+                        var textAtoms = line.split(SplitRegex);
+                        var len = textAtoms.length;
                         for (var j = 0; j < len; j++) {
-                            var word = line.charAt(j);
+                            var word = textAtoms[j];
                             measureW = TextMeasurer.measureText(word, font);
                             if (lineWidth + measureW > textFieldWidth) {
 
                                 if (lineWidth === 0) {
-                                    lines.splice(i, 0, word);
+                                    index = getCharIndex(word,textFieldWidth,font);
+                                    lines.splice(i, 0, word.substring(0,index));
                                     measuredWidths[i] = measureW;
+                                    textAtoms.splice(j+1,0, word.substring(index));
+                                    len++;
                                     if (maxWidth < measureW) {
                                         maxWidth = measureW;
                                     }
@@ -446,6 +471,10 @@ module lark {
                 for (i = 0; i < length; i++) {
                     line = lines[i];
                     measureW = TextMeasurer.measureText(line, font);
+                    if(hasWidthSet&&measureW>textFieldWidth){
+                        index = getCharIndex(line,textFieldWidth,font);
+                        line = line.substring(0,index);
+                    }
                     measuredWidths[i] = measureW;
                     if (maxWidth < measureW) {
                         maxWidth = measureW;
@@ -461,8 +490,31 @@ module lark {
 
     }
 
+    var SplitRegex = /(?=[\u00BF-\u1FFF\u2C00-\uD7FF]|\b|\s)(?![。，！、》…）)}”】\.\,\!\?\]\:])/;
+
+    /**
+     * 返回不超过最大宽度的字符结束索引(不包括)。
+     */
+    function getCharIndex(text:string,maxWidth:number,font:string):number{
+        var lineWidth = 0;
+        var length = text.length;
+        var index:number;
+        for (var i = 0; i < length; i++) {
+            var word = text.charAt(i);
+            var measureW = TextMeasurer.measureText(word, font);
+            if (lineWidth + measureW > maxWidth) {
+                index = i;
+                break;
+            }
+            lineWidth += measureW;
+        }
+        return index==0?1:index;
+    }
+
     registerType(TextField, [Types.TextField]);
 }
+
+
 
 module lark.player {
 

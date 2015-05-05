@@ -118,21 +118,25 @@ module lark.player {
     export const enum TextFieldFlags {
         // TextFiled剩余可用:
         /**
-         * 是否显示为粗体。
+         * 是否显示为粗体。false
          */
         Bold = 0x1000,
         /**
-         * 是否显示为斜体。
+         * 是否显示为斜体。false
          */
         Italic = 0x2000,
         /**
-         * 字体信息的字符串形式发生改变。
+         * 字体信息的字符串形式发生改变。true
          */
         FontStringChanged = 0x4000,
         /**
          * 文本行列表发生改变
          */
-        TextLinesChanged = 0x8000
+        TextLinesChanged = 0x8000,
+        /**
+         * 一个布尔值，表示文本字段是否自动换行。如果 wordWrap 的值为 true，则该文本字段自动换行；如果值为 false，则该文本字段不自动换行。默认值为 false。
+         */
+        wordWrap = 0x10000
     }
 
 
