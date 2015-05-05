@@ -191,7 +191,7 @@ module lark.gui {
         /**
          * 验证组件的尺寸
          */
-        public validateSize():void {
+        public validateSize(recursive?:boolean):void {
         }
 
         /**

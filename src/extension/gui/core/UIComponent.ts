@@ -179,7 +179,7 @@ module lark.gui {
         /**
          * 验证组件的尺寸
          */
-        validateSize():void;
+        validateSize(recursive?:boolean):void;
 
         /**
          * 标记需要验证显示列表
@@ -536,11 +536,8 @@ module lark.player {
          * 立即验证自身的尺寸。
          */
         private validateSizeNow():void {
-            var parent:DisplayObject = this.$parent;
-            if (!parent || !parent.isType(gui.Types.UIComponent)) {
-                parent = this;
-            }
-            (<gui.UIComponent>parent).validateNow();
+            this.validateSize(true);
+            this.updateFinalSize();
         }
 
         /**
@@ -765,7 +762,19 @@ module lark.player {
         /**
          * 验证组件的尺寸
          */
-        public validateSize():void {
+        public validateSize(recursive?:boolean):void {
+            if (recursive) {
+                var children = this.$children;
+                if (children) {
+                    var length = children.length;
+                    for (var i = 0; i < length; i++) {
+                        var child = children[i];
+                        if (child.isType(gui.Types.UIComponent)) {
+                            (<gui.UIComponent>child).validateSize(true);
+                        }
+                    }
+                }
+            }
             if (this.$hasFlags(UIFlags.InvalidateSizeFlag)) {
                 var changed = this.measureSizes();
                 if (changed) {
@@ -816,31 +825,39 @@ module lark.player {
          */
         public validateDisplayList():void {
             if (this.$hasFlags(UIFlags.InvalidateDisplayListFlag)) {
-                var unscaledWidth = 0;
-                var unscaledHeight = 0;
+                this.updateFinalSize();
                 var values = this.$uiValues;
-                if (this.$hasFlags(UIFlags.LayoutWidthExplicitlySet)) {
-                    unscaledWidth = values[UIValues.width];
-                }
-                else if (!isNone(values[UIValues.explicitWidth])) {
-                    unscaledWidth = values[UIValues.explicitWidth];
-                }
-                else {
-                    unscaledWidth = values[UIValues.measuredWidth];
-                }
-                if (this.$hasFlags(UIFlags.LayoutHeightExplicitlySet)) {
-                    unscaledHeight = values[UIValues.height];
-                }
-                else if (!isNone(values[UIValues.explicitHeight])) {
-                    unscaledHeight = values[UIValues.explicitHeight];
-                }
-                else {
-                    unscaledHeight = values[UIValues.measuredHeight];
-                }
-                this.setActualSize(unscaledWidth, unscaledHeight);
-                this.updateDisplayList(unscaledWidth, unscaledHeight);
+                this.updateDisplayList(values[UIValues.width], values[UIValues.height]);
                 this.$removeFlags(UIFlags.InvalidateDisplayListFlag);
             }
+        }
+
+        /**
+         * 更新最终的组件宽高
+         */
+        private updateFinalSize():void{
+            var unscaledWidth = 0;
+            var unscaledHeight = 0;
+            var values = this.$uiValues;
+            if (this.$hasFlags(UIFlags.LayoutWidthExplicitlySet)) {
+                unscaledWidth = values[UIValues.width];
+            }
+            else if (!isNone(values[UIValues.explicitWidth])) {
+                unscaledWidth = values[UIValues.explicitWidth];
+            }
+            else {
+                unscaledWidth = values[UIValues.measuredWidth];
+            }
+            if (this.$hasFlags(UIFlags.LayoutHeightExplicitlySet)) {
+                unscaledHeight = values[UIValues.height];
+            }
+            else if (!isNone(values[UIValues.explicitHeight])) {
+                unscaledHeight = values[UIValues.explicitHeight];
+            }
+            else {
+                unscaledHeight = values[UIValues.measuredHeight];
+            }
+            this.setActualSize(unscaledWidth, unscaledHeight);
         }
 
         /**
@@ -919,8 +936,8 @@ module lark.player {
                 x += this.$getX() - bounds.x;
                 y += this.$getY() - bounds.y;
             }
-            this.$super.$setX.call(this,x);
-            this.$super.$setY.call(this,y);
+            this.$super.$setX.call(this, x);
+            this.$super.$setY.call(this, y);
         }
 
         /**
@@ -1016,7 +1033,7 @@ module lark.player {
      * @param descendant 自定义的UIComponent子类
      * @param base 自定义子类继承的父类
      */
-    export function implementUIComponent(descendant:any,base:any):void {
+    export function implementUIComponent(descendant:any, base:any):void {
         for (var property in UIComponentImpl) {
             if (UIComponentImpl.hasOwnProperty(property)) {
                 descendant[property] = UIComponentImpl[property];

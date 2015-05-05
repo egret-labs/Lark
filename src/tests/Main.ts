@@ -101,6 +101,16 @@ module lark {
             //shape.cacheAsBitmap = true;
             //container.mask = this.targetIcon;
 
+            var group = new lark.gui.Group();
+            //this.addChild(group);
+            var label = new lark.gui.Label();
+            label.text = "2020303010djfajdklfjadklfjalkdjflkajdlfjlwejfkljldjfklajdklfjlakdjf";
+            label.left = 0;
+            label.right = 0;
+            label.width = 100;
+            group.addChild(label);
+            log(group.width,group.height);
+
         }
 
         private onRequest(event:Event):void{
