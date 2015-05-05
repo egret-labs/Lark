@@ -27,9 +27,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
-
-    const enum Values {
+module lark.player {
+    export const enum TextFieldValues {
         fontSize,           //30
         lineSpacing,        //0
         textColor,          //0x000000
@@ -38,6 +37,10 @@ module lark {
         textWidth,          //0
         textHeight          //0
     }
+}
+
+module lark {
+
     /**
      * TextField 类用于创建显示对象以显示文本。可以使用 TextField 类的方法和属性对文本字段进行操作。
      * 注意:TextField.width和TextField.height与其他显示对象的定义不同。
@@ -88,16 +91,16 @@ module lark {
          * 字号大小,默认值30 。
          */
         public get fontSize():number {
-            return this.$textFieldValues[Values.fontSize];
+            return this.$textFieldValues[player.TextFieldValues.fontSize];
         }
 
         public set fontSize(value:number) {
             value = +value || 0;
             var values = this.$textFieldValues;
-            if (values[Values.fontSize] === value) {
+            if (values[player.TextFieldValues.fontSize] === value) {
                 return;
             }
-            values[Values.fontSize] = value;
+            values[player.TextFieldValues.fontSize] = value;
             this.invalidateFontString();
         }
 
@@ -189,15 +192,15 @@ module lark {
          * 行间距。标准行高通常等于fontSize的值，设置此属性，将会在标准行高之间添加指定像素的空白间隔。可以设置为负值。默认值0.
          */
         public get lineSpacing():number {
-            return this.$textFieldValues[Values.lineSpacing];
+            return this.$textFieldValues[player.TextFieldValues.lineSpacing];
         }
 
         public set lineSpacing(value:number) {
             value = +value || 0;
             var values = this.$textFieldValues;
-            if (values[Values.lineSpacing] === value)
+            if (values[player.TextFieldValues.lineSpacing] === value)
                 return;
-            values[Values.lineSpacing] = value;
+            values[player.TextFieldValues.lineSpacing] = value;
             this.$invalidateContentBounds();
         }
 
@@ -207,16 +210,16 @@ module lark {
          * 文本颜色，默认值0x000000
          */
         public get textColor():number {
-            return this.$textFieldValues[Values.textColor];
+            return this.$textFieldValues[player.TextFieldValues.textColor];
         }
 
         public set textColor(value:number) {
             value = +value | 0;
             var values = this.$textFieldValues;
-            if (values[Values.textColor] === value) {
+            if (values[player.TextFieldValues.textColor] === value) {
                 return;
             }
-            values[Values.textColor] = value;
+            values[player.TextFieldValues.textColor] = value;
             this._colorString = player.toColorString(value);
             this.$invalidate();
         }
@@ -249,7 +252,7 @@ module lark {
          */
         public get textWidth():number {
             this.updateTextLines();
-            return this.$textFieldValues[Values.textWidth];
+            return this.$textFieldValues[player.TextFieldValues.textWidth];
         }
 
         /**
@@ -257,34 +260,36 @@ module lark {
          */
         public get textHeight():number {
             this.updateTextLines();
-            return this.$textFieldValues[Values.textHeight];
+            return this.$textFieldValues[player.TextFieldValues.textHeight];
         }
 
         $getWidth():number {
-            return this.$getContentBounds().width;
+            var w = this.$textFieldValues[player.TextFieldValues.textFieldWidth];
+            return isNone(w)?this.$getContentBounds().width:w;
         }
 
         $setWidth(value:number) {
             value = +value || 0;
             var values = this.$textFieldValues;
-            if (value < 0 || value === values[Values.textFieldWidth]) {
+            if (value < 0 || value === values[player.TextFieldValues.textFieldWidth]) {
                 return;
             }
-            values[Values.textFieldWidth] = value;
+            values[player.TextFieldValues.textFieldWidth] = value;
             this.$invalidateContentBounds();
         }
 
         $getHeight():number {
-            return this.$getContentBounds().height;
+            var h = this.$textFieldValues[player.TextFieldValues.textFieldHeight];
+            return isNone(h)?this.$getContentBounds().height:h;
         }
 
         $setHeight(value:number) {
             value = +value || 0;
             var values = this.$textFieldValues;
-            if (value < 0 || value === values[Values.textFieldHeight]) {
+            if (value < 0 || value === values[player.TextFieldValues.textFieldHeight]) {
                 return;
             }
-            values[Values.textFieldHeight] = value;
+            values[player.TextFieldValues.textFieldHeight] = value;
             this.$invalidateContentBounds();
         }
 
@@ -296,12 +301,12 @@ module lark {
         $measureContentBounds(bounds:Rectangle):void {
             this.updateTextLines();
             var values = this.$textFieldValues;
-            var height = isNone(values[Values.textFieldHeight]) ?
-                values[Values.textHeight] : values[Values.textFieldHeight];
-            var width = isNone(values[Values.textFieldWidth])?
-                values[Values.textWidth]:values[Values.textFieldWidth];
-            if(width<values[Values.textWidth]){
-                width = values[Values.textWidth];
+            var height = isNone(values[player.TextFieldValues.textFieldHeight]) ?
+                values[player.TextFieldValues.textHeight] : values[player.TextFieldValues.textFieldHeight];
+            var width = isNone(values[player.TextFieldValues.textFieldWidth])?
+                values[player.TextFieldValues.textWidth]:values[player.TextFieldValues.textFieldWidth];
+            if(width<values[player.TextFieldValues.textWidth]){
+                width = values[player.TextFieldValues.textWidth];
             }
             bounds.setTo(0, 0, width, height);
         }
@@ -317,11 +322,11 @@ module lark {
             context.font = this.getFontString();
             context.fillStyle = this._colorString;
             var length = lines.length;
-            var drawY = values[Values.fontSize] * 0.5;
-            var vGap = values[Values.fontSize] + values[Values.lineSpacing];
-            var textHeight = values[Values.textHeight];
-            var hasHeightSet = !isNone(values[Values.textFieldHeight]);
-            var explicitHeight = hasHeightSet ? values[Values.textFieldHeight] : Number.POSITIVE_INFINITY;
+            var drawY = values[player.TextFieldValues.fontSize] * 0.5;
+            var vGap = values[player.TextFieldValues.fontSize] + values[player.TextFieldValues.lineSpacing];
+            var textHeight = values[player.TextFieldValues.textHeight];
+            var hasHeightSet = !isNone(values[player.TextFieldValues.textFieldHeight]);
+            var explicitHeight = hasHeightSet ? values[player.TextFieldValues.textFieldHeight] : Number.POSITIVE_INFINITY;
             if (hasHeightSet && textHeight < explicitHeight) {
                 var vAlign = 0;
                 if (this._verticalAlign == VerticalAlign.MIDDLE)
@@ -340,11 +345,11 @@ module lark {
             }
             var measuredWidths = this.measuredWidths;
             var maxWidth:number;
-            if (isNone(values[Values.textFieldWidth])) {
-                maxWidth = values[Values.textWidth];
+            if (isNone(values[player.TextFieldValues.textFieldWidth])) {
+                maxWidth = values[player.TextFieldValues.textWidth];
             }
             else {
-                maxWidth = values[Values.textFieldWidth];
+                maxWidth = values[player.TextFieldValues.textFieldWidth];
             }
             for (var i:number = 0; i < length; i++) {
                 var line = lines[i];
@@ -376,9 +381,9 @@ module lark {
             var values = this.$textFieldValues;
             var measuredWidths = this.measuredWidths;
             measuredWidths.length = 0;
-            values[Values.textWidth] = 0;
-            values[Values.textHeight] = 0;
-            var textFieldWidth = values[Values.textFieldWidth];
+            values[player.TextFieldValues.textWidth] = 0;
+            values[player.TextFieldValues.textHeight] = 0;
+            var textFieldWidth = values[player.TextFieldValues.textFieldWidth];
 
             var text:string = this._text;
             if (!text || textFieldWidth === 0) {
@@ -447,8 +452,9 @@ module lark {
                     }
                 }
             }
-            values[Values.textWidth] = Math.ceil(maxWidth);
-            values[Values.textHeight] = Math.ceil(lines.length * (values[Values.fontSize] + values[Values.lineSpacing]) - values[Values.lineSpacing]);
+            values[player.TextFieldValues.textWidth] = Math.ceil(maxWidth);
+            values[player.TextFieldValues.textHeight] = Math.ceil(lines.length * (values[player.TextFieldValues.fontSize] +
+                values[player.TextFieldValues.lineSpacing]) - values[player.TextFieldValues.lineSpacing]);
             this.textLines = lines;
             return lines;
         }

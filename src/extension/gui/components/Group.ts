@@ -208,7 +208,7 @@ module lark.gui {
         /**
          * 标记父级容器的尺寸和显示列表为失效
          */
-        protected invalidateParentSizeAndDisplayList():void {
+        protected invalidateParentLayout():void {
         }
 
         $uiValues:Float64Array;

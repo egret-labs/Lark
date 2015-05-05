@@ -57,7 +57,13 @@ module lark.gui {
         ///**
         // * 标记父级容器的尺寸和显示列表为失效
         // */
-        // protected invalidateParentSizeAndDisplayList():void{}
+        // protected invalidateParentLayout():void{}
+
+        //$getWidth():number;
+        //$setWidth(value:number):void;
+
+        //$getHeight():number;
+        //$setHeight(value:number):void;
 
         $uiValues:Float64Array;
 
@@ -336,7 +342,7 @@ module lark.player {
             if (this.$includeInLayout === value)
                 return;
             this.$includeInLayout = true;
-            this.invalidateParentSizeAndDisplayList();
+            this.invalidateParentLayout();
             this.$includeInLayout = value;
         }
 
@@ -374,7 +380,7 @@ module lark.player {
             if (values[UIValues.left] === value)
                 return;
             values[UIValues.left] = value;
-            this.invalidateParentSizeAndDisplayList();
+            this.invalidateParentLayout();
         }
 
         /**
@@ -390,7 +396,7 @@ module lark.player {
             if (values[UIValues.right] === value)
                 return;
             values[UIValues.right] = value;
-            this.invalidateParentSizeAndDisplayList();
+            this.invalidateParentLayout();
         }
 
         /**
@@ -406,7 +412,7 @@ module lark.player {
             if (values[UIValues.top] === value)
                 return;
             values[UIValues.top] = value;
-            this.invalidateParentSizeAndDisplayList();
+            this.invalidateParentLayout();
         }
 
         /**
@@ -422,7 +428,7 @@ module lark.player {
             if (values[UIValues.bottom] == value)
                 return;
             values[UIValues.bottom] = value;
-            this.invalidateParentSizeAndDisplayList();
+            this.invalidateParentLayout();
         }
 
 
@@ -439,7 +445,7 @@ module lark.player {
             if (values[UIValues.horizontalCenter] === value)
                 return;
             values[UIValues.horizontalCenter] = value;
-            this.invalidateParentSizeAndDisplayList();
+            this.invalidateParentLayout();
         }
 
         /**
@@ -455,7 +461,7 @@ module lark.player {
             if (values[UIValues.verticalCenter] === value)
                 return;
             values[UIValues.verticalCenter] = value;
-            this.invalidateParentSizeAndDisplayList();
+            this.invalidateParentLayout();
         }
 
 
@@ -472,7 +478,7 @@ module lark.player {
             if (values[UIValues.percentWidth] === value)
                 return;
             values[UIValues.percentWidth] = value;
-            this.invalidateParentSizeAndDisplayList();
+            this.invalidateParentLayout();
         }
 
         /**
@@ -488,7 +494,7 @@ module lark.player {
             if (values[UIValues.percentHeight] === value)
                 return;
             values[UIValues.percentHeight] = value;
-            this.invalidateParentSizeAndDisplayList();
+            this.invalidateParentLayout();
         }
 
         /**
@@ -508,13 +514,22 @@ module lark.player {
         /**
          * 组件宽度,默认值为lark.NONE,设置为lark.NONE将使用组件的measure()方法自动计算尺寸
          */
-        public get width():number {
+        $getWidth():number {
             this.validateSizeNow();
             return this.$uiValues[UIValues.width];
         }
 
-        public set width(value:number) {
-
+        $setWidth(value:number) {
+            value = +value || 0;
+            var values = this.$uiValues;
+            if (value < 0 || values[UIValues.width] === value && values[UIValues.explicitWidth] === value)
+                return;
+            values[UIValues.width] = value;
+            values[UIValues.explicitWidth] = value;
+            if (isNaN(value))
+                this.invalidateSize();
+            this.invalidateDisplayList();
+            this.invalidateParentLayout();
         }
 
         /**
@@ -531,28 +546,28 @@ module lark.player {
         /**
          * 组件高度,默认值为NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
          */
-        public get height():number {
+        $getHeight():number {
             this.validateSizeNow();
             return this.$uiValues[UIValues.height];
         }
 
-        public set height(value:number) {
+        $setHeight(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
             if (value < 0 || values[UIValues.height] === value && values[UIValues.explicitHeight] === value)
                 return;
             values[UIValues.height] = value;
-            values[UIValues.explicitWidth] = value;
+            values[UIValues.explicitHeight] = value;
             if (isNaN(value))
                 this.invalidateSize();
             this.invalidateDisplayList();
-            this.invalidateParentSizeAndDisplayList();
+            this.invalidateParentLayout();
         }
 
         $setScaleX(value:number):boolean {
             var change = this.$super.$setScaleX.call(this, value);
             if (change) {
-                this.invalidateParentSizeAndDisplayList();
+                this.invalidateParentLayout();
             }
             return change;
         }
@@ -560,7 +575,7 @@ module lark.player {
         $setScaleY(value:number):boolean {
             var change = this.$super.$setScaleY.call(this, value);
             if (change) {
-                this.invalidateParentSizeAndDisplayList();
+                this.invalidateParentLayout();
             }
             return change;
         }
@@ -580,7 +595,7 @@ module lark.player {
             }
             values[UIValues.minWidth] = value;
             this.invalidateSize();
-            this.invalidateParentSizeAndDisplayList();
+            this.invalidateParentLayout();
         }
 
         /**
@@ -598,7 +613,7 @@ module lark.player {
             }
             values[UIValues.maxWidth] = value;
             this.invalidateSize();
-            this.invalidateParentSizeAndDisplayList();
+            this.invalidateParentLayout();
         }
 
         /**
@@ -616,7 +631,7 @@ module lark.player {
             }
             values[UIValues.minHeight] = value;
             this.invalidateSize();
-            this.invalidateParentSizeAndDisplayList();
+            this.invalidateParentLayout();
         }
 
 
@@ -635,7 +650,7 @@ module lark.player {
             }
             values[UIValues.maxHeight] = value;
             this.invalidateSize();
-            this.invalidateParentSizeAndDisplayList();
+            this.invalidateParentLayout();
         }
 
         /**
@@ -659,8 +674,22 @@ module lark.player {
          */
         public setMeasuredSize(width:number, height:number):void {
             var values = this.$uiValues;
-            values[UIValues.measuredWidth] = Math.ceil(+width || 0);
-            values[UIValues.measuredHeight] = Math.ceil(+height || 0);
+            width = Math.ceil(+width || 0);
+            height = Math.ceil(+height || 0);
+            if (width < values[UIValues.minWidth]) {
+                width = values[UIValues.minWidth];
+            }
+            if (width > values[UIValues.maxWidth]) {
+                width = values[UIValues.maxWidth];
+            }
+            if (height < values[UIValues.minHeight]) {
+                height = values[UIValues.minHeight];
+            }
+            if (height > values[UIValues.maxHeight]) {
+                height = values[UIValues.maxHeight]
+            }
+            values[UIValues.measuredWidth] = width;
+            values[UIValues.measuredHeight] = height;
         }
 
 
@@ -687,7 +716,7 @@ module lark.player {
         $setX(value:number):boolean {
             var change = this.$super.$setX.call(this, value);
             if (change) {
-                this.invalidateParentSizeAndDisplayList();
+                this.invalidateParentLayout();
             }
             return change;
         }
@@ -695,7 +724,7 @@ module lark.player {
         $setY(value:number):boolean {
             var change = this.$super.$setY.call(this, value);
             if (change) {
-                this.invalidateParentSizeAndDisplayList();
+                this.invalidateParentLayout();
             }
             return change;
         }
@@ -741,7 +770,7 @@ module lark.player {
                 var changed = this.measureSizes();
                 if (changed) {
                     this.invalidateDisplayList();
-                    this.invalidateParentSizeAndDisplayList();
+                    this.invalidateParentLayout();
                 }
                 this.$removeFlags(UIFlags.InvalidateSizeFlag);
             }
@@ -759,19 +788,6 @@ module lark.player {
             var values = this.$uiValues;
             if (isNone(values[UIValues.explicitWidth]) || isNone(values[UIValues.explicitHeight])) {
                 this.measure();
-
-                if (values[UIValues.measuredWidth] < values[UIValues.minWidth]) {
-                    values[UIValues.measuredWidth] = values[UIValues.minWidth];
-                }
-                if (values[UIValues.measuredWidth] > values[UIValues.maxWidth]) {
-                    values[UIValues.measuredWidth] = values[UIValues.maxWidth];
-                }
-                if (values[UIValues.measuredHeight] < values[UIValues.minHeight]) {
-                    values[UIValues.measuredHeight] = values[UIValues.minHeight];
-                }
-                if (values[UIValues.measuredHeight] > values[UIValues.maxHeight]) {
-                    values[UIValues.measuredHeight] = values[UIValues.maxHeight]
-                }
             }
             var preferredW = this.getPreferredUWidth();
             var preferredH = this.getPreferredUHeight();
@@ -800,8 +816,8 @@ module lark.player {
          */
         public validateDisplayList():void {
             if (this.$hasFlags(UIFlags.InvalidateDisplayListFlag)) {
-                var unscaledWidth:number = 0;
-                var unscaledHeight:number = 0;
+                var unscaledWidth = 0;
+                var unscaledHeight = 0;
                 var values = this.$uiValues;
                 if (this.$hasFlags(UIFlags.LayoutWidthExplicitlySet)) {
                     unscaledWidth = values[UIValues.width];
@@ -838,7 +854,7 @@ module lark.player {
         /**
          * 标记父级容器的尺寸和显示列表为失效
          */
-        protected invalidateParentSizeAndDisplayList():void {
+        protected invalidateParentLayout():void {
             var parent = this.$parent;
             if (!parent || !this.$includeInLayout || !(parent.isType(gui.Types.UIComponent)))
                 return;
