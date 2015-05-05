@@ -431,9 +431,11 @@ module lark {
 
                                 if (lineWidth === 0) {
                                     index = getMaxIndex(word,textFieldWidth,font);
-                                    lines.splice(i, 0, word.substring(0,index));
-                                    measuredWidths[i] = measureW;
                                     words.splice(j+1,0, word.substring(index));
+                                    word = word.substring(0,index);
+                                    measureW = TextMeasurer.measureText(word,font);
+                                    lines.splice(i, 0, word);
+                                    measuredWidths[i] = measureW;
                                     len++;
                                     if (maxWidth < measureW) {
                                         maxWidth = measureW;
