@@ -324,9 +324,8 @@ export function search(dir:string, extension:string):string[] {
  * @param dir 要搜索的文件夹
  * @param filterFunc 过滤函数：filterFunc(file:File):Boolean,参数为遍历过程中的每一个文件，返回true则加入结果列表
  */
-export function searchByFunction(dir:string, filterFunc:Function):string[] {
+export function searchByFunction(dir: string, filterFunc: Function, checkDir?:boolean):string[] {
     var list = [];
-    var checkDir = arguments[2];
     try {
         var stat = FS.statSync(dir);
     }

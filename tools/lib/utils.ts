@@ -52,6 +52,12 @@ export function tr(code: number, ...args): string {
     return text;
 }
 
+export function exit(code: number, ...args) {
+    var message = tr.apply(this, [code].concat(args));
+    console.error(message);
+    process.exit(code);
+}
+
 function _getEnv() {
     return process.env;
 }

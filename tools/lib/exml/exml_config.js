@@ -24,11 +24,11 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/// <reference path="../node.d.ts"/>
+/// <reference path="../types.d.ts" />
 var file = require("../FileUtil");
-var xml = require("../core/xml.js");
+var xml = require("../xml/index");
 var CodeUtil = require("../code_util");
-var create_manifest = require("../tools/create_manifest.js");
+var create_manifest = require("./createManifest");
 var properties = {};
 var stylesMap = {};
 var EXMLConfig = (function () {
@@ -42,15 +42,21 @@ var EXMLConfig = (function () {
         this.componentDic = {};
         this.idMap = {};
         this.basicTypes = ["void", "any", "number", "string", "boolean", "Object", "Array", "Function"];
-        var exmlPath = param.getEgretPath() + "/tools/lib/exml/";
+        var exmlPath = lark.options.larkRoot + "/tools/lib/exml/";
         exmlPath = exmlPath.split("\\").join("/");
-        var str = file.read(exmlPath + "egret-manifest.xml");
+        var str = file.read(exmlPath + "manifest.xml");
         var manifest = xml.parse(str);
         this.parseManifest(manifest);
         str = file.read(exmlPath + "properties.json");
         properties = JSON.parse(str);
         this.findStyles(properties);
     }
+    EXMLConfig.getInstance = function () {
+        if (!exmlConfig) {
+            exmlConfig = new EXMLConfig();
+        }
+        return exmlConfig;
+    };
     EXMLConfig.prototype.findStyles = function (properties) {
         var data = properties["styles"];
         if (!data) {
@@ -559,12 +565,5 @@ var Component = (function () {
     return Component;
 })();
 var exmlConfig;
-function getInstance() {
-    if (!exmlConfig) {
-        exmlConfig = new EXMLConfig();
-    }
-    return exmlConfig;
-}
-exports.EXMLConfig = EXMLConfig;
-exports.getInstance = getInstance;
+module.exports = EXMLConfig;
 //# sourceMappingURL=exml_config.js.map

@@ -27,9 +27,10 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 /// <reference path="../lib/types.d.ts" />
-var TypeScript = require("../lib/typescript/tsc");
-var FileUtil = require("../lib/FileUtil");
 var utils = require('../lib/utils');
+var exmlc = require('../lib/exml/exmlc');
+var FileUtil = require("../lib/FileUtil");
+var TypeScript = require("../lib/typescript/tsc");
 var UglifyJS = require("../lib/uglify-js/uglifyjs");
 var Action = (function () {
     function Action(options) {
@@ -47,12 +48,20 @@ var Action = (function () {
             FileUtil.remove(path);
         }
     };
+    Action.prototype.compileExmls = function () {
+        var option = this.options;
+        var exmls = FileUtil.search(option.srcDir, "exml");
+        exmls.forEach(function (exml) {
+            exmlc.compile(exml, option.srcDir);
+        });
+    };
     Action.prototype.buildProject = function () {
         var option = this.options;
         //拷贝lark.js
         if (!option.publish && FileUtil.exists(option.srcLarkFile)) {
             FileUtil.copy(option.srcLarkFile, option.outLarkFile);
         }
+        this.compileExmls();
         var tsList = FileUtil.search(option.srcDir, "ts");
         var compileResult = this.compile(option, tsList, option.out, option.outDir);
         var larkRootSrc = FileUtil.escapePath(this.options.srcDir);

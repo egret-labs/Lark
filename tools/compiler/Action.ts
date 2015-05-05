@@ -29,9 +29,10 @@
 
 /// <reference path="../lib/types.d.ts" />
 
-import TypeScript = require("../lib/typescript/tsc");
-import FileUtil = require("../lib/FileUtil");
 import utils = require('../lib/utils');
+import exmlc = require('../lib/exml/exmlc');
+import FileUtil = require("../lib/FileUtil");
+import TypeScript = require("../lib/typescript/tsc");
 import UglifyJS = require("../lib/uglify-js/uglifyjs");
 
 class Action {
@@ -61,6 +62,14 @@ class Action {
     }
 
 
+    public compileExmls() {
+        var option: lark.ICompileOptions = this.options;
+        var exmls: string[] = FileUtil.search(option.srcDir, "exml");
+        exmls.forEach(exml=> {
+            exmlc.compile(exml, option.srcDir);
+        });
+    }
+
     public buildProject() {
         var option: lark.ICompileOptions = this.options;
 
@@ -69,6 +78,8 @@ class Action {
         {
             FileUtil.copy(option.srcLarkFile, option.outLarkFile);
         }
+
+        this.compileExmls();
 
         var tsList: string[] = FileUtil.search(option.srcDir, "ts");
         var compileResult = this.compile(option, tsList, option.out, option.outDir);

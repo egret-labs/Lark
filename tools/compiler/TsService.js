@@ -112,9 +112,7 @@ var Host = (function () {
     };
     Host.prototype.getScriptFileNames = function () {
         var fileNames = [];
-        ts.forEachKey(this.fileNameToScript, function (fileName) {
-            fileNames.push(fileName);
-        });
+        ts.forEachKey(this.fileNameToScript, function (fileName) { fileNames.push(fileName); });
         return fileNames;
     };
     Host.prototype.getScriptInfo = function (fileName) {

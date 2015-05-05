@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 /// <reference path="../lib/types.d.ts" />
-require('../locales/en');
+require('../locales/zh_CN');
 var Parser = require("./Parser");
 var Run = require("./Run");
 var Build = require("./Build");
@@ -35,8 +35,10 @@ var Publish = require("./Publish");
 var Create = require("./Create");
 var server = require('../server/server');
 var BuildService = require("./BuildService");
+global.lark = global.lark || {};
 function executeCommandLine(args) {
     var options = Parser.parseCommandLine(args);
+    lark.options = options;
     if (options.autoCompile) {
         if (options.action == 'startserver') {
             startAutoBuildService(options);

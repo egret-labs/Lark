@@ -51,7 +51,7 @@ module lark.portal {
             if (success)
                 request.onload = e=> success(request.response);
             if (error)
-                request.onerror = e => error(e.error);
+                request.onerror = e => error(e['error']);
 
             var postdata = isget ? null : data;
 

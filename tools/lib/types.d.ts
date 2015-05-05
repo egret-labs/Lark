@@ -91,6 +91,8 @@ declare module lark {
         type: string;
     }
 
+    export var options: ICompileOptions;
+
     module server {
         export var options: ICompileOptions;
         export interface ViewModel {

@@ -54,6 +54,16 @@ function tr(code) {
     return text;
 }
 exports.tr = tr;
+function exit(code) {
+    var args = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args[_i - 1] = arguments[_i];
+    }
+    var message = tr.apply(this, [code].concat(args));
+    console.error(message);
+    process.exit(code);
+}
+exports.exit = exit;
 function _getEnv() {
     return process.env;
 }

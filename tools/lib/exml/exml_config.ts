@@ -25,12 +25,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/// <reference path="../node.d.ts"/>
+/// <reference path="../types.d.ts" />
 
 import file = require("../FileUtil");
-import xml = require("../core/xml.js");
-var CodeUtil = require("../code_util");
-import create_manifest = require("../tools/create_manifest.js");
+import xml = require("../xml/index");
+import CodeUtil = require("../code_util");
+import create_manifest = require("./createManifest");
 var properties = {};
 var stylesMap = {};
 
@@ -48,15 +48,23 @@ class EXMLConfig{
      * 构造函数
      */
     public constructor(){
-        var exmlPath:string = param.getEgretPath()+"/tools/lib/exml/";
+        var exmlPath: string = lark.options.larkRoot + "/tools/lib/exml/";
         exmlPath = exmlPath.split("\\").join("/");
-        var str:string = file.read(exmlPath+"egret-manifest.xml");
+        var str:string = file.read(exmlPath+"manifest.xml");
         var manifest:any = xml.parse(str);
         this.parseManifest(manifest);
 
         str = file.read(exmlPath+"properties.json");
         properties = JSON.parse(str);
         this.findStyles(properties);
+    }
+
+    public static getInstance():EXMLConfig {
+
+        if (!exmlConfig) {
+            exmlConfig = new EXMLConfig();
+        }
+        return exmlConfig;
     }
 
     private findStyles(properties:any):void{
@@ -601,12 +609,5 @@ class Component{
 }
 
 var exmlConfig:EXMLConfig;
-function getInstance():EXMLConfig{
-    if(!exmlConfig){
-        exmlConfig = new EXMLConfig();
-    }
-    return exmlConfig;
-}
 
-exports.EXMLConfig = EXMLConfig;
-exports.getInstance = getInstance;
+export = EXMLConfig;

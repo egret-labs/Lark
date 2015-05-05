@@ -29,7 +29,7 @@
 
 /// <reference path="../lib/types.d.ts" />
 
-require('../locales/en');
+require('../locales/zh_CN');
 
 import Parser = require("./Parser");
 import Run = require("./Run");
@@ -41,12 +41,13 @@ import FileUtil = require('../lib/FileUtil');
 import server = require('../server/server');
 import BuildService = require("./BuildService");
 
-
+global.lark = global.lark || {};
 
 
 
 export function executeCommandLine(args: string[]): void {
     var options = Parser.parseCommandLine(args);
+    lark.options = options;
     if (options.autoCompile) {
         if (options.action == 'startserver') {
             startAutoBuildService(options);

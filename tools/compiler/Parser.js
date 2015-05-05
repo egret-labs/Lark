@@ -7,46 +7,36 @@ var optionDeclarations = [
     {
         name: "action",
         type: "string"
-    },
-    {
+    }, {
         name: "includeLark",
         type: "boolean",
         shortName: "e"
-    },
-    {
+    }, {
         name: "runtime",
         type: "string"
-    },
-    {
+    }, {
         name: "watch",
         type: "boolean"
-    },
-    {
+    }, {
         name: "minify",
         type: "boolean"
-    },
-    {
+    }, {
         name: "sourceMap",
         type: "boolean"
-    },
-    {
+    }, {
         name: "esTarget",
         type: "string"
-    },
-    {
+    }, {
         name: 'showUI',
         type: "boolean"
-    },
-    {
+    }, {
         name: 'modules',
         type: 'string'
-    },
-    {
+    }, {
         name: 'declaration',
         type: 'boolean',
         shortName: "d"
-    },
-    {
+    }, {
         name: 'autoCompile',
         type: 'boolean',
         shortName: "a"

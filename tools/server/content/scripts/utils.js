@@ -47,7 +47,7 @@ var lark;
                 if (success)
                     request.onload = function (e) { return success(request.response); };
                 if (error)
-                    request.onerror = function (e) { return error(e.error); };
+                    request.onerror = function (e) { return error(e['error']); };
                 var postdata = isget ? null : data;
                 request.send(postdata);
             };

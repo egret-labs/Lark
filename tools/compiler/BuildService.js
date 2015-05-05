@@ -1,19 +1,24 @@
 /// <reference path="../lib/types.d.ts" />
-var chokidar = require("../lib/chokidar/index");
-var typeScriptService = require("./TsService");
+var exmlc = require('../lib/exml/exmlc');
 var FileUtil = require("../lib/FileUtil");
+var typeScriptService = require("./TsService");
+var chokidar = require("../lib/chokidar/index");
 var BuildService = (function () {
     function BuildService() {
     }
     BuildService.prototype.start = function (settings) {
         this.setting = settings;
         this.tss = new typeScriptService(settings);
+        this.createEXMLMonitor(settings.srcDir);
         this.createTypeScriptMonitor(settings.srcDir);
         this.createTemplateMonitor(settings.templateDir);
     };
     BuildService.prototype.createTypeScriptMonitor = function (folder) {
         var _this = this;
-        chokidar.watch(folder, { ignoreInitial: true, ignored: [function (f) { return !_this.typeScriptFilter(f); }] }).on('add', function (f) { return _this.tss.fileChanged(f, true, _this.getTypeScriptOutputFileName(f)); }).on('change', function (f) { return _this.tss.fileChanged(f, true, _this.getTypeScriptOutputFileName(f)); }).on('unlink', function (f) { return _this.tss.fileChanged(f, true, _this.getTypeScriptOutputFileName(f)); });
+        chokidar.watch(folder, { ignoreInitial: true, ignored: [function (f) { return !_this.typeScriptFilter(f); }] })
+            .on('add', function (f) { return _this.tss.fileChanged(f, true, _this.getTypeScriptOutputFileName(f)); })
+            .on('change', function (f) { return _this.tss.fileChanged(f, true, _this.getTypeScriptOutputFileName(f)); })
+            .on('unlink', function (f) { return _this.tss.fileChanged(f, true, _this.getTypeScriptOutputFileName(f)); });
     };
     BuildService.prototype.typeScriptFilter = function (fileName) {
         if (FileUtil.isDirectory(fileName))
@@ -30,7 +35,10 @@ var BuildService = (function () {
     };
     BuildService.prototype.createTemplateMonitor = function (folder) {
         var _this = this;
-        chokidar.watch(folder, { ignoreInitial: true }).on('add', function (f) { return _this.onTemplateFileChanged(f); }).on('change', function (f) { return _this.onTemplateFileChanged(f); }).on('unlink', function (f) { return _this.onTemplateFileChanged(f); });
+        chokidar.watch(folder, { ignoreInitial: true })
+            .on('add', function (f) { return _this.onTemplateFileChanged(f); })
+            .on('change', function (f) { return _this.onTemplateFileChanged(f); })
+            .on('unlink', function (f) { return _this.onTemplateFileChanged(f); });
     };
     BuildService.prototype.getTemplateOutputFileName = function (fileName) {
         fileName = FileUtil.escapePath(fileName);
@@ -48,6 +56,29 @@ var BuildService = (function () {
         else {
             FileUtil.remove(output);
         }
+    };
+    BuildService.prototype.createEXMLMonitor = function (folder) {
+        var _this = this;
+        chokidar.watch(folder, { ignoreInitial: true, ignored: [function (f) { return !_this.exmlFileFilter(f); }] })
+            .on('add', function (f) { return _this.compileExmlFile(f); })
+            .on('change', function (f) { return _this.compileExmlFile(f); })
+            .on('unlink', function (f) { return _this.removeExmlTsOutput(f); });
+    };
+    BuildService.prototype.exmlFileFilter = function (fileName) {
+        if (FileUtil.isDirectory(fileName))
+            return true;
+        if (endWith(fileName, '.exml'))
+            return true;
+        return false;
+    };
+    BuildService.prototype.compileExmlFile = function (file) {
+        console.log('Compile Exml: ', file);
+        exmlc.compile(file, this.setting.srcDir);
+    };
+    BuildService.prototype.removeExmlTsOutput = function (fileName) {
+        fileName = FileUtil.escapePath(fileName);
+        var output = fileName.replace(/\.exml/, '.ts');
+        FileUtil.remove(fileName);
     };
     BuildService.instance = null;
     return BuildService;

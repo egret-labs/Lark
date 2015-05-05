@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014,egret.com
+ * Copyright (c) 2014,lark.com
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -9,14 +9,14 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the egret.com nor the
+ *     * Neither the name of the lark.com nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * THIS SOFTWARE IS PROVIDED BY lark-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DISCLAIMED. IN NO EVENT SHALL lark-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
  * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
  * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
@@ -32,11 +32,11 @@ var __extends = this.__extends || function (d, b) {
 };
 /// <reference path="../node.d.ts"/>
 /// <reference path="exml_config.ts"/>
-var xml = require("../core/xml.js");
-var globals = require("../core/globals.js");
-var CodeUtil = require("../core/code_util.js");
-var file = require("../core/file.js");
-var exml_config = require("./exml_config.js");
+var xml = require("../xml/index");
+var utils = require("../utils");
+var CodeUtil = require("../code_util");
+var file = require("../FileUtil");
+var exml_config = require("./exml_config");
 var compiler;
 function compile(exmlPath, srcPath) {
     exmlPath = exmlPath.split("\\").join("/");
@@ -45,7 +45,7 @@ function compile(exmlPath, srcPath) {
         srcPath += "/";
     }
     if (!file.exists(exmlPath)) {
-        globals.exit(2001, exmlPath);
+        utils.exit(11001, exmlPath);
     }
     var className = exmlPath.substring(srcPath.length, exmlPath.length - 5);
     className = className.split("/").join(".");
@@ -54,10 +54,10 @@ function compile(exmlPath, srcPath) {
         var xmlData = xml.parse(xmlString);
     }
     catch (e) {
-        globals.exit(2002, exmlPath);
+        utils.exit(11002, exmlPath);
     }
     if (!xmlData) {
-        globals.exit(2002, exmlPath);
+        utils.exit(11002, exmlPath);
     }
     if (!compiler) {
         compiler = new EXMLCompiler();
@@ -66,8 +66,8 @@ function compile(exmlPath, srcPath) {
     var tsPath = exmlPath.substring(0, exmlPath.length - 5) + ".ts";
     file.save(tsPath, tsText);
 }
-;
 exports.compile = compile;
+;
 var EXMLCompiler = (function () {
     /**
      * 构造函数
@@ -135,13 +135,13 @@ var EXMLCompiler = (function () {
     };
     /**
      * 编译指定的XML对象为TypeScript类。
-     * 注意:编译前要先注入egret-manifest.xml清单文件给manifestData属性。
+     * 注意:编译前要先注入lark-manifest.xml清单文件给manifestData属性。
      * @param xmlData 要编译的EXML文件内容
      * @param className 要编译成的完整类名，包括命名空间。
      */
     EXMLCompiler.prototype.compile = function (xmlData, className, srcPath, exmlPath) {
         if (!this.exmlConfig) {
-            this.exmlConfig = new exml_config.getInstance();
+            this.exmlConfig = exml_config.getInstance();
         }
         this.exmlPath = exmlPath;
         this.currentXML = xmlData;
@@ -176,7 +176,7 @@ var EXMLCompiler = (function () {
     EXMLCompiler.prototype.startCompile = function () {
         var result = this.getRepeatedIds(this.currentXML);
         if (result.length > 0) {
-            globals.exit(2004, this.exmlPath, result.join("\n"));
+            utils.exit(11004, this.exmlPath, result.join("\n"));
         }
         this.currentClass.superClass = this.getPackageByNode(this.currentXML);
         this.getStateNames();
@@ -185,7 +185,8 @@ var EXMLCompiler = (function () {
             var length = children.length;
             for (var i = 0; i < length; i++) {
                 var node = children[i];
-                if (node.namespace == EXMLCompiler.W && node.localName == EXMLCompiler.DECLARATIONS) {
+                if (node.namespace == EXMLCompiler.W &&
+                    node.localName == EXMLCompiler.DECLARATIONS) {
                     this.declarations = node;
                     break;
                 }
@@ -194,13 +195,13 @@ var EXMLCompiler = (function () {
         var list = [];
         this.checkDeclarations(this.declarations, list);
         if (list.length > 0) {
-            globals.warn(2101, this.exmlPath, list.join("\n"));
+            console.warn(utils.tr(11101, this.exmlPath, list.join("\n")));
         }
         if (!this.currentXML.namespace) {
-            globals.exit(2017, this.exmlPath, this.toXMLString(this.currentXML));
+            utils.exit(11017, this.exmlPath, this.toXMLString(this.currentXML));
         }
         this.addIds(this.currentXML.children);
-        this.currentClass.addVariable(new CpVariable("__s", Modifiers.M_PRIVATE, "Function", "egret.gui.setProperties"));
+        this.currentClass.addVariable(new CpVariable("__s", Modifiers.M_PRIVATE, "Function", "lark.gui.setProperties"));
         this.createConstructFunc();
     };
     /**
@@ -238,7 +239,7 @@ var EXMLCompiler = (function () {
         for (var i = 0; i < length; i++) {
             var node = items[i];
             if (!node.namespace) {
-                globals.exit(2017, this.exmlPath, this.toXMLString(node));
+                utils.exit(11017, this.exmlPath, this.toXMLString(node));
             }
             this.addIds(node.children);
             if (node.namespace == EXMLCompiler.W) {
@@ -482,7 +483,7 @@ var EXMLCompiler = (function () {
         var directChild = [];
         var length = children.length;
         var propList = [];
-        var isContainer = this.exmlConfig.isInstanceOf(className, "egret.gui.IContainer");
+        var isContainer = this.exmlConfig.isInstanceOf(className, "lark.gui.IContainer");
         for (var i = 0; i < length; i++) {
             var child = children[i];
             var prop = child.localName;
@@ -495,10 +496,10 @@ var EXMLCompiler = (function () {
                 }
                 var type = this.exmlConfig.getPropertyType(child.localName, className);
                 if (!type) {
-                    globals.exit(2005, this.exmlPath, child.localName, this.getPropertyStr(child));
+                    utils.exit(11005, this.exmlPath, child.localName, this.getPropertyStr(child));
                 }
                 if (!child.children || child.children.length == 0) {
-                    globals.warn(2102, this.exmlPath, this.getPropertyStr(child));
+                    console.warn(utils.tr(11102, this.exmlPath, this.getPropertyStr(child)));
                     continue;
                 }
                 var errorInfo = this.getPropertyStr(child);
@@ -514,7 +515,7 @@ var EXMLCompiler = (function () {
         var defaultType = this.exmlConfig.getPropertyType(defaultProp, className);
         var errorInfo = this.getPropertyStr(directChild[0]);
         if (!defaultProp || !defaultType) {
-            globals.exit(2012, this.exmlPath, errorInfo);
+            utils.exit(11012, this.exmlPath, errorInfo);
         }
         this.addChildrenToProp(directChild, defaultType, defaultProp, cb, varName, errorInfo, propList, className, isContainer);
     };
@@ -526,7 +527,7 @@ var EXMLCompiler = (function () {
         var childLength = children.length;
         if (childLength > 1) {
             if (type != "Array") {
-                globals.exit(2011, this.exmlPath, prop, errorInfo);
+                utils.exit(11011, this.exmlPath, prop, errorInfo);
             }
             var values = [];
             for (var j = 0; j < childLength; j++) {
@@ -567,7 +568,7 @@ var EXMLCompiler = (function () {
             else {
                 var targetClass = this.exmlConfig.getClassNameById(firstChild.localName, firstChild.namespace);
                 if (!this.exmlConfig.isInstanceOf(targetClass, type)) {
-                    globals.exit(2008, this.exmlPath, targetClass, prop, errorInfo);
+                    utils.exit(11008, this.exmlPath, targetClass, prop, errorInfo);
                 }
                 childFunc = this.createFuncForNode(firstChild);
             }
@@ -579,7 +580,7 @@ var EXMLCompiler = (function () {
                 propList.push(prop);
             }
             else {
-                globals.warn(2103, this.exmlPath, prop, errorInfo);
+                console.warn(utils.tr(2103, this.exmlPath, prop, errorInfo));
             }
             if (this.exmlConfig.isStyleProperty(prop, className)) {
                 cb.addCodeLine(varName + ".setStyle(\"" + prop + "\"," + childFunc + ")");
@@ -638,7 +639,7 @@ var EXMLCompiler = (function () {
         var className = this.exmlConfig.getClassNameById(node.localName, node.namespace);
         var type = this.exmlConfig.getPropertyType(key, className);
         if (!type) {
-            globals.exit(2005, this.exmlPath, key, this.toXMLString(node));
+            utils.exit(11005, this.exmlPath, key, this.toXMLString(node));
         }
         if (type != "string" && value.charAt(0) == "{" && value.charAt(value.length - 1) == "}") {
             value = value.substr(1, value.length - 2);
@@ -651,22 +652,22 @@ var EXMLCompiler = (function () {
             if (CodeUtil.isVariableWord(value)) {
                 var targetNode = this.idToNode[value];
                 if (!targetNode) {
-                    globals.exit(2010, this.exmlPath, key, value, this.toXMLString(node));
+                    utils.exit(11010, this.exmlPath, key, value, this.toXMLString(node));
                 }
                 var targetClass = this.exmlConfig.getClassNameById(targetNode.localName, targetNode.namespace);
                 if (!this.exmlConfig.isInstanceOf(targetClass, type)) {
-                    globals.exit(2008, this.exmlPath, targetClass, key, this.toXMLString(node));
+                    utils.exit(11008, this.exmlPath, targetClass, key, this.toXMLString(node));
                 }
             }
             else {
-                globals.exit(2009, this.exmlPath, this.toXMLString(node));
+                utils.exit(11009, this.exmlPath, this.toXMLString(node));
             }
         }
         else if (type == "Class" && value.indexOf("@ButtonSkin(") == 0 && value.charAt(value.length - 1) == ")") {
             value = value.substring(12, value.length - 1);
             var skinNames = value.split(",");
             if (skinNames.length > 3) {
-                globals.exit(2018, this.exmlPath, this.toXMLString(node));
+                utils.exit(11018, this.exmlPath, this.toXMLString(node));
             }
             for (var i = skinNames.length - 1; i >= 0; i--) {
                 var skinName = skinNames[i];
@@ -674,31 +675,32 @@ var EXMLCompiler = (function () {
                 var firstChar = skinName.charAt(0);
                 var lastChar = skinName.charAt(skinName.length - 1);
                 if (firstChar != lastChar || (firstChar != "'" && firstChar != "\"")) {
-                    globals.exit(2018, this.exmlPath, this.toXMLString(node));
+                    utils.exit(11018, this.exmlPath, this.toXMLString(node));
                     break;
                 }
                 skinNames[i] = this.formatString(skinName.substring(1, skinName.length - 1));
             }
-            value = "new egret.gui.ButtonSkin(" + skinNames.join(",") + ")";
+            value = "new lark.gui.ButtonSkin(" + skinNames.join(",") + ")";
         }
-        else if (key == "scale9Grid" && type == "egret.Rectangle") {
+        else if (key == "scale9Grid" && type == "lark.Rectangle") {
             var rect = value.split(",");
-            if (rect.length != 4 || isNaN(parseInt(rect[0])) || isNaN(parseInt(rect[1])) || isNaN(parseInt(rect[2])) || isNaN(parseInt(rect[3]))) {
-                globals.exit(2016, this.exmlPath, this.toXMLString(node));
+            if (rect.length != 4 || isNaN(parseInt(rect[0])) || isNaN(parseInt(rect[1])) ||
+                isNaN(parseInt(rect[2])) || isNaN(parseInt(rect[3]))) {
+                utils.exit(11016, this.exmlPath, this.toXMLString(node));
             }
-            value = "egret.gui.getScale9Grid(\"" + value + "\")";
+            value = "lark.gui.getScale9Grid(\"" + value + "\")";
         }
         else {
             var orgValue = value;
             switch (type) {
-                case "egret.gui.IFactory":
-                    value = "new egret.gui.ClassFactory(" + orgValue + ")";
+                case "lark.gui.IFactory":
+                    value = "new lark.gui.ClassFactory(" + orgValue + ")";
                 case "Class":
                     if (!this.exmlConfig.checkClassName(orgValue)) {
-                        globals.exit(2015, this.exmlPath, orgValue, this.toXMLString(node));
+                        utils.exit(11015, this.exmlPath, orgValue, this.toXMLString(node));
                     }
                     if (value == this.currentClassName) {
-                        globals.exit(2014, this.exmlPath, this.toXMLString(node));
+                        utils.exit(11014, this.exmlPath, this.toXMLString(node));
                     }
                     break;
                 case "number":
@@ -715,7 +717,7 @@ var EXMLCompiler = (function () {
                     value = this.formatString(stringValue);
                     break;
                 default:
-                    globals.exit(2008, this.exmlPath, "string", key + ":" + type, this.toXMLString(node));
+                    utils.exit(11008, this.exmlPath, "string", key + ":" + type, this.toXMLString(node));
                     break;
             }
         }
@@ -886,7 +888,7 @@ var EXMLCompiler = (function () {
         if (states == null)
             return;
         if (states.length == 0) {
-            globals.warn(2102, this.exmlPath, this.getPropertyStr(item));
+            console.warn(utils.tr(11102, this.exmlPath, this.getPropertyStr(item)));
             return;
         }
         length = states.length;
@@ -940,10 +942,10 @@ var EXMLCompiler = (function () {
                 prop = prop.substring(0, index);
                 var type = this.exmlConfig.getPropertyType(prop, className);
                 if (type == "Array") {
-                    globals.exit(2013, this.exmlPath, this.getPropertyStr(node));
+                    utils.exit(11013, this.exmlPath, this.getPropertyStr(node));
                 }
                 if (children.length > 1) {
-                    globals.exit(2011, this.exmlPath, prop, this.getPropertyStr(node));
+                    utils.exit(11011, this.exmlPath, prop, this.getPropertyStr(node));
                 }
                 var firstChild = children[0];
                 this.createFuncForNode(firstChild);
@@ -972,7 +974,7 @@ var EXMLCompiler = (function () {
                 var state;
                 if (this.isStateNode(node)) {
                     if (!this.isIVisualElement(node)) {
-                        globals.exit(2007, this.exmlPath, this.toXMLString(node));
+                        utils.exit(11007, this.exmlPath, this.toXMLString(node));
                     }
                     var propertyName = "";
                     var parent = (node.parent);
@@ -1055,7 +1057,7 @@ var EXMLCompiler = (function () {
      */
     EXMLCompiler.prototype.isIVisualElement = function (node) {
         var className = this.exmlConfig.getClassNameById(node.localName, node.namespace);
-        var result = this.exmlConfig.isInstanceOf(className, "egret.gui.IVisualElement");
+        var result = this.exmlConfig.isInstanceOf(className, "lark.gui.IVisualElement");
         if (!result) {
             return false;
         }
@@ -1125,7 +1127,7 @@ var EXMLCompiler = (function () {
             }
         }
         if (states.length == 0) {
-            globals.exit(2006, this.exmlPath, name, this.toXMLString(node));
+            utils.exit(11006, this.exmlPath, name, this.toXMLString(node));
         }
         return states;
     };
@@ -1183,7 +1185,7 @@ var EXMLCompiler = (function () {
     EXMLCompiler.prototype.getPackageByNode = function (node) {
         var moduleName = this.exmlConfig.getClassNameById(node.localName, node.namespace);
         if (!moduleName) {
-            globals.exit(2003, this.exmlPath, this.toXMLString(node));
+            utils.exit(11003, this.exmlPath, this.toXMLString(node));
         }
         return moduleName;
     };
@@ -1194,7 +1196,7 @@ var EXMLCompiler = (function () {
         return name.indexOf(".") != -1;
     };
     /**
-     * Egret命名空间
+     * lark命名空间
      */
     EXMLCompiler.E = "http://ns.egret-labs.org/egret";
     /**
@@ -1729,7 +1731,8 @@ var CpFunction = (function (_super) {
         else if (this.isSet) {
             getSetStr = "set ";
         }
-        var returnStr = noteStr + indentStr + this.modifierName + " " + staticStr + getSetStr + this.name + "(";
+        var returnStr = noteStr + indentStr + this.modifierName + " "
+            + staticStr + getSetStr + this.name + "(";
         var isFirst = true;
         index = 0;
         while (this.argumentBlock.length > index) {
@@ -1829,7 +1832,8 @@ var CpVariable = (function (_super) {
         if (this.defaultValue != "" && this.defaultValue != null) {
             valueStr = " = " + this.defaultValue;
         }
-        return noteStr + this.getIndent() + this.modifierName + " " + staticStr + this.name + ":" + this.type + valueStr + ";";
+        return noteStr + this.getIndent() + this.modifierName + " " + staticStr +
+            this.name + ":" + this.type + valueStr + ";";
     };
     return CpVariable;
 })(CodeBase);
@@ -1860,7 +1864,7 @@ var CpState = (function (_super) {
     };
     CpState.prototype.toCode = function () {
         var indentStr = this.getIndent(1);
-        var returnStr = "new egret.gui.State (\"" + this.name + "\",\n" + indentStr + "[\n";
+        var returnStr = "new lark.gui.State (\"" + this.name + "\",\n" + indentStr + "[\n";
         var index = 0;
         var isFirst = true;
         var overrides = this.addItems.concat(this.setProperty);
@@ -1895,7 +1899,7 @@ var CpAddItems = (function (_super) {
     }
     CpAddItems.prototype.toCode = function () {
         var indentStr = this.getIndent(1);
-        var returnStr = "new egret.gui.AddItems(\"" + this.target + "\",\"" + this.propertyName + "\",\"" + this.position + "\",\"" + this.relativeTo + "\")";
+        var returnStr = "new lark.gui.AddItems(\"" + this.target + "\",\"" + this.propertyName + "\",\"" + this.position + "\",\"" + this.relativeTo + "\")";
         return returnStr;
     };
     return CpAddItems;
@@ -1910,7 +1914,7 @@ var CpSetProperty = (function (_super) {
     }
     CpSetProperty.prototype.toCode = function () {
         var indentStr = this.getIndent(1);
-        return "new egret.gui.SetProperty(\"" + this.target + "\",\"" + this.name + "\"," + this.value + ")";
+        return "new lark.gui.SetProperty(\"" + this.target + "\",\"" + this.name + "\"," + this.value + ")";
     };
     return CpSetProperty;
 })(CodeBase);
@@ -1924,7 +1928,7 @@ var CpSetStyle = (function (_super) {
     }
     CpSetStyle.prototype.toCode = function () {
         var indentStr = this.getIndent(1);
-        return "new egret.gui.SetStyle(\"" + this.target + "\",\"" + this.name + "\"," + this.value + ")";
+        return "new lark.gui.SetStyle(\"" + this.target + "\",\"" + this.name + "\"," + this.value + ")";
     };
     return CpSetStyle;
 })(CodeBase);
