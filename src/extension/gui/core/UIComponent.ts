@@ -144,22 +144,11 @@ module lark.gui {
         maxHeight:number;
 
         /**
-         * 组件的测量宽度（以像素为单位）。此值由 measure() 方法设置。
-         */
-        measuredWidth:number;
-
-        /**
-         * 组件的默认高度（以像素为单位）。此值由 measure() 方法设置。
-         */
-        measuredHeight:number;
-
-        /**
          * 设置测量结果。
          * @param width 测量宽度
          * @param height 测量高度
          */
         setMeasuredSize(width:number, height:number):void;
-
 
         /**
          * 标记提交过需要延迟应用的属性
@@ -651,20 +640,6 @@ module lark.player {
         }
 
         /**
-         * 组件的测量宽度（以像素为单位）。此值由 measure() 方法设置。
-         */
-        public get measuredWidth():number {
-            return this.$uiValues[UIValues.measuredWidth];
-        }
-
-        /**
-         * 组件的默认高度（以像素为单位）。此值由 measure() 方法设置。
-         */
-        public get measuredHeight():number {
-            return this.$uiValues[UIValues.measuredHeight];
-        }
-
-        /**
          * 设置测量结果。
          * @param width 测量宽度
          * @param height 测量高度
@@ -1007,7 +982,6 @@ module lark.player {
                 matrix.$transformBounds(bounds);
             }
         }
-
     }
 
     /**
@@ -1053,6 +1027,95 @@ module lark.player {
                 var value = Object.getOwnPropertyDescriptor(protoBase, key);
                 Object.defineProperty(prototype, key, value);
             }
+        }
+
+        if(DEBUG){//用于调试时查看布局尺寸的便利属性，发行版时移除。
+            Object.defineProperty(prototype, "preferredWidth", {
+                get: function () {
+                    var bounds = lark.$TempRectangle;
+                    this.getPreferredBounds(bounds);
+                    return bounds.width;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(prototype, "preferredHeight", {
+                get: function () {
+                    var bounds = lark.$TempRectangle;
+                    this.getPreferredBounds(bounds);
+                    return bounds.height;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(prototype, "preferredX", {
+                get: function () {
+                    var bounds = lark.$TempRectangle;
+                    this.getPreferredBounds(bounds);
+                    return bounds.x;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(prototype, "preferredY", {
+                get: function () {
+                    var bounds = lark.$TempRectangle;
+                    this.getPreferredBounds(bounds);
+                    return bounds.y;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(prototype, "layoutBoundsX", {
+                get: function () {
+                    var bounds = lark.$TempRectangle;
+                    this.getLayoutBounds(bounds);
+                    return bounds.x;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(prototype, "layoutBoundsY", {
+                get: function () {
+                    var bounds = lark.$TempRectangle;
+                    this.getLayoutBounds(bounds);
+                    return bounds.y;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(prototype, "layoutBoundsWidth", {
+                get: function () {
+                    var bounds = lark.$TempRectangle;
+                    this.getLayoutBounds(bounds);
+                    return bounds.width;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(prototype, "layoutBoundsHeight", {
+                get: function () {
+                    var bounds = lark.$TempRectangle;
+                    this.getLayoutBounds(bounds);
+                    return bounds.height;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(prototype, "measuredWidth", {
+                get: function () {
+                    return this.$uiValues[UIValues.measuredWidth];
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(prototype, "measuredHeight", {
+                get: function () {
+                    return this.$uiValues[UIValues.measuredHeight];
+                },
+                enumerable: true,
+                configurable: true
+            });
         }
     }
 }
