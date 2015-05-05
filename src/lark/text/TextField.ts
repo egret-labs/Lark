@@ -422,18 +422,18 @@ module lark {
                     if (measureW > textFieldWidth) {
                         var newLine = "";
                         var lineWidth = 0;
-                        var textAtoms = line.split(SplitRegex);
-                        var len = textAtoms.length;
+                        var words = line.split(/\b/);
+                        var len = words.length;
                         for (var j = 0; j < len; j++) {
-                            var word = textAtoms[j];
+                            var word = words[j];
                             measureW = TextMeasurer.measureText(word, font);
                             if (lineWidth + measureW > textFieldWidth) {
 
                                 if (lineWidth === 0) {
-                                    index = getCharIndex(word,textFieldWidth,font);
+                                    index = getMaxIndex(word,textFieldWidth,font);
                                     lines.splice(i, 0, word.substring(0,index));
                                     measuredWidths[i] = measureW;
-                                    textAtoms.splice(j+1,0, word.substring(index));
+                                    words.splice(j+1,0, word.substring(index));
                                     len++;
                                     if (maxWidth < measureW) {
                                         maxWidth = measureW;
@@ -449,6 +449,11 @@ module lark {
                                     }
                                     newLine = "";
                                     lineWidth = 0;
+                                    if(measureW>textFieldWidth){
+                                        measureW = 0;
+                                        word = "";
+                                        j--;
+                                    }
                                 }
                                 i++;
                                 length++;
@@ -472,7 +477,7 @@ module lark {
                     line = lines[i];
                     measureW = TextMeasurer.measureText(line, font);
                     if(hasWidthSet&&measureW>textFieldWidth){
-                        index = getCharIndex(line,textFieldWidth,font);
+                        index = getMaxIndex(line,textFieldWidth,font);
                         line = line.substring(0,index);
                     }
                     measuredWidths[i] = measureW;
@@ -490,12 +495,10 @@ module lark {
 
     }
 
-    var SplitRegex = /(?=[\u00BF-\u1FFF\u2C00-\uD7FF]|\b|\s)(?![。，！、》…）)}”】\.\,\!\?\]\:])/;
-
     /**
      * 返回不超过最大宽度的字符结束索引(不包括)。
      */
-    function getCharIndex(text:string,maxWidth:number,font:string):number{
+    function getMaxIndex(text:string,maxWidth:number,font:string):number{
         var lineWidth = 0;
         var length = text.length;
         var index:number;
