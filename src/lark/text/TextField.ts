@@ -35,7 +35,8 @@ module lark.player {
         textFieldWidth,     //NONE
         textFieldHeight,    //NONE
         textWidth,          //0
-        textHeight          //0
+        textHeight,         //0
+        textDrawWidth        //0
     }
 }
 
@@ -64,7 +65,8 @@ module lark {
                 NONE,           //textFieldWidth
                 NONE,           //textFieldHeight
                 0,              //textWidth
-                0               //textHeight
+                0,              //textHeight
+                0,              //textDrawWidth
             ]);
             this.$displayObjectFlags |= player.TextFieldFlags.wordWrap|
                 player.TextFieldFlags.FontStringChanged;
@@ -324,8 +326,8 @@ module lark {
                 values[player.TextFieldValues.textHeight] : values[player.TextFieldValues.textFieldHeight];
             var width = isNone(values[player.TextFieldValues.textFieldWidth])?
                 values[player.TextFieldValues.textWidth]:values[player.TextFieldValues.textFieldWidth];
-            if(width<values[player.TextFieldValues.textWidth]){
-                width = values[player.TextFieldValues.textWidth];
+            if(width<values[player.TextFieldValues.textDrawWidth]){
+                width = values[player.TextFieldValues.textDrawWidth];
             }
             bounds.setTo(0, 0, width, height);
         }
@@ -414,6 +416,7 @@ module lark {
             var lines = text.split(/(?:\r\n|\r|\n)/);
             var length = lines.length;
             var maxWidth = 0;
+            var drawWidth = 0;
             var index:number;
             if (hasWidthSet&&this.$hasFlags(player.TextFieldFlags.wordWrap)) {
                 for (var i = 0; i < length; i++) {
@@ -480,7 +483,8 @@ module lark {
                     measureW = TextMeasurer.measureText(line, font);
                     if(hasWidthSet&&measureW>textFieldWidth){
                         index = getMaxIndex(line,textFieldWidth,font);
-                        line = line.substring(0,index);
+                        line = lines[i] = line.substring(0,index);
+                        drawWidth = Math.max(drawWidth,TextMeasurer.measureText(line,font));
                     }
                     measuredWidths[i] = measureW;
                     if (maxWidth < measureW) {
@@ -488,6 +492,7 @@ module lark {
                     }
                 }
             }
+            values[player.TextFieldValues.textDrawWidth] = drawWidth;
             values[player.TextFieldValues.textWidth] = Math.ceil(maxWidth);
             values[player.TextFieldValues.textHeight] = Math.ceil(lines.length * (values[player.TextFieldValues.fontSize] +
                 values[player.TextFieldValues.lineSpacing]) - values[player.TextFieldValues.lineSpacing]);
