@@ -281,6 +281,7 @@ module lark.player {
                 0,          //scrollH,
                 0           //scrollV
             ]);
+            this.$displayObjectFlags |= player.UIFlags.UIComponentInitFlags;
             this.createChildren();
         }
 

@@ -29,6 +29,9 @@
 
 module lark.gui {
 
+    /**
+     * 皮肤主题。实例化一个主题，能够在运行时修改全局的默认皮肤。
+     */
     export class Theme extends EventEmitter {
 
         private static themeMap:{[key:number]:Theme} = {};
@@ -36,7 +39,7 @@ module lark.gui {
         /**
          * 获取组件对应的默认皮肤。
          */
-        $getDefaultSkin(client:SkinnableComponent,stage:Stage):any{
+        static $getDefaultSkin(client:SkinnableComponent,stage:Stage):any{
             var theme = Theme.themeMap[stage.$hashCode];
             if(!theme){
                 return null;
@@ -53,7 +56,7 @@ module lark.gui {
         }
 
         private skinMap:{[key:string]:string} = {};
-        private flagToClass:{[key:number]:string} = {};
+        private flagToClassName:{[key:number]:string} = {};
         /**
          * 根据主机组件，获取对应的默认皮肤实例。
          * @param client 要获取默认皮肤的组件
@@ -81,9 +84,11 @@ module lark.gui {
             if(clazz&&clazz.prototype){
                 var flag = clazz.prototype.__classFlag__;
                 if(flag){
-                    this.flagToClass[flag] = hostComponentKey;
+                    this.flagToClassName[flag] = hostComponentKey;
                 }
             }
         }
     }
+
+    registerType(Theme,Types.Theme);
 }

@@ -27,46 +27,34 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark.gui {
 
-    //UIComponent剩余可用的：
-    // 0x1000000,0x2000000,0x4000000,0x8000000,0x10000000,
-    // 0x20000000,0x40000000,0x80000000,0x100000000,0x200000000,0x400000000,0x800000000,0x1000000000,0x2000000000,
-    // 0x4000000000,0x8000000000,0x10000000000,0x20000000000,0x40000000000,0x80000000000,0x100000000000,0x200000000000
+    /**
+     * 含有视图状态功能的皮肤基类。
+     */
+    export class Skin extends EventEmitter {
 
-    export const enum UIFlags{
+        private _hostComponent: SkinnableComponent = null;
         /**
-         * 属性失效标志
+         * 主机组件引用
          */
-        InvalidatePropertiesFlag = 0x20000,
+        public get hostComponent():SkinnableComponent{
+            return this._hostComponent;
+        }
+        public set hostComponent(value:SkinnableComponent){
+        }
+
         /**
-         * 尺寸失效标志
+         * 组件的当前视图状态。将其设置为 "" 或 null 可将组件重置回其基本状态。
          */
-        InvalidateSizeFlag = 0x40000,
-        /**
-         * 布局失效标志
-         */
-        InvalidateDisplayListFlag = 0x80000,
-        /**
-         * UIComponent初始化标志量
-         */
-        UIComponentInitFlags = InvalidatePropertiesFlag|InvalidateSizeFlag|InvalidateDisplayListFlag,
-        /**
-         * 布局宽度被显式设置的标记
-         */
-        LayoutWidthExplicitlySet = 0x100000,
-        /**
-         * 布局高度被显式设置的标记
-         */
-        LayoutHeightExplicitlySet = 0x200000,
-        /**
-         * 是否启用容器滚动。如果为 true，则将子项剪切到视区的边界，配合设置scrollH和scrollV属性将能滚动视区。
-         * 如果为 false，则容器子代会从容器边界扩展过去，而设置scrollH和scrollV也无效。默认false。
-         */
-        scrollEnabled = 0x400000,
-        /**
-         * 视图状态失效标志
-         */
-        stateIsDirty = 0x800000
+        public get currentState():string{
+            return "normal"
+        }
+
+        public set currentState(value:string){
+
+        }
     }
+
+    registerType(Skin,Types.Skin);
 }

@@ -32,5 +32,6 @@ module lark.gui {
     var locale_strings = $locale_strings;
 
     locale_strings[2001] = "BasicLayout doesn't support virtualization.";
+    locale_strings[2002] = "parse skinName error，the parsing result of skinName must be a instance of lark.gui.Skin.";
 
 }

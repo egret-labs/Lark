@@ -33,4 +33,5 @@ module lark.gui {
     var locale_strings = $locale_strings;
 
     locale_strings[2001] = "BasicLayout 不支持虚拟化。";
+    locale_strings[2002] = "皮肤解析出错，skinName 属性的值必须要能够解析为一个Skin子类的实例。";
 }

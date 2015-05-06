@@ -32,11 +32,203 @@ module lark.gui {
     /**
      * SkinnableComponent 类定义可设置外观的组件的基类。SkinnableComponent 类所使用的外观通常是 Skin 类的子类。
      */
-    export class SkinnableComponent extends Sprite implements UIComponent{
-        public constructor(){
+    export class SkinnableComponent extends Sprite implements UIComponent {
+        public constructor() {
             super();
             player.UIComponentImpl.call(this);
         }
+
+        /**
+         * 主机组件标识符。用于唯一确定一个组件的名称。
+         * 用户自定义的组件若不对此属性赋值，将会继承父级的标识符定义。
+         */
+        public hostComponentKey:string = null;
+
+        /**
+         * 外部显式设置了皮肤名的标志
+         */
+        $skinNameExplicitlySet:any = false;
+
+        private _skinName:any = null;
+        /**
+         * 皮肤标识符。有效值可为：皮肤类定义,皮肤类名,或皮肤实例，
+         */
+        public get skinName():any {
+            return this._skinName;
+        }
+
+        public set skinName(value:any) {
+            this.$skinNameExplicitlySet = true;
+            if (this._skinName == value)
+                return;
+            this._skinName = value;
+            this.parseSkinName();
+        }
+
+        /**
+         * 解析skinName
+         */
+        private parseSkinName():void {
+            var skinName = this._skinName;
+            var skin:any;
+            if (skinName) {
+                if (skinName.prototype) {
+                    skin = new skinName();
+                }
+                else if (typeof(skinName) == "string") {
+                    var clazz:any = getDefinitionByName(<string><any> skinName);
+                    if (clazz) {
+                        skin = new clazz();
+                    }
+                }
+                else {
+                    skin = skinName;
+                }
+            }
+            if (skin instanceof LarkObject && !skin.isType(Types.Skin)) {
+                skin = null;
+                DEBUG && $error(2002);
+            }
+            this.$setSkin(skin);
+        }
+
+        $onAddToStage(stage:Stage, nestLevel:number):void {
+            super.$onAddToStage(stage, nestLevel);
+            if (!this.$skinNameExplicitlySet) {
+                var skin = Theme.$getDefaultSkin(this, stage);
+                if (skin) {
+                    this.$setSkin(skin);
+                }
+            }
+        }
+
+
+        private _skin:Skin = null;
+        /**
+         * 皮肤对象实例。
+         */
+        public get skin():Skin {
+            return this._skin;
+        }
+
+        /**
+         * 设置皮肤实例
+         */
+        $setSkin(skin:Skin):void {
+            if (this._skin) {
+                this.detachSkin(this._skin);
+            }
+            this._skin = skin;
+            if (skin) {
+                this.attachSkin(skin);
+            }
+            this.invalidateSkinState();
+            this.invalidateSize();
+            this.invalidateDisplayList();
+
+            if (this.hasListener(UIEvent.SKIN_CHANGED)) {
+                UIEvent.emitUIEvent(this, UIEvent.SKIN_CHANGED);
+            }
+        }
+
+        /**
+         * 附加皮肤
+         */
+        protected attachSkin(skin:Skin):void {
+            skin.hostComponent = this;
+            this.findSkinParts();
+        }
+
+        /**
+         * 匹配皮肤和主机组件的公共变量，并完成实例的注入。此方法在附加皮肤时会自动执行一次。
+         * 若皮肤中含有延迟实例化的子部件，在子部件实例化完成时需要从外部再次调用此方法,完成注入。
+         */
+        private findSkinParts():void {
+            var skin = this._skin;
+            if (skin) {
+                var skinParts:string[] = skin["skinParts"];
+                var length = skinParts.length;
+                for (var i = 0; i < length; i++) {
+                    var partName:string = skinParts[i];
+                    if ((partName in skin)) {
+                        try {
+                            this[partName] = skin[partName];
+                            this.partAdded(partName, skin[partName]);
+                        }
+                        catch (e) {
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
+         * 卸载皮肤
+         */
+        public detachSkin(skin:any):void {
+            var skinParts:string[] = skin.skinParts;
+            var length = skinParts.length;
+            for (var i = 0; i < length; i++) {
+                var partName:string = skinParts[i];
+                if (!(partName in this))
+                    continue;
+                if (!this[partName]) {
+                    this.partRemoved(partName, this[partName]);
+                }
+                this[partName] = null;
+            }
+            skin.hostComponent = null;
+        }
+
+        /**
+         * 若皮肤是Skin,则调用此方法附加皮肤中的公共部件
+         */
+        public partAdded(partName:string, instance:any):void {
+
+        }
+
+        /**
+         * 若皮肤是Skin，则调用此方法卸载皮肤之前注入的公共部件
+         */
+        public partRemoved(partName:string, instance:any):void {
+
+        }
+
+
+        //========================皮肤视图状态=====================start=======================
+
+        private stateIsDirty:boolean = false;
+
+        /**
+         * 标记当前需要重新验证皮肤状态
+         */
+        public invalidateSkinState():void {
+            if (this.stateIsDirty)
+                return;
+
+            this.stateIsDirty = true;
+            this.invalidateProperties();
+        }
+
+        /**
+         * 子类覆盖此方法,应用当前的皮肤状态
+         */
+        public validateSkinState():void {
+            var skin = this._skin;
+            if (skin) {
+                skin.currentState = this.getCurrentSkinState();
+            }
+        }
+
+        /**
+         * 返回组件当前的皮肤状态名称,子类覆盖此方法定义各种状态名
+         */
+        public getCurrentSkinState():string {
+            return "normal";
+        }
+
+        //========================皮肤视图状态===================end========================
+
 
         //=======================UIComponent接口实现===========================
         /**
@@ -51,7 +243,10 @@ module lark.gui {
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         protected commitProperties():void {
-
+            if (this.stateIsDirty) {
+                this.stateIsDirty = false;
+                this.validateSkinState();
+            }
         }
 
         /**
@@ -65,7 +260,7 @@ module lark.gui {
          * 更新显示列表
          */
         protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
-            player.updateDisplayList(this,unscaledWidth,unscaledHeight);
+            player.updateDisplayList(this, unscaledWidth, unscaledHeight);
         }
 
         /**
@@ -232,6 +427,6 @@ module lark.gui {
         }
     }
 
-    player.implementUIComponent(SkinnableComponent,Sprite,true);
+    player.implementUIComponent(SkinnableComponent, Sprite, true);
     registerType(SkinnableComponent, Types.SkinnableComponent, [Types.UIComponent]);
 }
