@@ -38,8 +38,8 @@ module lark.gui {
      * 如果指定了宽度，则指定文本将在组件边界的右边缘换行，如果文本扩展到低于组件底部，则将被剪切。
      */
     export class Label extends TextField implements UIComponent {
-        public constructor() {
-            super();
+        public constructor(text?:string) {
+            super(text);
             UIImpl.call(this);
         }
 
