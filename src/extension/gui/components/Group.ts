@@ -165,6 +165,15 @@ module lark.gui {
             return hasClip;
         }
 
+        $childAdded(child:DisplayObject,index:number):void{
+            this.invalidateSize();
+            this.invalidateDisplayList();
+        }
+
+        $childRemoved(child:DisplayObject,index:number):void{
+            this.invalidateSize();
+            this.invalidateDisplayList();
+        }
 
         //=======================UIComponent接口实现===========================
         /**
