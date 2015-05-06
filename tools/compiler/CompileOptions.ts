@@ -14,9 +14,12 @@ class CompileOptions implements lark.ICompileOptions {
         return FileUtil.joinPath(this.projectDir, "lark.json");
     }
 
-    get srcLarkFile(): string {
-        var filename = this.publish ? 'lark.min.js' : 'lark.js';
-        return FileUtil.joinPath(this.srcDir, "lark/" + filename);
+    get larkManifest(): string {
+        return FileUtil.joinPath(this.templateDir, "manifest.lark.json");
+    }
+
+    get projManifest(): string {
+        return FileUtil.joinPath(this.templateDir, "manifest.proj.json");
     }
 
     get debugDir(): string {

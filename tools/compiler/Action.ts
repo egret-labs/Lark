@@ -70,30 +70,29 @@ class Action {
         });
     }
 
-    public buildProject() {
+    public compileProject() {
         var option: lark.ICompileOptions = this.options;
 
-        //拷贝lark.js
-        if (!option.publish && FileUtil.exists(option.srcLarkFile))
-        {
-            FileUtil.copy(option.srcLarkFile, option.outLarkFile);
-        }
+        ////拷贝lark.js
+        //if (!option.publish && FileUtil.exists(option.larkManifest))
+        //{
+        //    FileUtil.copy(option.larkManifest, option.outLarkFile);
+        //}
 
         this.compileExmls();
 
         var tsList: string[] = FileUtil.search(option.srcDir, "ts");
         var compileResult = this.compile(option, tsList, option.out, option.outDir);
         var larkRootSrc = FileUtil.escapePath(this.options.srcDir);
-        var files: string[] = [];
-        compileResult.files.forEach(f=> {
-            if (!f)
-                return;
-            if (/\.d\.ts$/.test(f))
-                return;
-            f = FileUtil.escapePath(f);
-            f = f.replace(larkRootSrc, '').replace(/\.ts$/, '.js');
-            files.push(f);
-        });
+        var files: string[] = Action.GetJavaScriptFileNames(compileResult.files, larkRootSrc);
+
+        var projManifest = {
+            files: files
+        };
+
+        var json = JSON.stringify(projManifest, null, '   ');
+        FileUtil.save(this.options.projManifest, json);
+
         compileResult.files = files;
         return compileResult;
 
@@ -109,8 +108,8 @@ class Action {
         var separate = options.projectProperties.keepLarkInSeparatedFiles;
 
 
-        var output = separate ? null : options.srcLarkFile;
-        var outDir = separate ? FileUtil.joinPath(options.projectDir,'temp') : null;
+        var output = separate ? null : FileUtil.joinPath(options.templateDir, '/lark/lark.js');
+        var outDir = separate ? FileUtil.joinPath(options.templateDir,'/lark/') : null;
 
         if (FileUtil.exists(output))
             FileUtil.remove(output);
@@ -123,43 +122,80 @@ class Action {
         if (compileResult.exitCode == 0)
         {
             if (separate) {
-
-                var defineFiles = FileUtil.searchByFunction(outDir,(f: string) => /\.d\.ts$/.test(f));
-                var contents = [];
-                defineFiles.forEach(f=> contents.push(FileUtil.read(f)));
-                var defFileContent = contents.join('\r\n');
-                FileUtil.save(FileUtil.joinPath(options.srcDir, 'lark/lark.d.ts'), defFileContent);
-
-
-                var larkRootSrc = FileUtil.escapePath(options.larkRoot) + '/src/';
-                compileResult.files.forEach(f=> {
-                    if (!f)
-                        return;
-                    if (/\.d\.ts$/.test(f))
-                        return;
-                    f = FileUtil.escapePath(f);
-                    f = f.replace(larkRootSrc, '').replace(/\.ts$/, '.js');
-                    f = "lark/" + f;
-                    larkFiles.files.push(f);
-                });
-
-
-                defineFiles.forEach(f=> FileUtil.remove(f));
-                FileUtil.copy(outDir, FileUtil.joinPath(options.templateDir, 'lark/'));
-                FileUtil.remove(outDir);
+                outDir = FileUtil.joinPath(options.templateDir, '/lark/');
             }
-            else {
-                FileUtil.copy(output, options.outLarkFile);
-                var file = options.outLarkFile.replace(options.outDir, '');
-                if (file.indexOf('/') == 0)
-                    file = file.substr(1);
-                larkFiles.files.push(file);
-            }
+
+            var defineFiles = FileUtil.searchByFunction(outDir,(f: string) => /\.d\.ts$/.test(f));
+            var contents = [];
+            defineFiles.forEach(f=> contents.push(FileUtil.read(f)));
+            var defFileContent = contents.join('\r\n');
+            FileUtil.save(FileUtil.joinPath(options.srcDir, 'lark/lark.d.ts'), defFileContent);
+
+
+
+            var larkBinFiles = FileUtil.search(outDir, 'js');
+            larkFiles.files = Action.GetJavaScriptFileNames(larkBinFiles, options.templateDir);
+
+
+            defineFiles.forEach(f=> FileUtil.remove(f));
+            //}
+            //else {
+            //    FileUtil.copy(output, options.outLarkFile);
+            //    var file = options.outLarkFile.replace(options.outDir, '');
+            //    if (file.indexOf('/') == 0)
+            //        file = file.substr(1);
+            //    larkFiles.files.push(file);
+            //}
 
             var json = JSON.stringify(larkFiles, null, '   ');
-            FileUtil.save(FileUtil.joinPath(options.srcDir, 'lark/lark.json'), json);
+            FileUtil.save(options.larkManifest, json);
         }
         return compileResult.exitCode;
+    }
+
+
+    public static compileTemplates(options:lark.ICompileOptions) {
+
+        var templateFile = FileUtil.joinPath(options.templateDir, options.projectProperties.startupHtml);
+        var content = FileUtil.read(templateFile);
+
+        var manifests = [{
+            manifest: options.larkManifest,
+            replacement: '<script id="lark"></script>'
+        }, {
+            manifest: options.larkManifest,
+            replacement: '<script id="lark"></script>'
+        }];
+
+        manifests.forEach(manifest=> {
+            if (FileUtil.exists(options.larkManifest) && content.indexOf(manifest.replacement) >= 0) {
+                var json = FileUtil.read(options.larkManifest);
+                var lark = JSON.parse(json);
+                var files: string[] = lark.files;
+                var scripts = files.map(f=> ['<script src="', f, '"></script>'].join('')).join('\r\n');
+                content = content.replace(manifest.replacement, scripts);
+            }
+        });
+
+        if (FileUtil.exists(options.larkManifest)) {
+            var json = FileUtil.read(options.larkManifest);
+            var lark = JSON.parse(json);
+            var files: string[] = lark.files;
+            var larkScripts = files.map(f=> ['<script src="', f, '"></script>'].join('')).join('\r\n');
+            content = content.replace('<script id="lark"></script>', larkScripts);
+        }
+
+        if (FileUtil.exists(options.projManifest)) {
+            var json = FileUtil.read(options.projManifest);
+            var lark = JSON.parse(json);
+            var files: string[] = lark.files;
+            var projectScripts = projectFiles.map(f=> ['<script src="', f, '"></script>'].join('')).join('\r\n');
+            content = content.replace('<script id="project"></script>', projectScripts);
+        }
+
+
+        var outputFile = FileUtil.joinPath(options.debugDir, options.projectProperties.startupHtml);
+        FileUtil.save(outputFile, content);
     }
 
     private compile(options: lark.ICompileOptions, files: string[], out?: string, outDir?: string, def?: boolean) {
@@ -203,6 +239,22 @@ class Action {
             FileUtil.copy(path, destPath);
         }
     }
+    static GetJavaScriptFileNames(tsFiles: string[],root:string,prefix?:string) {
+        var files: string[] = [];
+        tsFiles.forEach(f=> {
+            if (!f)
+                return;
+            if (/\.d\.ts$/.test(f))
+                return;
+            f = FileUtil.escapePath(f);
+            f = f.replace(root, '').replace(/\.ts$/, '.js');
+            if (prefix) {
+                f = prefix + f;
+            }
+            files.push(f);
+        });
+        return files;
+    }
 }
 
 TypeScript.exit = exitCode => {
@@ -213,3 +265,7 @@ TypeScript.exit = exitCode => {
 
 
 export = Action;
+
+
+var a = new Audio();
+a.load()

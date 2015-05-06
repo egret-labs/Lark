@@ -1,4 +1,5 @@
 /// <reference path="../lib/types.d.ts" />
+var Action = require('./Action');
 var exmlc = require('../lib/exml/exmlc');
 var FileUtil = require("../lib/FileUtil");
 var typeScriptService = require("./TsService");
@@ -48,6 +49,8 @@ var BuildService = (function () {
     };
     BuildService.prototype.onTemplateFileChanged = function (f) {
         f = FileUtil.escapePath(f);
+        if (f.indexOf(this.setting.projectProperties.startupHtml) >= 0)
+            return this.onTemplateIndexChanged(f);
         var output = this.getTemplateOutputFileName(f);
         console.log('Copy: ', f, "\n  to: ", output);
         if (FileUtil.exists(f)) {
@@ -56,6 +59,16 @@ var BuildService = (function () {
         else {
             FileUtil.remove(output);
         }
+    };
+    BuildService.prototype.onTemplateIndexChanged = function (file) {
+        file = FileUtil.escapePath(file);
+        var index = FileUtil.joinPath(this.setting.templateDir, this.setting.projectProperties.startupHtml);
+        index = FileUtil.escapePath(index);
+        if (file != index)
+            return;
+        var tsFiles = this.tss.host.getScriptFileNames();
+        var jsFiles = Action.GetJavaScriptFileNames(tsFiles, this.setting.srcDir);
+        Action.compileTemplates(jsFiles, this.setting);
     };
     BuildService.prototype.createEXMLMonitor = function (folder) {
         var _this = this;

@@ -27,7 +27,8 @@ declare module lark {
         action: string;
         projectDir: string;
         srcDir: string;
-        srcLarkFile: string;
+        larkManifest: string;
+        projManifest: string;
         debugDir: string;
         debugLarkFile: string;
         releaseDir: string;

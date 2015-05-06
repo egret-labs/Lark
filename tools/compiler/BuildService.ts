@@ -1,6 +1,7 @@
 ﻿/// <reference path="../lib/types.d.ts" />
 
 import events = require('events');
+import Action = require('./Action');
 import exmlc = require('../lib/exml/exmlc');
 import FileUtil = require("../lib/FileUtil");
 import typeScriptService = require("./TsService");
@@ -56,8 +57,10 @@ class BuildService {
         var output = FileUtil.joinPath(this.setting.debugDir, relativePath);
         return output;
     }
-    onTemplateFileChanged(f) {
+    onTemplateFileChanged(f:string) {
         f = FileUtil.escapePath(f);
+        if (f.indexOf(this.setting.projectProperties.startupHtml) >= 0)
+            return this.onTemplateIndexChanged(f);
         var output = this.getTemplateOutputFileName(f);
         console.log('Copy: ', f,"\n  to: ", output);
         if (FileUtil.exists(f)) {
@@ -66,6 +69,16 @@ class BuildService {
         else {
             FileUtil.remove(output);
         }
+    }
+    onTemplateIndexChanged(file: string) {
+        file = FileUtil.escapePath(file);
+        var index = FileUtil.joinPath(this.setting.templateDir, this.setting.projectProperties.startupHtml);
+        index = FileUtil.escapePath(index);
+        if (file != index)
+            return;
+        var tsFiles = this.tss.host.getScriptFileNames();
+        var jsFiles = Action.GetJavaScriptFileNames(tsFiles, this.setting.srcDir);
+        Action.compileTemplates(jsFiles, this.setting);
     }
 
     createEXMLMonitor(folder: string) {

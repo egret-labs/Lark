@@ -18,10 +18,16 @@ var CompileOptions = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(CompileOptions.prototype, "srcLarkFile", {
+    Object.defineProperty(CompileOptions.prototype, "larkManifest", {
         get: function () {
-            var filename = this.publish ? 'lark.min.js' : 'lark.js';
-            return FileUtil.joinPath(this.srcDir, "lark/" + filename);
+            return FileUtil.joinPath(this.templateDir, "manifest.lark.json");
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CompileOptions.prototype, "projManifest", {
+        get: function () {
+            return FileUtil.joinPath(this.templateDir, "manifest.proj.json");
         },
         enumerable: true,
         configurable: true
