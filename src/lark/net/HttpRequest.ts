@@ -32,6 +32,10 @@ module lark {
      * HttpRequest 类以文本、二进制数据或 JSON对象的形式从 URL 下载数据。。
      * HttpRequest 对象会先从 URL 中下载所有数据，然后才将数据用于应用程序中的代码。它会发出有关下载进度的通知，
      * 通过 bytesLoaded 和 bytesTotal 属性以及已调度的事件，可以监视下载进度。
+     *
+     * @event lark.Event.COMPLETE 加载完成
+     * @event lark.Event.IO_ERROR 加载失败
+     * @event lark.ProgressEvent.PROGRESS 加载进度，可通过event.bytesLoaded和event.bytesTotal统计进度信息。
      */
     export interface HttpRequest extends EventEmitter {
         /**
