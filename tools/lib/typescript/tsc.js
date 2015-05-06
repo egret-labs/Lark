@@ -10744,22 +10744,22 @@ var ts;
                     write(";");
                 }
                 writeLine();
-                emit(node.name);
-                write(".prototype.__class__ = \"");
-                var stack = [], parent = node.parent;
-                while (parent != null) {
-                    stack.push(parent);
-                    parent = parent.parent;
-                }
-                for (var i = stack.length - 1; i >= 0; i--) {
-                    parent = stack[i];
-                    if (parent["name"] && parent["name"].text) {
-                        write(parent["name"].text);
-                        write(".");
-                    }
-                }
-                write(node.name.text);
-                write("\";");
+                //emit(node.name);
+                //write(".prototype.__class__ = \"");
+                //var stack = [], parent = node.parent;
+                //while (parent != null) {
+                //    stack.push(parent);
+                //    parent = parent.parent;
+                //}
+                //for (var i = stack.length - 1; i >= 0; i--) {
+                //    parent = stack[i];
+                //    if (parent["name"] && parent["name"].text) {
+                //        write(parent["name"].text);
+                //        write(".");
+                //    }
+                //}
+                //write(node.name.text);
+                //write("\";");
                 emitTrailingComments(node);
                 function emitConstructorOfClass() {
                     // Emit the constructor overload pinned comments
