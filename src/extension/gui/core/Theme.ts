@@ -52,12 +52,33 @@ module lark.gui {
             Theme.themeMap[stage.$hashCode] = this;
         }
 
+        private skinMap:{[key:string]:string} = {};
+        private flagToClass:{[key:number]:string} = {};
         /**
          * 根据主机组件，获取对应的默认皮肤实例。
          * @param client 要获取默认皮肤的组件
          */
         public getDefaultSkin(client:SkinnableComponent):any{
             return null;
+        }
+
+        public mapSkin(hostComponentKey:string,skinName:string):void{
+            if(DEBUG){
+                if(!hostComponentKey){
+                    $error(1003, "hostComponentKey");
+                }
+                if(!skinName){
+                    $error(1003, "skinName");
+                }
+            }
+            this.skinMap[hostComponentKey] = skinName;
+            var clazz = getDefinitionByName(hostComponentKey);
+            if(clazz&&clazz.prototype){
+                var flag = clazz.prototype.__classFlag__;
+                if(flag){
+                    this.flagToClass[flag] = hostComponentKey;
+                }
+            }
         }
     }
 }
