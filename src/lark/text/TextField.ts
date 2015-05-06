@@ -521,7 +521,7 @@ module lark {
         return index==0?1:index;
     }
 
-    registerType(TextField, [Types.TextField]);
+    registerType(TextField, Types.TextField);
 }
 
 

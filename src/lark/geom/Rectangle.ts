@@ -227,7 +227,7 @@ module lark {
             return v * this.width + u * this.height;
         }
     }
-    registerType(Rectangle,[Types.Rectangle]);
+    registerType(Rectangle,Types.Rectangle);
     /**
      * 仅供引擎内复用，要防止暴露引用到外部。
      */

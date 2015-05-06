@@ -286,5 +286,5 @@ module lark.gui {
     }
 
     player.implementUIComponent(Label, TextField);
-    registerType(Label, [Types.UIComponent, Types.Label]);
+    registerType(Label, Types.Label, [Types.UIComponent]);
 }

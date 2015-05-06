@@ -103,5 +103,5 @@ module lark.gui {
 			return result;
 		}
 	}
-	registerType(UIEvent,[Types.UIEvent]);
+	registerType(UIEvent,Types.UIEvent);
 }

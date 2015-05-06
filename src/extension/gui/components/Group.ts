@@ -367,7 +367,7 @@ module lark.gui {
         }
     }
 
-    player.implementUIComponent(Group,Sprite,true);
+    player.implementUIComponent(Group, Sprite, true);
 
-    registerType(Group, [Types.UIComponent, Types.Group]);
+    registerType(Group, Types.Group, [Types.UIComponent]);
 }

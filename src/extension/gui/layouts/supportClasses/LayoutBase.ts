@@ -133,5 +133,5 @@ module lark.gui {
         }
     }
 
-    registerType(LayoutBase, [Types.LayoutBase]);
+    registerType(LayoutBase, Types.LayoutBase);
 }
