@@ -1007,7 +1007,7 @@ module lark.player {
      * @param descendant 自定义的UIComponent子类
      * @param base 自定义子类继承的父类
      */
-    export function implementUIComponent(descendant:any, base:any):void {
+    export function implementUIComponent(descendant:any, base:any,isContainer?:boolean):void {
         for (var property in UIComponentImpl) {
             if (UIComponentImpl.hasOwnProperty(property)) {
                 descendant[property] = UIComponentImpl[property];
@@ -1027,6 +1027,17 @@ module lark.player {
                 var value = Object.getOwnPropertyDescriptor(protoBase, key);
                 Object.defineProperty(prototype, key, value);
             }
+        }
+
+        if(isContainer){
+            prototype.$childAdded = function (child:DisplayObject, index:number):void {
+                this.invalidateSize();
+                this.invalidateDisplayList();
+            };
+            prototype.$childRemoved = function (child:DisplayObject, index:number):void {
+                this.invalidateSize();
+                this.invalidateDisplayList();
+            };
         }
 
         if(DEBUG){//用于调试时查看布局尺寸的便利属性，发行版时移除。

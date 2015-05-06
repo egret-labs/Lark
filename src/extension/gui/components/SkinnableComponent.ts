@@ -232,6 +232,6 @@ module lark.gui {
         }
     }
 
-    player.implementUIComponent(SkinnableComponent,Sprite);
+    player.implementUIComponent(SkinnableComponent,Sprite,true);
     registerType(SkinnableComponent, [Types.UIComponent, Types.SkinnableComponent]);
 }

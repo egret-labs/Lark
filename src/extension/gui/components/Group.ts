@@ -165,16 +165,6 @@ module lark.gui {
             return hasClip;
         }
 
-        $childAdded(child:DisplayObject,index:number):void{
-            this.invalidateSize();
-            this.invalidateDisplayList();
-        }
-
-        $childRemoved(child:DisplayObject,index:number):void{
-            this.invalidateSize();
-            this.invalidateDisplayList();
-        }
-
         //=======================UIComponent接口实现===========================
         /**
          * 创建子项,子类覆盖此方法以完成组件子项的初始化操作，
@@ -377,7 +367,7 @@ module lark.gui {
         }
     }
 
-    player.implementUIComponent(Group,Sprite);
+    player.implementUIComponent(Group,Sprite,true);
 
     registerType(Group, [Types.UIComponent, Types.Group]);
 }
