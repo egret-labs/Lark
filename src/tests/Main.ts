@@ -93,13 +93,25 @@ module lark {
             this.targetIcon = bitmap;
             this.addChild(this.targetIcon);
             this.timer.on(TimerEvent.TIMER, this.onTick, this);
-            this.timer.start();
+            //this.timer.start();
             this.stage.addChild(FPS.display);
             this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
             this.container = container;
             //container.addChild(shape);
             //shape.cacheAsBitmap = true;
             //container.mask = this.targetIcon;
+
+            var group = new lark.gui.Group();
+            group.x = 300;
+            this.addChild(group);
+            var label = new lark.gui.Label();
+            label.text = "2020303010djfaj test a word wrap get a new wor to test...dklfjadklfjalkdjflkajdlfjlwejfkljldjfklajdklfjlakdjf";
+            //label.wordWrap = false;
+            label.left = 0;
+            label.right = 0;
+            label.width = 100;
+            group.addChild(label);
+            log(group.width,group.height);
 
         }
 

@@ -28,6 +28,8 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark.gui {
+
+    var UIImpl = player.UIComponentImpl;
     /**
      * Label 是可以呈示一行或多行统一格式文本的UI组件。要显示的文本由 text 属性确定。文本格式由样式属性指定，例如 fontFamily 和 fontSize。
      * 因为 Label 运行速度快且占用内存少，所以它特别适合用于显示多个小型非交互式文本的情况，例如，项呈示器和 Button 外观中的标签。
@@ -38,13 +40,26 @@ module lark.gui {
     export class Label extends TextField implements UIComponent {
         public constructor() {
             super();
-            player.UIComponentImpl.call(this);
+            UIImpl.call(this);
         }
 
         $invalidateContentBounds():void {
             super.$invalidateContentBounds();
             this.invalidateSize();
         }
+
+        $setWidth(value:number):void {
+            super.$setWidth(value);
+            UIImpl.prototype.$setWidth.call(this, value);
+        }
+
+        $setHeight(value:number):void {
+            super.$setHeight(value);
+            UIImpl.prototype.$setHeight.call(this, value);
+        }
+
+        private _widthConstraint:number = NONE;
+
 
         //=======================UIComponent接口实现===========================
         /**
@@ -66,7 +81,24 @@ module lark.gui {
          * 测量组件尺寸
          */
         protected measure():void {
-            this.setMeasuredSize(this.textWidth,this.textHeight);
+            var values = this.$uiValues;
+            var textValues = this.$textFieldValues;
+            var oldWidth = textValues[player.TextFieldValues.textFieldWidth];
+            var availableWidth = NONE;
+            if (!isNone(this._widthConstraint)) {
+                availableWidth = this._widthConstraint;
+                this._widthConstraint = NONE;
+            }
+            else if (!isNone(values[player.UIValues.explicitWidth])) {
+                availableWidth = values[player.UIValues.explicitWidth];
+            }
+            else if (values[player.UIValues.maxWidth] != 100000) {
+                availableWidth = values[player.UIValues.maxWidth];
+            }
+
+            super.$setWidth(availableWidth);
+            this.setMeasuredSize(this.textWidth, this.textHeight);
+            super.$setWidth(oldWidth);
         }
 
         /**
@@ -80,7 +112,7 @@ module lark.gui {
         /**
          * 标记父级容器的尺寸和显示列表为失效
          */
-        protected invalidateParentSizeAndDisplayList():void {
+        protected invalidateParentLayout():void {
         }
 
         $uiValues:Float64Array;
@@ -162,16 +194,6 @@ module lark.gui {
         public maxHeight:number;
 
         /**
-         * 组件的测量宽度（以像素为单位）。此值由 measure() 方法设置。
-         */
-        public measuredWidth:number;
-
-        /**
-         * 组件的默认高度（以像素为单位）。此值由 measure() 方法设置。
-         */
-        public measuredHeight:number;
-
-        /**
          * 设置测量结果。
          * @param width 测量宽度
          * @param height 测量高度
@@ -200,7 +222,7 @@ module lark.gui {
         /**
          * 验证组件的尺寸
          */
-        public validateSize():void {
+        public validateSize(recursive?:boolean):void {
         }
 
         /**
@@ -225,6 +247,19 @@ module lark.gui {
          * 设置组件的布局宽高
          */
         public setLayoutBoundsSize(layoutWidth:number, layoutHeight:number):void {
+            UIImpl.prototype.setLayoutBoundsSize.call(this, layoutWidth, layoutHeight);
+            if(isNone(layoutWidth)||layoutWidth===this._widthConstraint||layoutWidth == 0){
+                return;
+            }
+            var values = this.$uiValues;
+            if(!isNone(values[player.UIValues.explicitHeight])){
+                return;
+            }
+            if (layoutWidth == values[player.UIValues.measuredWidth]) {
+                return;
+            }
+            this._widthConstraint = layoutWidth;
+            this.invalidateSize();
         }
 
         /**
@@ -251,5 +286,5 @@ module lark.gui {
     }
 
     player.implementUIComponent(Label, TextField);
-    registerType(Group, [Types.UIComponent, Types.Label]);
+    registerType(Label, [Types.UIComponent, Types.Label]);
 }

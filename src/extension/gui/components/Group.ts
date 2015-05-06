@@ -208,7 +208,7 @@ module lark.gui {
         /**
          * 标记父级容器的尺寸和显示列表为失效
          */
-        protected invalidateParentSizeAndDisplayList():void {
+        protected invalidateParentLayout():void {
         }
 
         $uiValues:Float64Array;
@@ -290,16 +290,6 @@ module lark.gui {
         public maxHeight:number;
 
         /**
-         * 组件的测量宽度（以像素为单位）。此值由 measure() 方法设置。
-         */
-        public measuredWidth:number;
-
-        /**
-         * 组件的默认高度（以像素为单位）。此值由 measure() 方法设置。
-         */
-        public measuredHeight:number;
-
-        /**
          * 设置测量结果。
          * @param width 测量宽度
          * @param height 测量高度
@@ -328,7 +318,7 @@ module lark.gui {
         /**
          * 验证组件的尺寸
          */
-        public validateSize():void {
+        public validateSize(recursive?:boolean):void {
         }
 
         /**
