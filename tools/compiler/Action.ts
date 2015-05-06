@@ -73,12 +73,6 @@ class Action {
     public compileProject() {
         var option: lark.ICompileOptions = this.options;
 
-        ////拷贝lark.js
-        //if (!option.publish && FileUtil.exists(option.larkManifest))
-        //{
-        //    FileUtil.copy(option.larkManifest, option.outLarkFile);
-        //}
-
         this.compileExmls();
 
         var tsList: string[] = FileUtil.search(option.srcDir, "ts");
@@ -121,8 +115,8 @@ class Action {
         var compileResult = this.compile(options, tsList, output, outDir, !options.publish);
         if (compileResult.exitCode == 0)
         {
-            if (separate) {
-                outDir = FileUtil.joinPath(options.templateDir, '/lark/');
+            if (!separate) {
+                outDir = FileUtil.joinPath(options.templateDir, 'lark/');
             }
 
             var defineFiles = FileUtil.searchByFunction(outDir,(f: string) => /\.d\.ts$/.test(f));
@@ -138,14 +132,6 @@ class Action {
 
 
             defineFiles.forEach(f=> FileUtil.remove(f));
-            //}
-            //else {
-            //    FileUtil.copy(output, options.outLarkFile);
-            //    var file = options.outLarkFile.replace(options.outDir, '');
-            //    if (file.indexOf('/') == 0)
-            //        file = file.substr(1);
-            //    larkFiles.files.push(file);
-            //}
 
             var json = JSON.stringify(larkFiles, null, '   ');
             FileUtil.save(options.larkManifest, json);
@@ -163,13 +149,13 @@ class Action {
             manifest: options.larkManifest,
             replacement: '<script id="lark"></script>'
         }, {
-            manifest: options.larkManifest,
-            replacement: '<script id="lark"></script>'
+            manifest: options.projManifest,
+            replacement: '<script id="project"></script>'
         }];
 
         manifests.forEach(manifest=> {
-            if (FileUtil.exists(options.larkManifest) && content.indexOf(manifest.replacement) >= 0) {
-                var json = FileUtil.read(options.larkManifest);
+            if (FileUtil.exists(manifest.manifest) && content.indexOf(manifest.replacement) >= 0) {
+                var json = FileUtil.read(manifest.manifest);
                 var lark = JSON.parse(json);
                 var files: string[] = lark.files;
                 var scripts = files.map(f=> ['<script src="', f, '"></script>'].join('')).join('\r\n');
@@ -177,21 +163,11 @@ class Action {
             }
         });
 
-        if (FileUtil.exists(options.larkManifest)) {
-            var json = FileUtil.read(options.larkManifest);
-            var lark = JSON.parse(json);
-            var files: string[] = lark.files;
-            var larkScripts = files.map(f=> ['<script src="', f, '"></script>'].join('')).join('\r\n');
-            content = content.replace('<script id="lark"></script>', larkScripts);
-        }
-
-        if (FileUtil.exists(options.projManifest)) {
-            var json = FileUtil.read(options.projManifest);
-            var lark = JSON.parse(json);
-            var files: string[] = lark.files;
-            var projectScripts = projectFiles.map(f=> ['<script src="', f, '"></script>'].join('')).join('\r\n');
-            content = content.replace('<script id="project"></script>', projectScripts);
-        }
+        content = content.replace('$entry-class$', options.projectProperties.entry);
+        content = content.replace('$scale-mode$', options.projectProperties.scaleMode);
+        content = content.replace('$content-width$', options.projectProperties.contentWidth.toString());
+        content = content.replace('$content-height$', options.projectProperties.contentHeight.toString());
+        content = content.replace('$show-paint-rects$', options.projectProperties.showPaintRects ? 'true' : 'false');
 
 
         var outputFile = FileUtil.joinPath(options.debugDir, options.projectProperties.startupHtml);
@@ -247,7 +223,7 @@ class Action {
             if (/\.d\.ts$/.test(f))
                 return;
             f = FileUtil.escapePath(f);
-            f = f.replace(root, '').replace(/\.ts$/, '.js');
+            f = f.replace(root, '').replace(/\.ts$/, '.js').replace(/^\//,'');
             if (prefix) {
                 f = prefix + f;
             }
@@ -265,7 +241,3 @@ TypeScript.exit = exitCode => {
 
 
 export = Action;
-
-
-var a = new Audio();
-a.load()

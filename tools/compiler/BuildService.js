@@ -66,9 +66,8 @@ var BuildService = (function () {
         index = FileUtil.escapePath(index);
         if (file != index)
             return;
-        var tsFiles = this.tss.host.getScriptFileNames();
-        var jsFiles = Action.GetJavaScriptFileNames(tsFiles, this.setting.srcDir);
-        Action.compileTemplates(jsFiles, this.setting);
+        console.log('Compile Template: ' + file);
+        Action.compileTemplates(this.setting);
     };
     BuildService.prototype.createEXMLMonitor = function (folder) {
         var _this = this;

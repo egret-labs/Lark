@@ -67,13 +67,18 @@ declare module lark {
 
     export interface ILarkProperties {
         version: string;
-        entry: string;
         modules: ILarkModule[];
         port: number;
+        ip: string;
         host: string;
         keepLarkInSeparatedFiles: boolean;
         larkVersion: string;
+        entry: string;
         startupHtml: string;
+        scaleMode: string;
+        contentWidth: number;
+        contentHeight: number;
+        showPaintRects: boolean;
     }
 
     export interface CommandLineOption {

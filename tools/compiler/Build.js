@@ -46,8 +46,8 @@ var Build = (function (_super) {
         if (this.options.includeLark)
             exitCode = this.buildLark();
         this.copyDirectory(this.options.templateDir, this.options.debugDir);
-        var compileResult = this.buildProject();
-        Action.compileTemplates(compileResult.files, this.options);
+        var compileResult = this.compileProject();
+        Action.compileTemplates(this.options);
         exitCode = compileResult.exitCode;
         console.log('Build End');
         return exitCode;

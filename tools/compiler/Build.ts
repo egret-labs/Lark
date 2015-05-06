@@ -47,7 +47,7 @@ class Build extends Action {
 
         var compileResult = this.compileProject();
 
-        Action.compileTemplates(compileResult.files,this.options);
+        Action.compileTemplates(this.options);
 
         exitCode = compileResult.exitCode;
         console.log('Build End');

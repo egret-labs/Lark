@@ -48,7 +48,7 @@ var Publish = (function (_super) {
         //拷贝模板文件
         this.copyDirectory(option.templateDir, option.releaseDir);
         var exitcode = this.buildLark();
-        exitcode = this.buildProject().exitCode;
+        exitcode = this.compileProject().exitCode;
         return exitcode;
     };
     return Publish;

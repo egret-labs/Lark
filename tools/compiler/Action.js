@@ -90,8 +90,8 @@ var Action = (function () {
         };
         var compileResult = this.compile(options, tsList, output, outDir, !options.publish);
         if (compileResult.exitCode == 0) {
-            if (separate) {
-                outDir = FileUtil.joinPath(options.templateDir, '/lark/');
+            if (!separate) {
+                outDir = FileUtil.joinPath(options.templateDir, 'lark/');
             }
             var defineFiles = FileUtil.searchByFunction(outDir, function (f) { return /\.d\.ts$/.test(f); });
             var contents = [];
@@ -121,32 +121,23 @@ var Action = (function () {
                 manifest: options.larkManifest,
                 replacement: '<script id="lark"></script>'
             }, {
-                manifest: options.larkManifest,
-                replacement: '<script id="lark"></script>'
+                manifest: options.projManifest,
+                replacement: '<script id="project"></script>'
             }];
         manifests.forEach(function (manifest) {
-            if (FileUtil.exists(options.larkManifest) && content.indexOf(manifest.replacement) >= 0) {
-                var json = FileUtil.read(options.larkManifest);
+            if (FileUtil.exists(manifest.manifest) && content.indexOf(manifest.replacement) >= 0) {
+                var json = FileUtil.read(manifest.manifest);
                 var lark = JSON.parse(json);
                 var files = lark.files;
                 var scripts = files.map(function (f) { return ['<script src="', f, '"></script>'].join(''); }).join('\r\n');
                 content = content.replace(manifest.replacement, scripts);
             }
         });
-        if (FileUtil.exists(options.larkManifest)) {
-            var json = FileUtil.read(options.larkManifest);
-            var lark = JSON.parse(json);
-            var files = lark.files;
-            var larkScripts = files.map(function (f) { return ['<script src="', f, '"></script>'].join(''); }).join('\r\n');
-            content = content.replace('<script id="lark"></script>', larkScripts);
-        }
-        if (FileUtil.exists(options.projManifest)) {
-            var json = FileUtil.read(options.projManifest);
-            var lark = JSON.parse(json);
-            var files = lark.files;
-            var projectScripts = projectFiles.map(function (f) { return ['<script src="', f, '"></script>'].join(''); }).join('\r\n');
-            content = content.replace('<script id="project"></script>', projectScripts);
-        }
+        content = content.replace('$entry-class$', options.projectProperties.entry);
+        content = content.replace('$scale-mode$', options.projectProperties.scaleMode);
+        content = content.replace('$content-width$', options.projectProperties.contentWidth.toString());
+        content = content.replace('$content-height$', options.projectProperties.contentHeight.toString());
+        content = content.replace('$show-paint-rects$', options.projectProperties.showPaintRects ? 'true' : 'false');
         var outputFile = FileUtil.joinPath(options.debugDir, options.projectProperties.startupHtml);
         FileUtil.save(outputFile, content);
     };
@@ -188,7 +179,7 @@ var Action = (function () {
             if (/\.d\.ts$/.test(f))
                 return;
             f = FileUtil.escapePath(f);
-            f = f.replace(root, '').replace(/\.ts$/, '.js');
+            f = f.replace(root, '').replace(/\.ts$/, '.js').replace(/^\//, '');
             if (prefix) {
                 f = prefix + f;
             }
