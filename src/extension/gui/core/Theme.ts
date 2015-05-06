@@ -41,7 +41,7 @@ module lark.gui {
             if(!theme){
                 return null;
             }
-            return theme.getDefaultSkin(client);
+            return theme.getSkin(client);
         }
 
         public constructor(stage:Stage) {
@@ -58,10 +58,15 @@ module lark.gui {
          * 根据主机组件，获取对应的默认皮肤实例。
          * @param client 要获取默认皮肤的组件
          */
-        public getDefaultSkin(client:SkinnableComponent):any{
+        public getSkin(client:SkinnableComponent):any{
             return null;
         }
 
+        /**
+         * 为指定的主机组件映射一个默认皮肤
+         * @param hostComponentKey 主机组件名称，例如：“lark.gui.Button”
+         * @param skinName 皮肤名称 例如："app.MyButtonSkin";
+         */
         public mapSkin(hostComponentKey:string,skinName:string):void{
             if(DEBUG){
                 if(!hostComponentKey){
