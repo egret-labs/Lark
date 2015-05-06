@@ -83,10 +83,17 @@ module lark {
          * 索引为 0 表示该 DisplayObjectContainer 对象的显示列表的后（底）部。
          * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
          * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
+         * 当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
          */
         public addChildAt(child:DisplayObject, index:number):DisplayObject {
             index = +index | 0;
+            if (index < 0 || index >= this.$children.length) {
+                index = this.$children.length;
+                if(child.$parent===this){
+                    index--;
+                }
+            }
             return this.doAddChild(child, index);
         }
 
@@ -98,12 +105,6 @@ module lark {
                 else if (child.isType(Types.DisplayObjectContainer) && (<DisplayObjectContainer>child).contains(this)) {
                     $error(1004);
                 }
-            }
-
-
-            if (index < 0 || index > this.$children.length) {
-                DEBUG && $error(1007);
-                return child;
             }
 
             var host:DisplayObjectContainer = child.$parent;
@@ -137,6 +138,7 @@ module lark {
             this.assignParentDisplayList(child, displayList, displayList);
             child.$propagateFlagsDown(player.DisplayObjectFlags.DownOnAddedOrRemoved);
             this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
+            this.$childAdded(child,index);
             return child;
         }
 
@@ -234,6 +236,7 @@ module lark {
             index = +index | 0;
             var children = this.$children;
             var child:DisplayObject = children[index];
+            this.$childRemoved(child,index);
             child.emitWith(Event.REMOVED, true);
 
             if (this.$stage) {//在舞台上
@@ -247,9 +250,9 @@ module lark {
             }
             var displayList = this.$displayList || this.$parentDisplayList;
             this.assignParentDisplayList(child, displayList, displayList);
+            child.$propagateFlagsDown(player.DisplayObjectFlags.DownOnAddedOrRemoved);
             child.$setParent(null);
             children.splice(index, 1);
-            child.$propagateFlagsDown(player.DisplayObjectFlags.DownOnAddedOrRemoved);
             this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
             return child;
         }
@@ -261,6 +264,9 @@ module lark {
          */
         public setChildIndex(child:DisplayObject, index:number):void {
             index = +index | 0;
+            if (index < 0 || index >= this.$children.length) {
+                index = this.$children.length-1;
+            }
             this.doSetChildIndex(child, index);
         }
 
@@ -269,15 +275,12 @@ module lark {
             if (lastIdx < 0) {
                 DEBUG && $error(1006);
             }
+            this.$childRemoved(child,lastIdx);
             //从原来的位置删除
             this.$children.splice(lastIdx, 1);
             //放到新的位置
-            if (index < 0 || this.$children.length <= index) {
-                this.$children.push(child);
-            }
-            else {
-                this.$children.splice(index, 0, child);
-            }
+            this.$children.splice(index, 0, child);
+            this.$childAdded(child,index);
             child.$invalidateTransform();
             this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
         }
@@ -305,8 +308,8 @@ module lark {
          * @param child2 第二个子对象。
          */
         public swapChildren(child1:DisplayObject, child2:DisplayObject):void {
-            var index1:number = this.$children.indexOf(child1);
-            var index2:number = this.$children.indexOf(child2);
+            var index1 = this.$children.indexOf(child1);
+            var index2 = this.$children.indexOf(child2);
             if (index1 == -1 || index2 == -1) {
                 DEBUG && $error(1006);
             }
@@ -316,14 +319,23 @@ module lark {
         }
 
         private doSwapChildrenAt(index1:number, index2:number):void {
-            if (index1 == index2) {
+            if (index1 > index2){
+                var temp = index2;
+                index2 = index1;
+                index1 = temp;
+            }
+            else if (index1 === index2) {
                 return;
             }
             var list:Array<DisplayObject> = this.$children;
             var child1:DisplayObject = list[index1];
             var child2:DisplayObject = list[index2];
+            this.$childRemoved(child1,index1);
+            this.$childRemoved(child2,index2);
             list[index1] = child2;
             list[index2] = child1;
+            this.$childAdded(child2,index1);
+            this.$childAdded(child1,index2);
             child1.$invalidateTransform();
             child2.$invalidateTransform();
             this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
@@ -337,6 +349,21 @@ module lark {
             for (var i:number = children.length - 1; i >= 0; i--) {
                 this.doRemoveChild(i);
             }
+        }
+
+        /**
+         * 一个子项被添加到容器内，此方法不仅在操作addChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
+         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
+         */
+        $childAdded(child:DisplayObject,index:number):void{
+
+        }
+        /**
+         * 一个子项从容器内移除，此方法不仅在操作removeChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
+         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
+         */
+        $childRemoved(child:DisplayObject,index:number):void{
+
         }
 
         $onAddToStage(stage:Stage,nestLevel:number):void {
