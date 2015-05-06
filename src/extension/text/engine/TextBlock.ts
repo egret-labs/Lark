@@ -53,7 +53,7 @@ module lark.text {
                 if (isGraphic) {
                     if (result.format.float == HorizontalAlign.LEFT)
                         arrayToInsert = results[0];
-                    else if (result.format.float == HorizontalAlign.NONE)
+                    else if (result.format.float == undefined)
                         arrayToInsert = results[2];
                 }
 

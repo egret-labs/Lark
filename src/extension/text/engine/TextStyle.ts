@@ -94,7 +94,7 @@ module lark {
             return this.currentStyle.italic || this.baseStyle.italic || false;
         }
         get float() {
-            return this.currentStyle.float || this.baseStyle.float || HorizontalAlign.NONE;
+            return this.currentStyle.float || this.baseStyle.float || undefined;
         }
         get textAlignV() {
             return this.currentStyle.textAlignV || this.baseStyle.textAlignV || VerticalAlign.TOP;
