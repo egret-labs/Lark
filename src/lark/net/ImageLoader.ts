@@ -31,6 +31,8 @@ module lark {
 
     /**
      * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
+     * @event COMPLETE lark.Event 加载完成
+     * @event IO_ERROR lark.Event 加载失败
      */
     export interface ImageLoader extends EventEmitter {
         /**
@@ -48,12 +50,6 @@ module lark {
          */
         load(url:string):void;
 
-        on(type: "complete", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        on(type: "ioError", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        once(type: "complete", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        once(type: "ioError", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        once(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
     }
 
     export var ImageLoader:{new():ImageLoader};

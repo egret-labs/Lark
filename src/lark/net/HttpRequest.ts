@@ -29,10 +29,9 @@
 
 module lark {
     /**
-     * HttpRequest 类以文本、二进制数据或 JSON对象的形式从 URL 下载数据。。
+     * HttpRequest 类以文本、二进制数据或 JSON对象的形式从 URL 下载数据。
      * HttpRequest 对象会先从 URL 中下载所有数据，然后才将数据用于应用程序中的代码。它会发出有关下载进度的通知，
      * 通过 bytesLoaded 和 bytesTotal 属性以及已调度的事件，可以监视下载进度。
-     *
      * @event COMPLETE lark.Event 加载完成
      * @event IO_ERROR lark.Event 加载失败
      * @event PROGRESS lark.ProgressEvent 加载进度，可通过event.bytesLoaded和event.bytesTotal统计进度信息。
@@ -81,14 +80,6 @@ module lark {
          */
         getResponseHeader(header:string): string;
 
-        on(type: "complete", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        on(type: "ioError", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        on(type: "progress", listener: (event: ProgressEvent) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        once(type: "complete", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        once(type: "ioError", listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        once(type: "progress", listener: (event: ProgressEvent) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        once(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
     }
 
     export var HttpRequest:{ new (): HttpRequest };
