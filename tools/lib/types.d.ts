@@ -105,5 +105,17 @@ declare module lark {
             options: ICompileOptions;
         }
     }
+
+    export interface LarkManifest {
+        version: string;
+        modules: any[];
+    }
+
+    export interface LarkModule {
+        name: string;
+        description: string;
+        files: string[];
+        dependencies: string[];
+    }
 }
 
