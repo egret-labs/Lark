@@ -120,12 +120,10 @@ module lark.gui {
                         this.partRemoved(partName, null);
                     }
                 }
-                oldSkin.hostComponent = null;
             }
             this.removeChildren();
             this._skin = skin;
             if (skin) {
-                skin.hostComponent = this;
                 var skinParts:string[] = skin.skinParts;
                 var length = skinParts.length;
                 for (var i = 0; i < length; i++) {
@@ -133,6 +131,13 @@ module lark.gui {
                     var instance = skin[partName];
                     if (instance) {
                         this.setSkinPart(partName, instance);
+                    }
+                }
+                var children = skin.$elementsContent;
+                if(children){
+                    var length = children.length;
+                    for(var i=0;i<length;i++){
+                        this.addChild(children[i]);
                     }
                 }
             }
@@ -202,6 +207,34 @@ module lark.gui {
          */
         protected measure():void {
             player.measure(this);
+            var skin = this._skin;
+            if(!skin){
+                return;
+            }
+            var values = this.$uiValues;
+            if(!isNone(skin.width)){
+                values[player.UIValues.measuredWidth] = skin.width;
+            }
+            else{
+                if (values[player.UIValues.measuredWidth] < skin.minWidth) {
+                    values[player.UIValues.measuredWidth] = skin.minWidth;
+                }
+                if (values[player.UIValues.measuredWidth] > skin.maxWidth) {
+                    values[player.UIValues.measuredWidth] = skin.maxWidth;
+                }
+            }
+
+            if(!isNone(skin.height)){
+                values[player.UIValues.measuredHeight] = skin.height;
+            }
+            else {
+                if (values[player.UIValues.measuredHeight] < skin.minHeight) {
+                    values[player.UIValues.measuredHeight] = skin.minHeight;
+                }
+                if (values[player.UIValues.measuredHeight] > skin.maxHeight) {
+                    values[player.UIValues.measuredHeight] = skin.maxHeight;
+                }
+            }
         }
 
         /**

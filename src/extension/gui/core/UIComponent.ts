@@ -647,22 +647,8 @@ module lark.player {
          */
         public setMeasuredSize(width:number, height:number):void {
             var values = this.$uiValues;
-            width = Math.ceil(+width || 0);
-            height = Math.ceil(+height || 0);
-            if (width < values[UIValues.minWidth]) {
-                width = values[UIValues.minWidth];
-            }
-            if (width > values[UIValues.maxWidth]) {
-                width = values[UIValues.maxWidth];
-            }
-            if (height < values[UIValues.minHeight]) {
-                height = values[UIValues.minHeight];
-            }
-            if (height > values[UIValues.maxHeight]) {
-                height = values[UIValues.maxHeight]
-            }
-            values[UIValues.measuredWidth] = width;
-            values[UIValues.measuredHeight] = height;
+            values[UIValues.measuredWidth] = Math.ceil(+width || 0);
+            values[UIValues.measuredHeight] = Math.ceil(+height || 0);
         }
 
 
@@ -773,6 +759,18 @@ module lark.player {
             var values = this.$uiValues;
             if (isNone(values[UIValues.explicitWidth]) || isNone(values[UIValues.explicitHeight])) {
                 this.measure();
+                if (values[UIValues.measuredWidth] < values[UIValues.minWidth]) {
+                    values[UIValues.measuredWidth] = values[UIValues.minWidth];
+                }
+                if (values[UIValues.measuredWidth] > values[UIValues.maxWidth]) {
+                    values[UIValues.measuredWidth] = values[UIValues.maxWidth];
+                }
+                if (values[UIValues.measuredHeight] < values[UIValues.minHeight]) {
+                    values[UIValues.measuredHeight] = values[UIValues.minHeight];
+                }
+                if (values[UIValues.measuredHeight] > values[UIValues.maxHeight]) {
+                    values[UIValues.measuredHeight] = values[UIValues.maxHeight]
+                }
             }
             var preferredW = this.getPreferredUWidth();
             var preferredH = this.getPreferredUHeight();

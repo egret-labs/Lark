@@ -39,6 +39,19 @@ module lark.gui {
             player.UIComponentImpl.call(this);
         }
 
+        $elementsContent:DisplayObject[] = [];
+
+        public set elementsContent(value:DisplayObject[]){
+            this.$elementsContent = value;
+            this.removeChildren();
+            if(value){
+                var length = value.length;
+                for(var i=0;i<length;i++){
+                    this.addChild(value[i]);
+                }
+            }
+        }
+
         private _layout:LayoutBase = null;
         /**
          * 此容器的布局对象

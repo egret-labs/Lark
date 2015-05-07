@@ -30,35 +30,46 @@
 module lark.gui {
 
     /**
-     * 含有视图状态功能的皮肤基类。
+     * 皮肤基类。通常情况下，您不需要手动创建这个类的实例，而是通过解析EXML文件后自动生成。
      */
-    export class Skin extends EventEmitter {
+    export class Skin extends LarkObject {
 
         /**
          * 皮肤部件名称列表
          */
         public skinParts:string[];
 
-        private _hostComponent: SkinnableComponent = null;
         /**
-         * 主机组件引用
+         * 皮肤的最大宽度。仅影响主机组件的测量结果。
          */
-        public get hostComponent():SkinnableComponent{
-            return this._hostComponent;
-        }
-        public set hostComponent(value:SkinnableComponent){
-        }
-
+        public maxWidth:number = 100000;
         /**
-         * 组件的当前视图状态。将其设置为 "" 或 null 可将组件重置回其基本状态。
+         * 皮肤的最小宽度,此属性设置为大于maxWidth的值时无效。仅影响主机组件的测量结果。
          */
-        public get currentState():string{
-            return "normal"
+        public minWidth:number = 0;
+        /**
+         * 皮肤的最大高度。仅影响主机组件的测量结果。
+         */
+        public maxHeight:number = 100000;
+        /**
+         * 皮肤的最小高度,此属性设置为大于maxHeight的值时无效。仅影响主机组件的测量结果。
+         */
+        public minHeight:number = 0;
+        /**
+         * 皮肤显式设置宽度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
+         */
+        public width:number = NONE;
+        /**
+         * 皮肤显式设置高度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
+         */
+        public height:number = NONE;
+
+        $elementsContent:DisplayObject[] = [];
+
+        public set elementsContent(value:DisplayObject[]){
+            this.$elementsContent = value;
         }
 
-        public set currentState(value:string){
-
-        }
     }
 
     registerType(Skin,Types.Skin);
