@@ -122,6 +122,7 @@ module lark.gui {
                 }
                 oldSkin.hostComponent = null;
             }
+            this.removeChildren();
             this._skin = skin;
             if (skin) {
                 skin.hostComponent = this;
