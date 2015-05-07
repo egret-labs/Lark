@@ -44,11 +44,6 @@ module lark.gui {
          */
         public hostComponentKey:string = null;
 
-        /**
-         * 外部显式设置了皮肤名的标志
-         */
-        $skinNameExplicitlySet:any = false;
-
         private _skinName:any = null;
         /**
          * 皮肤标识符。有效值可为：皮肤类定义,皮肤类名,或皮肤实例，
@@ -58,7 +53,7 @@ module lark.gui {
         }
 
         public set skinName(value:any) {
-            this.$skinNameExplicitlySet = true;
+            this.$setFlags(player.UIFlags.skinNameExplicitlySet);
             if (this._skinName == value)
                 return;
             this._skinName = value;
@@ -94,7 +89,7 @@ module lark.gui {
 
         $onAddToStage(stage:Stage, nestLevel:number):void {
             super.$onAddToStage(stage, nestLevel);
-            if (!this.$skinNameExplicitlySet) {
+            if (!this.$hasFlags(player.UIFlags.skinNameExplicitlySet)) {
                 var skin = Theme.$getDefaultSkin(this, stage);
                 if (skin) {
                     this.$setSkin(skin);
@@ -115,14 +110,31 @@ module lark.gui {
          * 设置皮肤实例
          */
         $setSkin(skin:Skin):void {
-            if (this._skin) {
-                this.detachSkin(this._skin);
+            var oldSkin = this._skin;
+            if (oldSkin) {
+                var skinParts:string[] = oldSkin.skinParts;
+                var length = skinParts.length;
+                for (var i = 0; i < length; i++) {
+                    var partName = skinParts[i];
+                    if (this[partName]) {
+                        this.partRemoved(partName, null);
+                    }
+                }
+                oldSkin.hostComponent = null;
             }
             this._skin = skin;
             if (skin) {
-                this.attachSkin(skin);
+                skin.hostComponent = this;
+                var skinParts:string[] = skin.skinParts;
+                var length = skinParts.length;
+                for (var i = 0; i < length; i++) {
+                    var partName = skinParts[i];
+                    var instance = skin[partName];
+                    if (instance) {
+                        this.setSkinPart(partName, instance);
+                    }
+                }
             }
-            this.invalidateSkinState();
             this.invalidateSize();
             this.invalidateDisplayList();
 
@@ -131,103 +143,41 @@ module lark.gui {
             }
         }
 
-        /**
-         * 附加皮肤
-         */
-        protected attachSkin(skin:Skin):void {
-            skin.hostComponent = this;
-            this.findSkinParts();
-        }
 
         /**
-         * 匹配皮肤和主机组件的公共变量，并完成实例的注入。此方法在附加皮肤时会自动执行一次。
-         * 若皮肤中含有延迟实例化的子部件，在子部件实例化完成时需要从外部再次调用此方法,完成注入。
+         * 关联一个对象到逻辑组件的指定皮肤部件上。通常您不需要手动调用此方法，当使用EXML文件作为组件皮肤，此方法将会被自动调用。
+         * 在运行时，EXML文件内声明的id名称将作为此方法的partName参数，而id所对应的节点对象，将作为此方法的instance参数被依次传入。
+         * @param partName 皮肤部件名称
+         * @param instance 皮肤部件实例
          */
-        private findSkinParts():void {
-            var skin = this._skin;
-            if (skin) {
-                var skinParts:string[] = skin["skinParts"];
-                var length = skinParts.length;
-                for (var i = 0; i < length; i++) {
-                    var partName:string = skinParts[i];
-                    if ((partName in skin)) {
-                        try {
-                            this[partName] = skin[partName];
-                            this.partAdded(partName, skin[partName]);
-                        }
-                        catch (e) {
-                        }
-                    }
-                }
+        public setSkinPart(partName:string, instance:any):void {
+            var oldInstance = this[partName];
+            if (oldInstance) {
+                this.partRemoved(partName, oldInstance);
+            }
+            this[partName] = instance;
+            if (instance) {
+                this.partAdded(partName, instance);
             }
         }
 
         /**
-         * 卸载皮肤
+         * 子类覆盖此方法，以在皮肤部件第一次附加时对其执行一些初始化操作，例如添加事件监听，赋值缓存的属性值等。
+         * @param partName 要附加的皮肤部件名称
+         * @param instance 要附加的皮肤部件实例
          */
-        public detachSkin(skin:any):void {
-            var skinParts:string[] = skin.skinParts;
-            var length = skinParts.length;
-            for (var i = 0; i < length; i++) {
-                var partName:string = skinParts[i];
-                if (!(partName in this))
-                    continue;
-                if (!this[partName]) {
-                    this.partRemoved(partName, this[partName]);
-                }
-                this[partName] = null;
-            }
-            skin.hostComponent = null;
-        }
-
-        /**
-         * 若皮肤是Skin,则调用此方法附加皮肤中的公共部件
-         */
-        public partAdded(partName:string, instance:any):void {
+        protected partAdded(partName:string, instance:any):void {
 
         }
 
         /**
-         * 若皮肤是Skin，则调用此方法卸载皮肤之前注入的公共部件
+         * 子类覆盖此方法，以在皮肤部件从逻辑组件卸载时对其执行一些清理操作，例如移除事件监听，断开缓存的引用等。
+         * @param partName 要卸载的皮肤部件名称
+         * @param instance 要卸载的皮肤部件实例
          */
-        public partRemoved(partName:string, instance:any):void {
+        protected partRemoved(partName:string, instance:any):void {
 
         }
-
-
-        //========================皮肤视图状态=====================start=======================
-
-        private stateIsDirty:boolean = false;
-
-        /**
-         * 标记当前需要重新验证皮肤状态
-         */
-        public invalidateSkinState():void {
-            if (this.stateIsDirty)
-                return;
-
-            this.stateIsDirty = true;
-            this.invalidateProperties();
-        }
-
-        /**
-         * 子类覆盖此方法,应用当前的皮肤状态
-         */
-        public validateSkinState():void {
-            var skin = this._skin;
-            if (skin) {
-                skin.currentState = this.getCurrentSkinState();
-            }
-        }
-
-        /**
-         * 返回组件当前的皮肤状态名称,子类覆盖此方法定义各种状态名
-         */
-        public getCurrentSkinState():string {
-            return "normal";
-        }
-
-        //========================皮肤视图状态===================end========================
 
 
         //=======================UIComponent接口实现===========================
@@ -243,10 +193,7 @@ module lark.gui {
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         protected commitProperties():void {
-            if (this.stateIsDirty) {
-                this.stateIsDirty = false;
-                this.validateSkinState();
-            }
+
         }
 
         /**

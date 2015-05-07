@@ -34,6 +34,11 @@ module lark.gui {
      */
     export class Skin extends EventEmitter {
 
+        /**
+         * 皮肤部件名称列表
+         */
+        public skinParts:string[];
+
         private _hostComponent: SkinnableComponent = null;
         /**
          * 主机组件引用
