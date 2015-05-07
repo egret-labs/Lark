@@ -163,11 +163,11 @@ class Action {
             }
         });
 
-        content = content.replace('$entry-class$', options.projectProperties.entry);
-        content = content.replace('$scale-mode$', options.projectProperties.scaleMode);
-        content = content.replace('$content-width$', options.projectProperties.contentWidth.toString());
-        content = content.replace('$content-height$', options.projectProperties.contentHeight.toString());
-        content = content.replace('$show-paint-rects$', options.projectProperties.showPaintRects ? 'true' : 'false');
+        content = content.replace(/\$entry\-class\$/ig, options.projectProperties.entry);
+        content = content.replace(/\$scale\-mode\$/ig, options.projectProperties.scaleMode);
+        content = content.replace(/\$content\-width\$/ig, options.projectProperties.contentWidth.toString());
+        content = content.replace(/\$content\-height\$/ig, options.projectProperties.contentHeight.toString());
+        content = content.replace(/\$show\-paint\-rects\$/ig, options.projectProperties.showPaintRects ? 'true' : 'false');
 
 
         var outputFile = FileUtil.joinPath(options.debugDir, options.projectProperties.startupHtml);

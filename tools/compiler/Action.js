@@ -57,11 +57,6 @@ var Action = (function () {
     };
     Action.prototype.compileProject = function () {
         var option = this.options;
-        ////拷贝lark.js
-        //if (!option.publish && FileUtil.exists(option.larkManifest))
-        //{
-        //    FileUtil.copy(option.larkManifest, option.outLarkFile);
-        //}
         this.compileExmls();
         var tsList = FileUtil.search(option.srcDir, "ts");
         var compileResult = this.compile(option, tsList, option.out, option.outDir);
@@ -101,14 +96,6 @@ var Action = (function () {
             var larkBinFiles = FileUtil.search(outDir, 'js');
             larkFiles.files = Action.GetJavaScriptFileNames(larkBinFiles, options.templateDir);
             defineFiles.forEach(function (f) { return FileUtil.remove(f); });
-            //}
-            //else {
-            //    FileUtil.copy(output, options.outLarkFile);
-            //    var file = options.outLarkFile.replace(options.outDir, '');
-            //    if (file.indexOf('/') == 0)
-            //        file = file.substr(1);
-            //    larkFiles.files.push(file);
-            //}
             var json = JSON.stringify(larkFiles, null, '   ');
             FileUtil.save(options.larkManifest, json);
         }
@@ -133,11 +120,11 @@ var Action = (function () {
                 content = content.replace(manifest.replacement, scripts);
             }
         });
-        content = content.replace('$entry-class$', options.projectProperties.entry);
-        content = content.replace('$scale-mode$', options.projectProperties.scaleMode);
-        content = content.replace('$content-width$', options.projectProperties.contentWidth.toString());
-        content = content.replace('$content-height$', options.projectProperties.contentHeight.toString());
-        content = content.replace('$show-paint-rects$', options.projectProperties.showPaintRects ? 'true' : 'false');
+        content = content.replace(/\$entry\-class\$/ig, options.projectProperties.entry);
+        content = content.replace(/\$scale\-mode\$/ig, options.projectProperties.scaleMode);
+        content = content.replace(/\$content\-width\$/ig, options.projectProperties.contentWidth.toString());
+        content = content.replace(/\$content\-height\$/ig, options.projectProperties.contentHeight.toString());
+        content = content.replace(/\$show\-paint\-rects\$/ig, options.projectProperties.showPaintRects ? 'true' : 'false');
         var outputFile = FileUtil.joinPath(options.debugDir, options.projectProperties.startupHtml);
         FileUtil.save(outputFile, content);
     };
