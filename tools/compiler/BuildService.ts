@@ -3,6 +3,7 @@
 import events = require('events');
 import Action = require('./Action');
 import exmlc = require('../lib/exml/exmlc');
+import utils = require("../lib/utils");
 import FileUtil = require("../lib/FileUtil");
 import typeScriptService = require("./TsService");
 import chokidar = require("../lib/chokidar/index");
@@ -33,7 +34,7 @@ class BuildService {
     typeScriptFilter(fileName:string):boolean {
         if (FileUtil.isDirectory(fileName))
             return true;
-        if (endWith(fileName, '.ts'))
+        if (utils.endWith(fileName, '.ts'))
             return true;
         return false;
     }
@@ -89,7 +90,7 @@ class BuildService {
     exmlFileFilter(fileName: string): boolean {
         if (FileUtil.isDirectory(fileName))
             return true;
-        if (endWith(fileName, '.exml'))
+        if (utils.endWith(fileName, '.exml'))
             return true;
         return false;
     }
@@ -105,9 +106,7 @@ class BuildService {
 }
 
 
-function endWith(text: string, match: string) {
-    return text.lastIndexOf(match) == (text.length - match.length);
-}
+
 
 
 export = BuildService;

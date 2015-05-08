@@ -1,6 +1,7 @@
 /// <reference path="../lib/types.d.ts" />
 var Action = require('./Action');
 var exmlc = require('../lib/exml/exmlc');
+var utils = require("../lib/utils");
 var FileUtil = require("../lib/FileUtil");
 var typeScriptService = require("./TsService");
 var chokidar = require("../lib/chokidar/index");
@@ -24,7 +25,7 @@ var BuildService = (function () {
     BuildService.prototype.typeScriptFilter = function (fileName) {
         if (FileUtil.isDirectory(fileName))
             return true;
-        if (endWith(fileName, '.ts'))
+        if (utils.endWith(fileName, '.ts'))
             return true;
         return false;
     };
@@ -79,7 +80,7 @@ var BuildService = (function () {
     BuildService.prototype.exmlFileFilter = function (fileName) {
         if (FileUtil.isDirectory(fileName))
             return true;
-        if (endWith(fileName, '.exml'))
+        if (utils.endWith(fileName, '.exml'))
             return true;
         return false;
     };
@@ -95,8 +96,5 @@ var BuildService = (function () {
     BuildService.instance = null;
     return BuildService;
 })();
-function endWith(text, match) {
-    return text.lastIndexOf(match) == (text.length - match.length);
-}
 module.exports = BuildService;
 //# sourceMappingURL=BuildService.js.map
