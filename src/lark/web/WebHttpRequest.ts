@@ -76,7 +76,7 @@ module lark.web {
          * @param url 该请求所要访问的URL该请求所要访问的URL
          * @param method 请求所使用的HTTP方法， 请使用 HttpMethod 定义的枚举值.
          */
-        public open(url:string, method?:string):void {
+        public open(url:string, method:string="GET"):void {
             this._url = url;
             this._xhr.open(method, url, true);
         }

@@ -101,21 +101,13 @@ module lark {
             //shape.cacheAsBitmap = true;
             //container.mask = this.targetIcon;
 
-            var group = new lark.gui.Group();
-            group.x = 300;
-            this.addChild(group);
-            var label = new lark.gui.Label();
-            label.text = "2020303010djfaj test a word wrap get a new wor to test...dklfjadklfjalkdjflkajdlfjlwejfkljldjfklajdklfjlakdjf";
-            //label.wordWrap = false;
-            label.left = 0;
-            label.right = 0;
-            label.width = 100;
-            group.addChild(label);
-            log(group.width,group.height);
-
+            var request = new HttpRequest();
+            request.once(Event.COMPLETE,this.onExmlLoaded,this);
+            request.open("tests/AlertSkin.exml");
+            request.send();
         }
 
-        private onRequest(event:Event):void{
+        private onExmlLoaded(event:Event):void{
             var request:HttpRequest = event.target;
             log(request.response);
         }

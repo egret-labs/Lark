@@ -101,6 +101,11 @@ module lark.gui {
 
     }
 
+
     var config = new EXMLConfig();
     var parser = new EXMLParser();
+
+    if(DEBUG){
+        EXML["config"] = config;
+    }
 }
