@@ -85,6 +85,8 @@ module lark.web {
         if(DEBUG){
             var showPaintRects = container.getAttribute("data-show-paint-rects")=="true";
             player.showPaintRects(showPaintRects);
+            var showFPS = container.getAttribute("data-show-fps")=="true";
+            player.showFPS(showFPS);
         }
         container["lark-player"] = player;
         container["lark-touch"] = webTouch;

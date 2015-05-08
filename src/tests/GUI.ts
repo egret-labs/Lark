@@ -29,55 +29,27 @@
 
 module lark {
 
-    export class FPS {
+    export class GUI extends gui.Group {
 
-        public constructor() {
-
+        public constructor(){
+            super();
+            this.initUI();
+            var request = new HttpRequest();
+            request.once(Event.COMPLETE,this.onExmlLoaded,this);
+            request.open("tests/AlertSkin.exml");
+            request.send();
         }
 
-        private static _textField:lark.TextField;
-
-        public static get display():lark.TextField {
-            if (!FPS._textField) {
-                FPS._textField = new lark.TextField();
-                FPS._textField.textColor = 0x0c8c0c;
-                FPS._textField.fontFamily = "monospace";
-                FPS._textField.x = 20;
-                FPS._textField.y = 20;
-                FPS._textField.touchEnabled = false;
-            }
-            return FPS._textField;
+        private onExmlLoaded(event:Event):void{
+            var request:HttpRequest = event.target;
+            this.label.text = request.response;
         }
 
-        private static totalTime:number = 0;
-        private static totalTick:number = 0;
-        private static lastTime:number = 0;
-        private static drawCalls:number = 0;
-
-        public static info:string = "";
-
-        public static update(drawCalls:number, dirtyRatio:number, ...args):void {
-            if (!FPS._textField) {
-                return;
-            }
-            var current = lark.getTimer();
-            FPS.totalTime += current - this.lastTime;
-            FPS.lastTime = current;
-            FPS.totalTick++;
-            FPS.drawCalls = Math.max(drawCalls, FPS.drawCalls);
-            if (FPS.totalTime > 500) {
-                var lastFPS = Math.round(FPS.totalTick * 1000 / FPS.totalTime);
-                FPS.totalTick = 0;
-                FPS.totalTime = 0;
-                var text = "FPS: " + lastFPS + "\nDraw: " + FPS.drawCalls + "," + dirtyRatio + "%\nCost: " + args.join(",");
-                if(FPS.info){
-                    text += "\nInfo: "+FPS.info;
-                }
-                if (FPS._textField.text != text) {
-                    FPS._textField.text = text;
-                }
-                FPS.drawCalls = 0;
-            }
+        private label:gui.Label;
+        private initUI():void{
+            var label = new gui.Label();
+            this.label = label;
+            this.addChild(label);
         }
     }
 }

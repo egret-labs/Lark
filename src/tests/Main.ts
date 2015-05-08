@@ -94,22 +94,12 @@ module lark {
             this.addChild(this.targetIcon);
             this.timer.on(TimerEvent.TIMER, this.onTick, this);
             //this.timer.start();
-            this.stage.addChild(FPS.display);
             this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
             this.container = container;
             //container.addChild(shape);
             //shape.cacheAsBitmap = true;
             //container.mask = this.targetIcon;
 
-            var request = new HttpRequest();
-            request.once(Event.COMPLETE,this.onExmlLoaded,this);
-            request.open("tests/AlertSkin.exml");
-            request.send();
-        }
-
-        private onExmlLoaded(event:Event):void{
-            var request:HttpRequest = event.target;
-            log(request.response);
         }
 
         private container:DisplayObjectContainer;
@@ -121,7 +111,7 @@ module lark {
 
         private onTouchBegin(event:TouchEvent):void {
             var target = <DisplayObject>event.target;
-            if (target === this.stage || target === FPS.display) {
+            if (target === this.stage) {
                 return;
             }
             this.timer.stop();

@@ -45,14 +45,11 @@ module lark {
 
         createChildren(bitmapData: BitmapData) {
             this.removeChildren();
-            this.addChild(FPS.display);
             var bitmap = new Bitmap();
             bitmap.bitmapData = bitmapData;
             bitmap.width = bitmap.height = 200;
             var bitmap2 = new Bitmap();
             bitmap2.bitmapData = bitmapData;
-
-
 
             var style: ITextStyle = {
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',

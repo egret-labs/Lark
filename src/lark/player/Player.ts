@@ -45,9 +45,62 @@ module lark.player {
             this.stage = stage;
             this.screenDisplayList = this.createDisplayList(stage, context);
 
-            if (DEBUG) {//显示重绘区域相关的代码,发行版中移除
+            if (DEBUG) {//显示重绘区和FPS相关的代码,发行版中移除
+
+                this._showFPS = false;
                 this._showPaintRects = false;
                 this.stageDisplayList = null;
+                this.paintList = [];
+                this.totalTime = 0;
+                this.totalTick = 0;
+                this.lastTime = 0;
+                this.drawCalls = 0;
+
+                this.showFPS = function (value:boolean):void {
+                    value = !!value;
+                    if (this._showFPS === value) {
+                        return;
+                    }
+                    this._showFPS = value;
+                    if (value) {
+                        if (!this.fpsText) {
+                            var textField = new lark.TextField();
+                            this.fpsText = textField;
+                            textField.textColor = 0x0c8c0c;
+                            textField.fontFamily = "monospace";
+                            textField.x = 20;
+                            textField.y = 20;
+                            textField.touchEnabled = false;
+                        }
+                    }
+                    else if (this.fpsText && this.fpsText.parent) {
+                        this.stage.removeChild(this.fpsText);
+                    }
+                };
+
+                this.updateFPS = function(drawCalls:number, dirtyRatio:number, ...args):void {
+                    if (!this.fpsText) {
+                        return;
+                    }
+                    var current = lark.getTimer();
+                    this.totalTime += current - this.lastTime;
+                    this.lastTime = current;
+                    this.totalTick++;
+                    this.drawCalls = Math.max(drawCalls, this.drawCalls);
+                    if (this.totalTime > 500) {
+                        var lastFPS = Math.round(this.totalTick * 1000 / this.totalTime);
+                        this.totalTick = 0;
+                        this.totalTime = 0;
+                        var text = "FPS: " + lastFPS + "\nDraw: " + this.drawCalls + "," + dirtyRatio + "%\nCost: " + args.join(",");
+                        //if (FPS.info) {
+                        //    text += "\nInfo: " + FPS.info;
+                        //}
+                        if (this.fpsText.text != text) {
+                            this.fpsText.text = text;
+                        }
+                        this.drawCalls = 0;
+                    }
+                };
 
                 this.showPaintRects = function (value:boolean):void {
                     value = !!value;
@@ -66,7 +119,6 @@ module lark.player {
                     }
                 };
 
-                this.paintList = [];
 
                 this.drawPaintRects = function (dirtyList:Region[]):void {
                     var length = dirtyList.length;
@@ -83,15 +135,15 @@ module lark.player {
                         repaintList.shift();
                     }
                     var context = this.screenDisplayList.renderContext;
-                    context.setTransform(1,0,0,1,0,0);
+                    context.setTransform(1, 0, 0, 1, 0, 0);
                     context.clearRect(0, 0, context.surface.width, context.surface.height);
-                    context.drawImage(this.stageDisplayList.surface,0,0);
+                    context.drawImage(this.stageDisplayList.surface, 0, 0);
                     length = repaintList.length;
                     for (i = 0; i < length; i++) {
                         list = repaintList[i];
                         for (var j = list.length - 1; j >= 0; j--) {
                             var r:number[] = list[j];
-                            this.drawDirtyRect(r[0], r[1], r[2], r[3],context);
+                            this.drawDirtyRect(r[0], r[1], r[2], r[3], context);
                         }
                     }
                     context.save();
@@ -103,14 +155,14 @@ module lark.player {
                         context.rect(region.minX, region.minY, region.width, region.height);
                     }
                     context.clip();
-                    context.drawImage(this.stageDisplayList.surface,0,0);
+                    context.drawImage(this.stageDisplayList.surface, 0, 0);
                     context.restore();
                 };
 
                 /**
                  * 绘制一个脏矩形显示区域，在显示重绘区功能开启时调用。
                  */
-                this.drawDirtyRect = function (x:number, y:number, width:number, height:number,context:RenderContext):void {
+                this.drawDirtyRect = function (x:number, y:number, width:number, height:number, context:RenderContext):void {
                     context.strokeStyle = 'red';
                     context.lineWidth = 1;
                     context.strokeRect(x - 0.5, y - 0.5, width, height);
@@ -118,6 +170,22 @@ module lark.player {
             }
         }
 
+        /**
+         * 是否显示FPS，仅在DEBUG模式下有效。
+         */
+        public showFPS:(value:boolean)=>void;
+        private _showFPS:boolean;
+        private fpsText:TextField;
+        private totalTime:number;
+        private totalTick:number;
+        private lastTime:number;
+        private drawCalls:number;
+        public info:string;
+        public updateFPS:(drawCalls:number, dirtyRatio:number, ...args)=>void;
+
+        /**
+         * 是否显示脏矩形重绘区，仅在DEBUG模式下有效。
+         */
         public showPaintRects:(value:boolean)=>void;
         private _showPaintRects:boolean;
         private stageDisplayList:DisplayList;
@@ -126,7 +194,7 @@ module lark.player {
         /**
          * 绘制一个脏矩形显示区域，在显示重绘区功能开启时调用。
          */
-        public drawDirtyRect:(x:number, y:number, width:number, height:number,context:RenderContext)=>void;
+        public drawDirtyRect:(x:number, y:number, width:number, height:number, context:RenderContext)=>void;
 
         private createDisplayList(stage:Stage, context:RenderContext):DisplayList {
             var displayList = new DisplayList(stage);
@@ -209,6 +277,9 @@ module lark.player {
          * 渲染屏幕
          */
         $render(triggerByFrame:boolean):void {
+            if(DEBUG&&this._showFPS){
+                this.stage.addChild(this.fpsText);
+            }
             var stage = this.stage;
             var t = lark.getTimer();
             var dirtyList = stage.$displayList.updateDirtyRegions();
@@ -218,18 +289,20 @@ module lark.player {
                 dirtyList = dirtyList.concat();
                 drawCalls = stage.$displayList.drawToSurface();
             }
-            if (DEBUG && this._showPaintRects) {
-                this.drawPaintRects(dirtyList);
-            }
-            var t2 = lark.getTimer();
-            if (triggerByFrame) {
-                var length = dirtyList.length;
-                var dirtyArea = 0;
-                for (var i = 0; i < length; i++) {
-                    dirtyArea += dirtyList[i].area;
+            if (DEBUG) {
+                if(this._showPaintRects) {
+                    this.drawPaintRects(dirtyList);
                 }
-                var dirtyRatio = Math.ceil(dirtyArea * 1000 / (stage.stageWidth * stage.stageHeight)) / 10;
-                FPS.update(drawCalls, dirtyRatio, t1 - t, t2 - t1);
+                var t2 = lark.getTimer();
+                if(triggerByFrame&&this._showFPS){
+                    var length = dirtyList.length;
+                    var dirtyArea = 0;
+                    for (var i = 0; i < length; i++) {
+                        dirtyArea += dirtyList[i].area;
+                    }
+                    var dirtyRatio = Math.ceil(dirtyArea * 1000 / (stage.stageWidth * stage.stageHeight)) / 10;
+                    this.updateFPS(drawCalls, dirtyRatio, t1 - t, t2 - t1);
+                }
             }
         }
 

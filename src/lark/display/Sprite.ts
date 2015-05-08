@@ -271,13 +271,16 @@ module lark {
         }
 
         private doSetChildIndex(child:DisplayObject, index:number):void {
-            var lastIdx = this.$children.indexOf(child);
-            if (lastIdx < 0) {
+            var lastIndex = this.$children.indexOf(child);
+            if (lastIndex < 0) {
                 DEBUG && $error(1006);
             }
-            this.$childRemoved(child,lastIdx);
+            if(lastIndex==index){
+                return;
+            }
+            this.$childRemoved(child,lastIndex);
             //从原来的位置删除
-            this.$children.splice(lastIdx, 1);
+            this.$children.splice(lastIndex, 1);
             //放到新的位置
             this.$children.splice(index, 0, child);
             this.$childAdded(child,index);
