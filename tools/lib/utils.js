@@ -141,8 +141,4 @@ exports.open = open;
 function escape(s) {
     return s.replace(/"/, '\\\"');
 }
-function endWith(text, match) {
-    return text.lastIndexOf(match) == (text.length - match.length);
-}
-exports.endWith = endWith;
 //# sourceMappingURL=utils.js.map

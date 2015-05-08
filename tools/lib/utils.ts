@@ -144,7 +144,3 @@ export function open(target, appName?, callback?) {
 function escape(s) {
     return s.replace(/"/, '\\\"');
 }
-
-export function endWith(text: string, match: string) {
-    return text.lastIndexOf(match) == (text.length - match.length);
-}
