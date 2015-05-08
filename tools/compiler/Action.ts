@@ -73,7 +73,7 @@ class Action {
     public compileProject() {
         var option: lark.ICompileOptions = this.options;
 
-        this.compileExmls();
+        //this.compileExmls();
 
         var tsList: string[] = FileUtil.search(option.srcDir, "ts");
         var compileResult = this.compile(option, tsList, option.out, option.outDir);

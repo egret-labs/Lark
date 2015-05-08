@@ -57,7 +57,7 @@ var Action = (function () {
     };
     Action.prototype.compileProject = function () {
         var option = this.options;
-        this.compileExmls();
+        //this.compileExmls();
         var tsList = FileUtil.search(option.srcDir, "ts");
         var compileResult = this.compile(option, tsList, option.out, option.outDir);
         var larkRootSrc = FileUtil.escapePath(this.options.srcDir);
