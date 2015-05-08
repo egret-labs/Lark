@@ -196,24 +196,23 @@ module lark.player {
          * 是否显示FPS，仅在DEBUG模式下有效。
          */
         public showFPS:(value:boolean)=>void;
+        private updateFPS:(drawCalls:number, dirtyRatio:number, ...args)=>void;
         private _showFPS:boolean;
         private fpsText:TextField;
         private totalTime:number;
         private totalTick:number;
         private lastTime:number;
         private drawCalls:number;
-        public info:string;
-        public updateFPS:(drawCalls:number, dirtyRatio:number, ...args)=>void;
 
         /**
          * 是否显示脏矩形重绘区，仅在DEBUG模式下有效。
          */
         public showPaintRect:(value:boolean)=>void;
+        private drawDirtyRect:(x:number, y:number, width:number, height:number, context:RenderContext)=>void;
         private _showPaintRect:boolean;
         private stageDisplayList:DisplayList;
         private paintList:any[];
         private drawPaintRect:(dirtyList:Region[])=>void;
-        public drawDirtyRect:(x:number, y:number, width:number, height:number, context:RenderContext)=>void;
 
     }
 
