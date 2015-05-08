@@ -442,7 +442,7 @@ module ts {
 
 class TSC {
     static executeCommandLine = ts.executeCommandLine;
-    static executeWithOption(options: lark.ICompileOptions, files: string[], out?: string, outDir?: string): { exitCode: number;files:string[] } {
+    static executeWithOption(options: lark.ICompileOptions, files: string[], out?: string, outDir?: string):number {
 
         var target = options.esTarget.toLowerCase();
         var targetEnum = ts.ScriptTarget.ES5;
@@ -468,10 +468,7 @@ class TSC {
         {
             parsedCmd.options.outDir = outDir;
         }
-        return {
-            exitCode: ts.executeWithOption(parsedCmd),
-            files: ts.TreeGenerator.getOrderedFiles()
-        };
+        return ts.executeWithOption(parsedCmd);
     }
     static exit: (exitCode: number) => number = null;
     static write = msg=> console.log(msg);

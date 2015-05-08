@@ -29,7 +29,7 @@
 
 /// <reference path="../lib/types.d.ts" />
 
-require('../locales/zh_CN');
+require('../locales/en');
 
 import Parser = require("./Parser");
 import Run = require("./Run");
@@ -39,35 +39,24 @@ import Create = require("./Create");
 import utils = require('../lib/utils');
 import FileUtil = require('../lib/FileUtil');
 import server = require('../server/server');
-import BuildService = require("./BuildService");
 
-global.lark = global.lark || {};
+
 
 
 
 export function executeCommandLine(args: string[]): void {
     var options = Parser.parseCommandLine(args);
-    lark.options = options;
-    if (options.autoCompile) {
-        if (options.action == 'startserver') {
-            startAutoBuildService(options);
-            server.startServer(options);
-        }
-        else {
-            new Run(options).run();
-            console.log('Auto build server is still running...');
-        }
-    }
-    else {
-        var exitCode = executeOption(options);
-        process.exit(exitCode);
-    }
+    //if (options.action == 'startserver')
+    //    server.startServer(options);
+    //else
+    //    new Run(options).run();
+    var exitCode = executeOption(options);
+    process.exit(exitCode);
 
 }
 
 export function executeOption(options: lark.ICompileOptions): number {
     var exitCode = 0;
-    startAutoBuildService(options);
     switch (options.action) {
         case "publish":
             var publish = new Publish(options);
@@ -83,12 +72,5 @@ export function executeOption(options: lark.ICompileOptions): number {
             break;
     }
     return exitCode;
-}
-
-function startAutoBuildService(options: lark.ICompileOptions) {
-    if (BuildService.instance == null) {
-        BuildService.instance = new BuildService();
-        BuildService.instance.start(options);
-    }
 }
 

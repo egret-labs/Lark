@@ -27,8 +27,7 @@ declare module lark {
         action: string;
         projectDir: string;
         srcDir: string;
-        larkManifest: string;
-        projManifest: string;
+        srcLarkFile: string;
         debugDir: string;
         debugLarkFile: string;
         releaseDir: string;
@@ -39,9 +38,7 @@ declare module lark {
         outLarkFile: string;
         larkRoot?: string;
         port: number;
-        host: string;
-        websocketUrl: string;
-        manageUrl: string;
+        ip: string;
 
         publish?: boolean;
         includeLark?: boolean;
@@ -53,32 +50,13 @@ declare module lark {
         esTarget?: string;
         showUI?: boolean;
         declaration?: boolean;
-        autoCompile?: boolean;
-        projectProperties: ILarkProperties;
 
-        toJSON: () => any;
+        //modules
+        modules?: string;
+
+
 
         //工具用
-    }
-
-    export interface ILarkModule {
-        name: string;
-    }
-
-    export interface ILarkProperties {
-        version: string;
-        modules: ILarkModule[];
-        port: number;
-        ip: string;
-        host: string;
-        keepLarkInSeparatedFiles: boolean;
-        larkVersion: string;
-        entry: string;
-        startupHtml: string;
-        scaleMode: string;
-        contentWidth: number;
-        contentHeight: number;
-        showPaintRects: boolean;
     }
 
     export interface CommandLineOption {
@@ -95,27 +73,6 @@ declare module lark {
         message?: string;
         data?: any;
         type: string;
-    }
-
-    export var options: ICompileOptions;
-
-    module server {
-        export var options: ICompileOptions;
-        export interface ViewModel {
-            options: ICompileOptions;
-        }
-    }
-
-    export interface LarkManifest {
-        version: string;
-        modules: any[];
-    }
-
-    export interface LarkModule {
-        name: string;
-        description: string;
-        files: string[];
-        dependencies: string[];
     }
 }
 

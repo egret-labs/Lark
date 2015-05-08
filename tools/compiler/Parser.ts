@@ -1,9 +1,7 @@
 ﻿/// <reference path="../lib/types.d.ts" />
 
 import utils = require('../lib/utils');
-import file = require('../lib/FileUtil');
 import CompileOptions = require("./CompileOptions");
-import Properties = require("./Properties");
 
 
 
@@ -40,12 +38,8 @@ var optionDeclarations: lark.CommandLineOption[] = [
         type: 'string'
     }, {
         name: 'declaration',
-        type: 'boolean',
+        type: 'booleam',
         shortName: "d"
-    }, {
-        name: 'autoCompile',
-        type: 'boolean',
-        shortName: "a"
     }
 ];
 
@@ -141,25 +135,7 @@ export function parseCommandLine(commandLine: string[]) {
         if (options.projectDir == null)
             options.projectDir = process.cwd();
 
-        var props = new Properties();
-        if (file.exists(options.larkPropertiesFile)) {
-            var json = file.read(options.larkPropertiesFile);
-            var data: lark.ILarkProperties = null;
-            try {
-                data = JSON.parse(json);
-            }
-            catch (e) {
-                console.error(utils.tr(10005));
-                process.exit(10005);
-            }
-
-            props.parse(data);
-        }
-        else {
-            props.host = 'localhost';
-            props.port = 3001;
-        }
-        options.projectProperties = props;
+        options.port = 3001;
     }
 
 }

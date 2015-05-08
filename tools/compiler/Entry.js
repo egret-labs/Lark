@@ -27,37 +27,23 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 /// <reference path="../lib/types.d.ts" />
-require('../locales/zh_CN');
+require('../locales/en');
 var Parser = require("./Parser");
-var Run = require("./Run");
 var Build = require("./Build");
 var Publish = require("./Publish");
 var Create = require("./Create");
-var server = require('../server/server');
-var BuildService = require("./BuildService");
-global.lark = global.lark || {};
 function executeCommandLine(args) {
     var options = Parser.parseCommandLine(args);
-    lark.options = options;
-    if (options.autoCompile) {
-        if (options.action == 'startserver') {
-            startAutoBuildService(options);
-            server.startServer(options);
-        }
-        else {
-            new Run(options).run();
-            console.log('Auto build server is still running...');
-        }
-    }
-    else {
-        var exitCode = executeOption(options);
-        process.exit(exitCode);
-    }
+    //if (options.action == 'startserver')
+    //    server.startServer(options);
+    //else
+    //    new Run(options).run();
+    var exitCode = executeOption(options);
+    process.exit(exitCode);
 }
 exports.executeCommandLine = executeCommandLine;
 function executeOption(options) {
     var exitCode = 0;
-    startAutoBuildService(options);
     switch (options.action) {
         case "publish":
             var publish = new Publish(options);
@@ -75,10 +61,4 @@ function executeOption(options) {
     return exitCode;
 }
 exports.executeOption = executeOption;
-function startAutoBuildService(options) {
-    if (BuildService.instance == null) {
-        BuildService.instance = new BuildService();
-        BuildService.instance.start(options);
-    }
-}
 //# sourceMappingURL=Entry.js.map

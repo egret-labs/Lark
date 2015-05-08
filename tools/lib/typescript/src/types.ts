@@ -952,7 +952,6 @@ module ts {
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
         checkAndMarkExpression(node: Expression, contextualMapper?: TypeMapper): Type;
-        egretGetResolveSymbol(node: Identifier): Symbol;
     }
 
     export interface SymbolDisplayBuilder {

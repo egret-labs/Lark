@@ -88,11 +88,10 @@ var textTemp = {};
  * 读取文本文件,返回打开文本的字符串内容，若失败，返回"".
  * @param path 要打开的文件路径
  */
-function read(path, ignoreCache) {
-    if (ignoreCache === void 0) { ignoreCache = false; }
+function read(path) {
     path = escapePath(path);
     var text = textTemp[path];
-    if (text && !ignoreCache) {
+    if (text) {
         return text;
     }
     try {
@@ -195,9 +194,7 @@ function _copy_dir(sourceDir, outputDir) {
 function remove(path) {
     path = escapePath(path);
     try {
-        FS.lstatSync(path).isDirectory()
-            ? rmdir(path)
-            : FS.unlinkSync(path);
+        FS.lstatSync(path).isDirectory() ? rmdir(path) : FS.unlinkSync(path);
     }
     catch (e) {
     }
@@ -321,8 +318,9 @@ exports.search = search;
  * @param dir 要搜索的文件夹
  * @param filterFunc 过滤函数：filterFunc(file:File):Boolean,参数为遍历过程中的每一个文件，返回true则加入结果列表
  */
-function searchByFunction(dir, filterFunc, checkDir) {
+function searchByFunction(dir, filterFunc) {
     var list = [];
+    var checkDir = arguments[2];
     try {
         var stat = FS.statSync(dir);
     }
@@ -359,8 +357,7 @@ function findFiles(filePath, list, extension, filterFunc, checkDir) {
         }
         else if (extension) {
             var len = extension.length;
-            if (path.charAt(path.length - len - 1) == "." &&
-                path.substr(path.length - len, len).toLowerCase() == extension) {
+            if (path.charAt(path.length - len - 1) == "." && path.substr(path.length - len, len).toLowerCase() == extension) {
                 list.push(path);
             }
         }

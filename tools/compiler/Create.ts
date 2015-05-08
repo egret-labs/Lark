@@ -31,7 +31,6 @@
 
 
 import Action = require('./Action');
-import Properties = require('./Properties');
 import FileUtil = require('../lib/FileUtil');
 
 class Create extends Action {
@@ -43,11 +42,6 @@ class Create extends Action {
         FileUtil.createDirectory(option.debugDir);
         var templateDir = FileUtil.joinPath(option.larkRoot, 'template');
         FileUtil.copy(templateDir, option.templateDir);
-
-        var prop = new Properties();
-        var propjson = prop.toJSON();
-        FileUtil.save(FileUtil.joinPath(option.projectDir, 'lark.json'), JSON.stringify(propjson, null, '   '));
-
         var exitcode = this.buildLark();
         return exitcode;
     }

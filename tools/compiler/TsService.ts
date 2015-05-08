@@ -1,89 +1,33 @@
-﻿
-/// <reference path="../lib/types.d.ts" />
-/// <reference path="../lib/typescript/typescriptServices.d.ts" />
-
-import events = require('events');
-import watch = require("../lib/watch");
+﻿import ts = require("../lib/typescript/typescriptServices");
 import FileUtil = require("../lib/FileUtil");
-require("../lib/typescript/typescriptServices");
 
 class TsService {
-    static instance: TsService = null;
     tss: ts.LanguageService;
     host: Host;
-    settings: lark.ICompileOptions;
-    constructor(settings: lark.ICompileOptions) {
+    constructor(settings: ts.CompilerOptions) {
         var host = new Host();
         var tss = ts.createLanguageService(host, ts.createDocumentRegistry());
 
-        host.settings = this.convertOption(settings);
+        host.settings = settings;
         this.host = host;
         this.tss = tss;
-        this.settings = settings;
-        var tslib = FileUtil.joinPath(settings.larkRoot, 'tools/lib/typescript/lib.d.ts');
-        var tsList: string[] = FileUtil.search(settings.srcDir, "ts");
-        tsList.unshift(tslib);
-        tsList.forEach(file=> {
-            var content = FileUtil.read(file);
-            this.host.addScript(file, content);
-        });
     }
 
-    /**
-    * 添加 修改 删除
-    */
-    fileChanged(fileName: string, emit = true, output?: string) {
-        fileName = FileUtil.escapePath(fileName);
-        console.log('Compile: ',fileName,'\n     to: ', output);
-        var exist = FileUtil.exists(fileName);
-        if (!exist) {
-            this.host.removeScript(fileName);
-        }
-        else {
-            var content = FileUtil.read(fileName,true);
-            this.host.updateScript(fileName, content);
-            if (emit)
-                this.emit(fileName, output);
-        }
+    addScript(fileName: string) {
+        var content = FileUtil.read(fileName);
+        this.host.addScript(fileName, content);
     }
 
-    emit(fileName: string, output?: string) {
+    emit(fileName: string) {
 
         var files = this.host.getScriptFileNames();
 
         files.forEach(file=> {
             var errors = this.tss.getSemanticDiagnostics(file);
-            errors.forEach(error=> console.log(error.messageText, error.file.filename));
+            errors.forEach(error=> console.log(error.messageText,error.file.filename));
         })
 
-        var content = this.tss.getEmitOutput(fileName);
-        var fileToSave = output || this.settings.out;
-        if (content.outputFiles && content.outputFiles.length > 0) {
-            FileUtil.save(fileToSave, content.outputFiles[0].text);
-        }
-    }
-
-    private convertOption(options: lark.ICompileOptions) {
-
-        var target = options.esTarget.toLowerCase();
-        var targetEnum = ts.ScriptTarget.ES5;
-        if (target == 'es6')
-            targetEnum = ts.ScriptTarget.ES6;
-
-        var tsOption: ts.CompilerOptions = {
-            sourceMap: options.sourceMap,
-            target: targetEnum,
-            removeComments: options.removeComments,
-            declaration: options.declaration
-        };
-
-        if (options.out) {
-            tsOption.out = options.out;
-        }
-        else {
-            tsOption.outDir = options.outDir;
-        }
-        return tsOption;
+        return this.tss.getEmitOutput(fileName);
     }
 }
 

@@ -1,45 +1,48 @@
 /// <reference path="../lib/types.d.ts" />
 var utils = require('../lib/utils');
-var file = require('../lib/FileUtil');
 var CompileOptions = require("./CompileOptions");
-var Properties = require("./Properties");
 var optionDeclarations = [
     {
         name: "action",
         type: "string"
-    }, {
+    },
+    {
         name: "includeLark",
         type: "boolean",
         shortName: "e"
-    }, {
+    },
+    {
         name: "runtime",
         type: "string"
-    }, {
+    },
+    {
         name: "watch",
         type: "boolean"
-    }, {
+    },
+    {
         name: "minify",
         type: "boolean"
-    }, {
+    },
+    {
         name: "sourceMap",
         type: "boolean"
-    }, {
+    },
+    {
         name: "esTarget",
         type: "string"
-    }, {
+    },
+    {
         name: 'showUI',
         type: "boolean"
-    }, {
+    },
+    {
         name: 'modules',
         type: 'string'
-    }, {
+    },
+    {
         name: 'declaration',
-        type: 'boolean',
+        type: 'booleam',
         shortName: "d"
-    }, {
-        name: 'autoCompile',
-        type: 'boolean',
-        shortName: "a"
     }
 ];
 var shortOptionNames = {};
@@ -103,24 +106,7 @@ function parseCommandLine(commandLine) {
         }
         if (options.projectDir == null)
             options.projectDir = process.cwd();
-        var props = new Properties();
-        if (file.exists(options.larkPropertiesFile)) {
-            var json = file.read(options.larkPropertiesFile);
-            var data = null;
-            try {
-                data = JSON.parse(json);
-            }
-            catch (e) {
-                console.error(utils.tr(10005));
-                process.exit(10005);
-            }
-            props.parse(data);
-        }
-        else {
-            props.host = 'localhost';
-            props.port = 3001;
-        }
-        options.projectProperties = props;
+        options.port = 3001;
     }
 }
 exports.parseCommandLine = parseCommandLine;

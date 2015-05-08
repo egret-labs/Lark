@@ -66,8 +66,7 @@ module ts {
             getAliasedSymbol: resolveImport,
             hasEarlyErrors,
             isEmitBlocked,
-            checkAndMarkExpression,
-            egretGetResolveSymbol
+            checkAndMarkExpression
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -412,43 +411,8 @@ module ts {
                     }
                 }
             }
-
-
-            if (result.declarations)
-            {
-                var sourceFile = getSourceFile(lastLocation);
-                var dependFile = getSourceFile(result.declarations[0]);
-                if (sourceFile && dependFile)
-                {
-                    ts.UsedFileResolver.mapFile(sourceFile.filename, dependFile.filename);
-                }
-            }
-
             return result;
         }
-
-
-        var egretNodesLink: NodeLinks[] = [];
-
-        /**
-        * 
-        */
-        function egretGetResolveSymbol(node: Identifier): Symbol {
-
-            var links = getNodeLinks(node);
-            if (links.resolvedSymbol) {
-                return links.resolvedSymbol;
-            }
-
-            if (!node.id) node.id = nextNodeId++;
-            links = egretNodesLink[node.id] || (egretNodesLink[node.id] = {});
-            links.resolvedSymbol = (getFullWidth(node) > 0 && resolveName(node, node.text, SymbolFlags.Class | SymbolFlags.Export, null, node)) || unknownSymbol;
-
-            if (links.resolvedSymbol) {
-                return links.resolvedSymbol;
-            }
-        }
-
 
         function resolveImport(symbol: Symbol): Symbol {
             Debug.assert((symbol.flags & SymbolFlags.Import) !== 0, "Should only get Imports here.");
@@ -7017,17 +6981,6 @@ module ts {
 
         function checkTypeReference(node: TypeReferenceNode) {
             var type = getTypeFromTypeReferenceNode(node);
-
-            if (type && type.symbol&&type.symbol.declarations)
-            {
-                var sourceFile = getSourceFile(node);
-                var dependFile = getSourceFile(type.symbol.declarations[0]);
-                if (sourceFile && dependFile)
-                {
-                    ts.UsedFileResolver.mapFile(sourceFile.filename, dependFile.filename);
-                }
-            }
-
             if (type !== unknownType && node.typeArguments) {
                 // Do type argument local checks only if referenced type is successfully resolved
                 var len = node.typeArguments.length;

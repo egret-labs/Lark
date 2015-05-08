@@ -11,23 +11,10 @@ var CompileOptions = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(CompileOptions.prototype, "larkPropertiesFile", {
+    Object.defineProperty(CompileOptions.prototype, "srcLarkFile", {
         get: function () {
-            return FileUtil.joinPath(this.projectDir, "lark.json");
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(CompileOptions.prototype, "larkManifest", {
-        get: function () {
-            return FileUtil.joinPath(this.templateDir, "manifest.lark.json");
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(CompileOptions.prototype, "projManifest", {
-        get: function () {
-            return FileUtil.joinPath(this.templateDir, "manifest.proj.json");
+            var filename = this.publish ? 'lark.min.js' : 'lark.js';
+            return FileUtil.joinPath(this.srcDir, "lark/" + filename);
         },
         enumerable: true,
         configurable: true
@@ -41,7 +28,7 @@ var CompileOptions = (function () {
     });
     Object.defineProperty(CompileOptions.prototype, "debugLarkFile", {
         get: function () {
-            return FileUtil.joinPath(this.templateDir, "lark/lark.js");
+            return FileUtil.joinPath(this.debugDir, "lark/lark.js");
         },
         enumerable: true,
         configurable: true
@@ -55,7 +42,7 @@ var CompileOptions = (function () {
     });
     Object.defineProperty(CompileOptions.prototype, "releaseLarkFile", {
         get: function () {
-            return FileUtil.joinPath(this.templateDir, "lark/lark.min.js");
+            return FileUtil.joinPath(this.releaseDir, "lark/lark.min.js");
         },
         enumerable: true,
         configurable: true
@@ -89,57 +76,12 @@ var CompileOptions = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(CompileOptions.prototype, "host", {
-        get: function () {
-            return this.projectProperties.host;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(CompileOptions.prototype, "port", {
-        get: function () {
-            return this.projectProperties.port;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(CompileOptions.prototype, "websocketUrl", {
-        get: function () {
-            var url = "ws://" + this.host + ':' + this.port;
-            return url;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(CompileOptions.prototype, "manageUrl", {
-        get: function () {
-            var url = "http://" + this.host + ':' + this.port + '/$/';
-            return url;
-        },
-        enumerable: true,
-        configurable: true
-    });
     CompileOptions.parse = function (option) {
         var it = new CompileOptions();
         for (var p in option) {
             it[p] = option[p];
         }
         return it;
-    };
-    CompileOptions.prototype.toJSON = function () {
-        var options = this;
-        var json = {};
-        for (var k in this) {
-            var disc = Object.getOwnPropertyDescriptor(options, k) || Object.getOwnPropertyDescriptor(CompileOptions.prototype, k);
-            if (!disc)
-                continue;
-            if (disc.enumerable == false)
-                continue;
-            if (typeof disc.value == 'function')
-                continue;
-            json[k] = options[k];
-        }
-        return json;
     };
     return CompileOptions;
 })();

@@ -30,8 +30,6 @@
 /// <reference path="../lib/types.d.ts" />
 
 import Action = require('./Action');
-import Properties = require('./Properties');
-import FileUtil = require("../lib/FileUtil");
 
 class Build extends Action {
 
@@ -45,14 +43,12 @@ class Build extends Action {
 
         this.copyDirectory(this.options.templateDir, this.options.debugDir);
 
-        var compileResult = this.compileProject();
-
-        Action.compileTemplates(this.options);
-
-        exitCode = compileResult.exitCode;
+        exitCode = this.buildProject();
         console.log('Build End');
         return exitCode;
     }
+
+
 }
 
 export = Build;

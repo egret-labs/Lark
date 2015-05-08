@@ -12675,19 +12675,19 @@ function createTemporaryKey(req) {
 }
 
 process.on('SIGTERM', function() {
-    framework && framework.stop();
+	framework.stop();
 });
 
 process.on('SIGINT', function() {
-    framework && framework.stop();
+	framework.stop();
 });
 
 process.on('exit', function() {
 
-	if (framework && framework.onExit)
+	if (framework.onExit)
 		framework.onExit(framework);
 
-    framework && framework.emit('exit');
+	framework.emit('exit');
 });
 
 process.on('message', function(msg, h) {

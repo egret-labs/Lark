@@ -22,48 +22,35 @@ var Command = (function (_super) {
         var controller = this;
         controller.on('open', function (client) {
             var log = function (msg) {
+                var params = [];
+                for (var _i = 1; _i < arguments.length; _i++) {
+                    params[_i - 1] = arguments[_i];
+                }
                 var data = {
                     type: 'log',
-                    data: msg
+                    data: {
+                        msg: msg,
+                        params: params
+                    }
                 };
                 controller.send(data);
+                console['rawLog'].apply(console, [msg].concat(params));
             };
-            if (!console['override']) {
-                console['override'] = true;
-                ["log", "warn", "error"].forEach(function (method) {
-                    var oldMethod = console[method].bind(console);
-                    console['old_' + method] = oldMethod;
-                    console[method] = function () {
-                        var params = [];
-                        for (var _i = 0; _i < arguments.length; _i++) {
-                            params[_i - 0] = arguments[_i];
-                        }
-                        oldMethod.apply(console, params);
-                        if (!params || !params.length)
-                            return;
-                        log(params);
-                    };
-                });
+            if (!console['rawLog']) {
+                console['rawLog'] = console.log;
+                console.log = log.bind(console);
             }
-            console.log("Connected");
             TypeScript.write = function (msg) { return console.log(msg); };
         });
         controller.on('close', function (client) {
             console.log('Disconnect / Online:', controller.online);
-            if (console['override']) {
-                ["log", "warn", "error"].forEach(function (method) {
-                    console[method] = console['old_' + method];
-                });
-                console['override'] = false;
+            if (console['rawLog']) {
+                console.log = console['rawLog'];
+                console['rawLog'] = undefined;
             }
         });
-        controller.on('message', function (client, data) {
-            if (data.type == 'cmd') {
-                execute(client, data.data);
-            }
-            else {
-                console.log(data);
-            }
+        controller.on('message', function (client, message) {
+            execute(client, message);
         });
     };
     return Command;

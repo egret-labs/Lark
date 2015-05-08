@@ -27,8 +27,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 /// <reference path="node.d.ts" />
-var cp = require('child_process');
-var path = require('path');
 var file = require('./FileUtil');
 global["$locale_strings"] = global["$locale_strings"] || {};
 var $locale_strings = global["$locale_strings"];
@@ -54,16 +52,6 @@ function tr(code) {
     return text;
 }
 exports.tr = tr;
-function exit(code) {
-    var args = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        args[_i - 1] = arguments[_i];
-    }
-    var message = tr.apply(this, [code].concat(args));
-    console.error(message);
-    process.exit(code);
-}
-exports.exit = exit;
 function _getEnv() {
     return process.env;
 }
@@ -100,45 +88,4 @@ function getLarkRoot() {
     return larkRoot;
 }
 exports.getLarkRoot = getLarkRoot;
-function open(target, appName, callback) {
-    var opener;
-    if (typeof (appName) === 'function') {
-        callback = appName;
-        appName = null;
-    }
-    switch (process.platform) {
-        case 'darwin':
-            if (appName) {
-                opener = 'open -a "' + escape(appName) + '"';
-            }
-            else {
-                opener = 'open';
-            }
-            break;
-        case 'win32':
-            // if the first parameter to start is quoted, it uses that as the title
-            // so we pass a blank title so we can quote the file we are opening
-            if (appName) {
-                opener = 'start "" "' + escape(appName) + '"';
-            }
-            else {
-                opener = 'start ""';
-            }
-            break;
-        default:
-            if (appName) {
-                opener = escape(appName);
-            }
-            else {
-                // use Portlands xdg-open everywhere else
-                opener = path.join(__dirname, '../vendor/xdg-open');
-            }
-            break;
-    }
-    return cp.exec(opener + ' "' + escape(target) + '"', callback);
-}
-exports.open = open;
-function escape(s) {
-    return s.replace(/"/, '\\\"');
-}
 //# sourceMappingURL=utils.js.map

@@ -20,7 +20,7 @@ class Run extends Action {
     }
 
     checkState(options: lark.ICompileOptions) {
-        var req = http.get('http://'+ options.host +':' + options.port + '/$/ping',(res: http.ClientResponse) => {
+        var req = http.get('http://127.0.0.1:' + options.port + '/$/ping',(res: http.ClientResponse) => {
             this.sendCMD(options);
         });
         req.on('error', e => {
@@ -32,27 +32,37 @@ class Run extends Action {
     startServer(options: lark.ICompileOptions) {
 
         var nodePath = process.execPath,
-            larkPath = FileUtil.joinPath(options.larkRoot, 'tools/bin/lark');
-        console.log(process.cwd());
+            larkPath = FileUtil.joinPath(options.larkRoot, 'tools/bin/lark'),
+            params = '"' + options.projectDir + '"';
+        var cmd = 'cmd "' + nodePath + '" "' + larkPath + '" ' + params;
 
-        childProcess.spawn(nodePath, [larkPath, 'startserver', options.projectDir,'-a'], {
-            detached: true,
-            stdio: ['ignore', 'ignore', 'ignore'],
-            cwd: process.cwd()
-        });
+        console.log(cmd);
+
+        childProcess.spawn(nodePath, [larkPath, 'startserver', params], { detached: true, stdio: ['ignore', 'ignore', 'ignore'] });
+
+        //var serverFile = FileUtil.joinPath(options.larkRoot, 'tools/server/server.js');
+        //var n = childProcess.fork(serverFile);
+
+        //n.on('message', function (m) {
+        //    console.log('PARENT got message:', m);
+        //});
+
+        //n.send(options, null);
+
+
 
         var exitCode = Entry.executeOption(options);
         this.exit(exitCode);
+
+
+        //server.startServer(options);
     }
 
     sendCMD(options: lark.ICompileOptions) {
-        var wshost = 'ws://' + options.host +':' + options.port + "/";
+        var wshost = 'ws://127.0.0.1:' + options.port + "/";
         var ws = Websocket.connect(wshost);
 
-        var data = JSON.stringify({
-            type: 'cmd',
-            data: options
-        });
+        var data = JSON.stringify(options);
         ws.on("connect", e=> {
             ws.sendText(data);
         });
@@ -60,6 +70,7 @@ class Run extends Action {
     }
 
     gotResult(msg) {
+        msg = decodeURIComponent(msg);
         var result:lark.CommandResult = null;
         try {
             result = JSON.parse(msg);
@@ -70,7 +81,7 @@ class Run extends Action {
         }
         if (result.type == 'log')
         {
-            console.log.apply(console, result.data);
+            console.log.apply(console, [result.data.msg].concat(result.data.params));
         }
         if (result.exitCode != undefined)
             this.exit(result.exitCode);

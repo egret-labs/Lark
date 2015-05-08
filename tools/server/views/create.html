@@ -1,102 +1,135 @@
-﻿<script src="/$/content/scripts/create.js"></script>
+﻿<h2>
+    Create a Lark Project
+</h2>
 
-<div id="create-view" ng-controller="CreateController as create">
-    <h2>
-        Create a Lark Project
-    </h2>
+<section>
+    <h3>
+        Welcome to use Lark to build amazing media contents
+    </h3>
+</section>
 
-    <section>
-        <h3>
-            Welcome to use Lark to build amazing media contents
-        </h3>
-    </section>
+<section>
+    <h3>What kind of project you want to build</h3>
+    <label>
+        <input type="radio" name="projectType" value="site" checked="checked"/> Mini Site
+    </label>
+    <label>
+        <input type="radio" name="projectType" value="game" /> Mobile Games
+    </label>
+    <label>
+        <input type="radio" name="projectType" value="app" /> Mobile Apps
+    </label>
+</section>
 
-    <section>
-        <h3>What kind of project you want to build</h3>
+<section>
+    <h3>Which template will you use</h3>
+    <label>
+        <input type="radio" name="template" value="site01" checked="checked"/> Mini Site 01
+    </label>
+    <label>
+        <input type="radio" name="template" value="site02" /> Mini Site 02
+    </label>
+    <label>
+        <input type="radio" name="template" value="site03" /> Mini Site 03
+    </label>
+    <label>
+        <input type="radio" name="template" value="site04" /> Mini Site 04
+    </label>
+    <label>
+        <input type="radio" name="template" value="site05" /> Mini Site 05
+    </label>
+</section>
+
+<section>
+    <h3>Extensions</h3>
+    
+    <label>
+        <input type="checkbox" value="true" /> I want to use more APIs
+    </label>
+
+    <div>
         <label>
-            <input type="radio" name="projectType" value="site" checked="checked" /> Mini Site
+            <input type="checkbox" name="extensions" value="text" /> Rich Text Support
         </label>
         <label>
-            <input type="radio" name="projectType" value="game" /> Mobile Games
+            <input type="checkbox" name="extensions" value="audio" /> Audio Support
         </label>
         <label>
-            <input type="radio" name="projectType" value="app" /> Mobile Apps
+            <input type="checkbox" name="extensions" value="video" /> Video Support
         </label>
-    </section>
-
-    <section>
-        <h3>Which template will you use</h3>
-        <label ng-repeat="template in create.larkManifest.templates">
-            <input type="radio" name="template" value="{{template.name}}" ng-click="create.selectTemplate(template.name)" /> {{template.description}}
+        <label>
+            <input type="checkbox" name="extensions" value="location" /> Location Support
         </label>
-    </section>
-
-    <section>
-        <h3>Extensions</h3>
-
-        <div ng-repeat="ext in create.larkManifest.modules">
-            <label>
-                <input type="checkbox" name="modules" value="{{ext.name}}" ng-model="ext.checked" /> {{ext.description}}
-            </label>
-        </div>
-
-    </section>
-
-
-    <section>
-        <h3>Platforms</h3>
-
-        <div>
-            <label ng-repeat="platform in create.larkManifest.platforms">
-                <input type="checkbox" name="platform" ng-model="platform.checked" value="{{platform.name}}" /> {{platform.description}}
-            </label>
-        </div>
-    </section>
-
-    <div class="nav-bar">
-        <input type="button" id="previous" value="Previous" />
-        <input type="button" id="next" value="Next" />
-        <input type="button" id="finish" value="Finish" ng-click="create.finish()" />
+        <label>
+            <input type="checkbox" name="extensions" value="orientation" /> Orientation Support
+        </label>
     </div>
 
-    <script>
-        (function () {
-
-            var sections = document.querySelectorAll('section');
-            var active = 0;
-            var btnNext = document.getElementById('next'),
-                btnPrevious = document.getElementById('previous'),
-                btnFinish = document.getElementById('finish');
+</section>
 
 
-            moveTo(0);
+<section>
+    <h3>Platforms</h3>
 
-            btnNext.addEventListener('click', next);
-            btnPrevious.addEventListener('click', previous);
-            btnFinish.addEventListener('click', finish);
+    <div>
+        <label>
+            <input type="checkbox" name="platform" value="web" /> HTML5
+        </label>
+        <label>
+            <input type="checkbox" name="platform" value="ios" /> iOS
+        </label>
+        <label>
+            <input type="checkbox" name="platform" value="android" /> Android
+        </label>
+        <label>
+            <input type="checkbox" name="platform" value="windows" /> Windows
+        </label>
+    </div>
+</section>
 
-            function next() {
-                moveTo(active + 1);
-            }
-
-            function previous() {
-                moveTo(active - 1);
-            }
-
-            function moveTo(index) {
-                sections[active].className = '';
-                active = index;
-                active = Math.min(active, sections.length - 1);
-                active = Math.max(active, 0);
-                sections[active].className = 'active';
-                btnPrevious.disabled = active == 0;
-                btnNext.disabled = active == (sections.length - 1);
-            }
-
-            function finish() {
-
-            }
-
-        })();
-    </script>
+<div class="nav-bar">
+    <input type="button" id="previous" value="Previous" /> 
+    <input type="button" id="next" value="Next" /> 
+    <input type="button" id="finish" value="Finish" />
 </div>
+
+<script>
+    (function () {
+
+        var sections = document.querySelectorAll('section');
+        var active = 0;
+        var btnNext = document.getElementById('next'),
+            btnPrevious = document.getElementById('previous'),
+            btnFinish = document.getElementById('finish');
+            
+
+        moveTo(0);
+
+        btnNext.addEventListener('click', next);
+        btnPrevious.addEventListener('click', previous);
+        btnFinish.addEventListener('click', finish);
+
+        function next() {
+            moveTo(active + 1);
+        }
+
+        function previous() {
+            moveTo(active - 1);
+        }
+
+        function moveTo(index) {
+            sections[active].className = '';
+            active = index;
+            active = Math.min(active, sections.length - 1);
+            active = Math.max(active, 0);
+            sections[active].className = 'active';
+            btnPrevious.disabled = active == 0;
+            btnNext.disabled = active == (sections.length - 1);
+        }
+
+        function finish() {
+
+        }
+
+    })();
+</script>

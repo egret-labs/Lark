@@ -34,7 +34,6 @@ var __extends = this.__extends || function (d, b) {
 };
 /// <reference path="../lib/types.d.ts" />
 var Action = require('./Action');
-var Properties = require('./Properties');
 var FileUtil = require('../lib/FileUtil');
 var Create = (function (_super) {
     __extends(Create, _super);
@@ -48,9 +47,6 @@ var Create = (function (_super) {
         FileUtil.createDirectory(option.debugDir);
         var templateDir = FileUtil.joinPath(option.larkRoot, 'template');
         FileUtil.copy(templateDir, option.templateDir);
-        var prop = new Properties();
-        var propjson = prop.toJSON();
-        FileUtil.save(FileUtil.joinPath(option.projectDir, 'lark.json'), JSON.stringify(propjson, null, '   '));
         var exitcode = this.buildLark();
         return exitcode;
     };

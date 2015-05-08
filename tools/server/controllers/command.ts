@@ -18,30 +18,24 @@ class Command extends TotalJS.Controller {
         var controller = this;
         controller.on('open', function (client) {
 
-            var log = (msg: any) => {
+            var log = (msg: string, ...params: string[]) => {
                 var data: lark.CommandResult = {
                     type: 'log',
-                    data: msg
+                    data: {
+                        msg,
+                        params
+                    }
                 };
                 controller.send(data);
+
+                console['rawLog'].apply(console, [msg].concat(params));
             }
 
-            if (!console['override'])
+            if (!console['rawLog'])
             {
-                console['override'] = true;
-                ["log", "warn", "error"].forEach(function (method) {
-                    var oldMethod = console[method].bind(console);
-                    console['old_' + method] = oldMethod;
-                    console[method] = function (...params:string[]) {
-                        oldMethod.apply(console, params);
-                        if (!params || !params.length)
-                            return;
-                        log(params);
-                    };
-                });
+                console['rawLog'] = console.log;
+                console.log = log.bind(console);
             }
-
-            console.log("Connected");
 
             TypeScript.write = msg=> console.log(msg);
         });
@@ -50,23 +44,16 @@ class Command extends TotalJS.Controller {
 
             console.log('Disconnect / Online:', controller.online);
 
-            if (console['override'])
+            if (console['rawLog'])
             {
-                ["log", "warn", "error"].forEach(function (method) {
-                    console[method] = console['old_' + method];
-                });
-                console['override'] = false;
+                console.log = console['rawLog'];
+                console['rawLog'] = undefined;
             }
 
         });
 
-        controller.on('message', function (client: TotalJS.WebSocketClient, data: lark.CommandResult) {
-            if (data.type == 'cmd') {
-                execute(client, data.data);
-            }
-            else {
-                console.log(data);
-            }
+        controller.on('message', function (client:TotalJS.WebSocketClient, message) {
+            execute(client,message);
         });
     }
 
