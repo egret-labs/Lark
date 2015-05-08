@@ -31,6 +31,8 @@ module lark.web {
 
     var surfacePool:player.Surface[] = [];
 
+    var isQQBrowser = navigator.userAgent.indexOf("QQBrowser")!=-1;
+
     export class CanvasFactory implements player.SurfaceFactory {
 
         public constructor(){
@@ -48,7 +50,7 @@ module lark.web {
             var surface = (useOnce||surfacePool.length>3)?surfacePool.pop():null;
             if (!surface) {
                 var canvas:HTMLCanvasElement = document.createElement("canvas");
-                if (!this.testCanvasValid(canvas)) {
+                if (isQQBrowser&&!this.testCanvasValid(canvas)) {
                     warn("failed to create canvas!");
                     return null;
                 }
