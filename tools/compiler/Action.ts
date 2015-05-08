@@ -122,18 +122,36 @@ class Action {
 
         return exitCode;
     }
-
-    public copyDirectory(from: string, to: string) {
-
-        var fileList = FileUtil.getDirectoryListing(from);
+    /**
+    * 复制文件夹及其子文件夹下所有的文件
+    * @param from 要搜索的文件夹
+    * @param to 目标文件夹
+    * @param filter 过滤函数：filter(file:string):boolean,参数为遍历过程中的每一个文件，返回true则加入结果列表
+    */
+    public copyDirectory(from: string, to: string, filter?: (filename: string) => boolean) {
+        var fileList: string[] = [];
+        if (!filter)
+            fileList = FileUtil.getDirectoryListing(from);
+        else
+            fileList = FileUtil.searchByFunction(from, filter);
         length = fileList.length;
-        for (var i = 0; i < length; i++)
-        {
+        for (var i = 0; i < length; i++) {
             var path = fileList[i];
             var destPath = path.substring(from.length);
             destPath = FileUtil.joinPath(to, destPath);
             FileUtil.copy(path, destPath);
         }
+    }
+
+    static fileExtensionToIgnore = {
+        "ts": true
+    };
+
+    public srcFolderOutputFilter(file: string) {
+        var extension = FileUtil.getExtension(file);
+        if (extension in Action.fileExtensionToIgnore)
+            return false;
+        return true;
     }
 }
 

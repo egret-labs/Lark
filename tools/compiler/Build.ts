@@ -42,6 +42,7 @@ class Build extends Action {
             exitCode = this.buildLark();
 
         this.copyDirectory(this.options.templateDir, this.options.debugDir);
+        this.copyDirectory(this.options.srcDir, this.options.debugDir, this.srcFolderOutputFilter);
 
         exitCode = this.buildProject();
         console.log('Build End');
