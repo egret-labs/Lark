@@ -539,7 +539,7 @@ module lark {
         }
 
     }
-    registerType(Matrix,[Types.Matrix]);
+    registerType(Matrix,Types.Matrix);
 
     /**
      * 仅供引擎内复用，要防止暴露引用到外部。

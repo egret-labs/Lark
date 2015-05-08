@@ -281,6 +281,7 @@ module lark.player {
                 0,          //scrollH,
                 0           //scrollV
             ]);
+            this.$displayObjectFlags |= player.UIFlags.UIComponentInitFlags;
             this.createChildren();
         }
 
@@ -646,22 +647,8 @@ module lark.player {
          */
         public setMeasuredSize(width:number, height:number):void {
             var values = this.$uiValues;
-            width = Math.ceil(+width || 0);
-            height = Math.ceil(+height || 0);
-            if (width < values[UIValues.minWidth]) {
-                width = values[UIValues.minWidth];
-            }
-            if (width > values[UIValues.maxWidth]) {
-                width = values[UIValues.maxWidth];
-            }
-            if (height < values[UIValues.minHeight]) {
-                height = values[UIValues.minHeight];
-            }
-            if (height > values[UIValues.maxHeight]) {
-                height = values[UIValues.maxHeight]
-            }
-            values[UIValues.measuredWidth] = width;
-            values[UIValues.measuredHeight] = height;
+            values[UIValues.measuredWidth] = Math.ceil(+width || 0);
+            values[UIValues.measuredHeight] = Math.ceil(+height || 0);
         }
 
 
@@ -772,6 +759,18 @@ module lark.player {
             var values = this.$uiValues;
             if (isNone(values[UIValues.explicitWidth]) || isNone(values[UIValues.explicitHeight])) {
                 this.measure();
+                if (values[UIValues.measuredWidth] < values[UIValues.minWidth]) {
+                    values[UIValues.measuredWidth] = values[UIValues.minWidth];
+                }
+                if (values[UIValues.measuredWidth] > values[UIValues.maxWidth]) {
+                    values[UIValues.measuredWidth] = values[UIValues.maxWidth];
+                }
+                if (values[UIValues.measuredHeight] < values[UIValues.minHeight]) {
+                    values[UIValues.measuredHeight] = values[UIValues.minHeight];
+                }
+                if (values[UIValues.measuredHeight] > values[UIValues.maxHeight]) {
+                    values[UIValues.measuredHeight] = values[UIValues.maxHeight]
+                }
             }
             var preferredW = this.getPreferredUWidth();
             var preferredH = this.getPreferredUHeight();
@@ -1007,7 +1006,7 @@ module lark.player {
      * @param descendant 自定义的UIComponent子类
      * @param base 自定义子类继承的父类
      */
-    export function implementUIComponent(descendant:any, base:any):void {
+    export function implementUIComponent(descendant:any, base:any,isContainer?:boolean):void {
         for (var property in UIComponentImpl) {
             if (UIComponentImpl.hasOwnProperty(property)) {
                 descendant[property] = UIComponentImpl[property];
@@ -1027,6 +1026,17 @@ module lark.player {
                 var value = Object.getOwnPropertyDescriptor(protoBase, key);
                 Object.defineProperty(prototype, key, value);
             }
+        }
+
+        if(isContainer){
+            prototype.$childAdded = function (child:DisplayObject, index:number):void {
+                this.invalidateSize();
+                this.invalidateDisplayList();
+            };
+            prototype.$childRemoved = function (child:DisplayObject, index:number):void {
+                this.invalidateSize();
+                this.invalidateDisplayList();
+            };
         }
 
         if(DEBUG){//用于调试时查看布局尺寸的便利属性，发行版时移除。

@@ -47,6 +47,12 @@ module lark.web {
             capabilities.$webAudio = h5.wa;
             capabilities.$webGL = h5.gl;
             capabilities.$webSocket = h5.ws;
+            var language = (navigator.language || navigator.browserLanguage).toLowerCase();
+            var strings = language.split("-");
+            if(strings.length>1){
+                strings[1] = strings[1].toUpperCase();
+            }
+            capabilities.$language = strings.join("-");
         }
         
         private static checkHtml5Support() {

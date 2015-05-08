@@ -39,20 +39,28 @@ module lark {
      * lark.log(emitter.isType(lark.Types.EventEmitter));   //输出true。
      * lark.log(emitter.isType(lark.Types.Bitmap));   //输出false。
      *
-     * @param clazz 继承自LarkObject的类定义，注意：接口在运行时不存在，因此不能传入接口定义。
-     * @param typeFlags 要注册的枚举值列表。注意：传入的自定义枚举数值范围要避免与Lark引擎(1~2000的数值)或其他第三方库的数值范围重合,
+     * 注意：传入的类定义必须继承自LarkObject。另外，传入的自定义枚举数值范围要避免与Lark引擎(1~2000的数值)或其他第三方库的数值范围重合,
      * 否则有可能会导致运行时isType()方法类型判断错误。
+     *
+     * @param classDefinition 要注册的类定义。
+     * @param classFlags 要注册的类对应的枚举值。
+     * @param interfaceFlags 要注册的类所实现的接口的枚举值列表。
      */
-    export function registerType(clazz:any,typeFlags:number[]):void{
+    export function registerType(classDefinition:any,classFlag:number,interfaceFlags?:number[]):void{
         if (DEBUG) {
-            if(!clazz){
-                $error(1003, "clazz");
+            if(!classDefinition){
+                $error(1003, "classDefinition");
             }
-            if(!typeFlags){
-                $error(1003, "typeFlags");
+            if(classFlag===void 0){
+                $error(1003, "classFlag");
             }
         }
-        var prototype: any = clazz.prototype;
-        prototype.__meta__ = typeFlags.concat(prototype.__meta__);
+        var prototype: any = classDefinition.prototype;
+        prototype.__classFlag__ = classFlag;
+        var flags = [classFlag];
+        if(interfaceFlags){
+            flags = flags.concat(interfaceFlags);
+        }
+        prototype.__typeFlags__ = flags.concat(prototype.__typeFlags__);
     }
 }

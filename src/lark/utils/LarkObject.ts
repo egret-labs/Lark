@@ -61,9 +61,9 @@ module lark {
          */
         public isType(typeFlag:number):boolean{
             var prototype: any = Object.getPrototypeOf(this);
-            return (prototype.__meta__.indexOf(typeFlag)!==-1);
+            return (prototype.__typeFlags__.indexOf(typeFlag)!==-1);
         }
     }
-
-    LarkObject.prototype["__meta__"] = [];
+    LarkObject.prototype["__classFlag__"] = 0;
+    LarkObject.prototype["__typeFlags__"] = [];
 }

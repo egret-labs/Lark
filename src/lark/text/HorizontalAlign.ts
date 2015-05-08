@@ -48,9 +48,5 @@ module lark {
          */
         public static CENTER: string = "center";
 
-        /**
-         * 未设置
-         */
-        public static NONE: string = undefined;
 	}
 }

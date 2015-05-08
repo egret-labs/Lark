@@ -27,40 +27,50 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-
-module lark {
+module lark.gui {
 
     /**
-     * 此类用于使用 Lark 绘图应用程序编程接口 (API) 创建简单形状。Shape 类包括 graphics 属性，该属性使您可以从 Graphics 类访问方法。
+     * 皮肤基类。通常情况下，您不需要手动创建这个类的实例，而是通过解析EXML文件后自动生成。
      */
-    export class Shape extends DisplayObject {
+    export class Skin extends LarkObject {
 
         /**
-         * 创建一个 Shape 对象
+         * 皮肤部件名称列表
          */
-        public constructor() {
-            super();
-            this.$graphics = new Graphics();
-            this.$graphics.$targetDisplay = this;
-            this.$renderRegion = new player.Region();
-            this.pixelHitTest = true;
-        }
+        public skinParts:string[];
 
-        $graphics:Graphics;
         /**
-         * 获取 Shape 中的 Graphics 对象。
+         * 皮肤的最大宽度。仅影响主机组件的测量结果。
          */
-        public get graphics():Graphics {
-            return this.$graphics;
+        public maxWidth:number = 100000;
+        /**
+         * 皮肤的最小宽度,此属性设置为大于maxWidth的值时无效。仅影响主机组件的测量结果。
+         */
+        public minWidth:number = 0;
+        /**
+         * 皮肤的最大高度。仅影响主机组件的测量结果。
+         */
+        public maxHeight:number = 100000;
+        /**
+         * 皮肤的最小高度,此属性设置为大于maxHeight的值时无效。仅影响主机组件的测量结果。
+         */
+        public minHeight:number = 0;
+        /**
+         * 皮肤显式设置宽度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
+         */
+        public width:number = NONE;
+        /**
+         * 皮肤显式设置高度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
+         */
+        public height:number = NONE;
+
+        $elementsContent:DisplayObject[] = [];
+
+        public set elementsContent(value:DisplayObject[]){
+            this.$elementsContent = value;
         }
 
-        $measureContentBounds(bounds:Rectangle):void {
-            this.$graphics.$measureContentBounds(bounds);
-        }
-
-        $render(context:player.RenderContext):void{
-            this.$graphics.$render(context);
-        }
     }
-    registerType(Shape,Types.Shape);
+
+    registerType(Skin,Types.Skin);
 }

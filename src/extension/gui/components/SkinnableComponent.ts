@@ -32,11 +32,159 @@ module lark.gui {
     /**
      * SkinnableComponent 类定义可设置外观的组件的基类。SkinnableComponent 类所使用的外观通常是 Skin 类的子类。
      */
-    export class SkinnableComponent extends Sprite implements UIComponent{
-        public constructor(){
+    export class SkinnableComponent extends Sprite implements UIComponent {
+        public constructor() {
             super();
             player.UIComponentImpl.call(this);
         }
+
+        /**
+         * 主机组件标识符。用于唯一确定一个组件的名称。
+         * 用户自定义的组件若不对此属性赋值，将会继承父级的标识符定义。
+         */
+        public hostComponentKey:string = null;
+
+        private _skinName:any = null;
+        /**
+         * 皮肤标识符。有效值可为：皮肤类定义,皮肤类名,或皮肤实例，
+         */
+        public get skinName():any {
+            return this._skinName;
+        }
+
+        public set skinName(value:any) {
+            this.$setFlags(player.UIFlags.skinNameExplicitlySet);
+            if (this._skinName == value)
+                return;
+            this._skinName = value;
+            this.parseSkinName();
+        }
+
+        /**
+         * 解析skinName
+         */
+        private parseSkinName():void {
+            var skinName = this._skinName;
+            var skin:any;
+            if (skinName) {
+                if (skinName.prototype) {
+                    skin = new skinName();
+                }
+                else if (typeof(skinName) == "string") {
+                    var clazz:any = getDefinitionByName(<string><any> skinName);
+                    if (clazz) {
+                        skin = new clazz();
+                    }
+                }
+                else {
+                    skin = skinName;
+                }
+            }
+            if (skin instanceof LarkObject && !skin.isType(Types.Skin)) {
+                skin = null;
+                DEBUG && $error(2002);
+            }
+            this.$setSkin(skin);
+        }
+
+        $onAddToStage(stage:Stage, nestLevel:number):void {
+            super.$onAddToStage(stage, nestLevel);
+            if (!this.$hasFlags(player.UIFlags.skinNameExplicitlySet)) {
+                var skin = Theme.$getDefaultSkin(this, stage);
+                if (skin) {
+                    this.$setSkin(skin);
+                }
+            }
+        }
+
+
+        private _skin:Skin = null;
+        /**
+         * 皮肤对象实例。
+         */
+        public get skin():Skin {
+            return this._skin;
+        }
+
+        /**
+         * 设置皮肤实例
+         */
+        $setSkin(skin:Skin):void {
+            var oldSkin = this._skin;
+            if (oldSkin) {
+                var skinParts:string[] = oldSkin.skinParts;
+                var length = skinParts.length;
+                for (var i = 0; i < length; i++) {
+                    var partName = skinParts[i];
+                    if (this[partName]) {
+                        this.partRemoved(partName, null);
+                    }
+                }
+            }
+            this.removeChildren();
+            this._skin = skin;
+            if (skin) {
+                var skinParts:string[] = skin.skinParts;
+                var length = skinParts.length;
+                for (var i = 0; i < length; i++) {
+                    var partName = skinParts[i];
+                    var instance = skin[partName];
+                    if (instance) {
+                        this.setSkinPart(partName, instance);
+                    }
+                }
+                var children = skin.$elementsContent;
+                if(children){
+                    var length = children.length;
+                    for(var i=0;i<length;i++){
+                        this.addChild(children[i]);
+                    }
+                }
+            }
+            this.invalidateSize();
+            this.invalidateDisplayList();
+
+            if (this.hasListener(UIEvent.SKIN_CHANGED)) {
+                UIEvent.emitUIEvent(this, UIEvent.SKIN_CHANGED);
+            }
+        }
+
+
+        /**
+         * 关联一个对象到逻辑组件的指定皮肤部件上。通常您不需要手动调用此方法，当使用EXML文件作为组件皮肤，此方法将会被自动调用。
+         * 在运行时，EXML文件内声明的id名称将作为此方法的partName参数，而id所对应的节点对象，将作为此方法的instance参数被依次传入。
+         * @param partName 皮肤部件名称
+         * @param instance 皮肤部件实例
+         */
+        public setSkinPart(partName:string, instance:any):void {
+            var oldInstance = this[partName];
+            if (oldInstance) {
+                this.partRemoved(partName, oldInstance);
+            }
+            this[partName] = instance;
+            if (instance) {
+                this.partAdded(partName, instance);
+            }
+        }
+
+        /**
+         * 子类覆盖此方法，以在皮肤部件第一次附加时对其执行一些初始化操作，例如添加事件监听，赋值缓存的属性值等。
+         * @param partName 要附加的皮肤部件名称
+         * @param instance 要附加的皮肤部件实例
+         */
+        protected partAdded(partName:string, instance:any):void {
+
+        }
+
+        /**
+         * 子类覆盖此方法，以在皮肤部件从逻辑组件卸载时对其执行一些清理操作，例如移除事件监听，断开缓存的引用等。
+         * @param partName 要卸载的皮肤部件名称
+         * @param instance 要卸载的皮肤部件实例
+         */
+        protected partRemoved(partName:string, instance:any):void {
+
+        }
+
 
         //=======================UIComponent接口实现===========================
         /**
@@ -59,13 +207,41 @@ module lark.gui {
          */
         protected measure():void {
             player.measure(this);
+            var skin = this._skin;
+            if(!skin){
+                return;
+            }
+            var values = this.$uiValues;
+            if(!isNone(skin.width)){
+                values[player.UIValues.measuredWidth] = skin.width;
+            }
+            else{
+                if (values[player.UIValues.measuredWidth] < skin.minWidth) {
+                    values[player.UIValues.measuredWidth] = skin.minWidth;
+                }
+                if (values[player.UIValues.measuredWidth] > skin.maxWidth) {
+                    values[player.UIValues.measuredWidth] = skin.maxWidth;
+                }
+            }
+
+            if(!isNone(skin.height)){
+                values[player.UIValues.measuredHeight] = skin.height;
+            }
+            else {
+                if (values[player.UIValues.measuredHeight] < skin.minHeight) {
+                    values[player.UIValues.measuredHeight] = skin.minHeight;
+                }
+                if (values[player.UIValues.measuredHeight] > skin.maxHeight) {
+                    values[player.UIValues.measuredHeight] = skin.maxHeight;
+                }
+            }
         }
 
         /**
          * 更新显示列表
          */
         protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
-            player.updateDisplayList(this,unscaledWidth,unscaledHeight);
+            player.updateDisplayList(this, unscaledWidth, unscaledHeight);
         }
 
         /**
@@ -232,6 +408,6 @@ module lark.gui {
         }
     }
 
-    player.implementUIComponent(SkinnableComponent,Sprite);
-    registerType(SkinnableComponent, [Types.UIComponent, Types.SkinnableComponent]);
+    player.implementUIComponent(SkinnableComponent, Sprite, true);
+    registerType(SkinnableComponent, Types.SkinnableComponent, [Types.UIComponent]);
 }

@@ -1064,5 +1064,5 @@ module lark {
         }
 
     }
-    registerType(DisplayObject, [Types.DisplayObject]);
+    registerType(DisplayObject, Types.DisplayObject);
 }

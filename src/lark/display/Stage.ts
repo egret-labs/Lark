@@ -229,5 +229,5 @@ module lark {
             configurable: true
         });
     }
-    registerType(Stage,[Types.Stage]);
+    registerType(Stage,Types.Stage);
 }
