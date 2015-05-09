@@ -39,15 +39,15 @@ module lark {
     export function getDefinitionByName(name:string):any {
         if (!name)
             return null;
-        var definition:any = $getDefinitionByNameCache[name];
+        var definition = $getDefinitionByNameCache[name];
         if (definition) {
             return definition;
         }
-        var paths:Array<string> = name.split(".");
-        var length:number = paths.length;
+        var paths = name.split(".");
+        var length = paths.length;
         definition = __global;
-        for (var i:number = 0; i < length; i++) {
-            var path:string = paths[i];
+        for (var i = 0; i < length; i++) {
+            var path = paths[i];
             definition = definition[path];
             if (!definition) {
                 return null;
