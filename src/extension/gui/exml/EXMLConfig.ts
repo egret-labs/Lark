@@ -76,7 +76,12 @@ module lark.player {
             var length = keys.length;
             for (var i = 0; i < length; i++) {
                 var key = keys[i];
-                var type = typeof instance[key];
+                if(isArray(instance[key])){
+                    type = "Array";
+                }
+                else{
+                    var type = typeof instance[key];
+                }
                 if (type == "function" || key.charAt(0) == "_" || key.charAt(0) == "$") {
                     continue;
                 }
@@ -91,19 +96,19 @@ module lark.player {
          */
         public getClassNameById(id:string, ns:string):string {
             var name:string = "";
-            if(basicTypes.indexOf(id)!=-1){
+            if (basicTypes.indexOf(id) != -1) {
                 return id;
             }
-            if(ns==NS_W){
+            if (ns == NS_W) {
 
             }
-            else if(!ns||ns==NS_E){
-                name = GUI_MODULE+name;
+            else if (!ns || ns == NS_E) {
+                name = GUI_MODULE + name;
             }
-            else{
-                name = ns.substring(0,ns.length-1)+id
+            else {
+                name = ns.substring(0, ns.length - 1) + id
             }
-            if(!getDefinitionByName(name)){
+            if (!getDefinitionByName(name)) {
                 name = "";
             }
             return name;
@@ -141,7 +146,12 @@ module lark.player {
         public hasProperty(prop:string, className:string):boolean {
             return true;
         }
+    }
 
-
+    /**
+     * 判断一个对象是数组
+     */
+    function isArray(o:any):boolean {
+        return Object.prototype.toString.call(o) === '[object Array]';
     }
 }

@@ -383,4 +383,6 @@ module lark.gui {
     player.implementUIComponent(Group, Sprite, true);
 
     registerType(Group, Types.Group, [Types.UIComponent]);
+    setPropertyType(Group,"elementsContent","Array");
+    Group.prototype["__defaultProperty__"] = "elementsContent";
 }
