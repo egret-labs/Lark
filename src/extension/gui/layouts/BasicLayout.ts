@@ -78,7 +78,7 @@ module lark.gui {
                 return this.$useVirtualLayout;
             },
             set: function (value) {
-                $error(2001);
+                $error(2201);
             },
             enumerable: true,
             configurable: true

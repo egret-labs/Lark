@@ -29,6 +29,18 @@
 
 module lark.player {
 
+    /**
+     * GUI命名空间
+     */
+    export var NS_E:string = "http://ns.egret-labs.org/egret";
+    /**
+     * Wing命名空间
+     */
+    export var NS_W:string = "http://ns.egret-labs.org/wing";
+
+    var basicTypes:string[] = ["Array", "boolean", "string", "number"];
+    var GUI_MODULE = "lark.gui.";
+
     var hashCount = 0;
 
     export class EXMLConfig {
@@ -79,6 +91,21 @@ module lark.player {
          */
         public getClassNameById(id:string, ns:string):string {
             var name:string = "";
+            if(basicTypes.indexOf(id)!=-1){
+                return id;
+            }
+            if(ns==NS_W){
+
+            }
+            else if(!ns||ns==NS_E){
+                name = GUI_MODULE+name;
+            }
+            else{
+                name = ns.substring(0,ns.length-1)+id
+            }
+            if(!getDefinitionByName(name)){
+                name = "";
+            }
             return name;
         }
 
@@ -103,6 +130,16 @@ module lark.player {
                 return "any";
             }
             return "";
+        }
+
+        /**
+         * 检查一个类上是否含有指定的属性
+         * @param prop 要检查的属性名
+         * @param className 要检查的类名，包含模块名
+         * @returns 若含有返回true。
+         */
+        public hasProperty(prop:string, className:string):boolean {
+            return true;
         }
 
 

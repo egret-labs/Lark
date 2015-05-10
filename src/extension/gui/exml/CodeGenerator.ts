@@ -72,6 +72,35 @@ module lark.player {
         public superClass:string = "";
 
         /**
+         * 变量定义区块
+         */
+        private variableBlock:CpVariable[] = [];
+
+        /**
+         * 添加变量
+         */
+        public addVariable(variableItem:CpVariable):void {
+            if (this.variableBlock.indexOf(variableItem) == -1) {
+                this.variableBlock.push(variableItem);
+            }
+        }
+
+        /**
+         * 根据变量名获取变量定义
+         */
+        public getVariableByName(name:string):CpVariable {
+            var list = this.variableBlock;
+            var length = list.length;
+            for (var i=0; i < length; i++) {
+                var item = list[i];
+                if (item.name == name) {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        /**
          * 函数定义区块
          */
         private functionBlock:CpFunction[] = [];
@@ -116,11 +145,23 @@ module lark.player {
                 returnStr += ") {\n";
             }
 
-            //打印构造函数
+
             returnStr += indent1Str + "function " + this.className + "() {\n";
             if (this.superClass) {
                 returnStr += indent2Str + "_super.call(this);\n";
             }
+
+            //打印变量列表
+            var variables = this.variableBlock;
+            length = variables.length;
+            for(i=0;i<length;i++){
+                var variable = variables[i];
+                if(variable.defaultValue){
+                    returnStr += indent2Str+variable.toCode() + "\n";
+                }
+            }
+
+            //打印构造函数
             if (this.constructCode) {
                 var codes = this.constructCode.toCode().split("\n");
                 var length = codes.length;
@@ -325,6 +366,32 @@ module lark.player {
         }
     }
 
+    export class CpVariable extends CodeBase {
+
+        public constructor(name:string, defaultValue?:string) {
+            super();
+            this.indent = 2;
+            this.name = name;
+            this.defaultValue = defaultValue;
+        }
+
+        /**
+         * 变量名
+         */
+        public name:string;
+        /**
+         * 默认值
+         */
+        public defaultValue:string;
+
+        public toCode():string {
+            if(!this.defaultValue){
+                return "";
+            }
+            return "this."+this.name+ " = " + this.defaultValue+";";
+        }
+    }
+
 
     export class CpState extends CodeBase {
 
@@ -358,7 +425,7 @@ module lark.player {
 
         public toCode():string {
             var indentStr:string = this.getIndent(1);
-            var returnStr:string = "new egret.gui.State (\"" + this.name + "\",\n" + indentStr + "[\n";
+            var returnStr:string = "new lark.gui.State (\"" + this.name + "\",\n" + indentStr + "[\n";
             var index:number = 0;
             var isFirst:boolean = true;
             var overrides:Array<any> = this.addItems.concat(this.setProperty);
@@ -382,7 +449,7 @@ module lark.player {
         }
     }
 
-    class CpAddItems extends CodeBase {
+    export class CpAddItems extends CodeBase {
         public constructor(target:string, propertyName:string, position:string, relativeTo:string) {
             super();
             this.target = target;
@@ -413,12 +480,12 @@ module lark.player {
 
         public toCode():string {
             var indentStr:string = this.getIndent(1);
-            var returnStr:string = "new egret.gui.AddItems(\"" + this.target + "\",\"" + this.propertyName + "\",\"" + this.position + "\",\"" + this.relativeTo + "\")";
+            var returnStr:string = "new lark.gui.AddItems(\"" + this.target + "\",\"" + this.propertyName + "\",\"" + this.position + "\",\"" + this.relativeTo + "\")";
             return returnStr;
         }
     }
 
-    class CpSetProperty extends CodeBase {
+    export class CpSetProperty extends CodeBase {
         public constructor(target:string, name:string, value:string) {
             super();
             this.target = target;
@@ -443,35 +510,7 @@ module lark.player {
 
         public toCode():string {
             var indentStr:string = this.getIndent(1);
-            return "new egret.gui.SetProperty(\"" + this.target + "\",\"" + this.name + "\"," + this.value + ")";
-        }
-    }
-    class CpSetStyle extends CodeBase {
-        public constructor(target:string, name:string, value:string) {
-            super();
-            this.target = target;
-            this.name = name;
-            this.value = value;
-        }
-
-        /**
-         * 要修改的属性名
-         */
-        public name:string;
-
-        /**
-         * 目标实例名
-         */
-        public target:string;
-
-        /**
-         * 属性值
-         */
-        public value:string;
-
-        public toCode():string {
-            var indentStr:string = this.getIndent(1);
-            return "new egret.gui.SetStyle(\"" + this.target + "\",\"" + this.name + "\"," + this.value + ")";
+            return "new lark.gui.SetProperty(\"" + this.target + "\",\"" + this.name + "\"," + this.value + ")";
         }
     }
 

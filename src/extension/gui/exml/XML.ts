@@ -39,7 +39,7 @@ module lark.player {
         /**
          * 节点所属的父级节点
          */
-        parentNode: XML;
+        parent: XML;
     }
 
     /**
@@ -47,30 +47,17 @@ module lark.player {
      */
     export interface XML extends XMLNode {
         /**
-         * 读取一个属性值
-         * @param name 要读取的属性名称
-         * @returns 返回属性对应的值，若属性不存在返回""。
-         */
-        getAttribute(name:string):string;
-
-        /**
-         * 设置一个属性值
-         * @param name 要设置的属性名称
-         * @param value 要设置的值
-         */
-        setAttribute(name:string, value:string);
-        /**
          * 当前节点上的属性列表
          */
-        attributes:XMLAttribute[];
+        attributes:any;
         /**
          * 当前节点的子节点列表
          */
-        childNodes:XMLNode[];
+        children:XMLNode[];
         /**
-         * 节点完整名称。例如节点 <e:Button/> 的 nodeName 为：e:Button
+         * 节点完整名称。例如节点 <e:Button/> 的 name 为：e:Button
          */
-        nodeName:string;
+        name:string;
         /**
          * 节点的命名空间前缀。例如节点 <e:Button/> 的 prefix 为：e
          */
@@ -80,9 +67,9 @@ module lark.player {
          */
         localName:string;
         /**
-         * 节点的命名空间地址。例如节点 <e:Skin xmlns:e="http://ns.egret-labs.org/egret"/> 的 namespaceURI 为： http://ns.egret-labs.org/egret
+         * 节点的命名空间地址。例如节点 <e:Skin xmlns:e="http://ns.egret-labs.org/egret"/> 的 namespace 为： http://ns.egret-labs.org/egret
          */
-        namespaceURI: string;
+        namespace: string;
     }
 
     /**
@@ -92,20 +79,7 @@ module lark.player {
         /**
          * 文本内容
          */
-        textContent:string;
-    }
-    /**
-     * XML属性节点
-     */
-    export interface XMLAttribute extends XMLNode {
-        /**
-         * 属性名称
-         */
-        name: string;
-        /**
-         * 属性值
-         */
-        value:string;
+        text:string;
     }
 
     export var XML:{

@@ -42,7 +42,7 @@ module lark {
 
         private onExmlLoaded(event:Event):void {
             var request:HttpRequest = event.target;
-            var xml = lark.gui.EXML.parse(request.response);
+            var xml = lark.gui.EXML.parse(request.response,"lark.gui.AlertSkin");
             this.label.text = request.response;
         }
 

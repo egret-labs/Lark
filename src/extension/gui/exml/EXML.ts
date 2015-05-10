@@ -30,7 +30,7 @@
 module lark.gui {
 
     var parser = new player.EXMLParser();
-    var config = new player.EXMLConfig();
+
     /**
      * EXML皮肤文件运行时解析工具
      */
@@ -39,12 +39,20 @@ module lark.gui {
         /**
          * 解析一个EXML文件的文本内容为一个皮肤类。
          * @param text 要解析的EXML文件内容
-         * @param className 皮肤对应的类名,例如 lark.gui.ButtonSkin。传入此参数，在解析完成后将会自动注册皮肤类定义到全局，
-         * 之后您可以通过lark.getDefinitionByName()方法获取这个皮肤的类定义。若不传入将不注册类定义。
+         * @param className 皮肤对应的完整类名，包括模块名称。例如 lark.gui.ButtonSkin。解析完成后皮肤类定义会自动缓存到全局，
+         * 若指定的类已经存在，将会覆盖已有的类定义。解析后您也可以通过lark.getDefinitionByName(className)方法获取这个皮肤的类定义。
          */
-        public static parse(text:string, className?:string):Function {
+        public static parse(text:string, className:string):Function {
+            if (DEBUG) {
+                if(!text){
+                    $error(1003, "text");
+                }
+                if(!className){
+                    $error(1003, "className");
+                }
+            }
             var xml = player.XML.parse(text);
-            var clazz = parser.parse(xml);
+            var clazz = parser.parse(xml,className);
             if (className && clazz) {
                 var paths = className.split(".");
                 var length = paths.length;
@@ -58,10 +66,6 @@ module lark.gui {
             return clazz;
         }
 
-    }
-
-    if (DEBUG) {
-        gui.EXML["config"] = config;
     }
 
 }

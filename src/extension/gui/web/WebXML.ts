@@ -34,9 +34,9 @@ module lark.web {
      */
     export class XMLNode {
 
-        public constructor(nodeType:number, parentNode:XML) {
+        public constructor(nodeType:number, parent:XML) {
             this.nodeType = nodeType;
-            this.parentNode = parentNode;
+            this.parent = parent;
         }
 
         /**
@@ -46,7 +46,7 @@ module lark.web {
         /**
          * 节点所属的父级节点
          */
-        public parentNode:XML;
+        public parent:XML;
     }
 
     /**
@@ -54,63 +54,26 @@ module lark.web {
      */
     export class XML extends XMLNode {
 
-        public constructor(localName:string, parentNode:XML, prefix:string, namespaceURI:string, nodeName:string) {
-            super(1, parentNode);
+        public constructor(localName:string, parent:XML, prefix:string, namespace:string, name:string) {
+            super(1, parent);
             this.localName = localName;
             this.prefix = prefix;
-            this.namespaceURI = namespaceURI;
-            this.nodeName = nodeName;
-        }
-
-        /**
-         * 读取一个属性值
-         * @param name 要读取的属性名称
-         * @returns 返回属性对应的值，若属性不存在返回""。
-         */
-        public getAttribute(name:string):string {
-            var node = this.findAttribute(name);
-            return node?node.value:"";
-        }
-
-        /**
-         * 设置一个属性值
-         * @param name 要设置的属性名称
-         * @param value 要设置的值
-         */
-        public setAttribute(name:string,value:string) {
-            var node = this.findAttribute(name);
-            if(node){
-                node.value = value;
-            }
-            else{
-                this.attributes.push(new XMLAttribute(name,value,this));
-            }
-        }
-
-        private findAttribute(name:string):XMLAttribute{
-            var list = this.attributes;
-            var length = list.length;
-            for(var i=0;i<length;i++){
-                var node = list[i];
-                if(node.name==name){
-                    return node;
-                }
-            }
-            return null;
+            this.namespace = namespace;
+            this.name = name;
         }
 
         /**
          * 当前节点上的属性列表
          */
-        public attributes:XMLAttribute[] = [];
+        public attributes:{[key:string]:string} = {};
         /**
          * 当前节点的子节点列表
          */
-        public childNodes:XMLNode[] = [];
+        public children:XMLNode[] = [];
         /**
-         * 节点完整名称。例如节点 <e:Button/> 的 nodeName 为：e:Button
+         * 节点完整名称。例如节点 <e:Button/> 的 name 为：e:Button
          */
-        public nodeName:string;
+        public name:string;
         /**
          * 节点的命名空间前缀。例如节点 <e:Button/> 的 prefix 为：e
          */
@@ -120,45 +83,24 @@ module lark.web {
          */
         public localName:string;
         /**
-         * 节点的命名空间地址。例如节点 <e:Skin xmlns:e="http://ns.egret-labs.org/egret"/> 的 namespaceURI 为： http://ns.egret-labs.org/egret
+         * 节点的命名空间地址。例如节点 <e:Skin xmlns:e="http://ns.egret-labs.org/egret"/> 的 namespace 为： http://ns.egret-labs.org/egret
          */
-        public namespaceURI:string;
+        public namespace:string;
     }
 
     /**
      * XML文本节点
      */
     export class XMLText extends XMLNode {
-        public  constructor(textContent:string, parentNode:XML) {
-            super(3, parentNode);
-            this.textContent = textContent;
+        public  constructor(text:string, parent:XML) {
+            super(3, parent);
+            this.text = text;
         }
 
         /**
          * 文本内容
          */
-        public textContent:string;
-    }
-
-    /**
-     * XML属性节点
-     */
-    export class XMLAttribute extends XMLNode {
-
-        public constructor(name:string, value:string, parentNode:XML) {
-            super(2, parentNode);
-            this.name = name;
-            this.value = value;
-        }
-
-        /**
-         * 属性名称
-         */
-        public name:string;
-        /**
-         * 属性值
-         */
-        public value:string;
+        public text:string;
     }
 
 
@@ -183,8 +125,8 @@ module lark.web {
     /**
      * 解析一个节点
      */
-    function parseNode(node:Node, parentNode:XML):XML {
-        var xml = new XML(node.localName, parentNode, node.prefix, node.namespaceURI, node.nodeName);
+    function parseNode(node:Node, parent:XML):XML {
+        var xml = new XML(node.localName, parent, node.prefix, node.namespaceURI, node.nodeName);
         var nodeAttributes = node.attributes;
         var attributes = xml.attributes;
         var length = nodeAttributes.length;
@@ -194,11 +136,11 @@ module lark.web {
             if (name.indexOf("xmlns:") === 0) {
                 continue;
             }
-            attributes.push(new XMLAttribute(name, attributeNode.value, xml));
+            attributes[name] = attributeNode.value;
         }
         var childNodes = node.childNodes;
         length = childNodes.length;
-        var children = xml.childNodes;
+        var children = xml.children;
         for (i = 0; i < length; i++) {
             var childNode = childNodes[i];
             var nodeType = childNode.nodeType;
