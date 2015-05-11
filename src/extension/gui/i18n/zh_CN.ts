@@ -34,7 +34,7 @@ module lark.gui {
 
     //EXML报错信息
     locale_strings[2001] = "{0}: 找不到EXML文件";
-    locale_strings[2002] = "{0}: 不是有效的XML文件";
+    locale_strings[2002] = "{0}: 不是有效的XML文件:\n{1}";
     locale_strings[2003] = "{0}: 无法找到节点所对应的类定义\n{1}";
     locale_strings[2004] = "{0}: 节点不能含有同名的id属性\n{1}";
     locale_strings[2005] = "{0}: 节点上不存在名为'{1}'的属性或样式名:\n{2}";

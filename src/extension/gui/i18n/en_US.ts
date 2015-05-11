@@ -32,7 +32,7 @@ module lark.gui {
     var locale_strings = $locale_strings;
 
     locale_strings[2001] = "{0}: EXML file can't be found ";
-    locale_strings[2002] = "{0}: invalid XML file";
+    locale_strings[2002] = "{0}: invalid XML file:\n{1}";
     locale_strings[2003] = "{0}: the class definitions corresponding to nodes can't be found  \n {1}";
     locale_strings[2004] = "{0}: nodes cannot contain id property with the same name \n {1}";
     locale_strings[2005] = "{0}: property with the name of '{1}' or style name does not exist on the node: \n {2}";

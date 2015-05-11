@@ -44,7 +44,7 @@ module lark {
 
         private onExmlLoaded(event:Event):void {
             var request:HttpRequest = event.target;
-            var skin = lark.gui.EXML.parse(request.response,"lark.gui.AlertSkin");
+                var skin = lark.gui.EXML.parse(request.response,"lark.gui.AlertSkin");
             var component = new lark.gui.SkinnableComponent();
             component.skinName = skin;
             this.addChild(component);

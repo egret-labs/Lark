@@ -131,12 +131,12 @@ module lark.player {
             var code = this.currentClass.toCode();
             this.currentClass = null;
             try {
-                if (DEBUG) {
-                    log(code);
-                }
                 var result = eval(code);
             }
             catch (e) {
+                if (DEBUG) {
+                    log(code);
+                }
                 return null;
             }
             return result;
