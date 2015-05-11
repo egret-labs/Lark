@@ -59,6 +59,15 @@ module lark.gui {
          */
         Label,
         /**
+         * Image 控件允许您在运行时显示 JPEG、PNG 等图片文件文件。Image 继承至 Bitmap，因此您可以直接对其 bitmapData 属性，
+         * 赋值从外部加载得到的位图数据以显示对应图片。同时，Image 还提供了更加方便的 source 属性，source 属性可以接受一个网络图片url作为值，
+         * 赋值为url后，它内部会自动去加载并显示图片。并且您同样也可以直接把 BitmapData 对象赋值给 source 属性以显示图片。
+         * Image 控件可以直接替代 Bitmap 在显示列表中使用。
+         *
+         * @event COMPLETE lark.Event 当图片加载完成后调度
+         */
+        Image,
+        /**
          * 含有视图状态功能的皮肤基类。
          */
         Skin,

@@ -35,7 +35,6 @@ module lark {
             super();
             this.width = 1800;
             this.height  = 800;
-            this.initUI();
             var request = new HttpRequest();
             request.once(Event.COMPLETE, this.onExmlLoaded, this);
             request.open("tests/AlertSkin.exml");
@@ -51,15 +50,49 @@ module lark {
             component.horizontalCenter = 0;
             component.verticalCenter = 0;
             component.height = 300;
+            component.isType(lark.gui.Types.UIComponent);
+
+            var image = new lark.gui.Image("image/test.png");
+            this.addChild(image);
+            image.horizontalCenter = 0;
+            image.verticalCenter = 0;
+            this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
-        private label:gui.Label;
+        private touchTarget:lark.gui.UIComponent;
+        private offsetX:number = 0;
+        private offsetY:number = 0;
 
-        private initUI():void {
-            var label = new gui.Label();
-            this.label = label;
-            this.addChild(label);
+        private onTouchBegin(event:TouchEvent):void {
+            var target = <lark.gui.UIComponent>event.target;
+            if (target.isType(Types.Stage)) {
+                return;
+            }
+            this.touchTarget = target;
+            target.includeInLayout = false;
+            var pos = target.parent.localToGlobal(target.x, target.y);
+            this.addChild(target);
+            pos = target.parent.globalToLocal(pos.x, pos.y);
+            target.x = pos.x;
+            target.y = pos.y;
+            this.offsetX = target.x - event.stageX;
+            this.offsetY = target.y - event.stageY;
+            this.stage.on(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            this.stage.on(TouchEvent.TOUCH_END, this.onTouchEnd, this);
+            event.updateAfterEvent();
         }
 
+        private onTouchMove(event:TouchEvent):void {
+            this.touchTarget.x = this.offsetX + event.stageX;
+            this.touchTarget.y = this.offsetY + event.stageY;
+            event.updateAfterEvent();
+        }
+
+        private onTouchEnd(event:TouchEvent):void {
+            this.touchTarget = null;
+            this.stage.removeListener(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            this.stage.removeListener(TouchEvent.TOUCH_END, this.onTouchEnd, this);
+            event.updateAfterEvent();
+        }
     }
 }

@@ -57,12 +57,19 @@ module lark {
         }
 
         public set bitmapData(value:BitmapData){
+            this.$setBitmapData(value);
+        }
+
+        $setBitmapData(value:BitmapData):void{
+            if(value===this.$bitmapData){
+                return;
+            }
             this.$bitmapData = value;
             this.$invalidateContentBounds();
         }
 
         $measureContentBounds(bounds:Rectangle):void {
-            var bitmapData:BitmapData = this.$bitmapData;
+            var bitmapData = this.$bitmapData;
             if(bitmapData){
                 bounds.setTo(0,0,bitmapData.width,bitmapData.height);
             }

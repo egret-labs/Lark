@@ -40,6 +40,11 @@ module lark.gui {
         // protected createChildren():void{}
 
         ///**
+        // * 子项创建完成。
+        // */
+        // protected childrenCreated():void{}
+
+        ///**
         // * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
         // */
         // protected commitProperties():void{}
@@ -283,6 +288,7 @@ module lark.player {
             ]);
             this.$displayObjectFlags |= player.UIFlags.UIComponentInitFlags;
             this.createChildren();
+            this.childrenCreated();
         }
 
         /**
@@ -290,6 +296,13 @@ module lark.player {
          * 请务必调用super.createChildren()以完成父类组件的初始化
          */
         protected createChildren():void {
+
+        }
+
+        /**
+         * 子项创建完成。
+         */
+        protected childrenCreated():void{
 
         }
 
