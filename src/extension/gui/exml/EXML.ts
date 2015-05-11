@@ -55,7 +55,9 @@ module lark.gui {
                 var xml = player.XML.parse(text);
             }
             catch(e){
-                $error(2002,className,text+"\n"+e.message);
+                if(DEBUG){
+                    $error(2002,className,text+"\n"+e.message);
+                }
             }
             var clazz = parser.parse(xml,className);
             if (className && clazz) {
