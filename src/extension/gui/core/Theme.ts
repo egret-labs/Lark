@@ -90,5 +90,5 @@ module lark.gui {
         }
     }
 
-    registerType(Theme,Types.Theme);
+    registerClass(Theme,Types.Theme);
 }

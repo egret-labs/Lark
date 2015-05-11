@@ -42,5 +42,6 @@ module lark {
     locale_strings[1009] = "The Stage class does not implement this property or method.";
     locale_strings[1010] = "{0} is readonly";
     locale_strings[1011] = "Stream Error. URL: {0}";
+    locale_strings[1012] = "The type of parameter {0} must be Class.";
 
 }

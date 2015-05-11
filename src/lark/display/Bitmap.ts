@@ -79,5 +79,5 @@ module lark {
         }
     }
 
-    registerType(Bitmap,Types.Bitmap);
+    registerClass(Bitmap,Types.Bitmap);
 }

@@ -448,7 +448,7 @@ module lark {
         }
     }
 
-    registerType(Graphics,Types.Graphics);
+    registerClass(Graphics,Types.Graphics);
 
     function mapGraphicsFunction(context:player.RenderContext):any {
         var map = context["graphicsMap"] = {};

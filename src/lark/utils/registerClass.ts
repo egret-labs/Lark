@@ -46,10 +46,13 @@ module lark {
      * @param classFlags 要注册的类对应的枚举值。
      * @param interfaceFlags 要注册的类所实现的接口的枚举值列表。
      */
-    export function registerType(classDefinition:any,classFlag:number,interfaceFlags?:number[]):void{
+    export function registerClass(classDefinition:any,classFlag:number,interfaceFlags?:number[]):void{
         if (DEBUG) {
             if(!classDefinition){
                 $error(1003, "classDefinition");
+            }
+            if(!classDefinition.prototype){
+                $error(1012,"classDefinition")
             }
             if(classFlag===void 0){
                 $error(1003, "classFlag");

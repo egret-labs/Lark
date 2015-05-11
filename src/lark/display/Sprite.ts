@@ -551,5 +551,5 @@ module lark {
         }
 
     }
-    registerType(Sprite,Types.Sprite,[Types.DisplayObjectContainer]);
+    registerClass(Sprite,Types.Sprite,[Types.DisplayObjectContainer]);
 }

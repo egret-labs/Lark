@@ -62,5 +62,5 @@ module lark {
             this.$graphics.$render(context);
         }
     }
-    registerType(Shape,Types.Shape);
+    registerClass(Shape,Types.Shape);
 }

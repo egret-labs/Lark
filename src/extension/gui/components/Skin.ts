@@ -72,5 +72,5 @@ module lark.gui {
 
     }
 
-    registerType(Skin,Types.Skin);
+    registerClass(Skin,Types.Skin);
 }

@@ -125,7 +125,7 @@ module lark {
 
     }
 
-    registerType(Point,Types.Point);
+    registerClass(Point,Types.Point);
 
     /**
      * 仅供引擎内复用，要防止暴露引用到外部。

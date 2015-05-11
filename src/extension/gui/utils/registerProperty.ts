@@ -33,16 +33,36 @@ module lark.gui {
      * 为一个类定义注册运行时属性类型，以便运行时的EXML文件解析过程能获取准确的属性类型。大多数情况下，您都不需要手动调用此方法显式注册属性类型。
      * 仅当您有一个自定义的GUI组件，需要在EXML中用标签描述时可能需要显式注册，但以下情况除外：
      * 当属性类型为基本数据类型：boolean,number,string,Array这四种其中之一时，您只需要为自定义的属性赋值上正确的初始值，
-     * 运行时EXML解析器就能通过初始值自动分析出正确的属性类型。若您出现特殊原因无法为属性赋值上正确的初始值时,可以手动调用此方法显式注册属性类型。
+     * 运行时EXML解析器就能通过初始值自动分析出正确的属性类型。
+     * 若您无法为属性赋值上正确的初始值时(有初始值，比如null),运行时EXML解析器会把此属性当做string来处理，若完全没有初始值，将会报错找不到节点属性，
+     * 这种情况下可以手动调用此方法显式注册属性类型。
      *
      * @param classDefinition 要注册的类定义。
      * @param property 要注册的属性
-     * @param type 要注册的类型
+     * @param type 要注册的类型,例如：“boolean","number","string","Array","lark.gui.IFactory","lark.Rectangle"
+     * @param asDefault 是否将此属性注册为组件的默认属性,一个组件只可以设置一个默认属性。注册了组件默认属性后，在EXML中可以使用省略属性节点的写法，
+     * 例如：
+     *
+     * <e:Scroller>
+     *     <e:viewport>
+     *         <e:Group/>
+     *     </e:viewport>
+     * </e:Scroller>
+     *
+     * 因为 viewport 已经注册为 Scroller 的默认属性，上面的例子可以等效为：
+     *
+     * <e:Scroller>
+     *     <e:Group/>
+     * </e:Scroller>
+     *
      */
-    export function setPropertyType(classDefinition:any,property:string,type:string):void{
+    export function registerProperty(classDefinition:any,property:string,type:string,asDefault?:boolean):void{
         if (DEBUG) {
             if(!classDefinition){
                 $error(1003, "classDefinition");
+            }
+            if(!classDefinition.prototype){
+                $error(1012,"classDefinition")
             }
             if(!property){
                 $error(1003, "property");
@@ -54,5 +74,8 @@ module lark.gui {
         var prototype: any = classDefinition.prototype;
         prototype.__meta__ = prototype.__meta__||{};
         prototype.__meta__[property] = type;
+        if(asDefault){
+            prototype.__defaultProperty__ = property;
+        }
     }
 }

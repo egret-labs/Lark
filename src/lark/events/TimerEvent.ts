@@ -75,5 +75,5 @@ module lark {
         }
     }
 
-    registerType(TimerEvent,Types.TimerEvent);
+    registerClass(TimerEvent,Types.TimerEvent);
 }

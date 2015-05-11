@@ -170,5 +170,5 @@ module lark {
         }
     }
 
-    registerType(TouchEvent,Types.TouchEvent);
+    registerClass(TouchEvent,Types.TouchEvent);
 }

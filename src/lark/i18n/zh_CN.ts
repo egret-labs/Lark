@@ -43,4 +43,5 @@ module lark {
     locale_strings[1009] = "Stage 类不实现此属性或方法。";
     locale_strings[1010] = "{0} 是只读的";
     locale_strings[1011] = "流错误。URL: {0}";
+    locale_strings[1012] = "参数 {0} 的类型必须为 Class。";
 }

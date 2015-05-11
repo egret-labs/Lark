@@ -271,5 +271,5 @@ module lark {
 
     }
 
-    registerType(Event,Types.Event);
+    registerClass(Event,Types.Event);
 }

@@ -94,6 +94,6 @@ module lark.web {
             return image;
         }
     }
-    registerType(WebImageLoader, Types.ImageLoader);
+    registerClass(WebImageLoader, Types.ImageLoader);
     ImageLoader = WebImageLoader;
 }

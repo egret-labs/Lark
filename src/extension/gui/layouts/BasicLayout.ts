@@ -84,7 +84,7 @@ module lark.gui {
             configurable: true
         });
     }
-    registerType(BasicLayout, Types.BasicLayout);
+    registerClass(BasicLayout, Types.BasicLayout);
 }
 
 module lark.player {
