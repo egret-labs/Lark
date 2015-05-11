@@ -97,7 +97,7 @@ module lark.web {
         /**
          * 更新播放器视口尺寸
          */
-        public updateScreenSize(player:lark.player.Player, webTouch:WebTouchHandler):void {
+        public updateScreenSize(player:lark.player.Player, webTouch:WebTouchHandler,webText:WebTextLayer):void {
             var screenRect = this.container.getBoundingClientRect();
             var stageSize = lark.player.screenAdapter.calculateStageSize(this.scaleMode,
                 screenRect.width, screenRect.height, this.contentWidth, this.contentHeight);
@@ -115,7 +115,10 @@ module lark.web {
             canvas.style.width = displayWidth + "px";
             canvas.style.height = displayHeight + "px";
             player.updateStageSize(stageWidth, stageHeight);
-            webTouch.updateScaleMode(displayWidth / stageWidth, displayHeight / stageHeight);
+            var scalex = displayWidth / stageWidth,
+                scaley = displayHeight / stageHeight;
+            webTouch.updateScaleMode(scalex,scaley);
+            webText.updateScaleMode(scalex,scaley);
         }
     }
 }
