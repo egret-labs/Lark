@@ -134,12 +134,12 @@ module lark.player {
                 if (DEBUG) {
                     log(code);
                 }
-                eval(code);
+                var result = eval(code);
             }
             catch (e) {
                 return null;
             }
-            return this[this.currentClass.className];
+            return result;
         }
 
         /**
@@ -252,7 +252,10 @@ module lark.player {
             if (attributes["includeIn"] || attributes["$excludeFrom"]) {
                 return true;
             }
-            for (var name in attributes) {
+            var keys = Object.keys(attributes);
+            var length = keys.length;
+            for(var i=0;i<length;i++){
+                var name = keys[i];
                 if (name.indexOf(".") != -1) {
                     return true;
                 }
@@ -394,20 +397,17 @@ module lark.player {
          * 将节点属性赋值语句添加到代码块
          */
         private addAttributesToCodeBlock(cb:CpCodeBlock, varName:string, node:XML):void {
-            var keyList:string[] = [];
             var key:string;
             var value:string;
             var attributes = node.attributes;
-            for (key in attributes) {
-                if (!this.isNormalKey(key)) {
-                    continue;
-                }
-                keyList.push(key);
-            }
+            var keyList:string[] = Object.keys(attributes);
             keyList.sort();//排序一下防止出现随机顺序
             var length = keyList.length;
             for (var i = 0; i < length; i++) {
                 key = keyList[i];
+                if (!this.isNormalKey(key)) {
+                    continue;
+                }
                 value = attributes[key];
                 key = this.formatKey(key, value);
                 value = this.formatValue(key, value, node);
@@ -594,7 +594,7 @@ module lark.player {
             if(index!=-1){
                 name = name.substr(0,index);
             }
-            return exmlConfig.hasProperty(name,className);
+            return !!exmlConfig.getPropertyType(name,className);
         }
 
 
@@ -774,9 +774,12 @@ module lark.player {
             this.createStates(this.currentXML);
             var states:CpState[];
             var node = this.currentXML;
-            var attributes = node.attributes;
             var nodeClassName = this.getClassNameOfNode(node);
-            for (var itemName in attributes) {
+            var attributes = node.attributes;
+            var keys = Object.keys(attributes);
+            var keysLength = keys.length;
+            for(var m=0;m<keysLength;m++){
+                var itemName = keys[m];
                 var value:string = attributes[itemName];
                 var index = itemName.indexOf(".");
                 if (index != -1) {
@@ -983,7 +986,7 @@ module lark.player {
 
                             var stateLength = excludeNames.length;
                             for (var j = 0; j < stateLength; j++) {
-                                var name = excludeNames[j];
+                                var name:string = excludeNames[j];
                                 this.getStateByName(name, node);//检查exlcudeFrom是否含有未定义的视图状态名
                             }
                             stateLength = this.stateCode.length;
@@ -1011,8 +1014,10 @@ module lark.player {
                         }
                     }
 
-                    var name;
-                    for (name in attributes) {
+                    var names = Object.keys(attributes);
+                    var namesLength = names.length;
+                    for(var m=0;m<namesLength;m++){
+                        name = names[m];
                         var value:string = attributes[name];
                         var index:number = name.indexOf(".");
                         if (index != -1) {
@@ -1190,22 +1195,23 @@ module lark.player {
             }
         }
 
-        function toXMLString(node:any):string {
+        function toXMLString(node:XML):string {
             if (!node) {
                 return "";
             }
             var str:string = "  at <" + node.name;
-            for (var key in node) {
-                if (key.charAt(0) == "$") {
-                    var value:string = node[key];
-                    key = key.substring(1);
-                    if (key == "id" && value.substring(0, 2) == "__") {
-                        continue;
-                    }
-                    str += " " + key + "=\"" + value + "\"";
+            var attributes = node.attributes;
+            var keys = Object.keys(attributes);
+            var length = keys.length;
+            for(var i=0;i<length;i++){
+                var key = keys[i];
+                var value:string = attributes[key];
+                if (key == "id" && value.substring(0, 2) == "__") {
+                    continue;
                 }
+                str += " " + key + "=\"" + value + "\"";
             }
-            if (node.isSelfClosing) {
+            if (node.children.length==0) {
                 str += "/>";
             }
             else {

@@ -60,32 +60,48 @@ module lark.player {
             if (!prototype || prototype.hasOwnProperty("__hashCode__")) {
                 return null;
             }
-            prototype.__hashCode__ = hashCount++;
-            var info = {};
-            this.properties[prototype.__hashCode__] = info;
             var superClazz = Object.getPrototypeOf(prototype);
+            var info = {};
             if (superClazz) {
-                this.describeSuper(superClazz, instance);
-                info["super"] = superClazz.__hashCode__;
+                var superInfo = this.describeSuper(superClazz, instance);
+                if (superInfo) {
+                    function factory():void {
+                    };
+                    factory.prototype = superInfo;
+                    info = new factory();
+                }
             }
+            prototype.__hashCode__ = hashCount++;
+            this.properties[prototype.__hashCode__] = info;
             this.updateInfo(info, instance, Object.keys(prototype));
             return info;
         }
 
         private updateInfo(info:any, instance:any, keys:string[]):void {
             var length = keys.length;
+            var meta = instance.__meta__;
             for (var i = 0; i < length; i++) {
                 var key = keys[i];
-                if(isArray(instance[key])){
-                    type = "Array";
-                }
-                else{
-                    var type = typeof instance[key];
-                }
-                if (type == "function" || key.charAt(0) == "_" || key.charAt(0) == "$") {
+                if(key=="constructor"||key.charAt(0) == "_" || key.charAt(0) == "$"){
                     continue;
                 }
-                info[key] = type;
+                var resultType:string;
+                if (meta && meta[key]) {
+                    resultType = meta[key];
+                }
+                else if (isArray(instance[key])) {
+                    resultType = "Array";
+                }
+                else {
+                    resultType = typeof instance[key];
+                    if (resultType == "function") {
+                        continue;
+                    }
+                    if (basicTypes.indexOf(resultType) == -1) {
+                        resultType = "any";
+                    }
+                }
+                info[key] = resultType;
             }
         }
 
@@ -103,12 +119,12 @@ module lark.player {
 
             }
             else if (!ns || ns == NS_E) {
-                name = GUI_MODULE + name;
+                name = GUI_MODULE + id;
             }
             else {
                 name = ns.substring(0, ns.length - 1) + id
             }
-            if (!getDefinitionByName(name)) {
+            if (!getPrototypeOf(name)) {
                 name = "";
             }
             return name;
@@ -122,29 +138,38 @@ module lark.player {
          */
         public getDefaultPropById(id:string, ns:string):string {
             var className:string = this.getClassNameById(id, ns);
-            return "";
+            var prototype = getPrototypeOf(className);
+            if (!prototype) {
+                name = "";
+            }
+            return prototype.__defaultProperty__;
         }
 
         /**
          * 获取指定属性的类型,返回基本数据类型："boolean","string","number","any"。
-         * @param prop 属性名
+         * @param property 属性名
          * @param className 要查询的完整类名
          */
-        public getPropertyType(prop:string, className:string):string {
+        public getPropertyType(property:string, className:string):string {
             if (className == "Object") {
                 return "any";
             }
-            return "";
-        }
-
-        /**
-         * 检查一个类上是否含有指定的属性
-         * @param prop 要检查的属性名
-         * @param className 要检查的类名，包含模块名
-         * @returns 若含有返回true。
-         */
-        public hasProperty(prop:string, className:string):boolean {
-            return true;
+            var resultType:string = "";
+            var prototype = getPrototypeOf(className);
+            if (prototype) {
+                if (!prototype.hasOwnProperty("__hashCode__")) {
+                    var instance = getInstanceOf(className);
+                    if (!instance) {
+                        return resultType;
+                    }
+                    this.describe(instance);
+                }
+                var info = this.properties[prototype.__hashCode__];
+                if (info) {
+                    resultType = info[property];
+                }
+            }
+            return resultType;
         }
     }
 
@@ -154,4 +179,33 @@ module lark.player {
     function isArray(o:any):boolean {
         return Object.prototype.toString.call(o) === '[object Array]';
     }
+
+    /**
+     * 获取一个类名对应的prototype引用
+     */
+    function getPrototypeOf(className:string):any {
+        var clazz = getDefinitionByName(className);
+        if (!clazz) {
+            return null;
+        }
+        return clazz.prototype;
+    }
+
+    /**
+     * 创建一个类名对应的实例
+     */
+    function getInstanceOf(className:string):any {
+        var clazz = getDefinitionByName(className);
+        try {
+            var instance = new clazz();
+        }
+        catch (e) {
+            if (DEBUG) {
+                $warn(2104, className);
+            }
+            return null;
+        }
+        return instance;
+    }
+
 }

@@ -137,7 +137,7 @@ module lark.player {
             var indent2Str = this.getIndent(indent + 2);
 
             //打印类起始块
-            var returnStr = indentStr + "var " + this.className + " = (function (";
+            var returnStr = indentStr + "(function (";
             if (this.superClass) {
                 returnStr += "_super) {\n" + indent1Str + "__extends(" + this.className + ", _super);\n";
             }
@@ -185,10 +185,10 @@ module lark.player {
             //打印类结尾
             returnStr += indent1Str + "return " + this.className + ";\n" + indentStr;
             if (this.superClass) {
-                returnStr += "})();";
+                returnStr += "})(" + this.superClass + ");";
             }
             else {
-                returnStr += "})(" + this.superClass + ");";
+                returnStr += "})();";
             }
             return returnStr;
         }
@@ -338,7 +338,7 @@ module lark.player {
             var returnStr = indentStr;
             if (this.isGet) {
                 codeIndent = this.getIndent(this.indent + 2);
-                returnStr += 'Object.defineProperty(__proto, "skinParts", {\n';
+                returnStr += 'Object.defineProperty(_proto, "skinParts", {\n';
                 returnStr += indent1Str + "get: function () {\n";
             }
             else {

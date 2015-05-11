@@ -73,4 +73,5 @@ module lark.gui {
     }
 
     registerClass(Skin,Types.Skin);
+    registerProperty(Skin,"elementsContent","Array",true);
 }
