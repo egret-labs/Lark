@@ -33,6 +33,8 @@ module lark {
 
         public constructor() {
             super();
+            this.width = 1800;
+            this.height  = 800;
             this.initUI();
             var request = new HttpRequest();
             request.once(Event.COMPLETE, this.onExmlLoaded, this);
@@ -42,8 +44,13 @@ module lark {
 
         private onExmlLoaded(event:Event):void {
             var request:HttpRequest = event.target;
-            var xml = lark.gui.EXML.parse(request.response,"lark.gui.AlertSkin");
-            this.label.text = request.response;
+            var skin = lark.gui.EXML.parse(request.response,"lark.gui.AlertSkin");
+            var component = new lark.gui.SkinnableComponent();
+            component.skinName = skin;
+            this.addChild(component);
+            component.horizontalCenter = 0;
+            component.verticalCenter = 0;
+            component.height = 300;
         }
 
         private label:gui.Label;

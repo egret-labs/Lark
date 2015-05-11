@@ -100,7 +100,7 @@ module lark.gui {
 
         private _skin:Skin = null;
         /**
-         * 皮肤对象实例。
+         * [只读]皮肤对象实例。
          */
         public get skin():Skin {
             return this._skin;

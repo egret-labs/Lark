@@ -47,42 +47,49 @@ module lark.player {
 
         private properties:any = {};
 
-        public describe(instance:any):void {
-            var prototype = Object.getPrototypeOf(instance);
-            var info = this.describeSuper(prototype, instance);
-            if (!info) {
-                return;
-            }
-            this.updateInfo(info, instance, Object.keys(instance));
-        }
-
-        public describeSuper(prototype:any, instance:any):any {
-            if (!prototype || prototype.hasOwnProperty("__hashCode__")) {
+        private describe(instance:any):any {
+            if (!instance) {
                 return null;
             }
-            var superClazz = Object.getPrototypeOf(prototype);
-            var info = {};
-            if (superClazz) {
-                var superInfo = this.describeSuper(superClazz, instance);
-                if (superInfo) {
-                    function factory():void {
-                    };
-                    factory.prototype = superInfo;
-                    info = new factory();
+            var prototype = Object.getPrototypeOf(instance);
+            if (!prototype) {
+                return null;
+            }
+            var info:any;
+            if(prototype.hasOwnProperty("__hashCode__")){
+
+                info = this.properties[prototype.__hashCode__];
+                if(info){
+                    return info;
                 }
             }
-            prototype.__hashCode__ = hashCount++;
-            this.properties[prototype.__hashCode__] = info;
-            this.updateInfo(info, instance, Object.keys(prototype));
-            return info;
-        }
 
-        private updateInfo(info:any, instance:any, keys:string[]):void {
+            var superProto = Object.getPrototypeOf(prototype);
+            if (!superProto) {
+                return null;
+            }
+
+            var superInstance = getInstanceOf(superProto.constructor);
+            var superInfo = this.describe(superInstance);
+            if (superInfo) {
+                function factory():void {
+                }
+
+                factory.prototype = superInfo;
+                info = new factory();
+            }
+            else {
+                info = {};
+            }
+            if(DEBUG){
+                info.__class__ = prototype.constructor.name;
+            }
+            var keys = Object.keys(prototype).concat(Object.keys(instance));
             var length = keys.length;
             var meta = instance.__meta__;
             for (var i = 0; i < length; i++) {
                 var key = keys[i];
-                if(key=="constructor"||key.charAt(0) == "_" || key.charAt(0) == "$"){
+                if (key == "constructor" || key.charAt(0) == "_" || key.charAt(0) == "$") {
                     continue;
                 }
                 var resultType:string;
@@ -103,6 +110,9 @@ module lark.player {
                 }
                 info[key] = resultType;
             }
+            prototype.__hashCode__ = hashCount++;
+            this.properties[prototype.__hashCode__] = info;
+            return info;
         }
 
         /**
@@ -158,8 +168,12 @@ module lark.player {
             var prototype = getPrototypeOf(className);
             if (prototype) {
                 if (!prototype.hasOwnProperty("__hashCode__")) {
-                    var instance = getInstanceOf(className);
+                    var clazz = getDefinitionByName(className);
+                    var instance = getInstanceOf(clazz);
                     if (!instance) {
+                        if (DEBUG) {
+                            $warn(2104, className);
+                        }
                         return resultType;
                     }
                     this.describe(instance);
@@ -194,15 +208,14 @@ module lark.player {
     /**
      * 创建一个类名对应的实例
      */
-    function getInstanceOf(className:string):any {
-        var clazz = getDefinitionByName(className);
+    function getInstanceOf(clazz:any):any {
+        if (!clazz) {
+            return null;
+        }
         try {
             var instance = new clazz();
         }
         catch (e) {
-            if (DEBUG) {
-                $warn(2104, className);
-            }
             return null;
         }
         return instance;
