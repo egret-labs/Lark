@@ -31,13 +31,13 @@ module lark.web {
 
     var surfacePool:player.Surface[] = [];
 
-    var isQQBrowser = navigator.userAgent.indexOf("QQBrowser")!=-1;
+    var isQQBrowser = navigator.userAgent.indexOf("QQBrowser") != -1;
 
     export class CanvasFactory implements player.SurfaceFactory {
 
-        public constructor(){
+        public constructor() {
             player.sharedRenderContext = this.create().renderContext;
-            for(var i=0;i<3;i++){
+            for (var i = 0; i < 3; i++) {
                 surfacePool.push(this.create());
             }
         }
@@ -47,10 +47,10 @@ module lark.web {
          * @param useOnce 表示对取出实例的使用是一次性的，用完后立即会释放。
          */
         public create(useOnce?:boolean):player.Surface {
-            var surface = (useOnce||surfacePool.length>3)?surfacePool.pop():null;
+            var surface = (useOnce || surfacePool.length > 3) ? surfacePool.pop() : null;
             if (!surface) {
                 var canvas:HTMLCanvasElement = document.createElement("canvas");
-                if (isQQBrowser&&!this.testCanvasValid(canvas)) {
+                if (isQQBrowser && !this.testCanvasValid(canvas)) {
                     warn("failed to create canvas!");
                     return null;
                 }
@@ -64,7 +64,7 @@ module lark.web {
          * @param surface 要释放的Surface实例
          */
         public release(surface:player.Surface):void {
-            if(!surface){
+            if (!surface) {
                 return;
             }
             surface.width = surface.height = 1;
@@ -97,10 +97,83 @@ module lark.web {
             context.drawImage = function (image:HTMLElement, offsetX:number, offsetY:number, width?:number,
                                           height?:number, surfaceOffsetX?:number, surfaceOffsetY?:number,
                                           surfaceImageWidth?:number, surfaceImageHeight?:number):void {
-                if (image["width"] === 0 || image["height"] === 0) {//屏蔽IE下对绘制空canvas的报错。
+                if (!image || image["width"] === 0 || image["height"] === 0) {//屏蔽IE下对绘制空canvas的报错。
                     return;
                 }
                 drawImage.apply(context, arguments);
+            };
+
+            context["drawScale9GridImage"] = function (image:HTMLElement, scale9Grid:Rectangle, offsetX:number, offsetY:number,
+                                                       width?:number, height?:number, surfaceOffsetX?:number, surfaceOffsetY?:number,
+                                                       surfaceImageWidth?:number, surfaceImageHeight?:number):void {
+                if (!image || image["width"] === 0 || image["height"] === 0) {//屏蔽IE下对绘制空canvas的报错。
+                    return;
+                }
+                if (!scale9Grid) {
+                    drawImage.call(context, image, offsetX, offsetY, width, height,
+                        surfaceOffsetX, surfaceOffsetY, surfaceImageWidth, surfaceImageHeight);
+                    return;
+                }
+
+
+                var sourceW0 = scale9Grid.x;
+                var sourceH0 = scale9Grid.y;
+                var sourceW1 = scale9Grid.width;
+                var sourceH1 = scale9Grid.height;
+
+                //防止空心的情况出现。
+                if (sourceH1 == 0) {
+                    sourceH1 = 1;
+                    if (sourceH0 >= height) {
+                        sourceH0--;
+                    }
+                }
+                if (sourceW1 == 0) {
+                    sourceW1 = 1;
+                    if (sourceW0 >= width) {
+                        sourceW0--;
+                    }
+                }
+
+                var sourceX1 = offsetX + sourceW0;
+                var sourceX2 = sourceX1 + sourceW1;
+                var sourceW2 = width - sourceW0 - sourceW1;
+
+                var sourceY1 = offsetY + sourceH0;
+                var sourceY2 = sourceY1 + sourceH1;
+                var sourceH2 = height - sourceH0 - sourceH1;
+
+                var targetX1 = surfaceOffsetX + sourceW0;
+                var targetX2 = surfaceOffsetX + surfaceImageWidth - sourceW2;
+                var targetW1 = surfaceImageWidth - sourceW0 - sourceW2;
+                var targetY1 = surfaceOffsetY + sourceH0;
+                var targetY2 = surfaceOffsetY + surfaceImageHeight - sourceH2;
+                var targetH1 = surfaceImageHeight - sourceH0 - sourceH2;
+
+                //
+                //     x0     x1    x2
+                //  y0 +------+------+------+
+                //     |      |      |      | h0
+                //     |      |      |      |
+                //  y1 +------+------+------+
+                //     |      |      |      | h1
+                //     |      |      |      |
+                //  y2 +------+------+------+
+                //     |      |      |      | h2
+                //     |      |      |      |
+                //     +------+------+------+
+                //        w0     w1     w2
+                //
+
+                drawImage.call(context, image, offsetX, offsetY, sourceW0, sourceH0, surfaceOffsetX, surfaceOffsetY, sourceW0, sourceH0);
+                drawImage.call(context, image, sourceX1, offsetY, sourceW1, sourceH0, targetX1, surfaceOffsetY, targetW1, sourceH0);
+                drawImage.call(context, image, sourceX2, offsetY, sourceW2, sourceH0, targetX2, surfaceOffsetY, sourceW2, sourceH0);
+                drawImage.call(context, image, offsetX, sourceY1, sourceW0, sourceH1, surfaceOffsetX, targetY1, sourceW0, targetH1);
+                drawImage.call(context, image, sourceX1, sourceY1, sourceW1, sourceH1, targetX1, targetY1, targetW1, targetH1);
+                drawImage.call(context, image, sourceX2, sourceY1, sourceW2, sourceH1, targetX2, targetY1, sourceW2, targetH1);
+                drawImage.call(context, image, offsetX, sourceY2, sourceW0, sourceH2, surfaceOffsetX, targetY2, sourceW0, sourceH2);
+                drawImage.call(context, image, sourceX1, sourceY2, sourceW1, sourceH2, targetX1, targetY2, targetW1, sourceH2);
+                drawImage.call(context, image, sourceX2, sourceY2, sourceW2, sourceH2, targetX2, targetY2, sourceW2, sourceH2);
             };
 
             if (!context.hasOwnProperty("imageSmoothingEnabled")) {
@@ -122,5 +195,6 @@ module lark.web {
             }
             return <player.Surface><any>canvas;
         }
+
     }
 }

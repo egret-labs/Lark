@@ -77,10 +77,18 @@ module lark.player {
         fillText(text:string, x:number, y:number, maxWidth?:number): void;
         measureText(text:string): TextMetrics;
         /**
-         * 如果要对绘制的图片进行缩放，出于性能优化考虑，系统不会主动去每次重置imageSmoothingEnabled属性，因此您在调用drawImage()方法前请务必
+         * 注意：如果要对绘制的图片进行缩放，出于性能优化考虑，系统不会主动去每次重置imageSmoothingEnabled属性，因此您在调用drawImage()方法前请务必
          * 确保 imageSmoothingEnabled 已被重置为正常的值，否则有可能沿用上个显示对象绘制过程留下的值。
          */
-        drawImage(image:BitmapData, offsetX:number, offsetY:number, width?:number, height?:number, surfaceOffsetX?:number, surfaceOffsetY?:number, surfaceImageWidth?:number, surfaceImageHeight?:number):void;
+        drawImage(image:BitmapData, offsetX:number, offsetY:number, width?:number, height?:number,
+                  surfaceOffsetX?:number, surfaceOffsetY?:number, surfaceImageWidth?:number, surfaceImageHeight?:number):void;
+        /**
+         * 绘制九宫格位图
+         * 注意：如果要对绘制的图片进行缩放，出于性能优化考虑，系统不会主动去每次重置imageSmoothingEnabled属性，因此您在调用drawScale9GridImage()方法前请务必
+         * 确保 imageSmoothingEnabled 已被重置为正常的值，否则有可能沿用上个显示对象绘制过程留下的值。
+         */
+        drawScale9GridImage(image:BitmapData, scale9Grid:Rectangle, offsetX:number, offsetY:number, width?:number, height?:number,
+                            surfaceOffsetX?:number, surfaceOffsetY?:number, surfaceImageWidth?:number, surfaceImageHeight?:number):void;
         createPattern(image:BitmapData, repetition:string): GraphicsPattern;
         getImageData(sx:number, sy:number, sw:number, sh:number): ImageData;
     }

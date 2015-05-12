@@ -211,7 +211,7 @@ module lark.gui {
                 default ://scale
                     context.imageSmoothingEnabled = this.$smoothing;
                     if(this._scale9Grid){
-
+                        context.drawScale9GridImage(bitmapData,this._scale9Grid,0,0,bitmapData.width,bitmapData.height,0,0,width,height)
                     }
                     else{
                         context.drawImage(bitmapData, 0, 0, width, height);

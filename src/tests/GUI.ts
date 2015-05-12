@@ -53,19 +53,21 @@ module lark {
             component.isType(lark.gui.Types.UIComponent);
 
             var image = new lark.gui.Image("image/test.png");
+            image.fillMode = "clip";
             this.addChild(image);
             image.horizontalCenter = 0;
             image.verticalCenter = 0;
             image.width = 300;
             image.height = 400;
 
-            var image2 = new lark.gui.Image("image/test.png");
+            var image2 = new lark.gui.Image("image/button.png");
+            image2.scale9Grid = new lark.Rectangle(5,5,110,30);
             this.addChild(image2);
             image2.x = 300;
             image2.y = 100;
-            image2.smoothing = false;
+            //image2.smoothing = false;
             image2.width = 300;
-            image2.height = 400;
+            image2.height = 100;
 
             this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
