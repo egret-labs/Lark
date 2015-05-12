@@ -37,16 +37,50 @@ module lark.gui {
      * 赋值为url后，它内部会自动去加载并显示图片。并且您同样也可以直接把 BitmapData 对象赋值给 source 属性以显示图片。
      * Image 控件可以直接替代 Bitmap 在显示列表中使用。
      *
-     * @event COMPLETE lark.Event 当图片加载完成后调度
+     * @event lark.Event.COMPLETE 当图片加载完成后调度
      */
     export class Image extends Bitmap implements UIComponent {
 
         public constructor(source?:string|BitmapData) {
             super();
             player.UIComponentImpl.call(this);
-            if(source){
+            if (source) {
                 this.source = source;
             }
+        }
+
+        /**
+         * 矩形区域，它定义素材对象的九个缩放区域。
+         * 注意:此属性仅在fileMode为BitmapFillMode.SCALE时有效。
+         */
+        private _scale9Grid:Rectangle = null;
+
+        public get scale9Grid():Rectangle {
+            return this._scale9Grid;
+        }
+
+        public set scale9Grid(value:Rectangle) {
+            this._scale9Grid = value;
+            this.invalidateDisplayList();
+        }
+
+        private _fillMode:string = "scale";
+        /**
+         * 确定位图填充尺寸的方式。默认值：BitmapFillMode.SCALE。
+         * 设置为 BitmapFillMode.CLIP，位图将在边缘处被截断。
+         * 设置为 BitmapFillMode.REPEAT时，位图将重复以填充区域。
+         * 设置为 BitmapFillMode.SCALE时，位图将拉伸以填充区域。
+         */
+        public get fillMode():string {
+            return this._fillMode;
+        }
+
+        public set fillMode(value:string) {
+            if (value == this._fillMode) {
+                return;
+            }
+            this._fillMode = value;
+            this.invalidateDisplayList();
         }
 
         private _source:string|BitmapData = null;
@@ -62,7 +96,7 @@ module lark.gui {
                 return;
             }
             this._source = value;
-            if(!value){
+            if (!value) {
                 this.$setBitmapData(null);
             }
             else if (typeof value == "string") {
@@ -74,7 +108,7 @@ module lark.gui {
         }
 
         $setBitmapData(value:BitmapData):void {
-            if(value===this.$bitmapData){
+            if (value === this.$bitmapData) {
                 return;
             }
             super.$setBitmapData(value);
@@ -84,6 +118,7 @@ module lark.gui {
         }
 
         private loaderMap:any = {};
+
         /**
          * 加载一张图片。
          */
@@ -106,18 +141,82 @@ module lark.gui {
             loader.removeListener(Event.COMPLETE, this.onLoadFinish, this);
             loader.removeListener(Event.IO_ERROR, this.onLoadFinish, this);
             var data:BitmapData;
-            if(event.type==Event.COMPLETE){
+            if (event.type == Event.COMPLETE) {
                 data = loader.data;
                 loader.data = null;
             }
             loaderPool.push(loader);
             var url = this.loaderMap[loader.$hashCode];
             this.loaderMap[loader.$hashCode] = null;
-            if(this._source===url){
+            if (this._source === url) {
                 this.$setBitmapData(data);
-                if(data){
+                if (data) {
                     this.emitWith(Event.COMPLETE);
                 }
+            }
+        }
+
+        $measureContentBounds(bounds:Rectangle):void {
+            var bitmapData = this.$bitmapData;
+            if (bitmapData) {
+                var values = this.$uiValues;
+                var width = values[player.UIValues.width];
+                var height = values[player.UIValues.height];
+                if (isNone(width) || isNone(height)) {
+                    bounds.setEmpty();
+                    return;
+                }
+                if (this._fillMode == "clip") {
+                    if (width > bitmapData.width) {
+                        width = bitmapData.width;
+                    }
+                    if (height > bitmapData.height) {
+                        height = bitmapData.height;
+                    }
+                }
+                bounds.setTo(0, 0, width, height);
+            }
+            else {
+                bounds.setEmpty();
+            }
+        }
+
+        $render(context:player.RenderContext):void {
+            var bitmapData = this.$bitmapData;
+            if (!bitmapData) {
+                return;
+            }
+            var values = this.$uiValues;
+            var width = values[player.UIValues.width];
+            var height = values[player.UIValues.height];
+            if (isNone(width) || isNone(height)) {
+                return;
+            }
+            switch (this._fillMode) {
+                case "clip":
+                    if (width > bitmapData.width) {
+                        width = bitmapData.width;
+                    }
+                    if (height > bitmapData.height) {
+                        height = bitmapData.height;
+                    }
+                    context.drawImage(bitmapData, 0, 0, width, height, 0, 0, width, height);
+                    break;
+                case "repeat":
+                    var pattern = context.createPattern(bitmapData, "repeat");
+                    context.rect(0, 0, width, height);
+                    context.fillStyle = pattern;
+                    context.fill();
+                    break;
+                default ://scale
+                    context.imageSmoothingEnabled = this.$smoothing;
+                    if(this._scale9Grid){
+
+                    }
+                    else{
+                        context.drawImage(bitmapData, 0, 0, width, height);
+                    }
+                    break;
             }
         }
 
@@ -150,11 +249,11 @@ module lark.gui {
          */
         protected measure():void {
             var bitmapData = this.$bitmapData;
-            if(bitmapData){
-                this.setMeasuredSize(bitmapData.width,bitmapData.height);
+            if (bitmapData) {
+                this.setMeasuredSize(bitmapData.width, bitmapData.height);
             }
-            else{
-                this.setMeasuredSize(0,0);
+            else {
+                this.setMeasuredSize(0, 0);
             }
 
         }
@@ -163,6 +262,7 @@ module lark.gui {
          * 更新显示列表
          */
         protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
+            this.$invalidateContentBounds();
         }
 
         /**

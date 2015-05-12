@@ -68,6 +68,24 @@ module lark {
             this.$invalidateContentBounds();
         }
 
+        $smoothing:boolean = true;
+        /**
+         * 控制在缩放时是否对位图进行平滑处理。如果为 true，则会在缩放时对位图进行平滑处理。
+         * 如果为 false，则不会在缩放时对位图进行平滑处理。默认true。
+         */
+        public get smoothing():boolean{
+            return this.$smoothing;
+        }
+
+        public set smoothing(value:boolean) {
+            value = !!value;
+            if(value===this.$smoothing){
+                return;
+            }
+            this.$smoothing = value;
+            this.$invalidate();
+        }
+
         $measureContentBounds(bounds:Rectangle):void {
             var bitmapData = this.$bitmapData;
             if(bitmapData){
@@ -81,6 +99,7 @@ module lark {
         $render(context:player.RenderContext):void{
             var bitmapData = this.$bitmapData;
             if (bitmapData) {
+                context.imageSmoothingEnabled = this.$smoothing;
                 context.drawImage(bitmapData,0,0);
             }
         }

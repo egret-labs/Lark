@@ -56,6 +56,17 @@ module lark {
             this.addChild(image);
             image.horizontalCenter = 0;
             image.verticalCenter = 0;
+            image.width = 300;
+            image.height = 400;
+
+            var image2 = new lark.gui.Image("image/test.png");
+            this.addChild(image2);
+            image2.x = 300;
+            image2.y = 100;
+            image2.smoothing = false;
+            image2.width = 300;
+            image2.height = 400;
+
             this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
