@@ -30,12 +30,33 @@
 module lark {
 
     /**
-     * �ı����������¼���
+     * 文本输入框相关事件。
      */
     export class TextInputEvent extends Event{
 
+        /**
+         * TextInput 获得焦点
+         * @type {string}
+         */
         public static FOCUS:string = 'focus';
+
+        /**
+         * TextInput 失去焦点
+         * @type {string}
+         */
+        public static BLUR:string = 'blur';
+
+        /**
+         * TextInput 正在输入文本
+         * @type {string}
+         */
         public static INPUT:string = 'input';
+
+        /**
+         * TextInput 输入完成
+         * @type {string}
+         */
+        public static CHANGE:string = 'change';
 
     }
 }

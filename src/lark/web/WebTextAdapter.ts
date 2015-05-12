@@ -29,72 +29,83 @@
 
 module lark.web {
 
-    var stageToTextLayerMap:any = {};
     var tempPoint = new Point();
-    export class WebTextLayer extends LarkObject{
+
+    /**
+     * HTML5 环境下的输入文本
+     */
+    export class WebTextAdapter extends LarkObject implements player.ITextAdapter{
         constructor(container:HTMLDivElement,stage:Stage,canvas:HTMLCanvasElement){
             super();
+            this.stage = stage;
             this.canvas = canvas;
             this.container = container;
-            stageToTextLayerMap[stage.hashCode] = this;
+            player.$cacheTextAdapter(this);
             this.createHtmlInputs();
         }
 
-        static getTextLayer(textInput:TextInput):WebTextLayer{
-            var hashCode = textInput.stage.hashCode;
-            return stageToTextLayerMap[hashCode];
-        }
-
-        public scaleX:number = 1;
-        public scaleY:number = 1;
-        public canvas:HTMLCanvasElement;
-        public container:HTMLDivElement;
-        public textContainer:HTMLDivElement;
-        public pendingToShowHtmlInput = false;
-        public currentTextInput:TextInput = null;
-        public currentHtmlInput:HTMLInputElement|HTMLTextAreaElement;
-
+        public stage:Stage;
+        private scaleX:number = 1;
+        private scaleY:number = 1;
+        private offsetX:number = 1;
+        private offsetY:number = 1;
+        private canvas:HTMLCanvasElement;
+        private container:HTMLDivElement;
+        private textContainer:HTMLDivElement;
+        private pendingToShowHtmlInput = false;
+        private currentTextInput:TextInput = null;
+        private currentHtmlInput:HTMLInputElement|HTMLTextAreaElement;
         private singleLineTextInput:HTMLInputElement = null;
         private multiLineTextInput:HTMLTextAreaElement = null;
 
-
+        /**
+         * 当用户点击TextInput时，将它设置为正在输入的TextInput对象，HTML text input 会显示出来并获得焦点
+         * @param currentTextInput 要输入的TextInput对象
+         */
         public setCurrentTextInput(currentTextInput:TextInput){
             this.currentTextInput = currentTextInput;
-            this.currentHtmlInput = currentTextInput.multiLine ? this.multiLineTextInput : this.singleLineTextInput;
+            this.currentHtmlInput = currentTextInput.wordWrap ? this.multiLineTextInput : this.singleLineTextInput;
             this.currentHtmlInput.value = this.currentTextInput.text;
             this.pendingToShowHtmlInput = true;
-            console.log('set true');
+            this.canvas['userTyping'] = true;
         }
 
+        /**
+         * 清空正在输入的TextInput，隐藏HTML text input。
+         */
         public removeCurrentTextInput(){
-            console.log('remove html');
+            window.scrollTo(0, 0);
             var currentTextInput = this.currentTextInput;
             var currentHtmlInput = this.currentHtmlInput;
 
-            if(currentHtmlInput) {
-                currentHtmlInput.onblur = null;
-                currentHtmlInput.oninput = null;
-                this.resetHtmlInputStyle(currentHtmlInput);
-                this.resetTextContainerStyle();
-            }
-            if(currentTextInput && currentHtmlInput){
-                currentTextInput.$setUserInputText(currentHtmlInput.value);
-                currentTextInput.$endInput();
-            }
+            currentHtmlInput.onblur = null;
+            currentHtmlInput.oninput = null;
+            this.resetHtmlInputStyle(currentHtmlInput);
+            this.resetTextContainerStyle();
+
+            currentTextInput.$setUserInputText(currentHtmlInput.value);
+            currentTextInput.$endInput();
 
             this.currentHtmlInput = null;
             this.currentTextInput = null;
+            this.pendingToShowHtmlInput = false;
+
+            this.canvas['userTyping'] = false;
         }
 
 
         /**
-         * ������Ļ��ǰ�����ű��������ڼ���׼ȷ�ĵ��λ�á�
-         * @param scaleX ˮƽ��������ű�����
-         * @param scaleY ��ֱ��������ű�����
+         * 更新屏幕当前的缩放比例，用于计算准确的点击位置。
+         * @param scaleX 水平方向的缩放比例。
+         * @param scaleY 垂直方向的缩放比例。
+         * @param offsetX canvas 相对 container 的横向偏移位置
+         * @param offsetY canvas 相对 container 的纵向偏移位置
          */
-        public updateScaleMode(scaleX:number, scaleY:number):void {
+        public updateScaleMode(scaleX:number, scaleY:number, offsetX:number, offsetY:number):void {
             this.scaleX = scaleX;
             this.scaleY = scaleY;
+            this.offsetX = offsetX;
+            this.offsetY = offsetY;
         }
 
         private createHtmlInputs(){
@@ -119,25 +130,25 @@ module lark.web {
 
         private handleContainerClick = (e) => {
             if(this.pendingToShowHtmlInput){
-                console.log('set false');
                 this.pendingToShowHtmlInput = false;
                 e.stopImmediatePropagation();
-                this.formatHtmlInputStyle();
-                this.currentHtmlInput.onblur = this.handleHtmlInputBlur;
-                this.currentHtmlInput.oninput = this.handleHtmlInputInputEvent;
-                this.currentHtmlInput.selectionStart = this.currentHtmlInput.value.length;
-                this.currentHtmlInput.selectionEnd = this.currentHtmlInput.value.length;
-                this.currentHtmlInput.focus();
-                setTimeout(()=>this.currentHtmlInput.style.opacity='1',0);
-                this.currentTextInput.emitWith('focus');
+                this.$initializeInput();
+                var currentHtmlInput = this.currentHtmlInput;
+                currentHtmlInput.onblur = this.handleHtmlInputBlur;
+                currentHtmlInput.oninput = this.handleHtmlInputInputEvent;
+                currentHtmlInput.selectionStart = currentHtmlInput.value.length;
+                currentHtmlInput.selectionEnd = currentHtmlInput.value.length;
+                currentHtmlInput.focus();
+
+                this.currentTextInput.$startInput();
             }
-            else{
+            else if(this.currentTextInput != null){
                 this.removeCurrentTextInput();
             }
         };
 
         private handleHtmlInputInputEvent = (e)=>{
-            this.currentTextInput.text = this.currentHtmlInput.value;
+            this.currentTextInput.$setUserInputText(this.currentHtmlInput.value);
         };
 
         private handleHtmlInputBlur = (e) => {
@@ -150,6 +161,7 @@ module lark.web {
             element.style.top = "0px";
             element.style.border = "none";
             element.style.padding = "0";
+            element.style[getPrefixStyleName("transformOrigin")] = "0% 0% 0px";
         }
 
         private resetHtmlInputStyle(element:HTMLElement){
@@ -173,37 +185,58 @@ module lark.web {
             this.resetHtmlElementStyle(this.textContainer);
         }
 
-        private formatHtmlInputStyle(){
+
+        /**
+         * 更新HTML5 text input 的属性值
+         */
+        public $initializeInput(){
             this.singleLineTextInput.style.display="none";
             this.multiLineTextInput.style.display="none";
             var textInput = this.currentTextInput;
-            var scalex = this.scaleX;
-            var scaley = this.scaleY;
 
-            var p = this.currentTextInput.localToGlobal(0,0,tempPoint);
+            var scaleX = this.scaleX;
+            var scaleY = this.scaleY;
+            var matrix = textInput.$getConcatenatedMatrix().clone();
+            matrix.scale(scaleX,scaleY);
 
-            this.textContainer.style.left = p.x *scalex +"px";
-            this.textContainer.style.top = p.y *scaley +"px";
+            var p = textInput.localToGlobal(0,0,tempPoint);
+            this.textContainer.style.left = this.offsetX + p.x *scaleX +"px";
+            this.textContainer.style.top = this.offsetY + p.y *scaleY +"px";
 
-            scalex = textInput.scaleX * this.scaleX;
-            scaley = textInput.scaleY * this.scaleY;
+            scaleX = matrix.$getScaleX();
+            scaleY = matrix.$getScaleY();
+            var width = textInput.width * scaleX + "px";
+            var height = textInput.height * scaleY + "px";
+            this.textContainer.style.width=width;
+            this.textContainer.style.height=height;
+
+
             var setElementStyle = this.setElementStyle.bind(this);
+
+
             setElementStyle("fontFamily", textInput.fontFamily);
             setElementStyle("fontStyle", textInput.italic ? "italic" : "normal");
             setElementStyle("fontWeight", textInput.bold ? "bold" : "normal");
             setElementStyle("textAlign", textInput.horizontalAlign);
-            setElementStyle("fontSize", textInput.fontSize * scalex + "px");
-            setElementStyle("lineHeight", textInput.fontSize * scaley + "px");
+            setElementStyle("fontSize", textInput.fontSize + "px");
+            setElementStyle("lineHeight", textInput.fontSize + "px");
             setElementStyle("color", player.toColorString(textInput.textColor));
             setElementStyle("verticalAlign", textInput.verticalAlign);
             setElementStyle("display", "block");
-            var width = textInput.width * scalex + "px";
-            var height = textInput.height * scaley + "px";
-            setElementStyle("width", width);
-            setElementStyle("height", height);
-            this.textContainer.style.width=width;
-            this.textContainer.style.height=height;
+            setElementStyle("width", textInput.width + "px");
+            setElementStyle("height", textInput.height + "px");
+            setElementStyle(getPrefixStyleName('transform'), 'matrix(' + [matrix.a,matrix.b,matrix.c,matrix.d,0,0].join(",") + ')');
 
+            setTimeout(()=>{
+                this.currentHtmlInput.style.opacity='1';
+            },0);
+
+            if(textInput.wordWrap == false && textInput.verticalAlign != VerticalAlign.MIDDLE){
+                var padding = textInput.height - textInput.fontSize;
+                var styleName = textInput.verticalAlign == VerticalAlign.TOP?'paddingBottom':'paddingTop';
+                setElementStyle(styleName,padding + "px");
+                setElementStyle("height", textInput.fontSize + "px");
+            }
         }
 
         private setElementStyle(style:string, value:any):void {
@@ -211,6 +244,31 @@ module lark.web {
                 this.currentHtmlInput.style[style] = value;
             }
         }
+    }
+
+
+    var $CurrentPrefix:string = null;
+
+    export function getPrefixStyleName(name:string):string{
+        if($CurrentPrefix==null)
+            $CurrentPrefix = getPrefix();
+        return $CurrentPrefix + name.charAt(0).toUpperCase()+name.substr(1);
+    }
+
+    function getPrefix():string {
+        var tempStyle = document.createElement('div').style;
+        var prefix = "";
+        var transArr:Array<string> = ["t", "webkitT", "msT", "MozT", "OT"];
+
+        for (var i:number = 0; i < transArr.length; i++) {
+            var transform:string = transArr[i] + 'ransform';
+
+            if (transform in tempStyle){
+                prefix = transArr[i]
+            }
+        }
+
+        return prefix.substr(0,prefix.length-1);
     }
 
 }

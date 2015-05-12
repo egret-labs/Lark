@@ -27,35 +27,44 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
-    export class TestInput extends Sprite{
+module lark.player{
 
-        constructor(){
-            super();
+    /**
+     * 平台实现输入文本的接口
+     */
+    export interface ITextAdapter {
 
-            var input = new TextInput();
-            input.width = 300;
-            input.height = 300;
-            input.y = 100;
-            input.x = 100;
-            input.wordWrap = true;
-            input.text = "Hello World!";
-            input.fontSize=40;
-            input.bold = true;
-            input.verticalAlign = VerticalAlign.TOP;
-            input.italic = true;
-            input.textColor = 0xFF0000;
-            //input.rotation = 45;
-            window['theInput'] = input;
-            input.$getConcatenatedMatrix();
+        /**
+         * 当用户点击TextInput时，将它设置为正在输入的TextInput对象，HTML text input 会显示出来并获得焦点
+         * @param currentTextInput 要输入的TextInput对象
+         */
+        setCurrentTextInput(currentTextInput:TextInput):void;
 
-            input.on("focus",e=>console.log("focus",input.text),this);
-            input.on("blur",e=>console.log("blur",input.text),this);
-            input.on("input",e=>console.log("input",input.text),this);
-            input.on("change",e=>console.log("change",input.text),this);
+        /**
+         * 清空正在输入的TextInput，隐藏HTML text input。
+         */
+        removeCurrentTextInput():void;
 
-            this.addChild(input);
-            this.addChild(FPS.display);
-        }
+        /**
+         * 更新HTML5 或 runtime 中 text input 的属性值
+         */
+        $initializeInput():void;
+
+        stage:Stage;
+    }
+
+    var stageToTextLayerMap:any = {};
+
+    /**
+     * 获取
+     * @param textInput
+     * @returns {any}
+     */
+    export function $getTextAdapter(textInput:TextInput):ITextAdapter{
+        var stageHash = textInput.stage?textInput.stage.$hashCode:0;
+        return stageToTextLayerMap[stageHash];
+    }
+    export function $cacheTextAdapter( adapter:ITextAdapter){
+        stageToTextLayerMap[adapter.stage.$hashCode] = adapter;
     }
 }

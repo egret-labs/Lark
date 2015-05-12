@@ -30,12 +30,14 @@
 module lark{
 
     /**
-     * TextInput ���ڴ�����ʾ�����������ı�
+     * TextInput 用于创建显示对象来输入文本. 默认为单行文本，当需要使用多行文本时，请设置 multiLine 为 true
      */
     export class TextInput extends TextField{
         constructor(){
             super();
+            this.wordWrap = false;
             this.on(TouchEvent.TOUCH_BEGIN,this.handleTouchBegin,this);
+
         }
 
         private _multiLine:boolean = false;
@@ -44,7 +46,7 @@ module lark{
 
 
         /**
-         * ָ���Ƿ��Ƕ��������ı�
+         * 指定是否是多行输入文本, 默认为false，当指定为单行文本时，会同时修改 wordWrap 为 false
          * @returns {boolean}
          */
         public get multiLine():boolean {
@@ -52,7 +54,12 @@ module lark{
         }
 
         public set multiLine(value:boolean) {
+            value =!!value;
             this._multiLine = value;
+
+            //指定为单行文本时,同时设置wordwrap
+            if(value==false && this.wordWrap!=false)
+                this.wordWrap = true;
         }
 
 
@@ -63,7 +70,12 @@ module lark{
             if(this._isFocus)
                 return;
             this._isFocus = true;
-            this.$startInput();
+            this.setAsCurrent();
+        }
+
+        private setAsCurrent(){
+            var layer = player.$getTextAdapter(this);
+            layer.setCurrentTextInput(this);
         }
 
         $setUserInputText(text:string){
@@ -76,20 +88,55 @@ module lark{
         $startInput(){
             this._isTyping = true;
             this.$invalidateContentBounds();
-            var layer = web.WebTextLayer.getTextLayer(this);
-            layer.setCurrentTextInput(this);
+            this.emitWith(TextInputEvent.FOCUS);
         }
 
         $endInput(){
             this._isTyping = false;
             this._isFocus = false;
             this.$invalidateContentBounds();
+            this.emitWith(TextInputEvent.BLUR);
+            this.emitWith(TextInputEvent.CHANGE);
         }
 
+
+
+
+
+        $setX(value:number):boolean {
+            this.updateTextAdapter();
+            return super.$setX(value);
+        }
+        $setY(value:number):boolean {
+            this.updateTextAdapter();
+            return super.$setY(value);
+        }
+
+        $measureContentBounds(bounds:Rectangle):void {
+            super.$measureContentBounds(bounds);
+            this.updateTextAdapter();
+        }
         $render(context:player.RenderContext):void {
-            if(this._isTyping)
+            if(this._isTyping){
                 return;
+            }
             super.$render(context);
+        }
+
+        private timeoutId:number = -1;
+        private updateTextAdapter(){
+            if(!this._isFocus){
+                return;
+            }
+
+            this.setAsCurrent();
+            if(this.timeoutId != -1)
+                clearTimeout(this.timeoutId);
+            this.timeoutId = setTimeout(()=>{
+                var layer = player.$getTextAdapter(this);
+                layer.$initializeInput();
+                this.timeoutId = -1;
+            },0);
         }
     }
 }

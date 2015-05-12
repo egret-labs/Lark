@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/lark/player/TextAdapter.ts" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/lark/text/TextInput.ts" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/lark/text/TextInputEvent.ts" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/lark/web/WebTextAdapter.ts" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/tests/TextInput.ts" charset="UTF-8" />
+  </component>
+</project>

@@ -106,7 +106,7 @@ module lark.web {
 
         private prevent(event):void {
             event.stopPropagation();
-            if (event["isScroll"] != true) {
+            if (event["isScroll"] != true && !this.canvas['userTyping']) {
                 event.preventDefault();
             }
         }

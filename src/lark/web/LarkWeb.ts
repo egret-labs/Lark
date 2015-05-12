@@ -42,7 +42,7 @@ module lark.web {
             var player = <lark.player.Player>container["lark-player"];
             var webTouch = <WebTouchHandler>container["lark-touch"];
             var webScreen = <WebScreen>container["lark-screen"];
-            var webText = <WebTextLayer>container["lark-text-layer"];
+            var webText = <WebTextAdapter>container["lark-text-layer"];
             webScreen.updateScreenSize(player,webTouch,webText);
     }
     }
@@ -82,7 +82,7 @@ module lark.web {
         var stage = new lark.Stage();
         var touch = new lark.player.TouchHandler(stage);
         var webTouch = new WebTouchHandler(touch, canvas);
-        var webText = new WebTextLayer(container,stage,canvas);
+        var webText = new WebTextAdapter(container,stage,canvas);
         var player = new lark.player.Player(surface.renderContext, stage, entryClassName);
         if(DEBUG){
             var showPaintRects = container.getAttribute("data-show-paint-rects")=="true";
