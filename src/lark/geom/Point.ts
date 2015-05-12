@@ -128,7 +128,7 @@ module lark {
     registerClass(Point,Types.Point);
 
     /**
-     * 仅供引擎内复用，要防止暴露引用到外部。
+     * 仅供框架内复用，要防止暴露引用到外部。
      */
     export var $TempPoint = new Point();
 }

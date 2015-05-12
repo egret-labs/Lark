@@ -33,8 +33,8 @@ module lark {
     export var $START_TIME:number = 0;
 
     /**
-     * 用于计算相对时间。此方法返回自启动 Lark 引擎以来经过的毫秒数。
-     * @returns 启动 Lark 引擎以来经过的毫秒数。
+     * 用于计算相对时间。此方法返回自启动 Lark 框架以来经过的毫秒数。
+     * @returns 启动 Lark 框架以来经过的毫秒数。
      */
     export function getTimer():number {
         return Date.now() - $START_TIME;

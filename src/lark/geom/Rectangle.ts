@@ -229,7 +229,7 @@ module lark {
     }
     registerClass(Rectangle,Types.Rectangle);
     /**
-     * 仅供引擎内复用，要防止暴露引用到外部。
+     * 仅供框架内复用，要防止暴露引用到外部。
      */
     export var $TempRectangle = new Rectangle();
 }

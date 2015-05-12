@@ -737,7 +737,7 @@ module lark {
         /**
          * 返回一个矩形，该矩形定义相对于 targetCoordinateSpace 对象坐标系的显示对象区域。
          * @param targetCoordinateSpace 定义要使用的坐标系的显示对象。
-         * @param resultRect 引擎建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Rectangle对象来存储结果，
+         * @param resultRect 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Rectangle对象来存储结果，
          * 若不传入将创建一个新的Rectangle对象返回。
          * @returns 定义与 targetCoordinateSpace 对象坐标系统相关的显示对象面积的矩形。
          */
@@ -771,7 +771,7 @@ module lark {
          * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
          * @param stageX 舞台坐标x
          * @param stageY 舞台坐标y
-         * @param resultPoint 引擎建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
+         * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
          * 若不传入将创建一个新的Point对象返回。
          * @returns 具有相对于显示对象的坐标的 Point 对象。
          */
@@ -784,7 +784,7 @@ module lark {
          * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
          * @param localX 舞台坐标x
          * @param localY 舞台坐标y
-         * @param resultPoint 引擎建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
+         * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
          * 若不传入将创建一个新的Point对象返回。
          * @returns 具有相对于显示对象的坐标的 Point 对象。
          */

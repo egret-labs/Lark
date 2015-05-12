@@ -363,7 +363,7 @@ module lark {
          * 返回将 Matrix 对象表示的几何转换应用于指定点所产生的结果。
          * @param pointX 想要获得其矩阵转换结果的点的x坐标。
          * @param pointY 想要获得其矩阵转换结果的点的y坐标。
-         * @param resultPoint 引擎建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，若不传入将创建一个新的Point对象返回。
+         * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，若不传入将创建一个新的Point对象返回。
          * @returns 由应用矩阵转换所产生的点。
          */
         public transformPoint(pointX:number, pointY:number, resultPoint?:Point):Point {
@@ -542,7 +542,7 @@ module lark {
     registerClass(Matrix,Types.Matrix);
 
     /**
-     * 仅供引擎内复用，要防止暴露引用到外部。
+     * 仅供框架内复用，要防止暴露引用到外部。
      */
     export var $TempMatrix = new Matrix();
 }

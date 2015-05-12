@@ -39,7 +39,7 @@ module lark {
      * lark.log(emitter.isType(lark.Types.EventEmitter));   //输出true。
      * lark.log(emitter.isType(lark.Types.Bitmap));   //输出false。
      *
-     * 注意：传入的类定义必须继承自LarkObject。另外，传入的自定义枚举数值范围要避免与Lark引擎(1~2000的数值)或其他第三方库的数值范围重合,
+     * 注意：传入的类定义必须继承自LarkObject。另外，传入的自定义枚举数值范围要避免与Lark框架(1~2000的数值)或其他第三方库的数值范围重合,
      * 否则有可能会导致运行时isType()方法类型判断错误。
      *
      * @param classDefinition 要注册的类定义。
