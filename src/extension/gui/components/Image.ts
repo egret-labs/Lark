@@ -162,7 +162,7 @@ module lark.gui {
         private contentChanged(data:any,source:any):void {
             if (source !== this._source)
                 return;
-            if(data&&"isType" in data&&!data.isType(lark.Types.BitmapData)){
+            if(!is(data,lark.Types.BitmapData)){
                 return;
             }
             this.$setBitmapData(data);

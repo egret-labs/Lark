@@ -31,7 +31,7 @@ module lark {
     /**
      * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
      */
-    export class Sprite extends DisplayObject implements DisplayObjectContainer{
+    export class Sprite extends DisplayObject implements DisplayObjectContainer {
 
         static $EVENT_ADD_TO_STAGE_LIST:DisplayObject[] = [];
         static $EVENT_REMOVE_FROM_STAGE_LIST:DisplayObject[] = [];
@@ -90,7 +90,7 @@ module lark {
             index = +index | 0;
             if (index < 0 || index >= this.$children.length) {
                 index = this.$children.length;
-                if(child.$parent===this){
+                if (child.$parent === this) {
                     index--;
                 }
             }
@@ -102,7 +102,7 @@ module lark {
                 if (child == this) {
                     $error(1005);
                 }
-                else if (child.isType(Types.DisplayObjectContainer) && (<DisplayObjectContainer>child).contains(this)) {
+                else if (is(child, Types.DisplayObjectContainer) && (<DisplayObjectContainer>child).contains(this)) {
                     $error(1004);
                 }
             }
@@ -121,7 +121,7 @@ module lark {
             child.$setParent(this);
             var stage:Stage = this.$stage;
             if (stage) {//当前容器在舞台
-                child.$onAddToStage(stage,this.$nestLevel+1);
+                child.$onAddToStage(stage, this.$nestLevel + 1);
 
             }
             child.emitWith(Event.ADDED, true);
@@ -138,7 +138,7 @@ module lark {
             this.assignParentDisplayList(child, displayList, displayList);
             child.$propagateFlagsDown(player.DisplayObjectFlags.DownOnAddedOrRemoved);
             this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
-            this.$childAdded(child,index);
+            this.$childAdded(child, index);
             return child;
         }
 
@@ -236,7 +236,7 @@ module lark {
             index = +index | 0;
             var children = this.$children;
             var child:DisplayObject = children[index];
-            this.$childRemoved(child,index);
+            this.$childRemoved(child, index);
             child.emitWith(Event.REMOVED, true);
 
             if (this.$stage) {//在舞台上
@@ -265,7 +265,7 @@ module lark {
         public setChildIndex(child:DisplayObject, index:number):void {
             index = +index | 0;
             if (index < 0 || index >= this.$children.length) {
-                index = this.$children.length-1;
+                index = this.$children.length - 1;
             }
             this.doSetChildIndex(child, index);
         }
@@ -275,15 +275,15 @@ module lark {
             if (lastIndex < 0) {
                 DEBUG && $error(1006);
             }
-            if(lastIndex==index){
+            if (lastIndex == index) {
                 return;
             }
-            this.$childRemoved(child,lastIndex);
+            this.$childRemoved(child, lastIndex);
             //从原来的位置删除
             this.$children.splice(lastIndex, 1);
             //放到新的位置
             this.$children.splice(index, 0, child);
-            this.$childAdded(child,index);
+            this.$childAdded(child, index);
             child.$invalidateTransform();
             this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
         }
@@ -322,7 +322,7 @@ module lark {
         }
 
         private doSwapChildrenAt(index1:number, index2:number):void {
-            if (index1 > index2){
+            if (index1 > index2) {
                 var temp = index2;
                 index2 = index1;
                 index1 = temp;
@@ -333,12 +333,12 @@ module lark {
             var list:Array<DisplayObject> = this.$children;
             var child1:DisplayObject = list[index1];
             var child2:DisplayObject = list[index2];
-            this.$childRemoved(child1,index1);
-            this.$childRemoved(child2,index2);
+            this.$childRemoved(child1, index1);
+            this.$childRemoved(child2, index2);
             list[index1] = child2;
             list[index2] = child1;
-            this.$childAdded(child2,index1);
-            this.$childAdded(child1,index2);
+            this.$childAdded(child2, index1);
+            this.$childAdded(child1, index2);
             child1.$invalidateTransform();
             child2.$invalidateTransform();
             this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
@@ -358,25 +358,26 @@ module lark {
          * 一个子项被添加到容器内，此方法不仅在操作addChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
          * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
          */
-        $childAdded(child:DisplayObject,index:number):void{
+        $childAdded(child:DisplayObject, index:number):void {
 
         }
+
         /**
          * 一个子项从容器内移除，此方法不仅在操作removeChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
          * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
          */
-        $childRemoved(child:DisplayObject,index:number):void{
+        $childRemoved(child:DisplayObject, index:number):void {
 
         }
 
-        $onAddToStage(stage:Stage,nestLevel:number):void {
-            super.$onAddToStage(stage,nestLevel);
+        $onAddToStage(stage:Stage, nestLevel:number):void {
+            super.$onAddToStage(stage, nestLevel);
             var children = this.$children;
             var length = children.length;
             nestLevel++;
             for (var i = 0; i < length; i++) {
                 var child:DisplayObject = this.$children[i];
-                child.$onAddToStage(stage,nestLevel);
+                child.$onAddToStage(stage, nestLevel);
             }
         }
 
@@ -510,7 +511,7 @@ module lark {
         }
 
 
-        $hitTest(stageX:number, stageY:number,shapeFlag?:boolean):DisplayObject {
+        $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):DisplayObject {
             if (!this.$visible || !this.$hasAnyFlags(player.DisplayObjectFlags.TouchEnabled |
                     player.DisplayObjectFlags.TouchChildren)) {
                 return null;
@@ -521,19 +522,19 @@ module lark {
             if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
                 return null;
             }
-            if(!this.$getOriginalBounds().contains(localX,localY)){
+            if (!this.$getOriginalBounds().contains(localX, localY)) {
                 return null;
             }
-            if (this.$mask && !this.$mask.$hitTest(stageX, stageY,true)) {
+            if (this.$mask && !this.$mask.$hitTest(stageX, stageY, true)) {
                 return null
             }
             var children = this.$children;
             for (var i = children.length - 1; i >= 0; i--) {
                 var child = children[i];
-                if(child.$maskedObject){
+                if (child.$maskedObject) {
                     continue;
                 }
-                var target = child.$hitTest(stageX, stageY,shapeFlag);
+                var target = child.$hitTest(stageX, stageY, shapeFlag);
                 if (target) {
                     break;
                 }
@@ -545,11 +546,11 @@ module lark {
                 return this;
             }
             if (this.$hasFlags(player.DisplayObjectFlags.TouchEnabled)) {
-                return super.$hitTest(stageX, stageY,shapeFlag);
+                return super.$hitTest(stageX, stageY, shapeFlag);
             }
             return null;
         }
 
     }
-    registerClass(Sprite,Types.Sprite,[Types.DisplayObjectContainer]);
+    registerClass(Sprite, Types.Sprite, [Types.DisplayObjectContainer]);
 }

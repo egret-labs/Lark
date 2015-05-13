@@ -27,31 +27,22 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-
 module lark {
     /**
-     * 哈希计数
+     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字相比具有更高的性能，并且能判断接口的实现。
+     * 若要判断对象是否为项目中的自定义类或接口的实例，请使用 lark.registerClass() 方法为自定义类注册运行时信息即可。
+     * @param instance 要判断的实例，注意：传入的值必须是实例，而不是类定义。若要判断类定义使用表达式：typeof instance == "function" 即可。
+     * @param typeFlag 类或接口的枚举值，请参考 lark.Types 或 lark.gui.Types 定义的枚举常量。
+     * @returns 返回true表示当前对象是指定类或接口的实例。
      */
-    export var $hashCount:number = 1;
-
-    /**
-     * Lark顶级对象。框架内所有对象的基类，为对象实例提供唯一的hashCode值。
-     */
-    export class LarkObject {
-
-        /**
-         * 创建一个 lark.HashObject 对象
-         */
-        public constructor() {
-            this.$hashCode = $hashCount++;
+    export function is(instance:any,typeFlag:number):boolean {
+        if(!instance){
+            return false;
         }
-
-        $hashCode:number;
-        /**
-         * 返回此对象唯一的哈希值,用于唯一确定一个对象。hashCode为大于等于1的整数。
-         */
-        public get hashCode():number {
-            return this.$hashCode;
+        var prototype:any = Object.getPrototypeOf(instance);
+        if(!prototype||!prototype.__typeFlags__){
+            return false;
         }
+        return (prototype.__typeFlags__.indexOf(typeFlag) !== -1);
     }
 }

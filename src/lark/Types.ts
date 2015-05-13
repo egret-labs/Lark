@@ -30,7 +30,7 @@
 module lark {
     //1~1000预留给lark包下的类和接口
     /**
-     * 为Lark框架内的类或接口定义的枚举值。通常作为实例检查类型的方法 isType() 的参数。
+     * 为Lark框架内的类或接口定义的枚举值。通常作为实例检查类型 lark.is() 方法的参数。
      */
     export const enum Types {
         /**

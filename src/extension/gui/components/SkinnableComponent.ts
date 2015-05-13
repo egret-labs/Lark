@@ -80,7 +80,7 @@ module lark.gui {
                     skin = skinName;
                 }
             }
-            if (skin instanceof LarkObject && !skin.isType(Types.Skin)) {
+            if (!is(skin,Types.Skin)) {
                 skin = null;
                 DEBUG && $error(2202);
             }

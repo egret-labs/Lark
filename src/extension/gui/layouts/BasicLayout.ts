@@ -102,7 +102,7 @@ module lark.player {
         var count = target.numChildren;
         for (var i = 0; i < count; i++) {
             var layoutElement = <gui.UIComponent> (target.getChildAt(i));
-            if (!layoutElement.isType(gui.Types.UIComponent) || !layoutElement.$includeInLayout) {
+            if (!is(layoutElement,gui.Types.UIComponent) || !layoutElement.$includeInLayout) {
                 continue;
             }
 
@@ -171,7 +171,7 @@ module lark.player {
         var bounds = $TempRectangle;
         for (var i = 0; i < count; i++) {
             var layoutElement = <gui.UIComponent> (target.getChildAt(i));
-            if (!layoutElement.isType(gui.Types.UIComponent) || !layoutElement.$includeInLayout) {
+            if (!is(layoutElement,gui.Types.UIComponent) || !layoutElement.$includeInLayout) {
                 continue;
             }
 

@@ -744,7 +744,7 @@ module lark.player {
                     var length = children.length;
                     for (var i = 0; i < length; i++) {
                         var child = children[i];
-                        if (child.isType(gui.Types.UIComponent)) {
+                        if (is(child,gui.Types.UIComponent)) {
                             (<gui.UIComponent>child).validateSize(true);
                         }
                     }
@@ -860,7 +860,7 @@ module lark.player {
          */
         protected invalidateParentLayout():void {
             var parent = this.$parent;
-            if (!parent || !this.$includeInLayout || !(parent.isType(gui.Types.UIComponent)))
+            if (!parent || !this.$includeInLayout || !is(parent,gui.Types.UIComponent))
                 return;
             (<gui.UIComponent><any>parent).invalidateSize();
             (<gui.UIComponent><any>parent).invalidateDisplayList();

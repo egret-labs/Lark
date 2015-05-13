@@ -30,17 +30,17 @@
 module lark {
     /**
      * 为一个类定义注册运行时类信息,用此方法往类定义上注册它自身以及所有接口对应的枚举值。
-     * 在运行时，这个类的实例将可以使用isType()方法传入一个枚举值来判断实例类型。
+     * 在运行时，这个类的实例将可以使用 lark.is() 方法传入一个枚举值来判断实例类型。
      * 例如：
      * //为lark.EventEmitter类注册运行时类信息，由于它实现了IEventEmitter接口，这里应同时传入两个枚举值。
-     * lark.registerType(lark.EventEmitter,[lark.Types.EventEmitter,lark.Types.IEventEmitter]);
+     * lark.registerClass(lark.EventEmitter,lark.Types.EventEmitter,[lark.Types.IEventEmitter]);
      * var emitter = new lark.EventEmitter();
-     * lark.log(emitter.isType(lark.Types.IEventEmitter));  //输出true。
-     * lark.log(emitter.isType(lark.Types.EventEmitter));   //输出true。
-     * lark.log(emitter.isType(lark.Types.Bitmap));   //输出false。
+     * lark.log(lark.is(emitter, lark.Types.IEventEmitter));  //输出true。
+     * lark.log(lark.is(emitter, lark.Types.EventEmitter));   //输出true。
+     * lark.log(lark.is(emitter, lark.Types.Bitmap));   //输出false。
      *
-     * 注意：传入的类定义必须继承自LarkObject。另外，传入的自定义枚举数值范围要避免与Lark框架(1~2000的数值)或其他第三方库的数值范围重合,
-     * 否则有可能会导致运行时isType()方法类型判断错误。
+     * 注意：传入的自定义枚举数值范围要避免与Lark框架(1~2000的数值)或其他第三方库的数值范围重合,
+     * 否则有可能会导致运行时 lark.is() 方法类型判断错误。
      *
      * @param classDefinition 要注册的类定义。
      * @param classFlags 要注册的类对应的枚举值。
@@ -64,6 +64,9 @@ module lark {
         if(interfaceFlags){
             flags = flags.concat(interfaceFlags);
         }
-        prototype.__typeFlags__ = flags.concat(prototype.__typeFlags__);
+        if(prototype.__typeFlags__){
+            flags = flags.concat(prototype.__typeFlags__);
+        }
+        prototype.__typeFlags__ = flags;
     }
 }

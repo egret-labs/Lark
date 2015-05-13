@@ -409,7 +409,7 @@ module lark.gui {
                             return client;
                         }
                     }
-                    else if(client.isType(lark.Types.DisplayObjectContainer)){
+                    else if(is(client,lark.Types.DisplayObjectContainer)){
 
                         var items = bin.items;
                         var length = bin.length;
@@ -456,7 +456,7 @@ module lark.gui {
                             return client;
                         }
                     }
-                    else if(client.isType(lark.Types.DisplayObjectContainer)){
+                    else if(is(client,lark.Types.DisplayObjectContainer)){
                         var items = bin.items;
                         var length = bin.length;
                         for (var i = 0; i < length; i++) {

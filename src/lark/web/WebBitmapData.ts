@@ -29,17 +29,15 @@
 
 module lark.web {
 
-    function isType(typeFlag:number):boolean {
-        return typeFlag === Types.BitmapData;
-    }
+    registerClass(HTMLImageElement,Types.BitmapData);
+    registerClass(HTMLCanvasElement,Types.BitmapData);
+    registerClass(HTMLVideoElement,Types.BitmapData);
 
     /**
-     * 转换 Image，Canvas，Video 为 Lark 框架内使用的 BitmapData 对象。增加isType()类型判断方法。
+     * 转换 Image，Canvas，Video 为 Lark 框架内使用的 BitmapData 对象。
      */
     export function toBitmapData(data:HTMLImageElement|HTMLCanvasElement|HTMLVideoElement):BitmapData {
-        data["isType"] = isType;
-        data["$hashCode"] = $hashCount++
-        data["hashCode"] = data["$hashCode"];
+        data["hashCode"] = data["$hashCode"] = $hashCount++
         return <BitmapData><any>data;
     }
 }

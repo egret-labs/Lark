@@ -50,7 +50,7 @@ module lark {
             component.horizontalCenter = 0;
             component.verticalCenter = 0;
             component.height = 300;
-            component.isType(lark.gui.Types.UIComponent);
+            is(component,lark.gui.Types.UIComponent);
 
             var image = new lark.gui.Image("image/test.png");
             image.fillMode = "clip";
@@ -78,7 +78,7 @@ module lark {
 
         private onTouchBegin(event:TouchEvent):void {
             var target = <lark.gui.UIComponent>event.target;
-            if (target.isType(Types.Stage)) {
+            if (is(target,Types.Stage)) {
                 return;
             }
             this.touchTarget = target;
