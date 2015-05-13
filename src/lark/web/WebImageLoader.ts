@@ -68,7 +68,7 @@ module lark.web {
             if(!image){
                 return;
             }
-            this.data = image;
+            this.data = toBitmapData(image);
             this.emitWith(Event.COMPLETE);
         }
 

@@ -28,22 +28,24 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 
-
 module lark {
     export class Text extends Sprite {
-        bitmapData: BitmapData = null;
+        bitmapData:BitmapData = null;
+
         public constructor() {
             super();
-            var img = new Image();
-            img.src = "http://tp2.sinaimg.cn/2078341137/50/5619181703/1";
-            img.onload = () => {
-                this.bitmapData = img;
-                this.createChildren(img)
-            }
-            
+            var loader = new ImageLoader();
+            loader.once(Event.COMPLETE, this.start, this);
+            loader.load("image/test.png");
         }
 
-        createChildren(bitmapData: BitmapData) {
+        private start(event:Event):void {
+            var loader:ImageLoader = event.target;
+            var bitmapData = loader.data;
+            this.createChildren(bitmapData);
+        }
+
+        private createChildren(bitmapData:BitmapData) {
             this.removeChildren();
             var bitmap = new Bitmap();
             bitmap.bitmapData = bitmapData;
@@ -51,11 +53,10 @@ module lark {
             var bitmap2 = new Bitmap();
             bitmap2.bitmapData = bitmapData;
 
-            var style: ITextStyle = {
+            var style:ITextStyle = {
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize:30
+                fontSize: 30
             };
-
 
 
             var text = "Hi:    3455 \n"
@@ -68,237 +69,237 @@ module lark {
             tf.y = 200;
             //this.addChild(tf);
 
-            var rich = new lark.RichTextField({ fontSize: 30,textAlignH:"right" });
+            var rich = new lark.RichTextField({fontSize: 30, textAlignH: "right"});
             rich.y = 50;
             rich.width = 500;
             rich.height = 500;
             rich.nodes = ['Hi ', {
-                    text: " Hi how are you",
-                    style: { textColor: 0xFF0000 }
+                text: " Hi how are you",
+                style: {textColor: 0xFF0000}
             }, bitmap, {
-                    graphic: bitmap2,
-                    style: {
-                        float:"left"
-                    }
+                graphic: bitmap2,
+                style: {
+                    float: "left"
+                }
             }, {
+                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                height: 50,
+                width: 50,
+                style: {
+                    float: "right"
+                }
+            },
+                "faj s dhfa sdf as df asd \n s \n s \n s \nf as df a sdf as df a sdf asd fa",
+                {
                     src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
                     height: 50,
                     width: 50,
                     style: {
-                        float:"right"
+                        float: "left"
                     }
-            },
-                "faj s dhfa sdf as df asd \n s \n s \n s \nf as df a sdf as df a sdf asd fa",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "left"
-                }
-            },
+                },
                 "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "right"
-                }
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "right"
+                    }
                 },
                 "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
                 "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "left"
-                }
-            },
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "left"
+                    }
+                },
                 "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "right"
-                }
-            },
-                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
-                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "left"
-                }
-            },
-                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "right"
-                }
-            },
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "right"
+                    }
+                },
                 "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
                 "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "left"
-                }
-            },
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "left"
+                    }
+                },
                 "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "right"
-                }
-            },
-                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
-                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "left"
-                }
-            },
-                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "right"
-                }
-            },
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "right"
+                    }
+                },
                 "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
                 "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "left"
-                }
-            },
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "left"
+                    }
+                },
                 "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "right"
-                }
-            },
-                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
-                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "left"
-                }
-            },
-                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "right"
-                }
-            },
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "right"
+                    }
+                },
                 "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
                 "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "left"
-                }
-            },
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "left"
+                    }
+                },
                 "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "right"
-                }
-            },
-                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
-                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "left"
-                }
-            },
-                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "left"
-                }
-            },
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "right"
+                    }
+                },
                 "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
                 "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "left"
-                }
-            },
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "left"
+                    }
+                },
                 "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "left"
-                }
-            },
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "right"
+                    }
+                },
                 "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
                 "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "left"
-                }
-            },
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "left"
+                    }
+                },
                 "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
-            {
-                src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
-                height: 50,
-                width: 50,
-                style: {
-                    float: "left"
-                }
-            },
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "right"
+                    }
+                },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "left"
+                    }
+                },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "right"
+                    }
+                },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "left"
+                    }
+                },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "left"
+                    }
+                },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "left"
+                    }
+                },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "left"
+                    }
+                },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                "faj s dhfa sdf as df asd f as df a sdf as df a sdf asd fa",
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "left"
+                    }
+                },
+                "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer ",
+                {
+                    src: "http://tp2.sinaimg.cn/2078341137/50/5619181703/1",
+                    height: 50,
+                    width: 50,
+                    style: {
+                        float: "left"
+                    }
+                },
                 "df sd fsd sdf sdf fd s df dfs we rer ewr r wer  ewr rew wer "];
             this.addChild(rich);
-            
+
             window.addEventListener("mousewheel", e=> {
                 rich.scrollV += (e.wheelDelta > 0 ? 1 : -1);
                 if (rich.scrollV < 0)
@@ -306,8 +307,9 @@ module lark {
             });
         }
 
-        
+
         colors = [0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0x00FFFF, 0xFFFF00, 0xFF00FF];
+
         getRandomColor() {
             var random = Math.random() * this.colors.length;
             random = Math.floor(random);

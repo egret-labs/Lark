@@ -27,43 +27,17 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
+module lark.web {
 
-module lark.gui {
-
-    var loaderPool:ImageLoader[] = [];
+    function isType(typeFlag:number):boolean {
+        return typeFlag === Types.BitmapData;
+    }
 
     /**
-     * 默认的IAssetAdapter接口实现
+     * 转换 Image，Canvas，Video 为 Lark 框架内使用的 BitmapData 对象。增加isType()类型判断方法。
      */
-    export class DefaultAssetAdapter implements IAssetAdapter {
-
-        /**
-         * 解析素材
-         * @param source 待解析的新素材标识符
-         * @param callBack 解析完成回调函数，示例：callBack(content:any,source:string):void;
-         * @param thisObject callBack的 this 引用
-         */
-        public getAsset(source:string, callBack:(data:any, source:string) => void, thisObject:any):void {
-
-            var loader = loaderPool.pop();
-            if (!loader) {
-                loader = new ImageLoader();
-            }
-            loader.on(Event.COMPLETE, onLoadFinish, null);
-            loader.on(Event.IO_ERROR, onLoadFinish, null);
-            loader.load(source);
-
-            function onLoadFinish(event:Event):void {
-                loader.removeListener(Event.COMPLETE, onLoadFinish, null);
-                loader.removeListener(Event.IO_ERROR, onLoadFinish, null);
-                var data:BitmapData;
-                if (event.type == Event.COMPLETE) {
-                    data = loader.data;
-                    loader.data = null;
-                }
-                loaderPool.push(loader);
-                callBack.call(thisObject,data,source);
-            }
-        }
+    export function toBitmapData(data:HTMLImageElement|HTMLCanvasElement|HTMLVideoElement):BitmapData {
+        data["isType"] = isType;
+        return <BitmapData><any>data;
     }
 }

@@ -32,17 +32,16 @@ module lark {
 
         public constructor() {
             super();
-            var img = new Image();
-            img.src = "image/test.png";
-            img.onload = ()=> {
-                this.start(img);
-            }
-
+            var loader = new ImageLoader();
+            loader.once(Event.COMPLETE,this.start,this);
+            loader.load("image/test.png");
         }
 
         private image:any;
 
-        private start(bitmapData:BitmapData):void {
+        private start(event:Event):void {
+            var loader:ImageLoader = event.target;
+            var bitmapData = loader.data;
 
             this.image = bitmapData;
             var textField = new TextField();
@@ -69,7 +68,7 @@ module lark {
             canvas.height = 250;
             var context: CanvasRenderingContext2D = canvas.getContext("2d");
             context.drawImage(this.image, 0, 0);
-            var bitmap = new Bitmap(canvas);
+            var bitmap = new Bitmap(web.toBitmapData(canvas));
             this.addChild(bitmap);
             bitmap.y = 50+this.canvasCount * 5;
             this.canvasCount++;

@@ -7,8 +7,9 @@
             super(option);
         }
 
+        private _bitmapData:BitmapData;
         public get bitmapData(): BitmapData {
-            return <HTMLVideoElement>this.domElement;
+            return this._bitmapData;
         }
 
         public set bitmapData(video) {
@@ -22,6 +23,7 @@
             video.width = this.$option.width;
             video.addEventListener("loadedmetadata", e=> this.onLoadedMeta(e));
             this.domElement = video;
+            this._bitmapData = toBitmapData(video);
             return video;
         }
 

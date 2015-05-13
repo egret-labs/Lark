@@ -29,8 +29,10 @@
 
 module lark.gui {
 
-    var loaderPool:ImageLoader[] = [];
-
+    /**
+     * 默认的皮肤适配器
+     */
+    var assetAdapter = new DefaultAssetAdapter();
     /**
      * Image 控件允许您在运行时显示 JPEG、PNG 等图片文件文件。Image 继承至 Bitmap，因此您可以直接对其 bitmapData 属性，
      * 赋值从外部加载得到的位图数据以显示对应图片。同时，Image 还提供了更加方便的 source 属性，source 属性可以接受一个网络图片url作为值，
@@ -83,6 +85,7 @@ module lark.gui {
             this.invalidateDisplayList();
         }
 
+        private sourceChanged:boolean = false;
         private _source:string|BitmapData = null;
         /**
          * 用于显示位图的数据源。可以为一个网络图片url或BitmapData实例。
@@ -100,7 +103,12 @@ module lark.gui {
                 this.$setBitmapData(null);
             }
             else if (typeof value == "string") {
-                this.loadImage(<string>value);
+                if(this.$stage){
+                    this.parseSource();
+                }
+                else{
+                    this.sourceChanged = true;
+                }
             }
             else {
                 this.$setBitmapData(<BitmapData>value);
@@ -113,46 +121,56 @@ module lark.gui {
             }
             super.$setBitmapData(value);
             this._source = value;
+            this.sourceChanged = false;
             this.invalidateSize();
             this.invalidateDisplayList();
         }
 
-        private loaderMap:any = {};
-
-        /**
-         * 加载一张图片。
-         */
-        private loadImage(url:string):void {
-            var loader = loaderPool.pop();
-            if (!loader) {
-                loader = new ImageLoader();
+        $onAddToStage(stage:Stage, nestLevel:number):void {
+            super.$onAddToStage(stage, nestLevel);
+            this.checkInvalidateFlag();
+            if(this.sourceChanged){
+                this.parseSource();
             }
-            this.loaderMap[loader.$hashCode] = url;
-            loader.on(Event.COMPLETE, this.onLoadFinish, this);
-            loader.on(Event.IO_ERROR, this.onLoadFinish, this);
-            loader.load(url);
         }
 
         /**
-         * 图片加载结束
+         * 解析source
          */
-        private onLoadFinish(event:Event):void {
-            var loader:ImageLoader = event.target;
-            loader.removeListener(Event.COMPLETE, this.onLoadFinish, this);
-            loader.removeListener(Event.IO_ERROR, this.onLoadFinish, this);
-            var data:BitmapData;
-            if (event.type == Event.COMPLETE) {
-                data = loader.data;
-                loader.data = null;
+        private parseSource():void{
+            this.sourceChanged = false;
+            if(!assetAdapter){
+                assetAdapter = this.getAdapter();
             }
-            loaderPool.push(loader);
-            var url = this.loaderMap[loader.$hashCode];
-            this.loaderMap[loader.$hashCode] = null;
-            if (this._source === url) {
-                this.$setBitmapData(data);
-                if (data) {
-                    this.emitWith(Event.COMPLETE);
-                }
+            assetAdapter.getAsset(<string>this._source,this.contentChanged,this);
+        }
+
+        /**
+         * 获取资源适配器
+         */
+        private getAdapter():IAssetAdapter{
+            var adapter:IAssetAdapter = this.$stage.getImplementation("lark.gui.IAssetAdapter");
+            if(!adapter){
+                adapter = new DefaultAssetAdapter();
+            }
+            return adapter;
+        }
+
+        /**
+         * 资源发生改变
+         */
+        private contentChanged(data:any,source:any):void {
+            if (source !== this._source)
+                return;
+            if(data&&"isType" in data&&!data.isType(lark.Types.BitmapData)){
+                return;
+            }
+            this.$setBitmapData(data);
+            if (data) {
+                this.emitWith(Event.COMPLETE);
+            }
+            else if(DEBUG){
+                $warn(2203,source);
             }
         }
 
@@ -293,6 +311,11 @@ module lark.gui {
             context.drawImage(image, sourceX2, sourceY2, sourceW2, sourceH2, targetX2, targetY2, sourceW2, sourceH2);
         }
 
+
+        /**
+         * 检查属性失效标记并应用
+         */
+        private checkInvalidateFlag:(event?:Event)=>void;
 
         //=======================UIComponent接口实现===========================
         /**

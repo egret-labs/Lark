@@ -29,8 +29,20 @@
 
 module lark {
 
+    /**
+     * BitmapData 对象包含像素数据的数组。此数据可以表示完全不透明的位图，或表示包含 Alpha 通道数据的透明位图。
+     * 以上任一类型的 BitmapData 对象都作为 32 位整数的缓冲区进行存储。每个 32 位整数确定位图中单个像素的属性。
+     * 每个 32 位整数都是四个 8 位通道值（从 0 到 255）的组合，这些值描述像素的 Alpha 透明度以及红色、绿色、蓝色 (ARGB) 值。
+     * （对于 ARGB 值，最高有效字节代表 Alpha 通道值，其后的有效字节分别代表红色、绿色和蓝色通道值。）
+     */
     export interface BitmapData {
         width: number;
         height: number;
+        /**
+         * 检查当前对象是否为Lark框架内指定接口或类或其子类的实例。此方法与使用instanceOf关键字相比具有更高的性能，并且能判断接口的实现。
+         * @param typeFlag 类或接口的枚举值，请参考lark.Types或lark.gui.Types定义的枚举常量。
+         * @returns 返回true表示当前对象是指定类或接口的实例。
+         */
+        isType(typeFlag:number):boolean;
     }
 }

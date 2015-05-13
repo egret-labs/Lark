@@ -58,5 +58,6 @@ module lark.gui {
     
     locale_strings[2201] = "BasicLayout doesn't support virtualization.";
     locale_strings[2202] = "parse skinName error，the parsing result of skinName must be a instance of lark.gui.Skin.";
+    locale_strings[2203] = "parse source error，could not find asset from URL：{0} .";
 
 }

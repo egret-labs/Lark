@@ -92,7 +92,7 @@ module lark.web {
             var context = canvas.getContext("2d");
             canvas["renderContext"] = context;
             context["surface"] = canvas;
-
+            toBitmapData(canvas);
             var drawImage = context.drawImage;
             context.drawImage = function (image:HTMLElement, offsetX:number, offsetY:number, width?:number,
                                           height?:number, surfaceOffsetX?:number, surfaceOffsetY?:number,
