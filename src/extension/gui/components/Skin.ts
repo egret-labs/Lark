@@ -66,12 +66,160 @@ module lark.gui {
 
         $elementsContent:DisplayObject[] = [];
 
-        public set elementsContent(value:DisplayObject[]){
+        public set elementsContent(value:DisplayObject[]) {
             this.$elementsContent = value;
         }
 
+
+        private _hostComponent: SkinnableComponent = null;
+        /**
+         * 此皮肤附加到的主机组件
+         */
+        public get hostComponent():SkinnableComponent{
+            return this._hostComponent;
+        }
+
+        public set hostComponent(value:SkinnableComponent){
+            if(this._hostComponent==value)
+                return;
+            this._hostComponent = value;
+
+            if(this._hostComponent){
+                if(this.currentStateChanged){
+                    this.commitCurrentState();
+                }
+            }
+        }
+
+
+        //========================state相关函数===============start=========================
+
+        private _states:State[] = [];
+        /**
+         * 为此组件定义的视图状态。
+         */
+        public get states():State[] {
+            return this._states;
+        }
+
+        public set states(value:State[]) {
+            if (!value)
+                value = [];
+            this._states = value;
+            this.currentStateChanged = true;
+            this.requestedCurrentState = this._currentState;
+            if (!this.getState(this.requestedCurrentState)) {
+                this.requestedCurrentState = this.getDefaultState();
+            }
+        }
+
+        /**
+         * 当前视图状态发生改变的标志
+         */
+        private currentStateChanged:boolean = false;
+
+        private _currentState:string = null;
+        /**
+         * 存储还未验证的视图状态
+         */
+        private requestedCurrentState:string = null;
+
+        /**
+         * 组件的当前视图状态。将其设置为 "" 或 null 可将组件重置回其基本状态。
+         */
+        public get currentState():string {
+            if (this.currentStateChanged)
+                return this.requestedCurrentState;
+            return this._currentState ? this._currentState : this.getDefaultState();
+        }
+
+        public set currentState(value:string) {
+            if (!value)
+                value = this.getDefaultState();
+            if (value != this.currentState && value && this.currentState) {
+                this.requestedCurrentState = value;
+                this.currentStateChanged = true;
+                if (this._hostComponent) {
+                    this.commitCurrentState();
+                }
+            }
+        }
+
+        /**
+         * 返回默认状态
+         */
+        private getDefaultState():string {
+            if (this._states.length > 0) {
+                return this._states[0].name;
+            }
+            return null;
+        }
+
+        /**
+         * 应用当前的视图状态。子类覆盖此方法在视图状态发生改变时执行相应更新操作。
+         */
+        public commitCurrentState():void {
+            if (!this.currentStateChanged)
+                return;
+            this.currentStateChanged = false;
+            var destination:State = this.getState(this.requestedCurrentState);
+            if (!destination) {
+                this.requestedCurrentState = this.getDefaultState();
+            }
+            this.removeState(this._currentState);
+            this._currentState = this.requestedCurrentState;
+
+            if (this._currentState) {
+                this.applyState(this._currentState);
+            }
+        }
+
+
+        /**
+         * 通过名称返回视图状态
+         */
+        private getState(stateName:string):State {
+            if (!stateName)
+                return null;
+            var states:Array<any> = this._states;
+            var length:number = states.length;
+            for (var i:number = 0; i < length; i++) {
+                var state:State = states[i];
+                if (state.name == stateName)
+                    return state;
+            }
+            return null;
+        }
+
+        /**
+         * 移除指定的视图状态以及所依赖的所有父级状态，除了与新状态的共同状态外
+         */
+        private removeState(stateName:string):void {
+            var state:State = this.getState(stateName);
+            if (state) {
+                var overrides:Array<IOverride> = state.overrides;
+                for (var i:number = overrides.length - 1; i >= 0; i--)
+                    overrides[i].remove(this);
+            }
+        }
+
+        /**
+         * 应用新状态
+         */
+        private applyState(stateName:string):void {
+            var state:State = this.getState(stateName);
+            if (state) {
+                var overrides:Array<any> = state.overrides;
+                var length:number = overrides.length;
+                for (var i:number = 0; i < length; i++)
+                    overrides[i].apply(this);
+            }
+        }
+
+        //========================state相关函数===============end=========================
+
     }
 
-    registerClass(Skin,Types.Skin);
-    registerProperty(Skin,"elementsContent","Array",true);
+    registerClass(Skin, Types.Skin);
+    registerProperty(Skin, "elementsContent", "Array", true);
 }

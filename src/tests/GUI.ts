@@ -50,7 +50,6 @@ module lark {
             component.horizontalCenter = 0;
             component.verticalCenter = 0;
             component.height = 300;
-            is(component,lark.gui.Types.UIComponent);
 
             var image = new lark.gui.Image("image/test.png");
             image.fillMode = "clip";

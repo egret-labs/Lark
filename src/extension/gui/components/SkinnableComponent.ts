@@ -120,10 +120,12 @@ module lark.gui {
                         this.partRemoved(partName, null);
                     }
                 }
+                oldSkin.hostComponent = null;
             }
             this.removeChildren();
             this._skin = skin;
             if (skin) {
+                skin.hostComponent = this;
                 var skinParts:string[] = skin.skinParts;
                 var length = skinParts.length;
                 for (var i = 0; i < length; i++) {
