@@ -32,7 +32,7 @@ module lark {
     /**
      * 哈希计数
      */
-    var hashCount:number = 1;
+    export var $hashCount:number = 1;
 
     /**
      * Lark顶级对象。框架内所有对象的基类，为对象实例提供唯一的hashCode值，以及isType()快速类型判断方法。
@@ -43,7 +43,7 @@ module lark {
          * 创建一个 lark.HashObject 对象
          */
         public constructor() {
-            this.$hashCode = hashCount++;
+            this.$hashCode = $hashCount++;
         }
 
         $hashCode:number;

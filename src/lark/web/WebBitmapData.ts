@@ -38,6 +38,8 @@ module lark.web {
      */
     export function toBitmapData(data:HTMLImageElement|HTMLCanvasElement|HTMLVideoElement):BitmapData {
         data["isType"] = isType;
+        data["$hashCode"] = $hashCount++
+        data["hashCode"] = data["$hashCode"];
         return <BitmapData><any>data;
     }
 }
