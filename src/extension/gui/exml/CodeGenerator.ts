@@ -29,6 +29,10 @@
 
 module lark.player {
 
+    var STATE = "lark.gui.State";
+    var ADD_ITEMS = "lark.gui.AddItems";
+    var SET_PROPERTY = "lark.gui.SetProperty";
+
     /**
      * 代码生成工具基类
      */
@@ -91,7 +95,7 @@ module lark.player {
         public getVariableByName(name:string):CpVariable {
             var list = this.variableBlock;
             var length = list.length;
-            for (var i=0; i < length; i++) {
+            for (var i = 0; i < length; i++) {
                 var item = list[i];
                 if (item.name == name) {
                     return item;
@@ -154,10 +158,10 @@ module lark.player {
             //打印变量列表
             var variables = this.variableBlock;
             length = variables.length;
-            for(i=0;i<length;i++){
+            for (i = 0; i < length; i++) {
                 var variable = variables[i];
-                if(variable.defaultValue){
-                    returnStr += indent2Str+variable.toCode() + "\n";
+                if (variable.defaultValue) {
+                    returnStr += indent2Str + variable.toCode() + "\n";
                 }
             }
 
@@ -385,10 +389,10 @@ module lark.player {
         public defaultValue:string;
 
         public toCode():string {
-            if(!this.defaultValue){
+            if (!this.defaultValue) {
                 return "";
             }
-            return "this."+this.name+ " = " + this.defaultValue+";";
+            return "this." + this.name + " = " + this.defaultValue + ";";
         }
     }
 
@@ -425,7 +429,7 @@ module lark.player {
 
         public toCode():string {
             var indentStr:string = this.getIndent(1);
-            var returnStr:string = "new lark.gui.State (\"" + this.name + "\",\n" + indentStr + "[\n";
+            var returnStr:string = "new " + STATE + " (\"" + this.name + "\",\n" + indentStr + "[\n";
             var index:number = 0;
             var isFirst:boolean = true;
             var overrides:Array<any> = this.addItems.concat(this.setProperty);
@@ -480,7 +484,7 @@ module lark.player {
 
         public toCode():string {
             var indentStr:string = this.getIndent(1);
-            var returnStr:string = "new lark.gui.AddItems(\"" + this.target + "\",\"" + this.propertyName + "\",\"" + this.position + "\",\"" + this.relativeTo + "\")";
+            var returnStr:string = "new " + ADD_ITEMS + "(\"" + this.target + "\",\"" + this.propertyName + "\",\"" + this.position + "\",\"" + this.relativeTo + "\")";
             return returnStr;
         }
     }
@@ -510,7 +514,7 @@ module lark.player {
 
         public toCode():string {
             var indentStr:string = this.getIndent(1);
-            return "new lark.gui.SetProperty(\"" + this.target + "\",\"" + this.name + "\"," + this.value + ")";
+            return "new " + SET_PROPERTY + "(\"" + this.target + "\",\"" + this.name + "\"," + this.value + ")";
         }
     }
 
