@@ -59,7 +59,16 @@ module lark.gui {
                     $error(2002,className,text+"\n"+e.message);
                 }
             }
-            var clazz = parser.parse(xml,className);
+            var code = parser.parse(xml,className);
+            try {
+                var clazz = eval(code);
+            }
+            catch (e) {
+                if (DEBUG) {
+                    log(code);
+                }
+                return null;
+            }
             if (className && clazz) {
                 var paths = className.split(".");
                 var length = paths.length;

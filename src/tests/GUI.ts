@@ -34,20 +34,18 @@ module lark {
         public constructor() {
             super();
             this.width = 1800;
-            this.height  = 800;
+            this.height = 800;
             var request = new HttpRequest();
             request.once(Event.COMPLETE, this.onExmlLoaded, this);
-            request.open("tests/ButtonSkin.exml");
+            request.open("tests/AlertSkin.exml");
             request.send();
         }
 
         private onExmlLoaded(event:Event):void {
             var request:HttpRequest = event.target;
-                var skin = lark.gui.EXML.parse(request.response,"lark.gui.ButtonSkin");
-            var component = new lark.gui.Button();
+            var skin = lark.gui.EXML.parse(request.response, "lark.gui.AlertSkin");
+            var component = new lark.gui.Component();
             component.skinName = skin;
-            component.label = "按钮";
-            component.stickyHighlighting = true;
             this.addChild(component);
             component.x = 100;
             component.verticalCenter = 0;
@@ -78,7 +76,7 @@ module lark {
 
         private onTouchBegin(event:TouchEvent):void {
             var target = <lark.gui.UIComponent>event.target;
-            if (is(target,Types.Stage)) {
+            if (is(target, Types.Stage)) {
                 return;
             }
             this.touchTarget = target;

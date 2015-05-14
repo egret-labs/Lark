@@ -76,6 +76,20 @@ module lark.player {
         public superClass:string = "";
 
         /**
+         * 内部类区块
+         */
+        private innerClassBlock:CpClass[] = [];
+
+        /**
+         * 添加一个内部类
+         */
+        public addInnerClass(clazz:CpClass):void {
+            if (this.innerClassBlock.indexOf(clazz) == -1) {
+                this.innerClassBlock.push(clazz);
+            }
+        }
+
+        /**
          * 变量定义区块
          */
         private variableBlock:CpVariable[] = [];
@@ -149,6 +163,14 @@ module lark.player {
                 returnStr += ") {\n";
             }
 
+            //打印内部类列表
+            var innerClasses = this.innerClassBlock;
+            var length = innerClasses.length;
+            for (var i = 0; i < length; i++) {
+                var clazz = innerClasses[i];
+                clazz.indent = indent+1;
+                returnStr += indent1Str+"var "+clazz.className+" = "+clazz.toCode()+"\n\n";
+            }
 
             returnStr += indent1Str + "function " + this.className + "() {\n";
             if (this.superClass) {
@@ -168,8 +190,8 @@ module lark.player {
             //打印构造函数
             if (this.constructCode) {
                 var codes = this.constructCode.toCode().split("\n");
-                var length = codes.length;
-                for (var i = 0; i < length; i++) {
+                length = codes.length;
+                for (i = 0; i < length; i++) {
                     var code = codes[i];
                     returnStr += indent2Str + code + "\n";
                 }

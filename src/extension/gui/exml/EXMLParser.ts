@@ -34,6 +34,9 @@ module lark.player {
      */
     export var exmlConfig:EXMLConfig;
 
+    var exmlParserPool:EXMLParser[] = [];
+    var innerClassCount = 1;
+
     var DECLARATIONS = "Declarations";
     var RECTANGLE = "lark.Rectangle";
     var IFACTORY = "lark.gui.IFactory";
@@ -101,11 +104,19 @@ module lark.player {
         private delayAssignmentDic:any = {};
 
         /**
-         * 编译指定的XML对象为JavaScript类。
+         * 编译指定的XML对象为JavaScript代码。
          * @param xmlData 要编译的EXML文件内容
          * @param className 要编译成的完整类名，包括模块名。
          */
-        public parse(xmlData:XML, className:string):Function {
+        public parse(xmlData:XML, className:string):string {
+            var clazz = this.parseClass(xmlData,className);
+            return clazz.toCode();
+        }
+
+        /**
+         * 编译指定的XML对象为CpClass对象。
+         */
+        private parseClass(xmlData:XML,className:string):CpClass{
             if (!exmlConfig) {
                 exmlConfig = new EXMLConfig();
             }
@@ -128,18 +139,9 @@ module lark.player {
                 this.currentClass.className = className;
             }
             this.startCompile();
-            var code = this.currentClass.toCode();
+            var clazz = this.currentClass;
             this.currentClass = null;
-            try {
-                var result = eval(code);
-            }
-            catch (e) {
-                if (DEBUG) {
-                    log(code);
-                }
-                return null;
-            }
-            return result;
+            return clazz;
         }
 
         /**
@@ -206,6 +208,9 @@ module lark.player {
                     if (DEBUG) {
                         $error(2017, this.currentClassName, toXMLString(node));
                     }
+                    continue;
+                }
+                if(node.localName=="Skin"&&node.namespace==NS_E){
                     continue;
                 }
                 var nodeClassName = this.getClassNameOfNode(node);
@@ -456,6 +461,21 @@ module lark.player {
             for (var i = 0; i < length; i++) {
                 var child:XML = children[i];
                 if (child.nodeType != 1 || child.namespace == NS_W) {
+                    continue;
+                }
+                if(child.localName=="Skin"&&child.namespace==NS_E){
+                    var parser = exmlParserPool.pop();
+                    if(!parser){
+                        parser = new EXMLParser();
+                    }
+                    var innerClassName = this.currentClass.className+"$inner"+innerClassCount++;
+                    var innerClass = parser.parseClass(child,innerClassName);
+                    this.currentClass.addInnerClass(innerClass);
+                    exmlParserPool.push(parser);
+                    var type = exmlConfig.getPropertyType("skinName",className);
+                    if(type){
+                        cb.addAssignment(varName, innerClassName, "skinName");
+                    }
                     continue;
                 }
                 var prop = child.localName;
@@ -906,7 +926,7 @@ module lark.player {
             var length = items.length;
             for (var i = 0; i < length; i++) {
                 var node:XML = items[i];
-                if(node.nodeType!=1){
+                if(node.nodeType!=1||(node.localName=="Skin"&&node.namespace==NS_E)){
                     continue;
                 }
                 this.createStates(node);
