@@ -113,14 +113,6 @@ module lark.gui {
         }
 
         /**
-         * 添加舞台鼠标弹起事件监听
-         */
-        private addStageMouseHandlers():void {
-            this.$stage.on(TouchEvent.TOUCH_END, this.stage_mouseUpHandler, this);
-            this.$stage.on(Event.LEAVE_STAGE, this.stage_mouseUpHandler, this);
-        }
-
-        /**
          * 鼠标事件处理
          */
         protected mouseEventHandler(event:TouchEvent):void {
@@ -137,7 +129,7 @@ module lark.gui {
                     break;
 
                 case TouchEvent.TOUCH_BEGIN:
-                    this.addStageMouseHandlers();
+                    this.$stage.on(TouchEvent.TOUCH_END, this.stage_mouseUpHandler, this);
                     this.touchCaptured = true;
                     break;
 
@@ -160,8 +152,6 @@ module lark.gui {
          */
         private stage_mouseUpHandler(event:Event):void {
             this.$stage.removeListener(TouchEvent.TOUCH_END, this.stage_mouseUpHandler, this);
-            this.$stage.removeListener(Event.LEAVE_STAGE, this.stage_mouseUpHandler, this);
-
             if (event.target == this)
                 return;
 

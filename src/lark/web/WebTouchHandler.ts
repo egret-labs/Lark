@@ -67,20 +67,12 @@ module lark.web {
                 }
                 this.addTouchListener();
             }
-
-            window.addEventListener("mouseup", (event:any)=> {
-                var box = this.canvas.getBoundingClientRect();
-                if(event.pageX<box.left||event.pageX>box.right||
-                    event.pageY<box.top||event.pageY>box.bottom){
-                    this.touch.onLeaveStage();
-                }
-            });
         }
 
         private addMouseListener():void {
             this.canvas.addEventListener("mousedown", this.onTouchBegin);
             this.canvas.addEventListener("mousemove", this.onTouchMove);
-            this.canvas.addEventListener("mouseup", this.onTouchEnd);
+            window.addEventListener("mouseup", this.onTouchEnd);
         }
 
         private addTouchListener():void {

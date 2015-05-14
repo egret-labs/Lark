@@ -74,10 +74,6 @@ module lark {
          */
         public static RENDER:string = "render";
         /**
-         * 离开舞台。
-         */
-        public static LEAVE_STAGE:string = "leaveStage";
-        /**
          * 舞台尺寸发生改变
          */
         public static RESIZE:string = "resize";
