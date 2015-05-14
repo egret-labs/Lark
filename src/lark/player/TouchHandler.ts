@@ -52,7 +52,7 @@ module lark.player{
          * @param touchPointID 分配给触摸点的唯一标识号
          */
         public onTouchBegin(x:number,y:number,touchPointID:number):void {
-            var target = this.findTarget(x,y,touchPointID);
+            var target = this.findTarget(x,y);
             this.touchDownTarget[touchPointID] = target.$hashCode;
             TouchEvent.emitTouchEvent(target,TouchEvent.TOUCH_BEGIN,true,true,x,y,touchPointID);
         }
@@ -72,7 +72,7 @@ module lark.player{
             }
             this.lastTouchX = x;
             this.lastTouchY = y;
-            var target = this.findTarget(x,y,touchPointID);
+            var target = this.findTarget(x,y);
             var oldTarget = this.touchMoveTarget[touchPointID];
             this.touchMoveTarget[touchPointID] = target;
             TouchEvent.emitTouchEvent(target,TouchEvent.TOUCH_MOVE,true,true,x,y,touchPointID);
@@ -107,7 +107,7 @@ module lark.player{
          * @param touchPointID 分配给触摸点的唯一标识号
          */
         public onTouchEnd(x:number,y:number,touchPointID:number):void {
-            var target = this.findTarget(x,y,touchPointID);
+            var target = this.findTarget(x,y);
             var oldTargetCode = this.touchDownTarget[touchPointID];
             this.touchDownTarget[touchPointID] = -1;
             TouchEvent.emitTouchEvent(target,TouchEvent.TOUCH_END,true,true,x,y,touchPointID);
@@ -122,7 +122,7 @@ module lark.player{
         /**
          * 获取舞台坐标下的触摸对象
          */
-        private findTarget(stageX:number,stageY:number,touchPointID:number):DisplayObject{
+        private findTarget(stageX:number,stageY:number):DisplayObject{
             var target = this.stage.$hitTest(stageX,stageY);
             if(!target){
                 target = this.stage;

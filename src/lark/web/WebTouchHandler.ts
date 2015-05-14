@@ -29,6 +29,8 @@
 
 module lark.web {
 
+    var isMobile = Capabilities.isMobile;
+
     export class WebTouchHandler extends LarkObject {
 
         public constructor(touch:lark.player.TouchHandler, canvas:HTMLCanvasElement) {
@@ -60,7 +62,7 @@ module lark.web {
                 }, false);
             }
             else {
-                if (!Capabilities.isMobile) {
+                if (!isMobile) {
                     this.addMouseListener();
                 }
                 this.addTouchListener();
@@ -113,6 +115,9 @@ module lark.web {
 
         private onTouchBegin = (event:any):void => {
             var location = this.getLocation(event);
+            if(isMobile){
+                this.touch.onTouchMove(location.x, location.y, event.identifier);
+            }
             this.touch.onTouchBegin(location.x, location.y, event.identifier);
         }
 

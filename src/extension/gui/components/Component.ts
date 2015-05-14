@@ -98,32 +98,32 @@ module lark.gui {
         }
 
 
-        private _skin:Skin = null;
+        $skin:Skin = null;
         /**
          * [只读]皮肤对象实例。
          */
         public get skin():Skin {
-            return this._skin;
+            return this.$skin;
         }
 
         /**
          * 设置皮肤实例
          */
         $setSkin(skin:Skin):void {
-            var oldSkin = this._skin;
+            var oldSkin = this.$skin;
             if (oldSkin) {
                 var skinParts:string[] = oldSkin.skinParts;
                 var length = skinParts.length;
                 for (var i = 0; i < length; i++) {
                     var partName = skinParts[i];
                     if (this[partName]) {
-                        this.partRemoved(partName, null);
+                        this.setSkinPart(partName, null);
                     }
                 }
                 oldSkin.hostComponent = null;
             }
             this.removeChildren();
-            this._skin = skin;
+            this.$skin = skin;
             if (skin) {
                 skin.hostComponent = this;
                 var skinParts:string[] = skin.skinParts;
@@ -268,7 +268,7 @@ module lark.gui {
          * 返回组件当前的皮肤状态名称,子类覆盖此方法定义各种状态名
          */
         protected getCurrentSkinState():string {
-            return this.enabled ? "normal" : "disabled"
+            return "";
         }
 
         //========================皮肤视图状态===================end========================
@@ -284,20 +284,13 @@ module lark.gui {
         }
 
         /**
-         * 子项创建完成。
-         */
-        protected childrenCreated():void {
-
-        }
-
-        /**
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         protected commitProperties():void {
             if (this.$hasFlags(player.UIFlags.stateIsDirty)) {
                 this.$removeFlags(player.UIFlags.stateIsDirty);
-                if (this._skin) {
-                    this._skin.currentState = this.currentState;
+                if (this.$skin) {
+                    this.$skin.currentState = this.currentState;
                 }
             }
         }
@@ -307,7 +300,7 @@ module lark.gui {
          */
         protected measure():void {
             player.measure(this);
-            var skin = this._skin;
+            var skin = this.$skin;
             if (!skin) {
                 return;
             }

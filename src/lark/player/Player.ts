@@ -216,6 +216,7 @@ module lark.player {
 
     }
 
+    export var $fpsInfo:string;
 
     if (DEBUG) {//显示重绘区和FPS相关的代码,发行版中移除
 
@@ -255,9 +256,9 @@ module lark.player {
                 this.totalTick = 0;
                 this.totalTime = 0;
                 var text = "FPS: " + lastFPS + "\nDraw: " + this.drawCalls + "," + dirtyRatio + "%\nCost: " + args.join(",");
-                //if (FPS.info) {
-                //    text += "\nInfo: " + FPS.info;
-                //}
+                if ($fpsInfo) {
+                    text += "\nInfo: " + $fpsInfo;
+                }
                 if (this.fpsText.text != text) {
                     this.fpsText.text = text;
                 }

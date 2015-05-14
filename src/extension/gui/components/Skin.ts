@@ -94,6 +94,7 @@ module lark.gui {
 
         //========================state相关函数===============start=========================
 
+        private statesMap:any = {};
         private _states:State[] = [];
         /**
          * 为此组件定义的视图状态。
@@ -106,10 +107,20 @@ module lark.gui {
             if (!value)
                 value = [];
             this._states = value;
+            var statesMap = {};
+            var length = value.length;
+            for (var i = 0; i < length; i++) {
+                var state = value[i];
+                statesMap[state.name] = state;
+            }
+            this.statesMap = statesMap;
             this.currentStateChanged = true;
             this.requestedCurrentState = this._currentState;
-            if (!this.getState(this.requestedCurrentState)) {
+            if (!this.hasState(this.requestedCurrentState)) {
                 this.requestedCurrentState = this.getDefaultState();
+            }
+            if (this._hostComponent) {
+                this.commitCurrentState();
             }
         }
 
@@ -158,7 +169,7 @@ module lark.gui {
             if (!this.currentStateChanged)
                 return;
             this.currentStateChanged = false;
-            var destination:State = this.getState(this.requestedCurrentState);
+            var destination:State = this.statesMap[this.requestedCurrentState];
             if (!destination) {
                 this.requestedCurrentState = this.getDefaultState();
             }
@@ -167,31 +178,22 @@ module lark.gui {
             this.applyState(this._currentState);
         }
 
-
         /**
-         * 通过名称返回视图状态
+         * 返回是否含有指定名称的视图状态
+         * @param stateName 要检查的视图状态名称
          */
-        private getState(stateName:string):State {
-            if (!stateName)
-                return null;
-            var states = this._states;
-            var length = states.length;
-            for (var i = 0; i < length; i++) {
-                var state = states[i];
-                if (state.name == stateName)
-                    return state;
-            }
-            return null;
+        public hasState(stateName:string):boolean{
+            return !!this.statesMap[stateName];
         }
 
         /**
          * 移除指定的视图状态以及所依赖的所有父级状态，除了与新状态的共同状态外
          */
         private removeState(stateName:string):void {
-            var state:State = this.getState(stateName);
+            var state = this.statesMap[stateName];
             if (state) {
-                var overrides:Array<IOverride> = state.overrides;
-                for (var i:number = overrides.length - 1; i >= 0; i--)
+                var overrides = state.overrides;
+                for (var i = overrides.length - 1; i >= 0; i--)
                     overrides[i].remove(this);
             }
         }
@@ -200,11 +202,11 @@ module lark.gui {
          * 应用新状态
          */
         private applyState(stateName:string):void {
-            var state:State = this.getState(stateName);
+            var state = this.statesMap[stateName];
             if (state) {
-                var overrides:Array<any> = state.overrides;
-                var length:number = overrides.length;
-                for (var i:number = 0; i < length; i++)
+                var overrides = state.overrides;
+                var length = overrides.length;
+                for (var i = 0; i < length; i++)
                     overrides[i].apply(this);
             }
         }

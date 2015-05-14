@@ -190,13 +190,6 @@ module lark.gui {
         }
 
         /**
-         * 子项创建完成。
-         */
-        protected childrenCreated():void{
-
-        }
-
-        /**
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         protected commitProperties():void {
