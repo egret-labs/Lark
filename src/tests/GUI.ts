@@ -37,38 +37,39 @@ module lark {
             this.height  = 800;
             var request = new HttpRequest();
             request.once(Event.COMPLETE, this.onExmlLoaded, this);
-            request.open("tests/AlertSkin.exml");
+            request.open("tests/ButtonSkin.exml");
             request.send();
         }
 
         private onExmlLoaded(event:Event):void {
             var request:HttpRequest = event.target;
-                var skin = lark.gui.EXML.parse(request.response,"lark.gui.AlertSkin");
-            var component = new lark.gui.Component();
+                var skin = lark.gui.EXML.parse(request.response,"lark.gui.ButtonSkin");
+            var component = new lark.gui.Button();
             component.skinName = skin;
+            component.label = "按钮";
+            component.stickyHighlighting = true;
             this.addChild(component);
-            component.horizontalCenter = 0;
+            component.x = 100;
             component.verticalCenter = 0;
-            component.height = 300;
 
-            var image = new lark.gui.Image("image/test.png");
-            image.fillMode = "clip";
-            this.addChild(image);
-            image.horizontalCenter = 0;
-            image.verticalCenter = 0;
-            image.width = 300;
-            image.height = 400;
+            //var image = new lark.gui.Image("image/test.png");
+            //image.fillMode = "clip";
+            //this.addChild(image);
+            //image.horizontalCenter = 0;
+            //image.verticalCenter = 0;
+            //image.width = 300;
+            //image.height = 400;
+            //
+            //var image2 = new lark.gui.Image("image/button.png");
+            //image2.scale9Grid = new lark.Rectangle(5,5,110,30);
+            //this.addChild(image2);
+            //image2.x = 300;
+            //image2.y = 100;
+            ////image2.smoothing = false;
+            //image2.width = 300;
+            //image2.height = 100;
 
-            var image2 = new lark.gui.Image("image/button.png");
-            image2.scale9Grid = new lark.Rectangle(5,5,110,30);
-            this.addChild(image2);
-            image2.x = 300;
-            image2.y = 100;
-            //image2.smoothing = false;
-            image2.width = 300;
-            image2.height = 100;
-
-            this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+            //this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
         private touchTarget:lark.gui.UIComponent;

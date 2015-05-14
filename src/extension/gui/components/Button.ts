@@ -29,6 +29,7 @@
 
 module lark.gui {
 
+    var isMobile = Capabilities.isMobile;
     /**
      * 按钮组件
      */
@@ -122,7 +123,7 @@ module lark.gui {
         /**
          * 鼠标事件处理
          */
-        public mouseEventHandler(event:TouchEvent):void {
+        protected mouseEventHandler(event:TouchEvent):void {
             switch (event.$type) {
                 case TouchEvent.TOUCH_ENTER:
                     this.hovered = true;
@@ -175,7 +176,7 @@ module lark.gui {
             if (this.mouseCaptured && (this.hovered || this.stickyHighlighting))
                 return "down";
 
-            if ((this.hovered || this.mouseCaptured) &&
+            if (!isMobile&&(this.hovered || this.mouseCaptured) &&
                 this.$skin && this.$skin.hasState("over"))
                 return "over";
 
@@ -203,4 +204,5 @@ module lark.gui {
         }
     }
 
+    registerClass(Button, Types.Button);
 }

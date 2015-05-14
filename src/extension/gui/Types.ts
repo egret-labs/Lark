@@ -83,6 +83,10 @@ module lark.gui {
          * BasicLayout 类根据其各个设置彼此独立地排列布局元素。
          * BasicLayout（也称为绝对布局）要求显式定位每个容器子代。可以使用子代的 x 和 y 属性，或使用约束来定位每个子代。
          */
-        BasicLayout
+        BasicLayout,
+        /**
+         * 按钮组件
+         */
+        Button
     }
 }

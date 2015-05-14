@@ -520,4 +520,5 @@ module lark.gui {
 
     player.implementUIComponent(Image, Bitmap);
     registerClass(Image, Types.Image, [Types.UIComponent]);
+    registerProperty(Image, "scale9Grid", "lark.Rectangle");
 }

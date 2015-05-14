@@ -647,14 +647,14 @@ module lark.player {
                 var targetClass = this.getClassNameOfNode(targetNode);
             }
             else if (key == "scale9Grid" && type == RECTANGLE) {
-                var rect = value.split(",");
                 if(DEBUG){
+                    var rect = value.split(",");
                     if (rect.length != 4 || isNaN(parseInt(rect[0])) || isNaN(parseInt(rect[1])) ||
                         isNaN(parseInt(rect[2])) || isNaN(parseInt(rect[3]))) {
                         $error(2016, this.currentClassName, toXMLString(node));
                     }
                 }
-                value = "new "+RECTANGLE+"(\"" + value + "\")";
+                value = "new "+RECTANGLE+"(" + value + ")";
             }
             else {
                 var orgValue:string = value;
@@ -848,7 +848,7 @@ module lark.player {
                 var length = children.length;
                 for (var i = 0; i < length; i++) {
                     var item:XML = children[i];
-                    if (item.nodeType==-1&&
+                    if (item.nodeType==1&&
                         item.localName == "states") {
                         item.namespace = NS_W;
                         states = item.children;
@@ -1155,6 +1155,9 @@ module lark.player {
          * 获取节点的完整类名，包括模块名
          */
         private getClassNameOfNode(node:XML):string {
+            if(node.namespace==NS_W){
+                return "";
+            }
             var className = exmlConfig.getClassNameById(node.localName, node.namespace);
             if (DEBUG&&!className) {
                 $error(2003, this.currentClassName, toXMLString(node));

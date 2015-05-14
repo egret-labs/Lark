@@ -89,6 +89,7 @@ module lark.gui {
 
         $onAddToStage(stage:Stage, nestLevel:number):void {
             super.$onAddToStage(stage, nestLevel);
+            this.checkInvalidateFlag();
             if (!this.$hasFlags(player.UIFlags.skinNameExplicitlySet)) {
                 var skin = Theme.$getDefaultSkin(this, stage);
                 if (skin) {
@@ -273,6 +274,10 @@ module lark.gui {
 
         //========================皮肤视图状态===================end========================
 
+        /**
+         * 检查属性失效标记并应用
+         */
+        private checkInvalidateFlag:(event?:Event)=>void;
 
         //=======================UIComponent接口实现===========================
         /**
