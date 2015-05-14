@@ -40,10 +40,6 @@ module lark.gui {
 		}
 
 		/**
-		 * 当用户按下ButtonBase控件时分派。如果 autoRepeat属性为 true，则只要按钮处于按下状态，就将重复分派此事件。
-		 */
-		public static BUTTON_DOWN:string = "buttonDown";
-		/**
 		 * 改变结束
 		 */
 		public static CHANGE_END:string = "changeEnd";
@@ -62,14 +58,9 @@ module lark.gui {
 		 */
 		public static VALUE_COMMIT:string = "valueCommit";
 		/**
-		 * SkinnableComponent皮肤发生改变
+		 * Component皮肤发生改变
 		 */
 		public static SKIN_CHANGED:string = "skinChanged";
-
-		/**
-		 * UIAsset的content属性解析完成
-		 */
-		public static CONTENT_CHANGED:string = "contentChanged";
 
 		/**
 		 * 容器的内容尺寸发生改变

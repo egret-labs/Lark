@@ -71,15 +71,15 @@ module lark.gui {
         }
 
 
-        private _hostComponent: SkinnableComponent = null;
+        private _hostComponent: Component = null;
         /**
          * 此皮肤附加到的主机组件
          */
-        public get hostComponent():SkinnableComponent{
+        public get hostComponent():Component{
             return this._hostComponent;
         }
 
-        public set hostComponent(value:SkinnableComponent){
+        public set hostComponent(value:Component){
             if(this._hostComponent==value)
                 return;
             this._hostComponent = value;

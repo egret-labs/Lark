@@ -39,7 +39,7 @@ module lark.gui {
         /**
          * 获取组件对应的默认皮肤。
          */
-        static $getDefaultSkin(client:SkinnableComponent,stage:Stage):any{
+        static $getDefaultSkin(client:Component,stage:Stage):any{
             var theme = Theme.themeMap[stage.$hashCode];
             if(!theme){
                 return null;
@@ -61,7 +61,7 @@ module lark.gui {
          * 根据主机组件，获取对应的默认皮肤实例。
          * @param client 要获取默认皮肤的组件
          */
-        public getSkin(client:SkinnableComponent):any{
+        public getSkin(client:Component):any{
             return null;
         }
 

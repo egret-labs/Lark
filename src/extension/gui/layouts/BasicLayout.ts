@@ -92,7 +92,7 @@ module lark.player {
     /**
      * 一个工具方法，使用BasicLayout规则测量目标对象。
      */
-    export function measure(target:gui.Group|gui.SkinnableComponent):void{
+    export function measure(target:gui.Group|gui.Component):void{
         if(!target){
             return;
         }
@@ -159,7 +159,7 @@ module lark.player {
     /**
      * 一个工具方法，使用BasicLayout规则布局目标对象。
      */
-    export function updateDisplayList(target:gui.Group|gui.SkinnableComponent,
+    export function updateDisplayList(target:gui.Group|gui.Component,
                                                  unscaledWidth:number, unscaledHeight:number):Point{
         if (!target)
             return;

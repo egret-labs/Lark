@@ -30,9 +30,9 @@
 module lark.gui {
 
     /**
-     * SkinnableComponent 类定义可设置外观的组件的基类。SkinnableComponent 类所使用的外观通常是 Skin 类的子类。
+     * Component 类定义可设置外观的组件的基类。Component 类所使用的外观通常是 Skin 类的子类。
      */
-    export class SkinnableComponent extends Sprite implements UIComponent {
+    export class Component extends Sprite implements UIComponent {
         public constructor() {
             super();
             player.UIComponentImpl.call(this);
@@ -508,6 +508,6 @@ module lark.gui {
         }
     }
 
-    player.implementUIComponent(SkinnableComponent, Sprite, true);
-    registerClass(SkinnableComponent, Types.SkinnableComponent, [Types.UIComponent]);
+    player.implementUIComponent(Component, Sprite, true);
+    registerClass(Component, Types.Component, [Types.UIComponent]);
 }

@@ -29,7 +29,7 @@
 
 module lark.gui {
 
-    export class Button extends SkinnableComponent {
+    export class Button extends Component {
 
 
     }

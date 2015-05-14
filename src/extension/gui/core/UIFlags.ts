@@ -74,7 +74,7 @@ module lark.player {
          */
         stateIsDirty = 0x1000000,
         /**
-         * SkinnableComponent.skinName属性被显式设置过的标志
+         * Component.skinName属性被显式设置过的标志
          */
         skinNameExplicitlySet = 0x2000000,
         /**
