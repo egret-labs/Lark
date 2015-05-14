@@ -282,7 +282,7 @@ module lark.player {
         private getNodeId(node:XML):string {
             if (node.attributes["id"])
                 return node.attributes.id;
-            return "__";
+            return "_"+node.localName;
         }
 
         /**

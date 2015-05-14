@@ -147,7 +147,7 @@ module lark.web {
         for (i = 0; i < length; i++) {
             var childNode = childNodes[i];
             var nodeType = childNode.nodeType;
-            var childXML:any;
+            var childXML:any = null;
             if (nodeType === 1) {
                 childXML = parseNode(childNode, xml);
             }
