@@ -120,6 +120,13 @@ module lark.player{
         }
 
         /**
+         * 触摸在屏幕外结束(弹起)
+         */
+        public onLeaveStage():void{
+            this.stage.emitWith(Event.LEAVE_STAGE);
+        }
+
+        /**
          * 获取舞台坐标下的触摸对象
          */
         private findTarget(stageX:number,stageY:number):DisplayObject{
