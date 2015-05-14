@@ -80,7 +80,7 @@ module lark.gui {
                     skin = skinName;
                 }
             }
-            if (!is(skin,Types.Skin)) {
+            if (!is(skin, Types.Skin)) {
                 skin = null;
                 DEBUG && $error(2202);
             }
@@ -136,9 +136,9 @@ module lark.gui {
                     }
                 }
                 var children = skin.$elementsContent;
-                if(children){
+                if (children) {
                     var length = children.length;
-                    for(var i=0;i<length;i++){
+                    for (var i = 0; i < length; i++) {
                         this.addChild(children[i]);
                     }
                 }
@@ -187,6 +187,92 @@ module lark.gui {
 
         }
 
+        $setTouchChildren(value:boolean) {
+            value = !!value;
+            if (this.$hasFlags(player.UIFlags.enabled)) {
+                this.$toggleFlags(player.DisplayObjectFlags.TouchChildren, value);
+            }
+            else {
+                this.$toggleFlags(player.UIFlags.explicitTouchChildren, value);
+            }
+        }
+
+        $setTouchEnabled(value:boolean) {
+            value = !!value;
+            if (this.$hasFlags(player.UIFlags.enabled)) {
+                this.$toggleFlags(player.DisplayObjectFlags.TouchEnabled, value);
+            }
+            else {
+                this.$toggleFlags(player.UIFlags.explicitTouchEnabled, value);
+            }
+        }
+
+        /**
+         * 组件是否可以接受用户交互。将 enabled 属性设置为 false 后，组件会自动禁用触摸事件(将 touchEnabled 和 touchChildren 同时设置为 false)，
+         * 部分组件可能还会将皮肤的视图状态设置为"disabled",使其所有子项的颜色变暗。默认值为 true。
+         */
+        public get enabled():boolean {
+            return this.$hasFlags(player.UIFlags.enabled);
+        }
+
+        public set enabled(value:boolean) {
+            value = !!value;
+            if (value === this.$hasFlags(player.UIFlags.enabled)) {
+                return;
+            }
+            this.$toggleFlags(player.UIFlags.enabled, value);
+            if(value){
+                this.$toggleFlags(player.UIFlags.explicitTouchEnabled, this.touchEnabled);
+                this.$toggleFlags(player.UIFlags.explicitTouchChildren, this.touchChildren);
+            }
+            else{
+                super.$setTouchEnabled(this.$hasFlags(player.UIFlags.explicitTouchEnabled));
+                super.$setTouchChildren(this.$hasFlags(player.UIFlags.explicitTouchChildren));
+            }
+            this.invalidateSkinState();
+        }
+
+        //========================皮肤视图状态=====================start=======================
+
+        private explicitCurrentState:string = "";
+
+        /**
+         * 组件的当前视图状态。显式设置此属性，将采用显式设置的值去更新皮肤状态，而忽略组件内部getCurrentSkinState()方法返回的值。
+         * 将其设置为 "" 或 null 可将取消组件外部显式设置的视图状态名称，从而采用内部getCurrentSkinState()方法返回的状态。
+         */
+        public get currentState():string {
+            return this.explicitCurrentState ?
+                this.explicitCurrentState : this.getCurrentSkinState();
+        }
+
+        public set currentState(value:string) {
+            if (value == this.explicitCurrentState) {
+                return;
+            }
+            this.explicitCurrentState = value;
+            this.invalidateSkinState();
+        }
+
+        /**
+         * 标记当前需要重新验证皮肤状态
+         */
+        protected invalidateSkinState():void {
+            if (this.$hasFlags(player.UIFlags.stateIsDirty))
+                return;
+
+            this.$setFlags(player.UIFlags.stateIsDirty);
+            this.invalidateProperties();
+        }
+
+        /**
+         * 返回组件当前的皮肤状态名称,子类覆盖此方法定义各种状态名
+         */
+        protected getCurrentSkinState():string {
+            return this.enabled ? "normal" : "disabled"
+        }
+
+        //========================皮肤视图状态===================end========================
+
 
         //=======================UIComponent接口实现===========================
         /**
@@ -200,7 +286,7 @@ module lark.gui {
         /**
          * 子项创建完成。
          */
-        protected childrenCreated():void{
+        protected childrenCreated():void {
 
         }
 
@@ -208,7 +294,12 @@ module lark.gui {
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         protected commitProperties():void {
-
+            if (this.$hasFlags(player.UIFlags.stateIsDirty)) {
+                this.$removeFlags(player.UIFlags.stateIsDirty);
+                if (this._skin) {
+                    this._skin.currentState = this.currentState;
+                }
+            }
         }
 
         /**
@@ -217,14 +308,14 @@ module lark.gui {
         protected measure():void {
             player.measure(this);
             var skin = this._skin;
-            if(!skin){
+            if (!skin) {
                 return;
             }
             var values = this.$uiValues;
-            if(!isNone(skin.width)){
+            if (!isNone(skin.width)) {
                 values[player.UIValues.measuredWidth] = skin.width;
             }
-            else{
+            else {
                 if (values[player.UIValues.measuredWidth] < skin.minWidth) {
                     values[player.UIValues.measuredWidth] = skin.minWidth;
                 }
@@ -233,7 +324,7 @@ module lark.gui {
                 }
             }
 
-            if(!isNone(skin.height)){
+            if (!isNone(skin.height)) {
                 values[player.UIValues.measuredHeight] = skin.height;
             }
             else {

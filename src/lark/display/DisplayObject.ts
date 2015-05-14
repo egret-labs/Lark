@@ -642,6 +642,10 @@ module lark {
         }
 
         public set touchEnabled(value:boolean) {
+            this.$setTouchEnabled(value);
+        }
+
+        $setTouchEnabled(value:boolean):void{
             this.$toggleFlags(player.DisplayObjectFlags.TouchEnabled, !!value);
         }
 

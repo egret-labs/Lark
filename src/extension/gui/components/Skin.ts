@@ -128,15 +128,11 @@ module lark.gui {
          * 组件的当前视图状态。将其设置为 "" 或 null 可将组件重置回其基本状态。
          */
         public get currentState():string {
-            if (this.currentStateChanged)
-                return this.requestedCurrentState;
-            return this._currentState ? this._currentState : this.getDefaultState();
+            return this.currentStateChanged?this.requestedCurrentState:this._currentState;
         }
 
         public set currentState(value:string) {
-            if (!value)
-                value = this.getDefaultState();
-            if (value != this.currentState && value && this.currentState) {
+            if (value != this.currentState) {
                 this.requestedCurrentState = value;
                 this.currentStateChanged = true;
                 if (this._hostComponent) {
@@ -168,10 +164,7 @@ module lark.gui {
             }
             this.removeState(this._currentState);
             this._currentState = this.requestedCurrentState;
-
-            if (this._currentState) {
-                this.applyState(this._currentState);
-            }
+            this.applyState(this._currentState);
         }
 
 
@@ -181,10 +174,10 @@ module lark.gui {
         private getState(stateName:string):State {
             if (!stateName)
                 return null;
-            var states:Array<any> = this._states;
-            var length:number = states.length;
-            for (var i:number = 0; i < length; i++) {
-                var state:State = states[i];
+            var states = this._states;
+            var length = states.length;
+            for (var i = 0; i < length; i++) {
+                var state = states[i];
                 if (state.name == stateName)
                     return state;
             }

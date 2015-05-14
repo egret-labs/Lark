@@ -431,6 +431,10 @@ module lark {
         }
 
         public set touchChildren(value:boolean) {
+            this.$setTouchChildren(value);
+        }
+
+        $setTouchChildren(value:boolean):void {
             this.$toggleFlags(player.DisplayObjectFlags.TouchChildren, !!value);
         }
 

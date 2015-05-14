@@ -30,7 +30,7 @@
 module lark.player {
 
     //UIComponent剩余可用的：
-    // 0x2000000,0x4000000,0x8000000,0x10000000,
+    // 0x10000000,
     // 0x20000000,0x40000000,0x80000000,0x100000000,0x200000000,0x400000000,0x800000000,0x1000000000,0x2000000000,
     // 0x4000000000,0x8000000000,0x10000000000,0x20000000000,0x40000000000,0x80000000000,0x100000000000,0x200000000000
 
@@ -48,10 +48,6 @@ module lark.player {
          */
         InvalidateDisplayListFlag = 0x80000,
         /**
-         * UIComponent初始化标志量
-         */
-        UIComponentInitFlags = InvalidatePropertiesFlag|InvalidateSizeFlag|InvalidateDisplayListFlag,
-        /**
          * 布局宽度被显式设置的标记
          */
         LayoutWidthExplicitlySet = 0x100000,
@@ -65,12 +61,29 @@ module lark.player {
          */
         scrollEnabled = 0x400000,
         /**
+         * 组件是否可以接受用户交互。将 enabled 属性设置为 false 后，组件会自动禁用触摸事件(将 touchEnabled 和 touchChildren 同时设置为 false)，
+         * 部分组件可能还会将皮肤的视图状态设置为"disabled",使其所有子项的颜色变暗。
+         */
+        enabled = 0x800000,
+        /**
+         * UIComponent初始化标志量
+         */
+        UIComponentInitFlags = InvalidatePropertiesFlag|InvalidateSizeFlag|InvalidateDisplayListFlag|enabled,
+        /**
          * 视图状态失效标志
          */
-        stateIsDirty = 0x800000,
+        stateIsDirty = 0x1000000,
         /**
          * SkinnableComponent.skinName属性被显式设置过的标志
          */
-        skinNameExplicitlySet = 0x1000000
+        skinNameExplicitlySet = 0x2000000,
+        /**
+         * 外部显式设置的mouseChildren属性值
+         */
+        explicitTouchChildren = 0x4000000,
+        /**
+         * 外部显式设置的mouseEnabled属性值
+         */
+        explicitTouchEnabled = 0x8000000,
     }
 }
