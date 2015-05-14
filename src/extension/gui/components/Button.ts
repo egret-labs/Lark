@@ -94,7 +94,7 @@ module lark.gui {
         /**
          * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，是否按下鼠标以及触摸点是否在按钮上。
          */
-        private mouseCaptured:boolean = false;
+        private touchCaptured:boolean = false;
 
         private _stickyHighlighting:boolean = false;
         /**
@@ -126,6 +126,9 @@ module lark.gui {
         protected mouseEventHandler(event:TouchEvent):void {
             switch (event.$type) {
                 case TouchEvent.TOUCH_ENTER:
+                    if(event.touchDown&&!this.touchCaptured){
+                        return;
+                    }
                     this.hovered = true;
                     break;
 
@@ -135,15 +138,15 @@ module lark.gui {
 
                 case TouchEvent.TOUCH_BEGIN:
                     this.addStageMouseHandlers();
-                    this.mouseCaptured = true;
+                    this.touchCaptured = true;
                     break;
 
                 case TouchEvent.TOUCH_END:
                     if (event.target == this) {
                         this.hovered = true;
-                        if (this.mouseCaptured) {
+                        if (this.touchCaptured) {
                             this.buttonReleased();
-                            this.mouseCaptured = false;
+                            this.touchCaptured = false;
                         }
                     }
                     break;
@@ -162,7 +165,7 @@ module lark.gui {
             if (event.target == this)
                 return;
 
-            this.mouseCaptured = false;
+            this.touchCaptured = false;
             this.invalidateSkinState();
         }
 
@@ -173,10 +176,10 @@ module lark.gui {
             if (!this.$hasFlags(player.UIFlags.enabled))
                 return "disabled";
 
-            if (this.mouseCaptured && (this.hovered || this.stickyHighlighting))
+            if (this.touchCaptured && (this.hovered || this.stickyHighlighting))
                 return "down";
 
-            if (!isMobile&&(this.hovered || this.mouseCaptured) &&
+            if (!isMobile&&(this.hovered || this.touchCaptured) &&
                 this.$skin && this.$skin.hasState("over"))
                 return "over";
 

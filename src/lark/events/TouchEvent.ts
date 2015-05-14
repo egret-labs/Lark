@@ -83,15 +83,16 @@ module lark {
          * @param touchPointID 分配给触摸点的唯一标识号
          */
         public constructor(type:string, bubbles?:boolean, cancelable?:boolean, stageX?:number,
-                           stageY?:number, touchPointID?:number) {
+                           stageY?:number, touchPointID?:number, touchDown?:boolean) {
             super(type, bubbles, cancelable);
-            this.$setTo(stageX, stageY, touchPointID);
+            this.$setTo(stageX, stageY, touchPointID, touchDown);
         }
 
-        $setTo(stageX:number, stageY:number, touchPointID:number):void {
+        $setTo(stageX:number, stageY:number, touchPointID:number, touchDown:boolean):void {
             this.touchPointID = +touchPointID || 0;
             this._stageX = +stageX || 0;
             this._stageY = +stageY || 0;
+            this.touchDown = !!touchDown;
         }
 
         public _stageX:number;
@@ -139,6 +140,10 @@ module lark {
          * 分配给触摸点的唯一标识号
          */
         public touchPointID:number;
+        /**
+         * 表示触摸已按下 (true) 还是未按下 (false)。
+         */
+        public touchDown:boolean;
 
         /**
          * 如果已修改显示列表，调用此方法将会忽略帧频限制，在此事件处理完成后立即重绘屏幕。
@@ -158,17 +163,17 @@ module lark {
          * @param touchPointID 分配给触摸点的唯一标识号
          */
         public static emitTouchEvent(target:IEventEmitter, type:string, bubbles?:boolean, cancelable?:boolean,
-                                         stageX?:number, stageY?:number, touchPointID?:number):boolean {
-            if(!bubbles&&!target.hasListener(type)){
+                                     stageX?:number, stageY?:number, touchPointID?:number, touchDown?:boolean):boolean {
+            if (!bubbles && !target.hasListener(type)) {
                 return;
             }
             var event = Event.create(TouchEvent, type, bubbles, cancelable);
-            event.$setTo(stageX, stageY, touchPointID);
+            event.$setTo(stageX, stageY, touchPointID, touchDown);
             var result = target.emit(event);
             Event.release(event);
             return result;
         }
     }
 
-    registerClass(TouchEvent,Types.TouchEvent);
+    registerClass(TouchEvent, Types.TouchEvent);
 }

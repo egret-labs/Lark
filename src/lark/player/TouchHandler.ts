@@ -54,7 +54,7 @@ module lark.player{
         public onTouchBegin(x:number,y:number,touchPointID:number):void {
             var target = this.findTarget(x,y);
             this.touchDownTarget[touchPointID] = target.$hashCode;
-            TouchEvent.emitTouchEvent(target,TouchEvent.TOUCH_BEGIN,true,true,x,y,touchPointID);
+            TouchEvent.emitTouchEvent(target,TouchEvent.TOUCH_BEGIN,true,true,x,y,touchPointID,true);
         }
 
         private lastTouchX:number = -1;
@@ -73,9 +73,10 @@ module lark.player{
             this.lastTouchX = x;
             this.lastTouchY = y;
             var target = this.findTarget(x,y);
+            var touchDown = this.touchDownTarget[touchPointID]>0;
             var oldTarget = this.touchMoveTarget[touchPointID];
             this.touchMoveTarget[touchPointID] = target;
-            TouchEvent.emitTouchEvent(target,TouchEvent.TOUCH_MOVE,true,true,x,y,touchPointID);
+            TouchEvent.emitTouchEvent(target,TouchEvent.TOUCH_MOVE,true,true,x,y,touchPointID,touchDown);
             if(oldTarget!==target){
                 var enterList = this.getParentList(target,ENTER_LIST);
                 var leaveList = this.getParentList(oldTarget,LEAVE_LIST);
@@ -84,10 +85,10 @@ module lark.player{
                     leaveList.pop();
                 }
                 while(leaveList.length){
-                    TouchEvent.emitTouchEvent(leaveList.shift(),TouchEvent.TOUCH_LEAVE,false,true,x,y,touchPointID);
+                    TouchEvent.emitTouchEvent(leaveList.shift(),TouchEvent.TOUCH_LEAVE,false,true,x,y,touchPointID,touchDown);
                 }
                 while(enterList.length){
-                    TouchEvent.emitTouchEvent(enterList.shift(),TouchEvent.TOUCH_ENTER,false,true,x,y,touchPointID);
+                    TouchEvent.emitTouchEvent(enterList.shift(),TouchEvent.TOUCH_ENTER,false,true,x,y,touchPointID,touchDown);
                 }
             }
         }
@@ -110,12 +111,12 @@ module lark.player{
             var target = this.findTarget(x,y);
             var oldTargetCode = this.touchDownTarget[touchPointID];
             this.touchDownTarget[touchPointID] = -1;
-            TouchEvent.emitTouchEvent(target,TouchEvent.TOUCH_END,true,true,x,y,touchPointID);
+            TouchEvent.emitTouchEvent(target,TouchEvent.TOUCH_END,true,true,x,y,touchPointID,false);
             if(oldTargetCode===target.$hashCode){
-                TouchEvent.emitTouchEvent(target,TouchEvent.TOUCH_TAP,true,true,x,y,touchPointID);
+                TouchEvent.emitTouchEvent(target,TouchEvent.TOUCH_TAP,true,true,x,y,touchPointID,false);
             }
             else{
-                TouchEvent.emitTouchEvent(target,TouchEvent.TOUCH_RELEASE_OUTSIDE,true,true,x,y,touchPointID);
+                TouchEvent.emitTouchEvent(target,TouchEvent.TOUCH_RELEASE_OUTSIDE,true,true,x,y,touchPointID,false);
             }
         }
 
