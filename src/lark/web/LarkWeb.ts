@@ -129,6 +129,7 @@ module lark.web {
     lark.assert = console.assert.bind(console);
     lark.warn = console.warn.bind(console);
     lark.error = console.error.bind(console);
+    if(DEBUG){
     lark.log = function(){
         if(DEBUG){
             var length = arguments.length;
@@ -139,6 +140,10 @@ module lark.web {
             player.$logToFPS(info);
         }
         console.log.apply(console,arguments);
+    }
+    }
+    else{
+        lark.log = console.log.bind(console);
     }
     window.addEventListener("load", runLark);
     window.addEventListener("resize",updateScreenSize);

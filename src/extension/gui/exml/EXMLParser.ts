@@ -109,14 +109,14 @@ module lark.player {
          * @param className 要编译成的完整类名，包括模块名。
          */
         public parse(xmlData:XML, className:string):string {
-            var clazz = this.parseClass(xmlData,className);
+            var clazz = this.parseClass(xmlData, className);
             return clazz.toCode();
         }
 
         /**
          * 编译指定的XML对象为CpClass对象。
          */
-        private parseClass(xmlData:XML,className:string):CpClass{
+        private parseClass(xmlData:XML, className:string):CpClass {
             if (!exmlConfig) {
                 exmlConfig = new EXMLConfig();
             }
@@ -187,14 +187,14 @@ module lark.player {
                 }
                 return;
             }
-            this.addIds(this.currentXML.children,this.currentClass.superClass);
+            this.addIds(this.currentXML.children, this.currentClass.superClass);
             this.createConstructFunc();
         }
 
         /**
          * 添加必须的id
          */
-        private addIds(items:any,className:string):void {
+        private addIds(items:any, className:string):void {
             if (!items) {
                 return;
             }
@@ -210,11 +210,11 @@ module lark.player {
                     }
                     continue;
                 }
-                if(node.localName=="Skin"&&node.namespace==NS_E){
+                if (node.localName == "Skin" && node.namespace == NS_E) {
                     continue;
                 }
                 var nodeClassName = this.getClassNameOfNode(node);
-                this.addIds(node.children,nodeClassName);
+                this.addIds(node.children, nodeClassName);
                 var id = node.attributes["id"];
                 if (node.namespace == NS_W) {
                 }
@@ -228,7 +228,7 @@ module lark.player {
                         this.stateIds.push(id);
                 }
                 else if (node.localName) {
-                    if (this.isProperty(node,className)) {
+                    if (this.isProperty(node, className)) {
                         var prop = node.localName;
                         var index = prop.indexOf(".");
                         var children:Array<any> = node.children;
@@ -259,7 +259,7 @@ module lark.player {
             }
             var keys = Object.keys(attributes);
             var length = keys.length;
-            for(var i=0;i<length;i++){
+            for (var i = 0; i < length; i++) {
                 var name = keys[i];
                 if (name.indexOf(".") != -1) {
                     return true;
@@ -287,7 +287,7 @@ module lark.player {
         private getNodeId(node:XML):string {
             if (node.attributes["id"])
                 return node.attributes.id;
-            return "_"+node.localName;
+            return "_" + node.localName;
         }
 
         /**
@@ -463,23 +463,23 @@ module lark.player {
                 if (child.nodeType != 1 || child.namespace == NS_W) {
                     continue;
                 }
-                if(child.localName=="Skin"&&child.namespace==NS_E){
+                if (child.localName == "Skin" && child.namespace == NS_E) {
                     var parser = exmlParserPool.pop();
-                    if(!parser){
+                    if (!parser) {
                         parser = new EXMLParser();
                     }
-                    var innerClassName = this.currentClass.className+"$inner"+innerClassCount++;
-                    var innerClass = parser.parseClass(child,innerClassName);
+                    var innerClassName = this.currentClass.className + "$inner" + innerClassCount++;
+                    var innerClass = parser.parseClass(child, innerClassName);
                     this.currentClass.addInnerClass(innerClass);
                     exmlParserPool.push(parser);
-                    var type = exmlConfig.getPropertyType("skinName",className);
-                    if(type){
+                    var type = exmlConfig.getPropertyType("skinName", className);
+                    if (type) {
                         cb.addAssignment(varName, innerClassName, "skinName");
                     }
                     continue;
                 }
                 var prop = child.localName;
-                if (this.isProperty(child,className)) {
+                if (this.isProperty(child, className)) {
                     if (!this.isNormalKey(prop)) {
                         continue;
                     }
@@ -499,7 +499,7 @@ module lark.player {
                     if (DEBUG) {
                         var errorInfo = getPropertyStr(child);
                     }
-                    this.addChildrenToProp(child.children, type, prop, cb, varName, errorInfo, propList,node);
+                    this.addChildrenToProp(child.children, type, prop, cb, varName, errorInfo, propList, node);
                 }
                 else {
                     directChild.push(child);
@@ -517,7 +517,7 @@ module lark.player {
                 }
                 return;
             }
-            this.addChildrenToProp(directChild, defaultType, defaultProp, cb, varName, errorInfo, propList,node);
+            this.addChildrenToProp(directChild, defaultType, defaultProp, cb, varName, errorInfo, propList, node);
         }
 
         /**
@@ -525,7 +525,7 @@ module lark.player {
          */
         private addChildrenToProp(children:Array<any>, type:string, prop:string,
                                   cb:CpCodeBlock, varName:string, errorInfo:string,
-                                  propList:string[],node:XML):void {
+                                  propList:string[], node:XML):void {
             var childFunc = "";
             var childLength = children.length;
             if (childLength > 1) {
@@ -558,7 +558,7 @@ module lark.player {
                             var len = firstChild.children.length;
                             for (var k = 0; k < len; k++) {
                                 item = <any>firstChild.children[k];
-                                if(item.nodeType!=1){
+                                if (item.nodeType != 1) {
                                     continue;
                                 }
                                 childFunc = this.createFuncForNode(item);
@@ -580,12 +580,12 @@ module lark.player {
                             childFunc = "[]";
                     }
                 }
-                else if(firstChild.nodeType==1){
+                else if (firstChild.nodeType == 1) {
                     var targetClass = this.getClassNameOfNode(firstChild);
                     childFunc = this.createFuncForNode(firstChild);
                 }
-                else{
-                    childFunc = this.formatValue(prop,(<XMLText><any>firstChild).text,node);
+                else {
+                    childFunc = this.formatValue(prop, (<XMLText><any>firstChild).text, node);
                 }
             }
             if (childFunc != "") {
@@ -594,7 +594,7 @@ module lark.player {
                 if (propList.indexOf(prop) == -1) {
                     propList.push(prop);
                 }
-                else if(DEBUG){
+                else if (DEBUG) {
                     $warn(2103, this.currentClassName, prop, errorInfo);
                 }
                 cb.addAssignment(varName, childFunc, prop);
@@ -604,17 +604,17 @@ module lark.player {
         /**
          * 指定节点是否是属性节点
          */
-        private isProperty(node:any,className:string):boolean {
+        private isProperty(node:any, className:string):boolean {
             var name = node.localName;
             if (name == null)
                 return true;
             if (this.isBasicTypeData(name))
                 return false;
             var index = name.indexOf(".")
-            if(index!=-1){
-                name = name.substr(0,index);
+            if (index != -1) {
+                name = name.substr(0, index);
             }
-            return !!exmlConfig.getPropertyType(name,className);
+            return !!exmlConfig.getPropertyType(name, className);
         }
 
 
@@ -651,7 +651,7 @@ module lark.player {
             value = value.trim();
             var className = this.getClassNameOfNode(node);
             var type:string = exmlConfig.getPropertyType(key, className);
-            if (DEBUG&&!type) {
+            if (DEBUG && !type) {
                 $error(2005, this.currentClassName, key, toXMLString(node));
             }
             if (type != "string" && value.charAt(0) == "{" && value.charAt(value.length - 1) == "}") {
@@ -661,26 +661,26 @@ module lark.player {
                     value = value.substring(5);
                 }
                 var targetNode:any = this.idToNode[value];
-                if (DEBUG&&!targetNode) {
+                if (DEBUG && !targetNode) {
                     $error(2010, this.currentClassName, key, value, toXMLString(node));
                 }
                 var targetClass = this.getClassNameOfNode(targetNode);
             }
             else if (key == "scale9Grid" && type == RECTANGLE) {
-                if(DEBUG){
+                if (DEBUG) {
                     var rect = value.split(",");
                     if (rect.length != 4 || isNaN(parseInt(rect[0])) || isNaN(parseInt(rect[1])) ||
                         isNaN(parseInt(rect[2])) || isNaN(parseInt(rect[3]))) {
                         $error(2016, this.currentClassName, toXMLString(node));
                     }
                 }
-                value = "new "+RECTANGLE+"(" + value + ")";
+                value = "new " + RECTANGLE + "(" + value + ")";
             }
             else {
                 var orgValue:string = value;
                 switch (type) {
                     case IFACTORY:
-                        value = "new "+CLASS_FACTORY+"(" + orgValue + ")";
+                        value = "new " + CLASS_FACTORY + "(" + orgValue + ")";
                     case "number":
                         if (value.indexOf("#") == 0)
                             value = "0x" + value.substring(1);
@@ -696,7 +696,7 @@ module lark.player {
                         value = this.formatString(stringValue);
                         break;
                     default:
-                        if(DEBUG){
+                        if (DEBUG) {
                             $error(2008, this.currentClassName, "string", key + ":" + type, toXMLString(node));
                         }
                         break;
@@ -749,7 +749,7 @@ module lark.player {
                     var length = children.length;
                     for (var i = 0; i < length; i++) {
                         var decl:XML = children[i];
-                        if(decl.nodeType!=1){
+                        if (decl.nodeType != 1) {
                             continue;
                         }
                         var funcName = this.createFuncForNode(decl);
@@ -773,20 +773,21 @@ module lark.player {
             }
 
             var skinParts = this.skinParts;
+            var skinPartStr:string = "[]";
             length = skinParts.length;
             if (length > 0) {
                 for (i = 0; i < length; i++) {
                     skinParts[i] = "\"" + skinParts[i] + "\"";
                 }
-                var skinPartStr = "[" + skinParts.join(",") + "]";
-                var skinPartFunc:CpFunction = new CpFunction();
-                skinPartFunc.name = "skinParts";
-                skinPartFunc.isGet = true;
-                var skinPartCB:CpCodeBlock = new CpCodeBlock();
-                skinPartCB.addReturn(skinPartStr);
-                skinPartFunc.codeBlock = skinPartCB;
-                this.currentClass.addFunction(skinPartFunc);
+                skinPartStr = "[" + skinParts.join(",") + "]";
             }
+            var skinPartFunc:CpFunction = new CpFunction();
+            skinPartFunc.name = "skinParts";
+            skinPartFunc.isGet = true;
+            var skinPartCB:CpCodeBlock = new CpCodeBlock();
+            skinPartCB.addReturn(skinPartStr);
+            skinPartFunc.codeBlock = skinPartCB;
+            this.currentClass.addFunction(skinPartFunc);
 
 
             this.currentXML.attributes.id = "";
@@ -798,7 +799,7 @@ module lark.player {
             var attributes = node.attributes;
             var keys = Object.keys(attributes);
             var keysLength = keys.length;
-            for(var m=0;m<keysLength;m++){
+            for (var m = 0; m < keysLength; m++) {
                 var itemName = keys[m];
                 var value:string = attributes[itemName];
                 var index = itemName.indexOf(".");
@@ -834,7 +835,7 @@ module lark.player {
                         first = false;
                     else
                         cb.addCodeLine(indentStr + ",");
-                    var codes= state.toCode().split("\n");
+                    var codes = state.toCode().split("\n");
                     var codeIndex = 0;
                     while (codeIndex < codes.length) {
                         var code = codes[codeIndex];
@@ -868,7 +869,7 @@ module lark.player {
                 var length = children.length;
                 for (var i = 0; i < length; i++) {
                     var item:XML = children[i];
-                    if (item.nodeType==1&&
+                    if (item.nodeType == 1 &&
                         item.localName == "states") {
                         item.namespace = NS_W;
                         states = item.children;
@@ -880,7 +881,7 @@ module lark.player {
             if (!states)
                 return;
             if (states.length == 0) {
-                if(DEBUG){
+                if (DEBUG) {
                     $warn(2102, this.currentClassName, getPropertyStr(item));
                 }
                 return;
@@ -888,7 +889,7 @@ module lark.player {
             length = states.length;
             for (i = 0; i < length; i++) {
                 var state:XML = states[i];
-                if(state.nodeType!=1){
+                if (state.nodeType != 1) {
                     continue;
                 }
                 var stateGroups:Array<any> = [];
@@ -926,14 +927,14 @@ module lark.player {
             var length = items.length;
             for (var i = 0; i < length; i++) {
                 var node:XML = items[i];
-                if(node.nodeType!=1||(node.localName=="Skin"&&node.namespace==NS_E)){
+                if (node.nodeType != 1 || (node.localName == "Skin" && node.namespace == NS_E)) {
                     continue;
                 }
                 this.createStates(node);
                 if (node.namespace == NS_W || !node.localName) {
                     continue;
                 }
-                if (this.isProperty(node,className)) {
+                if (this.isProperty(node, className)) {
                     var prop = node.localName;
                     var index = prop.indexOf(".");
                     var children:Array<any> = node.children;
@@ -944,7 +945,7 @@ module lark.player {
                     prop = prop.substring(0, index);
 
                     var type = exmlConfig.getPropertyType(prop, className);
-                    if(DEBUG){
+                    if (DEBUG) {
                         if (type == "Array") {
                             $error(2013, this.currentClassName, getPropertyStr(node));
                         }
@@ -955,13 +956,13 @@ module lark.player {
 
                     var firstChild:XML = children[0];
                     var value:string;
-                    if(firstChild.nodeType==1){
+                    if (firstChild.nodeType == 1) {
                         this.createFuncForNode(firstChild);
                         this.checkIdForState(firstChild);
                         value = "this." + firstChild.attributes.id;
                     }
-                    else{
-                        value = this.formatValue(prop,(<XMLText><any>firstChild).text,parentNode);
+                    else {
+                        value = this.formatValue(prop, (<XMLText><any>firstChild).text, parentNode);
                     }
 
                     states = this.getStateByName(stateName, node);
@@ -986,9 +987,9 @@ module lark.player {
                         var parent:XML = node.parent;
                         if (parent.localName == "Array")
                             parent = parent.parent;
-                        if(parent&&parent.parent){
+                        if (parent && parent.parent) {
                             var parentClassName = this.getClassNameOfNode(parent.parent);
-                            if (this.isProperty(parent,parentClassName))
+                            if (this.isProperty(parent, parentClassName))
                                 parent = parent.parent;
                         }
 
@@ -1012,7 +1013,7 @@ module lark.player {
                             stateLength = this.stateCode.length;
                             for (j = 0; j < stateLength; j++) {
                                 state = this.stateCode[j];
-                                if (excludeNames.indexOf(state.name) == -1){
+                                if (excludeNames.indexOf(state.name) == -1) {
                                     stateNames.push(state.name);
                                 }
 
@@ -1036,7 +1037,7 @@ module lark.player {
 
                     var names = Object.keys(attributes);
                     var namesLength = names.length;
-                    for(var m=0;m<namesLength;m++){
+                    for (var m = 0; m < namesLength; m++) {
                         name = names[m];
                         var value:string = attributes[name];
                         var index:number = name.indexOf(".");
@@ -1114,7 +1115,7 @@ module lark.player {
                     }
                 }
             }
-            if (DEBUG&&states.length == 0) {
+            if (DEBUG && states.length == 0) {
                 $error(2006, this.currentClassName, name, toXMLString(node));
             }
             return states;
@@ -1136,7 +1137,7 @@ module lark.player {
             var length = children.length;
             for (var i = 0; i < length; i++) {
                 var item = children[i];
-                if (this.isProperty(item,className))
+                if (this.isProperty(item, className))
                     continue;
                 if (item == node) {
                     found = true;
@@ -1175,11 +1176,11 @@ module lark.player {
          * 获取节点的完整类名，包括模块名
          */
         private getClassNameOfNode(node:XML):string {
-            if(node.namespace==NS_W){
+            if (node.namespace == NS_W) {
                 return "";
             }
             var className = exmlConfig.getClassNameById(node.localName, node.namespace);
-            if (DEBUG&&!className) {
+            if (DEBUG && !className) {
                 $error(2003, this.currentClassName, toXMLString(node));
             }
             return className;
@@ -1226,7 +1227,7 @@ module lark.player {
             var attributes = node.attributes;
             var keys = Object.keys(attributes);
             var length = keys.length;
-            for(var i=0;i<length;i++){
+            for (var i = 0; i < length; i++) {
                 var key = keys[i];
                 var value:string = attributes[key];
                 if (key == "id" && value.substring(0, 2) == "__") {
@@ -1234,7 +1235,7 @@ module lark.player {
                 }
                 str += " " + key + "=\"" + value + "\"";
             }
-            if (node.children.length==0) {
+            if (node.children.length == 0) {
                 str += "/>";
             }
             else {

@@ -41,7 +41,6 @@ module lark.player {
             if (DEBUG && !context) {
                 $error(1003, "context");
             }
-            log("haha");
             this.entryClassName = entryClassName;
             this.stage = stage;
             this.screenDisplayList = this.createDisplayList(stage, context);
@@ -420,7 +419,7 @@ module lark.player {
                     if (this.infoText.textWidth > this._stage.stageWidth - 20) {
                         this.infoText.width = this._stage.stageWidth - 20;
                     }
-                    while (this.infoText.textHeight > this._stage.stageHeight) {
+                    while (this.infoText.textHeight > this._stage.stageHeight-20) {
                         lines.shift();
                         this.infoText.text = lines.join("\n");
                     }
