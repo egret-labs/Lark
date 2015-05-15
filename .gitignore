@@ -12,3 +12,4 @@ bin-release
 *.sln
 *.suo
 /tools/lib/typescript/src/*.js
+tmp

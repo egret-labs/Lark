@@ -78,11 +78,9 @@ module lark.web {
          * 添加canvas到container。
          */
         private attachCanvas(container:HTMLElement,canvas:HTMLCanvasElement):void {
-            container.onselectstart = function () {//屏蔽网页的文本选择
-                return false;
-            };
+
             var style = canvas.style;
-            style.margin = "auto";
+            style.margin = "0 auto";
             style.position = "absolute";
             style.top = "0";
             style.bottom = "0";
@@ -97,7 +95,10 @@ module lark.web {
         /**
          * 更新播放器视口尺寸
          */
-        public updateScreenSize(player:lark.player.Player, webTouch:WebTouchHandler):void {
+        public updateScreenSize(player:lark.player.Player, webTouch:WebTouchHandler,webText:WebTextAdapter):void {
+            var canvas = this.canvas;
+            if(canvas['userTyping'])
+                return;
             var screenRect = this.container.getBoundingClientRect();
             var stageSize = lark.player.screenAdapter.calculateStageSize(this.scaleMode,
                 screenRect.width, screenRect.height, this.contentWidth, this.contentHeight);
@@ -105,7 +106,6 @@ module lark.web {
             var stageHeight = stageSize.stageHeight;
             var displayWidth = stageSize.displayWidth;
             var displayHeight = stageSize.displayHeight;
-            var canvas = this.canvas;
             if (canvas.width !== stageWidth) {
                 canvas.width = stageWidth;
             }
@@ -115,7 +115,10 @@ module lark.web {
             canvas.style.width = displayWidth + "px";
             canvas.style.height = displayHeight + "px";
             player.updateStageSize(stageWidth, stageHeight);
-            webTouch.updateScaleMode(displayWidth / stageWidth, displayHeight / stageHeight);
+            var scalex = displayWidth / stageWidth,
+                scaley = displayHeight / stageHeight;
+            webTouch.updateScaleMode(scalex,scaley);
+            webText.updateScaleMode(scalex, scaley,(screenRect.width-displayWidth)/2,0);
         }
     }
 }
