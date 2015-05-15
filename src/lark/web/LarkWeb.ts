@@ -129,16 +129,21 @@ module lark.web {
     lark.assert = console.assert.bind(console);
     lark.warn = console.warn.bind(console);
     lark.error = console.error.bind(console);
-    lark.log = function(){
-        if(DEBUG){
-            var length = arguments.length;
-            var info = "";
-            for(var i=0;i<length;i++){
-                info += arguments[i]+" ";
+    if(DEBUG){
+        lark.log = function(){
+            if(DEBUG){
+                var length = arguments.length;
+                var info = "";
+                for(var i=0;i<length;i++){
+                    info += arguments[i]+" ";
+                }
+                player.$logToFPS(info);
             }
-            player.$logToFPS(info);
+            console.log.apply(console,arguments);
         }
-        console.log.apply(console,arguments);
+    }
+    else{
+        lark.log = console.log.bind(console);
     }
     window.addEventListener("load", runLark);
     window.addEventListener("resize",updateScreenSize);
