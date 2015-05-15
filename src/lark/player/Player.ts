@@ -408,7 +408,7 @@ module lark.player {
                     if (this.infoText.textWidth > this._stage.stageWidth - 20) {
                         this.infoText.width = this._stage.stageWidth - 20;
                     }
-                    while (this.infoText.textHeight > this._stage.stageHeight) {
+                    while (this.infoText.textHeight > this._stage.stageHeight-20) {
                         lines.shift();
                         this.infoText.text = lines.join("\n");
                     }
