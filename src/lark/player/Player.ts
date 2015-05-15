@@ -41,7 +41,6 @@ module lark.player {
             if (DEBUG && !context) {
                 $error(1003, "context");
             }
-            log("haha");
             this.entryClassName = entryClassName;
             this.stage = stage;
             this.screenDisplayList = this.createDisplayList(stage, context);
