@@ -91,6 +91,22 @@ module lark.gui {
         /**
          * 切换按钮
          */
-        ToggleButton
+        ToggleButton,
+        /**
+         * 复选框
+         */
+        CheckBox,
+        /**
+         * 开关按钮
+         */
+        ToggleSwitch,
+        /**
+         * RadioButton 组件使用户可在一组互相排斥的选择中做出一种选择
+         */
+        RadioButton,
+        /**
+         * RadioButtonGroup 组件定义一组 RadioButton 组件，这些组件相互排斥；因此，用户每次只能选择一个 RadioButton 组件
+         */
+        RadioButtonGroup
     }
 }

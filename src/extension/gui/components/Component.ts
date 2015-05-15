@@ -100,6 +100,7 @@ module lark.gui {
 
 
         $skin:Skin = null;
+
         /**
          * [只读]皮肤对象实例。
          */
@@ -217,16 +218,20 @@ module lark.gui {
         }
 
         public set enabled(value:boolean) {
+            this.$setEnabled(value);
+        }
+
+        $setEnabled(value:boolean):void {
             value = !!value;
             if (value === this.$hasFlags(player.UIFlags.enabled)) {
                 return;
             }
             this.$toggleFlags(player.UIFlags.enabled, value);
-            if(value){
+            if (value) {
                 this.$toggleFlags(player.UIFlags.explicitTouchEnabled, this.touchEnabled);
                 this.$toggleFlags(player.UIFlags.explicitTouchChildren, this.touchChildren);
             }
-            else{
+            else {
                 super.$setTouchEnabled(this.$hasFlags(player.UIFlags.explicitTouchEnabled));
                 super.$setTouchChildren(this.$hasFlags(player.UIFlags.explicitTouchChildren));
             }
@@ -257,7 +262,7 @@ module lark.gui {
         /**
          * 标记当前需要重新验证皮肤状态
          */
-        protected invalidateSkinState():void {
+        public invalidateSkinState():void {
             if (this.$hasFlags(player.UIFlags.stateIsDirty))
                 return;
 

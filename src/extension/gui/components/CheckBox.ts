@@ -31,63 +31,17 @@
 module lark.gui {
 
 	/**
-	 * 切换按钮
-	 * @event lark.Event.CHANGE 选中状态发生改变，仅当触摸操作引起的选中状态改变才会抛出此事件。
+	 * 复选框
 	 */
-	export class ToggleButton extends Button{
-
-		$selected: boolean = false;
+	export class CheckBox extends ToggleButton{
 		/**
-		 * 按钮处于按下状态时为 true，而按钮处于弹起状态时为 false。
+		 * 创建一个CheckBox
 		 */
-		public get selected():boolean{
-			return this.$selected;
-		}
-
-		public set selected(value:boolean){
-			this.$setSelected(value);
-		}
-
-		$setSelected(value:boolean):void{
-			value = !!value;
-			if (value === this.$selected)
-				return;
-			this.$selected = value;
-			this.invalidateSkinState();
-			UIEvent.emitUIEvent(this, UIEvent.VALUE_COMMIT);
-		}
-
-		/**
-		 * 返回要应用到外观的状态的名称
-		 */
-		public getCurrentSkinState():string{
-			var state = super.getCurrentSkinState();
-			if (!this.$selected){
-				return state;
-			}
-			else{
-				var selectedState = state + "AndSelected";
-				var skin = this.skin;
-				if(skin&&skin.hasState(selectedState)){
-					return selectedState;
-				}
-				return state=="disabled"?"disabled":"down";
-			}
-		}
-		/**
-		 * 是否根据鼠标事件自动变换选中状态,默认true。仅框架内使用。
-		 */
-		$autoSelected:boolean = true;
-
-		/**
-		 * 当在用户单击按钮之后处理 MouseEvent.MOUSE_UP 事件时，将调用此方法
-		 */
-		protected buttonReleased():void{
-			if(!this.$autoSelected)
-				return;
-			this.selected = !this.$selected;
-			this.emitWith(Event.CHANGE);
+		public constructor(){
+			super();
 		}
 	}
-	registerClass(ToggleButton, Types.ToggleButton);
+
+	registerClass(CheckBox,Types.CheckBox);
+	
 }
