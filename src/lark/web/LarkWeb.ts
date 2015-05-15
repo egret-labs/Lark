@@ -89,9 +89,9 @@ module lark.web {
             player.showPaintRect(showPaintRect);
             var showFPS = container.getAttribute("data-show-fps")=="true";
             var showLog = container.getAttribute("data-show-log")=="true";
-            var logPrefix = container.getAttribute("data-log-prefix");
+            var logFilter = container.getAttribute("data-log-filter");
             if(showFPS||showLog){
-                player.displayFPS(showFPS,showLog,logPrefix);
+                player.displayFPS(showFPS,showLog,logFilter);
             }
         }
         container["lark-player"] = player;

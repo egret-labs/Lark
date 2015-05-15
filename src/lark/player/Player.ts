@@ -192,7 +192,7 @@ module lark.player {
         /**
          * 显示FPS，仅在DEBUG模式下有效。
          */
-        public displayFPS:(showFPS:boolean, showLog:boolean, logPrefix:string)=>void;
+        public displayFPS:(showFPS:boolean, showLog:boolean, logFilter:string)=>void;
         private showFPS:boolean;
         private showLog:boolean;
         private fpsDisplay:FPS;
@@ -214,7 +214,7 @@ module lark.player {
      * FPS显示对象
      */
     interface FPS extends Sprite {
-        new (stage:Stage, showFPS:boolean, showLog:boolean, logPrefix:string):FPS
+        new (stage:Stage, showFPS:boolean, showLog:boolean, logFilter:string):FPS
         /**
          * 更新FPS信息
          */
@@ -226,7 +226,7 @@ module lark.player {
         updateInfo(info:string):void;
     }
 
-    declare var FPS:{new (stage:Stage, showFPS:boolean, showLog:boolean, logPrefix:string):FPS};
+    declare var FPS:{new (stage:Stage, showFPS:boolean, showLog:boolean, logFilter:string):FPS};
 
     declare var __extends:Function;
     export var $logToFPS:(info:string)=>void;
@@ -245,12 +245,12 @@ module lark.player {
             fpsDisplay.updateInfo(info);
         }
 
-        function displayFPS(showFPS:boolean, showLog:boolean, logPrefix:string):void {
+        function displayFPS(showFPS:boolean, showLog:boolean, logFilter:string):void {
             showLog = !!showLog;
             this.showFPS = !!showFPS;
             this.showLog = showLog;
             if (!this.fpsDisplay) {
-                fpsDisplay = this.fpsDisplay = new FPS(this.stage, showFPS, showLog, logPrefix);
+                fpsDisplay = this.fpsDisplay = new FPS(this.stage, showFPS, showLog, logFilter);
                 var length = infoLines.length;
                 for (var i = 0; i < length; i++) {
                     fpsDisplay.updateInfo(infoLines[i]);
@@ -331,7 +331,7 @@ module lark.player {
          */
         FPS = (function (_super):FPS {
             __extends(FPSImpl, _super);
-            function FPSImpl(stage, showFPS, showLog, logPrefix) {
+            function FPSImpl(stage, showFPS, showLog, logFilter) {
                 _super.call(this);
                 this.infoLines = [];
                 this.totalTime = 0;
@@ -341,10 +341,21 @@ module lark.player {
                 this._stage = stage;
                 this.showFPS = showFPS;
                 this.showLog = showLog;
-                this.logPrefix = logPrefix;
+                this.logFilter = logFilter;
                 this.touchChildren = false;
                 this.touchEnabled = false;
                 this.createDisplay();
+                try {
+                    var logFilterRegExp = logFilter ? new RegExp(logFilter) : null;
+                }
+                catch (e) {
+                    console.log(e);
+                }
+                this.filter = function (message:string):boolean {
+                    if (logFilterRegExp)
+                        return logFilterRegExp.test(message);
+                    return !logFilter || message.indexOf(logFilter) == 0;
+                }
             }
 
             FPSImpl.prototype.createDisplay = function () {
@@ -396,7 +407,7 @@ module lark.player {
                 if (!this.showLog) {
                     return;
                 }
-                if (this.logPrefix && info.indexOf(this.logPrefix) != 0) {
+                if (!this.filter(info)) {
                     return;
                 }
                 var lines = this.infoLines;

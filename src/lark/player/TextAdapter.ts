@@ -38,19 +38,19 @@ module lark.player{
          * 当用户点击TextInput时，将它设置为正在输入的TextInput对象，HTML text input 会显示出来并获得焦点
          * @param currentTextInput 要输入的TextInput对象
          */
-        setCurrentTextInput(currentTextInput:TextInput):void;
+        $setCurrentTextInput(currentTextInput:TextInput):void;
 
         /**
          * 清空正在输入的TextInput，隐藏HTML text input。
          */
-        removeCurrentTextInput():void;
+        $removeCurrentTextInput():void;
 
         /**
          * 更新HTML5 或 runtime 中 text input 的属性值
          */
         $initializeInput():void;
 
-        stage:Stage;
+        $stage:Stage;
     }
 
     var stageToTextLayerMap:any = {};
@@ -65,6 +65,6 @@ module lark.player{
         return stageToTextLayerMap[stageHash];
     }
     export function $cacheTextAdapter( adapter:ITextAdapter){
-        stageToTextLayerMap[adapter.stage.$hashCode] = adapter;
+        stageToTextLayerMap[adapter.$stage.$hashCode] = adapter;
     }
 }

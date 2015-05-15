@@ -37,14 +37,14 @@ module lark.web {
     export class WebTextAdapter extends LarkObject implements player.ITextAdapter{
         constructor(container:HTMLDivElement,stage:Stage,canvas:HTMLCanvasElement){
             super();
-            this.stage = stage;
+            this.$stage = stage;
             this.canvas = canvas;
             this.container = container;
             player.$cacheTextAdapter(this);
             this.createHtmlInputs();
         }
 
-        public stage:Stage;
+        public $stage:Stage;
         private scaleX:number = 1;
         private scaleY:number = 1;
         private offsetX:number = 1;
@@ -62,9 +62,9 @@ module lark.web {
          * 当用户点击TextInput时，将它设置为正在输入的TextInput对象，HTML text input 会显示出来并获得焦点
          * @param currentTextInput 要输入的TextInput对象
          */
-        public setCurrentTextInput(currentTextInput: TextInput) {
+        public $setCurrentTextInput(currentTextInput: TextInput) {
             if (this.currentTextInput != null)
-                this.removeCurrentTextInput();
+                this.$removeCurrentTextInput();
             this.currentTextInput = currentTextInput;
             this.currentHtmlInput = currentTextInput.wordWrap ? this.multiLineTextInput : this.singleLineTextInput;
             this.currentHtmlInput.value = this.currentTextInput.text;
@@ -75,7 +75,7 @@ module lark.web {
         /**
          * 清空正在输入的TextInput，隐藏HTML text input。
          */
-        public removeCurrentTextInput(){
+        public $removeCurrentTextInput(){
             window.scrollTo(0, 0);
             var currentTextInput = this.currentTextInput;
             var currentHtmlInput = this.currentHtmlInput;
@@ -145,7 +145,7 @@ module lark.web {
                 this.currentTextInput.$startInput();
             }
             else if(this.currentTextInput != null){
-                this.removeCurrentTextInput();
+                this.$removeCurrentTextInput();
             }
         };
 
@@ -154,7 +154,7 @@ module lark.web {
         };
 
         private handleHtmlInputBlur = (e) => {
-            this.removeCurrentTextInput();
+            this.$removeCurrentTextInput();
         };
 
         private resetHtmlElementStyle(element:HTMLElement){
@@ -251,7 +251,7 @@ module lark.web {
 
     var $CurrentPrefix:string = null;
 
-    export function getPrefixStyleName(name:string):string{
+    function getPrefixStyleName(name:string):string{
         if($CurrentPrefix==null)
             $CurrentPrefix = getPrefix();
         return $CurrentPrefix + name.charAt(0).toUpperCase()+name.substr(1);
