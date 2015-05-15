@@ -63,7 +63,7 @@ module lark {
                 + " World setTimeout(() => rich.width = this.stage? this.stage.stageWidth : 500, 300); \n "
                 + " World setTimeout(() => rich.width = this.stage ? this.stage.stageWidth : 500, 300); \\n World";
             var tf = new TextField(text);
-            tf.horizontalAlign = "left";
+            tf.textAlign = "left";
             tf.textColor = 0xFF0000;
             tf.width = 400;
             tf.y = 200;
