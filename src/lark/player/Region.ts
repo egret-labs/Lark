@@ -100,6 +100,7 @@ module lark.player {
             }
             this.updateArea();
         }
+
         /**
          * 注意！由于性能优化，此方法不判断自身是否为空，必须在外部确认自身和目标区域都不为空再调用合并。否则结果始终从0，0点开始。
          */
@@ -121,7 +122,7 @@ module lark.player {
             if (this.maxY > target.maxY) {
                 this.maxY = target.maxY;
             }
-            if(this.minY>=this.maxY){
+            if (this.minY >= this.maxY) {
                 this.setEmpty();
                 return;
             }
@@ -171,10 +172,10 @@ module lark.player {
             var yMax = y + bounds.height;
             //优化，通常情况下不缩放旋转的对象占多数，直接加上偏移量即可。
             if (a === 1.0 && b === 0.0 && c === 0.0 && d === 1.0) {
-                this.minX = Math.floor(x + tx);
-                this.minY = Math.floor(y + ty);
-                this.maxX = Math.ceil(xMax + tx);
-                this.maxY = Math.ceil(yMax + ty);
+                this.minX = Math.floor(x + tx) - 1;
+                this.minY = Math.floor(y + ty) - 1;
+                this.maxX = Math.ceil(xMax + tx) + 1;
+                this.maxY = Math.ceil(yMax + ty) + 1;
             }
             else {
                 var x0 = a * x + c * y + tx;
@@ -199,8 +200,8 @@ module lark.player {
                     x3 = tmp;
                 }
 
-                this.minX = Math.floor(x0 < x2 ? x0 : x2);
-                this.maxX = Math.ceil(x1 > x3 ? x1 : x3);
+                this.minX = Math.floor(x0 < x2 ? x0 : x2) - 1;
+                this.maxX = Math.ceil(x1 > x3 ? x1 : x3) + 1;
 
                 if (y0 > y1) {
                     tmp = y0;
@@ -213,8 +214,8 @@ module lark.player {
                     y3 = tmp;
                 }
 
-                this.minY = Math.floor(y0 < y2 ? y0 : y2);
-                this.maxY = Math.ceil(y1 > y3 ? y1 : y3);
+                this.minY = Math.floor(y0 < y2 ? y0 : y2) - 1;
+                this.maxY = Math.ceil(y1 > y3 ? y1 : y3) + 1;
             }
             this.updateArea();
         }
