@@ -62,7 +62,9 @@ module lark.web {
          * 当用户点击TextInput时，将它设置为正在输入的TextInput对象，HTML text input 会显示出来并获得焦点
          * @param currentTextInput 要输入的TextInput对象
          */
-        public setCurrentTextInput(currentTextInput:TextInput){
+        public setCurrentTextInput(currentTextInput: TextInput) {
+            if (this.currentTextInput != null)
+                this.removeCurrentTextInput();
             this.currentTextInput = currentTextInput;
             this.currentHtmlInput = currentTextInput.wordWrap ? this.multiLineTextInput : this.singleLineTextInput;
             this.currentHtmlInput.value = this.currentTextInput.text;

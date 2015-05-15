@@ -33,29 +33,52 @@ module lark {
         constructor(){
             super();
 
-            var input = new TextInput();
+            var textarea = new TextInput();
+            textarea.width = 300;
+            textarea.height = 300;
+            textarea.y = 100;
+            textarea.x = 100;
+            textarea.wordWrap = true;
+            textarea.text = "Text Area !";
+            textarea.fontSize=40;
+            textarea.bold = true;
+            textarea.verticalAlign = VerticalAlign.TOP;
+            textarea.italic = true;
+            textarea.textColor = 0x000000;
+
+            var bg = new Shape();
+            bg.x = 100;
+            bg.y = 100;
+            bg.graphics.beginPath();
+            bg.graphics.fillStyle = 'white';
+            bg.graphics.fillRect(0, 0, 300, 300);
+            this.addChild(bg);
+
+            textarea.on("focus",e=>console.log("focus",textarea.text),this);
+            textarea.on("blur",e=>console.log("blur",textarea.text),this);
+            textarea.on("input",e=>console.log("input",textarea.text),this);
+            textarea.on("change", e=> console.log("change", textarea.text), this);
+
+            var input = new TextInput();;
             input.width = 300;
-            input.height = 300;
-            input.y = 100;
+            input.height = 50;
+            input.y = 500;
             input.x = 100;
-            input.wordWrap = true;
-            input.text = "Hello World!";
-            input.fontSize=40;
-            input.bold = true;
-            input.verticalAlign = VerticalAlign.TOP;
-            input.italic = true;
-            input.textColor = 0xFF0000;
-            //input.rotation = 45;
-            window['theInput'] = input;
-            input.$getConcatenatedMatrix();
+            input.text = "Text Input!"
+            input.fontSize = 40;
 
-            input.on("focus",e=>console.log("focus",input.text),this);
-            input.on("blur",e=>console.log("blur",input.text),this);
-            input.on("input",e=>console.log("input",input.text),this);
-            input.on("change",e=>console.log("change",input.text),this);
+            var inputbg = new Shape();
+            inputbg.x = 100;
+            inputbg.y = 500;
+            inputbg.graphics.beginPath();
+            inputbg.graphics.fillStyle = 'white';
+            inputbg.graphics.fillRect(0, 0, 300, 50);
+            this.addChild(inputbg);
 
+
+
+            this.addChild(textarea);
             this.addChild(input);
-            this.addChild(FPS.display);
         }
     }
 }

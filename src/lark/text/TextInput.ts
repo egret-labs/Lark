@@ -129,7 +129,6 @@ module lark{
                 return;
             }
 
-            this.setAsCurrent();
             if(this.timeoutId != -1)
                 clearTimeout(this.timeoutId);
             this.timeoutId = setTimeout(()=>{
