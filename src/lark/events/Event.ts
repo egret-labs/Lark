@@ -79,6 +79,11 @@ module lark {
         public static RESIZE:string = "resize";
 
         /**
+         * 属性值或状态发生改变。
+         */
+        public static CHANGE:string = "change";
+
+        /**
          * 网络请求加载完成
          */
         public static COMPLETE:string = "complete";

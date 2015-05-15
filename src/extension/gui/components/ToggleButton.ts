@@ -27,30 +27,62 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
 
-    /**
-     * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
-     * @event lark.Event.COMPLETE 加载完成
-     * @event lark.Event.IO_ERROR 加载失败
-     */
-    export interface ImageLoader extends EventEmitter {
-        /**
-         * 使用 load() 方法加载成功的 BitmapData 图像数据。
-         */
-        data:BitmapData;
-        /**
-         * 当从其他站点加载一个图片时，指定是否启用跨域资源共享(CORS)，默认值为null。
-         * 可以设置为"anonymous","use-credentials"或null,设置为其他值将等同于"anonymous"。
-         */
-        crossOrigin:string;
-        /**
-         * 启动一次图像加载。注意：若之前已经调用过加载请求，重新调用 load() 将终止先前的请求，并开始新的加载。
-         * @param url 要加载的图像文件的地址。
-         */
-        load(url:string):void;
+module lark.gui {
 
-    }
+	/**
+	 * 切换按钮
+	 * @event lark.Event.CHANGE 选中状态发生改变，仅当触摸操作引起的选中状态改变才会抛出此事件。
+	 */
+	export class ToggleButton extends Button{
 
-    export var ImageLoader:{new():ImageLoader};
+		private _selected: boolean = false;
+		/**
+		 * 按钮处于按下状态时为 true，而按钮处于弹起状态时为 false。
+		 */
+		public get selected():boolean{
+			return this._selected;
+		}
+
+		public set selected(value:boolean){
+			value = !!value;
+			if (value === this._selected)
+				return;
+			this._selected = value;
+			this.invalidateSkinState();
+		}
+
+		/**
+		 * 返回要应用到外观的状态的名称
+		 */
+		public getCurrentSkinState():string{
+			var state = super.getCurrentSkinState();
+			if (!this._selected){
+				return state;
+			}
+			else{
+				var selectedState = state + "AndSelected";
+				var skin = this.skin;
+				if(skin&&skin.hasState(selectedState)){
+					return selectedState;
+				}
+				return state=="disabled"?"disabled":"down";
+			}
+		}
+		/**
+		 * 是否根据鼠标事件自动变换选中状态,默认true。仅框架内使用。
+		 */
+		$autoSelected:boolean = true;
+
+		/**
+		 * 当在用户单击按钮之后处理 MouseEvent.MOUSE_UP 事件时，将调用此方法
+		 */
+		public buttonReleased():void{
+			if(!this.$autoSelected)
+				return;
+			this.selected = !this._selected;
+			this.emitWith(Event.CHANGE);
+		}
+	}
+	registerClass(ToggleButton, Types.ToggleButton);
 }

@@ -59,7 +59,7 @@ module lark.gui {
          * 赋值为url后，它内部会自动去加载并显示图片。并且您同样也可以直接把 BitmapData 对象赋值给 source 属性以显示图片。
          * Image 控件可以直接替代 Bitmap 在显示列表中使用。
          *
-         * @event COMPLETE lark.Event 当图片加载完成后调度
+         * @event lark.Event.COMPLETE 当图片加载完成后调度
          */
         Image,
         /**
@@ -87,6 +87,10 @@ module lark.gui {
         /**
          * 按钮组件
          */
-        Button
+        Button,
+        /**
+         * 切换按钮
+         */
+        ToggleButton
     }
 }
