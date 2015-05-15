@@ -71,14 +71,10 @@ module lark.gui {
 		 */
 		public static SCROLL_POSITION_CHANGED:string = "scrollPositionChanged";
 		/**
-		 * 下拉框弹出事件
+		 * 即将关闭面板事件
 		 */
-		public static OPEN:string = "open";
-		/**
-		 * 下拉框关闭事件
-		 */
-		public static CLOSE:string = "close";
-		
+		public static CLOSING:string = "close";
+
 		/**
 		 * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
 		 * @param target 事件派发目标
