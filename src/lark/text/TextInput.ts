@@ -40,30 +40,8 @@ module lark{
 
         }
 
-        private _multiLine:boolean = false;
         private _isTyping:boolean = false;
         private _isFocus:boolean = false;
-
-
-        /**
-         * 指定是否是多行输入文本, 默认为false，当指定为单行文本时，会同时修改 wordWrap 为 false
-         * @returns {boolean}
-         */
-        public get multiLine():boolean {
-            return this._multiLine;
-        }
-
-        public set multiLine(value:boolean) {
-            value =!!value;
-            this._multiLine = value;
-
-            //指定为单行文本时,同时设置wordwrap
-            if(value==false && this.wordWrap!=false)
-                this.wordWrap = true;
-        }
-
-
-
 
 
         private handleTouchBegin(e:TouchEvent){
@@ -75,9 +53,13 @@ module lark{
 
         private setAsCurrent(){
             var layer = player.$getTextAdapter(this);
-            layer.setCurrentTextInput(this);
+            layer.$setCurrentTextInput(this);
         }
 
+        /**
+         * Call by TextAdapter set text
+         * @param text
+         */
         $setUserInputText(text:string){
             if(text==this.text)
                 return;
@@ -138,4 +120,6 @@ module lark{
             },0);
         }
     }
+
+    registerClass(TextInput, Types.TextInput);
 }

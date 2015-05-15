@@ -162,7 +162,12 @@ module lark {
         /**
          * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
          */
-        ImageLoader
+        ImageLoader,
+
+        /**
+         * TextInput 用于创建显示对象来输入文本. 默认为单行文本，当需要使用多行文本时，请设置 multiLine 为 true
+         */
+        TextInput
 
     }
 }

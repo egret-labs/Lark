@@ -89,9 +89,9 @@ module lark.web {
             player.showPaintRect(showPaintRect);
             var showFPS = container.getAttribute("data-show-fps")=="true";
             var showLog = container.getAttribute("data-show-log")=="true";
-            var logPrefix = container.getAttribute("data-log-prefix");
+            var logFilter = container.getAttribute("data-log-filter");
             if(showFPS||showLog){
-                player.displayFPS(showFPS,showLog,logPrefix);
+                player.displayFPS(showFPS,showLog,logFilter);
             }
         }
         container["lark-player"] = player;
@@ -130,17 +130,17 @@ module lark.web {
     lark.warn = console.warn.bind(console);
     lark.error = console.error.bind(console);
     if(DEBUG){
-        lark.log = function(){
-            if(DEBUG){
-                var length = arguments.length;
-                var info = "";
-                for(var i=0;i<length;i++){
-                    info += arguments[i]+" ";
-                }
-                player.$logToFPS(info);
+    lark.log = function(){
+        if(DEBUG){
+            var length = arguments.length;
+            var info = "";
+            for(var i=0;i<length;i++){
+                info += arguments[i]+" ";
             }
-            console.log.apply(console,arguments);
+            player.$logToFPS(info);
         }
+        console.log.apply(console,arguments);
+    }
     }
     else{
         lark.log = console.log.bind(console);
