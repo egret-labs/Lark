@@ -158,20 +158,20 @@ module lark {
             return this.fontString;
         }
 
-        private _horizontalAlign:string = HorizontalAlign.LEFT;
+        private _textAlign:string = HorizontalAlign.LEFT;
         /**
          * 文字的水平对齐方式 ,请使用HorizontalAlign中定义的常量。
          * 默认值：HorizontalAlign.LEFT。
          */
-        public get horizontalAlign():string {
-            return this._horizontalAlign;
+        public get textAlign():string {
+            return this._textAlign;
         }
 
-        public set horizontalAlign(value:string) {
-            if (this._horizontalAlign == value) {
+        public set textAlign(value:string) {
+            if (this._textAlign == value) {
                 return;
             }
-            this._horizontalAlign = value;
+            this._textAlign = value;
             this.$invalidateContentBounds();
         }
 
@@ -361,10 +361,10 @@ module lark {
             }
             drawY = Math.round(drawY);
             var hAlign:number = 0;
-            if (this._horizontalAlign == HorizontalAlign.CENTER) {
+            if (this._textAlign == HorizontalAlign.CENTER) {
                 hAlign = 0.5;
             }
-            else if (this._horizontalAlign == HorizontalAlign.RIGHT) {
+            else if (this._textAlign == HorizontalAlign.RIGHT) {
                 hAlign = 1;
             }
             var measuredWidths = this.measuredWidths;

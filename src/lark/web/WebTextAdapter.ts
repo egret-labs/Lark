@@ -219,7 +219,7 @@ module lark.web {
             setElementStyle("fontFamily", textInput.fontFamily);
             setElementStyle("fontStyle", textInput.italic ? "italic" : "normal");
             setElementStyle("fontWeight", textInput.bold ? "bold" : "normal");
-            setElementStyle("textAlign", textInput.horizontalAlign);
+            setElementStyle("textAlign", textInput.textAlign);
             setElementStyle("fontSize", textInput.fontSize + "px");
             setElementStyle("lineHeight", textInput.fontSize + "px");
             setElementStyle("color", player.toColorString(textInput.textColor));
