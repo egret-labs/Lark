@@ -53,11 +53,17 @@ module lark {
 
     export function $error(code:number,...params:any[]):void{
         var text:string = lark.tr.apply(null,arguments);
+        if(DEBUG){
+            player.$logToFPS("Error #"+code+": "+text)
+        }
         throw new Error("#"+code+": "+text);//使用这种方式报错能够终止后续代码继续运行
     }
 
     export function $warn(code:number,...params:any[]):void{
         var text:string = lark.tr.apply(null,arguments);
+        if(DEBUG){
+            player.$logToFPS("Error #"+code+": "+text)
+        }
         warn("Warning #"+code+": "+text);
     }
 }

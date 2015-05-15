@@ -41,25 +41,22 @@ module lark.player {
             if (DEBUG && !context) {
                 $error(1003, "context");
             }
+            log("haha");
             this.entryClassName = entryClassName;
             this.stage = stage;
             this.screenDisplayList = this.createDisplayList(stage, context);
 
             if (DEBUG) {//显示重绘区和FPS相关的代码,发行版中移除
 
-                this._showFPS = false;
+                this.showFPS = false;
+                this.showLog = false;
                 this._showPaintRect = false;
                 this.stageDisplayList = null;
                 this.paintList = [];
-                this.totalTime = 0;
-                this.totalTick = 0;
-                this.lastTime = 0;
-                this.drawCalls = 0;
-                this.showFPS = showFPS;
-                this.updateFPS = updateFPS;
+                this.displayFPS = displayFPS;
                 this.showPaintRect = showPaintRect;
-                this.drawPaintRect = drawPaintRect
-                this.drawDirtyRect = drawDirtyRect
+                this.drawPaintRect = drawPaintRect;
+                this.drawDirtyRect = drawDirtyRect;
             }
         }
 
@@ -144,8 +141,8 @@ module lark.player {
          * 渲染屏幕
          */
         $render(triggerByFrame:boolean):void {
-            if (DEBUG && this._showFPS) {
-                this.stage.addChild(this.fpsText);
+            if (DEBUG && (this.showFPS || this.showLog)) {
+                this.stage.addChild(this.fpsDisplay);
             }
             var stage = this.stage;
             var t = lark.getTimer();
@@ -161,14 +158,14 @@ module lark.player {
                     this.drawPaintRect(dirtyList);
                 }
                 var t2 = lark.getTimer();
-                if (triggerByFrame && this._showFPS) {
+                if (triggerByFrame && this.showFPS) {
                     var length = dirtyList.length;
                     var dirtyArea = 0;
                     for (var i = 0; i < length; i++) {
                         dirtyArea += dirtyList[i].area;
                     }
                     var dirtyRatio = Math.ceil(dirtyArea * 1000 / (stage.stageWidth * stage.stageHeight)) / 10;
-                    this.updateFPS(drawCalls, dirtyRatio, t1 - t, t2 - t1);
+                    this.fpsDisplay.update(drawCalls, dirtyRatio, t1 - t, t2 - t1);
                 }
             }
         }
@@ -193,16 +190,12 @@ module lark.player {
 
 
         /**
-         * 是否显示FPS，仅在DEBUG模式下有效。
+         * 显示FPS，仅在DEBUG模式下有效。
          */
-        public showFPS:(value:boolean)=>void;
-        private updateFPS:(drawCalls:number, dirtyRatio:number, ...args)=>void;
-        private _showFPS:boolean;
-        private fpsText:TextField;
-        private totalTime:number;
-        private totalTick:number;
-        private lastTime:number;
-        private drawCalls:number;
+        public displayFPS:(showFPS:boolean, showLog:boolean, logPrefix:string)=>void;
+        private showFPS:boolean;
+        private showLog:boolean;
+        private fpsDisplay:FPS;
 
         /**
          * 是否显示脏矩形重绘区，仅在DEBUG模式下有效。
@@ -216,55 +209,56 @@ module lark.player {
 
     }
 
-    export var $fpsInfo:string;
+
+    /**
+     * FPS显示对象
+     */
+    interface FPS extends Sprite {
+        new (stage:Stage, showFPS:boolean, showLog:boolean, logPrefix:string):FPS
+        /**
+         * 更新FPS信息
+         */
+        update(drawCalls:number, dirtyRatio:number, ...args):void;
+
+        /**
+         * 插入一条日志信息
+         */
+        updateInfo(info:string):void;
+    }
+
+    declare var FPS:{new (stage:Stage, showFPS:boolean, showLog:boolean, logPrefix:string):FPS};
+
+    declare var __extends:Function;
+    export var $logToFPS:(info:string)=>void;
+    
 
     if (DEBUG) {//显示重绘区和FPS相关的代码,发行版中移除
 
-        function showFPS(value:boolean):void {
-            value = !!value;
-            if (this._showFPS === value) {
+        var infoLines:string[] = [];
+        var fpsDisplay:FPS;
+
+        $logToFPS = function (info:string):void {
+            if (!fpsDisplay) {
+                infoLines.push(info);
                 return;
             }
-            this._showFPS = value;
-            if (value) {
-                if (!this.fpsText) {
-                    var textField = new lark.TextField();
-                    this.fpsText = textField;
-                    textField.textColor = 0x0c8c0c;
-                    textField.fontFamily = "monospace";
-                    textField.x = 20;
-                    textField.y = 20;
-                    textField.touchEnabled = false;
+            fpsDisplay.updateInfo(info);
+        }
+
+        function displayFPS(showFPS:boolean, showLog:boolean, logPrefix:string):void {
+            showLog = !!showLog;
+            this.showFPS = !!showFPS;
+            this.showLog = showLog;
+            if (!this.fpsDisplay) {
+                fpsDisplay = this.fpsDisplay = new FPS(this.stage, showFPS, showLog, logPrefix);
+                var length = infoLines.length;
+                for (var i = 0; i < length; i++) {
+                    fpsDisplay.updateInfo(infoLines[i]);
                 }
-            }
-            else if (this.fpsText && this.fpsText.parent) {
-                this.stage.removeChild(this.fpsText);
+                infoLines = null;
             }
         }
 
-        function updateFPS(drawCalls:number, dirtyRatio:number, ...args):void {
-            if (!this.fpsText) {
-                return;
-            }
-            var current = lark.getTimer();
-            this.totalTime += current - this.lastTime;
-            this.lastTime = current;
-            this.totalTick++;
-            this.drawCalls = Math.max(drawCalls, this.drawCalls);
-            if (this.totalTime > 500) {
-                var lastFPS = Math.round(this.totalTick * 1000 / this.totalTime);
-                this.totalTick = 0;
-                this.totalTime = 0;
-                var text = "FPS: " + lastFPS + "\nDraw: " + this.drawCalls + "," + dirtyRatio + "%\nCost: " + args.join(",");
-                if ($fpsInfo) {
-                    text += "\nInfo: " + $fpsInfo;
-                }
-                if (this.fpsText.text != text) {
-                    this.fpsText.text = text;
-                }
-                this.drawCalls = 0;
-            }
-        }
 
         function showPaintRect(value:boolean):void {
             value = !!value;
@@ -331,6 +325,108 @@ module lark.player {
             context.lineWidth = 1;
             context.strokeRect(x - 0.5, y - 0.5, width, height);
         }
+
+        /**
+         * FPS显示对象
+         */
+        FPS = (function (_super):FPS {
+            __extends(FPSImpl, _super);
+            function FPSImpl(stage, showFPS, showLog, logPrefix) {
+                _super.call(this);
+                this.infoLines = [];
+                this.totalTime = 0;
+                this.totalTick = 0;
+                this.lastTime = 0;
+                this.drawCalls = 0;
+                this._stage = stage;
+                this.showFPS = showFPS;
+                this.showLog = showLog;
+                this.logPrefix = logPrefix;
+                this.touchChildren = false;
+                this.touchEnabled = false;
+                this.createDisplay();
+            }
+
+            FPSImpl.prototype.createDisplay = function () {
+                this.shape = new lark.Shape();
+                this.addChild(this.shape);
+                var textField = new lark.TextField();
+                textField.fontSize = 24;
+                this.addChild(textField);
+                this.textField = textField;
+                textField.textColor = 0x00c200;
+                textField.fontFamily = "monospace";
+                textField.x = 10;
+                textField.y = 10;
+                var textField = new lark.TextField();
+                this.infoText = textField;
+                this.addChild(textField);
+                textField.textColor = 0xb0b0b0;
+                textField.fontFamily = "monospace";
+                textField.x = 10;
+                textField.fontSize = 12;
+                textField.y = 10;
+            };
+            FPSImpl.prototype.update = function (drawCalls, dirtyRatio) {
+                var args = [];
+                for (var _i = 2; _i < arguments.length; _i++) {
+                    args[_i - 2] = arguments[_i];
+                }
+                var current = lark.getTimer();
+                this.totalTime += current - this.lastTime;
+                this.lastTime = current;
+                this.totalTick++;
+                this.drawCalls = Math.max(drawCalls, this.drawCalls);
+                if (this.totalTime > 500) {
+                    var lastFPS = Math.round(this.totalTick * 1000 / this.totalTime);
+                    this.totalTick = 0;
+                    this.totalTime = 0;
+                    var text = "FPS: " + lastFPS + "\nDraw: " + this.drawCalls + "," + dirtyRatio + "%\nCost: " + args.join(",");
+                    if (this.textField.text != text) {
+                        this.textField.text = text;
+                        this.updateLayout();
+                    }
+                    this.drawCalls = 0;
+                }
+            };
+            /**
+             * 插入一条日志信息
+             */
+            FPSImpl.prototype.updateInfo = function (info) {
+                if (!this.showLog) {
+                    return;
+                }
+                if (this.logPrefix && info.indexOf(this.logPrefix) != 0) {
+                    return;
+                }
+                var lines = this.infoLines;
+                if (info) {
+                    lines.push(info);
+                }
+                this.infoText.width = lark.NONE;
+                this.infoText.text = lines.join("\n");
+                if (this._stage.stageHeight > 0) {
+                    if (this.infoText.textWidth > this._stage.stageWidth - 20) {
+                        this.infoText.width = this._stage.stageWidth - 20;
+                    }
+                    while (this.infoText.textHeight > this._stage.stageHeight) {
+                        lines.shift();
+                        this.infoText.text = lines.join("\n");
+                    }
+                }
+                this.updateLayout();
+            };
+            FPSImpl.prototype.updateLayout = function () {
+                if (this.showFPS) {
+                    this.infoText.y = this.textField.height + 20;
+                }
+                var g = this.shape.$graphics;
+                g.clear();
+                g.fillStyle = "rgba(68,68,68,0.4)";
+                g.fillRect(0, 0, Math.max(160, this.width + 20), this.height + 20);
+            };
+            return <FPS><any>FPSImpl;
+        })(lark.Sprite);
     }
 }
 

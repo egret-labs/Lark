@@ -86,7 +86,11 @@ module lark.web {
             var showPaintRect = container.getAttribute("data-show-paint-rect")=="true";
             player.showPaintRect(showPaintRect);
             var showFPS = container.getAttribute("data-show-fps")=="true";
-            player.showFPS(showFPS);
+            var showLog = container.getAttribute("data-show-log")=="true";
+            var logPrefix = container.getAttribute("data-log-prefix");
+            if(showFPS||showLog){
+                player.displayFPS(showFPS,showLog,logPrefix);
+            }
         }
         container["lark-player"] = player;
         container["lark-touch"] = webTouch;
@@ -122,7 +126,17 @@ module lark.web {
     lark.assert = console.assert.bind(console);
     lark.warn = console.warn.bind(console);
     lark.error = console.error.bind(console);
-    lark.log = console.log.bind(console);
+    lark.log = function(){
+        if(DEBUG){
+            var length = arguments.length;
+            var info = "";
+            for(var i=0;i<length;i++){
+                info += arguments[i]+" ";
+            }
+            player.$logToFPS(info);
+        }
+        console.log.apply(console,arguments);
+    }
     window.addEventListener("load", runLark);
     window.addEventListener("resize",updateScreenSize);
 }
