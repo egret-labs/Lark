@@ -29,6 +29,12 @@
 
 module lark.player {
 
+    if (DEBUG) {
+        function isF(num:number):boolean {
+            return num % 1 !== 0;
+        }
+    }
+
     function unionArea(r1:Region, r2:Region):number {
         var minX = r1.minX < r2.minX ? r1.minX : r2.minX;
         var minY = r1.minY < r2.minY ? r1.minY : r2.minY;
@@ -55,9 +61,9 @@ module lark.player {
         public setClipRect(width:number, height:number):void {
             this.hasClipRect = true;
             this.clipRectChanged = true;
-            this.clipWidth = width;
-            this.clipHeight = height;
-            this.clipArea = width*height;
+            this.clipWidth = Math.ceil(width);
+            this.clipHeight = Math.ceil(height);
+            this.clipArea = this.clipWidth * this.clipHeight;
         }
 
         /**
@@ -65,6 +71,11 @@ module lark.player {
          */
         public addRegion(target:Region):boolean {
             var minX = target.minX, minY = target.minY, maxX = target.maxX, maxY = target.maxY;
+            if (DEBUG) {
+                if (isF(minX) || isF(minY) || isF(maxX) || isF(maxY)) {
+                    log("addRegion error:", minX, minY, maxX, maxY);
+                }
+            }
             if (this.hasClipRect) {
                 if (minX < 0) {
                     minX = 0;
@@ -134,7 +145,7 @@ module lark.player {
             var totalArea = 0;
             for (var i = 0; i < length - 1; i++) {
                 var regionA = dirtyList[i];
-                hasClipRect&&(totalArea += regionA.area);
+                hasClipRect && (totalArea += regionA.area);
                 for (var j = i + 1; j < length; j++) {
                     var regionB = dirtyList[j];
                     var delta = unionArea(regionA, regionB) - regionA.area - regionB.area;
@@ -145,7 +156,7 @@ module lark.player {
                     }
                 }
             }
-            if(hasClipRect&&(totalArea/this.clipArea)>0.95){//当脏矩形的面积已经超过屏幕95%时，直接放弃后续的所有标记。
+            if (hasClipRect && (totalArea / this.clipArea) > 0.95) {//当脏矩形的面积已经超过屏幕95%时，直接放弃后续的所有标记。
                 this.clipRectChanged = true;
             }
             if (mergeA != mergeB) {
