@@ -343,8 +343,11 @@ module lark {
             context.font = this.getFontString();
             context.fillStyle = this._colorString;
             var length = lines.length;
-            var drawY = values[player.TextFieldValues.fontSize] * 0.5;
-            var vGap = values[player.TextFieldValues.fontSize] + values[player.TextFieldValues.lineSpacing];
+            var lineHeight = values[player.TextFieldValues.fontSize];
+            var halfLineHeight = lineHeight*0.5;
+            var drawY = halfLineHeight+2;
+            var vGap = lineHeight + values[player.TextFieldValues.lineSpacing];
+
             var textHeight = values[player.TextFieldValues.textHeight];
             var hasHeightSet = !isNone(values[player.TextFieldValues.textFieldHeight]);
             var explicitHeight = hasHeightSet ? values[player.TextFieldValues.textFieldHeight] : Number.POSITIVE_INFINITY;
@@ -372,6 +375,7 @@ module lark {
             else {
                 maxWidth = values[player.TextFieldValues.textFieldWidth];
             }
+            var maxYPos:number = explicitHeight-2;
             for (var i:number = 0; i < length; i++) {
                 var line = lines[i];
                 var measureW = measuredWidths[i];
@@ -379,7 +383,7 @@ module lark {
                 if (drawX < 0) {
                     drawX = 0;
                 }
-                if (drawY < explicitHeight) {
+                if (drawY + halfLineHeight <= maxYPos) {
                     context.fillText(line, drawX, drawY);
                 }
                 drawY += vGap;
@@ -494,8 +498,9 @@ module lark {
             }
             values[player.TextFieldValues.textDrawWidth] = drawWidth;
             values[player.TextFieldValues.textWidth] = Math.ceil(maxWidth);
+            //由于Canvas不提供文本行高测量功能，这里以字号为默认行高测量，并在顶部和底部各留2像素边距防止文本截断。
             values[player.TextFieldValues.textHeight] = Math.ceil(lines.length * (values[player.TextFieldValues.fontSize] +
-                values[player.TextFieldValues.lineSpacing]) - values[player.TextFieldValues.lineSpacing]);
+                values[player.TextFieldValues.lineSpacing]) - values[player.TextFieldValues.lineSpacing]+4);
             this.textLines = lines;
             return lines;
         }
