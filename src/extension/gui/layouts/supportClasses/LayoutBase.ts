@@ -33,21 +33,22 @@ module lark.gui {
      * 容器布局基类。若要创建使用 Group 容器的自定义布局，必须扩展 LayoutBase 或其子类之一。
      * 子类必须实现 updateDisplayList() 方法（定位 target Group 的子项并调整这些子项的大小）和 measure() 方法（计算 target 的默认大小）。
      */
-    export class LayoutBase extends EventEmitter{
+    export class LayoutBase extends EventEmitter {
 
-        public constructor(){
+        public constructor() {
             super();
         }
 
-        $target: Group = null;
+        $target:Group = null;
+
         /**
          * 目标容器
          */
-        public get target():Group{
+        public get target():Group {
             return this.$target;
         }
 
-        public set target(value:Group){
+        public set target(value:Group) {
             if (this.$target === value)
                 return;
             this.$target = value;
@@ -56,17 +57,18 @@ module lark.gui {
 
 
         $useVirtualLayout:boolean = false;
+
         /**
          * 若要配置容器使用虚拟布局，请为与容器关联的布局的 useVirtualLayout 属性设置为 true。
          * 只有布局设置为 VerticalLayout、HorizontalLayout
          * 或 TileLayout 的 DataGroup 或 SkinnableDataContainer
          * 才支持虚拟布局。不支持虚拟化的布局子类必须禁止更改此属性。
          */
-        public get useVirtualLayout():boolean{
+        public get useVirtualLayout():boolean {
             return this.$useVirtualLayout;
         }
 
-        public set useVirtualLayout(value:boolean){
+        public set useVirtualLayout(value:boolean) {
             if (this.$useVirtualLayout == value)
                 return;
 
@@ -79,57 +81,66 @@ module lark.gui {
                 this.target.invalidateDisplayList();
         }
 
-        private _typicalLayoutRect: Rectangle = null;
+        $typicalWidth:number = 71;
+        $typicalHeight:number = 22;
 
-        /**
-         * 由虚拟布局所使用，以估计尚未滚动到视图中的布局元素的大小。
-         */
-        public get typicalLayoutRect():Rectangle{
-            return this._typicalLayoutRect;
+        public setTypicalSize(width:number, height:number):void {
+            width = +width || 71;
+            height = +height || 22;
+            if (width !== this.$typicalWidth || height !== this.$typicalHeight) {
+                this.$typicalWidth = width;
+                this.$typicalHeight = height;
+                if (this.$target) {
+                    this.$target.invalidateSize();
+                }
+            }
         }
 
-        public set typicalLayoutRect(value:Rectangle){
-            if(this._typicalLayoutRect==value)
-                return;
-            this._typicalLayoutRect = value;
-            if (this.target)
-                this.target.invalidateSize();
-        }
         /**
          * 滚动条位置改变
          */
-        public scrollPositionChanged():void{
+        public scrollPositionChanged():void {
         }
 
         /**
          * 清理虚拟布局缓存的数据
          */
-        public clearVirtualLayoutCache():void{
+        public clearVirtualLayoutCache():void {
         }
+
         /**
          * 在已添加布局元素之后且在验证目标的大小和显示列表之前，由目标调用。
          * 按元素状态缓存的布局（比如虚拟布局）可以覆盖此方法以更新其缓存。
          * @param index 发生改变的子项索引
          */
-        public elementAdded(index:number):void{
+        public elementAdded(index:number):void {
         }
+
         /**
          * 必须在已删除布局元素之后且在验证目标的大小和显示列表之前，由目标调用此方法。
          * 按元素状态缓存的布局（比如虚拟布局）可以覆盖此方法以更新其缓存。
          * @param index 发生改变的子项索引
          */
-        public elementRemoved(index:number):void{
+        public elementRemoved(index:number):void {
+        }
+
+        /**
+         * 获取在视图中的索引列表
+         */
+        public getElementIndicesInView():number[]{
+            return null;
         }
 
         /**
          * 测量组件尺寸大小
          */
-        public measure():void{
+        public measure():void {
         }
+
         /**
          * 更新显示列表
          */
-        public updateDisplayList(width:number, height:number):void{
+        public updateDisplayList(width:number, height:number):void {
         }
     }
 

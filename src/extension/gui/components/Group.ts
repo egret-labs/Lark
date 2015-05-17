@@ -178,6 +178,34 @@ module lark.gui {
             return hasClip;
         }
 
+        /**
+         * 布局元素子项的数量。
+         */
+        public get numElements():number{
+            return this.$children.length;
+        }
+
+        /**
+         * 获取一个布局元素子项
+         */
+        public getElementAt(index:number):DisplayObject{
+            return this.$children[index];
+        }
+
+        /**
+         * 在支持虚拟布局的容器中，设置容器内可见的子元素索引范围。此方法在不支持虚拟布局的容器中无效。
+         * 通常在即将重新布局子项之前会被调用一次，容器覆盖此方法提前释放已经不可见的子元素。
+         * @param startIndex 可视元素起始索引
+         * @param endIndex 可视元素结束索引
+         */
+        public setVirtualElementIndicesInView(startIndex:number,endIndex:number):void{
+
+        }
+
+
+
+
+
         //=======================UIComponent接口实现===========================
         /**
          * 创建子项,子类覆盖此方法以完成组件子项的初始化操作，
