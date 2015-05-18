@@ -4,11 +4,11 @@
     <e:Group left="6" right="6" height="50" id="moveArea">
         <e:Label id="titleDisplay" fontFamily="Tahoma" fontSize="26"
                  textColor="0x727070" left="5" right="5" verticalCenter="0"
-                 minHeight="28" verticalAlign="middle" horizontalAlign="center" text="titleDisplay"/>
+                 minHeight="28" verticalAlign="middle" textAlign="center" text="titleDisplay"/>
     </e:Group>
     <e:Label id="contentDisplay" fontFamily="Tahoma" fontSize="22"
              textColor="0x727070" left="1" right="1" top="36" bottom="45"
-             verticalAlign="middle" horizontalAlign="center" text="contentDisplay">
+             verticalAlign="middle" textAlign="center" text="contentDisplay">
     </e:Label>
     <e:Button label="按钮">
         <e:Skin>

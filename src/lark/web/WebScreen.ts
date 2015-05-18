@@ -80,6 +80,7 @@ module lark.web {
         private attachCanvas(container:HTMLElement,canvas:HTMLCanvasElement):void {
 
             var style = canvas.style;
+            style.cursor = "default";
             style.margin = "0 auto";
             style.position = "absolute";
             style.top = "0";
