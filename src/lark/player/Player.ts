@@ -158,12 +158,15 @@ module lark.player {
                 }
                 var t2 = lark.getTimer();
                 if (triggerByFrame && this.showFPS) {
-                    var length = dirtyList.length;
-                    var dirtyArea = 0;
-                    for (var i = 0; i < length; i++) {
-                        dirtyArea += dirtyList[i].area;
+                    var dirtyRatio = 0;
+                    if(drawCalls>0){
+                        var length = dirtyList.length;
+                        var dirtyArea = 0;
+                        for (var i = 0; i < length; i++) {
+                            dirtyArea += dirtyList[i].area;
+                        }
+                        dirtyRatio = Math.ceil(dirtyArea * 1000 / (stage.stageWidth * stage.stageHeight)) / 10;
                     }
-                    var dirtyRatio = Math.ceil(dirtyArea * 1000 / (stage.stageWidth * stage.stageHeight)) / 10;
                     this.fpsDisplay.update(drawCalls, dirtyRatio, t1 - t, t2 - t1);
                 }
             }
@@ -332,6 +335,7 @@ module lark.player {
             __extends(FPSImpl, _super);
             function FPSImpl(stage, showFPS, showLog, logFilter) {
                 _super.call(this);
+                this["isFPS"] = true;
                 this.infoLines = [];
                 this.totalTime = 0;
                 this.totalTick = 0;

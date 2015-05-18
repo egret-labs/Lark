@@ -314,7 +314,12 @@ module lark.player {
                         drawCalls += this.drawWidthBlendMode(child,context,dirtyList,drawToStage,clipRegion);
                     }
                     else {
-                        drawCalls += this.drawDisplayObject(child, context, dirtyList, drawToStage, child.$displayList, clipRegion);
+                        if(DEBUG&&child["isFPS"]){
+                            this.drawDisplayObject(child, context, dirtyList, drawToStage, child.$displayList, clipRegion);
+                        }
+                        else{
+                            drawCalls += this.drawDisplayObject(child, context, dirtyList, drawToStage, child.$displayList, clipRegion);
+                        }
                     }
                 }
             }
