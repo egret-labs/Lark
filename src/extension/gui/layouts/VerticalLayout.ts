@@ -234,7 +234,7 @@ module lark.gui {
                     }
                 }
                 else {
-                    layoutElementHeight = heightDic[layoutElement.$hashCode];
+                    layoutElementHeight = heightDic[layoutElement.$hashCode] || NONE;
                 }
                 if (hJustify) {
                     x = paddingL;
@@ -441,7 +441,7 @@ module lark.gui {
                 return false;
             }
 
-            var  values = target.$uiValues;
+            var values = target.$uiValues;
             if (values[player.UIValues.width] == 0 || values[player.UIValues.height] == 0) {
                 this.startIndex = this.endIndex = -1;
                 return false;

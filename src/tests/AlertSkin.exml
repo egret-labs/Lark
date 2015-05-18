@@ -11,7 +11,7 @@
              verticalAlign="middle" textAlign="center" text="contentDisplay">
     </e:Label>
     <e:Button label="按钮">
-        <e:Skin>
+        <e:Skin xmlns:e="http://ns.egret-labs.org/egret" xmlns:w="http://ns.egret-labs.org/wing">
             <e:states>
                 <e:State name="up"/>
                 <e:State name="over"/>

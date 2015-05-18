@@ -237,7 +237,7 @@ module lark.gui {
                     }
                 }
                 else {
-                    layoutElementWidth = widthDic[layoutElement.$hashCode];
+                    layoutElementWidth = widthDic[layoutElement.$hashCode] || NONE;
                 }
                 if (vJustify) {
                     y = paddingT;
@@ -367,12 +367,13 @@ module lark.gui {
             contentHeight += paddingT + paddingB;
             contentWidth = this.getStartPosition(numElements) - gap + paddingR;
             this.maxElementSize = maxElementHeight;
-            target.setContentSize(contentWidth,contentHeight);
+            target.setContentSize(contentWidth, contentHeight);
 
             if (needInvalidateSize || oldMaxH < this.maxElementSize) {
                 target.invalidateSize();
             }
         }
+
         /**
          * 获取指定索引的起始位置
          */
@@ -390,7 +391,7 @@ module lark.gui {
             var gap = this.$gap;
             var elementSizeTable = this.elementSizeTable;
             for (var i = 0; i < index; i++) {
-                startPos += (elementSizeTable[i]||typicalWidth) + gap;
+                startPos += (elementSizeTable[i] || typicalWidth) + gap;
             }
             return startPos;
         }
@@ -402,7 +403,7 @@ module lark.gui {
         protected getElementSize(index:number):number {
 
             if (this.$useVirtualLayout) {
-                return this.elementSizeTable[index]||this.$typicalWidth;
+                return this.elementSizeTable[index] || this.$typicalWidth;
             }
             if (this.$target) {
                 return this.$target.getElementAt(index).width;
@@ -420,7 +421,7 @@ module lark.gui {
             var length = this.$target.numElements;
             var elementSizeTable = this.elementSizeTable;
             for (var i = 0; i < length; i++) {
-                totalSize += (elementSizeTable[i]||typicalWidth) + gap;
+                totalSize += (elementSizeTable[i] || typicalWidth) + gap;
             }
             totalSize -= gap;
             return totalSize;

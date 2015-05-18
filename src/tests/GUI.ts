@@ -35,7 +35,7 @@ module lark {
             super();
             var request = new HttpRequest();
             request.once(Event.COMPLETE, this.onExmlLoaded, this);
-            request.open("tests/AlertSkin.exml");
+            request.open("tests/ButtonSkin.exml");
             request.send();
         }
 
@@ -43,12 +43,19 @@ module lark {
             this.width = this.stage.stageWidth;
             this.height = this.stage.stageHeight;
             var request:HttpRequest = event.target;
-            var skin = lark.gui.EXML.parse(request.response, "lark.gui.AlertSkin");
-            var component = new lark.gui.Component();
-            component.skinName = skin;
-            this.addChild(component);
-            component.x = 100;
-            component.verticalCenter = 0;
+            var skin = lark.gui.EXML.parse(request.response, "lark.gui.ButtonSkin");
+
+            var group = new lark.gui.Group();
+            group.horizontalCenter = 0;
+            group.verticalCenter = 0;
+            this.addChild(group);
+            for(var i=0;i<10;i++){
+                var button = this.createButton(skin);
+                group.addChild(button);
+            }
+            var layout = new lark.gui.VerticalLayout();
+            group.layout = layout;
+
 
             //var image = new lark.gui.Image("image/test.png");
             //image.fillMode = "clip";
@@ -70,6 +77,11 @@ module lark {
             this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
+        private createButton(skin:any):lark.gui.Button {
+            var button = new lark.gui.Button();
+            button.skinName = skin;
+            return button;
+        }
         private touchTarget:lark.gui.UIComponent;
         private offsetX:number = 0;
         private offsetY:number = 0;
