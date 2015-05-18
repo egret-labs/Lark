@@ -59,7 +59,7 @@ module lark.gui {
     locale_strings[2103] = "{0}: 节点上的同一个属性'{1}'被多次赋值\n{2}";
     locale_strings[2104] = "无法实例化组件：{0} ，请检查该组件构造函数参数是否为空。";
 
-    //GUI报错信息
+    //GUI报错与警告信息
     locale_strings[2201] = "BasicLayout 不支持虚拟化。";
     locale_strings[2202] = "皮肤解析出错，skinName 属性的值必须要能够解析为一个Skin子类的实例。";
     locale_strings[2203] = "素材解析出错，找不到URL：{0} 所对应的资源。";

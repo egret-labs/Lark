@@ -52,12 +52,12 @@ module lark.gui {
             }
         }
 
-        private _layout:LayoutBase = null;
+        $layout:LayoutBase = null;
         /**
          * 此容器的布局对象
          */
         public get layout():LayoutBase {
-            return this._layout;
+            return this.$layout;
         }
 
         public set layout(value:LayoutBase) {
@@ -65,13 +65,13 @@ module lark.gui {
         }
 
         $setLayout(value:LayoutBase):void {
-            if (this._layout == value)
+            if (this.$layout == value)
                 return;
-            if (this._layout) {
-                this._layout.target = null;
+            if (this.$layout) {
+                this.$layout.target = null;
             }
 
-            this._layout = value;
+            this.$layout = value;
 
             if (value) {
                 value.target = this;
@@ -139,8 +139,8 @@ module lark.gui {
             if (value === values[player.UIValues.scrollH])
                 return;
             values[player.UIValues.scrollH] = value;
-            if (this.updateScrollRect() && this._layout) {
-                this._layout.scrollPositionChanged();
+            if (this.updateScrollRect() && this.$layout) {
+                this.$layout.scrollPositionChanged();
             }
             UIEvent.emitUIEvent(this, UIEvent.SCROLL_POSITION_CHANGED);
         }
@@ -158,8 +158,8 @@ module lark.gui {
             if (value == values[player.UIValues.scrollV])
                 return;
             values[player.UIValues.scrollV] = value;
-            if (this.updateScrollRect() && this._layout) {
-                this._layout.scrollPositionChanged();
+            if (this.updateScrollRect() && this.$layout) {
+                this.$layout.scrollPositionChanged();
             }
             UIEvent.emitUIEvent(this, UIEvent.SCROLL_POSITION_CHANGED);
         }
@@ -195,8 +195,8 @@ module lark.gui {
         /**
          * 在支持虚拟布局的容器中，设置容器内可见的子元素索引范围。此方法在不支持虚拟布局的容器中无效。
          * 通常在即将重新布局子项之前会被调用一次，容器覆盖此方法提前释放已经不可见的子元素。
-         * @param startIndex 可视元素起始索引
-         * @param endIndex 可视元素结束索引
+         * @param startIndex 可视元素起始索引（包括）
+         * @param endIndex 可视元素结束索引（包括）
          */
         public setVirtualElementIndicesInView(startIndex:number,endIndex:number):void{
 
@@ -212,7 +212,7 @@ module lark.gui {
          * 请务必调用super.createChildren()以完成父类组件的初始化
          */
         protected createChildren():void {
-            if (!this._layout) {
+            if (!this.$layout) {
                 this.$setLayout(new BasicLayout());
             }
         }
@@ -227,19 +227,19 @@ module lark.gui {
          * 测量组件尺寸
          */
         protected measure():void {
-            if (!this._layout) {
+            if (!this.$layout) {
                 this.setMeasuredSize(0, 0);
                 return;
             }
-            this._layout.measure();
+            this.$layout.measure();
         }
 
         /**
          * 更新显示列表
          */
         protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
-            if (this._layout) {
-                this._layout.updateDisplayList(unscaledWidth, unscaledHeight);
+            if (this.$layout) {
+                this.$layout.updateDisplayList(unscaledWidth, unscaledHeight);
             }
             this.updateScrollRect();
         }

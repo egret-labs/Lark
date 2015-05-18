@@ -42,6 +42,14 @@ module lark.gui {
          */
         Group,
         /**
+         * 列表组件
+         */
+        List,
+        /**
+         * 列表类组件的项呈示器接口
+         */
+        IItemRenderer,
+        /**
          * Component 类定义可设置外观的组件的基类。Component 类所使用的外观通常是 Skin 类的子类。
          */
         Component,
