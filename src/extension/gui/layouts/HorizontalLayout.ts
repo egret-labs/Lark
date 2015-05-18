@@ -477,4 +477,6 @@ module lark.gui {
         }
 
     }
+
+    registerClass(HorizontalLayout,Types.HorizontalLayout);
 }

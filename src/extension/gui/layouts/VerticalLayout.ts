@@ -29,6 +29,9 @@
 
 module lark.gui {
 
+    /**
+     * 垂直布局
+     */
     export class VerticalLayout extends LinearLayoutBase {
 
         /**
@@ -473,4 +476,6 @@ module lark.gui {
             return oldStartIndex != this.startIndex || oldEndIndex != this.endIndex;
         }
     }
+
+    registerClass(VerticalLayout,Types.VerticalLayout);
 }

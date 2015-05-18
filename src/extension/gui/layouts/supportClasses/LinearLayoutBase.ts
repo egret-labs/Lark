@@ -405,6 +405,8 @@ module lark.gui {
             while (!done);
         }
     }
+
+    registerClass(LinearLayoutBase,Types.LinearLayoutBase);
 }
 
 module lark.player {

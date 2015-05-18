@@ -77,7 +77,7 @@ module lark {
         private fieldsInitialized:boolean;
 
         /**
-         * DisplayObject定义的所有变量请不要添加任何初始值，必须统一在此处初始化。否则UIComponent的多继承机制可能会触发两次DisplayObject的构造方法。
+         * DisplayObject定义的所有变量请不要添加任何初始值，必须统一在此处初始化。否则UIComponent的代码复用机制可能会触发两次DisplayObject的构造方法。
          */
         private initializeFields():void{
             this.fieldsInitialized = true;

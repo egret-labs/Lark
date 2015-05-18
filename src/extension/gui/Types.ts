@@ -75,15 +75,37 @@ module lark.gui {
          */
         UIEvent,
         /**
+         * 集合类型数据改变事件
+         */
+        CollectionEvent,
+        /**
+         * 数组的集合类数据结构包装器
+         * 通常作为列表组件的数据源，使用这种数据结构包装普通数组，
+         * 能在数据源发生改变的时候主动通知视图刷新变更的数据项
+         */
+        ArrayCollection,
+        /**
          * 容器布局基类。若要创建使用 Group 容器的自定义布局，必须扩展 LayoutBase 或其子类之一。
          * 子类必须实现 updateDisplayList() 方法（定位 target Group 的子项并调整这些子项的大小）和 measure() 方法（计算 target 的默认大小）。
          */
         LayoutBase,
         /**
+         * 线性布局基类，通常作为 HorizontalLayout 和 VerticalLayout 的父类。
+         */
+        LinearLayoutBase,
+        /**
          * BasicLayout 类根据其各个设置彼此独立地排列布局元素。
          * BasicLayout（也称为绝对布局）要求显式定位每个容器子代。可以使用子代的 x 和 y 属性，或使用约束来定位每个子代。
          */
         BasicLayout,
+        /**
+         * 水平布局
+         */
+        HorizontalLayout,
+        /**
+         * 垂直布局
+         */
+        VerticalLayout,
         /**
          * 带有标题，关闭按钮，可移动区域的面板组件。注意：当第一次通过触摸交互操作移动面板时，面板的 includeInLayout 属性将会自动被设置为false，
          * 以确保移动不会受到自动布局属性的影响。若之后还需要启用面板在父级容器中的自动布局，需手动设置 includeInLayout 为 true。
