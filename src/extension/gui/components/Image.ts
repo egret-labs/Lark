@@ -170,7 +170,7 @@ module lark.gui {
                 this.emitWith(Event.COMPLETE);
             }
             else if(DEBUG){
-                $warn(2203,source);
+                $warn(2301,source);
             }
         }
 

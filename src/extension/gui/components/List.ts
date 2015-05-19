@@ -227,9 +227,6 @@ module lark.gui {
          * 虚拟布局结束清理不可见的项呈示器
          */
         private finishVirtualLayout():void {
-            if (!this.virtualLayoutUnderway)
-                return;
-            this.virtualLayoutUnderway = false;
             var found = false;
             var freeRenderers = this.freeRenderers;
             var keys = Object.keys(freeRenderers);
@@ -637,26 +634,34 @@ module lark.gui {
             super.measure();
         }
 
-        /**
-         * 正在进行虚拟布局阶段
-         */
-        private virtualLayoutUnderway:boolean = false;
-
 
         protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
-            if (this._layoutInvalidateDisplayListFlag && this.$layout && this.$layout.$useVirtualLayout) {
-                this.virtualLayoutUnderway = true;
+            var useVirtualLayout = (this.$layout && this.$layout.$useVirtualLayout);
+            if (useVirtualLayout) {
                 this.ensureTypicalLayoutElement();
             }
             super.updateDisplayList(unscaledWidth, unscaledHeight);
-            if (this.virtualLayoutUnderway)
+            if (useVirtualLayout) {
+                //检查索引 0 处的项测量大小是否发生改变，若改变就重新计算 typicalLayoutRect
+                var rect = this.typicalLayoutRect;
+                if (rect) {
+                    var renderer = this.indexToRenderer[0];
+                    if (renderer) {
+                        var bounds = $TempRectangle;
+                        renderer.getPreferredBounds(bounds);
+                        if (bounds.width != rect.width || bounds.height != rect.height) {
+                            this.typicalLayoutRect = null;
+                        }
+                    }
+                }
                 this.finishVirtualLayout();
+            }
         }
 
         /**
          * 用于测试默认大小的数据
          */
-        private typicalItem:any
+        private typicalItem:any;
 
         private typicalItemChanged:boolean = false;
 
@@ -664,7 +669,7 @@ module lark.gui {
          * 确保测量过默认条目大小。
          */
         private ensureTypicalLayoutElement():void {
-            if (this.$layout.typicalLayoutRect)
+            if (this.typicalLayoutRect)
                 return;
 
             if (this._dataProvider && this._dataProvider.length > 0) {
@@ -709,7 +714,12 @@ module lark.gui {
         private setTypicalLayoutRect(rect:Rectangle):void {
             this.typicalLayoutRect = rect;
             if (this.$layout) {
-                this.$layout.setTypicalSize(rect.width, rect.height);
+                if (rect) {
+                    this.$layout.setTypicalSize(rect.width, rect.height);
+                }
+                else {
+                    this.$layout.setTypicalSize(0, 0);
+                }
             }
         }
 
@@ -806,62 +816,35 @@ module lark.gui {
                 return 0;
             return this._dataProvider.length;
         }
-
-        /**
-         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中
-         * @deprecated
-         */
-        public addChild(child:DisplayObject):DisplayObject {
-            return null;
-        }
-
-        /**
-         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中
-         * @deprecated
-         */
-        public addChildAt(child:DisplayObject, index:number):DisplayObject {
-            return null;
-        }
-
-        /**
-         * 从 DisplayObjectContainer 实例的子列表中删除指定的 child DisplayObject 实例
-         * @deprecated
-         */
-        public removeChild(child:DisplayObject):DisplayObject {
-            return null;
-        }
-
-        /**
-         * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject
-         * @deprecated
-         */
-        public removeChildAt(index:number):DisplayObject {
-            return null;
-        }
-
-        /**
-         * 更改现有子项在显示对象容器中的位置
-         * @deprecated
-         */
-        public setChildIndex(child:DisplayObject, index:number):void {
-
-        }
-
-        /**
-         * 交换两个指定子对象的 Z 轴顺序（从前到后顺序）
-         * @deprecated
-         */
-        public swapChildren(child1:DisplayObject, child2:DisplayObject):void {
-        }
-
-        /**
-         * 在子级列表中两个指定的索引位置，交换子对象的 Z 轴顺序（前后顺序）
-         * @deprecated
-         */
-        public swapChildrenAt(index1:number, index2:number):void {
-
-        }
     }
 
     registerClass(List, Types.List);
+
+    if (DEBUG) {
+        List.prototype.addChild = function (child) {
+            lark.$error(2203);
+            return null;
+        };
+        List.prototype.addChildAt = function (child, index) {
+            lark.$error(2203);
+            return null;
+        };
+        List.prototype.removeChild = function (child) {
+            lark.$error(2203);
+            return null;
+        };
+        List.prototype.removeChildAt = function (index) {
+            lark.$error(2203);
+            return null;
+        };
+        List.prototype.setChildIndex = function (child, index) {
+            lark.$error(2203);
+        };
+        List.prototype.swapChildren = function (child1, child2) {
+            lark.$error(2203);
+        };
+        List.prototype.swapChildrenAt = function (index1, index2) {
+            lark.$error(2203);
+        };
+    }
 }

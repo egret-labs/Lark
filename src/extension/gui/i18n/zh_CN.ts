@@ -62,5 +62,7 @@ module lark.gui {
     //GUI报错与警告信息
     locale_strings[2201] = "BasicLayout 不支持虚拟化。";
     locale_strings[2202] = "皮肤解析出错，skinName 属性的值必须要能够解析为一个Skin子类的实例。";
-    locale_strings[2203] = "素材解析出错，找不到URL：{0} 所对应的资源。";
+    locale_strings[2203] = "此方法在List类中不可用， 请通过数据源 dataProvider 来操作子项的添加或删除。";
+
+    locale_strings[2301] = "素材解析失败，找不到URL：{0} 所对应的资源。";
 }
