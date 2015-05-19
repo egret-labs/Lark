@@ -29,7 +29,55 @@
 
 module lark.gui {
 
-    export class ItemRenderer extends Component{
+    export class ItemRenderer extends Group implements IItemRenderer {
 
+        /**
+         * 要在项呈示器中显示的文本。
+         */
+        label:string;
+        /**
+         * 要在项呈示器中显示的图标
+         */
+        icon:string;
+
+        private _data: any = null;
+        /**
+         * 要呈示或编辑的数据。
+         */
+        public get data():any{
+            return this._data;
+        }
+
+        public set data(value:any){
+            this._data = value;
+            this.dataChanged();
+        }
+
+        /**
+         * 子类复写此方法以在 data 数据源发生改变时跟新显示列表。
+         */
+        protected dataChanged():void{
+
+        }
+
+        private _selected:boolean = false;
+        /**
+         * 如果项呈示器可以将其自身显示为已选中，则为 true。
+         */
+        public get selected():boolean{
+            return this._selected;
+        }
+
+        public set selected(value:boolean){
+            if(this._selected==value)
+                return;
+            this._selected = value;
+
+        }
+
+        /**
+         * 项呈示器的数据提供程序中的项目索引。
+         */
+        public itemIndex:number = -1;
     }
 }

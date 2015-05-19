@@ -41,9 +41,11 @@ module lark.gui {
 
         $elementsContent:DisplayObject[] = [];
 
+        /**
+         * [只写] 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
+         */
         public set elementsContent(value:DisplayObject[]){
             this.$elementsContent = value;
-            this.removeChildren();
             if(value){
                 var length = value.length;
                 for(var i=0;i<length;i++){

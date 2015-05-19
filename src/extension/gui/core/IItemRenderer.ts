@@ -39,11 +39,11 @@ module lark.gui {
 		 */
 		data:any;
 		/**
-		 * 如果项呈示器可以将其自身显示为已选中，则包含 true。
+		 * 如果项呈示器可以将其自身显示为已选中，则为 true。
 		 */
 		selected:boolean;
 		/**
-		 * 项呈示器的主机组件的数据提供程序中的项目索引。
+		 * 项呈示器的数据提供程序中的项目索引。
 		 */
 		itemIndex:number;
 		/**
