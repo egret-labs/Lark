@@ -1127,7 +1127,7 @@ module lark.player {
         private findNearNodeId(node:XML):any {
             var parentNode:XML = node.parent;
             var targetId = "";
-            var position:string;
+            var position:number;
             var index = -1;
             var preItem:XML;
             var afterItem:XML;
@@ -1152,15 +1152,15 @@ module lark.player {
                     preItem = item;
             }
             if (index == 0) {
-                position = "first";
+                position = player.AddPosition.FIRST;
                 return {position: position, relativeTo: targetId};
             }
             if (index == length - 1) {
-                position = "last";
+                position = player.AddPosition.LAST;
                 return {position: position, relativeTo: targetId};
             }
             if (afterItem) {
-                position = "before";
+                position = player.AddPosition.BEFORE;
                 targetId = afterItem.attributes.id;
                 if (targetId) {
                     this.checkIdForState(afterItem);
@@ -1168,7 +1168,7 @@ module lark.player {
                 }
 
             }
-            return {position: "last", relativeTo: targetId};
+            return {position: player.AddPosition.LAST, relativeTo: targetId};
         }
 
 

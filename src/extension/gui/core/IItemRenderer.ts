@@ -46,13 +46,5 @@ module lark.gui {
 		 * 项呈示器的数据提供程序中的项目索引。
 		 */
 		itemIndex:number;
-		/**
-		 * 要在项呈示器中显示的文本。
-		 */
-		label:string;
-		/**
-		 * 要在项呈示器中显示的图标
-		 */
-		icon:string;
 	}
 }

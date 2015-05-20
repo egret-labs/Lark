@@ -42,7 +42,7 @@ module lark.gui {
          * @param className 皮肤对应的完整类名，包括模块名称。例如 lark.gui.ButtonSkin。解析完成后皮肤类定义会自动缓存到全局，
          * 若指定的类已经存在，将会覆盖已有的类定义。解析后您也可以通过lark.getDefinitionByName(className)方法获取这个皮肤的类定义。
          */
-        public static parse(text:string, className:string):Function {
+        public static parse(text:string, className:string):{new():any} {
             if (DEBUG) {
                 if(!text){
                     $error(1003, "text");

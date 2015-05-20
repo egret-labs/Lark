@@ -36,13 +36,15 @@ module lark.gui {
 	export interface IOverride{
 		/**
 		 * 应用覆盖。将保留原始值，以便以后可以在 remove() 方法中恢复该值。 
-		 * @param parent 皮肤附加到的主机组件
-		 */			
-		apply(skin:Skin):void;
+		 * @param host 含有视图状态的组件。
+		 * @param parent 子项添加到的父级容器。
+		 */
+		apply(host:any,parent:DisplayObjectContainer):void;
 		/**
-		 * 删除覆盖。在 apply() 方法中记住的值将被恢复。 
-		 * @param parent 皮肤附加到的主机组件
+		 * 删除覆盖。在 apply() 方法中记住的值将被恢复。
+		 * @param host 含有视图状态的组件。
+		 * @param parent 子项添加到的父级容器。
 		 */		
-		remove(skin:Skin):void;
+		remove(host:any,parent:DisplayObjectContainer):void;
 	}
 }

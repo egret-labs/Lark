@@ -58,11 +58,6 @@ module lark.gui {
 		 */
 		public static VALUE_COMMIT:string = "valueCommit";
 		/**
-		 * Component皮肤发生改变
-		 */
-		public static SKIN_CHANGED:string = "skinChanged";
-
-		/**
 		 * 容器的内容尺寸发生改变
 		 */
 		public static CONTENT_SIZE_CHANGED:string = "contentSizeChanged";

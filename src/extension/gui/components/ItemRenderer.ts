@@ -31,15 +31,6 @@ module lark.gui {
 
     export class ItemRenderer extends Group implements IItemRenderer {
 
-        /**
-         * 要在项呈示器中显示的文本。
-         */
-        label:string;
-        /**
-         * 要在项呈示器中显示的图标
-         */
-        icon:string;
-
         private _data: any = null;
         /**
          * 要呈示或编辑的数据。

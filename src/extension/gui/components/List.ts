@@ -786,19 +786,9 @@ module lark.gui {
         public updateRenderer(renderer:IItemRenderer, itemIndex:number, data:any):IItemRenderer {
             this.renderersBeingUpdated = true;
             renderer.itemIndex = itemIndex;
-            renderer.label = this.itemToLabel(data);
             renderer.data = data;
             this.renderersBeingUpdated = false;
             return renderer;
-        }
-
-        /**
-         * 返回可在项呈示器中显示的文本。
-         */
-        public itemToLabel(item:any):string {
-            if (item)
-                return item.toString();
-            else return " ";
         }
 
         /**

@@ -65,10 +65,11 @@ module lark.gui {
 
         /**
          * 应用覆盖。将保留原始值，以便以后可以在 remove() 方法中恢复该值。
-         * @param skin 皮肤附加到的主机组件
+         * @param host 含有视图状态的组件。
+         * @param parent 子项添加到的父级容器。
          */
-        public apply(skin:Skin):void {
-            var obj:any = this.target ? skin[this.target] : skin;
+        public apply(host:Skin, parent:DisplayObjectContainer):void {
+            var obj:any = this.target ? host[this.target] : host;
             if (!obj)
                 return;
             this.oldValue = obj[this.name];
@@ -77,10 +78,11 @@ module lark.gui {
 
         /**
          * 删除覆盖。在 apply() 方法中记住的值将被恢复。
-         * @param skin 皮肤附加到的主机组件
+         * @param host 含有视图状态的组件。
+         * @param parent 子项添加到的父级容器。
          */
-        public remove(skin:Skin):void {
-            var obj:any = this.target ? skin[this.target] : skin;
+        public remove(host:Skin, parent:DisplayObjectContainer):void {
+            var obj:any = this.target ? host[this.target] : host;
             if (!obj)
                 return;
             this.setPropertyValue(obj, this.name, this.oldValue, this.oldValue);

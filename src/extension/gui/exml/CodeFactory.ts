@@ -476,7 +476,7 @@ module lark.player {
     }
 
     export class CpAddItems extends CodeBase {
-        public constructor(target:string, propertyName:string, position:string, relativeTo:string) {
+        public constructor(target:string, propertyName:string, position:number, relativeTo:string) {
             super();
             this.target = target;
             this.propertyName = propertyName;
@@ -497,7 +497,7 @@ module lark.player {
         /**
          * 添加的位置
          */
-        public position:string;
+        public position:number;
 
         /**
          * 相对的显示元素
@@ -506,7 +506,7 @@ module lark.player {
 
         public toCode():string {
             var indentStr:string = this.getIndent(1);
-            var returnStr:string = "new " + ADD_ITEMS + "(\"" + this.target + "\",\"" + this.propertyName + "\",\"" + this.position + "\",\"" + this.relativeTo + "\")";
+            var returnStr:string = "new " + ADD_ITEMS + "(\"" + this.target + "\",\"" + this.propertyName + "\"," + this.position + ",\"" + this.relativeTo + "\")";
             return returnStr;
         }
     }

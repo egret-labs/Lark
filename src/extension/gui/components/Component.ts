@@ -147,10 +147,6 @@ module lark.gui {
             }
             this.invalidateSize();
             this.invalidateDisplayList();
-
-            if (this.hasListener(UIEvent.SKIN_CHANGED)) {
-                UIEvent.emitUIEvent(this, UIEvent.SKIN_CHANGED);
-            }
         }
 
 

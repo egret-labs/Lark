@@ -71,150 +71,54 @@ module lark.gui {
         }
 
 
-        private _hostComponent: Component = null;
+        private _hostComponent:Component = null;
         /**
          * 此皮肤附加到的主机组件
          */
-        public get hostComponent():Component{
+        public get hostComponent():Component {
             return this._hostComponent;
         }
 
-        public set hostComponent(value:Component){
-            if(this._hostComponent==value)
+        public set hostComponent(value:Component) {
+            if (this._hostComponent == value)
                 return;
             this._hostComponent = value;
-
-            if(this._hostComponent){
-                if(this.currentStateChanged){
+            var values = this.stateValues;
+            values.parent = value;
+            if (value) {
+                if (values.currentStateChanged) {
                     this.commitCurrentState();
                 }
             }
         }
 
+        private stateValues:player.StateValues = new player.StateValues();
 
-        //========================state相关函数===============start=========================
-
-        private statesMap:any = {};
-        private _states:State[] = [];
         /**
          * 为此组件定义的视图状态。
          */
-        public get states():State[] {
-            return this._states;
-        }
-
-        public set states(value:State[]) {
-            if (!value)
-                value = [];
-            this._states = value;
-            var statesMap = {};
-            var length = value.length;
-            for (var i = 0; i < length; i++) {
-                var state = value[i];
-                statesMap[state.name] = state;
-            }
-            this.statesMap = statesMap;
-            this.currentStateChanged = true;
-            this.requestedCurrentState = this._currentState;
-            if (!this.hasState(this.requestedCurrentState)) {
-                this.requestedCurrentState = this.getDefaultState();
-            }
-            if (this._hostComponent) {
-                this.commitCurrentState();
-            }
-        }
-
-        /**
-         * 当前视图状态发生改变的标志
-         */
-        private currentStateChanged:boolean = false;
-
-        private _currentState:string = null;
-        /**
-         * 存储还未验证的视图状态
-         */
-        private requestedCurrentState:string = null;
+        public states:State[];
 
         /**
          * 组件的当前视图状态。将其设置为 "" 或 null 可将组件重置回其基本状态。
          */
-        public get currentState():string {
-            return this.currentStateChanged?this.requestedCurrentState:this._currentState;
-        }
-
-        public set currentState(value:string) {
-            if (value != this.currentState) {
-                this.requestedCurrentState = value;
-                this.currentStateChanged = true;
-                if (this._hostComponent) {
-                    this.commitCurrentState();
-                }
-            }
-        }
-
-        /**
-         * 返回默认状态
-         */
-        private getDefaultState():string {
-            if (this._states.length > 0) {
-                return this._states[0].name;
-            }
-            return null;
-        }
-
-        /**
-         * 应用当前的视图状态。子类覆盖此方法在视图状态发生改变时执行相应更新操作。
-         */
-        public commitCurrentState():void {
-            if (!this.currentStateChanged)
-                return;
-            this.currentStateChanged = false;
-            var destination:State = this.statesMap[this.requestedCurrentState];
-            if (!destination) {
-                this.requestedCurrentState = this.getDefaultState();
-            }
-            this.removeState(this._currentState);
-            this._currentState = this.requestedCurrentState;
-            this.applyState(this._currentState);
-        }
+        public currentState:string;
 
         /**
          * 返回是否含有指定名称的视图状态
          * @param stateName 要检查的视图状态名称
          */
-        public hasState(stateName:string):boolean{
-            return !!this.statesMap[stateName];
-        }
+        public hasState:(stateName:string)=>boolean;
 
         /**
-         * 移除指定的视图状态以及所依赖的所有父级状态，除了与新状态的共同状态外
+         * 应用当前的视图状态。子类覆盖此方法在视图状态发生改变时执行相应更新操作。
          */
-        private removeState(stateName:string):void {
-            var state = this.statesMap[stateName];
-            if (state) {
-                var overrides = state.overrides;
-                for (var i = overrides.length - 1; i >= 0; i--)
-                    overrides[i].remove(this);
-            }
+        protected commitCurrentState():void {
         }
-
-        /**
-         * 应用新状态
-         */
-        private applyState(stateName:string):void {
-            var state = this.statesMap[stateName];
-            if (state) {
-                var overrides = state.overrides;
-                var length = overrides.length;
-                for (var i = 0; i < length; i++)
-                    overrides[i].apply(this);
-            }
-        }
-
-        //========================state相关函数===============end=========================
 
     }
 
+    player.mixin(Skin,player.StateClient);
     registerClass(Skin, Types.Skin);
     registerProperty(Skin, "elementsContent", "Array", true);
 }

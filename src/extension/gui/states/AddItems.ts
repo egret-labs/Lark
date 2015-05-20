@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player{
+module lark.player {
 
     export const enum AddPosition {
         /**
@@ -87,13 +87,14 @@ module lark.gui {
 
         /**
          * 应用覆盖。将保留原始值，以便以后可以在 remove() 方法中恢复该值。
-         * @param skin 皮肤附加到的主机组件
+         * @param host 含有视图状态的组件。
+         * @param parent 子项添加到的父级容器。
          */
-        public apply(skin:Skin):void {
+        public apply(host:any, parent:DisplayObjectContainer):void {
             var index:number;
-            var relative:DisplayObject = skin[this.relativeTo];
-            var target:DisplayObject = skin[this.target];
-            var container:DisplayObjectContainer = this.propertyName ? skin[this.propertyName] : skin.hostComponent;
+            var relative:DisplayObject = host[this.relativeTo];
+            var target:DisplayObject = host[this.target];
+            var container:DisplayObjectContainer = this.propertyName ? host[this.propertyName] : parent;
             if (!target || !container)
                 return;
             switch (this.position) {
@@ -117,14 +118,15 @@ module lark.gui {
 
         /**
          * 删除覆盖。在 apply() 方法中记住的值将被恢复。
-         * @param skin 皮肤附加到的主机组件
+         * @param host 含有视图状态的组件。
+         * @param parent 子项添加到的父级容器。
          */
-        public remove(skin:Skin):void {
-            var container:DisplayObjectContainer = this.propertyName ? skin[this.propertyName] : skin.hostComponent;
-            var target:DisplayObject = skin[this.target];
+        public remove(host:any):void {
+            var container:DisplayObjectContainer = this.propertyName ? host[this.propertyName] : parent;
+            var target:DisplayObject = host[this.target];
             if (!target || !container)
                 return;
-            if (target.$parent===container) {
+            if (target.$parent === container) {
                 container.removeChild(target);
             }
         }

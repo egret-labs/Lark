@@ -998,23 +998,18 @@ module lark.player {
     }
 
     /**
-     * 自定义类实现UIComponent的步骤：
-     * 1.在自定义类的构造函数里调用：player.UIComponentImpl.call(this);
-     * 2.拷贝UIComponent接口定义的所有内容(包括注释掉的protected函数)到自定义类，将所有方法都声明为空方法体。
-     * 3.在定义类结尾的外部调用player.implementUIComponent()，并传入自定义类。
-     * 4.若覆盖了某个UIComponent的方法，需要手动调用UIComponentImpl.prototype["方法名"].call(this);
-     * @param descendant 自定义的UIComponent子类
-     * @param base 自定义子类继承的父类
+     * 拷贝模板类的方法体和属性到目标类上。
+     * @param target 目标类
+     * @param template 模板类
      */
-    export function implementUIComponent(descendant:any, base:any,isContainer?:boolean):void {
-        for (var property in UIComponentImpl) {
-            if (UIComponentImpl.hasOwnProperty(property)) {
-                descendant[property] = UIComponentImpl[property];
+    export function mixin(target:any,template:any):void{
+        for (var property in template) {
+            if (template.hasOwnProperty(property)) {
+                target[property] = template[property];
             }
         }
-        var prototype = descendant.prototype;
-        prototype.$super = base.prototype
-        var protoBase = UIComponentImpl.prototype;
+        var prototype = target.prototype;
+        var protoBase = template.prototype;
         var keys = Object.keys(protoBase);
         var length = keys.length;
         for (var i = 0; i < length; i++) {
@@ -1027,6 +1022,21 @@ module lark.player {
                 Object.defineProperty(prototype, key, value);
             }
         }
+    }
+
+    /**
+     * 自定义类实现UIComponent的步骤：
+     * 1.在自定义类的构造函数里调用：player.UIComponentImpl.call(this);
+     * 2.拷贝UIComponent接口定义的所有内容(包括注释掉的protected函数)到自定义类，将所有方法都声明为空方法体。
+     * 3.在定义类结尾的外部调用player.implementUIComponent()，并传入自定义类。
+     * 4.若覆盖了某个UIComponent的方法，需要手动调用UIComponentImpl.prototype["方法名"].call(this);
+     * @param descendant 自定义的UIComponent子类
+     * @param base 自定义子类继承的父类
+     */
+    export function implementUIComponent(descendant:any, base:any,isContainer?:boolean):void {
+        mixin(descendant,UIComponentImpl);
+        var prototype = descendant.prototype;
+        prototype.$super = base.prototype;
 
         if(isContainer){
             prototype.$childAdded = function (child:DisplayObject, index:number):void {

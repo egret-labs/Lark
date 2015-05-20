@@ -37,6 +37,7 @@ module lark.gui {
         public constructor() {
             super();
             player.UIComponentImpl.call(this);
+            this.stateValues.parent = this;
         }
 
         $elementsContent:DisplayObject[] = [];
@@ -205,7 +206,29 @@ module lark.gui {
         }
 
 
+        private stateValues:player.StateValues = new player.StateValues();
 
+        /**
+         * 为此组件定义的视图状态。
+         */
+        public states:State[];
+
+        /**
+         * 组件的当前视图状态。将其设置为 "" 或 null 可将组件重置回其基本状态。
+         */
+        public currentState:string;
+
+        /**
+         * 返回是否含有指定名称的视图状态
+         * @param stateName 要检查的视图状态名称
+         */
+        public hasState:(stateName:string)=>boolean;
+
+        /**
+         * 应用当前的视图状态。子类覆盖此方法在视图状态发生改变时执行相应更新操作。
+         */
+        protected commitCurrentState():void {
+        }
 
 
         //=======================UIComponent接口实现===========================
@@ -411,7 +434,7 @@ module lark.gui {
     }
 
     player.implementUIComponent(Group, Sprite, true);
-
+    player.mixin(Group,player.StateClient);
     registerClass(Group, Types.Group, [Types.UIComponent]);
     registerProperty(Group,"elementsContent","Array",true);
 }

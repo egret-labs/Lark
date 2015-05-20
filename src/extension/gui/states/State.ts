@@ -30,33 +30,167 @@
 
 module lark.gui {
 
-	/**
-	 * State 类定义视图状态，即组件的特定视图。
-	 */
-	export class State extends LarkObject{
-		/**
-		 * 创建一个State实例
-		 */
-		public constructor(name:string,overrides:IOverride[]){
-			super();
-			this.name = name;
+    /**
+     * State 类定义视图状态，即组件的特定视图。
+     */
+    export class State extends LarkObject {
+        /**
+         * 创建一个State实例
+         */
+        public constructor(name:string, overrides:IOverride[]) {
+            super();
+            this.name = name;
             this.overrides = overrides;
-		}
+        }
 
-		/**
-		 * 视图状态的名称。给定组件的状态名称必须唯一。必须设置此属性。
-		 */
-        public name: string;
-		
-		/**
-		 * 该视图状态的覆盖，表现为实现 IOverride 接口的对象的数组。
-		 * 这些覆盖在进入状态时按顺序应用，在退出状态时按相反的顺序删除。 
-		 */
-		public overrides:IOverride[];
-		/**
-		 * 此视图状态作为 string 数组所属的状态组。
-		 */
-		public stateGroups:string[];
-	}
-	
+        /**
+         * 视图状态的名称。给定组件的状态名称必须唯一。必须设置此属性。
+         */
+        public name:string;
+
+        /**
+         * 该视图状态的覆盖，表现为实现 IOverride 接口的对象的数组。
+         * 这些覆盖在进入状态时按顺序应用，在退出状态时按相反的顺序删除。
+         */
+        public overrides:IOverride[];
+        /**
+         * 此视图状态作为 string 数组所属的状态组。
+         */
+        public stateGroups:string[];
+    }
+
+}
+
+module lark.player {
+
+    export class StateClient {
+
+        private stateValues:StateValues;
+        /**
+         * 为此组件定义的视图状态。
+         */
+        public get states():gui.State[] {
+            return this.stateValues.states;
+        }
+
+        public set states(value:gui.State[]) {
+            if (!value)
+                value = [];
+            var values = this.stateValues;
+            values.states = value;
+            var statesMap = {};
+            var length = value.length;
+            for (var i = 0; i < length; i++) {
+                var state = value[i];
+                statesMap[state.name] = state;
+            }
+            values.statesMap = statesMap;
+            values.currentStateChanged = true;
+            values.requestedCurrentState = values.currentState;
+            if (!this.hasState(values.requestedCurrentState)) {
+                values.requestedCurrentState = this.getDefaultState();
+            }
+            if (values.parent) {
+                this.commitCurrentState();
+            }
+        }
+
+        /**
+         * 组件的当前视图状态。将其设置为 "" 或 null 可将组件重置回其基本状态。
+         */
+        public get currentState():string {
+            var values = this.stateValues;
+            return values.currentStateChanged?values.requestedCurrentState:values.currentState;
+        }
+
+        public set currentState(value:string) {
+            if (value != this.currentState) {
+                var values = this.stateValues;
+                values.requestedCurrentState = value;
+                values.currentStateChanged = true;
+                if (values.parent) {
+                    this.commitCurrentState();
+                }
+            }
+        }
+
+        /**
+         * 返回默认状态
+         */
+        private getDefaultState():string {
+            if (this.stateValues.states.length > 0) {
+                return this.stateValues.states[0].name;
+            }
+            return null;
+        }
+
+        /**
+         * 应用当前的视图状态。子类覆盖此方法在视图状态发生改变时执行相应更新操作。
+         */
+        public commitCurrentState():void {
+            var values = this.stateValues;
+            if (!values.currentStateChanged)
+                return;
+
+            values.currentStateChanged = false;
+            var destination:gui.State = values.statesMap[values.requestedCurrentState];
+            if (!destination) {
+                values.requestedCurrentState = this.getDefaultState();
+            }
+            this.removeState(values.currentState);
+            values.currentState = values.requestedCurrentState;
+            this.applyState(values.currentState);
+        }
+
+        /**
+         * 返回是否含有指定名称的视图状态
+         * @param stateName 要检查的视图状态名称
+         */
+        public hasState(stateName:string):boolean{
+            return !!this.stateValues.statesMap[stateName];
+        }
+
+        /**
+         * 移除指定的视图状态以及所依赖的所有父级状态，除了与新状态的共同状态外
+         */
+        private removeState(stateName:string):void {
+            var state = this.stateValues.statesMap[stateName];
+            var parent = this.stateValues.parent;
+            if (state) {
+                var overrides = state.overrides;
+                for (var i = overrides.length - 1; i >= 0; i--)
+                    overrides[i].remove(this,parent);
+            }
+        }
+
+        /**
+         * 应用新状态
+         */
+        private applyState(stateName:string):void {
+            var state = this.stateValues.statesMap[stateName];
+            var parent = this.stateValues.parent;
+            if (state) {
+                var overrides = state.overrides;
+                var length = overrides.length;
+                for (var i = 0; i < length; i++)
+                    overrides[i].apply(this,parent);
+            }
+        }
+
+    }
+
+    export class StateValues {
+
+        public statesMap:any = {};
+
+        public states:gui.State[] = [];
+
+        public currentStateChanged:boolean = false;
+
+        public currentState:string = null;
+
+        public requestedCurrentState:string = null;
+
+        public parent:DisplayObjectContainer = null;
+    }
 }
