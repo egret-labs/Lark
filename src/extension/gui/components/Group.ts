@@ -37,7 +37,7 @@ module lark.gui {
         public constructor() {
             super();
             player.UIComponentImpl.call(this);
-            this.stateValues.parent = this;
+            this.$stateValues.parent = this;
         }
 
         $elementsContent:DisplayObject[] = [];
@@ -206,7 +206,7 @@ module lark.gui {
         }
 
 
-        private stateValues:player.StateValues = new player.StateValues();
+        $stateValues:player.StateValues = new player.StateValues();
 
         /**
          * 为此组件定义的视图状态。
@@ -223,11 +223,26 @@ module lark.gui {
          * @param stateName 要检查的视图状态名称
          */
         public hasState:(stateName:string)=>boolean;
-
         /**
          * 应用当前的视图状态。子类覆盖此方法在视图状态发生改变时执行相应更新操作。
          */
-        protected commitCurrentState():void {
+        private commitCurrentState:()=>void;
+        /**
+         * 标记组件当前的视图状态失效，调用此方法后，子类应该覆盖 getCurrentState() 方法来返回当前的视图状态名称。
+         */
+        public invalidateState():void {
+            if (this.$hasFlags(player.UIFlags.stateIsDirty)){
+                return;
+            }
+            this.$setFlags(player.UIFlags.stateIsDirty);
+            this.invalidateProperties();
+        }
+
+        /**
+         * 返回组件当前的皮肤状态名称,子类覆盖此方法定义各种状态名
+         */
+        protected getCurrentState():string {
+            return "";
         }
 
 
@@ -246,6 +261,14 @@ module lark.gui {
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         protected commitProperties():void {
+            if(this.$hasFlags(player.UIFlags.stateIsDirty)){
+                this.$removeFlags(player.UIFlags.stateIsDirty);
+                var values = this.$stateValues;
+                if(!values.explicitState){
+                    values.currentState = this.getCurrentState();
+                    this.commitCurrentState();
+                }
+            }
         }
 
         /**

@@ -109,7 +109,7 @@ module lark.gui {
                 return;
 
             this._stickyHighlighting = value;
-            this.invalidateSkinState();
+            this.invalidateState();
         }
 
         /**
@@ -143,7 +143,7 @@ module lark.gui {
                     }
                     break;
             }
-            this.invalidateSkinState();
+            this.invalidateState();
             event.updateAfterEvent();
         }
 
@@ -156,13 +156,13 @@ module lark.gui {
                 return;
 
             this.touchCaptured = false;
-            this.invalidateSkinState();
+            this.invalidateState();
         }
 
         /**
          * 返回要应用到外观的状态的名称
          */
-        protected getCurrentSkinState():string {
+        protected getCurrentState():string {
             if (!this.$hasFlags(player.UIFlags.enabled))
                 return "disabled";
 

@@ -83,16 +83,14 @@ module lark.gui {
             if (this._hostComponent == value)
                 return;
             this._hostComponent = value;
-            var values = this.stateValues;
+            var values = this.$stateValues;
             values.parent = value;
             if (value) {
-                if (values.currentStateChanged) {
-                    this.commitCurrentState();
-                }
+                this.commitCurrentState();
             }
         }
 
-        private stateValues:player.StateValues = new player.StateValues();
+        $stateValues:player.StateValues = new player.StateValues();
 
         /**
          * 为此组件定义的视图状态。
@@ -113,9 +111,7 @@ module lark.gui {
         /**
          * 应用当前的视图状态。子类覆盖此方法在视图状态发生改变时执行相应更新操作。
          */
-        protected commitCurrentState():void {
-        }
-
+        private commitCurrentState:()=>void;
     }
 
     player.mixin(Skin,player.StateClient);

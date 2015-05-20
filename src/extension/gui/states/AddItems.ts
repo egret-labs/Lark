@@ -121,7 +121,7 @@ module lark.gui {
          * @param host 含有视图状态的组件。
          * @param parent 子项添加到的父级容器。
          */
-        public remove(host:any):void {
+        public remove(host:any,parent:DisplayObjectContainer):void {
             var container:DisplayObjectContainer = this.propertyName ? host[this.propertyName] : parent;
             var target:DisplayObject = host[this.target];
             if (!target || !container)

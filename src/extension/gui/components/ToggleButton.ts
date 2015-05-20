@@ -53,15 +53,15 @@ module lark.gui {
 			if (value === this.$selected)
 				return;
 			this.$selected = value;
-			this.invalidateSkinState();
+			this.invalidateState();
 			UIEvent.emitUIEvent(this, UIEvent.VALUE_COMMIT);
 		}
 
 		/**
 		 * 返回要应用到外观的状态的名称
 		 */
-		public getCurrentSkinState():string{
-			var state = super.getCurrentSkinState();
+		protected getCurrentState():string{
+			var state = super.getCurrentState();
 			if (!this.$selected){
 				return state;
 			}

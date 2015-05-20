@@ -45,16 +45,16 @@ module lark {
             var request:HttpRequest = event.target;
             var skin = lark.gui.EXML.parse(request.response, "lark.gui.ButtonSkin");
 
-            var group = new lark.gui.Group();
-            group.horizontalCenter = 0;
-            group.verticalCenter = 0;
-            this.addChild(group);
+            var list = new lark.gui.List();
+            list.itemRenderer = skin;
+            var ac = new lark.gui.ArrayCollection();
+            list.dataProvider = ac;
             for(var i=0;i<10;i++){
-                var button = this.createButton(skin);
-                group.addChild(button);
+                ac.addItem("label"+i);
             }
-            var layout = new lark.gui.VerticalLayout();
-            group.layout = layout;
+            list.horizontalCenter = 0;
+            list.verticalCenter = 0;
+            this.addChild(list);
 
 
             //var image = new lark.gui.Image("image/test.png");

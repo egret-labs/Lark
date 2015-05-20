@@ -231,34 +231,34 @@ module lark.gui {
                 super.$setTouchEnabled(this.$hasFlags(player.UIFlags.explicitTouchEnabled));
                 super.$setTouchChildren(this.$hasFlags(player.UIFlags.explicitTouchChildren));
             }
-            this.invalidateSkinState();
+            this.invalidateState();
         }
 
         //========================皮肤视图状态=====================start=======================
 
-        private explicitCurrentState:string = "";
+        private explicitState:string = "";
 
         /**
-         * 组件的当前视图状态。显式设置此属性，将采用显式设置的值去更新皮肤状态，而忽略组件内部getCurrentSkinState()方法返回的值。
-         * 将其设置为 "" 或 null 可将取消组件外部显式设置的视图状态名称，从而采用内部getCurrentSkinState()方法返回的状态。
+         * 组件的当前视图状态。显式设置此属性，将采用显式设置的值去更新皮肤状态，而忽略组件内部 getCurrentState() 方法返回的值。
+         * 将其设置为 "" 或 null 可将取消组件外部显式设置的视图状态名称，从而采用内部 getCurrentState() 方法返回的状态。
          */
         public get currentState():string {
-            return this.explicitCurrentState ?
-                this.explicitCurrentState : this.getCurrentSkinState();
+            return this.explicitState ?
+                this.explicitState : this.getCurrentState();
         }
 
         public set currentState(value:string) {
-            if (value == this.explicitCurrentState) {
+            if (value == this.explicitState) {
                 return;
             }
-            this.explicitCurrentState = value;
-            this.invalidateSkinState();
+            this.explicitState = value;
+            this.invalidateState();
         }
 
         /**
-         * 标记当前需要重新验证皮肤状态
+         * 标记组件当前的视图状态失效，调用此方法后，子类应该覆盖 getCurrentState() 方法来返回当前的视图状态名称。
          */
-        public invalidateSkinState():void {
+        public invalidateState():void {
             if (this.$hasFlags(player.UIFlags.stateIsDirty))
                 return;
 
@@ -269,7 +269,7 @@ module lark.gui {
         /**
          * 返回组件当前的皮肤状态名称,子类覆盖此方法定义各种状态名
          */
-        protected getCurrentSkinState():string {
+        protected getCurrentState():string {
             return "";
         }
 

@@ -82,7 +82,7 @@ module lark.gui {
             }
         }
 
-        public getVirtualElementAt(index:number):DisplayObject {
+        public getElementAt(index:number):DisplayObject {
             if (index < 0 || index >= this._dataProvider.length)
                 return null;
             var renderer = this.indexToRenderer[index];
@@ -558,7 +558,7 @@ module lark.gui {
                 var layout:VerticalLayout = new VerticalLayout();
                 layout.gap = 0;
                 layout.horizontalAlign = JustifyAlign.CONTENT_JUSTIFY;
-                this.$layout = layout;
+                this.$setLayout(layout);
             }
             super.createChildren();
         }
@@ -789,13 +789,6 @@ module lark.gui {
             renderer.data = data;
             this.renderersBeingUpdated = false;
             return renderer;
-        }
-
-        /**
-         * 返回位于指定索引处的子显示对象实例
-         */
-        public getElementAt(index:number):DisplayObject {
-            return this.indexToRenderer[index];
         }
 
         /**

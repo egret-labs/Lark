@@ -50,6 +50,10 @@ module lark.gui {
          */
         IItemRenderer,
         /**
+         * 项呈示器基类，通常作为List类的项目视图模板。
+         */
+        ItemRenderer,
+        /**
          * Component 类定义可设置外观的组件的基类。Component 类所使用的外观通常是 Skin 类的子类。
          */
         Component,

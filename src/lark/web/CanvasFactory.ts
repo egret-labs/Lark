@@ -103,7 +103,7 @@ module lark.web {
                 drawImage.apply(context, arguments);
             };
 
-            if (!context.hasOwnProperty("imageSmoothingEnabled")) {
+            if (context["imageSmoothingEnabled"]===void 0) {
                 var keys = ["webkitImageSmoothingEnabled", "mozImageSmoothingEnabled", "msImageSmoothingEnabled"];
                 for (var i = keys.length - 1; i >= 0; i--) {
                     var key = keys[i];

@@ -29,17 +29,29 @@
 
 module lark.gui {
 
+    var isMobile = Capabilities.isMobile;
+    /**
+     * 项呈示器基类，通常作为List类的项目视图模板。
+     */
     export class ItemRenderer extends Group implements IItemRenderer {
 
-        private _data: any = null;
+        public constructor() {
+            super();
+            this.on(TouchEvent.TOUCH_ENTER, this.mouseEventHandler, this);
+            this.on(TouchEvent.TOUCH_LEAVE, this.mouseEventHandler, this);
+            this.on(TouchEvent.TOUCH_BEGIN, this.mouseEventHandler, this);
+            this.on(TouchEvent.TOUCH_END, this.mouseEventHandler, this);
+        }
+
+        private _data:any = null;
         /**
          * 要呈示或编辑的数据。
          */
-        public get data():any{
+        public get data():any {
             return this._data;
         }
 
-        public set data(value:any){
+        public set data(value:any) {
             this._data = value;
             this.dataChanged();
         }
@@ -47,7 +59,7 @@ module lark.gui {
         /**
          * 子类复写此方法以在 data 数据源发生改变时跟新显示列表。
          */
-        protected dataChanged():void{
+        protected dataChanged():void {
 
         }
 
@@ -55,20 +67,88 @@ module lark.gui {
         /**
          * 如果项呈示器可以将其自身显示为已选中，则为 true。
          */
-        public get selected():boolean{
+        public get selected():boolean {
             return this._selected;
         }
 
-        public set selected(value:boolean){
-            if(this._selected==value)
+        public set selected(value:boolean) {
+            if (this._selected == value)
                 return;
             this._selected = value;
-
+            this.invalidateState();
         }
 
         /**
          * 项呈示器的数据提供程序中的项目索引。
          */
         public itemIndex:number = -1;
+
+        /**
+         * 指示触摸点否位于按钮上。
+         */
+        private hovered:boolean = false;
+
+        /**
+         * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，是否按下鼠标以及触摸点是否在按钮上。
+         */
+        private touchCaptured:boolean = false;
+
+        /**
+         * 鼠标事件处理
+         */
+        protected mouseEventHandler(event:TouchEvent):void {
+            switch (event.$type) {
+                case TouchEvent.TOUCH_ENTER:
+                    if (event.touchDown && !this.touchCaptured) {
+                        return;
+                    }
+                    log(event.type,this.data);
+                    this.hovered = true;
+                    break;
+
+                case TouchEvent.TOUCH_LEAVE:
+                    log(event.type,this.data);
+                    this.hovered = false;
+                    break;
+
+                case TouchEvent.TOUCH_BEGIN:
+                    this.$stage.on(TouchEvent.TOUCH_END, this.stage_mouseUpHandler, this);
+                    this.touchCaptured = true;
+                    break;
+
+                case TouchEvent.TOUCH_END:
+                    this.hovered = true;
+                    this.touchCaptured = false;
+                    break;
+            }
+            this.invalidateState();
+            event.updateAfterEvent();
+        }
+
+        /**
+         * 舞台上鼠标弹起事件
+         */
+        private stage_mouseUpHandler(event:Event):void {
+            this.$stage.removeListener(TouchEvent.TOUCH_END, this.stage_mouseUpHandler, this);
+            this.touchCaptured = false;
+            this.invalidateState();
+        }
+
+        /**
+         * 返回要应用到外观的状态的名称
+         */
+        protected getCurrentState():string {
+            if (this._selected)
+                return "down";
+            if (this.touchCaptured && this.hovered)
+                return "down";
+
+            if (!isMobile && (this.hovered || this.touchCaptured) && this.hasState("over"))
+                return "over";
+
+            return "up";
+        }
     }
+
+    registerClass(ItemRenderer, Types.ItemRenderer, [Types.IItemRenderer])
 }

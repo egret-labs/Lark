@@ -109,7 +109,7 @@ module lark.gui {
             var buttons = this.radioButtons;
             var length = buttons.length;
             for (var i = 0; i < length; i++)
-                buttons[i].invalidateSkinState();
+                buttons[i].invalidateState();
         }
 
         /**
@@ -183,7 +183,7 @@ module lark.gui {
                 this.selection = instance;
 
             instance.$radioButtonGroup = this;
-            instance.invalidateSkinState();
+            instance.invalidateState();
         }
 
         /**
@@ -205,7 +205,7 @@ module lark.gui {
                         if (instance == this._selection)
                             this._selection = null;
                         instance.$radioButtonGroup = null;
-                        instance.invalidateSkinState();
+                        instance.invalidateState();
                         this.radioButtons.splice(i, 1);
                         foundInstance = true;
                         i--;
