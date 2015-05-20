@@ -87,9 +87,6 @@ module lark.player {
             var oldTarget = this.touchMoveTarget[touchPointID];
             this.touchMoveTarget[touchPointID] = target;
             TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_MOVE, true, true, x, y, touchPointID, touchDown);
-            if (!is(target, lark.Types.Stage)) {
-                log("handler", (<lark.DisplayObject>target).parent["data"]);
-            }
 
             if (oldTarget !== target) {
                 var enterList = getParentList(target, ENTER_LIST);
@@ -118,6 +115,7 @@ module lark.player {
             var oldTargetCode = this.touchDownTarget[touchPointID];
             this.touchDownTarget[touchPointID] = -1;
             TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_END, true, true, x, y, touchPointID, false);
+            target = this.findTarget(x, y);
             if (oldTargetCode === target.$hashCode) {
                 TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_TAP, true, true, x, y, touchPointID, false);
             }

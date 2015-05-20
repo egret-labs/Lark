@@ -352,7 +352,7 @@ module lark.player {
                     var logFilterRegExp = logFilter ? new RegExp(logFilter) : null;
                 }
                 catch (e) {
-                    console.log(e);
+                    log(e);
                 }
                 this.filter = function (message:string):boolean {
                     if (logFilterRegExp)

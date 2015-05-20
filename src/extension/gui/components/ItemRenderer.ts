@@ -102,12 +102,10 @@ module lark.gui {
                     if (event.touchDown && !this.touchCaptured) {
                         return;
                     }
-                    log(event.type,this.data);
                     this.hovered = true;
                     break;
 
                 case TouchEvent.TOUCH_LEAVE:
-                    log(event.type,this.data);
                     this.hovered = false;
                     break;
 
@@ -129,7 +127,7 @@ module lark.gui {
          * 舞台上鼠标弹起事件
          */
         private stage_mouseUpHandler(event:Event):void {
-            this.$stage.removeListener(TouchEvent.TOUCH_END, this.stage_mouseUpHandler, this);
+            //this.$stage.removeListener(TouchEvent.TOUCH_END, this.stage_mouseUpHandler, this);
             this.touchCaptured = false;
             this.invalidateState();
         }
