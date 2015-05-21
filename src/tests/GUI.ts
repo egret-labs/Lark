@@ -74,7 +74,7 @@ module lark {
             //image2.width = 300;
             //image2.height = 100;
 
-            this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+            //this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
         private createButton(skin:any):lark.gui.Button {

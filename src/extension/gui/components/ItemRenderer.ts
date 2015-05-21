@@ -37,10 +37,7 @@ module lark.gui {
 
         public constructor() {
             super();
-            this.on(TouchEvent.TOUCH_ENTER, this.mouseEventHandler, this);
-            this.on(TouchEvent.TOUCH_LEAVE, this.mouseEventHandler, this);
-            this.on(TouchEvent.TOUCH_BEGIN, this.mouseEventHandler, this);
-            this.on(TouchEvent.TOUCH_END, this.mouseEventHandler, this);
+            this.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
         private _data:any = null;
@@ -84,11 +81,6 @@ module lark.gui {
         public itemIndex:number = -1;
 
         /**
-         * 指示触摸点否位于按钮上。
-         */
-        private hovered:boolean = false;
-
-        /**
          * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，是否按下鼠标以及触摸点是否在按钮上。
          */
         private touchCaptured:boolean = false;
@@ -96,38 +88,19 @@ module lark.gui {
         /**
          * 鼠标事件处理
          */
-        protected mouseEventHandler(event:TouchEvent):void {
-            switch (event.$type) {
-                case TouchEvent.TOUCH_ENTER:
-                    if (event.touchDown && !this.touchCaptured) {
-                        return;
-                    }
-                    this.hovered = true;
-                    break;
-
-                case TouchEvent.TOUCH_LEAVE:
-                    this.hovered = false;
-                    break;
-
-                case TouchEvent.TOUCH_BEGIN:
-                    this.$stage.on(TouchEvent.TOUCH_END, this.stage_mouseUpHandler, this);
-                    this.touchCaptured = true;
-                    break;
-
-                case TouchEvent.TOUCH_END:
-                    this.hovered = true;
-                    this.touchCaptured = false;
-                    break;
-            }
+        protected onTouchBegin(event:TouchEvent):void {
+            this.$stage.on(TouchEvent.TOUCH_END, this.onStageTouchEnd, this);
+            this.touchCaptured = true;
             this.invalidateState();
             event.updateAfterEvent();
         }
 
         /**
-         * 舞台上鼠标弹起事件
+         * 舞台上触摸弹起事件
          */
-        private stage_mouseUpHandler(event:Event):void {
-            //this.$stage.removeListener(TouchEvent.TOUCH_END, this.stage_mouseUpHandler, this);
+        private onStageTouchEnd(event:Event):void {
+            var stage = event.$currentTarget;
+            stage.removeListener(TouchEvent.TOUCH_END, this.onStageTouchEnd, this);
             this.touchCaptured = false;
             this.invalidateState();
         }
@@ -136,13 +109,8 @@ module lark.gui {
          * 返回要应用到外观的状态的名称
          */
         protected getCurrentState():string {
-            if (this._selected)
+            if (this._selected||this.touchCaptured)
                 return "down";
-            if (this.touchCaptured && this.hovered)
-                return "down";
-
-            if (!isMobile && (this.hovered || this.touchCaptured) && this.hasState("over"))
-                return "over";
 
             return "up";
         }

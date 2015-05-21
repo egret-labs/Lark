@@ -53,8 +53,6 @@ module lark.player {
 
         private touchDownTarget:{[key:number]:number} = {};
 
-        private touchMoveTarget:{[key:number]:DisplayObject} = {};
-
         /**
          * 触摸开始（按下）
          * @param x 事件发生处相对于舞台的坐标x
@@ -64,7 +62,7 @@ module lark.player {
         public onTouchBegin(x:number, y:number, touchPointID:number):void {
             var target = this.findTarget(x, y);
             this.touchDownTarget[touchPointID] = target.$hashCode;
-            TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_BEGIN, true, true, x, y, touchPointID, true);
+            TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_BEGIN, true, true, x, y, touchPointID);
         }
 
         private lastTouchX:number = -1;
@@ -83,25 +81,7 @@ module lark.player {
             this.lastTouchX = x;
             this.lastTouchY = y;
             var target = this.findTarget(x, y);
-            var touchDown = this.touchDownTarget[touchPointID] > 0;
-            var oldTarget = this.touchMoveTarget[touchPointID];
-            this.touchMoveTarget[touchPointID] = target;
-            TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_MOVE, true, true, x, y, touchPointID, touchDown);
-
-            if (oldTarget !== target) {
-                var enterList = getParentList(target, ENTER_LIST);
-                var leaveList = getParentList(oldTarget, LEAVE_LIST);
-                while (enterList[enterList.length - 1] === leaveList[leaveList.length - 1]) {
-                    enterList.pop();
-                    leaveList.pop();
-                }
-                while (leaveList.length) {
-                    TouchEvent.emitTouchEvent(leaveList.shift(), TouchEvent.TOUCH_LEAVE, false, true, x, y, touchPointID, touchDown);
-                }
-                while (enterList.length) {
-                    TouchEvent.emitTouchEvent(enterList.shift(), TouchEvent.TOUCH_ENTER, false, true, x, y, touchPointID, touchDown);
-                }
-            }
+            TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_MOVE, true, true, x, y, touchPointID);
         }
 
         /**
@@ -114,13 +94,13 @@ module lark.player {
             var target = this.findTarget(x, y);
             var oldTargetCode = this.touchDownTarget[touchPointID];
             this.touchDownTarget[touchPointID] = -1;
-            TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_END, true, true, x, y, touchPointID, false);
+            TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_END, true, true, x, y, touchPointID);
             target = this.findTarget(x, y);
             if (oldTargetCode === target.$hashCode) {
-                TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_TAP, true, true, x, y, touchPointID, false);
+                TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_TAP, true, true, x, y, touchPointID);
             }
             else {
-                TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_RELEASE_OUTSIDE, true, true, x, y, touchPointID, false);
+                TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_RELEASE_OUTSIDE, true, true, x, y, touchPointID);
             }
         }
 

@@ -63,15 +63,6 @@ module lark {
          * 在开始触摸的对象的外部结束触摸
          */
         public static TOUCH_RELEASE_OUTSIDE:string = "touchReleaseOutside";
-        /**
-         * 从外部移动进入一个新的显示对象
-         */
-        public static TOUCH_ENTER:string = "touchEnter";
-        /**
-         * 从当前显示对象移出到外部
-         */
-        public static TOUCH_LEAVE:string = "touchLeave";
-
 
         /**
          * 创建一个 TouchEvent 对象，其中包含有关Touch事件的信息
@@ -83,16 +74,15 @@ module lark {
          * @param touchPointID 分配给触摸点的唯一标识号
          */
         public constructor(type:string, bubbles?:boolean, cancelable?:boolean, stageX?:number,
-                           stageY?:number, touchPointID?:number, touchDown?:boolean) {
+                           stageY?:number, touchPointID?:number) {
             super(type, bubbles, cancelable);
-            this.$setTo(stageX, stageY, touchPointID, touchDown);
+            this.$setTo(stageX, stageY, touchPointID);
         }
 
-        $setTo(stageX:number, stageY:number, touchPointID:number, touchDown:boolean):void {
+        $setTo(stageX:number, stageY:number, touchPointID:number):void {
             this.touchPointID = +touchPointID || 0;
             this._stageX = +stageX || 0;
             this._stageY = +stageY || 0;
-            this.touchDown = !!touchDown;
         }
 
         public _stageX:number;
@@ -140,10 +130,6 @@ module lark {
          * 分配给触摸点的唯一标识号
          */
         public touchPointID:number;
-        /**
-         * 表示触摸已按下 (true) 还是未按下 (false)。
-         */
-        public touchDown:boolean;
 
         /**
          * 如果已修改显示列表，调用此方法将会忽略帧频限制，在此事件处理完成后立即重绘屏幕。
@@ -163,12 +149,12 @@ module lark {
          * @param touchPointID 分配给触摸点的唯一标识号
          */
         public static emitTouchEvent(target:IEventEmitter, type:string, bubbles?:boolean, cancelable?:boolean,
-                                     stageX?:number, stageY?:number, touchPointID?:number, touchDown?:boolean):boolean {
+                                     stageX?:number, stageY?:number, touchPointID?:number):boolean {
             if (!bubbles && !target.hasListener(type)) {
                 return;
             }
             var event = Event.create(TouchEvent, type, bubbles, cancelable);
-            event.$setTo(stageX, stageY, touchPointID, touchDown);
+            event.$setTo(stageX, stageY, touchPointID);
             var result = target.emit(event);
             Event.release(event);
             return result;
