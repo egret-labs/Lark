@@ -35,7 +35,7 @@ module lark {
             super();
             var request = new HttpRequest();
             request.once(Event.COMPLETE, this.onExmlLoaded, this);
-            request.open("tests/ButtonSkin.exml");
+            request.open("tests/List.exml");
             request.send();
         }
 
@@ -45,7 +45,7 @@ module lark {
             var request:HttpRequest = event.target;
             var Skin = lark.gui.EXML.parse(request.response, "lark.gui.ButtonSkin");
 
-            var skin:lark.gui.ItemRenderer = new Skin();
+            var skin:lark.gui.UIComponent = new Skin();
             skin.horizontalCenter = 0;
             skin.verticalCenter = 0;
             this.addChild(skin);

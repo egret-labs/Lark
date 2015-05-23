@@ -200,5 +200,6 @@ module lark.gui {
         }
     }
 
+    registerProperty(ArrayCollection,"source","Array",true)
     registerClass(ArrayCollection,Types.ArrayCollection);
 }

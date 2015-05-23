@@ -801,6 +801,8 @@ module lark.gui {
         }
     }
 
+    registerProperty(List,"itemRenderer","Class");
+    registerProperty(List,"dataProvider","lark.gui.ICollection",true);
     registerClass(List, Types.List);
 
     if (DEBUG) {

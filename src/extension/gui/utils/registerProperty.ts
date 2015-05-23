@@ -39,7 +39,7 @@ module lark.gui {
      *
      * @param classDefinition 要注册的类定义。
      * @param property 要注册的属性,注意属性名不能以 _ 或 $ 符开头。
-     * @param type 要注册的类型,例如：“boolean","number","string","Array","lark.gui.ClassFactory","lark.Rectangle"
+     * @param type 要注册的类型,例如：“boolean","number","string","Array","lark.Rectangle"
      * @param asDefault 是否将此属性注册为组件的默认属性,一个组件只可以设置一个默认属性。注册了组件默认属性后，在EXML中可以使用省略属性节点的写法，
      * 例如：
      *
