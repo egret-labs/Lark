@@ -75,7 +75,7 @@ module lark.player {
         /**
          * 舞台引用
          */
-        private stage:Stage;
+        public stage:Stage;
         /**
          * 入口类实例
          */

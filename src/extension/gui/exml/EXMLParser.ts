@@ -39,10 +39,11 @@ module lark.player {
 
     var DECLARATIONS = "Declarations";
     var RECTANGLE = "lark.Rectangle";
-    var CLASS = "Class";
-    var ARRAY = "Array";
+    var TYPE_CLASS = "Class";
+    var TYPE_ARRAY = "Array";
+    var TYPE_STATE = "State[]";
     var ELEMENTS_CONTENT = "elementsContent";
-    var basicTypes:string[] = [ARRAY, "boolean", "string", "number"];
+    var basicTypes:string[] = [TYPE_ARRAY, "boolean", "string", "number"];
     var wingKeys:string[] = ["id", "locked", "includeIn", "excludeFrom"];
     var htmlEntities:string[][] = [["<", "&lt;"], [">", "&gt;"], ["&", "&amp;"], ["\"", "&quot;"], ["'", "&apos;"]];
 
@@ -275,7 +276,7 @@ module lark.player {
                         prop = exmlConfig.getDefaultPropById(parent.localName, parent.namespace);
                     }
                     var className = exmlConfig.getClassNameById(parent.localName, parent.namespace);
-                    result = (exmlConfig.getPropertyType(prop, className) == CLASS);
+                    result = (exmlConfig.getPropertyType(prop, className) == TYPE_CLASS);
                 }
             }
             node["isInnerClass"] = result;
@@ -401,7 +402,7 @@ module lark.player {
                 }
             }
             switch (className) {
-                case ARRAY:
+                case TYPE_ARRAY:
                     var values = [];
                     if (children) {
                         var length = children.length;
@@ -577,7 +578,7 @@ module lark.player {
             var childLength = children.length;
 
             if (childLength > 1) {
-                if (type != ARRAY) {
+                if (type != TYPE_ARRAY) {
                     if (DEBUG) {
                         $error(2011, this.currentClassName, prop, errorInfo);
                     }
@@ -599,8 +600,8 @@ module lark.player {
             }
             else {
                 var firstChild:XML = children[0];
-                if (type == ARRAY) {
-                    if (firstChild.localName == ARRAY) {
+                if (type == TYPE_ARRAY) {
+                    if (firstChild.localName == TYPE_ARRAY) {
                         values = [];
                         if (firstChild.children) {
                             var len = firstChild.children.length;
@@ -629,7 +630,7 @@ module lark.player {
                     }
                 }
                 else if (firstChild.nodeType == 1) {
-                    if (type == CLASS) {
+                    if (type == TYPE_CLASS) {
                         if (childLength > 1) {
                             if (DEBUG) {
                                 $error(2011, this.currentClassName, prop, errorInfo);
@@ -747,7 +748,7 @@ module lark.player {
             else {
                 var orgValue:string = value;
                 switch (type) {
-                    case CLASS:
+                    case TYPE_CLASS:
 
                         break;
                     case "number":
@@ -932,6 +933,11 @@ module lark.player {
          */
         private getStateNames():void {
             var root = this.currentXML;
+            var className = exmlConfig.getClassNameById(root.localName,root.namespace);
+            var type = exmlConfig.getPropertyType("states",className);
+            if(type!=TYPE_STATE){
+                return;
+            }
             var statesValue = root.attributes["states"];
             if (statesValue) {
                 delete root.attributes["states"];
@@ -1041,7 +1047,7 @@ module lark.player {
                     var className = this.getClassNameOfNode(parentNode);
                     var type = exmlConfig.getPropertyType(prop, className);
                     if (DEBUG) {
-                        if (type == ARRAY) {
+                        if (type == TYPE_ARRAY) {
                             $error(2013, this.currentClassName, getPropertyStr(node));
                         }
                         if (children.length > 1) {
@@ -1080,7 +1086,7 @@ module lark.player {
                     if (this.isStateNode(node)) {
                         var propertyName = "";
                         var parent:XML = node.parent;
-                        if (parent.localName == ARRAY)
+                        if (parent.localName == TYPE_ARRAY)
                             parent = parent.parent;
                         if (parent && parent.parent) {
                             if (this.isProperty(parent))

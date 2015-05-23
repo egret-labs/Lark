@@ -37,7 +37,7 @@ module lark.gui {
     locale_strings[2002] = "{0}: 不是有效的XML文件:\n{1}";
     locale_strings[2003] = "{0}: 无法找到节点所对应的类定义\n{1}";
     locale_strings[2004] = "{0}: 节点不能含有同名的id属性\n{1}";
-    locale_strings[2005] = "{0}: 节点上不存在名为'{1}'的属性或样式名:\n{2}";
+    locale_strings[2005] = "{0}: 节点上不存在名为'{1}'的属性:\n{2}";
     locale_strings[2006] = "{0}: 未定义的视图状态名称:'{1}'\n{2}";
     locale_strings[2007] = "{0}: 只有处于容器内的egret.IVisualElement对象可以使用includeIn和excludeFrom属性\n{1}";
     locale_strings[2008] = "{0}: 无法将'{1}'类型的值赋给属性:'{2}'\n{3}";

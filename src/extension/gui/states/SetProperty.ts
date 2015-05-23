@@ -31,7 +31,7 @@
 module lark.gui {
 
     /**
-     * 属性设置操作
+     * 视图状态设置属性操作
      */
     export class SetProperty implements IOverride {
         /**
@@ -115,4 +115,5 @@ module lark.gui {
         }
     }
 
+    registerClass(SetProperty,Types.SetProperty);
 }

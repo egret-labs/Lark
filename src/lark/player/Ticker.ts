@@ -61,6 +61,9 @@ module lark.player {
             if (this.playerList.indexOf(player) != -1) {
                 return;
             }
+            if(DEBUG){
+                lark_stages.push(player.stage);
+            }
             this.playerList = this.playerList.concat();
             this.playerList.push(player);
         }
@@ -71,6 +74,10 @@ module lark.player {
         $removePlayer(player:Player):void {
             var index = this.playerList.indexOf(player);
             if (index !== -1) {
+                if(DEBUG){
+                    var i = lark_stages.indexOf(player.stage);
+                    lark_stages.splice(i,1);
+                }
                 this.playerList = this.playerList.concat();
                 this.playerList.splice(index, 1);
             }
@@ -190,4 +197,8 @@ module lark.player {
             }
         }
     }
+}
+
+if(DEBUG){
+    var lark_stages:lark.Stage[] = [];
 }

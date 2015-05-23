@@ -139,21 +139,11 @@ module lark.gui {
          */
         private parseSource():void{
             this.sourceChanged = false;
-            if(!assetAdapter){
-                assetAdapter = this.getAdapter();
-            }
-            assetAdapter.getAsset(<string>this._source,this.contentChanged,this);
-        }
-
-        /**
-         * 获取资源适配器
-         */
-        private getAdapter():IAssetAdapter{
             var adapter:IAssetAdapter = this.$stage.getImplementation("lark.gui.IAssetAdapter");
             if(!adapter){
-                adapter = new DefaultAssetAdapter();
+                adapter = assetAdapter;
             }
-            return adapter;
+            adapter.getAsset(<string>this._source,this.contentChanged,this);
         }
 
         /**

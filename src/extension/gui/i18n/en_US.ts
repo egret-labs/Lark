@@ -35,7 +35,7 @@ module lark.gui {
     locale_strings[2002] = "{0}: invalid XML file:\n{1}";
     locale_strings[2003] = "{0}: the class definitions corresponding to nodes can't be found  \n {1}";
     locale_strings[2004] = "{0}: nodes cannot contain id property with the same name \n {1}";
-    locale_strings[2005] = "{0}: property with the name of '{1}' or style name does not exist on the node: \n {2}";
+    locale_strings[2005] = "{0}: property with the name of '{1}' does not exist on the node: \n {2}";
     locale_strings[2006] = "{0}: undefined view state name: '{1}' \n {2}";
     locale_strings[2007] = "{0}: only egret.IVisualElement objects within the container can use the includeIn and excludeFrom properties\n {1}";
     locale_strings[2008] = "{0}: fail to assign values of '{1}' class to property: '{2}' \n {3}";

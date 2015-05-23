@@ -45,17 +45,18 @@ module lark.gui {
         /**
          * [只写] 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
          */
-        public set elementsContent(value:DisplayObject[]){
+        public set elementsContent(value:DisplayObject[]) {
             this.$elementsContent = value;
-            if(value){
+            if (value) {
                 var length = value.length;
-                for(var i=0;i<length;i++){
+                for (var i = 0; i < length; i++) {
                     this.addChild(value[i]);
                 }
             }
         }
 
         $layout:LayoutBase = null;
+
         /**
          * 此容器的布局对象
          */
@@ -184,14 +185,14 @@ module lark.gui {
         /**
          * 布局元素子项的数量。
          */
-        public get numElements():number{
+        public get numElements():number {
             return this.$children.length;
         }
 
         /**
          * 获取一个布局元素子项
          */
-        public getElementAt(index:number):DisplayObject{
+        public getElementAt(index:number):DisplayObject {
             return this.$children[index];
         }
 
@@ -201,7 +202,7 @@ module lark.gui {
          * @param startIndex 可视元素起始索引（包括）
          * @param endIndex 可视元素结束索引（包括）
          */
-        public setVirtualElementIndicesInView(startIndex:number,endIndex:number):void{
+        public setVirtualElementIndicesInView(startIndex:number, endIndex:number):void {
 
         }
 
@@ -224,14 +225,19 @@ module lark.gui {
          */
         public hasState:(stateName:string)=>boolean;
         /**
+         * 初始化所有视图状态
+         */
+        private initializeStates:(stage:Stage)=>void;
+        /**
          * 应用当前的视图状态。子类覆盖此方法在视图状态发生改变时执行相应更新操作。
          */
         private commitCurrentState:()=>void;
+
         /**
          * 标记组件当前的视图状态失效，调用此方法后，子类应该覆盖 getCurrentState() 方法来返回当前的视图状态名称。
          */
         public invalidateState():void {
-            if (this.$hasFlags(player.UIFlags.stateIsDirty)){
+            if (this.$hasFlags(player.UIFlags.stateIsDirty)) {
                 return;
             }
             this.$setFlags(player.UIFlags.stateIsDirty);
@@ -245,6 +251,18 @@ module lark.gui {
             return "";
         }
 
+        $onAddToStage(stage:Stage, nestLevel:number):void {
+            super.$onAddToStage(stage, nestLevel);
+            this.checkInvalidateFlag();
+            if(!this.$stateValues.intialized){
+                this.initializeStates(stage);
+            }
+        }
+
+        /**
+         * 检查属性失效标记并应用
+         */
+        private checkInvalidateFlag:(event?:Event)=>void;
 
         //=======================UIComponent接口实现===========================
         /**
@@ -261,10 +279,10 @@ module lark.gui {
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         protected commitProperties():void {
-            if(this.$hasFlags(player.UIFlags.stateIsDirty)){
+            if (this.$hasFlags(player.UIFlags.stateIsDirty)) {
                 this.$removeFlags(player.UIFlags.stateIsDirty);
                 var values = this.$stateValues;
-                if(!values.explicitState){
+                if (!values.explicitState) {
                     values.currentState = this.getCurrentState();
                     this.commitCurrentState();
                 }
@@ -457,7 +475,8 @@ module lark.gui {
     }
 
     player.implementUIComponent(Group, Sprite, true);
-    player.mixin(Group,player.StateClient);
+    player.mixin(Group, player.StateClient);
+    registerProperty(Group, "elementsContent", "Array", true);
+    registerProperty(Group, "states", "State[]");
     registerClass(Group, Types.Group, [Types.UIComponent]);
-    registerProperty(Group,"elementsContent","Array",true);
 }

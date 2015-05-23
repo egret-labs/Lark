@@ -87,8 +87,21 @@ module lark.gui {
             values.parent = value;
             if (value) {
                 this.commitCurrentState();
+                if (!this.$stateValues.intialized) {
+                    if (value.$stage) {
+                        this.initializeStates(value.$stage);
+                    }
+                    else{
+                        value.once(Event.ADDED_TO_STAGE,this.onAddedToStage,this);
+                    }
+                }
             }
         }
+
+        private onAddedToStage(event?:Event):void{
+            this.initializeStates(this._hostComponent.$stage);
+        }
+
 
         $stateValues:player.StateValues = new player.StateValues();
 
@@ -109,12 +122,18 @@ module lark.gui {
         public hasState:(stateName:string)=>boolean;
 
         /**
+         * 初始化所有视图状态
+         */
+        private initializeStates:(stage:Stage)=>void;
+
+        /**
          * 应用当前的视图状态。子类覆盖此方法在视图状态发生改变时执行相应更新操作。
          */
         private commitCurrentState:()=>void;
     }
 
-    player.mixin(Skin,player.StateClient);
-    registerClass(Skin, Types.Skin);
+    player.mixin(Skin, player.StateClient);
     registerProperty(Skin, "elementsContent", "Array", true);
+    registerProperty(Skin, "states", "State[]");
+    registerClass(Skin, Types.Skin);
 }

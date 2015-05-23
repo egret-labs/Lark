@@ -57,8 +57,27 @@ module lark.gui {
          * 此视图状态作为 string 数组所属的状态组。
          */
         public stateGroups:string[];
+
+        /**
+         * 初始化视图状态
+         */
+        public initialize(host:any, stage:Stage):void {
+            var overrides = this.overrides;
+            var length = overrides.length;
+            for (var i = 0; i < length; i++) {
+                var addItems:AddItems = <AddItems>overrides[i];
+                if (is(addItems, Types.AddItems)) {
+                    var target:DisplayObject = host[addItems.target];
+                    if (is(target, Types.Image)&&!target.$parent) {
+                        stage.addChild(target);
+                        stage.removeChild(target);
+                    }
+                }
+            }
+        }
     }
 
+    registerClass(State, Types.State);
 }
 
 module lark.player {
@@ -110,15 +129,15 @@ module lark.player {
          */
         private commitCurrentState():void {
             var values = this.$stateValues;
-            if(!values.parent){
+            if (!values.parent) {
                 return;
             }
             var destination:gui.State = values.statesMap[values.currentState];
             if (!destination) {
-                if(values.states.length>0){
+                if (values.states.length > 0) {
                     values.currentState = values.states[0].name;
                 }
-                else{
+                else {
                     return;
                 }
             }
@@ -155,9 +174,23 @@ module lark.player {
         public hasState(stateName:string):boolean {
             return !!this.$stateValues.statesMap[stateName];
         }
+
+        /**
+         * 初始化所有视图状态
+         */
+        private initializeStates(stage:Stage):void {
+            this.$stateValues.intialized = true;
+            var states = this.states;
+            var length = states.length;
+            for (var i = 0; i < length; i++) {
+                states[i].initialize(this,stage);
+            }
+        }
     }
 
     export class StateValues {
+
+        public intialized:boolean = false;
 
         public statesMap:any = {};
 

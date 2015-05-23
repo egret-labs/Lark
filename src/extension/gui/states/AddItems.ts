@@ -52,7 +52,7 @@ module lark.player {
 module lark.gui {
 
     /**
-     * 显示元素添加操作
+     * 视图添加状态显示元素操作
      */
     export class AddItems implements IOverride {
         /**
@@ -131,6 +131,8 @@ module lark.gui {
             }
         }
     }
+
+    registerClass(AddItems,Types.AddItems);
 
 }
 

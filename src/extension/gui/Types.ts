@@ -147,6 +147,23 @@ module lark.gui {
         /**
          * RadioButtonGroup 组件定义一组 RadioButton 组件，这些组件相互排斥；因此，用户每次只能选择一个 RadioButton 组件
          */
-        RadioButtonGroup
+        RadioButtonGroup,
+        /**
+         * State 类定义视图状态，即组件的特定视图。
+         */
+        State,
+        /**
+         * IOverride 接口定义视图状态的覆盖操作。State 类 overrides 属性数组中的所有条目均必须实现此接口。
+         */
+        IOverride,
+        /**
+         * 视图添加状态显示元素操作
+         */
+        AddItems,
+        /**
+         * 视图状态设置属性操作
+         */
+        SetProperty
+
     }
 }
