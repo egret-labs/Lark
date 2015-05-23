@@ -862,9 +862,14 @@ module lark.player {
          * 获取视图状态名称列表
          */
         private getStateNames():void {
+            var root = this.currentXML;
+            var statesValue = root.attributes["states"];
+            if(statesValue){
+                delete root.attributes["states"];
+            }
             var stateNames = this.stateNames;
-            var states:any[];
-            var children:any[] = this.currentXML.children;
+            var stateChildren:any[];
+            var children:any[] = root.children;
             if (children) {
                 var length = children.length;
                 for (var i = 0; i < length; i++) {
@@ -872,23 +877,45 @@ module lark.player {
                     if (item.nodeType == 1 &&
                         item.localName == "states") {
                         item.namespace = NS_W;
-                        states = item.children;
+                        stateChildren = item.children;
                         break;
                     }
                 }
             }
 
-            if (!states)
+            if (!stateChildren&&!statesValue){
                 return;
-            if (states.length == 0) {
-                if (DEBUG) {
+            }
+
+            if(DEBUG){
+                if (stateChildren&&stateChildren.length == 0) {
                     $warn(2102, this.currentClassName, getPropertyStr(item));
+                }
+                if(stateChildren&&statesValue){
+                    $warn(2103, this.currentClassName, "states", getPropertyStr(item));
+                }
+            }
+
+            if(statesValue){
+
+                var states = statesValue.split(",");
+                length = states.length;
+                for(var i=0;i<length;i++){
+                    var stateName:string = states[i].trim();
+                    if(!stateName){
+                        continue;
+                    }
+                    if (stateNames.indexOf(stateName) == -1) {
+                        stateNames.push(stateName);
+                    }
+                    this.stateCode.push(new CpState(stateName));
                 }
                 return;
             }
-            length = states.length;
+
+            length = stateChildren.length;
             for (i = 0; i < length; i++) {
-                var state:XML = states[i];
+                var state:XML = stateChildren[i];
                 if (state.nodeType != 1) {
                     continue;
                 }
@@ -907,7 +934,7 @@ module lark.player {
                         }
                     }
                 }
-                var stateName:string = attributes.name;
+                stateName = attributes.name;
                 if (stateNames.indexOf(stateName) == -1) {
                     stateNames.push(stateName);
                 }

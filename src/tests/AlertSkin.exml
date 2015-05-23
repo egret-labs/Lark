@@ -11,13 +11,7 @@
              verticalAlign="middle" textAlign="center" text="contentDisplay">
     </e:Label>
     <e:Button label="按钮">
-        <e:Skin xmlns:e="http://ns.egret-labs.org/egret" xmlns:w="http://ns.egret-labs.org/wing">
-            <e:states>
-                <e:State name="up"/>
-                <e:State name="over"/>
-                <e:State name="down"/>
-                <e:State name="disabled"/>
-            </e:states>
+        <e:Skin states="up,over,down,disabled" xmlns:e="http://ns.egret-labs.org/egret" xmlns:w="http://ns.egret-labs.org/wing">
             <e:Image source="image/button_up.png" includeIn="up" width="100%" height="100%" scale9Grid="5,5,63,16"/>
             <e:Image source="image/button_over.png" includeIn="over" width="100%" height="100%" scale9Grid="5,5,63,16"/>
             <e:Image source="image/button_down.png" includeIn="down" width="100%" height="100%" scale9Grid="5,5,63,16"/>

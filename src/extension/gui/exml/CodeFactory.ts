@@ -421,7 +421,7 @@ module lark.player {
 
     export class CpState extends CodeBase {
 
-        public constructor(name:string, stateGroups:Array<any> = null) {
+        public constructor(name:string, stateGroups?:Array<any>) {
             super();
             this.name = name;
             if (stateGroups)

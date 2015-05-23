@@ -43,18 +43,12 @@ module lark {
             this.width = this.stage.stageWidth;
             this.height = this.stage.stageHeight;
             var request:HttpRequest = event.target;
-            var skin = lark.gui.EXML.parse(request.response, "lark.gui.ButtonSkin");
+            var Skin = lark.gui.EXML.parse(request.response, "lark.gui.ButtonSkin");
 
-            var list = new lark.gui.List();
-            list.itemRenderer = skin;
-            var ac = new lark.gui.ArrayCollection();
-            list.dataProvider = ac;
-            for(var i=0;i<10;i++){
-                ac.addItem("label"+i);
-            }
-            list.horizontalCenter = 0;
-            list.verticalCenter = 0;
-            this.addChild(list);
+            var skin:lark.gui.ItemRenderer = new Skin();
+            skin.horizontalCenter = 0;
+            skin.verticalCenter = 0;
+            this.addChild(skin);
 
 
             //var image = new lark.gui.Image("image/test.png");

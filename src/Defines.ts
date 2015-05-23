@@ -62,7 +62,7 @@ module lark {
     export function $warn(code:number,...params:any[]):void{
         var text:string = lark.tr.apply(null,arguments);
         if(DEBUG){
-            player.$logToFPS("Error #"+code+": "+text)
+            player.$logToFPS("Warning #"+code+": "+text)
         }
         warn("Warning #"+code+": "+text);
     }
