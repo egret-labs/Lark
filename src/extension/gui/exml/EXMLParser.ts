@@ -734,7 +734,7 @@ module lark.player {
                 this.bindings.push(new EXBinding(node.attributes["id"], key, value));
                 value = "";
             }
-            else if (key == "scale9Grid" && type == RECTANGLE) {
+            else if (type == RECTANGLE) {
                 if (DEBUG) {
                     var rect = value.split(",");
                     if (rect.length != 4 || isNaN(parseInt(rect[0])) || isNaN(parseInt(rect[1])) ||
