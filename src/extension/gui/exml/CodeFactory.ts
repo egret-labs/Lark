@@ -32,6 +32,7 @@ module lark.player {
     var STATE = "lark.gui.State";
     var ADD_ITEMS = "lark.gui.AddItems";
     var SET_PROPERTY = "lark.gui.SetProperty";
+    var BINDING_PROPERTY = "lark.gui.Binding.bindProperty";
 
     /**
      * 代码生成工具基类
@@ -59,12 +60,12 @@ module lark.player {
     }
 
 
-    export class CpClass extends CodeBase {
+    export class EXClass extends CodeBase {
 
         /**
          * 构造函数代码块
          */
-        public constructCode:CpCodeBlock;
+        public constructCode:EXCodeBlock;
         /**
          * 类名,不包括模块名
          */
@@ -78,12 +79,12 @@ module lark.player {
         /**
          * 内部类区块
          */
-        private innerClassBlock:CpClass[] = [];
+        private innerClassBlock:EXClass[] = [];
 
         /**
          * 添加一个内部类
          */
-        public addInnerClass(clazz:CpClass):void {
+        public addInnerClass(clazz:EXClass):void {
             if (this.innerClassBlock.indexOf(clazz) == -1) {
                 this.innerClassBlock.push(clazz);
             }
@@ -92,12 +93,12 @@ module lark.player {
         /**
          * 变量定义区块
          */
-        private variableBlock:CpVariable[] = [];
+        private variableBlock:EXVariable[] = [];
 
         /**
          * 添加变量
          */
-        public addVariable(variableItem:CpVariable):void {
+        public addVariable(variableItem:EXVariable):void {
             if (this.variableBlock.indexOf(variableItem) == -1) {
                 this.variableBlock.push(variableItem);
             }
@@ -106,7 +107,7 @@ module lark.player {
         /**
          * 根据变量名获取变量定义
          */
-        public getVariableByName(name:string):CpVariable {
+        public getVariableByName(name:string):EXVariable {
             var list = this.variableBlock;
             var length = list.length;
             for (var i = 0; i < length; i++) {
@@ -121,12 +122,12 @@ module lark.player {
         /**
          * 函数定义区块
          */
-        private functionBlock:CpFunction[] = [];
+        private functionBlock:EXFunction[] = [];
 
         /**
          * 添加函数
          */
-        public addFunction(functionItem:CpFunction):void {
+        public addFunction(functionItem:EXFunction):void {
             if (this.functionBlock.indexOf(functionItem) == -1) {
                 this.functionBlock.push(functionItem);
             }
@@ -135,7 +136,7 @@ module lark.player {
         /**
          * 根据函数名返回函数定义块
          */
-        public getFuncByName(name:string):CpFunction {
+        public getFuncByName(name:string):EXFunction {
             var list = this.functionBlock;
             var length = list.length;
             for (var i = 0; i < length; i++) {
@@ -221,7 +222,7 @@ module lark.player {
 
     }
 
-    export class CpCodeBlock extends CodeBase {
+    export class EXCodeBlock extends CodeBase {
 
         /**
          * 添加变量声明语句
@@ -334,7 +335,7 @@ module lark.player {
         /**
          * 在结尾追加另一个代码块的内容
          */
-        public concat(cb:CpCodeBlock):void {
+        public concat(cb:EXCodeBlock):void {
             this.lines = this.lines.concat(cb.lines);
         }
 
@@ -343,12 +344,12 @@ module lark.player {
         }
     }
 
-    export class CpFunction extends CodeBase {
+    export class EXFunction extends CodeBase {
 
         /**
          * 代码块
          */
-        public codeBlock:CpCodeBlock = null;
+        public codeBlock:EXCodeBlock = null;
 
         public isGet:boolean = false;
 
@@ -392,7 +393,7 @@ module lark.player {
         }
     }
 
-    export class CpVariable extends CodeBase {
+    export class EXVariable extends CodeBase {
 
         public constructor(name:string, defaultValue?:string) {
             super();
@@ -419,7 +420,7 @@ module lark.player {
     }
 
 
-    export class CpState extends CodeBase {
+    export class EXState extends CodeBase {
 
         public constructor(name:string, stateGroups?:Array<any>) {
             super();
@@ -443,7 +444,7 @@ module lark.player {
          * 添加一个覆盖
          */
         public addOverride(item:CodeBase):void {
-            if (item instanceof CpAddItems)
+            if (item instanceof EXAddItems)
                 this.addItems.push(item);
             else
                 this.setProperty.push(item);
@@ -475,24 +476,24 @@ module lark.player {
         }
     }
 
-    export class CpAddItems extends CodeBase {
-        public constructor(target:string, propertyName:string, position:number, relativeTo:string) {
+    export class EXAddItems extends CodeBase {
+        public constructor(target:string, property:string, position:number, relativeTo:string) {
             super();
             this.target = target;
-            this.propertyName = propertyName;
+            this.property = property;
             this.position = position;
             this.relativeTo = relativeTo;
         }
 
         /**
-         * 创建项目的工厂类实例
+         * 要添加的实例
          */
         public target:string;
 
         /**
          * 要添加到的属性
          */
-        public propertyName:string;
+        public property:string;
 
         /**
          * 添加的位置
@@ -505,13 +506,12 @@ module lark.player {
         public relativeTo:string;
 
         public toCode():string {
-            var indentStr:string = this.getIndent(1);
-            var returnStr:string = "new " + ADD_ITEMS + "(\"" + this.target + "\",\"" + this.propertyName + "\"," + this.position + ",\"" + this.relativeTo + "\")";
+            var returnStr:string = "new " + ADD_ITEMS + "(\"" + this.target + "\",\"" + this.property + "\"," + this.position + ",\"" + this.relativeTo + "\")";
             return returnStr;
         }
     }
 
-    export class CpSetProperty extends CodeBase {
+    export class EXSetProperty extends CodeBase {
         public constructor(target:string, name:string, value:string) {
             super();
             this.target = target;
@@ -535,10 +535,36 @@ module lark.player {
         public value:string;
 
         public toCode():string {
-            var indentStr:string = this.getIndent(1);
             return "new " + SET_PROPERTY + "(\"" + this.target + "\",\"" + this.name + "\"," + this.value + ")";
         }
     }
 
+
+    export class EXBinding extends CodeBase {
+
+        public constructor(target:string,property:string,expression:string){
+            super();
+            this.target = target;
+            this.property = property;
+            this.expression = expression;
+        }
+
+        /**
+         * 目标实例名
+         */
+        public target:string;
+        /**
+         * 目标属性名
+         */
+        public property:string;
+        /**
+         * 绑定表达式
+         */
+        public expression:string;
+
+        public toCode():string {
+            return BINDING_PROPERTY+"(this, [\""+this.expression+"\"], this[\""+this.target+"\"],\""+this.property+"\");";
+        }
+    }
 
 }

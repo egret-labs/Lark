@@ -51,8 +51,8 @@ module lark.gui {
 
         $setTo(kind?:string, location?:number, oldLocation?:number, items?:any[], oldItems?:any[]):void {
             this.kind = kind;
-            this.location = +location | -1;
-            this.oldLocation = +oldLocation | -1;
+            this.location = +location | 0;
+            this.oldLocation = +oldLocation | 0;
             this.items = items || [];
             this.oldItems = oldItems || [];
         }

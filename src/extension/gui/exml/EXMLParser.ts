@@ -70,7 +70,7 @@ module lark.player {
         /**
          * 当前类
          */
-        private currentClass:CpClass;
+        private currentClass:EXClass;
         /**
          * 当前编译的类名
          */
@@ -86,7 +86,7 @@ module lark.player {
         /**
          * 状态代码列表
          */
-        private stateCode:CpState[];
+        private stateCode:EXState[];
 
         private stateNames:string[];
         /**
@@ -97,6 +97,8 @@ module lark.player {
         private idToNode:any;
 
         private skinParts:string[];
+
+        private bindings:EXBinding[];
 
         private declarations:any;
         /**
@@ -117,7 +119,7 @@ module lark.player {
         /**
          * 编译指定的XML对象为CpClass对象。
          */
-        private parseClass(xmlData:XML, className:string):CpClass {
+        private parseClass(xmlData:XML, className:string):EXClass {
             if (!exmlConfig) {
                 exmlConfig = new EXMLConfig();
             }
@@ -129,8 +131,9 @@ module lark.player {
             this.stateCode = [];
             this.stateNames = [];
             this.skinParts = [];
+            this.bindings = [];
             this.declarations = null;
-            this.currentClass = new CpClass();
+            this.currentClass = new EXClass();
             this.stateIds = [];
             var index = className.lastIndexOf(".");
             if (index != -1) {
@@ -332,7 +335,7 @@ module lark.player {
             if (moduleName == "")
                 return;
             if (!this.currentClass.getVariableByName(node.attributes.id))
-                this.currentClass.addVariable(new CpVariable(node.attributes.id));
+                this.currentClass.addVariable(new EXVariable(node.attributes.id));
         }
 
         /**
@@ -344,11 +347,11 @@ module lark.player {
             if (isBasicType)
                 return this.createBasicTypeForNode(node);
             var moduleName = this.getClassNameOfNode(node);
-            var func = new CpFunction();
+            var func = new EXFunction();
             var tailName = "_i";
             var id = node.attributes.id;
             func.name = id + tailName;
-            var cb = new CpCodeBlock();
+            var cb = new EXCodeBlock();
             var varName:string = "t";
             if (className == "Object") {
                 cb.addVar(varName, "{}");
@@ -369,7 +372,7 @@ module lark.player {
             if (delayAssignments) {
                 var length = delayAssignments.length;
                 for (var i = 0; i < length; i++) {
-                    var codeBlock:CpCodeBlock = delayAssignments[i];
+                    var codeBlock:EXCodeBlock = delayAssignments[i];
                     cb.concat(codeBlock);
                 }
             }
@@ -435,7 +438,7 @@ module lark.player {
         /**
          * 将节点属性赋值语句添加到代码块
          */
-        private addAttributesToCodeBlock(cb:CpCodeBlock, varName:string, node:XML):void {
+        private addAttributesToCodeBlock(cb:EXCodeBlock, varName:string, node:XML):void {
             var key:string;
             var value:string;
             var attributes = node.attributes;
@@ -462,7 +465,7 @@ module lark.player {
                     if (!cb.containsCodeLine(codeLine)) {
                         cb.addCodeLineAt(codeLine, 1);
                     }
-                    var delayCb = new CpCodeBlock();
+                    var delayCb = new EXCodeBlock();
                     if (varName == "this") {
                         delayCb.addAssignment(varName, THIS + value, key);
                     }
@@ -485,7 +488,7 @@ module lark.player {
         /**
          * 初始化子项
          */
-        private initlizeChildNode(node:XML, cb:CpCodeBlock, varName:string):void {
+        private initlizeChildNode(node:XML, cb:EXCodeBlock, varName:string):void {
             var children:Array<any> = node.children;
             if (!children || children.length == 0)
                 return;
@@ -572,7 +575,7 @@ module lark.player {
          * 添加多个子节点到指定的属性
          */
         private addChildrenToProp(children:Array<any>, type:string, prop:string,
-                                  cb:CpCodeBlock, varName:string, errorInfo:string,
+                                  cb:EXCodeBlock, varName:string, errorInfo:string,
                                   propList:string[], node:XML):void {
             var childFunc = "";
             var childLength = children.length;
@@ -712,7 +715,7 @@ module lark.player {
         /**
          * 格式化值
          */
-        private formatValue(key:string, value:string, node:any):string {
+        private formatValue(key:string, value:string, node:XML):string {
             if (!value) {
                 value = "";
             }
@@ -723,17 +726,18 @@ module lark.player {
             if (DEBUG && !type) {
                 $error(2005, this.currentClassName, key, toXMLString(node));
             }
-            if (type != "string" && value.charAt(0) == "{" && value.charAt(value.length - 1) == "}") {
-                value = value.substr(1, value.length - 2);
-                value = value.trim();
-                if (value.indexOf("this.") == 0) {
-                    value = value.substring(5);
-                }
-                var targetNode:any = this.idToNode[value];
-                if (DEBUG && !targetNode) {
-                    $error(2010, this.currentClassName, key, value, toXMLString(node));
-                }
-                var targetClass = this.getClassNameOfNode(targetNode);
+            if (value.charAt(0) == "{" && value.charAt(value.length - 1) == "}") {
+                value = value.substr(1, value.length - 2).trim();
+                this.bindings.push(new EXBinding(node.attributes["id"], key, value));
+                value = "";
+                //if (value.indexOf("this.") == 0) {
+                //    value = value.substring(5);
+                //}
+                //var targetNode:any = this.idToNode[value];
+                //if (DEBUG && !targetNode) {
+                //    $error(2010, this.currentClassName, key, value, toXMLString(node));
+                //}
+                //var targetClass = this.getClassNameOfNode(targetNode);
             }
             else if (key == "scale9Grid" && type == RECTANGLE) {
                 if (DEBUG) {
@@ -808,7 +812,7 @@ module lark.player {
          * 创建构造函数
          */
         private createConstructFunc():void {
-            var cb:CpCodeBlock = new CpCodeBlock;
+            var cb:EXCodeBlock = new EXCodeBlock;
             cb.addEmptyLine();
             var varName:string = "this";
             this.addAttributesToCodeBlock(cb, varName, this.currentXML);
@@ -851,10 +855,10 @@ module lark.player {
                 }
                 skinPartStr = "[" + skinParts.join(",") + "]";
             }
-            var skinPartFunc:CpFunction = new CpFunction();
+            var skinPartFunc:EXFunction = new EXFunction();
             skinPartFunc.name = "skinParts";
             skinPartFunc.isGet = true;
-            var skinPartCB:CpCodeBlock = new CpCodeBlock();
+            var skinPartCB:EXCodeBlock = new EXCodeBlock();
             skinPartCB.addReturn(skinPartStr);
             skinPartFunc.codeBlock = skinPartCB;
             this.currentClass.addFunction(skinPartFunc);
@@ -863,7 +867,7 @@ module lark.player {
             this.currentXML.attributes.id = "";
             //生成视图状态代码
             this.createStates(this.currentXML);
-            var states:CpState[];
+            var states:EXState[];
             var node = this.currentXML;
             var nodeClassName = this.getClassNameOfNode(node);
             var attributes = node.attributes;
@@ -884,9 +888,9 @@ module lark.player {
                     states = this.getStateByName(stateName, node);
                     var stateLength = states.length;
                     if (stateLength > 0) {
-                        for (var i = 0; i < stateLength; i++) {
+                        for (i = 0; i < stateLength; i++) {
                             var state = states[i];
-                            state.addOverride(new CpSetProperty("", key, itemValue));
+                            state.addOverride(new EXSetProperty("", key, itemValue));
                         }
                     }
                 }
@@ -894,12 +898,12 @@ module lark.player {
 
             //打印视图状态初始化代码
             var stateCode = this.stateCode;
-            if (stateCode.length > 0) {
+            length = stateCode.length;
+            if (length > 0) {
+                var indentStr = "	";
                 cb.addCodeLine("this.states = [");
                 var first = true;
-                var indentStr = "	";
-                var length = stateCode.length;
-                for (var i = 0; i < length; i++) {
+                for (i = 0; i < length; i++) {
                     state = stateCode[i];
                     if (first)
                         first = false;
@@ -915,6 +919,17 @@ module lark.player {
                     }
                 }
                 cb.addCodeLine("];");
+            }
+
+            //生成绑定代码
+            var bindings = this.bindings;
+            length = bindings.length;
+            if (length > 0) {
+                cb.addEmptyLine();
+                for (i = 0; i < length; i++) {
+                    var binding = bindings[i];
+                    cb.addCodeLine(binding.toCode());
+                }
             }
 
             this.currentClass.constructCode = cb;
@@ -933,9 +948,9 @@ module lark.player {
          */
         private getStateNames():void {
             var root = this.currentXML;
-            var className = exmlConfig.getClassNameById(root.localName,root.namespace);
-            var type = exmlConfig.getPropertyType("states",className);
-            if(type!=TYPE_STATE){
+            var className = exmlConfig.getClassNameById(root.localName, root.namespace);
+            var type = exmlConfig.getPropertyType("states", className);
+            if (type != TYPE_STATE) {
                 return;
             }
             var statesValue = root.attributes["states"];
@@ -983,7 +998,7 @@ module lark.player {
                     if (stateNames.indexOf(stateName) == -1) {
                         stateNames.push(stateName);
                     }
-                    this.stateCode.push(new CpState(stateName));
+                    this.stateCode.push(new EXState(stateName));
                 }
                 return;
             }
@@ -1013,7 +1028,7 @@ module lark.player {
                 if (stateNames.indexOf(stateName) == -1) {
                     stateNames.push(stateName);
                 }
-                this.stateCode.push(new CpState(stateName, stateGroups));
+                this.stateCode.push(new EXState(stateName, stateGroups));
             }
         }
 
@@ -1071,7 +1086,7 @@ module lark.player {
                     if (l > 0) {
                         for (var j:number = 0; j < l; j++) {
                             state = states[j];
-                            state.addOverride(new CpSetProperty(parentNode.attributes.id, prop, value));
+                            state.addOverride(new EXSetProperty(parentNode.attributes.id, prop, value));
                         }
                     }
                 }
@@ -1081,8 +1096,8 @@ module lark.player {
                     var nodeClassName = this.getClassNameOfNode(node);
                     this.checkIdForState(node);
                     var stateName:string;
-                    var states:Array<CpState>;
-                    var state:CpState;
+                    var states:Array<EXState>;
+                    var state:EXState;
                     if (this.isStateNode(node)) {
                         var propertyName = "";
                         var parent:XML = node.parent;
@@ -1128,7 +1143,7 @@ module lark.player {
                                 var l = states.length;
                                 for (var j = 0; j < l; j++) {
                                     state = states[j];
-                                    state.addOverride(new CpAddItems(id, propertyName,
+                                    state.addOverride(new EXAddItems(id, propertyName,
                                         positionObj.position, positionObj.relativeTo));
                                 }
                             }
@@ -1154,7 +1169,7 @@ module lark.player {
                             if (l > 0) {
                                 for (var j = 0; j < l; j++) {
                                     state = states[j];
-                                    state.addOverride(new CpSetProperty(id, key, value));
+                                    state.addOverride(new EXSetProperty(id, key, value));
                                 }
                             }
                         }
@@ -1178,7 +1193,7 @@ module lark.player {
             if (!func)
                 return;
             var codeLine = "this." + id + " = t;";
-            var cb:CpCodeBlock = func.codeBlock;
+            var cb:EXCodeBlock = func.codeBlock;
             if (!cb)
                 return;
             if (!cb.containsCodeLine(codeLine)) {
@@ -1189,8 +1204,8 @@ module lark.player {
         /**
          * 通过视图状态名称获取对应的视图状态
          */
-        private getStateByName(name:string, node:XML):CpState[] {
-            var states:CpState[] = [];
+        private getStateByName(name:string, node:XML):EXState[] {
+            var states:EXState[] = [];
             var stateCode = this.stateCode;
             var length = stateCode.length;
             for (var i = 0; i < length; i++) {

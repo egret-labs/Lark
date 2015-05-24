@@ -39,17 +39,19 @@ module lark {
             request.send();
         }
 
+        private list:lark.gui.List;
+
         private onExmlLoaded(event:Event):void {
             this.width = this.stage.stageWidth;
             this.height = this.stage.stageHeight;
             var request:HttpRequest = event.target;
-            var Skin = lark.gui.EXML.parse(request.response, "lark.gui.ButtonSkin");
+            var Skin = lark.gui.EXML.parse(request.response, "lark.List");
 
-            var skin:lark.gui.UIComponent = new Skin();
-            skin.horizontalCenter = 0;
-            skin.verticalCenter = 0;
-            this.addChild(skin);
-
+            var list:lark.gui.List = new Skin();
+            list.horizontalCenter = 0;
+            list.verticalCenter = 0;
+            this.list = list;
+            this.addChild(list);
 
             //var image = new lark.gui.Image("image/test.png");
             //image.fillMode = "clip";
@@ -68,7 +70,7 @@ module lark {
             //image2.width = 300;
             //image2.height = 100;
 
-            //this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+            this.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
         private createButton(skin:any):lark.gui.Button {
@@ -81,22 +83,32 @@ module lark {
         private offsetY:number = 0;
 
         private onTouchBegin(event:TouchEvent):void {
-            var target = <lark.gui.UIComponent>event.target;
-            if (is(target, Types.Stage)) {
-                return;
+            var target = <lark.DisplayObject>event.target;
+            var list = this.list;
+            if(list.contains(target)){
+                while(target!=list){
+                    if(is(target,lark.gui.Types.IItemRenderer)){
+                        break;
+                    }
+                    target = target.parent;
+                }
+                var index = (<lark.gui.IItemRenderer><any>target).itemIndex;
+                var dp:lark.gui.ArrayCollection = <lark.gui.ArrayCollection>list.dataProvider;
+                dp.replaceItemAt("label"+((Math.random()*100)|0),index);
             }
-            this.touchTarget = target;
-            target.includeInLayout = false;
-            var pos = target.parent.localToGlobal(target.x, target.y);
-            this.addChild(target);
-            pos = target.parent.globalToLocal(pos.x, pos.y);
-            target.x = pos.x;
-            target.y = pos.y;
-            this.offsetX = target.x - event.stageX;
-            this.offsetY = target.y - event.stageY;
-            this.stage.on(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
-            this.stage.on(TouchEvent.TOUCH_END, this.onTouchEnd, this);
-            event.updateAfterEvent();
+            return;
+            //this.touchTarget = target;
+            //target.includeInLayout = false;
+            //var pos = target.parent.localToGlobal(target.x, target.y);
+            //this.addChild(target);
+            //pos = target.parent.globalToLocal(pos.x, pos.y);
+            //target.x = pos.x;
+            //target.y = pos.y;
+            //this.offsetX = target.x - event.stageX;
+            //this.offsetY = target.y - event.stageY;
+            //this.stage.on(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            //this.stage.on(TouchEvent.TOUCH_END, this.onTouchEnd, this);
+            //event.updateAfterEvent();
         }
 
         private onTouchMove(event:TouchEvent):void {

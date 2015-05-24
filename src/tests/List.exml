@@ -5,7 +5,7 @@
             <e:Image source="image/button_over.png" includeIn="over" width="100%" height="100%" scale9Grid="5,5,63,16"/>
             <e:Image source="image/button_down.png" includeIn="down" width="100%" height="100%" scale9Grid="5,5,63,16"/>
             <e:Image source="image/button_disabled.png" includeIn="disabled" width="100%" height="100%" scale9Grid="5,5,63,16"/>
-            <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" left="20" right="20" top="10" bottom="10"/>
+            <e:Label id="labelDisplay" text="{data}" horizontalCenter="0" verticalCenter="0" left="20" right="20" top="10" bottom="10"/>
             <e:Image id="iconDisplay" horizontalCenter="0" verticalCenter="0"/>
         </e:ItemRenderer>
     </e:itemRenderer>

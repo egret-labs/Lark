@@ -50,6 +50,7 @@ module lark.gui {
 
         public set data(value:any) {
             this._data = value;
+            PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"data");
             this.dataChanged();
         }
 
@@ -116,5 +117,6 @@ module lark.gui {
         }
     }
 
+    registerBindable(ItemRenderer.prototype,"data");
     registerClass(ItemRenderer, Types.ItemRenderer, [Types.IItemRenderer])
 }
