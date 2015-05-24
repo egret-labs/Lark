@@ -564,7 +564,7 @@ module lark.player {
             if (!parser) {
                 parser = new EXMLParser();
             }
-            var innerClassName = this.currentClass.className + "$inner" + innerClassCount++;
+            var innerClassName = this.currentClass.className + "$" + node.localName + innerClassCount++;
             var innerClass = parser.parseClass(node, innerClassName);
             this.currentClass.addInnerClass(innerClass);
             exmlParserPool.push(parser);
