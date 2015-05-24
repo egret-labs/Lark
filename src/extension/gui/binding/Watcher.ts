@@ -57,19 +57,18 @@ module lark.gui {
          * @param thisObject handler 方法绑定的this对象
          * @returns 如果已为 chain 参数至少指定了一个属性名称，则返回 Watcher 实例；否则返回 null。
          */
-        public static watch(host:IEventEmitter, chain:string[], handler:(value:any)=>void, thisObject:any):Watcher {
+        public static watch(host:any, chain:string[], handler:(value:any)=>void, thisObject:any):Watcher {
             if (DEBUG) {
                 if (!chain) {
                     $error(1003, "chain");
                 }
             }
-            if (is(host, lark.Types.IEventEmitter) && chain.length > 0) {
+            if (chain.length > 0) {
                 var property = chain.shift();
-                if (!Watcher.checkBindable(host, property)) {
-                    return null;
-                }
-                var next = Watcher.watch(host[property], chain, handler, thisObject);
-                return new Watcher(host, property, handler, thisObject, next);
+                var next = Watcher.watch(null, chain, handler, thisObject);
+                var watcher = new Watcher(property, handler, thisObject, next);
+                watcher.reset(host);
+                return watcher;
             }
             else {
                 return null;
@@ -119,16 +118,14 @@ module lark.gui {
         /**
          * 构造函数，非公开。只能从 watch() 方法中调用此方法。有关参数用法，请参阅 watch() 方法。
          */
-        public constructor(host:any, property:string, handler:(value:any)=>void, thisObject:any, next?:Watcher) {
+        public constructor(property:string, handler:(value:any)=>void, thisObject:any, next?:Watcher) {
             this.property = property;
             this.handler = handler;
             this.next = next;
-            this.host = host;
             this.thisObject = thisObject;
-            host.on(PropertyEvent.PROPERTY_CHANGE, this.wrapHandler, this, false, 100);
         }
 
-        private host:IEventEmitter;
+        private host:any;
 
         private property:string;
 
@@ -178,13 +175,14 @@ module lark.gui {
          * 重置此 Watcher 实例使用新的宿主对象。
          */
         public reset(newHost:IEventEmitter):void {
-            if (this.host) {
+            if (is(this.host,lark.Types.IEventEmitter)) {
                 this.host.removeListener(PropertyEvent.PROPERTY_CHANGE, this.wrapHandler, this);
             }
 
             this.host = newHost;
 
-            if (newHost) {
+            if (is(newHost,lark.Types.IEventEmitter)) {
+                Watcher.checkBindable(newHost, this.property)
                 newHost.on(PropertyEvent.PROPERTY_CHANGE, this.wrapHandler, this, false, 100);
             }
 

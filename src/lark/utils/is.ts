@@ -36,7 +36,7 @@ module lark {
      * @returns 返回true表示当前对象是指定类或接口的实例。
      */
     export function is(instance:any,typeFlag:number):boolean {
-        if(!instance){
+        if(!instance ||typeof instance != "object"){
             return false;
         }
         var prototype:any = Object.getPrototypeOf(instance);

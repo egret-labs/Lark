@@ -32,11 +32,11 @@ module lark.player {
     /**
      * GUI命名空间
      */
-    export var NS_E:string = "http://ns.egret-labs.org/egret";
+    export var NS_E:string = "http://ns.egret.com/lark";
     /**
      * Wing命名空间
      */
-    export var NS_W:string = "http://ns.egret-labs.org/wing";
+    export var NS_W:string = "http://ns.egret.com/wing";
 
     var basicTypes:string[] = ["Array", "boolean", "string", "number"];
     var GUI_MODULE = "lark.gui.";
@@ -121,6 +121,9 @@ module lark.player {
          * @param ns 命名空间
          */
         public getClassNameById(id:string, ns:string):string {
+            if (id == "Object"&&ns==NS_E) {
+                return id;
+            }
             var name:string = "";
             if (basicTypes.indexOf(id) != -1) {
                 return id;

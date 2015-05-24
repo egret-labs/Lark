@@ -563,7 +563,8 @@ module lark.player {
         public expression:string;
 
         public toCode():string {
-            return BINDING_PROPERTY+"(this, [\""+this.expression+"\"], this[\""+this.target+"\"],\""+this.property+"\");";
+            var chain = this.expression.split(".").join("\",\"");
+            return BINDING_PROPERTY+"(this, [\""+chain+"\"], this[\""+this.target+"\"],\""+this.property+"\");";
         }
     }
 

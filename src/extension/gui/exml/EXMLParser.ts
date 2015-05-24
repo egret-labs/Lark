@@ -728,16 +728,11 @@ module lark.player {
             }
             if (value.charAt(0) == "{" && value.charAt(value.length - 1) == "}") {
                 value = value.substr(1, value.length - 2).trim();
+                if (value.indexOf("this.") == 0) {
+                    value = value.substring(5);
+                }
                 this.bindings.push(new EXBinding(node.attributes["id"], key, value));
                 value = "";
-                //if (value.indexOf("this.") == 0) {
-                //    value = value.substring(5);
-                //}
-                //var targetNode:any = this.idToNode[value];
-                //if (DEBUG && !targetNode) {
-                //    $error(2010, this.currentClassName, key, value, toXMLString(node));
-                //}
-                //var targetClass = this.getClassNameOfNode(targetNode);
             }
             else if (key == "scale9Grid" && type == RECTANGLE) {
                 if (DEBUG) {

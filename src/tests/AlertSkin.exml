@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin xmlns:e="http://ns.egret-labs.org/egret" xmlns:w="http://ns.egret-labs.org/wing"
+<e:Skin xmlns:e="http://ns.egret.com/lark" xmlns:w="http://ns.egret.com/wing"
         minHeight="230" minWidth="470" maxWidth="710">
     <e:Group left="6" right="6" height="50" id="moveArea">
         <e:Label id="titleDisplay" fontFamily="Tahoma" fontSize="26"

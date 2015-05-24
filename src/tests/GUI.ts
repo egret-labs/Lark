@@ -94,7 +94,7 @@ module lark {
                 }
                 var index = (<lark.gui.IItemRenderer><any>target).itemIndex;
                 var dp:lark.gui.ArrayCollection = <lark.gui.ArrayCollection>list.dataProvider;
-                dp.replaceItemAt("label"+((Math.random()*100)|0),index);
+                dp.replaceItemAt({label:"label"+((Math.random()*100)|0)},index);
             }
             return;
             //this.touchTarget = target;

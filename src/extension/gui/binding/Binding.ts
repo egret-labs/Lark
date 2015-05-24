@@ -59,7 +59,7 @@ module lark.gui {
          * @param thisObject handler 方法绑定的this对象
          * @returns 如果已为 chain 参数至少指定了一个属性名称，则返回 Watcher 实例；否则返回 null。
          */
-        public static bindHandler(host:any, chain:string[], handler:(value:any)=>void, thisObject?:any):Watcher {
+        public static bindHandler(host:any, chain:string[], handler:(value:any)=>void, thisObject:any):Watcher {
             var watcher = Watcher.watch(host, chain, handler, thisObject);
             if (watcher) {
                 handler.call(thisObject, watcher.getValue());
