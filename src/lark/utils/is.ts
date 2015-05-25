@@ -35,14 +35,15 @@ module lark {
      * @param typeFlag 类或接口的枚举值，请参考 lark.Types 或 lark.gui.Types 定义的枚举常量。
      * @returns 返回true表示当前对象是指定类或接口的实例。
      */
-    export function is(instance:any,typeFlag:number):boolean {
-        if(!instance ||typeof instance != "object"){
+    export function is(instance:any, typeFlag:number):boolean {
+        if (!instance || typeof instance != "object") {
             return false;
         }
         var prototype:any = Object.getPrototypeOf(instance);
-        if(!prototype||!prototype.__typeFlags__){
+        var flags = prototype ? prototype.__typeFlags__ : null;
+        if (!flags) {
             return false;
         }
-        return (prototype.__typeFlags__.indexOf(typeFlag) !== -1);
+        return (flags.indexOf(typeFlag) !== -1);
     }
 }
