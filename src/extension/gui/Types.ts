@@ -50,6 +50,10 @@ module lark.gui {
          */
         ListBase,
         /**
+         * 选项卡组件
+         */
+        TabBar,
+        /**
          * 列表组件
          */
         List,
