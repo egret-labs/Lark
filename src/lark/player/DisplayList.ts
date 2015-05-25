@@ -429,7 +429,7 @@ module lark.player {
             //绘制遮罩
             if(mask){
                 var maskContext = this.createRenderContext(region.width,region.height);
-                if(!displayContext){//RenderContext创建失败，放弃绘制遮罩。
+                if(!maskContext){//RenderContext创建失败，放弃绘制遮罩。
                     drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, drawToStage, displayObject.$displayList, clipRegion);
                     surfaceFactory.release(displayContext.surface);
                     Region.release(region);
