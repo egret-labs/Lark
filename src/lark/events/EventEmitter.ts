@@ -251,6 +251,7 @@ module lark {
                 Event.release(event);
                 return result;
             }
+            return true;
         }
     }
 
