@@ -79,10 +79,14 @@ module lark {
         public static RESIZE:string = "resize";
 
         /**
-         * 属性值或状态发生改变。
+         * 属性值或状态发生改变。通常是按钮的选中状态，或者列表的选中项索引改变。
          */
         public static CHANGE:string = "change";
 
+        /**
+         * 属性值或状态即将发生改变,通常是按钮的选中状态，或者列表的选中项索引改变。可以通过调用 preventDefault() 方法阻止索引发生更改。
+         */
+        public static CHANGING:string = "changing";
         /**
          * 网络请求加载完成
          */
@@ -99,11 +103,12 @@ module lark {
          * @param bubbles  确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
          * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
          */
-        public constructor(type:string, bubbles?:boolean, cancelable?:boolean) {
+        public constructor(type:string, bubbles?:boolean, cancelable?:boolean,data?:any) {
             super();
             this.$type = type;
             this.$bubbles = !!bubbles;
             this._cancelable = !!cancelable;
+            this.data = data;
         }
 
         /**
@@ -111,7 +116,7 @@ module lark {
          */
         public data:any;
 
-        $type:string = "";
+        $type:string;
 
         /**
          * 事件的类型。类型区分大小写。
@@ -120,7 +125,7 @@ module lark {
             return this.$type;
         }
 
-        $bubbles:boolean = false;
+        $bubbles:boolean;
 
         /**
          * 表示事件是否为冒泡事件。如果事件可以冒泡，则此值为 true；否则为 false。
@@ -129,7 +134,7 @@ module lark {
             return this.$bubbles;
         }
 
-        private _cancelable:boolean = false;
+        private _cancelable:boolean;
         /**
          * 表示是否可以阻止与事件相关联的行为。如果可以取消该行为，则此值为 true；否则为 false。
          */

@@ -45,15 +45,6 @@ module lark.gui {
 		public static CHANGE_END:string = "changeEnd";
 		
 		/**
-		 * 改变开始
-		 */
-		public static CHANGE_START:string = "changeStart";
-		
-		/**
-		 * 正在改变中
-		 */
-		public static CHANGING:string = "changing";
-		/**
 		 * 值发生改变
 		 */
 		public static VALUE_COMMIT:string = "valueCommit";

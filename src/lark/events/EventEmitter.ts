@@ -243,9 +243,9 @@ module lark {
          * @param data 附加数据(可选)
          * @returns 如果成功调度了事件，则值为 true。值 false 表示失败或对事件调用了 preventDefault()。
          */
-        public emitWith(type:string, bubbles?:boolean, data?:any):boolean {
+        public emitWith(type:string, bubbles?:boolean, cancelable?:boolean, data?:any):boolean {
             if (bubbles || this.hasListener(type)) {
-                var event = Event.create(Event, type, bubbles);
+                var event = Event.create(Event, type, bubbles,cancelable);
                 event.data = data;
                 var result = this.emit(event);
                 Event.release(event);
@@ -253,7 +253,8 @@ module lark {
             }
         }
     }
-    registerClass(EventEmitter,Types.EventEmitter,[Types.IEventEmitter]);
+
+    registerClass(EventEmitter, Types.EventEmitter, [Types.IEventEmitter]);
 }
 
 module lark.player {

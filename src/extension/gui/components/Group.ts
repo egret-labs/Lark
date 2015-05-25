@@ -30,7 +30,8 @@
 module lark.gui {
 
     /**
-     * GUI容器基类
+     * Group 是自动布局的容器基类。如果包含的子项内容太大需要滚动显示，可以在在 Group 外部包裹一层 Scroller 组件
+     * (将 Group 实例赋值给 Scroller 组件的 viewport 属性)。Scroller 会为 Group 添加滚动的触摸操作功能，并显示垂直或水平的滚动条。
      */
     export class Group extends Sprite implements UIComponent {
 
