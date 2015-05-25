@@ -58,7 +58,7 @@ module lark.gui {
     
     locale_strings[2201] = "BasicLayout doesn't support virtualization.";
     locale_strings[2202] = "parse skinName error，the parsing result of skinName must be a instance of lark.gui.Skin.";
-    locale_strings[2203] = "this method is not available in the List class. Instead, use dataProvider to modify children.";
+    locale_strings[2203] = "this method is not available in the DataGroup class or its subclass. Instead, use dataProvider to modify children.";
 
     locale_strings[2301] = "parse source failed，could not find asset from URL：{0} .";
 

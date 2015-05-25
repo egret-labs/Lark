@@ -48,12 +48,18 @@ module lark.gui {
          */
         public static NO_PROPOSED_SELECTION:number = -2;
 
+        /**
+         * 如果为 true，用户单击当前选定的条目时即会将其取消选择。
+         * 如果为 false，用户必须选择不同的条目才可取消选择当前选定的条目。默认值为false。
+         */
+        public allowDeselection:boolean = false;
+
         $requireSelection:boolean = false;
 
         private requireSelectionChanged:boolean = false;
 
         /**
-         * 如果为 true，则必须始终在控件中选中数据项目。<br/>
+         * 如果为 true，则控件中必须含有选中的数据项目。
          * 如果该值为 true，则始终将 selectedIndex 属性设置为 0 和 (dataProvider.length - 1) 之间的一个值。
          */
         public get requireSelection():boolean {
@@ -71,7 +77,6 @@ module lark.gui {
                 this.invalidateProperties();
             }
         }
-
 
         /**
          * 在属性提交前缓存真实的选中项的值
@@ -387,7 +392,7 @@ module lark.gui {
             renderer.removeListener(TouchEvent.TOUCH_END, this.onRendererTouchEnd, this);
         }
 
-        $mouseDownItemRenderer:IItemRenderer = null;
+        $touchDownItemRenderer:IItemRenderer = null;
 
         /**
          * 鼠标在项呈示器上按下
@@ -395,7 +400,7 @@ module lark.gui {
         protected onRendererTouchBegin(event:TouchEvent):void {
             if (event.$isDefaultPrevented)
                 return;
-            this.$mouseDownItemRenderer = <IItemRenderer> (event.$currentTarget);
+            this.$touchDownItemRenderer = <IItemRenderer> (event.$currentTarget);
             this.$stage.on(TouchEvent.TOUCH_END, this.stage_touchEndHandler, this);
         }
 
@@ -404,9 +409,13 @@ module lark.gui {
          */
         protected onRendererTouchEnd(event:TouchEvent):void {
             var itemRenderer = <IItemRenderer> (event.$currentTarget);
-            if (itemRenderer != this.$mouseDownItemRenderer)
+            if (itemRenderer != this.$touchDownItemRenderer)
                 return;
-            this.setSelectedIndex(itemRenderer.itemIndex, true);
+            var index = itemRenderer.itemIndex;
+            if(this.allowDeselection&&this.$isItemIndexSelected(index)){
+                index = ListBase.NO_SELECTION;
+            }
+            this.setSelectedIndex(index, true);
         }
 
         /**
@@ -415,7 +424,7 @@ module lark.gui {
         private stage_touchEndHandler(event:Event):void {
             var stage = <Stage>event.$currentTarget;
             stage.removeListener(TouchEvent.TOUCH_END, this.stage_touchEndHandler, this);
-            this.$mouseDownItemRenderer = null;
+            this.$touchDownItemRenderer = null;
         }
     }
 
