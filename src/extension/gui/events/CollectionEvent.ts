@@ -90,7 +90,7 @@ module lark.gui {
         public static emitCollectionEvent(target:IEventEmitter, eventType:string, kind?:string, location?:number,
                                           oldLocation?:number, items?:any[], oldItems?:any[]):boolean {
             if (!target.hasListener(eventType)) {
-                return;
+                return true;
             }
             var event = Event.create(CollectionEvent, eventType);
             event.$setTo(kind, location, oldLocation, items, oldItems);

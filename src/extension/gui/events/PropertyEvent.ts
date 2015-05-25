@@ -59,7 +59,7 @@ module lark.gui {
          */
         public static emitPropertyEvent(target:IEventEmitter, eventType:string, property?:string):boolean {
             if (!target.hasListener(eventType)) {
-                return;
+                return true;
             }
             var event = Event.create(PropertyEvent, eventType);
             event.property = property;

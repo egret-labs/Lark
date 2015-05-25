@@ -151,7 +151,7 @@ module lark {
         public static emitTouchEvent(target:IEventEmitter, type:string, bubbles?:boolean, cancelable?:boolean,
                                      stageX?:number, stageY?:number, touchPointID?:number):boolean {
             if (!bubbles && !target.hasListener(type)) {
-                return;
+                return true;
             }
             var event = Event.create(TouchEvent, type, bubbles, cancelable);
             event.$setTo(stageX, stageY, touchPointID);

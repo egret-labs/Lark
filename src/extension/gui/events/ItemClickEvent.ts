@@ -27,54 +27,50 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-
 module lark.gui {
 
-	/**
-	 * UI事件
-	 */
-	export class UIEvent extends Event{
+    /**
+     * 列表单击事件
+     */
+    export class ItemClickEvent extends Event {
+        /**
+         * 属性改变
+         */
+        public static ITEM_CLICK:string = "itemClick";
 
-		public constructor(type:string, bubbles?:boolean, cancelable?:boolean){
-			super(type, bubbles, cancelable);
-		}
+        /**
+         * 触发鼠标事件的项呈示器数据源项。
+         */
+        public item:any = null;
 
-		/**
-		 * 改变结束
-		 */
-		public static CHANGE_END:string = "changeEnd";
-		
-		/**
-		 * 值发生改变
-		 */
-		public static VALUE_COMMIT:string = "valueCommit";
-		/**
-		 * 容器的内容尺寸发生改变
-		 */
-		public static CONTENT_SIZE_CHANGED:string = "contentSizeChanged";
-		/**
-		 * 容器的滚动位置发生改变
-		 */
-		public static SCROLL_POSITION_CHANGED:string = "scrollPositionChanged";
-		/**
-		 * 即将关闭面板事件
-		 */
-		public static CLOSING:string = "close";
+        /**
+         * 触发鼠标事件的项呈示器。
+         */
+        public itemRenderer:IItemRenderer = null;
 
-		/**
-		 * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-		 * @param target 事件派发目标
-		 * @param eventType 事件类型
-		 */
-		public static emitUIEvent(target:IEventEmitter, eventType:string):boolean {
-            if(!target.hasListener(eventType)){
+        /**
+         * 触发鼠标事件的项索引
+         */
+        public itemIndex:number = -1;
+
+        /**
+         * 使用指定的 EventEmitter 对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         * @param target 事件派发目标
+         * @param eventType 事件类型
+         */
+        public static emitItemClickEvent(target:IEventEmitter, eventType:string, itemRenderer?:IItemRenderer):boolean {
+            if (!target.hasListener(eventType)) {
                 return true;
             }
-			var event = Event.create(UIEvent, eventType);
-			var result = target.emit(event);
-			Event.release(event);
-			return result;
-		}
-	}
-	registerClass(UIEvent,Types.UIEvent);
+            var event = Event.create(ItemClickEvent, eventType);
+            event.item = itemRenderer.data;
+            event.itemIndex = itemRenderer.itemIndex;
+            event.itemRenderer = itemRenderer;
+            var result = target.emit(event);
+            Event.release(event);
+            return result;
+        }
+    }
+
+    registerClass(ItemClickEvent, Types.ItemClickEvent);
 }

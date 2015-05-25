@@ -48,12 +48,6 @@ module lark.gui {
          */
         public static NO_PROPOSED_SELECTION:number = -2;
 
-        /**
-         * 如果为 true，用户单击当前选定的条目时即会将其取消选择。
-         * 如果为 false，用户必须选择不同的条目才可取消选择当前选定的条目。默认值为false。
-         */
-        public allowDeselection:boolean = false;
-
         $requireSelection:boolean = false;
 
         private requireSelectionChanged:boolean = false;
@@ -392,7 +386,7 @@ module lark.gui {
             renderer.removeListener(TouchEvent.TOUCH_END, this.onRendererTouchEnd, this);
         }
 
-        $touchDownItemRenderer:IItemRenderer = null;
+        $mouseDownItemRenderer:IItemRenderer = null;
 
         /**
          * 鼠标在项呈示器上按下
@@ -400,7 +394,7 @@ module lark.gui {
         protected onRendererTouchBegin(event:TouchEvent):void {
             if (event.$isDefaultPrevented)
                 return;
-            this.$touchDownItemRenderer = <IItemRenderer> (event.$currentTarget);
+            this.$mouseDownItemRenderer = <IItemRenderer> (event.$currentTarget);
             this.$stage.on(TouchEvent.TOUCH_END, this.stage_touchEndHandler, this);
         }
 
@@ -409,13 +403,10 @@ module lark.gui {
          */
         protected onRendererTouchEnd(event:TouchEvent):void {
             var itemRenderer = <IItemRenderer> (event.$currentTarget);
-            if (itemRenderer != this.$touchDownItemRenderer)
+            if (itemRenderer != this.$mouseDownItemRenderer)
                 return;
-            var index = itemRenderer.itemIndex;
-            if(this.allowDeselection&&this.$isItemIndexSelected(index)){
-                index = ListBase.NO_SELECTION;
-            }
-            this.setSelectedIndex(index, true);
+            this.setSelectedIndex(itemRenderer.itemIndex, true);
+            ItemClickEvent.emitItemClickEvent(this,ItemClickEvent.ITEM_CLICK,itemRenderer);
         }
 
         /**
@@ -424,7 +415,7 @@ module lark.gui {
         private stage_touchEndHandler(event:Event):void {
             var stage = <Stage>event.$currentTarget;
             stage.removeListener(TouchEvent.TOUCH_END, this.stage_touchEndHandler, this);
-            this.$touchDownItemRenderer = null;
+            this.$mouseDownItemRenderer = null;
         }
     }
 
