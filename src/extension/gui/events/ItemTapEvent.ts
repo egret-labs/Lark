@@ -30,26 +30,26 @@
 module lark.gui {
 
     /**
-     * 列表单击事件
+     * 列表项单击事件
      */
-    export class ItemClickEvent extends Event {
+    export class ItemTapEvent extends Event {
         /**
-         * 属性改变
+         *
          */
-        public static ITEM_CLICK:string = "itemClick";
+        public static ITEM_TAP:string = "itemTap";
 
         /**
-         * 触发鼠标事件的项呈示器数据源项。
+         * 触发触摸事件的项呈示器数据源项。
          */
         public item:any = null;
 
         /**
-         * 触发鼠标事件的项呈示器。
+         * 触发触摸事件的项呈示器。
          */
         public itemRenderer:IItemRenderer = null;
 
         /**
-         * 触发鼠标事件的项索引
+         * 触发触摸事件的项索引
          */
         public itemIndex:number = -1;
 
@@ -62,7 +62,7 @@ module lark.gui {
             if (!target.hasListener(eventType)) {
                 return true;
             }
-            var event = Event.create(ItemClickEvent, eventType);
+            var event = Event.create(ItemTapEvent, eventType);
             event.item = itemRenderer.data;
             event.itemIndex = itemRenderer.itemIndex;
             event.itemRenderer = itemRenderer;
@@ -72,5 +72,5 @@ module lark.gui {
         }
     }
 
-    registerClass(ItemClickEvent, Types.ItemClickEvent);
+    registerClass(ItemTapEvent, Types.ItemTapEvent);
 }

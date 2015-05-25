@@ -105,7 +105,7 @@ module lark.gui {
         /**
          * 列表单击事件
          */
-        ItemClickEvent,
+        ItemTapEvent,
         /**
          * 数组的集合类数据结构包装器
          * 通常作为列表组件的数据源，使用这种数据结构包装普通数组，

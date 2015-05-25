@@ -34,6 +34,7 @@ module lark.gui {
      * @event lark.Event.CHANGE 选中的索引已经发生改变,注意：此事件仅在索引改变是由用户触摸操作引起时才抛出。
      * @event lark.Event.CHANGING 选中的索引即将发生改变，可以通过调用事件对象的 preventDefault() 方法来阻止改变。
      * 注意：此事件仅在索引改变是由用户触摸操作引起时才抛出。
+     * @event lark.gui.ItemTapEvent.ITEM_TAP 项呈示器单击事件。
      * @event lark.gui.UIEvent.VALUE_COMMIT 选中的索引已经发生改变。此事件无论索引改变是否由触摸操作引起都会抛出。
      */
     export class ListBase extends DataGroup {
@@ -406,7 +407,7 @@ module lark.gui {
             if (itemRenderer != this.$mouseDownItemRenderer)
                 return;
             this.setSelectedIndex(itemRenderer.itemIndex, true);
-            ItemClickEvent.emitItemClickEvent(this,ItemClickEvent.ITEM_CLICK,itemRenderer);
+            ItemTapEvent.emitItemClickEvent(this,ItemTapEvent.ITEM_TAP,itemRenderer);
         }
 
         /**
