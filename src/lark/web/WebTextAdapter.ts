@@ -138,6 +138,9 @@ module lark.web {
                 var currentHtmlInput = this.currentHtmlInput;
                 currentHtmlInput.onblur = this.handleHtmlInputBlur;
                 currentHtmlInput.oninput = this.handleHtmlInputInputEvent;
+                currentHtmlInput.onkeydown = this.handleHtmlKeyEvent;
+                currentHtmlInput.onkeyup = this.handleHtmlKeyEvent;
+                currentHtmlInput.oninput = this.handleHtmlInputInputEvent;
                 currentHtmlInput.selectionStart = currentHtmlInput.value.length;
                 currentHtmlInput.selectionEnd = currentHtmlInput.value.length;
                 currentHtmlInput.focus();
@@ -147,6 +150,10 @@ module lark.web {
             else if(this.currentTextInput != null){
                 this.$removeCurrentTextInput();
             }
+        };
+
+        private handleHtmlKeyEvent = (e:KeyboardEvent) => {
+            this.currentTextInput.$onKeyEvent(e);
         };
 
         private handleHtmlInputInputEvent = (e)=>{
@@ -195,6 +202,7 @@ module lark.web {
             this.singleLineTextInput.style.display="none";
             this.multiLineTextInput.style.display="none";
             var textInput = this.currentTextInput;
+            var htmlInput = this.currentHtmlInput;
 
             var scaleX = this.scaleX;
             var scaleY = this.scaleY;
@@ -238,6 +246,9 @@ module lark.web {
                 var styleName = textInput.verticalAlign == VerticalAlign.TOP?'paddingBottom':'paddingTop';
                 setElementStyle(styleName,padding + "px");
                 setElementStyle("height", textInput.fontSize + "px");
+            }
+            if(textInput.text != htmlInput.value){
+                htmlInput.value = textInput.text;
             }
         }
 

@@ -58,5 +58,16 @@ module lark {
          */
         public static CHANGE:string = 'change';
 
+        /**
+         * TextInput 键盘 keydown 事件
+         * @type {string}
+         */
+        public static KEY_DOWN:string = 'keydown';
+
+
+        public keyCode:number;
+        public altKey:boolean = true;
+        public ctrlKey:boolean = true;
+        public metaKey:boolean = true;
     }
 }
