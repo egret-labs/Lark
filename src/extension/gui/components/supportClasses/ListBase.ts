@@ -87,6 +87,10 @@ module lark.gui {
          * 当以编程方式更改 selectedIndex 属性的值时，此控件不分派 change 和 changing 事件。
          */
         public get selectedIndex():number {
+            return this.$getSelectedIndex();
+        }
+
+        $getSelectedIndex():number {
             if (this.$proposedSelectedIndex != ListBase.NO_PROPOSED_SELECTION)
                 return this.$proposedSelectedIndex;
             return this.$selectedIndex;
@@ -104,11 +108,10 @@ module lark.gui {
         /**
          * 设置选中项
          */
-        protected setSelectedIndex(value:number, dispatchChangeEvent:boolean = false):void {
+        protected setSelectedIndex(value:number, dispatchChangeEvent?:boolean):void {
             if (value == this.selectedIndex) {
                 return;
             }
-
             if (dispatchChangeEvent)
                 this.$dispatchChangeAfterSelection = (this.$dispatchChangeAfterSelection || dispatchChangeEvent);
             this.$proposedSelectedIndex = value;
@@ -159,7 +162,7 @@ module lark.gui {
         /**
          * 处理对组件设置的属性
          */
-        public commitProperties():void {
+        protected commitProperties():void {
             var dataProviderChanged = this.$dataProviderChanged;
             super.commitProperties();
 
@@ -252,7 +255,6 @@ module lark.gui {
                 this.$dispatchChangeAfterSelection = false;
                 return false;
             }
-
 
 
             if (this.$dispatchChangeAfterSelection) {
@@ -407,7 +409,7 @@ module lark.gui {
             if (itemRenderer != this.$mouseDownItemRenderer)
                 return;
             this.setSelectedIndex(itemRenderer.itemIndex, true);
-            ItemTapEvent.emitItemClickEvent(this,ItemTapEvent.ITEM_TAP,itemRenderer);
+            ItemTapEvent.emitItemClickEvent(this, ItemTapEvent.ITEM_TAP, itemRenderer);
         }
 
         /**

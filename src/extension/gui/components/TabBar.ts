@@ -37,6 +37,7 @@ module lark.gui {
         public constructor(){
             super();
             this.requireSelection = true;
+            this.useVirtualLayout = false;
         }
     }
 
