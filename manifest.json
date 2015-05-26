@@ -2,99 +2,78 @@
     "version": "0.0.1.0",
     "modules": [
         {
-            "name": "core",
+            "name": "lark",
             "description": "Lark Framework Core",
             "files": [
-                "src/Defines.ts",
-                "src/lark/utils/LarkObject.ts",
-                "src/lark/utils/registerType.ts",
-                "src/lark/i18n/zh_CN.ts",
-                "src/lark/utils/getDefinitionByName.ts",
-                "src/lark/utils/getTimer.ts",
-                "src/lark/utils/tr.ts",
-                "src/lark/utils/NONE.ts",
-                "src/lark/geom/Matrix.ts",
-                "src/lark/geom/Point.ts",
-                "src/lark/geom/Rectangle.ts",
-                "src/lark/events/EventPhase.ts",
-                "src/lark/events/Event.ts",
-                "src/lark/events/EventEmitter.ts",
-                "src/lark/utils/Timer.ts",
-                "src/lark/events/ProgressEvent.ts",
-                "src/lark/events/TimerEvent.ts",
-                "src/lark/events/TouchEvent.ts",
-                "src/lark/system/Capabilities.ts",
-                "src/lark/web/WebCapability.ts",
-                "src/lark/display/BlendMode.ts",
-                "src/lark/display/DisplayObject.ts",
-                "src/lark/display/Sprite.ts",
-                "src/lark/display/Bitmap.ts",
-                "src/lark/display/Stage.ts",
-                "src/lark/display/Graphics.ts",
-                "src/lark/display/Shape.ts",
-                "src/lark/player/Region.ts",
-                "src/lark/player/DirtyRegion.ts",
-                "src/lark/player/ScaleMode.ts",
-                "src/lark/player/ScreenAdapter.ts",
-                "src/lark/player/DisplayList.ts",
-                "src/lark/player/Ticker.ts",
-                "src/lark/player/Player.ts",
-                "src/lark/player/TouchHandler.ts",
-                "src/lark/text/TextMeasurer.ts",
-                "src/lark/web/WebHttpRequest.ts",
-                "src/lark/web/WebImageLoader.ts",
-                "src/lark/web/WebScreen.ts",
-                "src/lark/web/WebTouchHandler.ts",
-                "src/lark/web/CanvasFactory.ts",
-                "src/lark/web/LarkWeb.ts",
-                "src/lark/text/TextField.ts",
-                "src/lark/text/HorizontalAlign.ts",
-                "src/lark/text/VerticalAlign.ts"
+                "Defines.ts",
+                {
+                    "dir":"lark/"
+                }
             ],
+            "root":"src/",
             "dependencies": []
         },
         {
-            "name": "gui",
+            "name": "lark.gui",
             "description": "Lark GUI Framework",
             "files": [
-                "src/extension/gui/Types.ts",
-                "src/extension/gui/i18n/zh_CN.ts",
-                "src/extension/gui/utils/MatrixUtil.ts",
-                "src/extension/gui/core/UIComponent.ts",
-                "src/extension/gui/core/validator.ts",
-                "src/extension/gui/components/Label.ts",
-                "src/extension/gui/components/Group.ts",
-                "src/extension/gui/components/SkinnableComponent.ts",
-                "src/extension/gui/events/UIEvent.ts",
-                "src/extension/gui/layouts/supportClasses/LayoutBase.ts",
-                "src/extension/gui/layouts/BasicLayout.ts"
+                {
+                    "dir":""
+                }
             ],
+            "root":"src/extension/gui/",
             "dependencies": [
-                "core"
+                "lark"
             ]
         },
         {
-            "name": "texture",
+            "name": "lark.texture",
             "description": "Texture for Lark",
             "files": [
-                "src/extension/image/Texture.ts"
+                "Texture.ts"
             ],
+            "root":"src/extension/image/",
             "dependencies": [
-                "core"
+                "lark"
             ]
         },
         {
-            "name": "video",
+            "name": "lark.media",
+            "hidden":true,
+            "description": "Media base in Lark Projects",
+            "files": [ 
+                "Media.ts",
+                "web/WebMedia.ts"
+            ],
+            "root":"src/extension/media/",
+            "dependencies": [
+                "lark"
+            ]
+        },
+        {
+            "name": "lark.video",
             "description": "Play Video in Lark Projects",
             "files": [ 
-                "src/extension/media/Media.ts",
-                "src/extension/media/WebMedia.ts",
-                "src/extension/media/Video.ts",
-                "src/extension/media/web/Video.ts"
+                "Video.ts",
+                "web/Video.ts"
             ],
+            "root":"src/extension/media/",
             "dependencies": [
-                "core"
+                "lark",
+                "lark.media"
             ]
+        }
+    ],
+    "platforms":[
+        {
+            "name":"html5",
+            "description":"Html5"
+        }
+    ],
+    "templates":[
+        {
+            "name":"empty",
+            "description":"Empty Project"
         }
     ]
 }
