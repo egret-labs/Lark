@@ -29,48 +29,160 @@
 
 /// <reference path="../lib/types.d.ts" />
 
-require('../locales/en');
+require('../locales/zh_CN');
 
 import Parser = require("./Parser");
-import Run = require("./Run");
 import Build = require("./Build");
 import Publish = require("./Publish");
 import Create = require("./Create");
 import utils = require('../lib/utils');
 import FileUtil = require('../lib/FileUtil');
 import server = require('../server/server');
+import BuildService = require("./BuildService");
 
+import http = require('http');
+import querystring = require('querystring');
+import childProcess = require('child_process');
 
+global.lark = global.lark || {};
 
+var DontExitCode = -0xF000;
 
 
 export function executeCommandLine(args: string[]): void {
     var options = Parser.parseCommandLine(args);
-    //if (options.action == 'startserver')
-    //    server.startServer(options);
-    //else
-    //    new Run(options).run();
-    var exitCode = executeOption(options);
-    process.exit(exitCode);
+    lark.options = options;
+    entry.executeCommand(options);
+    
 
 }
 
 export function executeOption(options: lark.ICompileOptions): number {
-    var exitCode = 0;
-    switch (options.action) {
-        case "publish":
-            var publish = new Publish(options);
-            exitCode =publish.run();
-            break;
-        case "create":
-            var create = new Create(options);
-            exitCode =create.run();
-            break;
-        default :
-            var build = new Build(options);
-            exitCode =build.run();
-            break;
-    }
-    return exitCode;
+    return entry.executeOption(options);
 }
+
+
+class Entry {
+    
+    executeCommand(options: lark.ICompileOptions) {
+        var optionJSON = JSON.stringify(options);
+        optionJSON = encodeURIComponent(optionJSON);
+        var requestUrl = 'http://' + options.host + ':' + options.port 
+                       + '/$/command?command=' + optionJSON;
+                        
+        var commandRequest = http.get(requestUrl, (res: http.ClientResponse) => {
+            res.setEncoding('utf-8');
+            res.on('data', (text: string) => {
+                this.gotCommandResult(text);
+            })
+        });
+        
+        
+        commandRequest.once('error', e => {
+            if (options.action == 'build') {
+                console.log("start server");
+                options.serverOnly = true;
+                entry.startBackgroundServer(options);
+                options.fileName = null;
+                this.executeCommand(options);
+            }
+            else {
+                this.executeOption(options);
+            }
+        });
+        commandRequest.setTimeout(100);
+    }
+
+    executeOption(options: lark.ICompileOptions) {
+        var exitCode = 0;
+        switch (options.action) {
+            case "publish":
+                var publish = new Publish(options);
+                exitCode = publish.run();
+                break;
+            case "create":
+                var create = new Create(options);
+                create.run();
+                server.startServer(options, options.manageUrl + "create/");
+                exitCode = DontExitCode;
+                break;
+            case "run":
+                server.startServer(options);
+                if (options.autoCompile || options.fileName)
+                    BuildService.getInstance();
+                exitCode = DontExitCode;
+                break;
+            case "buildLark":
+                var build = new Build(options);
+                build.buildLarkSource();
+                break;
+            case "shutdown":
+                this.exit(0);
+                break;
+            default:
+                var build = new Build(options);
+                exitCode = build.run();
+                break;
+        }
+        return exitCode;
+    }
+    server: childProcess.ChildProcess;
+    startBackgroundServer(options: lark.ICompileOptions) {
+        if (this.server)
+            return;
+        var nodePath = process.execPath,
+            larkPath = FileUtil.joinPath(options.larkRoot, 'tools/bin/lark');
+
+        var startupParams = ['--expose-gc',larkPath, 'run'];
+        if (options.autoCompile)
+            startupParams.push('-a');
+        if (options.fileName) {
+            startupParams.push('-f');
+            startupParams.push(options.fileName);
+        }
+        if (options.serverOnly)
+            startupParams.push('--serveronly');
+
+        this.server = childProcess.spawn(nodePath, startupParams, {
+            detached: true,
+            stdio: ['ignore', 'ignore', 'ignore'],
+            cwd: process.cwd()
+        });
+    }
+
+    gotCommandResult(msg) {
+        var result: lark.CommandResult = null;
+        try {
+            result = JSON.parse(msg);
+        }
+        catch (e)
+        {
+            console.log(e);
+            result = <any>{};
+        }
+        if (result.type == 'log')
+        {
+            this.writeServerLog(result.data);
+        }
+        if (result.exitCode != undefined) {
+            var logdata: string[][] = result.data;
+            if (logdata) {
+                logdata.forEach(params=> this.writeServerLog(params) );
+            }
+            this.exit(result.exitCode);
+        }
+    }
+    
+    writeServerLog(params:string[]){
+        console.log.apply(console, params);
+    }
+
+    exit(exitCode) {
+        if(DontExitCode == exitCode)
+            return ;
+        process.exit(exitCode);
+    }
+}
+
+var entry = new Entry();
 

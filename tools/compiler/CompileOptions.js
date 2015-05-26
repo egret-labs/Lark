@@ -4,6 +4,13 @@ var CompileOptions = (function () {
     function CompileOptions() {
         this.esTarget = 'ES5';
     }
+    Object.defineProperty(CompileOptions.prototype, "dirName", {
+        get: function () {
+            return FileUtil.getFileName(this.projectDir);
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(CompileOptions.prototype, "srcDir", {
         get: function () {
             return FileUtil.joinPath(this.projectDir, "src/");
@@ -11,10 +18,16 @@ var CompileOptions = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(CompileOptions.prototype, "srcLarkFile", {
+    Object.defineProperty(CompileOptions.prototype, "larkPropertiesFile", {
         get: function () {
-            var filename = this.publish ? 'lark.min.js' : 'lark.js';
-            return FileUtil.joinPath(this.srcDir, "lark/" + filename);
+            return FileUtil.joinPath(this.projectDir, "lark.json");
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CompileOptions.prototype, "projManifest", {
+        get: function () {
+            return FileUtil.joinPath(this.templateDir, "proj.json");
         },
         enumerable: true,
         configurable: true
@@ -26,13 +39,6 @@ var CompileOptions = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(CompileOptions.prototype, "debugLarkFile", {
-        get: function () {
-            return FileUtil.joinPath(this.debugDir, "lark/lark.js");
-        },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(CompileOptions.prototype, "releaseDir", {
         get: function () {
             return FileUtil.joinPath(this.projectDir, "bin-release/");
@@ -40,16 +46,9 @@ var CompileOptions = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(CompileOptions.prototype, "releaseLarkFile", {
-        get: function () {
-            return FileUtil.joinPath(this.releaseDir, "lark/lark.min.js");
-        },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(CompileOptions.prototype, "out", {
         get: function () {
-            var filename = this.publish ? FileUtil.joinPath(this.outDir, 'game.min.js') : undefined;
+            var filename = this.publish ? FileUtil.joinPath(this.outDir, this.project.name + '.min.js') : undefined;
             return filename;
         },
         enumerable: true,
@@ -62,16 +61,39 @@ var CompileOptions = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(CompileOptions.prototype, "outLarkFile", {
+    Object.defineProperty(CompileOptions.prototype, "templateDir", {
         get: function () {
-            return this.publish ? this.releaseLarkFile : this.debugLarkFile;
+            return FileUtil.joinPath(this.projectDir, "web/");
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(CompileOptions.prototype, "templateDir", {
+    Object.defineProperty(CompileOptions.prototype, "host", {
         get: function () {
-            return FileUtil.joinPath(this.projectDir, "template");
+            return this.project.host;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CompileOptions.prototype, "port", {
+        get: function () {
+            return this.project.port;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CompileOptions.prototype, "websocketUrl", {
+        get: function () {
+            var url = "ws://" + this.host + ':' + this.port;
+            return url;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CompileOptions.prototype, "manageUrl", {
+        get: function () {
+            var url = "http://" + this.host + ':' + this.port + '/$/';
+            return url;
         },
         enumerable: true,
         configurable: true
@@ -82,6 +104,21 @@ var CompileOptions = (function () {
             it[p] = option[p];
         }
         return it;
+    };
+    CompileOptions.prototype.toJSON = function () {
+        var options = this;
+        var json = {};
+        for (var k in this) {
+            var disc = Object.getOwnPropertyDescriptor(options, k) || Object.getOwnPropertyDescriptor(CompileOptions.prototype, k);
+            if (!disc)
+                continue;
+            if (disc.enumerable == false)
+                continue;
+            if (typeof disc.value == 'function')
+                continue;
+            json[k] = options[k];
+        }
+        return json;
     };
     return CompileOptions;
 })();

@@ -1,33 +1,95 @@
-﻿import ts = require("../lib/typescript/typescriptServices");
+﻿
+/// <reference path="../lib/types.d.ts" />
+/// <reference path="../lib/typescript/typescriptServices.d.ts" />
+
+import events = require('events');
+import watch = require("../lib/watch");
 import FileUtil = require("../lib/FileUtil");
+require("../lib/typescript/typescriptServices");
 
 class TsService {
+    static instance: TsService = null;
     tss: ts.LanguageService;
     host: Host;
-    constructor(settings: ts.CompilerOptions) {
+    settings: lark.ICompileOptions;
+    constructor(settings: lark.ICompileOptions) {
         var host = new Host();
         var tss = ts.createLanguageService(host, ts.createDocumentRegistry());
 
-        host.settings = settings;
+        host.settings = this.convertOption(settings);
         this.host = host;
         this.tss = tss;
+        this.settings = settings;
+        var tslib = FileUtil.joinPath(settings.larkRoot, 'tools/lib/typescript/lib.d.ts');
+        var tsList: string[] = FileUtil.search(settings.srcDir, "ts");
+        tsList.unshift(tslib);
+        tsList.forEach(file=> {
+            var content = FileUtil.read(file);
+            this.host.addScript(file, content);
+        });
     }
 
-    addScript(fileName: string) {
-        var content = FileUtil.read(fileName);
-        this.host.addScript(fileName, content);
+    /**
+    * 添加 修改 删除
+    */
+    fileChanged(fileName: string,emit = true, output?: string):number {
+        var fileInTsService = true;
+        fileName = FileUtil.escapePath(fileName);
+        var exist = FileUtil.exists(fileName);
+        if (!exist) {
+            this.host.removeScript(fileName);
+            return 0;
+        }
+        else {
+            var content = FileUtil.read(fileName, true);
+            fileInTsService = !!this.host.getScriptInfo(fileName);
+            this.host.updateScript(fileName, content);
+            if (fileInTsService && emit) {
+                console.log('Compile: ', fileName, '\n     to: ', output);
+                return this.emit(fileName, output);
+            }
+            return 0;
+        }
     }
 
-    emit(fileName: string) {
+    emit(fileName: string, output?: string):number {
 
         var files = this.host.getScriptFileNames();
 
         files.forEach(file=> {
             var errors = this.tss.getSemanticDiagnostics(file);
-            errors.forEach(error=> console.log(error.messageText,error.file.filename));
+            errors.forEach(error=> console.log(error.messageText, error.file.filename));
         })
 
-        return this.tss.getEmitOutput(fileName);
+        var content = this.tss.getEmitOutput(fileName);
+        var fileToSave = output || this.settings.out;
+        if (content.outputFiles && content.outputFiles.length > 0) {
+            FileUtil.save(fileToSave, content.outputFiles[0].text);
+        }
+        return content.emitOutputStatus
+    }
+
+    private convertOption(options: lark.ICompileOptions) {
+
+        var target = options.esTarget.toLowerCase();
+        var targetEnum = ts.ScriptTarget.ES5;
+        if (target == 'es6')
+            targetEnum = ts.ScriptTarget.ES6;
+
+        var tsOption: ts.CompilerOptions = {
+            sourceMap: options.sourceMap,
+            target: targetEnum,
+            removeComments: options.removeComments,
+            declaration: options.declaration
+        };
+
+        if (options.out) {
+            tsOption.out = options.out;
+        }
+        else {
+            tsOption.outDir = options.outDir;
+        }
+        return tsOption;
     }
 }
 
@@ -43,7 +105,7 @@ class Host implements ts.LanguageServiceHost {
 
     public updateScript(fileName: string, content: string) {
         var script = this.getScriptInfo(fileName);
-        if (script !== null) {
+        if (script) {
             script.updateContent(content);
             return;
         }
@@ -61,9 +123,12 @@ class Host implements ts.LanguageServiceHost {
     }
 
     public removeScript(fileName: string) {
+        console.log('remove--', fileName);
         var script = this.getScriptInfo(fileName);
-        if (script !== null) {
+        if (script) {
             script.updateContent("");
+            this.fileNameToScript[fileName] = undefined;
+            delete this.fileNameToScript[fileName];
             return;
         }
     }
@@ -83,7 +148,7 @@ class Host implements ts.LanguageServiceHost {
         ts.forEachKey(this.fileNameToScript,(fileName) => { fileNames.push(fileName); });
         return fileNames;
     }
-    private getScriptInfo(fileName: string): ScriptInfo {
+    public getScriptInfo(fileName: string): ScriptInfo {
         return this.fileNameToScript[fileName];
     }
     public getScriptVersion(fileName: string): string {

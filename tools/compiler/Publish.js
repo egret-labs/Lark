@@ -47,12 +47,12 @@ var Publish = (function (_super) {
         this.clean(option.releaseDir);
         //拷贝模板文件
         this.copyDirectory(option.templateDir, option.releaseDir);
-        this.copyDirectory(this.options.srcDir, this.options.releaseDir, this.srcFolderOutputFilter);
-        var exitcode = this.buildLark();
-        exitcode = this.buildProject();
-        return exitcode;
+        var exitcode = this.compileProject().exitCode;
+        if (exitcode)
+            return exitcode;
+        Action.compileTemplates(this.options);
+        return 0;
     };
     return Publish;
 })(Action);
 module.exports = Publish;
-//# sourceMappingURL=Publish.js.map

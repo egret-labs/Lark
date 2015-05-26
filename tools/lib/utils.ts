@@ -29,6 +29,8 @@
 
 /// <reference path="node.d.ts" />
 
+import cp = require('child_process');
+import path = require('path');
 import file = require('./FileUtil');
 global["$locale_strings"] = global["$locale_strings"] || {};
 var $locale_strings = global["$locale_strings"];
@@ -48,6 +50,12 @@ export function tr(code: number, ...args): string {
         text = text.replace("{" + i + "}", args[i]);
     }
     return text;
+}
+
+export function exit(code: number, ...args) {
+    var message = tr.apply(this, [code].concat(args));
+    console.error(message);
+    process.exit(code);
 }
 
 function _getEnv() {
@@ -90,4 +98,56 @@ export function getLarkRoot() {
         larkRoot = url;
     }
     return larkRoot;
+}
+
+
+
+
+export function open(target, appName?, callback?) {
+    var opener;
+
+    if (typeof (appName) === 'function') {
+        callback = appName;
+        appName = null;
+    }
+
+    switch (process.platform) {
+        case 'darwin':
+            if (appName) {
+                opener = 'open -a "' + escape(appName) + '"';
+            } else {
+                opener = 'open';
+            }
+            break;
+        case 'win32':
+            // if the first parameter to start is quoted, it uses that as the title
+            // so we pass a blank title so we can quote the file we are opening
+            if (appName) {
+                opener = 'start "" "' + escape(appName) + '"';
+            } else {
+                opener = 'start ""';
+            }
+            break;
+        default:
+            if (appName) {
+                opener = escape(appName);
+            } else {
+                // use Portlands xdg-open everywhere else
+                opener = path.join(__dirname, '../vendor/xdg-open');
+            }
+            break;
+    }
+
+    return cp.exec(opener + ' "' + escape(target) + '"', callback);
+}
+
+
+
+export function endWith(text: string, match: string) {
+    return text.lastIndexOf(match) == (text.length - match.length);
+}
+
+
+function escape(s) {
+    return s.replace(/"/, '\\\"');
 }

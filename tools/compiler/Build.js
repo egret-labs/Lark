@@ -34,6 +34,7 @@ var __extends = this.__extends || function (d, b) {
 };
 /// <reference path="../lib/types.d.ts" />
 var Action = require('./Action');
+var BuildService = require('./BuildService');
 var Build = (function (_super) {
     __extends(Build, _super);
     function Build() {
@@ -41,16 +42,37 @@ var Build = (function (_super) {
     }
     Build.prototype.run = function () {
         var exitCode = 0;
-        console.log('Build Start');
-        this.clean(this.options.debugDir);
-        if (this.options.includeLark)
-            exitCode = this.buildLark();
-        this.copyDirectory(this.options.templateDir, this.options.debugDir);
-        this.copyDirectory(this.options.srcDir, this.options.debugDir, this.srcFolderOutputFilter);
-        exitCode = this.buildProject();
-        console.log('Build End');
+        if (this.options.autoCompile) {
+            BuildService.getInstance(this.options);
+        }
+        if (this.options.fileName) {
+            console.log('build file:' + this.options.fileName);
+            exitCode = BuildService.buildSingle(this.options.fileName);
+            return exitCode;
+        }
+        if (Build.inProgress) {
+            console.log('Another build task is in progress');
+            return exitCode;
+        }
+        Build.inProgress = true;
+        console.log('build start');
+        try {
+            this.clean(this.options.debugDir);
+            if (this.options.includeLark)
+                exitCode = this.copyLark();
+            this.copyDirectory(this.options.templateDir, this.options.debugDir);
+            this.copyDirectory(this.options.srcDir, this.options.debugDir, this.srcFolderOutputFilter);
+            var compileResult = this.compileProject();
+            Action.compileTemplates(this.options);
+            exitCode = compileResult.exitCode;
+        }
+        catch (e) {
+        }
+        console.log('build end');
+        Build.inProgress = false;
         return exitCode;
     };
+    Build.inProgress = false;
     return Build;
 })(Action);
 module.exports = Build;

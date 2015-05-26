@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html ng-app="lark">
 <head>
     @{meta}
     <meta charset="utf-8" />
@@ -7,11 +7,45 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="width=1024, user-scalable=yes" />
     <meta name="robots" content="all,follow" />
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-
+    <link href="/$/content/style/pure.css" rel="stylesheet" />
     <link href="/$/content/style/larkserver.css" rel="stylesheet" />
+    <script type="text/javascript" src="//apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//apps.bdimg.com/libs/angular.js/1.3.13/angular.js"></script>
+    <script src="/$/content/scripts/utils.js"></script>
 </head>
 <body>
-    <div id="main-container">@{body}</div>
+    <div id="layout">
+        <!-- Menu toggle -->
+        <a href="#menu" id="menuLink" class="menu-link">
+            <!-- Hamburger icon -->
+            <span></span>
+        </a>
+        <div id="menu">
+            <div class="pure-menu">
+                <a class="pure-menu-heading" href="#">Lark</a>
+                <ul class="pure-menu-list">
+                    <li class="pure-menu-item"><a href="/$/" class="pure-menu-link">Preview</a></li>
+                    <li class="pure-menu-item"><a href="/$/manage" class="pure-menu-link">Manage</a></li>
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link" id="btnToggleConsole">Output</a></li>
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link" id="btnShutdown">Stop</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="main">
+            <div id="page-main" class="page">@{body}</div>
+            <pre id="console"></pre>
+        </div>
+    </div>
+    <script>
+        var lark = lark || {
+            server:{},
+            portal:{}
+        };
+        lark.server.options = @{! JSON.stringify(repository.options) };
+        lark.server.IPs =  @{! JSON.stringify(repository.IPs) };
+        lark.manifest = @{! JSON.stringify(repository.manifest) };
+        lark.portal.project = lark.server.options.project;
+    </script>
+    <script src="/$/content/scripts/index.js"></script>
 </body>
 </html>

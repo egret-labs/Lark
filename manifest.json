@@ -14,14 +14,14 @@
             "dependencies": []
         },
         {
-            "name": "lark.gui",
+            "name": "swan",
             "description": "Lark GUI Framework",
             "files": [
                 {
                     "dir":""
                 }
             ],
-            "root":"src/extension/gui/",
+            "root":"src/extension/swan/",
             "dependencies": [
                 "lark"
             ]

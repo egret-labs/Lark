@@ -320,6 +320,7 @@ module ts {
                 exitStatus = emitOutput.emitResultStatus;
                 var reportStart = new Date().getTime();
                 errors = concatenate(errors, emitErrors);
+                
             }
         }
 
@@ -442,7 +443,7 @@ module ts {
 
 class TSC {
     static executeCommandLine = ts.executeCommandLine;
-    static executeWithOption(options: lark.ICompileOptions, files: string[], out?: string, outDir?: string):number {
+    static executeWithOption(options: lark.ICompileOptions, files: string[], out?: string, outDir?: string): { exitCode: number;files:string[] } {
 
         var target = options.esTarget.toLowerCase();
         var targetEnum = ts.ScriptTarget.ES5;
@@ -468,7 +469,10 @@ class TSC {
         {
             parsedCmd.options.outDir = outDir;
         }
-        return ts.executeWithOption(parsedCmd);
+        return {
+            exitCode: ts.executeWithOption(parsedCmd),
+            files: ts.TreeGenerator.getOrderedFiles()
+        };
     }
     static exit: (exitCode: number) => number = null;
     static write = msg=> console.log(msg);

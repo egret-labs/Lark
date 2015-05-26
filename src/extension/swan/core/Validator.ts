@@ -528,6 +528,6 @@ module swan {
             }
         }
     }
-
-    export var validator:Validator = new Validator();
+    var _validator = new Validator();
+    export var validator = _validator;
 }

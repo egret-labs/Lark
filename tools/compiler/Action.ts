@@ -28,11 +28,12 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 /// <reference path="../lib/types.d.ts" />
-
-import TypeScript = require("../lib/typescript/tsc");
-import FileUtil = require("../lib/FileUtil");
 import utils = require('../lib/utils');
+import exmlc = require('../lib/exml/exmlc');
+import FileUtil = require("../lib/FileUtil");
+import TypeScript = require("../lib/typescript/tsc");
 import UglifyJS = require("../lib/uglify-js/uglifyjs");
+
 
 class Action {
 
@@ -61,67 +62,256 @@ class Action {
     }
 
 
-    public buildProject(): number {
+    public compileExmls() {
+        var option: lark.ICompileOptions = this.options;
+        var exmls: string[] = FileUtil.search(option.srcDir, "exml");
+        exmls.forEach(exml=> {
+            exmlc.compile(exml, option.srcDir);
+        });
+    }
+
+    public compileProject() {
         var option: lark.ICompileOptions = this.options;
 
-        //拷贝lark.js
-        if (!option.publish && FileUtil.exists(option.srcLarkFile))
-        {
-            FileUtil.copy(option.srcLarkFile, option.outLarkFile);
-        }
+        //this.compileExmls();
 
         var tsList: string[] = FileUtil.search(option.srcDir, "ts");
-        return this.compile(option, tsList, option.out, option.outDir);
+        var compileResult = this.compile(option, tsList, option.out, option.outDir);
+        var srcDir = FileUtil.escapePath(this.options.srcDir);
+        var files: string[] = Action.GetJavaScriptFileNames(compileResult.files, srcDir);
+
+        var projManifest = {
+            files: files,
+            min: option.project.name + ".min.js"
+        };
+
+        var json = JSON.stringify(projManifest, null, '   ');
+        var oldContent = FileUtil.read(this.options.projManifest);
+        if (oldContent != json)
+            FileUtil.save(this.options.projManifest, json);
+
+        compileResult.files = files;
+        return compileResult;
 
     }
 
-    public buildLark(): number {
-
-        var options: lark.ICompileOptions = this.options;
+    public buildLarkSource():number{
+        var self = this;
+        var code = 0;
+        var options = this.options;
+        var penddings:lark.LarkModule[] = [];
         var larkRoot = options.larkRoot;
-        var srcPath: string = FileUtil.joinPath(larkRoot, "src");
-        var tsList: string[] = FileUtil.search(srcPath, "ts");
-        var output = options.srcLarkFile;
-        var destOut = options.outLarkFile;
+        var dtsFiles: [string,string[]][] = [];
+        var self = this;
 
-        if (FileUtil.exists(output))
-            FileUtil.remove(output);
-        var exitCode = this.compile(options, tsList, output, null, !options.publish);
-        if (exitCode == 0)
-        {
-            FileUtil.copy(output, destOut);
+        var manifestPath = FileUtil.joinPath(larkRoot, "manifest.json");
+        console.log(manifestPath);
+        var content = FileUtil.read(manifestPath);
+        var manifest:lark.LarkManifest = null;
+        console.log(content);
+        try{ manifest = JSON.parse(content) }
+        catch(e){ utils.exit(10009) }
+        
+        
+        manifest.modules.forEach(m=>{
+            buildModule(m);
+        });
+        var tempDts: string[] = [];
+
+        global.ignoreDollar = true;
+
+        dtsFiles.forEach(d=> {
+            var dts = d[0], depends = d[1];
+            var tempDtsName = dts.replace(/\.d\.ts/, 'd.ts');
+            var singleFile = dts.replace(/\.d\.ts/, 'd.js');
+            FileUtil.copy(dts, tempDtsName);
+            var tss = depends.concat(tempDtsName);
+            self.compile(options, tss, singleFile, null, true);
+            FileUtil.remove(singleFile);
+            FileUtil.remove(tempDtsName);
+            tempDts.push(tempDtsName.replace(/\.ts$/,'.d.ts'));
+        });
+
+        dtsFiles.forEach(d=> {
+            FileUtil.remove(d[0]);
+        });
+
+        tempDts.forEach(d=> {
+            var dts = d.replace(/d\.d\.ts$/, '.d.ts');
+            FileUtil.copy(d, dts);
+            FileUtil.remove(d);
+        })
+
+        global.ignoreDollar = false;
+        function buildModule(larkModule:lark.LarkModule) {
+            var name = larkModule.name;
+            var depends = larkModule.dependencies.map(name=> self.getModuleOutputPath(name,name+'.d.ts'));
+            
+            if(depends.some(path=>FileUtil.exists(path)==false)){
+                penddings.push(larkModule);
+                return;
+            }
+            
+            var outDir = self.getModuleOutputPath(name);
+            var declareFile = self.getModuleOutputPath(name,name+".d.ts");
+            var singleFile = self.getModuleOutputPath(name, name + ".js");
+            var manifestFile = self.getModuleOutputPath(name, name + '.json');
+            var moduleRoot = FileUtil.joinPath(larkRoot,larkModule.root);
+            var tss: string[] = [];
+            dtsFiles.push([declareFile, depends]);
+            larkModule.files.forEach(file=>{
+                if(typeof(file)=='string'){
+                    var tsfile = FileUtil.joinPath(moduleRoot,<string>file);
+                    tss.push(tsfile);
+                }
+                else{
+                    var folderOption = <any>file;
+                    var folder = FileUtil.joinPath(moduleRoot,folderOption.dir);
+                    console.log(folder);
+                    var regex = folderOption.filter && new RegExp(folderOption.filter);
+                    folderOption.test = regex == undefined ? ()=>true:f=>regex.test(f);
+                    var files = FileUtil.searchByFunction(folder,folderOption.test);
+                    console.log(files);
+                    tss = tss.concat(files);
+                }
+            
+            });
+            tss = depends.concat(tss);
+            self.compile(options, tss, singleFile, null, true);
+            self.minify(singleFile, singleFile.replace(/\.js$/, '.min.js'));
+            var result = self.compile(options, tss, null, outDir, false);
+
+            var moduleRoot = FileUtil.escapePath(moduleRoot);
+            var files: string[] = Action.GetJavaScriptFileNames(result.files, moduleRoot);
+            var manifest = {
+                files: files,
+                bin: name + ".js",
+                min: name + ".min.js"
+            };
+            FileUtil.save(manifestFile, JSON.stringify(manifest, null, '   '));
         }
-        return exitCode;
+        
+        return code;
+    }
+    
+    private getModuleOutputPath(name: string, filePath: string = "") {
+        var path = FileUtil.joinPath(this.options.larkRoot, "build/" + name + "/" + filePath);
+        return path;
+    }
+    public copyLark(): number {
+        var options: lark.ICompileOptions = this.options;
+
+        var modulesUsed = options.project.modules;
+        console.log(options.project);
+        modulesUsed.forEach(m=> {
+            var moduleRoot = this.getModuleOutputPath(m.name);
+            var libsDir = FileUtil.joinPath(options.templateDir, '/libs/' + m.name);
+            FileUtil.copy(moduleRoot, libsDir);
+
+            var dts = FileUtil.joinPath(options.templateDir, '/libs/' + m.name + '/' + m.name + '.d.ts');
+            var dtsInSrc = FileUtil.joinPath(options.srcDir, '/libs/' + m.name + '.d.ts');
+
+            FileUtil.copy(dts, dtsInSrc);
+            FileUtil.remove(dts);
+            
+        });
+
+        return 0;
     }
 
-    private compile(options: lark.ICompileOptions, files: string[], out?: string, outDir?: string, def?: boolean): number {
+
+    public static compileTemplates(options:lark.ICompileOptions) {
+        var templateFile = FileUtil.joinPath(options.templateDir, options.project.startupHtml);
+        var content = FileUtil.read(templateFile);
+
+        var larkFiles: string[] = [];
+        var projFiles: string[] = [];
+        var modules = options.project.modules.concat([{ name: 'proj' }]);
+        modules.forEach(m=> {
+            var libDir = m.name == 'proj' ? "" : ("libs/" + m.name + '/');
+            var dir = options.templateDir + libDir;
+            var manifestFile = dir + m.name + ".json";
+            if (FileUtil.exists(manifestFile)) {
+                var content = FileUtil.read(manifestFile);
+                var manifest = JSON.parse(content);
+
+                //项目编译后的文件
+                if (m.name == 'proj') {
+                    projFiles = options.publish ? [manifest.min] : manifest.files;
+                    return;
+                }
+
+
+                if (options.project.keepLarkInSeparatedFiles) {
+                    var files = manifest.files.map(f=> libDir + f);
+                    larkFiles = larkFiles.concat(files);
+                }
+                else {
+                    var file = options.publish ? manifest.min : manifest.bin;
+                    larkFiles.push(libDir + file);
+                }
+            }
+        });
+
+        var manifests = [{
+            files: larkFiles,
+            replacement: '<script id="lark"></script>'
+        }, {
+            files: projFiles,
+            replacement: '<script id="project"></script>'
+        }];
+
+        manifests.forEach(manifest=> {
+            var scripts = manifest.files.map(f=> ['<script src="', f, '"></script>'].join('')).join('\r\n');
+            content = content.replace(manifest.replacement, scripts);
+        });
+
+        content = content.replace(/\$entry\-class\$/ig, options.project.entry);
+        content = content.replace(/\$scale\-mode\$/ig, options.project.scaleMode);
+        content = content.replace(/\$content\-width\$/ig, options.project.contentWidth.toString());
+        content = content.replace(/\$content\-height\$/ig, options.project.contentHeight.toString());
+        content = content.replace(/\$show\-paint\-rects\$/ig, options.project.showPaintRects ? 'true' : 'false');
+
+
+        var outputFile = FileUtil.joinPath(options.outDir, options.project.startupHtml);
+        FileUtil.save(outputFile, content);
+    }
+
+    private compile(options: lark.ICompileOptions, files: string[], out?: string, outDir?: string, def?: boolean) {
         var defTemp = options.declaration;
         options.declaration = def;
 
-        var exitCode = TypeScript.executeWithOption(options, files, out, outDir, def);
+        var compileResult = TypeScript.executeWithOption(options, files, out, outDir, def);
 
         options.declaration = defTemp;
 
         if (!options.minify)
-            return exitCode;
+            return compileResult;
 
         
         if (!out)
         {
             console.log(utils.tr(10004));
-            return exitCode;
+            return compileResult;
         }
+
+        this.minify(out, out);
+
+        return compileResult;
+    }
+
+    public minify(sourceFile: string, output: string) {
+
 
         var defines = {
             DEBUG: false,
             RELEASE: true
         }
         //UglifyJS参数参考这个页面：https://github.com/mishoo/UglifyJS2
-        var result = UglifyJS.minify(out, { compress: { global_defs: defines }, output: { beautify: false } });
-        FileUtil.save(out, result.code);
-
-        return exitCode;
+        var result = UglifyJS.minify(sourceFile, { compress: { global_defs: defines }, output: { beautify: false } });
+        FileUtil.save(output, result.code);
     }
+
     /**
     * 复制文件夹及其子文件夹下所有的文件
     * @param from 要搜索的文件夹
@@ -153,11 +343,33 @@ class Action {
             return false;
         return true;
     }
+    static GetJavaScriptFileNames(tsFiles: string[],root:string,prefix?:string) {
+        var files: string[] = [];
+        tsFiles.forEach(f=> {
+            if (!f)
+                return;
+            if (/\.d\.ts$/.test(f))
+                return;
+            f = FileUtil.escapePath(f);
+            f = f.replace(root, '').replace(/\.ts$/, '.js').replace(/^\//,'');
+            if (prefix) {
+                f = prefix + f;
+            }
+            files.push(f);
+        });
+        return files;
+    }
+
+    public saveProject() {
+
+        var propjson = lark.options.project.toJSON();
+        FileUtil.save(FileUtil.joinPath(lark.options.projectDir, 'lark.json'), JSON.stringify(propjson, null, '   '));
+    }
 }
 
 TypeScript.exit = exitCode => {
     if (exitCode != 0)
-        console.log(utils.tr(10003));
+        console.log(utils.tr(10003, exitCode));
     return exitCode;
 };
 

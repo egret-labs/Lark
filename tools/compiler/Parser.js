@@ -1,54 +1,36 @@
 /// <reference path="../lib/types.d.ts" />
 var utils = require('../lib/utils');
+var file = require('../lib/FileUtil');
 var CompileOptions = require("./CompileOptions");
-var optionDeclarations = [
+var Project = require("./Project");
+exports.optionDeclarations = [
     {
         name: "action",
         type: "string"
-    },
-    {
+    }, {
         name: "includeLark",
         type: "boolean",
         shortName: "e"
-    },
-    {
-        name: "runtime",
-        type: "string"
-    },
-    {
-        name: "watch",
-        type: "boolean"
-    },
-    {
-        name: "minify",
-        type: "boolean"
-    },
-    {
+    }, {
         name: "sourceMap",
         type: "boolean"
-    },
-    {
-        name: "esTarget",
-        type: "string"
-    },
-    {
-        name: 'showUI',
+    }, {
+        name: 'serverOnly',
         type: "boolean"
-    },
-    {
-        name: 'modules',
-        type: 'string'
-    },
-    {
-        name: 'declaration',
-        type: 'booleam',
-        shortName: "d"
+    }, {
+        name: 'autoCompile',
+        type: 'boolean',
+        shortName: "a"
+    }, {
+        name: 'fileName',
+        type: 'string',
+        shortName: 'f'
     }
 ];
 var shortOptionNames = {};
 var optionNameMap = {};
-optionDeclarations.forEach(function (option) {
-    optionNameMap[option.name] = option;
+exports.optionDeclarations.forEach(function (option) {
+    optionNameMap[option.name.toLowerCase()] = option;
     if (option.shortName) {
         shortOptionNames[option.shortName] = option.name;
     }
@@ -69,7 +51,7 @@ function parseCommandLine(commandLine) {
                 s = s.slice(s.charAt(1) === '-' ? 2 : 1).toLowerCase();
                 // Try to translate short option names to their full equivalents.
                 if (s in shortOptionNames) {
-                    s = shortOptionNames[s];
+                    s = shortOptionNames[s].toLowerCase();
                 }
                 if (s in optionNameMap) {
                     var opt = optionNameMap[s];
@@ -88,7 +70,6 @@ function parseCommandLine(commandLine) {
                             options[opt.name] = args[i++] || "";
                             break;
                     }
-                    console.log(opt.name, options[opt.name]);
                 }
                 else {
                     //Unknown option
@@ -106,7 +87,20 @@ function parseCommandLine(commandLine) {
         }
         if (options.projectDir == null)
             options.projectDir = process.cwd();
-        options.port = 3001;
+        var props = new Project();
+        if (file.exists(options.larkPropertiesFile)) {
+            var json = file.read(options.larkPropertiesFile);
+            var data = null;
+            try {
+                data = JSON.parse(json);
+            }
+            catch (e) {
+                console.error(utils.tr(10005));
+                process.exit(10005);
+            }
+            props.parse(data);
+        }
+        options.project = props;
     }
 }
 exports.parseCommandLine = parseCommandLine;

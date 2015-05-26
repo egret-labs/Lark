@@ -1,26 +1,81 @@
-var ts = require("../lib/typescript/typescriptServices");
+/// <reference path="../lib/types.d.ts" />
+/// <reference path="../lib/typescript/typescriptServices.d.ts" />
 var FileUtil = require("../lib/FileUtil");
+require("../lib/typescript/typescriptServices");
 var TsService = (function () {
     function TsService(settings) {
+        var _this = this;
         var host = new Host();
         var tss = ts.createLanguageService(host, ts.createDocumentRegistry());
-        host.settings = settings;
+        host.settings = this.convertOption(settings);
         this.host = host;
         this.tss = tss;
+        this.settings = settings;
+        var tslib = FileUtil.joinPath(settings.larkRoot, 'tools/lib/typescript/lib.d.ts');
+        var tsList = FileUtil.search(settings.srcDir, "ts");
+        tsList.unshift(tslib);
+        tsList.forEach(function (file) {
+            var content = FileUtil.read(file);
+            _this.host.addScript(file, content);
+        });
     }
-    TsService.prototype.addScript = function (fileName) {
-        var content = FileUtil.read(fileName);
-        this.host.addScript(fileName, content);
+    /**
+    * 添加 修改 删除
+    */
+    TsService.prototype.fileChanged = function (fileName, emit, output) {
+        if (emit === void 0) { emit = true; }
+        var fileInTsService = true;
+        fileName = FileUtil.escapePath(fileName);
+        var exist = FileUtil.exists(fileName);
+        if (!exist) {
+            this.host.removeScript(fileName);
+            return 0;
+        }
+        else {
+            var content = FileUtil.read(fileName, true);
+            fileInTsService = !!this.host.getScriptInfo(fileName);
+            this.host.updateScript(fileName, content);
+            if (fileInTsService && emit) {
+                console.log('Compile: ', fileName, '\n     to: ', output);
+                return this.emit(fileName, output);
+            }
+            return 0;
+        }
     };
-    TsService.prototype.emit = function (fileName) {
+    TsService.prototype.emit = function (fileName, output) {
         var _this = this;
         var files = this.host.getScriptFileNames();
         files.forEach(function (file) {
             var errors = _this.tss.getSemanticDiagnostics(file);
             errors.forEach(function (error) { return console.log(error.messageText, error.file.filename); });
         });
-        return this.tss.getEmitOutput(fileName);
+        var content = this.tss.getEmitOutput(fileName);
+        var fileToSave = output || this.settings.out;
+        if (content.outputFiles && content.outputFiles.length > 0) {
+            FileUtil.save(fileToSave, content.outputFiles[0].text);
+        }
+        return content.emitOutputStatus;
     };
+    TsService.prototype.convertOption = function (options) {
+        var target = options.esTarget.toLowerCase();
+        var targetEnum = 1 /* ES5 */;
+        if (target == 'es6')
+            targetEnum = 2 /* ES6 */;
+        var tsOption = {
+            sourceMap: options.sourceMap,
+            target: targetEnum,
+            removeComments: options.removeComments,
+            declaration: options.declaration
+        };
+        if (options.out) {
+            tsOption.out = options.out;
+        }
+        else {
+            tsOption.outDir = options.outDir;
+        }
+        return tsOption;
+    };
+    TsService.instance = null;
     return TsService;
 })();
 var Host = (function () {
@@ -35,7 +90,7 @@ var Host = (function () {
     };
     Host.prototype.updateScript = function (fileName, content) {
         var script = this.getScriptInfo(fileName);
-        if (script !== null) {
+        if (script) {
             script.updateContent(content);
             return;
         }
@@ -49,9 +104,12 @@ var Host = (function () {
         }
     };
     Host.prototype.removeScript = function (fileName) {
+        console.log('remove--', fileName);
         var script = this.getScriptInfo(fileName);
-        if (script !== null) {
+        if (script) {
             script.updateContent("");
+            this.fileNameToScript[fileName] = undefined;
+            delete this.fileNameToScript[fileName];
             return;
         }
     };
@@ -63,9 +121,7 @@ var Host = (function () {
     };
     Host.prototype.getScriptFileNames = function () {
         var fileNames = [];
-        ts.forEachKey(this.fileNameToScript, function (fileName) {
-            fileNames.push(fileName);
-        });
+        ts.forEachKey(this.fileNameToScript, function (fileName) { fileNames.push(fileName); });
         return fileNames;
     };
     Host.prototype.getScriptInfo = function (fileName) {

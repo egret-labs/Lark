@@ -31,6 +31,8 @@
 
 
 import Action = require('./Action');
+import Build = require('./Build');
+import Project = require('./Project');
 import FileUtil = require('../lib/FileUtil');
 
 class Create extends Action {
@@ -40,10 +42,23 @@ class Create extends Action {
         var option = this.options;
         FileUtil.createDirectory(option.srcDir);
         FileUtil.createDirectory(option.debugDir);
-        var templateDir = FileUtil.joinPath(option.larkRoot, 'template');
-        FileUtil.copy(templateDir, option.templateDir);
-        var exitcode = this.buildLark();
-        return exitcode;
+
+        lark.options.project = new Project();
+        this.saveProject();
+
+        return 0;
+    }
+
+    public doCreate(projJson: lark.ILarkProject) {
+        var proj = new Project();
+        proj.parse(projJson);
+        this.options.project = proj;
+        this.saveProject();
+        var template = FileUtil.joinPath(lark.options.larkRoot, "tools/templates/" + proj.template);
+        FileUtil.copy(template, lark.options.projectDir);
+        this.copyLark();
+        var build = new Build(this.options);
+        build.run();
     }
 }
 

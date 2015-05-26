@@ -1514,7 +1514,7 @@ declare module ts {
     interface Logger {
         log(s: string): void;
     }
-    interface LanguageServiceHost extends Logger {
+    export interface LanguageServiceHost extends Logger {
         getCompilationSettings(): CompilerOptions;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): string;
@@ -1936,11 +1936,8 @@ declare module ts {
         isCancellationRequested(): boolean;
         throwIfCancellationRequested(): void;
     }
-    function createDocumentRegistry(): DocumentRegistry;
+    export function createDocumentRegistry(): DocumentRegistry;
     function preProcessFile(sourceText: string, readImportFiles?: boolean): PreProcessedFileInfo;
-    function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry): LanguageService;
+    export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry): LanguageService;
     function createClassifier(host: Logger): Classifier;
 }
-
-
-export = ts;

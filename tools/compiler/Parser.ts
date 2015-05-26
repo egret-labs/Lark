@@ -1,13 +1,15 @@
 ﻿/// <reference path="../lib/types.d.ts" />
 
 import utils = require('../lib/utils');
+import file = require('../lib/FileUtil');
 import CompileOptions = require("./CompileOptions");
+import Project = require("./Project");
 
 
 
 
 
-var optionDeclarations: lark.CommandLineOption[] = [
+export var optionDeclarations: lark.CommandLineOption[] = [
     {
         name: "action",
         type: "string"
@@ -16,30 +18,19 @@ var optionDeclarations: lark.CommandLineOption[] = [
         type: "boolean",
         shortName: "e"
     }, {
-        name: "runtime",
-        type: "string"
-    }, {
-        name: "watch",
-        type: "boolean"
-    }, {
-        name: "minify",
-        type: "boolean"
-    }, {
         name: "sourceMap",
         type: "boolean"
     }, {
-        name: "esTarget",
-        type: "string"
-    }, {
-        name: 'showUI',
+        name: 'serverOnly',
         type: "boolean"
     }, {
-        name: 'modules',
-        type: 'string'
+        name: 'autoCompile',
+        type: 'boolean',
+        shortName: "a"
     }, {
-        name: 'declaration',
-        type: 'booleam',
-        shortName: "d"
+        name: 'fileName',
+        type: 'string',
+        shortName:'f'
     }
 ];
 
@@ -47,7 +38,7 @@ var shortOptionNames: lark.Map<string> = {};
 var optionNameMap: lark.Map<lark.CommandLineOption> = {};
 
 optionDeclarations.forEach(option => {
-    optionNameMap[option.name] = option;
+    optionNameMap[option.name.toLowerCase()] = option;
 
     if (option.shortName)
     {
@@ -76,7 +67,7 @@ export function parseCommandLine(commandLine: string[]) {
                 // Try to translate short option names to their full equivalents.
                 if (s in shortOptionNames)
                 {
-                    s = shortOptionNames[s];
+                    s = shortOptionNames[s].toLowerCase();
                 }
 
 
@@ -112,7 +103,6 @@ export function parseCommandLine(commandLine: string[]) {
                         //        errors.push(utils.tr(opt.error.code));
                         //    }
                     }
-                    console.log(opt.name, options[opt.name]);
                 }
                 else
                 {
@@ -135,7 +125,21 @@ export function parseCommandLine(commandLine: string[]) {
         if (options.projectDir == null)
             options.projectDir = process.cwd();
 
-        options.port = 3001;
+        var props = new Project();
+        if (file.exists(options.larkPropertiesFile)) {
+            var json = file.read(options.larkPropertiesFile);
+            var data: lark.ILarkProject = null;
+            try {
+                data = JSON.parse(json);
+            }
+            catch (e) {
+                console.error(utils.tr(10005));
+                process.exit(10005);
+            }
+
+            props.parse(data);
+        }
+        options.project = props;
     }
 
 }

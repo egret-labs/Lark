@@ -1,41 +1,90 @@
-﻿module ts {
+﻿/// <reference path="core.ts"/>
+/// <reference path="sys.ts"/>
+/// <reference path="types.ts"/>
+/// <reference path="scanner.ts"/>
+/// <reference path="parser.ts"/>
+/// <reference path="binder.ts"/>
+/// <reference path="checker.ts"/>
+/// <reference path="emitter.ts"/>
+/// <reference path="commandLineParser.ts"/>
+
+module ts {
     var checker: TypeChecker = null;
+    var program: Program = null;
 
     //parse
-    var classNameToFileMap: Map<string> = {};
-    var interfaceNames: Map<boolean> = {};
+    var classNameToFileMap: Map<string | Map<boolean>> = {};
+    var classNames: Map<number> = {};
     var fileToClassNameMap: Map<string[]> = {};
     var classNameToBaseClassMap: Map<string[]> = {};
+    var constructorToClassMap: Map<string[]> = {};
+    var functionCallToClassMap: Map<string[]> = {};
+    var functionId = 0;
     var staticToClassNameMap: Map<string> = {};
-
+    
     //sort
     var fileNodesList: FileNode[] = [];
     var fileNameToNodeMap: Map<FileNode> = {};
     var orderedFileList: string[] = [];
+    
 
-
+    function addClassToFileMap(name:string,file:string) {
+        var map = classNameToFileMap[name];
+        if(!map || file==map){
+            classNameToFileMap[name] = file;
+        }
+        else{
+            if(typeof(map)=='string'){
+                map = { map:true };
+            }
+            map[file] = true;
+            classNameToFileMap[name] = map;
+        }
+    }
 
     export class TreeGenerator {
+
+        static getOrderedFiles() {
+            return orderedFileList;
+        }
+
+        static getClassNameAndProps() {
+            var names = {};
+            var files = program.getSourceFiles().concat();
+            files.forEach(f=> {
+                if (f.filename.indexOf('.d.ts') > 0)
+                    return;
+                var symbols = checker.getSymbolsInScope(f, SymbolFlags.Module | SymbolFlags.PropertyOrAccessor | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Export);
+                symbols.forEach(s=> {
+                    var name = s.name
+                    names[name] = true;
+                });
+            });
+            return names;
+        }
+
         classNameToFileMap = classNameToFileMap;
-        public orderFiles(chk: TypeChecker, program: Program) {
+        public orderFiles(chk: TypeChecker, prog: Program) {
 
             classNameToFileMap = {};
-            interfaceNames = {};
             fileToClassNameMap = {};
             classNameToBaseClassMap = {};
+            constructorToClassMap = {};
+            functionCallToClassMap = {};
+            functionId = 0;
             staticToClassNameMap = {};
 
             fileNodesList = [];
             fileNameToNodeMap = {};
 
-            var files = program.getSourceFiles().concat();
+            var files = prog.getSourceFiles().concat();
             var libdts = files.shift();
             orderedFileList = files.map(f=> f.filename);
             checker = chk;
+            program = prog;
             forEach(files, file=> this.symbolTabelToFileMap(file, file.locals));
             this.sortFiles();
-
-            var sources = program.getSourceFiles();
+            var sources = prog.getSourceFiles();
             orderedFileList.forEach(f=> {
                 for (var i = 0; i < sources.length; i++) {
                     var s = sources[i];
@@ -48,6 +97,7 @@
             });
         }
 
+
         private symbolToFileMap(file: SourceFile, symbol:Symbol) {
             var classtype = <InterfaceType>checker.getDeclaredTypeOfSymbol(symbol.exportSymbol || symbol);
             if (symbol.flags & (SymbolFlags.Module))
@@ -57,7 +107,7 @@
             if (classtype) {
                 
                 var fullName = getFullyQualifiedName( symbol);
-                classNameToFileMap[fullName] = file.filename;
+                addClassToFileMap(fullName,file.filename);
 
 
                 var classes = fileToClassNameMap[file.filename];
@@ -72,6 +122,7 @@
                 if (classtype.baseTypes && classtype.baseTypes.length) {
                     forEach(classtype.baseTypes,(t: InterfaceType) => this.classNameToBaseClass(fullName, t));
                 }
+                this.constructorToClassName(file, <ClassDeclaration>symbol.valueDeclaration);
             }
             
 
@@ -91,6 +142,97 @@
                     this.symbolTabelToFileMap(file, symbol.exports);
                 }
             });
+            if (file.filename.indexOf(".d.ts") > 0)
+                return;
+            var self = this;
+            findFunctionCall(file);
+            function findFunctionCall(pnode:Node) {
+                forEachChild(pnode,node=>{
+                    if(node.kind == SyntaxKind.ClassDeclaration || 
+                        node.kind == SyntaxKind.InterfaceDeclaration ||
+                        node.kind == SyntaxKind.FunctionDeclaration)
+                        return;
+                    if(node.kind == SyntaxKind.PropertyAccessExpression||
+                        node.kind == SyntaxKind.CallExpression ||
+                        node.kind == SyntaxKind.NewExpression ||
+                        node.kind == SyntaxKind.Identifier ){
+                            
+                        var name = "callExpression" + ++functionId;
+                        self.findUsedClasses(node,name,functionCallToClassMap);
+                    }
+                    else
+                        findFunctionCall(node);
+                });
+            }
+            
+            
+        }
+
+        private constructorToClassName(file: SourceFile, classNode: ClassDeclaration) {
+            if (!classNode || !classNode.symbol)
+                return;
+            var className = checker.getFullyQualifiedName(classNode.symbol);
+            var nodesToCheck: Node[] = [];
+            forEachChild(classNode, node=> {
+                if (node.kind == SyntaxKind.Constructor) {
+                    nodesToCheck.push((<ConstructorDeclaration>node).body);
+                }
+
+                if (node.kind == SyntaxKind.Property && (<PropertyDeclaration>node).initializer) {
+                    nodesToCheck.push((<PropertyDeclaration>node).initializer);
+                }
+            });
+            if (!nodesToCheck.length) {
+                return;
+            }
+            
+
+            nodesToCheck.forEach(node=> this.findUsedClasses(node,className,constructorToClassMap));
+        }
+        
+        private findUsedClasses = (node: Node,name:string,collection:Map<string[]>)=> {
+            if(!node)
+                return;
+            var nodeToGet: Node = null;
+            switch (node.kind) {
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.Identifier:
+                    nodeToGet = node;// (<PropertyAccessExpression>n).expression;
+                    break;
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.NewExpression:
+                    nodeToGet = (<CallExpression>node).expression;
+                    break;
+                default:
+                    nodeToGet = null;
+            }
+
+            if (nodeToGet) {
+                var definedSymbol = checker.egretGetResolveSymbol(<Identifier>nodeToGet);
+
+                if (definedSymbol && !(definedSymbol.exportSymbol && (definedSymbol.exportSymbol.flags & SymbolFlags.Module)) && (definedSymbol.flags & SymbolFlags.Value || definedSymbol.flags & SymbolFlags.Export)) {
+                    var targetName = checker.getFullyQualifiedName(definedSymbol);
+                    if (targetName == "unknown")
+                        return;
+                    var classes = collection[name] || [];
+                    classes.push(targetName);
+                    collection[name] = classes;
+                    if (!(targetName in classNameToFileMap) && definedSymbol.declarations && definedSymbol.declarations.length) {
+                        var declareNode = definedSymbol.declarations[0];
+                        var source = <SourceFile>getAncestor(declareNode, SyntaxKind.SourceFile);
+                        addClassToFileMap(targetName,source.filename);
+                    }
+                    
+                    if(!(name in classNameToFileMap)){
+                        var source = <SourceFile>getAncestor(nodeToGet, SyntaxKind.SourceFile);
+                        addClassToFileMap(name,source.filename);
+                    }
+                }
+            }
+            else {
+                forEachChild(node,n=>this.findUsedClasses(n,name,collection));
+            }
+            
         }
 
         private staticMemberToClassName(file: SourceFile, symbol: Symbol) {
@@ -105,6 +247,10 @@
                 staticToClassNameMap[fullName] = initializerClass;
                 
             }
+        }
+
+        private addStaticDepend(staticMemberName: string, className: string) {
+
         }
 
         private classNameToBaseClass(className, baseType:InterfaceType) {
@@ -139,27 +285,46 @@
         private sortFiles() {
             forEachKey(classNameToFileMap, className=> {
                 var file = classNameToFileMap[className];
-                var fileNode = this.getFileNode(file);
+                if(typeof(file)!='string')
+                    return;
+                var fileName:string = <string>file;
+                var fileNode = this.getFileNode(fileName);
                 var supers = classNameToBaseClassMap[className];
                 if (supers) {
                     supers.forEach(superClass=> {
                         var dependFile = classNameToFileMap[superClass];
-                        if (dependFile == file)
+                        if (dependFile == fileName || dependFile[fileName])
                             return;
-                        var dependNode = this.getFileNode(dependFile);
+                        var dependNode = this.getFileNode(<string>dependFile);
                         dependNode.addSub(fileNode);
                         fileNode.addSuper(dependNode);
                     })
                 }
                 var staticDepends = staticToClassNameMap[className];
                 if (staticDepends) {
+                    var constructorDepends = constructorToClassMap[staticDepends] || [];
+                    constructorDepends.push(staticDepends);
+                    constructorDepends.forEach(depend=> {
+                        var dependFile = classNameToFileMap[depend];
 
-                    var dependFile = classNameToFileMap[staticDepends];
-                    if (dependFile != file) {
-                        var dependFileNode = this.getFileNode(dependFile);
-                        fileNode.addDepends(dependFileNode);
-                        dependFileNode.addSubDepends(fileNode);
-                    }
+                        if (dependFile != file&& typeof(dependFile) =='string' ) {
+                            var dependFileNode = this.getFileNode(<string>dependFile);
+                            fileNode.addDepends(dependFileNode);
+                            dependFileNode.addSubDepends(fileNode);
+                        }
+                    });
+                }
+                var functionName = className;
+                var functionCallDepens = functionCallToClassMap[functionName];
+                if(functionCallDepens){
+                    functionCallDepens.forEach(depend=> {
+                        var dependFile = classNameToFileMap[depend];
+                        if (dependFile == file || typeof(dependFile)!='string')
+                            return;
+                        var dependNode = this.getFileNode(<string>dependFile);
+                        dependNode.addSub(fileNode);
+                        fileNode.addSuper(dependNode);
+                    })
                 }
             });
 
@@ -178,14 +343,38 @@
                 else
                     otherTypes.push(t);
             });
-
-            topTypes.forEach(t=> t.setOrder(0));
-            bottomTypes.forEach(t=> t.setOrder(t.order));
-            fileNodesList.sort((a, b) => compareFileNode(a, b));
+            if(hasRefCircle()){
+                
+            }
+            else{
+                topTypes.forEach(t=> t.setOrder(0));
+                bottomTypes.forEach(t=> t.setOrder(t.order));
+                fileNodesList.sort((a, b) => compareFileNode(a, b));
+            }
             orderedFileList = fileNodesList.map(f=> f.name);
         }
+
     }
 
+    var fileToFileMap: Map<Map<boolean>> = {};
+
+    function hasRefCircle() {
+        return fileNodesList.some(f=>f.checkCircle()==false);
+    }
+
+    export class UsedFileResolver{
+        
+        static mapFile(source: string, used: string) {
+            var depends = fileToFileMap[source];
+            if (!depends)
+            {
+                depends = {};
+                fileToFileMap[source] = depends;
+            }
+            depends[used] = true;
+        }
+
+    }
 
 
 
@@ -208,14 +397,25 @@
     * no export properties may have same name, add id after the name
     */
     function getFullyQualifiedName(symbol: Symbol) {
+        var name:string = null;
         if (symbol.exportSymbol)
-            return checker.getFullyQualifiedName(symbol.exportSymbol);
-
-
-        var name = checker.getFullyQualifiedName(symbol);
-        if (!(symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.Module))) {
-            name += symbol.id;
+        {
+            name = checker.getFullyQualifiedName(symbol.exportSymbol);
+            classNames[name] = Object.keys(classNames).length;
         }
+        else
+        {
+            name = checker.getFullyQualifiedName(symbol);
+            if (!(symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.Module)))
+            {
+                name += symbol.id;
+            }
+            else
+            {
+                classNames[name] = Object.keys(classNames).length;
+            }
+        }
+            
         return name;
 
     }
@@ -229,9 +429,9 @@
         file: string;
 
         addSuper(node: FileNode) {
-            if (this.supers.indexOf(node) >= 0)
+            if (this.depends.indexOf(node) >= 0)
                 return;
-            this.supers.push(node);
+            this.depends.push(node);
         }
 
         addDepends(node: FileNode) {
@@ -239,12 +439,31 @@
                 return;
             this.depends.push(node);
         }
-
+        
+        checkCircle():boolean{
+            var self = this;
+            var path = "";
+            function getSupers(node:FileNode):boolean {
+                path += "=>" + node.name;
+                var supers = node.depends.concat();
+                for(var i= supers.length-1;i>=0;i--){
+                    var sup = supers[i];
+                    if(sup == self){
+                        console.log("Find Circle",node.name);
+                        return false;
+                    }
+                    var c = getSupers(sup);
+                    if(false)
+                        return false;
+                }
+            }
+            return getSupers(this);
+        }
 
         addSub(node: FileNode) {
-            if (this.subs.indexOf(node) >= 0)
+            if (this.subdepends.indexOf(node) >= 0)
                 return;
-            this.subs.push(node);
+            this.subdepends.push(node);
         }
 
         addSubDepends(node: FileNode) {
@@ -257,18 +476,21 @@
         
 
         setOrder(value: number,nest:number = 0) {
-            this.depends.concat(this.supers).forEach(s=> {
+            this.depends.forEach(s=> {
                 if (s.order > value)
                     value = s.order + 1;
+                
             })
 
             var offset = value - this._order;
             this._order = value;
 
-            this.subdepends.concat(this.subs).forEach(s=> {
+            this.subdepends.forEach(s=> {
+                
                 if (s._order <= this._order)
                     s.setOrder( this._order + 1,nest+1);
                 s.setOrder(s._order + offset, nest + 1);
+                
             });
         }
 

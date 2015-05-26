@@ -45,4 +45,3 @@ var Config = (function (_super) {
     return Config;
 })(Action);
 module.exports = Config;
-//# sourceMappingURL=Config.js.map

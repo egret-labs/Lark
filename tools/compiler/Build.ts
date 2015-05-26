@@ -30,26 +30,54 @@
 /// <reference path="../lib/types.d.ts" />
 
 import Action = require('./Action');
+import FileUtil = require("../lib/FileUtil");
+import BuildService = require('./BuildService');
+
 
 class Build extends Action {
-
-    public run() {
+    static inProgress = false;
+    public run():number {
         var exitCode = 0;
-        console.log('Build Start');
-        this.clean(this.options.debugDir);
 
-        if (this.options.includeLark)
-            exitCode = this.buildLark();
+        if (this.options.autoCompile) {
+            BuildService.getInstance(this.options);
+        }
 
-        this.copyDirectory(this.options.templateDir, this.options.debugDir);
-        this.copyDirectory(this.options.srcDir, this.options.debugDir, this.srcFolderOutputFilter);
+        if (this.options.fileName) {
+            console.log('build file:' + this.options.fileName);
+            exitCode = BuildService.buildSingle(this.options.fileName);
+            return exitCode;
+        }
 
-        exitCode = this.buildProject();
-        console.log('Build End');
+        if (Build.inProgress) {
+            console.log('Another build task is in progress');
+            return exitCode;
+        }
+
+        Build.inProgress = true;
+        console.log('build start');
+        try {
+            this.clean(this.options.debugDir);
+
+            if (this.options.includeLark)
+                exitCode = this.copyLark();
+
+            this.copyDirectory(this.options.templateDir, this.options.debugDir);
+            this.copyDirectory(this.options.srcDir, this.options.debugDir, this.srcFolderOutputFilter);
+
+            var compileResult = this.compileProject();
+
+            Action.compileTemplates(this.options);
+
+            exitCode = compileResult.exitCode;
+        }
+        catch (e) {
+
+        }
+        console.log('build end');
+        Build.inProgress = false;
         return exitCode;
     }
-
-
 }
 
 export = Build;

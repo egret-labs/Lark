@@ -4,7 +4,6 @@
 
 
 
-
 declare module lark {
 
     export interface Map<T> {
@@ -27,36 +26,53 @@ declare module lark {
         action: string;
         projectDir: string;
         srcDir: string;
-        srcLarkFile: string;
+        projManifest: string;
         debugDir: string;
-        debugLarkFile: string;
         releaseDir: string;
-        releaseLarkFile: string;
         templateDir: string;
         out: string;
         outDir: string;
-        outLarkFile: string;
         larkRoot?: string;
         port: number;
-        ip: string;
+        host: string;
+        websocketUrl: string;
+        manageUrl: string;
 
         publish?: boolean;
         includeLark?: boolean;
-        runtime?: string;
-        watch?: boolean;
         minify?: boolean;
         sourceMap?: boolean;
         removeComments?: boolean;
         esTarget?: string;
-        showUI?: boolean;
+        serverOnly?: boolean;
         declaration?: boolean;
+        autoCompile?: boolean;
+        fileName?:string;
+        project: ILarkProject;
 
-        //modules
-        modules?: string;
-
-
+        toJSON: () => any;
 
         //工具用
+    }
+
+    export interface ILarkProject {
+        name: string;
+        version: string;
+        modules: LarkModule[];
+        platforms: LarkPlatform[];
+        port: number;
+        ip: string;
+        host: string;
+        keepLarkInSeparatedFiles: boolean;
+        larkVersion: string;
+        entry: string;
+        startupHtml: string;
+        scaleMode: string;
+        contentWidth: number;
+        contentHeight: number;
+        showPaintRects: boolean;
+        template: string;
+        toJSON?(): ILarkProject;
     }
 
     export interface CommandLineOption {
@@ -73,6 +89,42 @@ declare module lark {
         message?: string;
         data?: any;
         type: string;
+    }
+
+    export var options: ICompileOptions;
+
+    module server {
+        export var options: ICompileOptions;
+        export interface ViewModel {
+            options: ICompileOptions;
+        }
+        export var console: {
+            on(event: string, listener: Function): any;
+            removeListener(event: string, listener: Function): any;
+        };
+        export var IPs: string[];
+    }
+
+    export var manifest: lark.LarkManifest;
+    export interface LarkManifest {
+        version: string;
+        modules: LarkModule[];
+        platforms: LarkPlatform[];
+    }
+
+    
+    
+    export interface LarkModule {
+        name: string;
+        description?: string;
+        files?: Array<string|{ dir: string;filter:string }>;
+        dependencies?: string[];
+        root?: string;
+    }
+
+    export interface LarkPlatform {
+        name: string;
+        description?: string;
     }
 }
 

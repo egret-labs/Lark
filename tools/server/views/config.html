@@ -1,0 +1,108 @@
+﻿<section>
+
+    <h3>Default Screen Size</h3>
+    <div>
+        <input type="number" name="contentWidth" ng-model="model.contentWidth" required />
+        <span class="error" ng-show="createForm.contentWidth.$error.required">
+            Required!
+        </span>
+        <span class="error" ng-show="createForm.contentWidth.$error.number">
+            Should be numbers
+        </span>
+        x <input type="number" name="contentHeight" ng-model="model.contentHeight" required />
+        <span class="error" ng-show="createForm.contentHeight.$error.required">
+            Required!
+        </span>
+        <span class="error" ng-show="createForm.contentHeight.$error.number">
+            Should be numbers
+        </span>
+
+    </div>
+
+    <h3>Scale Mode</h3>
+    <div>
+        <label ng-repeat="mode in model.scaleModes">
+            <input type="radio" ng-value="mode.name" ng-model="model.scaleMode" /> {{mode.description}}
+        </label>
+    </div>
+</section>
+
+<section>
+
+    <h3>Modules</h3>
+
+    <div ng-repeat="ext in model.larkManifest.modules">
+        <label>
+            <input type="checkbox" name="modules" ng-checked="ext.checked" ng-model="ext.checked" /> {{ext.description}}
+        </label>
+    </div>
+
+    <h3>Platforms</h3>
+
+    <div>
+        <label ng-repeat="platform in model.larkManifest.platforms">
+            <input type="checkbox" name="platform" ng-model="platform.checked" ng-checked="platform.checked" /> {{platform.description}}
+        </label>
+    </div>
+</section>
+
+<!--<section>
+    <h3> Development </h3>
+
+    <h4>Debug server</h4>
+    <div>
+        IP address: <input type="text" ng-model="model.ip" />
+    </div>
+    <div>
+        Host name: <input type="text" ng-model="model.host" />
+    </div>
+    <div>
+        Port: <input type="text" ng-model="model.port" />
+    </div>
+</section>-->
+
+<div class="nav-bar">
+    <input type="button" class="pure-button pure-button-primary" id="previous" value="Previous" />
+    <input type="button" class="pure-button pure-button-primary" id="next" value="Next" />
+    <input type="button" class="pure-button pure-button-primary" id="finish" value="Finish" ng-click="model.finish()" />
+</div>
+<script>
+    (function () {
+
+        var sections = document.querySelectorAll('section');
+        var active = 0;
+        var btnNext = document.getElementById('next'),
+            btnPrevious = document.getElementById('previous'),
+            btnFinish = document.getElementById('finish');
+
+
+        moveTo(0);
+
+        btnNext.addEventListener('click', next);
+        btnPrevious.addEventListener('click', previous);
+        btnFinish.addEventListener('click', finish);
+
+        function next() {
+            moveTo(active + 1);
+        }
+
+        function previous() {
+            moveTo(active - 1);
+        }
+
+        function moveTo(index) {
+            sections[active].className = '';
+            active = index;
+            active = Math.min(active, sections.length - 1);
+            active = Math.max(active, 0);
+            sections[active].className = 'active';
+            btnPrevious.disabled = active == 0;
+            btnNext.disabled = active == (sections.length - 1);
+        }
+
+        function finish() {
+
+        }
+
+    })();
+</script>
