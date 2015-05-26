@@ -34,13 +34,13 @@ module lark.web {
     /**
      * HTML5 环境下的输入文本
      */
-    export class WebTextAdapter extends LarkObject implements player.ITextAdapter{
+    export class WebTextAdapter extends LarkObject implements sys.ITextAdapter{
         constructor(container:HTMLDivElement,stage:Stage,canvas:HTMLCanvasElement){
             super();
             this.$stage = stage;
             this.canvas = canvas;
             this.container = container;
-            player.$cacheTextAdapter(this);
+            sys.$cacheTextAdapter(this);
             this.createHtmlInputs();
         }
 
@@ -222,7 +222,7 @@ module lark.web {
             setElementStyle("textAlign", textInput.textAlign);
             setElementStyle("fontSize", textInput.fontSize + "px");
             setElementStyle("lineHeight", textInput.fontSize + "px");
-            setElementStyle("color", player.toColorString(textInput.textColor));
+            setElementStyle("color", sys.toColorString(textInput.textColor));
             setElementStyle("verticalAlign", textInput.verticalAlign);
             setElementStyle("display", "block");
             setElementStyle("width", textInput.width + "px");

@@ -356,7 +356,7 @@ module swan {
                 var spacePerPercent:number = spaceToDistribute / totalPercent;
 
                 for (var i:number = 0; i < numElements; i++) {
-                    var childInfo:lark.player.ChildInfo = childInfoArray[i];
+                    var childInfo:sys.ChildInfo = childInfoArray[i];
 
                     var size:number = childInfo.percent * spacePerPercent;
 
@@ -408,7 +408,7 @@ module swan {
     lark.registerClass(LinearLayoutBase,Types.LinearLayoutBase);
 }
 
-module lark.player {
+module swan.sys {
 
     export class ChildInfo {
 
@@ -419,12 +419,12 @@ module lark.player {
         public size:number = 0;
 
 
-        public percent:number = NONE;
+        public percent:number = lark.NONE;
 
 
-        public min:number = NONE;
+        public min:number = lark.NONE;
 
 
-        public max:number = NONE;
+        public max:number = lark.NONE;
     }
 }

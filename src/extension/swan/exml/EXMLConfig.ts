@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module swan.sys {
 
     /**
      * Swan 命名空间
@@ -172,11 +172,11 @@ module lark.player {
             var prototype = getPrototypeOf(className);
             if (prototype) {
                 if (!prototype.hasOwnProperty("__hashCode__")) {
-                    var clazz = getDefinitionByName(className);
+                    var clazz = lark.getDefinitionByName(className);
                     var instance = getInstanceOf(clazz);
                     if (!instance) {
                         if (DEBUG) {
-                            $warn(2104, className);
+                            lark.$warn(2104, className);
                         }
                         return resultType;
                     }
@@ -202,7 +202,7 @@ module lark.player {
      * 获取一个类名对应的prototype引用
      */
     function getPrototypeOf(className:string):any {
-        var clazz = getDefinitionByName(className);
+        var clazz = lark.getDefinitionByName(className);
         if (!clazz) {
             return null;
         }

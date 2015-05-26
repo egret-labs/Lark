@@ -29,14 +29,14 @@
 
 module lark.web {
 
-    var surfacePool:player.Surface[] = [];
+    var surfacePool:sys.Surface[] = [];
 
     var isQQBrowser = navigator.userAgent.indexOf("QQBrowser") != -1;
 
-    export class CanvasFactory implements player.SurfaceFactory {
+    export class CanvasFactory implements sys.SurfaceFactory {
 
         public constructor() {
-            player.sharedRenderContext = this.create().renderContext;
+            sys.sharedRenderContext = this.create().renderContext;
             for (var i = 0; i < 3; i++) {
                 surfacePool.push(this.create());
             }
@@ -46,7 +46,7 @@ module lark.web {
          * 从对象池取出或创建一个新的Surface实例
          * @param useOnce 表示对取出实例的使用是一次性的，用完后立即会释放。
          */
-        public create(useOnce?:boolean):player.Surface {
+        public create(useOnce?:boolean):sys.Surface {
             var surface = (useOnce || surfacePool.length > 3) ? surfacePool.pop() : null;
             if (!surface) {
                 var canvas:HTMLCanvasElement = document.createElement("canvas");
@@ -63,7 +63,7 @@ module lark.web {
          * 释放一个Surface实例
          * @param surface 要释放的Surface实例
          */
-        public release(surface:player.Surface):void {
+        public release(surface:sys.Surface):void {
             if (!surface) {
                 return;
             }
@@ -88,7 +88,7 @@ module lark.web {
             return true;
         }
 
-        private createSurface(canvas:HTMLCanvasElement):player.Surface {
+        private createSurface(canvas:HTMLCanvasElement):sys.Surface {
             var context = canvas.getContext("2d");
             canvas["renderContext"] = context;
             context["surface"] = canvas;
@@ -120,7 +120,7 @@ module lark.web {
                     }
                 });
             }
-            return <player.Surface><any>canvas;
+            return <sys.Surface><any>canvas;
         }
 
     }

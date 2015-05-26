@@ -35,7 +35,7 @@ module swan {
     export class Component extends lark.Sprite implements UIComponent {
         public constructor() {
             super();
-            lark.player.UIComponentImpl.call(this);
+            sys.UIComponentImpl.call(this);
         }
 
         /**
@@ -53,7 +53,7 @@ module swan {
         }
 
         public set skinName(value:any) {
-            this.$setFlags(lark.player.UIFlags.skinNameExplicitlySet);
+            this.$setFlags(sys.UIFlags.skinNameExplicitlySet);
             if (this._skinName == value)
                 return;
             this._skinName = value;
@@ -176,21 +176,21 @@ module swan {
 
         $setTouchChildren(value:boolean) {
             value = !!value;
-            if (this.$hasFlags(lark.player.UIFlags.enabled)) {
-                this.$toggleFlags(lark.player.DisplayObjectFlags.TouchChildren, value);
+            if (this.$hasFlags(sys.UIFlags.enabled)) {
+                this.$toggleFlags(lark.sys.DisplayObjectFlags.TouchChildren, value);
             }
             else {
-                this.$toggleFlags(lark.player.UIFlags.explicitTouchChildren, value);
+                this.$toggleFlags(sys.UIFlags.explicitTouchChildren, value);
             }
         }
 
         $setTouchEnabled(value:boolean) {
             value = !!value;
-            if (this.$hasFlags(lark.player.UIFlags.enabled)) {
-                this.$toggleFlags(lark.player.DisplayObjectFlags.TouchEnabled, value);
+            if (this.$hasFlags(sys.UIFlags.enabled)) {
+                this.$toggleFlags(lark.sys.DisplayObjectFlags.TouchEnabled, value);
             }
             else {
-                this.$toggleFlags(lark.player.UIFlags.explicitTouchEnabled, value);
+                this.$toggleFlags(sys.UIFlags.explicitTouchEnabled, value);
             }
         }
 
@@ -199,7 +199,7 @@ module swan {
          * 部分组件可能还会将皮肤的视图状态设置为"disabled",使其所有子项的颜色变暗。默认值为 true。
          */
         public get enabled():boolean {
-            return this.$hasFlags(lark.player.UIFlags.enabled);
+            return this.$hasFlags(sys.UIFlags.enabled);
         }
 
         public set enabled(value:boolean) {
@@ -208,17 +208,17 @@ module swan {
 
         $setEnabled(value:boolean):void {
             value = !!value;
-            if (value === this.$hasFlags(lark.player.UIFlags.enabled)) {
+            if (value === this.$hasFlags(sys.UIFlags.enabled)) {
                 return;
             }
-            this.$toggleFlags(lark.player.UIFlags.enabled, value);
+            this.$toggleFlags(sys.UIFlags.enabled, value);
             if (value) {
-                this.$toggleFlags(lark.player.UIFlags.explicitTouchEnabled, this.touchEnabled);
-                this.$toggleFlags(lark.player.UIFlags.explicitTouchChildren, this.touchChildren);
+                this.$toggleFlags(sys.UIFlags.explicitTouchEnabled, this.touchEnabled);
+                this.$toggleFlags(sys.UIFlags.explicitTouchChildren, this.touchChildren);
             }
             else {
-                super.$setTouchEnabled(this.$hasFlags(lark.player.UIFlags.explicitTouchEnabled));
-                super.$setTouchChildren(this.$hasFlags(lark.player.UIFlags.explicitTouchChildren));
+                super.$setTouchEnabled(this.$hasFlags(sys.UIFlags.explicitTouchEnabled));
+                super.$setTouchChildren(this.$hasFlags(sys.UIFlags.explicitTouchChildren));
             }
             this.invalidateState();
         }
@@ -248,10 +248,10 @@ module swan {
          * 标记组件当前的视图状态失效，调用此方法后，子类应该覆盖 getCurrentState() 方法来返回当前的视图状态名称。
          */
         public invalidateState():void {
-            if (this.$hasFlags(lark.player.UIFlags.stateIsDirty))
+            if (this.$hasFlags(sys.UIFlags.stateIsDirty))
                 return;
 
-            this.$setFlags(lark.player.UIFlags.stateIsDirty);
+            this.$setFlags(sys.UIFlags.stateIsDirty);
             this.invalidateProperties();
         }
 
@@ -275,7 +275,7 @@ module swan {
          * 请务必调用super.createChildren()以完成父类组件的初始化
          */
         protected createChildren():void {
-            if (!this.$hasFlags(lark.player.UIFlags.skinNameExplicitlySet)) {
+            if (!this.$hasFlags(sys.UIFlags.skinNameExplicitlySet)) {
                 var skin = Theme.$getDefaultSkin(this, this.$stage);
                 if (skin) {
                     this.$setSkin(skin);
@@ -287,8 +287,8 @@ module swan {
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         protected commitProperties():void {
-            if (this.$hasFlags(lark.player.UIFlags.stateIsDirty)) {
-                this.$removeFlags(lark.player.UIFlags.stateIsDirty);
+            if (this.$hasFlags(sys.UIFlags.stateIsDirty)) {
+                this.$removeFlags(sys.UIFlags.stateIsDirty);
                 if (this.$skin) {
                     this.$skin.currentState = this.currentState;
                 }
@@ -299,33 +299,33 @@ module swan {
          * 测量组件尺寸
          */
         protected measure():void {
-            lark.player.measure(this);
+            sys.measure(this);
             var skin = this.$skin;
             if (!skin) {
                 return;
             }
             var values = this.$uiValues;
             if (!lark.isNone(skin.width)) {
-                values[lark.player.UIValues.measuredWidth] = skin.width;
+                values[sys.UIValues.measuredWidth] = skin.width;
             }
             else {
-                if (values[lark.player.UIValues.measuredWidth] < skin.minWidth) {
-                    values[lark.player.UIValues.measuredWidth] = skin.minWidth;
+                if (values[sys.UIValues.measuredWidth] < skin.minWidth) {
+                    values[sys.UIValues.measuredWidth] = skin.minWidth;
                 }
-                if (values[lark.player.UIValues.measuredWidth] > skin.maxWidth) {
-                    values[lark.player.UIValues.measuredWidth] = skin.maxWidth;
+                if (values[sys.UIValues.measuredWidth] > skin.maxWidth) {
+                    values[sys.UIValues.measuredWidth] = skin.maxWidth;
                 }
             }
 
             if (!lark.isNone(skin.height)) {
-                values[lark.player.UIValues.measuredHeight] = skin.height;
+                values[sys.UIValues.measuredHeight] = skin.height;
             }
             else {
-                if (values[lark.player.UIValues.measuredHeight] < skin.minHeight) {
-                    values[lark.player.UIValues.measuredHeight] = skin.minHeight;
+                if (values[sys.UIValues.measuredHeight] < skin.minHeight) {
+                    values[sys.UIValues.measuredHeight] = skin.minHeight;
                 }
-                if (values[lark.player.UIValues.measuredHeight] > skin.maxHeight) {
-                    values[lark.player.UIValues.measuredHeight] = skin.maxHeight;
+                if (values[sys.UIValues.measuredHeight] > skin.maxHeight) {
+                    values[sys.UIValues.measuredHeight] = skin.maxHeight;
                 }
             }
         }
@@ -334,7 +334,7 @@ module swan {
          * 更新显示列表
          */
         protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
-            lark.player.updateDisplayList(this, unscaledWidth, unscaledHeight);
+            sys.updateDisplayList(this, unscaledWidth, unscaledHeight);
         }
 
         /**
@@ -501,6 +501,6 @@ module swan {
         }
     }
 
-    lark.player.implementUIComponent(Component, lark.Sprite, true);
+    sys.implementUIComponent(Component, lark.Sprite, true);
     lark.registerClass(Component, Types.Component, [Types.UIComponent]);
 }

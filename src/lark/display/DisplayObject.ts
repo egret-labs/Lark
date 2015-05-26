@@ -61,7 +61,7 @@ module lark {
      * DisplayObject 类包含若干广播事件。通常，任何特定事件的目标均为一个特定的 DisplayObject 实例。
      * 若只有一个目标，则会将事件侦听器限制为只能放置到该目标上（在某些情况下，可放置到显示列表中该目标的祖代上），这意味着您可以向任何 DisplayObject 实例添加侦听器来侦听广播事件。
      */
-    export class DisplayObject extends EventEmitter implements player.Renderable {
+    export class DisplayObject extends EventEmitter implements sys.Renderable {
 
         /**
          * 创建一个显示对象
@@ -103,7 +103,7 @@ module lark {
             this.$renderMatrix = new lark.Matrix();
             this.$renderRegion = null;
             this.name = null;
-            this.$displayObjectFlags = player.DisplayObjectFlags.InitFlags;
+            this.$displayObjectFlags = sys.DisplayObjectFlags.InitFlags;
             this.displayObjectValues = new Float64Array([
                 1,  //scaleX,
                 1,  //scaleY,
@@ -177,7 +177,7 @@ module lark {
         }
 
         private invalidateMatrix():void {
-            this.$setFlags(player.DisplayObjectFlags.InvalidMatrix);
+            this.$setFlags(sys.DisplayObjectFlags.InvalidMatrix);
             this.invalidatePosition();
         }
 
@@ -186,10 +186,10 @@ module lark {
          */
         private invalidatePosition():void {
             this.$invalidateTransform();
-            this.$propagateFlagsDown(player.DisplayObjectFlags.InvalidConcatenatedMatrix |
-                player.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
+            this.$propagateFlagsDown(sys.DisplayObjectFlags.InvalidConcatenatedMatrix |
+                sys.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
             if (this.$parent) {
-                this.$parent.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
+                this.$parent.$propagateFlagsUp(sys.DisplayObjectFlags.InvalidBounds);
             }
         }
 
@@ -255,10 +255,10 @@ module lark {
         }
 
         $getMatrix():Matrix {
-            if (this.$hasFlags(player.DisplayObjectFlags.InvalidMatrix)) {
+            if (this.$hasFlags(sys.DisplayObjectFlags.InvalidMatrix)) {
                 var values = this.displayObjectValues;
                 this._matrix.$updateScaleAndRotation(values[Values.scaleX], values[Values.scaleY], values[Values.skewX], values[Values.skewY]);
-                this.$removeFlags(player.DisplayObjectFlags.InvalidMatrix);
+                this.$removeFlags(sys.DisplayObjectFlags.InvalidMatrix);
             }
             return this._matrix;
         }
@@ -282,7 +282,7 @@ module lark {
             values[Values.skewX] = matrix.$getSkewX();
             values[Values.skewY] = matrix.$getSkewY();
             values[Values.rotation] = clampRotation(values[Values.skewY] * 180 / Math.PI);
-            this.$removeFlags(player.DisplayObjectFlags.InvalidMatrix);
+            this.$removeFlags(sys.DisplayObjectFlags.InvalidMatrix);
             this.invalidatePosition();
         }
 
@@ -291,7 +291,7 @@ module lark {
          * 获得这个显示对象以及它所有父级对象的连接矩阵。
          */
         $getConcatenatedMatrix():Matrix {
-            if (this.$hasFlags(player.DisplayObjectFlags.InvalidConcatenatedMatrix)) {
+            if (this.$hasFlags(sys.DisplayObjectFlags.InvalidConcatenatedMatrix)) {
                 if (this.$parent) {
                     this.$parent.$getConcatenatedMatrix().$preMultiplyInto(this.$getMatrix(),
                         this.$renderMatrix);
@@ -308,7 +308,7 @@ module lark {
                 if (this.$renderRegion) {
                     this.$renderRegion.moved = true;
                 }
-                this.$removeFlags(player.DisplayObjectFlags.InvalidConcatenatedMatrix);
+                this.$removeFlags(sys.DisplayObjectFlags.InvalidConcatenatedMatrix);
             }
             return this.$renderMatrix;
         }
@@ -316,9 +316,9 @@ module lark {
         private _invertedConcatenatedMatrix:Matrix;
 
         $getInvertedConcatenatedMatrix():Matrix {
-            if (this.$hasFlags(player.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix)) {
+            if (this.$hasFlags(sys.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix)) {
                 this.$getConcatenatedMatrix().$invertInto(this._invertedConcatenatedMatrix);
-                this.$removeFlags(player.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
+                this.$removeFlags(sys.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
             }
             return this._invertedConcatenatedMatrix;
         }
@@ -546,7 +546,7 @@ module lark {
         /**
          * cacheAsBitmap创建的缓存位图节点。
          */
-        $displayList:lark.player.DisplayList;
+        $displayList:lark.sys.DisplayList;
 
         /**
          * 如果设置为 true，则 Lark 播放器将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
@@ -555,18 +555,18 @@ module lark {
          * 最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放和旋转的显示对象一起使用。
          */
         public get cacheAsBitmap():boolean {
-            return this.$hasFlags(player.DisplayObjectFlags.CacheAsBitmap);
+            return this.$hasFlags(sys.DisplayObjectFlags.CacheAsBitmap);
         }
 
         public set cacheAsBitmap(value:boolean) {
             value = !!value;
-            this.$toggleFlags(player.DisplayObjectFlags.CacheAsBitmap, value);
+            this.$toggleFlags(sys.DisplayObjectFlags.CacheAsBitmap, value);
             var hasDisplayList = !!this.$displayList;
             if (hasDisplayList === value) {
                 return;
             }
             if (value) {
-                var displayList = player.DisplayList.create(this);
+                var displayList = sys.DisplayList.create(this);
                 if (displayList) {
                     this.$displayList = displayList;
                     if (this.$parentDisplayList) {
@@ -576,7 +576,7 @@ module lark {
                 }
             }
             else {
-                player.DisplayList.release(this.$displayList);
+                sys.DisplayList.release(this.$displayList);
                 this.$displayList = null;
                 this.$cacheAsBitmapChanged();
             }
@@ -612,7 +612,7 @@ module lark {
                 return;
             }
             this.$alpha = value;
-            this.$propagateFlagsDown(player.DisplayObjectFlags.InvalidConcatenatedAlpha);
+            this.$propagateFlagsDown(sys.DisplayObjectFlags.InvalidConcatenatedAlpha);
             this.$invalidate(true);
         }
 
@@ -620,7 +620,7 @@ module lark {
          * 获取这个显示对象跟它所有父级透明度的乘积
          */
         $getConcatenatedAlpha():number {
-            if (this.$hasFlags(player.DisplayObjectFlags.InvalidConcatenatedAlpha)) {
+            if (this.$hasFlags(sys.DisplayObjectFlags.InvalidConcatenatedAlpha)) {
                 if (this.$parent) {
                     var parentAlpha = this.$parent.$getConcatenatedAlpha();
                     this.$renderAlpha = parentAlpha * this.$alpha;
@@ -628,7 +628,7 @@ module lark {
                 else {
                     this.$renderAlpha = this.$alpha;
                 }
-                this.$removeFlags(player.DisplayObjectFlags.InvalidConcatenatedAlpha);
+                this.$removeFlags(sys.DisplayObjectFlags.InvalidConcatenatedAlpha);
             }
             return this.$renderAlpha;
         }
@@ -638,7 +638,7 @@ module lark {
          * @default true 默认为 true 即可以接收。
          */
         public get touchEnabled():boolean {
-            return this.$hasFlags(player.DisplayObjectFlags.TouchEnabled);
+            return this.$hasFlags(sys.DisplayObjectFlags.TouchEnabled);
         }
 
         public set touchEnabled(value:boolean) {
@@ -646,7 +646,7 @@ module lark {
         }
 
         $setTouchEnabled(value:boolean):void{
-            this.$toggleFlags(player.DisplayObjectFlags.TouchEnabled, !!value);
+            this.$toggleFlags(sys.DisplayObjectFlags.TouchEnabled, !!value);
         }
 
         /**
@@ -654,11 +654,11 @@ module lark {
          * 开启此属性将会有一定量的额外性能损耗，Shape和Sprite等含有矢量图的类默认开启此属性，其他类默认关闭。
          */
         public get pixelHitTest():boolean {
-            return this.$hasFlags(player.DisplayObjectFlags.PixelHitTest);
+            return this.$hasFlags(sys.DisplayObjectFlags.PixelHitTest);
         }
 
         public set pixelHitTest(value:boolean) {
-            this.$toggleFlags(player.DisplayObjectFlags.PixelHitTest, !!value);
+            this.$toggleFlags(sys.DisplayObjectFlags.PixelHitTest, !!value);
         }
 
         $scrollRect:Rectangle;
@@ -694,11 +694,11 @@ module lark {
          * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
          */
         public get blendMode():string {
-            return player.numberToBlendMode(this.$blendMode);
+            return sys.numberToBlendMode(this.$blendMode);
         }
 
         public set blendMode(value:string) {
-            var mode = player.blendModeToNumber(value);
+            var mode = sys.blendModeToNumber(value);
             if (mode === this.$blendMode) {
                 return;
             }
@@ -802,8 +802,8 @@ module lark {
          */
         $invalidateContentBounds():void {
             this.$invalidate();
-            this.$setFlags(player.DisplayObjectFlags.InvalidContentBounds);
-            this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
+            this.$setFlags(sys.DisplayObjectFlags.InvalidContentBounds);
+            this.$propagateFlagsUp(sys.DisplayObjectFlags.InvalidBounds);
         }
 
         private _bounds:Rectangle;
@@ -813,10 +813,10 @@ module lark {
          */
         $getOriginalBounds():Rectangle {
             var bounds = this._bounds;
-            if (this.$hasFlags(player.DisplayObjectFlags.InvalidBounds)) {
+            if (this.$hasFlags(sys.DisplayObjectFlags.InvalidBounds)) {
                 bounds.copyFrom(this.$getContentBounds());
                 this.$measureChildBounds(bounds);
-                this.$removeFlags(player.DisplayObjectFlags.InvalidBounds);
+                this.$removeFlags(sys.DisplayObjectFlags.InvalidBounds);
                 if (this.$displayList) {
                     this.$displayList.$renderRegion.moved = true;
                 }
@@ -836,12 +836,12 @@ module lark {
 
         $getContentBounds():Rectangle {
             var bounds = this._contentBounds;
-            if (this.$hasFlags(player.DisplayObjectFlags.InvalidContentBounds)) {
+            if (this.$hasFlags(sys.DisplayObjectFlags.InvalidContentBounds)) {
                 this.$measureContentBounds(bounds);
                 if (this.$renderRegion) {
                     this.$renderRegion.moved = true;
                 }
-                this.$removeFlags(player.DisplayObjectFlags.InvalidContentBounds);
+                this.$removeFlags(sys.DisplayObjectFlags.InvalidContentBounds);
             }
             return bounds;
         }
@@ -854,17 +854,17 @@ module lark {
 
         }
 
-        $parentDisplayList:lark.player.DisplayList;
+        $parentDisplayList:lark.sys.DisplayList;
 
         /**
          * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
          * @param notiryChildren 是否标记子项也需要重绘。传入false或不传入，将只标记自身需要重绘。通常只有alpha属性改变会需要通知子项重绘。
          */
         $invalidate(notifyChildren?:boolean):void {
-            if (!this.$renderRegion || this.$hasFlags(player.DisplayObjectFlags.DirtyRender)) {
+            if (!this.$renderRegion || this.$hasFlags(sys.DisplayObjectFlags.DirtyRender)) {
                 return;
             }
-            this.$setFlags(player.DisplayObjectFlags.DirtyRender);
+            this.$setFlags(sys.DisplayObjectFlags.DirtyRender);
             var displayList = this.$displayList ? this.$displayList : this.$parentDisplayList;
             if (displayList) {
                 displayList.markDirty(this);
@@ -876,10 +876,10 @@ module lark {
          * 通常用于矩阵改变或从显示列表添加和移除时。若自身的显示内容已经改变需要重绘，应该调用$invalidate()。
          */
         $invalidateTransform():void {
-            if (this.$hasFlags(player.DisplayObjectFlags.DirtyChildren)) {
+            if (this.$hasFlags(sys.DisplayObjectFlags.DirtyChildren)) {
                 return;
             }
-            this.$setFlags(player.DisplayObjectFlags.DirtyChildren);
+            this.$setFlags(sys.DisplayObjectFlags.DirtyChildren);
             var displayList = this.$displayList;
             if ((displayList || this.$renderRegion) && this.$parentDisplayList) {
                 this.$parentDisplayList.markDirty(displayList || this);
@@ -901,13 +901,13 @@ module lark {
         /**
          * 此显示对象自身（不包括子项）在屏幕上的显示尺寸。
          */
-        $renderRegion:player.Region;
+        $renderRegion:sys.Region;
 
         /**
          * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
          */
         $update():boolean {
-            this.$removeFlagsUp(player.DisplayObjectFlags.Dirty);
+            this.$removeFlagsUp(sys.DisplayObjectFlags.Dirty);
             this.$getConcatenatedAlpha();
             var matrix = this.$getConcatenatedMatrix();
             var bounds = this.$getContentBounds();
@@ -927,12 +927,12 @@ module lark {
         /**
          * 执行渲染,绘制自身到屏幕
          */
-        $render(context:player.RenderContext):void {
+        $render(context:sys.RenderContext):void {
 
         }
 
         $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):DisplayObject {
-            if (!this.$renderRegion || !this.$visible || !this.$hasFlags(player.DisplayObjectFlags.TouchEnabled)) {
+            if (!this.$renderRegion || !this.$visible || !this.$hasFlags(sys.DisplayObjectFlags.TouchEnabled)) {
                 return null;
             }
             var m = this.$getInvertedConcatenatedMatrix().$data;
@@ -948,7 +948,7 @@ module lark {
                         return null;
                     }
                 }
-                if (shapeFlag || this.$displayObjectFlags & player.DisplayObjectFlags.PixelHitTest) {
+                if (shapeFlag || this.$displayObjectFlags & sys.DisplayObjectFlags.PixelHitTest) {
                     return this.hitTestPixel(localX, localY);
                 }
                 return this;
@@ -961,7 +961,7 @@ module lark {
             if (alpha === 0) {
                 return null;
             }
-            var context:player.RenderContext;
+            var context:sys.RenderContext;
             var data:Uint8Array;
             var displayList = this.$displayList;
             if (displayList) {
@@ -969,7 +969,7 @@ module lark {
                 data = context.getImageData(localX - displayList.offsetX, localY - displayList.offsetY, 1, 1).data;
             }
             else {
-                context = player.sharedRenderContext;
+                context = sys.sharedRenderContext;
                 context.surface.width = context.surface.height = 3;
                 context.translate(1 - localX, 1 - localY);
                 this.$render(context);

@@ -52,7 +52,7 @@ module swan {
          */
         public measure():void {
             super.measure();
-            lark.player.measure(this.$target);
+            sys.measure(this.$target);
         }
 
 
@@ -64,7 +64,7 @@ module swan {
         public updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
             super.updateDisplayList(unscaledWidth, unscaledHeight);
             var target = this.$target;
-            var pos = lark.player.updateDisplayList(target,unscaledWidth,unscaledHeight);
+            var pos = sys.updateDisplayList(target,unscaledWidth,unscaledHeight);
             target.setContentSize(Math.ceil(pos.x), Math.ceil(pos.y));
         }
     }
@@ -87,7 +87,7 @@ module swan {
     lark.registerClass(BasicLayout, Types.BasicLayout);
 }
 
-module lark.player {
+module swan.sys {
 
     /**
      * 一个工具方法，使用BasicLayout规则测量目标对象。
@@ -98,21 +98,21 @@ module lark.player {
         }
         var width = 0;
         var height = 0;
-        var bounds = $TempRectangle;
+        var bounds = lark.$TempRectangle;
         var count = target.numChildren;
         for (var i = 0; i < count; i++) {
             var layoutElement = <swan.UIComponent> (target.getChildAt(i));
-            if (!is(layoutElement,swan.Types.UIComponent) || !layoutElement.$includeInLayout) {
+            if (!lark.is(layoutElement,swan.Types.UIComponent) || !layoutElement.$includeInLayout) {
                 continue;
             }
 
             var values = layoutElement.$uiValues;
-            var hCenter = values[player.UIValues.horizontalCenter];
-            var vCenter = values[player.UIValues.verticalCenter];
-            var left = values[player.UIValues.left];
-            var right = values[player.UIValues.right];
-            var top = values[player.UIValues.top];
-            var bottom = values[player.UIValues.bottom];
+            var hCenter = values[sys.UIValues.horizontalCenter];
+            var vCenter = values[sys.UIValues.verticalCenter];
+            var left = values[sys.UIValues.left];
+            var right = values[sys.UIValues.right];
+            var top = values[sys.UIValues.top];
+            var bottom = values[sys.UIValues.bottom];
 
             var extX:number;
             var extY:number;
@@ -160,7 +160,7 @@ module lark.player {
      * 一个工具方法，使用BasicLayout规则布局目标对象。
      */
     export function updateDisplayList(target:swan.Group|swan.Component,
-                                                 unscaledWidth:number, unscaledHeight:number):Point{
+                                                 unscaledWidth:number, unscaledHeight:number):lark.Point{
         if (!target)
             return;
 
@@ -168,25 +168,25 @@ module lark.player {
 
         var maxX = 0;
         var maxY = 0;
-        var bounds = $TempRectangle;
+        var bounds = lark.$TempRectangle;
         for (var i = 0; i < count; i++) {
             var layoutElement = <swan.UIComponent> (target.getChildAt(i));
-            if (!is(layoutElement,swan.Types.UIComponent) || !layoutElement.$includeInLayout) {
+            if (!lark.is(layoutElement,swan.Types.UIComponent) || !layoutElement.$includeInLayout) {
                 continue;
             }
 
             var values = layoutElement.$uiValues;
-            var hCenter = values[player.UIValues.horizontalCenter];
-            var vCenter = values[player.UIValues.verticalCenter];
-            var left = values[player.UIValues.left];
-            var right = values[player.UIValues.right];
-            var top = values[player.UIValues.top];
-            var bottom = values[player.UIValues.bottom];
-            var percentWidth = values[player.UIValues.percentWidth];
-            var percentHeight = values[player.UIValues.percentHeight];
+            var hCenter = values[sys.UIValues.horizontalCenter];
+            var vCenter = values[sys.UIValues.verticalCenter];
+            var left = values[sys.UIValues.left];
+            var right = values[sys.UIValues.right];
+            var top = values[sys.UIValues.top];
+            var bottom = values[sys.UIValues.bottom];
+            var percentWidth = values[sys.UIValues.percentWidth];
+            var percentHeight = values[sys.UIValues.percentHeight];
 
-            var childWidth = NONE;
-            var childHeight = NONE;
+            var childWidth = lark.NONE;
+            var childHeight = lark.NONE;
 
             if (!lark.isNone(left) && !lark.isNone(right)) {
                 childWidth = unscaledWidth - right - left;
@@ -208,8 +208,8 @@ module lark.player {
             var elementHeight = bounds.height;
 
 
-            var childX = NONE;
-            var childY = NONE;
+            var childX = lark.NONE;
+            var childY = lark.NONE;
 
             if (!lark.isNone(hCenter))
                 childX = Math.round((unscaledWidth - elementWidth) / 2 + hCenter);
@@ -234,6 +234,6 @@ module lark.player {
             maxX = Math.max(maxX, childX + elementWidth);
             maxY = Math.max(maxY, childY + elementHeight);
         }
-        return $TempPoint.setTo(maxX,maxY);
+        return lark.$TempPoint.setTo(maxX,maxY);
     }
 }

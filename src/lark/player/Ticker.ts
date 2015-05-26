@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark.sys {
 
     /**
      * Lark心跳控制器
@@ -47,39 +47,39 @@ module lark.player {
 
         public constructor() {
             if (DEBUG&&Ticker.$instance) {
-                $error(1008,"lark.player.Ticker");
+                $error(1008,"lark.sys.Ticker");
             }
             lark.$START_TIME = Date.now();
         }
 
-        private playerList:Player[] = [];
+        private sysList:Player[] = [];
 
         /**
          * 注册一个播放器实例并运行
          */
-        $addPlayer(player:Player):void {
-            if (this.playerList.indexOf(player) != -1) {
+        $addsys(player:Player):void {
+            if (this.sysList.indexOf(player) != -1) {
                 return;
             }
             if(DEBUG){
                 lark_stages.push(player.stage);
             }
-            this.playerList = this.playerList.concat();
-            this.playerList.push(player);
+            this.sysList = this.sysList.concat();
+            this.sysList.push(player);
         }
 
         /**
          * 停止一个播放器实例的运行。
          */
-        $removePlayer(player:Player):void {
-            var index = this.playerList.indexOf(player);
+        $removesys(player:Player):void {
+            var index = this.sysList.indexOf(player);
             if (index !== -1) {
                 if(DEBUG){
                     var i = lark_stages.indexOf(player.stage);
                     lark_stages.splice(i,1);
                 }
-                this.playerList = this.playerList.concat();
-                this.playerList.splice(index, 1);
+                this.sysList = this.sysList.concat();
+                this.sysList.splice(index, 1);
             }
         }
 
@@ -152,8 +152,8 @@ module lark.player {
          * 执行一次屏幕渲染
          */
         private render(triggerByFrame:boolean):void{
-            var playerList = this.playerList;
-            var length = playerList.length;
+            var sysList = this.sysList;
+            var length = sysList.length;
             if (length == 0) {
                 return;
             }
@@ -162,7 +162,7 @@ module lark.player {
                 Ticker.$invalidateRenderFlag = false;
             }
             for (var i = 0; i < length; i++) {
-                playerList[i].$render(triggerByFrame);
+                sysList[i].$render(triggerByFrame);
             }
             Ticker.$requestRenderingFlag = false;
         }

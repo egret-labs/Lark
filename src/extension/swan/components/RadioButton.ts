@@ -60,7 +60,7 @@ module swan {
          * 组件是否可以接受用户交互。默认值为true。设置此属性将影响组内所有单选按钮
          */
         public get enabled():boolean {
-            if (!this.$hasFlags(lark.player.UIFlags.enabled)) {
+            if (!this.$hasFlags(sys.UIFlags.enabled)) {
                 return false;
             }
             return !this.$radioButtonGroup ||

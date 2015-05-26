@@ -52,7 +52,7 @@ module lark{
         }
 
         private setAsCurrent(){
-            var layer = player.$getTextAdapter(this);
+            var layer = sys.$getTextAdapter(this);
             layer.$setCurrentTextInput(this);
         }
 
@@ -98,7 +98,7 @@ module lark{
             super.$measureContentBounds(bounds);
             this.updateTextAdapter();
         }
-        $render(context:player.RenderContext):void {
+        $render(context:sys.RenderContext):void {
             if(this._isTyping){
                 return;
             }
@@ -114,7 +114,7 @@ module lark{
             if(this.timeoutId != -1)
                 clearTimeout(this.timeoutId);
             this.timeoutId = setTimeout(()=>{
-                var layer = player.$getTextAdapter(this);
+                var layer = sys.$getTextAdapter(this);
                 layer.$initializeInput();
                 this.timeoutId = -1;
             },0);

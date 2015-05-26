@@ -44,7 +44,7 @@ module lark {
             this.$children = [];
         }
 
-        $propagateFlagsDown(flags:player.DisplayObjectFlags) {
+        $propagateFlagsDown(flags:sys.DisplayObjectFlags) {
             if (this.$hasFlags(flags)) {
                 return;
             }
@@ -136,8 +136,8 @@ module lark {
             }
             var displayList = this.$displayList || this.$parentDisplayList;
             this.assignParentDisplayList(child, displayList, displayList);
-            child.$propagateFlagsDown(player.DisplayObjectFlags.DownOnAddedOrRemoved);
-            this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
+            child.$propagateFlagsDown(sys.DisplayObjectFlags.DownOnAddedOrRemoved);
+            this.$propagateFlagsUp(sys.DisplayObjectFlags.InvalidBounds);
             this.$childAdded(child, index);
             return child;
         }
@@ -250,10 +250,10 @@ module lark {
             }
             var displayList = this.$displayList || this.$parentDisplayList;
             this.assignParentDisplayList(child, displayList, displayList);
-            child.$propagateFlagsDown(player.DisplayObjectFlags.DownOnAddedOrRemoved);
+            child.$propagateFlagsDown(sys.DisplayObjectFlags.DownOnAddedOrRemoved);
             child.$setParent(null);
             children.splice(index, 1);
-            this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
+            this.$propagateFlagsUp(sys.DisplayObjectFlags.InvalidBounds);
             return child;
         }
 
@@ -285,7 +285,7 @@ module lark {
             this.$children.splice(index, 0, child);
             this.$childAdded(child, index);
             child.$invalidateTransform();
-            this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
+            this.$propagateFlagsUp(sys.DisplayObjectFlags.InvalidBounds);
         }
 
         /**
@@ -341,7 +341,7 @@ module lark {
             this.$childAdded(child1, index2);
             child1.$invalidateTransform();
             child2.$invalidateTransform();
-            this.$propagateFlagsUp(player.DisplayObjectFlags.InvalidBounds);
+            this.$propagateFlagsUp(sys.DisplayObjectFlags.InvalidBounds);
         }
 
         /**
@@ -427,7 +427,7 @@ module lark {
          * 默认值为 true 即可以接收。
          */
         public get touchChildren():boolean {
-            return this.$hasFlags(player.DisplayObjectFlags.TouchChildren);
+            return this.$hasFlags(sys.DisplayObjectFlags.TouchChildren);
         }
 
         public set touchChildren(value:boolean) {
@@ -435,7 +435,7 @@ module lark {
         }
 
         $setTouchChildren(value:boolean):void {
-            this.$toggleFlags(player.DisplayObjectFlags.TouchChildren, !!value);
+            this.$toggleFlags(sys.DisplayObjectFlags.TouchChildren, !!value);
         }
 
         /**
@@ -464,11 +464,11 @@ module lark {
             this.markChildDirty(this, this.$parentDisplayList);
         }
 
-        private markChildDirty(child:DisplayObject, parentCache:lark.player.DisplayList):void {
-            if (child.$hasFlags(player.DisplayObjectFlags.DirtyChildren)) {
+        private markChildDirty(child:DisplayObject, parentCache:lark.sys.DisplayList):void {
+            if (child.$hasFlags(sys.DisplayObjectFlags.DirtyChildren)) {
                 return;
             }
-            child.$setFlags(player.DisplayObjectFlags.DirtyChildren);
+            child.$setFlags(sys.DisplayObjectFlags.DirtyChildren);
             var displayList = child.$displayList;
             if ((displayList || child.$renderRegion) && parentCache) {
                 parentCache.markDirty(displayList || child);
@@ -496,9 +496,9 @@ module lark {
             }
         }
 
-        private assignParentDisplayList(child:DisplayObject, parentCache:lark.player.DisplayList, newParent:lark.player.DisplayList):void {
+        private assignParentDisplayList(child:DisplayObject, parentCache:lark.sys.DisplayList, newParent:lark.sys.DisplayList):void {
             child.$parentDisplayList = newParent;
-            child.$setFlags(player.DisplayObjectFlags.DirtyChildren);
+            child.$setFlags(sys.DisplayObjectFlags.DirtyChildren);
             var displayList = child.$displayList;
             if ((child.$renderRegion || displayList) && parentCache) {
                 parentCache.markDirty(displayList || child);
@@ -516,8 +516,8 @@ module lark {
 
 
         $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):DisplayObject {
-            if (!this.$visible || !this.$hasAnyFlags(player.DisplayObjectFlags.TouchEnabled |
-                    player.DisplayObjectFlags.TouchChildren)) {
+            if (!this.$visible || !this.$hasAnyFlags(sys.DisplayObjectFlags.TouchEnabled |
+                    sys.DisplayObjectFlags.TouchChildren)) {
                 return null;
             }
             var m = this.$getInvertedConcatenatedMatrix().$data;
@@ -544,12 +544,12 @@ module lark {
                 }
             }
             if (target) {
-                if (this.$hasFlags(player.DisplayObjectFlags.TouchChildren)) {
+                if (this.$hasFlags(sys.DisplayObjectFlags.TouchChildren)) {
                     return target;
                 }
                 return this;
             }
-            if (this.$hasFlags(player.DisplayObjectFlags.TouchEnabled)) {
+            if (this.$hasFlags(sys.DisplayObjectFlags.TouchEnabled)) {
                 return super.$hitTest(stageX, stageY, shapeFlag);
             }
             return null;

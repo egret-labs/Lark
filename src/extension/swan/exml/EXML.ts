@@ -29,7 +29,7 @@
 
 module swan {
 
-    var parser = new lark.player.EXMLParser();
+    var parser = new sys.EXMLParser();
 
     /**
      * EXML皮肤文件运行时解析工具
@@ -52,7 +52,7 @@ module swan {
                 }
             }
             try{
-                var xml = lark.player.XML.parse(text);
+                var xml = sys.XML.parse(text);
             }
             catch(e){
                 if(DEBUG){

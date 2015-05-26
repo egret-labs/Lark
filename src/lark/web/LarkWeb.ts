@@ -39,7 +39,7 @@ module lark.web {
         var length = containerList.length;
         for(var i=0;i<length;i++){
             var container = containerList[i];
-            var player = <lark.player.Player>container["lark-player"];
+            var player = <sys.Player>container["lark-player"];
             var webTouch = <WebTouchHandler>container["lark-touch"];
             var webScreen = <WebScreen>container["lark-screen"];
             var webText = <WebTextAdapter>container["lark-text-layer"];
@@ -48,42 +48,42 @@ module lark.web {
     }
 
     /**
-     * 网页加载完成，实例化页面中定义的LarkPlayer标签
+     * 网页加载完成，实例化页面中定义的Larksys标签
      */
     function runLark():void {
-        var ticker = lark.player.Ticker.$instance = new player.Ticker();
+        var ticker = lark.sys.Ticker.$instance = new sys.Ticker();
         startTicker(ticker);
         var surfaceFactory = new CanvasFactory();
-        player.surfaceFactory = surfaceFactory;
-        if(!lark.player.screenAdapter){
-            lark.player.screenAdapter = new lark.player.ScreenAdapter();
+        sys.surfaceFactory = surfaceFactory;
+        if(!lark.sys.screenAdapter){
+            lark.sys.screenAdapter = new lark.sys.ScreenAdapter();
         }
 
         var list = document.querySelectorAll(".lark-player");
         var length = list.length;
         for (var i = 0; i < length; i++) {
             var container = <HTMLDivElement>list[i];
-            createPlayer(container);
+            createsys(container);
         }
     }
 
     /**
      * Lark网页版程序入口
      */
-    function createPlayer(container:HTMLDivElement):void {
+    function createsys(container:HTMLDivElement):void {
         containerList.push(container);
         var entryClassName = container.getAttribute("data-entry-class");
         var contentWidth = +container.getAttribute("data-content-width")||480;
         var contentHeight = +container.getAttribute("data-content-height")||800;
         var scaleMode = container.getAttribute("data-scale-mode");
-        var surface = lark.player.surfaceFactory.create();
+        var surface = lark.sys.surfaceFactory.create();
         var canvas = <HTMLCanvasElement><any>surface;
         var webScreen = new WebScreen(container,canvas,scaleMode,contentWidth,contentHeight);
         var stage = new lark.Stage();
-        var touch = new lark.player.TouchHandler(stage);
+        var touch = new lark.sys.TouchHandler(stage);
         var webTouch = new WebTouchHandler(touch, canvas);
         var webText = new WebTextAdapter(container,stage,canvas);
-        var player = new lark.player.Player(surface.renderContext, stage, entryClassName);
+        var player = new lark.sys.Player(surface.renderContext, stage, entryClassName);
         if(DEBUG){
             var showPaintRect = container.getAttribute("data-show-paint-rect")=="true";
             player.showPaintRect(showPaintRect);
@@ -105,7 +105,7 @@ module lark.web {
     /**
      * 启动心跳计时器。
      */
-    function startTicker(ticker:lark.player.Ticker):void {
+    function startTicker(ticker:lark.sys.Ticker):void {
         var requestAnimationFrame =
             window["requestAnimationFrame"] ||
             window["webkitRequestAnimationFrame"] ||
@@ -137,7 +137,7 @@ module lark.web {
             for(var i=0;i<length;i++){
                 info += arguments[i]+" ";
             }
-            player.$logToFPS(info);
+            sys.$logToFPS(info);
         }
         console.log.apply(console,arguments);
     }
