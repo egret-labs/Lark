@@ -342,7 +342,7 @@ module lark {
         public clear():void {
             this.reset();
             this.$commands.length = 0;
-            this.$targetDisplay.$invalidate();
+            this.$targetDisplay.$invalidateContentBounds();
         }
 
         private isFirst:boolean;
