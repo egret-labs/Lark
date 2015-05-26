@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module swan.sys {
 
     var STATE = "swan.State";
     var ADD_ITEMS = "swan.AddItems";

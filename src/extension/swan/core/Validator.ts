@@ -28,12 +28,12 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 
-module swan {
+module swan.sys {
 
     /**
      * 失效验证管理器
      */
-    class Validator extends lark.EventEmitter {
+    export class Validator extends lark.EventEmitter {
         /**
          * 创建一个Validator对象
          */
@@ -160,7 +160,7 @@ module swan {
         private attachListeners():void {
             this.eventDisplay.on(lark.Event.ENTER_FRAME, this.doPhasedInstantiationCallBack, this);
             this.eventDisplay.on(lark.Event.RENDER, this.doPhasedInstantiationCallBack, this);
-            lark.player.Ticker.$invalidateRenderFlag = true;
+            lark.sys.Ticker.$invalidateRenderFlag = true;
             this.listenersAttached = true;
         }
 
@@ -528,6 +528,4 @@ module swan {
             }
         }
     }
-    var _validator = new Validator();
-    export var validator = _validator;
 }

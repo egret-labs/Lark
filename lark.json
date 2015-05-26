@@ -1,0 +1,14 @@
+{
+   "version": "1.0.0",
+   "name": "app",
+   "template": "empty",
+   "entry": "Main",
+   "port": 48110,
+   "host": "localhost",
+   "ip": "0.0.0.0",
+   "startupHtml": "index.html",
+   "scaleMode": "noScale",
+   "contentHeight": 800,
+   "contentWidth": 480,
+   "showPaintRects": false
+}

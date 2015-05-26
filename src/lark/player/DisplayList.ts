@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark.sys {
 
     var displayListPool:DisplayList[] = [];
 
@@ -58,7 +58,7 @@ module lark.player {
         public static create(target:DisplayObject):DisplayList {
             var displayList = displayListPool.pop();
             if (!displayList) {
-                displayList = new lark.player.DisplayList(target);
+                displayList = new lark.sys.DisplayList(target);
             }
             var surface = surfaceFactory.create();
             if (!surface) {
@@ -249,7 +249,7 @@ module lark.player {
         /**
          * 绘制一个显示对象
          */
-        private drawDisplayObject(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.player.Region[],
+        private drawDisplayObject(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.sys.Region[],
                                   drawToStage:boolean, displayList:DisplayList, clipRegion:Region):number {
             var drawCalls = 0;
             var node:Renderable;
@@ -326,7 +326,7 @@ module lark.player {
             return drawCalls;
         }
 
-        private drawWidthBlendMode(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.player.Region[],
+        private drawWidthBlendMode(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.sys.Region[],
                               drawToStage:boolean,clipRegion:Region):number {
             var drawCalls = 0;
             var region:Region;
@@ -361,7 +361,7 @@ module lark.player {
             Region.release(region);
             return drawCalls;
         }
-        private drawWidthClip(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.player.Region[],
+        private drawWidthClip(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.sys.Region[],
                               drawToStage:boolean,clipRegion:Region):number {
             var drawCalls = 0;
             var scrollRect = displayObject.$scrollRect;
@@ -501,9 +501,9 @@ module lark.player {
                 oldSurface.height = bounds.height;
             }
             else if (bounds.width !== oldSurface.width || bounds.height !== oldSurface.height) {
-                var newContext = player.sharedRenderContext;
+                var newContext = sys.sharedRenderContext;
                 var newSurface = newContext.surface;
-                player.sharedRenderContext = oldContext;
+                sys.sharedRenderContext = oldContext;
                 this.renderContext = newContext;
                 this.surface = newSurface;
                 newSurface.width = bounds.width;

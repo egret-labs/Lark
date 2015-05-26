@@ -31,7 +31,7 @@ module lark.web {
 
     export class WebTouchHandler extends LarkObject {
 
-        public constructor(touch:lark.player.TouchHandler, canvas:HTMLCanvasElement) {
+        public constructor(touch:lark.sys.TouchHandler, canvas:HTMLCanvasElement) {
             super();
             this.canvas = canvas;
             this.touch = touch;
@@ -39,7 +39,7 @@ module lark.web {
         }
 
         private canvas:HTMLCanvasElement;
-        private touch:lark.player.TouchHandler;
+        private touch:lark.sys.TouchHandler;
 
         /**
          * 添加事件监听

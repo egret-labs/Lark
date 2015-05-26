@@ -34,13 +34,13 @@ module lark.web {
     /**
      * HTML5 环境下的输入文本
      */
-    export class WebTextAdapter extends LarkObject implements player.ITextAdapter{
+    export class WebTextAdapter extends LarkObject implements sys.ITextAdapter{
         constructor(container:HTMLDivElement,stage:Stage,canvas:HTMLCanvasElement){
             super();
             this.$stage = stage;
             this.canvas = canvas;
             this.container = container;
-            player.$cacheTextAdapter(this);
+            sys.$cacheTextAdapter(this);
             this.createHtmlInputs();
         }
 
@@ -137,7 +137,6 @@ module lark.web {
                 this.$initializeInput();
                 var currentHtmlInput = this.currentHtmlInput;
                 currentHtmlInput.onblur = this.handleHtmlInputBlur;
-                currentHtmlInput.oninput = this.handleHtmlInputInputEvent;
                 currentHtmlInput.onkeydown = this.handleHtmlKeyEvent;
                 currentHtmlInput.onkeyup = this.handleHtmlKeyEvent;
                 currentHtmlInput.oninput = this.handleHtmlInputInputEvent;
@@ -152,7 +151,7 @@ module lark.web {
             }
         };
 
-        private handleHtmlKeyEvent = (e:KeyboardEvent) => {
+        private handleHtmlKeyEvent = (e: KeyboardEvent) => {
             this.currentTextInput.$onKeyEvent(e);
         };
 
@@ -230,7 +229,7 @@ module lark.web {
             setElementStyle("textAlign", textInput.textAlign);
             setElementStyle("fontSize", textInput.fontSize + "px");
             setElementStyle("lineHeight", textInput.fontSize + "px");
-            setElementStyle("color", player.toColorString(textInput.textColor));
+            setElementStyle("color", sys.toColorString(textInput.textColor));
             setElementStyle("verticalAlign", textInput.verticalAlign);
             setElementStyle("display", "block");
             setElementStyle("width", textInput.width + "px");
@@ -247,7 +246,7 @@ module lark.web {
                 setElementStyle(styleName,padding + "px");
                 setElementStyle("height", textInput.fontSize + "px");
             }
-            if(textInput.text != htmlInput.value){
+            if (textInput.text != htmlInput.value) {
                 htmlInput.value = textInput.text;
             }
         }

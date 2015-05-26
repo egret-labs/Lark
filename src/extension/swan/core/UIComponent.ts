@@ -28,6 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module swan {
+
     /**
      * UI 显示对象基类
      */
@@ -212,19 +213,19 @@ module swan {
 
 }
 
-module lark.player {
+module swan.sys {
 
     export const enum UIValues {
-        left,                       //NONE
-        right,                      //NONE
-        top,                        //NONE
-        bottom,                     //NONE
-        horizontalCenter,           //NONE
-        verticalCenter,             //NONE
-        percentWidth,               //NONE
-        percentHeight,              //NONE
-        explicitWidth,              //NONE
-        explicitHeight,             //NONE
+        left,                       //lark.NONE
+        right,                      //lark.NONE
+        top,                        //lark.NONE
+        bottom,                     //lark.NONE
+        horizontalCenter,           //lark.NONE
+        verticalCenter,             //lark.NONE
+        percentWidth,               //lark.NONE
+        percentHeight,              //lark.NONE
+        explicitWidth,              //lark.NONE
+        explicitHeight,             //lark.NONE
         width,                      //0
         height,                     //0
         minWidth,                   //0
@@ -233,8 +234,8 @@ module lark.player {
         maxHeight,                  //100000
         measuredWidth,              //0
         measuredHeight,             //0
-        oldPreferWidth,             //NONE
-        oldPreferHeight,            //NONE
+        oldPreferWidth,             //lark.NONE
+        oldPreferHeight,            //lark.NONE
         contentWidth,               //0
         contentHeight,              //0
         scrollH,                    //0
@@ -245,27 +246,29 @@ module lark.player {
         return (m[0] === 1 && m[1] === 0 && m[2] === 0 && m[3] === 1);
     }
 
+    var validator = new sys.Validator();
+
     /**
-     * Swan 显示对象基类模板。仅作为 UIComponent 的默认实现，为lark.player.implemenetUIComponenet()方法提供代码模板。
+     * Swan 显示对象基类模板。仅作为 UIComponent 的默认实现，为lark.sys.implemenetUIComponenet()方法提供代码模板。
      * 注意：在此类里不允许直接使用super关键字访问父类方法。一律使用this.$super属性访问。
      */
-    export class UIComponentImpl extends DisplayObject implements swan.UIComponent {
+    export class UIComponentImpl extends lark.DisplayObject implements swan.UIComponent {
         /**
          * 构造函数
          */
         public constructor() {
             super();
             this.$uiValues = new Float64Array([
-                NONE,       //left
-                NONE,       //right
-                NONE,       //top
-                NONE,       //bottom
-                NONE,       //horizontalCenter
-                NONE,       //verticalCenter
-                NONE,       //percentWidth
-                NONE,       //percentHeight
-                NONE,       //explicitWidth
-                NONE,       //explicitHeight
+                lark.NONE,       //left
+                lark.NONE,       //right
+                lark.NONE,       //top
+                lark.NONE,       //bottom
+                lark.NONE,       //horizontalCenter
+                lark.NONE,       //verticalCenter
+                lark.NONE,       //percentWidth
+                lark.NONE,       //percentHeight
+                lark.NONE,       //explicitWidth
+                lark.NONE,       //explicitHeight
                 0,          //width
                 0,          //height
                 0,          //minWidth
@@ -274,14 +277,14 @@ module lark.player {
                 100000,     //maxHeight
                 0,          //measuredWidth
                 0,          //measuredHeight
-                NONE,       //oldPreferWidth
-                NONE,       //oldPreferHeight
+                lark.NONE,       //oldPreferWidth
+                lark.NONE,       //oldPreferHeight
                 0,          //contentWidth
                 0,          //contentHeight
                 0,          //scrollH,
                 0           //scrollV
             ]);
-            this.$displayObjectFlags |= lark.player.UIFlags.UIComponentInitFlags;
+            this.$displayObjectFlags |= sys.UIFlags.UIComponentInitFlags;
         }
 
         /**
@@ -335,11 +338,11 @@ module lark.player {
             this.$includeInLayout = value;
         }
 
-        $onAddToStage(stage:Stage, nestLevel:number):void {
+        $onAddToStage(stage:lark.Stage, nestLevel:number):void {
             this.$super.$onAddToStage.call(this, stage, nestLevel);
             this.checkInvalidateFlag();
-            if(!this.$hasFlags(lark.player.UIFlags.initialized)){
-                this.$setFlags(lark.player.UIFlags.initialized);
+            if(!this.$hasFlags(sys.UIFlags.initialized)){
+                this.$setFlags(sys.UIFlags.initialized);
                 this.createChildren();
             }
         }
@@ -348,7 +351,6 @@ module lark.player {
          * 检查属性失效标记并应用
          */
         private checkInvalidateFlag(event?:Event):void {
-            var validator = swan.validator;
             if (this.$hasFlags(UIFlags.InvalidatePropertiesFlag)) {
                 validator.invalidateProperties(this);
             }
@@ -505,7 +507,7 @@ module lark.player {
         }
 
         /**
-         * 组件宽度,默认值为lark.NONE,设置为lark.NONE将使用组件的measure()方法自动计算尺寸
+         * 组件宽度,默认值为lark.lark.NONE,设置为lark.NONE将使用组件的measure()方法自动计算尺寸
          */
         $getWidth():number {
             this.validateSizeNow();
@@ -699,7 +701,7 @@ module lark.player {
             if (!this.$hasFlags(UIFlags.InvalidatePropertiesFlag)) {
                 this.$setFlags(UIFlags.InvalidatePropertiesFlag);
                 if (this.$stage)
-                    swan.validator.invalidateProperties(this);
+                    validator.invalidateProperties(this);
             }
         }
 
@@ -720,7 +722,7 @@ module lark.player {
             if (!this.$hasFlags(UIFlags.InvalidateSizeFlag)) {
                 this.$setFlags(UIFlags.InvalidateSizeFlag);
                 if (this.$stage)
-                    swan.validator.invalidateSize(this);
+                    validator.invalidateSize(this);
             }
         }
 
@@ -734,7 +736,7 @@ module lark.player {
                     var length = children.length;
                     for (var i = 0; i < length; i++) {
                         var child = children[i];
-                        if (is(child,swan.Types.UIComponent)) {
+                        if (lark.is(child,swan.Types.UIComponent)) {
                             (<swan.UIComponent>child).validateSize(true);
                         }
                     }
@@ -793,7 +795,7 @@ module lark.player {
             if (!this.$hasFlags(UIFlags.InvalidateDisplayListFlag)) {
                 this.$setFlags(UIFlags.InvalidateDisplayListFlag);
                 if (this.$stage)
-                    swan.validator.invalidateDisplayList(this);
+                    validator.invalidateDisplayList(this);
             }
         }
 
@@ -842,7 +844,7 @@ module lark.player {
          */
         public validateNow():void {
             if (this.$stage)
-                swan.validator.validateClient(this);
+                validator.validateClient(this);
         }
 
         /**
@@ -850,7 +852,7 @@ module lark.player {
          */
         protected invalidateParentLayout():void {
             var parent = this.$parent;
-            if (!parent || !this.$includeInLayout || !is(parent,swan.Types.UIComponent))
+            if (!parent || !this.$includeInLayout || !lark.is(parent,swan.Types.UIComponent))
                 return;
             (<swan.UIComponent><any>parent).invalidateSize();
             (<swan.UIComponent><any>parent).invalidateDisplayList();
@@ -891,15 +893,15 @@ module lark.player {
                 return;
             }
 
-            var fitSize = player.MatrixUtil.fitBounds(layoutWidth, layoutHeight, matrix,
+            var fitSize = sys.MatrixUtil.fitBounds(layoutWidth, layoutHeight, matrix,
                 values[UIValues.explicitWidth], values[UIValues.explicitHeight],
                 this.getPreferredUWidth(), this.getPreferredUHeight(),
                 minWidth, minHeight, maxWidth, maxHeight);
             if (!fitSize) {
-                fitSize = Point.create(minWidth, minHeight);
+                fitSize = lark.Point.create(minWidth, minHeight);
             }
             this.setActualSize(fitSize.x, fitSize.y);
-            Point.release(fitSize);
+            lark.Point.release(fitSize);
         }
 
         /**
@@ -908,7 +910,7 @@ module lark.player {
         public setLayoutBoundsPosition(x:number, y:number):void {
             var matrix = this.$getMatrix();
             if (!isDeltaIdentity(matrix.$data)) {
-                var bounds = $TempRectangle;
+                var bounds = lark.$TempRectangle;
                 this.getLayoutBounds(bounds);
                 x += this.$getX() - bounds.x;
                 y += this.$getY() - bounds.y;
@@ -922,7 +924,7 @@ module lark.player {
          * 按照：布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸,
          * 注意此方法返回值已经包含scale和rotation。
          */
-        public getLayoutBounds(bounds:Rectangle):void {
+        public getLayoutBounds(bounds:lark.Rectangle):void {
             var values = this.$uiValues;
             var w:number;
             if (this.$hasFlags(UIFlags.LayoutWidthExplicitlySet)) {
@@ -965,14 +967,14 @@ module lark.player {
          * 按照：外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸，
          * 注意此方法返回值已经包含scale和rotation。
          */
-        public getPreferredBounds(bounds:Rectangle):void {
+        public getPreferredBounds(bounds:lark.Rectangle):void {
             var w = this.getPreferredUWidth();
             var h = this.getPreferredUHeight();
             this.applyMatrix(bounds, w, h);
         }
 
 
-        private applyMatrix(bounds:Rectangle, w:number, h:number):void {
+        private applyMatrix(bounds:lark.Rectangle, w:number, h:number):void {
             var bounds = bounds.setTo(0, 0, w, h);
             var matrix = this.$getMatrix();
             var m = matrix.$data;
@@ -1029,9 +1031,9 @@ module lark.player {
 
     /**
      * 自定义类实现UIComponent的步骤：
-     * 1.在自定义类的构造函数里调用：player.UIComponentImpl.call(this);
+     * 1.在自定义类的构造函数里调用：sys.UIComponentImpl.call(this);
      * 2.拷贝UIComponent接口定义的所有内容(包括注释掉的protected函数)到自定义类，将所有方法都声明为空方法体。
-     * 3.在定义类结尾的外部调用player.implementUIComponent()，并传入自定义类。
+     * 3.在定义类结尾的外部调用sys.implementUIComponent()，并传入自定义类。
      * 4.若覆盖了某个UIComponent的方法，需要手动调用UIComponentImpl.prototype["方法名"].call(this);
      * @param descendant 自定义的UIComponent子类
      * @param base 自定义子类继承的父类
@@ -1042,11 +1044,11 @@ module lark.player {
         prototype.$super = base.prototype;
 
         if(isContainer){
-            prototype.$childAdded = function (child:DisplayObject, index:number):void {
+            prototype.$childAdded = function (child:lark.DisplayObject, index:number):void {
                 this.invalidateSize();
                 this.invalidateDisplayList();
             };
-            prototype.$childRemoved = function (child:DisplayObject, index:number):void {
+            prototype.$childRemoved = function (child:lark.DisplayObject, index:number):void {
                 this.invalidateSize();
                 this.invalidateDisplayList();
             };

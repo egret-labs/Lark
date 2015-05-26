@@ -42,7 +42,7 @@ module lark {
             super();
             this.$graphics = new Graphics();
             this.$graphics.$targetDisplay = this;
-            this.$renderRegion = new player.Region();
+            this.$renderRegion = new sys.Region();
             this.pixelHitTest = true;
         }
 
@@ -58,7 +58,7 @@ module lark {
             this.$graphics.$measureContentBounds(bounds);
         }
 
-        $render(context:player.RenderContext):void{
+        $render(context:sys.RenderContext):void{
             this.$graphics.$render(context);
         }
     }

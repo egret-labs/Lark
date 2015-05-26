@@ -45,7 +45,7 @@ module swan {
 
         public constructor(source?:string|lark.BitmapData) {
             super();
-            lark.player.UIComponentImpl.call(this);
+            sys.UIComponentImpl.call(this);
             if (source) {
                 this.source = source;
             }
@@ -161,8 +161,8 @@ module swan {
             var bitmapData = this.$bitmapData;
             if (bitmapData) {
                 var values = this.$uiValues;
-                var width = values[lark.player.UIValues.width];
-                var height = values[lark.player.UIValues.height];
+                var width = values[sys.UIValues.width];
+                var height = values[sys.UIValues.height];
                 if (lark.isNone(width) || lark.isNone(height)) {
                     bounds.setEmpty();
                     return;
@@ -182,14 +182,14 @@ module swan {
             }
         }
 
-        $render(context:lark.player.RenderContext):void {
+        $render(context:lark.sys.RenderContext):void {
             var bitmapData = this.$bitmapData;
             if (!bitmapData) {
                 return;
             }
             var values = this.$uiValues;
-            var width = values[lark.player.UIValues.width];
-            var height = values[lark.player.UIValues.height];
+            var width = values[sys.UIValues.width];
+            var height = values[sys.UIValues.height];
             if (lark.isNone(width) || lark.isNone(height)) {
                 return;
             }
@@ -224,7 +224,7 @@ module swan {
         /**
          * 绘制九宫格位图
          */
-        private drawScale9GridImage(context:lark.player.RenderContext, image:lark.BitmapData,
+        private drawScale9GridImage(context:lark.sys.RenderContext, image:lark.BitmapData,
                                     scale9Grid:lark.Rectangle, surfaceWidth?:number, surfaceHeight?:number):void {
 
             var imageWidth = image.width;
@@ -503,7 +503,7 @@ module swan {
         }
     }
 
-    lark.player.implementUIComponent(Image, lark.Bitmap);
+    sys.implementUIComponent(Image, lark.Bitmap);
     lark.registerClass(Image, Types.Image, [Types.UIComponent]);
     registerProperty(Image, "scale9Grid", "lark.Rectangle");
 }

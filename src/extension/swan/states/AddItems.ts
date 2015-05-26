@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module swan.sys {
 
     export const enum AddPosition {
         /**
@@ -98,16 +98,16 @@ module swan {
             if (!target || !container)
                 return;
             switch (this.position) {
-                case lark.player.AddPosition.FIRST:
+                case sys.AddPosition.FIRST:
                     index = 0;
                     break;
-                case lark.player.AddPosition.LAST:
+                case sys.AddPosition.LAST:
                     index = -1;
                     break;
-                case lark.player.AddPosition.BEFORE:
+                case sys.AddPosition.BEFORE:
                     index = container.getChildIndex(relative);
                     break;
-                case lark.player.AddPosition.AFTER:
+                case sys.AddPosition.AFTER:
                     index = container.getChildIndex(relative) + 1;
                     break;
             }

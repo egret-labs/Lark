@@ -105,7 +105,7 @@ module lark {
         public start() {
             if(this._running)
                 return;
-            lark.player.Ticker.$instance.$addTimer(this);
+            lark.sys.Ticker.$instance.$addTimer(this);
             this._running = true;
         }
 
@@ -115,7 +115,7 @@ module lark {
         public stop() {
             if(!this._running)
                 return;
-            lark.player.Ticker.$instance.$removeTimer(this);
+            lark.sys.Ticker.$instance.$removeTimer(this);
             this._running = false;
         }
 

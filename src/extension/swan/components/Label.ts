@@ -29,7 +29,7 @@
 
 module swan {
 
-    var UIImpl = lark.player.UIComponentImpl;
+    var UIImpl = sys.UIComponentImpl;
     /**
      * Label 是可以呈示一行或多行统一格式文本的UI组件。要显示的文本由 text 属性确定。文本格式由样式属性指定，例如 fontFamily 和 fontSize。
      * 因为 Label 运行速度快且占用内存少，所以它特别适合用于显示多个小型非交互式文本的情况，例如，项呈示器和 Button 外观中的标签。
@@ -83,17 +83,17 @@ module swan {
         protected measure():void {
             var values = this.$uiValues;
             var textValues = this.$textFieldValues;
-            var oldWidth = textValues[lark.player.TextFieldValues.textFieldWidth];
+            var oldWidth = textValues[lark.sys.TextFieldValues.textFieldWidth];
             var availableWidth = lark.NONE;
             if (!lark.isNone(this._widthConstraint)) {
                 availableWidth = this._widthConstraint;
                 this._widthConstraint = lark.NONE;
             }
-            else if (!lark.isNone(values[lark.player.UIValues.explicitWidth])) {
-                availableWidth = values[lark.player.UIValues.explicitWidth];
+            else if (!lark.isNone(values[sys.UIValues.explicitWidth])) {
+                availableWidth = values[sys.UIValues.explicitWidth];
             }
-            else if (values[lark.player.UIValues.maxWidth] != 100000) {
-                availableWidth = values[lark.player.UIValues.maxWidth];
+            else if (values[sys.UIValues.maxWidth] != 100000) {
+                availableWidth = values[sys.UIValues.maxWidth];
             }
 
             super.$setWidth(availableWidth);
@@ -252,10 +252,10 @@ module swan {
                 return;
             }
             var values = this.$uiValues;
-            if(!lark.isNone(values[lark.player.UIValues.explicitHeight])){
+            if(!lark.isNone(values[sys.UIValues.explicitHeight])){
                 return;
             }
-            if (layoutWidth == values[lark.player.UIValues.measuredWidth]) {
+            if (layoutWidth == values[sys.UIValues.measuredWidth]) {
                 return;
             }
             this._widthConstraint = layoutWidth;
@@ -285,6 +285,6 @@ module swan {
         }
     }
 
-    lark.player.implementUIComponent(Label, lark.TextField);
+    sys.implementUIComponent(Label, lark.TextField);
     lark.registerClass(Label, Types.Label, [Types.UIComponent]);
 }

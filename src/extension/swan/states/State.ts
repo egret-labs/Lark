@@ -80,7 +80,7 @@ module swan {
     lark.registerClass(State, Types.State);
 }
 
-module lark.player {
+module swan.sys {
 
     export class StateClient {
 
@@ -178,7 +178,7 @@ module lark.player {
         /**
          * 初始化所有视图状态
          */
-        private initializeStates(stage:Stage):void {
+        private initializeStates(stage:lark.Stage):void {
             this.$stateValues.intialized = true;
             var states = this.states;
             var length = states.length;
@@ -202,6 +202,6 @@ module lark.player {
 
         public currentState:string = null;
 
-        public parent:DisplayObjectContainer = null;
+        public parent:lark.DisplayObjectContainer = null;
     }
 }

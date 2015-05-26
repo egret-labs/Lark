@@ -37,7 +37,7 @@ module swan {
 
         public constructor() {
             super();
-            lark.player.UIComponentImpl.call(this);
+            sys.UIComponentImpl.call(this);
             this.$stateValues.parent = this;
         }
 
@@ -90,14 +90,14 @@ module swan {
          * 视域的内容的宽度
          */
         public get contentWidth():number {
-            return this.$uiValues[lark.player.UIValues.contentWidth];
+            return this.$uiValues[sys.UIValues.contentWidth];
         }
 
         /**
          * 视域的内容的高度
          */
         public get contentHeight():number {
-            return this.$uiValues[lark.player.UIValues.contentHeight];
+            return this.$uiValues[sys.UIValues.contentHeight];
         }
 
         /**
@@ -107,11 +107,11 @@ module swan {
             width = Math.ceil(+width || 0);
             height = Math.ceil(+height || 0);
             var values = this.$uiValues;
-            if (values[lark.player.UIValues.contentWidth] === width && values[lark.player.UIValues.contentHeight] === height) {
+            if (values[sys.UIValues.contentWidth] === width && values[sys.UIValues.contentHeight] === height) {
                 return;
             }
-            values[lark.player.UIValues.contentWidth] = width;
-            values[lark.player.UIValues.contentHeight] = height;
+            values[sys.UIValues.contentWidth] = width;
+            values[sys.UIValues.contentHeight] = height;
             UIEvent.emitUIEvent(this, UIEvent.CONTENT_SIZE_CHANGED);
         }
 
@@ -120,14 +120,14 @@ module swan {
          * 如果为 false，则容器子代会从容器边界扩展过去，而设置scrollH和scrollV也无效。默认false。
          */
         public get scrollEnabled():boolean {
-            return this.$hasFlags(lark.player.UIFlags.scrollEnabled);
+            return this.$hasFlags(sys.UIFlags.scrollEnabled);
         }
 
         public set scrollEnabled(value:boolean) {
             value = !!value;
-            if (value === this.$hasFlags(lark.player.UIFlags.scrollEnabled))
+            if (value === this.$hasFlags(sys.UIFlags.scrollEnabled))
                 return;
-            this.$toggleFlags(lark.player.UIFlags.scrollEnabled, value);
+            this.$toggleFlags(sys.UIFlags.scrollEnabled, value);
             this.updateScrollRect();
         }
 
@@ -135,15 +135,15 @@ module swan {
          * 可视区域水平方向起始点
          */
         public get scrollH():number {
-            return this.$uiValues[lark.player.UIValues.scrollH];
+            return this.$uiValues[sys.UIValues.scrollH];
         }
 
         public set scrollH(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (value === values[lark.player.UIValues.scrollH])
+            if (value === values[sys.UIValues.scrollH])
                 return;
-            values[lark.player.UIValues.scrollH] = value;
+            values[sys.UIValues.scrollH] = value;
             if (this.updateScrollRect() && this.$layout) {
                 this.$layout.scrollPositionChanged();
             }
@@ -154,15 +154,15 @@ module swan {
          * 可视区域竖直方向起始点
          */
         public get scrollV():number {
-            return this.$uiValues[lark.player.UIValues.scrollV];
+            return this.$uiValues[sys.UIValues.scrollV];
         }
 
         public set scrollV(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (value == values[lark.player.UIValues.scrollV])
+            if (value == values[sys.UIValues.scrollV])
                 return;
-            values[lark.player.UIValues.scrollV] = value;
+            values[sys.UIValues.scrollV] = value;
             if (this.updateScrollRect() && this.$layout) {
                 this.$layout.scrollPositionChanged();
             }
@@ -171,11 +171,11 @@ module swan {
 
         private updateScrollRect():boolean {
             var values = this.$uiValues;
-            var hasClip = this.$hasFlags(lark.player.UIFlags.scrollEnabled)
+            var hasClip = this.$hasFlags(sys.UIFlags.scrollEnabled)
             if (hasClip) {
-                this.scrollRect = lark.$TempRectangle.setTo(values[lark.player.UIValues.scrollH],
-                    values[lark.player.UIValues.scrollV],
-                    values[lark.player.UIValues.width], values[lark.player.UIValues.height]);
+                this.scrollRect = lark.$TempRectangle.setTo(values[sys.UIValues.scrollH],
+                    values[sys.UIValues.scrollV],
+                    values[sys.UIValues.width], values[sys.UIValues.height]);
             }
             else if (this.$scrollRect) {
                 this.scrollRect = null;
@@ -208,7 +208,7 @@ module swan {
         }
 
 
-        $stateValues:lark.player.StateValues = new lark.player.StateValues();
+        $stateValues:sys.StateValues = new sys.StateValues();
 
         /**
          * 为此组件定义的视图状态。
@@ -238,10 +238,10 @@ module swan {
          * 标记组件当前的视图状态失效，调用此方法后，子类应该覆盖 getCurrentState() 方法来返回当前的视图状态名称。
          */
         public invalidateState():void {
-            if (this.$hasFlags(lark.player.UIFlags.stateIsDirty)) {
+            if (this.$hasFlags(sys.UIFlags.stateIsDirty)) {
                 return;
             }
-            this.$setFlags(lark.player.UIFlags.stateIsDirty);
+            this.$setFlags(sys.UIFlags.stateIsDirty);
             this.invalidateProperties();
         }
 
@@ -275,8 +275,8 @@ module swan {
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         protected commitProperties():void {
-            if (this.$hasFlags(lark.player.UIFlags.stateIsDirty)) {
-                this.$removeFlags(lark.player.UIFlags.stateIsDirty);
+            if (this.$hasFlags(sys.UIFlags.stateIsDirty)) {
+                this.$removeFlags(sys.UIFlags.stateIsDirty);
                 var values = this.$stateValues;
                 if (!values.explicitState) {
                     values.currentState = this.getCurrentState();
@@ -470,8 +470,8 @@ module swan {
         }
     }
 
-    lark.player.implementUIComponent(Group, lark.Sprite, true);
-    lark.player.mixin(Group, lark.player.StateClient);
+    sys.implementUIComponent(Group, lark.Sprite, true);
+    sys.mixin(Group, sys.StateClient);
     registerProperty(Group, "elementsContent", "Array", true);
     registerProperty(Group, "states", "State[]");
     lark.registerClass(Group, Types.Group, [Types.UIComponent]);

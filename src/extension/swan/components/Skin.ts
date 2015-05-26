@@ -103,7 +103,7 @@ module swan {
         }
 
 
-        $stateValues:lark.player.StateValues = new lark.player.StateValues();
+        $stateValues:sys.StateValues = new sys.StateValues();
 
         /**
          * 为此组件定义的视图状态。
@@ -132,7 +132,7 @@ module swan {
         private commitCurrentState:()=>void;
     }
 
-    lark.player.mixin(Skin, lark.player.StateClient);
+    sys.mixin(Skin, sys.StateClient);
     registerProperty(Skin, "elementsContent", "Array", true);
     registerProperty(Skin, "states", "State[]");
     lark.registerClass(Skin, Types.Skin);

@@ -61,7 +61,7 @@ module lark.web {
         private container:HTMLElement;
 
         /**
-         * 缩放模式,默认值为player.ScaleMode.NO_SCALE。请参考player.ScaleMode中定义的值,若设置的值不是player.ScaleMode中的值，将会默认采用player.ScaleMode.NO_SCALE。
+         * 缩放模式,默认值为sys.ScaleMode.NO_SCALE。请参考sys.ScaleMode中定义的值,若设置的值不是sys.ScaleMode中的值，将会默认采用sys.ScaleMode.NO_SCALE。
          */
         private scaleMode:string;
 
@@ -96,12 +96,12 @@ module lark.web {
         /**
          * 更新播放器视口尺寸
          */
-        public updateScreenSize(player:lark.player.Player, webTouch:WebTouchHandler,webText:WebTextAdapter):void {
+        public updateScreenSize(player:sys.Player, webTouch:WebTouchHandler,webText:WebTextAdapter):void {
             var canvas = this.canvas;
             if(canvas['userTyping'])
                 return;
             var screenRect = this.container.getBoundingClientRect();
-            var stageSize = lark.player.screenAdapter.calculateStageSize(this.scaleMode,
+            var stageSize = lark.sys.screenAdapter.calculateStageSize(this.scaleMode,
                 screenRect.width, screenRect.height, this.contentWidth, this.contentHeight);
             var stageWidth = stageSize.stageWidth;
             var stageHeight = stageSize.stageHeight;

@@ -48,7 +48,7 @@ module lark {
         public notifyLevel:number = 0;
     }
 
-    var ONCE_EVENT_LIST:lark.player.EventBin[] = [];
+    var ONCE_EVENT_LIST:lark.sys.EventBin[] = [];
 
     /**
      * EventEmitter 是 Lark 的事件派发器类，负责进行事件的发送和侦听。
@@ -109,7 +109,7 @@ module lark {
             }
             var host = this.eventDataHost;
             var eventMap:any = useCapture ? host.captureEventsMap : host.eventsMap;
-            var list:lark.player.EventBin[] = eventMap[type];
+            var list:lark.sys.EventBin[] = eventMap[type];
             if (!list) {
                 list = eventMap[type] = [];
             }
@@ -128,7 +128,7 @@ module lark {
                     insertIndex = i;
                 }
             }
-            var eventBin:lark.player.EventBin = {
+            var eventBin:lark.sys.EventBin = {
                 type: type, listener: listener, thisObject: thisObject, priority: priority,
                 target: this, useCapture: useCapture, emitOnce: !!emitOnce
             };
@@ -151,7 +151,7 @@ module lark {
 
             var host = this.eventDataHost;
             var eventMap:Object = useCapture ? host.captureEventsMap : host.eventsMap;
-            var list:lark.player.EventBin[] = eventMap[type];
+            var list:lark.sys.EventBin[] = eventMap[type];
             if (!list) {
                 return;
             }
@@ -207,7 +207,7 @@ module lark {
         $notifyListener(event:Event):boolean {
             var host = this.eventDataHost;
             var eventMap:Object = event.$eventPhase == 1 ? host.captureEventsMap : host.eventsMap;
-            var list:lark.player.EventBin[] = eventMap[event.$type];
+            var list:lark.sys.EventBin[] = eventMap[event.$type];
             if (!list) {
                 return true;
             }
@@ -258,7 +258,7 @@ module lark {
     registerClass(EventEmitter, Types.EventEmitter, [Types.IEventEmitter]);
 }
 
-module lark.player {
+module lark.sys {
     /**
      * 事件信息对象
      */

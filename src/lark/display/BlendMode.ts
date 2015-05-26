@@ -63,7 +63,7 @@ module lark {
     }
 }
 
-module lark.player {
+module lark.sys {
 
     var blendModeString = ["normal","add","erase"];
     var blendModeNumber = {};

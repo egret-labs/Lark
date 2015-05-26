@@ -71,7 +71,7 @@ module lark {
          */
         public constructor(style?:ITextStyle) {
             super();
-            this.$renderRegion = new player.Region();
+            this.$renderRegion = new sys.Region();
             var styleWrapper = new RichTextFieldStyleWarpper();
             styleWrapper.currentStyle = {};
             this._styleWrapper = styleWrapper;
@@ -206,7 +206,7 @@ module lark {
         private getFontString(): string {
             if (this.fontStringChanged) {
                 this.fontStringChanged = false;
-                this.fontString = player.toFontString(this);
+                this.fontString = sys.toFontString(this);
             }
             return this.fontString;
         }
@@ -276,7 +276,7 @@ module lark {
                 return;
             }
             this._style.textColor = value;
-            this._colorString = player.toColorString(value);
+            this._colorString = sys.toColorString(value);
             this.$invalidate();
         }
 
@@ -351,7 +351,7 @@ module lark {
         protected _textLines: Array<text.TextLine> = [];
         protected _stringLines: Array<TextSpan> = []; 
 
-        $render(context: player.RenderContext): void {
+        $render(context: sys.RenderContext): void {
 
             if (this._lineDirty) {
                 this.$generateTextLines();
@@ -373,8 +373,8 @@ module lark {
 
             for (var i = 0; i < lines.length; i++) {
                 var span = lines[i];
-                var fontString = span.style.fontString || (span.style.fontString = player.toFontString(span.style));
-                var colorString = span.style.colorString || (span.style.colorString = player.toColorString(span.style.textColor));
+                var fontString = span.style.fontString || (span.style.fontString = sys.toFontString(span.style));
+                var colorString = span.style.colorString || (span.style.colorString = sys.toColorString(span.style.textColor));
                 context.font = fontString;
                 context.fillStyle = this._colorString;
                 context.fillText(span.text, span.x, span.y - span.height / 2, span.width);

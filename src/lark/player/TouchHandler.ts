@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark.sys {
 
     var ENTER_LIST:DisplayObject[] = [], LEAVE_LIST:DisplayObject[] = [];
 

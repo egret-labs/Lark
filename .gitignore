@@ -12,4 +12,7 @@ bin-release
 *.sln
 *.suo
 /tools/lib/typescript/src/*.js
+.idea
 tmp
+*.iml
+build

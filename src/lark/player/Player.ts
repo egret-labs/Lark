@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module lark.sys {
     /**
      * Lark播放器
      */
@@ -94,7 +94,7 @@ module lark.player {
             if (!this.root) {
                 this.initialize();
             }
-            Ticker.$instance.$addPlayer(this);
+            Ticker.$instance.$addsys(this);
         }
 
         private initialize():void {
@@ -133,7 +133,7 @@ module lark.player {
                 return;
             }
             this.isPlaying = false;
-            Ticker.$instance.$removePlayer(this);
+            Ticker.$instance.$removesys(this);
         }
 
         /**
@@ -270,7 +270,7 @@ module lark.player {
             this._showPaintRect = value;
             if (value) {
                 if (!this.stageDisplayList) {
-                    this.stageDisplayList = player.DisplayList.create(this.stage);
+                    this.stageDisplayList = sys.DisplayList.create(this.stage);
                 }
                 this.stage.$displayList = this.stageDisplayList;
             }

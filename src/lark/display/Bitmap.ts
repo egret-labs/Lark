@@ -43,7 +43,7 @@ module lark {
          */
         public constructor(bitmapData?:BitmapData) {
             super();
-            this.$renderRegion = new player.Region();
+            this.$renderRegion = new sys.Region();
             this.bitmapData = bitmapData;
         }
 
@@ -96,7 +96,7 @@ module lark {
             }
         }
 
-        $render(context:player.RenderContext):void{
+        $render(context:sys.RenderContext):void{
             var bitmapData = this.$bitmapData;
             if (bitmapData) {
                 context.imageSmoothingEnabled = this.$smoothing;

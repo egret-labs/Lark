@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.web {
+module swan.web {
 
     /**
      * XML节点基类
@@ -165,5 +165,5 @@ module lark.web {
     }
 
 
-    player.XML = {parse: parse};
+    sys.XML = {parse: parse};
 }

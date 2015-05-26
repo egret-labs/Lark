@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark.player {
+module swan.sys {
 
     /**
      * EXML配置管理器实例
@@ -155,7 +155,7 @@ module lark.player {
             if (DEBUG) {
                 var result = this.getRepeatedIds(this.currentXML);
                 if (result.length > 0) {
-                    $error(2004, this.currentClassName, result.join("\n"));
+                    lark.$error(2004, this.currentClassName, result.join("\n"));
                 }
             }
             this.currentClass.superClass = this.getClassNameOfNode(this.currentXML);
@@ -180,14 +180,14 @@ module lark.player {
                 this.checkDeclarations(this.declarations, list);
 
                 if (list.length > 0) {
-                    $error(2020, this.currentClassName, list.join("\n"));
+                    lark.$error(2020, this.currentClassName, list.join("\n"));
                 }
             }
 
 
             if (!this.currentXML.namespace) {
                 if (DEBUG) {
-                    $error(2017, this.currentClassName, toXMLString(this.currentXML));
+                    lark.$error(2017, this.currentClassName, toXMLString(this.currentXML));
                 }
                 return;
             }
@@ -210,7 +210,7 @@ module lark.player {
                 }
                 if (!node.namespace) {
                     if (DEBUG) {
-                        $error(2017, this.currentClassName, toXMLString(node));
+                        lark.$error(2017, this.currentClassName, toXMLString(node));
                     }
                     continue;
                 }
@@ -520,13 +520,13 @@ module lark.player {
                     var type = exmlConfig.getPropertyType(child.localName, className);
                     if (!type) {
                         if (DEBUG) {
-                            $error(2005, this.currentClassName, child.localName, getPropertyStr(child));
+                            lark.$error(2005, this.currentClassName, child.localName, getPropertyStr(child));
                         }
                         continue;
                     }
                     if (!child.children || child.children.length == 0) {
                         if (DEBUG) {
-                            $warn(2102, this.currentClassName, getPropertyStr(child));
+                            lark.$warn(2102, this.currentClassName, getPropertyStr(child));
                         }
                         continue;
                     }
@@ -549,7 +549,7 @@ module lark.player {
             }
             if (!defaultProp || !defaultType) {
                 if (DEBUG) {
-                    $error(2012, this.currentClassName, errorInfo);
+                    lark.$error(2012, this.currentClassName, errorInfo);
                 }
                 return;
             }
@@ -583,7 +583,7 @@ module lark.player {
             if (childLength > 1) {
                 if (type != TYPE_ARRAY) {
                     if (DEBUG) {
-                        $error(2011, this.currentClassName, prop, errorInfo);
+                        lark.$error(2011, this.currentClassName, prop, errorInfo);
                     }
                     return;
                 }
@@ -636,7 +636,7 @@ module lark.player {
                     if (type == TYPE_CLASS) {
                         if (childLength > 1) {
                             if (DEBUG) {
-                                $error(2011, this.currentClassName, prop, errorInfo);
+                                lark.$error(2011, this.currentClassName, prop, errorInfo);
                             }
                             return;
                         }
@@ -658,7 +658,7 @@ module lark.player {
                     propList.push(prop);
                 }
                 else if (DEBUG) {
-                    $warn(2103, this.currentClassName, prop, errorInfo);
+                    lark.$warn(2103, this.currentClassName, prop, errorInfo);
                 }
                 cb.addAssignment(varName, childFunc, prop);
             }
@@ -724,7 +724,7 @@ module lark.player {
             var className = this.getClassNameOfNode(node);
             var type:string = exmlConfig.getPropertyType(key, className);
             if (DEBUG && !type) {
-                $error(2005, this.currentClassName, key, toXMLString(node));
+                lark.$error(2005, this.currentClassName, key, toXMLString(node));
             }
             if (value.charAt(0) == "{" && value.charAt(value.length - 1) == "}") {
                 value = value.substr(1, value.length - 2).trim();
@@ -739,7 +739,7 @@ module lark.player {
                     var rect = value.split(",");
                     if (rect.length != 4 || isNaN(parseInt(rect[0])) || isNaN(parseInt(rect[1])) ||
                         isNaN(parseInt(rect[2])) || isNaN(parseInt(rect[3]))) {
-                        $error(2016, this.currentClassName, toXMLString(node));
+                        lark.$error(2016, this.currentClassName, toXMLString(node));
                     }
                 }
                 value = "new " + RECTANGLE + "(" + value + ")";
@@ -766,7 +766,7 @@ module lark.player {
                         break;
                     default:
                         if (DEBUG) {
-                            $error(2008, this.currentClassName, "string", key + ":" + type, toXMLString(node));
+                            lark.$error(2008, this.currentClassName, "string", key + ":" + type, toXMLString(node));
                         }
                         break;
                 }
@@ -974,10 +974,10 @@ module lark.player {
 
             if (DEBUG) {
                 if (stateChildren && stateChildren.length == 0) {
-                    $warn(2102, this.currentClassName, getPropertyStr(item));
+                    lark.$warn(2102, this.currentClassName, getPropertyStr(item));
                 }
                 if (stateChildren && statesValue) {
-                    $warn(2103, this.currentClassName, "states", getPropertyStr(item));
+                    lark.$warn(2103, this.currentClassName, "states", getPropertyStr(item));
                 }
             }
 
@@ -1058,10 +1058,10 @@ module lark.player {
                     var type = exmlConfig.getPropertyType(prop, className);
                     if (DEBUG) {
                         if (type == TYPE_ARRAY) {
-                            $error(2013, this.currentClassName, getPropertyStr(node));
+                            lark.$error(2013, this.currentClassName, getPropertyStr(node));
                         }
                         if (children.length > 1) {
-                            $error(2011, this.currentClassName, prop, getPropertyStr(node));
+                            lark.$error(2011, this.currentClassName, prop, getPropertyStr(node));
                         }
                     }
 
@@ -1226,7 +1226,7 @@ module lark.player {
                 }
             }
             if (DEBUG && states.length == 0) {
-                $error(2006, this.currentClassName, name, toXMLString(node));
+                lark.$error(2006, this.currentClassName, name, toXMLString(node));
             }
             return states;
         }
@@ -1261,15 +1261,15 @@ module lark.player {
                     preItem = item;
             }
             if (index == 0) {
-                position = player.AddPosition.FIRST;
+                position = sys.AddPosition.FIRST;
                 return {position: position, relativeTo: targetId};
             }
             if (index == length - 1) {
-                position = player.AddPosition.LAST;
+                position = sys.AddPosition.LAST;
                 return {position: position, relativeTo: targetId};
             }
             if (afterItem) {
-                position = player.AddPosition.BEFORE;
+                position = sys.AddPosition.BEFORE;
                 targetId = afterItem.attributes.id;
                 if (targetId) {
                     this.checkIdForState(afterItem);
@@ -1277,7 +1277,7 @@ module lark.player {
                 }
 
             }
-            return {position: player.AddPosition.LAST, relativeTo: targetId};
+            return {position: sys.AddPosition.LAST, relativeTo: targetId};
         }
 
 
@@ -1287,7 +1287,7 @@ module lark.player {
         private getClassNameOfNode(node:XML):string {
             var className = exmlConfig.getClassNameById(node.localName, node.namespace);
             if (DEBUG && !className) {
-                $error(2003, this.currentClassName, toXMLString(node));
+                lark.$error(2003, this.currentClassName, toXMLString(node));
             }
             return className;
         }
