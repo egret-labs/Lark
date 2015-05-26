@@ -27,23 +27,44 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
+module swan {
+
     /**
-     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字相比具有更高的性能，并且能判断接口的实现。
-     * 若要判断对象是否为项目中的自定义类或接口的实例，请使用 lark.registerClass() 方法为自定义类注册运行时信息即可。
-     * @param instance 要判断的实例，注意：传入的值必须是实例，而不是类定义。若要判断类定义使用表达式：typeof instance == "function" 即可。
-     * @param typeFlag 类或接口的枚举值，请参考 lark.Types 或 swan.Types 定义的枚举常量。
-     * @returns 返回true表示当前对象是指定类或接口的实例。
+     * 定义  CollectionEvent 类 kind 属性的有效值的常量。
+     * 这些常量指示对集合进行的更改类型。
      */
-    export function is(instance:any, typeFlag:number):boolean {
-        if (!instance || typeof instance != "object") {
-            return false;
-        }
-        var prototype:any = Object.getPrototypeOf(instance);
-        var flags = prototype ? prototype.__typeFlags__ : null;
-        if (!flags) {
-            return false;
-        }
-        return (flags.indexOf(typeFlag) !== -1);
+    export class CollectionEventKind {
+        /**
+         * 指示集合添加了一个或多个项目。
+         */
+        public static ADD:string = "add";
+        /**
+         * 指示集合应用了排序或/和筛选。
+         */
+        public static REFRESH:string = "refresh";
+        /**
+         * 指示集合删除了一个或多个项目。
+         */
+        public static REMOVE:string = "remove";
+        /**
+         * 指示已替换由 CollectionEvent.location 属性确定的位置处的项目。
+         */
+        public static REPLACE:string = "replace";
+        /**
+         * 指示集合已彻底更改，需要进行重置。
+         */
+        public static RESET:string = "reset";
+        /**
+         * 指示集合中一个或多个项目进行了更新。受影响的项目将存储在  CollectionEvent.items 属性中。
+         */
+        public static UPDATE:string = "update";
+        /**
+         * 指示集合中某个节点的子项列表已打开，通常应用于Tree的数据源XMLCollection。
+         */
+        public static OPEN:string = "open";
+        /**
+         * 指示集合中某个节点的子项列表已关闭，通常应用于Tree的数据源XMLCollection。
+         */
+        public static CLOSE:string = "close";
     }
 }

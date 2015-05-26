@@ -27,23 +27,26 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
+
+module swan {
     /**
-     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字相比具有更高的性能，并且能判断接口的实现。
-     * 若要判断对象是否为项目中的自定义类或接口的实例，请使用 lark.registerClass() 方法为自定义类注册运行时信息即可。
-     * @param instance 要判断的实例，注意：传入的值必须是实例，而不是类定义。若要判断类定义使用表达式：typeof instance == "function" 即可。
-     * @param typeFlag 类或接口的枚举值，请参考 lark.Types 或 swan.Types 定义的枚举常量。
-     * @returns 返回true表示当前对象是指定类或接口的实例。
+     * BitmapFillMode 类定义 Image 控件的图像填充方式。
+     * BitmapFillMode 类定义了调整大小模式的一个枚举，这些模式确定 Bitmap 如何填充由布局系统指定的尺寸。
      */
-    export function is(instance:any, typeFlag:number):boolean {
-        if (!instance || typeof instance != "object") {
-            return false;
-        }
-        var prototype:any = Object.getPrototypeOf(instance);
-        var flags = prototype ? prototype.__typeFlags__ : null;
-        if (!flags) {
-            return false;
-        }
-        return (flags.indexOf(typeFlag) !== -1);
+    export class BitmapFillMode{
+
+        /**
+         * 在区域的边缘处截断不显示位图。
+         */
+        public static CLIP:string = "clip";
+        /**
+         * 重复位图以填充区域。
+         */
+        public static REPEAT:string = "repeat";
+        /**
+         * 拉伸位图以填充区域。
+         */
+        public static SCALE: string = "scale";
+
     }
 }

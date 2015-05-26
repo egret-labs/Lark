@@ -27,23 +27,67 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
-    /**
-     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字相比具有更高的性能，并且能判断接口的实现。
-     * 若要判断对象是否为项目中的自定义类或接口的实例，请使用 lark.registerClass() 方法为自定义类注册运行时信息即可。
-     * @param instance 要判断的实例，注意：传入的值必须是实例，而不是类定义。若要判断类定义使用表达式：typeof instance == "function" 即可。
-     * @param typeFlag 类或接口的枚举值，请参考 lark.Types 或 swan.Types 定义的枚举常量。
-     * @returns 返回true表示当前对象是指定类或接口的实例。
-     */
-    export function is(instance:any, typeFlag:number):boolean {
-        if (!instance || typeof instance != "object") {
-            return false;
-        }
-        var prototype:any = Object.getPrototypeOf(instance);
-        var flags = prototype ? prototype.__typeFlags__ : null;
-        if (!flags) {
-            return false;
-        }
-        return (flags.indexOf(typeFlag) !== -1);
-    }
+
+module swan {
+
+	/**
+	 * 切换按钮
+	 * @event lark.Event.CHANGE 选中状态发生改变，仅当触摸操作引起的选中状态改变才会抛出此事件。
+	 */
+	export class ToggleButton extends Button{
+
+		$selected: boolean = false;
+		/**
+		 * 按钮处于按下状态时为 true，而按钮处于弹起状态时为 false。
+		 */
+		public get selected():boolean{
+			return this.$selected;
+		}
+
+		public set selected(value:boolean){
+			this.$setSelected(value);
+		}
+
+		$setSelected(value:boolean):void{
+			value = !!value;
+			if (value === this.$selected)
+				return;
+			this.$selected = value;
+			this.invalidateState();
+			UIEvent.emitUIEvent(this, UIEvent.VALUE_COMMIT);
+		}
+
+		/**
+		 * 返回要应用到外观的状态的名称
+		 */
+		protected getCurrentState():string{
+			var state = super.getCurrentState();
+			if (!this.$selected){
+				return state;
+			}
+			else{
+				var selectedState = state + "AndSelected";
+				var skin = this.skin;
+				if(skin&&skin.hasState(selectedState)){
+					return selectedState;
+				}
+				return state=="disabled"?"disabled":"down";
+			}
+		}
+		/**
+		 * 是否根据鼠标事件自动变换选中状态,默认true。仅框架内使用。
+		 */
+		$autoSelected:boolean = true;
+
+		/**
+		 * 当在用户单击按钮之后处理 MouseEvent.MOUSE_UP 事件时，将调用此方法
+		 */
+		protected buttonReleased():void{
+			if(!this.$autoSelected)
+				return;
+			this.selected = !this.$selected;
+			this.emitWith(lark.Event.CHANGE);
+		}
+	}
+	lark.registerClass(ToggleButton, Types.ToggleButton);
 }

@@ -27,23 +27,66 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
+module lark.player {
     /**
-     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字相比具有更高的性能，并且能判断接口的实现。
-     * 若要判断对象是否为项目中的自定义类或接口的实例，请使用 lark.registerClass() 方法为自定义类注册运行时信息即可。
-     * @param instance 要判断的实例，注意：传入的值必须是实例，而不是类定义。若要判断类定义使用表达式：typeof instance == "function" 即可。
-     * @param typeFlag 类或接口的枚举值，请参考 lark.Types 或 swan.Types 定义的枚举常量。
-     * @returns 返回true表示当前对象是指定类或接口的实例。
+     * XML节点基类
      */
-    export function is(instance:any, typeFlag:number):boolean {
-        if (!instance || typeof instance != "object") {
-            return false;
-        }
-        var prototype:any = Object.getPrototypeOf(instance);
-        var flags = prototype ? prototype.__typeFlags__ : null;
-        if (!flags) {
-            return false;
-        }
-        return (flags.indexOf(typeFlag) !== -1);
+    export interface XMLNode {
+        /**
+         * 节点类型，1：XML，2：XMLAttribute，3：XMLText
+         */
+        nodeType:number;
+        /**
+         * 节点所属的父级节点
+         */
+        parent: XML;
     }
+
+    /**
+     * XML节点对象
+     */
+    export interface XML extends XMLNode {
+        /**
+         * 当前节点上的属性列表
+         */
+        attributes:any;
+        /**
+         * 当前节点的子节点列表
+         */
+        children:XMLNode[];
+        /**
+         * 节点完整名称。例如节点 <e:Button/> 的 name 为：e:Button
+         */
+        name:string;
+        /**
+         * 节点的命名空间前缀。例如节点 <e:Button/> 的 prefix 为：e
+         */
+        prefix: string;
+        /**
+         * 节点的本地名称。例如节点 <e:Button/> 的 prefix 为：Button
+         */
+        localName:string;
+        /**
+         * 节点的命名空间地址。例如节点 <e:Skin xmlns:e="http://ns.egret.com/swan"/> 的 namespace 为： http://ns.egret.com/swan
+         */
+        namespace: string;
+    }
+
+    /**
+     * XML文本节点
+     */
+    export interface XMLText extends XMLNode {
+        /**
+         * 文本内容
+         */
+        text:string;
+    }
+
+    export var XML:{
+        /**
+         * 解析字符串为XML对象
+         * @param text 要解析的XML对象。
+         */
+        parse(text:string):XML;
+    };
 }

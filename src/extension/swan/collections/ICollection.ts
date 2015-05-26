@@ -27,23 +27,24 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
-    /**
-     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字相比具有更高的性能，并且能判断接口的实现。
-     * 若要判断对象是否为项目中的自定义类或接口的实例，请使用 lark.registerClass() 方法为自定义类注册运行时信息即可。
-     * @param instance 要判断的实例，注意：传入的值必须是实例，而不是类定义。若要判断类定义使用表达式：typeof instance == "function" 即可。
-     * @param typeFlag 类或接口的枚举值，请参考 lark.Types 或 swan.Types 定义的枚举常量。
-     * @returns 返回true表示当前对象是指定类或接口的实例。
-     */
-    export function is(instance:any, typeFlag:number):boolean {
-        if (!instance || typeof instance != "object") {
-            return false;
-        }
-        var prototype:any = Object.getPrototypeOf(instance);
-        var flags = prototype ? prototype.__typeFlags__ : null;
-        if (!flags) {
-            return false;
-        }
-        return (flags.indexOf(typeFlag) !== -1);
-    }
+
+module swan {
+
+	/**
+	 * 列表的集合类数据源对象接口
+	 */
+	export interface ICollection extends lark.IEventEmitter{
+		/**
+		 * 此集合中的项目数。0 表示不包含项目。
+		 */
+		length:number;
+		/**
+		 * 获取指定索引处的项目。
+		 */
+		getItemAt(index:number):any;
+		/**
+		 * 如果项目位于列表中,返回该项目的索引。否则返回-1。
+		 */
+		getItemIndex(item:any):number;
+	}
 }

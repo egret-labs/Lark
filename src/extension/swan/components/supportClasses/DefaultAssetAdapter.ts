@@ -27,23 +27,43 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
+
+module swan {
+
+    var loaderPool:lark.ImageLoader[] = [];
+
     /**
-     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字相比具有更高的性能，并且能判断接口的实现。
-     * 若要判断对象是否为项目中的自定义类或接口的实例，请使用 lark.registerClass() 方法为自定义类注册运行时信息即可。
-     * @param instance 要判断的实例，注意：传入的值必须是实例，而不是类定义。若要判断类定义使用表达式：typeof instance == "function" 即可。
-     * @param typeFlag 类或接口的枚举值，请参考 lark.Types 或 swan.Types 定义的枚举常量。
-     * @returns 返回true表示当前对象是指定类或接口的实例。
+     * 默认的IAssetAdapter接口实现
      */
-    export function is(instance:any, typeFlag:number):boolean {
-        if (!instance || typeof instance != "object") {
-            return false;
+    export class DefaultAssetAdapter implements IAssetAdapter {
+
+        /**
+         * 解析素材
+         * @param source 待解析的新素材标识符
+         * @param callBack 解析完成回调函数，示例：callBack(content:any,source:string):void;
+         * @param thisObject callBack的 this 引用
+         */
+        public getAsset(source:string, callBack:(data:any, source:string) => void, thisObject:any):void {
+
+            var loader = loaderPool.pop();
+            if (!loader) {
+                loader = new lark.ImageLoader();
+            }
+            loader.on(lark.Event.COMPLETE, onLoadFinish, null);
+            loader.on(lark.Event.IO_ERROR, onLoadFinish, null);
+            loader.load(source);
+
+            function onLoadFinish(event:lark.Event):void {
+                loader.removeListener(lark.Event.COMPLETE, onLoadFinish, null);
+                loader.removeListener(lark.Event.IO_ERROR, onLoadFinish, null);
+                var data:lark.BitmapData;
+                if (event.type == lark.Event.COMPLETE) {
+                    data = loader.data;
+                    loader.data = null;
+                }
+                loaderPool.push(loader);
+                callBack.call(thisObject,data,source);
+            }
         }
-        var prototype:any = Object.getPrototypeOf(instance);
-        var flags = prototype ? prototype.__typeFlags__ : null;
-        if (!flags) {
-            return false;
-        }
-        return (flags.indexOf(typeFlag) !== -1);
     }
 }

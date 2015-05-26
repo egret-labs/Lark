@@ -29,7 +29,7 @@
 
 module lark {
 
-    export class GUI extends gui.Group {
+    export class GUI extends swan.Group {
 
         public constructor() {
             super();
@@ -39,21 +39,21 @@ module lark {
             request.send();
         }
 
-        private list:lark.gui.List;
+        private list:swan.List;
 
         private onExmlLoaded(event:Event):void {
             this.width = this.stage.stageWidth;
             this.height = this.stage.stageHeight;
             var request:HttpRequest = event.target;
-            var Skin = lark.gui.EXML.parse(request.response, "lark.List");
+            var Skin = swan.EXML.parse(request.response, "lark.List");
 
-            var list:lark.gui.List = new Skin();
+            var list:swan.List = new Skin();
             list.horizontalCenter = 0;
             list.verticalCenter = 0;
             this.list = list;
             this.addChild(list);
 
-            //var image = new lark.gui.Image("image/test.png");
+            //var image = new swan.Image("image/test.png");
             //image.fillMode = "clip";
             //this.addChild(image);
             //image.horizontalCenter =
@@ -61,7 +61,7 @@ module lark {
             //image.width = 300;
             //image.height = 400;
             //
-            //var image2 = new lark.gui.Image("image/button.png");
+            //var image2 = new swan.Image("image/button.png");
             //image2.scale9Grid = new lark.Rectangle(5,5,110,30);
             //this.addChild(image2);
             //image2.x = 300;
@@ -73,12 +73,12 @@ module lark {
             this.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
-        private createButton(skin:any):lark.gui.Button {
-            var button = new lark.gui.Button();
+        private createButton(skin:any):swan.Button {
+            var button = new swan.Button();
             button.skinName = skin;
             return button;
         }
-        private touchTarget:lark.gui.UIComponent;
+        private touchTarget:swan.UIComponent;
         private offsetX:number = 0;
         private offsetY:number = 0;
 
@@ -87,13 +87,13 @@ module lark {
             var list = this.list;
             if(list.contains(target)){
                 while(target!=list){
-                    if(is(target,lark.gui.Types.IItemRenderer)){
+                    if(is(target,swan.Types.IItemRenderer)){
                         break;
                     }
                     target = target.parent;
                 }
-                var index = (<lark.gui.IItemRenderer><any>target).itemIndex;
-                var dp:lark.gui.ArrayCollection = <lark.gui.ArrayCollection>list.dataProvider;
+                var index = (<swan.IItemRenderer><any>target).itemIndex;
+                var dp:swan.ArrayCollection = <swan.ArrayCollection>list.dataProvider;
                 dp.replaceItemAt({label:"label"+((Math.random()*100)|0)},index);
             }
             return;

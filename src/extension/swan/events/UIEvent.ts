@@ -27,23 +27,54 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
-    /**
-     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字相比具有更高的性能，并且能判断接口的实现。
-     * 若要判断对象是否为项目中的自定义类或接口的实例，请使用 lark.registerClass() 方法为自定义类注册运行时信息即可。
-     * @param instance 要判断的实例，注意：传入的值必须是实例，而不是类定义。若要判断类定义使用表达式：typeof instance == "function" 即可。
-     * @param typeFlag 类或接口的枚举值，请参考 lark.Types 或 swan.Types 定义的枚举常量。
-     * @returns 返回true表示当前对象是指定类或接口的实例。
-     */
-    export function is(instance:any, typeFlag:number):boolean {
-        if (!instance || typeof instance != "object") {
-            return false;
-        }
-        var prototype:any = Object.getPrototypeOf(instance);
-        var flags = prototype ? prototype.__typeFlags__ : null;
-        if (!flags) {
-            return false;
-        }
-        return (flags.indexOf(typeFlag) !== -1);
-    }
+
+module swan {
+
+	/**
+	 * UI事件
+	 */
+	export class UIEvent extends lark.Event{
+
+		public constructor(type:string, bubbles?:boolean, cancelable?:boolean){
+			super(type, bubbles, cancelable);
+		}
+
+		/**
+		 * 改变结束
+		 */
+		public static CHANGE_END:string = "changeEnd";
+		
+		/**
+		 * 值发生改变
+		 */
+		public static VALUE_COMMIT:string = "valueCommit";
+		/**
+		 * 容器的内容尺寸发生改变
+		 */
+		public static CONTENT_SIZE_CHANGED:string = "contentSizeChanged";
+		/**
+		 * 容器的滚动位置发生改变
+		 */
+		public static SCROLL_POSITION_CHANGED:string = "scrollPositionChanged";
+		/**
+		 * 即将关闭面板事件
+		 */
+		public static CLOSING:string = "close";
+
+		/**
+		 * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+		 * @param target 事件派发目标
+		 * @param eventType 事件类型
+		 */
+		public static emitUIEvent(target:lark.IEventEmitter, eventType:string):boolean {
+            if(!target.hasListener(eventType)){
+                return true;
+            }
+			var event = lark.Event.create(UIEvent, eventType);
+			var result = target.emit(event);
+			lark.Event.release(event);
+			return result;
+		}
+	}
+	lark.registerClass(UIEvent,Types.UIEvent);
 }

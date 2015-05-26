@@ -27,23 +27,24 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
-    /**
-     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字相比具有更高的性能，并且能判断接口的实现。
-     * 若要判断对象是否为项目中的自定义类或接口的实例，请使用 lark.registerClass() 方法为自定义类注册运行时信息即可。
-     * @param instance 要判断的实例，注意：传入的值必须是实例，而不是类定义。若要判断类定义使用表达式：typeof instance == "function" 即可。
-     * @param typeFlag 类或接口的枚举值，请参考 lark.Types 或 swan.Types 定义的枚举常量。
-     * @returns 返回true表示当前对象是指定类或接口的实例。
-     */
-    export function is(instance:any, typeFlag:number):boolean {
-        if (!instance || typeof instance != "object") {
-            return false;
-        }
-        var prototype:any = Object.getPrototypeOf(instance);
-        var flags = prototype ? prototype.__typeFlags__ : null;
-        if (!flags) {
-            return false;
-        }
-        return (flags.indexOf(typeFlag) !== -1);
-    }
+
+module swan {
+
+	/**
+	 * IOverride 接口定义视图状态的覆盖操作。State 类 overrides 属性数组中的所有条目均必须实现此接口。
+	 */
+	export interface IOverride{
+		/**
+		 * 应用覆盖。将保留原始值，以便以后可以在 remove() 方法中恢复该值。 
+		 * @param host 含有视图状态的组件。
+		 * @param parent 子项添加到的父级容器。
+		 */
+		apply(host:any,parent:lark.DisplayObjectContainer):void;
+		/**
+		 * 删除覆盖。在 apply() 方法中记住的值将被恢复。
+		 * @param host 含有视图状态的组件。
+		 * @param parent 子项添加到的父级容器。
+		 */		
+		remove(host:any,parent:lark.DisplayObjectContainer):void;
+	}
 }

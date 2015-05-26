@@ -27,23 +27,34 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
+module swan {
+
+    var key = "__bindables__";
+
     /**
-     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字相比具有更高的性能，并且能判断接口的实现。
-     * 若要判断对象是否为项目中的自定义类或接口的实例，请使用 lark.registerClass() 方法为自定义类注册运行时信息即可。
-     * @param instance 要判断的实例，注意：传入的值必须是实例，而不是类定义。若要判断类定义使用表达式：typeof instance == "function" 即可。
-     * @param typeFlag 类或接口的枚举值，请参考 lark.Types 或 swan.Types 定义的枚举常量。
-     * @returns 返回true表示当前对象是指定类或接口的实例。
+     * 标记实例的一个属性是可绑定的,此方法通常由 Watcher 类调用。
+     * @param instance 要标记的实例
+     * @param property 可绑定的属性。
      */
-    export function is(instance:any, typeFlag:number):boolean {
-        if (!instance || typeof instance != "object") {
-            return false;
+    export function registerBindable(instance:any,property:string):void{
+        if (DEBUG) {
+            if(!instance){
+                lark.$error(1003, "instance");
+            }
+            if(!property){
+                lark.$error(1003, "property");
+            }
         }
-        var prototype:any = Object.getPrototypeOf(instance);
-        var flags = prototype ? prototype.__typeFlags__ : null;
-        if (!flags) {
-            return false;
+
+        if(instance.hasOwnProperty(key)){
+            instance[key].push(property);
         }
-        return (flags.indexOf(typeFlag) !== -1);
+        else{
+            var list = [property];
+            if(instance[key]){
+                list = instance[key].concat(list);
+            }
+            instance[key] = list;
+        }
     }
 }

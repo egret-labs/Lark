@@ -27,23 +27,21 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
+module swan {
     /**
-     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字相比具有更高的性能，并且能判断接口的实现。
-     * 若要判断对象是否为项目中的自定义类或接口的实例，请使用 lark.registerClass() 方法为自定义类注册运行时信息即可。
-     * @param instance 要判断的实例，注意：传入的值必须是实例，而不是类定义。若要判断类定义使用表达式：typeof instance == "function" 即可。
-     * @param typeFlag 类或接口的枚举值，请参考 lark.Types 或 swan.Types 定义的枚举常量。
-     * @returns 返回true表示当前对象是指定类或接口的实例。
+     * 素材适配器接口。
+     * 若项目需要自定义 Image.source的解析规则，需要实现这个接口，
+     * 然后调用如下代码注入自定义实现到框架即可：
+     * var assetAdapter = new YourAssetAdapter();
+     * Stage.registerImplementation("swan.IAssetAdapter",assetAdapter)
      */
-    export function is(instance:any, typeFlag:number):boolean {
-        if (!instance || typeof instance != "object") {
-            return false;
-        }
-        var prototype:any = Object.getPrototypeOf(instance);
-        var flags = prototype ? prototype.__typeFlags__ : null;
-        if (!flags) {
-            return false;
-        }
-        return (flags.indexOf(typeFlag) !== -1);
+    export interface IAssetAdapter{
+        /**
+         * 解析素材
+         * @param source 待解析的新素材标识符
+         * @param callBack 解析完成回调函数，示例：callBack(content:any,source:string):void;
+         * @param thisObject callBack的this引用
+         */
+        getAsset(source: string, callBack: (content: any, source: string) => void, thisObject: any): void;
     }
 }
