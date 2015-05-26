@@ -104,7 +104,7 @@ module lark.gui {
             var renderer = this.$indexToRenderer[index];
             if (!renderer) {
                 var item:any = this.$dataProvider.getItemAt(index);
-                renderer = this.createVirtualRenderer(index);
+                renderer = this.createVirtualRenderer(item);
                 this.$indexToRenderer[index] = renderer;
                 this.updateRenderer(renderer, index, item);
                 if (this.createNewRendererFlag) {
@@ -124,19 +124,20 @@ module lark.gui {
          */
         private freeRendererByIndex(index:number):void {
             var renderer = this.$indexToRenderer[index];
-            if (!renderer) {
-                return;
-            }
-            delete this.$indexToRenderer[index];
             if (renderer) {
-                var rendererClass = this.rendererToClassMap[renderer.$hashCode];
-                var hashCode = rendererClass.$hashCode;
-                if (!this.freeRenderers[hashCode]) {
-                    this.freeRenderers[hashCode] = [];
-                }
-                this.freeRenderers[hashCode].push(renderer);
-                renderer.visible = false;
+                delete this.$indexToRenderer[index];
+                this.doFreeRenderer(renderer);
             }
+        }
+
+        private doFreeRenderer(renderer:IItemRenderer):void{
+            var rendererClass = this.rendererToClassMap[renderer.$hashCode];
+            var hashCode = rendererClass.$hashCode;
+            if (!this.freeRenderers[hashCode]) {
+                this.freeRenderers[hashCode] = [];
+            }
+            this.freeRenderers[hashCode].push(renderer);
+            renderer.visible = false;
         }
 
         /**
@@ -156,8 +157,7 @@ module lark.gui {
         /**
          * 为指定索引创建虚拟的项呈示器
          */
-        private createVirtualRenderer(index:number):IItemRenderer {
-            var item = this.$dataProvider.getItemAt(index);
+        private createVirtualRenderer(item:any):IItemRenderer {
             var renderer:IItemRenderer;
             var rendererClass = this.itemToRendererClass(item);
             var hashCode = rendererClass.$hashCode;
@@ -284,8 +284,7 @@ module lark.gui {
                 this.$indexToRenderer.splice(index, 0, null);
                 return;
             }
-            var rendererClass = this.itemToRendererClass(item);
-            var renderer = this.createOneRenderer(rendererClass);
+            var renderer = this.createVirtualRenderer(item);
             this.$indexToRenderer.splice(index, 0, renderer);
             if (renderer) {
                 this.updateRenderer(renderer, index, item);
@@ -306,7 +305,12 @@ module lark.gui {
 
             if (oldRenderer) {
                 this.rendererRemoved(oldRenderer, index, item);
-                super.removeChild(oldRenderer);
+                if(this.$layout&&this.$layout.$useVirtualLayout){
+                    this.doFreeRenderer(oldRenderer);
+                }
+                else{
+                    super.removeChild(oldRenderer);
+                }
             }
         }
 
@@ -533,8 +537,7 @@ module lark.gui {
                 this.setTypicalLayoutRect(null);
                 return;
             }
-            var rendererClass = this.itemToRendererClass(this.typicalItem);
-            var typicalRenderer = this.createOneRenderer(rendererClass);
+            var typicalRenderer = this.createVirtualRenderer(this.typicalItem);
             if (!typicalRenderer) {
                 this.setTypicalLayoutRect(null);
                 return;
@@ -545,7 +548,12 @@ module lark.gui {
             var bounds = $TempRectangle;
             typicalRenderer.getPreferredBounds(bounds);
             var rect = new Rectangle(0, 0, bounds.width, bounds.height);
-            super.removeChild(typicalRenderer);
+            if(this.$layout&&this.$layout.$useVirtualLayout){
+                this.doFreeRenderer(typicalRenderer);
+            }
+            else{
+                super.removeChild(typicalRenderer);
+            }
             this.setTypicalLayoutRect(rect);
             this.createNewRendererFlag = false;
         }
