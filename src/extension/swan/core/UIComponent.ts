@@ -296,6 +296,13 @@ module swan.sys {
         }
 
         /**
+         * 子项创建完成,此方法在createChildren()之后执行。
+         */
+        protected childrenCreated():void{
+
+        }
+
+        /**
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         protected commitProperties():void {
@@ -344,6 +351,7 @@ module swan.sys {
             if(!this.$hasFlags(sys.UIFlags.initialized)){
                 this.$setFlags(sys.UIFlags.initialized);
                 this.createChildren();
+                this.childrenCreated();
             }
         }
 
@@ -1032,7 +1040,7 @@ module swan.sys {
     /**
      * 自定义类实现UIComponent的步骤：
      * 1.在自定义类的构造函数里调用：sys.UIComponentImpl.call(this);
-     * 2.拷贝UIComponent接口定义的所有内容(包括注释掉的protected函数)到自定义类，将所有方法都声明为空方法体。
+     * 2.拷贝UIComponent接口定义的所有内容(包括注释掉的protected函数)到自定义类，将所有子类需要覆盖的方法都声明为空方法体。
      * 3.在定义类结尾的外部调用sys.implementUIComponent()，并传入自定义类。
      * 4.若覆盖了某个UIComponent的方法，需要手动调用UIComponentImpl.prototype["方法名"].call(this);
      * @param descendant 自定义的UIComponent子类

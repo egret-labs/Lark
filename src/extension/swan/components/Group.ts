@@ -83,7 +83,6 @@ module swan {
             }
             this.invalidateSize();
             this.invalidateDisplayList();
-            this.emitWith("layoutChanged");
         }
 
         /**
@@ -269,6 +268,13 @@ module swan {
             if(!this.$stateValues.intialized){
                 this.initializeStates(this.$stage);
             }
+        }
+
+        /**
+         * 子项创建完成,此方法在createChildren()之后执行。
+         */
+        protected childrenCreated():void{
+
         }
 
         /**
