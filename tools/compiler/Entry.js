@@ -32,11 +32,8 @@ var Parser = require("./Parser");
 var Build = require("./Build");
 var Publish = require("./Publish");
 var Create = require("./Create");
-var lock = require("../lib/lockfile");
-var FileUtil = require('../lib/FileUtil');
 var server = require('../server/server');
 var BuildService = require("./BuildService");
-var childProcess = require('child_process');
 global.lark = global.lark || {};
 var DontExitCode = -0xF000;
 function executeCommandLine(args) {
@@ -67,7 +64,7 @@ var Entry = (function () {
                 break;
             case "run":
                 server.startServer(options);
-                if (options.autoCompile || options.fileName)
+                if (options.autoCompile)
                     BuildService.getInstance();
                 exitCode = DontExitCode;
                 break;
@@ -84,64 +81,6 @@ var Entry = (function () {
                 break;
         }
         return exitCode;
-    };
-    Entry.prototype.startBackgroundServer = function (options) {
-        if (this.server)
-            return;
-        try {
-            lock.lockSync('service.lock', {});
-        }
-        catch (e) {
-            console.log("service is running");
-            return;
-        }
-        var nodePath = process.execPath, larkPath = FileUtil.joinPath(options.larkRoot, 'tools/bin/lark');
-        var startupParams = ['--expose-gc', larkPath, 'run'];
-        if (options.autoCompile)
-            startupParams.push('-a');
-        if (options.fileName) {
-            startupParams.push('-f');
-            startupParams.push(options.fileName);
-        }
-        if (options.serverOnly)
-            startupParams.push('--serveronly');
-        this.server = childProcess.spawn(nodePath, startupParams, {
-            detached: true,
-            stdio: ['ignore', 'ignore', 'ignore'],
-            cwd: process.cwd()
-        });
-        setTimeout(function () {
-            try {
-                lock.unlockSync('service.lock');
-            }
-            catch (e) {
-                console.log('faild to remove service.lock');
-            }
-        }, 4000);
-    };
-    Entry.prototype.gotCommandResult = function (msg) {
-        var _this = this;
-        var result = null;
-        try {
-            result = JSON.parse(msg);
-        }
-        catch (e) {
-            console.log(e);
-            result = {};
-        }
-        if (result.type == 'log') {
-            this.writeServerLog(result.data);
-        }
-        if (result.exitCode != undefined) {
-            var logdata = result.data;
-            if (logdata) {
-                logdata.forEach(function (params) { return _this.writeServerLog(params); });
-            }
-            this.exit(result.exitCode);
-        }
-    };
-    Entry.prototype.writeServerLog = function (params) {
-        console.log.apply(console, params);
     };
     Entry.prototype.exit = function (exitCode) {
         if (DontExitCode == exitCode)

@@ -42,7 +42,6 @@ import server = require('../server/server');
 import BuildService = require("./BuildService");
 
 import http = require('http');
-import querystring = require('querystring');
 import childProcess = require('child_process');
 
 global.lark = global.lark || {};
@@ -78,7 +77,7 @@ class Entry {
                 break;
             case "run":
                 server.startServer(options);
-                if (options.autoCompile || options.fileName)
+                if (options.autoCompile)
                     BuildService.getInstance();
                 exitCode = DontExitCode;
                 break;
@@ -95,74 +94,6 @@ class Entry {
                 break;
         }
         return exitCode;
-    }
-    server: childProcess.ChildProcess;
-    startBackgroundServer(options: lark.ICompileOptions) {
-        if (this.server)
-            return;
-
-        try {
-            lock.lockSync('service.lock', {});
-        }
-        catch (e) {
-            console.log("service is running");
-            return;
-        }
-
-        var nodePath = process.execPath,
-            larkPath = FileUtil.joinPath(options.larkRoot, 'tools/bin/lark');
-
-        var startupParams = ['--expose-gc',larkPath, 'run'];
-        if (options.autoCompile)
-            startupParams.push('-a');
-        if (options.fileName) {
-            startupParams.push('-f');
-            startupParams.push(options.fileName);
-        }
-        if (options.serverOnly)
-            startupParams.push('--serveronly');
-
-        this.server = childProcess.spawn(nodePath, startupParams, {
-            detached: true,
-            stdio: ['ignore', 'ignore', 'ignore'],
-            cwd: process.cwd()
-        });
-
-        setTimeout(() => {
-            try {
-                lock.unlockSync('service.lock');
-            }
-            catch (e) {
-                console.log('faild to remove service.lock');
-            }
-        }, 4000);
-    }
-
-    gotCommandResult(msg) {
-        var result: lark.CommandResult = null;
-        try {
-            result = JSON.parse(msg);
-        }
-        catch (e)
-        {
-            console.log(e);
-            result = <any>{};
-        }
-        if (result.type == 'log')
-        {
-            this.writeServerLog(result.data);
-        }
-        if (result.exitCode != undefined) {
-            var logdata: string[][] = result.data;
-            if (logdata) {
-                logdata.forEach(params=> this.writeServerLog(params) );
-            }
-            this.exit(result.exitCode);
-        }
-    }
-    
-    writeServerLog(params:string[]){
-        console.log.apply(console, params);
     }
 
     exit(exitCode) {
