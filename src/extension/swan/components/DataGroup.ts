@@ -207,7 +207,7 @@ module swan {
             this.invalidateProperties();
             this.invalidateSize();
             this.invalidateDisplayList();
-        }
+        } 
 
         /**
          * 移除数据源监听
@@ -290,7 +290,10 @@ module swan {
             this.$indexToRenderer.splice(index, 0, renderer);
             if (renderer) {
                 this.updateRenderer(renderer, index, item);
-                this.rendererAdded(renderer, index, item);
+                if(this.createNewRendererFlag){
+                    this.createNewRendererFlag = false;
+                    this.rendererAdded(renderer, index, item);
+                }
             }
         }
 
@@ -306,11 +309,11 @@ module swan {
                 this.$indexToRenderer.splice(index, 1);
 
             if (oldRenderer) {
-                this.rendererRemoved(oldRenderer, index, item);
                 if(this.$layout&&this.$layout.$useVirtualLayout){
                     this.doFreeRenderer(oldRenderer);
                 }
                 else{
+                    this.rendererRemoved(oldRenderer, index, item);
                     super.removeChild(oldRenderer);
                 }
             }
@@ -545,13 +548,15 @@ module swan {
                 this.setTypicalLayoutRect(null);
                 return;
             }
-            this.createNewRendererFlag = true;
             this.updateRenderer(typicalRenderer, 0, this.typicalItem);
             typicalRenderer.validateNow();
             var bounds = lark.$TempRectangle;
             typicalRenderer.getPreferredBounds(bounds);
             var rect = new lark.Rectangle(0, 0, bounds.width, bounds.height);
             if(this.$layout&&this.$layout.$useVirtualLayout){
+                if(this.createNewRendererFlag){
+                    this.rendererAdded(typicalRenderer,0,this.typicalItem);
+                }
                 this.doFreeRenderer(typicalRenderer);
             }
             else{
@@ -602,8 +607,8 @@ module swan {
                 var index = keys[i];
                 var renderer = indexToRenderer[index];
                 if (renderer) {
-                    super.removeChild(renderer);
                     this.rendererRemoved(renderer, renderer.itemIndex, renderer.data);
+                    super.removeChild(renderer);
                 }
             }
             this.$indexToRenderer = [];
@@ -616,7 +621,9 @@ module swan {
                     var list:IItemRenderer[] = freeRenderers[hashCode];
                     var length = list.length;
                     for (var i = 0; i < length; i++) {
-                        super.removeChild(list[i]);
+                        renderer = list[i];
+                        this.rendererRemoved(renderer, renderer.itemIndex, renderer.data);
+                        super.removeChild(renderer);
                     }
                 }
                 this.freeRenderers = {};
