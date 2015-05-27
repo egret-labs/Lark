@@ -41,13 +41,10 @@ module swan {
             this.$stateValues.parent = this;
         }
 
-        $elementsContent:lark.DisplayObject[] = [];
-
         /**
          * [只写] 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
          */
         public set elementsContent(value:lark.DisplayObject[]) {
-            this.$elementsContent = value;
             if (value) {
                 var length = value.length;
                 for (var i = 0; i < length; i++) {
@@ -265,9 +262,7 @@ module swan {
             if (!this.$layout) {
                 this.$setLayout(new BasicLayout());
             }
-            if(!this.$stateValues.intialized){
-                this.initializeStates(this.$stage);
-            }
+            this.initializeStates(this.$stage);
         }
 
         /**

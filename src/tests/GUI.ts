@@ -86,11 +86,16 @@ module lark {
             var target = <lark.DisplayObject>event.target;
             var list = this.list;
             if(list.contains(target)){
+                var found = false;
                 while(target!=list){
                     if(is(target,swan.Types.IItemRenderer)){
+                        found = true;
                         break;
                     }
                     target = target.parent;
+                }
+                if(!found){
+                    return;
                 }
                 var index = (<swan.IItemRenderer><any>target).itemIndex;
                 var dp:swan.ArrayCollection = <swan.ArrayCollection>list.dataProvider;

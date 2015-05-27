@@ -564,7 +564,7 @@ module swan.sys {
 
         public toCode():string {
             var chain = this.expression.split(".").join("\",\"");
-            return BINDING_PROPERTY+"(this, [\""+chain+"\"], this[\""+this.target+"\"],\""+this.property+"\");";
+            return BINDING_PROPERTY+"(this, [\""+chain+"\"], this."+this.target+",\""+this.property+"\");";
         }
     }
 

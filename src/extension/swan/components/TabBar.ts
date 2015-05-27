@@ -39,6 +39,44 @@ module swan {
             this.requireSelection = true;
             this.useVirtualLayout = false;
         }
+
+        protected createChildren():void{
+            if (!this.$layout) {
+                var layout = new HorizontalLayout();
+                layout.gap = 0;
+                layout.horizontalAlign = JustifyAlign.JUSTIFY;
+                layout.verticalAlign = JustifyAlign.CONTENT_JUSTIFY;
+                this.$setLayout(layout);
+            }
+            super.createChildren();
+        }
+
+        $setDataProvider(value:ICollection){
+            if(lark.is(this.$dataProvider, swan.Types.ViewStack)){
+                this.$dataProvider.removeListener("IndexChanged",this.onViewStackIndexChange,this);
+                this.removeListener(lark.Event.CHANGE,this.onIndexChanged,this);
+            }
+
+            if(lark.is(value, swan.Types.ViewStack)){
+                value.on("IndexChanged",this.onViewStackIndexChange,this);
+                this.on(lark.Event.CHANGE,this.onIndexChanged,this);
+            }
+            super.$setDataProvider(value);
+        }
+
+        /**
+         * 鼠标点击的选中项改变
+         */
+        private onIndexChanged(event:lark.Event):void{
+            (<ViewStack><any> (this.$dataProvider)).$setSelectedIndex(this.selectedIndex,false);
+        }
+
+        /**
+         * ViewStack选中项发生改变
+         */
+        private onViewStackIndexChange(event:lark.Event):void{
+            this.setSelectedIndex((<ViewStack><any> (this.$dataProvider)).selectedIndex, false);
+        }
     }
 
     lark.registerClass(TabBar,Types.TabBar);

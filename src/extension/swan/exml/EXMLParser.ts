@@ -351,7 +351,9 @@ module swan.sys {
             var tailName = "_i";
             var id = node.attributes.id;
             func.name = id + tailName;
+            this.currentClass.addFunction(func);
             var cb = new EXCodeBlock();
+            func.codeBlock = cb;
             var varName:string = "t";
             if (className == "Object") {
                 cb.addVar(varName, "{}");
@@ -377,8 +379,6 @@ module swan.sys {
                 }
             }
             cb.addReturn(varName);
-            func.codeBlock = cb;
-            this.currentClass.addFunction(func);
             return "this." + func.name + "()";
         }
 
@@ -731,6 +731,7 @@ module swan.sys {
                 if (value.indexOf("this.") == 0) {
                     value = value.substring(5);
                 }
+                this.checkIdForState(node);
                 this.bindings.push(new EXBinding(node.attributes["id"], key, value));
                 value = "";
             }
