@@ -186,7 +186,7 @@ module swan {
          * 是否是有效的索引
          */
         private isValidIndex = (item:number, index:number, v:number[]):boolean => {
-            return this.$dataProvider && (item >= 0) && (item < this.$dataProvider.length);
+            return this.$dataProvider && (item >= 0) && (item < this.$dataProvider.length)&&item%1==0;
         }
 
         /**

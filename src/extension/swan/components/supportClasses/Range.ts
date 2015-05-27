@@ -41,7 +41,7 @@ module swan {
             super();
         }
 
-        public _maximum:number = 100;
+        $maximum:number = 100;
         /**
          * 最大有效值改变标志
          */
@@ -51,24 +51,25 @@ module swan {
          * 最大有效值
          */
         public get maximum():number {
-            return this._maximum;
+            return this.$maximum;
         }
 
         public set maximum(value:number) {
-            this.$setMaximun(value);
+            this.$setMaximum(value);
         }
 
-        $setMaximun(value:number):void {
-            if (value == this._maximum)
+        $setMaximum(value:number):void {
+            value = +value || 0;
+            if (value === this.$maximum)
                 return;
 
-            this._maximum = value;
+            this.$maximum = value;
             this.maxChanged = true;
 
             this.invalidateProperties();
         }
 
-        public _minimum:number = 0;
+        $minimum:number = 0;
 
         /**
          * 最小有效值改变标志
@@ -79,18 +80,19 @@ module swan {
          * 最小有效值
          */
         public get minimum():number {
-            return this._minimum;
+            return this.$minimum;
         }
 
         public set minimum(value:number) {
-            this.$setMinimun(value);
+            this.$setMinimum(value);
         }
 
-        $setMinimun(value:number):void {
-            if (value == this._minimum)
+        $setMinimum(value:number):void {
+            value = +value || 0;
+            if (value === this.$minimum)
                 return;
 
-            this._minimum = value;
+            this.$minimum = value;
             this.minChanged = true;
 
             this.invalidateProperties();
@@ -113,7 +115,8 @@ module swan {
         }
 
         public set stepSize(value:number) {
-            if (value == this._stepSize)
+            value = +value || 0;
+            if (value === this._stepSize)
                 return;
 
             this._stepSize = value;
@@ -138,18 +141,19 @@ module swan {
         }
 
         public set value(newValue:number) {
+            newValue = +newValue||0;
             this.$setValue(newValue);
         }
 
         $setValue(newValue:number) {
-            if (newValue == this.value)
+            if (newValue === this.value)
                 return;
             this._changedValue = newValue;
             this.valueChanged = true;
             this.invalidateProperties();
         }
 
-        private _snapInterval:number = 1;
+        $snapInterval:number = 1;
 
         private snapIntervalChanged:boolean = false;
 
@@ -162,20 +166,21 @@ module swan {
          * 此属性还约束 stepSize 属性（如果设置）的有效值。如果未显式设置此属性，但设置了 stepSize，则 snapInterval 将默认为 stepSize。
          */
         public get snapInterval():number {
-            return this._snapInterval;
+            return this.$snapInterval;
         }
 
         public set snapInterval(value:number) {
             this._explicitSnapInterval = true;
 
-            if (value == this._snapInterval)
+            value = +value||0;
+            if (value === this.$snapInterval)
                 return;
             if (isNaN(value)) {
-                this._snapInterval = 1;
+                this.$snapInterval = 1;
                 this._explicitSnapInterval = false;
             }
             else {
-                this._snapInterval = value;
+                this.$snapInterval = value;
             }
 
             this.snapIntervalChanged = true;
@@ -193,9 +198,9 @@ module swan {
             if (this.minimum > this.maximum) {
 
                 if (!this.maxChanged)
-                    this._minimum = this._maximum;
+                    this.$minimum = this.$maximum;
                 else
-                    this._maximum = this._minimum;
+                    this.$maximum = this.$minimum;
             }
 
             if (this.valueChanged || this.maxChanged || this.minChanged || this.snapIntervalChanged) {
@@ -212,7 +217,7 @@ module swan {
                     this._stepSize = this.nearestValidSize(this._stepSize);
                 }
                 else {
-                    this._snapInterval = this._stepSize;
+                    this.$snapInterval = this._stepSize;
                     this.setValue(this.nearestValidValue(this._value, this.snapInterval));
                 }
 
@@ -282,10 +287,11 @@ module swan {
          * @param increase 若为 true，则向value增加stepSize，否则减去它。
          */
         public changeValueByStep(increase:boolean = true):void {
-            if (this.stepSize == 0)
+            var stepSize = this._stepSize;
+            if (stepSize === 0)
                 return;
 
-            var newValue:number = (increase) ? this.value + this.stepSize : this.value - this.stepSize;
+            var newValue:number = (increase) ? this.value + stepSize : this.value - stepSize;
             this.setValue(this.nearestValidValue(newValue, this.snapInterval));
         }
     }

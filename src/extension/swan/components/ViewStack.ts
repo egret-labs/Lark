@@ -79,6 +79,7 @@ module swan {
         }
 
         public set selectedIndex(value:number) {
+            value = +value|0;
             this.$setSelectedIndex(value);
         }
 

@@ -101,6 +101,7 @@ module swan {
         }
 
         public getElementAt(index:number):lark.DisplayObject {
+            index = +index|0;
             if (index < 0 || index >= this.$dataProvider.length)
                 return null;
             var renderer = this.$indexToRenderer[index];

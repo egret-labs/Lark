@@ -62,7 +62,8 @@ module swan {
         }
 
         public set requireSelection(value:boolean) {
-            if (value == this.$requireSelection)
+            value = !!value;
+            if (value === this.$requireSelection)
                 return;
 
             this.$requireSelection = value;
@@ -97,6 +98,7 @@ module swan {
         }
 
         public set selectedIndex(value:number) {
+            value = +value|0;
             this.setSelectedIndex(value, false);
         }
 
