@@ -13,8 +13,8 @@ class Project implements lark.ILarkProject {
     name: string = "app";
     entry: string = 'Main';
     template: string = 'empty';
-    modules: lark.LarkModule[];
-    platforms: lark.LarkPlatform[];
+    modules: lark.LarkModule[] = [];
+    platforms: lark.LarkPlatform[] = [];
     port: number = Math.ceil(Math.random() * 50000 + 3000);
     host: string = 'localhost';
     ip: string = '0.0.0.0';

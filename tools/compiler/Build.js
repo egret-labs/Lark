@@ -34,6 +34,8 @@ var __extends = this.__extends || function (d, b) {
 };
 /// <reference path="../lib/types.d.ts" />
 var Action = require('./Action');
+var lock = require("../lib/lockfile");
+var FileUtil = require("../lib/FileUtil");
 var BuildService = require('./BuildService');
 var Build = (function (_super) {
     __extends(Build, _super);
@@ -50,14 +52,16 @@ var Build = (function (_super) {
             exitCode = BuildService.buildSingle(this.options.fileName);
             return exitCode;
         }
-        if (Build.inProgress) {
+        try {
+            lock.lockSync('build.lock', { stale: 20000 });
+        }
+        catch (e) {
             console.log('Another build task is in progress');
             return exitCode;
         }
-        Build.inProgress = true;
         console.log('build start');
         try {
-            this.clean(this.options.debugDir);
+            this.clean(this.options.debugDir, FileUtil.joinPath(this.options.debugDir, 'tmp'));
             if (this.options.includeLark)
                 exitCode = this.copyLark();
             this.copyDirectory(this.options.templateDir, this.options.debugDir);
@@ -65,14 +69,20 @@ var Build = (function (_super) {
             var compileResult = this.compileProject();
             Action.compileTemplates(this.options);
             exitCode = compileResult.exitCode;
+            console.log('build end');
         }
         catch (e) {
+            console.log('build error');
+            console.log(e.message, e.stack);
         }
-        console.log('build end');
-        Build.inProgress = false;
+        try {
+            lock.unlockSync('build.lock');
+        }
+        catch (e) {
+            console.log('unlock error');
+        }
         return exitCode;
     };
-    Build.inProgress = false;
     return Build;
 })(Action);
 module.exports = Build;

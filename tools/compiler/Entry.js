@@ -32,17 +32,17 @@ var Parser = require("./Parser");
 var Build = require("./Build");
 var Publish = require("./Publish");
 var Create = require("./Create");
+var lock = require("../lib/lockfile");
 var FileUtil = require('../lib/FileUtil');
 var server = require('../server/server');
 var BuildService = require("./BuildService");
-var http = require('http');
 var childProcess = require('child_process');
 global.lark = global.lark || {};
 var DontExitCode = -0xF000;
 function executeCommandLine(args) {
     var options = Parser.parseCommandLine(args);
     lark.options = options;
-    entry.executeCommand(options);
+    entry.executeOption(options);
 }
 exports.executeCommandLine = executeCommandLine;
 function executeOption(options) {
@@ -52,32 +52,6 @@ exports.executeOption = executeOption;
 var Entry = (function () {
     function Entry() {
     }
-    Entry.prototype.executeCommand = function (options) {
-        var _this = this;
-        var optionJSON = JSON.stringify(options);
-        optionJSON = encodeURIComponent(optionJSON);
-        var requestUrl = 'http://' + options.host + ':' + options.port
-            + '/$/command?command=' + optionJSON;
-        var commandRequest = http.get(requestUrl, function (res) {
-            res.setEncoding('utf-8');
-            res.on('data', function (text) {
-                _this.gotCommandResult(text);
-            });
-        });
-        commandRequest.once('error', function (e) {
-            if (options.action == 'build') {
-                console.log("start server");
-                options.serverOnly = true;
-                entry.startBackgroundServer(options);
-                options.fileName = null;
-                _this.executeCommand(options);
-            }
-            else {
-                _this.executeOption(options);
-            }
-        });
-        commandRequest.setTimeout(100);
-    };
     Entry.prototype.executeOption = function (options) {
         var exitCode = 0;
         switch (options.action) {
@@ -114,6 +88,13 @@ var Entry = (function () {
     Entry.prototype.startBackgroundServer = function (options) {
         if (this.server)
             return;
+        try {
+            lock.lockSync('service.lock', {});
+        }
+        catch (e) {
+            console.log("service is running");
+            return;
+        }
         var nodePath = process.execPath, larkPath = FileUtil.joinPath(options.larkRoot, 'tools/bin/lark');
         var startupParams = ['--expose-gc', larkPath, 'run'];
         if (options.autoCompile)
@@ -129,6 +110,14 @@ var Entry = (function () {
             stdio: ['ignore', 'ignore', 'ignore'],
             cwd: process.cwd()
         });
+        setTimeout(function () {
+            try {
+                lock.unlockSync('service.lock');
+            }
+            catch (e) {
+                console.log('faild to remove service.lock');
+            }
+        }, 4000);
     };
     Entry.prototype.gotCommandResult = function (msg) {
         var _this = this;

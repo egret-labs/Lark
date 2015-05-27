@@ -50,13 +50,15 @@ class Action {
     }
 
 
-    public clean(path: string) {
+    public clean(path: string,...excludes:string[]) {
 
         var fileList = FileUtil.getDirectoryListing(path);
         var length = fileList.length;
         for (var i = 0; i < length; i++)
         {
             var path = fileList[i];
+            if (excludes && excludes.indexOf(path) >= 0)
+                continue;
             FileUtil.remove(path);
         }
     }

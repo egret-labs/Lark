@@ -5,6 +5,8 @@ var Project = (function () {
         this.name = "app";
         this.entry = 'Main';
         this.template = 'empty';
+        this.modules = [];
+        this.platforms = [];
         this.port = Math.ceil(Math.random() * 50000 + 3000);
         this.host = 'localhost';
         this.ip = '0.0.0.0';
@@ -56,3 +58,4 @@ var Project = (function () {
     return Project;
 })();
 module.exports = Project;
+//# sourceMappingURL=Project.js.map

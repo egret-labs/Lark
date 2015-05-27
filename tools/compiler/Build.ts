@@ -30,12 +30,12 @@
 /// <reference path="../lib/types.d.ts" />
 
 import Action = require('./Action');
+import lock = require("../lib/lockfile");
 import FileUtil = require("../lib/FileUtil");
 import BuildService = require('./BuildService');
 
 
 class Build extends Action {
-    static inProgress = false;
     public run():number {
         var exitCode = 0;
 
@@ -49,15 +49,17 @@ class Build extends Action {
             return exitCode;
         }
 
-        if (Build.inProgress) {
+        try {
+            lock.lockSync('build.lock', { stale: 20000 });
+        }
+        catch (e) {
             console.log('Another build task is in progress');
             return exitCode;
         }
 
-        Build.inProgress = true;
         console.log('build start');
         try {
-            this.clean(this.options.debugDir);
+            this.clean(this.options.debugDir, FileUtil.joinPath(this.options.debugDir,'tmp'));
 
             if (this.options.includeLark)
                 exitCode = this.copyLark();
@@ -66,16 +68,20 @@ class Build extends Action {
             this.copyDirectory(this.options.srcDir, this.options.debugDir, this.srcFolderOutputFilter);
 
             var compileResult = this.compileProject();
-
             Action.compileTemplates(this.options);
-
             exitCode = compileResult.exitCode;
+            console.log('build end');
         }
         catch (e) {
-
+            console.log('build error');
+            console.log(e.message,e.stack);
         }
-        console.log('build end');
-        Build.inProgress = false;
+        try {
+            lock.unlockSync('build.lock');
+        }
+        catch (e) {
+            console.log('unlock error');
+        }
         return exitCode;
     }
 }

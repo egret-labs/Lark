@@ -33,8 +33,8 @@ export function startServer(options: lark.ICompileOptions, startupUrl?:string) {
     lark.manifest = JSON.parse(manifestContent);
 
     console.log('server root', __dirname);
-    framework.config['directory-temp'] = '/bin-debug/';
-    framework.config['directory-public'] = '/bin-debug/';
+    framework.config['directory-temp'] = '/bin-debug/tmp/';
+    framework.config['directory-public'] = '/bin-debug/tmp/';
     framework.config['directory-views'] = '~' + __dirname + '/views/';
     framework.config['directory-controllers'] = '~' + __dirname + '/controllers/';
     framework.config['default-websocket-encodedecode'] = false;

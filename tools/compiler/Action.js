@@ -41,10 +41,16 @@ var Action = (function () {
         return 0;
     };
     Action.prototype.clean = function (path) {
+        var excludes = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            excludes[_i - 1] = arguments[_i];
+        }
         var fileList = FileUtil.getDirectoryListing(path);
         var length = fileList.length;
         for (var i = 0; i < length; i++) {
             var path = fileList[i];
+            if (excludes && excludes.indexOf(path) >= 0)
+                continue;
             FileUtil.remove(path);
         }
     };

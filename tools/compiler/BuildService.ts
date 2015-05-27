@@ -45,7 +45,8 @@ class BuildService extends Action {
         watcher.on('unlink', f=> this.handleFileChange(f, FileChangeType.Remove));
     }
     private _penddingBuildTask:NodeJS.Timer = null;
-    private handleFileChange(fileName: string, changeType: FileChangeType,emit= true):number {
+    private handleFileChange(fileName: string, changeType: FileChangeType, emit = true): number {
+        
         fileName = FileUtil.escapePath(fileName);
         var exitcode = 0;
         var extension = FileUtil.getExtension(fileName);

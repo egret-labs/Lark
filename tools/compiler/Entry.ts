@@ -36,6 +36,7 @@ import Build = require("./Build");
 import Publish = require("./Publish");
 import Create = require("./Create");
 import utils = require('../lib/utils');
+import lock = require("../lib/lockfile");
 import FileUtil = require('../lib/FileUtil');
 import server = require('../server/server');
 import BuildService = require("./BuildService");
@@ -52,9 +53,7 @@ var DontExitCode = -0xF000;
 export function executeCommandLine(args: string[]): void {
     var options = Parser.parseCommandLine(args);
     lark.options = options;
-    entry.executeCommand(options);
-    
-
+    entry.executeOption(options);
 }
 
 export function executeOption(options: lark.ICompileOptions): number {
@@ -63,35 +62,6 @@ export function executeOption(options: lark.ICompileOptions): number {
 
 
 class Entry {
-    
-    executeCommand(options: lark.ICompileOptions) {
-        var optionJSON = JSON.stringify(options);
-        optionJSON = encodeURIComponent(optionJSON);
-        var requestUrl = 'http://' + options.host + ':' + options.port 
-                       + '/$/command?command=' + optionJSON;
-                        
-        var commandRequest = http.get(requestUrl, (res: http.ClientResponse) => {
-            res.setEncoding('utf-8');
-            res.on('data', (text: string) => {
-                this.gotCommandResult(text);
-            })
-        });
-        
-        
-        commandRequest.once('error', e => {
-            if (options.action == 'build') {
-                console.log("start server");
-                options.serverOnly = true;
-                entry.startBackgroundServer(options);
-                options.fileName = null;
-                this.executeCommand(options);
-            }
-            else {
-                this.executeOption(options);
-            }
-        });
-        commandRequest.setTimeout(100);
-    }
 
     executeOption(options: lark.ICompileOptions) {
         var exitCode = 0;
@@ -130,6 +100,15 @@ class Entry {
     startBackgroundServer(options: lark.ICompileOptions) {
         if (this.server)
             return;
+
+        try {
+            lock.lockSync('service.lock', {});
+        }
+        catch (e) {
+            console.log("service is running");
+            return;
+        }
+
         var nodePath = process.execPath,
             larkPath = FileUtil.joinPath(options.larkRoot, 'tools/bin/lark');
 
@@ -148,6 +127,15 @@ class Entry {
             stdio: ['ignore', 'ignore', 'ignore'],
             cwd: process.cwd()
         });
+
+        setTimeout(() => {
+            try {
+                lock.unlockSync('service.lock');
+            }
+            catch (e) {
+                console.log('faild to remove service.lock');
+            }
+        }, 4000);
     }
 
     gotCommandResult(msg) {
