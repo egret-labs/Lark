@@ -85,8 +85,8 @@ module lark {
         private onTouchBegin(event:TouchEvent):void {
             var target = <lark.DisplayObject>event.target;
             var list = this.list;
-            var progressBar:swan.ProgressBar = list["progressBar"];
-            progressBar.value = Math.random()*100;
+            //var progressBar:swan.ProgressBar = list["progressBar"];
+            //progressBar.value = Math.random()*100;
             return;
             //this.touchTarget = target;
             //target.includeInLayout = false;

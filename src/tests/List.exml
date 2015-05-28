@@ -28,10 +28,17 @@
         <s:Image name="downskin" source="image/button_down.png" width="100%" height="100%" scale9Grid="5,5,63,16"/>
         <s:Image name="disabledskin" source="image/button_disabled.png" width="100%" height="100%" scale9Grid="5,5,63,16"/>
     </s:ViewStack>
-    <s:ProgressBar id="progressBar" y="200" value="50" width="400">
+    <s:ProgressBar id="progressBar2" y="200" value="50" width="400">
         <s:Skin>
             <s:Image source="image/button_disabled.png" width="100%" scale9Grid="5,5,63,16"/>
             <s:Image source="image/button_up.png" id="thumb" width="100%" scale9Grid="5,5,63,16"/>
         </s:Skin>
     </s:ProgressBar>
+    <s:VSlider id="progressBar" y="250" value="50" height="400">
+        <s:Skin>
+            <s:Image source="image/button_disabled.png" id="track" height="100%" scale9Grid="5,5,63,16"/>
+            <s:Image source="image/button_down.png" id="trackHighlight" scale9Grid="5,5,63,16"/>
+            <s:Image source="image/button_up.png" id="thumb" scale9Grid="5,5,63,16"/>
+        </s:Skin>
+    </s:VSlider>
 </s:Group>
