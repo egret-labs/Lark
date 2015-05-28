@@ -34,7 +34,7 @@ var __extends = this.__extends || function (d, b) {
 };
 /// <reference path="../lib/types.d.ts" />
 var Action = require('./Action');
-var Build = require('./Build');
+var Build = require('../build/index');
 var Project = require('./Project');
 var FileUtil = require('../lib/FileUtil');
 var Create = (function (_super) {
@@ -58,10 +58,11 @@ var Create = (function (_super) {
         this.saveProject();
         var template = FileUtil.joinPath(lark.options.larkRoot, "tools/templates/" + proj.template);
         FileUtil.copy(template, lark.options.projectDir);
-        this.copyLark();
+        this.copyLarkDeclare();
         var build = new Build(this.options);
         build.run();
     };
     return Create;
 })(Action);
 module.exports = Create;
+//# sourceMappingURL=Create.js.map

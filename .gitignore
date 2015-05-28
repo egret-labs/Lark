@@ -15,4 +15,4 @@ bin-release
 .idea
 tmp
 *.iml
-build
+/build

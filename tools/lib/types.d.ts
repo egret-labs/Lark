@@ -63,7 +63,6 @@ declare module lark {
         port: number;
         ip: string;
         host: string;
-        keepLarkInSeparatedFiles: boolean;
         larkVersion: string;
         entry: string;
         startupHtml: string;
@@ -82,6 +81,18 @@ declare module lark {
         description?: DiagnosticMessage;    // The message describing what the command line switch does
         paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter.
         error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'.
+    }
+
+    export interface ServiceCommand {
+        command: string;
+    }
+
+    export interface ServiceBuildCommand extends ServiceCommand {
+        changes: string[];
+    }
+    export interface ServiceCommandResult extends ServiceCommand {
+        exitCode: number;
+        messages: string[];
     }
 
     export interface CommandResult {

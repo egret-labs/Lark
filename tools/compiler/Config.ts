@@ -32,7 +32,7 @@
 
 
 import Action = require('./Action');
-import Build = require('./Build');
+import Build = require('../build/index');
 import FileUtil = require('../lib/FileUtil');
 
 class Config extends Action {

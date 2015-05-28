@@ -30,7 +30,7 @@
 var utils = require('../lib/utils');
 var exmlc = require('../lib/exml/exmlc');
 var FileUtil = require("../lib/FileUtil");
-var TypeScript = require("../lib/typescript/tsc");
+var TypeScript = require("../lib/typescript/tsclark");
 var UglifyJS = require("../lib/uglify-js/uglifyjs");
 var Action = (function () {
     function Action(options) {
@@ -67,10 +67,10 @@ var Action = (function () {
         var tsList = FileUtil.search(option.srcDir, "ts");
         var compileResult = this.compile(option, tsList, option.out, option.outDir);
         var srcDir = FileUtil.escapePath(this.options.srcDir);
-        var files = Action.GetJavaScriptFileNames(compileResult.files, srcDir);
+        var files = Action.GetJavaScriptFileNames(compileResult.files, /^src\//);
         var projManifest = {
             files: files,
-            min: option.project.name + ".min.js"
+            release: option.project.name + ".min.js"
         };
         var json = JSON.stringify(projManifest, null, '   ');
         var oldContent = FileUtil.read(this.options.projManifest);
@@ -125,15 +125,14 @@ var Action = (function () {
         global.ignoreDollar = false;
         function buildModule(larkModule) {
             var name = larkModule.name;
-            var depends = larkModule.dependencies.map(function (name) { return self.getModuleOutputPath(name, name + '.d.ts'); });
+            var depends = larkModule.dependencies.map(function (name) { return self.getModuleOutputPath(name + '.d.ts'); });
             if (depends.some(function (path) { return FileUtil.exists(path) == false; })) {
                 penddings.push(larkModule);
                 return;
             }
-            var outDir = self.getModuleOutputPath(name);
-            var declareFile = self.getModuleOutputPath(name, name + ".d.ts");
-            var singleFile = self.getModuleOutputPath(name, name + ".js");
-            var manifestFile = self.getModuleOutputPath(name, name + '.json');
+            var outDir = self.getModuleOutputPath();
+            var declareFile = self.getModuleOutputPath(name + ".d.ts");
+            var singleFile = self.getModuleOutputPath(name + ".js");
             var moduleRoot = FileUtil.joinPath(larkRoot, larkModule.root);
             var tss = [];
             dtsFiles.push([declareFile, depends]);
@@ -156,67 +155,53 @@ var Action = (function () {
             tss = depends.concat(tss);
             self.compile(options, tss, singleFile, null, true);
             self.minify(singleFile, singleFile.replace(/\.js$/, '.min.js'));
-            var result = self.compile(options, tss, null, outDir, false);
-            var moduleRoot = FileUtil.escapePath(moduleRoot);
-            var files = Action.GetJavaScriptFileNames(result.files, moduleRoot);
-            var manifest = {
-                files: files,
-                bin: name + ".js",
-                min: name + ".min.js"
-            };
-            FileUtil.save(manifestFile, JSON.stringify(manifest, null, '   '));
         }
         return code;
     };
-    Action.prototype.getModuleOutputPath = function (name, filePath) {
+    Action.prototype.getModuleOutputPath = function (filePath) {
         if (filePath === void 0) { filePath = ""; }
-        var path = FileUtil.joinPath(this.options.larkRoot, "build/" + name + "/" + filePath);
+        var path = FileUtil.joinPath(this.options.larkRoot, "build/" + filePath);
         return path;
     };
-    Action.prototype.copyLark = function () {
+    Action.prototype.copyLarkBuild = function () {
         var _this = this;
         var options = this.options;
         var modulesUsed = options.project.modules;
-        console.log(options.project);
+        var jsFileExtension = options.publish ? ".min.js" : ".js";
         modulesUsed.forEach(function (m) {
-            var moduleRoot = _this.getModuleOutputPath(m.name);
-            var libsDir = FileUtil.joinPath(options.templateDir, '/libs/' + m.name);
-            FileUtil.copy(moduleRoot, libsDir);
-            var dts = FileUtil.joinPath(options.templateDir, '/libs/' + m.name + '/' + m.name + '.d.ts');
-            var dtsInSrc = FileUtil.joinPath(options.srcDir, '/libs/' + m.name + '.d.ts');
-            FileUtil.copy(dts, dtsInSrc);
-            FileUtil.remove(dts);
+            var moduleBin = _this.getModuleOutputPath(m.name + jsFileExtension);
+            var targetFile = FileUtil.joinPath(options.outDir, '/libs/' + m.name + jsFileExtension);
+            FileUtil.copy(moduleBin, targetFile);
+        });
+        return 0;
+    };
+    Action.prototype.copyLarkDeclare = function () {
+        var _this = this;
+        var options = this.options;
+        var modulesUsed = options.project.modules;
+        modulesUsed.forEach(function (m) {
+            var moduleDeclare = _this.getModuleOutputPath(m.name + ".d.ts");
+            var targetDeclare = FileUtil.joinPath(options.srcDir, '/libs/' + m.name + ".d.ts");
+            FileUtil.copy(moduleDeclare, targetDeclare);
         });
         return 0;
     };
     Action.compileTemplates = function (options) {
         var templateFile = FileUtil.joinPath(options.templateDir, options.project.startupHtml);
-        var content = FileUtil.read(templateFile);
         var larkFiles = [];
         var projFiles = [];
-        var modules = options.project.modules.concat([{ name: 'proj' }]);
+        var modules = options.project.modules;
+        var jsext = options.publish ? ".min.js" : ".js";
         modules.forEach(function (m) {
-            var libDir = m.name == 'proj' ? "" : ("libs/" + m.name + '/');
-            var dir = options.templateDir + libDir;
-            var manifestFile = dir + m.name + ".json";
-            if (FileUtil.exists(manifestFile)) {
-                var content = FileUtil.read(manifestFile);
-                var manifest = JSON.parse(content);
-                //项目编译后的文件
-                if (m.name == 'proj') {
-                    projFiles = options.publish ? [manifest.min] : manifest.files;
-                    return;
-                }
-                if (options.project.keepLarkInSeparatedFiles) {
-                    var files = manifest.files.map(function (f) { return libDir + f; });
-                    larkFiles = larkFiles.concat(files);
-                }
-                else {
-                    var file = options.publish ? manifest.min : manifest.bin;
-                    larkFiles.push(libDir + file);
-                }
-            }
+            larkFiles.push('libs/' + m.name + jsext);
         });
+        var dir = options.templateDir;
+        var manifestFile = dir + "proj.json";
+        if (FileUtil.exists(manifestFile)) {
+            var content = FileUtil.read(manifestFile);
+            var manifest = JSON.parse(content);
+            projFiles = options.publish ? [manifest.release] : manifest.files;
+        }
         var manifests = [{
                 files: larkFiles,
                 replacement: '<script id="lark"></script>'
@@ -224,6 +209,7 @@ var Action = (function () {
                 files: projFiles,
                 replacement: '<script id="project"></script>'
             }];
+        var content = FileUtil.read(templateFile);
         manifests.forEach(function (manifest) {
             var scripts = manifest.files.map(function (f) { return ['<script src="', f, '"></script>'].join(''); }).join('\r\n');
             content = content.replace(manifest.replacement, scripts);
@@ -239,8 +225,11 @@ var Action = (function () {
     Action.prototype.compile = function (options, files, out, outDir, def) {
         var defTemp = options.declaration;
         options.declaration = def;
-        var compileResult = TypeScript.executeWithOption(options, files, out, outDir, def);
+        console.log(options.projectDir);
+        files = files.map(function (f) { return f.replace(options.projectDir, ""); });
+        var compileResult = TypeScript.executeWithOption(options, files, out, outDir);
         options.declaration = defTemp;
+        this.recompile = compileResult.compileWithChanges;
         if (!options.minify)
             return compileResult;
         if (!out) {
@@ -249,6 +238,18 @@ var Action = (function () {
         }
         this.minify(out, out);
         return compileResult;
+    };
+    Object.defineProperty(Action.prototype, "canRecompile", {
+        get: function () {
+            return this.recompile != null;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Action.prototype.recompileChanges = function (files) {
+        var _this = this;
+        files = files.map(function (f) { return f.replace(_this.options.projectDir, ""); });
+        return this.recompile(files);
     };
     Action.prototype.minify = function (sourceFile, output) {
         var defines = {

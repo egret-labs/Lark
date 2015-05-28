@@ -29,11 +29,13 @@
 /// <reference path="../lib/types.d.ts" />
 require('../locales/zh_CN');
 var Parser = require("./Parser");
-var Build = require("./Build");
+var Build = require("../build/index");
 var Publish = require("./Publish");
 var Create = require("./Create");
+var FileUtil = require('../lib/FileUtil');
 var server = require('../server/server');
-var BuildService = require("./BuildService");
+var http = require('http');
+var childProcess = require('child_process');
 global.lark = global.lark || {};
 var DontExitCode = -0xF000;
 function executeCommandLine(args) {
@@ -64,8 +66,6 @@ var Entry = (function () {
                 break;
             case "run":
                 server.startServer(options);
-                if (options.autoCompile)
-                    BuildService.getInstance();
                 exitCode = DontExitCode;
                 break;
             case "buildLark":
@@ -75,9 +75,12 @@ var Entry = (function () {
             case "shutdown":
                 this.exit(0);
                 break;
-            default:
+            case "buildService":
                 var build = new Build(options);
                 exitCode = build.run();
+                break;
+            default:
+                sendBuildCMD();
                 break;
         }
         return exitCode;
@@ -90,4 +93,41 @@ var Entry = (function () {
     return Entry;
 })();
 var entry = new Entry();
+var serviceCreated = false;
+function sendBuildCMD() {
+    var options = lark.options;
+    var requestUrl = 'http://127.0.0.1:51598/?path=' + encodeURIComponent(options.projectDir);
+    var commandRequest = http.get(requestUrl, function (res) {
+        res.setEncoding('utf-8');
+        res.on('data', function (text) {
+            gotCommandResult(text);
+        });
+    });
+    commandRequest.once('error', function (e) {
+        if (!serviceCreated) {
+            startBackgroundService();
+            serviceCreated = true;
+        }
+        setTimeout(function () { return sendBuildCMD(); }, 200);
+    });
+    commandRequest.setTimeout(100);
+}
+function startBackgroundService() {
+    var options = lark.options;
+    var nodePath = process.execPath, service = FileUtil.joinPath(options.larkRoot, 'tools/service/index');
+    var startupParams = ['--expose-gc', service];
+    this.server = childProcess.spawn(nodePath, startupParams, {
+        detached: true,
+        stdio: ['ignore', 'ignore', 'ignore'],
+        cwd: process.cwd(),
+        silent: true
+    });
+}
+function gotCommandResult(msg) {
+    var cmd = JSON.parse(msg);
+    if (cmd.messages) {
+        cmd.messages.forEach(function (m) { return console.log(m); });
+    }
+    process.exit(cmd.exitCode || 0);
+}
 //# sourceMappingURL=Entry.js.map

@@ -9,7 +9,6 @@ import utils = require('../lib/utils');
 import file = require('../lib/FileUtil');
 import cp = require('child_process');
 import Default = require('./controllers/default');
-import TypeScript = require("../lib/typescript/tsc");
 global.lark = global.lark || {};
 
 
@@ -21,7 +20,6 @@ export function startServer(options: lark.ICompileOptions, startupUrl?:string) {
     Default.UserProjectPath = options.projectDir;
     options.projectDir = options.projectDir || '/public/';
 
-    TypeScript.write = msg=> console.log(msg);
 
     lark.server = {
         options: options,

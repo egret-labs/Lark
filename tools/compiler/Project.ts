@@ -24,14 +24,12 @@ class Project implements lark.ILarkProject {
     contentHeight: number = 800;
     showPaintRects: boolean = false;
 
-    keepLarkInSeparatedFiles: boolean;
     advancedMinify: boolean;
 
     parse(json: lark.ILarkProject) {
         this.version = json.version || this.version;
         this.name = json.name || this.name;
         this.larkVersion = json.larkVersion||this.larkVersion;
-        this.keepLarkInSeparatedFiles = json.keepLarkInSeparatedFiles;
         this.entry = json.entry||this.entry;
         this.modules = json.modules || this.modules;
         this.platforms = json.platforms || this.platforms;
@@ -52,7 +50,6 @@ class Project implements lark.ILarkProject {
             name: this.name,
             template: this.template,
             larkVersion: this.larkVersion,
-            keepLarkInSeparatedFiles: this.keepLarkInSeparatedFiles,
             entry: this.entry,
             modules: this.modules,
             port: this.port,

@@ -47,7 +47,7 @@ var Publish = (function (_super) {
         this.clean(option.releaseDir);
         //拷贝模板文件
         this.copyDirectory(option.templateDir, option.releaseDir);
-        var exitcode = this.compileProject().exitCode;
+        var exitcode = this.compileProject().exitStatus;
         if (exitcode)
             return exitcode;
         Action.compileTemplates(this.options);
@@ -56,3 +56,4 @@ var Publish = (function (_super) {
     return Publish;
 })(Action);
 module.exports = Publish;
+//# sourceMappingURL=Publish.js.map

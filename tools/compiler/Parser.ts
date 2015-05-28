@@ -123,7 +123,13 @@ export function parseCommandLine(commandLine: string[]) {
 
 
         if (options.projectDir == null)
-            options.projectDir = process.cwd();
+            options.projectDir = process.cwd()
+        else {
+            var absPath = file.joinPath(process.cwd(), options.projectDir);
+            if (file.exists(absPath))
+                options.projectDir = absPath;
+        }
+        options.projectDir = file.joinPath(options.projectDir, "/");
 
         var props = new Project();
         if (file.exists(options.larkPropertiesFile)) {

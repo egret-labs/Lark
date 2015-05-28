@@ -20,7 +20,6 @@ var Project = (function () {
         this.version = json.version || this.version;
         this.name = json.name || this.name;
         this.larkVersion = json.larkVersion || this.larkVersion;
-        this.keepLarkInSeparatedFiles = json.keepLarkInSeparatedFiles;
         this.entry = json.entry || this.entry;
         this.modules = json.modules || this.modules;
         this.platforms = json.platforms || this.platforms;
@@ -40,7 +39,6 @@ var Project = (function () {
             name: this.name,
             template: this.template,
             larkVersion: this.larkVersion,
-            keepLarkInSeparatedFiles: this.keepLarkInSeparatedFiles,
             entry: this.entry,
             modules: this.modules,
             port: this.port,

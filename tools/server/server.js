@@ -10,7 +10,6 @@ var events = require('events');
 var utils = require('../lib/utils');
 var file = require('../lib/FileUtil');
 var Default = require('./controllers/default');
-var TypeScript = require("../lib/typescript/tsc");
 global.lark = global.lark || {};
 function startServer(options, startupUrl) {
     var total = require('../lib/totaljs/');
@@ -18,7 +17,6 @@ function startServer(options, startupUrl) {
     options.port = options.port || 3000;
     Default.UserProjectPath = options.projectDir;
     options.projectDir = options.projectDir || '/public/';
-    TypeScript.write = function (msg) { return console.log(msg); };
     lark.server = {
         options: options,
         console: new ServerConsole(),

@@ -45,7 +45,7 @@ class Publish extends Action{
         //拷贝模板文件
         this.copyDirectory(option.templateDir, option.releaseDir);
 
-        var exitcode = this.compileProject().exitCode;
+        var exitcode = this.compileProject().exitStatus;
         if (exitcode)
             return exitcode;
 

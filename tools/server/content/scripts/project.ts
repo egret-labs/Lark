@@ -39,7 +39,6 @@ module lark.portal {
         contentWidth: number = project.contentWidth;
         contentHeight: number = project.contentHeight;
         showPaintRects: boolean = project.showPaintRects;
-        keepLarkInSeparatedFiles: boolean = project.keepLarkInSeparatedFiles;
         template: string = "empty";
 
         constructor() {

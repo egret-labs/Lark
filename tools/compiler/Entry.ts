@@ -32,14 +32,13 @@
 require('../locales/zh_CN');
 
 import Parser = require("./Parser");
-import Build = require("./Build");
+import Build = require("../build/index");
 import Publish = require("./Publish");
 import Create = require("./Create");
 import utils = require('../lib/utils');
 import lock = require("../lib/lockfile");
 import FileUtil = require('../lib/FileUtil');
 import server = require('../server/server');
-import BuildService = require("./BuildService");
 
 import http = require('http');
 import childProcess = require('child_process');
@@ -77,8 +76,6 @@ class Entry {
                 break;
             case "run":
                 server.startServer(options);
-                if (options.autoCompile)
-                    BuildService.getInstance();
                 exitCode = DontExitCode;
                 break;
             case "buildLark":
@@ -88,9 +85,12 @@ class Entry {
             case "shutdown":
                 this.exit(0);
                 break;
-            default:
+            case "buildService":
                 var build = new Build(options);
                 exitCode = build.run();
+                break;
+            default:
+                sendBuildCMD();
                 break;
         }
         return exitCode;
@@ -104,4 +104,46 @@ class Entry {
 }
 
 var entry = new Entry();
+
+var serviceCreated = false;
+function sendBuildCMD() {
+    var options = lark.options;
+    var requestUrl = 'http://127.0.0.1:51598/?path=' + encodeURIComponent(options.projectDir); 
+    var commandRequest = http.get(requestUrl, function (res) {
+        res.setEncoding('utf-8');
+        res.on('data', function (text) {
+            gotCommandResult(text);
+        });
+    });
+    commandRequest.once('error', function (e) {
+        if (!serviceCreated) {
+            startBackgroundService();
+            serviceCreated = true;
+        }
+        setTimeout(() => sendBuildCMD(), 200);
+    });
+    commandRequest.setTimeout(100);
+}
+
+function startBackgroundService() {
+    var options = lark.options;
+    var nodePath = process.execPath,
+        service = FileUtil.joinPath(options.larkRoot, 'tools/service/index');
+    var startupParams = ['--expose-gc', service];
+    this.server = childProcess.spawn(nodePath, startupParams, {
+        detached: true,
+        stdio: ['ignore', 'ignore', 'ignore'],
+        cwd: process.cwd(),
+        silent: true
+    });
+}
+
+
+function gotCommandResult(msg) {
+    var cmd: lark.ServiceCommandResult = JSON.parse(msg);
+    if (cmd.messages) {
+        cmd.messages.forEach(m=> console.log(m));
+    }
+    process.exit(cmd.exitCode || 0);
+}
 

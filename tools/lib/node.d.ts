@@ -625,7 +625,7 @@ declare module "child_process" {
         stderr: stream.Readable;
         pid: number;
         kill(signal?:string): void;
-        send(message:any, sendHandle:any): void;
+        send(message:any, sendHandle?:any): void;
         disconnect(): void;
     }
 
@@ -646,7 +646,7 @@ declare module "child_process" {
         maxBuffer?: number;
         killSignal?: string;
     }, callback:(error:Error, stdout:Buffer, stderr:Buffer) =>void):ChildProcess;
-    export function exec(command:string, callback:(error:Error, stdout:Buffer, stderr:Buffer) =>void):ChildProcess;
+    //export function exec(command:string, callback:(error:Error, stdout:Buffer, stderr:Buffer) =>void):ChildProcess;
     export function execFile(file:string,
                              callback?:(error:Error, stdout:Buffer, stderr:Buffer) =>void):ChildProcess;
     export function execFile(file:string, args?:string[],

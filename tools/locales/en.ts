@@ -39,4 +39,7 @@ locale_strings[10003] = "TSC is trying to exit, exit code is: {0}";
 locale_strings[10004] = "No output file name when minify flag is true";
 locale_strings[10005] = "Can not load Lark project properties from lark.json";
 locale_strings[10006] = "manifest.json has been generated";
+locale_strings[10007] = "{0}: error 类文件之间存在循环依赖，请检查类的继承关系或静态变量的初始化引用。";
+locale_strings[10008] = "类或接口名冲突：‘{0}’同时存在于以下两个文件内：\n{1}\n{2}";
+locale_strings[10009] = "Lark manifest.json 文件不是标准的json文件请尝试重新安装Lark";
 
