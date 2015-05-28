@@ -45,7 +45,7 @@ module swan {
         /**
          * [SkinPart]进度高亮显示对象。
          */
-        public thumb:lark.DisplayObject = null;
+        public thumb:swan.UIComponent = null;
         /**
          * [SkinPart]进度条文本
          */
@@ -79,18 +79,18 @@ module swan {
         private _slideDuration:number = 500;
 
         /**
-         * value改变时调整thumb长度的缓动动画时间，单位毫秒。设置为0则不执行缓动。默认值500。
+         * value改变时更新视图的缓动动画时间，单位毫秒。设置为0则不执行缓动。默认值500。
          */
         public get slideDuration():number {
             return this._slideDuration;
         }
 
         public set slideDuration(value:number) {
-            value = +value|0;
+            value = +value | 0;
             if (this._slideDuration === value)
                 return;
             this._slideDuration = value;
-            if (this.animator && this.animator.isPlaying) {
+            if (this.animator.isPlaying) {
                 this.animator.stop();
                 this.setValue(this.slideToValue);
             }
@@ -123,7 +123,7 @@ module swan {
         $setValue(newValue:number) {
             if (this.value === newValue)
                 return;
-            this.setValue(newValue);
+            super.$setValue(newValue);
             if (this._slideDuration > 0 && this.$stage) {
                 this.validateProperties();//最大值最小值发生改变时要立即应用，防止当前起始值不正确。
                 var animator = this.animator;
@@ -148,6 +148,7 @@ module swan {
         }
 
         private animationValue:number = 0;
+
         /**
          * 动画播放更新数值
          */
@@ -158,16 +159,24 @@ module swan {
         }
 
 
-        protected setValue(value:number):void {
-            super.setValue(value);
-            this.invalidateDisplayList();
+        protected partAdded(partName:string, instance:any):void {
+            super.partAdded(partName, instance);
+            if (instance === this.thumb) {
+                this.thumb.on(lark.Event.RESIZE, this.onThumbResize, this);
+            }
+        }
+
+        protected partRemoved(partName:string, instance:any):void {
+            super.partRemoved(partName, instance);
+            if (instance === this.thumb) {
+                this.thumb.removeListener(lark.Event.RESIZE, this.onThumbResize, this);
+            }
         }
 
         /**
-         * 绘制对象和/或设置其子项的大小和位置
+         * thumb的位置或尺寸发生改变
          */
-        protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
-            super.updateDisplayList(unscaledWidth, unscaledHeight);
+        private onThumbResize(event:lark.Event):void {
             this.updateSkinDisplayList();
         }
 
@@ -175,7 +184,7 @@ module swan {
          * 更新皮肤部件大小和可见性。
          */
         protected updateSkinDisplayList():void {
-            var currentValue = this.animator.isPlaying?this.animationValue:this.value;
+            var currentValue = this.animator.isPlaying ? this.animationValue : this.value;
             var maxValue = this.$maximum;
             var thumb = this.thumb;
             if (thumb) {
@@ -189,33 +198,27 @@ module swan {
                     clipHeight = 0;
 
                 var rect = thumb.$scrollRect;
-                if(!rect){
+                if (!rect) {
                     rect = lark.$TempRectangle;
-                    rect.setEmpty();
                 }
+                rect.setTo(0,0,thumbWidth,thumbHeight);
                 var thumbPosX = thumb.x - rect.x;
                 var thumbPosY = thumb.y - rect.y;
-                rect.x = 0;
-                rect.y = 0;
                 switch (this._direction) {
                     case ProgressBarDirection.LEFT_TO_RIGHT:
                         rect.width = clipWidth;
-                        rect.height = thumbHeight;
                         thumb.x = thumbPosX;
                         break;
                     case ProgressBarDirection.RIGHT_TO_LEFT:
                         rect.width = clipWidth;
-                        rect.height = thumbHeight;
                         rect.x = thumbWidth - clipWidth;
                         thumb.x = thumbPosX + rect.x;
                         break;
                     case ProgressBarDirection.TOP_TO_BOTTOM:
-                        rect.width = thumbWidth;
                         rect.height = clipHeight;
                         thumb.y = thumbPosY;
                         break;
                     case ProgressBarDirection.BOTTOM_TO_TOP:
-                        rect.width = thumbWidth;
                         rect.height = clipHeight;
                         rect.y = thumbHeight - clipHeight;
                         thumb.y = thumbPosY + rect.y;

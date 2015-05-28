@@ -81,24 +81,24 @@ module lark {
 
         $setTo(stageX:number, stageY:number, touchPointID:number):void {
             this.touchPointID = +touchPointID || 0;
-            this._stageX = +stageX || 0;
-            this._stageY = +stageY || 0;
+            this.$stageX = +stageX || 0;
+            this.$stageY = +stageY || 0;
         }
 
-        public _stageX:number;
+        $stageX:number;
         /**
          * 事件发生点在全局舞台坐标中的水平坐标。
          */
         public get stageX():number {
-            return this._stageX;
+            return this.$stageX;
         }
 
-        public _stageY:number;
+        $stageY:number;
         /**
          * 事件发生点在全局舞台坐标中的垂直坐标。
          */
         public get stageY():number {
-            return this._stageY;
+            return this.$stageY;
         }
 
         private localPoint:Point;

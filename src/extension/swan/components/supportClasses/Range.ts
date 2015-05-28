@@ -55,19 +55,15 @@ module swan {
         }
 
         public set maximum(value:number) {
-            this.$setMaximum(value);
-        }
-
-        $setMaximum(value:number):void {
             value = +value || 0;
             if (value === this.$maximum)
                 return;
-
             this.$maximum = value;
             this.maxChanged = true;
-
             this.invalidateProperties();
+            this.invalidateDisplayList();
         }
+
 
         $minimum:number = 0;
 
@@ -84,18 +80,13 @@ module swan {
         }
 
         public set minimum(value:number) {
-            this.$setMinimum(value);
-        }
-
-        $setMinimum(value:number):void {
             value = +value || 0;
             if (value === this.$minimum)
                 return;
-
             this.$minimum = value;
             this.minChanged = true;
-
             this.invalidateProperties();
+            this.invalidateDisplayList();
         }
 
         private _stepSize:number = 1;
@@ -141,7 +132,7 @@ module swan {
         }
 
         public set value(newValue:number) {
-            newValue = +newValue||0;
+            newValue = +newValue || 0;
             this.$setValue(newValue);
         }
 
@@ -171,11 +162,10 @@ module swan {
 
         public set snapInterval(value:number) {
             this._explicitSnapInterval = true;
-
-            value = +value||0;
+            value = +value || 0;
             if (value === this.$snapInterval)
                 return;
-            if (isNaN(value)) {
+            if (lark.isNone(value)) {
                 this.$snapInterval = 1;
                 this._explicitSnapInterval = false;
             }
@@ -195,7 +185,7 @@ module swan {
         protected commitProperties():void {
             super.commitProperties();
 
-            if (this.minimum > this.maximum) {
+            if (this.$minimum > this.$maximum) {
 
                 if (!this.maxChanged)
                     this.$minimum = this.$maximum;
@@ -209,7 +199,7 @@ module swan {
                 this.maxChanged = false;
                 this.minChanged = false;
                 this.snapIntervalChanged = false;
-                this.setValue(this.nearestValidValue(currentValue, this.snapInterval));
+                this.setValue(this.nearestValidValue(currentValue, this.$snapInterval));
             }
 
             if (this.stepSizeChanged) {
@@ -218,7 +208,7 @@ module swan {
                 }
                 else {
                     this.$snapInterval = this._stepSize;
-                    this.setValue(this.nearestValidValue(this._value, this.snapInterval));
+                    this.setValue(this.nearestValidValue(this._value, this.$snapInterval));
                 }
 
                 this.stepSizeChanged = false;
@@ -270,15 +260,14 @@ module swan {
          * @param value value属性的新值
          */
         protected setValue(value:number):void {
-            if (this._value == value)
+            if (this._value === value)
                 return;
-            if (isNaN(value))
-                value = 0;
-            if (!isNaN(this.maximum) && !isNaN(this.minimum) && (this.maximum > this.minimum))
-                this._value = Math.min(this.maximum, Math.max(this.minimum, value));
+            if (this.$maximum > this.$minimum)
+                this._value = Math.min(this.$maximum, Math.max(this.$minimum, value));
             else
                 this._value = value;
             this.valueChanged = false;
+            this.invalidateDisplayList();
             UIEvent.emitUIEvent(this, UIEvent.VALUE_COMMIT);
         }
 
@@ -293,6 +282,21 @@ module swan {
 
             var newValue:number = (increase) ? this.value + stepSize : this.value - stepSize;
             this.setValue(this.nearestValidValue(newValue, this.snapInterval));
+        }
+
+        /**
+         * 绘制对象和/或设置其子项的大小和位置
+         */
+        protected updateDisplayList(w:number, h:number):void {
+            super.updateDisplayList(w, h);
+            this.updateSkinDisplayList();
+        }
+
+        /**
+         * 更新皮肤部件（通常为滑块）的大小和可见性。
+         * 子类覆盖此方法以基于 minimum、maximum 和 value 属性更新滑块的大小、位置和可见性。
+         */
+        protected updateSkinDisplayList():void {
         }
     }
 

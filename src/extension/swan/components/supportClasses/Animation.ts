@@ -119,7 +119,7 @@ module swan.sys {
         /**
          * 计算当前值并返回动画是否结束
          */
-        private doInterval(event?:lark.Event):void {
+        private doInterval(event?:lark.TimerEvent):void {
             var currentTime = lark.getTimer();
             var runningTime = currentTime - this.startTime;
             if (!this.isPlaying) {
@@ -136,6 +136,9 @@ module swan.sys {
             }
             if (isEnded && this.endFunction) {
                 this.endFunction.call(this.thisObject, this);
+            }
+            if(event){
+                event.updateAfterEvent();
             }
         }
 

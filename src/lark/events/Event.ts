@@ -74,7 +74,7 @@ module lark {
          */
         public static RENDER:string = "render";
         /**
-         * 舞台尺寸发生改变
+         * 舞台尺寸或UI组件尺寸发生改变
          */
         public static RESIZE:string = "resize";
 

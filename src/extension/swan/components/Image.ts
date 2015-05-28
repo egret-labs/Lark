@@ -320,6 +320,7 @@ module swan {
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         protected commitProperties():void {
+            sys.UIComponentImpl.prototype["commitProperties"].call(this);
             if(this.sourceChanged){
                 this.parseSource();
             }

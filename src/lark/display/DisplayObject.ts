@@ -343,7 +343,6 @@ module lark {
         $setX(value:number):boolean {
             value = +value || 0;
             var values = this._matrix.$data;
-            ;
             if (value === values[M.tx]) {
                 return false;
             }
