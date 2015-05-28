@@ -42,12 +42,14 @@ class Build extends Action {
     public run(): number {
 
         this._request = http.get('http://127.0.0.1:51598/?init=true&path='+encodeURIComponent(this.options.projectDir), res=> {
-            res.setEncoding('utf-8');
-            res.on('data', function (text) {
-                var msg:lark.ServiceBuildCommand = JSON.parse(text);
-                this.buildChanges(msg.changes);
+            res.setEncoding('utf8');
+            res.on('data', text => {
+                var msg: lark.ServiceBuildCommand = JSON.parse(text);
+                if(msg.command=='build')
+                    this.buildChanges(msg.changes);
             });
         });
+        this._request.once('error',() => process.exit());
 
         setInterval(() => this.sendCommand({ command:"status", status:process.memoryUsage() }), 60000);
 
@@ -88,8 +90,7 @@ class Build extends Action {
             else
                 others.push(f);
         });
-        this.buildChangedRes(others)
-        console.log(codes);
+        this.buildChangedRes(others);
         if (codes.length) {
             var result = this.buildChangedTS(codes);
             this._lastExitCode = result.exitStatus;
@@ -109,8 +110,7 @@ class Build extends Action {
 
         var src = this.options.srcDir,
             temp = this.options.templateDir,
-            start = this.options.project.startupHtml,
-            proj = this.options.projManifest;
+            start = this.options.project.startupHtml;
 
 
         fileNames.forEach(fileName => { 
@@ -130,7 +130,7 @@ class Build extends Action {
                 console.log('Remove: ', output);
             }
 
-            if (fileName.indexOf(start) >= 0 || fileName.indexOf(proj) >= 0)
+            if (fileName.indexOf(start) >= 0)
                 return this.onTemplateIndexChanged(fileName);
         });
     }

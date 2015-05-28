@@ -34,6 +34,7 @@ var TypeScript = require("../lib/typescript/tsclark");
 var UglifyJS = require("../lib/uglify-js/uglifyjs");
 var Action = (function () {
     function Action(options) {
+        this.projectManifest = {};
         this.options = options;
         this.projectDir = options.projectDir;
     }
@@ -72,10 +73,7 @@ var Action = (function () {
             files: files,
             release: option.project.name + ".min.js"
         };
-        var json = JSON.stringify(projManifest, null, '   ');
-        var oldContent = FileUtil.read(this.options.projManifest);
-        if (oldContent != json)
-            FileUtil.save(this.options.projManifest, json);
+        this.options.projManifest = projManifest;
         compileResult.files = files;
         return compileResult;
     };
@@ -196,19 +194,14 @@ var Action = (function () {
             larkFiles.push('libs/' + m.name + jsext);
         });
         var dir = options.templateDir;
-        var manifestFile = dir + "proj.json";
-        if (FileUtil.exists(manifestFile)) {
-            var content = FileUtil.read(manifestFile);
-            var manifest = JSON.parse(content);
-            projFiles = options.publish ? [manifest.release] : manifest.files;
-        }
+        projFiles = options.publish ? [options.projManifest.release] : options.projManifest.files;
         var manifests = [{
-                files: larkFiles,
-                replacement: '<script id="lark"></script>'
-            }, {
-                files: projFiles,
-                replacement: '<script id="project"></script>'
-            }];
+            files: larkFiles,
+            replacement: '<script id="lark"></script>'
+        }, {
+            files: projFiles,
+            replacement: '<script id="project"></script>'
+        }];
         var content = FileUtil.read(templateFile);
         manifests.forEach(function (manifest) {
             var scripts = manifest.files.map(function (f) { return ['<script src="', f, '"></script>'].join(''); }).join('\r\n');

@@ -57,7 +57,7 @@ var lark;
                 var json = JSON.stringify(this);
                 console.log(json);
                 $.get('', { proj: json }, function () {
-                    location.href = "/$/";
+                    location.href = "/bin-debug/index.html";
                 });
                 $('#console').addClass('active');
                 this.larkManifest = manifest;

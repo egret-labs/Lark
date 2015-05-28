@@ -20,7 +20,7 @@ function install() {
     addRoute('$/', preview);
     addRoute('$/ping/', ping);
     addRoute('$/create/', create);
-    addRoute('$/manage/', manage);
+    addRoute('$/config/', manage);
     addRoute('$/command/', command);
     addRoute('$/shutdown', shutdown);
     framework.file('Lark manage static files', staticFiles);
@@ -60,8 +60,9 @@ function doCreate() {
         var proj = JSON.parse(projJSON);
             
         var create = new Create(lark.options);
-        create.doCreate(proj);
-        self.res.send(200, 'OK');
+        create.doCreate(proj,() => {
+            self.res.send(200, 'OK');
+        });
     }
     catch (e) {
         console.log(e);

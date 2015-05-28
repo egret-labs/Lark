@@ -9,11 +9,15 @@ http.createServer(function (req, res) {
     console.log(info);
     if (info.init) {
         var proj = projects[info.path];
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
         proj.buildPort = res;
+        setInterval(function () { return res.write("{}"); }, 15000);
     }
     else if (info.command) {
         var proj = projects[info.path];
         proj.onBuildServiceMessage(info.command);
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.end("");
     }
     else {
         handleBuildTask(info, res);

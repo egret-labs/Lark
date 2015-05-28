@@ -64,6 +64,10 @@ var Entry = (function () {
                 server.startServer(options, options.manageUrl + "create/");
                 exitCode = DontExitCode;
                 break;
+            case "config":
+                server.startServer(options, options.manageUrl + "config/");
+                exitCode = DontExitCode;
+                break;
             case "run":
                 server.startServer(options);
                 exitCode = DontExitCode;
@@ -94,13 +98,13 @@ var Entry = (function () {
 })();
 var entry = new Entry();
 var serviceCreated = false;
-function sendBuildCMD() {
+function sendBuildCMD(callback) {
     var options = lark.options;
     var requestUrl = 'http://127.0.0.1:51598/?path=' + encodeURIComponent(options.projectDir);
     var commandRequest = http.get(requestUrl, function (res) {
         res.setEncoding('utf-8');
         res.on('data', function (text) {
-            gotCommandResult(text);
+            gotCommandResult(text, callback);
         });
     });
     commandRequest.once('error', function (e) {
@@ -108,11 +112,13 @@ function sendBuildCMD() {
             startBackgroundService();
             serviceCreated = true;
         }
-        setTimeout(function () { return sendBuildCMD(); }, 200);
+        setTimeout(function () { return sendBuildCMD(callback); }, 200);
     });
     commandRequest.setTimeout(100);
 }
+exports.sendBuildCMD = sendBuildCMD;
 function startBackgroundService() {
+    console.log('create service');
     var options = lark.options;
     var nodePath = process.execPath, service = FileUtil.joinPath(options.larkRoot, 'tools/service/index');
     var startupParams = ['--expose-gc', service];
@@ -123,11 +129,16 @@ function startBackgroundService() {
         silent: true
     });
 }
-function gotCommandResult(msg) {
+function gotCommandResult(msg, callback) {
     var cmd = JSON.parse(msg);
     if (cmd.messages) {
         cmd.messages.forEach(function (m) { return console.log(m); });
     }
-    process.exit(cmd.exitCode || 0);
+    if (callback) {
+        callback(cmd);
+    }
+    else {
+        process.exit(cmd.exitCode || 0);
+    }
 }
 //# sourceMappingURL=Entry.js.map

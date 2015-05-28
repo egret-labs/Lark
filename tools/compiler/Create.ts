@@ -31,7 +31,7 @@
 
 
 import Action = require('./Action');
-import Build = require('../build/index');
+import Entry = require('./Entry');
 import Project = require('./Project');
 import FileUtil = require('../lib/FileUtil');
 
@@ -49,7 +49,7 @@ class Create extends Action {
         return 0;
     }
 
-    public doCreate(projJson: lark.ILarkProject) {
+    public doCreate(projJson: lark.ILarkProject, callback?: Function) {
         var proj = new Project();
         proj.parse(projJson);
         this.options.project = proj;
@@ -57,8 +57,8 @@ class Create extends Action {
         var template = FileUtil.joinPath(lark.options.larkRoot, "tools/templates/" + proj.template);
         FileUtil.copy(template, lark.options.projectDir);
         this.copyLarkDeclare();
-        var build = new Build(this.options);
-        build.run();
+        console.log('call build');
+        Entry.sendBuildCMD(callback);
     }
 }
 

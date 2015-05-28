@@ -21,12 +21,16 @@ http.createServer(function (req, res) {
     var info: TaskInfo = uri.query;
     console.log(info);
     if (info.init) {
-        var proj:Project = projects[info.path];
+        var proj: Project = projects[info.path];
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
         proj.buildPort = res;
+        setInterval(() => res.write("{}"), 15000);
     }
     else if (info.command) {
         var proj: Project = projects[info.path];
         proj.onBuildServiceMessage(info.command);
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.end("");
     }
     else {
         handleBuildTask(info, res);

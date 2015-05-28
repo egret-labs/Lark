@@ -16,7 +16,7 @@ function install() {
     addRoute('$/', preview);
     addRoute('$/ping/', ping);
     addRoute('$/create/', create);
-    addRoute('$/manage/', manage);
+    addRoute('$/config/', manage);
     addRoute('$/command/', command);
     addRoute('$/shutdown', shutdown);
     framework.file('Lark manage static files', staticFiles);
@@ -47,8 +47,9 @@ function doCreate() {
     try {
         var proj = JSON.parse(projJSON);
         var create = new Create(lark.options);
-        create.doCreate(proj);
-        self.res.send(200, 'OK');
+        create.doCreate(proj, function () {
+            self.res.send(200, 'OK');
+        });
     }
     catch (e) {
         console.log(e);
@@ -90,7 +91,9 @@ function ping() {
 }
 function command() {
     var logs = [];
-    function writeLog(params) { logs.push(params); }
+    function writeLog(params) {
+        logs.push(params);
+    }
     lark.server.console.on('log', writeLog);
     var commandString = self.req.query['command'];
     var commandOption;

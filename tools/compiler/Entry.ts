@@ -35,6 +35,7 @@ import Parser = require("./Parser");
 import Build = require("../build/index");
 import Publish = require("./Publish");
 import Create = require("./Create");
+import Config = require("./Config");
 import utils = require('../lib/utils');
 import lock = require("../lib/lockfile");
 import FileUtil = require('../lib/FileUtil');
@@ -74,6 +75,10 @@ class Entry {
                 server.startServer(options, options.manageUrl + "create/");
                 exitCode = DontExitCode;
                 break;
+            case "config":
+                server.startServer(options, options.manageUrl + "config/");
+                exitCode = DontExitCode;
+                break;
             case "run":
                 server.startServer(options);
                 exitCode = DontExitCode;
@@ -106,13 +111,13 @@ class Entry {
 var entry = new Entry();
 
 var serviceCreated = false;
-function sendBuildCMD() {
+export function sendBuildCMD(callback?: Function) {
     var options = lark.options;
     var requestUrl = 'http://127.0.0.1:51598/?path=' + encodeURIComponent(options.projectDir); 
     var commandRequest = http.get(requestUrl, function (res) {
         res.setEncoding('utf-8');
         res.on('data', function (text) {
-            gotCommandResult(text);
+            gotCommandResult(text,callback);
         });
     });
     commandRequest.once('error', function (e) {
@@ -120,12 +125,13 @@ function sendBuildCMD() {
             startBackgroundService();
             serviceCreated = true;
         }
-        setTimeout(() => sendBuildCMD(), 200);
+        setTimeout(() => sendBuildCMD(callback), 200);
     });
     commandRequest.setTimeout(100);
 }
 
 function startBackgroundService() {
+    console.log('create service');
     var options = lark.options;
     var nodePath = process.execPath,
         service = FileUtil.joinPath(options.larkRoot, 'tools/service/index');
@@ -139,11 +145,16 @@ function startBackgroundService() {
 }
 
 
-function gotCommandResult(msg) {
+function gotCommandResult(msg, callback?: Function) {
     var cmd: lark.ServiceCommandResult = JSON.parse(msg);
     if (cmd.messages) {
         cmd.messages.forEach(m=> console.log(m));
     }
-    process.exit(cmd.exitCode || 0);
+    if (callback) {
+        callback(cmd);
+    }
+    else {
+        process.exit(cmd.exitCode || 0);
+    }
 }
 

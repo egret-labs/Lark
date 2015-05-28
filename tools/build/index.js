@@ -48,12 +48,14 @@ var Build = (function (_super) {
     Build.prototype.run = function () {
         var _this = this;
         this._request = http.get('http://127.0.0.1:51598/?init=true&path=' + encodeURIComponent(this.options.projectDir), function (res) {
-            res.setEncoding('utf-8');
+            res.setEncoding('utf8');
             res.on('data', function (text) {
                 var msg = JSON.parse(text);
-                this.buildChanges(msg.changes);
+                if (msg.command == 'build')
+                    _this.buildChanges(msg.changes);
             });
         });
+        this._request.once('error', function () { return process.exit(); });
         setInterval(function () { return _this.sendCommand({ command: "status", status: process.memoryUsage() }); }, 60000);
         return this.buildProject();
     };
@@ -87,7 +89,6 @@ var Build = (function (_super) {
                 others.push(f);
         });
         this.buildChangedRes(others);
-        console.log(codes);
         if (codes.length) {
             var result = this.buildChangedTS(codes);
             this._lastExitCode = result.exitStatus;
@@ -103,7 +104,7 @@ var Build = (function (_super) {
     };
     Build.prototype.buildChangedRes = function (fileNames) {
         var _this = this;
-        var src = this.options.srcDir, temp = this.options.templateDir, start = this.options.project.startupHtml, proj = this.options.projManifest;
+        var src = this.options.srcDir, temp = this.options.templateDir, start = this.options.project.startupHtml;
         fileNames.forEach(function (fileName) {
             if (fileName.indexOf(src) < 0 && fileName.indexOf(temp) < 0) {
                 return;
@@ -118,7 +119,7 @@ var Build = (function (_super) {
                 FileUtil.remove(output);
                 console.log('Remove: ', output);
             }
-            if (fileName.indexOf(start) >= 0 || fileName.indexOf(proj) >= 0)
+            if (fileName.indexOf(start) >= 0)
                 return _this.onTemplateIndexChanged(fileName);
         });
     };

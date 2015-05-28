@@ -6,6 +6,7 @@ import FileUtil = require('../lib/FileUtil');
 class CompileOptions implements lark.ICompileOptions {
     action: string;
     projectDir: string;
+    projManifest: any;
 
     get dirName(): string {
         return FileUtil.getFileName(this.projectDir);
@@ -17,10 +18,6 @@ class CompileOptions implements lark.ICompileOptions {
     
     get larkPropertiesFile(): string {
         return FileUtil.joinPath(this.projectDir, "lark.json");
-    }
-
-    get projManifest(): string {
-        return FileUtil.joinPath(this.templateDir, "proj.json");
     }
 
     get debugDir(): string {
@@ -43,7 +40,7 @@ class CompileOptions implements lark.ICompileOptions {
 
 
     get templateDir(): string {
-        return FileUtil.joinPath(this.projectDir, "web/");
+        return FileUtil.joinPath(this.projectDir, "template/");
     }
 
     get host(): string {

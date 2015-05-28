@@ -44,6 +44,7 @@ class Action {
 
     public projectDir: string;
     public options: lark.ICompileOptions;
+    private projectManifest: any = {};
     private recompile: (files: string[]) => TypeScript.LarkCompileResult;
 
     public run(): number {
@@ -88,10 +89,7 @@ class Action {
             release: option.project.name + ".min.js"
         };
 
-        var json = JSON.stringify(projManifest, null, '   ');
-        var oldContent = FileUtil.read(this.options.projManifest);
-        if (oldContent != json)
-            FileUtil.save(this.options.projManifest, json);
+        this.options.projManifest = projManifest;
 
         compileResult.files = files;
         return compileResult;
@@ -230,13 +228,8 @@ class Action {
             larkFiles.push('libs/' + m.name + jsext);
         });
 
-        var dir = options.templateDir ;
-        var manifestFile = dir + "proj.json";
-        if (FileUtil.exists(manifestFile)) {
-            var content = FileUtil.read(manifestFile);
-            var manifest = JSON.parse(content);
-            projFiles = options.publish ? [manifest.release] : manifest.files;
-        }
+        var dir = options.templateDir;
+        projFiles = options.publish ? [options.projManifest.release] : options.projManifest.files;
         
 
         var manifests = [{
