@@ -120,6 +120,7 @@ declare module lark {
         version: string;
         modules: LarkModule[];
         platforms: LarkPlatform[];
+        configurations: CompileConfiguration[];
     }
 
     
@@ -127,14 +128,28 @@ declare module lark {
     export interface LarkModule {
         name: string;
         description?: string;
-        files?: Array<string|{ dir: string;filter:string }>;
+        files?: Array<string|LarkSourceFile>;
         dependencies?: string[];
         root?: string;
+    }
+
+    export interface LarkSourceFile {
+        platforms?: string[];
+        configurations?: string[];
+        path:string
+    }
+
+    export interface CompileConfiguration {
+        name: string;
+        description?: string;
+        minify: boolean;
+        declaration: boolean;
     }
 
     export interface LarkPlatform {
         name: string;
         description?: string;
+        declaration?: boolean;
     }
 }
 
