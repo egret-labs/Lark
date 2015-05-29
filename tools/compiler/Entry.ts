@@ -32,12 +32,10 @@
 require('../locales/zh_CN');
 
 import Parser = require("./Parser");
-import Build = require("../build/index");
+import Build = require("./Build");
 import Publish = require("./Publish");
 import Create = require("./Create");
-import Config = require("./Config");
 import utils = require('../lib/utils');
-import lock = require("../lib/lockfile");
 import FileUtil = require('../lib/FileUtil');
 import server = require('../server/server');
 
@@ -77,6 +75,10 @@ class Entry {
                 break;
             case "config":
                 server.startServer(options, options.manageUrl + "config/");
+                exitCode = DontExitCode;
+                break;
+            case "help":
+                server.startServer(options, options.manageUrl + "help/");
                 exitCode = DontExitCode;
                 break;
             case "run":

@@ -30,8 +30,8 @@
 
 import xml = require("../xml/index");
 import utils = require("../utils");
-import CodeUtil = require("../code_util");
 import file = require("../FileUtil");
+import CodeUtil = require("./code_util");
 import exml_config = require("./exml_config");
 
 var compiler:EXMLCompiler;

@@ -2,7 +2,7 @@
 
 import file = require("../FileUtil");
 import xml = require("../xml/index");
-import CodeUtil = require("../code_util");
+import CodeUtil = require("./code_util");
 
 import utils = require("../utils");
 import exml_config = require("./exml_config");

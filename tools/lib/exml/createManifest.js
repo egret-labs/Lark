@@ -1,7 +1,7 @@
 /// <reference path="../types.d.ts" />
 var file = require("../FileUtil");
 var xml = require("../xml/index");
-var CodeUtil = require("../code_util");
+var CodeUtil = require("./code_util");
 var utils = require("../utils");
 var exml_config = require("./exml_config");
 /**
@@ -1203,3 +1203,4 @@ module.exports = {
     getModuleReferenceInfo: getModuleReferenceInfo,
     getModuleReferenceList: getModuleReferenceList
 };
+//# sourceMappingURL=createManifest.js.map

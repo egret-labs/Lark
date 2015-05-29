@@ -1,5 +1,4 @@
 ﻿/// <reference path="node.d.ts" />
-/// <reference path="es6-promise.d.ts" />
 /// <reference path="totaljs/totaljs.d.ts" />
 
 

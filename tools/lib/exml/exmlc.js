@@ -34,8 +34,8 @@ var __extends = this.__extends || function (d, b) {
 /// <reference path="exml_config.ts"/>
 var xml = require("../xml/index");
 var utils = require("../utils");
-var CodeUtil = require("../code_util");
 var file = require("../FileUtil");
+var CodeUtil = require("./code_util");
 var exml_config = require("./exml_config");
 var compiler;
 function compile(exmlPath, srcPath) {
@@ -1969,3 +1969,4 @@ var Modifiers = (function () {
     Modifiers.M_STATIC = "static";
     return Modifiers;
 })();
+//# sourceMappingURL=exmlc.js.map

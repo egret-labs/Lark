@@ -3,7 +3,7 @@
 import url = require('url');
 import file = require('../../lib/FileUtil');
 import Entry = require('../../compiler/Entry');
-import Build = require('../../build/index');
+import Build = require('../../compiler/Build');
 import Create = require('../../compiler/Create');
 import Project = require('../../compiler/Project');
 import CompileOptions = require('../../compiler/CompileOptions');
@@ -17,11 +17,11 @@ var exportObject = {
 export = exportObject;
 var self = this;
 function install() {
-    addRoute('$/', preview);
+    addRoute('$/', manage);
     addRoute('$/ping/', ping);
+    addRoute('$/help/', help);
     addRoute('$/create/', create);
     addRoute('$/config/', manage);
-    addRoute('$/command/', command);
     addRoute('$/shutdown', shutdown);
     framework.file('Lark manage static files', staticFiles);
     framework.file('User project static files', projectFiles);
@@ -43,9 +43,6 @@ function addRoute(path: string, method: Function) {
 
     
 
-function preview() {
-    this.view('index');
-}
 
 function create() {
     if (this.req.query['proj'])
@@ -95,6 +92,10 @@ function doManage() {
     }
 }
 
+function help() {
+    this.view('help');
+}
+
 function shutdown() {
     console.log('The server has been shutdown');
     self.res.send(200, '');
@@ -107,30 +108,6 @@ function ping() {
     res.send(200, 'OK');
 }
 
-function command() {
-    var logs = []
-    function writeLog(params) { logs.push(params); }
-    lark.server.console.on('log', writeLog);
-
-    var commandString = self.req.query['command'];
-    var commandOption: lark.ICompileOptions;
-    try {
-        commandOption = JSON.parse(commandString);
-    }
-    catch (e) {
-        console.log(e);
-    }
-    var options = CompileOptions.parse(commandOption);
-    var exitcode = Entry.executeOption(options);
-    var result: lark.CommandResult = {
-        type: 'result',
-        exitCode: exitcode,
-        message: '',
-        data: logs
-    };
-    lark.server.console.removeListener('log', writeLog);
-    self.res.json(result);
-}
 
 function staticFiles(req, res, isValidation) {
 

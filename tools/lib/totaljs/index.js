@@ -12617,7 +12617,7 @@ process.on('uncaughtException', function(e) {
 		if (typeof(process.send) === TYPE_FUNCTION)
 			process.send('eaddrinuse');
 		console.log('\nThe IP address and the PORT is already in use.\nYou must change the PORT\'s number or IP address.\n');
-		process.exit(1);
+        setTimeout(function () { process.exit(1); }, 20);
 		return;
 	}
 

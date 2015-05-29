@@ -49,19 +49,24 @@ class Project {
     }
 
     buildWholeProject() {
-        this.buildProcess && this.buildProcess.kill();
+        this.sendCommand({ command: 'shutdown' });
+        if (this.buildProcess) {
+            this.buildProcess.removeAllListeners('exit');
+            this.buildProcess.kill();
+        }
         var larkPath = FileUtil.joinPath(utils.getLarkRoot(), 'tools/bin/lark');
 
         var build = cprocess.spawn(process.execPath, [larkPath, 'buildService', this.path], {
             detached: true,
             cwd: this.path
         });
-        build.on('exit',() => this.buildProcess = null);
+        build.on('exit', (code, signal) => this.onBuildServiceExit(code, signal));
 
         this.buildProcess = build;
     }
 
     buildWithExistBuildService() {
+        console.log('buildWithExistBuildService');
         if (!this.buildProcess) {
             this.buildWholeProject();
             return;
@@ -75,10 +80,10 @@ class Project {
         });
     }
 
-    private sendCommand(cmd: lark.ServiceBuildCommand) {
+    private sendCommand(cmd: lark.ServiceCommand) {
         //this.buildProcess.stdin.write(JSON.stringify(cmd), 'utf8');
         console.log(cmd);
-        this.buildPort.write(JSON.stringify(cmd));
+        this.buildPort && this.buildPort.write(JSON.stringify(cmd));
         //this.buildProcess.send(cmd);
     }
 

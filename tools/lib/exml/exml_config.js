@@ -27,7 +27,7 @@
 /// <reference path="../types.d.ts" />
 var file = require("../FileUtil");
 var xml = require("../xml/index");
-var CodeUtil = require("../code_util");
+var CodeUtil = require("./code_util");
 var create_manifest = require("./createManifest");
 var properties = {};
 var stylesMap = {};
@@ -566,3 +566,4 @@ var Component = (function () {
 })();
 var exmlConfig;
 module.exports = EXMLConfig;
+//# sourceMappingURL=exml_config.js.map

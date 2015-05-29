@@ -37,16 +37,21 @@ var Project = (function () {
     };
     Project.prototype.buildWholeProject = function () {
         var _this = this;
-        this.buildProcess && this.buildProcess.kill();
+        this.sendCommand({ command: 'shutdown' });
+        if (this.buildProcess) {
+            this.buildProcess.removeAllListeners('exit');
+            this.buildProcess.kill();
+        }
         var larkPath = FileUtil.joinPath(utils.getLarkRoot(), 'tools/bin/lark');
         var build = cprocess.spawn(process.execPath, [larkPath, 'buildService', this.path], {
             detached: true,
             cwd: this.path
         });
-        build.on('exit', function () { return _this.buildProcess = null; });
+        build.on('exit', function (code, signal) { return _this.onBuildServiceExit(code, signal); });
         this.buildProcess = build;
     };
     Project.prototype.buildWithExistBuildService = function () {
+        console.log('buildWithExistBuildService');
         if (!this.buildProcess) {
             this.buildWholeProject();
             return;
@@ -60,10 +65,11 @@ var Project = (function () {
     Project.prototype.sendCommand = function (cmd) {
         //this.buildProcess.stdin.write(JSON.stringify(cmd), 'utf8');
         console.log(cmd);
-        this.buildPort.write(JSON.stringify(cmd));
+        this.buildPort && this.buildPort.write(JSON.stringify(cmd));
         //this.buildProcess.send(cmd);
     };
     Project.prototype.onBuildServiceMessage = function (text) {
+        //console.log(text);
         try {
             var msg = JSON.parse(text);
         }

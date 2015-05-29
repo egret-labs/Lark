@@ -29,7 +29,7 @@
 /// <reference path="../lib/types.d.ts" />
 require('../locales/zh_CN');
 var Parser = require("./Parser");
-var Build = require("../build/index");
+var Build = require("./Build");
 var Publish = require("./Publish");
 var Create = require("./Create");
 var FileUtil = require('../lib/FileUtil');
@@ -66,6 +66,10 @@ var Entry = (function () {
                 break;
             case "config":
                 server.startServer(options, options.manageUrl + "config/");
+                exitCode = DontExitCode;
+                break;
+            case "help":
+                server.startServer(options, options.manageUrl + "help/");
                 exitCode = DontExitCode;
                 break;
             case "run":

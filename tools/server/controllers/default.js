@@ -1,11 +1,9 @@
 /// <reference path="../../lib/types.d.ts" />
 var url = require('url');
 var file = require('../../lib/FileUtil');
-var Entry = require('../../compiler/Entry');
-var Build = require('../../build/index');
+var Build = require('../../compiler/Build');
 var Create = require('../../compiler/Create');
 var Project = require('../../compiler/Project');
-var CompileOptions = require('../../compiler/CompileOptions');
 var exportObject = {
     LarkStaticContentPath: '$/content/',
     UserProjectPath: null,
@@ -13,11 +11,11 @@ var exportObject = {
 };
 var self = this;
 function install() {
-    addRoute('$/', preview);
+    addRoute('$/', manage);
     addRoute('$/ping/', ping);
+    addRoute('$/help/', help);
     addRoute('$/create/', create);
     addRoute('$/config/', manage);
-    addRoute('$/command/', command);
     addRoute('$/shutdown', shutdown);
     framework.file('Lark manage static files', staticFiles);
     framework.file('User project static files', projectFiles);
@@ -33,9 +31,6 @@ function addRoute(path, method) {
         this.repository = viewdata;
         method.call(this);
     });
-}
-function preview() {
-    this.view('index');
 }
 function create() {
     if (this.req.query['proj'])
@@ -79,6 +74,9 @@ function doManage() {
         self.res.send(500, JSON.stringify(e, null, '  '));
     }
 }
+function help() {
+    this.view('help');
+}
 function shutdown() {
     console.log('The server has been shutdown');
     self.res.send(200, '');
@@ -88,31 +86,6 @@ function ping() {
     console.log('call ping');
     var res = self.res;
     res.send(200, 'OK');
-}
-function command() {
-    var logs = [];
-    function writeLog(params) {
-        logs.push(params);
-    }
-    lark.server.console.on('log', writeLog);
-    var commandString = self.req.query['command'];
-    var commandOption;
-    try {
-        commandOption = JSON.parse(commandString);
-    }
-    catch (e) {
-        console.log(e);
-    }
-    var options = CompileOptions.parse(commandOption);
-    var exitcode = Entry.executeOption(options);
-    var result = {
-        type: 'result',
-        exitCode: exitcode,
-        message: '',
-        data: logs
-    };
-    lark.server.console.removeListener('log', writeLog);
-    self.res.json(result);
 }
 function staticFiles(req, res, isValidation) {
     if (isValidation) {

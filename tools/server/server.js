@@ -33,9 +33,17 @@ function startServer(options, startupUrl) {
     framework.config['allow-compile-js'] = false;
     framework.config['allow-compile-html'] = false;
     framework.config['allow-compile-css'] = false;
-    total.http('debug', { port: options.port, ip: '0.0.0.0' });
-    if (!options.serverOnly)
-        utils.open(startupUrl || options.manageUrl);
+    try {
+        total.http('debug', { port: options.port, ip: '0.0.0.0' });
+        if (!options.serverOnly)
+            utils.open(startupUrl || options.manageUrl);
+    }
+    catch (e) {
+        if (e.toString().indexOf('listen EADDRINUSE') !== -1) {
+            if (!options.serverOnly)
+                utils.open(startupUrl || options.manageUrl);
+        }
+    }
 }
 exports.startServer = startServer;
 var ServerConsole = (function (_super) {

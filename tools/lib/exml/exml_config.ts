@@ -29,7 +29,7 @@
 
 import file = require("../FileUtil");
 import xml = require("../xml/index");
-import CodeUtil = require("../code_util");
+import CodeUtil = require("./code_util");
 import create_manifest = require("./createManifest");
 var properties = {};
 var stylesMap = {};
