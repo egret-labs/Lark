@@ -79,7 +79,7 @@ module swan {
             var bounds = lark.$TempRectangle;
             this.thumb.getLayoutBounds(bounds);
             this.thumb.setLayoutBoundsPosition(Math.round(thumbPosParentX), bounds.y);
-            if (this.$showTrackHighlight && this.trackHighlight && this.trackHighlight.$parent) {
+            if (this.trackHighlight && this.trackHighlight.$parent) {
                 var trackHighlightX = this.trackHighlight.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).x - thumbPosTrackX;
                 this.trackHighlight.x = Math.round(trackHighlightX);
                 this.trackHighlight.width = Math.round(thumbPosTrackX);

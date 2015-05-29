@@ -128,7 +128,7 @@ module lark {
                     insertIndex = i;
                 }
             }
-            var eventBin:lark.sys.EventBin = {
+            var eventBin:sys.EventBin = {
                 type: type, listener: listener, thisObject: thisObject, priority: priority,
                 target: this, useCapture: useCapture, emitOnce: !!emitOnce
             };

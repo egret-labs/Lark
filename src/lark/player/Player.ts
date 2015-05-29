@@ -94,7 +94,7 @@ module lark.sys {
             if (!this.root) {
                 this.initialize();
             }
-            Ticker.$instance.$addsys(this);
+            $ticker.$addPlayer(this);
         }
 
         private initialize():void {
@@ -133,7 +133,7 @@ module lark.sys {
                 return;
             }
             this.isPlaying = false;
-            Ticker.$instance.$removesys(this);
+            $ticker.$removePlayer(this);
         }
 
         /**

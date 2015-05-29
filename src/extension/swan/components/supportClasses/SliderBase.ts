@@ -52,27 +52,6 @@ module swan {
          */
         public trackHighlight:lark.DisplayObject = null;
 
-        $showTrackHighlight:boolean = true;
-
-        /**
-         * 是否启用轨道高亮效果。默认值为 true。
-         * 注意:皮肤部件 trackHighlight 要同时为非空才能显示高亮效果。
-         */
-        public get showTrackHighlight():boolean {
-            return this.$showTrackHighlight;
-        }
-
-        public set showTrackHighlight(value:boolean) {
-            value = !!value;
-            if (this.$showTrackHighlight === value)
-                return;
-            this.$showTrackHighlight = value;
-            if (this.trackHighlight)
-                this.trackHighlight.visible = value;
-            this.invalidateDisplayList();
-        }
-
-
         /**
          * 动画实例
          */
@@ -209,7 +188,6 @@ module swan {
                 if (lark.is(this.trackHighlight, lark.Types.DisplayObjectContainer)) {
                     (<lark.DisplayObjectContainer> this.trackHighlight).touchChildren = false;
                 }
-                this.trackHighlight.visible = this.$showTrackHighlight;
             }
         }
     }

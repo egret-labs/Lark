@@ -1,35 +1,38 @@
-/**
- * Copyright (c) 2014,Egret-Labs.org
- * All rights reserved.
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the Egret-Labs.org nor the
- *       names of its contributors may be used to endorse or promote products
- *       derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+
 
 
 module swan.sys {
 
-    function sineInOut(t):number {
-        return -0.5 * (Math.cos(Math.PI * t) - 1)
+    function sineInOut(fraction:number):number {
+        return -0.5 * (Math.cos(Math.PI * fraction) - 1)
     }
 
     /**
@@ -41,16 +44,19 @@ module swan.sys {
         public constructor(updateFunction:(animation:Animation)=>void, thisObject:any) {
             this.updateFunction = updateFunction;
             this.thisObject = thisObject;
-            this.timer = new lark.Timer(1000 / 60);
-            this.timer.on(lark.TimerEvent.TIMER, this.doInterval, this);
         }
+
+        /**
+         * 此动画的缓动行为。设置为null意味着不使用缓动，默认值为 sineInOut
+         */
+        public easerFunction:(fraction:number)=>number = sineInOut;
 
         private thisObject:any;
 
         /**
          * 是否正在播放动画，不包括延迟等待和暂停的阶段
          */
-        public isPlaying:boolean = false
+        public isPlaying:boolean = false;
 
         /**
          * 动画持续时间,单位毫秒，默认值500
@@ -93,18 +99,15 @@ module swan.sys {
             this.start();
         }
 
-        private timer:lark.Timer;
-
         /**
          * 开始播放动画
          */
         private start():void {
             this.isPlaying = false;
             this.currentValue = 0;
-            this.caculateCurrentValue(0);
             this.startTime = lark.getTimer();
-            this.doInterval();
-            this.timer.start();
+            this.doInterval(this.startTime);
+            lark.startTick(this.doInterval,this);
         }
 
         /**
@@ -113,21 +116,23 @@ module swan.sys {
         public stop():void {
             this.isPlaying = false;
             this.startTime = 0;
-            this.timer.stop();
+            lark.stopTick(this.doInterval,this);
         }
 
         /**
          * 计算当前值并返回动画是否结束
          */
-        private doInterval(event?:lark.TimerEvent):void {
-            var currentTime = lark.getTimer();
+        private doInterval(currentTime:number):boolean {
             var runningTime = currentTime - this.startTime;
             if (!this.isPlaying) {
                 this.isPlaying = true;
             }
             var duration = this.duration;
             var fraction = duration == 0 ? 1 : Math.min(runningTime, duration) / duration;
-            this.caculateCurrentValue(fraction);
+            if (this.easerFunction){
+                fraction = this.easerFunction(fraction);
+            }
+            this.currentValue = this.from + (this.to - this.from) * fraction;
             if (this.updateFunction)
                 this.updateFunction.call(this.thisObject, this);
             var isEnded = runningTime >= duration;
@@ -137,17 +142,7 @@ module swan.sys {
             if (isEnded && this.endFunction) {
                 this.endFunction.call(this.thisObject, this);
             }
-            if(event){
-                event.updateAfterEvent();
-            }
-        }
-
-        /**
-         * 计算当前值
-         */
-        private caculateCurrentValue(fraction:number):void {
-            fraction = sineInOut(fraction);
-            this.currentValue = this.from + (this.to - this.from) * fraction;
+            return true;
         }
 
     }

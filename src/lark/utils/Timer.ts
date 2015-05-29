@@ -105,7 +105,7 @@ module lark {
         public start() {
             if(this._running)
                 return;
-            lark.sys.Ticker.$instance.$addTimer(this);
+            startTick(this.$update,this);
             this._running = true;
         }
 
@@ -115,7 +115,7 @@ module lark {
         public stop() {
             if(!this._running)
                 return;
-            lark.sys.Ticker.$instance.$removeTimer(this);
+            stopTick(this.$update,this);
             this._running = false;
         }
 
@@ -125,7 +125,7 @@ module lark {
         /**
          * Ticker以60FPS频率刷新此方法
          */
-        $update() {
+        $update(timeStamp:number):boolean {
             this.lastCount -= 1000;
             if(this.lastCount>0){
                 return;

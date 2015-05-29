@@ -81,7 +81,7 @@ module swan {
             var thumbHeight = bounds.height;
             this.thumb.getLayoutBounds(bounds);
             this.thumb.setLayoutBoundsPosition(bounds.x, Math.round(thumbPosParentY));
-            if (this.$showTrackHighlight && this.trackHighlight) {
+            if (this.trackHighlight) {
                 var trackHighlightY = this.trackHighlight.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).y;
                 this.trackHighlight.y = Math.round(trackHighlightY + thumbHeight);
                 this.trackHighlight.height = Math.round(thumbRange - trackHighlightY);
