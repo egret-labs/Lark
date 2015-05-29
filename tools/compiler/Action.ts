@@ -114,10 +114,13 @@ class Action {
         try{ manifest = JSON.parse(content) }
         catch(e){ utils.exit(10009) }
         
-        
+        var configurations: lark.CompileConfiguration[] = [
+            { name: "debug", declaration: true },
+            { name: "release", minify: true }
+        ];
         
         manifest.modules.forEach(m=> {
-            manifest.configurations.forEach(config=> {
+            configurations.forEach(config=> {
                 manifest.platforms.forEach(platform=> {
                     buildModule(m, platform, config);
                 })
@@ -176,19 +179,19 @@ class Action {
             var tss: string[] = [];
             larkModule.files.forEach(file=> {
                 var path: string = null; 
-                var platforms: string[], configs: string[];
+                var sourcePlatform: string, sourceConfig: string = null;
                 if (typeof (file) == 'string') {
                     path = <string>file;
                 }
                 else{
                     var source = <lark.LarkSourceFile>file;
                     path = source.path;
-                    platforms = source.platforms;
-                    configs = source.configurations;
+                    sourcePlatform = source.platform;
+                    sourceConfig = source.debug ? "debug" : null;
                 }
 
-                var platformOK = testPlatform(platform.name, platforms);
-                var configOK = testConfig(configuration.name, configs);
+                var platformOK = platform.name == ANY || sourcePlatform == platform.name;
+                var configOK = sourceConfig == null || sourceConfig == configuration.name;
                 if (platformOK && configOK) {
                     path = FileUtil.joinPath(moduleRoot, path);
                     tss.push(path);

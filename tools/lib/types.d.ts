@@ -134,16 +134,16 @@ declare module lark {
     }
 
     export interface LarkSourceFile {
-        platforms?: string[];
-        configurations?: string[];
+        platform?: string;
+        debug?: boolean;
         path:string
     }
 
     export interface CompileConfiguration {
         name: string;
         description?: string;
-        minify: boolean;
-        declaration: boolean;
+        minify?: boolean;
+        declaration?: boolean;
     }
 
     export interface LarkPlatform {

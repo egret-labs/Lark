@@ -97,8 +97,12 @@ var Action = (function () {
         catch (e) {
             utils.exit(10009);
         }
+        var configurations = [
+            { name: "debug", declaration: true },
+            { name: "release", minify: true }
+        ];
         manifest.modules.forEach(function (m) {
-            manifest.configurations.forEach(function (config) {
+            configurations.forEach(function (config) {
                 manifest.platforms.forEach(function (platform) {
                     buildModule(m, platform, config);
                 });
@@ -150,18 +154,18 @@ var Action = (function () {
             var tss = [];
             larkModule.files.forEach(function (file) {
                 var path = null;
-                var platforms, configs;
+                var sourcePlatform, sourceConfig = null;
                 if (typeof (file) == 'string') {
                     path = file;
                 }
                 else {
                     var source = file;
                     path = source.path;
-                    platforms = source.platforms;
-                    configs = source.configurations;
+                    sourcePlatform = source.platform;
+                    sourceConfig = source.debug ? "debug" : null;
                 }
-                var platformOK = testPlatform(platform.name, platforms);
-                var configOK = testConfig(configuration.name, configs);
+                var platformOK = platform.name == ANY || sourcePlatform == platform.name;
+                var configOK = sourceConfig == null || sourceConfig == configuration.name;
                 if (platformOK && configOK) {
                     path = FileUtil.joinPath(moduleRoot, path);
                     tss.push(path);

@@ -5,7 +5,7 @@
             "name": "lark",
             "description": "Lark Framework Core",
             "files": [
-                {  "path" : "Defines.ts", "configurations":["debug"] },
+                {  "path" : "Defines.ts", "debug":true },
                 "lark/display/Bitmap.ts",
                 "lark/display/BitmapData.ts",
                 "lark/display/BlendMode.ts",
@@ -65,15 +65,15 @@
                 "lark/utils/registerClass.ts",
                 "lark/utils/Timer.ts",
                 "lark/utils/tr.ts",
-                { "path":"lark/web/CanvasFactory.ts", "platforms":["html5"]  },
-                { "path":"lark/web/LarkWeb.ts","platforms":["html5"]  },
-                { "path":"lark/web/WebBitmapData.ts","platforms":["html5"]  },
-                { "path":"lark/web/WebCapability.ts","platforms":["html5"]  },
-                { "path":"lark/web/WebHttpRequest.ts","platforms":["html5"]  },
-                { "path":"lark/web/WebImageLoader.ts","platforms":["html5"]  },
-                { "path":"lark/web/WebScreen.ts","platforms":["html5"]  },
-                { "path":"lark/web/WebTextAdapter.ts","platforms":["html5"]  },
-                { "path":"lark/web/WebTouchHandler.ts","platforms":["html5"]  }
+                { "path":"lark/web/CanvasFactory.ts", "platform":"html5" },
+                { "path":"lark/web/LarkWeb.ts","platform":"html5"  },
+                { "path":"lark/web/WebBitmapData.ts","platform":"html5"  },
+                { "path":"lark/web/WebCapability.ts","platform":"html5"  },
+                { "path":"lark/web/WebHttpRequest.ts","platform":"html5"  },
+                { "path":"lark/web/WebImageLoader.ts","platform":"html5"  },
+                { "path":"lark/web/WebScreen.ts","platform":"html5"  },
+                { "path":"lark/web/WebTextAdapter.ts","platform":"html5"  },
+                { "path":"lark/web/WebTouchHandler.ts","platform":"html5"  }
             ],
             "root":"src/",
             "dependencies": []
@@ -93,16 +93,6 @@
         {
             "name":"empty",
             "description":"Empty Project"
-        }
-    ],
-    "configurations":[
-        {
-            "name":"debug",
-            "declaration":true
-        },
-        {
-            "name":"release",
-            "minify":true
         }
     ]
 }
