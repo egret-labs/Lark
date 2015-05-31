@@ -1,16 +1,22 @@
-<s:Group xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
-    <s:TabBar dataProvider="{viewStack}">
-        <s:itemRenderer>
-            <s:ItemRenderer states="up,over,down,disabled">
-                <s:Image source="image/button_up.png" includeIn="up" width="100%" height="100%" scale9Grid="5,5,63,16"/>
-                <s:Image source="image/button_over.png" includeIn="over" width="100%" height="100%" scale9Grid="5,5,63,16"/>
-                <s:Image source="image/button_down.png" includeIn="down" width="100%" height="100%" scale9Grid="5,5,63,16"/>
-                <s:Image source="image/button_disabled.png" includeIn="disabled" width="100%" height="100%" scale9Grid="5,5,63,16"/>
-                <s:Label id="labelDisplay" text="{data}" textAlign="center" left="20" right="20" top="10" bottom="10"/>
-                <s:Image id="iconDisplay" horizontalCenter="0" verticalCenter="0"/>
-            </s:ItemRenderer>
-        </s:itemRenderer>
-        <!--<s:ArrayCollection id="dataProvider">-->
+<s:Scroller width="400" height="300" xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
+    <s:Group>
+        <s:TabBar dataProvider="{viewStack}">
+            <s:itemRenderer>
+                <s:ItemRenderer states="up,over,down,disabled">
+                    <s:Image source="image/button_up.png" includeIn="up" width="100%" height="100%"
+                             scale9Grid="5,5,63,16"/>
+                    <s:Image source="image/button_over.png" includeIn="over" width="100%" height="100%"
+                             scale9Grid="5,5,63,16"/>
+                    <s:Image source="image/button_down.png" includeIn="down" width="100%" height="100%"
+                             scale9Grid="5,5,63,16"/>
+                    <s:Image source="image/button_disabled.png" includeIn="disabled" width="100%" height="100%"
+                             scale9Grid="5,5,63,16"/>
+                    <s:Label id="labelDisplay" text="{data}" textAlign="center" left="20" right="20" top="10"
+                             bottom="10"/>
+                    <s:Image id="iconDisplay" horizontalCenter="0" verticalCenter="0"/>
+                </s:ItemRenderer>
+            </s:itemRenderer>
+            <!--<s:ArrayCollection id="dataProvider">-->
             <!--<s:Object label="label0"/>-->
             <!--<s:Object label="label0"/>-->
             <!--<s:Object label="label0"/>-->
@@ -21,24 +27,26 @@
             <!--<s:Object label="label0"/>-->
             <!--<s:Object label="label0"/>-->
             <!--<s:Object label="label0"/>-->
-        <!--</s:ArrayCollection>-->
-    </s:TabBar>
-    <s:ViewStack id="viewStack" horizontalCenter="0" y="100">
-        <s:Image name="upskin" source="image/button_up.png" width="100%" height="100%" scale9Grid="5,5,63,16"/>
-        <s:Image name="downskin" source="image/button_down.png" width="100%" height="100%" scale9Grid="5,5,63,16"/>
-        <s:Image name="disabledskin" source="image/button_disabled.png" width="100%" height="100%" scale9Grid="5,5,63,16"/>
-    </s:ViewStack>
-    <s:ProgressBar id="progressBar2" y="200" value="50" width="400">
-        <s:Skin>
-            <s:Image source="image/button_disabled.png" width="100%" scale9Grid="5,5,63,16"/>
-            <s:Image source="image/button_up.png" id="thumb" width="100%" scale9Grid="5,5,63,16"/>
-        </s:Skin>
-    </s:ProgressBar>
-    <s:VSlider id="progressBar" y="250" value="50" height="400">
-        <s:Skin>
-            <s:Image source="image/button_disabled.png" id="track" height="100%" scale9Grid="5,5,63,16"/>
-            <s:Image source="image/button_down.png" id="trackHighlight" scale9Grid="5,5,63,16"/>
-            <s:Image source="image/button_up.png" id="thumb" scale9Grid="5,5,63,16"/>
-        </s:Skin>
-    </s:VSlider>
-</s:Group>
+            <!--</s:ArrayCollection>-->
+        </s:TabBar>
+        <s:ViewStack id="viewStack" horizontalCenter="0" y="100">
+            <s:Image name="upskin" source="image/button_up.png" width="100%" height="100%" scale9Grid="5,5,63,16"/>
+            <s:Image name="downskin" source="image/button_down.png" width="100%" height="100%" scale9Grid="5,5,63,16"/>
+            <s:Image name="disabledskin" source="image/button_disabled.png" width="100%" height="100%"
+                     scale9Grid="5,5,63,16"/>
+        </s:ViewStack>
+        <s:ProgressBar id="progressBar2" y="200" value="50" width="400">
+            <s:Skin>
+                <s:Image source="image/button_disabled.png" width="100%" scale9Grid="5,5,63,16"/>
+                <s:Image source="image/button_up.png" id="thumb" width="100%" scale9Grid="5,5,63,16"/>
+            </s:Skin>
+        </s:ProgressBar>
+        <s:VSlider id="progressBar" y="250" value="50" height="400">
+            <s:Skin>
+                <s:Image source="image/button_disabled.png" id="track" height="100%" scale9Grid="5,5,63,16"/>
+                <s:Image source="image/button_down.png" id="trackHighlight" scale9Grid="5,5,63,16"/>
+                <s:Image source="image/button_up.png" id="thumb" scale9Grid="5,5,63,16"/>
+            </s:Skin>
+        </s:VSlider>
+    </s:Group>
+</s:Scroller>

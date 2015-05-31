@@ -30,24 +30,24 @@
 module swan {
 
 	/**
-	 * 定义进度条控件增长方向的常量
+	 * 定义进度条等控件增长方向的常量
 	 */
-	export class ProgressBarDirection{
+	export class Direction{
 		/**
 		 * 水平从左到右增长
 		 */
-		public static LEFT_TO_RIGHT:string = "leftToRight";
+		public static LTR:string = "ltr";
 		/**
 		 * 水平从右到左增长
 		 */
-		public static RIGHT_TO_LEFT:string = "rightToLeft";
+		public static RTL:string = "rtl";
 		/**
 		 * 竖直从上到下增长
 		 */
-		public static TOP_TO_BOTTOM:string = "topToBottom";
+		public static TTB:string = "ttb";
 		/**
 		 * 竖直从下到上增长
 		 */
-		public static BOTTOM_TO_TOP:string = "bottomToTop";
+		public static BTT:string = "btt";
 	}
 }

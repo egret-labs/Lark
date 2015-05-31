@@ -29,6 +29,10 @@
 
 module swan {
 
+    const enum M {
+        a, b, c, d, tx, ty
+    }
+
     /**
      * Group 是自动布局的容器基类。如果包含的子项内容太大需要滚动显示，可以在在 Group 外部包裹一层 Scroller 组件
      * (将 Group 实例赋值给 Scroller 组件的 viewport 属性)。Scroller 会为 Group 添加滚动的触摸操作功能，并显示垂直或水平的滚动条。
@@ -201,6 +205,27 @@ module swan {
          */
         public setVirtualElementIndicesInView(startIndex:number, endIndex:number):void {
 
+        }
+
+        public touchEnabledWhereTransparent:boolean = true;
+
+        $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):lark.DisplayObject {
+            var target = super.$hitTest(stageX,stageY,shapeFlag);
+            if(target||!this.touchEnabledWhereTransparent){
+                return target;
+            }
+            if (!this.$visible || !this.$hasFlags(lark.sys.DisplayObjectFlags.TouchEnabled)) {
+                return null;
+            }
+            var m = this.$getInvertedConcatenatedMatrix().$data;
+            var values = this.$uiValues;
+            var bounds = lark.$TempRectangle.setTo(0,0,values[sys.UIValues.width],values[sys.UIValues.height]);
+            var localX = m[M.a] * stageX + m[M.c] * stageY + m[M.tx];
+            var localY = m[M.b] * stageX + m[M.d] * stageY + m[M.ty];
+            if (bounds.contains(localX, localY)) {
+               return this;
+            }
+            return null;
         }
 
 

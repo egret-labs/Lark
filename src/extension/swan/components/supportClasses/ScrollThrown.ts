@@ -74,6 +74,10 @@ module swan {
          * 调用finish()方法后计算得到的目标值。
          */
         public scrollTo:number = 0;
+        /**
+         * start()方法被调用过的标志。
+         */
+        public started:boolean = false;
 
         private previousTime:number = 0;
         private velocity:number = 0;
@@ -86,6 +90,7 @@ module swan {
          * @param position 起始绝对位置，以像素为单位，通常是stageX或stageY。
          */
         public start(position:number):void {
+            this.started = true;
             this.velocity = 0;
             this.previousVelocity.length = 0;
             this.previousTime = lark.getTimer();
@@ -143,6 +148,7 @@ module swan {
             }
             this.scrollTo = posTo;
             this.duration = duration;
+            this.started = false;
         }
 
         private onTick(timeStamp:number):boolean {

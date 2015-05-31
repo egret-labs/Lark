@@ -192,6 +192,10 @@ module swan {
         /**
          * 层级堆叠容器,一次只显示一个子对象。
          */
-        ViewStack
+        ViewStack,
+        /**
+         * 滚动条组件
+         */
+        Scroller
     }
 }

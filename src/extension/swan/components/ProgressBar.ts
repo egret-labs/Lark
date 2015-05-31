@@ -96,9 +96,9 @@ module swan {
             }
         }
 
-        private _direction:string = ProgressBarDirection.LEFT_TO_RIGHT;
+        private _direction:string = Direction.LTR;
         /**
-         * 进度条增长方向。请使用ProgressBarDirection定义的常量。默认值：ProgressBarDirection.LEFT_TO_RIGHT。
+         * 进度条增长方向。请使用 Direction 定义的常量。默认值：Direction.LTR（从左向右增长）。
          */
         public get direction():string {
             return this._direction;
@@ -205,20 +205,20 @@ module swan {
                 var thumbPosX = thumb.x - rect.x;
                 var thumbPosY = thumb.y - rect.y;
                 switch (this._direction) {
-                    case ProgressBarDirection.LEFT_TO_RIGHT:
+                    case Direction.LTR:
                         rect.width = clipWidth;
                         thumb.x = thumbPosX;
                         break;
-                    case ProgressBarDirection.RIGHT_TO_LEFT:
+                    case Direction.RTL:
                         rect.width = clipWidth;
                         rect.x = thumbWidth - clipWidth;
                         thumb.x = thumbPosX + rect.x;
                         break;
-                    case ProgressBarDirection.TOP_TO_BOTTOM:
+                    case Direction.TTB:
                         rect.height = clipHeight;
                         thumb.y = thumbPosY;
                         break;
-                    case ProgressBarDirection.BOTTOM_TO_TOP:
+                    case Direction.BTT:
                         rect.height = clipHeight;
                         rect.y = thumbHeight - clipHeight;
                         thumb.y = thumbPosY + rect.y;
