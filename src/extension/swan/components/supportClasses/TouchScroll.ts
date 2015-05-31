@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module swan {
+module swan.sys {
     /**
      * 需要记录的历史速度的最大次数。
      */
@@ -74,23 +74,19 @@ module swan {
          * 创建一个 TouchScroll 实例
          * @param updateFunction 滚动位置更新回调函数
          */
-        public constructor(updateFunction:(scrollPos:number)=>void,thisObject:any){
+        public constructor(updateFunction:(scrollPos:number)=>void,target:lark.IEventEmitter){
             if (DEBUG && !updateFunction) {
                 lark.$error(1003, "updateFunction");
             }
             this.updateFunction = updateFunction;
-            this.target = thisObject;
+            this.target = target;
             this.animation = new sys.Animation(this.onScrollingUpdate, this);
             this.animation.endFunction = this.finishScrolling;
             this.animation.easerFunction = easeOut;
         }
 
-        private target:any;
+        private target:lark.IEventEmitter;
         private updateFunction:(scrollPos:number)=>void;
-        /**
-         * start()方法被调用过的标志。
-         */
-        public started:boolean = false;
 
         private previousTime:number = 0;
         private velocity:number = 0;
@@ -99,7 +95,10 @@ module swan {
         private previousPosition:number = 0;
         private currentScrollPos:number = 0;
         private maxScrollPos:number = 0;
-
+        /**
+         * 鼠标按下时的偏移量
+         */
+        private offsetPoint:number = 0;
         /**
          * 停止触摸时继续滚动的动画实例
          */
@@ -118,11 +117,11 @@ module swan {
          * @param touchPoint 起始触摸位置，以像素为单位，通常是stageX或stageY。
          */
         public start(touchPoint:number,scrollValue:number,maxScrollValue:number):void {
-            this.started = true;
             this.velocity = 0;
             this.previousVelocity.length = 0;
             this.previousTime = lark.getTimer();
             this.previousPosition = this.currentPosition = touchPoint;
+            this.offsetPoint = scrollValue + touchPoint;
             lark.startTick(this.onTick, this);
         }
 
@@ -130,10 +129,18 @@ module swan {
          * 更新当前移动到的位置
          * @param touchPoint 当前触摸位置，以像素为单位，通常是stageX或stageY。
          */
-        public update(touchPoint:number,scrollValue:number,maxScrollValue:number):void {
+        public update(touchPoint:number,maxScrollValue:number):void {
             this.currentPosition = touchPoint;
-            this.currentScrollPos = scrollValue;
             this.maxScrollPos = maxScrollValue;
+            var scrollPos = this.offsetPoint - touchPoint;
+            if (scrollPos < 0) {
+                scrollPos *= 0.5;
+            }
+            if (scrollPos > maxScrollValue) {
+                scrollPos = (scrollPos + maxScrollValue) * 0.5
+            }
+            this.currentScrollPos = scrollPos;
+            this.updateFunction.call(this.target,scrollPos);
         }
 
         /**
@@ -176,7 +183,6 @@ module swan {
                     duration = Math.log(MINIMUM_VELOCITY / absPixelsPerMS) / FRICTION_LOG;
                 }
             }
-            this.started = false;
             if (duration > 0) {
                 this.throwTo(posTo,duration);
             }
@@ -200,7 +206,7 @@ module swan {
             return true;
         }
 
-        private finishScrolling(animation?:sys.Animation):void {
+        private finishScrolling(animation?:Animation):void {
             var hsp = this.currentScrollPos;
             var maxHsp = this.maxScrollPos;
             var hspTo = hsp;
@@ -231,7 +237,7 @@ module swan {
         /**
          * 更新水平滚动位置
          */
-        private onScrollingUpdate(animation:sys.Animation):void {
+        private onScrollingUpdate(animation:Animation):void {
             this.currentScrollPos = animation.currentValue;
             this.updateFunction.call(this.target,animation.currentValue);
         }

@@ -53,6 +53,11 @@ module swan {
          */
         public itemIndex:number = -1;
 
+        protected clean():void{
+            super.clean();
+            this.item = this.itemRenderer = null;
+        }
+
         /**
          * 使用指定的 EventEmitter 对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
          * @param target 事件派发目标

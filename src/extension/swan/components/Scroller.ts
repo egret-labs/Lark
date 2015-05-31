@@ -34,50 +34,20 @@ module swan {
      * 滚动条组件
      */
     export class Scroller extends Component {
-        /**
-         * 创建一个 Scroller 实例
-         */
-        public constructor() {
-            super();
-            this.touchScrollH = new swan.TouchScroll(this.horizontalUpdateHandler,this);
-            this.touchScrollV = new swan.TouchScroll(this.verticalUpdateHandler,this);
-        }
-
-        private horizontalUpdateHandler(scrollPos:number):void {
-            this._viewport.scrollH = scrollPos;
-        }
-
-        private verticalUpdateHandler(scrollPos:number):void {
-            this._viewport.scrollV = scrollPos;
-        }
 
         /**
          * 开始触发滚动的阈值（以像素为单位），当触摸点偏离初始触摸点的距离超过这个值时才会触发滚动。默认值：5 。
          */
         public static scrollThreshold:number = 5;
 
-        protected measure():void {
-            var viewport = this._viewport;
-            if (viewport) {
-                var bounds = lark.$TempRectangle;
-                viewport.getPreferredBounds(bounds);
-                this.setMeasuredSize(bounds.width, bounds.height);
-            }
-            else {
-                this.setMeasuredSize(0, 0);
-            }
+        /**
+         * 创建一个 Scroller 实例
+         */
+        public constructor() {
+            super();
+            this.touchScrollH = new sys.TouchScroll(this.horizontalUpdateHandler,this);
+            this.touchScrollV = new sys.TouchScroll(this.verticalUpdateHandler,this);
         }
-
-
-        protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
-            super.updateDisplayList(unscaledWidth, unscaledHeight);
-            var viewport = this._viewport;
-            if (viewport) {
-                viewport.setLayoutBoundsPosition(0, 0);
-                viewport.setLayoutBoundsSize(unscaledWidth, unscaledHeight);
-            }
-        }
-
 
         /**
          * 垂直方向是否允许滚动的策略，参见 ScrollPolicy 类定义的常量。默认值：ScrollPolicy.AUTO
@@ -200,12 +170,6 @@ module swan {
             lark.Event.release(event);
         }
 
-        /**
-         * 鼠标按下时的偏移量
-         */
-        private offsetPointX:number = 0;
-        private offsetPointY:number = 0;
-
         private touchStartX:number = 0;
         private touchStartY:number = 0;
         private touchMoved:boolean = false;
@@ -259,8 +223,8 @@ module swan {
             return hCanScroll || vCanScroll;
         }
 
-        private touchScrollH:TouchScroll;
-        private touchScrollV:TouchScroll;
+        private touchScrollH:sys.TouchScroll;
+        private touchScrollV:sys.TouchScroll;
 
         private onViewportTouchBegin(event:lark.TouchEvent):void {
             if (event.$target == this._viewport) {
@@ -280,8 +244,6 @@ module swan {
             var values = this._viewport.$uiValues;
             this.touchStartX = event.$stageX;
             this.touchStartY = event.$stageY;
-            this.offsetPointX = values[sys.UIValues.scrollH] + event.$stageX;
-            this.offsetPointY = values[sys.UIValues.scrollV] + event.$stageY;
 
             if (this.horizontalCanScroll) {
                 this.touchScrollH.start(event.$stageX, values[sys.UIValues.scrollH],
@@ -312,29 +274,13 @@ module swan {
             var viewport = this._viewport;
             var values = viewport.$uiValues;
             if (this.horizontalCanScroll) {
-                this.touchScrollH.update(event.$stageX, values[sys.UIValues.scrollH],
+                this.touchScrollH.update(event.$stageX,
                     values[sys.UIValues.contentWidth] - values[sys.UIValues.width]);
-                var hsp = this.offsetPointX - event.$stageX;
-                if (hsp < 0) {
-                    hsp *= 0.5;
-                }
-                if (hsp > values[sys.UIValues.contentWidth] - values[sys.UIValues.width]) {
-                    hsp = (hsp + values[sys.UIValues.contentWidth] - values[sys.UIValues.width]) * 0.5
-                }
-                viewport.scrollH = hsp;
             }
 
             if (this.verticalCanScroll) {
-                this.touchScrollV.update(event.$stageY, values[sys.UIValues.scrollV],
+                this.touchScrollV.update(event.$stageY,
                     values[sys.UIValues.contentHeight] - values[sys.UIValues.height]);
-                var vsp = this.offsetPointY - event.$stageY;
-                if (vsp < 0) {
-                    vsp *= 0.5;
-                }
-                if (vsp > values[sys.UIValues.contentHeight] - values[sys.UIValues.height]) {
-                    vsp = (vsp + values[sys.UIValues.contentHeight] - values[sys.UIValues.height]) * 0.5;
-                }
-                viewport.scrollV = vsp;
             }
         }
 
@@ -346,18 +292,48 @@ module swan {
 
             var viewport:IViewport = this._viewport;
             var values = viewport.$uiValues;
-            var touchScrollH = this.touchScrollH;
-            if (touchScrollH.started) {
+            if (this.horizontalCanScroll) {
+                var touchScrollH = this.touchScrollH;
                 touchScrollH.finish(values[sys.UIValues.scrollH],
                     values[sys.UIValues.contentWidth] - values[sys.UIValues.width]);
             }
-            var touchScrollV = this.touchScrollV;
-            if (touchScrollV.started) {
+            if (this.verticalCanScroll) {
+                var touchScrollV = this.touchScrollV;
                 touchScrollV.finish( values[sys.UIValues.scrollV],
                     values[sys.UIValues.contentHeight] - values[sys.UIValues.height]);
             }
         }
 
+
+        private horizontalUpdateHandler(scrollPos:number):void {
+            this._viewport.scrollH = scrollPos;
+        }
+
+        private verticalUpdateHandler(scrollPos:number):void {
+            this._viewport.scrollV = scrollPos;
+        }
+
+        protected measure():void {
+            var viewport = this._viewport;
+            if (viewport) {
+                var bounds = lark.$TempRectangle;
+                viewport.getPreferredBounds(bounds);
+                this.setMeasuredSize(bounds.width, bounds.height);
+            }
+            else {
+                this.setMeasuredSize(0, 0);
+            }
+        }
+
+
+        protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
+            var viewport = this._viewport;
+            if (viewport) {
+                viewport.setLayoutBoundsPosition(0, 0);
+                viewport.setLayoutBoundsSize(unscaledWidth, unscaledHeight);
+            }
+        }
     }
 
     registerProperty(Scroller, "viewport", "any", true);
