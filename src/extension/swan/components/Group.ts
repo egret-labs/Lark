@@ -29,10 +29,6 @@
 
 module swan {
 
-    const enum M {
-        a, b, c, d, tx, ty
-    }
-
     /**
      * Group 是自动布局的容器基类。如果包含的子项内容太大需要滚动显示，可以在在 Group 外部包裹一层 Scroller 组件
      * (将 Group 实例赋值给 Scroller 组件的 viewport 属性)。Scroller 会为 Group 添加滚动的触摸操作功能，并显示垂直或水平的滚动条。
@@ -207,23 +203,25 @@ module swan {
 
         }
 
-        public touchEnabledWhereTransparent:boolean = true;
+        /**
+         * 背景的透明区域是否可以响应触摸事件。默认 true。
+         */
+        public touchBackground:boolean = true;
 
         $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):lark.DisplayObject {
-            var target = super.$hitTest(stageX,stageY,shapeFlag);
-            if(target||!this.touchEnabledWhereTransparent){
+            var target = super.$hitTest(stageX, stageY, shapeFlag);
+            if (target || !this.touchBackground || shapeFlag ||
+                this.$displayObjectFlags & lark.sys.DisplayObjectFlags.PixelHitTest) {
                 return target;
             }
             if (!this.$visible || !this.$hasFlags(lark.sys.DisplayObjectFlags.TouchEnabled)) {
                 return null;
             }
-            var m = this.$getInvertedConcatenatedMatrix().$data;
+            var point = this.globalToLocal(stageX, stageY, lark.$TempPoint);
             var values = this.$uiValues;
-            var bounds = lark.$TempRectangle.setTo(0,0,values[sys.UIValues.width],values[sys.UIValues.height]);
-            var localX = m[M.a] * stageX + m[M.c] * stageY + m[M.tx];
-            var localY = m[M.b] * stageX + m[M.d] * stageY + m[M.ty];
-            if (bounds.contains(localX, localY)) {
-               return this;
+            var bounds = lark.$TempRectangle.setTo(0, 0, values[sys.UIValues.width], values[sys.UIValues.height]);
+            if (bounds.contains(point.x, point.y)) {
+                return this;
             }
             return null;
         }
@@ -293,7 +291,7 @@ module swan {
         /**
          * 子项创建完成,此方法在createChildren()之后执行。
          */
-        protected childrenCreated():void{
+        protected childrenCreated():void {
 
         }
 

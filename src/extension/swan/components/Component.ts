@@ -508,7 +508,7 @@ module swan {
         public getPreferredBounds(bounds:lark.Rectangle):void {
         }
     }
-
+    registerProperty(Component, "skinName", "Class");
     sys.implementUIComponent(Component, lark.Sprite, true);
     lark.registerClass(Component, Types.Component, [Types.UIComponent]);
 }

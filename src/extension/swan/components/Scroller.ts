@@ -46,6 +46,11 @@ module swan {
             super();
         }
 
+        /**
+         * 开始触发滚动的阈值（以像素为单位），当触摸点偏离初始触摸点的距离超过这个值时才会触发滚动。默认值：5 。
+         */
+        public static scrollThreshold:number = 5;
+
         protected measure():void {
             var viewport = this._viewport;
             if (viewport) {
@@ -184,7 +189,7 @@ module swan {
                     break;
                 }
             }
-            list.splice(0, startIndex+1);
+            list.splice(0, startIndex + 1);
             var targetIndex = list.indexOf(event.$target);
             this.$emitPropagationEvent(event, list, targetIndex);
             lark.Event.release(event);
@@ -193,8 +198,12 @@ module swan {
         /**
          * 鼠标按下时的偏移量
          */
-        private offsetPointX:number;
-        private offsetPointY:number;
+        private offsetPointX:number = 0;
+        private offsetPointY:number = 0;
+
+        private touchStartX:number = 0;
+        private touchStartY:number = 0;
+        private touchMoved:boolean = false;
 
         private horizontalCanScroll:boolean;
         private verticalCanScroll:boolean;
@@ -248,11 +257,12 @@ module swan {
         private horizontalThrown:ScrollThrown = new ScrollThrown();
         private verticalThrown:ScrollThrown = new ScrollThrown();
 
-        private onViewportTouchBegin(event:lark.TouchEvent):void{
-            if(event.$target==this._viewport){
+        private onViewportTouchBegin(event:lark.TouchEvent):void {
+            if (event.$target == this._viewport) {
                 this.onTouchBegin(event);
             }
         }
+
         private onTouchBegin(event:lark.TouchEvent):void {
             if (event.isDefaultPrevented()) {
                 return;
@@ -267,6 +277,8 @@ module swan {
             var viewport = this._viewport;
             var hsp = viewport.scrollH;
             var vsp = viewport.scrollV;
+            this.touchStartX = event.$stageX;
+            this.touchStartY = event.$stageY;
             this.offsetPointX = hsp + event.$stageX;
             this.offsetPointY = vsp + event.$stageY;
 
@@ -283,6 +295,13 @@ module swan {
         }
 
         private onTouchMove(event:lark.TouchEvent):void {
+            if (!this.touchMoved) {
+                if (Math.abs(this.touchStartX - event.$stageX) < Scroller.scrollThreshold &&
+                    Math.abs(this.touchStartY - event.$stageY) < Scroller.scrollThreshold) {
+                    return;
+                }
+                this.touchMoved = true;
+            }
             if (this.delayTouchBeginEvent) {
                 this.delayTouchBeginEvent = null;
                 this.touchBeginTimer.stop();
@@ -315,6 +334,7 @@ module swan {
         }
 
         private onTouchEnd(event:lark.Event):void {
+            this.touchMoved = false;
             var stage:lark.Stage = event.$currentTarget;
             stage.removeListener(lark.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
             stage.removeListener(lark.TouchEvent.TOUCH_END, this.onTouchEnd, this);
@@ -326,8 +346,8 @@ module swan {
                 var hsp = values[sys.UIValues.scrollH];
                 var maxHsp = values[sys.UIValues.contentWidth] - values[sys.UIValues.width];
                 maxHsp = Math.max(0, maxHsp);
-                horizontalThrown.finish(hsp,maxHsp);
-                if (horizontalThrown.duration>0) {
+                horizontalThrown.finish(hsp, maxHsp);
+                if (horizontalThrown.duration > 0) {
                     this.throwHorizontally(horizontalThrown.scrollTo, horizontalThrown.duration);
                 }
                 else {
@@ -338,12 +358,12 @@ module swan {
             if (verticalThrown.started) {
                 var vsp = values[sys.UIValues.scrollV];
                 var maxVsp = values[sys.UIValues.contentHeight] - values[sys.UIValues.height];
-                maxVsp = Math.max(0,maxVsp);
-                verticalThrown.finish(vsp,maxVsp);
-                if(verticalThrown.duration>0){
-                    this.throwVertically(verticalThrown.scrollTo,verticalThrown.duration);
+                maxVsp = Math.max(0, maxVsp);
+                verticalThrown.finish(vsp, maxVsp);
+                if (verticalThrown.duration > 0) {
+                    this.throwVertically(verticalThrown.scrollTo, verticalThrown.duration);
                 }
-                else{
+                else {
                     this.finishScrollingVertically();
                 }
             }

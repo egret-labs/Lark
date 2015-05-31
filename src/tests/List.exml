@@ -1,5 +1,5 @@
 <s:Scroller width="400" height="300" xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
-    <s:Group>
+    <s:Group touchBackground="true">
         <s:TabBar dataProvider="{viewStack}">
             <s:itemRenderer>
                 <s:ItemRenderer states="up,over,down,disabled">
