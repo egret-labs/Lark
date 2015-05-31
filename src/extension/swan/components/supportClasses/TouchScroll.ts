@@ -57,23 +57,36 @@ module swan {
      */
     var FRICTION_LOG = Math.log(FRICTION);
 
+    function easeOut(ratio:number):number {
+        var invRatio:number = ratio - 1.0;
+        return invRatio * invRatio * invRatio + 1;
+    }
 
     /**
-     * 一个工具类,通常用于容器的滚屏拖动操作，计算在一段时间持续滚动后释放，应该继续滚动到的值和缓动时间。
+     * 一个工具类,用于容器的滚屏拖动操作，计算在一段时间持续滚动后释放，应该继续滚动到的值和缓动时间。
      * 使用此工具类，您需要创建一个 ScrollThrown 实例,并在滚动发生时调用start()方法，然后在触摸移动过程中调用update()更新当前舞台坐标。
      * 内部将会启动一个计时器定时根据当前位置计算出速度值，并缓存下来最后4个值。当停止滚动时，再调用finish()方法，
      * 将立即停止记录位移，并将计算出的最终结果存储到 Thrown.scrollTo 和 Thrown.duration 属性上。
      */
-    export class ScrollThrown {
+    export class TouchScroll {
 
         /**
-         * 调用finish()方法后计算得到的缓动时间。
+         * 创建一个 TouchScroll 实例
+         * @param updateFunction 滚动位置更新回调函数
          */
-        public duration:number = 0;
-        /**
-         * 调用finish()方法后计算得到的目标值。
-         */
-        public scrollTo:number = 0;
+        public constructor(updateFunction:(scrollPos:number)=>void,thisObject:any){
+            if (DEBUG && !updateFunction) {
+                lark.$error(1003, "updateFunction");
+            }
+            this.updateFunction = updateFunction;
+            this.target = thisObject;
+            this.animation = new sys.Animation(this.onScrollingUpdate, this);
+            this.animation.endFunction = this.finishScrolling;
+            this.animation.easerFunction = easeOut;
+        }
+
+        private target:any;
+        private updateFunction:(scrollPos:number)=>void;
         /**
          * start()方法被调用过的标志。
          */
@@ -84,26 +97,43 @@ module swan {
         private previousVelocity:number[] = [];
         private currentPosition:number = 0;
         private previousPosition:number = 0;
+        private currentScrollPos:number = 0;
+        private maxScrollPos:number = 0;
+
+        /**
+         * 停止触摸时继续滚动的动画实例
+         */
+        private animation:sys.Animation;
+
+        /**
+         * 如果正在执行缓动滚屏，停止缓动。
+         */
+        public stop():void{
+            this.animation.stop();
+            lark.stopTick(this.onTick, this);
+        }
 
         /**
          * 开始记录位移变化。注意：当使用完毕后，必须调用 finish() 方法结束记录，否则该对象将无法被回收。
-         * @param position 起始绝对位置，以像素为单位，通常是stageX或stageY。
+         * @param touchPoint 起始触摸位置，以像素为单位，通常是stageX或stageY。
          */
-        public start(position:number):void {
+        public start(touchPoint:number,scrollValue:number,maxScrollValue:number):void {
             this.started = true;
             this.velocity = 0;
             this.previousVelocity.length = 0;
             this.previousTime = lark.getTimer();
-            this.previousPosition = this.currentPosition = position;
+            this.previousPosition = this.currentPosition = touchPoint;
             lark.startTick(this.onTick, this);
         }
 
         /**
          * 更新当前移动到的位置
-         * @param position 当前绝对位置，以像素为单位，通常是stageX或stageY。
+         * @param touchPoint 当前触摸位置，以像素为单位，通常是stageX或stageY。
          */
-        public update(position:number):void {
-            this.currentPosition = position;
+        public update(touchPoint:number,scrollValue:number,maxScrollValue:number):void {
+            this.currentPosition = touchPoint;
+            this.currentScrollPos = scrollValue;
+            this.maxScrollPos = maxScrollValue;
         }
 
         /**
@@ -146,9 +176,13 @@ module swan {
                     duration = Math.log(MINIMUM_VELOCITY / absPixelsPerMS) / FRICTION_LOG;
                 }
             }
-            this.scrollTo = posTo;
-            this.duration = duration;
             this.started = false;
+            if (duration > 0) {
+                this.throwTo(posTo,duration);
+            }
+            else {
+                this.finishScrolling();
+            }
         }
 
         private onTick(timeStamp:number):boolean {
@@ -164,6 +198,42 @@ module swan {
                 this.previousPosition = this.currentPosition;
             }
             return true;
+        }
+
+        private finishScrolling(animation?:sys.Animation):void {
+            var hsp = this.currentScrollPos;
+            var maxHsp = this.maxScrollPos;
+            var hspTo = hsp;
+            if (hsp < 0) {
+                hspTo = 0;
+            }
+            if (hsp > maxHsp) {
+                hspTo = maxHsp;
+            }
+            this.throwTo(hspTo, 300);
+        }
+
+        /**
+         * 缓动到水平滚动位置
+         */
+        private throwTo(hspTo:number, duration:number = 500):void {
+            var hsp = this.currentScrollPos;
+            if (hsp == hspTo) {
+                return;
+            }
+            var animation = this.animation;
+            animation.duration = duration;
+            animation.from = hsp;
+            animation.to = hspTo;
+            animation.play();
+        }
+
+        /**
+         * 更新水平滚动位置
+         */
+        private onScrollingUpdate(animation:sys.Animation):void {
+            this.currentScrollPos = animation.currentValue;
+            this.updateFunction.call(this.target,animation.currentValue);
         }
     }
 }

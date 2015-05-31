@@ -39,7 +39,7 @@ module swan {
          */
         public constructor() {
             super();
-            this.animator = new sys.Animation(this.animationUpdateHandler, this);
+            this.animation = new sys.Animation(this.animationUpdateHandler, this);
         }
 
         /**
@@ -90,8 +90,8 @@ module swan {
             if (this._slideDuration === value)
                 return;
             this._slideDuration = value;
-            if (this.animator.isPlaying) {
-                this.animator.stop();
+            if (this.animation.isPlaying) {
+                this.animation.stop();
                 this.setValue(this.slideToValue);
             }
         }
@@ -114,7 +114,7 @@ module swan {
         /**
          * 动画实例
          */
-        private animator:sys.Animation;
+        private animation:sys.Animation;
         /**
          * 动画播放结束时要到达的value。
          */
@@ -126,21 +126,21 @@ module swan {
             super.$setValue(newValue);
             if (this._slideDuration > 0 && this.$stage) {
                 this.validateProperties();//最大值最小值发生改变时要立即应用，防止当前起始值不正确。
-                var animator = this.animator;
-                if (animator.isPlaying) {
+                var animation = this.animation;
+                if (animation.isPlaying) {
                     this.animationValue = this.slideToValue;
                     this.invalidateDisplayList();
-                    animator.stop();
+                    animation.stop();
                 }
                 this.slideToValue = this.nearestValidValue(newValue, this.$snapInterval);
                 if (this.slideToValue === this.animationValue)
                     return;
                 var duration = this._slideDuration *
                     (Math.abs(this.animationValue - this.slideToValue) / (this.$maximum - this.$minimum));
-                animator.duration = duration === Infinity ? 0 : duration;
-                animator.from = this.animationValue;
-                animator.to = this.slideToValue;
-                animator.play();
+                animation.duration = duration === Infinity ? 0 : duration;
+                animation.from = this.animationValue;
+                animation.to = this.slideToValue;
+                animation.play();
             }
             else {
                 this.animationValue = this.value;
@@ -184,7 +184,7 @@ module swan {
          * 更新皮肤部件大小和可见性。
          */
         protected updateSkinDisplayList():void {
-            var currentValue = this.animator.isPlaying ? this.animationValue : this.value;
+            var currentValue = this.animation.isPlaying ? this.animationValue : this.value;
             var maxValue = this.$maximum;
             var thumb = this.thumb;
             if (thumb) {

@@ -55,7 +55,7 @@ module swan {
         /**
          * 动画实例
          */
-        private animator:sys.Animation;
+        private animation:sys.Animation;
 
         $pendingValue:number = 0;
         /**
@@ -106,14 +106,14 @@ module swan {
          * 停止播放动画
          */
         private stopAnimation():void {
-            this.animator.stop();
+            this.animation.stop();
             this.setValue(this.nearestValidValue(this.pendingValue, this.snapInterval));
             this.emitWith(lark.Event.CHANGE);
             UIEvent.emitUIEvent(this, UIEvent.CHANGE_END);
         }
 
         protected onThumbTouchBegin(event:lark.TouchEvent):void {
-            if (this.animator && this.animator.isPlaying)
+            if (this.animation && this.animation.isPlaying)
                 this.stopAnimation();
 
             super.onThumbTouchBegin(event);
@@ -156,20 +156,20 @@ module swan {
 
             if (newValue != this.$pendingValue) {
                 if (this.slideDuration != 0) {
-                    if (!this.animator) {
-                        this.animator = new sys.Animation(this.$animationUpdateHandler, this);
-                        this.animator.endFunction = this.animationEndHandler;
+                    if (!this.animation) {
+                        this.animation = new sys.Animation(this.$animationUpdateHandler, this);
+                        this.animation.endFunction = this.animationEndHandler;
                     }
-                    var animator = this.animator;
-                    if (animator.isPlaying)
+                    var animation = this.animation;
+                    if (animation.isPlaying)
                         this.stopAnimation();
                     this.slideToValue = newValue;
-                    animator.duration = this.slideDuration *
+                    animation.duration = this.slideDuration *
                         (Math.abs(this.$pendingValue - this.slideToValue) / (this.$maximum - this.$minimum));
-                    animator.from = this.$pendingValue;
-                    animator.to = this.slideToValue;
+                    animation.from = this.$pendingValue;
+                    animation.to = this.slideToValue;
                     UIEvent.emitUIEvent(this, UIEvent.CHANGE_START);
-                    animator.play();
+                    animation.play();
                 }
                 else {
                     this.setValue(newValue);

@@ -30,11 +30,6 @@
 
 module swan {
 
-    function easeOut(ratio:number):number {
-        var invRatio:number = ratio - 1.0;
-        return invRatio * invRatio * invRatio + 1;
-    }
-
     /**
      * 滚动条组件
      */
@@ -44,6 +39,16 @@ module swan {
          */
         public constructor() {
             super();
+            this.touchScrollH = new swan.TouchScroll(this.horizontalUpdateHandler,this);
+            this.touchScrollV = new swan.TouchScroll(this.verticalUpdateHandler,this);
+        }
+
+        private horizontalUpdateHandler(scrollPos:number):void {
+            this._viewport.scrollH = scrollPos;
+        }
+
+        private verticalUpdateHandler(scrollPos:number):void {
+            this._viewport.scrollV = scrollPos;
         }
 
         /**
@@ -254,8 +259,8 @@ module swan {
             return hCanScroll || vCanScroll;
         }
 
-        private horizontalThrown:ScrollThrown = new ScrollThrown();
-        private verticalThrown:ScrollThrown = new ScrollThrown();
+        private touchScrollH:TouchScroll;
+        private touchScrollV:TouchScroll;
 
         private onViewportTouchBegin(event:lark.TouchEvent):void {
             if (event.$target == this._viewport) {
@@ -270,23 +275,21 @@ module swan {
             if (!this.checkScrollPolicy()) {
                 return;
             }
-            if (this.verticalAnimator && this.verticalAnimator.isPlaying)
-                this.verticalAnimator.stop();
-            if (this.horizontalAnimator && this.horizontalAnimator.isPlaying)
-                this.horizontalAnimator.stop();
-            var viewport = this._viewport;
-            var hsp = viewport.scrollH;
-            var vsp = viewport.scrollV;
+            this.touchScrollV.stop();
+            this.touchScrollH.stop();
+            var values = this._viewport.$uiValues;
             this.touchStartX = event.$stageX;
             this.touchStartY = event.$stageY;
-            this.offsetPointX = hsp + event.$stageX;
-            this.offsetPointY = vsp + event.$stageY;
+            this.offsetPointX = values[sys.UIValues.scrollH] + event.$stageX;
+            this.offsetPointY = values[sys.UIValues.scrollV] + event.$stageY;
 
             if (this.horizontalCanScroll) {
-                this.horizontalThrown.start(event.$stageX);
+                this.touchScrollH.start(event.$stageX, values[sys.UIValues.scrollH],
+                    values[sys.UIValues.contentWidth] - values[sys.UIValues.width]);
             }
             if (this.verticalCanScroll) {
-                this.verticalThrown.start(event.$stageY);
+                this.touchScrollV.start(event.$stageY, values[sys.UIValues.scrollV],
+                    values[sys.UIValues.contentHeight] - values[sys.UIValues.height]);
             }
             var stage = this.$stage;
             stage.on(lark.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
@@ -309,7 +312,8 @@ module swan {
             var viewport = this._viewport;
             var values = viewport.$uiValues;
             if (this.horizontalCanScroll) {
-                this.horizontalThrown.update(event.$stageX);
+                this.touchScrollH.update(event.$stageX, values[sys.UIValues.scrollH],
+                    values[sys.UIValues.contentWidth] - values[sys.UIValues.width]);
                 var hsp = this.offsetPointX - event.$stageX;
                 if (hsp < 0) {
                     hsp *= 0.5;
@@ -321,7 +325,8 @@ module swan {
             }
 
             if (this.verticalCanScroll) {
-                this.verticalThrown.update(event.$stageY);
+                this.touchScrollV.update(event.$stageY, values[sys.UIValues.scrollV],
+                    values[sys.UIValues.contentHeight] - values[sys.UIValues.height]);
                 var vsp = this.offsetPointY - event.$stageY;
                 if (vsp < 0) {
                     vsp *= 0.5;
@@ -341,127 +346,18 @@ module swan {
 
             var viewport:IViewport = this._viewport;
             var values = viewport.$uiValues;
-            var horizontalThrown = this.horizontalThrown;
-            if (horizontalThrown.started) {
-                var hsp = values[sys.UIValues.scrollH];
-                var maxHsp = values[sys.UIValues.contentWidth] - values[sys.UIValues.width];
-                maxHsp = Math.max(0, maxHsp);
-                horizontalThrown.finish(hsp, maxHsp);
-                if (horizontalThrown.duration > 0) {
-                    this.throwHorizontally(horizontalThrown.scrollTo, horizontalThrown.duration);
-                }
-                else {
-                    this.finishScrollingHorizontally();
-                }
+            var touchScrollH = this.touchScrollH;
+            if (touchScrollH.started) {
+                touchScrollH.finish(values[sys.UIValues.scrollH],
+                    values[sys.UIValues.contentWidth] - values[sys.UIValues.width]);
             }
-            var verticalThrown = this.verticalThrown;
-            if (verticalThrown.started) {
-                var vsp = values[sys.UIValues.scrollV];
-                var maxVsp = values[sys.UIValues.contentHeight] - values[sys.UIValues.height];
-                maxVsp = Math.max(0, maxVsp);
-                verticalThrown.finish(vsp, maxVsp);
-                if (verticalThrown.duration > 0) {
-                    this.throwVertically(verticalThrown.scrollTo, verticalThrown.duration);
-                }
-                else {
-                    this.finishScrollingVertically();
-                }
+            var touchScrollV = this.touchScrollV;
+            if (touchScrollV.started) {
+                touchScrollV.finish( values[sys.UIValues.scrollV],
+                    values[sys.UIValues.contentHeight] - values[sys.UIValues.height]);
             }
         }
 
-        /**
-         * 停止触摸时继续滚动的动画实例
-         */
-        private horizontalAnimator:sys.Animation;
-
-        private finishScrollingHorizontally(animation?:sys.Animation):void {
-            var viewport:IViewport = this._viewport;
-            var hsp:number = viewport.scrollH;
-            var maxHsp:number = viewport.contentWidth - viewport.width;
-            var hspTo:number = hsp;
-            if (hsp < 0) {
-                hspTo = 0;
-            }
-            if (hsp > maxHsp) {
-                hspTo = maxHsp;
-            }
-            this.throwHorizontally(hspTo, 300);
-        }
-
-        /**
-         * 缓动到水平滚动位置
-         */
-        public throwHorizontally(hspTo:number, duration:number = 500):void {
-            var hsp:number = this._viewport.scrollH;
-            if (hsp == hspTo) {
-                return;
-            }
-            var horizontalAnimator = this.horizontalAnimator;
-            if (!horizontalAnimator) {
-                horizontalAnimator = this.horizontalAnimator = new sys.Animation(this.horizontalUpdateHandler, this);
-                horizontalAnimator.endFunction = this.finishScrollingHorizontally;
-                horizontalAnimator.easerFunction = easeOut;
-            }
-            horizontalAnimator.duration = duration;
-            horizontalAnimator.from = hsp;
-            horizontalAnimator.to = hspTo;
-            horizontalAnimator.play();
-        }
-
-        /**
-         * 更新水平滚动位置
-         */
-        private horizontalUpdateHandler(animation:sys.Animation):void {
-            this._viewport.scrollH = animation.currentValue;
-        }
-
-        /**
-         * 滚动回正确位置的动画实例
-         */
-        private verticalAnimator:sys.Animation;
-
-        private finishScrollingVertically(animation?:sys.Animation):void {
-            var viewport:IViewport = this._viewport;
-            var values = viewport.$uiValues;
-            var vsp = values[sys.UIValues.scrollV];
-            var maxVsp = values[sys.UIValues.contentHeight] - values[sys.UIValues.height];
-            maxVsp = Math.max(0, maxVsp);
-            var vspTo = vsp;
-            if (vsp < 0) {
-                vspTo = 0;
-            }
-            if (vsp > maxVsp) {
-                vspTo = maxVsp;
-            }
-            this.throwVertically(vspTo, 300);
-        }
-
-        /**
-         * 缓动到垂直滚动位置
-         */
-        public throwVertically(vspTo:number, duration:number = 500):void {
-            var vsp = this._viewport.scrollV;
-            if (vsp == vspTo) {
-                return;
-            }
-            var verticalAnimator = this.verticalAnimator;
-            if (!verticalAnimator) {
-                verticalAnimator = this.verticalAnimator = new sys.Animation(this.verticalUpdateHandler, this);
-                verticalAnimator.endFunction = this.finishScrollingVertically;
-                verticalAnimator.easerFunction = easeOut;
-            }
-            verticalAnimator.duration = duration;
-            verticalAnimator.from = vsp;
-            verticalAnimator.to = vspTo;
-            verticalAnimator.play();
-        }
-
-        /**
-         * 更新垂直滚动位置
-         */
-        private verticalUpdateHandler(animation:sys.Animation):void {
-            this._viewport.scrollV = animation.currentValue;
-        }
     }
 
     registerProperty(Scroller, "viewport", "any", true);
