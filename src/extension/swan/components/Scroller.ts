@@ -45,9 +45,19 @@ module swan {
          */
         public constructor() {
             super();
-            this.touchScrollH = new sys.TouchScroll(this.horizontalUpdateHandler,this);
-            this.touchScrollV = new sys.TouchScroll(this.verticalUpdateHandler,this);
+            this.touchScrollH = new sys.TouchScroll(this.horizontalUpdateHandler, this);
+            this.touchScrollV = new sys.TouchScroll(this.verticalUpdateHandler, this);
         }
+
+
+        /**
+         * [SkinPart] 水平滚动条
+         */
+        public horizontalScrollBar:swan.HScrollBar = null;
+        /**
+         * [SkinPart] 垂直滚动条
+         */
+        public verticalScrollBar:swan.VScrollBar = null;
 
         /**
          * 垂直方向是否允许滚动的策略，参见 ScrollPolicy 类定义的常量。默认值：ScrollPolicy.AUTO
@@ -88,12 +98,24 @@ module swan {
                 viewport.on(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
                 this.addChildAt(viewport, 0);
             }
+            if(this.horizontalScrollBar){
+                this.horizontalScrollBar.viewport = viewport;
+            }
+            if(this.verticalScrollBar){
+                this.verticalScrollBar.viewport = viewport;
+            }
         }
 
         /**
          * 卸载视域组件
          */
         private uninstallViewport():void {
+            if(this.horizontalScrollBar){
+                this.horizontalScrollBar.viewport = null;
+            }
+            if(this.verticalScrollBar){
+                this.verticalScrollBar.viewport = null;
+            }
             var viewport = this._viewport;
             if (viewport) {
                 viewport.scrollEnabled = false;
@@ -102,6 +124,83 @@ module swan {
                 viewport.removeListener(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
                 this.removeChild(viewport);
             }
+        }
+
+        private onContentSizeChanged(event:swan.UIEvent):void {
+            var values = this._viewport.$uiValues;
+            var hScrollBar = this.horizontalScrollBar;
+            if(hScrollBar){
+                hScrollBar.maximum = values[sys.UIValues.contentWidth] - values[sys.UIValues.width];
+            }
+            var vScrollBar = this.verticalScrollBar;
+            if(vScrollBar){
+                vScrollBar.maximum = values[sys.UIValues.contentHeight] - values[sys.UIValues.height];
+            }
+        }
+
+        private onScrollPositionChanged(event:swan.UIEvent):void {
+            var values = this._viewport.$uiValues;
+            var hScrollBar = this.horizontalScrollBar;
+            if(hScrollBar){
+                hScrollBar.value = values[sys.UIValues.scrollH];
+            }
+            var vScrollBar = this.verticalScrollBar;
+            if(vScrollBar){
+                vScrollBar.value = values[sys.UIValues.scrollV];
+            }
+        }
+
+        $setSkin(skin:Skin):void {
+            super.$setSkin(skin);
+            var viewport = this._viewport;
+            if (viewport) {
+                this.addChildAt(viewport, 0);
+            }
+            this.checkScrollBarVisibility(this._autoHideScrollBar);
+        }
+
+        private autoHideTimer:lark.Timer = null;
+
+        private _autoHideScrollBar:boolean = true;
+        /**
+         * 是否自动隐藏滚动条，仅当滚动位置发生改变时显示一段时间。
+         */
+        public get autoHideScrollBar():boolean {
+            return this._autoHideScrollBar;
+        }
+
+        public set autoHideScrollBar(value:boolean) {
+            value = !!value;
+            if (value === this._autoHideScrollBar) {
+                return;
+            }
+            this._autoHideScrollBar = value;
+            this.checkScrollBarVisibility(value);
+        }
+
+        private checkScrollBarVisibility(hide:boolean):void {
+            var hScrollBar = this.horizontalScrollBar;
+            var vScrollBar = this.verticalScrollBar;
+            if (!hScrollBar && !vScrollBar) {
+                return;
+            }
+            if (hide) {
+                if (hScrollBar) {
+                    hScrollBar.visible = false;
+                }
+                if (vScrollBar) {
+                    vScrollBar.visible = false;
+                }
+            }
+            else {
+                if (hScrollBar) {
+                    hScrollBar.visible = this.horizontalCanScroll;
+                }
+                if (vScrollBar) {
+                    vScrollBar.visible = this.verticalCanScroll;
+                }
+            }
+
         }
 
         private onTouchEndCapture(event:lark.TouchEvent):void {
@@ -174,8 +273,8 @@ module swan {
         private touchStartY:number = 0;
         private touchMoved:boolean = false;
 
-        private horizontalCanScroll:boolean;
-        private verticalCanScroll:boolean;
+        private horizontalCanScroll:boolean = false;
+        private verticalCanScroll:boolean = false;
 
         /**
          * 检查当前滚动策略，若有一个方向可以滚动，返回true。
@@ -239,6 +338,7 @@ module swan {
             if (!this.checkScrollPolicy()) {
                 return;
             }
+            this.checkScrollBarVisibility(false);
             this.touchScrollV.stop();
             this.touchScrollH.stop();
             var values = this._viewport.$uiValues;
@@ -284,6 +384,7 @@ module swan {
             }
         }
 
+
         private onTouchEnd(event:lark.Event):void {
             this.touchMoved = false;
             var stage:lark.Stage = event.$currentTarget;
@@ -299,9 +400,19 @@ module swan {
             }
             if (this.verticalCanScroll) {
                 var touchScrollV = this.touchScrollV;
-                touchScrollV.finish( values[sys.UIValues.scrollV],
+                touchScrollV.finish(values[sys.UIValues.scrollV],
                     values[sys.UIValues.contentHeight] - values[sys.UIValues.height]);
             }
+            if (!this.autoHideTimer) {
+                this.autoHideTimer = new lark.Timer(500, 1);
+                this.autoHideTimer.on(lark.TimerEvent.TIMER_COMPLETE, this.onAutoHideTimer, this);
+            }
+            this.autoHideTimer.reset();
+            this.autoHideTimer.start();
+        }
+
+        private onAutoHideTimer(event:lark.TimerEvent):void {
+            this.checkScrollBarVisibility(this._autoHideScrollBar);
         }
 
 
@@ -313,19 +424,6 @@ module swan {
             this._viewport.scrollV = scrollPos;
         }
 
-        protected measure():void {
-            var viewport = this._viewport;
-            if (viewport) {
-                var bounds = lark.$TempRectangle;
-                viewport.getPreferredBounds(bounds);
-                this.setMeasuredSize(bounds.width, bounds.height);
-            }
-            else {
-                this.setMeasuredSize(0, 0);
-            }
-        }
-
-
         protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
             super.updateDisplayList(unscaledWidth, unscaledHeight);
             var viewport = this._viewport;
@@ -336,6 +434,6 @@ module swan {
         }
     }
 
-    registerProperty(Scroller, "viewport", "any", true);
+    registerProperty(Scroller, "viewport", "swan.IViewport", true);
     lark.registerClass(Scroller, Types.Scroller);
 }

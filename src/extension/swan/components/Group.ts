@@ -103,12 +103,19 @@ module swan {
             width = Math.ceil(+width || 0);
             height = Math.ceil(+height || 0);
             var values = this.$uiValues;
-            if (values[sys.UIValues.contentWidth] === width && values[sys.UIValues.contentHeight] === height) {
+            var wChange = (values[sys.UIValues.contentWidth] !== width);
+            var hChange = (values[sys.UIValues.contentHeight] !== height);
+            if (!wChange && !hChange) {
                 return;
             }
             values[sys.UIValues.contentWidth] = width;
             values[sys.UIValues.contentHeight] = height;
-            UIEvent.emitUIEvent(this, UIEvent.CONTENT_SIZE_CHANGED);
+            if(wChange){
+                PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"contentWidth");
+            }
+            if(hChange){
+                PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"contentHeight");
+            }
         }
 
         /**
@@ -143,7 +150,7 @@ module swan {
             if (this.updateScrollRect() && this.$layout) {
                 this.$layout.scrollPositionChanged();
             }
-            UIEvent.emitUIEvent(this, UIEvent.SCROLL_POSITION_CHANGED);
+            PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"scrollH");
         }
 
         /**
@@ -162,7 +169,7 @@ module swan {
             if (this.updateScrollRect() && this.$layout) {
                 this.$layout.scrollPositionChanged();
             }
-            UIEvent.emitUIEvent(this, UIEvent.SCROLL_POSITION_CHANGED);
+            PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"scrollV");
         }
 
         private updateScrollRect():boolean {
@@ -499,5 +506,5 @@ module swan {
     sys.mixin(Group, sys.StateClient);
     registerProperty(Group, "elementsContent", "Array", true);
     registerProperty(Group, "states", "State[]");
-    lark.registerClass(Group, Types.Group, [Types.UIComponent]);
+    lark.registerClass(Group, Types.Group, [Types.UIComponent,Types.IViewport]);
 }

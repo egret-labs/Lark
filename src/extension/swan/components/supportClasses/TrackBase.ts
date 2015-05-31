@@ -156,7 +156,6 @@ module swan {
         protected updateWhenTouchMove(newValue:number):void{
             if (newValue != this.value) {
                 this.setValue(newValue);
-                this.validateDisplayList();
                 this.emitWith(lark.Event.CHANGE);
             }
         }

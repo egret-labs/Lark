@@ -300,7 +300,7 @@ module swan {
                 if (itemRenderer != this.$mouseDownItemRenderer)
                     return;
                 this.setSelectedIndices(this.calculateSelectedIndices(itemRenderer.itemIndex), true);
-                ItemTapEvent.emitItemClickEvent(this, ItemTapEvent.ITEM_TAP, itemRenderer);
+                ItemTapEvent.emitItemTapEvent(this, ItemTapEvent.ITEM_TAP, itemRenderer);
             }
             else {
                 super.onRendererTouchEnd(event);

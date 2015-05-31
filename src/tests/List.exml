@@ -1,4 +1,18 @@
 <s:Scroller width="400" height="300" xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
+    <s:Skin>
+        <s:VScrollBar id="verticalScrollBar" right="0" top="0" bottom="20">
+            <s:Skin>
+                <s:Image source="image/button_disabled.png" id="track" height="100%" scale9Grid="5,5,63,16"/>
+                <s:Image source="image/button_up.png" id="thumb" scale9Grid="5,5,63,16"/>
+            </s:Skin>
+        </s:VScrollBar>
+        <s:HScrollBar id="horizontalScrollBar" bottom="0" left="0" right="0">
+            <s:Skin>
+                <s:Image source="image/button_disabled.png" id="track" width="100%" scale9Grid="5,5,63,16"/>
+                <s:Image source="image/button_up.png" id="thumb" scale9Grid="5,5,63,16"/>
+            </s:Skin>
+        </s:HScrollBar>
+    </s:Skin>
     <s:Group touchBackground="true">
         <s:TabBar dataProvider="{viewStack}">
             <s:itemRenderer>
@@ -41,12 +55,11 @@
                 <s:Image source="image/button_up.png" id="thumb" width="100%" scale9Grid="5,5,63,16"/>
             </s:Skin>
         </s:ProgressBar>
-        <s:VSlider id="progressBar" y="250" value="50" height="400">
+        <s:VScrollBar horizontalCenter="0" height="400">
             <s:Skin>
                 <s:Image source="image/button_disabled.png" id="track" height="100%" scale9Grid="5,5,63,16"/>
-                <s:Image source="image/button_down.png" id="trackHighlight" scale9Grid="5,5,63,16"/>
                 <s:Image source="image/button_up.png" id="thumb" scale9Grid="5,5,63,16"/>
             </s:Skin>
-        </s:VSlider>
+        </s:VScrollBar>
     </s:Group>
 </s:Scroller>

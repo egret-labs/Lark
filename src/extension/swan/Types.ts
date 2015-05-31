@@ -196,6 +196,22 @@ module swan {
         /**
          * 滚动条组件
          */
-        Scroller
+        Scroller,
+        /**
+         * 滚动条基类
+         */
+        ScrollBarBase,
+        /**
+         * 垂直滚动条
+         */
+        VScrollBar,
+        /**
+         * 水平滚动条
+         */
+        HScrollBar,
+        /**
+         * 支持视区的组件接口
+         */
+        IViewport
     }
 }

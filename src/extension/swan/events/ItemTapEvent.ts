@@ -63,7 +63,7 @@ module swan {
          * @param target 事件派发目标
          * @param eventType 事件类型
          */
-        public static emitItemClickEvent(target:lark.IEventEmitter, eventType:string, itemRenderer?:IItemRenderer):boolean {
+        public static emitItemTapEvent(target:lark.IEventEmitter, eventType:string, itemRenderer?:IItemRenderer):boolean {
             if (!target.hasListener(eventType)) {
                 return true;
             }
