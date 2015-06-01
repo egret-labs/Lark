@@ -36,7 +36,7 @@ module lark.sys {
         textFieldHeight,    //NONE
         textWidth,          //0
         textHeight,         //0
-        textDrawWidth        //0
+        textDrawWidth       //0
     }
 }
 
@@ -66,9 +66,9 @@ module lark {
                 NONE,           //textFieldHeight
                 0,              //textWidth
                 0,              //textHeight
-                0,              //textDrawWidth
+                0               //textDrawWidth
             ]);
-            this.$displayObjectFlags |= sys.TextFieldFlags.wordWrap|
+            this.$displayObjectFlags |= sys.TextFieldFlags.wordWrap |
                 sys.TextFieldFlags.FontStringChanged;
             this.text = text;
         }
@@ -232,11 +232,11 @@ module lark {
          * 一个布尔值，表示文本字段是否自动换行。如果 wordWrap 的值为 true，则该文本字段自动换行；
          * 如果值为 false，则该文本字段不自动换行,如果同时显式设置过宽度，超出宽度的部分将被截断。默认值为 true。
          */
-        public get wordWrap():boolean{
+        public get wordWrap():boolean {
             return this.$hasFlags(sys.TextFieldFlags.wordWrap);
         }
 
-        public set wordWrap(value:boolean){
+        public set wordWrap(value:boolean) {
             value = !!value;
             if (value === this.$hasFlags(sys.TextFieldFlags.wordWrap)) {
                 return;
@@ -286,7 +286,7 @@ module lark {
 
         $getWidth():number {
             var w = this.$textFieldValues[sys.TextFieldValues.textFieldWidth];
-            return isNone(w)?this.$getContentBounds().width:w;
+            return isNone(w) ? this.$getContentBounds().width : w;
         }
 
         $setWidth(value:number) {
@@ -301,7 +301,7 @@ module lark {
 
         $getHeight():number {
             var h = this.$textFieldValues[sys.TextFieldValues.textFieldHeight];
-            return isNone(h)?this.$getContentBounds().height:h;
+            return isNone(h) ? this.$getContentBounds().height : h;
         }
 
         $setHeight(value:number) {
@@ -322,11 +322,20 @@ module lark {
         $measureContentBounds(bounds:Rectangle):void {
             this.updateTextLines();
             var values = this.$textFieldValues;
-            var height = isNone(values[sys.TextFieldValues.textFieldHeight]) ?
-                values[sys.TextFieldValues.textHeight] : values[sys.TextFieldValues.textFieldHeight];
-            var width = isNone(values[sys.TextFieldValues.textFieldWidth])?
-                values[sys.TextFieldValues.textWidth]:values[sys.TextFieldValues.textFieldWidth];
-            if(width<values[sys.TextFieldValues.textDrawWidth]){
+            var height:number;
+            if (isNone(values[sys.TextFieldValues.textFieldHeight])) {
+                height = values[sys.TextFieldValues.textHeight];
+            }
+            else {
+                height = values[sys.TextFieldValues.textFieldHeight];
+                var lineHeight = values[sys.TextFieldValues.fontSize] + 4;
+                if (height < lineHeight) {
+                    height = lineHeight;
+                }
+            }
+            var width = isNone(values[sys.TextFieldValues.textFieldWidth]) ?
+                values[sys.TextFieldValues.textWidth] : values[sys.TextFieldValues.textFieldWidth];
+            if (width < values[sys.TextFieldValues.textDrawWidth]) {
                 width = values[sys.TextFieldValues.textDrawWidth];
             }
             bounds.setTo(0, 0, width, height);
@@ -344,8 +353,8 @@ module lark {
             context.fillStyle = this._colorString;
             var length = lines.length;
             var lineHeight = values[sys.TextFieldValues.fontSize];
-            var halfLineHeight = lineHeight*0.5;
-            var drawY = halfLineHeight+2;
+            var halfLineHeight = lineHeight * 0.5;
+            var drawY = halfLineHeight + 2;
             var vGap = lineHeight + values[sys.TextFieldValues.lineSpacing];
 
             var textHeight = values[sys.TextFieldValues.textHeight];
@@ -360,7 +369,7 @@ module lark {
                 drawY += vAlign * (explicitHeight - textHeight);
             }
             drawY = Math.round(drawY);
-            var hAlign:number = 0;
+            var hAlign = 0;
             if (this._textAlign == HorizontalAlign.CENTER) {
                 hAlign = 0.5;
             }
@@ -375,15 +384,15 @@ module lark {
             else {
                 maxWidth = values[sys.TextFieldValues.textFieldWidth];
             }
-            var maxYPos:number = explicitHeight-2;
-            for (var i:number = 0; i < length; i++) {
+            var maxYPos = explicitHeight - 2;
+            for (var i = 0; i < length; i++) {
                 var line = lines[i];
                 var measureW = measuredWidths[i];
                 var drawX = Math.round((maxWidth - measureW) * hAlign);
                 if (drawX < 0) {
                     drawX = 0;
                 }
-                if (drawY + halfLineHeight <= maxYPos) {
+                if (drawY + halfLineHeight <= maxYPos || i === 0) {
                     context.fillText(line, drawX, drawY);
                 }
                 drawY += vGap;
@@ -422,7 +431,7 @@ module lark {
             var maxWidth = 0;
             var drawWidth = 0;
             var index:number;
-            if (hasWidthSet&&this.$hasFlags(sys.TextFieldFlags.wordWrap)) {
+            if (hasWidthSet && this.$hasFlags(sys.TextFieldFlags.wordWrap)) {
                 for (var i = 0; i < length; i++) {
                     var line = lines[i];
                     var measureW = TextMeasurer.measureText(line, font);
@@ -437,10 +446,10 @@ module lark {
                             if (lineWidth + measureW > textFieldWidth) {
 
                                 if (lineWidth === 0) {
-                                    index = getMaxIndex(word,textFieldWidth,font);
-                                    words.splice(j+1,0, word.substring(index));
-                                    word = word.substring(0,index);
-                                    measureW = TextMeasurer.measureText(word,font);
+                                    index = getMaxIndex(word, textFieldWidth, font);
+                                    words.splice(j + 1, 0, word.substring(index));
+                                    word = word.substring(0, index);
+                                    measureW = TextMeasurer.measureText(word, font);
                                     lines.splice(i, 0, word);
                                     measuredWidths[i] = measureW;
                                     len++;
@@ -458,7 +467,7 @@ module lark {
                                     }
                                     newLine = "";
                                     lineWidth = 0;
-                                    if(measureW>textFieldWidth){
+                                    if (measureW > textFieldWidth) {
                                         measureW = 0;
                                         word = "";
                                         j--;
@@ -480,15 +489,16 @@ module lark {
                         }
                     }
                 }
+                drawWidth = Math.max(drawWidth, maxWidth);
             }
             else {
                 for (i = 0; i < length; i++) {
                     line = lines[i];
                     measureW = TextMeasurer.measureText(line, font);
-                    if(hasWidthSet&&measureW>textFieldWidth){
-                        index = getMaxIndex(line,textFieldWidth,font);
-                        line = lines[i] = line.substring(0,index);
-                        drawWidth = Math.max(drawWidth,TextMeasurer.measureText(line,font));
+                    if (hasWidthSet && measureW > textFieldWidth) {
+                        index = getMaxIndex(line, textFieldWidth, font);
+                        line = lines[i] = line.substring(0, index);
+                        drawWidth = Math.max(drawWidth, TextMeasurer.measureText(line, font));
                     }
                     measuredWidths[i] = measureW;
                     if (maxWidth < measureW) {
@@ -500,7 +510,7 @@ module lark {
             values[sys.TextFieldValues.textWidth] = Math.ceil(maxWidth);
             //由于Canvas不提供文本行高测量功能，这里以字号为默认行高测量，并在顶部和底部各留2像素边距防止文本截断。
             values[sys.TextFieldValues.textHeight] = Math.ceil(lines.length * (values[sys.TextFieldValues.fontSize] +
-                values[sys.TextFieldValues.lineSpacing]) - values[sys.TextFieldValues.lineSpacing]+4);
+                values[sys.TextFieldValues.lineSpacing]) - values[sys.TextFieldValues.lineSpacing] + 4);
             this.textLines = lines;
             return lines;
         }
@@ -510,7 +520,7 @@ module lark {
     /**
      * 返回不超过最大宽度的字符结束索引(不包括)。
      */
-    function getMaxIndex(text:string,maxWidth:number,font:string):number{
+    function getMaxIndex(text:string, maxWidth:number, font:string):number {
         var lineWidth = 0;
         var length = text.length;
         var index:number;
@@ -523,12 +533,11 @@ module lark {
             }
             lineWidth += measureW;
         }
-        return index==0?1:index;
+        return index == 0 ? 1 : index;
     }
 
     registerClass(TextField, Types.TextField);
 }
-
 
 
 module lark.sys {
