@@ -212,6 +212,14 @@ module swan {
         /**
          * 支持视区的组件接口
          */
-        IViewport
+        IViewport,
+        /**
+         * 网格布局
+         */
+        TileLayout,
+        /**
+         * 可编辑文本
+         */
+        EditableText
     }
 }

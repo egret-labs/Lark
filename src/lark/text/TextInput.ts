@@ -81,18 +81,6 @@ module lark{
             this.emitWith(TextInputEvent.CHANGE);
         }
 
-        $onKeyEvent(e: KeyboardEvent) {
-            var event = new TextInputEvent(e.type);
-            event.keyCode = e.keyCode;
-            event.altKey = e.altKey;
-            event.ctrlKey = e.ctrlKey;
-            event.metaKey = e.metaKey;
-            this.emit(event);
-        }
-
-
-
-
         $setX(value:number):boolean {
             this.updateTextAdapter();
             return super.$setX(value);

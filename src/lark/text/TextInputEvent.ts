@@ -36,38 +36,17 @@ module lark {
 
         /**
          * TextInput 获得焦点
-         * @type {string}
          */
         public static FOCUS:string = 'focus';
 
         /**
          * TextInput 失去焦点
-         * @type {string}
          */
         public static BLUR:string = 'blur';
 
         /**
-         * TextInput 正在输入文本
-         * @type {string}
+         * TextInput 正在输入文本,通过事件对象的text属性可以读取最新的文本内容。
          */
         public static INPUT:string = 'input';
-
-        /**
-         * TextInput 输入完成
-         * @type {string}
-         */
-        public static CHANGE:string = 'change';
-
-        /**
-         * TextInput 键盘 keydown 事件
-         * @type {string}
-         */
-        public static KEY_DOWN:string = 'keydown';
-
-
-        public keyCode:number;
-        public altKey:boolean = true;
-        public ctrlKey:boolean = true;
-        public metaKey:boolean = true;
     }
 }

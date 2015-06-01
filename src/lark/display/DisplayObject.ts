@@ -68,19 +68,16 @@ module lark {
          */
         public constructor() {
             super();
-            if (!this.fieldsInitialized) {//避免重复初始化
+            if (!this._matrix) {//避免重复初始化
                 this.initializeFields();
             }
 
         }
 
-        private fieldsInitialized:boolean;
-
         /**
          * DisplayObject定义的所有变量请不要添加任何初始值，必须统一在此处初始化。否则UIComponent的代码复用机制可能会触发两次DisplayObject的构造方法。
          */
         private initializeFields():void{
-            this.fieldsInitialized = true;
             this.$displayObjectFlags = 0;
             this.$children = null;
             this.$parent = null;

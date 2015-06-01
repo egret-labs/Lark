@@ -831,4 +831,6 @@ module swan {
             }
         }
     }
+
+    lark.registerClass(TileLayout,Types.TileLayout);
 }
