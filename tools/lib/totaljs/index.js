@@ -4273,25 +4273,25 @@ Framework.prototype.mode = function(http, name, options) {
 /**
  * Show framework informations
  */
-Framework.prototype.console = function() {
-	console.log('====================================================');
-	console.log('PID          : ' + process.pid);
+Framework.prototype.console = function () {
+	//console.log('====================================================');
+	//console.log('PID          : ' + process.pid);
 
-	if (process.argv[0] === 'iojs')
-		console.log('io.js        : ' + process.version);
-	else
-		console.log('node.js      : ' + process.version);
+	//if (process.argv[0] === 'iojs')
+	//	console.log('io.js        : ' + process.version);
+	//else
+	//	console.log('node.js      : ' + process.version);
 
-	console.log('total.js     : v' + framework.version_header);
-	console.log('====================================================');
-	console.log('Name         : ' + framework.config.name);
-	console.log('Version      : ' + framework.config.version);
-	console.log('Author       : ' + framework.config.author);
-	console.log('Date         : ' + new Date().format('yyyy-MM-dd HH:mm:ss'));
-	console.log('Mode         : ' + (framework.config.debug ? 'debug' : 'release'));
-	console.log('====================================================\n');
-	console.log('{2}://{0}:{1}/'.format(framework.ip, framework.port, framework.isHTTPS ? 'https' : 'http'));
-	console.log('');
+	//console.log('total.js     : v' + framework.version_header);
+	//console.log('====================================================');
+	//console.log('Name         : ' + framework.config.name);
+	//console.log('Version      : ' + framework.config.version);
+	//console.log('Author       : ' + framework.config.author);
+	//console.log('Date         : ' + new Date().format('yyyy-MM-dd HH:mm:ss'));
+	//console.log('Mode         : ' + (framework.config.debug ? 'debug' : 'release'));
+	//console.log('====================================================\n');
+	//console.log('{2}://{0}:{1}/'.format(framework.ip, framework.port, framework.isHTTPS ? 'https' : 'http'));
+	//console.log('');
 };
 
 /**

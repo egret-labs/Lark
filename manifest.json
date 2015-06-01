@@ -1,5 +1,5 @@
 ﻿{
-    "version": "0.0.1.0",
+    "version": "0.5.0",
     "modules": [
         {
             "name": "lark",
@@ -82,7 +82,8 @@
     "platforms":[
         {
             "name":"any",
-            "declaration":true
+            "declaration":true,
+            "hidden":true
         },
         {
             "name":"html5",
@@ -91,8 +92,38 @@
     ],
     "templates":[
         {
-            "name":"empty",
-            "description":"Empty Project"
+            "name":"Empty",
+            "description":"空项目"
+        },
+        {
+            "name":"Demo",
+            "description":"示例项目"
+        }
+    ],
+    "scaleModes":[
+        {
+            "name":"noScale",
+            "description":"不缩放应用程序内容。即使在更改播放器视口大小时，它仍然保持不变。如果播放器视口比内容小，则可能进行一些裁切。在此模式下，舞台尺寸（Stage.stageWidth,Stage.stageHeight）始终跟播放器视口大小保持一致。"
+        },
+        {
+            "name":"showAll",
+            "description":"保持原始宽高比缩放应用程序内容，缩放后应用程序内容的较宽方向填满播放器视口，另一个方向的两侧可能会不够宽而留有黑边。在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。"
+        },
+        {
+            "name":"noBorder",
+            "description":"保持原始宽高比缩放应用程序内容，缩放后应用程序内容的较窄方向填满播放器视口，另一个方向的两侧可能会超出播放器视口而被裁切。在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。"
+        },
+        {
+            "name":"exactFit",
+            "description":"不保持原始宽高比缩放应用程序内容，缩放后应用程序内容正好填满播放器视口。在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。"
+        },
+        {
+            "name":"fixedWidth",
+            "description":"保持原始宽高比缩放应用程序内容，缩放后应用程序内容在水平和垂直方向都填满播放器视口，但只保持应用程序内容的原始宽度不变，高度可能会改变。在此模式下，舞台宽度(Stage.stageWidth)始终等于初始化时外部传入的应用程序内容宽度。舞台高度(Stage.stageHeight)由当前的缩放比例与播放器视口高度决定。"
+        },
+        {
+            "name":"fixedHeight",
+            "description":"保持原始宽高比缩放应用程序内容，缩放后应用程序内容在水平和垂直方向都填满播放器视口，但只保持应用程序内容的原始高度不变，宽度可能会改变。在此模式下，舞台高度(Stage.stageHeight)始终等于初始化时外部传入的应用程序内容高度。舞台宽度(Stage.stageWidth)由当前的缩放比例与播放器视口宽度决定。"
         }
     ]
 }

@@ -36,6 +36,7 @@ declare module lark {
         host: string;
         websocketUrl: string;
         manageUrl: string;
+        startUrl: string;
 
         publish?: boolean;
         includeLark?: boolean;
@@ -121,6 +122,12 @@ declare module lark {
         modules: LarkModule[];
         platforms: LarkPlatform[];
         configurations: CompileConfiguration[];
+        scaleModes: LarkScaleMode[];
+    }
+
+    export interface LarkScaleMode {
+        name: string;
+        description: string;
     }
 
     

@@ -2,14 +2,10 @@
 
 <div id="create-view" ng-controller="ProjectController as model">
     <h2>
-        Create a Lark Project
+        创建一个全新的 Lark 项目
     </h2>
     <form name="createForm" action="#" method="post">
 
-        <h3>Project Type</h3>
-        <label ng-repeat="template in model.larkManifest.templates">
-            <input type="radio" name="template" ng-value="template.name" ng-model="model.template" /> {{template.description}}
-        </label>
 
         @{view('config')}
     </form>

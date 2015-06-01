@@ -18,13 +18,7 @@ module lark.portal {
     export class Project implements lark.ILarkProject {
         larkManifest = lark.manifest;
         name = project.name;
-        scaleModes = [{
-            name: 'noScale',
-            description: 'Keep the original resolution of the device, will hide the parts out of the screen.'
-        }, {
-            name: 'showAll',
-            description: 'Scale to display all contents'
-        }];
+        scaleModes = lark.manifest.scaleModes;
 
         larkVersion: string = project.larkVersion;
         version: string = project.version;
@@ -39,7 +33,8 @@ module lark.portal {
         contentWidth: number = project.contentWidth;
         contentHeight: number = project.contentHeight;
         showPaintRects: boolean = project.showPaintRects;
-        template: string = "empty";
+        template: string = "Empty";
+        isConfig = location.pathname == "/$/config";
 
         constructor() {
             this.larkManifest.modules.forEach(lm=> {
@@ -65,12 +60,14 @@ module lark.portal {
             this.modules = manifest.modules.filter(m=> m.checked).map(m=> { return { name: m.name }; });
             this.platforms = manifest.platforms.filter(p=> p.checked).map(p=> { return { name: p.name }; });
             this.larkManifest = undefined;
+            var modes = this.scaleModes;
+            this.scaleModes = undefined;
             var json = JSON.stringify(this);
             console.log(json);
             $.get('', { proj: json }, function () {
                 location.href = "/bin-debug/index.html";
             });
-
+            this.scaleModes = modes;
 
             this.larkManifest = manifest;
         }

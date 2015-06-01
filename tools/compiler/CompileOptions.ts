@@ -57,6 +57,10 @@ class CompileOptions implements lark.ICompileOptions {
         var url = "http://" + this.host + ':' + this.port + '/$/';
         return url;
     }
+    get startUrl(): string {
+        var url = "http://" + this.host + ':' + this.port + '/bin-debug/' + this.project.startupHtml;
+        return url;
+    }
 
     larkRoot: string;
     publish: boolean;

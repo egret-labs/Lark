@@ -24,7 +24,6 @@ function startServer(options, startupUrl) {
     };
     var manifestContent = file.read(file.joinPath(options.larkRoot, 'manifest.json'));
     lark.manifest = JSON.parse(manifestContent);
-    console.log('server root', __dirname);
     framework.config['directory-temp'] = '~' + options.projectDir + '/bin-debug/tmp/';
     framework.config['directory-public'] = '~' + options.projectDir + '/bin-debug/tmp/';
     framework.config['directory-views'] = '~' + __dirname + '/views/';

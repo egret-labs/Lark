@@ -11,13 +11,7 @@ var lark;
                 var _this = this;
                 this.larkManifest = lark.manifest;
                 this.name = portal.project.name;
-                this.scaleModes = [{
-                        name: 'noScale',
-                        description: 'Keep the original resolution of the device, will hide the parts out of the screen.'
-                    }, {
-                        name: 'showAll',
-                        description: 'Scale to display all contents'
-                    }];
+                this.scaleModes = lark.manifest.scaleModes;
                 this.larkVersion = portal.project.larkVersion;
                 this.version = portal.project.version;
                 this.entry = portal.project.entry;
@@ -31,7 +25,8 @@ var lark;
                 this.contentWidth = portal.project.contentWidth;
                 this.contentHeight = portal.project.contentHeight;
                 this.showPaintRects = portal.project.showPaintRects;
-                this.template = "empty";
+                this.template = "Empty";
+                this.isConfig = location.pathname == "/$/config";
                 this.larkManifest.modules.forEach(function (lm) {
                     if (lm.name == 'lark')
                         lm.checked = true;
@@ -54,12 +49,14 @@ var lark;
                 this.modules = manifest.modules.filter(function (m) { return m.checked; }).map(function (m) { return { name: m.name }; });
                 this.platforms = manifest.platforms.filter(function (p) { return p.checked; }).map(function (p) { return { name: p.name }; });
                 this.larkManifest = undefined;
+                var modes = this.scaleModes;
+                this.scaleModes = undefined;
                 var json = JSON.stringify(this);
                 console.log(json);
                 $.get('', { proj: json }, function () {
                     location.href = "/bin-debug/index.html";
                 });
-                $('#console').addClass('active');
+                this.scaleModes = modes;
                 this.larkManifest = manifest;
             };
             return Project;

@@ -265,11 +265,14 @@ module ts {
 
 
 
-
+        //todo 
         private getFileNode(file:string) {
             if (file in fileNameToNodeMap)
                 return fileNameToNodeMap[file];
             var typeNode = new FileNode();
+            if (typeof (file) != 'string') {
+                console.log(file);
+            }
             typeNode.name = file;
             typeNode.subs = [];
             typeNode.depends = [];
@@ -293,7 +296,7 @@ module ts {
                 if (supers) {
                     supers.forEach(superClass=> {
                         var dependFile = classNameToFileMap[superClass];
-                        if (dependFile == fileName || dependFile[fileName])
+                        if (dependFile && dependFile['map'] || dependFile == fileName || dependFile[fileName])
                             return;
                         var dependNode = this.getFileNode(<string>dependFile);
                         dependNode.addSub(fileNode);
@@ -307,7 +310,7 @@ module ts {
                     constructorDepends.forEach(depend=> {
                         var dependFile = classNameToFileMap[depend];
 
-                        if (dependFile != file&& typeof(dependFile) =='string' ) {
+                        if (dependFile && dependFile['map']==undefined && dependFile != file&& typeof(dependFile) =='string' ) {
                             var dependFileNode = this.getFileNode(<string>dependFile);
                             fileNode.addDepends(dependFileNode);
                             dependFileNode.addSubDepends(fileNode);
@@ -319,7 +322,7 @@ module ts {
                 if(functionCallDepens){
                     functionCallDepens.forEach(depend=> {
                         var dependFile = classNameToFileMap[depend];
-                        if (dependFile == file || typeof(dependFile)!='string')
+                        if (dependFile && dependFile['map'] ||dependFile == file || typeof(dependFile)!='string')
                             return;
                         var dependNode = this.getFileNode(<string>dependFile);
                         dependNode.addSub(fileNode);

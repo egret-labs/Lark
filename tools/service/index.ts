@@ -5,6 +5,8 @@ import Project = require('./project');
 
 
 var LARK_SERVICE_PORT = 51598;
+//Lark version, use to shutdown if the version is different to the value passed by the build command
+var version = process.argv[2];
 var projects = {};
 
 
@@ -19,6 +21,9 @@ http.createServer(function (req, res) {
 
     var uri = url.parse(req.url,true);
     var info: TaskInfo = uri.query;
+    if (info.version && info.version != version) {
+        process.exit(0);
+    }
     console.log(info);
     if (info.init) {
         var proj: Project = projects[info.path];
@@ -46,6 +51,7 @@ interface TaskInfo {
     changeType?: string;
     init: boolean;
     command: string;
+    version: string;
 }
 
 function handleBuildTask(info:TaskInfo,currentRes:http.ServerResponse) {

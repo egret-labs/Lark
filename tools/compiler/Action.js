@@ -86,17 +86,7 @@ var Action = (function () {
         var larkRoot = options.larkRoot;
         var dtsFiles = [];
         var currentPlatform, currentConfig;
-        var manifestPath = FileUtil.joinPath(larkRoot, "manifest.json");
-        console.log(manifestPath);
-        var content = FileUtil.read(manifestPath);
-        var manifest = null;
-        console.log(content);
-        try {
-            manifest = JSON.parse(content);
-        }
-        catch (e) {
-            utils.exit(10009);
-        }
+        var manifest = lark.manifest;
         var configurations = [
             { name: "debug", declaration: true },
             { name: "release", minify: true }
@@ -154,7 +144,7 @@ var Action = (function () {
             var tss = [];
             larkModule.files.forEach(function (file) {
                 var path = null;
-                var sourcePlatform, sourceConfig = null;
+                var sourcePlatform = null, sourceConfig = null;
                 if (typeof (file) == 'string') {
                     path = file;
                 }
@@ -164,7 +154,7 @@ var Action = (function () {
                     sourcePlatform = source.platform;
                     sourceConfig = source.debug ? "debug" : null;
                 }
-                var platformOK = platform.name == ANY || sourcePlatform == platform.name;
+                var platformOK = sourcePlatform == null && platform.name == ANY || sourcePlatform == platform.name;
                 var configOK = sourceConfig == null || sourceConfig == configuration.name;
                 if (platformOK && configOK) {
                     path = FileUtil.joinPath(moduleRoot, path);

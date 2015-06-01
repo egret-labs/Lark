@@ -91,6 +91,14 @@ var CompileOptions = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(CompileOptions.prototype, "startUrl", {
+        get: function () {
+            var url = "http://" + this.host + ':' + this.port + '/bin-debug/' + this.project.startupHtml;
+            return url;
+        },
+        enumerable: true,
+        configurable: true
+    });
     CompileOptions.parse = function (option) {
         var it = new CompileOptions();
         for (var p in option) {

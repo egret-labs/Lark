@@ -1032,7 +1032,7 @@ module ts {
 
         function emitAccessorDeclaration(node: AccessorDeclaration) {
             var accessors = getAllAccessorDeclarations(<ClassDeclaration>node.parent, node);
-            if (node === accessors.firstAccessor) {
+            if (node === accessors.firstAccessor && resolver.isDeclarationVisible(node)) {
                 var name:string;
                 if(global.ignoreDollar && node.name && (name = node.name['text']) && name.indexOf('$')==0)
                     return;
@@ -1116,7 +1116,7 @@ module ts {
             if ((node.kind !== SyntaxKind.FunctionDeclaration || resolver.isDeclarationVisible(node)) &&
                 !resolver.isImplementationOfOverload(node)) {
                 var name:string;
-                if(global.ignoreDollar && node.name && (name = node.name['text']) && name.indexOf('$')==0)
+                if (global.ignoreDollar && node.name && !resolver.isDeclarationVisible(node) && (name = node.name['text']) && name.indexOf('$')==0)
                     return;
                 emitJsDocComments(node);
                 if (node.kind === SyntaxKind.FunctionDeclaration) {
@@ -3053,33 +3053,31 @@ module ts {
                             write(", ");
                             emitExpressionForPropertyName((<AccessorDeclaration>member).name);
                             emitEnd((<AccessorDeclaration>member).name);
-                            write(", {");
+                            write(",");
                             increaseIndent();
                             if (accessors.getAccessor) {
                                 writeLine();
                                 emitLeadingComments(accessors.getAccessor);
-                                write("g: ");
                                 emitStart(accessors.getAccessor);
                                 write("function ");
                                 emitSignatureAndBody(accessors.getAccessor);
                                 emitEnd(accessors.getAccessor);
                                 emitTrailingComments(accessors.getAccessor);
-                                write(",");
+                                if (accessors.setAccessor)
+                                    write(",");
                             }
                             if (accessors.setAccessor) {
                                 writeLine();
                                 emitLeadingComments(accessors.setAccessor);
-                                write("s: ");
                                 emitStart(accessors.setAccessor);
                                 write("function ");
                                 emitSignatureAndBody(accessors.setAccessor);
                                 emitEnd(accessors.setAccessor);
                                 emitTrailingComments(accessors.setAccessor);
-                                write(",");
                             }
                             decreaseIndent();
                             writeLine();
-                            write("});");
+                            write(");");
                             emitEnd(member);
                         }
                     }
@@ -3138,25 +3136,6 @@ module ts {
                     write(";");
                 }
                 writeLine();
-                emit(node.name);
-                write(".prototype.__class__ = \"");
-                var stack = [], parent = node.parent;
-                while (parent != null)
-                {
-                    stack.push(parent);
-                    parent = parent.parent;
-                }
-                for (var i = stack.length - 1; i >= 0; i--)
-                {
-                    parent = stack[i];
-                    if (parent["name"] && parent["name"].text)
-                    {
-                        write(parent["name"].text);
-                        write(".");
-                    }
-                }
-                write(node.name.text);
-                write("\";");
                 emitTrailingComments(node);
 
                 function emitConstructorOfClass() {
@@ -3524,7 +3503,7 @@ module ts {
                 }
                 if (!defineEmitted) {
                     writeLine();
-                    write('var __define =this.__define || function (o, p, a) { Object.defineProperty(o, p, { configurable:true,enumerable:true,get:a.g,set:a.s }) };');
+                    write('var __define = this.__define || function (o, p, g, s) { Object.defineProperty(o, p, { configurable:true, enumerable:true, get:g, set:s }) };');
                     defineEmitted = true;
                 }
                 if (isExternalModule(node)) {

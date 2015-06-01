@@ -41,11 +41,11 @@ class Build extends Action {
     private _request:http.ClientRequest = null;
     public run(): number {
 
-        this._request = http.get('http://127.0.0.1:51598/?init=true&path='+encodeURIComponent(this.options.projectDir), res=> {
+        this._request = http.get('http://127.0.0.1:51598/?init=true&path=' + encodeURIComponent(this.options.projectDir), res=> {
             res.setEncoding('utf8');
             res.on('data', text => {
                 var msg: lark.ServiceBuildCommand = JSON.parse(text);
-                if(msg.command=='build')
+                if (msg.command == 'build')
                     this.buildChanges(msg.changes);
                 if (msg.command == 'shutdown')
                     process.exit(0);

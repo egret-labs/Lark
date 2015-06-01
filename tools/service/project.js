@@ -76,6 +76,8 @@ var Project = (function () {
         catch (e) {
         }
         if (msg && msg.command == 'build') {
+            if (msg.messages.length > 20)
+                msg.messages.length = 20;
             if (this.penddingRequest) {
                 this.penddingRequest.writeHead(200, { 'Content-Type': 'text/plain' });
                 this.penddingRequest.end(JSON.stringify(msg));

@@ -41,6 +41,11 @@ module lark {
     locale_strings[10007] = "{0}: error 类文件之间存在循环依赖，请检查类的继承关系或静态变量的初始化引用。";
     locale_strings[10008] = "类或接口名冲突：‘{0}’同时存在于以下两个文件内：\n{1}\n{2}";
     locale_strings[10009] = "Lark manifest.json 文件不是标准的json文件请尝试重新安装Lark";
+    locale_strings[10010] = "自动编译正在监视项目文件...";
+    locale_strings[10011] = "自动编译完成.";
+    locale_strings[10012] = "如果你没有设置 IDE 保存自动编译，可以添加参数 -a 来启动自动编译";
+    locale_strings[10013] = "lark 服务器已经启动, URL: {0}";
+    locale_strings[10014] = "自动编译失败，请参考下面的错误信息：";
     
     
     
@@ -70,4 +75,13 @@ module lark {
     locale_strings[11101] = "{0}: warning 在w:Declarations内的子节点，不允许使用includeIn和excludeFrom属性\n{1}";
     locale_strings[11102] = "{0}: warning 在属性节点上找不到任何子节点\n{1}";
     locale_strings[11103] = "{0}: warning 节点上的同一个属性'{1}'被多次赋值\n{2}";
+
+
+
+    locale_strings[12000] = "创建一个全新的 Lark 项目";
+    locale_strings[12001] = "选择一个项目模板";
+    locale_strings[12002] = "请输入默认的屏幕尺寸";
+    locale_strings[12003] = "选择屏幕缩放模式";
+    locale_strings[12004] = "选择扩展模块";
+    locale_strings[12005] = "请选择希望发布的平台";
 }

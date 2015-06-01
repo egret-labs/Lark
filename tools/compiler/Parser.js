@@ -40,8 +40,8 @@ function parseCommandLine(commandLine) {
     var options = new CompileOptions();
     var filenames = [];
     var errors = [];
-    parseStrings(commandLine);
     options.larkRoot = utils.getLarkRoot();
+    parseStrings(commandLine);
     return options;
     function parseStrings(args) {
         var i = 0;
@@ -107,6 +107,16 @@ function parseCommandLine(commandLine) {
             props.parse(data);
         }
         options.project = props;
+        var manifestPath = file.joinPath(options.larkRoot, "manifest.json");
+        var content = file.read(manifestPath);
+        var manifest = lark.manifest;
+        try {
+            manifest = JSON.parse(content);
+        }
+        catch (e) {
+            utils.exit(10009);
+        }
+        lark.manifest = manifest;
     }
 }
 exports.parseCommandLine = parseCommandLine;
