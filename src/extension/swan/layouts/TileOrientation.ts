@@ -27,3 +27,20 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
+module swan {
+
+    /**
+     * TileOrientation 类为 TileLayout 类的 orientation 属性定义可能的值。
+     */
+    export class TileOrientation {
+        /**
+         * 逐行排列元素。
+         */
+        public static ROWS:string = "rows";
+
+        /**
+         * 逐列排列元素。
+         */
+        public static COLUMNS:string = "columns";
+    }
+}
