@@ -249,8 +249,8 @@ module swan.sys {
         oldHeight                   //0
     }
 
-    function isDeltaIdentity(m:Float64Array):boolean {
-        return (m[0] === 1 && m[1] === 0 && m[2] === 0 && m[3] === 1);
+    function isDeltaIdentity(m:lark.Matrix):boolean {
+        return (m.a === 1 && m.b === 0 && m.c === 0 && m.d === 1);
     }
 
     var validator = new sys.Validator();
@@ -302,7 +302,7 @@ module swan.sys {
                 0,           //oldWidth,
                 0            //oldHeight
             ]);
-            this.$displayObjectFlags |= sys.UIFlags.UIComponentInitFlags;
+            this.$displayFlags |= sys.UIFlags.UIComponentInitFlags;
             this.$includeInLayout = true;
         }
 
@@ -928,7 +928,7 @@ module swan.sys {
                 height = Math.max(minHeight, Math.min(maxHeight, layoutHeight));
             }
             var matrix = this.$getMatrix();
-            if (isDeltaIdentity(matrix.$data)) {
+            if (isDeltaIdentity(matrix)) {
                 this.setActualSize(width, height);
                 return;
             }
@@ -949,7 +949,7 @@ module swan.sys {
          */
         public setLayoutBoundsPosition(x:number, y:number):void {
             var matrix = this.$getMatrix();
-            if (!isDeltaIdentity(matrix.$data)) {
+            if (!isDeltaIdentity(matrix)) {
                 var bounds = lark.$TempRectangle;
                 this.getLayoutBounds(bounds);
                 x += this.$getX() - bounds.x;
@@ -1019,10 +1019,9 @@ module swan.sys {
         private applyMatrix(bounds:lark.Rectangle, w:number, h:number):void {
             var bounds = bounds.setTo(0, 0, w, h);
             var matrix = this.$getMatrix();
-            var m = matrix.$data;
-            if (isDeltaIdentity(m)) {
-                bounds.x += m[4];
-                bounds.y += m[5];
+            if (isDeltaIdentity(matrix)) {
+                bounds.x += matrix.tx;
+                bounds.y += matrix.ty;
             }
             else {
                 matrix.$transformBounds(bounds);

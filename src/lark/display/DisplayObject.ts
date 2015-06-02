@@ -50,10 +50,6 @@ module lark {
         rotation    //0
     }
 
-    const enum M {
-        a, b, c, d, tx, ty
-    }
-
     /**
      * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时显示的所有对象。使用 DisplayObjectContainer 类排列显示列表中的显示对象。
      * DisplayObjectContainer 对象可以有子显示对象，而其他显示对象是“叶”节点，只有父级和同级，没有子级。
@@ -68,34 +64,34 @@ module lark {
          */
         public constructor() {
             super();
-            this.$displayObjectFlags = sys.DisplayObjectFlags.InitFlags;
-            this.displayObjectValues = new Float64Array([
-                1,  //scaleX,
-                1,  //scaleY,
-                0,  //skewX,
-                0,  //skewY,
-                0   //rotation
-            ]);
+            this.$displayFlags = sys.DisplayObjectFlags.InitFlags;
+            this.displayValues = {
+                0:1,  //scaleX,
+                1:1,  //scaleY,
+                2:0,  //skewX,
+                3:0,  //skewY,
+                4:0   //rotation
+            };
         }
 
-        private displayObjectValues:Float64Array;
+        private displayValues:any;
 
-        $displayObjectFlags:number;
+        $displayFlags:number;
 
         $setFlags(flags:number):void {
-            this.$displayObjectFlags |= flags;
+            this.$displayFlags |= flags;
         }
 
         $toggleFlags(flags:number, on:boolean):void {
             if (on) {
-                this.$displayObjectFlags |= flags;
+                this.$displayFlags |= flags;
             } else {
-                this.$displayObjectFlags &= ~flags;
+                this.$displayFlags &= ~flags;
             }
         }
 
         $removeFlags(flags:number):void {
-            this.$displayObjectFlags &= ~flags;
+            this.$displayFlags &= ~flags;
         }
 
         /**
@@ -113,7 +109,7 @@ module lark {
         }
 
         $hasFlags(flags:number):boolean {
-            return (this.$displayObjectFlags & flags) === flags;
+            return (this.$displayFlags & flags) === flags;
         }
 
         /**
@@ -138,7 +134,7 @@ module lark {
         }
 
         $hasAnyFlags(flags:number):boolean {
-            return !!(this.$displayObjectFlags & flags);
+            return !!(this.$displayFlags & flags);
         }
 
         private invalidateMatrix():void {
@@ -221,7 +217,7 @@ module lark {
 
         $getMatrix():Matrix {
             if (this.$hasFlags(sys.DisplayObjectFlags.InvalidMatrix)) {
-                var values = this.displayObjectValues;
+                var values = this.displayValues;
                 this._matrix.$updateScaleAndRotation(values[Values.scaleX], values[Values.scaleY], values[Values.skewX], values[Values.skewY]);
                 this.$removeFlags(sys.DisplayObjectFlags.InvalidMatrix);
             }
@@ -241,7 +237,7 @@ module lark {
             }
             var m = this._matrix;
             m.copyFrom(matrix);
-            var values = this.displayObjectValues;
+            var values = this.displayValues;
             values[Values.scaleX] = m.$getScaleX();
             values[Values.scaleY] = m.$getScaleY();
             values[Values.skewX] = matrix.$getSkewX();
@@ -298,7 +294,7 @@ module lark {
         }
 
         $getX():number {
-            return this._matrix.$data[M.tx];
+            return this._matrix.tx;
         }
 
         public set x(value:number) {
@@ -307,11 +303,11 @@ module lark {
 
         $setX(value:number):boolean {
             value = +value || 0;
-            var values = this._matrix.$data;
-            if (value === values[M.tx]) {
+            var m = this._matrix;
+            if (value === m.tx) {
                 return false;
             }
-            values[M.tx] = value;
+            m.tx = value;
             this.invalidatePosition();
             return true;
         }
@@ -326,7 +322,7 @@ module lark {
         }
 
         $getY():number {
-            return this._matrix.$data[M.ty];
+            return this._matrix.ty;
         }
 
         public set y(value:number) {
@@ -335,11 +331,11 @@ module lark {
 
         $setY(value:number):boolean {
             value = +value || 0;
-            var values = this._matrix.$data;
-            if (value === values[M.ty]) {
+            var m = this._matrix;
+            if (value === m.ty) {
                 return false;
             }
-            values[M.ty] = value;
+            m.ty = value;
             this.invalidatePosition();
             return true;
         }
@@ -352,7 +348,7 @@ module lark {
          * @default 1
          */
         public get scaleX():number {
-            return this.displayObjectValues[Values.scaleX];
+            return this.displayValues[Values.scaleX];
         }
 
         public set scaleX(value:number) {
@@ -361,7 +357,7 @@ module lark {
 
         $setScaleX(value:number):boolean {
             value = +value || 0;
-            var values = this.displayObjectValues;
+            var values = this.displayValues;
             if (value === values[Values.scaleX]) {
                 return false;
             }
@@ -377,7 +373,7 @@ module lark {
          * @default 1
          */
         public get scaleY():number {
-            return this.displayObjectValues[Values.scaleY];
+            return this.displayValues[Values.scaleY];
         }
 
         public set scaleY(value:number) {
@@ -386,10 +382,10 @@ module lark {
 
         $setScaleY(value:number):boolean {
             value = +value || 0;
-            if (value === this.displayObjectValues[Values.scaleY]) {
+            if (value === this.displayValues[Values.scaleY]) {
                 return false;
             }
-            this.displayObjectValues[Values.scaleY] = value;
+            this.displayValues[Values.scaleY] = value;
             this.invalidateMatrix();
             return true;
         }
@@ -401,13 +397,13 @@ module lark {
          * @default 0 默认值为 0 不旋转。
          */
         public get rotation():number {
-            return this.displayObjectValues[Values.rotation];
+            return this.displayValues[Values.rotation];
         }
 
         public set rotation(value:number) {
             value = +value || 0;
             value = clampRotation(value);
-            var values = this.displayObjectValues;
+            var values = this.displayValues;
             if (value === values[Values.rotation]) {
                 return;
             }
@@ -439,7 +435,7 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var values = this.displayObjectValues;
+            var values = this.displayValues;
             var originalBounds = this.$getOriginalBounds();
             var bounds = this.$getTransformedBounds(this.$parent, $TempRectangle);
             var angle = values[Values.rotation] / 180 * Math.PI;
@@ -473,7 +469,7 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var values = this.displayObjectValues;
+            var values = this.displayValues;
             var originalBounds = this.$getOriginalBounds();
             var bounds = this.$getTransformedBounds(this.$parent, $TempRectangle);
             var angle = values[Values.rotation] / 180 * Math.PI;
@@ -899,10 +895,10 @@ module lark {
             if (!this.$renderRegion || !this.$visible || !this.$hasFlags(sys.DisplayObjectFlags.TouchEnabled)) {
                 return null;
             }
-            var m = this.$getInvertedConcatenatedMatrix().$data;
+            var m = this.$getInvertedConcatenatedMatrix();
             var bounds = this.$getContentBounds();
-            var localX = m[M.a] * stageX + m[M.c] * stageY + m[M.tx];
-            var localY = m[M.b] * stageX + m[M.d] * stageY + m[M.ty];
+            var localX = m.a * stageX + m.c * stageY + m.tx;
+            var localY = m.b * stageX + m.d * stageY + m.ty;
             if (bounds.contains(localX, localY)) {
                 if (!this.$children) {//容器已经检查过scrollRect和mask，避免重复对遮罩进行碰撞。
                     if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
@@ -912,7 +908,7 @@ module lark {
                         return null;
                     }
                 }
-                if (shapeFlag || this.$displayObjectFlags & sys.DisplayObjectFlags.PixelHitTest) {
+                if (shapeFlag || this.$displayFlags & sys.DisplayObjectFlags.PixelHitTest) {
                     return this.hitTestPixel(localX, localY);
                 }
                 return this;

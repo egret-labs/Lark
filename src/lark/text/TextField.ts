@@ -68,7 +68,7 @@ module lark {
                 0,              //textHeight
                 0               //textDrawWidth
             ]);
-            this.$displayObjectFlags |= sys.TextFieldFlags.wordWrap |
+            this.$displayFlags |= sys.TextFieldFlags.wordWrap |
                 sys.TextFieldFlags.FontStringChanged;
             this.text = text;
         }
