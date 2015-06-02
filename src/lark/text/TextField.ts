@@ -58,22 +58,22 @@ module lark {
         public constructor(text?:string) {
             super();
             this.$renderRegion = new sys.Region();
-            this.$textFieldValues = new Float64Array([
-                30,             //fontSize
-                0,              //lineSpacing
-                0x000000,       //textColor
-                NONE,           //textFieldWidth
-                NONE,           //textFieldHeight
-                0,              //textWidth
-                0,              //textHeight
-                0               //textDrawWidth
-            ]);
+            this.$textFieldValues = {
+                0: 30,             //fontSize
+                1: 0,              //lineSpacing
+                2: 0x000000,       //textColor
+                3: NONE,           //textFieldWidth
+                4: NONE,           //textFieldHeight
+                5: 0,              //textWidth
+                6: 0,              //textHeight
+                7: 0               //textDrawWidth
+            };
             this.$displayFlags |= sys.TextFieldFlags.wordWrap |
                 sys.TextFieldFlags.FontStringChanged;
             this.text = text;
         }
 
-        $textFieldValues:Float64Array;
+        $textFieldValues:any;
 
         private _fontFamily:string = "sans-serif";
         /**

@@ -43,11 +43,12 @@ module lark {
     }
 
     const enum Values {
-        scaleX,     //1
-        scaleY,     //1
-        skewX,      //0
-        skewY,      //0
-        rotation    //0
+        scaleX,
+        scaleY,
+        skewX,
+        skewY,
+        rotation,
+        name,
     }
 
     /**
@@ -70,7 +71,8 @@ module lark {
                 1:1,  //scaleY,
                 2:0,  //skewX,
                 3:0,  //skewY,
-                4:0   //rotation
+                4:0,  //rotation
+                5:""  //name
             };
         }
 
@@ -163,7 +165,13 @@ module lark {
          * 表示 DisplayObject 的实例名称。
          * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
          */
-        public name:string = "";
+        public get name():string{
+            return this.displayValues[Values.name];
+        }
+
+        public set name(value:string){
+            this.displayValues[Values.name] = value;
+        }
 
         $parent:DisplayObjectContainer = null;
 

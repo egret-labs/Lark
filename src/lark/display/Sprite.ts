@@ -191,7 +191,7 @@ module lark {
             var children = this.$children;
             var length = children.length;
             var displayObject:DisplayObject;
-            for (var i:number = 0; i < length; i++) {
+            for (var i = 0; i < length; i++) {
                 displayObject = children[i];
                 if (displayObject.name == name) {
                     return displayObject;

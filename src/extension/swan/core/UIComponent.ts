@@ -69,7 +69,7 @@ module swan {
         //$getHeight():number;
         //$setHeight(value:number):void;
 
-        $uiValues:Float64Array;
+        $uiValues:any;
 
         $includeInLayout:boolean;
 
@@ -272,36 +272,36 @@ module swan.sys {
          * UIComponentImpl 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
          */
         private initializeUIValues():void {
-            this.$uiValues = new Float64Array([
-                lark.NONE,       //left
-                lark.NONE,       //right
-                lark.NONE,       //top
-                lark.NONE,       //bottom
-                lark.NONE,       //horizontalCenter
-                lark.NONE,       //verticalCenter
-                lark.NONE,       //percentWidth
-                lark.NONE,       //percentHeight
-                lark.NONE,       //explicitWidth
-                lark.NONE,       //explicitHeight
-                0,          //width
-                0,          //height
-                0,          //minWidth
-                100000,     //maxWidth
-                0,          //minHeight
-                100000,     //maxHeight
-                0,          //measuredWidth
-                0,          //measuredHeight
-                lark.NONE,       //oldPreferWidth
-                lark.NONE,       //oldPreferHeight
-                0,          //contentWidth
-                0,          //contentHeight
-                0,          //scrollH,
-                0,           //scrollV
-                0,           //oldX,
-                0,           //oldY,
-                0,           //oldWidth,
-                0            //oldHeight
-            ]);
+            this.$uiValues = {
+                0:lark.NONE,       //left
+                1:lark.NONE,       //right
+                2:lark.NONE,       //top
+                3:lark.NONE,       //bottom
+                4:lark.NONE,       //horizontalCenter
+                5:lark.NONE,       //verticalCenter
+                6:lark.NONE,       //percentWidth
+                7:lark.NONE,       //percentHeight
+                8:lark.NONE,       //explicitWidth
+                9:lark.NONE,       //explicitHeight
+                10:0,          //width
+                11:0,          //height
+                12:0,          //minWidth
+                13:100000,     //maxWidth
+                14:0,          //minHeight
+                15:100000,     //maxHeight
+                16:0,          //measuredWidth
+                17:0,          //measuredHeight
+                18:lark.NONE,       //oldPreferWidth
+                19:lark.NONE,       //oldPreferHeight
+                20:0,          //contentWidth
+                21:0,          //contentHeight
+                22:0,          //scrollH,
+                23:0,           //scrollV
+                24:0,           //oldX,
+                25:0,           //oldY,
+                26:0,           //oldWidth,
+                27:0            //oldHeight
+        };
             this.$displayFlags |= sys.UIFlags.UIComponentInitFlags;
             this.$includeInLayout = true;
         }
@@ -350,7 +350,7 @@ module swan.sys {
 
         $super:any;
 
-        $uiValues:Float64Array;
+        $uiValues:any;
 
         $includeInLayout:boolean;
 

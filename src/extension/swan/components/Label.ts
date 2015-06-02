@@ -126,7 +126,7 @@ module swan {
         protected invalidateParentLayout():void {
         }
 
-        $uiValues:Float64Array;
+        $uiValues:any;
 
         $includeInLayout:boolean;
 
