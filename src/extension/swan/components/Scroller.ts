@@ -93,7 +93,6 @@ module swan {
             var viewport = this._viewport;
             if (viewport) {
                 viewport.scrollEnabled = true;
-                viewport.on(lark.TouchEvent.TOUCH_BEGIN, this.onViewportTouchBegin, this);
                 viewport.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
                 viewport.on(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
                 this.addChildAt(viewport, 0);
@@ -119,34 +118,9 @@ module swan {
             var viewport = this._viewport;
             if (viewport) {
                 viewport.scrollEnabled = false;
-                viewport.removeListener(lark.TouchEvent.TOUCH_BEGIN, this.onViewportTouchBegin, this);
                 viewport.removeListener(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
                 viewport.removeListener(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
                 this.removeChild(viewport);
-            }
-        }
-
-        private onContentSizeChanged(event:swan.UIEvent):void {
-            var values = this._viewport.$uiValues;
-            var hScrollBar = this.horizontalScrollBar;
-            if(hScrollBar){
-                hScrollBar.maximum = values[sys.UIValues.contentWidth] - values[sys.UIValues.width];
-            }
-            var vScrollBar = this.verticalScrollBar;
-            if(vScrollBar){
-                vScrollBar.maximum = values[sys.UIValues.contentHeight] - values[sys.UIValues.height];
-            }
-        }
-
-        private onScrollPositionChanged(event:swan.UIEvent):void {
-            var values = this._viewport.$uiValues;
-            var hScrollBar = this.horizontalScrollBar;
-            if(hScrollBar){
-                hScrollBar.value = values[sys.UIValues.scrollH];
-            }
-            var vScrollBar = this.verticalScrollBar;
-            if(vScrollBar){
-                vScrollBar.value = values[sys.UIValues.scrollV];
             }
         }
 
@@ -230,7 +204,7 @@ module swan {
                         return;
                     }
                 }
-                target = target.parent;
+                target = target.$parent;
             }
             event.stopPropagation();
             var touchEvent = lark.Event.create(lark.TouchEvent, event.$type, event.$bubbles, event.$cancelable);
@@ -238,7 +212,7 @@ module swan {
             touchEvent.$target = event.$target;
             this.delayTouchBeginEvent = touchEvent;
             if (!this.touchBeginTimer) {
-                this.touchBeginTimer = new lark.Timer(100, 1);
+                this.touchBeginTimer = new lark.Timer(200, 1);
                 this.touchBeginTimer.on(lark.TimerEvent.TIMER_COMPLETE, this.onTouchBeginTimer, this);
             }
             this.touchBeginTimer.start();
@@ -256,6 +230,7 @@ module swan {
             var target:lark.DisplayObject = event.$target;
             var list = this.$getPropagationList(target);
             var length = list.length;
+            var targetIndex = list.length*0.5;
             var startIndex = -1;
             for (var i = 0; i < length; i++) {
                 if (list[i] === viewport) {
@@ -264,7 +239,7 @@ module swan {
                 }
             }
             list.splice(0, startIndex + 1);
-            var targetIndex = list.indexOf(event.$target);
+            targetIndex -= startIndex + 1;
             this.$emitPropagationEvent(event, list, targetIndex);
             lark.Event.release(event);
         }
@@ -324,12 +299,6 @@ module swan {
 
         private touchScrollH:sys.TouchScroll;
         private touchScrollV:sys.TouchScroll;
-
-        private onViewportTouchBegin(event:lark.TouchEvent):void {
-            if (event.$target == this._viewport) {
-                this.onTouchBegin(event);
-            }
-        }
 
         private onTouchBegin(event:lark.TouchEvent):void {
             if (event.isDefaultPrevented()) {
