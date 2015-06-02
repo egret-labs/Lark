@@ -10967,6 +10967,7 @@ var ts;
                 });
             }
             function emitMemberFunctions(node) {
+                writeLine();
                 write('var d = __define,c=');
                 emitNode(node.name);
                 write(';p=c.prototype;');
@@ -11019,9 +11020,11 @@ var ts;
                                 emitSignatureAndBody(accessors.getAccessor);
                                 emitEnd(accessors.getAccessor);
                                 emitTrailingComments(accessors.getAccessor);
-                                if (accessors.setAccessor)
-                                    write(",");
                             }
+                            else {
+                                write("undefined");
+                            }
+                            write(",");
                             if (accessors.setAccessor) {
                                 writeLine();
                                 emitLeadingComments(accessors.setAccessor);
@@ -11030,6 +11033,9 @@ var ts;
                                 emitSignatureAndBody(accessors.setAccessor);
                                 emitEnd(accessors.setAccessor);
                                 emitTrailingComments(accessors.setAccessor);
+                            }
+                            else {
+                                write("undefined");
                             }
                             decreaseIndent();
                             writeLine();
@@ -11442,7 +11448,7 @@ var ts;
                 }
                 if (!defineEmitted) {
                     writeLine();
-                    write('var __define = this.__define || function (o, p, g, s) { Object.defineProperty(o, p, { configurable:true, enumerable:true, get:g, set:s }) };');
+                    write('var __define = this.__define || function (o, p, g, s) { \n  Object.defineProperty(o, p, { configurable:true, enumerable:true, get:g,set:s }) };');
                     defineEmitted = true;
                 }
                 if (ts.isExternalModule(node)) {

@@ -3007,6 +3007,7 @@ module ts {
             }
 
             function emitMemberFunctions(node: ClassDeclaration) {
+                writeLine();
                 write('var d = __define,c=');
                 emitNode(node.name);
                 write(';p=c.prototype;');
@@ -3063,9 +3064,11 @@ module ts {
                                 emitSignatureAndBody(accessors.getAccessor);
                                 emitEnd(accessors.getAccessor);
                                 emitTrailingComments(accessors.getAccessor);
-                                if (accessors.setAccessor)
-                                    write(",");
                             }
+                            else {
+                                write("undefined");
+                            }
+                            write(",");
                             if (accessors.setAccessor) {
                                 writeLine();
                                 emitLeadingComments(accessors.setAccessor);
@@ -3074,6 +3077,9 @@ module ts {
                                 emitSignatureAndBody(accessors.setAccessor);
                                 emitEnd(accessors.setAccessor);
                                 emitTrailingComments(accessors.setAccessor);
+                            }
+                            else {
+                                write("undefined");
                             }
                             decreaseIndent();
                             writeLine();
@@ -3503,7 +3509,7 @@ module ts {
                 }
                 if (!defineEmitted) {
                     writeLine();
-                    write('var __define = this.__define || function (o, p, g, s) { Object.defineProperty(o, p, { configurable:true, enumerable:true, get:g, set:s }) };');
+                    write('var __define = this.__define || function (o, p, g, s) { \n  Object.defineProperty(o, p, { configurable:true, enumerable:true, get:g,set:s }) };');
                     defineEmitted = true;
                 }
                 if (isExternalModule(node)) {
