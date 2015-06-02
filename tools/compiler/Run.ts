@@ -35,6 +35,7 @@ import watch = require("../lib/watch");
 import utils = require("../lib/utils");
 import FileUtil = require("../lib/FileUtil");
 import server = require('../server/server');
+import service = require('../service/index');
 
 
 class Run extends Action {
@@ -49,7 +50,7 @@ class Run extends Action {
         }
         server.startServer(this.options, this.options.startUrl);
         console.log(utils.tr(10013, this.options.startUrl));
-        Entry.sendBuildCMD((cmd:lark.ServiceCommandResult) => {});
+        service.execCommand({ command: "build", path: this.options.projectDir }, (cmd: lark.ServiceCommandResult) => { });
         return 0;
     }
     private watchFiles(dir:string) {
@@ -61,8 +62,7 @@ class Run extends Action {
         })
     }
     private sendBuildCMD() {
-        Entry.sendBuildCMD((cmd: lark.ServiceCommandResult) => {
-            console.log('');
+        service.execCommand({ command: "build", path: this.options.projectDir }, (cmd: lark.ServiceCommandResult) => {
             if (cmd.exitCode == 0)
                 console.log(utils.tr(10011));
             else
@@ -70,7 +70,6 @@ class Run extends Action {
             if (cmd.messages) {
                 cmd.messages.forEach(m=> console.log(m));
             }
-                
         });
     }
 }

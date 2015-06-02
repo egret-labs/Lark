@@ -86,7 +86,7 @@ class Action {
 
         var projManifest = {
             files: files,
-            release: option.project.name + ".min.js"
+            release: "main.min.js"
         };
 
         this.options.projManifest = projManifest;
@@ -101,18 +101,21 @@ class Action {
         var code = 0;
         var ANY = 'any';
         var options = this.options;
-        var penddings:lark.LarkModule[] = [];
+        var manifest = lark.manifest;
         var larkRoot = options.larkRoot;
+        var penddings:lark.LarkModule[] = [];
         var dtsFiles: [string,string[]][] = [];
         var currentPlatform: string, currentConfig: string;
-
-        var manifest = lark.manifest;
+        var outputDir = this.getModuleOutputPath();
         
         var configurations: lark.CompileConfiguration[] = [
             { name: "debug", declaration: true },
             { name: "release", minify: true }
         ];
         
+
+        this.clean(outputDir);
+
         manifest.modules.forEach(m=> {
             configurations.forEach(config=> {
                 manifest.platforms.forEach(platform=> {
@@ -220,80 +223,58 @@ class Action {
         var path = FileUtil.joinPath(this.options.larkRoot, "build/" + filePath);
         return path;
     }
-    public copyLarkBuild(): number {
 
-        var options: lark.ICompileOptions = this.options;
-        var modulesUsed = options.project.modules;
-        var platforms = options.project.platforms;
-        var jsFileExtension = options.publish ? ".min.js" : ".js";
-        modulesUsed.forEach(m=> {
-            var moduleBin = this.getModuleOutputPath(m.name + jsFileExtension);
-            var targetFile = FileUtil.joinPath(options.outDir, '/libs/' + m.name + jsFileExtension);
-            FileUtil.copy(moduleBin, targetFile);
-            platforms.forEach(p=> {
-                var moduleBin = this.getModuleOutputPath(m.name + '.'+ p.name + jsFileExtension);
-                var targetFile = FileUtil.joinPath(options.outDir, '/libs/' + m.name + '.' + p.name + jsFileExtension);
-                FileUtil.copy(moduleBin, targetFile);
-            });
-        });
-
-        return 0;
-    }
-
-    public copyLarkDeclare(): number {
-
+    public copyLark(): number {
         var options = this.options;
-        var modulesUsed = options.project.modules;
-        modulesUsed.forEach(m=> {
-            var moduleDeclare = this.getModuleOutputPath(m.name + ".d.ts");
-            var targetDeclare = FileUtil.joinPath(options.srcDir, '/libs/' + m.name + ".d.ts");
-            FileUtil.copy(moduleDeclare, targetDeclare);
-        });
-
+        var moduleBin = this.getModuleOutputPath("");
+        var targetFile = FileUtil.joinPath(options.srcDir, '/libs/');
+        FileUtil.copy(moduleBin, targetFile);
         return 0;
     }
 
-
-    public static compileTemplates(options:lark.ICompileOptions) {
-        var templateFile = FileUtil.joinPath(options.templateDir, options.project.startupHtml);
-
+    public copyTemplate() {
+        var options = this.options;
+        var templateFile = FileUtil.joinPath(options.templateDir, "index.html");
+        if (!FileUtil.exists(templateFile))
+            return;
+        console.log(templateFile);
         var larkFiles: string[] = [];
-        var projFiles: string[] = [];
 
         var modules = options.project.modules;
         var platforms = options.project.platforms;
-        var jsext = options.publish ? ".min.js" : ".js";
         modules.forEach(m=> {
-            larkFiles.push('libs/' + m.name + jsext);
-            platforms.forEach(p=> larkFiles.push('libs/' + m.name + "." + p.name + jsext))
+            larkFiles.push('libs/' + m.name);
+            platforms.forEach(p=> larkFiles.push('libs/' + m.name + "." + p.name))
         });
 
-        var dir = options.templateDir;
-        projFiles = options.publish ? [options.projManifest.release] : options.projManifest.files;
         
-
-        var manifests = [{
-            files: larkFiles,
-            replacement: '<script id="lark"></script>'
-        }, {
-            files: projFiles,
-            replacement: '<script id="project"></script>'
-        }];
-
         var content = FileUtil.read(templateFile);
-        manifests.forEach(manifest=> {
-            var scripts = manifest.files.map(f=> ['<script src="', f, '"></script>'].join('')).join('\r\n');
-            content = content.replace(manifest.replacement, scripts);
-        });
-
-        content = content.replace(/\$entry\-class\$/ig, options.project.entry);
+        var scripts = larkFiles.map(f=> utils.format('<script src="{0}.js" src-release="{0}.min.js"></script>',f)).join('\r\n    ');
+        content = content.replace('<script id="lark"></script>', scripts);
+        console.log(scripts);
+        content = content.replace(/\$entry\-class\$/ig, "Main");
         content = content.replace(/\$scale\-mode\$/ig, options.project.scaleMode);
         content = content.replace(/\$content\-width\$/ig, options.project.contentWidth.toString());
         content = content.replace(/\$content\-height\$/ig, options.project.contentHeight.toString());
-        content = content.replace(/\$show\-paint\-rects\$/ig, options.project.showPaintRects ? 'true' : 'false');
+        content = content.replace(/\$show\-paint\-rects\$/ig, 'false');
+        console.log(content);
+
+        FileUtil.save(templateFile, content);
+    }
+
+    public static compileTemplates(options: lark.ICompileOptions) {
+
+        var templateFile = FileUtil.joinPath(options.templateDir, "index.html");
+        if (!FileUtil.exists(templateFile))
+            return;
+        var content = FileUtil.read(templateFile);
 
 
-        var outputFile = FileUtil.joinPath(options.outDir, options.project.startupHtml);
+        var projFiles = options.publish ? [options.projManifest.release] : options.projManifest.files; 
+        var scripts = projFiles.map(f=> utils.format('<script src="{0}"></script>', f)).join('\r\n    ');
+        content = content.replace('<script id="project"></script>', scripts);
+
+        var outputFile = FileUtil.joinPath(options.outDir, "index.html");
         FileUtil.save(outputFile, content);
     }
 
@@ -387,12 +368,6 @@ class Action {
             files.push(f);
         });
         return files;
-    }
-
-    public saveProject() {
-
-        var propjson = lark.options.project.toJSON();
-        FileUtil.save(FileUtil.joinPath(lark.options.projectDir, 'lark.json'), JSON.stringify(propjson, null, '   '));
     }
 }
 

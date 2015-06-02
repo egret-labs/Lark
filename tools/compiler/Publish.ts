@@ -41,10 +41,10 @@ class Publish extends Action{
 
         //清理bin-debug目录
         this.clean(option.releaseDir);
-        
+
+        this.copyDirectory(option.srcDir, option.releaseDir, this.srcFolderOutputFilter);
         //拷贝模板文件
         this.copyDirectory(option.templateDir, option.releaseDir);
-        this.copyLarkBuild();
 
         var exitcode = this.compileProject().exitStatus;
         if (exitcode)

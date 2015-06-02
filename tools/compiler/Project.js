@@ -1,4 +1,6 @@
 /// <reference path="../lib/types.d.ts" />
+var file = require('../lib/FileUtil');
+var utils = require('../lib/utils');
 var Project = (function () {
     function Project() {
         this.version = '1.0.0';
@@ -52,6 +54,27 @@ var Project = (function () {
             platforms: this.platforms
         };
         return json;
+    };
+    Project.prototype.read = function (path) {
+        if (path === void 0) { path = lark.options.larkPropertiesFile; }
+        if (file.exists(path)) {
+            var json = file.read(path);
+            var data = null;
+            try {
+                data = JSON.parse(json);
+            }
+            catch (e) {
+                console.error(utils.tr(10005));
+                process.exit(10005);
+            }
+            this.parse(data);
+        }
+    };
+    Project.prototype.save = function (path) {
+        if (path === void 0) { path = lark.options.larkPropertiesFile; }
+        var propjson = this;
+        console.log(path);
+        file.save(path, JSON.stringify(propjson, null, '   '));
     };
     return Project;
 })();

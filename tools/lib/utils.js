@@ -47,13 +47,22 @@ function tr(code) {
     if (!text) {
         return "{" + code + "}";
     }
-    var length = args.length;
-    for (var i = 0; i < length; i++) {
-        text = text.replace("{" + i + "}", args[i]);
-    }
+    text = format(text, args);
     return text;
 }
 exports.tr = tr;
+function format(text) {
+    var args = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args[_i - 1] = arguments[_i];
+    }
+    var length = args.length;
+    for (var i = 0; i < length; i++) {
+        text = text.replace(new RegExp("\\{" + i + "\\}", "ig"), args[i]);
+    }
+    return text;
+}
+exports.format = format;
 function exit(code) {
     var args = [];
     for (var _i = 1; _i < arguments.length; _i++) {
@@ -145,3 +154,4 @@ exports.endWith = endWith;
 function escape(s) {
     return s.replace(/"/, '\\\"');
 }
+//# sourceMappingURL=utils.js.map

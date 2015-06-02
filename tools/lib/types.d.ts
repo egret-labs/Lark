@@ -26,6 +26,7 @@ declare module lark {
         projectDir: string;
         srcDir: string;
         projManifest: any;
+        larkPropertiesFile: string;
         debugDir: string;
         releaseDir: string;
         templateDir: string;
@@ -72,6 +73,8 @@ declare module lark {
         showPaintRects: boolean;
         template: string;
         toJSON?(): ILarkProject;
+        read?(path?: string);
+        save?(path?: string);
     }
 
     export interface CommandLineOption {
@@ -85,6 +88,8 @@ declare module lark {
 
     export interface ServiceCommand {
         command: string;
+        path?: string;
+        version?: string;
     }
 
     export interface ServiceBuildCommand extends ServiceCommand {
@@ -93,13 +98,6 @@ declare module lark {
     export interface ServiceCommandResult extends ServiceCommand {
         exitCode: number;
         messages: string[];
-    }
-
-    export interface CommandResult {
-        exitCode?: number;
-        message?: string;
-        data?: any;
-        type: string;
     }
 
     export var options: ICompileOptions;

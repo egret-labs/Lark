@@ -45,9 +45,14 @@ export function tr(code: number, ...args): string {
     if (!text) {
         return "{" + code + "}";
     }
+    text = format(text, args);
+    return text;
+}
+
+export function format(text: string, ...args): string {
     var length = args.length;
     for (var i = 0; i < length; i++) {
-        text = text.replace("{" + i + "}", args[i]);
+        text = text.replace(new RegExp("\\{" + i + "\\}", "ig"), args[i]);
     }
     return text;
 }

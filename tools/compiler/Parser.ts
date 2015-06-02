@@ -131,21 +131,8 @@ export function parseCommandLine(commandLine: string[]) {
         }
         options.projectDir = file.joinPath(options.projectDir, "/");
 
-        var props = new Project();
-        if (file.exists(options.larkPropertiesFile)) {
-            var json = file.read(options.larkPropertiesFile);
-            var data: lark.ILarkProject = null;
-            try {
-                data = JSON.parse(json);
-            }
-            catch (e) {
-                console.error(utils.tr(10005));
-                process.exit(10005);
-            }
-
-            props.parse(data);
-        }
-        options.project = props;
+        var project = new Project();
+        options.project = project;
 
 
         var manifestPath = file.joinPath(options.larkRoot, "manifest.json");

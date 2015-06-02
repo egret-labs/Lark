@@ -300,7 +300,7 @@ function sortFileList(list, srcPath) {
 }
 
 function filterFileList(gameList, srcPath) {
-    var documentClass = lark.options.project.entry;
+    var documentClass = "Main";
     var docPath = classNameToPath[documentClass];
     if (docPath) {
         var documentList = readTHMClassList(file.joinPath(srcPath, ".."));

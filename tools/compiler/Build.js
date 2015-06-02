@@ -32,10 +32,9 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-/// <reference path="../lib/types.d.ts" />
-var http = require('http');
 var Action = require('../compiler/Action');
 var FileUtil = require("../lib/FileUtil");
+var service = require("../service/index");
 var Build = (function (_super) {
     __extends(Build, _super);
     function Build() {
@@ -47,16 +46,15 @@ var Build = (function (_super) {
     }
     Build.prototype.run = function () {
         var _this = this;
-        this._request = http.get('http://127.0.0.1:51598/?init=true&path=' + encodeURIComponent(this.options.projectDir), function (res) {
-            res.setEncoding('utf8');
-            res.on('data', function (text) {
-                var msg = JSON.parse(text);
-                if (msg.command == 'build')
-                    _this.buildChanges(msg.changes);
-                if (msg.command == 'shutdown')
-                    process.exit(0);
-            });
-        });
+        this._request = service.execCommand({
+            command: "init",
+            path: this.options.projectDir
+        }, function (msg) {
+            if (msg.command == 'build')
+                _this.buildChanges(msg.changes);
+            if (msg.command == 'shutdown')
+                process.exit(0);
+        }, false);
         this._request.once('error', function () { return process.exit(); });
         setInterval(function () { return _this.sendCommand({ command: "status", status: process.memoryUsage() }); }, 60000);
         return this.buildProject();
@@ -65,11 +63,8 @@ var Build = (function (_super) {
         var exitCode = 0;
         console.log('build start');
         this.clean(this.options.debugDir, FileUtil.joinPath(this.options.debugDir, 'tmp'));
-        if (this.options.includeLark)
-            exitCode = this.copyLarkDeclare();
         this.copyDirectory(this.options.templateDir, this.options.debugDir);
         this.copyDirectory(this.options.srcDir, this.options.debugDir, this.srcFolderOutputFilter);
-        this.copyLarkBuild();
         var compileResult = this.compileProject();
         Action.compileTemplates(this.options);
         exitCode = compileResult.exitStatus;
@@ -106,8 +101,13 @@ var Build = (function (_super) {
     };
     Build.prototype.buildChangedRes = function (fileNames) {
         var _this = this;
-        var src = this.options.srcDir, temp = this.options.templateDir, start = this.options.project.startupHtml;
+        var src = this.options.srcDir, temp = this.options.templateDir, proj = this.options.larkPropertiesFile, start = "index.html";
         fileNames.forEach(function (fileName) {
+            if (fileName == proj) {
+                _this.options.includeLark = true;
+                _this.buildProject();
+                _this.options.includeLark = false;
+            }
             if (fileName.indexOf(src) < 0 && fileName.indexOf(temp) < 0) {
                 return;
             }
@@ -126,7 +126,7 @@ var Build = (function (_super) {
         });
     };
     Build.prototype.onTemplateIndexChanged = function (file) {
-        var index = FileUtil.joinPath(this.options.templateDir, this.options.project.startupHtml);
+        var index = FileUtil.joinPath(this.options.templateDir, "index.html");
         index = FileUtil.escapePath(index);
         console.log('Compile Template: ' + index);
         Action.compileTemplates(this.options);
@@ -135,12 +135,13 @@ var Build = (function (_super) {
     Build.prototype.sendCommand = function (cmd) {
         if (!cmd) {
             cmd = {
-                command: 'build',
+                command: 'buildResult',
                 exitCode: this._lastExitCode,
-                messages: this._lastMessages
+                messages: this._lastMessages,
+                path: this.options.projectDir
             };
         }
-        http.get("http://127.0.0.1:51598/?path=" + this.options.projectDir + "&command=" + encodeURIComponent(JSON.stringify(cmd)), null);
+        service.execCommand(cmd, null, false);
     };
     return Build;
 })(Action);

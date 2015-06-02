@@ -32,6 +32,7 @@
 import http = require('http');
 import Action = require('../compiler/Action');
 import FileUtil = require("../lib/FileUtil");
+import service = require("../service/index");
 
 
 class Build extends Action {
@@ -40,17 +41,15 @@ class Build extends Action {
     private _id = Math.random() * 1000000;
     private _request:http.ClientRequest = null;
     public run(): number {
-
-        this._request = http.get('http://127.0.0.1:51598/?init=true&path=' + encodeURIComponent(this.options.projectDir), res=> {
-            res.setEncoding('utf8');
-            res.on('data', text => {
-                var msg: lark.ServiceBuildCommand = JSON.parse(text);
+        this._request = service.execCommand({
+            command: "init",
+            path: this.options.projectDir
+        }, (msg: lark.ServiceBuildCommand) => {
                 if (msg.command == 'build')
                     this.buildChanges(msg.changes);
                 if (msg.command == 'shutdown')
                     process.exit(0);
-            });
-        });
+            }, false);
         this._request.once('error',() => process.exit());
 
         setInterval(() => this.sendCommand({ command:"status", status:process.memoryUsage() }), 60000);
@@ -62,13 +61,9 @@ class Build extends Action {
         var exitCode = 0;
         console.log('build start');
         this.clean(this.options.debugDir, FileUtil.joinPath(this.options.debugDir, 'tmp'));
-
-        if (this.options.includeLark)
-            exitCode = this.copyLarkDeclare();
-
+        
         this.copyDirectory(this.options.templateDir, this.options.debugDir);
         this.copyDirectory(this.options.srcDir, this.options.debugDir, this.srcFolderOutputFilter);
-        this.copyLarkBuild();
 
         var compileResult = this.compileProject();
         Action.compileTemplates(this.options);
@@ -112,12 +107,17 @@ class Build extends Action {
 
         var src = this.options.srcDir,
             temp = this.options.templateDir,
-            start = this.options.project.startupHtml;
+            proj = this.options.larkPropertiesFile,
+            start = "index.html";
 
 
         fileNames.forEach(fileName => { 
-
-            if (fileName.indexOf(src) < 0 && fileName.indexOf(temp) < 0) {
+            if (fileName == proj) {
+                this.options.includeLark = true;
+                this.buildProject();
+                this.options.includeLark = false;
+            }
+            if (fileName.indexOf(src) < 0 && fileName.indexOf(temp) < 0 ) {
                 return;
             }
             
@@ -139,7 +139,7 @@ class Build extends Action {
 
 
     private onTemplateIndexChanged(file: string): number {
-        var index = FileUtil.joinPath(this.options.templateDir, this.options.project.startupHtml);
+        var index = FileUtil.joinPath(this.options.templateDir, "index.html");
         index = FileUtil.escapePath(index);
         console.log('Compile Template: ' + index);
         Action.compileTemplates(this.options);
@@ -149,12 +149,13 @@ class Build extends Action {
     private sendCommand(cmd?: lark.ServiceCommand) {
         if (!cmd) {
             cmd = {
-                command: 'build',
+                command: 'buildResult',
                 exitCode: this._lastExitCode,
-                messages: this._lastMessages
+                messages: this._lastMessages,
+                path:this.options.projectDir
             }
         }
-        http.get("http://127.0.0.1:51598/?path=" + this.options.projectDir + "&command=" + encodeURIComponent(JSON.stringify(cmd)), null);
+        service.execCommand(cmd, null, false);
     }
 }
 

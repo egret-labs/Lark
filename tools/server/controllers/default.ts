@@ -3,7 +3,7 @@
 import url = require('url');
 import file = require('../../lib/FileUtil');
 import Entry = require('../../compiler/Entry');
-import Build = require('../../compiler/Build');
+import Action = require('../../compiler/Action');
 import Create = require('../../compiler/Create');
 import Project = require('../../compiler/Project');
 import CompileOptions = require('../../compiler/CompileOptions');
@@ -17,11 +17,9 @@ var exportObject = {
 export = exportObject;
 var self = this;
 function install() {
-    addRoute('$/', manage);
     addRoute('$/ping/', ping);
     addRoute('$/help/', help);
     addRoute('$/create/', create);
-    addRoute('$/config/', manage);
     addRoute('$/shutdown', shutdown);
     framework.file('Lark manage static files', staticFiles);
     framework.file('User project static files', projectFiles);
@@ -67,30 +65,6 @@ function doCreate() {
     }
 }
 
-function manage() {
-    if (self.req.query['proj'])
-        doManage()
-    this.view('manage');
-}
-
-function doManage() {
-    var projJSON = self.req.query['proj'];
-    try {
-        var proj = JSON.parse(projJSON);
-        var project = new Project();
-        project.parse(proj);
-        lark.options.project = project;
-        lark.options.includeLark = true;
-        var build = new Build(lark.options);
-        build.saveProject();
-        build.run();
-        self.res.send(200, 'OK');
-    }
-    catch (e) {
-        console.log(e);
-        self.res.send(500, JSON.stringify(e, null, '  '));
-    }
-}
 
 function help() {
     this.view('help');

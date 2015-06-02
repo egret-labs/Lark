@@ -2,6 +2,8 @@
     background: #363e45;
     min-width: 320px;
     font: 400 14px/1.6 "Open Sans",sans-serif;
+    margin:0;
+    height:100%;
 }
 
 
@@ -16,6 +18,7 @@ section {
 
 #main {
     height: 100%;
+    margin:0 50px;
 }
 
 #console {
@@ -94,7 +97,7 @@ a {
     width: 400px;
     height: 60px;
     position: fixed;
-    left: 650px;
+    left: 700px;
     top: 730px;
     background-color: #4ea6fc;
     border-radius: 0px;
@@ -109,11 +112,25 @@ a {
         background-color: #197de3;
     }
 
+#mask{
+    text-align:center;
+    position:absolute;
+    top:0; 
+    left:0;
+    width:100%;
+    height:100%; 
+    background-color:rgba(0, 0, 0, 0.4);
+    display:none;
+}
+#mask #loading{
+    margin-top:100px
+}
 
 @media (max-width: 1000px) {
     .finish {
         position: inherit;
         width: 624px;
+        margin:50px 0;
     }
 }
 
