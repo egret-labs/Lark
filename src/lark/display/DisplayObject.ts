@@ -1009,12 +1009,27 @@ module lark {
             }
 
             var list = this.$getPropagationList(this);
-            var targetIndex = (list.length*0.5)|0;
+            var targetIndex = list.length*0.5;
             event.$target = this;
             this.$emitPropagationEvent(event, list, targetIndex);
             return !event.$isDefaultPrevented;
         }
 
+        /**
+         * 获取事件流列表。注意：Lark框架的事件流与Flash实现并不一致。
+         *
+         * Flash的事件流有三个阶段：捕获，目标，冒泡。
+         * 默认的的事件监听若不开始useCapture将监听目标和冒泡阶段。若开始capture将只能监听捕获当不包括目标的事件。
+         * 可以在Flash中写一个简单的测试：实例化一个非容器显示对象，例如TextField。分别监听useCapture为true和false时的鼠标事件。
+         * 点击后将只有useCapture为false的回调函数输出信息。也就带来一个问题「Flash的捕获阶段不能监听到最内层对象本身，只在父级列表有效」。
+         *
+         * 而HTML里的事件流只有两个阶段：捕获，冒泡。
+         * 最初是由于各个浏览器都只有一个方向的事件流，并且存在捕获和冒泡两种相反的顺序。w3c最终决定同时实现两种事件流，监听时用useCapture来区分监。
+         * HTML里与Flash里事件流最根本的区别：没有目标阶段，最内层的点击对象会触发两次事件，一次捕获一次冒泡。而Flash只触发一次，
+         * 是与「捕获」和「冒泡」独立的「目标」阶段。出于拥抱web标准的考虑，加上大部分Flash开发者其实也并不知道有「目标」阶段的存在。
+         *
+         * Lark最终采用了HTML里只有两个阶段的事件流机制。
+         */
         $getPropagationList(target:DisplayObject):DisplayObject[]{
             var list:DisplayObject[] = [];
             while (target) {
@@ -1023,7 +1038,6 @@ module lark {
             }
             var captureList = list.concat();
             captureList.reverse();//使用一次reverse()方法比多次调用unshift()性能高。
-            captureList.pop();
             list = captureList.concat(list);
             return list;
         }
@@ -1035,8 +1049,6 @@ module lark {
                 event.$currentTarget = currentTarget;
                 if (i < targetIndex)
                     event.$eventPhase = EventPhase.CAPTURING_PHASE;
-                else if (i == targetIndex)
-                    event.$eventPhase = EventPhase.AT_TARGET;
                 else
                     event.$eventPhase = EventPhase.BUBBLING_PHASE;
                 currentTarget.$notifyListener(event);
