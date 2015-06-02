@@ -29,7 +29,7 @@
 
 module lark {
 
-    const enum Values {
+    const enum Keys {
         fontSize,           //30
         lineSpacing,        //0
         textColor,          //0x000000
@@ -306,10 +306,10 @@ module lark {
         $setWidth(value:number) {
             value = +value || 0;
             var values = this.$textFieldValues;
-            if (value < 0 || value === values[Values.textFieldWidth]) {
+            if (value < 0 || value === values[Keys.textFieldWidth]) {
                 return;
             }
-            values[Values.textFieldWidth] = value;
+            values[Keys.textFieldWidth] = value;
             this.$invalidateContentBounds();
         }
 
@@ -320,10 +320,10 @@ module lark {
         $setHeight(value:number) {
             value = +value || 0;
             var values = this.$textFieldValues;
-            if (value < 0 || value === values[Values.textFieldHeight]) {
+            if (value < 0 || value === values[Keys.textFieldHeight]) {
                 return;
             }
-            values[Values.textFieldHeight] = value;
+            values[Keys.textFieldHeight] = value;
             this.$invalidateContentBounds();
         }
 
@@ -344,7 +344,7 @@ module lark {
             }
 
             var values = this.$textFieldValues;
-            bounds.setTo(0, 0, values[Values.textWidth], values[Values.textHeight]);
+            bounds.setTo(0, 0, values[Keys.textWidth], values[Keys.textHeight]);
         }
 
 
@@ -399,11 +399,11 @@ module lark {
                 bidt = format.blockIndent || 0;
 
             var maxWidth:number;
-            if (isNone(values[Values.textFieldWidth])) {
+            if (isNone(values[Keys.textFieldWidth])) {
                 maxWidth = this.stage ? this.stage.stageWidth : 500;
             }
             else {
-                maxWidth = values[Values.textFieldWidth];
+                maxWidth = values[Keys.textFieldWidth];
             }
 
             var width = maxWidth - lm - rm - bidt;
@@ -433,7 +433,7 @@ module lark {
             var y = 0;
             var values = this.$textFieldValues;
 
-            var maxHeight = isNone(values[Values.textFieldHeight]) ? Number.POSITIVE_INFINITY : values[Values.textFieldHeight];
+            var maxHeight = isNone(values[Keys.textFieldHeight]) ? Number.POSITIVE_INFINITY : values[Keys.textFieldHeight];
 
             for (var i = this._scrollV; i < lines.length; i++) {
                 var line = lines[i];

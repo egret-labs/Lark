@@ -94,17 +94,17 @@ module swan {
         protected measure():void {
             var values = this.$uiValues;
             var textValues = this.$textFieldValues;
-            var oldWidth = textValues[lark.sys.TextFieldValues.textFieldWidth];
+            var oldWidth = textValues[lark.sys.TextKeys.textFieldWidth];
             var availableWidth = lark.NONE;
             if (!lark.isNone(this._widthConstraint)) {
                 availableWidth = this._widthConstraint;
                 this._widthConstraint = lark.NONE;
             }
-            else if (!lark.isNone(values[sys.UIValues.explicitWidth])) {
-                availableWidth = values[sys.UIValues.explicitWidth];
+            else if (!lark.isNone(values[sys.UIKeys.explicitWidth])) {
+                availableWidth = values[sys.UIKeys.explicitWidth];
             }
-            else if (values[sys.UIValues.maxWidth] != 100000) {
-                availableWidth = values[sys.UIValues.maxWidth];
+            else if (values[sys.UIKeys.maxWidth] != 100000) {
+                availableWidth = values[sys.UIKeys.maxWidth];
             }
 
             super.$setWidth(availableWidth);
@@ -263,10 +263,10 @@ module swan {
                 return;
             }
             var values = this.$uiValues;
-            if(!lark.isNone(values[sys.UIValues.explicitHeight])){
+            if(!lark.isNone(values[sys.UIKeys.explicitHeight])){
                 return;
             }
-            if (layoutWidth == values[sys.UIValues.measuredWidth]) {
+            if (layoutWidth == values[sys.UIKeys.measuredWidth]) {
                 return;
             }
             this._widthConstraint = layoutWidth;

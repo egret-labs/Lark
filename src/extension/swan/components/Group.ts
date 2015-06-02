@@ -86,14 +86,14 @@ module swan {
          * 视域的内容的宽度
          */
         public get contentWidth():number {
-            return this.$uiValues[sys.UIValues.contentWidth];
+            return this.$uiValues[sys.UIKeys.contentWidth];
         }
 
         /**
          * 视域的内容的高度
          */
         public get contentHeight():number {
-            return this.$uiValues[sys.UIValues.contentHeight];
+            return this.$uiValues[sys.UIKeys.contentHeight];
         }
 
         /**
@@ -103,13 +103,13 @@ module swan {
             width = Math.ceil(+width || 0);
             height = Math.ceil(+height || 0);
             var values = this.$uiValues;
-            var wChange = (values[sys.UIValues.contentWidth] !== width);
-            var hChange = (values[sys.UIValues.contentHeight] !== height);
+            var wChange = (values[sys.UIKeys.contentWidth] !== width);
+            var hChange = (values[sys.UIKeys.contentHeight] !== height);
             if (!wChange && !hChange) {
                 return;
             }
-            values[sys.UIValues.contentWidth] = width;
-            values[sys.UIValues.contentHeight] = height;
+            values[sys.UIKeys.contentWidth] = width;
+            values[sys.UIKeys.contentHeight] = height;
             if(wChange){
                 PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"contentWidth");
             }
@@ -138,15 +138,15 @@ module swan {
          * 可视区域水平方向起始点
          */
         public get scrollH():number {
-            return this.$uiValues[sys.UIValues.scrollH];
+            return this.$uiValues[sys.UIKeys.scrollH];
         }
 
         public set scrollH(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (value === values[sys.UIValues.scrollH])
+            if (value === values[sys.UIKeys.scrollH])
                 return;
-            values[sys.UIValues.scrollH] = value;
+            values[sys.UIKeys.scrollH] = value;
             if (this.updateScrollRect() && this.$layout) {
                 this.$layout.scrollPositionChanged();
             }
@@ -157,15 +157,15 @@ module swan {
          * 可视区域竖直方向起始点
          */
         public get scrollV():number {
-            return this.$uiValues[sys.UIValues.scrollV];
+            return this.$uiValues[sys.UIKeys.scrollV];
         }
 
         public set scrollV(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (value == values[sys.UIValues.scrollV])
+            if (value == values[sys.UIKeys.scrollV])
                 return;
-            values[sys.UIValues.scrollV] = value;
+            values[sys.UIKeys.scrollV] = value;
             if (this.updateScrollRect() && this.$layout) {
                 this.$layout.scrollPositionChanged();
             }
@@ -176,9 +176,9 @@ module swan {
             var values = this.$uiValues;
             var hasClip = this.$hasFlags(sys.UIFlags.scrollEnabled)
             if (hasClip) {
-                this.scrollRect = lark.$TempRectangle.setTo(values[sys.UIValues.scrollH],
-                    values[sys.UIValues.scrollV],
-                    values[sys.UIValues.width], values[sys.UIValues.height]);
+                this.scrollRect = lark.$TempRectangle.setTo(values[sys.UIKeys.scrollH],
+                    values[sys.UIKeys.scrollV],
+                    values[sys.UIKeys.width], values[sys.UIKeys.height]);
             }
             else if (this.$scrollRect) {
                 this.scrollRect = null;
@@ -226,7 +226,7 @@ module swan {
             }
             var point = this.globalToLocal(stageX, stageY, lark.$TempPoint);
             var values = this.$uiValues;
-            var bounds = lark.$TempRectangle.setTo(0, 0, values[sys.UIValues.width], values[sys.UIValues.height]);
+            var bounds = lark.$TempRectangle.setTo(0, 0, values[sys.UIKeys.width], values[sys.UIKeys.height]);
             if (bounds.contains(point.x, point.y)) {
                 return this;
             }

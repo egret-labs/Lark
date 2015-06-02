@@ -388,7 +388,7 @@ module swan {
             var measuredHeight = 0;
 
             var values = target.$uiValues;
-            this.calculateRowAndColumn(values[sys.UIValues.explicitWidth], values[sys.UIValues.explicitHeight]);
+            this.calculateRowAndColumn(values[sys.UIKeys.explicitWidth], values[sys.UIKeys.explicitHeight]);
             var columnCount = this._requestedColumnCount > 0 ? this._requestedColumnCount : this._columnCount;
             var rowCount = this._requestedRowCount > 0 ? this._requestedRowCount : this._rowCount;
             var horizontalGap = lark.isNone(this._horizontalGap) ? 0 : this._horizontalGap;
@@ -610,7 +610,7 @@ module swan {
             }
 
             var values = target.$uiValues;
-            if (values[sys.UIValues.width] == 0 || values[sys.UIValues.height] == 0) {
+            if (values[sys.UIKeys.width] == 0 || values[sys.UIKeys.height] == 0) {
                 this.startIndex = this.endIndex = -1;
                 return false;
             }
@@ -627,8 +627,8 @@ module swan {
                     this.endIndex = numElements - 1;
                     return false;
                 }
-                var minVisibleX = values[sys.UIValues.scrollH];
-                var maxVisibleX = values[sys.UIValues.scrollH] + values[sys.UIValues.width];
+                var minVisibleX = values[sys.UIKeys.scrollH];
+                var maxVisibleX = values[sys.UIKeys.scrollH] + values[sys.UIKeys.width];
                 var startColumn = Math.floor((minVisibleX - paddingL) / itemWidth);
                 if (startColumn < 0)
                     startColumn = 0;
@@ -645,8 +645,8 @@ module swan {
                     this.endIndex = numElements - 1;
                     return false;
                 }
-                var minVisibleY = values[sys.UIValues.scrollV];
-                var maxVisibleY = values[sys.UIValues.scrollV] + values[sys.UIValues.height];
+                var minVisibleY = values[sys.UIKeys.scrollV];
+                var maxVisibleY = values[sys.UIKeys.scrollV] + values[sys.UIKeys.height];
                 var startRow = Math.floor((minVisibleY - paddingT) / itemHeight);
                 if (startRow < 0)
                     startRow = 0;
@@ -750,13 +750,13 @@ module swan {
             var values = element.$uiValues;
             if (this._horizontalAlign == JustifyAlign.JUSTIFY)
                 elementWidth = cellWidth;
-            else if (!lark.isNone(values[sys.UIValues.percentWidth]))
-                elementWidth = cellWidth * values[sys.UIValues.percentWidth] * 0.01;
+            else if (!lark.isNone(values[sys.UIKeys.percentWidth]))
+                elementWidth = cellWidth * values[sys.UIKeys.percentWidth] * 0.01;
 
             if (this._verticalAlign == JustifyAlign.JUSTIFY)
                 elementHeight = cellHeight;
-            else if (!lark.isNone(values[sys.UIValues.percentHeight]))
-                elementHeight = cellHeight * values[sys.UIValues.percentHeight] * 0.01;
+            else if (!lark.isNone(values[sys.UIKeys.percentHeight]))
+                elementHeight = cellHeight * values[sys.UIKeys.percentHeight] * 0.01;
 
 
             element.setLayoutBoundsSize(Math.round(elementWidth), Math.round(elementHeight));

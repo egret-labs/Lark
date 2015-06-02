@@ -161,8 +161,8 @@ module swan {
             var bitmapData = this.$bitmapData;
             if (bitmapData) {
                 var values = this.$uiValues;
-                var width = values[sys.UIValues.width];
-                var height = values[sys.UIValues.height];
+                var width = values[sys.UIKeys.width];
+                var height = values[sys.UIKeys.height];
                 if (lark.isNone(width) || lark.isNone(height)) {
                     bounds.setEmpty();
                     return;
@@ -188,8 +188,8 @@ module swan {
                 return;
             }
             var values = this.$uiValues;
-            var width = values[sys.UIValues.width];
-            var height = values[sys.UIValues.height];
+            var width = values[sys.UIKeys.width];
+            var height = values[sys.UIKeys.height];
             if (lark.isNone(width) || lark.isNone(height)) {
                 return;
             }

@@ -138,14 +138,14 @@ module swan {
                 }
                 else {
                     var values = layoutElement.$uiValues;
-                    if (!lark.isNone(values[sys.UIValues.percentHeight])) {
-                        totalPercentHeight += values[sys.UIValues.percentHeight];
+                    if (!lark.isNone(values[sys.UIKeys.percentHeight])) {
+                        totalPercentHeight += values[sys.UIKeys.percentHeight];
 
                         childInfo = new sys.ChildInfo();
                         childInfo.layoutElement = layoutElement;
-                        childInfo.percent = values[sys.UIValues.percentHeight];
-                        childInfo.min = values[sys.UIValues.minHeight];
-                        childInfo.max = values[sys.UIValues.maxHeight];
+                        childInfo.percent = values[sys.UIKeys.percentHeight];
+                        childInfo.min = values[sys.UIKeys.minHeight];
+                        childInfo.max = values[sys.UIKeys.maxHeight];
                         childInfoArray.push(childInfo);
 
                     }
@@ -247,8 +247,8 @@ module swan {
                 else {
                     var layoutElementWidth = lark.NONE;
                     var values = layoutElement.$uiValues;
-                    if (!lark.isNone(values[sys.UIValues.percentWidth])) {
-                        var percent = Math.min(100, values[sys.UIValues.percentWidth]);
+                    if (!lark.isNone(values[sys.UIKeys.percentWidth])) {
+                        var percent = Math.min(100, values[sys.UIKeys.percentWidth]);
                         layoutElementWidth = Math.round(targetWidth * percent * 0.01);
                     }
                     layoutElement.setLayoutBoundsSize(layoutElementWidth, layoutElementHeight);
@@ -445,7 +445,7 @@ module swan {
             }
 
             var values = target.$uiValues;
-            if (values[sys.UIValues.width] == 0 || values[sys.UIValues.height] == 0) {
+            if (values[sys.UIKeys.width] == 0 || values[sys.UIKeys.height] == 0) {
                 this.startIndex = this.endIndex = -1;
                 return false;
             }
@@ -453,13 +453,13 @@ module swan {
             var numElements = target.numElements;
             var contentHeight = this.getStartPosition(numElements - 1) +
                 this.elementSizeTable[numElements - 1] + this.$paddingBottom;
-            var minVisibleY = values[sys.UIValues.scrollV];
+            var minVisibleY = values[sys.UIKeys.scrollV];
             if (minVisibleY > contentHeight - this.$paddingBottom) {
                 this.startIndex = -1;
                 this.endIndex = -1;
                 return false;
             }
-            var maxVisibleY = values[sys.UIValues.scrollH] + values[sys.UIValues.height];
+            var maxVisibleY = values[sys.UIKeys.scrollH] + values[sys.UIKeys.height];
             if (maxVisibleY < this.$paddingTop) {
                 this.startIndex = -1;
                 this.endIndex = -1;

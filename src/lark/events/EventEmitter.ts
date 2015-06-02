@@ -30,7 +30,7 @@
 
 module lark {
 
-    const enum Values{
+    const enum Keys{
         eventTarget,
         eventsMap,
         captureEventsMap,
@@ -103,12 +103,12 @@ module lark {
                 $error(1003, "listener");
             }
             var values = this.emitterValues;
-            var eventMap:any = useCapture ? values[Values.captureEventsMap] : values[Values.eventsMap];
+            var eventMap:any = useCapture ? values[Keys.captureEventsMap] : values[Keys.eventsMap];
             var list:lark.sys.EventBin[] = eventMap[type];
             if (!list) {
                 list = eventMap[type] = [];
             }
-            else if (values[Values.notifyLevel] !== 0) {
+            else if (values[Keys.notifyLevel] !== 0) {
                 eventMap[type] = list = list.concat();
             }
             priority = +priority | 0;
@@ -145,12 +145,12 @@ module lark {
         public removeListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean):void {
 
             var values = this.emitterValues;
-            var eventMap:Object = useCapture ? values[Values.captureEventsMap] : values[Values.eventsMap];
+            var eventMap:Object = useCapture ? values[Keys.captureEventsMap] : values[Keys.eventsMap];
             var list:lark.sys.EventBin[] = eventMap[type];
             if (!list) {
                 return;
             }
-            if (values[Values.notifyLevel] !== 0) {
+            if (values[Keys.notifyLevel] !== 0) {
                 eventMap[type] = list = list.concat();
             }
             var length = list.length;
@@ -173,7 +173,7 @@ module lark {
          */
         public hasListener(type:string):boolean {
             var values = this.emitterValues;
-            return (values[Values.eventsMap][type] || values[Values.captureEventsMap][type]);
+            return (values[Keys.eventsMap][type] || values[Keys.captureEventsMap][type]);
         }
 
         /**
@@ -195,13 +195,13 @@ module lark {
          * @returns 如果成功调度了事件，则值为 true。值 false 表示失败或对事件调用了 preventDefault()。
          */
         public emit(event:Event):boolean {
-            event.$target = event.$currentTarget = this.emitterValues[Values.eventTarget];
+            event.$target = event.$currentTarget = this.emitterValues[Keys.eventTarget];
             return this.$notifyListener(event);
         }
 
         $notifyListener(event:Event):boolean {
             var values = this.emitterValues;
-            var eventMap:Object = event.$eventPhase == 1 ? values[Values.captureEventsMap] : values[Values.eventsMap];
+            var eventMap:Object = event.$eventPhase == 1 ? values[Keys.captureEventsMap] : values[Keys.eventsMap];
             var list:lark.sys.EventBin[] = eventMap[event.$type];
             if (!list) {
                 return true;
@@ -212,7 +212,7 @@ module lark {
             }
             var onceList = ONCE_EVENT_LIST;
             //做个标记，防止外部修改原始数组导致遍历错误。这里不直接调用list.concat()因为emit()方法调用通常比on()等方法频繁。
-            values[Values.notifyLevel]++;
+            values[Keys.notifyLevel]++;
             for (var i = 0; i < length; i++) {
                 var eventBin = list[i];
                 eventBin.listener.call(eventBin.thisObject, event);
@@ -223,7 +223,7 @@ module lark {
                     break;
                 }
             }
-            values[Values.notifyLevel]--;
+            values[Keys.notifyLevel]--;
             while (onceList.length) {
                 eventBin = onceList.pop();
                 eventBin.target.removeListener(eventBin.type, eventBin.listener, eventBin.thisObject, eventBin.useCapture);

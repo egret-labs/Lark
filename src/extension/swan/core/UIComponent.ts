@@ -218,7 +218,7 @@ module swan {
 
 module swan.sys {
 
-    export const enum UIValues {
+    export const enum UIKeys {
         left,
         right,
         top,
@@ -338,10 +338,10 @@ module swan.sys {
          */
         protected commitProperties():void {
             var values = this.$uiValues;
-            if (values[UIValues.oldWidth] != values[UIValues.width] || values[UIValues.oldHeight] != values[UIValues.height]) {
+            if (values[UIKeys.oldWidth] != values[UIKeys.width] || values[UIKeys.oldHeight] != values[UIKeys.height]) {
                 this.emitWith(lark.Event.RESIZE);
             }
-            if (values[UIValues.oldX] != this.$getX() || values[UIValues.oldY] != this.$getY()) {
+            if (values[UIKeys.oldX] != this.$getX() || values[UIKeys.oldY] != this.$getY()) {
                 UIEvent.emitUIEvent(this, UIEvent.MOVE);
             }
         }
@@ -386,8 +386,8 @@ module swan.sys {
             this.$super.$onAddToStage.call(this, stage, nestLevel);
             this.checkInvalidateFlag();
             var values = this.$uiValues;
-            if (!values[sys.UIValues.initialized]) {
-                values[sys.UIValues.initialized] = true;
+            if (!values[sys.UIKeys.initialized]) {
+                values[sys.UIKeys.initialized] = true;
                 this.createChildren();
                 this.childrenCreated();
                 UIEvent.emitUIEvent(this, UIEvent.CREATION_COMPLETE);
@@ -399,13 +399,13 @@ module swan.sys {
          */
         private checkInvalidateFlag(event?:Event):void {
             var values = this.$uiValues;
-            if (values[sys.UIValues.invalidatePropertiesFlag]) {
+            if (values[sys.UIKeys.invalidatePropertiesFlag]) {
                 validator.invalidateProperties(this);
             }
-            if (values[sys.UIValues.invalidateSizeFlag]) {
+            if (values[sys.UIKeys.invalidateSizeFlag]) {
                 validator.invalidateSize(this);
             }
-            if (values[sys.UIValues.invalidateDisplayListFlag]) {
+            if (values[sys.UIKeys.invalidateDisplayListFlag]) {
                 validator.invalidateDisplayList(this);
             }
         }
@@ -414,15 +414,15 @@ module swan.sys {
          * 距父级容器离左边距离
          */
         public get left():number {
-            return this.$uiValues[UIValues.left];
+            return this.$uiValues[UIKeys.left];
         }
 
         public set left(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (values[UIValues.left] === value)
+            if (values[UIKeys.left] === value)
                 return;
-            values[UIValues.left] = value;
+            values[UIKeys.left] = value;
             this.invalidateParentLayout();
         }
 
@@ -430,15 +430,15 @@ module swan.sys {
          * 距父级容器右边距离
          */
         public get right():number {
-            return this.$uiValues[UIValues.right];
+            return this.$uiValues[UIKeys.right];
         }
 
         public set right(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (values[UIValues.right] === value)
+            if (values[UIKeys.right] === value)
                 return;
-            values[UIValues.right] = value;
+            values[UIKeys.right] = value;
             this.invalidateParentLayout();
         }
 
@@ -446,15 +446,15 @@ module swan.sys {
          * 距父级容器顶部距离
          */
         public get top():number {
-            return this.$uiValues[UIValues.top];
+            return this.$uiValues[UIKeys.top];
         }
 
         public set top(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (values[UIValues.top] === value)
+            if (values[UIKeys.top] === value)
                 return;
-            values[UIValues.top] = value;
+            values[UIKeys.top] = value;
             this.invalidateParentLayout();
         }
 
@@ -462,15 +462,15 @@ module swan.sys {
          * 距父级容器底部距离
          */
         public get bottom():number {
-            return this.$uiValues[UIValues.bottom];
+            return this.$uiValues[UIKeys.bottom];
         }
 
         public set bottom(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (values[UIValues.bottom] == value)
+            if (values[UIKeys.bottom] == value)
                 return;
-            values[UIValues.bottom] = value;
+            values[UIKeys.bottom] = value;
             this.invalidateParentLayout();
         }
 
@@ -479,15 +479,15 @@ module swan.sys {
          * 在父级容器中距水平中心位置的距离
          */
         public get horizontalCenter():number {
-            return this.$uiValues[UIValues.horizontalCenter];
+            return this.$uiValues[UIKeys.horizontalCenter];
         }
 
         public set horizontalCenter(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (values[UIValues.horizontalCenter] === value)
+            if (values[UIKeys.horizontalCenter] === value)
                 return;
-            values[UIValues.horizontalCenter] = value;
+            values[UIKeys.horizontalCenter] = value;
             this.invalidateParentLayout();
         }
 
@@ -495,15 +495,15 @@ module swan.sys {
          * 在父级容器中距竖直中心位置的距离
          */
         public get verticalCenter():number {
-            return this.$uiValues[UIValues.verticalCenter];
+            return this.$uiValues[UIKeys.verticalCenter];
         }
 
         public set verticalCenter(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (values[UIValues.verticalCenter] === value)
+            if (values[UIKeys.verticalCenter] === value)
                 return;
-            values[UIValues.verticalCenter] = value;
+            values[UIKeys.verticalCenter] = value;
             this.invalidateParentLayout();
         }
 
@@ -512,15 +512,15 @@ module swan.sys {
          * 相对父级容器宽度的百分比
          */
         public get percentWidth():number {
-            return this.$uiValues[UIValues.percentWidth];
+            return this.$uiValues[UIKeys.percentWidth];
         }
 
         public set percentWidth(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (values[UIValues.percentWidth] === value)
+            if (values[UIKeys.percentWidth] === value)
                 return;
-            values[UIValues.percentWidth] = value;
+            values[UIKeys.percentWidth] = value;
             this.invalidateParentLayout();
         }
 
@@ -528,15 +528,15 @@ module swan.sys {
          * 相对父级容器高度的百分比
          */
         public get percentHeight():number {
-            return this.$uiValues[UIValues.percentHeight];
+            return this.$uiValues[UIKeys.percentHeight];
         }
 
         public set percentHeight(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (values[UIValues.percentHeight] === value)
+            if (values[UIKeys.percentHeight] === value)
                 return;
-            values[UIValues.percentHeight] = value;
+            values[UIKeys.percentHeight] = value;
             this.invalidateParentLayout();
         }
 
@@ -544,14 +544,14 @@ module swan.sys {
          * 外部显式指定的宽度
          */
         public get explicitWidth():number {
-            return this.$uiValues[UIValues.explicitWidth];
+            return this.$uiValues[UIKeys.explicitWidth];
         }
 
         /**
          * 外部显式指定的高度
          */
         public get explicitHeight():number {
-            return this.$uiValues[UIValues.explicitHeight];
+            return this.$uiValues[UIKeys.explicitHeight];
         }
 
         /**
@@ -559,16 +559,16 @@ module swan.sys {
          */
         $getWidth():number {
             this.validateSizeNow();
-            return this.$uiValues[UIValues.width];
+            return this.$uiValues[UIKeys.width];
         }
 
         $setWidth(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (value < 0 || values[UIValues.width] === value && values[UIValues.explicitWidth] === value)
+            if (value < 0 || values[UIKeys.width] === value && values[UIKeys.explicitWidth] === value)
                 return;
-            values[UIValues.width] = value;
-            values[UIValues.explicitWidth] = value;
+            values[UIKeys.width] = value;
+            values[UIKeys.explicitWidth] = value;
             if (lark.isNone(value))
                 this.invalidateSize();
             this.invalidateProperties();
@@ -589,16 +589,16 @@ module swan.sys {
          */
         $getHeight():number {
             this.validateSizeNow();
-            return this.$uiValues[UIValues.height];
+            return this.$uiValues[UIKeys.height];
         }
 
         $setHeight(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (value < 0 || values[UIValues.height] === value && values[UIValues.explicitHeight] === value)
+            if (value < 0 || values[UIKeys.height] === value && values[UIKeys.explicitHeight] === value)
                 return;
-            values[UIValues.height] = value;
-            values[UIValues.explicitHeight] = value;
+            values[UIKeys.height] = value;
+            values[UIKeys.explicitHeight] = value;
             if (lark.isNone(value))
                 this.invalidateSize();
             this.invalidateProperties();
@@ -626,16 +626,16 @@ module swan.sys {
          * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
          */
         public get minWidth():number {
-            return this.$uiValues[UIValues.minWidth];
+            return this.$uiValues[UIKeys.minWidth];
         }
 
         public set minWidth(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (value < 0 || values[UIValues.minWidth] === value) {
+            if (value < 0 || values[UIKeys.minWidth] === value) {
                 return;
             }
-            values[UIValues.minWidth] = value;
+            values[UIKeys.minWidth] = value;
             this.invalidateSize();
             this.invalidateParentLayout();
         }
@@ -644,16 +644,16 @@ module swan.sys {
          * 组件的最大高度。同时影响测量和自动布局的尺寸。
          */
         public get maxWidth():number {
-            return this.$uiValues[UIValues.maxWidth];
+            return this.$uiValues[UIKeys.maxWidth];
         }
 
         public set maxWidth(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (value < 0 || values[UIValues.maxWidth] === value) {
+            if (value < 0 || values[UIKeys.maxWidth] === value) {
                 return;
             }
-            values[UIValues.maxWidth] = value;
+            values[UIKeys.maxWidth] = value;
             this.invalidateSize();
             this.invalidateParentLayout();
         }
@@ -662,16 +662,16 @@ module swan.sys {
          * 组件的最小高度,此属性设置为大于maxHeight的值时无效。同时影响测量和自动布局的尺寸。
          */
         public get minHeight():number {
-            return this.$uiValues[UIValues.minHeight];
+            return this.$uiValues[UIKeys.minHeight];
         }
 
         public set minHeight(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (value < 0 || values[UIValues.minHeight] === value) {
+            if (value < 0 || values[UIKeys.minHeight] === value) {
                 return;
             }
-            values[UIValues.minHeight] = value;
+            values[UIKeys.minHeight] = value;
             this.invalidateSize();
             this.invalidateParentLayout();
         }
@@ -681,16 +681,16 @@ module swan.sys {
          * 组件的最大高度,同时影响测量和自动布局的尺寸。
          */
         public get maxHeight():number {
-            return this.$uiValues[UIValues.maxHeight];
+            return this.$uiValues[UIKeys.maxHeight];
         }
 
         public set maxHeight(value:number) {
             value = +value || 0;
             var values = this.$uiValues;
-            if (value < 0 || values[UIValues.maxHeight] === value) {
+            if (value < 0 || values[UIKeys.maxHeight] === value) {
                 return;
             }
-            values[UIValues.maxHeight] = value;
+            values[UIKeys.maxHeight] = value;
             this.invalidateSize();
             this.invalidateParentLayout();
         }
@@ -702,8 +702,8 @@ module swan.sys {
          */
         public setMeasuredSize(width:number, height:number):void {
             var values = this.$uiValues;
-            values[UIValues.measuredWidth] = Math.ceil(+width || 0);
-            values[UIValues.measuredHeight] = Math.ceil(+height || 0);
+            values[UIKeys.measuredWidth] = Math.ceil(+width || 0);
+            values[UIKeys.measuredHeight] = Math.ceil(+height || 0);
         }
 
 
@@ -714,12 +714,12 @@ module swan.sys {
         private setActualSize(w:number, h:number):void {
             var change = false;
             var values = this.$uiValues;
-            if (values[UIValues.width] !== w) {
-                values[UIValues.width] = w;
+            if (values[UIKeys.width] !== w) {
+                values[UIKeys.width] = w;
                 change = true;
             }
-            if (values[UIValues.height] !== h) {
-                values[UIValues.height] = h;
+            if (values[UIKeys.height] !== h) {
+                values[UIKeys.height] = h;
                 change = true;
             }
             if (change) {
@@ -752,8 +752,8 @@ module swan.sys {
          */
         public invalidateProperties():void {
             var values = this.$uiValues;
-            if (!values[sys.UIValues.invalidatePropertiesFlag]) {
-                values[sys.UIValues.invalidatePropertiesFlag] = true;
+            if (!values[sys.UIKeys.invalidatePropertiesFlag]) {
+                values[sys.UIKeys.invalidatePropertiesFlag] = true;
                 if (this.$stage)
                     validator.invalidateProperties(this);
             }
@@ -764,9 +764,9 @@ module swan.sys {
          */
         public validateProperties():void {
             var values = this.$uiValues;
-            if (values[sys.UIValues.invalidatePropertiesFlag]) {
+            if (values[sys.UIKeys.invalidatePropertiesFlag]) {
                 this.commitProperties();
-                values[sys.UIValues.invalidatePropertiesFlag] = false;
+                values[sys.UIKeys.invalidatePropertiesFlag] = false;
             }
         }
 
@@ -775,8 +775,8 @@ module swan.sys {
          */
         public invalidateSize():void {
             var values = this.$uiValues;
-            if (!values[sys.UIValues.invalidateSizeFlag]) {
-                values[sys.UIValues.invalidateSizeFlag] = true;
+            if (!values[sys.UIKeys.invalidateSizeFlag]) {
+                values[sys.UIKeys.invalidateSizeFlag] = true;
                 if (this.$stage)
                     validator.invalidateSize(this);
             }
@@ -799,13 +799,13 @@ module swan.sys {
                 }
             }
             var values = this.$uiValues;
-            if (values[sys.UIValues.invalidateSizeFlag]) {
+            if (values[sys.UIKeys.invalidateSizeFlag]) {
                 var changed = this.measureSizes();
                 if (changed) {
                     this.invalidateDisplayList();
                     this.invalidateParentLayout();
                 }
-                values[sys.UIValues.invalidateSizeFlag] = false;
+                values[sys.UIKeys.invalidateSizeFlag] = false;
             }
         }
 
@@ -815,30 +815,30 @@ module swan.sys {
         private measureSizes():boolean {
             var changed = false;
             var values = this.$uiValues;
-            if (!values[sys.UIValues.invalidateSizeFlag])
+            if (!values[sys.UIKeys.invalidateSizeFlag])
                 return changed;
 
-            if (lark.isNone(values[UIValues.explicitWidth]) || lark.isNone(values[UIValues.explicitHeight])) {
+            if (lark.isNone(values[UIKeys.explicitWidth]) || lark.isNone(values[UIKeys.explicitHeight])) {
                 this.measure();
-                if (values[UIValues.measuredWidth] < values[UIValues.minWidth]) {
-                    values[UIValues.measuredWidth] = values[UIValues.minWidth];
+                if (values[UIKeys.measuredWidth] < values[UIKeys.minWidth]) {
+                    values[UIKeys.measuredWidth] = values[UIKeys.minWidth];
                 }
-                if (values[UIValues.measuredWidth] > values[UIValues.maxWidth]) {
-                    values[UIValues.measuredWidth] = values[UIValues.maxWidth];
+                if (values[UIKeys.measuredWidth] > values[UIKeys.maxWidth]) {
+                    values[UIKeys.measuredWidth] = values[UIKeys.maxWidth];
                 }
-                if (values[UIValues.measuredHeight] < values[UIValues.minHeight]) {
-                    values[UIValues.measuredHeight] = values[UIValues.minHeight];
+                if (values[UIKeys.measuredHeight] < values[UIKeys.minHeight]) {
+                    values[UIKeys.measuredHeight] = values[UIKeys.minHeight];
                 }
-                if (values[UIValues.measuredHeight] > values[UIValues.maxHeight]) {
-                    values[UIValues.measuredHeight] = values[UIValues.maxHeight]
+                if (values[UIKeys.measuredHeight] > values[UIKeys.maxHeight]) {
+                    values[UIKeys.measuredHeight] = values[UIKeys.maxHeight]
                 }
             }
             var preferredW = this.getPreferredUWidth();
             var preferredH = this.getPreferredUHeight();
-            if (preferredW !== values[UIValues.oldPreferWidth] ||
-                preferredH !== values[UIValues.oldPreferHeight]) {
-                values[UIValues.oldPreferWidth] = preferredW;
-                values[UIValues.oldPreferHeight] = preferredH;
+            if (preferredW !== values[UIKeys.oldPreferWidth] ||
+                preferredH !== values[UIKeys.oldPreferHeight]) {
+                values[UIKeys.oldPreferWidth] = preferredW;
+                values[UIKeys.oldPreferHeight] = preferredH;
                 changed = true;
             }
             return changed;
@@ -849,8 +849,8 @@ module swan.sys {
          */
         public invalidateDisplayList():void {
             var values = this.$uiValues;
-            if (!values[sys.UIValues.invalidateDisplayListFlag]) {
-                values[sys.UIValues.invalidateDisplayListFlag] = true;
+            if (!values[sys.UIKeys.invalidateDisplayListFlag]) {
+                values[sys.UIKeys.invalidateDisplayListFlag] = true;
                 if (this.$stage)
                     validator.invalidateDisplayList(this);
             }
@@ -861,10 +861,10 @@ module swan.sys {
          */
         public validateDisplayList():void {
             var values = this.$uiValues;
-            if (values[sys.UIValues.invalidateDisplayListFlag]) {
+            if (values[sys.UIKeys.invalidateDisplayListFlag]) {
                 this.updateFinalSize();
-                this.updateDisplayList(values[UIValues.width], values[UIValues.height]);
-                values[sys.UIValues.invalidateDisplayListFlag] = false;
+                this.updateDisplayList(values[UIKeys.width], values[UIKeys.height]);
+                values[sys.UIKeys.invalidateDisplayListFlag] = false;
             }
         }
 
@@ -875,23 +875,23 @@ module swan.sys {
             var unscaledWidth = 0;
             var unscaledHeight = 0;
             var values = this.$uiValues;
-            if (values[sys.UIValues.layoutWidthExplicitlySet]) {
-                unscaledWidth = values[UIValues.width];
+            if (values[sys.UIKeys.layoutWidthExplicitlySet]) {
+                unscaledWidth = values[UIKeys.width];
             }
-            else if (!lark.isNone(values[UIValues.explicitWidth])) {
-                unscaledWidth = values[UIValues.explicitWidth];
-            }
-            else {
-                unscaledWidth = values[UIValues.measuredWidth];
-            }
-            if (values[sys.UIValues.layoutHeightExplicitlySet]) {
-                unscaledHeight = values[UIValues.height];
-            }
-            else if (!lark.isNone(values[UIValues.explicitHeight])) {
-                unscaledHeight = values[UIValues.explicitHeight];
+            else if (!lark.isNone(values[UIKeys.explicitWidth])) {
+                unscaledWidth = values[UIKeys.explicitWidth];
             }
             else {
-                unscaledHeight = values[UIValues.measuredHeight];
+                unscaledWidth = values[UIKeys.measuredWidth];
+            }
+            if (values[sys.UIKeys.layoutHeightExplicitlySet]) {
+                unscaledHeight = values[UIKeys.height];
+            }
+            else if (!lark.isNone(values[UIKeys.explicitHeight])) {
+                unscaledHeight = values[UIKeys.explicitHeight];
+            }
+            else {
+                unscaledHeight = values[UIKeys.measuredHeight];
             }
             this.setActualSize(unscaledWidth, unscaledHeight);
         }
@@ -922,26 +922,26 @@ module swan.sys {
             layoutHeight = +layoutHeight || 0;
             layoutWidth = +layoutWidth || 0;
             var values = this.$uiValues;
-            var maxWidth = values[UIValues.maxWidth];
-            var maxHeight = values[UIValues.maxHeight];
-            var minWidth = Math.min(values[UIValues.minWidth], maxWidth);
-            var minHeight = Math.min(values[UIValues.minHeight], maxHeight);
+            var maxWidth = values[UIKeys.maxWidth];
+            var maxHeight = values[UIKeys.maxHeight];
+            var minWidth = Math.min(values[UIKeys.minWidth], maxWidth);
+            var minHeight = Math.min(values[UIKeys.minHeight], maxHeight);
             var width:number;
             var height:number;
             if (lark.isNone(layoutWidth)) {
-                values[sys.UIValues.layoutWidthExplicitlySet] = false;
+                values[sys.UIKeys.layoutWidthExplicitlySet] = false;
                 width = this.getPreferredUWidth();
             }
             else {
-                values[sys.UIValues.layoutWidthExplicitlySet] = true;
+                values[sys.UIKeys.layoutWidthExplicitlySet] = true;
                 width = Math.max(minWidth, Math.min(maxWidth, layoutWidth));
             }
             if (lark.isNone(layoutHeight)) {
-                values[sys.UIValues.layoutHeightExplicitlySet] = false;
+                values[sys.UIKeys.layoutHeightExplicitlySet] = false;
                 height = this.getPreferredUHeight();
             }
             else {
-                values[sys.UIValues.layoutHeightExplicitlySet] = true;
+                values[sys.UIKeys.layoutHeightExplicitlySet] = true;
                 height = Math.max(minHeight, Math.min(maxHeight, layoutHeight));
             }
             var matrix = this.$getMatrix();
@@ -951,7 +951,7 @@ module swan.sys {
             }
 
             var fitSize = sys.MatrixUtil.fitBounds(layoutWidth, layoutHeight, matrix,
-                values[UIValues.explicitWidth], values[UIValues.explicitHeight],
+                values[UIKeys.explicitWidth], values[UIKeys.explicitHeight],
                 this.getPreferredUWidth(), this.getPreferredUHeight(),
                 minWidth, minHeight, maxWidth, maxHeight);
             if (!fitSize) {
@@ -986,24 +986,24 @@ module swan.sys {
         public getLayoutBounds(bounds:lark.Rectangle):void {
             var values = this.$uiValues;
             var w:number;
-            if (values[sys.UIValues.layoutWidthExplicitlySet]) {
-                w = values[UIValues.width];
+            if (values[sys.UIKeys.layoutWidthExplicitlySet]) {
+                w = values[UIKeys.width];
             }
-            else if (!lark.isNone(values[UIValues.explicitWidth])) {
-                w = values[UIValues.explicitWidth];
+            else if (!lark.isNone(values[UIKeys.explicitWidth])) {
+                w = values[UIKeys.explicitWidth];
             }
             else {
-                w = values[UIValues.measuredWidth];
+                w = values[UIKeys.measuredWidth];
             }
             var h:number;
-            if (values[sys.UIValues.layoutHeightExplicitlySet]) {
-                h = values[UIValues.height];
+            if (values[sys.UIKeys.layoutHeightExplicitlySet]) {
+                h = values[UIKeys.height];
             }
-            else if (!lark.isNone(values[UIValues.explicitHeight])) {
-                h = values[UIValues.explicitHeight];
+            else if (!lark.isNone(values[UIKeys.explicitHeight])) {
+                h = values[UIKeys.explicitHeight];
             }
             else {
-                h = values[UIValues.measuredHeight];
+                h = values[UIKeys.measuredHeight];
             }
             this.applyMatrix(bounds, w, h);
         }
@@ -1011,14 +1011,14 @@ module swan.sys {
 
         private getPreferredUWidth():number {
             var values = this.$uiValues;
-            return lark.isNone(values[UIValues.explicitWidth]) ?
-                values[UIValues.measuredWidth] : values[UIValues.explicitWidth];
+            return lark.isNone(values[UIKeys.explicitWidth]) ?
+                values[UIKeys.measuredWidth] : values[UIKeys.explicitWidth];
         }
 
         private getPreferredUHeight():number {
             var values = this.$uiValues;
-            return lark.isNone(values[UIValues.explicitHeight]) ?
-                values[UIValues.measuredHeight] : values[UIValues.explicitHeight];
+            return lark.isNone(values[UIKeys.explicitHeight]) ?
+                values[UIKeys.measuredHeight] : values[UIKeys.explicitHeight];
         }
 
         /**
@@ -1187,14 +1187,14 @@ module swan.sys {
             });
             Object.defineProperty(prototype, "measuredWidth", {
                 get: function () {
-                    return this.$uiValues[UIValues.measuredWidth];
+                    return this.$uiValues[UIKeys.measuredWidth];
                 },
                 enumerable: true,
                 configurable: true
             });
             Object.defineProperty(prototype, "measuredHeight", {
                 get: function () {
-                    return this.$uiValues[UIValues.measuredHeight];
+                    return this.$uiValues[UIKeys.measuredHeight];
                 },
                 enumerable: true,
                 configurable: true
