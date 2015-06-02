@@ -35,7 +35,7 @@ module lark{
     export class TextInput extends TextField{
         constructor(){
             super();
-            this.wordWrap = false;
+            this.$textFieldValues[sys.TextFieldValues.wordWrap] = false;
             this.on(TouchEvent.TOUCH_BEGIN,this.handleTouchBegin,this);
 
         }

@@ -3,7 +3,7 @@
     "modules": [
         {
             "name": "lark",
-            "description": "Lark Core",
+            "description": "Lark Framework Core",
             "files": [
                 {  "path" : "Defines.debug.ts", "debug":true },
                 {  "path" : "Defines.release.ts", "debug":false },
@@ -36,7 +36,6 @@
                 "lark/net/ImageLoader.ts",
                 "lark/player/DirtyRegion.ts",
                 "lark/player/DisplayList.ts",
-                "lark/player/DisplayObjectFlags.ts",
                 "lark/player/IScreenAdapter.ts",
                 "lark/player/Player.ts",
                 "lark/player/Region.ts",
@@ -82,7 +81,7 @@
             "dependencies": []
         },{
             "name":"swan",
-            "description":"GUI Framework for Lark",
+            "description":"GUI Library for Lark",
             "files":[ "binding/Binding.ts",
                   "binding/Watcher.ts",
                   "collections/ArrayCollection.ts",

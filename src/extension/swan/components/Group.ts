@@ -211,13 +211,13 @@ module swan {
         }
 
         /**
-         * 背景的透明区域是否可以响应触摸事件。默认 true。
+         * 触摸组件的背景透明区域是否可以穿透。设置为true表示可以穿透，反之透明区域也会响应触摸事件。默认 false。
          */
-        public touchBackground:boolean = true;
+        public touchThrough:boolean = false;
 
         $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):lark.DisplayObject {
             var target = super.$hitTest(stageX, stageY, shapeFlag);
-            if (target || !this.touchBackground || shapeFlag ||
+            if (target || !this.touchThrough || shapeFlag ||
                 this.$displayFlags & lark.sys.DisplayObjectFlags.PixelHitTest) {
                 return target;
             }
@@ -264,10 +264,11 @@ module swan {
          * 标记组件当前的视图状态失效，调用此方法后，子类应该覆盖 getCurrentState() 方法来返回当前的视图状态名称。
          */
         public invalidateState():void {
-            if (this.$hasFlags(sys.UIFlags.stateIsDirty)) {
+            var values = this.$stateValues;
+            if (values.stateIsDirty) {
                 return;
             }
-            this.$setFlags(sys.UIFlags.stateIsDirty);
+            values.stateIsDirty = true;
             this.invalidateProperties();
         }
 
@@ -307,9 +308,9 @@ module swan {
          */
         protected commitProperties():void {
             sys.UIComponentImpl.prototype["commitProperties"].call(this);
-            if (this.$hasFlags(sys.UIFlags.stateIsDirty)) {
-                this.$removeFlags(sys.UIFlags.stateIsDirty);
-                var values = this.$stateValues;
+            var values = this.$stateValues;
+            if (values.stateIsDirty) {
+                values.stateIsDirty = false;
                 if (!values.explicitState) {
                     values.currentState = this.getCurrentState();
                     this.commitCurrentState();
@@ -345,7 +346,7 @@ module swan {
         protected invalidateParentLayout():void {
         }
 
-        $uiValues:any;
+        $uiValues:Object;
 
         $includeInLayout:boolean;
 

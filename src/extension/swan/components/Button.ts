@@ -114,7 +114,7 @@ module swan {
          * 返回要应用到外观的状态的名称
          */
         protected getCurrentState():string {
-            if (!this.$hasFlags(sys.UIFlags.enabled))
+            if (!this.enabled)
                 return "disabled";
 
             if (this.touchCaptured)

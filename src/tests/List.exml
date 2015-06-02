@@ -1,5 +1,5 @@
 <s:Scroller  xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
-    <s:Group touchBackground="true">
+    <s:Group touchThrough="true">
 
         <s:EditableText text="hhhhh" x="200" width="400"/>
         <s:Button label="按钮">

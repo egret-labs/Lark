@@ -85,7 +85,8 @@ module lark {
             this.$invalidateContentBounds();
         }
 
-        $textFieldValues:any;
+        $textFieldValues:Object;
+
         protected _lineDirty = true;
 
 

@@ -203,5 +203,7 @@ module swan.sys {
         public currentState:string = null;
 
         public parent:lark.DisplayObjectContainer = null;
+
+        public stateIsDirty:boolean = false;
     }
 }

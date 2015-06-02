@@ -353,7 +353,7 @@ module swan {
         protected invalidateParentLayout():void {
         }
 
-        $uiValues:any;
+        $uiValues:Object;
 
         $includeInLayout:boolean;
 
