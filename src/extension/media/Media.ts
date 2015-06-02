@@ -1,4 +1,7 @@
-﻿module lark {
+﻿
+interface SystemEvent extends Event { }
+
+module lark {
 
     export interface Media extends EventEmitter {
         sources: IMediaSource;

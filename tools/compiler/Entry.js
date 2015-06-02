@@ -93,9 +93,11 @@ var Entry = (function () {
             case "buildService":
                 var build = new Build(options);
                 exitCode = build.run();
+                exitCode = DontExitCode;
                 break;
             default:
                 sendBuildCMD();
+                exitCode = DontExitCode;
                 break;
         }
         return exitCode;

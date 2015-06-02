@@ -152,7 +152,7 @@ var Action = (function () {
                     var source = file;
                     path = source.path;
                     sourcePlatform = source.platform;
-                    sourceConfig = source.debug ? "debug" : null;
+                    sourceConfig = source.debug === true ? "debug" : source.debug === false ? "release" : null;
                 }
                 var platformOK = sourcePlatform == null && platform.name == ANY || sourcePlatform == platform.name;
                 var configOK = sourceConfig == null || sourceConfig == configuration.name;
@@ -165,7 +165,8 @@ var Action = (function () {
             var dts = platform.declaration && configuration.declaration;
             console.log(singleFile);
             console.log(tss);
-            self.compile(options, tss, singleFile, null, dts);
+            var result = self.compile(options, tss, singleFile, null, dts);
+            console.log(result.messages);
             if (dts) {
                 dtsFiles.push([declareFile, depends]);
             }

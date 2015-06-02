@@ -28,42 +28,13 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 
-//此文件仅在调试版本中加载，发行版中会自动排除这个js文件，并移除代码中的所有DEBUG和RELEASE常量。
-//代码中若需要编写只在调试版运行或只在发行版运行的代码，可以参考如下代码块写法：
-//
-//  if(DEBUG){
-//      console.log("debug");
-//  }
-//  if(RELEASE){
-//      console.log("release");
-//  }
-//
-//以上代码块在发行版中会简化只有一个语句的代码块:
-//
-//  console.log("release");
-//
+//此文件仅保证程序中的debug代码能够通过编译，不会生成代码，在JS代码压缩阶段，会移除所有debug代码
+
 
 declare var DEBUG:boolean;
 declare var RELEASE:boolean;
 
-this["DEBUG"] = true;
-this["RELEASE"] = false;
-
 module lark {
-
-    export function $error(code:number,...params:any[]):void{
-        var text:string = lark.tr.apply(null,arguments);
-        if(DEBUG){
-            sys.$logToFPS("Error #"+code+": "+text)
-        }
-        throw new Error("#"+code+": "+text);//使用这种方式报错能够终止后续代码继续运行
-    }
-
-    export function $warn(code:number,...params:any[]):void{
-        var text:string = lark.tr.apply(null,arguments);
-        if(DEBUG){
-            sys.$logToFPS("Warning #"+code+": "+text)
-        }
-        warn("Warning #"+code+": "+text);
-    }
+    export declare function $error(code:number,...params:any[]):void;
+    export declare function $warn(code:number,...params:any[]):void;
 }

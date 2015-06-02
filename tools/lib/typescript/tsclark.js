@@ -9292,7 +9292,7 @@ var ts;
             if ((node.kind !== 184 /* FunctionDeclaration */ || resolver.isDeclarationVisible(node)) &&
                 !resolver.isImplementationOfOverload(node)) {
                 var name;
-                if (global.ignoreDollar && node.name && !resolver.isDeclarationVisible(node) && (name = node.name['text']) && name.indexOf('$') == 0)
+                if (global.ignoreDollar && node.name && (name = node.name['text']) && name.indexOf('$') == 0)
                     return;
                 emitJsDocComments(node);
                 if (node.kind === 184 /* FunctionDeclaration */) {

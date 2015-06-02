@@ -1116,7 +1116,7 @@ module ts {
             if ((node.kind !== SyntaxKind.FunctionDeclaration || resolver.isDeclarationVisible(node)) &&
                 !resolver.isImplementationOfOverload(node)) {
                 var name:string;
-                if (global.ignoreDollar && node.name && !resolver.isDeclarationVisible(node) && (name = node.name['text']) && name.indexOf('$')==0)
+                if (global.ignoreDollar && node.name && (name = node.name['text']) && name.indexOf('$')==0)
                     return;
                 emitJsDocComments(node);
                 if (node.kind === SyntaxKind.FunctionDeclaration) {
