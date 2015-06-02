@@ -41,13 +41,10 @@ module swan {
             this.$stateValues.parent = this;
         }
 
-        $elementsContent:lark.DisplayObject[] = [];
-
         /**
          * [只写] 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
          */
         public set elementsContent(value:lark.DisplayObject[]) {
-            this.$elementsContent = value;
             if (value) {
                 var length = value.length;
                 for (var i = 0; i < length; i++) {
@@ -83,7 +80,6 @@ module swan {
             }
             this.invalidateSize();
             this.invalidateDisplayList();
-            this.emitWith("layoutChanged");
         }
 
         /**
@@ -107,12 +103,19 @@ module swan {
             width = Math.ceil(+width || 0);
             height = Math.ceil(+height || 0);
             var values = this.$uiValues;
-            if (values[sys.UIValues.contentWidth] === width && values[sys.UIValues.contentHeight] === height) {
+            var wChange = (values[sys.UIValues.contentWidth] !== width);
+            var hChange = (values[sys.UIValues.contentHeight] !== height);
+            if (!wChange && !hChange) {
                 return;
             }
             values[sys.UIValues.contentWidth] = width;
             values[sys.UIValues.contentHeight] = height;
-            UIEvent.emitUIEvent(this, UIEvent.CONTENT_SIZE_CHANGED);
+            if(wChange){
+                PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"contentWidth");
+            }
+            if(hChange){
+                PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"contentHeight");
+            }
         }
 
         /**
@@ -147,7 +150,7 @@ module swan {
             if (this.updateScrollRect() && this.$layout) {
                 this.$layout.scrollPositionChanged();
             }
-            UIEvent.emitUIEvent(this, UIEvent.SCROLL_POSITION_CHANGED);
+            PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"scrollH");
         }
 
         /**
@@ -166,7 +169,7 @@ module swan {
             if (this.updateScrollRect() && this.$layout) {
                 this.$layout.scrollPositionChanged();
             }
-            UIEvent.emitUIEvent(this, UIEvent.SCROLL_POSITION_CHANGED);
+            PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"scrollV");
         }
 
         private updateScrollRect():boolean {
@@ -205,6 +208,29 @@ module swan {
          */
         public setVirtualElementIndicesInView(startIndex:number, endIndex:number):void {
 
+        }
+
+        /**
+         * 背景的透明区域是否可以响应触摸事件。默认 true。
+         */
+        public touchBackground:boolean = true;
+
+        $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):lark.DisplayObject {
+            var target = super.$hitTest(stageX, stageY, shapeFlag);
+            if (target || !this.touchBackground || shapeFlag ||
+                this.$displayObjectFlags & lark.sys.DisplayObjectFlags.PixelHitTest) {
+                return target;
+            }
+            if (!this.$visible || !this.$hasFlags(lark.sys.DisplayObjectFlags.TouchEnabled)) {
+                return null;
+            }
+            var point = this.globalToLocal(stageX, stageY, lark.$TempPoint);
+            var values = this.$uiValues;
+            var bounds = lark.$TempRectangle.setTo(0, 0, values[sys.UIValues.width], values[sys.UIValues.height]);
+            if (bounds.contains(point.x, point.y)) {
+                return this;
+            }
+            return null;
         }
 
 
@@ -266,15 +292,21 @@ module swan {
             if (!this.$layout) {
                 this.$setLayout(new BasicLayout());
             }
-            if(!this.$stateValues.intialized){
-                this.initializeStates(this.$stage);
-            }
+            this.initializeStates(this.$stage);
+        }
+
+        /**
+         * 子项创建完成,此方法在createChildren()之后执行。
+         */
+        protected childrenCreated():void {
+
         }
 
         /**
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         protected commitProperties():void {
+            sys.UIComponentImpl.prototype["commitProperties"].call(this);
             if (this.$hasFlags(sys.UIFlags.stateIsDirty)) {
                 this.$removeFlags(sys.UIFlags.stateIsDirty);
                 var values = this.$stateValues;
@@ -474,5 +506,5 @@ module swan {
     sys.mixin(Group, sys.StateClient);
     registerProperty(Group, "elementsContent", "Array", true);
     registerProperty(Group, "states", "State[]");
-    lark.registerClass(Group, Types.Group, [Types.UIComponent]);
+    lark.registerClass(Group, Types.Group, [Types.UIComponent,Types.IViewport]);
 }

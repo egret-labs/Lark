@@ -27,60 +27,18 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-
-module swan {
+module lark {
 
     /**
-     * UI事件
+     * 停止之前用 startTick() 方法启动的计时器。
+     * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
+     * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
+     * @param thisObject 回调方法的this对象引用。
      */
-    export class UIEvent extends lark.Event{
-
-        public constructor(type:string, bubbles?:boolean, cancelable?:boolean){
-            super(type, bubbles, cancelable);
+    export function stopTick(callBack:(timeStamp:number)=>boolean,thisObject:any):void{
+        if (DEBUG && !callBack) {
+            $error(1003, "callBack");
         }
-
-        /**
-         * 组件创建完成
-         */
-        public static CREATION_COMPLETE:string = "creationComplete";
-        /**
-         * 改变结束
-         */
-        public static CHANGE_END:string = "changeEnd";
-
-        /**
-         * 改变开始
-         */
-        public static CHANGE_START:string = "changeStart";
-
-        /**
-         * 值发生改变
-         */
-        public static VALUE_COMMIT:string = "valueCommit";
-        /**
-         * 即将关闭面板事件
-         */
-        public static CLOSING:string = "close";
-
-        /**
-         * UI组件在父级容器中的坐标发生改变事件
-         */
-        public static MOVE:string = "move";
-
-        /**
-         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-         * @param target 事件派发目标
-         * @param eventType 事件类型
-         */
-        public static emitUIEvent(target:lark.IEventEmitter, eventType:string):boolean {
-            if(!target.hasListener(eventType)){
-                return true;
-            }
-            var event = lark.Event.create(UIEvent, eventType);
-            var result = target.emit(event);
-            lark.Event.release(event);
-            return result;
-        }
+        sys.$ticker.$stopTick(callBack,thisObject);
     }
-    lark.registerClass(UIEvent,Types.UIEvent);
 }

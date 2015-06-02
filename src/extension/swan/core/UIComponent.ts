@@ -31,6 +31,9 @@ module swan {
 
     /**
      * UI 显示对象基类
+     * @event lark.Event.RESIZE 当UI组件的尺寸发生改变时调度
+     * @event swan.UIEvent.MOVE 当UI组件在父级容器中的位置发生改变时调度
+     * @event swan.UIEvent.CREATION_COMPLETE 当UI组件第一次被添加到舞台并完成初始化后调度
      */
     export interface UIComponent extends lark.DisplayObject {
 
@@ -239,7 +242,11 @@ module swan.sys {
         contentWidth,               //0
         contentHeight,              //0
         scrollH,                    //0
-        scrollV                     //0
+        scrollV,                    //0
+        oldX,                       //0
+        oldY,                       //0
+        oldWidth,                   //0
+        oldHeight                   //0
     }
 
     function isDeltaIdentity(m:Float64Array):boolean {
@@ -282,7 +289,11 @@ module swan.sys {
                 0,          //contentWidth
                 0,          //contentHeight
                 0,          //scrollH,
-                0           //scrollV
+                0,           //scrollV
+                0,           //oldX,
+                0,           //oldY,
+                0,           //oldWidth,
+                0            //oldHeight
             ]);
             this.$displayObjectFlags |= sys.UIFlags.UIComponentInitFlags;
         }
@@ -296,10 +307,23 @@ module swan.sys {
         }
 
         /**
+         * 子项创建完成,此方法在createChildren()之后执行。
+         */
+        protected childrenCreated():void {
+
+        }
+
+        /**
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         protected commitProperties():void {
-
+            var values = this.$uiValues;
+            if (values[UIValues.oldWidth] != values[UIValues.width] || values[UIValues.oldHeight] != values[UIValues.height]) {
+                this.emitWith(lark.Event.RESIZE);
+            }
+            if (values[UIValues.oldX] != this.$getX() || values[UIValues.oldY] != this.$getY()) {
+                UIEvent.emitUIEvent(this,UIEvent.MOVE);
+            }
         }
 
         /**
@@ -341,9 +365,11 @@ module swan.sys {
         $onAddToStage(stage:lark.Stage, nestLevel:number):void {
             this.$super.$onAddToStage.call(this, stage, nestLevel);
             this.checkInvalidateFlag();
-            if(!this.$hasFlags(sys.UIFlags.initialized)){
+            if (!this.$hasFlags(sys.UIFlags.initialized)) {
                 this.$setFlags(sys.UIFlags.initialized);
                 this.createChildren();
+                this.childrenCreated();
+                UIEvent.emitUIEvent(this,UIEvent.CREATION_COMPLETE);
             }
         }
 
@@ -521,8 +547,9 @@ module swan.sys {
                 return;
             values[UIValues.width] = value;
             values[UIValues.explicitWidth] = value;
-            if (isNaN(value))
+            if (lark.isNone(value))
                 this.invalidateSize();
+            this.invalidateProperties();
             this.invalidateDisplayList();
             this.invalidateParentLayout();
         }
@@ -550,8 +577,9 @@ module swan.sys {
                 return;
             values[UIValues.height] = value;
             values[UIValues.explicitHeight] = value;
-            if (isNaN(value))
+            if (lark.isNone(value))
                 this.invalidateSize();
+            this.invalidateProperties();
             this.invalidateDisplayList();
             this.invalidateParentLayout();
         }
@@ -674,6 +702,7 @@ module swan.sys {
             }
             if (change) {
                 this.invalidateDisplayList();
+                this.emitWith(lark.Event.RESIZE);
             }
         }
 
@@ -681,6 +710,7 @@ module swan.sys {
             var change = this.$super.$setX.call(this, value);
             if (change) {
                 this.invalidateParentLayout();
+                this.invalidateProperties();
             }
             return change;
         }
@@ -689,6 +719,7 @@ module swan.sys {
             var change = this.$super.$setY.call(this, value);
             if (change) {
                 this.invalidateParentLayout();
+                this.invalidateProperties();
             }
             return change;
         }
@@ -736,7 +767,7 @@ module swan.sys {
                     var length = children.length;
                     for (var i = 0; i < length; i++) {
                         var child = children[i];
-                        if (lark.is(child,swan.Types.UIComponent)) {
+                        if (lark.is(child, swan.Types.UIComponent)) {
                             (<swan.UIComponent>child).validateSize(true);
                         }
                     }
@@ -814,7 +845,7 @@ module swan.sys {
         /**
          * 更新最终的组件宽高
          */
-        private updateFinalSize():void{
+        private updateFinalSize():void {
             var unscaledWidth = 0;
             var unscaledHeight = 0;
             var values = this.$uiValues;
@@ -852,7 +883,7 @@ module swan.sys {
          */
         protected invalidateParentLayout():void {
             var parent = this.$parent;
-            if (!parent || !this.$includeInLayout || !lark.is(parent,swan.Types.UIComponent))
+            if (!parent || !this.$includeInLayout || !lark.is(parent, swan.Types.UIComponent))
                 return;
             (<swan.UIComponent><any>parent).invalidateSize();
             (<swan.UIComponent><any>parent).invalidateDisplayList();
@@ -915,8 +946,10 @@ module swan.sys {
                 x += this.$getX() - bounds.x;
                 y += this.$getY() - bounds.y;
             }
-            this.$super.$setX.call(this, x);
-            this.$super.$setY.call(this, y);
+            var changed:boolean = this.$super.$setX.call(this, x);
+            if(this.$super.$setY.call(this, y)||changed){
+                UIEvent.emitUIEvent(this,UIEvent.MOVE);
+            }
         }
 
         /**
@@ -1007,7 +1040,7 @@ module swan.sys {
      * @param target 目标类
      * @param template 模板类
      */
-    export function mixin(target:any,template:any):void{
+    export function mixin(target:any, template:any):void {
         for (var property in template) {
             if (template.hasOwnProperty(property)) {
                 target[property] = template[property];
@@ -1032,18 +1065,18 @@ module swan.sys {
     /**
      * 自定义类实现UIComponent的步骤：
      * 1.在自定义类的构造函数里调用：sys.UIComponentImpl.call(this);
-     * 2.拷贝UIComponent接口定义的所有内容(包括注释掉的protected函数)到自定义类，将所有方法都声明为空方法体。
+     * 2.拷贝UIComponent接口定义的所有内容(包括注释掉的protected函数)到自定义类，将所有子类需要覆盖的方法都声明为空方法体。
      * 3.在定义类结尾的外部调用sys.implementUIComponent()，并传入自定义类。
      * 4.若覆盖了某个UIComponent的方法，需要手动调用UIComponentImpl.prototype["方法名"].call(this);
      * @param descendant 自定义的UIComponent子类
      * @param base 自定义子类继承的父类
      */
-    export function implementUIComponent(descendant:any, base:any,isContainer?:boolean):void {
-        mixin(descendant,UIComponentImpl);
+    export function implementUIComponent(descendant:any, base:any, isContainer?:boolean):void {
+        mixin(descendant, UIComponentImpl);
         var prototype = descendant.prototype;
         prototype.$super = base.prototype;
 
-        if(isContainer){
+        if (isContainer) {
             prototype.$childAdded = function (child:lark.DisplayObject, index:number):void {
                 this.invalidateSize();
                 this.invalidateDisplayList();
@@ -1054,7 +1087,7 @@ module swan.sys {
             };
         }
 
-        if(DEBUG){//用于调试时查看布局尺寸的便利属性，发行版时移除。
+        if (DEBUG) {//用于调试时查看布局尺寸的便利属性，发行版时移除。
             Object.defineProperty(prototype, "preferredWidth", {
                 get: function () {
                     var bounds = lark.$TempRectangle;

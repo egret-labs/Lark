@@ -51,7 +51,7 @@ module lark.web {
      * 网页加载完成，实例化页面中定义的Larksys标签
      */
     function runLark():void {
-        var ticker = lark.sys.Ticker.$instance = new sys.Ticker();
+        var ticker = lark.sys.$ticker = new sys.Ticker();
         startTicker(ticker);
         var surfaceFactory = new CanvasFactory();
         sys.surfaceFactory = surfaceFactory;

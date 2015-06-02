@@ -27,60 +27,27 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-
 module swan {
 
-    /**
-     * UI事件
-     */
-    export class UIEvent extends lark.Event{
-
-        public constructor(type:string, bubbles?:boolean, cancelable?:boolean){
-            super(type, bubbles, cancelable);
-        }
-
-        /**
-         * 组件创建完成
-         */
-        public static CREATION_COMPLETE:string = "creationComplete";
-        /**
-         * 改变结束
-         */
-        public static CHANGE_END:string = "changeEnd";
-
-        /**
-         * 改变开始
-         */
-        public static CHANGE_START:string = "changeStart";
-
-        /**
-         * 值发生改变
-         */
-        public static VALUE_COMMIT:string = "valueCommit";
-        /**
-         * 即将关闭面板事件
-         */
-        public static CLOSING:string = "close";
-
-        /**
-         * UI组件在父级容器中的坐标发生改变事件
-         */
-        public static MOVE:string = "move";
-
-        /**
-         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-         * @param target 事件派发目标
-         * @param eventType 事件类型
-         */
-        public static emitUIEvent(target:lark.IEventEmitter, eventType:string):boolean {
-            if(!target.hasListener(eventType)){
-                return true;
-            }
-            var event = lark.Event.create(UIEvent, eventType);
-            var result = target.emit(event);
-            lark.Event.release(event);
-            return result;
-        }
-    }
-    lark.registerClass(UIEvent,Types.UIEvent);
+	/**
+	 * 定义进度条等控件增长方向的常量
+	 */
+	export class Direction{
+		/**
+		 * 水平从左到右增长
+		 */
+		public static LTR:string = "ltr";
+		/**
+		 * 水平从右到左增长
+		 */
+		public static RTL:string = "rtl";
+		/**
+		 * 竖直从上到下增长
+		 */
+		public static TTB:string = "ttb";
+		/**
+		 * 竖直从下到上增长
+		 */
+		public static BTT:string = "btt";
+	}
 }

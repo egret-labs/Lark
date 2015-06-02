@@ -101,6 +101,7 @@ module swan {
         }
 
         public getElementAt(index:number):lark.DisplayObject {
+            index = +index|0;
             if (index < 0 || index >= this.$dataProvider.length)
                 return null;
             var renderer = this.$indexToRenderer[index];
@@ -198,6 +199,10 @@ module swan {
         }
 
         public set dataProvider(value:ICollection) {
+            this.$setDataProvider(value);
+        }
+
+        $setDataProvider(value:ICollection):void{
             if (this.$dataProvider == value)
                 return;
             this.removeDataProviderListener();
@@ -207,7 +212,7 @@ module swan {
             this.invalidateProperties();
             this.invalidateSize();
             this.invalidateDisplayList();
-        } 
+        }
 
         /**
          * 移除数据源监听

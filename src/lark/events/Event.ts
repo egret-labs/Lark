@@ -74,7 +74,7 @@ module lark {
          */
         public static RENDER:string = "render";
         /**
-         * 舞台尺寸发生改变
+         * 舞台尺寸或UI组件尺寸发生改变
          */
         public static RESIZE:string = "resize";
 
@@ -107,7 +107,7 @@ module lark {
             super();
             this.$type = type;
             this.$bubbles = !!bubbles;
-            this._cancelable = !!cancelable;
+            this.$cancelable = !!cancelable;
             this.data = data;
         }
 
@@ -134,12 +134,12 @@ module lark {
             return this.$bubbles;
         }
 
-        private _cancelable:boolean;
+        $cancelable:boolean;
         /**
          * 表示是否可以阻止与事件相关联的行为。如果可以取消该行为，则此值为 true；否则为 false。
          */
         public get cancelable():boolean {
-            return this._cancelable;
+            return this.$cancelable;
         }
 
         $eventPhase:number = 2;
@@ -190,7 +190,7 @@ module lark {
          * 注意：当cancelable属性为false时，此方法不可用。
          */
         public preventDefault():void {
-            if (this._cancelable)
+            if (this.$cancelable)
                 this.$isDefaultPrevented = true;
         }
 
@@ -248,7 +248,7 @@ module lark {
                 var event:T = <T> eventPool.pop();
                 event.$type = type;
                 event.$bubbles = !!bubbles;
-                event._cancelable = !!cancelable;
+                event.$cancelable = !!cancelable;
                 event.$isDefaultPrevented = false;
                 event.$isPropagationStopped = false;
                 event.$isPropagationImmediateStopped = false;

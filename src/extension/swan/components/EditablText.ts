@@ -30,16 +30,11 @@
 module swan {
 
     var UIImpl = sys.UIComponentImpl;
-    /**
-     * Label 是可以呈示一行或多行统一格式文本的UI组件。要显示的文本由 text 属性确定。文本格式由样式属性指定，例如 fontFamily 和 fontSize。
-     * 因为 Label 运行速度快且占用内存少，所以它特别适合用于显示多个小型非交互式文本的情况，例如，项呈示器和 Button 外观中的标签。
-     * 在 Label 中，将以下三个字符序列识别为显式换行符：CR（“\r”）、LF（“\n”）和 CR+LF（“\r\n”）。
-     * 如果没有为 Label 指定宽度，则由这些显式换行符确定的最长行确定 Label 的宽度。
-     * 如果指定了宽度，则指定文本将在组件边界的右边缘换行，如果文本扩展到低于组件底部，则将被剪切。
-     */
-    export class Label extends lark.TextField implements UIComponent {
-        public constructor(text?:string) {
-            super(text);
+
+    export class EditableText extends lark.TextInput implements UIComponent {
+
+        public constructor() {
+            super();
             UIImpl.call(this);
         }
 
@@ -73,7 +68,7 @@ module swan {
         /**
          * 子项创建完成,此方法在createChildren()之后执行。
          */
-        protected childrenCreated():void{
+        protected childrenCreated():void {
 
         }
 
@@ -255,11 +250,11 @@ module swan {
          */
         public setLayoutBoundsSize(layoutWidth:number, layoutHeight:number):void {
             UIImpl.prototype.setLayoutBoundsSize.call(this, layoutWidth, layoutHeight);
-            if(lark.isNone(layoutWidth)||layoutWidth===this._widthConstraint||layoutWidth == 0){
+            if (lark.isNone(layoutWidth) || layoutWidth === this._widthConstraint || layoutWidth == 0) {
                 return;
             }
             var values = this.$uiValues;
-            if(!lark.isNone(values[sys.UIValues.explicitHeight])){
+            if (!lark.isNone(values[sys.UIValues.explicitHeight])) {
                 return;
             }
             if (layoutWidth == values[sys.UIValues.measuredWidth]) {
@@ -292,6 +287,6 @@ module swan {
         }
     }
 
-    sys.implementUIComponent(Label, lark.TextField);
-    lark.registerClass(Label, Types.Label, [Types.UIComponent]);
+    sys.implementUIComponent(EditableText, lark.TextInput);
+    lark.registerClass(EditableText, Types.EditableText, [Types.UIComponent]);
 }

@@ -16,3 +16,4 @@ bin-release
 tmp
 *.iml
 /build
+proj.json

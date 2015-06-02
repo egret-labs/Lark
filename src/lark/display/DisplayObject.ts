@@ -68,19 +68,16 @@ module lark {
          */
         public constructor() {
             super();
-            if (!this.fieldsInitialized) {//避免重复初始化
+            if (!this._matrix) {//避免重复初始化
                 this.initializeFields();
             }
 
         }
 
-        private fieldsInitialized:boolean;
-
         /**
          * DisplayObject定义的所有变量请不要添加任何初始值，必须统一在此处初始化。否则UIComponent的代码复用机制可能会触发两次DisplayObject的构造方法。
          */
         private initializeFields():void{
-            this.fieldsInitialized = true;
             this.$displayObjectFlags = 0;
             this.$children = null;
             this.$parent = null;
@@ -343,7 +340,6 @@ module lark {
         $setX(value:number):boolean {
             value = +value || 0;
             var values = this._matrix.$data;
-            ;
             if (value === values[M.tx]) {
                 return false;
             }
@@ -1012,44 +1008,39 @@ module lark {
                 return super.emit(event);
             }
 
-            var list:Array<DisplayObject> = [];
-            var target:DisplayObject = this;
+            var list = this.$getPropagationList(this);
+            var targetIndex = (list.length*0.5)|0;
+            event.$target = this;
+            this.$emitPropagationEvent(event, list, targetIndex);
+            return !event.$isDefaultPrevented;
+        }
+
+        $getPropagationList(target:DisplayObject):DisplayObject[]{
+            var list:DisplayObject[] = [];
             while (target) {
                 list.push(target);
                 target = target.$parent;
             }
-            event.$target = this;
-            this.emitPropagationEvent(event, list);
-            return !event.$isDefaultPrevented;
+            list.reverse();//使用一次reverse()方法比多次调用unshift()性能高。
+
+            var length = list.length;
+            for (var i = length - 2; i >= 0; i--) {
+                list.push(list[i]);
+            }
+            return list;
         }
 
-        private emitPropagationEvent(event:Event, list:DisplayObject[]):void {
-            var length:number = list.length;
-            var eventPhase:number = EventPhase.CAPTURING_PHASE;
-            for (var i:number = length - 1; i >= 0; i--) {
-                var currentTarget:DisplayObject = list[i];
+        $emitPropagationEvent(event:Event, list:DisplayObject[], targetIndex:number):void {
+            var length = list.length;
+            for (var i = 0; i < length; i++) {
+                var currentTarget = list[i];
                 event.$currentTarget = currentTarget;
-                event.$eventPhase = eventPhase;
-                currentTarget.$notifyListener(event);
-                if (event.$isPropagationStopped || event.$isPropagationImmediateStopped) {
-                    return;
-                }
-            }
-
-            var eventPhase:number = EventPhase.AT_TARGET;
-            var currentTarget:DisplayObject = list[0];
-            event.$currentTarget = currentTarget;
-            event.$eventPhase = eventPhase;
-            currentTarget.$notifyListener(event);
-            if (event.$isPropagationStopped || event.$isPropagationImmediateStopped) {
-                return;
-            }
-
-            var eventPhase:number = EventPhase.BUBBLING_PHASE;
-            for (i = 1; i < length; i++) {
-                var currentTarget:DisplayObject = list[i];
-                event.$currentTarget = currentTarget;
-                event.$eventPhase = eventPhase;
+                if (i < targetIndex)
+                    event.$eventPhase = EventPhase.CAPTURING_PHASE;
+                else if (i == targetIndex)
+                    event.$eventPhase = EventPhase.AT_TARGET;
+                else
+                    event.$eventPhase = EventPhase.BUBBLING_PHASE;
                 currentTarget.$notifyListener(event);
                 if (event.$isPropagationStopped || event.$isPropagationImmediateStopped) {
                     return;

@@ -42,7 +42,8 @@ var DontExitCode = -0xF000;
 function executeCommandLine(args) {
     var options = Parser.parseCommandLine(args);
     lark.options = options;
-    entry.executeOption(options);
+    var exitcode = entry.executeOption(options);
+    entry.exit(exitcode);
 }
 exports.executeCommandLine = executeCommandLine;
 function executeOption(options) {

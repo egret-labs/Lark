@@ -284,9 +284,17 @@ module swan {
         }
 
         /**
+         * 子项创建完成,此方法在createChildren()之后执行。
+         */
+        protected childrenCreated():void{
+
+        }
+
+        /**
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         protected commitProperties():void {
+            sys.UIComponentImpl.prototype["commitProperties"].call(this);
             if (this.$hasFlags(sys.UIFlags.stateIsDirty)) {
                 this.$removeFlags(sys.UIFlags.stateIsDirty);
                 if (this.$skin) {
@@ -500,7 +508,7 @@ module swan {
         public getPreferredBounds(bounds:lark.Rectangle):void {
         }
     }
-
+    registerProperty(Component, "skinName", "Class");
     sys.implementUIComponent(Component, lark.Sprite, true);
     lark.registerClass(Component, Types.Component, [Types.UIComponent]);
 }

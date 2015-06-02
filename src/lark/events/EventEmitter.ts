@@ -66,7 +66,9 @@ module lark {
          */
         public constructor(target:IEventEmitter = null) {
             super();
-            this.eventDataHost = new EventDataHost(target ? target : this);
+            if(!this.eventDataHost){
+                this.eventDataHost = new EventDataHost(target ? target : this);
+            }
         }
 
         private eventDataHost:EventDataHost;
@@ -128,7 +130,7 @@ module lark {
                     insertIndex = i;
                 }
             }
-            var eventBin:lark.sys.EventBin = {
+            var eventBin:sys.EventBin = {
                 type: type, listener: listener, thisObject: thisObject, priority: priority,
                 target: this, useCapture: useCapture, emitOnce: !!emitOnce
             };

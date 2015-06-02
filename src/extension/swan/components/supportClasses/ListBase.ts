@@ -62,7 +62,8 @@ module swan {
         }
 
         public set requireSelection(value:boolean) {
-            if (value == this.$requireSelection)
+            value = !!value;
+            if (value === this.$requireSelection)
                 return;
 
             this.$requireSelection = value;
@@ -97,6 +98,7 @@ module swan {
         }
 
         public set selectedIndex(value:number) {
+            value = +value|0;
             this.setSelectedIndex(value, false);
         }
 
@@ -123,9 +125,6 @@ module swan {
          *  在属性提交前缓存真实选中项的数据源
          */
         $pendingSelectedItem:any = undefined;
-
-        private _selectedItem:any = null;
-
         /**
          * 当前已选中的项目。设置此属性会取消选中当前选定的项目并选择新指定的项目。<br/>
          * 当用户通过与控件交互来更改 selectedItem 属性时，此控件将分派 change 和 changing 事件。<br/>
@@ -409,7 +408,7 @@ module swan {
             if (itemRenderer != this.$mouseDownItemRenderer)
                 return;
             this.setSelectedIndex(itemRenderer.itemIndex, true);
-            ItemTapEvent.emitItemClickEvent(this, ItemTapEvent.ITEM_TAP, itemRenderer);
+            ItemTapEvent.emitItemTapEvent(this, ItemTapEvent.ITEM_TAP, itemRenderer);
         }
 
         /**

@@ -188,7 +188,38 @@ module swan {
         /**
          * Watcher 类能够监视可绑定属性的改变，您可以定义一个事件处理函数作为 Watcher 的回调方法，在每次可绑定属性的值改变时都执行此函数。
          */
-        Watcher
-
+        Watcher,
+        /**
+         * 层级堆叠容器,一次只显示一个子对象。
+         */
+        ViewStack,
+        /**
+         * 滚动条组件
+         */
+        Scroller,
+        /**
+         * 滚动条基类
+         */
+        ScrollBarBase,
+        /**
+         * 垂直滚动条
+         */
+        VScrollBar,
+        /**
+         * 水平滚动条
+         */
+        HScrollBar,
+        /**
+         * 支持视区的组件接口
+         */
+        IViewport,
+        /**
+         * 网格布局
+         */
+        TileLayout,
+        /**
+         * 可编辑文本
+         */
+        EditableText
     }
 }

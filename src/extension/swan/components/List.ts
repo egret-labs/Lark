@@ -186,7 +186,7 @@ module swan {
          * 是否是有效的索引
          */
         private isValidIndex = (item:number, index:number, v:number[]):boolean => {
-            return this.$dataProvider && (item >= 0) && (item < this.$dataProvider.length);
+            return this.$dataProvider && (item >= 0) && (item < this.$dataProvider.length)&&item%1==0;
         }
 
         /**
@@ -300,7 +300,7 @@ module swan {
                 if (itemRenderer != this.$mouseDownItemRenderer)
                     return;
                 this.setSelectedIndices(this.calculateSelectedIndices(itemRenderer.itemIndex), true);
-                ItemTapEvent.emitItemClickEvent(this, ItemTapEvent.ITEM_TAP, itemRenderer);
+                ItemTapEvent.emitItemTapEvent(this, ItemTapEvent.ITEM_TAP, itemRenderer);
             }
             else {
                 super.onRendererTouchEnd(event);

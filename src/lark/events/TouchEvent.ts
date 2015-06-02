@@ -37,30 +37,48 @@ module lark {
      * 注意：当对象嵌套在显示列表中时，触摸事件的目标将是显示列表中可见的最深的可能嵌套对象。
      * 此对象称为目标节点。要使目标节点的祖代（祖代是一个包含显示列表中所有目标节点的对象，从舞台到目标节点的父节点均包括在内）
      * 接收触摸事件的通知，请对祖代节点使用 EventEmitter.on() 并将 type 参数设置为要检测的特定触摸事件。
+     *
+     * @version Lark 1.0
+     * @platform HTML5,Runtime,Native
      */
     export class TouchEvent extends Event {
 
         /**
          * 移动
+         *
+         * @version Lark 1.0
+         * @platform HTML5,Runtime,Native
          */
         public static TOUCH_MOVE:string = "touchMove";
 
         /**
          * 开始触摸
+         *
+         * @version Lark 1.0
+         * @platform HTML5,Runtime,Native
          */
         public static TOUCH_BEGIN:string = "touchBegin";
 
         /**
          * 结束触摸
+         *
+         * @version Lark 1.0
+         * @platform HTML5,Runtime,Native
          */
         public static TOUCH_END:string = "touchEnd";
 
         /**
          * 轻拍，开始和结束触摸都在同一对象上
+         *
+         * @version Lark 1.0
+         * @platform HTML5,Runtime,Native
          */
         public static TOUCH_TAP:string = "touchTap";
         /**
          * 在开始触摸的对象的外部结束触摸
+         *
+         * @version Lark 1.0
+         * @platform HTML5,Runtime,Native
          */
         public static TOUCH_RELEASE_OUTSIDE:string = "touchReleaseOutside";
 
@@ -72,6 +90,9 @@ module lark {
          * @param stageX 事件发生点在全局舞台坐标系中的水平坐标
          * @param stageY 事件发生点在全局舞台坐标系中的垂直坐标
          * @param touchPointID 分配给触摸点的唯一标识号
+         *
+         * @version Lark 1.0
+         * @platform HTML5,Runtime,Native
          */
         public constructor(type:string, bubbles?:boolean, cancelable?:boolean, stageX?:number,
                            stageY?:number, touchPointID?:number) {
@@ -79,30 +100,53 @@ module lark {
             this.$setTo(stageX, stageY, touchPointID);
         }
 
+        /**
+         * @private
+         */
         $setTo(stageX:number, stageY:number, touchPointID:number):void {
             this.touchPointID = +touchPointID || 0;
-            this._stageX = +stageX || 0;
-            this._stageY = +stageY || 0;
+            this.$stageX = +stageX || 0;
+            this.$stageY = +stageY || 0;
         }
 
-        public _stageX:number;
+        /**
+         * @private
+         */
+        $stageX:number;
+
         /**
          * 事件发生点在全局舞台坐标中的水平坐标。
+         *
+         * @version Lark 1.0
+         * @platform HTML5,Runtime,Native
          */
         public get stageX():number {
-            return this._stageX;
+            return this.$stageX;
         }
 
-        public _stageY:number;
+        /**
+         * @private
+         */
+        $stageY:number;
+
         /**
          * 事件发生点在全局舞台坐标中的垂直坐标。
+         *
+         * @version Lark 1.0
+         * @platform HTML5,Runtime,Native
          */
         public get stageY():number {
-            return this._stageY;
+            return this.$stageY;
         }
 
+        /**
+         * @private
+         */
         private localPoint:Point;
 
+        /**
+         * @private
+         */
         private getLocalXY():Point {
             if (!this.localPoint) {
                 this.localPoint = new Point();
@@ -114,6 +158,9 @@ module lark {
 
         /**
          * 事件发生点相对于currentTarget的水平坐标。
+         *
+         * @version Lark 1.0
+         * @platform HTML5,Runtime,Native
          */
         public get localX():number {
             return this.getLocalXY().x;
@@ -121,6 +168,9 @@ module lark {
 
         /**
          * 事件发生点相对于currentTarget的垂直坐标。
+         *
+         * @version Lark 1.0
+         * @platform HTML5,Runtime,Native
          */
         public get localY():number {
             return this.getLocalXY().y;
@@ -128,14 +178,20 @@ module lark {
 
         /**
          * 分配给触摸点的唯一标识号
+         *
+         * @version Lark 1.0
+         * @platform HTML5,Runtime,Native
          */
         public touchPointID:number;
 
         /**
          * 如果已修改显示列表，调用此方法将会忽略帧频限制，在此事件处理完成后立即重绘屏幕。
+         *
+         * @version Lark 1.0
+         * @platform HTML5,Runtime,Native
          */
         public updateAfterEvent():void {
-            lark.sys.Ticker.$requestRenderingFlag = true;
+            sys.$requestRenderingFlag = true;
         }
 
         /**
@@ -147,6 +203,12 @@ module lark {
          * @param stageX 事件发生点在全局舞台坐标系中的水平坐标
          * @param stageY 事件发生点在全局舞台坐标系中的垂直坐标
          * @param touchPointID 分配给触摸点的唯一标识号
+         *
+         * @see lark.Event.create()
+         * @see lark.Event.release()
+         *
+         * @version Lark 1.0
+         * @platform HTML5,Runtime,Native
          */
         public static emitTouchEvent(target:IEventEmitter, type:string, bubbles?:boolean, cancelable?:boolean,
                                      stageX?:number, stageY?:number, touchPointID?:number):boolean {

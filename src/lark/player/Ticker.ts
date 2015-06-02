@@ -30,75 +30,100 @@
 module lark.sys {
 
     /**
-     * Lark心跳控制器
+     * 心跳计时器单例
+     */
+    export var $ticker:Ticker;
+    /**
+     * 是否要广播Event.RENDER事件的标志。
+     */
+    export var $invalidateRenderFlag:boolean = false;
+    /**
+     * 需要立即刷新屏幕的标志
+     */
+    export var $requestRenderingFlag:boolean = false;
+
+    /**
+     * Lark心跳计时器
      */
     export class Ticker {
 
-        static $instance:Ticker;
-
-        /**
-         * 是否要广播Event.RENDER事件的标志。
-         */
-        static $invalidateRenderFlag:boolean = false;
-        /**
-         * 需要立即刷新屏幕的标志
-         */
-        static $requestRenderingFlag:boolean = false;
 
         public constructor() {
-            if (DEBUG&&Ticker.$instance) {
-                $error(1008,"lark.sys.Ticker");
+            if (DEBUG && $ticker) {
+                $error(1008, "lark.sys.Ticker");
             }
             lark.$START_TIME = Date.now();
         }
 
-        private sysList:Player[] = [];
+        private playerList:Player[] = [];
 
         /**
          * 注册一个播放器实例并运行
          */
-        $addsys(player:Player):void {
-            if (this.sysList.indexOf(player) != -1) {
+        $addPlayer(player:Player):void {
+            if (this.playerList.indexOf(player) != -1) {
                 return;
             }
-            if(DEBUG){
+            if (DEBUG) {
                 lark_stages.push(player.stage);
             }
-            this.sysList = this.sysList.concat();
-            this.sysList.push(player);
+            this.playerList = this.playerList.concat();
+            this.playerList.push(player);
         }
 
         /**
          * 停止一个播放器实例的运行。
          */
-        $removesys(player:Player):void {
-            var index = this.sysList.indexOf(player);
+        $removePlayer(player:Player):void {
+            var index = this.playerList.indexOf(player);
             if (index !== -1) {
-                if(DEBUG){
+                if (DEBUG) {
                     var i = lark_stages.indexOf(player.stage);
-                    lark_stages.splice(i,1);
+                    lark_stages.splice(i, 1);
                 }
-                this.sysList = this.sysList.concat();
-                this.sysList.splice(index, 1);
+                this.playerList = this.playerList.concat();
+                this.playerList.splice(index, 1);
             }
         }
 
-        private timerList:Timer[] = [];
+        private callBackList:Function[] = [];
+        private thisObjectList:any[] = [];
 
-        $addTimer(timer:Timer):void {
-            if (this.timerList.indexOf(timer) != -1) {
+        $startTick(callBack:(timeStamp:number)=>boolean, thisObject:any):void {
+            var index = this.getTickIndex(callBack, thisObject);
+            if (index != -1) {
                 return;
             }
-            this.timerList = this.timerList.concat();
-            this.timerList.push(timer);
+            this.concatTick();
+            this.callBackList.push(callBack);
+            this.thisObjectList.push(thisObject);
         }
 
-        $removeTimer(timer:Timer):void {
-            var index = this.timerList.indexOf(timer);
-            if (index !== -1) {
-                this.timerList = this.timerList.concat();
-                this.timerList.splice(index, 1);
+        $stopTick(callBack:(timeStamp:number)=>boolean, thisObject:any):void {
+            var index = this.getTickIndex(callBack, thisObject);
+            if (index == -1) {
+                return;
             }
+            this.concatTick();
+            this.callBackList.splice(index, 1);
+            this.thisObjectList.splice(index, 1);
+        }
+
+        private getTickIndex(callBack:(timeStamp:number)=>boolean, thisObject:any):number {
+            var callBackList = this.callBackList;
+            var thisObjectList = this.thisObjectList;
+            for (var i = callBackList.length - 1; i >= 0; i--) {
+                if (callBackList[i] === callBack &&
+                    thisObjectList[i] == thisObject) {//这里不能用===，因为有可能传入undefined和null.
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        private concatTick():void {
+            this.callBackList = this.callBackList.concat();
+            this.thisObjectList = this.thisObjectList.concat();
         }
 
         /**
@@ -107,38 +132,46 @@ module lark.sys {
         $frameRate:number = 60;
 
         private frameInterval:number = 1;
+
         /**
          * 设置全局帧率
          */
-        $setFrameRate(value:number):void{
-            value = +value||0;
-            if(value<=0){
+        $setFrameRate(value:number):void {
+            value = +value || 0;
+            if (value <= 0) {
                 return;
             }
-            if(this.$frameRate===value){
+            if (this.$frameRate === value) {
                 return;
             }
             this.$frameRate = value;
-            if(value>60){
+            if (value > 60) {
                 value = 60;
             }
             //这里用60*1000来避免浮点数计算不准确的问题。
-            this.lastCount = this.frameInterval = Math.round(60000/value);
+            this.lastCount = this.frameInterval = Math.round(60000 / value);
         }
 
         private lastCount:number = 1000;
+
         /**
          * 执行一次刷新
          */
         public update():void {
-            var timerList = this.timerList;
-            var timerLength = timerList.length;
-            for (var i = 0; i < timerLength; i++) {
-                timerList[i].$update();
+            var callBackList = this.callBackList;
+            var thisObjectList = this.thisObjectList;
+            var length = callBackList.length;
+            var requestRenderingFlag = $requestRenderingFlag;
+            var timeStamp = lark.getTimer();
+            for (var i = 0; i < length; i++) {
+                if (callBackList[i].call(thisObjectList[i], timeStamp)) {
+                    requestRenderingFlag = true;
+                }
+
             }
             this.lastCount -= 1000;
-            if(this.lastCount>0){
-                if(Ticker.$requestRenderingFlag){
+            if (this.lastCount > 0) {
+                if (requestRenderingFlag) {
                     this.render(false);
                 }
                 return;
@@ -151,20 +184,20 @@ module lark.sys {
         /**
          * 执行一次屏幕渲染
          */
-        private render(triggerByFrame:boolean):void{
-            var sysList = this.sysList;
-            var length = sysList.length;
+        private render(triggerByFrame:boolean):void {
+            var playerList = this.playerList;
+            var length = playerList.length;
             if (length == 0) {
                 return;
             }
-            if (Ticker.$invalidateRenderFlag) {
+            if ($invalidateRenderFlag) {
                 this.broadcastRender();
-                Ticker.$invalidateRenderFlag = false;
+                $invalidateRenderFlag = false;
             }
             for (var i = 0; i < length; i++) {
-                sysList[i].$render(triggerByFrame);
+                playerList[i].$render(triggerByFrame);
             }
-            Ticker.$requestRenderingFlag = false;
+            $requestRenderingFlag = false;
         }
 
         /**
@@ -199,6 +232,6 @@ module lark.sys {
     }
 }
 
-if(DEBUG){
+if (DEBUG) {
     var lark_stages:lark.Stage[] = [];
 }

@@ -70,7 +70,7 @@ module lark {
             //image2.width = 300;
             //image2.height = 100;
 
-            this.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+            this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
         private createButton(skin:any):swan.Button {
@@ -85,17 +85,8 @@ module lark {
         private onTouchBegin(event:TouchEvent):void {
             var target = <lark.DisplayObject>event.target;
             var list = this.list;
-            if(list.contains(target)){
-                while(target!=list){
-                    if(is(target,swan.Types.IItemRenderer)){
-                        break;
-                    }
-                    target = target.parent;
-                }
-                var index = (<swan.IItemRenderer><any>target).itemIndex;
-                var dp:swan.ArrayCollection = <swan.ArrayCollection>list.dataProvider;
-                dp.replaceItemAt({label:"label"+((Math.random()*100)|0)},index);
-            }
+            //var progressBar:swan.ProgressBar = list["progressBar"];
+            //progressBar.value = Math.random()*100;
             return;
             //this.touchTarget = target;
             //target.includeInLayout = false;

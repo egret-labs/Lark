@@ -51,7 +51,8 @@ var DontExitCode = -0xF000;
 export function executeCommandLine(args: string[]): void {
     var options = Parser.parseCommandLine(args);
     lark.options = options;
-    entry.executeOption(options);
+    var exitcode = entry.executeOption(options);
+    entry.exit(exitcode);
 }
 
 export function executeOption(options: lark.ICompileOptions): number {
@@ -111,7 +112,7 @@ class Entry {
 
     exit(exitCode) {
         if(DontExitCode == exitCode)
-            return ;
+            return;
         process.exit(exitCode);
     }
 }

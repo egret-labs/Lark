@@ -160,7 +160,7 @@ module swan.sys {
         private attachListeners():void {
             this.eventDisplay.on(lark.Event.ENTER_FRAME, this.doPhasedInstantiationCallBack, this);
             this.eventDisplay.on(lark.Event.RENDER, this.doPhasedInstantiationCallBack, this);
-            lark.sys.Ticker.$invalidateRenderFlag = true;
+            lark.sys.$invalidateRenderFlag = true;
             this.listenersAttached = true;
         }
 

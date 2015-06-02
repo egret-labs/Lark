@@ -50,11 +50,11 @@ module lark {
          * 注意，若同一个网页中包含多个lark.Stage实例，修改任何一个Stage的frameRate属性都会同步修改其他Stage的帧率。
          */
         public get frameRate():number {
-            return lark.sys.Ticker.$instance.$frameRate;
+            return sys.$ticker.$frameRate;
         }
 
         public set frameRate(value:number) {
-            lark.sys.Ticker.$instance.$setFrameRate(value);
+            sys.$ticker.$setFrameRate(value);
         }
 
         $stageWidth:number = 0;
@@ -80,7 +80,7 @@ module lark {
          * 每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 invalidate() 方法。
          */
         public invalidate():void {
-            sys.Ticker.$invalidateRenderFlag = true;
+            sys.$invalidateRenderFlag = true;
         }
 
         private implMap:any = {};

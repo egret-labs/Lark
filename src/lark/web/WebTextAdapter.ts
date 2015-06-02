@@ -137,8 +137,6 @@ module lark.web {
                 this.$initializeInput();
                 var currentHtmlInput = this.currentHtmlInput;
                 currentHtmlInput.onblur = this.handleHtmlInputBlur;
-                currentHtmlInput.onkeydown = this.handleHtmlKeyEvent;
-                currentHtmlInput.onkeyup = this.handleHtmlKeyEvent;
                 currentHtmlInput.oninput = this.handleHtmlInputInputEvent;
                 currentHtmlInput.selectionStart = currentHtmlInput.value.length;
                 currentHtmlInput.selectionEnd = currentHtmlInput.value.length;
@@ -149,10 +147,6 @@ module lark.web {
             else if(this.currentTextInput != null){
                 this.$removeCurrentTextInput();
             }
-        };
-
-        private handleHtmlKeyEvent = (e: KeyboardEvent) => {
-            this.currentTextInput.$onKeyEvent(e);
         };
 
         private handleHtmlInputInputEvent = (e)=>{

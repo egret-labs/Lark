@@ -27,60 +27,25 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-
 module swan {
 
-    /**
-     * UI事件
-     */
-    export class UIEvent extends lark.Event{
+	/**
+	 * 滚动条显示策略常量
+	 */
+	export class ScrollPolicy{
+		/**
+		 * 如果子项超出父级的尺寸，则允许滚动，反之不允许滚动。
+		 */
+		public static AUTO:string = "auto";
+		
+		/**
+		 * 从不允许滚动。
+		 */
+		public static OFF:string = "off";
 
-        public constructor(type:string, bubbles?:boolean, cancelable?:boolean){
-            super(type, bubbles, cancelable);
-        }
-
-        /**
-         * 组件创建完成
-         */
-        public static CREATION_COMPLETE:string = "creationComplete";
-        /**
-         * 改变结束
-         */
-        public static CHANGE_END:string = "changeEnd";
-
-        /**
-         * 改变开始
-         */
-        public static CHANGE_START:string = "changeStart";
-
-        /**
-         * 值发生改变
-         */
-        public static VALUE_COMMIT:string = "valueCommit";
-        /**
-         * 即将关闭面板事件
-         */
-        public static CLOSING:string = "close";
-
-        /**
-         * UI组件在父级容器中的坐标发生改变事件
-         */
-        public static MOVE:string = "move";
-
-        /**
-         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-         * @param target 事件派发目标
-         * @param eventType 事件类型
-         */
-        public static emitUIEvent(target:lark.IEventEmitter, eventType:string):boolean {
-            if(!target.hasListener(eventType)){
-                return true;
-            }
-            var event = lark.Event.create(UIEvent, eventType);
-            var result = target.emit(event);
-            lark.Event.release(event);
-            return result;
-        }
-    }
-    lark.registerClass(UIEvent,Types.UIEvent);
+		/**
+		 * 总是允许滚动。
+		 */
+		public static ON:string = "on";
+	}
 }

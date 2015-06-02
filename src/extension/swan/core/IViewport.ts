@@ -30,57 +30,40 @@
 
 module swan {
 
-    /**
-     * UI事件
-     */
-    export class UIEvent extends lark.Event{
-
-        public constructor(type:string, bubbles?:boolean, cancelable?:boolean){
-            super(type, bubbles, cancelable);
-        }
-
-        /**
-         * 组件创建完成
-         */
-        public static CREATION_COMPLETE:string = "creationComplete";
-        /**
-         * 改变结束
-         */
-        public static CHANGE_END:string = "changeEnd";
-
-        /**
-         * 改变开始
-         */
-        public static CHANGE_START:string = "changeStart";
-
-        /**
-         * 值发生改变
-         */
-        public static VALUE_COMMIT:string = "valueCommit";
-        /**
-         * 即将关闭面板事件
-         */
-        public static CLOSING:string = "close";
-
-        /**
-         * UI组件在父级容器中的坐标发生改变事件
-         */
-        public static MOVE:string = "move";
-
-        /**
-         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-         * @param target 事件派发目标
-         * @param eventType 事件类型
-         */
-        public static emitUIEvent(target:lark.IEventEmitter, eventType:string):boolean {
-            if(!target.hasListener(eventType)){
-                return true;
-            }
-            var event = lark.Event.create(UIEvent, eventType);
-            var result = target.emit(event);
-            lark.Event.release(event);
-            return result;
-        }
-    }
-    lark.registerClass(UIEvent,Types.UIEvent);
+	/**
+	 * 支持视区的组件接口
+	 */
+	export interface IViewport extends UIComponent{
+		/**
+		 * 视域的内容的宽度。
+		 * 如果 clipAndEnabledScrolling 为 true， 则视域的 contentWidth 为水平滚动定义限制，
+		 * 且视域的实际宽度定义可见的内容量。要在内容中水平滚动， 请在 0 和 contentWidth - width 
+		 * 之间更改 scrollH。
+		 */
+		contentWidth:number;
+		
+		/**
+		 * 视域的内容的高度。
+		 * 如果 scrollEnabled 为 true，则视域的 contentHeight 为垂直滚动定义限制，
+		 * 且视域的实际高度定义可见的内容量。要在内容中垂直滚动，请在 0 和 contentHeight - height 
+		 * 之间更改 scrollV。
+		 */
+		contentHeight:number;
+		
+		/**
+		 * 可视区域水平方向起始点
+		 */
+		scrollH:number;
+		
+		/**
+		 * 可视区域竖直方向起始点
+		 */
+		scrollV:number;
+		
+		/**
+		 * 如果为 true，指定将子代剪切到视区的边界。如果为 false，则容器子代会从容器边界扩展过去，而不管组件的大小规范。默认false
+		 */
+		scrollEnabled:boolean;
+	}
+	
 }
