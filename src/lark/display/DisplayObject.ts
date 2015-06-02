@@ -1021,12 +1021,10 @@ module lark {
                 list.push(target);
                 target = target.$parent;
             }
-            list.reverse();//使用一次reverse()方法比多次调用unshift()性能高。
-
-            var length = list.length;
-            for (var i = length - 2; i >= 0; i--) {
-                list.push(list[i]);
-            }
+            var captureList = list.concat();
+            captureList.reverse();//使用一次reverse()方法比多次调用unshift()性能高。
+            captureList.pop();
+            list = captureList.concat(list);
             return list;
         }
 

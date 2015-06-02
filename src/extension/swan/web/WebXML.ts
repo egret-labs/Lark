@@ -126,7 +126,7 @@ module swan.web {
      * 解析一个节点
      */
     function parseNode(node:Node, parent:XML):XML {
-        if(node.localName=="parsererror"||node instanceof HTMLUnknownElement){
+        if(node.localName=="parsererror"){
             throw new Error(node.textContent);
         }
         var xml = new XML(node.localName, parent, node.prefix, node.namespaceURI, node.nodeName);
