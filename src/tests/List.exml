@@ -2,5 +2,15 @@
     <s:Group touchBackground="true">
 
         <s:EditableText text="hhhhh" x="200" width="400"/>
+        <s:Button label="按钮">
+            <s:Skin height="200" width="200" states="up,over,down,disabled" xmlns:e="http://ns.egret-labs.org/egret" xmlns:w="http://ns.egret-labs.org/wing">
+                <s:Image source="image/button_up.png" includeIn="up" width="100%" height="100%" scale9Grid="5,5,63,16"/>
+                <s:Image source="image/button_over.png" includeIn="over" width="100%" height="100%" scale9Grid="5,5,63,16"/>
+                <s:Image source="image/button_down.png" includeIn="down" width="100%" height="100%" scale9Grid="5,5,63,16"/>
+                <s:Image source="image/button_disabled.png" includeIn="disabled" width="100%" height="100%" scale9Grid="5,5,63,16"/>
+                <s:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" left="20" right="20" top="10" bottom="10"/>
+                <s:Image id="iconDisplay" horizontalCenter="0" verticalCenter="0"/>
+            </s:Skin>
+        </s:Button>
     </s:Group>
 </s:Scroller>
