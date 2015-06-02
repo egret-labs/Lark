@@ -66,9 +66,7 @@ module lark {
          */
         public constructor(target:IEventEmitter = null) {
             super();
-            if(!this.eventDataHost){
-                this.eventDataHost = new EventDataHost(target ? target : this);
-            }
+            this.eventDataHost = new EventDataHost(target ? target : this);
         }
 
         private eventDataHost:EventDataHost;

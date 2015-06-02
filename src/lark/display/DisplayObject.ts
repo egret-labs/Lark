@@ -68,38 +68,6 @@ module lark {
          */
         public constructor() {
             super();
-            if (!this._matrix) {//避免重复初始化
-                this.initializeFields();
-            }
-
-        }
-
-        /**
-         * DisplayObject定义的所有变量请不要添加任何初始值，必须统一在此处初始化。否则UIComponent的代码复用机制可能会触发两次DisplayObject的构造方法。
-         */
-        private initializeFields():void{
-            this.$displayObjectFlags = 0;
-            this.$children = null;
-            this.$parent = null;
-            this.$stage = null;
-            this.$nestLevel = 0;
-            this._matrix = new Matrix();
-            this._invertedConcatenatedMatrix = new Matrix();
-            this.$visible = true;
-            this.$displayList = null;
-            this.$alpha = 1;
-            this.$scrollRect = null;
-            this.$blendMode = 0;
-            this.$maskedObject = null;
-            this.$mask = null;
-            this._bounds = new lark.Rectangle();
-            this._contentBounds = new lark.Rectangle();
-            this.$parentDisplayList = null;
-            this.$isDirty = false;
-            this.$renderAlpha = 1;
-            this.$renderMatrix = new lark.Matrix();
-            this.$renderRegion = null;
-            this.name = null;
             this.$displayObjectFlags = sys.DisplayObjectFlags.InitFlags;
             this.displayObjectValues = new Float64Array([
                 1,  //scaleX,
@@ -193,15 +161,15 @@ module lark {
         /**
          * 能够含有子项的类将子项列表存储在这个属性里。
          */
-        $children:DisplayObject[];
+        $children:DisplayObject[] = null;
 
         /**
          * 表示 DisplayObject 的实例名称。
          * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
          */
-        public name:string;
+        public name:string = "";
 
-        $parent:DisplayObjectContainer;
+        $parent:DisplayObjectContainer = null;
 
         /**
          * 表示包含此显示对象的 DisplayObjectContainer 对象。
@@ -226,12 +194,12 @@ module lark {
             Sprite.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
         }
 
-        $stage:Stage;
+        $stage:Stage = null;
 
         /**
          * 这个对象在显示列表中的嵌套深度，舞台为1，它的子项为2，子项的子项为3，以此类推。当对象不在显示列表中时此属性值为0.
          */
-        $nestLevel:number;
+        $nestLevel:number = 0;
 
         /**
          * 显示对象的舞台。
@@ -242,7 +210,7 @@ module lark {
             return this.$stage;
         }
 
-        private _matrix:Matrix;
+        private _matrix:Matrix = new Matrix();
         /**
          * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。
          * 注意：必须对matrix属性重新赋值改变的值才能生效，若获取matrix引用来修改对象属性，将不会发生任何改变。
@@ -310,7 +278,7 @@ module lark {
             return this.$renderMatrix;
         }
 
-        private _invertedConcatenatedMatrix:Matrix;
+        private _invertedConcatenatedMatrix:Matrix = new Matrix();
 
         $getInvertedConcatenatedMatrix():Matrix {
             if (this.$hasFlags(sys.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix)) {
@@ -519,7 +487,7 @@ module lark {
             this.invalidateMatrix();
         }
 
-        $visible:boolean;
+        $visible:boolean = true;
 
         /**
          * 显示对象是否可见。
@@ -542,7 +510,7 @@ module lark {
         /**
          * cacheAsBitmap创建的缓存位图节点。
          */
-        $displayList:lark.sys.DisplayList;
+        $displayList:lark.sys.DisplayList = null;
 
         /**
          * 如果设置为 true，则 Lark 播放器将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
@@ -591,7 +559,7 @@ module lark {
         /**
          * 渲染时会用到的属性，独立声明一个变量
          */
-        $alpha:number;
+        $alpha:number = 1;
 
         /**
          * 表示指定对象的 Alpha 透明度值。
@@ -657,7 +625,7 @@ module lark {
             this.$toggleFlags(sys.DisplayObjectFlags.PixelHitTest, !!value);
         }
 
-        $scrollRect:Rectangle;
+        $scrollRect:Rectangle = null;
 
         /**
          * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
@@ -683,7 +651,7 @@ module lark {
             this.invalidatePosition();
         }
 
-        $blendMode:number;
+        $blendMode:number = 0;
 
         /**
          * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上
@@ -705,9 +673,9 @@ module lark {
         /**
          * 被遮罩的对象
          */
-        $maskedObject:DisplayObject;
+        $maskedObject:DisplayObject = null;
 
-        $mask:DisplayObject;
+        $mask:DisplayObject = null;
 
         /**
          * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
@@ -802,7 +770,7 @@ module lark {
             this.$propagateFlagsUp(sys.DisplayObjectFlags.InvalidBounds);
         }
 
-        private _bounds:Rectangle;
+        private _bounds:Rectangle = new lark.Rectangle();
 
         /**
          * 获取显示对象占用的矩形区域集合，通常包括自身绘制的测量区域，如果是容器，还包括所有子项占据的区域。
@@ -828,7 +796,7 @@ module lark {
 
         }
 
-        private _contentBounds:Rectangle;
+        private _contentBounds:Rectangle = new lark.Rectangle();
 
         $getContentBounds():Rectangle {
             var bounds = this._contentBounds;
@@ -850,7 +818,7 @@ module lark {
 
         }
 
-        $parentDisplayList:lark.sys.DisplayList;
+        $parentDisplayList:lark.sys.DisplayList = null;
 
         /**
          * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
@@ -885,19 +853,19 @@ module lark {
         /**
          * 是否需要重绘的标志，此属性在渲染时会被访问，所以单独声明一个直接的变量。
          */
-        $isDirty:boolean;
+        $isDirty:boolean = false;
         /**
          * 这个对象在舞台上的整体透明度
          */
-        $renderAlpha:number;
+        $renderAlpha:number = 1;
         /**
          * 在舞台上的矩阵对象
          */
-        $renderMatrix:Matrix;
+        $renderMatrix:Matrix = new lark.Matrix();
         /**
          * 此显示对象自身（不包括子项）在屏幕上的显示尺寸。
          */
-        $renderRegion:sys.Region;
+        $renderRegion:sys.Region = null;
 
         /**
          * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。

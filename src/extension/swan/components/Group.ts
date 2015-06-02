@@ -37,7 +37,7 @@ module swan {
 
         public constructor() {
             super();
-            sys.UIComponentImpl.call(this);
+            this.initializeUIValues();
             this.$stateValues.parent = this;
         }
 
@@ -278,12 +278,12 @@ module swan {
             return "";
         }
 
-        /**
-         * 检查属性失效标记并应用
-         */
-        private checkInvalidateFlag:(event?:Event)=>void;
 
         //=======================UIComponent接口实现===========================
+        /**
+         * UIComponentImpl 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
+         */
+        private initializeUIValues:()=>void;
         /**
          * 子类覆盖此方法可以执行一些初始化子项操作。此方法仅在组件第一次添加到舞台时回调一次。
          * 请务必调用super.createChildren()以完成父类组件的初始化
@@ -488,7 +488,7 @@ module swan {
         /**
          * 组件的布局尺寸,常用于父级的updateDisplayList()方法中
          * 按照：布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸,
-         * 注意此方法返回值已经包含scale和rotation。
+         * 注意此方法返回值已经包含 scale 和 rotation。
          */
         public getLayoutBounds(bounds:lark.Rectangle):void {
         }

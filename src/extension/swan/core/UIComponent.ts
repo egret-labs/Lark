@@ -265,6 +265,13 @@ module swan.sys {
          */
         public constructor() {
             super();
+            this.initializeUIValues();
+        }
+
+        /**
+         * UIComponentImpl 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
+         */
+        private initializeUIValues():void {
             this.$uiValues = new Float64Array([
                 lark.NONE,       //left
                 lark.NONE,       //right
@@ -296,7 +303,9 @@ module swan.sys {
                 0            //oldHeight
             ]);
             this.$displayObjectFlags |= sys.UIFlags.UIComponentInitFlags;
+            this.$includeInLayout = true;
         }
+
 
         /**
          * 子类覆盖此方法可以执行一些初始化子项操作。此方法仅在组件第一次添加到舞台时回调一次。
@@ -322,7 +331,7 @@ module swan.sys {
                 this.emitWith(lark.Event.RESIZE);
             }
             if (values[UIValues.oldX] != this.$getX() || values[UIValues.oldY] != this.$getY()) {
-                UIEvent.emitUIEvent(this,UIEvent.MOVE);
+                UIEvent.emitUIEvent(this, UIEvent.MOVE);
             }
         }
 
@@ -343,7 +352,7 @@ module swan.sys {
 
         $uiValues:Float64Array;
 
-        $includeInLayout:boolean = true;
+        $includeInLayout:boolean;
 
         /**
          * 指定此组件是否包含在父容器的布局中。若为false，则父级容器在测量和布局阶段都忽略此组件。默认值为true。
@@ -369,7 +378,7 @@ module swan.sys {
                 this.$setFlags(sys.UIFlags.initialized);
                 this.createChildren();
                 this.childrenCreated();
-                UIEvent.emitUIEvent(this,UIEvent.CREATION_COMPLETE);
+                UIEvent.emitUIEvent(this, UIEvent.CREATION_COMPLETE);
             }
         }
 
@@ -947,8 +956,8 @@ module swan.sys {
                 y += this.$getY() - bounds.y;
             }
             var changed:boolean = this.$super.$setX.call(this, x);
-            if(this.$super.$setY.call(this, y)||changed){
-                UIEvent.emitUIEvent(this,UIEvent.MOVE);
+            if (this.$super.$setY.call(this, y) || changed) {
+                UIEvent.emitUIEvent(this, UIEvent.MOVE);
             }
         }
 
@@ -1064,7 +1073,7 @@ module swan.sys {
 
     /**
      * 自定义类实现UIComponent的步骤：
-     * 1.在自定义类的构造函数里调用：sys.UIComponentImpl.call(this);
+     * 1.在自定义类的构造函数里调用：this.initializeUIValues();
      * 2.拷贝UIComponent接口定义的所有内容(包括注释掉的protected函数)到自定义类，将所有子类需要覆盖的方法都声明为空方法体。
      * 3.在定义类结尾的外部调用sys.implementUIComponent()，并传入自定义类。
      * 4.若覆盖了某个UIComponent的方法，需要手动调用UIComponentImpl.prototype["方法名"].call(this);
