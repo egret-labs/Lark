@@ -127,7 +127,6 @@
                   "core/ScrollPolicy.ts",
                   "core/Theme.ts",
                   "core/UIComponent.ts",
-                  "core/UIFlags.ts",
                   "core/Validator.ts",
                   "events/CollectionEvent.ts",
                   "events/CollectionEventKind.ts",

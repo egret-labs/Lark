@@ -106,7 +106,7 @@ module swan.sys {
                 continue;
             }
 
-            var values = layoutElement.$uiValues;
+            var values = layoutElement.$UIComponent;
             var hCenter = values[sys.UIKeys.horizontalCenter];
             var vCenter = values[sys.UIKeys.verticalCenter];
             var left = values[sys.UIKeys.left];
@@ -175,7 +175,7 @@ module swan.sys {
                 continue;
             }
 
-            var values = layoutElement.$uiValues;
+            var values = layoutElement.$UIComponent;
             var hCenter = values[sys.UIKeys.horizontalCenter];
             var vCenter = values[sys.UIKeys.verticalCenter];
             var left = values[sys.UIKeys.left];

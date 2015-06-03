@@ -53,7 +53,7 @@ module swan {
 
         public constructor() {
             super();
-            this.$dataGroupValues = {
+            this.$DataGroup = {
                 0: true,      //useVirtualLayout
                 1: false,     //useVirtualLayoutChanged
                 2: {},        //rendererToClassMap
@@ -70,19 +70,19 @@ module swan {
             };
         }
 
-        $dataGroupValues:Object;
+        $DataGroup:Object;
 
         /**
          * 是否使用虚拟布局,默认true
          */
         public get useVirtualLayout():boolean {
             return this.$layout ? this.$layout.$useVirtualLayout :
-                this.$dataGroupValues[Keys.useVirtualLayout];
+                this.$DataGroup[Keys.useVirtualLayout];
         }
 
         public set useVirtualLayout(value:boolean) {
             value = !!value;
-            var values = this.$dataGroupValues;
+            var values = this.$DataGroup;
             if (value === values[Keys.useVirtualLayout])
                 return;
 
@@ -104,11 +104,11 @@ module swan {
                 this.onUseVirtualLayoutChanged();
             super.$setLayout(value);
             if (value) {
-                var rect = this.$dataGroupValues[Keys.typicalLayoutRect];
+                var rect = this.$DataGroup[Keys.typicalLayoutRect];
                 if (rect) {
                     value.setTypicalSize(rect.width, rect.height);
                 }
-                value.useVirtualLayout = this.$dataGroupValues[Keys.useVirtualLayout];
+                value.useVirtualLayout = this.$DataGroup[Keys.useVirtualLayout];
                 value.on("useVirtualLayoutChanged", this.onUseVirtualLayoutChanged, this);
             }
         }
@@ -117,7 +117,7 @@ module swan {
          * 是否使用虚拟布局标记改变
          */
         private onUseVirtualLayoutChanged(event?:lark.Event):void {
-            var values = this.$dataGroupValues;
+            var values = this.$DataGroup;
             values[Keys.useVirtualLayoutChanged] = true;
             values[Keys.cleanFreeRenderer] = true;
             this.removeDataProviderListener();
@@ -149,7 +149,7 @@ module swan {
                 renderer = this.createVirtualRenderer(item);
                 this.$indexToRenderer[index] = renderer;
                 this.updateRenderer(renderer, index, item);
-                var values = this.$dataGroupValues;
+                var values = this.$DataGroup;
                 if (values[Keys.createNewRendererFlag]) {
                     renderer.validateNow();
                     values[Keys.createNewRendererFlag] = false;
@@ -171,7 +171,7 @@ module swan {
         }
 
         private doFreeRenderer(renderer:IItemRenderer):void {
-            var values = this.$dataGroupValues;
+            var values = this.$DataGroup;
             var rendererClass = values[Keys.rendererToClassMap][renderer.$hashCode];
             var hashCode = rendererClass.$hashCode;
             if (!values[Keys.freeRenderers][hashCode]) {
@@ -185,7 +185,7 @@ module swan {
          * 标记组件，以便在稍后屏幕更新期间调用该组件的 measure() 方法
          */
         public invalidateSize():void {
-            if (!this.$dataGroupValues[Keys.createNewRendererFlag]) {//虚拟布局时创建子项不需要重新验证
+            if (!this.$DataGroup[Keys.createNewRendererFlag]) {//虚拟布局时创建子项不需要重新验证
                 super.invalidateSize();
             }
         }
@@ -197,7 +197,7 @@ module swan {
             var renderer:IItemRenderer;
             var rendererClass = this.itemToRendererClass(item);
             var hashCode = rendererClass.$hashCode;
-            var values = this.$dataGroupValues;
+            var values = this.$DataGroup;
             var freeRenderers = values[Keys.freeRenderers];
             if (freeRenderers[hashCode] && freeRenderers[hashCode].length > 0) {
                 renderer = freeRenderers[hashCode].pop();
@@ -213,7 +213,7 @@ module swan {
          */
         private createOneRenderer(rendererClass:any):IItemRenderer {
             var renderer = <IItemRenderer> (new rendererClass());
-            this.$dataGroupValues[Keys.rendererToClassMap][renderer.$hashCode] = rendererClass;
+            this.$DataGroup[Keys.rendererToClassMap][renderer.$hashCode] = rendererClass;
             if (!lark.is(renderer, Types.IItemRenderer)) {
                 return null;
             }
@@ -242,7 +242,7 @@ module swan {
             this.removeDataProviderListener();
             this.$dataProvider = value;
             this.$dataProviderChanged = true;
-            this.$dataGroupValues[Keys.cleanFreeRenderer] = true;
+            this.$DataGroup[Keys.cleanFreeRenderer] = true;
             this.invalidateProperties();
             this.invalidateSize();
             this.invalidateDisplayList();
@@ -329,7 +329,7 @@ module swan {
             this.$indexToRenderer.splice(index, 0, renderer);
             if (renderer) {
                 this.updateRenderer(renderer, index, item);
-                var values = this.$dataGroupValues;
+                var values = this.$DataGroup;
                 if (values[Keys.createNewRendererFlag]) {
                     values[Keys.createNewRendererFlag] = false;
                     this.rendererAdded(renderer, index, item);
@@ -387,7 +387,7 @@ module swan {
          * 数据源更新或替换项目事件处理
          */
         private itemUpdatedHandler(item:any, location:number):void {
-            if (this.$dataGroupValues[Keys.renderersBeingUpdated]) {
+            if (this.$DataGroup[Keys.renderersBeingUpdated]) {
                 return;//防止无限循环
             }
 
@@ -411,11 +411,11 @@ module swan {
          * rendererClass获取顺序：itemRendererFunction > itemRenderer > 默认ItemRenerer。
          */
         public get itemRenderer():any {
-            return this.$dataGroupValues[Keys.itemRenderer];
+            return this.$DataGroup[Keys.itemRenderer];
         }
 
         public set itemRenderer(value:any) {
-            var values = this.$dataGroupValues;
+            var values = this.$DataGroup;
             if (values[Keys.itemRenderer] == value)
                 return;
             values[Keys.itemRenderer] = value;
@@ -431,11 +431,11 @@ module swan {
          * rendererClass获取顺序：itemRendererFunction > itemRenderer > 默认ItemRenerer。
          */
         public get itemRendererFunction():(item:any)=>any {
-            return this.$dataGroupValues[Keys.itemRendererFunction];
+            return this.$DataGroup[Keys.itemRendererFunction];
         }
 
         public set itemRendererFunction(value:(item:any)=>any) {
-            var values = this.$dataGroupValues;
+            var values = this.$DataGroup;
             if (values[Keys.itemRendererFunction] == value)
                 return;
             values[Keys.itemRendererFunction] = value;
@@ -450,7 +450,7 @@ module swan {
          */
         private itemToRendererClass(item:any):any {
             var rendererClass:any;
-            var values = this.$dataGroupValues;
+            var values = this.$DataGroup;
             if (values[Keys.itemRendererFunction]) {
                 rendererClass = values[Keys.itemRendererFunction](item);
             }
@@ -485,7 +485,7 @@ module swan {
          * 处理对组件设置的属性
          */
         protected commitProperties():void {
-            var values = this.$dataGroupValues;
+            var values = this.$DataGroup;
             if (values[Keys.itemRendererChanged] || this.$dataProviderChanged || values[Keys.useVirtualLayoutChanged]) {
                 this.removeAllRenderers();
                 if (this.$layout)
@@ -536,7 +536,7 @@ module swan {
                 this.ensureTypicalLayoutElement();
             }
             super.updateDisplayList(unscaledWidth, unscaledHeight);
-            var values = this.$dataGroupValues;
+            var values = this.$DataGroup;
             if (useVirtualLayout) {
                 //检查索引 0 处的项测量大小是否发生改变，若改变就重新计算 typicalLayoutRect
                 var rect = values[Keys.typicalLayoutRect];
@@ -557,11 +557,11 @@ module swan {
          * 确保测量过默认条目大小。
          */
         private ensureTypicalLayoutElement():void {
-            if (this.$dataGroupValues[Keys.typicalLayoutRect])
+            if (this.$DataGroup[Keys.typicalLayoutRect])
                 return;
 
             if (this.$dataProvider && this.$dataProvider.length > 0) {
-                this.$dataGroupValues[Keys.typicalItem] = this.$dataProvider.getItemAt(0);
+                this.$DataGroup[Keys.typicalItem] = this.$dataProvider.getItemAt(0);
                 this.measureRendererSize();
             }
         }
@@ -570,7 +570,7 @@ module swan {
          * 测量项呈示器默认尺寸
          */
         private measureRendererSize():void {
-            var values = this.$dataGroupValues;
+            var values = this.$DataGroup;
             if (!values[Keys.typicalItem]) {
                 this.setTypicalLayoutRect(null);
                 return;
@@ -602,7 +602,7 @@ module swan {
          * 设置项目默认大小
          */
         private setTypicalLayoutRect(rect:lark.Rectangle):void {
-            this.$dataGroupValues[Keys.typicalLayoutRect] = rect;
+            this.$DataGroup[Keys.typicalLayoutRect] = rect;
             if (this.$layout) {
                 if (rect) {
                     this.$layout.setTypicalSize(rect.width, rect.height);
@@ -635,7 +635,7 @@ module swan {
                 }
             }
             this.$indexToRenderer = [];
-            var values = this.$dataGroupValues;
+            var values = this.$DataGroup;
             if (values[Keys.cleanFreeRenderer]) {
                 var freeRenderers = values[Keys.freeRenderers];
                 var keys = Object.keys(freeRenderers);
@@ -681,7 +681,7 @@ module swan {
          * 更新项呈示器
          */
         public updateRenderer(renderer:IItemRenderer, itemIndex:number, data:any):IItemRenderer {
-            var values = this.$dataGroupValues;
+            var values = this.$DataGroup;
             values[Keys.renderersBeingUpdated] = true;
             renderer.itemIndex = itemIndex;
             renderer.data = data;

@@ -160,7 +160,7 @@ module swan {
         $measureContentBounds(bounds:lark.Rectangle):void {
             var bitmapData = this.$bitmapData;
             if (bitmapData) {
-                var values = this.$uiValues;
+                var values = this.$UIComponent;
                 var width = values[sys.UIKeys.width];
                 var height = values[sys.UIKeys.height];
                 if (lark.isNone(width) || lark.isNone(height)) {
@@ -187,7 +187,7 @@ module swan {
             if (!bitmapData) {
                 return;
             }
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             var width = values[sys.UIKeys.width];
             var height = values[sys.UIKeys.height];
             if (lark.isNone(width) || lark.isNone(height)) {
@@ -353,7 +353,7 @@ module swan {
         protected invalidateParentLayout():void {
         }
 
-        $uiValues:Object;
+        $UIComponent:Object;
 
         $includeInLayout:boolean;
 

@@ -56,7 +56,7 @@ module lark {
          */
         public constructor(target:IEventEmitter = null) {
             super();
-            this.emitterValues = {
+            this.$EventEmitter = {
                 0: target ? target : this,
                 1: {},
                 2: {},
@@ -64,7 +64,7 @@ module lark {
             };
         }
 
-        private emitterValues:Object;
+        $EventEmitter:Object;
 
         /**
          * 添加事件侦听器
@@ -102,7 +102,7 @@ module lark {
             if (DEBUG && !listener) {
                 $error(1003, "listener");
             }
-            var values = this.emitterValues;
+            var values = this.$EventEmitter;
             var eventMap:any = useCapture ? values[Keys.captureEventsMap] : values[Keys.eventsMap];
             var list:lark.sys.EventBin[] = eventMap[type];
             if (!list) {
@@ -144,7 +144,7 @@ module lark {
          */
         public removeListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean):void {
 
-            var values = this.emitterValues;
+            var values = this.$EventEmitter;
             var eventMap:Object = useCapture ? values[Keys.captureEventsMap] : values[Keys.eventsMap];
             var list:lark.sys.EventBin[] = eventMap[type];
             if (!list) {
@@ -172,7 +172,7 @@ module lark {
          * @returns 是否存在监听器，若存在返回true，反之返回false。
          */
         public hasListener(type:string):boolean {
-            var values = this.emitterValues;
+            var values = this.$EventEmitter;
             return (values[Keys.eventsMap][type] || values[Keys.captureEventsMap][type]);
         }
 
@@ -195,12 +195,12 @@ module lark {
          * @returns 如果成功调度了事件，则值为 true。值 false 表示失败或对事件调用了 preventDefault()。
          */
         public emit(event:Event):boolean {
-            event.$target = event.$currentTarget = this.emitterValues[Keys.eventTarget];
+            event.$target = event.$currentTarget = this.$EventEmitter[Keys.eventTarget];
             return this.$notifyListener(event);
         }
 
         $notifyListener(event:Event):boolean {
-            var values = this.emitterValues;
+            var values = this.$EventEmitter;
             var eventMap:Object = event.$eventPhase == 1 ? values[Keys.captureEventsMap] : values[Keys.eventsMap];
             var list:lark.sys.EventBin[] = eventMap[event.$type];
             if (!list) {

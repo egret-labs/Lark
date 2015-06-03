@@ -73,7 +73,7 @@ module lark {
             styleWrapper.currentStyle = {};
             this._styleWrapper = styleWrapper;
             this.style = style;
-            this.$textFieldValues = {
+            this.$RichTextField = {
                 0: 30,             //fontSize
                 1: 0,              //lineSpacing
                 2: 0x000000,       //textColor
@@ -85,7 +85,7 @@ module lark {
             this.$invalidateContentBounds();
         }
 
-        $textFieldValues:Object;
+        $RichTextField:Object;
 
         protected _lineDirty = true;
 
@@ -305,7 +305,7 @@ module lark {
 
         $setWidth(value:number) {
             value = +value || 0;
-            var values = this.$textFieldValues;
+            var values = this.$RichTextField;
             if (value < 0 || value === values[Keys.textFieldWidth]) {
                 return;
             }
@@ -319,7 +319,7 @@ module lark {
 
         $setHeight(value:number) {
             value = +value || 0;
-            var values = this.$textFieldValues;
+            var values = this.$RichTextField;
             if (value < 0 || value === values[Keys.textFieldHeight]) {
                 return;
             }
@@ -343,7 +343,7 @@ module lark {
                 this._scrollVDirty = false;
             }
 
-            var values = this.$textFieldValues;
+            var values = this.$RichTextField;
             bounds.setTo(0, 0, values[Keys.textWidth], values[Keys.textHeight]);
         }
 
@@ -386,7 +386,7 @@ module lark {
             this._textLines.length = 0;
             this.parseContents();
             var contents = this._contents;
-            var values = this.$textFieldValues;
+            var values = this.$RichTextField;
 
             var format = this._styleWrapper;
             var textBlock = new text.TextBlock();
@@ -431,7 +431,7 @@ module lark {
             var lines = this._textLines;
             lines.length = 0;
             var y = 0;
-            var values = this.$textFieldValues;
+            var values = this.$RichTextField;
 
             var maxHeight = isNone(values[Keys.textFieldHeight]) ? Number.POSITIVE_INFINITY : values[Keys.textFieldHeight];
 

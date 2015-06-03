@@ -88,8 +88,8 @@ module swan {
          * 测量组件尺寸
          */
         protected measure():void {
-            var values = this.$uiValues;
-            var textValues = this.$textFieldValues;
+            var values = this.$UIComponent;
+            var textValues = this.$TextField;
             var oldWidth = textValues[lark.sys.TextKeys.textFieldWidth];
             var availableWidth = lark.NONE;
             if (!lark.isNone(this._widthConstraint)) {
@@ -122,7 +122,7 @@ module swan {
         protected invalidateParentLayout():void {
         }
 
-        $uiValues:Object;
+        $UIComponent:Object;
 
         $includeInLayout:boolean;
 
@@ -258,7 +258,7 @@ module swan {
             if (lark.isNone(layoutWidth) || layoutWidth === this._widthConstraint || layoutWidth == 0) {
                 return;
             }
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (!lark.isNone(values[sys.UIKeys.explicitHeight])) {
                 return;
             }

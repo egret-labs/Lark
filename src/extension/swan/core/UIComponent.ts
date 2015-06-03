@@ -69,7 +69,7 @@ module swan {
         //$getHeight():number;
         //$setHeight(value:number):void;
 
-        $uiValues:Object;
+        $UIComponent:Object;
 
         $includeInLayout:boolean;
 
@@ -239,10 +239,6 @@ module swan.sys {
         measuredHeight,
         oldPreferWidth,
         oldPreferHeight,
-        contentWidth,
-        contentHeight,
-        scrollH,
-        scrollV,
         oldX,
         oldY,
         oldWidth,
@@ -278,7 +274,7 @@ module swan.sys {
          * UIComponentImpl 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
          */
         private initializeUIValues():void {
-            this.$uiValues = {
+            this.$UIComponent = {
                 0: lark.NONE,       //left
                 1: lark.NONE,       //right
                 2: lark.NONE,       //top
@@ -289,30 +285,26 @@ module swan.sys {
                 7: lark.NONE,       //percentHeight
                 8: lark.NONE,       //explicitWidth
                 9: lark.NONE,       //explicitHeight
-                10: 0,          //width
-                11: 0,          //height
-                12: 0,          //minWidth
-                13: 100000,     //maxWidth
-                14: 0,          //minHeight
-                15: 100000,     //maxHeight
-                16: 0,          //measuredWidth
-                17: 0,          //measuredHeight
-                18: lark.NONE,       //oldPreferWidth
-                19: lark.NONE,       //oldPreferHeight
-                20: 0,          //contentWidth
-                21: 0,          //contentHeight
-                22: 0,          //scrollH,
-                23: 0,           //scrollV
-                24: 0,           //oldX
-                25: 0,           //oldY
-                26: 0,           //oldWidth
-                27: 0,           //oldHeight
-                28: true,           //invalidatePropertiesFlag
-                29: true,           //invalidateSizeFlag
-                30: true,           //invalidateDisplayListFlag
-                31: false,           //layoutWidthExplicitlySet
-                32: false,           //layoutHeightExplicitlySet
-                33: false,           //initialized
+                10: 0,              //width
+                11: 0,              //height
+                12: 0,              //minWidth
+                13: 100000,         //maxWidth
+                14: 0,              //minHeight
+                15: 100000,         //maxHeight
+                16: 0,              //measuredWidth
+                17: 0,              //measuredHeight
+                18: lark.NONE,      //oldPreferWidth
+                19: lark.NONE,      //oldPreferHeight
+                20: 0,              //oldX
+                21: 0,              //oldY
+                22: 0,              //oldWidth
+                23: 0,              //oldHeight
+                24: true,           //invalidatePropertiesFlag
+                25: true,           //invalidateSizeFlag
+                26: true,           //invalidateDisplayListFlag
+                27: false,          //layoutWidthExplicitlySet
+                28: false,          //layoutHeightExplicitlySet
+                29: false,          //initialized
             };
             this.$includeInLayout = true;
         }
@@ -337,7 +329,7 @@ module swan.sys {
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
          */
         protected commitProperties():void {
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (values[UIKeys.oldWidth] != values[UIKeys.width] || values[UIKeys.oldHeight] != values[UIKeys.height]) {
                 this.emitWith(lark.Event.RESIZE);
             }
@@ -361,7 +353,7 @@ module swan.sys {
 
         $super:any;
 
-        $uiValues:Object;
+        $UIComponent:Object;
 
         $includeInLayout:boolean;
 
@@ -385,7 +377,7 @@ module swan.sys {
         $onAddToStage(stage:lark.Stage, nestLevel:number):void {
             this.$super.$onAddToStage.call(this, stage, nestLevel);
             this.checkInvalidateFlag();
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (!values[sys.UIKeys.initialized]) {
                 values[sys.UIKeys.initialized] = true;
                 this.createChildren();
@@ -398,7 +390,7 @@ module swan.sys {
          * 检查属性失效标记并应用
          */
         private checkInvalidateFlag(event?:Event):void {
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (values[sys.UIKeys.invalidatePropertiesFlag]) {
                 validator.invalidateProperties(this);
             }
@@ -414,12 +406,12 @@ module swan.sys {
          * 距父级容器离左边距离
          */
         public get left():number {
-            return this.$uiValues[UIKeys.left];
+            return this.$UIComponent[UIKeys.left];
         }
 
         public set left(value:number) {
             value = +value || 0;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (values[UIKeys.left] === value)
                 return;
             values[UIKeys.left] = value;
@@ -430,12 +422,12 @@ module swan.sys {
          * 距父级容器右边距离
          */
         public get right():number {
-            return this.$uiValues[UIKeys.right];
+            return this.$UIComponent[UIKeys.right];
         }
 
         public set right(value:number) {
             value = +value || 0;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (values[UIKeys.right] === value)
                 return;
             values[UIKeys.right] = value;
@@ -446,12 +438,12 @@ module swan.sys {
          * 距父级容器顶部距离
          */
         public get top():number {
-            return this.$uiValues[UIKeys.top];
+            return this.$UIComponent[UIKeys.top];
         }
 
         public set top(value:number) {
             value = +value || 0;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (values[UIKeys.top] === value)
                 return;
             values[UIKeys.top] = value;
@@ -462,12 +454,12 @@ module swan.sys {
          * 距父级容器底部距离
          */
         public get bottom():number {
-            return this.$uiValues[UIKeys.bottom];
+            return this.$UIComponent[UIKeys.bottom];
         }
 
         public set bottom(value:number) {
             value = +value || 0;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (values[UIKeys.bottom] == value)
                 return;
             values[UIKeys.bottom] = value;
@@ -479,12 +471,12 @@ module swan.sys {
          * 在父级容器中距水平中心位置的距离
          */
         public get horizontalCenter():number {
-            return this.$uiValues[UIKeys.horizontalCenter];
+            return this.$UIComponent[UIKeys.horizontalCenter];
         }
 
         public set horizontalCenter(value:number) {
             value = +value || 0;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (values[UIKeys.horizontalCenter] === value)
                 return;
             values[UIKeys.horizontalCenter] = value;
@@ -495,12 +487,12 @@ module swan.sys {
          * 在父级容器中距竖直中心位置的距离
          */
         public get verticalCenter():number {
-            return this.$uiValues[UIKeys.verticalCenter];
+            return this.$UIComponent[UIKeys.verticalCenter];
         }
 
         public set verticalCenter(value:number) {
             value = +value || 0;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (values[UIKeys.verticalCenter] === value)
                 return;
             values[UIKeys.verticalCenter] = value;
@@ -512,12 +504,12 @@ module swan.sys {
          * 相对父级容器宽度的百分比
          */
         public get percentWidth():number {
-            return this.$uiValues[UIKeys.percentWidth];
+            return this.$UIComponent[UIKeys.percentWidth];
         }
 
         public set percentWidth(value:number) {
             value = +value || 0;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (values[UIKeys.percentWidth] === value)
                 return;
             values[UIKeys.percentWidth] = value;
@@ -528,12 +520,12 @@ module swan.sys {
          * 相对父级容器高度的百分比
          */
         public get percentHeight():number {
-            return this.$uiValues[UIKeys.percentHeight];
+            return this.$UIComponent[UIKeys.percentHeight];
         }
 
         public set percentHeight(value:number) {
             value = +value || 0;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (values[UIKeys.percentHeight] === value)
                 return;
             values[UIKeys.percentHeight] = value;
@@ -544,14 +536,14 @@ module swan.sys {
          * 外部显式指定的宽度
          */
         public get explicitWidth():number {
-            return this.$uiValues[UIKeys.explicitWidth];
+            return this.$UIComponent[UIKeys.explicitWidth];
         }
 
         /**
          * 外部显式指定的高度
          */
         public get explicitHeight():number {
-            return this.$uiValues[UIKeys.explicitHeight];
+            return this.$UIComponent[UIKeys.explicitHeight];
         }
 
         /**
@@ -559,12 +551,12 @@ module swan.sys {
          */
         $getWidth():number {
             this.validateSizeNow();
-            return this.$uiValues[UIKeys.width];
+            return this.$UIComponent[UIKeys.width];
         }
 
         $setWidth(value:number) {
             value = +value || 0;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (value < 0 || values[UIKeys.width] === value && values[UIKeys.explicitWidth] === value)
                 return;
             values[UIKeys.width] = value;
@@ -589,12 +581,12 @@ module swan.sys {
          */
         $getHeight():number {
             this.validateSizeNow();
-            return this.$uiValues[UIKeys.height];
+            return this.$UIComponent[UIKeys.height];
         }
 
         $setHeight(value:number) {
             value = +value || 0;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (value < 0 || values[UIKeys.height] === value && values[UIKeys.explicitHeight] === value)
                 return;
             values[UIKeys.height] = value;
@@ -626,12 +618,12 @@ module swan.sys {
          * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
          */
         public get minWidth():number {
-            return this.$uiValues[UIKeys.minWidth];
+            return this.$UIComponent[UIKeys.minWidth];
         }
 
         public set minWidth(value:number) {
             value = +value || 0;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (value < 0 || values[UIKeys.minWidth] === value) {
                 return;
             }
@@ -644,12 +636,12 @@ module swan.sys {
          * 组件的最大高度。同时影响测量和自动布局的尺寸。
          */
         public get maxWidth():number {
-            return this.$uiValues[UIKeys.maxWidth];
+            return this.$UIComponent[UIKeys.maxWidth];
         }
 
         public set maxWidth(value:number) {
             value = +value || 0;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (value < 0 || values[UIKeys.maxWidth] === value) {
                 return;
             }
@@ -662,12 +654,12 @@ module swan.sys {
          * 组件的最小高度,此属性设置为大于maxHeight的值时无效。同时影响测量和自动布局的尺寸。
          */
         public get minHeight():number {
-            return this.$uiValues[UIKeys.minHeight];
+            return this.$UIComponent[UIKeys.minHeight];
         }
 
         public set minHeight(value:number) {
             value = +value || 0;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (value < 0 || values[UIKeys.minHeight] === value) {
                 return;
             }
@@ -681,12 +673,12 @@ module swan.sys {
          * 组件的最大高度,同时影响测量和自动布局的尺寸。
          */
         public get maxHeight():number {
-            return this.$uiValues[UIKeys.maxHeight];
+            return this.$UIComponent[UIKeys.maxHeight];
         }
 
         public set maxHeight(value:number) {
             value = +value || 0;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (value < 0 || values[UIKeys.maxHeight] === value) {
                 return;
             }
@@ -701,7 +693,7 @@ module swan.sys {
          * @param height 测量高度
          */
         public setMeasuredSize(width:number, height:number):void {
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             values[UIKeys.measuredWidth] = Math.ceil(+width || 0);
             values[UIKeys.measuredHeight] = Math.ceil(+height || 0);
         }
@@ -713,7 +705,7 @@ module swan.sys {
          */
         private setActualSize(w:number, h:number):void {
             var change = false;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (values[UIKeys.width] !== w) {
                 values[UIKeys.width] = w;
                 change = true;
@@ -751,7 +743,7 @@ module swan.sys {
          * 标记属性失效
          */
         public invalidateProperties():void {
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (!values[sys.UIKeys.invalidatePropertiesFlag]) {
                 values[sys.UIKeys.invalidatePropertiesFlag] = true;
                 if (this.$stage)
@@ -763,7 +755,7 @@ module swan.sys {
          * 验证组件的属性
          */
         public validateProperties():void {
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (values[sys.UIKeys.invalidatePropertiesFlag]) {
                 this.commitProperties();
                 values[sys.UIKeys.invalidatePropertiesFlag] = false;
@@ -774,7 +766,7 @@ module swan.sys {
          * 标记提交过需要验证组件尺寸
          */
         public invalidateSize():void {
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (!values[sys.UIKeys.invalidateSizeFlag]) {
                 values[sys.UIKeys.invalidateSizeFlag] = true;
                 if (this.$stage)
@@ -798,7 +790,7 @@ module swan.sys {
                     }
                 }
             }
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (values[sys.UIKeys.invalidateSizeFlag]) {
                 var changed = this.measureSizes();
                 if (changed) {
@@ -814,7 +806,7 @@ module swan.sys {
          */
         private measureSizes():boolean {
             var changed = false;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (!values[sys.UIKeys.invalidateSizeFlag])
                 return changed;
 
@@ -848,7 +840,7 @@ module swan.sys {
          * 标记需要验证显示列表
          */
         public invalidateDisplayList():void {
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (!values[sys.UIKeys.invalidateDisplayListFlag]) {
                 values[sys.UIKeys.invalidateDisplayListFlag] = true;
                 if (this.$stage)
@@ -860,7 +852,7 @@ module swan.sys {
          * 验证子项的位置和大小，并绘制其他可视内容
          */
         public validateDisplayList():void {
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (values[sys.UIKeys.invalidateDisplayListFlag]) {
                 this.updateFinalSize();
                 this.updateDisplayList(values[UIKeys.width], values[UIKeys.height]);
@@ -874,7 +866,7 @@ module swan.sys {
         private updateFinalSize():void {
             var unscaledWidth = 0;
             var unscaledHeight = 0;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             if (values[sys.UIKeys.layoutWidthExplicitlySet]) {
                 unscaledWidth = values[UIKeys.width];
             }
@@ -921,7 +913,7 @@ module swan.sys {
         public setLayoutBoundsSize(layoutWidth:number, layoutHeight:number):void {
             layoutHeight = +layoutHeight || 0;
             layoutWidth = +layoutWidth || 0;
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             var maxWidth = values[UIKeys.maxWidth];
             var maxHeight = values[UIKeys.maxHeight];
             var minWidth = Math.min(values[UIKeys.minWidth], maxWidth);
@@ -984,7 +976,7 @@ module swan.sys {
          * 注意此方法返回值已经包含scale和rotation。
          */
         public getLayoutBounds(bounds:lark.Rectangle):void {
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             var w:number;
             if (values[sys.UIKeys.layoutWidthExplicitlySet]) {
                 w = values[UIKeys.width];
@@ -1010,13 +1002,13 @@ module swan.sys {
 
 
         private getPreferredUWidth():number {
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             return lark.isNone(values[UIKeys.explicitWidth]) ?
                 values[UIKeys.measuredWidth] : values[UIKeys.explicitWidth];
         }
 
         private getPreferredUHeight():number {
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             return lark.isNone(values[UIKeys.explicitHeight]) ?
                 values[UIKeys.measuredHeight] : values[UIKeys.explicitHeight];
         }
@@ -1187,14 +1179,14 @@ module swan.sys {
             });
             Object.defineProperty(prototype, "measuredWidth", {
                 get: function () {
-                    return this.$uiValues[UIKeys.measuredWidth];
+                    return this.$UIComponent[UIKeys.measuredWidth];
                 },
                 enumerable: true,
                 configurable: true
             });
             Object.defineProperty(prototype, "measuredHeight", {
                 get: function () {
-                    return this.$uiValues[UIKeys.measuredHeight];
+                    return this.$UIComponent[UIKeys.measuredHeight];
                 },
                 enumerable: true,
                 configurable: true
