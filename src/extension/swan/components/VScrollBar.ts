@@ -34,65 +34,47 @@ module swan {
      */
     export class VScrollBar extends ScrollBarBase {
 
-        public constructor(){
-            super();
-        }
-
-        /**
-         * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值
-         */
-        protected pointToValue(x:number, y:number):number {
-            if (!this.thumb || !this.track)
-                return 0;
-            var values = this.$Range;
-            var range = values[sys.RangeKeys.maximum] - values[sys.RangeKeys.minimum];
-            var thumbRange = this.getThumbRange();
-            return values[sys.RangeKeys.minimum] + ((thumbRange != 0) ? ((thumbRange - y) / thumbRange) * range : 0);
-        }
-
-        private getThumbRange():number {
-            var bounds = lark.$TempRectangle;
-            this.track.getLayoutBounds(bounds);
-            var thumbRange = bounds.height;
-            this.thumb.getLayoutBounds(bounds);
-            return thumbRange - bounds.height;
-        }
-
-
-        /**
-         * 设置外观部件（通常为滑块）的边界，这些外观部件的几何图形不是完全由外观的布局指定的
-         */
-        public updateSkinDisplayList():void {
-            if (!this.thumb || !this.track)
-                return;
-            var values = this.$Range;
-            var thumbRange = this.getThumbRange();
-            var range = values[sys.RangeKeys.maximum] - values[sys.RangeKeys.minimum];
-            var thumbPosTrackY = (range > 0) ? ((this.value - this.minimum) / range) * thumbRange : 0;
-            var thumbPos = this.track.localToGlobal( 0,thumbPosTrackY, lark.$TempPoint);
-            var thumbPosX = thumbPos.x;
-            var thumbPosY = thumbPos.y;
-            var thumbPosParentY = this.thumb.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).y;
-
-            var bounds = lark.$TempRectangle;
-            this.thumb.getLayoutBounds(bounds);
-            this.thumb.setLayoutBoundsPosition(bounds.x, Math.round(thumbPosParentY));
-        }
-
-        protected onViewportResize(event?:lark.Event):void{
+        protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
+            var thumb = this.thumb;
             var viewport = this.$viewport;
-            this.maximum = viewport.contentHeight - viewport.$UIComponent[sys.UIKeys.height];
+            if (!thumb || !viewport) {
+                return;
+            }
+            var bounds = lark.$TempRectangle;
+            thumb.getPreferredBounds(bounds);
+            var thumbHeight = bounds.height;
+            var thumbX = bounds.x;
+            var vsp = viewport.scrollV;
+            var contentHeight = viewport.contentHeight;
+            var height = viewport.height;
+            if (vsp <= 0) {
+                var scaleHeight = thumbHeight * (-vsp) / (height * 0.5);
+                thumb.setLayoutBoundsSize(lark.NONE, scaleHeight);
+                thumb.setLayoutBoundsPosition(thumbX, 0);
+            }
+            else if (vsp >= contentHeight - height) {
+                scaleHeight = thumbHeight * (vsp - contentHeight + height) / (height * 0.5);
+                thumb.setLayoutBoundsSize(lark.NONE, scaleHeight);
+                thumb.setLayoutBoundsPosition(thumbX, unscaledHeight - scaleHeight);
+            }
+            else {
+                var thumbY = (unscaledHeight - thumbHeight) * vsp / (contentHeight - height);
+                thumb.setLayoutBoundsSize(lark.NONE, lark.NONE);
+                thumb.setLayoutBoundsPosition(thumbX, thumbY);
+            }
         }
 
-        protected onPropertyChanged(event:swan.PropertyEvent):void{
-            if(event.property=="scrollV"){
-                this.value = this.$viewport.scrollV;
-            }
-            else if(event.property=="contentHeight"){
-                this.onViewportResize();
+
+        protected onPropertyChanged(event:swan.PropertyEvent):void {
+            switch (event.property) {
+                case "scrollV":
+                case "contentHeight":
+                    this.invalidateDisplayList();
+                    break;
             }
         }
     }
 
-    lark.registerClass(VScrollBar,Types.VScrollBar);
+    lark.registerClass(VScrollBar, Types.VScrollBar);
 }

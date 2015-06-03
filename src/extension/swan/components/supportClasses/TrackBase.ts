@@ -162,7 +162,7 @@ module swan {
             var stage:lark.Stage = event.$currentTarget;
             stage.removeListener(lark.TouchEvent.TOUCH_MOVE,this.onStageTouchMove,this);
             stage.removeListener(lark.TouchEvent.TOUCH_END,this.onStageTouchEnd,this);
-            UIEvent.emitUIEvent(this, UIEvent.CHANGE_END)
+            UIEvent.emitUIEvent(this, UIEvent.CHANGE_END);
         }
 
         /**

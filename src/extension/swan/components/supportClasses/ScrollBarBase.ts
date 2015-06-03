@@ -33,7 +33,7 @@ module swan {
     /**
      * 滚动条基类
      */
-    export class ScrollBarBase extends TrackBase {
+    export class ScrollBarBase extends Component {
         /**
          * 创建一个ScrollBarBase实例
          */
@@ -41,18 +41,10 @@ module swan {
             super();
         }
 
-        protected onTrackTouchBegin(event:lark.TouchEvent):void {
-            var thumbW = this.thumb ? this.thumb.width : 0;
-            var thumbH = this.thumb ? this.thumb.height : 0;
-            var offsetX = event.$stageX - (thumbW / 2);
-            var offsetY = event.$stageY - (thumbH / 2);
-            var p = this.track.globalToLocal(offsetX, offsetY, lark.$TempPoint);
-
-            var newValue = this.pointToValue(p.x, p.y);
-            newValue = this.nearestValidValue(newValue, this.snapInterval);
-            this.setValue(newValue);
-            this.emitWith(lark.Event.CHANGE);
-        }
+        /**
+         * [SkinPart]滑块显示对象
+         */
+        public thumb:swan.UIComponent = null;
 
         $viewport:IViewport = null;
 
@@ -76,10 +68,11 @@ module swan {
                 value.on(swan.PropertyEvent.PROPERTY_CHANGE, this.onPropertyChanged,this);
                 value.on(lark.Event.RESIZE, this.onViewportResize,this);
             }
+            this.invalidateDisplayList();
         }
 
-        protected onViewportResize(event?:lark.Event):void{
-
+        private onViewportResize(event?:lark.Event):void{
+            this.invalidateDisplayList();
         }
 
         protected onPropertyChanged(event:swan.PropertyEvent):void{

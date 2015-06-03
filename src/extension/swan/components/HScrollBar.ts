@@ -34,63 +34,46 @@ module swan {
      */
     export class HScrollBar extends ScrollBarBase {
 
-        public constructor(){
-            super();
-        }
-
-        /**
-         * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值
-         */
-        protected pointToValue(x:number, y:number):number {
-            if (!this.thumb || !this.track)
-                return 0;
-            var values = this.$Range;
-            var range = values[sys.RangeKeys.maximum] - values[sys.RangeKeys.minimum];
-            var thumbRange = this.getThumbRange();
-            return values[sys.RangeKeys.minimum] + (thumbRange != 0 ? (x / thumbRange) * range : 0);
-        }
-
-        private getThumbRange():number {
-            var bounds = lark.$TempRectangle;
-            this.track.getLayoutBounds(bounds);
-            var thumbRange = bounds.width;
-            this.thumb.getLayoutBounds(bounds);
-            return thumbRange - bounds.width;
-        }
-
-        /**
-         * 设置外观部件的边界，这些外观部件的几何图形不是完全由外观的布局指定的
-         */
-        protected updateSkinDisplayList():void {
-            if (!this.thumb || !this.track)
-                return;
-            var values = this.$Range;
-            var thumbRange = this.getThumbRange();
-            var range = values[sys.RangeKeys.maximum] - values[sys.RangeKeys.minimum];
-            var thumbPosTrackX = (range > 0) ? ((this.value - values[sys.RangeKeys.minimum]) / range) * thumbRange : 0;
-            var thumbPos = this.track.localToGlobal(thumbPosTrackX, 0, lark.$TempPoint);
-            var thumbPosX = thumbPos.x;
-            var thumbPosY = thumbPos.y;
-            var thumbPosParentX = this.thumb.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).x;
-
-            var bounds = lark.$TempRectangle;
-            this.thumb.getLayoutBounds(bounds);
-            this.thumb.setLayoutBoundsPosition(Math.round(thumbPosParentX), bounds.y);
-        }
-
-        protected onViewportResize(event?:lark.Event):void{
+        protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
+            var thumb = this.thumb;
             var viewport = this.$viewport;
-            this.maximum = viewport.contentWidth - viewport.$UIComponent[sys.UIKeys.width];
+            if (!thumb || !viewport) {
+                return;
+            }
+            var bounds = lark.$TempRectangle;
+            thumb.getPreferredBounds(bounds);
+            var thumbWidth = bounds.width;
+            var thumbY = bounds.y;
+            var hsp = viewport.scrollH;
+            var contentWidth = viewport.contentWidth;
+            var width = viewport.width;
+            if (hsp <= 0) {
+                var scaleWidth = thumbWidth * (-hsp) / (width * 0.5);
+                thumb.setLayoutBoundsSize(scaleWidth, lark.NONE);
+                thumb.setLayoutBoundsPosition(0, thumbY);
+            }
+            else if (hsp >= contentWidth - width) {
+                scaleWidth = thumbWidth * (hsp - contentWidth + width) / (width * 0.5);
+                thumb.setLayoutBoundsSize(scaleWidth, lark.NONE);
+                thumb.setLayoutBoundsPosition(unscaledWidth - scaleWidth, thumbY);
+            }
+            else {
+                var thumbX = (unscaledWidth-thumbWidth) * hsp / (contentWidth - width);
+                thumb.setLayoutBoundsSize(lark.NONE, lark.NONE);
+                thumb.setLayoutBoundsPosition(thumbX, thumbY);
+            }
         }
 
-        protected onPropertyChanged(event:swan.PropertyEvent):void{
-            if(event.property=="scrollH"){
-                this.value = this.$viewport.scrollH;
-            }
-            else if(event.property=="contentWidth"){
-                this.onViewportResize();
+        protected onPropertyChanged(event:swan.PropertyEvent):void {
+            switch (event.property) {
+                case "scrollH":
+                case "contentWidth":
+                    this.invalidateDisplayList();
+                    break;
             }
         }
     }
-    lark.registerClass(HScrollBar,Types.HScrollBar);
+
+    lark.registerClass(HScrollBar, Types.HScrollBar);
 }

@@ -158,7 +158,7 @@ module swan {
         }
 
         /**
-         * 处理对组件设置的属性 
+         * 处理对组件设置的属性
          */
         protected commitProperties():void {
             super.commitProperties();
