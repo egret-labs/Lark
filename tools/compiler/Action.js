@@ -30,6 +30,7 @@
 var utils = require('../lib/utils');
 var exmlc = require('../lib/exml/exmlc');
 var FileUtil = require("../lib/FileUtil");
+var htmlparser = require("../lib/htmlparser");
 var TypeScript = require("../lib/typescript/tsclark");
 var UglifyJS = require("../lib/uglify-js/uglifyjs");
 var Action = (function () {
@@ -165,10 +166,7 @@ var Action = (function () {
             });
             tss = depends.concat(tss);
             var dts = platform.declaration && configuration.declaration;
-            console.log(singleFile);
-            console.log(tss);
             var result = self.compile(options, tss, singleFile, null, dts);
-            console.log(result.messages);
             if (dts) {
                 dtsFiles.push([declareFile, depends]);
             }
@@ -200,7 +198,6 @@ var Action = (function () {
         var templateFile = FileUtil.joinPath(options.templateDir, "index.html");
         if (!FileUtil.exists(templateFile))
             return;
-        console.log(templateFile);
         var larkFiles = [];
         var modules = options.project.modules;
         var platforms = options.project.platforms;
@@ -211,13 +208,11 @@ var Action = (function () {
         var content = FileUtil.read(templateFile);
         var scripts = larkFiles.map(function (f) { return utils.format('<script src="{0}.js" src-release="{0}.min.js"></script>', f); }).join('\r\n    ');
         content = content.replace('<script id="lark"></script>', scripts);
-        console.log(scripts);
         content = content.replace(/\$entry\-class\$/ig, "Main");
         content = content.replace(/\$scale\-mode\$/ig, options.project.scaleMode);
         content = content.replace(/\$content\-width\$/ig, options.project.contentWidth.toString());
         content = content.replace(/\$content\-height\$/ig, options.project.contentHeight.toString());
         content = content.replace(/\$show\-paint\-rects\$/ig, 'false');
-        console.log(content);
         FileUtil.save(templateFile, content);
     };
     Action.compileTemplates = function (options) {
@@ -225,11 +220,41 @@ var Action = (function () {
         if (!FileUtil.exists(templateFile))
             return;
         var content = FileUtil.read(templateFile);
+        if (options.publish)
+            content = Action.replaceReleaseScript(content);
         var projFiles = options.publish ? [options.projManifest.release] : options.projManifest.files;
         var scripts = projFiles.map(function (f) { return utils.format('<script src="{0}"></script>', f); }).join('\r\n    ');
         content = content.replace('<script id="project"></script>', scripts);
         var outputFile = FileUtil.joinPath(options.outDir, "index.html");
         FileUtil.save(outputFile, content);
+    };
+    // Use release src to replace the src of scripts
+    //  from: <script src="libs/lark.js" src-release="libs/lark.min.js"></script>
+    //  to:   <script src="libs/lark.min.js"></script>
+    Action.replaceReleaseScript = function (html) {
+        var handler = new htmlparser.DefaultHandler(function (error, dom) {
+            if (error)
+                console.log(error);
+        });
+        var scriptWithReleaseSrc = [];
+        var parser = new htmlparser.Parser(handler);
+        parser.parseComplete(html);
+        handler.dom.forEach(function (d) { return visitDom(d); });
+        replaceReleaseTags();
+        return html;
+        function visitDom(el) {
+            if (el.type == 'script' && el.attribs && el.attribs['src-release']) {
+                scriptWithReleaseSrc.push(el);
+            }
+            if (el.children) {
+                el.children.forEach(function (e) { return visitDom(e); });
+            }
+        }
+        function replaceReleaseTags() {
+            scriptWithReleaseSrc.forEach(function (s) {
+                html = html.replace(s.raw, 'script src="' + s.attribs['src-release'] + '"');
+            });
+        }
     };
     Action.prototype.compile = function (options, files, out, outDir, def) {
         var defTemp = options.declaration;
