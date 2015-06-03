@@ -109,8 +109,10 @@ module swan {
          * 设置多个选中项
          */
         protected setSelectedIndices(value:number[], dispatchChangeEvent?:boolean):void {
+            var values = this.$ListBase;
             if (dispatchChangeEvent)
-                this.$dispatchChangeAfterSelection = (this.$dispatchChangeAfterSelection || dispatchChangeEvent);
+                values[sys.ListBaseKeys.dispatchChangeAfterSelection] =
+                    (values[sys.ListBaseKeys.dispatchChangeAfterSelection] || dispatchChangeEvent);
 
             if (value)
                 this._proposedSelectedIndices = value;
@@ -130,7 +132,8 @@ module swan {
         }
 
         protected commitSelection(dispatchChangedEvents:boolean = true):boolean {
-            var oldSelectedIndex = this.$selectedIndex;
+            var values = this.$ListBase;
+            var oldSelectedIndex = values[sys.ListBaseKeys.selectedIndex];
             if (this._proposedSelectedIndices) {
                 this._proposedSelectedIndices = this._proposedSelectedIndices.filter(this.isValidIndex);
 
@@ -140,10 +143,10 @@ module swan {
                     this._proposedSelectedIndices = temp;
                 }
                 if (this._proposedSelectedIndices.length > 0) {
-                    this.$proposedSelectedIndex = this._proposedSelectedIndices[0];
+                    values[sys.ListBaseKeys.proposedSelectedIndex] = this._proposedSelectedIndices[0];
                 }
                 else {
-                    this.$proposedSelectedIndex = -1;
+                    values[sys.ListBaseKeys.proposedSelectedIndex] = -1;
                 }
             }
 
@@ -154,7 +157,7 @@ module swan {
                 return false;
             }
 
-            var selectedIndex = this.selectedIndex;
+            var selectedIndex = this.$getSelectedIndex();
             if (selectedIndex > ListBase.NO_SELECTION) {
                 if (this._proposedSelectedIndices) {
                     if (this._proposedSelectedIndices.indexOf(selectedIndex) == -1)
@@ -172,9 +175,9 @@ module swan {
             }
 
             if (dispatchChangedEvents && retVal) {
-                if (this.$dispatchChangeAfterSelection) {
+                if (values[sys.ListBaseKeys.dispatchChangeAfterSelection]) {
                     this.emitWith(lark.Event.CHANGE)
-                    this.$dispatchChangeAfterSelection = false;
+                    values[sys.ListBaseKeys.dispatchChangeAfterSelection] = false;
                 }
                 UIEvent.emitUIEvent(this, UIEvent.VALUE_COMMIT);
             }
@@ -186,7 +189,7 @@ module swan {
          * 是否是有效的索引
          */
         private isValidIndex = (item:number, index:number, v:number[]):boolean => {
-            return this.$dataProvider && (item >= 0) && (item < this.$dataProvider.length)&&item%1==0;
+            return this.$dataProvider && (item >= 0) && (item < this.$dataProvider.length) && item % 1 == 0;
         }
 
         /**
@@ -263,7 +266,7 @@ module swan {
             var length = selectedIndices.length;
             if (length > 0) {
                 if (length == 1 && (selectedIndices[0] == index)) {
-                    if (!this.$requireSelection) {
+                    if (!this.$ListBase[sys.ListBaseKeys.requireSelection]) {
                         return interval;
                     }
                     interval.splice(0, 0, selectedIndices[0]);
@@ -272,10 +275,10 @@ module swan {
                 else {
                     var found = false;
                     for (var i = 0; i < length; i++) {
-                        if (selectedIndices[i] == index){
+                        if (selectedIndices[i] == index) {
                             found = true;
                         }
-                        else if (selectedIndices[i] != index){
+                        else if (selectedIndices[i] != index) {
                             interval.splice(0, 0, selectedIndices[i]);
                         }
                     }
@@ -297,7 +300,8 @@ module swan {
         protected onRendererTouchEnd(event:lark.TouchEvent):void {
             if (this.allowMultipleSelection) {
                 var itemRenderer = <IItemRenderer> (event.currentTarget);
-                if (itemRenderer != this.$mouseDownItemRenderer)
+                var mouseDownItemRenderer = this.$ListBase[sys.ListBaseKeys.mouseDownItemRenderer];
+                if (itemRenderer != mouseDownItemRenderer)
                     return;
                 this.setSelectedIndices(this.calculateSelectedIndices(itemRenderer.itemIndex), true);
                 ItemTapEvent.emitItemTapEvent(this, ItemTapEvent.ITEM_TAP, itemRenderer);

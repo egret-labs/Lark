@@ -97,10 +97,10 @@ module swan {
                 viewport.on(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
                 this.addChildAt(viewport, 0);
             }
-            if(this.horizontalScrollBar){
+            if (this.horizontalScrollBar) {
                 this.horizontalScrollBar.viewport = viewport;
             }
-            if(this.verticalScrollBar){
+            if (this.verticalScrollBar) {
                 this.verticalScrollBar.viewport = viewport;
             }
         }
@@ -109,10 +109,10 @@ module swan {
          * 卸载视域组件
          */
         private uninstallViewport():void {
-            if(this.horizontalScrollBar){
+            if (this.horizontalScrollBar) {
                 this.horizontalScrollBar.viewport = null;
             }
-            if(this.verticalScrollBar){
+            if (this.verticalScrollBar) {
                 this.verticalScrollBar.viewport = null;
             }
             var viewport = this._viewport;
@@ -209,8 +209,8 @@ module swan {
             this.onTouchBegin(event);
         }
 
-        private delayEmitEvent(event:lark.TouchEvent):void{
-            if(this.delayTouchEvent){
+        private delayEmitEvent(event:lark.TouchEvent):void {
+            if (this.delayTouchEvent) {
                 this.onDelayTouchEventTimer();
             }
             event.stopPropagation();
@@ -236,7 +236,7 @@ module swan {
             var target:lark.DisplayObject = event.$target;
             var list = this.$getPropagationList(target);
             var length = list.length;
-            var targetIndex = list.length*0.5;
+            var targetIndex = list.length * 0.5;
             var startIndex = -1;
             for (var i = 0; i < length; i++) {
                 if (list[i] === viewport) {
@@ -263,10 +263,10 @@ module swan {
         private checkScrollPolicy():boolean {
             var viewport:IViewport = this._viewport;
             var hCanScroll:boolean;
-            var values = viewport.$uiValues;
+            var values = viewport.$UIComponent;
             switch (this.scrollPolicyH) {
                 case "auto":
-                    if (values[sys.UIKeys.contentWidth] > values[sys.UIKeys.width]) {
+                    if (viewport.contentWidth > values[sys.UIKeys.width]) {
                         hCanScroll = true;
                     }
                     else {
@@ -285,7 +285,7 @@ module swan {
             var vCanScroll:boolean;
             switch (this.scrollPolicyV) {
                 case "auto":
-                    if (values[sys.UIKeys.contentHeight] > values[sys.UIKeys.height]) {
+                    if (viewport.contentHeight > values[sys.UIKeys.height]) {
                         vCanScroll = true;
                     }
                     else {
@@ -316,17 +316,19 @@ module swan {
             this.checkScrollBarVisibility(false);
             this.touchScrollV.stop();
             this.touchScrollH.stop();
-            var values = this._viewport.$uiValues;
+            var viewport = this._viewport;
+            var values = viewport.$UIComponent;
             this.touchStartX = event.$stageX;
             this.touchStartY = event.$stageY;
 
+
             if (this.horizontalCanScroll) {
-                this.touchScrollH.start(event.$stageX, values[sys.UIKeys.scrollH],
-                    values[sys.UIKeys.contentWidth] - values[sys.UIKeys.width]);
+                this.touchScrollH.start(event.$stageX, viewport.scrollH,
+                    viewport.contentWidth - values[sys.UIKeys.width]);
             }
             if (this.verticalCanScroll) {
-                this.touchScrollV.start(event.$stageY, values[sys.UIKeys.scrollV],
-                    values[sys.UIKeys.contentHeight] - values[sys.UIKeys.height]);
+                this.touchScrollV.start(event.$stageY, viewport.scrollV,
+                    viewport.contentHeight - values[sys.UIKeys.height]);
             }
             var stage = this.$stage;
             stage.on(lark.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
@@ -347,15 +349,13 @@ module swan {
                 this.delayTouchTimer.stop();
             }
             var viewport = this._viewport;
-            var values = viewport.$uiValues;
+            var values = viewport.$UIComponent;
             if (this.horizontalCanScroll) {
-                this.touchScrollH.update(event.$stageX,
-                    values[sys.UIKeys.contentWidth] - values[sys.UIKeys.width]);
+                this.touchScrollH.update(event.$stageX, viewport.contentWidth - values[sys.UIKeys.width]);
             }
 
             if (this.verticalCanScroll) {
-                this.touchScrollV.update(event.$stageY,
-                    values[sys.UIKeys.contentHeight] - values[sys.UIKeys.height]);
+                this.touchScrollV.update(event.$stageY, viewport.contentHeight - values[sys.UIKeys.height]);
             }
         }
 
@@ -367,16 +367,14 @@ module swan {
             stage.removeListener(lark.TouchEvent.TOUCH_END, this.onTouchEnd, this);
 
             var viewport:IViewport = this._viewport;
-            var values = viewport.$uiValues;
+            var values = viewport.$UIComponent;
             if (this.horizontalCanScroll) {
                 var touchScrollH = this.touchScrollH;
-                touchScrollH.finish(values[sys.UIKeys.scrollH],
-                    values[sys.UIKeys.contentWidth] - values[sys.UIKeys.width]);
+                touchScrollH.finish(viewport.scrollH, viewport.contentWidth - values[sys.UIKeys.width]);
             }
             if (this.verticalCanScroll) {
                 var touchScrollV = this.touchScrollV;
-                touchScrollV.finish(values[sys.UIKeys.scrollV],
-                    values[sys.UIKeys.contentHeight] - values[sys.UIKeys.height]);
+                touchScrollV.finish(viewport.scrollV, viewport.contentHeight - values[sys.UIKeys.height]);
             }
             if (!this.autoHideTimer) {
                 this.autoHideTimer = new lark.Timer(500, 1);

@@ -80,14 +80,13 @@ module swan {
         }
 
         protected onViewportResize(event?:lark.Event):void{
-            var values = this.$viewport.$uiValues;
-            this.maximum = values[sys.UIKeys.contentHeight] - values[sys.UIKeys.height];
+            var viewport = this.$viewport;
+            this.maximum = viewport.contentHeight - viewport.$UIComponent[sys.UIKeys.height];
         }
 
         protected onPropertyChanged(event:swan.PropertyEvent):void{
-            var values = this.$viewport.$uiValues;
             if(event.property=="scrollV"){
-                this.value = values[sys.UIKeys.scrollV];
+                this.value = this.$viewport.scrollV;
             }
             else if(event.property=="contentHeight"){
                 this.onViewportResize();

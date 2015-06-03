@@ -27,6 +27,20 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
+module swan.sys {
+
+    export const enum ListBaseKeys {
+        requireSelection,
+        requireSelectionChanged,
+        proposedSelectedIndex,
+        selectedIndex,
+        dispatchChangeAfterSelection,
+        pendingSelectedItem,
+        selectedIndexAdjusted,
+        mouseDownItemRenderer
+    }
+}
+
 module swan {
 
     /**
@@ -39,6 +53,21 @@ module swan {
      */
     export class ListBase extends DataGroup {
 
+        public constructor() {
+            super();
+            this.$ListBase = {
+                0: false,       //requireSelection
+                1: false,       //requireSelectionChanged
+                2: -2,          //proposedSelectedIndex
+                3: -1,          //selectedIndex
+                4: false,       //dispatchChangeAfterSelection
+                5: undefined,   //pendingSelectedItem
+                6: false,       //selectedIndexAdjusted
+                7: null,        //mouseDownItemRenderer
+            };
+        }
+
+        $ListBase:Object;
         /**
          * 未选中任何项时的索引值
          */
@@ -49,37 +78,26 @@ module swan {
          */
         public static NO_PROPOSED_SELECTION:number = -2;
 
-        $requireSelection:boolean = false;
-
-        private requireSelectionChanged:boolean = false;
-
         /**
          * 如果为 true，则控件中必须含有选中的数据项目。
          * 如果该值为 true，则始终将 selectedIndex 属性设置为 0 和 (dataProvider.length - 1) 之间的一个值。
          */
         public get requireSelection():boolean {
-            return this.$requireSelection;
+            return this.$ListBase[sys.ListBaseKeys.requireSelection];
         }
 
         public set requireSelection(value:boolean) {
             value = !!value;
-            if (value === this.$requireSelection)
+            var values = this.$ListBase;
+            if (value === values[sys.ListBaseKeys.requireSelection]) {
                 return;
-
-            this.$requireSelection = value;
-
+            }
+            values[sys.ListBaseKeys.requireSelection] = value;
             if (value) {
-                this.requireSelectionChanged = true;
+                values[sys.ListBaseKeys.requireSelectionChanged] = true;
                 this.invalidateProperties();
             }
         }
-
-        /**
-         * 在属性提交前缓存真实的选中项的值
-         */
-        $proposedSelectedIndex:number = ListBase.NO_PROPOSED_SELECTION;
-
-        $selectedIndex:number = ListBase.NO_SELECTION;
 
         /**
          * 选中项目的基于 0 的索引。<br/>
@@ -92,20 +110,16 @@ module swan {
         }
 
         $getSelectedIndex():number {
-            if (this.$proposedSelectedIndex != ListBase.NO_PROPOSED_SELECTION)
-                return this.$proposedSelectedIndex;
-            return this.$selectedIndex;
+            var values = this.$ListBase;
+            if (values[sys.ListBaseKeys.proposedSelectedIndex] != ListBase.NO_PROPOSED_SELECTION)
+                return values[sys.ListBaseKeys.proposedSelectedIndex];
+            return values[sys.ListBaseKeys.selectedIndex];
         }
 
         public set selectedIndex(value:number) {
-            value = +value|0;
+            value = +value | 0;
             this.setSelectedIndex(value, false);
         }
-
-        /**
-         * 索引改变后是否需要抛出事件
-         */
-        $dispatchChangeAfterSelection:boolean = false;
 
         /**
          * 设置选中项
@@ -114,30 +128,30 @@ module swan {
             if (value == this.selectedIndex) {
                 return;
             }
+            var values = this.$ListBase;
             if (dispatchChangeEvent)
-                this.$dispatchChangeAfterSelection = (this.$dispatchChangeAfterSelection || dispatchChangeEvent);
-            this.$proposedSelectedIndex = value;
+                values[sys.ListBaseKeys.dispatchChangeAfterSelection] =
+                    (values[sys.ListBaseKeys.dispatchChangeAfterSelection] || dispatchChangeEvent);
+            values[sys.ListBaseKeys.proposedSelectedIndex] = value;
             this.invalidateProperties();
         }
 
 
-        /**
-         *  在属性提交前缓存真实选中项的数据源
-         */
-        $pendingSelectedItem:any = undefined;
         /**
          * 当前已选中的项目。设置此属性会取消选中当前选定的项目并选择新指定的项目。<br/>
          * 当用户通过与控件交互来更改 selectedItem 属性时，此控件将分派 change 和 changing 事件。<br/>
          * 当以编程方式更改 selectedItem 属性的值时，此控件不分派 change 和 changing 事件。
          */
         public get selectedItem():any {
-            if (this.$pendingSelectedItem !== undefined)
-                return this.$pendingSelectedItem;
+            var values = this.$ListBase;
+            if (values[sys.ListBaseKeys.pendingSelectedItem] !== undefined)
+                return values[sys.ListBaseKeys.pendingSelectedItem];
 
-            if (this.selectedIndex == ListBase.NO_SELECTION || this.dataProvider == null)
+            var selectedIndex = this.$getSelectedIndex();
+            if (selectedIndex == ListBase.NO_SELECTION || this.$dataProvider == null)
                 return undefined;
 
-            return this.dataProvider.length > this.selectedIndex ? this.dataProvider.getItemAt(this.selectedIndex) : undefined;
+            return this.$dataProvider.length > selectedIndex ? this.$dataProvider.getItemAt(selectedIndex) : undefined;
         }
 
         public set selectedItem(value:any) {
@@ -151,10 +165,12 @@ module swan {
             if (this.selectedItem === value)
                 return;
 
+            var values = this.$ListBase;
             if (dispatchChangeEvent)
-                this.$dispatchChangeAfterSelection = (this.$dispatchChangeAfterSelection || dispatchChangeEvent);
+                values[sys.ListBaseKeys.dispatchChangeAfterSelection] =
+                    (values[sys.ListBaseKeys.dispatchChangeAfterSelection] || dispatchChangeEvent);
 
-            this.$pendingSelectedItem = value;
+            values[sys.ListBaseKeys.pendingSelectedItem] = value;
             this.invalidateProperties();
         }
 
@@ -165,48 +181,49 @@ module swan {
             var dataProviderChanged = this.$dataProviderChanged;
             super.commitProperties();
 
+            var values = this.$ListBase;
+            var selectedIndex = this.$getSelectedIndex();
+            var dataProvider = this.$dataProvider;
             if (dataProviderChanged) {
-                var selectedIndex = this.selectedIndex;
-                if (selectedIndex >= 0 && this.$dataProvider && selectedIndex < this.$dataProvider.length)
+                if (selectedIndex >= 0 && dataProvider && selectedIndex < dataProvider.length)
                     this.itemSelected(selectedIndex, true);
                 else if (this.requireSelection)
-                    this.$proposedSelectedIndex = 0;
+                    values[sys.ListBaseKeys.proposedSelectedIndex] = 0;
                 else
                     this.setSelectedIndex(-1, false);
             }
 
-            if (this.requireSelectionChanged) {
-                this.requireSelectionChanged = false;
+            if (values[sys.ListBaseKeys.requireSelectionChanged]) {
+                values[sys.ListBaseKeys.requireSelectionChanged] = false;
 
-                if (this.requireSelection &&
-                    this.selectedIndex == ListBase.NO_SELECTION &&
-                    this.dataProvider &&
-                    this.dataProvider.length > 0) {
-                    this.$proposedSelectedIndex = 0;
+                if (values[sys.ListBaseKeys.requireSelection] &&
+                    selectedIndex == ListBase.NO_SELECTION &&
+                    dataProvider &&
+                    dataProvider.length > 0) {
+                    values[sys.ListBaseKeys.proposedSelectedIndex] = 0;
                 }
             }
 
-            if (this.$pendingSelectedItem !== undefined) {
-                if (this.dataProvider)
-                    this.$proposedSelectedIndex = this.dataProvider.getItemIndex(this.$pendingSelectedItem);
+            if (values[sys.ListBaseKeys.pendingSelectedItem] !== undefined) {
+                if (dataProvider)
+                    values[sys.ListBaseKeys.proposedSelectedIndex] =
+                        dataProvider.getItemIndex(values[sys.ListBaseKeys.pendingSelectedItem]);
                 else
-                    this.$proposedSelectedIndex = ListBase.NO_SELECTION;
+                    values[sys.ListBaseKeys.proposedSelectedIndex] = ListBase.NO_SELECTION;
 
-                this.$pendingSelectedItem = undefined;
+                values[sys.ListBaseKeys.pendingSelectedItem] = undefined;
             }
 
-            var changedSelection:boolean = false;
-            if (this.$proposedSelectedIndex != ListBase.NO_PROPOSED_SELECTION)
+            var changedSelection = false;
+            if (values[sys.ListBaseKeys.proposedSelectedIndex] != ListBase.NO_PROPOSED_SELECTION)
                 changedSelection = this.commitSelection();
 
-            if (this.selectedIndexAdjusted) {
-                this.selectedIndexAdjusted = false;
+            if (values[sys.ListBaseKeys.selectedIndexAdjusted]) {
+                values[sys.ListBaseKeys.selectedIndexAdjusted] = false;
                 if (!changedSelection) {
                     UIEvent.emitUIEvent(this, UIEvent.VALUE_COMMIT);
                 }
             }
-
-
         }
 
         /**
@@ -241,45 +258,46 @@ module swan {
          */
         protected commitSelection(dispatchChangedEvents:boolean = true):boolean {
             var dataProvider = this.$dataProvider;
+            var values = this.$ListBase;
             var maxIndex = dataProvider ? dataProvider.length - 1 : -1;
-            var oldSelectedIndex = this.$selectedIndex;
-            var tmpProposedIndex:number = this.$proposedSelectedIndex;
+            var oldSelectedIndex = values[sys.ListBaseKeys.selectedIndex];
+            var tmpProposedIndex = values[sys.ListBaseKeys.proposedSelectedIndex];
             if (tmpProposedIndex < ListBase.NO_SELECTION)
                 tmpProposedIndex = ListBase.NO_SELECTION;
             if (tmpProposedIndex > maxIndex)
                 tmpProposedIndex = maxIndex;
-            if (this.$requireSelection && tmpProposedIndex == ListBase.NO_SELECTION &&
+            if (values[sys.ListBaseKeys.requireSelection] && tmpProposedIndex == ListBase.NO_SELECTION &&
                 dataProvider && dataProvider.length > 0) {
-                this.$proposedSelectedIndex = ListBase.NO_PROPOSED_SELECTION;
-                this.$dispatchChangeAfterSelection = false;
+                values[sys.ListBaseKeys.proposedSelectedIndex] = ListBase.NO_PROPOSED_SELECTION;
+                values[sys.ListBaseKeys.dispatchChangeAfterSelection] = false;
                 return false;
             }
 
 
-            if (this.$dispatchChangeAfterSelection) {
+            if (values[sys.ListBaseKeys.dispatchChangeAfterSelection]) {
                 var result = this.emitWith(lark.Event.CHANGING, false, true);
                 if (!result) {
-                    this.itemSelected(this.$proposedSelectedIndex, false);
-                    this.$proposedSelectedIndex = ListBase.NO_PROPOSED_SELECTION;
-                    this.$dispatchChangeAfterSelection = false;
+                    this.itemSelected(values[sys.ListBaseKeys.proposedSelectedIndex], false);
+                    values[sys.ListBaseKeys.proposedSelectedIndex] = ListBase.NO_PROPOSED_SELECTION;
+                    values[sys.ListBaseKeys.dispatchChangeAfterSelection] = false;
                     return false;
                 }
 
             }
 
-            this.$selectedIndex = tmpProposedIndex;
-            this.$proposedSelectedIndex = ListBase.NO_PROPOSED_SELECTION;
+            values[sys.ListBaseKeys.selectedIndex] = tmpProposedIndex;
+            values[sys.ListBaseKeys.proposedSelectedIndex] = ListBase.NO_PROPOSED_SELECTION;
 
             if (oldSelectedIndex != ListBase.NO_SELECTION)
                 this.itemSelected(oldSelectedIndex, false);
-            if (this.$selectedIndex != ListBase.NO_SELECTION)
-                this.itemSelected(this.$selectedIndex, true);
+            if (values[sys.ListBaseKeys.selectedIndex] != ListBase.NO_SELECTION)
+                this.itemSelected(values[sys.ListBaseKeys.selectedIndex], true);
 
             //子类若需要自身抛出Change事件，而不是在此处抛出，可以设置dispatchChangedEvents为false
             if (dispatchChangedEvents) {
-                if (this.$dispatchChangeAfterSelection) {
+                if (values[sys.ListBaseKeys.dispatchChangeAfterSelection]) {
                     this.emitWith(lark.Event.CHANGE);
-                    this.$dispatchChangeAfterSelection = false;
+                    values[sys.ListBaseKeys.dispatchChangeAfterSelection] = false;
                 }
                 UIEvent.emitUIEvent(this, UIEvent.VALUE_COMMIT);
             }
@@ -287,19 +305,18 @@ module swan {
             return true;
         }
 
-        private selectedIndexAdjusted:boolean = false;
-
         /**
          * 仅调整选中索引值而不更新选中项,即在提交属性阶段itemSelected方法不会被调用，也不会触发changing和change事件。
          * @param newIndex 新索引。
          * @param add 如果已将项目添加到组件，则为 true；如果已删除项目，则为 false。
          */
         protected adjustSelection(newIndex:number, add:boolean = false):void {
-            if (this.$proposedSelectedIndex != ListBase.NO_PROPOSED_SELECTION)
-                this.$proposedSelectedIndex = newIndex;
+            var values = this.$ListBase;
+            if (values[sys.ListBaseKeys.proposedSelectedIndex] != ListBase.NO_PROPOSED_SELECTION)
+                values[sys.ListBaseKeys.proposedSelectedIndex] = newIndex;
             else
-                this.$selectedIndex = newIndex;
-            this.selectedIndexAdjusted = true;
+                values[sys.ListBaseKeys.selectedIndex] = newIndex;
+            values[sys.ListBaseKeys.selectedIndexAdjusted] = true;
             this.invalidateProperties();
         }
 
@@ -308,12 +325,13 @@ module swan {
          */
         protected itemAdded(item:any, index:number):void {
             super.itemAdded(item, index);
-            if (this.selectedIndex == ListBase.NO_SELECTION) {
-                if (this.$requireSelection)
+            var selectedIndex = this.$getSelectedIndex();
+            if (selectedIndex == ListBase.NO_SELECTION) {
+                if (this.$ListBase[sys.ListBaseKeys.requireSelection])
                     this.adjustSelection(index, true);
             }
-            else if (index <= this.selectedIndex) {
-                this.adjustSelection(this.selectedIndex + 1, true);
+            else if (index <= selectedIndex) {
+                this.adjustSelection(selectedIndex + 1, true);
             }
         }
 
@@ -325,11 +343,11 @@ module swan {
             if (this.selectedIndex == ListBase.NO_SELECTION)
                 return;
 
-            var selectedIndex = this.selectedIndex;
+            var selectedIndex = this.$getSelectedIndex();
             if (index == selectedIndex) {
                 if (this.requireSelection && this.$dataProvider && this.$dataProvider.length > 0) {
                     if (index == 0) {
-                        this.$proposedSelectedIndex = 0;
+                        this.$ListBase[sys.ListBaseKeys.proposedSelectedIndex] = 0;
                         this.invalidateProperties();
                     }
                     else
@@ -388,15 +406,13 @@ module swan {
             renderer.removeListener(lark.TouchEvent.TOUCH_END, this.onRendererTouchEnd, this);
         }
 
-        $mouseDownItemRenderer:IItemRenderer = null;
-
         /**
          * 鼠标在项呈示器上按下
          */
         protected onRendererTouchBegin(event:lark.TouchEvent):void {
             if (event.$isDefaultPrevented)
                 return;
-            this.$mouseDownItemRenderer = <IItemRenderer> (event.$currentTarget);
+            this.$ListBase[sys.ListBaseKeys.mouseDownItemRenderer] = <IItemRenderer> (event.$currentTarget);
             this.$stage.on(lark.TouchEvent.TOUCH_END, this.stage_touchEndHandler, this);
         }
 
@@ -405,7 +421,8 @@ module swan {
          */
         protected onRendererTouchEnd(event:lark.TouchEvent):void {
             var itemRenderer = <IItemRenderer> (event.$currentTarget);
-            if (itemRenderer != this.$mouseDownItemRenderer)
+            var mouseDownItemRenderer = this.$ListBase[sys.ListBaseKeys.mouseDownItemRenderer];
+            if (itemRenderer != mouseDownItemRenderer)
                 return;
             this.setSelectedIndex(itemRenderer.itemIndex, true);
             ItemTapEvent.emitItemTapEvent(this, ItemTapEvent.ITEM_TAP, itemRenderer);
@@ -417,7 +434,7 @@ module swan {
         private stage_touchEndHandler(event:lark.Event):void {
             var stage = <lark.Stage>event.$currentTarget;
             stage.removeListener(lark.TouchEvent.TOUCH_END, this.stage_touchEndHandler, this);
-            this.$mouseDownItemRenderer = null;
+            this.$ListBase[sys.ListBaseKeys.mouseDownItemRenderer] = null;
         }
     }
 

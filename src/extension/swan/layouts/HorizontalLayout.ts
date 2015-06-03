@@ -137,7 +137,7 @@ module swan {
                     totalPreferredWidth += bounds.width;
                 }
                 else {
-                    var values = layoutElement.$uiValues;
+                    var values = layoutElement.$UIComponent;
                     if (!lark.isNone(values[sys.UIKeys.percentWidth])) {
                         totalPercentWidth += values[sys.UIKeys.percentWidth];
 
@@ -246,7 +246,7 @@ module swan {
                 }
                 else {
                     var layoutElementHeight = lark.NONE;
-                    var values = layoutElement.$uiValues;
+                    var values = layoutElement.$UIComponent;
                     if (!lark.isNone(layoutElement.percentHeight)) {
                         var percent = Math.min(100, values[sys.UIKeys.percentHeight]);
                         layoutElementHeight = Math.round(targetHeight * percent * 0.01);
@@ -444,7 +444,7 @@ module swan {
                 return false;
             }
 
-            var values = target.$uiValues;
+            var values = target.$UIComponent;
             if (values[sys.UIKeys.width] <= 0 || values[sys.UIKeys.height] <= 0) {
                 this.startIndex = this.endIndex = -1;
                 return false;
@@ -453,13 +453,13 @@ module swan {
             var numElements = target.numElements;
             var contentWidth = this.getStartPosition(numElements - 1) +
                 this.elementSizeTable[numElements - 1] + this.$paddingRight;
-            var minVisibleX = values[sys.UIKeys.scrollH];
+            var minVisibleX = target.scrollH;
             if (minVisibleX > contentWidth - this.$paddingRight) {
                 this.startIndex = -1;
                 this.endIndex = -1;
                 return false;
             }
-            var maxVisibleX:number = values[sys.UIKeys.scrollV] + values[sys.UIKeys.width];
+            var maxVisibleX = target.scrollV + values[sys.UIKeys.width];
             if (maxVisibleX < this.$paddingLeft) {
                 this.startIndex = -1;
                 this.endIndex = -1;

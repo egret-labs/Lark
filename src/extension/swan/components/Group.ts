@@ -29,6 +29,15 @@
 
 module swan {
 
+    const enum Keys{
+        contentWidth,
+        contentHeight,
+        scrollH,
+        scrollV,
+        scrollEnabled,
+        touchThrough
+    }
+
     /**
      * Group 是自动布局的容器基类。如果包含的子项内容太大需要滚动显示，可以在在 Group 外部包裹一层 Scroller 组件
      * (将 Group 实例赋值给 Scroller 组件的 viewport 属性)。Scroller 会为 Group 添加滚动的触摸操作功能，并显示垂直或水平的滚动条。
@@ -38,8 +47,18 @@ module swan {
         public constructor() {
             super();
             this.initializeUIValues();
+            this.$Group = {
+                0: 0,        //contentWidth,
+                1: 0,        //contentHeight,
+                2: 0,        //scrollH,
+                3: 0,        //scrollV,
+                4: false,    //scrollEnabled,
+                5: false,    //touchThrough
+            };
             this.$stateValues.parent = this;
         }
+
+        $Group:Object;
 
         /**
          * [只写] 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
@@ -86,14 +105,14 @@ module swan {
          * 视域的内容的宽度
          */
         public get contentWidth():number {
-            return this.$uiValues[sys.UIKeys.contentWidth];
+            return this.$Group[Keys.contentWidth];
         }
 
         /**
          * 视域的内容的高度
          */
         public get contentHeight():number {
-            return this.$uiValues[sys.UIKeys.contentHeight];
+            return this.$Group[Keys.contentHeight];
         }
 
         /**
@@ -102,19 +121,19 @@ module swan {
         public setContentSize(width:number, height:number):void {
             width = Math.ceil(+width || 0);
             height = Math.ceil(+height || 0);
-            var values = this.$uiValues;
-            var wChange = (values[sys.UIKeys.contentWidth] !== width);
-            var hChange = (values[sys.UIKeys.contentHeight] !== height);
+            var values = this.$Group;
+            var wChange = (values[Keys.contentWidth] !== width);
+            var hChange = (values[Keys.contentHeight] !== height);
             if (!wChange && !hChange) {
                 return;
             }
-            values[sys.UIKeys.contentWidth] = width;
-            values[sys.UIKeys.contentHeight] = height;
-            if(wChange){
-                PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"contentWidth");
+            values[Keys.contentWidth] = width;
+            values[Keys.contentHeight] = height;
+            if (wChange) {
+                PropertyEvent.emitPropertyEvent(this, PropertyEvent.PROPERTY_CHANGE, "contentWidth");
             }
-            if(hChange){
-                PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"contentHeight");
+            if (hChange) {
+                PropertyEvent.emitPropertyEvent(this, PropertyEvent.PROPERTY_CHANGE, "contentHeight");
             }
         }
 
@@ -123,14 +142,15 @@ module swan {
          * 如果为 false，则容器子代会从容器边界扩展过去，而设置scrollH和scrollV也无效。默认false。
          */
         public get scrollEnabled():boolean {
-            return this.$hasFlags(sys.UIFlags.scrollEnabled);
+            return this.$Group[Keys.scrollEnabled];
         }
 
         public set scrollEnabled(value:boolean) {
             value = !!value;
-            if (value === this.$hasFlags(sys.UIFlags.scrollEnabled))
+            var values = this.$Group;
+            if (value === values[Keys.scrollEnabled])
                 return;
-            this.$toggleFlags(sys.UIFlags.scrollEnabled, value);
+            values[Keys.scrollEnabled] = value;
             this.updateScrollRect();
         }
 
@@ -138,47 +158,48 @@ module swan {
          * 可视区域水平方向起始点
          */
         public get scrollH():number {
-            return this.$uiValues[sys.UIKeys.scrollH];
+            return this.$Group[Keys.scrollH];
         }
 
         public set scrollH(value:number) {
             value = +value || 0;
-            var values = this.$uiValues;
-            if (value === values[sys.UIKeys.scrollH])
+            var values = this.$Group;
+            if (value === values[Keys.scrollH])
                 return;
-            values[sys.UIKeys.scrollH] = value;
+            values[Keys.scrollH] = value;
             if (this.updateScrollRect() && this.$layout) {
                 this.$layout.scrollPositionChanged();
             }
-            PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"scrollH");
+            PropertyEvent.emitPropertyEvent(this, PropertyEvent.PROPERTY_CHANGE, "scrollH");
         }
 
         /**
          * 可视区域竖直方向起始点
          */
         public get scrollV():number {
-            return this.$uiValues[sys.UIKeys.scrollV];
+            return this.$Group[Keys.scrollV];
         }
 
         public set scrollV(value:number) {
             value = +value || 0;
-            var values = this.$uiValues;
-            if (value == values[sys.UIKeys.scrollV])
+            var values = this.$Group;
+            if (value == values[Keys.scrollV])
                 return;
-            values[sys.UIKeys.scrollV] = value;
+            values[Keys.scrollV] = value;
             if (this.updateScrollRect() && this.$layout) {
                 this.$layout.scrollPositionChanged();
             }
-            PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"scrollV");
+            PropertyEvent.emitPropertyEvent(this, PropertyEvent.PROPERTY_CHANGE, "scrollV");
         }
 
         private updateScrollRect():boolean {
-            var values = this.$uiValues;
-            var hasClip = this.$hasFlags(sys.UIFlags.scrollEnabled)
+            var values = this.$Group;
+            var hasClip = values[Keys.scrollEnabled];
             if (hasClip) {
-                this.scrollRect = lark.$TempRectangle.setTo(values[sys.UIKeys.scrollH],
-                    values[sys.UIKeys.scrollV],
-                    values[sys.UIKeys.width], values[sys.UIKeys.height]);
+                var uiValues = this.$UIComponent;
+                this.scrollRect = lark.$TempRectangle.setTo(values[Keys.scrollH],
+                    values[Keys.scrollV],
+                    uiValues[sys.UIKeys.width], uiValues[sys.UIKeys.height]);
             }
             else if (this.$scrollRect) {
                 this.scrollRect = null;
@@ -213,7 +234,13 @@ module swan {
         /**
          * 触摸组件的背景透明区域是否可以穿透。设置为true表示可以穿透，反之透明区域也会响应触摸事件。默认 false。
          */
-        public touchThrough:boolean = false;
+        public get touchThrough():boolean{
+            return this.$Group[Keys.touchThrough];
+        }
+
+        public set touchThrough(value:boolean){
+            this.$Group[Keys.touchThrough] = !!value;
+        }
 
         $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):lark.DisplayObject {
             var target = super.$hitTest(stageX, stageY, shapeFlag);
@@ -225,7 +252,7 @@ module swan {
                 return null;
             }
             var point = this.globalToLocal(stageX, stageY, lark.$TempPoint);
-            var values = this.$uiValues;
+            var values = this.$UIComponent;
             var bounds = lark.$TempRectangle.setTo(0, 0, values[sys.UIKeys.width], values[sys.UIKeys.height]);
             if (bounds.contains(point.x, point.y)) {
                 return this;
@@ -285,6 +312,7 @@ module swan {
          * UIComponentImpl 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
          */
         private initializeUIValues:()=>void;
+
         /**
          * 子类覆盖此方法可以执行一些初始化子项操作。此方法仅在组件第一次添加到舞台时回调一次。
          * 请务必调用super.createChildren()以完成父类组件的初始化
@@ -346,7 +374,7 @@ module swan {
         protected invalidateParentLayout():void {
         }
 
-        $uiValues:Object;
+        $UIComponent:Object;
 
         $includeInLayout:boolean;
 
@@ -507,5 +535,5 @@ module swan {
     sys.mixin(Group, sys.StateClient);
     registerProperty(Group, "elementsContent", "Array", true);
     registerProperty(Group, "states", "State[]");
-    lark.registerClass(Group, Types.Group, [Types.UIComponent,Types.IViewport]);
+    lark.registerClass(Group, Types.Group, [Types.UIComponent, Types.IViewport]);
 }

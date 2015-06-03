@@ -71,7 +71,7 @@ module lark {
         public constructor(text?:string) {
             super();
             this.$renderRegion = new sys.Region();
-            this.$textFieldValues = {
+            this.$TextField = {
                 0: 30,             //fontSize
                 1: 0,              //lineSpacing
                 2: 0x000000,       //textColor
@@ -96,17 +96,17 @@ module lark {
             this.text = text;
         }
 
-        $textFieldValues:Object;
+        $TextField:Object;
 
         /**
          * 字体名称 。默认值：sans-serif
          */
         public get fontFamily():string {
-            return this.$textFieldValues[sys.TextKeys.fontFamily];
+            return this.$TextField[sys.TextKeys.fontFamily];
         }
 
         public set fontFamily(value:string) {
-            var values = this.$textFieldValues;
+            var values = this.$TextField;
             if (values[sys.TextKeys.fontFamily] == value) {
                 return;
             }
@@ -118,12 +118,12 @@ module lark {
          * 字号大小,默认值30 。
          */
         public get fontSize():number {
-            return this.$textFieldValues[sys.TextKeys.fontSize];
+            return this.$TextField[sys.TextKeys.fontSize];
         }
 
         public set fontSize(value:number) {
             value = +value || 0;
-            var values = this.$textFieldValues;
+            var values = this.$TextField;
             if (values[sys.TextKeys.fontSize] === value) {
                 return;
             }
@@ -135,12 +135,12 @@ module lark {
          * 是否显示为粗体，默认false。
          */
         public get bold():boolean {
-            return this.$textFieldValues[sys.TextKeys.bold];
+            return this.$TextField[sys.TextKeys.bold];
         }
 
         public set bold(value:boolean) {
             value = !!value;
-            var values = this.$textFieldValues;
+            var values = this.$TextField;
             if (value === values[sys.TextKeys.bold]) {
                 return;
             }
@@ -152,12 +152,12 @@ module lark {
          * 是否显示为斜体，默认false。
          */
         public get italic():boolean {
-            return this.$textFieldValues[sys.TextKeys.italic];
+            return this.$TextField[sys.TextKeys.italic];
         }
 
         public set italic(value:boolean) {
             value = !!value;
-            var values = this.$textFieldValues;
+            var values = this.$TextField;
             if (value === values[sys.TextKeys.italic]) {
                 return;
             }
@@ -166,7 +166,7 @@ module lark {
         }
 
         private invalidateFontString():void {
-            this.$textFieldValues[sys.TextKeys.fontStringChanged] = true;
+            this.$TextField[sys.TextKeys.fontStringChanged] = true;
             this.$invalidateContentBounds();
         }
 
@@ -174,7 +174,7 @@ module lark {
          * 获取字体信息的字符串形式。
          */
         private getFontString():string {
-            var values = this.$textFieldValues;
+            var values = this.$TextField;
             if (values[sys.TextKeys.fontStringChanged]) {
                 values[sys.TextKeys.fontStringChanged] = false;
                 values[sys.TextKeys.fontString] = sys.toFontString(this);
@@ -187,11 +187,11 @@ module lark {
          * 默认值：HorizontalAlign.LEFT。
          */
         public get textAlign():string {
-            return this.$textFieldValues[sys.TextKeys.textAlign];
+            return this.$TextField[sys.TextKeys.textAlign];
         }
 
         public set textAlign(value:string) {
-            var values = this.$textFieldValues;
+            var values = this.$TextField;
             if (values[sys.TextKeys.textAlign] == value) {
                 return;
             }
@@ -204,11 +204,11 @@ module lark {
          * 默认值：VerticalAlign.TOP。
          */
         public get verticalAlign():string {
-            return this.$textFieldValues[sys.TextKeys.verticalAlign];
+            return this.$TextField[sys.TextKeys.verticalAlign];
         }
 
         public set verticalAlign(value:string) {
-            var values = this.$textFieldValues;
+            var values = this.$TextField;
             if (values[sys.TextKeys.verticalAlign] == value) {
                 return;
             }
@@ -220,12 +220,12 @@ module lark {
          * 行间距。标准行高通常等于fontSize的值，设置此属性，将会在标准行高之间添加指定像素的空白间隔。可以设置为负值。默认值0.
          */
         public get lineSpacing():number {
-            return this.$textFieldValues[sys.TextKeys.lineSpacing];
+            return this.$TextField[sys.TextKeys.lineSpacing];
         }
 
         public set lineSpacing(value:number) {
             value = +value || 0;
-            var values = this.$textFieldValues;
+            var values = this.$TextField;
             if (values[sys.TextKeys.lineSpacing] === value)
                 return;
             values[sys.TextKeys.lineSpacing] = value;
@@ -236,12 +236,12 @@ module lark {
          * 文本颜色，默认值0x000000
          */
         public get textColor():number {
-            return this.$textFieldValues[sys.TextKeys.textColor];
+            return this.$TextField[sys.TextKeys.textColor];
         }
 
         public set textColor(value:number) {
             value = +value | 0;
-            var values = this.$textFieldValues;
+            var values = this.$TextField;
             if (values[sys.TextKeys.textColor] === value) {
                 return;
             }
@@ -255,12 +255,12 @@ module lark {
          * 如果值为 false，则该文本字段不自动换行,如果同时显式设置过宽度，超出宽度的部分将被截断。默认值为 true。
          */
         public get wordWrap():boolean {
-            return this.$textFieldValues[sys.TextKeys.wordWrap];
+            return this.$TextField[sys.TextKeys.wordWrap];
         }
 
         public set wordWrap(value:boolean) {
             value = !!value;
-            var values = this.$textFieldValues;
+            var values = this.$TextField;
             if (value === values[sys.TextKeys.wordWrap]) {
                 return;
             }
@@ -272,12 +272,12 @@ module lark {
          * 要显示的文本内容
          */
         public get text():string {
-            return this.$textFieldValues[sys.TextKeys.text];
+            return this.$TextField[sys.TextKeys.text];
         }
 
         public set text(value:string) {
             value = (value || "") + "";
-            var values = this.$textFieldValues;
+            var values = this.$TextField;
             if (value == values[sys.TextKeys.text])
                 return;
             values[sys.TextKeys.text] = value;
@@ -297,7 +297,7 @@ module lark {
          */
         public get textWidth():number {
             this.updateTextLines();
-            return this.$textFieldValues[sys.TextKeys.textWidth];
+            return this.$TextField[sys.TextKeys.textWidth];
         }
 
         /**
@@ -305,17 +305,17 @@ module lark {
          */
         public get textHeight():number {
             this.updateTextLines();
-            return this.$textFieldValues[sys.TextKeys.textHeight];
+            return this.$TextField[sys.TextKeys.textHeight];
         }
 
         $getWidth():number {
-            var w = this.$textFieldValues[sys.TextKeys.textFieldWidth];
+            var w = this.$TextField[sys.TextKeys.textFieldWidth];
             return isNone(w) ? this.$getContentBounds().width : w;
         }
 
         $setWidth(value:number) {
             value = +value || 0;
-            var values = this.$textFieldValues;
+            var values = this.$TextField;
             if (value < 0 || value === values[sys.TextKeys.textFieldWidth]) {
                 return;
             }
@@ -324,13 +324,13 @@ module lark {
         }
 
         $getHeight():number {
-            var h = this.$textFieldValues[sys.TextKeys.textFieldHeight];
+            var h = this.$TextField[sys.TextKeys.textFieldHeight];
             return isNone(h) ? this.$getContentBounds().height : h;
         }
 
         $setHeight(value:number) {
             value = +value || 0;
-            var values = this.$textFieldValues;
+            var values = this.$TextField;
             if (value < 0 || value === values[sys.TextKeys.textFieldHeight]) {
                 return;
             }
@@ -340,12 +340,12 @@ module lark {
 
         $invalidateContentBounds():void {
             super.$invalidateContentBounds();
-            this.$textFieldValues[sys.TextKeys.textLinesChanged] = true;
+            this.$TextField[sys.TextKeys.textLinesChanged] = true;
         }
 
         $measureContentBounds(bounds:Rectangle):void {
             this.updateTextLines();
-            var values = this.$textFieldValues;
+            var values = this.$TextField;
             var height:number;
             if (isNone(values[sys.TextKeys.textFieldHeight])) {
                 height = values[sys.TextKeys.textHeight];
@@ -370,7 +370,7 @@ module lark {
             if (!lines) {
                 return;
             }
-            var values = this.$textFieldValues;
+            var values = this.$TextField;
             context.textAlign = "left";
             context.textBaseline = "middle";
             context.font = this.getFontString();
@@ -425,7 +425,7 @@ module lark {
 
         private updateTextLines():string[] {
 
-            var values = this.$textFieldValues;
+            var values = this.$TextField;
             if (!values[sys.TextKeys.textLinesChanged]) {
                 return this.textLines;
             }

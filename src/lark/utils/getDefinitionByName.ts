@@ -30,7 +30,7 @@
 
 module lark {
 
-    var $getDefinitionByNameCache:Object = {};
+    var $getDefinitionByNameCache:any = {};
 
     /**
      * 返回 name 参数指定的类的类对象引用。

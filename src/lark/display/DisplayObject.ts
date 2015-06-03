@@ -158,7 +158,7 @@ module lark {
         public constructor() {
             super();
             this.$displayFlags = sys.DisplayObjectFlags.InitFlags;
-            this.displayValues = {
+            this.$DisplayObject = {
                 0: 1,                //scaleX,
                 1: 1,                //scaleY,
                 2: 0,                //skewX,
@@ -172,7 +172,7 @@ module lark {
             };
         }
 
-        private displayValues:Object;
+        $DisplayObject:Object;
 
         $displayFlags:number;
 
@@ -262,11 +262,11 @@ module lark {
          * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
          */
         public get name():string {
-            return this.displayValues[Keys.name];
+            return this.$DisplayObject[Keys.name];
         }
 
         public set name(value:string) {
-            this.displayValues[Keys.name] = value;
+            this.$DisplayObject[Keys.name] = value;
         }
 
         $parent:DisplayObjectContainer = null;
@@ -319,7 +319,7 @@ module lark {
         }
 
         $getMatrix():Matrix {
-            var values = this.displayValues;
+            var values = this.$DisplayObject;
             if (this.$hasFlags(sys.DisplayObjectFlags.InvalidMatrix)) {
                 values[Keys.matrix].$updateScaleAndRotation(values[Keys.scaleX], values[Keys.scaleY], values[Keys.skewX], values[Keys.skewY]);
                 this.$removeFlags(sys.DisplayObjectFlags.InvalidMatrix);
@@ -330,12 +330,12 @@ module lark {
         public set matrix(value:Matrix) {
             this.$setMatrix(value);
             if (value) {
-                this.displayValues[Keys.matrix].copyFrom(value);
+                this.$DisplayObject[Keys.matrix].copyFrom(value);
             }
         }
 
         $setMatrix(matrix:Matrix):void {
-            var values = this.displayValues;
+            var values = this.$DisplayObject;
             var m = values[Keys.matrix];
             if (m.equals(matrix)) {
                 return;
@@ -379,7 +379,7 @@ module lark {
         }
 
         $getInvertedConcatenatedMatrix():Matrix {
-            var values = this.displayValues;
+            var values = this.$DisplayObject;
             if (this.$hasFlags(sys.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix)) {
                 this.$getConcatenatedMatrix().$invertInto(values[Keys.invertedConcatenatedMatrix]);
                 this.$removeFlags(sys.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
@@ -397,7 +397,7 @@ module lark {
         }
 
         $getX():number {
-            return this.displayValues[Keys.matrix].tx;
+            return this.$DisplayObject[Keys.matrix].tx;
         }
 
         public set x(value:number) {
@@ -406,7 +406,7 @@ module lark {
 
         $setX(value:number):boolean {
             value = +value || 0;
-            var m = this.displayValues[Keys.matrix];
+            var m = this.$DisplayObject[Keys.matrix];
             if (value === m.tx) {
                 return false;
             }
@@ -425,7 +425,7 @@ module lark {
         }
 
         $getY():number {
-            return this.displayValues[Keys.matrix].ty;
+            return this.$DisplayObject[Keys.matrix].ty;
         }
 
         public set y(value:number) {
@@ -434,7 +434,7 @@ module lark {
 
         $setY(value:number):boolean {
             value = +value || 0;
-            var m = this.displayValues[Keys.matrix];
+            var m = this.$DisplayObject[Keys.matrix];
             if (value === m.ty) {
                 return false;
             }
@@ -451,7 +451,7 @@ module lark {
          * @default 1
          */
         public get scaleX():number {
-            return this.displayValues[Keys.scaleX];
+            return this.$DisplayObject[Keys.scaleX];
         }
 
         public set scaleX(value:number) {
@@ -460,7 +460,7 @@ module lark {
 
         $setScaleX(value:number):boolean {
             value = +value || 0;
-            var values = this.displayValues;
+            var values = this.$DisplayObject;
             if (value === values[Keys.scaleX]) {
                 return false;
             }
@@ -476,7 +476,7 @@ module lark {
          * @default 1
          */
         public get scaleY():number {
-            return this.displayValues[Keys.scaleY];
+            return this.$DisplayObject[Keys.scaleY];
         }
 
         public set scaleY(value:number) {
@@ -485,10 +485,10 @@ module lark {
 
         $setScaleY(value:number):boolean {
             value = +value || 0;
-            if (value === this.displayValues[Keys.scaleY]) {
+            if (value === this.$DisplayObject[Keys.scaleY]) {
                 return false;
             }
-            this.displayValues[Keys.scaleY] = value;
+            this.$DisplayObject[Keys.scaleY] = value;
             this.invalidateMatrix();
             return true;
         }
@@ -500,13 +500,13 @@ module lark {
          * @default 0 默认值为 0 不旋转。
          */
         public get rotation():number {
-            return this.displayValues[Keys.rotation];
+            return this.$DisplayObject[Keys.rotation];
         }
 
         public set rotation(value:number) {
             value = +value || 0;
             value = clampRotation(value);
-            var values = this.displayValues;
+            var values = this.$DisplayObject;
             if (value === values[Keys.rotation]) {
                 return;
             }
@@ -538,7 +538,7 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var values = this.displayValues;
+            var values = this.$DisplayObject;
             var originalBounds = this.$getOriginalBounds();
             var bounds = this.$getTransformedBounds(this.$parent, $TempRectangle);
             var angle = values[Keys.rotation] / 180 * Math.PI;
@@ -572,7 +572,7 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var values = this.displayValues;
+            var values = this.$DisplayObject;
             var originalBounds = this.$getOriginalBounds();
             var bounds = this.$getTransformedBounds(this.$parent, $TempRectangle);
             var angle = values[Keys.rotation] / 180 * Math.PI;
@@ -873,7 +873,7 @@ module lark {
          * 获取显示对象占用的矩形区域集合，通常包括自身绘制的测量区域，如果是容器，还包括所有子项占据的区域。
          */
         $getOriginalBounds():Rectangle {
-            var bounds = this.displayValues[Keys.bounds];
+            var bounds = this.$DisplayObject[Keys.bounds];
             if (this.$hasFlags(sys.DisplayObjectFlags.InvalidBounds)) {
                 bounds.copyFrom(this.$getContentBounds());
                 this.$measureChildBounds(bounds);
@@ -894,7 +894,7 @@ module lark {
         }
 
         $getContentBounds():Rectangle {
-            var bounds = this.displayValues[Keys.contentBounds];
+            var bounds = this.$DisplayObject[Keys.contentBounds];
             if (this.$hasFlags(sys.DisplayObjectFlags.InvalidContentBounds)) {
                 this.$measureContentBounds(bounds);
                 if (this.$renderRegion) {
