@@ -49,12 +49,14 @@ module swan {
             var contentWidth = viewport.contentWidth;
             var width = viewport.width;
             if (hsp <= 0) {
-                var scaleWidth = thumbWidth * (-hsp) / (width * 0.5);
+                var scaleWidth = thumbWidth * (1-(-hsp) / (width * 0.5));
+                scaleWidth = Math.max(5,Math.round(scaleWidth));
                 thumb.setLayoutBoundsSize(scaleWidth, lark.NONE);
                 thumb.setLayoutBoundsPosition(0, thumbY);
             }
             else if (hsp >= contentWidth - width) {
-                scaleWidth = thumbWidth * (hsp - contentWidth + width) / (width * 0.5);
+                scaleWidth = thumbWidth * (1-(hsp - contentWidth + width) / (width * 0.5));
+                scaleWidth = Math.max(5,Math.round(scaleWidth));
                 thumb.setLayoutBoundsSize(scaleWidth, lark.NONE);
                 thumb.setLayoutBoundsPosition(unscaledWidth - scaleWidth, thumbY);
             }

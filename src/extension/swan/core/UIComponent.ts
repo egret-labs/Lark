@@ -913,6 +913,9 @@ module swan.sys {
         public setLayoutBoundsSize(layoutWidth:number, layoutHeight:number):void {
             layoutHeight = +layoutHeight || 0;
             layoutWidth = +layoutWidth || 0;
+            if(layoutHeight<0||layoutWidth<0){
+                return;
+            }
             var values = this.$UIComponent;
             var maxWidth = values[UIKeys.maxWidth];
             var maxHeight = values[UIKeys.maxHeight];

@@ -190,7 +190,7 @@ module swan {
             var values = this.$UIComponent;
             var width = values[sys.UIKeys.width];
             var height = values[sys.UIKeys.height];
-            if (lark.isNone(width) || lark.isNone(height)) {
+            if (width===0 || height===0) {
                 return;
             }
             switch (this._fillMode) {
@@ -257,6 +257,11 @@ module swan {
             var sourceY1 = sourceY0 + sourceH0;
             var sourceY2 = sourceY1 + sourceH1;
             var sourceH2 = imageHeight - sourceH0 - sourceH1;
+
+            if(sourceW0+sourceW2>surfaceWidth||sourceH0+sourceH2>surfaceHeight){
+                context.drawImage(image, 0, 0, surfaceWidth, surfaceHeight);
+                return;
+            }
 
             var targetX0 = 0;
             var targetX1 = targetX0 + sourceW0;
