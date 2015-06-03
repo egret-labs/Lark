@@ -56,7 +56,11 @@ var Build = (function (_super) {
                 process.exit(0);
         }, false);
         this._request.once('error', function () { return process.exit(); });
-        setInterval(function () { return _this.sendCommand({ command: "status", status: process.memoryUsage() }); }, 60000);
+        setInterval(function () { return _this.sendCommand({
+            command: "status",
+            status: process.memoryUsage(),
+            path: _this.options.projectDir
+        }); }, 6000);
         return this.buildProject();
     };
     Build.prototype.buildProject = function () {

@@ -28,8 +28,9 @@
 //////////////////////////////////////////////////////////////////////////////////////
 module swan {
 
-    lark.$locale_strings = lark.$locale_strings||{};
-    var locale_strings = lark.$locale_strings;
+    lark.$locale_strings = lark.$locale_strings || {};
+    lark.$locale_strings["en_US"] = lark.$locale_strings["en_US"] || {};
+    var locale_strings = lark.$locale_strings["en_US"];
 
     locale_strings[2001] = "{0}: EXML file can't be found ";
     locale_strings[2002] = "{0}: invalid XML file:\n{1}";

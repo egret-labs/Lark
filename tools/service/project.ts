@@ -49,11 +49,7 @@ class Project {
     }
 
     buildWholeProject() {
-        this.sendCommand({ command: 'shutdown' });
-        if (this.buildProcess) {
-            this.buildProcess.removeAllListeners('exit');
-            this.buildProcess.kill();
-        }
+        this.shutdown();
         var larkPath = FileUtil.joinPath(utils.getLarkRoot(), 'tools/bin/lark');
 
         var build = cprocess.spawn(process.execPath, [larkPath, 'buildService', this.path], {
@@ -85,6 +81,14 @@ class Project {
         console.log(cmd);
         this.buildPort && this.buildPort.write(JSON.stringify(cmd));
         //this.buildProcess.send(cmd);
+    }
+
+    public shutdown() {
+        this.sendCommand({ command: 'shutdown' });
+        if (this.buildProcess) {
+            this.buildProcess.removeAllListeners('exit');
+            this.buildProcess.kill();
+        }
     }
 
     onBuildServiceMessage(msg: lark.ServiceCommandResult) {

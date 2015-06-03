@@ -30,7 +30,8 @@
 module swan {
 
     lark.$locale_strings = lark.$locale_strings || {};
-    var locale_strings = lark.$locale_strings;
+    lark.$locale_strings["zh_CN"] = lark.$locale_strings["zh_CN"] || {};
+    var locale_strings = lark.$locale_strings["zh_CN"];
 
     //EXML报错信息
     locale_strings[2001] = "{0}: 找不到EXML文件";

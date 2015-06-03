@@ -36,7 +36,7 @@ var lark;
                     });
                 });
                 this.larkManifest.platforms.forEach(function (lm) {
-                    if (lm.name == 'html5')
+                    if (lm.name == 'web')
                         lm.checked = true;
                     _this.platforms.forEach(function (m) {
                         if (lm.name == m.name)

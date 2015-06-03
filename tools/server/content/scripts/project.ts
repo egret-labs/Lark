@@ -46,7 +46,7 @@ module lark.portal {
                 });
             });
             this.larkManifest.platforms.forEach(lm=> {
-                if (lm.name == 'html5')
+                if (lm.name == 'web')
                     lm.checked = true;
                 this.platforms.forEach(m=> {
                     if (lm.name == m.name)

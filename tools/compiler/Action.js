@@ -95,6 +95,7 @@ var Action = (function () {
         ];
         this.clean(outputDir);
         manifest.modules.forEach(function (m) {
+            listModuleFiles(m);
             configurations.forEach(function (config) {
                 manifest.platforms.forEach(function (platform) {
                     buildModule(m, platform, config);
@@ -123,8 +124,8 @@ var Action = (function () {
             FileUtil.remove(d);
         });
         global.ignoreDollar = false;
-        function buildModule(larkModule, platform, configuration) {
-            var name = larkModule.name;
+        function buildModule(m, platform, configuration) {
+            var name = m.name;
             var fileName = name;
             if (platform.name != ANY) {
                 fileName += "." + platform.name;
@@ -132,20 +133,20 @@ var Action = (function () {
             if (configuration.minify) {
                 fileName += ".min";
             }
-            var depends = larkModule.dependencies.map(function (name) { return self.getModuleOutputPath(name + '.d.ts'); });
+            var depends = m.dependencies.map(function (name) { return self.getModuleOutputPath(name, name + '.d.ts'); });
             if (depends.some(function (path) { return FileUtil.exists(path) == false; })) {
-                penddings.push(larkModule);
+                penddings.push(m);
                 return;
             }
             if (platform.name != ANY) {
-                depends.push(self.getModuleOutputPath(name + '.d.ts'));
+                depends.push(self.getModuleOutputPath(m.name, name + '.d.ts'));
             }
             var outDir = self.getModuleOutputPath();
-            var declareFile = self.getModuleOutputPath(fileName + ".d.ts");
-            var singleFile = self.getModuleOutputPath(fileName + ".js");
-            var moduleRoot = FileUtil.joinPath(larkRoot, larkModule.root);
+            var declareFile = self.getModuleOutputPath(m.name, fileName + ".d.ts");
+            var singleFile = self.getModuleOutputPath(m.name, fileName + ".js");
+            var moduleRoot = FileUtil.joinPath(larkRoot, m.root);
             var tss = [];
-            larkModule.files.forEach(function (file) {
+            m.files.forEach(function (file) {
                 var path = null;
                 var sourcePlatform = null, sourceConfig = null;
                 if (typeof (file) == 'string') {
@@ -160,13 +161,16 @@ var Action = (function () {
                 var platformOK = sourcePlatform == null && platform.name == ANY || sourcePlatform == platform.name;
                 var configOK = sourceConfig == null || sourceConfig == configuration.name;
                 if (platformOK && configOK) {
-                    path = FileUtil.joinPath(moduleRoot, path);
                     tss.push(path);
                 }
             });
             tss = depends.concat(tss);
             var dts = platform.declaration && configuration.declaration;
+            console.log("compile:" + m.name);
             var result = self.compile(options, tss, singleFile, null, dts);
+            if (result.exitStatus != 0) {
+                result.messages.forEach(function (m) { return console.log(m); });
+            }
             if (dts) {
                 dtsFiles.push([declareFile, depends]);
             }
@@ -179,16 +183,36 @@ var Action = (function () {
         function testConfig(value, array) {
             return value == ANY || array == null || array.indexOf(value) >= 0;
         }
+        function listModuleFiles(m) {
+            var tsFiles = FileUtil.search(FileUtil.joinPath(options.larkRoot, m.root), "ts");
+            var specFiles = {};
+            m.files.forEach(function (f) {
+                var fileName = typeof (f) == 'string' ? f : f.path;
+                fileName = FileUtil.joinPath(m.root, fileName);
+                fileName = FileUtil.joinPath(options.larkRoot, fileName);
+                if (f['path'])
+                    f['path'] = fileName;
+                specFiles[fileName] = true;
+            });
+            tsFiles.forEach(function (f) {
+                if (!specFiles[f])
+                    m.files.push(f);
+            });
+            console.log(m.files);
+        }
         return code;
     };
-    Action.prototype.getModuleOutputPath = function (filePath) {
+    Action.prototype.getModuleOutputPath = function (m, filePath) {
         if (filePath === void 0) { filePath = ""; }
-        var path = FileUtil.joinPath(this.options.larkRoot, "build/" + filePath);
+        var path = FileUtil.joinPath(this.options.larkRoot, "build/");
+        if (m)
+            path += m + '/';
+        path += filePath;
         return path;
     };
     Action.prototype.copyLark = function () {
         var options = this.options;
-        var moduleBin = this.getModuleOutputPath("");
+        var moduleBin = this.getModuleOutputPath();
         var targetFile = FileUtil.joinPath(options.srcDir, '/libs/');
         FileUtil.copy(moduleBin, targetFile);
         return 0;
@@ -202,8 +226,8 @@ var Action = (function () {
         var modules = options.project.modules;
         var platforms = options.project.platforms;
         modules.forEach(function (m) {
-            larkFiles.push('libs/' + m.name);
-            platforms.forEach(function (p) { return larkFiles.push('libs/' + m.name + "." + p.name); });
+            larkFiles.push(utils.format("libs/{0}/{0}", m.name));
+            platforms.forEach(function (p) { return larkFiles.push(utils.format("libs/{0}/{0}.{1}", m.name, p.name)); });
         });
         var content = FileUtil.read(templateFile);
         var scripts = larkFiles.map(function (f) { return utils.format('<script src="{0}.js" src-release="{0}.min.js"></script>', f); }).join('\r\n    ');

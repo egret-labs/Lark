@@ -29,24 +29,24 @@ export function run() {
         if (task.command == 'shutdown' || task.version && task.version != version) {
             res.writeHead(200, { 'Content-Type': 'text/plain' });
             res.end("{}");
-            process.exit(0);
+            shutdown();
         }
-        console.log("req:",task);
 
         if (task.command == 'init') {
-            var proj: Project = projects[task.path];
+            var proj: Project = getProject(task.path);
             res.writeHead(200, { 'Content-Type': 'text/plain' });
             proj.buildPort = res;
             setInterval(() => res.write("{}"), 15000);
         }
         else if (task.command == 'buildResult') {
-            var proj: Project = projects[task.path];
+            var proj: Project = getProject(task.path);
             proj.onBuildServiceMessage(<lark.ServiceCommandResult>task);
             res.writeHead(200, { 'Content-Type': 'text/plain' });
             res.end("");
         }
-        else {
+        else if (task.command == 'build'){
             handleBuildTask(task, res);
+            global.gc && global.gc();
         }
 
 
@@ -85,15 +85,20 @@ export function execCommand(command :lark.ServiceCommand, callback?: Function,st
 }
 
 
-function handleBuildTask(info:lark.ServiceCommand,currentRes:http.ServerResponse) {
+function getProject(path: string) {
     var project: Project;
-    if (!projects[info.path]) {
+    if (!projects[path]) {
         project = new Project();
-        project.path = info.path;
+        project.path = path;
         project.init();
-        projects[info.path] = project;
+        projects[path] = project;
+        return project;
     }
-    project = projects[info.path];
+    return projects[path];
+}
+
+function handleBuildTask(info:lark.ServiceCommand,currentRes:http.ServerResponse) {
+    var project = getProject(info.path);
     project.fileChanged();
     var res = project.penddingRequest;
     if (res) {
@@ -121,6 +126,16 @@ function startBackgroundService() {
     server.on("exit", () => serviceCreated = false);
 }
 
+function shutdown() {
+    for (var path in projects) {
+        var project:Project = projects[path];
+        project.shutdown();
+    }
+    console.log("shutdown");
+    process.exit(0);
+}
+
+
 function parseRequest(req: http.ServerRequest):lark.ServiceCommand {
     var uri = url.parse(req.url, true);
     var command = uri.query.q;
@@ -131,4 +146,15 @@ function getServiceURL(params: any) {
     var json = JSON.stringify(params);
     return "http://127.0.0.1:" + LARK_SERVICE_PORT + "/?q=" + encodeURIComponent(json);
 }
+
+
+
+
+
+
+
+
+
+
+
 /// <reference path="../lib/types.d.ts" />

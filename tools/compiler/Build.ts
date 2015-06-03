@@ -52,7 +52,11 @@ class Build extends Action {
             }, false);
         this._request.once('error',() => process.exit());
 
-        setInterval(() => this.sendCommand({ command:"status", status:process.memoryUsage() }), 60000);
+        setInterval(() => this.sendCommand({
+            command: "status",
+            status: process.memoryUsage(),
+            path: this.options.projectDir
+        }), 6000);
 
         return this.buildProject();
     }

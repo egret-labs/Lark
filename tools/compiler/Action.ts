@@ -118,6 +118,7 @@ class Action {
         this.clean(outputDir);
 
         manifest.modules.forEach(m=> {
+            listModuleFiles(m);
             configurations.forEach(config=> {
                 manifest.platforms.forEach(platform=> {
                     buildModule(m, platform, config);
@@ -151,8 +152,8 @@ class Action {
         })
 
         global.ignoreDollar = false;
-        function buildModule(larkModule:lark.LarkModule,platform:lark.LarkPlatform,configuration:lark.CompileConfiguration) {
-            var name = larkModule.name;
+        function buildModule(m:lark.LarkModule,platform:lark.LarkPlatform,configuration:lark.CompileConfiguration) {
+            var name = m.name;
             var fileName = name;
             if (platform.name != ANY) {
                 fileName += "." + platform.name;
@@ -160,22 +161,22 @@ class Action {
             if (configuration.minify) {
                 fileName += ".min";
             }
-            var depends = larkModule.dependencies.map(name=> self.getModuleOutputPath(name+'.d.ts'));
+            var depends = m.dependencies.map(name=> self.getModuleOutputPath(name,name+'.d.ts'));
             
             if(depends.some(path=>FileUtil.exists(path)==false)){
-                penddings.push(larkModule);
+                penddings.push(m);
                 return;
             }
             if (platform.name != ANY) {
-                depends.push(self.getModuleOutputPath(name + '.d.ts'));
+                depends.push(self.getModuleOutputPath(m.name,name + '.d.ts'));
             }
             
             var outDir = self.getModuleOutputPath();
-            var declareFile = self.getModuleOutputPath(fileName+".d.ts");
-            var singleFile = self.getModuleOutputPath(fileName + ".js");
-            var moduleRoot = FileUtil.joinPath(larkRoot,larkModule.root);
+            var declareFile = self.getModuleOutputPath(m.name,fileName+".d.ts");
+            var singleFile = self.getModuleOutputPath(m.name,fileName + ".js");
+            var moduleRoot = FileUtil.joinPath(larkRoot,m.root);
             var tss: string[] = [];
-            larkModule.files.forEach(file=> {
+            m.files.forEach(file=> {
                 var path: string = null; 
                 var sourcePlatform: string = null, sourceConfig: string = null;
                 if (typeof (file) == 'string') {
@@ -191,15 +192,16 @@ class Action {
                 var platformOK = sourcePlatform == null && platform.name == ANY || sourcePlatform == platform.name;
                 var configOK = sourceConfig == null || sourceConfig == configuration.name;
                 if (platformOK && configOK) {
-                    path = FileUtil.joinPath(moduleRoot, path);
                     tss.push(path);
-                }
-                
-            
+                }            
             });
             tss = depends.concat(tss);
             var dts = platform.declaration && configuration.declaration;
+            console.log("compile:" + m.name);
             var result = self.compile(options, tss, singleFile, null, dts);
+            if (result.exitStatus != 0) {
+                result.messages.forEach(m=> console.log(m));
+            }
             if (dts) {
                 dtsFiles.push([declareFile, depends]);
             }
@@ -214,17 +216,38 @@ class Action {
             return value == ANY || array == null || array.indexOf(value) >= 0;
         }
 
+        function listModuleFiles(m: lark.LarkModule) {
+            var tsFiles = FileUtil.search(FileUtil.joinPath(options.larkRoot, m.root), "ts");
+            var specFiles = {};
+            m.files.forEach(f=> {
+                var fileName = typeof (f) == 'string' ? <string>f : (<lark.LarkSourceFile>f).path;
+                fileName = FileUtil.joinPath(m.root, fileName);
+                fileName = FileUtil.joinPath(options.larkRoot, fileName);
+                if (f['path'])
+                    f['path'] = fileName;
+                specFiles[fileName] = true;
+            });
+            tsFiles.forEach(f=> {
+                if (!specFiles[f])
+                    m.files.push(f);
+            });
+            console.log(m.files)
+        }
+
         return code;
     }
     
-    private getModuleOutputPath(filePath: string = "") {
-        var path = FileUtil.joinPath(this.options.larkRoot, "build/" + filePath);
+    private getModuleOutputPath(m?: string, filePath: string = "") {
+        var path = FileUtil.joinPath(this.options.larkRoot, "build/");
+        if (m)
+            path += m + '/';
+        path += filePath;
         return path;
     }
 
     public copyLark(): number {
         var options = this.options;
-        var moduleBin = this.getModuleOutputPath("");
+        var moduleBin = this.getModuleOutputPath();
         var targetFile = FileUtil.joinPath(options.srcDir, '/libs/');
         FileUtil.copy(moduleBin, targetFile);
         return 0;
@@ -240,8 +263,8 @@ class Action {
         var modules = options.project.modules;
         var platforms = options.project.platforms;
         modules.forEach(m=> {
-            larkFiles.push('libs/' + m.name);
-            platforms.forEach(p=> larkFiles.push('libs/' + m.name + "." + p.name))
+            larkFiles.push(utils.format("libs/{0}/{0}", m.name));
+            platforms.forEach(p=> larkFiles.push(utils.format("libs/{0}/{0}.{1}", m.name, p.name)));
         });
 
         

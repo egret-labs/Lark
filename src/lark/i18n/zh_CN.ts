@@ -29,9 +29,10 @@
 
 module lark {
 
-    $locale_strings = $locale_strings||{};
-    var locale_strings = $locale_strings;
-
+    $locale_strings = $locale_strings || {};
+    $locale_strings["zh_CN"] = $locale_strings["zh_CN"] || {};
+    var locale_strings = $locale_strings["zh_CN"];
+    
     locale_strings[1001] = "找不到Lark入口类: {0}。";
     locale_strings[1002] = "Lark入口类 {0} 必须继承自lark.DisplayObject。";
     locale_strings[1003] = "参数 {0} 不能为 null。";

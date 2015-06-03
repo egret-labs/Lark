@@ -31,6 +31,8 @@ module lark {
 
     export var $locale_strings:any = $locale_strings||{};
 
+    export var $language: string = "en_US";
+
     /**
      * 全局多语言翻译函数
      * @param code 要查询的字符串代码
@@ -38,7 +40,7 @@ module lark {
      * @returns 返回拼接后的字符串
      */
     export function tr(code:number,...args):string{
-        var text = $locale_strings[code];
+        var text = $locale_strings[$language][code];
         if(!text){
             return "{"+code+"}";
         }

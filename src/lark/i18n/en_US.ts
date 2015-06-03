@@ -28,8 +28,9 @@
 //////////////////////////////////////////////////////////////////////////////////////
 module lark {
 
-    $locale_strings = $locale_strings||{};
-    var locale_strings = $locale_strings;
+    $locale_strings = $locale_strings || {};
+    $locale_strings["en_US"] = $locale_strings["en_US"] || {};
+    var locale_strings = $locale_strings["en_US"];
 
     locale_strings[1001] = "Could not find Lark entry class: {0}。";
     locale_strings[1002] = "Lark entry class '{0}' must inherit from lark.DisplayObject.";

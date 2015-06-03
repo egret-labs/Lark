@@ -37,11 +37,7 @@ var Project = (function () {
     };
     Project.prototype.buildWholeProject = function () {
         var _this = this;
-        this.sendCommand({ command: 'shutdown' });
-        if (this.buildProcess) {
-            this.buildProcess.removeAllListeners('exit');
-            this.buildProcess.kill();
-        }
+        this.shutdown();
         var larkPath = FileUtil.joinPath(utils.getLarkRoot(), 'tools/bin/lark');
         var build = cprocess.spawn(process.execPath, [larkPath, 'buildService', this.path], {
             detached: true,
@@ -67,6 +63,13 @@ var Project = (function () {
         console.log(cmd);
         this.buildPort && this.buildPort.write(JSON.stringify(cmd));
         //this.buildProcess.send(cmd);
+    };
+    Project.prototype.shutdown = function () {
+        this.sendCommand({ command: 'shutdown' });
+        if (this.buildProcess) {
+            this.buildProcess.removeAllListeners('exit');
+            this.buildProcess.kill();
+        }
     };
     Project.prototype.onBuildServiceMessage = function (msg) {
         if (msg.messages.length > 20)

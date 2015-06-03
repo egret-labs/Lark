@@ -18,23 +18,23 @@ function run() {
         if (task.command == 'shutdown' || task.version && task.version != version) {
             res.writeHead(200, { 'Content-Type': 'text/plain' });
             res.end("{}");
-            process.exit(0);
+            shutdown();
         }
-        console.log("req:", task);
         if (task.command == 'init') {
-            var proj = projects[task.path];
+            var proj = getProject(task.path);
             res.writeHead(200, { 'Content-Type': 'text/plain' });
             proj.buildPort = res;
             setInterval(function () { return res.write("{}"); }, 15000);
         }
         else if (task.command == 'buildResult') {
-            var proj = projects[task.path];
+            var proj = getProject(task.path);
             proj.onBuildServiceMessage(task);
             res.writeHead(200, { 'Content-Type': 'text/plain' });
             res.end("");
         }
-        else {
+        else if (task.command == 'build') {
             handleBuildTask(task, res);
+            global.gc && global.gc();
         }
     }).listen(LARK_SERVICE_PORT, '127.0.0.1');
 }
@@ -70,15 +70,19 @@ function execCommand(command, callback, startServer) {
     return commandRequest;
 }
 exports.execCommand = execCommand;
-function handleBuildTask(info, currentRes) {
+function getProject(path) {
     var project;
-    if (!projects[info.path]) {
+    if (!projects[path]) {
         project = new Project();
-        project.path = info.path;
+        project.path = path;
         project.init();
-        projects[info.path] = project;
+        projects[path] = project;
+        return project;
     }
-    project = projects[info.path];
+    return projects[path];
+}
+function handleBuildTask(info, currentRes) {
+    var project = getProject(info.path);
     project.fileChanged();
     var res = project.penddingRequest;
     if (res) {
@@ -99,6 +103,14 @@ function startBackgroundService() {
         silent: true
     });
     server.on("exit", function () { return serviceCreated = false; });
+}
+function shutdown() {
+    for (var path in projects) {
+        var project = projects[path];
+        project.shutdown();
+    }
+    console.log("shutdown");
+    process.exit(0);
 }
 function parseRequest(req) {
     var uri = url.parse(req.url, true);
