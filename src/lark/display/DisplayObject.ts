@@ -991,7 +991,7 @@ module lark {
         }
 
         $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):DisplayObject {
-            if (!this.$renderRegion || !this.$visible || !this.$hasFlags(sys.DisplayObjectFlags.TouchEnabled)) {
+            if (!this.$renderRegion || !this.$visible) {
                 return null;
             }
             var m = this.$getInvertedConcatenatedMatrix();
