@@ -123,6 +123,7 @@ module swan {
         $setValue(newValue:number) {
             if (this.value === newValue)
                 return;
+            var values = this.$Range;
             super.$setValue(newValue);
             if (this._slideDuration > 0 && this.$stage) {
                 this.validateProperties();//最大值最小值发生改变时要立即应用，防止当前起始值不正确。
@@ -132,11 +133,11 @@ module swan {
                     this.invalidateDisplayList();
                     animation.stop();
                 }
-                this.slideToValue = this.nearestValidValue(newValue, this.$snapInterval);
+                this.slideToValue = this.nearestValidValue(newValue, values[sys.RangeKeys.snapInterval]);
                 if (this.slideToValue === this.animationValue)
                     return;
                 var duration = this._slideDuration *
-                    (Math.abs(this.animationValue - this.slideToValue) / (this.$maximum - this.$minimum));
+                    (Math.abs(this.animationValue - this.slideToValue) / (values[sys.RangeKeys.maximum] - values[sys.RangeKeys.minimum]));
                 animation.duration = duration === Infinity ? 0 : duration;
                 animation.from = this.animationValue;
                 animation.to = this.slideToValue;
@@ -153,8 +154,9 @@ module swan {
          * 动画播放更新数值
          */
         private animationUpdateHandler(animation:sys.Animation):void {
-            var value = this.nearestValidValue(animation.currentValue, this.$snapInterval);
-            this.animationValue = Math.min(this.$maximum, Math.max(this.$minimum, value));
+            var values = this.$Range;
+            var value = this.nearestValidValue(animation.currentValue, values[sys.RangeKeys.snapInterval]);
+            this.animationValue = Math.min(values[sys.RangeKeys.maximum], Math.max(values[sys.RangeKeys.minimum], value));
             this.invalidateDisplayList();
         }
 
@@ -185,7 +187,7 @@ module swan {
          */
         protected updateSkinDisplayList():void {
             var currentValue = this.animation.isPlaying ? this.animationValue : this.value;
-            var maxValue = this.$maximum;
+            var maxValue = this.maximum;
             var thumb = this.thumb;
             if (thumb) {
                 var thumbWidth = thumb.width;

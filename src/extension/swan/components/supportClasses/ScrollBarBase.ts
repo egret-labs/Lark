@@ -49,7 +49,7 @@ module swan {
             var p = this.track.globalToLocal(offsetX, offsetY, lark.$TempPoint);
 
             var newValue = this.pointToValue(p.x, p.y);
-            newValue = this.nearestValidValue(newValue, this.$snapInterval);
+            newValue = this.nearestValidValue(newValue, this.snapInterval);
             this.setValue(newValue);
             this.emitWith(lark.Event.CHANGE);
         }
