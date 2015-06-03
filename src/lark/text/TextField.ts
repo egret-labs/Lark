@@ -28,15 +28,28 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark.sys {
-    export const enum TextFieldValues {
-        fontSize,           //30
-        lineSpacing,        //0
-        textColor,          //0x000000
-        textFieldWidth,     //NONE
-        textFieldHeight,    //NONE
-        textWidth,          //0
-        textHeight,         //0
-        textDrawWidth       //0
+
+    export const enum TextKeys {
+        fontSize,
+        lineSpacing,
+        textColor,
+        textFieldWidth,
+        textFieldHeight,
+        textWidth,
+        textHeight,
+        textDrawWidth,
+        fontFamily,
+        textAlign,
+        verticalAlign,
+        colorString,
+        fontString,
+        text,
+        measuredWidths,
+        bold,
+        italic,
+        fontStringChanged,
+        textLinesChanged,
+        wordWrap
     }
 }
 
@@ -58,36 +71,46 @@ module lark {
         public constructor(text?:string) {
             super();
             this.$renderRegion = new sys.Region();
-            this.$textFieldValues = new Float64Array([
-                30,             //fontSize
-                0,              //lineSpacing
-                0x000000,       //textColor
-                NONE,           //textFieldWidth
-                NONE,           //textFieldHeight
-                0,              //textWidth
-                0,              //textHeight
-                0               //textDrawWidth
-            ]);
-            this.$displayObjectFlags |= sys.TextFieldFlags.wordWrap |
-                sys.TextFieldFlags.FontStringChanged;
+            this.$textFieldValues = {
+                0: 30,             //fontSize
+                1: 0,              //lineSpacing
+                2: 0x000000,       //textColor
+                3: NONE,           //textFieldWidth
+                4: NONE,           //textFieldHeight
+                5: 0,              //textWidth
+                6: 0,              //textHeight
+                7: 0,              //textDrawWidth
+                8: "sans-serif",   //fontFamily
+                9: "left",         //textAlign
+                10: "top",         //verticalAlign
+                11: "#000000",     //colorString
+                12: "",            //fontString
+                13: "",            //text
+                14: [],            //measuredWidths
+                15: false,         //bold,
+                16: false,         //italic,
+                17: true,          //fontStringChanged,
+                18: false,         //textLinesChanged,
+                19: true,          //wordWrap
+            };
             this.text = text;
         }
 
-        $textFieldValues:Float64Array;
+        $textFieldValues:Object;
 
-        private _fontFamily:string = "sans-serif";
         /**
          * 字体名称 。默认值：sans-serif
          */
         public get fontFamily():string {
-            return this._fontFamily;
+            return this.$textFieldValues[sys.TextKeys.fontFamily];
         }
 
         public set fontFamily(value:string) {
-            if (this._fontFamily == value) {
+            var values = this.$textFieldValues;
+            if (values[sys.TextKeys.fontFamily] == value) {
                 return;
             }
-            this._fontFamily = value;
+            values[sys.TextKeys.fontFamily] = value;
             this.invalidateFontString();
         }
 
@@ -95,16 +118,16 @@ module lark {
          * 字号大小,默认值30 。
          */
         public get fontSize():number {
-            return this.$textFieldValues[sys.TextFieldValues.fontSize];
+            return this.$textFieldValues[sys.TextKeys.fontSize];
         }
 
         public set fontSize(value:number) {
             value = +value || 0;
             var values = this.$textFieldValues;
-            if (values[sys.TextFieldValues.fontSize] === value) {
+            if (values[sys.TextKeys.fontSize] === value) {
                 return;
             }
-            values[sys.TextFieldValues.fontSize] = value;
+            values[sys.TextKeys.fontSize] = value;
             this.invalidateFontString();
         }
 
@@ -112,15 +135,16 @@ module lark {
          * 是否显示为粗体，默认false。
          */
         public get bold():boolean {
-            return this.$hasFlags(sys.TextFieldFlags.Bold);
+            return this.$textFieldValues[sys.TextKeys.bold];
         }
 
         public set bold(value:boolean) {
             value = !!value;
-            if (value === this.$hasFlags(sys.TextFieldFlags.Bold)) {
+            var values = this.$textFieldValues;
+            if (value === values[sys.TextKeys.bold]) {
                 return;
             }
-            this.$toggleFlags(sys.TextFieldFlags.Bold, value);
+            values[sys.TextKeys.bold] = value;
             this.invalidateFontString();
         }
 
@@ -128,67 +152,67 @@ module lark {
          * 是否显示为斜体，默认false。
          */
         public get italic():boolean {
-            return this.$hasFlags(sys.TextFieldFlags.Italic);
+            return this.$textFieldValues[sys.TextKeys.italic];
         }
 
         public set italic(value:boolean) {
             value = !!value;
-            if (value === this.$hasFlags(sys.TextFieldFlags.Italic)) {
+            var values = this.$textFieldValues;
+            if (value === values[sys.TextKeys.italic]) {
                 return;
             }
-            this.$toggleFlags(sys.TextFieldFlags.Italic, value);
+            values[sys.TextKeys.italic] = value;
             this.invalidateFontString();
         }
 
         private invalidateFontString():void {
-            this.$setFlags(sys.TextFieldFlags.FontStringChanged);
+            this.$textFieldValues[sys.TextKeys.fontStringChanged] = true;
             this.$invalidateContentBounds();
         }
-
-        private fontString:string = "";
 
         /**
          * 获取字体信息的字符串形式。
          */
         private getFontString():string {
-            if (this.$hasFlags(sys.TextFieldFlags.FontStringChanged)) {
-                this.$removeFlags(sys.TextFieldFlags.FontStringChanged);
-                this.fontString = sys.toFontString(this);
+            var values = this.$textFieldValues;
+            if (values[sys.TextKeys.fontStringChanged]) {
+                values[sys.TextKeys.fontStringChanged] = false;
+                values[sys.TextKeys.fontString] = sys.toFontString(this);
             }
-            return this.fontString;
+            return values[sys.TextKeys.fontString];
         }
 
-        private _textAlign:string = HorizontalAlign.LEFT;
         /**
          * 文字的水平对齐方式 ,请使用HorizontalAlign中定义的常量。
          * 默认值：HorizontalAlign.LEFT。
          */
         public get textAlign():string {
-            return this._textAlign;
+            return this.$textFieldValues[sys.TextKeys.textAlign];
         }
 
         public set textAlign(value:string) {
-            if (this._textAlign == value) {
+            var values = this.$textFieldValues;
+            if (values[sys.TextKeys.textAlign] == value) {
                 return;
             }
-            this._textAlign = value;
+            values[sys.TextKeys.textAlign] = value;
             this.$invalidateContentBounds();
         }
 
-        private _verticalAlign:string = VerticalAlign.TOP;
         /**
          * 文字的垂直对齐方式 ,请使用VerticalAlign中定义的常量。
          * 默认值：VerticalAlign.TOP。
          */
         public get verticalAlign():string {
-            return this._verticalAlign;
+            return this.$textFieldValues[sys.TextKeys.verticalAlign];
         }
 
         public set verticalAlign(value:string) {
-            if (this._verticalAlign == value) {
+            var values = this.$textFieldValues;
+            if (values[sys.TextKeys.verticalAlign] == value) {
                 return;
             }
-            this._verticalAlign = value;
+            values[sys.TextKeys.verticalAlign] = value;
             this.$invalidateContentBounds();
         }
 
@@ -196,35 +220,33 @@ module lark {
          * 行间距。标准行高通常等于fontSize的值，设置此属性，将会在标准行高之间添加指定像素的空白间隔。可以设置为负值。默认值0.
          */
         public get lineSpacing():number {
-            return this.$textFieldValues[sys.TextFieldValues.lineSpacing];
+            return this.$textFieldValues[sys.TextKeys.lineSpacing];
         }
 
         public set lineSpacing(value:number) {
             value = +value || 0;
             var values = this.$textFieldValues;
-            if (values[sys.TextFieldValues.lineSpacing] === value)
+            if (values[sys.TextKeys.lineSpacing] === value)
                 return;
-            values[sys.TextFieldValues.lineSpacing] = value;
+            values[sys.TextKeys.lineSpacing] = value;
             this.$invalidateContentBounds();
         }
-
-        private _colorString:string = "#000000";
 
         /**
          * 文本颜色，默认值0x000000
          */
         public get textColor():number {
-            return this.$textFieldValues[sys.TextFieldValues.textColor];
+            return this.$textFieldValues[sys.TextKeys.textColor];
         }
 
         public set textColor(value:number) {
             value = +value | 0;
             var values = this.$textFieldValues;
-            if (values[sys.TextFieldValues.textColor] === value) {
+            if (values[sys.TextKeys.textColor] === value) {
                 return;
             }
-            values[sys.TextFieldValues.textColor] = value;
-            this._colorString = sys.toColorString(value);
+            values[sys.TextKeys.textColor] = value;
+            values[sys.TextKeys.colorString] = sys.toColorString(value);
             this.$invalidate();
         }
 
@@ -233,34 +255,36 @@ module lark {
          * 如果值为 false，则该文本字段不自动换行,如果同时显式设置过宽度，超出宽度的部分将被截断。默认值为 true。
          */
         public get wordWrap():boolean {
-            return this.$hasFlags(sys.TextFieldFlags.wordWrap);
+            return this.$textFieldValues[sys.TextKeys.wordWrap];
         }
 
         public set wordWrap(value:boolean) {
             value = !!value;
-            if (value === this.$hasFlags(sys.TextFieldFlags.wordWrap)) {
+            var values = this.$textFieldValues;
+            if (value === values[sys.TextKeys.wordWrap]) {
                 return;
             }
-            this.$toggleFlags(sys.TextFieldFlags.wordWrap, value);
+            values[sys.TextKeys.wordWrap] = value;
             this.$invalidateContentBounds();
         }
 
-        private _text:string = "";
         /**
          * 要显示的文本内容
          */
         public get text():string {
-            return this._text;
+            return this.$textFieldValues[sys.TextKeys.text];
         }
 
         public set text(value:string) {
             value = (value || "") + "";
-            if (value == this._text)
+            var values = this.$textFieldValues;
+            if (value == values[sys.TextKeys.text])
                 return;
-            this._text = value;
+            values[sys.TextKeys.text] = value;
             this.$invalidateContentBounds();
         }
 
+        private textLines:string[] = [];
         /**
          * 文本行数。
          */
@@ -273,7 +297,7 @@ module lark {
          */
         public get textWidth():number {
             this.updateTextLines();
-            return this.$textFieldValues[sys.TextFieldValues.textWidth];
+            return this.$textFieldValues[sys.TextKeys.textWidth];
         }
 
         /**
@@ -281,62 +305,62 @@ module lark {
          */
         public get textHeight():number {
             this.updateTextLines();
-            return this.$textFieldValues[sys.TextFieldValues.textHeight];
+            return this.$textFieldValues[sys.TextKeys.textHeight];
         }
 
         $getWidth():number {
-            var w = this.$textFieldValues[sys.TextFieldValues.textFieldWidth];
+            var w = this.$textFieldValues[sys.TextKeys.textFieldWidth];
             return isNone(w) ? this.$getContentBounds().width : w;
         }
 
         $setWidth(value:number) {
             value = +value || 0;
             var values = this.$textFieldValues;
-            if (value < 0 || value === values[sys.TextFieldValues.textFieldWidth]) {
+            if (value < 0 || value === values[sys.TextKeys.textFieldWidth]) {
                 return;
             }
-            values[sys.TextFieldValues.textFieldWidth] = value;
+            values[sys.TextKeys.textFieldWidth] = value;
             this.$invalidateContentBounds();
         }
 
         $getHeight():number {
-            var h = this.$textFieldValues[sys.TextFieldValues.textFieldHeight];
+            var h = this.$textFieldValues[sys.TextKeys.textFieldHeight];
             return isNone(h) ? this.$getContentBounds().height : h;
         }
 
         $setHeight(value:number) {
             value = +value || 0;
             var values = this.$textFieldValues;
-            if (value < 0 || value === values[sys.TextFieldValues.textFieldHeight]) {
+            if (value < 0 || value === values[sys.TextKeys.textFieldHeight]) {
                 return;
             }
-            values[sys.TextFieldValues.textFieldHeight] = value;
+            values[sys.TextKeys.textFieldHeight] = value;
             this.$invalidateContentBounds();
         }
 
         $invalidateContentBounds():void {
             super.$invalidateContentBounds();
-            this.$setFlags(sys.TextFieldFlags.TextLinesChanged);
+            this.$textFieldValues[sys.TextKeys.textLinesChanged] = true;
         }
 
         $measureContentBounds(bounds:Rectangle):void {
             this.updateTextLines();
             var values = this.$textFieldValues;
             var height:number;
-            if (isNone(values[sys.TextFieldValues.textFieldHeight])) {
-                height = values[sys.TextFieldValues.textHeight];
+            if (isNone(values[sys.TextKeys.textFieldHeight])) {
+                height = values[sys.TextKeys.textHeight];
             }
             else {
-                height = values[sys.TextFieldValues.textFieldHeight];
-                var lineHeight = values[sys.TextFieldValues.fontSize] + 4;
+                height = values[sys.TextKeys.textFieldHeight];
+                var lineHeight = values[sys.TextKeys.fontSize] + 4;
                 if (height < lineHeight) {
                     height = lineHeight;
                 }
             }
-            var width = isNone(values[sys.TextFieldValues.textFieldWidth]) ?
-                values[sys.TextFieldValues.textWidth] : values[sys.TextFieldValues.textFieldWidth];
-            if (width < values[sys.TextFieldValues.textDrawWidth]) {
-                width = values[sys.TextFieldValues.textDrawWidth];
+            var width = isNone(values[sys.TextKeys.textFieldWidth]) ?
+                values[sys.TextKeys.textWidth] : values[sys.TextKeys.textFieldWidth];
+            if (width < values[sys.TextKeys.textDrawWidth]) {
+                width = values[sys.TextKeys.textDrawWidth];
             }
             bounds.setTo(0, 0, width, height);
         }
@@ -350,39 +374,39 @@ module lark {
             context.textAlign = "left";
             context.textBaseline = "middle";
             context.font = this.getFontString();
-            context.fillStyle = this._colorString;
+            context.fillStyle = values[sys.TextKeys.colorString];
             var length = lines.length;
-            var lineHeight = values[sys.TextFieldValues.fontSize];
+            var lineHeight = values[sys.TextKeys.fontSize];
             var halfLineHeight = lineHeight * 0.5;
             var drawY = halfLineHeight + 2;
-            var vGap = lineHeight + values[sys.TextFieldValues.lineSpacing];
+            var vGap = lineHeight + values[sys.TextKeys.lineSpacing];
 
-            var textHeight = values[sys.TextFieldValues.textHeight];
-            var hasHeightSet = !isNone(values[sys.TextFieldValues.textFieldHeight]);
-            var explicitHeight = hasHeightSet ? values[sys.TextFieldValues.textFieldHeight] : Number.POSITIVE_INFINITY;
+            var textHeight = values[sys.TextKeys.textHeight];
+            var hasHeightSet = !isNone(values[sys.TextKeys.textFieldHeight]);
+            var explicitHeight = hasHeightSet ? values[sys.TextKeys.textFieldHeight] : Number.POSITIVE_INFINITY;
             if (hasHeightSet && textHeight < explicitHeight) {
                 var vAlign = 0;
-                if (this._verticalAlign == VerticalAlign.MIDDLE)
+                if (values[sys.TextKeys.verticalAlign] == VerticalAlign.MIDDLE)
                     vAlign = 0.5;
-                else if (this._verticalAlign == VerticalAlign.BOTTOM)
+                else if (values[sys.TextKeys.verticalAlign] == VerticalAlign.BOTTOM)
                     vAlign = 1;
                 drawY += vAlign * (explicitHeight - textHeight);
             }
             drawY = Math.round(drawY);
             var hAlign = 0;
-            if (this._textAlign == HorizontalAlign.CENTER) {
+            if (values[sys.TextKeys.textAlign] == HorizontalAlign.CENTER) {
                 hAlign = 0.5;
             }
-            else if (this._textAlign == HorizontalAlign.RIGHT) {
+            else if (values[sys.TextKeys.textAlign] == HorizontalAlign.RIGHT) {
                 hAlign = 1;
             }
-            var measuredWidths = this.measuredWidths;
+            var measuredWidths = values[sys.TextKeys.measuredWidths];
             var maxWidth:number;
-            if (isNone(values[sys.TextFieldValues.textFieldWidth])) {
-                maxWidth = values[sys.TextFieldValues.textWidth];
+            if (isNone(values[sys.TextKeys.textFieldWidth])) {
+                maxWidth = values[sys.TextKeys.textWidth];
             }
             else {
-                maxWidth = values[sys.TextFieldValues.textFieldWidth];
+                maxWidth = values[sys.TextKeys.textFieldWidth];
             }
             var maxYPos = explicitHeight - 2;
             for (var i = 0; i < length; i++) {
@@ -399,27 +423,21 @@ module lark {
             }
         }
 
-        private textLines:string[] = [];
-
-        private measuredWidths:number[] = [];
-
-
         private updateTextLines():string[] {
 
-            if (!this.$hasFlags(sys.TextFieldFlags.TextLinesChanged)) {
+            var values = this.$textFieldValues;
+            if (!values[sys.TextKeys.textLinesChanged]) {
                 return this.textLines;
             }
 
-            this.$removeFlags(sys.TextFieldFlags.TextLinesChanged);
             this.textLines.length = 0;
-            var values = this.$textFieldValues;
-            var measuredWidths = this.measuredWidths;
+            var measuredWidths = values[sys.TextKeys.measuredWidths];
             measuredWidths.length = 0;
-            values[sys.TextFieldValues.textWidth] = 0;
-            values[sys.TextFieldValues.textHeight] = 0;
-            var textFieldWidth = values[sys.TextFieldValues.textFieldWidth];
+            values[sys.TextKeys.textWidth] = 0;
+            values[sys.TextKeys.textHeight] = 0;
+            var textFieldWidth = values[sys.TextKeys.textFieldWidth];
 
-            var text:string = this._text;
+            var text:string = values[sys.TextKeys.text];
             if (!text || textFieldWidth === 0) {
                 return null;
             }
@@ -431,7 +449,7 @@ module lark {
             var maxWidth = 0;
             var drawWidth = 0;
             var index:number;
-            if (hasWidthSet && this.$hasFlags(sys.TextFieldFlags.wordWrap)) {
+            if (hasWidthSet && values[sys.TextKeys.wordWrap]) {
                 for (var i = 0; i < length; i++) {
                     var line = lines[i];
                     var measureW = TextMeasurer.measureText(line, font);
@@ -506,11 +524,11 @@ module lark {
                     }
                 }
             }
-            values[sys.TextFieldValues.textDrawWidth] = drawWidth;
-            values[sys.TextFieldValues.textWidth] = Math.ceil(maxWidth);
+            values[sys.TextKeys.textDrawWidth] = drawWidth;
+            values[sys.TextKeys.textWidth] = Math.ceil(maxWidth);
             //由于Canvas不提供文本行高测量功能，这里以字号为默认行高测量，并在顶部和底部各留2像素边距防止文本截断。
-            values[sys.TextFieldValues.textHeight] = Math.ceil(lines.length * (values[sys.TextFieldValues.fontSize] +
-                values[sys.TextFieldValues.lineSpacing]) - values[sys.TextFieldValues.lineSpacing] + 4);
+            values[sys.TextKeys.textHeight] = Math.ceil(lines.length * (values[sys.TextKeys.fontSize] +
+                values[sys.TextKeys.lineSpacing]) - values[sys.TextKeys.lineSpacing] + 4);
             this.textLines = lines;
             return lines;
         }

@@ -67,10 +67,6 @@ module lark {
         }
     }
 
-    const enum M {
-        a, b, c, d, tx, ty
-    }
-
     var matrixPool:Matrix[] = [];
     /**
      * Matrix 类表示一个转换矩阵，它确定如何将点从一个坐标空间映射到另一个坐标空间。
@@ -113,86 +109,45 @@ module lark {
          */
         constructor(a:number = 1, b:number = 0, c:number = 0, d:number = 1, tx:number = 0, ty:number = 0) {
             super();
-            this.$data = new Float64Array([a,b,c,d,tx,ty]);
+            this.a = a;
+            this.b = b;
+            this.c = c;
+            this.d = d;
+            this.tx = tx;
+            this.ty = ty;
         }
-
-        /**
-         * 将矩阵数据存储在Typed Array里，会获得约60%的性能提升。
-         */
-        $data:Float64Array
 
         /**
          * 缩放或旋转图像时影响像素沿 x 轴定位的值
          */
-        public set a(a:number) {
-            this.$data[M.a] = a;
-        }
-
-        public get a():number {
-            return this.$data[M.a];
-        }
-
+        public a:number;
         /**
          * 旋转或倾斜图像时影响像素沿 y 轴定位的值
          */
-        public get b():number {
-            return this.$data[M.b];
-        }
-
-        public set b(b:number) {
-            this.$data[M.b] = b;
-        }
-
+        public b:number;
         /**
          * 旋转或倾斜图像时影响像素沿 x 轴定位的值
          */
-        public get c():number {
-            return this.$data[M.c];
-        }
-
-        public set c(c:number) {
-            this.$data[M.c] = c;
-        }
-
+        public c:number;
         /**
          * 缩放或旋转图像时影响像素沿 y 轴定位的值
          */
-        public get d():number {
-            return this.$data[M.d];
-        }
-
-        public set d(d:number) {
-            this.$data[M.d] = d;
-        }
-
+        public d:number;
         /**
          * 沿 x 轴平移每个点的距离
          */
-        public get tx():number {
-            return this.$data[M.tx];
-        }
-
-        public set tx(tx:number) {
-            this.$data[M.tx] = tx;
-        }
+        public tx:number;
 
         /**
          * 沿 y 轴平移每个点的距离
          */
-        public set ty(ty:number) {
-            this.$data[M.ty] = ty;
-        }
-
-        public get ty():number {
-            return this.$data[M.ty];
-        }
+        public ty:number;
 
         /**
          * 返回一个新的 Matrix 对象，它是此矩阵的克隆，带有与所含对象完全相同的副本。
          */
         public clone():Matrix {
-            var m = this.$data;
-            return new Matrix(m[M.a], m[M.b], m[M.c], m[M.d], m[M.tx], m[M.ty]);
+            return new Matrix(this.a, this.b, this.c, this.d, this.tx, this.ty);
         }
 
         /**
@@ -200,42 +155,40 @@ module lark {
          * @param other 要连接到源矩阵的矩阵。
          */
         public concat(other:Matrix):void {
-            var m = this.$data, n = other.$data;
-            var a =  m[M.a] * n[M.a];
+            var a =  this.a * other.a;
             var b =  0.0;
             var c =  0.0;
-            var d =  m[M.d] * n[M.d];
-            var tx = m[M.tx] * n[M.a] + n[M.tx];
-            var ty = m[M.ty] * n[M.d] + n[M.ty];
+            var d =  this.d * other.d;
+            var tx = this.tx * other.a + other.tx;
+            var ty = this.ty * other.d + other.ty;
 
-            if (m[M.b] !== 0.0 || m[M.c] !== 0.0 || n[M.b] !== 0.0 || n[M.c] !== 0.0) {
-                a  += m[M.b] * n[M.c];
-                d  += m[M.c] * n[M.b];
-                b  += m[M.a] * n[M.b] + m[M.b] * n[M.d];
-                c  += m[M.c] * n[M.a] + m[M.d] * n[M.c];
-                tx += m[M.ty] * n[M.c];
-                ty += m[M.tx] * n[M.b];
+            if (this.b !== 0.0 || this.c !== 0.0 || other.b !== 0.0 || other.c !== 0.0) {
+                a  += this.b * other.c;
+                d  += this.c * other.b;
+                b  += this.a * other.b + this.b * other.d;
+                c  += this.c * other.a + this.d * other.c;
+                tx += this.ty * other.c;
+                ty += this.tx * other.b;
             }
 
-            m[M.a] = a;
-            m[M.b] = b;
-            m[M.c] = c;
-            m[M.d] = d;
-            m[M.tx] = tx;
-            m[M.ty] = ty;
+            this.a = a;
+            this.b = b;
+            this.c = c;
+            this.d = d;
+            this.tx = tx;
+            this.ty = ty;
         }
 
         /**
          * 将源 Matrix 对象中的所有矩阵数据复制到调用方 Matrix 对象中。
          */
         public copyFrom(other:Matrix):Matrix {
-            var m = this.$data, n = other.$data;
-            m[M.a] = n[M.a];
-            m[M.b] = n[M.b];
-            m[M.c] = n[M.c];
-            m[M.d] = n[M.d];
-            m[M.tx] = n[M.tx];
-            m[M.ty] = n[M.ty];
+            this.a = other.a;
+            this.b = other.b;
+            this.c = other.c;
+            this.d = other.d;
+            this.tx = other.tx;
+            this.ty = other.ty;
             return this;
         }
 
@@ -244,9 +197,8 @@ module lark {
          * 调用 identity() 方法后，生成的矩阵具有以下属性：a=1、b=0、c=0、d=1、tx=0 和 ty=0。
          */
         public identity():void {
-            var m = this.$data;
-            m[M.a] = m[M.d] = 1;
-            m[M.b] = m[M.c] = m[M.tx] = m[M.ty] = 0;
+            this.a = this.d = 1;
+            this.b = this.c = this.tx = this.ty = 0;
         }
 
         /**
@@ -258,23 +210,22 @@ module lark {
         }
 
         $invertInto(target:Matrix):void {
-            var m = this.$data, t = target.$data;
-            var a = m[M.a];
-            var b  = m[M.b];
-            var c  = m[M.c];
-            var d = m[M.d];
-            var tx = m[M.tx];
-            var ty = m[M.ty];
+            var a = this.a;
+            var b  = this.b;
+            var c  = this.c;
+            var d = this.d;
+            var tx = this.tx;
+            var ty = this.ty;
             if (b === 0 && c === 0) {
-                t[M.b] = t[M.c] = 0;
+                target.b = target.c = 0;
                 if(a===0||d===0){
-                    t[M.a] = t[M.d] = t[M.tx] = t[M.ty] = 0;
+                    target.a = target.d = target.tx = target.ty = 0;
                 }
                 else{
-                    a = t[M.a] = 1 / a;
-                    d = t[M.d] = 1 / d;
-                    t[M.tx] = -a * tx;
-                    t[M.ty] = -d * ty;
+                    a = target.a = 1 / a;
+                    d = target.d = 1 / d;
+                    target.tx = -a * tx;
+                    target.ty = -d * ty;
                 }
 
                 return;
@@ -285,12 +236,12 @@ module lark {
                 return;
             }
             determinant = 1 / determinant;
-            var k = t[M.a] =  d * determinant;
-            b = t[M.b] = -b * determinant;
-            c = t[M.c] = -c * determinant;
-            d = t[M.d] =  a * determinant;
-            t[M.tx] = -(k * tx + c * ty);
-            t[M.ty] = -(b * tx + d * ty);
+            var k = target.a =  d * determinant;
+            b = target.b = -b * determinant;
+            c = target.c = -c * determinant;
+            d = target.d =  a * determinant;
+            target.tx = -(k * tx + c * ty);
+            target.ty = -(b * tx + d * ty);
         }
 
         /**
@@ -301,21 +252,20 @@ module lark {
         public rotate(angle:number):void {
             angle = +angle;
             if (angle !== 0) {
-                var m = this.$data;
                 var u = cos(angle);
                 var v = sin(angle);
-                var ta = m[M.a];
-                var tb = m[M.b];
-                var tc = m[M.c];
-                var td = m[M.d];
-                var ttx = m[M.tx];
-                var tty = m[M.ty];
-                m[M.a] = ta  * u - tb  * v;
-                m[M.b] = ta  * v + tb  * u;
-                m[M.c] = tc  * u - td  * v;
-                m[M.d] = tc  * v + td  * u;
-                m[M.tx] = ttx * u - tty * v;
-                m[M.ty] = ttx * v + tty * u;
+                var ta = this.a;
+                var tb = this.b;
+                var tc = this.c;
+                var td = this.d;
+                var ttx = this.tx;
+                var tty = this.ty;
+                this.a = ta  * u - tb  * v;
+                this.b = ta  * v + tb  * u;
+                this.c = tc  * u - td  * v;
+                this.d = tc  * v + td  * u;
+                this.tx = ttx * u - tty * v;
+                this.ty = ttx * v + tty * u;
             }
         }
 
@@ -326,16 +276,15 @@ module lark {
          * @param sy 用于沿 y 轴缩放对象的乘数。
          */
         public scale(sx:number, sy:number):void {
-            var m = this.$data;
             if (sx !== 1) {
-                m[M.a] *= sx;
-                m[M.c] *= sx;
-                m[M.tx] *= sx;
+                this.a *= sx;
+                this.c *= sx;
+                this.tx *= sx;
             }
             if (sy !== 1) {
-                m[M.b] *= sy;
-                m[M.d] *= sy;
-                m[M.ty] *= sy;
+                this.b *= sy;
+                this.d *= sy;
+                this.ty *= sy;
             }
         }
 
@@ -349,13 +298,12 @@ module lark {
          * @param ty 沿 y 轴平移每个点的距离。
          */
         public setTo(a:number, b:number, c:number, d:number, tx:number, ty:number):Matrix {
-            var m = this.$data;
-            m[M.a] = a;
-            m[M.b] = b;
-            m[M.c] = c;
-            m[M.d] = d;
-            m[M.tx] = tx;
-            m[M.ty] = ty;
+            this.a = a;
+            this.b = b;
+            this.c = c;
+            this.d = d;
+            this.tx = tx;
+            this.ty = ty;
             return this;
         }
 
@@ -367,9 +315,8 @@ module lark {
          * @returns 由应用矩阵转换所产生的点。
          */
         public transformPoint(pointX:number, pointY:number, resultPoint?:Point):Point {
-            var m = this.$data;
-            var x = m[M.a] * pointX + m[M.c] * pointY + m[M.tx];
-            var y = m[M.b] * pointX + m[M.d] * pointY + m[M.ty];
+            var x = this.a * pointX + this.c * pointY + this.tx;
+            var y = this.b * pointX + this.d * pointY + this.ty;
             if (resultPoint) {
                 resultPoint.setTo(x, y);
                 return resultPoint;
@@ -383,9 +330,8 @@ module lark {
          * @param dy 沿 y 轴向下移动的量（以像素为单位）。
          */
         public translate(dx:number, dy:number):void {
-            var m = this.$data;
-            m[M.tx] += dx;
-            m[M.ty] += dy;
+            this.tx += dx;
+            this.ty += dy;
         }
 
         /**
@@ -394,20 +340,18 @@ module lark {
          * @returns 是否相等，ture表示相等。
          */
         public equals(other:Matrix):boolean {
-            var m = this.$data, n = other.$data;
-            return m[M.a] === n[M.a] && m[M.b] === n[M.b] &&
-                m[M.c] === n[M.c] && m[M.d] === n[M.d] &&
-                m[M.tx] === n[M.tx] && m[M.ty] === n[M.ty];
+            return this.a === other.a && this.b === other.b &&
+                this.c === other.c && this.d === other.d &&
+                this.tx === other.tx && this.ty === other.ty;
         }
 
         $transformBounds(bounds:Rectangle):void {
-            var m = this.$data;
-            var a  = m[M.a];
-            var b  = m[M.b];
-            var c  = m[M.c];
-            var d  = m[M.d];
-            var tx = m[M.tx];
-            var ty = m[M.ty];
+            var a  = this.a;
+            var b  = this.b;
+            var c  = this.c;
+            var d  = this.d;
+            var tx = this.tx;
+            var ty = this.ty;
 
             var x = bounds.x;
             var y = bounds.y;
@@ -455,87 +399,82 @@ module lark {
         }
 
         private getDeterminant() {
-            var m = this.$data;
-            return m[M.a] * m[M.d] - m[M.b] * m[M.c];
+            return this.a * this.d - this.b * this.c;
         }
 
         $getScaleX():number {
-            var m = this.$data;
-            if (m[M.a] === 1 && m[M.b] === 0) {
+            var m = this;
+            if (m.a === 1 && m.b === 0) {
                 return 1;
             }
-            var result = Math.sqrt(m[M.a] * m[M.a] + m[M.b] * m[M.b]);
+            var result = Math.sqrt(m.a * m.a + m.b * m.b);
             return this.getDeterminant() < 0 ? -result : result;
         }
 
         $getScaleY():number {
-            var m = this.$data;
-            if (m[M.c] === 0 && m[M.d] === 1) {
+            var m = this;
+            if (m.c === 0 && m.d === 1) {
                 return 1;
             }
-            var result = Math.sqrt(m[M.c] * m[M.c] + m[M.d] * m[M.d]);
+            var result = Math.sqrt(m.c * m.c + m.d * m.d);
             return this.getDeterminant() < 0 ? -result : result;
         }
 
         $getSkewX():number {
-            var m = this.$data;
-            return Math.atan2(m[M.d], m[M.c]) - (PI / 2);
+            return Math.atan2(this.d, this.c) - (PI / 2);
         }
 
         $getSkewY():number {
-            var m = this.$data;
-            return Math.atan2(m[M.b], m[M.a]);
+            return Math.atan2(this.b, this.a);
         }
 
         $updateScaleAndRotation(scaleX:number, scaleY:number, skewX:number, skewY:number) {
-            var m = this.$data;
             if ((skewX === 0 || skewX === TwoPI) && (skewY === 0 || skewY === TwoPI)) {
-                m[M.a] = scaleX;
-                m[M.b] = m[M.c] = 0;
-                m[M.d] = scaleY;
+                this.a = scaleX;
+                this.b = this.c = 0;
+                this.d = scaleY;
                 return;
             }
 
             var u = cos(skewX);
             var v = sin(skewX);
             if (skewX === skewY) {
-                m[M.a] = u * scaleX;
-                m[M.b] = v * scaleX;
+                this.a = u * scaleX;
+                this.b = v * scaleX;
             } else {
-                m[M.a] = cos(skewY) * scaleX;
-                m[M.b] = sin(skewY) * scaleX;
+                this.a = cos(skewY) * scaleX;
+                this.b = sin(skewY) * scaleX;
             }
-            m[M.c] = -v * scaleY;
-            m[M.d] = u * scaleY;
+            this.c = -v * scaleY;
+            this.d = u * scaleY;
         }
 
         /**
          * target = other * this
          */
         $preMultiplyInto(other:Matrix, target:Matrix):void {
-            var m = this.$data, n = other.$data, t = target.$data;
-            var a =  n[M.a] * m[M.a];
+            var a =  other.a * this.a;
             var b =  0.0;
             var c =  0.0;
-            var d =  n[M.d] * m[M.d];
-            var tx = n[M.tx] * m[M.a] + m[M.tx];
-            var ty = n[M.ty] * m[M.d] + m[M.ty];
+            var d =  other.d * this.d;
+            var tx = other.tx * this.a + this.tx;
+            var ty = other.ty * this.d + this.ty;
 
-            if (n[M.b] !== 0.0 || n[M.c] !== 0.0 || m[M.b] !== 0.0 || m[M.c] !== 0.0) {
-                a  += n[M.b] * m[M.c];
-                d  += n[M.c] * m[M.b];
-                b  += n[M.a] * m[M.b] + n[M.b] * m[M.d];
-                c  += n[M.c] * m[M.a] + n[M.d] * m[M.c];
-                tx += n[M.ty] * m[M.c];
-                ty += n[M.tx] * m[M.b];
+            if (other.b !== 0.0 || other.c !== 0.0 || this.b !== 0.0 || this.c !== 0.0) {
+                a  += other.b * this.c;
+                d  += other.c * this.b;
+                b  += other.a * this.b + other.b * this.d;
+                c  += other.c * this.a + other.d * this.c;
+                tx += other.ty * this.c;
+                ty += other.tx * this.b;
             }
 
-            t[M.a] = a;
-            t[M.b] = b;
-            t[M.c] = c;
-            t[M.d] = d;
-            t[M.tx] = tx;
-            t[M.ty] = ty;
+            target.a = a;
+            target.b = b;
+            target.c = c;
+            target.d = d;
+            target.tx = tx;
+            target.ty = ty;
         }
 
     }

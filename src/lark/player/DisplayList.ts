@@ -282,14 +282,14 @@ module lark.sys {
                 if (node.$isDirty) {
                     drawCalls++;
                     context.globalAlpha = globalAlpha;
-                    var m = node.$renderMatrix.$data;
+                    var m = node.$renderMatrix;
                     if (drawToStage) {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
-                        context.setTransform(m[0], m[1], m[2], m[3], m[4], m[5]);
+                        context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
                         node.$render(context);
                     }
                     else {
                         context.save();
-                        context.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
+                        context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
                         node.$render(context);
                         context.restore();
                     }
@@ -418,8 +418,8 @@ module lark.sys {
                 return drawCalls;
             }
             if(scrollRect){
-                var m = displayMatrix.$data;
-                displayContext.setTransform(m[0], m[1], m[2], m[3], m[4]-region.minX, m[5]-region.minY);
+                var m = displayMatrix;
+                displayContext.setTransform(m.a, m.b, m.c, m.d, m.tx-region.minX, m.ty-region.minY);
                 displayContext.beginPath();
                 displayContext.rect(scrollRect.x,scrollRect.y,scrollRect.width,scrollRect.height);
                 displayContext.clip();
@@ -515,8 +515,8 @@ module lark.sys {
                 oldSurface.height = 1;
                 oldSurface.width = 1;
             }
-            var m = root.$getInvertedConcatenatedMatrix().$data;
-            this.renderContext.setTransform(m[0], m[1], m[2], m[3], m[4] - bounds.x, m[5] - bounds.y);
+            var m = root.$getInvertedConcatenatedMatrix();
+            this.renderContext.setTransform(m.a, m.b, m.c, m.d, m.tx - bounds.x, m.ty - bounds.y);
         }
 
     }

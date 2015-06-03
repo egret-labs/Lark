@@ -29,7 +29,7 @@
 
 module lark {
 
-    const enum Values {
+    const enum Keys {
         fontSize,           //30
         lineSpacing,        //0
         textColor,          //0x000000
@@ -38,9 +38,6 @@ module lark {
         textWidth,          //0
         textHeight          //0
     }
-
-
-    
 
 
     export type RichTextNode = string | DisplayObject | IRTFStringNode | IRTFDisplayObjectNode;
@@ -60,9 +57,9 @@ module lark {
 
 
     /**
-     * RichTextField 类用于显示带有复杂格式的文本和显示对象。 
+     * RichTextField 类用于显示带有复杂格式的文本和显示对象。
      * Lark 提供了多种在运行时设置文本格式的方法。ITextFieldStyle 允许您设置 RichTextField 对象的字符和段落格式。
-     * 
+     *
      */
     export class RichTextField extends Sprite {
 
@@ -76,31 +73,34 @@ module lark {
             styleWrapper.currentStyle = {};
             this._styleWrapper = styleWrapper;
             this.style = style;
-            this.$textFieldValues = new Float64Array([
-                30,             //fontSize
-                0,              //lineSpacing
-                0x000000,       //textColor
-                NONE,           //textFieldWidth
-                NONE,           //textFieldHeight
-                0,              //textWidth
-                0               //textHeight
-            ]);
+            this.$textFieldValues = {
+                0: 30,             //fontSize
+                1: 0,              //lineSpacing
+                2: 0x000000,       //textColor
+                3: NONE,           //textFieldWidth
+                4: NONE,           //textFieldHeight
+                5: 0,              //textWidth
+                6: 0               //textHeight
+            };
             this.$invalidateContentBounds();
         }
 
-        $textFieldValues: Float64Array;
+        $textFieldValues:Object;
+
         protected _lineDirty = true;
 
 
-        protected _style: RichTextFieldStyle;
-        protected _styleWrapper: RichTextFieldStyleWarpper;
+        protected _style:RichTextFieldStyle;
+        protected _styleWrapper:RichTextFieldStyleWarpper;
+
         /**
-        *  设置或获取 RichTextField 默认的文本格式
-        */
-        public get style(): ITextStyle {
+         *  设置或获取 RichTextField 默认的文本格式
+         */
+        public get style():ITextStyle {
             return this._style;
         }
-        public set style(value: ITextStyle) {
+
+        public set style(value:ITextStyle) {
             this._style = value || {};
             this._styleWrapper.baseStyle = this._style;
             this._lineDirty = true;
@@ -108,31 +108,30 @@ module lark {
         }
 
 
-        protected _nodes: RichTextNode[];
-        
+        protected _nodes:RichTextNode[];
+
         /**
-        *  设置或获取要在 RichTextField 中显示的多样式文本或显示对象
-        */
-        public get nodes(): RichTextNode[] {
+         *  设置或获取要在 RichTextField 中显示的多样式文本或显示对象
+         */
+        public get nodes():RichTextNode[] {
             return this._nodes;
         }
 
-        public set nodes(value: RichTextNode[]) {
+        public set nodes(value:RichTextNode[]) {
             this._nodes = value;
             this._lineDirty = true;
             this.$invalidateContentBounds();
         }
 
 
-
         /**
          * 字体名称 。默认值：sans-serif
          */
-        public get fontFamily(): string {
+        public get fontFamily():string {
             return this._styleWrapper.fontFamily;
         }
 
-        public set fontFamily(value: string) {
+        public set fontFamily(value:string) {
             if (this._styleWrapper.fontFamily == value) {
                 return;
             }
@@ -145,11 +144,11 @@ module lark {
         /**
          * 字号大小,默认值30 。
          */
-        public get fontSize(): number {
+        public get fontSize():number {
             return this._styleWrapper.fontSize;
         }
 
-        public set fontSize(value: number) {
+        public set fontSize(value:number) {
             value = +value || 0;
             if (this._styleWrapper.fontSize == value) {
                 return;
@@ -164,11 +163,11 @@ module lark {
         /**
          * 是否显示为粗体，默认false。
          */
-        public get bold(): boolean {
+        public get bold():boolean {
             return this._styleWrapper.bold;
         }
 
-        public set bold(value: boolean) {
+        public set bold(value:boolean) {
             value = !!value;
             if (this._styleWrapper.bold == value) {
                 return;
@@ -182,11 +181,11 @@ module lark {
         /**
          * 是否显示为斜体，默认false。
          */
-        public get italic(): boolean {
+        public get italic():boolean {
             return this._styleWrapper.italic;
         }
 
-        public set italic(value: boolean) {
+        public set italic(value:boolean) {
             value = !!value;
             if (this._styleWrapper.italic == value) {
                 return;
@@ -197,13 +196,13 @@ module lark {
             this.$invalidateContentBounds();
         }
 
-        private fontString: string = "";
-        private fontStringChanged: boolean = true;
+        private fontString:string = "";
+        private fontStringChanged:boolean = true;
 
         /**
          * 获取字体信息的字符串形式。
          */
-        private getFontString(): string {
+        private getFontString():string {
             if (this.fontStringChanged) {
                 this.fontStringChanged = false;
                 this.fontString = sys.toFontString(this);
@@ -211,16 +210,16 @@ module lark {
             return this.fontString;
         }
 
-        private _textAlignH: string = HorizontalAlign.LEFT;
+        private _textAlignH:string = HorizontalAlign.LEFT;
         /**
          * 文字的水平对齐方式 ,请使用HorizontalAlign中定义的常量。
          * 默认值：HorizontalAlign.LEFT。
          */
-        public get textAlignH(): string {
+        public get textAlignH():string {
             return this._styleWrapper.textAlignH;
         }
 
-        public set textAlignH(value: string) {
+        public set textAlignH(value:string) {
             if (this._styleWrapper.textAlignH == value) {
                 return;
             }
@@ -233,11 +232,11 @@ module lark {
          * 文字的垂直对齐方式 ,请使用VerticalAlign中定义的常量。
          * 默认值：VerticalAlign.TOP。
          */
-        public get textAlignV(): string {
+        public get textAlignV():string {
             return this._styleWrapper.textAlignV;
         }
 
-        public set textAlignV(value: string) {
+        public set textAlignV(value:string) {
             if (this._styleWrapper.textAlignV == value) {
                 return;
             }
@@ -249,11 +248,11 @@ module lark {
         /**
          * 行间距
          */
-        public get lineSpacing(): number {
+        public get lineSpacing():number {
             return this._styleWrapper.lineSpacing;
         }
 
-        public set lineSpacing(value: number) {
+        public set lineSpacing(value:number) {
             value = +value || 0;
             if (this._styleWrapper.lineSpacing === value)
                 return;
@@ -261,16 +260,16 @@ module lark {
             this.$invalidateContentBounds();
         }
 
-        private _colorString: string = "#000000";
+        private _colorString:string = "#000000";
 
         /**
          * 文本颜色，默认值0x000000
          */
-        public get textColor(): number {
+        public get textColor():number {
             return this._styleWrapper.textColor;
         }
 
-        public set textColor(value: number) {
+        public set textColor(value:number) {
             value = +value | 0;
             if (this._styleWrapper.textColor === value) {
                 return;
@@ -281,15 +280,17 @@ module lark {
         }
 
 
-        protected _scrollV: number = 0;
-        protected _scrollVDirty: boolean = true;
+        protected _scrollV:number = 0;
+        protected _scrollVDirty:boolean = true;
+
         /**
-        *  设置或获取 RichTextField 的垂直滚动位置，以行为单位
-        */
-        public get scrollV(): number {
+         *  设置或获取 RichTextField 的垂直滚动位置，以行为单位
+         */
+        public get scrollV():number {
             return this._scrollV;
         }
-        public set scrollV(value: number) {
+
+        public set scrollV(value:number) {
             if (this._scrollV == value)
                 return;
             this._scrollV = value;
@@ -298,40 +299,40 @@ module lark {
         }
 
 
-        $getWidth(): number {
+        $getWidth():number {
             return this.$getContentBounds().width;
         }
 
-        $setWidth(value: number) {
+        $setWidth(value:number) {
             value = +value || 0;
             var values = this.$textFieldValues;
-            if (value < 0 || value === values[Values.textFieldWidth]) {
+            if (value < 0 || value === values[Keys.textFieldWidth]) {
                 return;
             }
-            values[Values.textFieldWidth] = value;
+            values[Keys.textFieldWidth] = value;
             this.$invalidateContentBounds();
         }
 
-        $getHeight(): number {
+        $getHeight():number {
             return this.$getContentBounds().height;
         }
 
-        $setHeight(value: number) {
+        $setHeight(value:number) {
             value = +value || 0;
             var values = this.$textFieldValues;
-            if (value < 0 || value === values[Values.textFieldHeight]) {
+            if (value < 0 || value === values[Keys.textFieldHeight]) {
                 return;
             }
-            values[Values.textFieldHeight] = value;
+            values[Keys.textFieldHeight] = value;
             this.$invalidateContentBounds();
         }
 
-        $invalidateContentBounds(): void {
+        $invalidateContentBounds():void {
             super.$invalidateContentBounds();
             this._lineDirty = true;
         }
 
-        $measureContentBounds(bounds: Rectangle): void {
+        $measureContentBounds(bounds:Rectangle):void {
 
             if (this._lineDirty) {
                 this.$generateTextLines();
@@ -343,15 +344,15 @@ module lark {
             }
 
             var values = this.$textFieldValues;
-            bounds.setTo(0, 0, values[Values.textWidth], values[Values.textHeight]);
+            bounds.setTo(0, 0, values[Keys.textWidth], values[Keys.textHeight]);
         }
 
 
-        protected _contents: text.ContentElement[];
-        protected _textLines: Array<text.TextLine> = [];
-        protected _stringLines: Array<TextSpan> = []; 
+        protected _contents:text.ContentElement[];
+        protected _textLines:Array<text.TextLine> = [];
+        protected _stringLines:Array<TextSpan> = [];
 
-        $render(context: sys.RenderContext): void {
+        $render(context:sys.RenderContext):void {
 
             if (this._lineDirty) {
                 this.$generateTextLines();
@@ -397,12 +398,12 @@ module lark {
                 rm = format.rightMargin || 0,
                 bidt = format.blockIndent || 0;
 
-            var maxWidth: number;
-            if (isNone(values[Values.textFieldWidth])) {
+            var maxWidth:number;
+            if (isNone(values[Keys.textFieldWidth])) {
                 maxWidth = this.stage ? this.stage.stageWidth : 500;
             }
             else {
-                maxWidth = values[Values.textFieldWidth];
+                maxWidth = values[Keys.textFieldWidth];
             }
 
             var width = maxWidth - lm - rm - bidt;
@@ -420,19 +421,19 @@ module lark {
         }
 
         protected $updateChildren() {
-            
+
             for (var i = 0; i < this.numChildren; i++) {
                 var child = this.getChildAt(i);
                 child.visible = false;
             }
-            
+
             var stringLines = this._stringLines;
             var lines = this._textLines;
             lines.length = 0;
             var y = 0;
             var values = this.$textFieldValues;
 
-            var maxHeight = isNone(values[Values.textFieldHeight]) ? Number.POSITIVE_INFINITY : values[Values.textFieldHeight];
+            var maxHeight = isNone(values[Keys.textFieldHeight]) ? Number.POSITIVE_INFINITY : values[Keys.textFieldHeight];
 
             for (var i = this._scrollV; i < lines.length; i++) {
                 var line = lines[i];
@@ -451,15 +452,14 @@ module lark {
         }
 
 
-
         protected parseContents() {
             if (!this._lineDirty)
                 return;
-            var contents: text.ContentElement[] = [];
+            var contents:text.ContentElement[] = [];
             var nodes = this._nodes, length = this._nodes.length;
             for (var i = 0; i < length; i++) {
-                var node: any = nodes[i];
-                var element: text.ContentElement = null;
+                var node:any = nodes[i];
+                var element:text.ContentElement = null;
                 if ((<string>node).charAt) {
                     element = this.parseString(node);
                 }
@@ -478,7 +478,7 @@ module lark {
             this._contents = [new text.GroupElement(contents)];
         }
 
-        protected parseGraphic(node: DisplayObject, style?: ITextStyle) {
+        protected parseGraphic(node:DisplayObject, style?:ITextStyle) {
 
             node.visible = false;
             this.addChild(node);
@@ -490,11 +490,11 @@ module lark {
 
         }
 
-        protected parseString(node: string) {
-            return this.parseTextNode({ text: node});
+        protected parseString(node:string) {
+            return this.parseTextNode({text: node});
         }
 
-        protected parseTextNode(node: IRTFStringNode) {
+        protected parseTextNode(node:IRTFStringNode) {
             var styleWrapper = this._styleWrapper;
             styleWrapper.currentStyle = node.style || {};
             var textElement = new text.TextElement(node.text, styleWrapper);
@@ -502,13 +502,13 @@ module lark {
         }
     }
     /**
-    * 定义多样式文本的样式
-    */
+     * 定义多样式文本的样式
+     */
     export interface RichTextFieldStyle extends ITextStyle {
 
         /**
-        * 设置段落中文本的水平对齐方式
-        */
+         * 设置段落中文本的水平对齐方式
+         */
         textAlignH?: string;
 
         /**
@@ -530,24 +530,24 @@ module lark {
          * 段落的右边距，以像素为单位。
          */
         rightMargin?: number;
-        
+
         /**
          * 行的前间距
          */
         lineSpacing?: number;
-    
+
     }
 
 
-    function hasFlag(prop: number, flag: number): boolean {
+    function hasFlag(prop:number, flag:number):boolean {
         return (prop & flag) == flag;
     }
 
     class RichTextFieldStyleWarpper extends TextStyleWarpper<RichTextFieldStyle> implements RichTextFieldStyle {
 
         /**
-        * 设置段落中文本的水平对齐方式
-        */
+         * 设置段落中文本的水平对齐方式
+         */
 
         get textAlignH() {
             return this.currentStyle.textAlignH || this.baseStyle.textAlignH || HorizontalAlign.LEFT;
@@ -580,7 +580,7 @@ module lark {
         get rightMargin() {
             return this.currentStyle.rightMargin || this.baseStyle.rightMargin || 0;
         }
-        
+
         /**
          * 行的前间距
          */

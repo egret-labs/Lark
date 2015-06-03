@@ -178,14 +178,13 @@ module swan {
         }
 
         private onTouchEndCapture(event:lark.TouchEvent):void {
-            if (!this.delayTouchBeginEvent) {
-                return;
+            if (this.delayTouchEvent) {
+                this.delayEmitEvent(event);
             }
-            this.onTouchBeginTimer();
         }
 
-        private touchBeginTimer:lark.Timer;
-        private delayTouchBeginEvent:lark.TouchEvent;
+        private delayTouchTimer:lark.Timer;
+        private delayTouchEvent:lark.TouchEvent;
 
         /**
          * 若这个Scroller可以滚动，阻止当前事件，延迟100ms再抛出。
@@ -206,23 +205,30 @@ module swan {
                 }
                 target = target.$parent;
             }
+            this.delayEmitEvent(event);
+            this.onTouchBegin(event);
+        }
+
+        private delayEmitEvent(event:lark.TouchEvent):void{
+            if(this.delayTouchEvent){
+                this.onDelayTouchEventTimer();
+            }
             event.stopPropagation();
             var touchEvent = lark.Event.create(lark.TouchEvent, event.$type, event.$bubbles, event.$cancelable);
             touchEvent.$setTo(event.$stageX, event.$stageY, event.touchPointID);
             touchEvent.$target = event.$target;
-            this.delayTouchBeginEvent = touchEvent;
-            if (!this.touchBeginTimer) {
-                this.touchBeginTimer = new lark.Timer(200, 1);
-                this.touchBeginTimer.on(lark.TimerEvent.TIMER_COMPLETE, this.onTouchBeginTimer, this);
+            this.delayTouchEvent = touchEvent;
+            if (!this.delayTouchTimer) {
+                this.delayTouchTimer = new lark.Timer(100, 1);
+                this.delayTouchTimer.on(lark.TimerEvent.TIMER_COMPLETE, this.onDelayTouchEventTimer, this);
             }
-            this.touchBeginTimer.start();
-            this.onTouchBegin(event);
+            this.delayTouchTimer.start();
         }
 
-        private onTouchBeginTimer(e?:lark.TimerEvent):void {
-            this.touchBeginTimer.stop();
-            var event = this.delayTouchBeginEvent;
-            this.delayTouchBeginEvent = null;
+        private onDelayTouchEventTimer(e?:lark.TimerEvent):void {
+            this.delayTouchTimer.stop();
+            var event = this.delayTouchEvent;
+            this.delayTouchEvent = null;
             var viewport = this._viewport;
             if (!viewport) {
                 return;
@@ -260,7 +266,7 @@ module swan {
             var values = viewport.$uiValues;
             switch (this.scrollPolicyH) {
                 case "auto":
-                    if (values[sys.UIValues.contentWidth] > values[sys.UIValues.width]) {
+                    if (values[sys.UIKeys.contentWidth] > values[sys.UIKeys.width]) {
                         hCanScroll = true;
                     }
                     else {
@@ -279,7 +285,7 @@ module swan {
             var vCanScroll:boolean;
             switch (this.scrollPolicyV) {
                 case "auto":
-                    if (values[sys.UIValues.contentHeight] > values[sys.UIValues.height]) {
+                    if (values[sys.UIKeys.contentHeight] > values[sys.UIKeys.height]) {
                         vCanScroll = true;
                     }
                     else {
@@ -315,12 +321,12 @@ module swan {
             this.touchStartY = event.$stageY;
 
             if (this.horizontalCanScroll) {
-                this.touchScrollH.start(event.$stageX, values[sys.UIValues.scrollH],
-                    values[sys.UIValues.contentWidth] - values[sys.UIValues.width]);
+                this.touchScrollH.start(event.$stageX, values[sys.UIKeys.scrollH],
+                    values[sys.UIKeys.contentWidth] - values[sys.UIKeys.width]);
             }
             if (this.verticalCanScroll) {
-                this.touchScrollV.start(event.$stageY, values[sys.UIValues.scrollV],
-                    values[sys.UIValues.contentHeight] - values[sys.UIValues.height]);
+                this.touchScrollV.start(event.$stageY, values[sys.UIKeys.scrollV],
+                    values[sys.UIKeys.contentHeight] - values[sys.UIKeys.height]);
             }
             var stage = this.$stage;
             stage.on(lark.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
@@ -336,20 +342,20 @@ module swan {
                 }
                 this.touchMoved = true;
             }
-            if (this.delayTouchBeginEvent) {
-                this.delayTouchBeginEvent = null;
-                this.touchBeginTimer.stop();
+            if (this.delayTouchEvent) {
+                this.delayTouchEvent = null;
+                this.delayTouchTimer.stop();
             }
             var viewport = this._viewport;
             var values = viewport.$uiValues;
             if (this.horizontalCanScroll) {
                 this.touchScrollH.update(event.$stageX,
-                    values[sys.UIValues.contentWidth] - values[sys.UIValues.width]);
+                    values[sys.UIKeys.contentWidth] - values[sys.UIKeys.width]);
             }
 
             if (this.verticalCanScroll) {
                 this.touchScrollV.update(event.$stageY,
-                    values[sys.UIValues.contentHeight] - values[sys.UIValues.height]);
+                    values[sys.UIKeys.contentHeight] - values[sys.UIKeys.height]);
             }
         }
 
@@ -364,13 +370,13 @@ module swan {
             var values = viewport.$uiValues;
             if (this.horizontalCanScroll) {
                 var touchScrollH = this.touchScrollH;
-                touchScrollH.finish(values[sys.UIValues.scrollH],
-                    values[sys.UIValues.contentWidth] - values[sys.UIValues.width]);
+                touchScrollH.finish(values[sys.UIKeys.scrollH],
+                    values[sys.UIKeys.contentWidth] - values[sys.UIKeys.width]);
             }
             if (this.verticalCanScroll) {
                 var touchScrollV = this.touchScrollV;
-                touchScrollV.finish(values[sys.UIValues.scrollV],
-                    values[sys.UIValues.contentHeight] - values[sys.UIValues.height]);
+                touchScrollV.finish(values[sys.UIKeys.scrollV],
+                    values[sys.UIKeys.contentHeight] - values[sys.UIKeys.height]);
             }
             if (!this.autoHideTimer) {
                 this.autoHideTimer = new lark.Timer(500, 1);

@@ -30,23 +30,13 @@
 
 module lark {
 
-    class EventDataHost {
-
-        public constructor(target:IEventEmitter) {
-            this.eventTarget = target;
-        }
-
-        /**
-         * 事件抛出对象
-         */
-        public eventTarget:IEventEmitter;
-
-        public eventsMap:any = {};
-
-        public captureEventsMap:any = {};
-
-        public notifyLevel:number = 0;
+    const enum Keys{
+        eventTarget,
+        eventsMap,
+        captureEventsMap,
+        notifyLevel
     }
+
 
     var ONCE_EVENT_LIST:lark.sys.EventBin[] = [];
 
@@ -66,12 +56,15 @@ module lark {
          */
         public constructor(target:IEventEmitter = null) {
             super();
-            if(!this.eventDataHost){
-                this.eventDataHost = new EventDataHost(target ? target : this);
-            }
+            this.emitterValues = {
+                0: target ? target : this,
+                1: {},
+                2: {},
+                3: 0,
+            };
         }
 
-        private eventDataHost:EventDataHost;
+        private emitterValues:Object;
 
         /**
          * 添加事件侦听器
@@ -109,13 +102,13 @@ module lark {
             if (DEBUG && !listener) {
                 $error(1003, "listener");
             }
-            var host = this.eventDataHost;
-            var eventMap:any = useCapture ? host.captureEventsMap : host.eventsMap;
+            var values = this.emitterValues;
+            var eventMap:any = useCapture ? values[Keys.captureEventsMap] : values[Keys.eventsMap];
             var list:lark.sys.EventBin[] = eventMap[type];
             if (!list) {
                 list = eventMap[type] = [];
             }
-            else if (host.notifyLevel !== 0) {
+            else if (values[Keys.notifyLevel] !== 0) {
                 eventMap[type] = list = list.concat();
             }
             priority = +priority | 0;
@@ -151,13 +144,13 @@ module lark {
          */
         public removeListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean):void {
 
-            var host = this.eventDataHost;
-            var eventMap:Object = useCapture ? host.captureEventsMap : host.eventsMap;
+            var values = this.emitterValues;
+            var eventMap:Object = useCapture ? values[Keys.captureEventsMap] : values[Keys.eventsMap];
             var list:lark.sys.EventBin[] = eventMap[type];
             if (!list) {
                 return;
             }
-            if (host.notifyLevel !== 0) {
+            if (values[Keys.notifyLevel] !== 0) {
                 eventMap[type] = list = list.concat();
             }
             var length = list.length;
@@ -179,8 +172,8 @@ module lark {
          * @returns 是否存在监听器，若存在返回true，反之返回false。
          */
         public hasListener(type:string):boolean {
-            var host = this.eventDataHost;
-            return (host.eventsMap[type] || host.captureEventsMap[type]);
+            var values = this.emitterValues;
+            return (values[Keys.eventsMap][type] || values[Keys.captureEventsMap][type]);
         }
 
         /**
@@ -202,13 +195,13 @@ module lark {
          * @returns 如果成功调度了事件，则值为 true。值 false 表示失败或对事件调用了 preventDefault()。
          */
         public emit(event:Event):boolean {
-            event.$target = event.$currentTarget = this.eventDataHost.eventTarget;
+            event.$target = event.$currentTarget = this.emitterValues[Keys.eventTarget];
             return this.$notifyListener(event);
         }
 
         $notifyListener(event:Event):boolean {
-            var host = this.eventDataHost;
-            var eventMap:Object = event.$eventPhase == 1 ? host.captureEventsMap : host.eventsMap;
+            var values = this.emitterValues;
+            var eventMap:Object = event.$eventPhase == 1 ? values[Keys.captureEventsMap] : values[Keys.eventsMap];
             var list:lark.sys.EventBin[] = eventMap[event.$type];
             if (!list) {
                 return true;
@@ -219,7 +212,7 @@ module lark {
             }
             var onceList = ONCE_EVENT_LIST;
             //做个标记，防止外部修改原始数组导致遍历错误。这里不直接调用list.concat()因为emit()方法调用通常比on()等方法频繁。
-            host.notifyLevel++;
+            values[Keys.notifyLevel]++;
             for (var i = 0; i < length; i++) {
                 var eventBin = list[i];
                 eventBin.listener.call(eventBin.thisObject, event);
@@ -230,7 +223,7 @@ module lark {
                     break;
                 }
             }
-            host.notifyLevel--;
+            values[Keys.notifyLevel]--;
             while (onceList.length) {
                 eventBin = onceList.pop();
                 eventBin.target.removeListener(eventBin.type, eventBin.listener, eventBin.thisObject, eventBin.useCapture);
@@ -247,7 +240,7 @@ module lark {
          */
         public emitWith(type:string, bubbles?:boolean, cancelable?:boolean, data?:any):boolean {
             if (bubbles || this.hasListener(type)) {
-                var event = Event.create(Event, type, bubbles,cancelable);
+                var event = Event.create(Event, type, bubbles, cancelable);
                 event.data = data;
                 var result = this.emit(event);
                 Event.release(event);

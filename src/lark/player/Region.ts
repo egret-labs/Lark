@@ -159,13 +159,13 @@ module lark.sys {
         }
 
         public updateRegion(bounds:Rectangle, matrix:Matrix):void {
-            var m = matrix.$data;
-            var a = m[0];
-            var b = m[1];
-            var c = m[2];
-            var d = m[3];
-            var tx = m[4];
-            var ty = m[5];
+            var m = matrix;
+            var a = m.a;
+            var b = m.b;
+            var c = m.c;
+            var d = m.d;
+            var tx = m.tx;
+            var ty = m.ty;
             var x = bounds.x;
             var y = bounds.y;
             var xMax = x + bounds.width;

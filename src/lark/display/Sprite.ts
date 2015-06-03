@@ -191,7 +191,7 @@ module lark {
             var children = this.$children;
             var length = children.length;
             var displayObject:DisplayObject;
-            for (var i:number = 0; i < length; i++) {
+            for (var i = 0; i < length; i++) {
                 displayObject = children[i];
                 if (displayObject.name == name) {
                     return displayObject;
@@ -520,9 +520,9 @@ module lark {
                     sys.DisplayObjectFlags.TouchChildren)) {
                 return null;
             }
-            var m = this.$getInvertedConcatenatedMatrix().$data;
-            var localX = m[0] * stageX + m[2] * stageY + m[4];
-            var localY = m[1] * stageX + m[3] * stageY + m[5];
+            var m = this.$getInvertedConcatenatedMatrix();
+            var localX = m.a * stageX + m.c * stageY + m.tx;
+            var localY = m.b * stageX + m.d * stageY + m.ty;
             if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
                 return null;
             }

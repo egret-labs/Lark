@@ -107,12 +107,12 @@ module swan.sys {
             }
 
             var values = layoutElement.$uiValues;
-            var hCenter = values[sys.UIValues.horizontalCenter];
-            var vCenter = values[sys.UIValues.verticalCenter];
-            var left = values[sys.UIValues.left];
-            var right = values[sys.UIValues.right];
-            var top = values[sys.UIValues.top];
-            var bottom = values[sys.UIValues.bottom];
+            var hCenter = values[sys.UIKeys.horizontalCenter];
+            var vCenter = values[sys.UIKeys.verticalCenter];
+            var left = values[sys.UIKeys.left];
+            var right = values[sys.UIKeys.right];
+            var top = values[sys.UIKeys.top];
+            var bottom = values[sys.UIKeys.bottom];
 
             var extX:number;
             var extY:number;
@@ -176,14 +176,14 @@ module swan.sys {
             }
 
             var values = layoutElement.$uiValues;
-            var hCenter = values[sys.UIValues.horizontalCenter];
-            var vCenter = values[sys.UIValues.verticalCenter];
-            var left = values[sys.UIValues.left];
-            var right = values[sys.UIValues.right];
-            var top = values[sys.UIValues.top];
-            var bottom = values[sys.UIValues.bottom];
-            var percentWidth = values[sys.UIValues.percentWidth];
-            var percentHeight = values[sys.UIValues.percentHeight];
+            var hCenter = values[sys.UIKeys.horizontalCenter];
+            var vCenter = values[sys.UIKeys.verticalCenter];
+            var left = values[sys.UIKeys.left];
+            var right = values[sys.UIKeys.right];
+            var top = values[sys.UIKeys.top];
+            var bottom = values[sys.UIKeys.bottom];
+            var percentWidth = values[sys.UIKeys.percentWidth];
+            var percentHeight = values[sys.UIKeys.percentHeight];
 
             var childWidth = lark.NONE;
             var childHeight = lark.NONE;

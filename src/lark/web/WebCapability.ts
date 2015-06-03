@@ -134,11 +134,3 @@ module lark.web {
     }
     WebCapability.detect();
 }
-
-if (!window["Float64Array"]) {
-    window["Float64Array"] = function (arr) {
-        for (var i = 0; i < arr.length; i++) {
-            this[i] = arr[i]
-        }
-    };
-}

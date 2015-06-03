@@ -34,59 +34,11 @@ module swan.sys {
     // 0x4000000000,0x8000000000,0x10000000000,0x20000000000,0x40000000000,0x80000000000,0x100000000000,0x200000000000
 
     export const enum UIFlags{
-        /**
-         * 属性失效标志
-         */
-        InvalidatePropertiesFlag = 0x20000,
-        /**
-         * 尺寸失效标志
-         */
-        InvalidateSizeFlag = 0x40000,
-        /**
-         * 布局失效标志
-         */
-        InvalidateDisplayListFlag = 0x80000,
-        /**
-         * 布局宽度被显式设置的标记
-         */
-        LayoutWidthExplicitlySet = 0x100000,
-        /**
-         * 布局高度被显式设置的标记
-         */
-        LayoutHeightExplicitlySet = 0x200000,
+
         /**
          * 是否启用容器滚动。如果为 true，则将子项剪切到视区的边界，配合设置scrollH和scrollV属性将能滚动视区。
          * 如果为 false，则容器子代会从容器边界扩展过去，而设置scrollH和scrollV也无效。默认false。
          */
         scrollEnabled = 0x400000,
-        /**
-         * 组件是否可以接受用户交互。将 enabled 属性设置为 false 后，组件会自动禁用触摸事件(将 touchEnabled 和 touchChildren 同时设置为 false)，
-         * 部分组件可能还会将皮肤的视图状态设置为"disabled",使其所有子项的颜色变暗。
-         */
-        enabled = 0x800000,
-        /**
-         * UIComponent初始化标志量
-         */
-        UIComponentInitFlags = InvalidatePropertiesFlag|InvalidateSizeFlag|InvalidateDisplayListFlag|enabled,
-        /**
-         * 视图状态失效标志
-         */
-        stateIsDirty = 0x1000000,
-        /**
-         * Component.skinName属性被显式设置过的标志
-         */
-        skinNameExplicitlySet = 0x2000000,
-        /**
-         * 外部显式设置的mouseChildren属性值
-         */
-        explicitTouchChildren = 0x4000000,
-        /**
-         * 外部显式设置的mouseEnabled属性值
-         */
-        explicitTouchEnabled = 0x8000000,
-        /**
-         * UIComponent 是否完成初始化的标志（第一次添加到舞台）
-         */
-        initialized = 0x10000000
     }
 }

@@ -35,7 +35,7 @@ module swan {
 
         public constructor() {
             super();
-            UIImpl.call(this);
+            this.initializeUIValues();
         }
 
         $invalidateContentBounds():void {
@@ -57,6 +57,11 @@ module swan {
 
 
         //=======================UIComponent接口实现===========================
+        /**
+         * UIComponentImpl 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
+         */
+        private initializeUIValues:()=>void;
+
         /**
          * 子类覆盖此方法可以执行一些初始化子项操作。此方法仅在组件第一次添加到舞台时回调一次。
          * 请务必调用super.createChildren()以完成父类组件的初始化
@@ -85,17 +90,17 @@ module swan {
         protected measure():void {
             var values = this.$uiValues;
             var textValues = this.$textFieldValues;
-            var oldWidth = textValues[lark.sys.TextFieldValues.textFieldWidth];
+            var oldWidth = textValues[lark.sys.TextKeys.textFieldWidth];
             var availableWidth = lark.NONE;
             if (!lark.isNone(this._widthConstraint)) {
                 availableWidth = this._widthConstraint;
                 this._widthConstraint = lark.NONE;
             }
-            else if (!lark.isNone(values[sys.UIValues.explicitWidth])) {
-                availableWidth = values[sys.UIValues.explicitWidth];
+            else if (!lark.isNone(values[sys.UIKeys.explicitWidth])) {
+                availableWidth = values[sys.UIKeys.explicitWidth];
             }
-            else if (values[sys.UIValues.maxWidth] != 100000) {
-                availableWidth = values[sys.UIValues.maxWidth];
+            else if (values[sys.UIKeys.maxWidth] != 100000) {
+                availableWidth = values[sys.UIKeys.maxWidth];
             }
 
             super.$setWidth(availableWidth);
@@ -117,7 +122,7 @@ module swan {
         protected invalidateParentLayout():void {
         }
 
-        $uiValues:Float64Array;
+        $uiValues:Object;
 
         $includeInLayout:boolean;
 
@@ -254,10 +259,10 @@ module swan {
                 return;
             }
             var values = this.$uiValues;
-            if (!lark.isNone(values[sys.UIValues.explicitHeight])) {
+            if (!lark.isNone(values[sys.UIKeys.explicitHeight])) {
                 return;
             }
-            if (layoutWidth == values[sys.UIValues.measuredWidth]) {
+            if (layoutWidth == values[sys.UIKeys.measuredWidth]) {
                 return;
             }
             this._widthConstraint = layoutWidth;

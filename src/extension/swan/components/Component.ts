@@ -27,7 +27,20 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
+
 module swan {
+
+    const enum Keys {
+        hostComponentKey,
+        skinName,
+        explicitState,
+        enabled,
+        stateIsDirty,
+        skinNameExplicitlySet,
+        explicitTouchChildren,
+        explicitTouchEnabled,
+        skin
+    }
 
     /**
      * Component 类定义可设置外观的组件的基类。Component 类所使用的外观通常是 Skin 类的子类。
@@ -35,28 +48,47 @@ module swan {
     export class Component extends lark.Sprite implements UIComponent {
         public constructor() {
             super();
-            sys.UIComponentImpl.call(this);
+            this.initializeUIValues();
+            this.$componentValues = {
+                0: null,         //hostComponentKey,
+                1: null,         //skinName,
+                2: "",           //explicitState,
+                3: true,         //enabled,
+                4: false,        //stateIsDirty,
+                5: false,        //skinNameExplicitlySet,
+                6: false,        //explicitTouchChildren,
+                7: false,        //explicitTouchEnabled
+                8: null          //skin
+            };
         }
+
+        $componentValues:Object;
 
         /**
          * 主机组件标识符。用于唯一确定一个组件的名称。
          * 用户自定义的组件若不对此属性赋值，将会继承父级的标识符定义。
          */
-        public hostComponentKey:string = null;
+        public get hostComponentKey():string {
+            return this.$componentValues[Keys.hostComponentKey];
+        }
 
-        private _skinName:any = null;
+        public set hostComponentKey(value:string) {
+            this.$componentValues[Keys.hostComponentKey] = value;
+        }
+
         /**
          * 皮肤标识符。有效值可为：皮肤类定义,皮肤类名,或皮肤实例，
          */
         public get skinName():any {
-            return this._skinName;
+            return this.$componentValues[Keys.skinName];
         }
 
         public set skinName(value:any) {
-            this.$setFlags(sys.UIFlags.skinNameExplicitlySet);
-            if (this._skinName == value)
+            var values = this.$componentValues;
+            values[Keys.skinNameExplicitlySet] = true;
+            if (values[Keys.skinName] == value)
                 return;
-            this._skinName = value;
+            values[Keys.skinName] = value;
             this.parseSkinName();
         }
 
@@ -64,7 +96,7 @@ module swan {
          * 解析skinName
          */
         private parseSkinName():void {
-            var skinName = this._skinName;
+            var skinName = this.skinName;
             var skin:any;
             if (skinName) {
                 if (skinName.prototype) {
@@ -88,20 +120,19 @@ module swan {
         }
 
 
-        $skin:Skin = null;
-
         /**
          * [只读]皮肤对象实例。
          */
         public get skin():Skin {
-            return this.$skin;
+            return this.$componentValues[Keys.skin];
         }
 
         /**
          * 设置皮肤实例
          */
         $setSkin(skin:Skin):void {
-            var oldSkin = this.$skin;
+            var values = this.$componentValues;
+            var oldSkin = values[Keys.skin];
             if (oldSkin) {
                 var skinParts:string[] = oldSkin.skinParts;
                 var length = skinParts.length;
@@ -114,7 +145,7 @@ module swan {
                 oldSkin.hostComponent = null;
             }
             this.removeChildren();
-            this.$skin = skin;
+            values[Keys.skin] = skin;
             if (skin) {
                 skin.hostComponent = this;
                 var skinParts:string[] = skin.skinParts;
@@ -176,21 +207,23 @@ module swan {
 
         $setTouchChildren(value:boolean) {
             value = !!value;
-            if (this.$hasFlags(sys.UIFlags.enabled)) {
+            var values = this.$componentValues;
+            if (values[Keys.enabled]) {
                 this.$toggleFlags(lark.sys.DisplayObjectFlags.TouchChildren, value);
             }
             else {
-                this.$toggleFlags(sys.UIFlags.explicitTouchChildren, value);
+                values[Keys.explicitTouchChildren] = value;
             }
         }
 
         $setTouchEnabled(value:boolean) {
             value = !!value;
-            if (this.$hasFlags(sys.UIFlags.enabled)) {
+            var values = this.$componentValues;
+            if (values[Keys.enabled]) {
                 this.$toggleFlags(lark.sys.DisplayObjectFlags.TouchEnabled, value);
             }
             else {
-                this.$toggleFlags(sys.UIFlags.explicitTouchEnabled, value);
+                values[Keys.explicitTouchEnabled] = value;
             }
         }
 
@@ -199,48 +232,50 @@ module swan {
          * 部分组件可能还会将皮肤的视图状态设置为"disabled",使其所有子项的颜色变暗。默认值为 true。
          */
         public get enabled():boolean {
-            return this.$hasFlags(sys.UIFlags.enabled);
+            return this.$componentValues[Keys.enabled];
         }
 
         public set enabled(value:boolean) {
+            value = !!value;
             this.$setEnabled(value);
         }
 
         $setEnabled(value:boolean):void {
-            value = !!value;
-            if (value === this.$hasFlags(sys.UIFlags.enabled)) {
+
+            var values = this.$componentValues;
+            if (value === values[Keys.enabled]) {
                 return;
             }
-            this.$toggleFlags(sys.UIFlags.enabled, value);
+            values[Keys.enabled] = value;
             if (value) {
-                this.$toggleFlags(sys.UIFlags.explicitTouchEnabled, this.touchEnabled);
-                this.$toggleFlags(sys.UIFlags.explicitTouchChildren, this.touchChildren);
+                values[Keys.explicitTouchEnabled] = this.touchEnabled;
+                values[Keys.explicitTouchChildren] = this.touchChildren;
             }
             else {
-                super.$setTouchEnabled(this.$hasFlags(sys.UIFlags.explicitTouchEnabled));
-                super.$setTouchChildren(this.$hasFlags(sys.UIFlags.explicitTouchChildren));
+                super.$setTouchEnabled(values[Keys.explicitTouchEnabled]);
+                super.$setTouchChildren(values[Keys.explicitTouchChildren]);
             }
             this.invalidateState();
         }
 
         //========================皮肤视图状态=====================start=======================
 
-        private explicitState:string = "";
-
         /**
          * 组件的当前视图状态。显式设置此属性，将采用显式设置的值去更新皮肤状态，而忽略组件内部 getCurrentState() 方法返回的值。
          * 将其设置为 "" 或 null 可将取消组件外部显式设置的视图状态名称，从而采用内部 getCurrentState() 方法返回的状态。
          */
         public get currentState():string {
-            return this.explicitState ?
-                this.explicitState : this.getCurrentState();
+            var values = this.$componentValues;
+            return values[Keys.explicitState] ?
+                values[Keys.explicitState] : this.getCurrentState();
         }
 
         public set currentState(value:string) {
-            if (value == this.explicitState) {
+            var values = this.$componentValues;
+            if (value == values[Keys.explicitState]) {
                 return;
             }
-            this.explicitState = value;
+            values[Keys.explicitState] = value;
             this.invalidateState();
         }
 
@@ -248,10 +283,11 @@ module swan {
          * 标记组件当前的视图状态失效，调用此方法后，子类应该覆盖 getCurrentState() 方法来返回当前的视图状态名称。
          */
         public invalidateState():void {
-            if (this.$hasFlags(sys.UIFlags.stateIsDirty))
+            var values = this.$componentValues;
+            if (values[Keys.stateIsDirty])
                 return;
 
-            this.$setFlags(sys.UIFlags.stateIsDirty);
+            values[Keys.stateIsDirty] = true;
             this.invalidateProperties();
         }
 
@@ -264,18 +300,20 @@ module swan {
 
         //========================皮肤视图状态===================end========================
 
-        /**
-         * 检查属性失效标记并应用
-         */
-        private checkInvalidateFlag:(event?:Event)=>void;
 
         //=======================UIComponent接口实现===========================
+        /**
+         * UIComponentImpl 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
+         */
+        private initializeUIValues:()=>void;
+
         /**
          * 子类覆盖此方法可以执行一些初始化子项操作。此方法仅在组件第一次添加到舞台时回调一次。
          * 请务必调用super.createChildren()以完成父类组件的初始化
          */
         protected createChildren():void {
-            if (!this.$hasFlags(sys.UIFlags.skinNameExplicitlySet)) {
+            var values = this.$componentValues;
+            if (!values[Keys.skinNameExplicitlySet]) {
                 var skin = Theme.$getDefaultSkin(this, this.$stage);
                 if (skin) {
                     this.$setSkin(skin);
@@ -286,7 +324,7 @@ module swan {
         /**
          * 子项创建完成,此方法在createChildren()之后执行。
          */
-        protected childrenCreated():void{
+        protected childrenCreated():void {
 
         }
 
@@ -295,10 +333,11 @@ module swan {
          */
         protected commitProperties():void {
             sys.UIComponentImpl.prototype["commitProperties"].call(this);
-            if (this.$hasFlags(sys.UIFlags.stateIsDirty)) {
-                this.$removeFlags(sys.UIFlags.stateIsDirty);
-                if (this.$skin) {
-                    this.$skin.currentState = this.currentState;
+            var values = this.$componentValues;
+            if (values[Keys.stateIsDirty]) {
+                values[Keys.stateIsDirty] = false;
+                if (values[Keys.skin]) {
+                    values[Keys.skin].currentState = this.currentState;
                 }
             }
         }
@@ -308,32 +347,32 @@ module swan {
          */
         protected measure():void {
             sys.measure(this);
-            var skin = this.$skin;
+            var skin = this.$componentValues[Keys.skin];
             if (!skin) {
                 return;
             }
             var values = this.$uiValues;
             if (!lark.isNone(skin.width)) {
-                values[sys.UIValues.measuredWidth] = skin.width;
+                values[sys.UIKeys.measuredWidth] = skin.width;
             }
             else {
-                if (values[sys.UIValues.measuredWidth] < skin.minWidth) {
-                    values[sys.UIValues.measuredWidth] = skin.minWidth;
+                if (values[sys.UIKeys.measuredWidth] < skin.minWidth) {
+                    values[sys.UIKeys.measuredWidth] = skin.minWidth;
                 }
-                if (values[sys.UIValues.measuredWidth] > skin.maxWidth) {
-                    values[sys.UIValues.measuredWidth] = skin.maxWidth;
+                if (values[sys.UIKeys.measuredWidth] > skin.maxWidth) {
+                    values[sys.UIKeys.measuredWidth] = skin.maxWidth;
                 }
             }
 
             if (!lark.isNone(skin.height)) {
-                values[sys.UIValues.measuredHeight] = skin.height;
+                values[sys.UIKeys.measuredHeight] = skin.height;
             }
             else {
-                if (values[sys.UIValues.measuredHeight] < skin.minHeight) {
-                    values[sys.UIValues.measuredHeight] = skin.minHeight;
+                if (values[sys.UIKeys.measuredHeight] < skin.minHeight) {
+                    values[sys.UIKeys.measuredHeight] = skin.minHeight;
                 }
-                if (values[sys.UIValues.measuredHeight] > skin.maxHeight) {
-                    values[sys.UIValues.measuredHeight] = skin.maxHeight;
+                if (values[sys.UIKeys.measuredHeight] > skin.maxHeight) {
+                    values[sys.UIKeys.measuredHeight] = skin.maxHeight;
                 }
             }
         }
@@ -351,7 +390,7 @@ module swan {
         protected invalidateParentLayout():void {
         }
 
-        $uiValues:Float64Array;
+        $uiValues:Object;
 
         $includeInLayout:boolean;
 

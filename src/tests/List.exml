@@ -1,9 +1,9 @@
-<s:Scroller  width="200" height="200" xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
-    <s:Group touchBackground="true">
+<s:Scroller  xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
+    <s:Group touchThrough="true">
 
         <s:EditableText text="hhhhh" x="200" width="400"/>
         <s:Button label="按钮">
-            <s:Skin height="500" width="500" states="up,over,down,disabled" xmlns:e="http://ns.egret-labs.org/egret" xmlns:w="http://ns.egret-labs.org/wing">
+            <s:Skin height="500" width="500" states="up,over,down,disabled">
                 <s:Image source="image/button_up.png" includeIn="up" width="100%" height="100%" scale9Grid="5,5,63,16"/>
                 <s:Image source="image/button_over.png" includeIn="over" width="100%" height="100%" scale9Grid="5,5,63,16"/>
                 <s:Image source="image/button_down.png" includeIn="down" width="100%" height="100%" scale9Grid="5,5,63,16"/>

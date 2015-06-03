@@ -33,7 +33,7 @@ module swan {
     /**
      * 为 Swan 内的类或接口定义的枚举值。通常作为实例检查类型 lark.is() 方法的参数。
      */
-    export enum Types {
+    export const enum Types {
         /**
          * UI 显示对象基类
          */

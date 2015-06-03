@@ -27,6 +27,94 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
+
+module lark.sys {
+    /**
+     * 显示对象失效标志
+     */
+    export const enum DisplayObjectFlags {
+
+        //DisplayObject剩余可用的：0x1000,0x2000,0x4000,0x8000,0x10000
+
+        /**
+         * 显示对象是否开启像素级精确碰撞，开启后显示对象的透明区域将可以穿透，Graphics默认开启此功能，。
+         */
+        PixelHitTest = 0x0001,
+        /**
+         * 显示对象自身的绘制区域尺寸失效
+         */
+        InvalidContentBounds = 0x0002,
+
+        /**
+         * 显示对象的矩形区域尺寸失效，包括自身绘制区域和子项的区域集合
+         */
+        InvalidBounds = 0x0004,
+
+        /**
+         * 显示对象的matrix属性失效标志，通常因为scaleX，width等属性发生改变。
+         */
+        InvalidMatrix = 0x0008,
+
+        /**
+         * 显示对象祖代的矩阵失效。
+         */
+        InvalidConcatenatedMatrix = 0x0010,
+
+        /**
+         * 显示对象祖代的逆矩阵失效。
+         */
+        InvalidInvertedConcatenatedMatrix = 0x0020,
+
+        /**
+         * 显示对象祖代的透明度属性失效。
+         */
+        InvalidConcatenatedAlpha = 0x0040,
+        /**
+         * 显示对象应该被缓存成位图的标志，即使没有设置这个标志，也有可能被缓存成位图，例如含有滤镜的情况。
+         * 而当设置了这个标志，如果内存不足，也会放弃缓存。
+         */
+        CacheAsBitmap = 0x0080,
+
+        /**
+         * 显示对象自身需要重绘的标志
+         */
+        DirtyRender = 0x0100,
+        /**
+         * 子项中已经全部含有DirtyRender标志，无需继续遍历。
+         */
+        DirtyChildren = 0x200,
+        /**
+         * 对象自身在舞台上的显示尺寸发生改变。
+         */
+        TouchEnabled = 0x400,
+        /**
+         * 对象自身以及子项在舞台上显示尺寸发生改变。
+         */
+        TouchChildren = 0x800,
+        /**
+         * DirtyRender|DirtyChildren
+         */
+        Dirty = DirtyRender | DirtyChildren,
+        /**
+         * 添加或删除子项时，需要向子项传递的标志。
+         */
+        DownOnAddedOrRemoved = DisplayObjectFlags.InvalidConcatenatedMatrix |
+            DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
+            DisplayObjectFlags.InvalidConcatenatedAlpha |
+            DisplayObjectFlags.DirtyChildren,
+        /**
+         * 显示对象初始化时的标志量
+         */
+        InitFlags = DisplayObjectFlags.TouchEnabled |
+            DisplayObjectFlags.TouchChildren |
+            DisplayObjectFlags.InvalidConcatenatedMatrix |
+            DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
+            DisplayObjectFlags.InvalidConcatenatedAlpha |
+            DisplayObjectFlags.Dirty
+
+    }
+}
+
 module lark {
 
     /**
@@ -42,16 +130,17 @@ module lark {
         return value;
     }
 
-    const enum Values {
-        scaleX,     //1
-        scaleY,     //1
-        skewX,      //0
-        skewY,      //0
-        rotation    //0
-    }
-
-    const enum M {
-        a, b, c, d, tx, ty
+    const enum Keys {
+        scaleX,
+        scaleY,
+        skewX,
+        skewY,
+        rotation,
+        name,
+        matrix,
+        invertedConcatenatedMatrix,
+        bounds,
+        contentBounds
     }
 
     /**
@@ -68,66 +157,39 @@ module lark {
          */
         public constructor() {
             super();
-            if (!this._matrix) {//避免重复初始化
-                this.initializeFields();
-            }
-
+            this.$displayFlags = sys.DisplayObjectFlags.InitFlags;
+            this.displayValues = {
+                0: 1,                //scaleX,
+                1: 1,                //scaleY,
+                2: 0,                //skewX,
+                3: 0,                //skewY,
+                4: 0,                //rotation
+                5: "",               //name
+                6: new Matrix(),     //matrix,
+                7: new Matrix(),     //invertedConcatenatedMatrix,
+                8: new Rectangle(),  //bounds,
+                9: new Rectangle(),  //contentBounds
+            };
         }
 
-        /**
-         * DisplayObject定义的所有变量请不要添加任何初始值，必须统一在此处初始化。否则UIComponent的代码复用机制可能会触发两次DisplayObject的构造方法。
-         */
-        private initializeFields():void{
-            this.$displayObjectFlags = 0;
-            this.$children = null;
-            this.$parent = null;
-            this.$stage = null;
-            this.$nestLevel = 0;
-            this._matrix = new Matrix();
-            this._invertedConcatenatedMatrix = new Matrix();
-            this.$visible = true;
-            this.$displayList = null;
-            this.$alpha = 1;
-            this.$scrollRect = null;
-            this.$blendMode = 0;
-            this.$maskedObject = null;
-            this.$mask = null;
-            this._bounds = new lark.Rectangle();
-            this._contentBounds = new lark.Rectangle();
-            this.$parentDisplayList = null;
-            this.$isDirty = false;
-            this.$renderAlpha = 1;
-            this.$renderMatrix = new lark.Matrix();
-            this.$renderRegion = null;
-            this.name = null;
-            this.$displayObjectFlags = sys.DisplayObjectFlags.InitFlags;
-            this.displayObjectValues = new Float64Array([
-                1,  //scaleX,
-                1,  //scaleY,
-                0,  //skewX,
-                0,  //skewY,
-                0   //rotation
-            ]);
-        }
+        private displayValues:Object;
 
-        private displayObjectValues:Float64Array;
-
-        $displayObjectFlags:number;
+        $displayFlags:number;
 
         $setFlags(flags:number):void {
-            this.$displayObjectFlags |= flags;
+            this.$displayFlags |= flags;
         }
 
         $toggleFlags(flags:number, on:boolean):void {
             if (on) {
-                this.$displayObjectFlags |= flags;
+                this.$displayFlags |= flags;
             } else {
-                this.$displayObjectFlags &= ~flags;
+                this.$displayFlags &= ~flags;
             }
         }
 
         $removeFlags(flags:number):void {
-            this.$displayObjectFlags &= ~flags;
+            this.$displayFlags &= ~flags;
         }
 
         /**
@@ -145,7 +207,7 @@ module lark {
         }
 
         $hasFlags(flags:number):boolean {
-            return (this.$displayObjectFlags & flags) === flags;
+            return (this.$displayFlags & flags) === flags;
         }
 
         /**
@@ -170,7 +232,7 @@ module lark {
         }
 
         $hasAnyFlags(flags:number):boolean {
-            return !!(this.$displayObjectFlags & flags);
+            return !!(this.$displayFlags & flags);
         }
 
         private invalidateMatrix():void {
@@ -193,15 +255,21 @@ module lark {
         /**
          * 能够含有子项的类将子项列表存储在这个属性里。
          */
-        $children:DisplayObject[];
+        $children:DisplayObject[] = null;
 
         /**
          * 表示 DisplayObject 的实例名称。
          * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
          */
-        public name:string;
+        public get name():string {
+            return this.displayValues[Keys.name];
+        }
 
-        $parent:DisplayObjectContainer;
+        public set name(value:string) {
+            this.displayValues[Keys.name] = value;
+        }
+
+        $parent:DisplayObjectContainer = null;
 
         /**
          * 表示包含此显示对象的 DisplayObjectContainer 对象。
@@ -226,12 +294,12 @@ module lark {
             Sprite.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
         }
 
-        $stage:Stage;
+        $stage:Stage = null;
 
         /**
          * 这个对象在显示列表中的嵌套深度，舞台为1，它的子项为2，子项的子项为3，以此类推。当对象不在显示列表中时此属性值为0.
          */
-        $nestLevel:number;
+        $nestLevel:number = 0;
 
         /**
          * 显示对象的舞台。
@@ -242,7 +310,6 @@ module lark {
             return this.$stage;
         }
 
-        private _matrix:Matrix;
         /**
          * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。
          * 注意：必须对matrix属性重新赋值改变的值才能生效，若获取matrix引用来修改对象属性，将不会发生任何改变。
@@ -252,33 +319,34 @@ module lark {
         }
 
         $getMatrix():Matrix {
+            var values = this.displayValues;
             if (this.$hasFlags(sys.DisplayObjectFlags.InvalidMatrix)) {
-                var values = this.displayObjectValues;
-                this._matrix.$updateScaleAndRotation(values[Values.scaleX], values[Values.scaleY], values[Values.skewX], values[Values.skewY]);
+                values[Keys.matrix].$updateScaleAndRotation(values[Keys.scaleX], values[Keys.scaleY], values[Keys.skewX], values[Keys.skewY]);
                 this.$removeFlags(sys.DisplayObjectFlags.InvalidMatrix);
             }
-            return this._matrix;
+            return values[Keys.matrix];
         }
 
         public set matrix(value:Matrix) {
             this.$setMatrix(value);
             if (value) {
-                this._matrix.copyFrom(value);
+                this.displayValues[Keys.matrix].copyFrom(value);
             }
         }
 
         $setMatrix(matrix:Matrix):void {
-            if (this._matrix.equals(matrix)) {
+            var values = this.displayValues;
+            var m = values[Keys.matrix];
+            if (m.equals(matrix)) {
                 return;
             }
-            var m = this._matrix;
+
             m.copyFrom(matrix);
-            var values = this.displayObjectValues;
-            values[Values.scaleX] = m.$getScaleX();
-            values[Values.scaleY] = m.$getScaleY();
-            values[Values.skewX] = matrix.$getSkewX();
-            values[Values.skewY] = matrix.$getSkewY();
-            values[Values.rotation] = clampRotation(values[Values.skewY] * 180 / Math.PI);
+            values[Keys.scaleX] = m.$getScaleX();
+            values[Keys.scaleY] = m.$getScaleY();
+            values[Keys.skewX] = matrix.$getSkewX();
+            values[Keys.skewY] = matrix.$getSkewY();
+            values[Keys.rotation] = clampRotation(values[Keys.skewY] * 180 / Math.PI);
             this.$removeFlags(sys.DisplayObjectFlags.InvalidMatrix);
             this.invalidatePosition();
         }
@@ -310,14 +378,13 @@ module lark {
             return this.$renderMatrix;
         }
 
-        private _invertedConcatenatedMatrix:Matrix;
-
         $getInvertedConcatenatedMatrix():Matrix {
+            var values = this.displayValues;
             if (this.$hasFlags(sys.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix)) {
-                this.$getConcatenatedMatrix().$invertInto(this._invertedConcatenatedMatrix);
+                this.$getConcatenatedMatrix().$invertInto(values[Keys.invertedConcatenatedMatrix]);
                 this.$removeFlags(sys.DisplayObjectFlags.InvalidInvertedConcatenatedMatrix);
             }
-            return this._invertedConcatenatedMatrix;
+            return values[Keys.invertedConcatenatedMatrix];
         }
 
         /**
@@ -330,7 +397,7 @@ module lark {
         }
 
         $getX():number {
-            return this._matrix.$data[M.tx];
+            return this.displayValues[Keys.matrix].tx;
         }
 
         public set x(value:number) {
@@ -339,11 +406,11 @@ module lark {
 
         $setX(value:number):boolean {
             value = +value || 0;
-            var values = this._matrix.$data;
-            if (value === values[M.tx]) {
+            var m = this.displayValues[Keys.matrix];
+            if (value === m.tx) {
                 return false;
             }
-            values[M.tx] = value;
+            m.tx = value;
             this.invalidatePosition();
             return true;
         }
@@ -358,7 +425,7 @@ module lark {
         }
 
         $getY():number {
-            return this._matrix.$data[M.ty];
+            return this.displayValues[Keys.matrix].ty;
         }
 
         public set y(value:number) {
@@ -367,11 +434,11 @@ module lark {
 
         $setY(value:number):boolean {
             value = +value || 0;
-            var values = this._matrix.$data;
-            if (value === values[M.ty]) {
+            var m = this.displayValues[Keys.matrix];
+            if (value === m.ty) {
                 return false;
             }
-            values[M.ty] = value;
+            m.ty = value;
             this.invalidatePosition();
             return true;
         }
@@ -384,7 +451,7 @@ module lark {
          * @default 1
          */
         public get scaleX():number {
-            return this.displayObjectValues[Values.scaleX];
+            return this.displayValues[Keys.scaleX];
         }
 
         public set scaleX(value:number) {
@@ -393,11 +460,11 @@ module lark {
 
         $setScaleX(value:number):boolean {
             value = +value || 0;
-            var values = this.displayObjectValues;
-            if (value === values[Values.scaleX]) {
+            var values = this.displayValues;
+            if (value === values[Keys.scaleX]) {
                 return false;
             }
-            values[Values.scaleX] = value;
+            values[Keys.scaleX] = value;
             this.invalidateMatrix();
             return true;
         }
@@ -409,7 +476,7 @@ module lark {
          * @default 1
          */
         public get scaleY():number {
-            return this.displayObjectValues[Values.scaleY];
+            return this.displayValues[Keys.scaleY];
         }
 
         public set scaleY(value:number) {
@@ -418,10 +485,10 @@ module lark {
 
         $setScaleY(value:number):boolean {
             value = +value || 0;
-            if (value === this.displayObjectValues[Values.scaleY]) {
+            if (value === this.displayValues[Keys.scaleY]) {
                 return false;
             }
-            this.displayObjectValues[Values.scaleY] = value;
+            this.displayValues[Keys.scaleY] = value;
             this.invalidateMatrix();
             return true;
         }
@@ -433,21 +500,21 @@ module lark {
          * @default 0 默认值为 0 不旋转。
          */
         public get rotation():number {
-            return this.displayObjectValues[Values.rotation];
+            return this.displayValues[Keys.rotation];
         }
 
         public set rotation(value:number) {
             value = +value || 0;
             value = clampRotation(value);
-            var values = this.displayObjectValues;
-            if (value === values[Values.rotation]) {
+            var values = this.displayValues;
+            if (value === values[Keys.rotation]) {
                 return;
             }
-            var delta = value - values[Values.rotation];
+            var delta = value - values[Keys.rotation];
             var angle = delta / 180 * Math.PI;
-            values[Values.skewX] += angle;
-            values[Values.skewY] += angle;
-            values[Values.rotation] = value;
+            values[Keys.skewX] += angle;
+            values[Keys.skewY] += angle;
+            values[Keys.rotation] = value;
             this.invalidateMatrix();
         }
 
@@ -471,17 +538,17 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var values = this.displayObjectValues;
+            var values = this.displayValues;
             var originalBounds = this.$getOriginalBounds();
             var bounds = this.$getTransformedBounds(this.$parent, $TempRectangle);
-            var angle = values[Values.rotation] / 180 * Math.PI;
+            var angle = values[Keys.rotation] / 180 * Math.PI;
             var baseWidth = originalBounds.$getBaseWidth(angle);
             if (!baseWidth) {
                 return;
             }
             var baseHeight = originalBounds.$getBaseHeight(angle);
-            values[Values.scaleY] = bounds.height / baseHeight;
-            values[Values.scaleX] = value / baseWidth;
+            values[Keys.scaleY] = bounds.height / baseHeight;
+            values[Keys.scaleX] = value / baseWidth;
             this.invalidateMatrix();
         }
 
@@ -505,21 +572,21 @@ module lark {
             if (value < 0) {
                 return;
             }
-            var values = this.displayObjectValues;
+            var values = this.displayValues;
             var originalBounds = this.$getOriginalBounds();
             var bounds = this.$getTransformedBounds(this.$parent, $TempRectangle);
-            var angle = values[Values.rotation] / 180 * Math.PI;
+            var angle = values[Keys.rotation] / 180 * Math.PI;
             var baseHeight = originalBounds.$getBaseHeight(angle);
             if (!baseHeight) {
                 return;
             }
             var baseWidth = originalBounds.$getBaseWidth(angle);
-            values[Values.scaleY] = value / baseHeight;
-            values[Values.scaleX] = bounds.width / baseWidth;
+            values[Keys.scaleY] = value / baseHeight;
+            values[Keys.scaleX] = bounds.width / baseWidth;
             this.invalidateMatrix();
         }
 
-        $visible:boolean;
+        $visible:boolean = true;
 
         /**
          * 显示对象是否可见。
@@ -542,7 +609,7 @@ module lark {
         /**
          * cacheAsBitmap创建的缓存位图节点。
          */
-        $displayList:lark.sys.DisplayList;
+        $displayList:lark.sys.DisplayList = null;
 
         /**
          * 如果设置为 true，则 Lark 播放器将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
@@ -591,7 +658,7 @@ module lark {
         /**
          * 渲染时会用到的属性，独立声明一个变量
          */
-        $alpha:number;
+        $alpha:number = 1;
 
         /**
          * 表示指定对象的 Alpha 透明度值。
@@ -641,7 +708,7 @@ module lark {
             this.$setTouchEnabled(value);
         }
 
-        $setTouchEnabled(value:boolean):void{
+        $setTouchEnabled(value:boolean):void {
             this.$toggleFlags(sys.DisplayObjectFlags.TouchEnabled, !!value);
         }
 
@@ -657,7 +724,7 @@ module lark {
             this.$toggleFlags(sys.DisplayObjectFlags.PixelHitTest, !!value);
         }
 
-        $scrollRect:Rectangle;
+        $scrollRect:Rectangle = null;
 
         /**
          * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
@@ -683,7 +750,7 @@ module lark {
             this.invalidatePosition();
         }
 
-        $blendMode:number;
+        $blendMode:number = 0;
 
         /**
          * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上
@@ -705,9 +772,9 @@ module lark {
         /**
          * 被遮罩的对象
          */
-        $maskedObject:DisplayObject;
+        $maskedObject:DisplayObject = null;
 
-        $mask:DisplayObject;
+        $mask:DisplayObject = null;
 
         /**
          * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
@@ -802,13 +869,11 @@ module lark {
             this.$propagateFlagsUp(sys.DisplayObjectFlags.InvalidBounds);
         }
 
-        private _bounds:Rectangle;
-
         /**
          * 获取显示对象占用的矩形区域集合，通常包括自身绘制的测量区域，如果是容器，还包括所有子项占据的区域。
          */
         $getOriginalBounds():Rectangle {
-            var bounds = this._bounds;
+            var bounds = this.displayValues[Keys.bounds];
             if (this.$hasFlags(sys.DisplayObjectFlags.InvalidBounds)) {
                 bounds.copyFrom(this.$getContentBounds());
                 this.$measureChildBounds(bounds);
@@ -828,10 +893,8 @@ module lark {
 
         }
 
-        private _contentBounds:Rectangle;
-
         $getContentBounds():Rectangle {
-            var bounds = this._contentBounds;
+            var bounds = this.displayValues[Keys.contentBounds];
             if (this.$hasFlags(sys.DisplayObjectFlags.InvalidContentBounds)) {
                 this.$measureContentBounds(bounds);
                 if (this.$renderRegion) {
@@ -850,7 +913,7 @@ module lark {
 
         }
 
-        $parentDisplayList:lark.sys.DisplayList;
+        $parentDisplayList:lark.sys.DisplayList = null;
 
         /**
          * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
@@ -885,19 +948,19 @@ module lark {
         /**
          * 是否需要重绘的标志，此属性在渲染时会被访问，所以单独声明一个直接的变量。
          */
-        $isDirty:boolean;
+        $isDirty:boolean = false;
         /**
          * 这个对象在舞台上的整体透明度
          */
-        $renderAlpha:number;
+        $renderAlpha:number = 1;
         /**
          * 在舞台上的矩阵对象
          */
-        $renderMatrix:Matrix;
+        $renderMatrix:Matrix = new lark.Matrix();
         /**
          * 此显示对象自身（不包括子项）在屏幕上的显示尺寸。
          */
-        $renderRegion:sys.Region;
+        $renderRegion:sys.Region = null;
 
         /**
          * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
@@ -931,10 +994,10 @@ module lark {
             if (!this.$renderRegion || !this.$visible || !this.$hasFlags(sys.DisplayObjectFlags.TouchEnabled)) {
                 return null;
             }
-            var m = this.$getInvertedConcatenatedMatrix().$data;
+            var m = this.$getInvertedConcatenatedMatrix();
             var bounds = this.$getContentBounds();
-            var localX = m[M.a] * stageX + m[M.c] * stageY + m[M.tx];
-            var localY = m[M.b] * stageX + m[M.d] * stageY + m[M.ty];
+            var localX = m.a * stageX + m.c * stageY + m.tx;
+            var localY = m.b * stageX + m.d * stageY + m.ty;
             if (bounds.contains(localX, localY)) {
                 if (!this.$children) {//容器已经检查过scrollRect和mask，避免重复对遮罩进行碰撞。
                     if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
@@ -944,7 +1007,7 @@ module lark {
                         return null;
                     }
                 }
-                if (shapeFlag || this.$displayObjectFlags & sys.DisplayObjectFlags.PixelHitTest) {
+                if (shapeFlag || this.$displayFlags & sys.DisplayObjectFlags.PixelHitTest) {
                     return this.hitTestPixel(localX, localY);
                 }
                 return this;
@@ -1009,7 +1072,7 @@ module lark {
             }
 
             var list = this.$getPropagationList(this);
-            var targetIndex = list.length*0.5;
+            var targetIndex = list.length * 0.5;
             event.$target = this;
             this.$emitPropagationEvent(event, list, targetIndex);
             return !event.$isDefaultPrevented;
@@ -1030,7 +1093,7 @@ module lark {
          *
          * Lark最终采用了HTML里只有两个阶段的事件流机制。
          */
-        $getPropagationList(target:DisplayObject):DisplayObject[]{
+        $getPropagationList(target:DisplayObject):DisplayObject[] {
             var list:DisplayObject[] = [];
             while (target) {
                 list.push(target);
