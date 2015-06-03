@@ -67,6 +67,9 @@ module lark.web {
                 this.$removeCurrentTextInput();
             this.currentTextInput = currentTextInput;
             this.currentHtmlInput = currentTextInput.wordWrap ? this.multiLineTextInput : this.singleLineTextInput;
+            if(currentTextInput.displayAsPassword) {
+                this.currentHtmlInput = this.singleLineTextInput;
+            }
             this.currentHtmlInput.value = this.currentTextInput.text;
             this.pendingToShowHtmlInput = true;
             this.canvas['userTyping'] = true;
@@ -162,7 +165,7 @@ module lark.web {
             element.style.left = "0px";
             element.style.top = "0px";
             element.style.border = "none";
-            element.style.padding = "0";
+            element.style.padding = "2px 0";
             element.style[getPrefixStyleName("transformOrigin")] = "0% 0% 0px";
         }
 
@@ -196,6 +199,13 @@ module lark.web {
             this.multiLineTextInput.style.display="none";
             var textInput = this.currentTextInput;
             var htmlInput = this.currentHtmlInput;
+
+            if(textInput.displayAsPassword) {
+                htmlInput.type = "password";
+            }
+            else {
+                htmlInput.type = "text";
+            }
 
             var scaleX = this.scaleX;
             var scaleY = this.scaleY;
@@ -231,11 +241,11 @@ module lark.web {
             setElementStyle(getPrefixStyleName('transform'), 'matrix(' + [matrix.a,matrix.b,matrix.c,matrix.d,0,0].join(",") + ')');
 
             setTimeout(()=>{
-                this.currentHtmlInput.style.opacity='1';
+                htmlInput.style.opacity='1';
             },0);
 
             if(textInput.wordWrap == false && textInput.verticalAlign != VerticalAlign.MIDDLE){
-                var padding = textInput.height - textInput.fontSize;
+                var padding = textInput.height - textInput.fontSize + 2;
                 var styleName = textInput.verticalAlign == VerticalAlign.TOP?'paddingBottom':'paddingTop';
                 setElementStyle(styleName,padding + "px");
                 setElementStyle("height", textInput.fontSize + "px");
@@ -243,6 +253,11 @@ module lark.web {
             if (textInput.text != htmlInput.value) {
                 htmlInput.value = textInput.text;
             }
+            if(textInput.maxChars != 0)
+                htmlInput.maxLength = textInput.maxChars;
+            else if(htmlInput.maxLength>=0)
+                htmlInput.maxLength = 0x800000;
+
         }
 
         private setElementStyle(style:string, value:any):void {

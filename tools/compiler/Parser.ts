@@ -92,16 +92,6 @@ export function parseCommandLine(commandLine: string[]) {
                         case "string":
                             options[opt.name] = args[i++] || "";
                             break;
-                        // If not a primitive, the possible types are specified in what is effectively a map of options.
-                        //default:
-                        //    var map = <lark.Map<number>>opt.type;
-                        //    var key = (args[i++] || "").toLowerCase();
-                        //    if (key in map) {
-                        //        options[opt.name] = map[key];
-                        //    }
-                        //    else {
-                        //        errors.push(utils.tr(opt.error.code));
-                        //    }
                     }
                 }
                 else

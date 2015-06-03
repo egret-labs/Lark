@@ -49,7 +49,9 @@ module lark.sys {
         italic,
         fontStringChanged,
         textLinesChanged,
-        wordWrap
+        wordWrap,
+        displayAsPassword,
+        maxChars
     }
 }
 
@@ -92,6 +94,8 @@ module lark {
                 17: true,          //fontStringChanged,
                 18: false,         //textLinesChanged,
                 19: true,          //wordWrap
+                20: false,         //displayAsPassword
+                21: 0              //maxChars
             };
             this.text = text;
         }
@@ -262,6 +266,9 @@ module lark {
             value = !!value;
             var values = this.$TextField;
             if (value === values[sys.TextKeys.wordWrap]) {
+                return;
+            }
+            if(values[sys.TextKeys.displayAsPassword]){
                 return;
             }
             values[sys.TextKeys.wordWrap] = value;
@@ -442,6 +449,16 @@ module lark {
                 return null;
             }
 
+            var displayAsPassword = values[sys.TextKeys.displayAsPassword];
+            if(displayAsPassword){
+                var textLength = text.length;
+                var asterisks = "";
+                for(var i=0;i<textLength;i++){
+                    asterisks+="•";
+                }
+                text = asterisks;
+            }
+
             var hasWidthSet = !isNone(textFieldWidth);
             var font = this.getFontString();
             var lines = text.split(/(?:\r\n|\r|\n)/);
@@ -456,7 +473,7 @@ module lark {
                     if (measureW > textFieldWidth) {
                         var newLine = "";
                         var lineWidth = 0;
-                        var words = line.split(/\b/);
+                        var words = this.$splitWords(line);
                         var len = words.length;
                         for (var j = 0; j < len; j++) {
                             var word = words[j];
@@ -531,6 +548,10 @@ module lark {
                 values[sys.TextKeys.lineSpacing]) - values[sys.TextKeys.lineSpacing] + 4);
             this.textLines = lines;
             return lines;
+        }
+
+        protected $splitWords(line:string):string[] {
+            return line.split(/\b/);
         }
 
     }

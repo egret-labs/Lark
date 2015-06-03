@@ -49,10 +49,10 @@ class Project {
     }
 
     buildWholeProject() {
-        this.shutdown();
+        this.shutdown(11);
         var larkPath = FileUtil.joinPath(utils.getLarkRoot(), 'tools/bin/lark');
 
-        var build = cprocess.spawn(process.execPath, [larkPath, 'buildService', this.path], {
+        var build = cprocess.spawn(process.execPath, ['--expose-gc',larkPath, 'buildService', this.path], {
             detached: true,
             cwd: this.path
         });
@@ -78,16 +78,22 @@ class Project {
 
     private sendCommand(cmd: lark.ServiceCommand) {
         //this.buildProcess.stdin.write(JSON.stringify(cmd), 'utf8');
-        console.log(cmd);
         this.buildPort && this.buildPort.write(JSON.stringify(cmd));
         //this.buildProcess.send(cmd);
     }
 
-    public shutdown() {
-        this.sendCommand({ command: 'shutdown' });
-        if (this.buildProcess) {
-            this.buildProcess.removeAllListeners('exit');
-            this.buildProcess.kill();
+    public shutdown(retry = 0) {
+        if (this.penddingRequest == null || retry >= 10) {
+            this.buildProcess = null;
+            this.sendCommand({ command: 'shutdown' });
+            if (this.buildProcess) {
+                this.buildProcess.removeAllListeners('exit');
+                this.buildProcess.kill();
+                this.buildProcess = null;
+            }
+        }
+        else {
+            setTimeout(() => this.shutdown(retry++), 5000);
         }
     }
 
@@ -97,6 +103,7 @@ class Project {
         if (this.penddingRequest) {
             this.penddingRequest.writeHead(200, { 'Content-Type': 'text/plain' });
             this.penddingRequest.end(JSON.stringify(msg));
+            this.penddingRequest = null;
         }
     }
 
