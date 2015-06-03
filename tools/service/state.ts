@@ -65,6 +65,7 @@ export interface FileChanges {
 }
 
 function updateMTime(filePath: string, states: Map<FileState> = {}) {
+    console.log(filePath);
     var files = FS.readdirSync(filePath);
     var length = files.length;
     for (var i = 0; i < length; i++) {

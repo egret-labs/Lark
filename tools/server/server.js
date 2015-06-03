@@ -85,7 +85,7 @@ var ServerConsole = (function (_super) {
 function getLocalIPAddress() {
     var os = require('os');
     var ifaces = os.networkInterfaces();
-    var ips = [lark.options.project.host, '127.0.0.1'];
+    var ips = ['localhost', '127.0.0.1'];
     Object.keys(ifaces).forEach(function (ifname) {
         var alias = 0;
         ifaces[ifname].forEach(function (iface) {

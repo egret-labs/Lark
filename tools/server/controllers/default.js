@@ -1,9 +1,7 @@
 /// <reference path="../../lib/types.d.ts" />
 var url = require('url');
 var file = require('../../lib/FileUtil');
-var Build = require('../../compiler/Build');
 var Create = require('../../compiler/Create');
-var Project = require('../../compiler/Project');
 var exportObject = {
     LarkStaticContentPath: '$/content/',
     UserProjectPath: null,
@@ -11,11 +9,9 @@ var exportObject = {
 };
 var self = this;
 function install() {
-    addRoute('$/', manage);
     addRoute('$/ping/', ping);
     addRoute('$/help/', help);
     addRoute('$/create/', create);
-    addRoute('$/config/', manage);
     addRoute('$/shutdown', shutdown);
     framework.file('Lark manage static files', staticFiles);
     framework.file('User project static files', projectFiles);
@@ -45,29 +41,6 @@ function doCreate() {
         create.doCreate(proj, function () {
             self.res.send(200, 'OK');
         });
-    }
-    catch (e) {
-        console.log(e);
-        self.res.send(500, JSON.stringify(e, null, '  '));
-    }
-}
-function manage() {
-    if (self.req.query['proj'])
-        doManage();
-    this.view('manage');
-}
-function doManage() {
-    var projJSON = self.req.query['proj'];
-    try {
-        var proj = JSON.parse(projJSON);
-        var project = new Project();
-        project.parse(proj);
-        lark.options.project = project;
-        lark.options.includeLark = true;
-        var build = new Build(lark.options);
-        build.saveProject();
-        build.run();
-        self.res.send(200, 'OK');
     }
     catch (e) {
         console.log(e);

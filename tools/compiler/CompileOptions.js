@@ -41,7 +41,7 @@ var CompileOptions = (function () {
     });
     Object.defineProperty(CompileOptions.prototype, "out", {
         get: function () {
-            var filename = this.publish ? FileUtil.joinPath(this.outDir, this.project.name + '.min.js') : undefined;
+            var filename = this.publish ? FileUtil.joinPath(this.outDir, 'main.min.js') : undefined;
             return filename;
         },
         enumerable: true,
@@ -63,14 +63,14 @@ var CompileOptions = (function () {
     });
     Object.defineProperty(CompileOptions.prototype, "host", {
         get: function () {
-            return this.project.host;
+            return "localhost";
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(CompileOptions.prototype, "port", {
         get: function () {
-            return this.project.port;
+            return 3000;
         },
         enumerable: true,
         configurable: true
@@ -93,7 +93,7 @@ var CompileOptions = (function () {
     });
     Object.defineProperty(CompileOptions.prototype, "startUrl", {
         get: function () {
-            var url = "http://" + this.host + ':' + this.port + '/bin-debug/' + this.project.startupHtml;
+            var url = "http://" + this.host + ':' + this.port + '/bin-debug/index.html';
             return url;
         },
         enumerable: true,

@@ -39,6 +39,7 @@ import Create = require("./Create");
 import utils = require('../lib/utils');
 import FileUtil = require('../lib/FileUtil');
 import server = require('../server/server');
+import service = require("../service/index");
 
 import http = require('http');
 import childProcess = require('child_process');
@@ -72,11 +73,6 @@ class Entry {
             case "create":
                 var create = new Create(options);
                 create.run();
-                server.startServer(options, options.manageUrl + "create/");
-                exitCode = DontExitCode;
-                break;
-            case "config":
-                server.startServer(options, options.manageUrl + "config/");
                 exitCode = DontExitCode;
                 break;
             case "help":
@@ -99,13 +95,23 @@ class Entry {
             case "shutdown":
                 this.exit(0);
                 break;
+            case "service":
+                service.run();
+                exitCode = DontExitCode;
+                break;
             case "buildService":
                 var build = new Build(options);
                 exitCode = build.run();
                 exitCode = DontExitCode;
                 break;
+            case "clean":
+                service.execCommand({ path: options.projectDir, command: "shutdown" },null, false);
+                setTimeout(() => service.execCommand({ path: options.projectDir, command: "build" }, gotCommandResult, true), 500);
+                exitCode = DontExitCode;
+                break;
+            case "build":
             default:
-                sendBuildCMD();
+                service.execCommand({ path: options.projectDir, command: "build" }, gotCommandResult,true);
                 exitCode = DontExitCode;
                 break;
         }
@@ -121,52 +127,11 @@ class Entry {
 
 var entry = new Entry();
 
-var serviceCreated = false;
-export function sendBuildCMD(callback:Function = gotCommandResult) {
-    var options = lark.options;
-    var requestUrl = 'http://127.0.0.1:51598/?version=' + lark.manifest.version + '&path=' + encodeURIComponent(options.projectDir); 
-    var commandRequest = http.get(requestUrl, function (res) {
-        res.setEncoding('utf-8');
-        res.on('data', function (text) {
-            try {
-                var cmd: lark.ServiceCommandResult = JSON.parse(text);
-            }
-            catch (e) {
-                cmd = { exitCode:0, messages:[],command:"build" };
-            }
-            callback(cmd);
-        });
-    });
-    commandRequest.once('error', function (e) {
-        if (!serviceCreated) {
-            startBackgroundService();
-            serviceCreated = true;
-        }
-        setTimeout(() => sendBuildCMD(callback), 200);
-    });
-    commandRequest.setTimeout(100);
-}
-
-function startBackgroundService() {
-    console.log('create service');
-    var options = lark.options;
-    var nodePath = process.execPath,
-        service = FileUtil.joinPath(options.larkRoot, 'tools/service/index');
-    var startupParams = ['--expose-gc', service, lark.manifest.version];
-    this.server = childProcess.spawn(nodePath, startupParams, {
-        detached: true,
-        stdio: ['ignore', 'ignore', 'ignore'],
-        cwd: process.cwd(),
-        silent: true
-    });
-}
-
 
 function gotCommandResult(cmd: lark.ServiceCommandResult) {
     if (cmd.messages) {
         cmd.messages.forEach(m=> console.log(m));
     }
     process.exit(cmd.exitCode || 0);
-    
 }
 

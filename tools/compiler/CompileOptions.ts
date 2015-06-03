@@ -30,7 +30,7 @@ class CompileOptions implements lark.ICompileOptions {
 
 
     get out(): string {
-        var filename = this.publish ? FileUtil.joinPath(this.outDir, this.project.name + '.min.js') : undefined;
+        var filename = this.publish ? FileUtil.joinPath(this.outDir, 'main.min.js') : undefined;
         return filename;
     }
 
@@ -44,10 +44,10 @@ class CompileOptions implements lark.ICompileOptions {
     }
 
     get host(): string {
-        return this.project.host;
+        return "localhost";
     }
     get port(): number {
-        return this.project.port;
+        return 3000;
     }
     get websocketUrl(): string {
         var url = "ws://" + this.host + ':' + this.port;
@@ -58,7 +58,7 @@ class CompileOptions implements lark.ICompileOptions {
         return url;
     }
     get startUrl(): string {
-        var url = "http://" + this.host + ':' + this.port + '/bin-debug/' + this.project.startupHtml;
+        var url = "http://" + this.host + ':' + this.port + '/bin-debug/index.html';
         return url;
     }
 

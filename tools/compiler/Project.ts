@@ -1,5 +1,7 @@
 ﻿/// <reference path="../lib/types.d.ts" />
 
+import file = require('../lib/FileUtil');
+import utils = require('../lib/utils');
 
 
 class Project implements lark.ILarkProject {
@@ -63,6 +65,27 @@ class Project implements lark.ILarkProject {
             platforms: this.platforms
         };
         return json;
+    }
+
+    read(path = lark.options.larkPropertiesFile) {
+        if (file.exists(path)) {
+            var json = file.read(path);
+            var data: lark.ILarkProject = null;
+            try {
+                data = JSON.parse(json);
+            }
+            catch (e) {
+                console.error(utils.tr(10005));
+                process.exit(10005);
+            }
+            this.parse(data);
+        }
+    }
+
+    save(path = lark.options.larkPropertiesFile) {
+        var propjson = this;
+        console.log(path);
+        file.save(path, JSON.stringify(propjson, null, '   '));
     }
 }
 

@@ -30,6 +30,7 @@
 var utils = require('../lib/utils');
 var exmlc = require('../lib/exml/exmlc');
 var FileUtil = require("../lib/FileUtil");
+var htmlparser = require("../lib/htmlparser");
 var TypeScript = require("../lib/typescript/tsclark");
 var UglifyJS = require("../lib/uglify-js/uglifyjs");
 var Action = (function () {
@@ -71,7 +72,7 @@ var Action = (function () {
         var files = Action.GetJavaScriptFileNames(compileResult.files, /^src\//);
         var projManifest = {
             files: files,
-            release: option.project.name + ".min.js"
+            release: "main.min.js"
         };
         this.options.projManifest = projManifest;
         compileResult.files = files;
@@ -82,15 +83,17 @@ var Action = (function () {
         var code = 0;
         var ANY = 'any';
         var options = this.options;
-        var penddings = [];
+        var manifest = lark.manifest;
         var larkRoot = options.larkRoot;
+        var penddings = [];
         var dtsFiles = [];
         var currentPlatform, currentConfig;
-        var manifest = lark.manifest;
+        var outputDir = this.getModuleOutputPath();
         var configurations = [
             { name: "debug", declaration: true },
             { name: "release", minify: true }
         ];
+        this.clean(outputDir);
         manifest.modules.forEach(function (m) {
             configurations.forEach(function (config) {
                 manifest.platforms.forEach(function (platform) {
@@ -163,10 +166,7 @@ var Action = (function () {
             });
             tss = depends.concat(tss);
             var dts = platform.declaration && configuration.declaration;
-            console.log(singleFile);
-            console.log(tss);
             var result = self.compile(options, tss, singleFile, null, dts);
-            console.log(result.messages);
             if (dts) {
                 dtsFiles.push([declareFile, depends]);
             }
@@ -186,67 +186,75 @@ var Action = (function () {
         var path = FileUtil.joinPath(this.options.larkRoot, "build/" + filePath);
         return path;
     };
-    Action.prototype.copyLarkBuild = function () {
-        var _this = this;
+    Action.prototype.copyLark = function () {
         var options = this.options;
-        var modulesUsed = options.project.modules;
-        var platforms = options.project.platforms;
-        var jsFileExtension = options.publish ? ".min.js" : ".js";
-        modulesUsed.forEach(function (m) {
-            var moduleBin = _this.getModuleOutputPath(m.name + jsFileExtension);
-            var targetFile = FileUtil.joinPath(options.outDir, '/libs/' + m.name + jsFileExtension);
-            FileUtil.copy(moduleBin, targetFile);
-            platforms.forEach(function (p) {
-                var moduleBin = _this.getModuleOutputPath(m.name + '.' + p.name + jsFileExtension);
-                var targetFile = FileUtil.joinPath(options.outDir, '/libs/' + m.name + '.' + p.name + jsFileExtension);
-                FileUtil.copy(moduleBin, targetFile);
-            });
-        });
+        var moduleBin = this.getModuleOutputPath("");
+        var targetFile = FileUtil.joinPath(options.srcDir, '/libs/');
+        FileUtil.copy(moduleBin, targetFile);
         return 0;
     };
-    Action.prototype.copyLarkDeclare = function () {
-        var _this = this;
+    Action.prototype.copyTemplate = function () {
         var options = this.options;
-        var modulesUsed = options.project.modules;
-        modulesUsed.forEach(function (m) {
-            var moduleDeclare = _this.getModuleOutputPath(m.name + ".d.ts");
-            var targetDeclare = FileUtil.joinPath(options.srcDir, '/libs/' + m.name + ".d.ts");
-            FileUtil.copy(moduleDeclare, targetDeclare);
-        });
-        return 0;
-    };
-    Action.compileTemplates = function (options) {
-        var templateFile = FileUtil.joinPath(options.templateDir, options.project.startupHtml);
+        var templateFile = FileUtil.joinPath(options.templateDir, "index.html");
+        if (!FileUtil.exists(templateFile))
+            return;
         var larkFiles = [];
-        var projFiles = [];
         var modules = options.project.modules;
         var platforms = options.project.platforms;
-        var jsext = options.publish ? ".min.js" : ".js";
         modules.forEach(function (m) {
-            larkFiles.push('libs/' + m.name + jsext);
-            platforms.forEach(function (p) { return larkFiles.push('libs/' + m.name + "." + p.name + jsext); });
+            larkFiles.push('libs/' + m.name);
+            platforms.forEach(function (p) { return larkFiles.push('libs/' + m.name + "." + p.name); });
         });
-        var dir = options.templateDir;
-        projFiles = options.publish ? [options.projManifest.release] : options.projManifest.files;
-        var manifests = [{
-                files: larkFiles,
-                replacement: '<script id="lark"></script>'
-            }, {
-                files: projFiles,
-                replacement: '<script id="project"></script>'
-            }];
         var content = FileUtil.read(templateFile);
-        manifests.forEach(function (manifest) {
-            var scripts = manifest.files.map(function (f) { return ['<script src="', f, '"></script>'].join(''); }).join('\r\n');
-            content = content.replace(manifest.replacement, scripts);
-        });
-        content = content.replace(/\$entry\-class\$/ig, options.project.entry);
+        var scripts = larkFiles.map(function (f) { return utils.format('<script src="{0}.js" src-release="{0}.min.js"></script>', f); }).join('\r\n    ');
+        content = content.replace('<script id="lark"></script>', scripts);
+        content = content.replace(/\$entry\-class\$/ig, "Main");
         content = content.replace(/\$scale\-mode\$/ig, options.project.scaleMode);
         content = content.replace(/\$content\-width\$/ig, options.project.contentWidth.toString());
         content = content.replace(/\$content\-height\$/ig, options.project.contentHeight.toString());
-        content = content.replace(/\$show\-paint\-rects\$/ig, options.project.showPaintRects ? 'true' : 'false');
-        var outputFile = FileUtil.joinPath(options.outDir, options.project.startupHtml);
+        content = content.replace(/\$show\-paint\-rects\$/ig, 'false');
+        FileUtil.save(templateFile, content);
+    };
+    Action.compileTemplates = function (options) {
+        var templateFile = FileUtil.joinPath(options.templateDir, "index.html");
+        if (!FileUtil.exists(templateFile))
+            return;
+        var content = FileUtil.read(templateFile);
+        if (options.publish)
+            content = Action.replaceReleaseScript(content);
+        var projFiles = options.publish ? [options.projManifest.release] : options.projManifest.files;
+        var scripts = projFiles.map(function (f) { return utils.format('<script src="{0}"></script>', f); }).join('\r\n    ');
+        content = content.replace('<script id="project"></script>', scripts);
+        var outputFile = FileUtil.joinPath(options.outDir, "index.html");
         FileUtil.save(outputFile, content);
+    };
+    // Use release src to replace the src of scripts
+    //  from: <script src="libs/lark.js" src-release="libs/lark.min.js"></script>
+    //  to:   <script src="libs/lark.min.js"></script>
+    Action.replaceReleaseScript = function (html) {
+        var handler = new htmlparser.DefaultHandler(function (error, dom) {
+            if (error)
+                console.log(error);
+        });
+        var scriptWithReleaseSrc = [];
+        var parser = new htmlparser.Parser(handler);
+        parser.parseComplete(html);
+        handler.dom.forEach(function (d) { return visitDom(d); });
+        replaceReleaseTags();
+        return html;
+        function visitDom(el) {
+            if (el.type == 'script' && el.attribs && el.attribs['src-release']) {
+                scriptWithReleaseSrc.push(el);
+            }
+            if (el.children) {
+                el.children.forEach(function (e) { return visitDom(e); });
+            }
+        }
+        function replaceReleaseTags() {
+            scriptWithReleaseSrc.forEach(function (s) {
+                html = html.replace(s.raw, 'script src="' + s.attribs['src-release'] + '"');
+            });
+        }
     };
     Action.prototype.compile = function (options, files, out, outDir, def) {
         var defTemp = options.declaration;
@@ -326,10 +334,6 @@ var Action = (function () {
             files.push(f);
         });
         return files;
-    };
-    Action.prototype.saveProject = function () {
-        var propjson = lark.options.project.toJSON();
-        FileUtil.save(FileUtil.joinPath(lark.options.projectDir, 'lark.json'), JSON.stringify(propjson, null, '   '));
     };
     Action.fileExtensionToIgnore = {
         "ts": true

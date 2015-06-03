@@ -32,8 +32,11 @@
 
 import Action = require('./Action');
 import Entry = require('./Entry');
+import Build = require('./Build');
 import Project = require('./Project');
 import FileUtil = require('../lib/FileUtil');
+import server = require('../server/server');
+import service = require('../service/index');
 
 class Create extends Action {
 
@@ -44,8 +47,8 @@ class Create extends Action {
         FileUtil.createDirectory(option.debugDir);
 
         lark.options.project = new Project();
-        this.saveProject();
-
+        lark.options.project.save();
+        server.startServer(option, option.manageUrl + "create/");
         return 0;
     }
 
@@ -53,12 +56,15 @@ class Create extends Action {
         var proj = new Project();
         proj.parse(projJson);
         this.options.project = proj;
-        this.saveProject();
+        proj.save();
         var template = FileUtil.joinPath(lark.options.larkRoot, "tools/templates/" + proj.template);
         FileUtil.copy(template, lark.options.projectDir);
-        this.copyLarkDeclare();
-        console.log('call build');
-        Entry.sendBuildCMD(callback);
+        this.copyLark();
+        this.copyTemplate();
+        var build = new Build(this.options);
+        build.buildProject();
+        FileUtil.remove(this.options.larkPropertiesFile);
+        callback();
     }
 }
 

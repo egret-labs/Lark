@@ -34,7 +34,7 @@ module lark.portal {
         contentHeight: number = project.contentHeight;
         showPaintRects: boolean = project.showPaintRects;
         template: string = "Empty";
-        isConfig = location.pathname == "/$/config";
+        isConfig = location.pathname.indexOf("/$/config") >= 0;
 
         constructor() {
             this.larkManifest.modules.forEach(lm=> {
@@ -65,14 +65,33 @@ module lark.portal {
             var json = JSON.stringify(this);
             console.log(json);
             $.get('', { proj: json }, function () {
-                location.href = "/bin-debug/index.html";
+                setTimeout(() => location.href = "/bin-debug/index.html", 500);
             });
             this.scaleModes = modes;
 
             this.larkManifest = manifest;
+            showLoading();
         }
     }
 }
 
 
 lark.app.controller('ProjectController', lark.portal.Project);
+
+
+function showLoading() {
+    $("#mask").show();
+    var elem = $("#loading");
+    elem.show();
+
+    $({ deg: 0 }).animate({ deg: 360 }, {
+        duration: 2000,
+        step: function (now) {
+            elem.css({
+                'transform': 'rotate(' + now + 'deg)'
+            });
+        },
+        easing:'linear',
+        complete: showLoading
+    });
+}

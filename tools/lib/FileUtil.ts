@@ -44,6 +44,7 @@ export function save(path:string, data:any):void {
         remove(path);
     }
     path = escapePath(path);
+    textTemp[path] = data;
     createDirectory(Path.dirname(path));
     FS.writeFileSync(path, data, charset);
 }

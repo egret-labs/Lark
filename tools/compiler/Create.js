@@ -34,9 +34,10 @@ var __extends = this.__extends || function (d, b) {
 };
 /// <reference path="../lib/types.d.ts" />
 var Action = require('./Action');
-var Entry = require('./Entry');
+var Build = require('./Build');
 var Project = require('./Project');
 var FileUtil = require('../lib/FileUtil');
+var server = require('../server/server');
 var Create = (function (_super) {
     __extends(Create, _super);
     function Create() {
@@ -48,19 +49,23 @@ var Create = (function (_super) {
         FileUtil.createDirectory(option.srcDir);
         FileUtil.createDirectory(option.debugDir);
         lark.options.project = new Project();
-        this.saveProject();
+        lark.options.project.save();
+        server.startServer(option, option.manageUrl + "create/");
         return 0;
     };
     Create.prototype.doCreate = function (projJson, callback) {
         var proj = new Project();
         proj.parse(projJson);
         this.options.project = proj;
-        this.saveProject();
+        proj.save();
         var template = FileUtil.joinPath(lark.options.larkRoot, "tools/templates/" + proj.template);
         FileUtil.copy(template, lark.options.projectDir);
-        this.copyLarkDeclare();
-        console.log('call build');
-        Entry.sendBuildCMD(callback);
+        this.copyLark();
+        this.copyTemplate();
+        var build = new Build(this.options);
+        build.buildProject();
+        FileUtil.remove(this.options.larkPropertiesFile);
+        callback();
     };
     return Create;
 })(Action);

@@ -40,6 +40,7 @@ function save(path, data) {
         remove(path);
     }
     path = escapePath(path);
+    textTemp[path] = data;
     createDirectory(Path.dirname(path));
     FS.writeFileSync(path, data, charset);
 }
@@ -395,3 +396,4 @@ function joinPath(dir, filename) {
     return path;
 }
 exports.joinPath = joinPath;
+//# sourceMappingURL=FileUtil.js.map

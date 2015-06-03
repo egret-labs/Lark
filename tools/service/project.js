@@ -68,20 +68,12 @@ var Project = (function () {
         this.buildPort && this.buildPort.write(JSON.stringify(cmd));
         //this.buildProcess.send(cmd);
     };
-    Project.prototype.onBuildServiceMessage = function (text) {
-        //console.log(text);
-        try {
-            var msg = JSON.parse(text);
-        }
-        catch (e) {
-        }
-        if (msg && msg.command == 'build') {
-            if (msg.messages.length > 20)
-                msg.messages.length = 20;
-            if (this.penddingRequest) {
-                this.penddingRequest.writeHead(200, { 'Content-Type': 'text/plain' });
-                this.penddingRequest.end(JSON.stringify(msg));
-            }
+    Project.prototype.onBuildServiceMessage = function (msg) {
+        if (msg.messages.length > 20)
+            msg.messages.length = 20;
+        if (this.penddingRequest) {
+            this.penddingRequest.writeHead(200, { 'Content-Type': 'text/plain' });
+            this.penddingRequest.end(JSON.stringify(msg));
         }
     };
     Project.prototype.onBuildServiceExit = function (code, signal) {

@@ -32,12 +32,11 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-/// <reference path="../lib/types.d.ts" />
-var Entry = require('../compiler/Entry');
 var Action = require('../compiler/Action');
 var watch = require("../lib/watch");
 var utils = require("../lib/utils");
 var server = require('../server/server');
+var service = require('../service/index');
 var Run = (function (_super) {
     __extends(Run, _super);
     function Run() {
@@ -54,7 +53,7 @@ var Run = (function (_super) {
         }
         server.startServer(this.options, this.options.startUrl);
         console.log(utils.tr(10013, this.options.startUrl));
-        Entry.sendBuildCMD(function (cmd) { });
+        service.execCommand({ command: "build", path: this.options.projectDir }, function (cmd) { });
         return 0;
     };
     Run.prototype.watchFiles = function (dir) {
@@ -66,8 +65,7 @@ var Run = (function (_super) {
         });
     };
     Run.prototype.sendBuildCMD = function () {
-        Entry.sendBuildCMD(function (cmd) {
-            console.log('');
+        service.execCommand({ command: "build", path: this.options.projectDir }, function (cmd) {
             if (cmd.exitCode == 0)
                 console.log(utils.tr(10011));
             else
