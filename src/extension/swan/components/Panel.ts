@@ -134,8 +134,8 @@ module swan {
          */
         protected onTouchBegin(event:lark.TouchEvent):void {
             this.$includeInLayout = false;
-            this.offsetPointX = this.x - event.stageX;
-            this.offsetPointY = this.y - event.stageY;
+            this.offsetPointX = this.x - event.$stageX;
+            this.offsetPointY = this.y - event.$stageY;
             this.$stage.on(lark.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
             this.$stage.on(lark.TouchEvent.TOUCH_END, this.onTouchEnd, this);
         }
@@ -144,8 +144,8 @@ module swan {
          * 触摸拖拽时的移动事件
          */
         public onTouchMove(event:lark.TouchEvent):void {
-            this.x = event.stageX + this.offsetPointX;
-            this.y += event.stageY + this.offsetPointY;
+            this.x = event.$stageX + this.offsetPointX;
+            this.y = event.$stageY + this.offsetPointY;
         }
 
         /**
