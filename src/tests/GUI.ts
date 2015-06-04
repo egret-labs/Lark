@@ -45,7 +45,7 @@ module lark {
             this.width = this.stage.stageWidth;
             this.height = this.stage.stageHeight;
             var request:HttpRequest = event.target;
-            var Skin = swan.EXML.parse(request.response, "lark.List");
+            var Skin = swan.EXML.parse(request.response);
 
             var list:swan.List = new Skin();
             list.horizontalCenter = 0;

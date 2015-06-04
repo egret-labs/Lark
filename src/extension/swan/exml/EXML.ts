@@ -42,44 +42,8 @@ module swan {
          * @param className 皮肤对应的完整类名，包括模块名称。例如 swan.ButtonSkin。解析完成后皮肤类定义会自动缓存到全局，
          * 若指定的类已经存在，将会覆盖已有的类定义。解析后您也可以通过lark.getDefinitionByName(className)方法获取这个皮肤的类定义。
          */
-        public static parse(text:string, className:string):{new():any} {
-            if (DEBUG) {
-                if(!text){
-                    lark.$error(1003, "text");
-                }
-                if(!className){
-                    lark.$error(1003, "className");
-                }
-            }
-            try{
-                var xml = sys.XML.parse(text);
-            }
-            catch(e){
-                if(DEBUG){
-                    lark.$error(2002,className,text+"\n"+e.message);
-                }
-            }
-            var code = parser.parse(xml,className);
-            try {
-                var clazz = eval(code);
-            }
-            catch (e) {
-                if (DEBUG) {
-                    lark.log(code);
-                }
-                return null;
-            }
-            if (className && clazz) {
-                var paths = className.split(".");
-                var length = paths.length;
-                var definition = __global;
-                for (var i = 0; i < length - 1; i++) {
-                    var path = paths[i];
-                    definition = definition[path] || (definition[path] = {});
-                }
-                definition[paths[length - 1]] = clazz;
-            }
-            return clazz;
+        public static parse(text:string):{new():any} {
+            return parser.parse(text);
         }
 
     }

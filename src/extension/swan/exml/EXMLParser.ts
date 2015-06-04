@@ -111,9 +111,52 @@ module swan.sys {
          * @param xmlData 要编译的EXML文件内容
          * @param className 要编译成的完整类名，包括模块名。
          */
-        public parse(xmlData:XML, className:string):string {
-            var clazz = this.parseClass(xmlData, className);
-            return clazz.toCode();
+        public parse(text:string):{new():any} {
+            if (DEBUG) {
+                if (!text) {
+                    lark.$error(1003, "text");
+                }
+            }
+            try {
+                var xmlData = sys.XML.parse(text);
+            }
+            catch (e) {
+                if (DEBUG) {
+                    lark.$error(2002, text + "\n" + e.message);
+                }
+            }
+            var className:string = "";
+            var hasClass:boolean = false;
+            if (xmlData.attributes["class"]) {
+                className = xmlData.attributes["class"];
+                delete xmlData.attributes["class"];
+                hasClass = !!className;
+            }
+            else {
+                className = "$exmlClass" + innerClassCount++;
+            }
+            var exClass = this.parseClass(xmlData, className);
+            var code = exClass.toCode();
+            try {
+                var clazz = eval(code);
+            }
+            catch (e) {
+                if (DEBUG) {
+                    lark.log(code);
+                }
+                return null;
+            }
+            if (hasClass && clazz) {
+                var paths = className.split(".");
+                var length = paths.length;
+                var definition = __global;
+                for (var i = 0; i < length - 1; i++) {
+                    var path = paths[i];
+                    definition = definition[path] || (definition[path] = {});
+                }
+                definition[paths[length - 1]] = clazz;
+            }
+            return clazz;
         }
 
         /**
@@ -142,6 +185,7 @@ module swan.sys {
             else {
                 this.currentClass.className = className;
             }
+
             this.startCompile();
             var clazz = this.currentClass;
             this.currentClass = null;
