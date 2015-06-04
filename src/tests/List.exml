@@ -1,4 +1,5 @@
-<s:Scroller class="swan.ScrollerTest" width="200" height="200" xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
+<s:Scroller xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing"
+            class="swan.ScrollerTest" width="200" height="200" horizontalCenter="0" verticalCenter="0">
     <s:Skin>
         <s:VScrollBar height="100%" id="verticalScrollBar" right="0">
             <s:Skin>
