@@ -42,6 +42,7 @@ module swan.sys {
     var TYPE_CLASS = "Class";
     var TYPE_ARRAY = "Array";
     var TYPE_STATE = "State[]";
+    var SKIN_NAME = "skinName";
     var ELEMENTS_CONTENT = "elementsContent";
     var basicTypes:string[] = [TYPE_ARRAY, "boolean", "string", "number"];
     var wingKeys:string[] = ["id", "locked", "includeIn", "excludeFrom"];
@@ -555,9 +556,12 @@ module swan.sys {
                 if (this.isInnerClass(child)) {
                     if (child.localName == "Skin") {
                         var innerClassName = this.parseInnerClass(child);
-                        var type = exmlConfig.getPropertyType("skinName", className);
+                        var type = exmlConfig.getPropertyType(SKIN_NAME, className);
                         if (type) {
-                            cb.addAssignment(varName, innerClassName, "skinName");
+                            cb.addAssignment(varName, innerClassName, SKIN_NAME);
+                        }
+                        else{
+                            lark.$error(2005, this.currentClassName, SKIN_NAME, getPropertyStr(child));
                         }
                     }
                     continue;
