@@ -308,19 +308,11 @@ module swan {
 
             var uiValues = viewport.$UIComponent;
 
-            var horizontalBar = this.horizontalScrollBar;
-            var verticalBar = this.verticalScrollBar;
             if (values[Keys.horizontalCanScroll]) {
-                if(horizontalBar){
-                    horizontalBar.visible = true;
-                }
                 values[Keys.touchScrollH].start(event.$stageX, viewport.scrollH,
                     viewport.contentWidth - uiValues[sys.UIKeys.width]);
             }
             if (values[Keys.verticalCanScroll]) {
-                if(verticalBar){
-                    verticalBar.visible = true;
-                }
                 values[Keys.touchScrollV].start(event.$stageY, viewport.scrollV,
                     viewport.contentHeight - uiValues[sys.UIKeys.height]);
             }
@@ -338,6 +330,14 @@ module swan {
                     return;
                 }
                 values[Keys.touchMoved] = true;
+                var horizontalBar = this.horizontalScrollBar;
+                var verticalBar = this.verticalScrollBar;
+                if (horizontalBar&&values[Keys.horizontalCanScroll]) {
+                    horizontalBar.visible = true;
+                }
+                if (verticalBar&&values[Keys.verticalCanScroll]) {
+                    verticalBar.visible = true;
+                }
             }
             if (values[Keys.delayTouchEvent]) {
                 values[Keys.delayTouchEvent] = null;
@@ -348,7 +348,6 @@ module swan {
             if (values[Keys.horizontalCanScroll]) {
                 values[Keys.touchScrollH].update(event.$stageX, viewport.contentWidth - uiValues[sys.UIKeys.width]);
             }
-
             if (values[Keys.verticalCanScroll]) {
                 values[Keys.touchScrollV].update(event.$stageY, viewport.contentHeight - uiValues[sys.UIKeys.height]);
             }
@@ -370,12 +369,17 @@ module swan {
             if (values[Keys.verticalCanScroll]) {
                 values[Keys.touchScrollV].finish(viewport.scrollV, viewport.contentHeight - uiValues[sys.UIKeys.height]);
             }
-            if (!values[Keys.autoHideTimer]) {
-                values[Keys.autoHideTimer] = new lark.Timer(500, 1);
-                values[Keys.autoHideTimer].on(lark.TimerEvent.TIMER_COMPLETE, this.onAutoHideTimer, this);
+
+            var horizontalBar = this.horizontalScrollBar;
+            var verticalBar = this.verticalScrollBar;
+            if(horizontalBar&&horizontalBar.visible||verticalBar&&verticalBar.visible){
+                if (!values[Keys.autoHideTimer]) {
+                    values[Keys.autoHideTimer] = new lark.Timer(500, 1);
+                    values[Keys.autoHideTimer].on(lark.TimerEvent.TIMER_COMPLETE, this.onAutoHideTimer, this);
+                }
+                values[Keys.autoHideTimer].reset();
+                values[Keys.autoHideTimer].start();
             }
-            values[Keys.autoHideTimer].reset();
-            values[Keys.autoHideTimer].start();
         }
 
         private onAutoHideTimer(event:lark.TimerEvent):void {
@@ -405,6 +409,7 @@ module swan {
                 viewport.setLayoutBoundsPosition(0, 0);
                 viewport.setLayoutBoundsSize(unscaledWidth, unscaledHeight);
             }
+
         }
 
         protected partAdded(partName:string,instance:any):void{

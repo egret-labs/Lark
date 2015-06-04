@@ -70,7 +70,7 @@ module swan {
             var values = this.$Range;
             var thumbRange = this.getThumbRange();
             var range = values[sys.RangeKeys.maximum] - values[sys.RangeKeys.minimum];
-            var thumbPosTrackX = (range > 0) ? ((this.$pendingValue - values[sys.RangeKeys.minimum]) / range) * thumbRange : 0;
+            var thumbPosTrackX = (range > 0) ? ((this.pendingValue - values[sys.RangeKeys.minimum]) / range) * thumbRange : 0;
             var thumbPos = this.track.localToGlobal(thumbPosTrackX, 0, lark.$TempPoint);
             var thumbPosX = thumbPos.x;
             var thumbPosY = thumbPos.y;

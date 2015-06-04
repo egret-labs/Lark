@@ -27,49 +27,108 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-
 module swan {
+
+    export const enum Keys {
+        clickOffsetX,
+        clickOffsetY,
+        moveStageX,
+        moveStageY,
+        touchDownTarget,
+        animation,
+        slideDuration,
+        pendingValue,
+        slideToValue,
+        liveDragging
+    }
 
     /**
      * 滑块控件基类
      */
-    export class SliderBase extends TrackBase {
+    export class SliderBase extends Range {
         /**
          * 创建一个 SliderBase 实例
          */
         public constructor() {
             super();
+            this.$SliderBase = {
+                0: 0,        //clickOffsetX,
+                1: 0,        //clickOffsetY,
+                2: 0,        //moveStageX,
+                3: 0,        //moveStageY,
+                4: null,     //touchDownTarget
+                5: null,     //animation,
+                6: 300,      //slideDuration,
+                7: 0,        //pendingValue
+                8: 0,        //slideToValue,
+                9: true,     //liveDragging
+            };
             this.maximum = 10;
+            this.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
-        /**
-         * 在轨道上单击以移动滑块时，滑动动画持续的时间（以毫秒为单位）。
-         */
-        public slideDuration:number = 300;
+        $SliderBase:Object;
 
         /**
          * [SkinPart]轨道高亮显示对象
          */
         public trackHighlight:lark.DisplayObject = null;
+        /**
+         * [SkinPart]滑块显示对象
+         */
+        public thumb:swan.UIComponent = null;
 
         /**
-         * 动画实例
+         * [SkinPart]轨道显示对象
          */
-        private animation:sys.Animation;
+        public track:swan.UIComponent = null;
 
-        $pendingValue:number = 0;
+        /**
+         * 在轨道上单击以移动滑块时，滑动动画持续的时间（以毫秒为单位）。设置为0将不执行缓动。
+         */
+        public get slideDuration():number {
+            return this.$SliderBase[Keys.slideDuration];
+        }
+
+        public set slideDuration(value:number) {
+            this.$SliderBase[Keys.slideDuration] = +value || 0;
+        }
+
+        /**
+         * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值。
+         * @param x 相对于轨道原点的位置的x坐标。
+         * @param y 相对于轨道原点的位置的y坐标。
+         */
+        protected pointToValue(x:number, y:number):number {
+            return this.minimum;
+        }
+
+        /**
+         * 如果为 true，则将在沿着轨道拖动滑块时，而不是在释放滑块按钮时，提交此滑块的值。
+         */
+        public get liveDragging():boolean {
+            return this.$SliderBase[Keys.liveDragging];
+        }
+
+        public set liveDragging(value:boolean) {
+            this.$SliderBase[Keys.liveDragging] = !!value;
+        }
+
+
         /**
          * 释放鼠标按键时滑块将具有的值。无论 liveDragging 是否为 true，在滑块拖动期间始终更新此属性。
          * 而 value 属性在当 liveDragging 为 false 时，只在鼠标释放时更新一次。
          */
         public get pendingValue():number {
-            return this.$pendingValue;
+            return this.$SliderBase[Keys.pendingValue];
         }
 
         public set pendingValue(value:number) {
-            if (value === this.$pendingValue)
+            value = +value || 0;
+            var values = this.$SliderBase;
+            if (value === values[Keys.pendingValue])
                 return;
-            this.$pendingValue = value;
+            values[Keys.pendingValue] = value;
             this.invalidateDisplayList();
         }
 
@@ -77,55 +136,95 @@ module swan {
          * 在 value 属性改变时为该属性设置后备存储，并调度 valueCommit 事件
          */
         protected setValue(value:number):void {
-            this.$pendingValue = value;
+            this.$SliderBase[Keys.pendingValue] = value;
             super.setValue(value);
         }
 
+
         /**
-         * 动画播放更新数值
+         * 添加外观部件时调用
          */
-        $animationUpdateHandler(animation:sys.Animation):void {
-            this.pendingValue = animation.currentValue;
+        protected partAdded(partName:string, instance:any):void {
+            super.partAdded(partName, instance);
+
+            if (instance == this.thumb) {
+                this.thumb.on(lark.TouchEvent.TOUCH_BEGIN, this.onThumbTouchBegin, this);
+                this.thumb.on(lark.Event.RESIZE, this.onTrackOrThumbResize, this);
+            }
+            else if (instance == this.track) {
+                this.track.on(lark.TouchEvent.TOUCH_BEGIN, this.onTrackTouchBegin, this);
+                this.track.on(lark.Event.RESIZE, this.onTrackOrThumbResize, this);
+            }
+            else if (instance === this.trackHighlight) {
+                this.trackHighlight.touchEnabled = false;
+                if (lark.is(this.trackHighlight, lark.Types.DisplayObjectContainer)) {
+                    (<lark.DisplayObjectContainer> this.trackHighlight).touchChildren = false;
+                }
+            }
         }
 
         /**
-         * 动画播放结束时要到达的value。
+         * 删除外观部件的实例时调用
          */
-        private slideToValue:number = 0;
+        protected partRemoved(partName:string, instance:any):void {
+            super.partRemoved(partName, instance);
 
-        /**
-         * 动画播放完毕
-         */
-        private animationEndHandler(animation:sys.Animation):void {
-            this.setValue(this.slideToValue);
-            this.emitWith(lark.Event.CHANGE);
-            UIEvent.emitUIEvent(this, UIEvent.CHANGE_END);
+            if (instance == this.thumb) {
+                this.thumb.removeListener(lark.TouchEvent.TOUCH_BEGIN, this.onThumbTouchBegin, this);
+                this.thumb.removeListener(lark.Event.RESIZE, this.onTrackOrThumbResize, this);
+            }
+            else if (instance == this.track) {
+                this.track.removeListener(lark.TouchEvent.TOUCH_BEGIN, this.onTrackTouchBegin, this);
+                this.track.removeListener(lark.Event.RESIZE, this.onTrackOrThumbResize, this);
+            }
         }
 
         /**
-         * 停止播放动画
+         * 滑块或轨道尺寸改变事件
          */
-        private stopAnimation():void {
-            this.animation.stop();
-            this.setValue(this.nearestValidValue(this.pendingValue, this.snapInterval));
-            this.emitWith(lark.Event.CHANGE);
-            UIEvent.emitUIEvent(this, UIEvent.CHANGE_END);
+        private onTrackOrThumbResize(event:lark.Event):void {
+            this.updateSkinDisplayList();
         }
 
+
+        /**
+         * 滑块按下事件
+         */
         protected onThumbTouchBegin(event:lark.TouchEvent):void {
-            if (this.animation && this.animation.isPlaying)
+            var values = this.$SliderBase;
+            if (values[Keys.animation] && values[Keys.animation].isPlaying)
                 this.stopAnimation();
 
-            super.onThumbTouchBegin(event);
+            var stage = this.$stage;
+            stage.on(lark.TouchEvent.TOUCH_MOVE, this.onStageTouchMove, this);
+            stage.on(lark.TouchEvent.TOUCH_END, this.onStageTouchEnd, this);
+
+            var clickOffset = this.thumb.globalToLocal(event.stageX, event.stageY, lark.$TempPoint);
+
+            values[Keys.clickOffsetX] = clickOffset.x;
+            values[Keys.clickOffsetY] = clickOffset.y;
+            UIEvent.emitUIEvent(this, UIEvent.CHANGE_START);
         }
 
         /**
-         * 如果为 true，则将在沿着轨道拖动滑块时，而不是在释放滑块按钮时，提交此滑块的值。
+         * 舞台上触摸移动事件
          */
-        public liveDragging:boolean = true;
+        private onStageTouchMove(event:lark.TouchEvent):void {
+            var values = this.$SliderBase;
+            values[Keys.moveStageX] = event.$stageX;
+            values[Keys.moveStageY] = event.$stageY;
+            var track = this.track;
+            if (!track)
+                return;
+            var p = track.globalToLocal(values[Keys.moveStageX], values[Keys.moveStageY], lark.$TempPoint);
+            var newValue = this.pointToValue(p.x - values[Keys.clickOffsetX], p.y - values[Keys.clickOffsetY]);
+            newValue = this.nearestValidValue(newValue, this.snapInterval);
+            this.updateWhenTouchMove(newValue);
+            event.updateAfterEvent();
+        }
 
         protected updateWhenTouchMove(newValue:number):void {
-            if (newValue != this.$pendingValue) {
+            if (newValue != this.$SliderBase[Keys.pendingValue]) {
                 if (this.liveDragging) {
                     this.setValue(newValue);
                     this.emitWith(lark.Event.CHANGE);
@@ -136,12 +235,68 @@ module swan {
             }
         }
 
+        /**
+         * 触摸结束事件
+         */
         protected onStageTouchEnd(event:lark.Event):void {
-            super.onStageTouchEnd(event);
-            if (!this.liveDragging && this.value != this.$pendingValue) {
-                this.setValue(this.$pendingValue);
+            var stage:lark.Stage = event.$currentTarget;
+            stage.removeListener(lark.TouchEvent.TOUCH_MOVE, this.onStageTouchMove, this);
+            stage.removeListener(lark.TouchEvent.TOUCH_END, this.onStageTouchEnd, this);
+            UIEvent.emitUIEvent(this, UIEvent.CHANGE_END);
+            var values = this.$SliderBase;
+            if (!this.liveDragging && this.value != values[Keys.pendingValue]) {
+                this.setValue(values[Keys.pendingValue]);
                 this.emitWith(lark.Event.CHANGE);
             }
+        }
+
+        /**
+         * 当在组件上按下时记录被按下的子显示对象
+         */
+        private onTouchBegin(event:lark.TouchEvent):void {
+            this.$stage.on(lark.TouchEvent.TOUCH_END, this.stageTouchEndHandler, this);
+            this.$SliderBase[Keys.touchDownTarget] = <lark.DisplayObject> (event.$target);
+        }
+
+        /**
+         * 当结束时，若不是在 touchDownTarget 上弹起，而是另外的子显示对象上弹起时，额外抛出一个触摸单击事件。
+         */
+        private stageTouchEndHandler(event:lark.TouchEvent):void {
+            var target:lark.DisplayObject = event.$target;
+            var values = this.$SliderBase;
+            event.$currentTarget.removeListener(lark.TouchEvent.TOUCH_END, this.stageTouchEndHandler, this);
+            if (values[Keys.touchDownTarget] != target && this.contains(<lark.DisplayObject> (target))) {
+                lark.TouchEvent.emitTouchEvent(this, lark.TouchEvent.TOUCH_TAP, true, true,
+                    event.$stageX, event.$stageY, event.touchPointID);
+            }
+            values[Keys.touchDownTarget] = null;
+        }
+
+
+        /**
+         * 动画播放更新数值
+         */
+        $animationUpdateHandler(animation:sys.Animation):void {
+            this.pendingValue = animation.currentValue;
+        }
+
+        /**
+         * 动画播放完毕
+         */
+        private animationEndHandler(animation:sys.Animation):void {
+            this.setValue(this.$SliderBase[Keys.slideToValue]);
+            this.emitWith(lark.Event.CHANGE);
+            UIEvent.emitUIEvent(this, UIEvent.CHANGE_END);
+        }
+
+        /**
+         * 停止播放动画
+         */
+        private stopAnimation():void {
+            this.$SliderBase[Keys.animation].stop();
+            this.setValue(this.nearestValidValue(this.pendingValue, this.snapInterval));
+            this.emitWith(lark.Event.CHANGE);
+            UIEvent.emitUIEvent(this, UIEvent.CHANGE_END);
         }
 
         protected onTrackTouchBegin(event:lark.TouchEvent):void {
@@ -151,24 +306,25 @@ module swan {
             var offsetY = event.$stageY - (thumbH / 2);
             var p = this.track.globalToLocal(offsetX, offsetY, lark.$TempPoint);
 
-            var values = this.$Range
+            var rangeValues = this.$Range
             var newValue = this.pointToValue(p.x, p.y);
-            newValue = this.nearestValidValue(newValue, values[sys.RangeKeys.snapInterval]);
+            newValue = this.nearestValidValue(newValue, rangeValues[sys.RangeKeys.snapInterval]);
 
-            if (newValue != this.$pendingValue) {
-                if (this.slideDuration != 0) {
-                    if (!this.animation) {
-                        this.animation = new sys.Animation(this.$animationUpdateHandler, this);
-                        this.animation.endFunction = this.animationEndHandler;
+            var values = this.$SliderBase;
+            if (newValue != values[Keys.pendingValue]) {
+                if (values[Keys.slideDuration] != 0) {
+                    if (!values[Keys.animation]) {
+                        values[Keys.animation] = new sys.Animation(this.$animationUpdateHandler, this);
+                        values[Keys.animation].endFunction = this.animationEndHandler;
                     }
-                    var animation = this.animation;
+                    var animation = values[Keys.animation];
                     if (animation.isPlaying)
                         this.stopAnimation();
-                    this.slideToValue = newValue;
-                    animation.duration = this.slideDuration *
-                        (Math.abs(this.$pendingValue - this.slideToValue) / (values[sys.RangeKeys.maximum] - values[sys.RangeKeys.minimum]));
-                    animation.from = this.$pendingValue;
-                    animation.to = this.slideToValue;
+                    values[Keys.slideToValue] = newValue;
+                    animation.duration = values[Keys.slideDuration] *
+                        (Math.abs(values[Keys.pendingValue] - values[Keys.slideToValue]) / (rangeValues[sys.RangeKeys.maximum] - rangeValues[sys.RangeKeys.minimum]));
+                    animation.from = values[Keys.pendingValue];
+                    animation.to = values[Keys.slideToValue];
                     UIEvent.emitUIEvent(this, UIEvent.CHANGE_START);
                     animation.play();
                 }
@@ -179,18 +335,6 @@ module swan {
             }
         }
 
-        /**
-         * 正删除外观部件的实例时调用
-         */
-        protected partAdded(partName:string, instance:any):void {
-            super.partAdded(partName, instance);
-            if (instance === this.trackHighlight) {
-                this.trackHighlight.touchEnabled = false;
-                if (lark.is(this.trackHighlight, lark.Types.DisplayObjectContainer)) {
-                    (<lark.DisplayObjectContainer> this.trackHighlight).touchChildren = false;
-                }
-            }
-        }
     }
 
 }
