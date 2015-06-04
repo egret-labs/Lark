@@ -17,17 +17,17 @@
                 { "path":"web/WebImageLoader.ts","platform":"web"  },
                 { "path":"web/WebScreen.ts","platform":"web"  },
                 { "path":"web/WebTextAdapter.ts","platform":"web"  },
-                { "path":"web/WebTouchHandler.ts","platform":"web"  }
+                { "path":"web/WebTouchHandler.ts","platform":"web"  },
+                { "path":"web/WebXML.ts", "platform": "web" }
             ],
             "root":"src/lark",
             "dependencies": []
         },{
             "name":"swan",
             "description":"GUI Library for Lark",
-            "files":[ 
+            "files":[
                 { "path":"i18n/en_US.ts","debug":true },
-                { "path":"i18n/zh_CN.ts","debug":true },
-                { "path": "web/WebXML.ts", "platform": "web" }
+                { "path":"i18n/zh_CN.ts","debug":true }
             ],
             "root":"src/extension/swan",
             "dependencies": ["lark"]

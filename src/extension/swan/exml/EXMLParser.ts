@@ -63,10 +63,10 @@ module swan.sys {
         /**
          * 获取重复的ID名
          */
-        public getRepeatedIds:(xml:XML)=>string[];
+        public getRepeatedIds:(xml:lark.XML)=>string[];
         private getIds:(xml:any, result:string[])=>void;
         private repeatedIdMap:any;
-        private checkDeclarations:(declarations:XML, list:string[])=>void;
+        private checkDeclarations:(declarations:lark.XML, list:string[])=>void;
 
         /**
          * 当前类
@@ -79,7 +79,7 @@ module swan.sys {
         /**
          * 当前要编译的EXML文件
          */
-        private currentXML:XML;
+        private currentXML:lark.XML;
         /**
          * id缓存字典
          */
@@ -119,7 +119,7 @@ module swan.sys {
                 }
             }
             try {
-                var xmlData = sys.XML.parse(text);
+                var xmlData = lark.XML.parse(text);
             }
             catch (e) {
                 if (DEBUG) {
@@ -170,7 +170,7 @@ module swan.sys {
         /**
          * 编译指定的XML对象为CpClass对象。
          */
-        private parseClass(xmlData:XML, className:string):EXClass {
+        private parseClass(xmlData:lark.XML, className:string):EXClass {
             if (!exmlConfig) {
                 exmlConfig = new EXMLConfig();
             }
@@ -256,7 +256,7 @@ module swan.sys {
             }
             var length = items.length;
             for (var i = 0; i < length; i++) {
-                var node:XML = items[i];
+                var node:lark.XML = items[i];
                 if (node.nodeType != 1) {
                     continue;
                 }
@@ -279,7 +279,7 @@ module swan.sys {
                     if (index == -1 || !children || children.length == 0) {
                         continue;
                     }
-                    var firstChild:XML = children[0];
+                    var firstChild:lark.XML = children[0];
                     this.stateIds.push(firstChild.attributes.id);
                 }
                 else if (node.nodeType === 1) {
@@ -306,7 +306,7 @@ module swan.sys {
         /**
          * 是否为内部类。
          */
-        private isInnerClass(node:XML):boolean {
+        private isInnerClass(node:lark.XML):boolean {
             if (node.hasOwnProperty("isInnerClass")) {
                 return node["isInnerClass"];
             }
@@ -341,7 +341,7 @@ module swan.sys {
         /**
          * 检测指定节点的属性是否含有视图状态
          */
-        private containsState(node:XML):boolean {
+        private containsState(node:lark.XML):boolean {
             var attributes = node.attributes;
             if (attributes["includeIn"]) {
                 return true;
@@ -360,7 +360,7 @@ module swan.sys {
         /**
          * 为指定节点创建id属性
          */
-        private createIdForNode(node:XML):void {
+        private createIdForNode(node:lark.XML):void {
             var idName = this.getNodeId(node);
             if (!this.idDic[idName])
                 this.idDic[idName] = 1;
@@ -373,7 +373,7 @@ module swan.sys {
         /**
          * 获取节点ID
          */
-        private getNodeId(node:XML):string {
+        private getNodeId(node:lark.XML):string {
             if (node.attributes["id"])
                 return node.attributes.id;
             return "_" + node.localName;
@@ -382,7 +382,7 @@ module swan.sys {
         /**
          * 为指定节点创建变量
          */
-        private createVarForNode(node:XML):void {
+        private createVarForNode(node:lark.XML):void {
             var moduleName = this.getClassNameOfNode(node);
             if (moduleName == "")
                 return;
@@ -393,7 +393,7 @@ module swan.sys {
         /**
          * 为指定节点创建初始化函数,返回函数名引用
          */
-        private createFuncForNode(node:XML):string {
+        private createFuncForNode(node:lark.XML):string {
             var className = node.localName;
             var isBasicType = this.isBasicTypeData(className);
             if (isBasicType)
@@ -444,14 +444,14 @@ module swan.sys {
         /**
          * 为指定基本数据类型节点实例化,返回实例化后的值。
          */
-        private createBasicTypeForNode(node:XML):string {
+        private createBasicTypeForNode(node:lark.XML):string {
             var className = node.localName;
             var returnValue = "";
             var varItem = this.currentClass.getVariableByName(node.attributes.id);
             var children:any[] = node.children;
             var text = "";
             if (children && children.length > 0) {
-                var firstChild:XMLText = children[0];
+                var firstChild:lark.XMLText = children[0];
                 if (firstChild.nodeType == 3) {
                     text = firstChild.text.trim();
                 }
@@ -462,7 +462,7 @@ module swan.sys {
                     if (children) {
                         var length = children.length;
                         for (var i = 0; i < length; i++) {
-                            var child:XML = children[i];
+                            var child:lark.XML = children[i];
                             if (child.nodeType == 1) {
                                 values.push(this.createFuncForNode(child));
                             }
@@ -490,7 +490,7 @@ module swan.sys {
         /**
          * 将节点属性赋值语句添加到代码块
          */
-        private addAttributesToCodeBlock(cb:EXCodeBlock, varName:string, node:XML):void {
+        private addAttributesToCodeBlock(cb:EXCodeBlock, varName:string, node:lark.XML):void {
             var key:string;
             var value:string;
             var attributes = node.attributes;
@@ -540,16 +540,16 @@ module swan.sys {
         /**
          * 初始化子项
          */
-        private initlizeChildNode(node:XML, cb:EXCodeBlock, varName:string):void {
+        private initlizeChildNode(node:lark.XML, cb:EXCodeBlock, varName:string):void {
             var children:Array<any> = node.children;
             if (!children || children.length == 0)
                 return;
             var className = exmlConfig.getClassNameById(node.localName, node.namespace);
-            var directChild:XML[] = [];
+            var directChild:lark.XML[] = [];
             var length = children.length;
             var propList:string[] = [];
             for (var i = 0; i < length; i++) {
-                var child:XML = children[i];
+                var child:lark.XML = children[i];
                 if (child.nodeType != 1 || child.namespace == NS_W) {
                     continue;
                 }
@@ -614,7 +614,7 @@ module swan.sys {
         /**
          * 解析内部类节点，并返回类名。
          */
-        private parseInnerClass(node:XML):string {
+        private parseInnerClass(node:lark.XML):string {
             var parser = exmlParserPool.pop();
             if (!parser) {
                 parser = new EXMLParser();
@@ -631,7 +631,7 @@ module swan.sys {
          */
         private addChildrenToProp(children:Array<any>, type:string, prop:string,
                                   cb:EXCodeBlock, varName:string, errorInfo:string,
-                                  propList:string[], node:XML):void {
+                                  propList:string[], node:lark.XML):void {
             var childFunc = "";
             var childLength = children.length;
 
@@ -644,7 +644,7 @@ module swan.sys {
                 }
                 var values:string[] = [];
                 for (var j = 0; j < childLength; j++) {
-                    var item:XML = children[j];
+                    var item:lark.XML = children[j];
                     if (item.nodeType != 1) {
                         continue;
                     }
@@ -657,7 +657,7 @@ module swan.sys {
                 childFunc = "[" + values.join(",") + "]";
             }
             else {
-                var firstChild:XML = children[0];
+                var firstChild:lark.XML = children[0];
                 if (type == TYPE_ARRAY) {
                     if (firstChild.localName == TYPE_ARRAY) {
                         values = [];
@@ -703,7 +703,7 @@ module swan.sys {
                     }
                 }
                 else {
-                    childFunc = this.formatValue(prop, (<XMLText><any>firstChild).text, node);
+                    childFunc = this.formatValue(prop, (<lark.XMLText><any>firstChild).text, node);
                 }
             }
             if (childFunc != "") {
@@ -722,7 +722,7 @@ module swan.sys {
         /**
          * 指定节点是否是属性节点
          */
-        private isProperty(node:XML):boolean {
+        private isProperty(node:lark.XML):boolean {
             if (node.hasOwnProperty("isProperty")) {
                 return node["isProperty"];
             }
@@ -770,7 +770,7 @@ module swan.sys {
         /**
          * 格式化值
          */
-        private formatValue(key:string, value:string, node:XML):string {
+        private formatValue(key:string, value:string, node:lark.XML):string {
             if (!value) {
                 value = "";
             }
@@ -873,7 +873,7 @@ module swan.sys {
                 if (children && children.length > 0) {
                     var length = children.length;
                     for (var i = 0; i < length; i++) {
-                        var decl:XML = children[i];
+                        var decl:lark.XML = children[i];
                         if (decl.nodeType != 1) {
                             continue;
                         }
@@ -989,7 +989,7 @@ module swan.sys {
         /**
          * 是否含有includeIn和excludeFrom属性
          */
-        private isStateNode(node:XML):boolean {
+        private isStateNode(node:lark.XML):boolean {
             var attributes = node.attributes;
             return attributes.hasOwnProperty("includeIn") || attributes.hasOwnProperty("excludeFrom");
         }
@@ -1014,7 +1014,7 @@ module swan.sys {
             if (children) {
                 var length = children.length;
                 for (var i = 0; i < length; i++) {
-                    var item:XML = children[i];
+                    var item:lark.XML = children[i];
                     if (item.nodeType == 1 &&
                         item.localName == "states") {
                         item.namespace = NS_W;
@@ -1056,7 +1056,7 @@ module swan.sys {
 
             length = stateChildren.length;
             for (i = 0; i < length; i++) {
-                var state:XML = stateChildren[i];
+                var state:lark.XML = stateChildren[i];
                 if (state.nodeType != 1) {
                     continue;
                 }
@@ -1086,14 +1086,14 @@ module swan.sys {
         /**
          * 解析视图状态代码
          */
-        private createStates(parentNode:XML):void {
+        private createStates(parentNode:lark.XML):void {
             var items:Array<any> = parentNode.children;
             if (!items) {
                 return;
             }
             var length = items.length;
             for (var i = 0; i < length; i++) {
-                var node:XML = items[i];
+                var node:lark.XML = items[i];
                 if (node.nodeType != 1 || this.isInnerClass(node)) {
                     continue;
                 }
@@ -1121,7 +1121,7 @@ module swan.sys {
                         }
                     }
 
-                    var firstChild:XML = children[0];
+                    var firstChild:lark.XML = children[0];
                     var value:string;
                     if (firstChild.nodeType == 1) {
                         this.createFuncForNode(firstChild);
@@ -1129,7 +1129,7 @@ module swan.sys {
                         value = "this." + firstChild.attributes.id;
                     }
                     else {
-                        value = this.formatValue(prop, (<XMLText><any>firstChild).text, parentNode);
+                        value = this.formatValue(prop, (<lark.XMLText><any>firstChild).text, parentNode);
                     }
 
                     states = this.getStateByName(stateName, node);
@@ -1151,7 +1151,7 @@ module swan.sys {
                     var state:EXState;
                     if (this.isStateNode(node)) {
                         var propertyName = "";
-                        var parent:XML = node.parent;
+                        var parent:lark.XML = node.parent;
                         if (parent.localName == TYPE_ARRAY)
                             parent = parent.parent;
                         if (parent && parent.parent) {
@@ -1233,7 +1233,7 @@ module swan.sys {
         /**
          * 检查指定的ID是否创建了类成员变量，若没创建则为其创建。
          */
-        private checkIdForState(node:XML):void {
+        private checkIdForState(node:lark.XML):void {
             if (!node || this.currentClass.getVariableByName(node.attributes.id)) {
                 return;
             }
@@ -1255,7 +1255,7 @@ module swan.sys {
         /**
          * 通过视图状态名称获取对应的视图状态
          */
-        private getStateByName(name:string, node:XML):EXState[] {
+        private getStateByName(name:string, node:lark.XML):EXState[] {
             var states:EXState[] = [];
             var stateCode = this.stateCode;
             var length = stateCode.length;
@@ -1290,13 +1290,13 @@ module swan.sys {
         /**
          * 寻找节点的临近节点ID和位置
          */
-        private findNearNodeId(node:XML):any {
-            var parentNode:XML = node.parent;
+        private findNearNodeId(node:lark.XML):any {
+            var parentNode:lark.XML = node.parent;
             var targetId = "";
             var position:number;
             var index = -1;
-            var preItem:XML;
-            var afterItem:XML;
+            var preItem:lark.XML;
+            var afterItem:lark.XML;
             var found = false;
             var children:Array<any> = parentNode.children;
             var length = children.length;
@@ -1340,7 +1340,7 @@ module swan.sys {
         /**
          * 获取节点的完整类名，包括模块名
          */
-        private getClassNameOfNode(node:XML):string {
+        private getClassNameOfNode(node:lark.XML):string {
             var className = exmlConfig.getClassNameById(node.localName, node.namespace);
             if (DEBUG && !className) {
                 lark.$error(2003, this.currentClassName, toXMLString(node));
@@ -1354,7 +1354,7 @@ module swan.sys {
         /**
          * 获取重复的ID名
          */
-        function getRepeatedIds(xml:XML):string[] {
+        function getRepeatedIds(xml:lark.XML):string[] {
             var result:string[] = [];
             this.getIds(xml, result);
             this.repeatedIdMap = {};
@@ -1381,7 +1381,7 @@ module swan.sys {
             }
         }
 
-        function toXMLString(node:XML):string {
+        function toXMLString(node:lark.XML):string {
             if (!node) {
                 return "";
             }
@@ -1409,7 +1409,7 @@ module swan.sys {
         /**
          * 清理声明节点里的状态标志
          */
-        function checkDeclarations(declarations:XML, list:string[]):void {
+        function checkDeclarations(declarations:lark.XML, list:string[]):void {
             if (!declarations) {
                 return;
             }

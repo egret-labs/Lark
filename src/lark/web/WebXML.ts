@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module swan.web {
+module lark.web {
 
     /**
      * XML节点基类
@@ -164,6 +164,5 @@ module swan.web {
         return xml;
     }
 
-
-    sys.XML = {parse: parse};
+    lark.XML = {parse: parse};
 }
