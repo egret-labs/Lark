@@ -46,33 +46,33 @@ module EXML {
      * 加载并解析一个外部的 EXML 文件为一个类定义。您可以在 EXML 文件的根节点上声明 class 属性作为要注册到全局的类名。
      * 若指定的类名已经存在，将会注册失败，并输出一个警告。注册成功后，您也可以通过 lark.getDefinitionByName(className) 方法获取这个 EXML 文件对应的类定义。
      * @param url 要加载的 EXML 文件路径
-     * @param callBack 加载并解析完成后的回调函数，无论加载成功还是失败，此函数均会被回调。失败时将传入null作为回调函数参数。
+     * @param callBack 加载并解析完成后的回调函数，无论加载成功还是失败，此函数均会被回调。失败时将传入 undefined 作为回调函数参数。
      * @param thisObject 回调函数的 this 引用
      */
-    export function load(url:string, callBack?:(clazz:{new():any})=>void, thisObject?:any):void {
+    export function load(url:string, callBack?:(clazz:any,url:string)=>void, thisObject?:any):void {
         if (DEBUG) {
             if (!url) {
                 lark.$error(1003, "url");
             }
         }
         var request = requestPool.pop();
-        if(!request){
+        if (!request) {
             request = new lark.HttpRequest();
         }
-        request.on(lark.Event.COMPLETE, onLoaded, null);
-        request.on(lark.Event.IO_ERROR, onLoaded, null);
+        request.on(lark.Event.COMPLETE, onLoadFinish, null);
+        request.on(lark.Event.IO_ERROR, onLoadFinish, null);
         request.open(url);
         request.send();
 
-        function onLoaded(event:lark.Event) {
-            request.removeListener(lark.Event.COMPLETE, onLoaded, null);
-            request.removeListener(lark.Event.IO_ERROR, onLoaded, null);
-            requestPool.push(request);
-            var text:string = request.response;
-            var clazz = parse(text);
-            if(callBack){
-                callBack.call(thisObject,clazz);
+        function onLoadFinish(event:lark.Event):void {
+            request.removeListener(lark.Event.COMPLETE, onLoadFinish, null);
+            request.removeListener(lark.Event.IO_ERROR, onLoadFinish, null);
+            var text:string = event.type == lark.Event.COMPLETE ? request.response : "";
+            if(text){
+                var clazz = parse(text);
             }
+            requestPool.push(request);
+            callBack.call(thisObject, clazz, url);
         }
     }
 

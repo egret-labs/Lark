@@ -63,9 +63,8 @@ module swan {
 
     //Swan 报错与警告信息
     locale_strings[2201] = "BasicLayout 不支持虚拟化。";
-    locale_strings[2202] = "皮肤解析出错，skinName 属性的值必须要能够解析为一个Skin子类的实例。";
-    locale_strings[2202] = "皮肤解析出错，skinName 属性的值必须要能够解析为一个Skin子类的实例。";
-    locale_strings[2203] = "此方法在 DataGroup 以及它的子类中不可用， 请通过数据源 dataProvider 来操作子项的添加或删除。";
+    locale_strings[2202] = "皮肤解析出错，属性 skinName 的值必须要能够解析为一个 swan.Skin 的实例。";
+    locale_strings[2203] = "此方法在 swan.DataGroup 以及它的子类中不可用， 请通过数据源 dataProvider 来操作子项的添加或删除。";
 
     locale_strings[2301] = "素材解析失败，找不到URL：{0} 所对应的资源。";
 }

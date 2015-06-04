@@ -33,15 +33,19 @@ module lark {
 
         public constructor() {
             super();
-            EXML.load("tests/List.exml",this.onExmlLoaded,this);
         }
 
-        private onExmlLoaded(clazz:any):void {
+
+
+        protected createChildren():void {
+            super.createChildren();
             this.width = this.stage.stageWidth;
             this.height = this.stage.stageHeight;
-            var component:swan.UIComponent = new clazz();
+            var component = new swan.Component();
+            component.horizontalCenter = 0;
+            component.verticalCenter = 0;
+            component.skinName = "tests/List.exml";
             this.addChild(component);
-
         }
 
         private touchTarget:swan.UIComponent;
