@@ -154,7 +154,14 @@ module swan.sys {
                     var path = paths[i];
                     definition = definition[path] || (definition[path] = {});
                 }
-                definition[paths[length - 1]] = clazz;
+                if (definition[paths[length - 1]]) {
+                    if (DEBUG) {
+                        lark.$warn(2101, className, toXMLString(xmlData));
+                    }
+                }
+                else {
+                    definition[paths[length - 1]] = clazz;
+                }
             }
             return clazz;
         }

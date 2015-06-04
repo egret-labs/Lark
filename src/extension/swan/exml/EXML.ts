@@ -27,25 +27,53 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module swan {
+module EXML {
 
-    var parser = new sys.EXMLParser();
+    var parser = new swan.sys.EXMLParser();
+
+    var requestPool:lark.HttpRequest[] = [];
 
     /**
-     * EXML皮肤文件运行时解析工具
+     * 解析一个 EXML 文件的文本内容为一个类定义。您可以在 EXML 文件的根节点上声明 class 属性作为要注册到全局的类名。
+     * 若指定的类名已经存在，将会注册失败，并输出一个警告。注册成功后，您也可以通过 lark.getDefinitionByName(className) 方法获取这个 EXML 文件对应的类定义。
+     * @param text 要解析的 EXML 文件内容
      */
-    export class EXML {
+    export function parse(text:string):{new():any} {
+        return parser.parse(text);
+    }
 
-        /**
-         * 解析一个EXML文件的文本内容为一个皮肤类。
-         * @param text 要解析的EXML文件内容
-         * @param className 皮肤对应的完整类名，包括模块名称。例如 swan.ButtonSkin。解析完成后皮肤类定义会自动缓存到全局，
-         * 若指定的类已经存在，将会覆盖已有的类定义。解析后您也可以通过lark.getDefinitionByName(className)方法获取这个皮肤的类定义。
-         */
-        public static parse(text:string):{new():any} {
-            return parser.parse(text);
+    /**
+     * 加载并解析一个外部的 EXML 文件为一个类定义。您可以在 EXML 文件的根节点上声明 class 属性作为要注册到全局的类名。
+     * 若指定的类名已经存在，将会注册失败，并输出一个警告。注册成功后，您也可以通过 lark.getDefinitionByName(className) 方法获取这个 EXML 文件对应的类定义。
+     * @param url 要加载的 EXML 文件路径
+     * @param callBack 加载并解析完成后的回调函数，无论加载成功还是失败，此函数均会被回调。失败时将传入null作为回调函数参数。
+     * @param thisObject 回调函数的 this 引用
+     */
+    export function load(url:string, callBack?:(clazz:{new():any})=>void, thisObject?:any):void {
+        if (DEBUG) {
+            if (!url) {
+                lark.$error(1003, "url");
+            }
         }
+        var request = requestPool.pop();
+        if(!request){
+            request = new lark.HttpRequest();
+        }
+        request.on(lark.Event.COMPLETE, onLoaded, null);
+        request.on(lark.Event.IO_ERROR, onLoaded, null);
+        request.open(url);
+        request.send();
 
+        function onLoaded(event:lark.Event) {
+            request.removeListener(lark.Event.COMPLETE, onLoaded, null);
+            request.removeListener(lark.Event.IO_ERROR, onLoaded, null);
+            requestPool.push(request);
+            var text:string = request.response;
+            var clazz = parse(text);
+            if(callBack){
+                callBack.call(thisObject,clazz);
+            }
+        }
     }
 
 }

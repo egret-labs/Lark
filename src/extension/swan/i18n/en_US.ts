@@ -53,6 +53,7 @@ module swan {
     locale_strings[2019] = "EXML parsing error {0}: the container’s child item must be visible nodes: {1}";
     locale_strings[2020] = "EXML parsing error {0}: for child nodes in w: Declarations, the includeIn and excludeFrom properties are not allowed to use \n {1}";
 
+    locale_strings[2101] = "EXML parsing warnning : fail to register the class property : {0},there is already a class with the same name in the global,please try to rename the class name for the exml. \n {1}";
     locale_strings[2102] = "EXML parsing warnning {0}: no child node can be found on the property code \n {1}";
     locale_strings[2103] = "EXML parsing warnning {0}: the same property '{1}' on the node is assigned multiple times \n {2}";
     locale_strings[2104] = "Instantiate class {0} error，the parameters of its constructor method must be empty.";

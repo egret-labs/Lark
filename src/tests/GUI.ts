@@ -33,20 +33,14 @@ module lark {
 
         public constructor() {
             super();
-            var request = new HttpRequest();
-            request.once(Event.COMPLETE, this.onExmlLoaded, this);
-            request.open("tests/List.exml");
-            request.send();
+            EXML.load("tests/List.exml",this.onExmlLoaded,this);
         }
 
         private list:swan.List;
 
-        private onExmlLoaded(event:Event):void {
+        private onExmlLoaded(Skin:any):void {
             this.width = this.stage.stageWidth;
             this.height = this.stage.stageHeight;
-            var request:HttpRequest = event.target;
-            var Skin = swan.EXML.parse(request.response);
-
             var list:swan.List = new Skin();
             list.horizontalCenter = 0;
             list.verticalCenter = 0;
