@@ -74,11 +74,12 @@ module swan.sys {
          * 创建一个 TouchScroll 实例
          * @param updateFunction 滚动位置更新回调函数
          */
-        public constructor(updateFunction:(scrollPos:number)=>void,target:lark.IEventEmitter){
+        public constructor(updateFunction:(scrollPos:number)=>void,endFunction:()=>void,target:lark.IEventEmitter){
             if (DEBUG && !updateFunction) {
                 lark.$error(1003, "updateFunction");
             }
             this.updateFunction = updateFunction;
+            this.endFunction = endFunction;
             this.target = target;
             this.animation = new sys.Animation(this.onScrollingUpdate, this);
             this.animation.endFunction = this.finishScrolling;
@@ -87,6 +88,7 @@ module swan.sys {
 
         private target:lark.IEventEmitter;
         private updateFunction:(scrollPos:number)=>void;
+        private endFunction:()=>void;
 
         private previousTime:number = 0;
         private velocity:number = 0;
@@ -103,6 +105,13 @@ module swan.sys {
          * 停止触摸时继续滚动的动画实例
          */
         private animation:sys.Animation;
+
+        /**
+         * 正在播放缓动动画的标志。
+         */
+        public isPlaying():boolean{
+            return this.animation.isPlaying;
+        }
 
         /**
          * 如果正在执行缓动滚屏，停止缓动。
@@ -225,6 +234,7 @@ module swan.sys {
         private throwTo(hspTo:number, duration:number = 500):void {
             var hsp = this.currentScrollPos;
             if (hsp == hspTo) {
+                this.endFunction.call(this.target);
                 return;
             }
             var animation = this.animation;

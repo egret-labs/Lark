@@ -217,7 +217,7 @@ module swan {
             if (!lark.is(renderer, Types.IItemRenderer)) {
                 return null;
             }
-            super.addChild(renderer);
+            this.addChild(renderer);
             return renderer;
         }
 
@@ -354,7 +354,7 @@ module swan {
                 }
                 else {
                     this.rendererRemoved(oldRenderer, index, item);
-                    super.removeChild(oldRenderer);
+                    this.removeChild(oldRenderer);
                 }
             }
         }
@@ -592,7 +592,7 @@ module swan {
                 this.doFreeRenderer(typicalRenderer);
             }
             else {
-                super.removeChild(typicalRenderer);
+                this.removeChild(typicalRenderer);
             }
             this.setTypicalLayoutRect(rect);
             values[Keys.createNewRendererFlag] = false;
@@ -631,7 +631,7 @@ module swan {
                 var renderer = indexToRenderer[index];
                 if (renderer) {
                     this.rendererRemoved(renderer, renderer.itemIndex, renderer.data);
-                    super.removeChild(renderer);
+                    this.removeChild(renderer);
                 }
             }
             this.$indexToRenderer = [];
@@ -647,7 +647,7 @@ module swan {
                     for (var i = 0; i < length; i++) {
                         renderer = list[i];
                         this.rendererRemoved(renderer, renderer.itemIndex, renderer.data);
-                        super.removeChild(renderer);
+                        this.removeChild(renderer);
                     }
                 }
                 values[Keys.freeRenderers] = {};

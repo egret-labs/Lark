@@ -459,7 +459,7 @@ module swan {
                 this.endIndex = -1;
                 return false;
             }
-            var maxVisibleY = target.scrollH + values[sys.UIKeys.height];
+            var maxVisibleY = target.scrollV + values[sys.UIKeys.height];
             if (maxVisibleY < this.$paddingTop) {
                 this.startIndex = -1;
                 this.endIndex = -1;

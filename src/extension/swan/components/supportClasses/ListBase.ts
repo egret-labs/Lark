@@ -439,32 +439,4 @@ module swan {
     }
 
     lark.registerClass(ListBase, Types.ListBase);
-
-    if (DEBUG) {
-        ListBase.prototype.addChild = function (child) {
-            lark.$error(2203);
-            return null;
-        };
-        ListBase.prototype.addChildAt = function (child, index) {
-            lark.$error(2203);
-            return null;
-        };
-        ListBase.prototype.removeChild = function (child) {
-            lark.$error(2203);
-            return null;
-        };
-        ListBase.prototype.removeChildAt = function (index) {
-            lark.$error(2203);
-            return null;
-        };
-        ListBase.prototype.setChildIndex = function (child, index) {
-            lark.$error(2203);
-        };
-        ListBase.prototype.swapChildren = function (child1, child2) {
-            lark.$error(2203);
-        };
-        ListBase.prototype.swapChildrenAt = function (index1, index2) {
-            lark.$error(2203);
-        };
-    }
 }

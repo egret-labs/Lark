@@ -47,6 +47,9 @@ module swan {
     }
     /**
      * 滚动条组件
+     *
+     * @event swan.UIEvent.CHANGE_START 滚动位置改变开始
+     * @event swan.UIEvent.CHANGE_END 滚动位置改变结束
      */
     export class Scroller extends Component {
 
@@ -60,8 +63,8 @@ module swan {
          */
         public constructor() {
             super();
-            var touchScrollH = new sys.TouchScroll(this.horizontalUpdateHandler, this);
-            var touchScrollV = new sys.TouchScroll(this.verticalUpdateHandler, this);
+            var touchScrollH = new sys.TouchScroll(this.horizontalUpdateHandler, this.horizontalEndHandler, this);
+            var touchScrollV = new sys.TouchScroll(this.verticalUpdateHandler, this.verticalEndHanlder, this);
             this.$Scroller = {
                 0: "auto",          //scrollPolicyV,
                 1: "auto",          //scrollPolicyH,
@@ -332,13 +335,14 @@ module swan {
                 values[Keys.touchMoved] = true;
                 var horizontalBar = this.horizontalScrollBar;
                 var verticalBar = this.verticalScrollBar;
-                if (horizontalBar&&values[Keys.horizontalCanScroll]) {
+                if (horizontalBar && values[Keys.horizontalCanScroll]) {
                     horizontalBar.visible = true;
                 }
-                if (verticalBar&&values[Keys.verticalCanScroll]) {
+                if (verticalBar && values[Keys.verticalCanScroll]) {
                     verticalBar.visible = true;
                 }
             }
+            UIEvent.emitUIEvent(this, UIEvent.CHANGE_START);
             if (values[Keys.delayTouchEvent]) {
                 values[Keys.delayTouchEvent] = null;
                 values[Keys.delayTouchTimer].stop();
@@ -369,30 +373,7 @@ module swan {
             if (values[Keys.verticalCanScroll]) {
                 values[Keys.touchScrollV].finish(viewport.scrollV, viewport.contentHeight - uiValues[sys.UIKeys.height]);
             }
-
-            var horizontalBar = this.horizontalScrollBar;
-            var verticalBar = this.verticalScrollBar;
-            if(horizontalBar&&horizontalBar.visible||verticalBar&&verticalBar.visible){
-                if (!values[Keys.autoHideTimer]) {
-                    values[Keys.autoHideTimer] = new lark.Timer(500, 1);
-                    values[Keys.autoHideTimer].on(lark.TimerEvent.TIMER_COMPLETE, this.onAutoHideTimer, this);
-                }
-                values[Keys.autoHideTimer].reset();
-                values[Keys.autoHideTimer].start();
-            }
         }
-
-        private onAutoHideTimer(event:lark.TimerEvent):void {
-            var horizontalBar = this.horizontalScrollBar;
-            var verticalBar = this.verticalScrollBar;
-            if(horizontalBar){
-                horizontalBar.visible = false;
-            }
-            if(verticalBar){
-                verticalBar.visible = false;
-            }
-        }
-
 
         private horizontalUpdateHandler(scrollPos:number):void {
             this.$Scroller[Keys.viewport].scrollH = scrollPos;
@@ -400,6 +381,46 @@ module swan {
 
         private verticalUpdateHandler(scrollPos:number):void {
             this.$Scroller[Keys.viewport].scrollV = scrollPos;
+        }
+
+        private horizontalEndHandler():void {
+            if(!this.$Scroller[Keys.touchScrollV].isPlaying()){
+                this.onChangeEnd();
+            }
+        }
+
+        private verticalEndHanlder():void {
+            if(!this.$Scroller[Keys.touchScrollH].isPlaying()){
+                this.onChangeEnd();
+            }
+        }
+
+        private onChangeEnd():void{
+            var values = this.$Scroller;
+            var horizontalBar = this.horizontalScrollBar;
+            var verticalBar = this.verticalScrollBar;
+            if (horizontalBar && horizontalBar.visible || verticalBar && verticalBar.visible) {
+                if (!values[Keys.autoHideTimer]) {
+                    values[Keys.autoHideTimer] = new lark.Timer(200, 1);
+                    values[Keys.autoHideTimer].on(lark.TimerEvent.TIMER_COMPLETE, this.onAutoHideTimer, this);
+                }
+                values[Keys.autoHideTimer].reset();
+                values[Keys.autoHideTimer].start();
+            }
+
+            UIEvent.emitUIEvent(this,UIEvent.CHANGE_END);
+
+        }
+
+        private onAutoHideTimer(event:lark.TimerEvent):void {
+            var horizontalBar = this.horizontalScrollBar;
+            var verticalBar = this.verticalScrollBar;
+            if (horizontalBar) {
+                horizontalBar.visible = false;
+            }
+            if (verticalBar) {
+                verticalBar.visible = false;
+            }
         }
 
         protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
@@ -412,14 +433,14 @@ module swan {
 
         }
 
-        protected partAdded(partName:string,instance:any):void{
-            super.partAdded(partName,instance);
-            if(instance==this.horizontalScrollBar){
+        protected partAdded(partName:string, instance:any):void {
+            super.partAdded(partName, instance);
+            if (instance == this.horizontalScrollBar) {
                 this.horizontalScrollBar.touchChildren = false;
                 this.horizontalScrollBar.touchEnabled = false;
                 this.horizontalScrollBar.visible = false;
             }
-            else if(instance==this.verticalScrollBar){
+            else if (instance == this.verticalScrollBar) {
                 this.verticalScrollBar.touchChildren = false;
                 this.verticalScrollBar.touchEnabled = false;
                 this.verticalScrollBar.visible = false;

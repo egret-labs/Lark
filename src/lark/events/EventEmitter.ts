@@ -201,7 +201,7 @@ module lark {
 
         $notifyListener(event:Event):boolean {
             var values = this.$EventEmitter;
-            var eventMap:Object = event.$eventPhase == 1 ? values[Keys.captureEventsMap] : values[Keys.eventsMap];
+            var eventMap:Object = event.$eventPhase == EventPhase.CAPTURING_PHASE ? values[Keys.captureEventsMap] : values[Keys.eventsMap];
             var list:lark.sys.EventBin[] = eventMap[event.$type];
             if (!list) {
                 return true;
