@@ -87,7 +87,7 @@ module lark {
 
         /**
          * 注册一个接口实现。Lark框架内预留了多个可由项目高度定制化的功能接口，使用此方法能够将项目中针对某接口的具体实现实例注入到框架中使用。
-         * @param interfaceName 注入的接口名称。例如："swan.IAssetAdapter"
+         * @param interfaceName 注入的接口名称。例如："swan.IAssetAdapter","swan.Theme"
          * @param instance 实现此接口的实例。
          */
         public registerImplementation(interfaceName:string,instance:any):void{
@@ -96,7 +96,7 @@ module lark {
 
         /**
          * 获取一个接口实现。此方法通常由框架内部调用。获取项目注入的自定义实现实例。
-         * @param interfaceName 要获取的接口名称。例如："swan.IAssetAdapter"
+         * @param interfaceName 要获取的接口名称。例如："swan.IAssetAdapter","swan.Theme"
          * @returns 返回实现此接口的实例。
          */
         public getImplementation(interfaceName:string):any {

@@ -35,16 +35,16 @@ module lark {
             super();
         }
 
-
-
         protected createChildren():void {
             super.createChildren();
+
+            new swan.Theme("tests/theme.json",this.stage);
+
             this.width = this.stage.stageWidth;
             this.height = this.stage.stageHeight;
             var component = new swan.Component();
             component.horizontalCenter = 0;
             component.verticalCenter = 0;
-            component.skinName = "tests/List.exml";
             this.addChild(component);
         }
 
