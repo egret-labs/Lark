@@ -27,8 +27,15 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-
 module swan {
+
+    export const enum Keys {
+        clickOffsetX,
+        clickOffsetY,
+        moveStageX,
+        moveStageY,
+        touchDownTarget
+    }
 
     /**
      * TrackBase类是具有一个轨道和一个或多个滑块按钮的组件的一个基类，如 Slider 和 ScrollBar。
@@ -39,8 +46,17 @@ module swan {
          */
         public constructor() {
             super();
+            this.$TrackBase = {
+                0:0,        //clickOffsetX,
+                1:0,        //clickOffsetY,
+                2:0,        //moveStageX,
+                3:0,        //moveStageY,
+                4:null,     //touchDownTarget
+            };
             this.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
+
+        $TrackBase:Object;
 
         /**
          * [SkinPart]滑块显示对象
@@ -57,21 +73,7 @@ module swan {
          * @param y 相对于轨道原点的位置的y坐标。
          */
         protected pointToValue(x:number, y:number):number {
-            return this.$minimum;
-        }
-
-
-        /**
-         * 按 stepSize 增大或减小 value
-         * @param increase {boolean}
-         */
-        public changeValueByStep(increase:boolean = true):void {
-            var prevValue:number = this.value;
-
-            super.changeValueByStep(increase);
-
-            if (this.value != prevValue)
-                this.emitWith(lark.Event.CHANGE);
+            return this.minimum;
         }
 
         /**
@@ -107,12 +109,6 @@ module swan {
         }
 
         /**
-         * 记录鼠标在thumb上按下的位置
-         */
-        $clickOffsetX:number = 0;
-        $clickOffsetY:number = 0;
-
-        /**
          * 滑块或轨道尺寸改变事件
          */
         private onTrackOrThumbResize(event:lark.Event):void {
@@ -129,26 +125,25 @@ module swan {
             stage.on(lark.TouchEvent.TOUCH_END, this.onStageTouchEnd, this);
 
             var clickOffset = this.thumb.globalToLocal(event.stageX, event.stageY, lark.$TempPoint);
-            this.$clickOffsetX = clickOffset.x;
-            this.$clickOffsetY = clickOffset.y;
+            var values = this.$TrackBase;
+            values[Keys.clickOffsetX] = clickOffset.x;
+            values[Keys.clickOffsetY] = clickOffset.y;
             UIEvent.emitUIEvent(this, UIEvent.CHANGE_START);
         }
-
-        $moveStageX:number = 0;
-        $moveStageY:number = 0;
 
         /**
          * 舞台上触摸移动事件
          */
         private onStageTouchMove(event:lark.TouchEvent):void {
-            this.$moveStageX = event.stageX;
-            this.$moveStageY = event.stageY;
+            var values = this.$TrackBase;
+            values[Keys.moveStageX] = event.$stageX;
+            values[Keys.moveStageY] = event.$stageY;
             var track = this.track;
             if (!track)
                 return;
-            var p = track.globalToLocal(this.$moveStageX, this.$moveStageY, lark.$TempPoint);
-            var newValue = this.pointToValue(p.x - this.$clickOffsetX, p.y - this.$clickOffsetY);
-            newValue = this.nearestValidValue(newValue, this.$snapInterval);
+            var p = track.globalToLocal(values[Keys.moveStageX], values[Keys.moveStageY], lark.$TempPoint);
+            var newValue = this.pointToValue(p.x - values[Keys.clickOffsetX], p.y - values[Keys.clickOffsetY]);
+            newValue = this.nearestValidValue(newValue, this.snapInterval);
             this.updateWhenTouchMove(newValue);
             event.updateAfterEvent();
         }
@@ -167,7 +162,7 @@ module swan {
             var stage:lark.Stage = event.$currentTarget;
             stage.removeListener(lark.TouchEvent.TOUCH_MOVE,this.onStageTouchMove,this);
             stage.removeListener(lark.TouchEvent.TOUCH_END,this.onStageTouchEnd,this);
-            UIEvent.emitUIEvent(this, UIEvent.CHANGE_END)
+            UIEvent.emitUIEvent(this, UIEvent.CHANGE_END);
         }
 
         /**
@@ -177,14 +172,12 @@ module swan {
 
         }
 
-        private touchDownTarget:lark.DisplayObject = null;
-
         /**
          * 当在组件上按下时记录被按下的子显示对象
          */
         private onTouchBegin(event:lark.TouchEvent):void {
             this.$stage.on(lark.TouchEvent.TOUCH_END, this.stageTouchEndHandler, this);
-            this.touchDownTarget = <lark.DisplayObject> (event.$target);
+            this.$TrackBase[Keys.touchDownTarget] = <lark.DisplayObject> (event.$target);
         }
 
         /**
@@ -192,12 +185,13 @@ module swan {
          */
         private stageTouchEndHandler(event:lark.TouchEvent):void {
             var target:lark.DisplayObject = event.$target;
+            var values = this.$TrackBase;
             event.$currentTarget.removeListener(lark.TouchEvent.TOUCH_END, this.stageTouchEndHandler, this);
-            if (this.touchDownTarget != target && this.contains(<lark.DisplayObject> (target))) {
+            if (values[Keys.touchDownTarget] != target && this.contains(<lark.DisplayObject> (target))) {
                 lark.TouchEvent.emitTouchEvent(this, lark.TouchEvent.TOUCH_TAP, true, true,
                     event.$stageX, event.$stageY, event.touchPointID);
             }
-            this.touchDownTarget = null;
+            values[Keys.touchDownTarget] = null;
         }
     }
 

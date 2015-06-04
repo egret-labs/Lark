@@ -47,10 +47,10 @@ module swan {
         protected pointToValue(x:number, y:number):number {
             if (!this.thumb || !this.track)
                 return 0;
-
-            var range = this.$maximum - this.$minimum;
+            var values = this.$Range;
+            var range = values[sys.RangeKeys.maximum] - values[sys.RangeKeys.minimum];
             var thumbRange = this.getThumbRange();
-            return this.$minimum + (thumbRange != 0 ? (x / thumbRange) * range : 0);
+            return values[sys.RangeKeys.minimum] + (thumbRange != 0 ? (x / thumbRange) * range : 0);
         }
 
         private getThumbRange():number {
@@ -67,10 +67,10 @@ module swan {
         protected updateSkinDisplayList():void {
             if (!this.thumb || !this.track)
                 return;
-
+            var values = this.$Range;
             var thumbRange = this.getThumbRange();
-            var range = this.$maximum - this.$minimum;
-            var thumbPosTrackX = (range > 0) ? ((this.$pendingValue - this.$minimum) / range) * thumbRange : 0;
+            var range = values[sys.RangeKeys.maximum] - values[sys.RangeKeys.minimum];
+            var thumbPosTrackX = (range > 0) ? ((this.$pendingValue - values[sys.RangeKeys.minimum]) / range) * thumbRange : 0;
             var thumbPos = this.track.localToGlobal(thumbPosTrackX, 0, lark.$TempPoint);
             var thumbPosX = thumbPos.x;
             var thumbPosY = thumbPos.y;

@@ -27,61 +27,53 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module swan {
+module EXML {
 
-    var parser = new sys.EXMLParser();
+    var parser = new swan.sys.EXMLParser();
+
+    var requestPool:lark.HttpRequest[] = [];
 
     /**
-     * EXML皮肤文件运行时解析工具
+     * 解析一个 EXML 文件的文本内容为一个类定义。您可以在 EXML 文件的根节点上声明 class 属性作为要注册到全局的类名。
+     * 若指定的类名已经存在，将会注册失败，并输出一个警告。注册成功后，您也可以通过 lark.getDefinitionByName(className) 方法获取这个 EXML 文件对应的类定义。
+     * @param text 要解析的 EXML 文件内容
      */
-    export class EXML {
+    export function parse(text:string):{new():any} {
+        return parser.parse(text);
+    }
 
-        /**
-         * 解析一个EXML文件的文本内容为一个皮肤类。
-         * @param text 要解析的EXML文件内容
-         * @param className 皮肤对应的完整类名，包括模块名称。例如 swan.ButtonSkin。解析完成后皮肤类定义会自动缓存到全局，
-         * 若指定的类已经存在，将会覆盖已有的类定义。解析后您也可以通过lark.getDefinitionByName(className)方法获取这个皮肤的类定义。
-         */
-        public static parse(text:string, className:string):{new():any} {
-            if (DEBUG) {
-                if(!text){
-                    lark.$error(1003, "text");
-                }
-                if(!className){
-                    lark.$error(1003, "className");
-                }
+    /**
+     * 加载并解析一个外部的 EXML 文件为一个类定义。您可以在 EXML 文件的根节点上声明 class 属性作为要注册到全局的类名。
+     * 若指定的类名已经存在，将会注册失败，并输出一个警告。注册成功后，您也可以通过 lark.getDefinitionByName(className) 方法获取这个 EXML 文件对应的类定义。
+     * @param url 要加载的 EXML 文件路径
+     * @param callBack 加载并解析完成后的回调函数，无论加载成功还是失败，此函数均会被回调。失败时将传入 undefined 作为回调函数参数。
+     * @param thisObject 回调函数的 this 引用
+     */
+    export function load(url:string, callBack?:(clazz:any,url:string)=>void, thisObject?:any):void {
+        if (DEBUG) {
+            if (!url) {
+                lark.$error(1003, "url");
             }
-            try{
-                var xml = sys.XML.parse(text);
-            }
-            catch(e){
-                if(DEBUG){
-                    lark.$error(2002,className,text+"\n"+e.message);
-                }
-            }
-            var code = parser.parse(xml,className);
-            try {
-                var clazz = eval(code);
-            }
-            catch (e) {
-                if (DEBUG) {
-                    lark.log(code);
-                }
-                return null;
-            }
-            if (className && clazz) {
-                var paths = className.split(".");
-                var length = paths.length;
-                var definition = __global;
-                for (var i = 0; i < length - 1; i++) {
-                    var path = paths[i];
-                    definition = definition[path] || (definition[path] = {});
-                }
-                definition[paths[length - 1]] = clazz;
-            }
-            return clazz;
         }
+        var request = requestPool.pop();
+        if (!request) {
+            request = new lark.HttpRequest();
+        }
+        request.on(lark.Event.COMPLETE, onLoadFinish, null);
+        request.on(lark.Event.IO_ERROR, onLoadFinish, null);
+        request.open(url);
+        request.send();
 
+        function onLoadFinish(event:lark.Event):void {
+            request.removeListener(lark.Event.COMPLETE, onLoadFinish, null);
+            request.removeListener(lark.Event.IO_ERROR, onLoadFinish, null);
+            var text:string = event.type == lark.Event.COMPLETE ? request.response : "";
+            if(text){
+                var clazz = parse(text);
+            }
+            requestPool.push(request);
+            callBack.call(thisObject, clazz, url);
+        }
     }
 
 }

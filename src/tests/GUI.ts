@@ -33,62 +33,29 @@ module lark {
 
         public constructor() {
             super();
-            var request = new HttpRequest();
-            request.once(Event.COMPLETE, this.onExmlLoaded, this);
-            request.open("tests/List.exml");
-            request.send();
         }
 
-        private list:swan.List;
 
-        private onExmlLoaded(event:Event):void {
+
+        protected createChildren():void {
+            super.createChildren();
             this.width = this.stage.stageWidth;
             this.height = this.stage.stageHeight;
-            var request:HttpRequest = event.target;
-            var Skin = swan.EXML.parse(request.response, "lark.List");
-
-            var list:swan.List = new Skin();
-            list.horizontalCenter = 0;
-            list.verticalCenter = 0;
-            this.list = list;
-            this.addChild(list);
-
-            //var image = new swan.Image("image/test.png");
-            //image.fillMode = "clip";
-            //this.addChild(image);
-            //image.horizontalCenter =
-            //image.verticalCenter = 0;
-            //image.width = 300;
-            //image.height = 400;
-            //
-            //var image2 = new swan.Image("image/button.png");
-            //image2.scale9Grid = new lark.Rectangle(5,5,110,30);
-            //this.addChild(image2);
-            //image2.x = 300;
-            //image2.y = 100;
-            ////image2.smoothing = false;
-            //image2.width = 300;
-            //image2.height = 100;
-
-            this.stage.on(TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+            var component = new swan.Component();
+            component.horizontalCenter = 0;
+            component.verticalCenter = 0;
+            component.skinName = "tests/List.exml";
+            this.addChild(component);
         }
 
-        private createButton(skin:any):swan.Button {
-            var button = new swan.Button();
-            button.skinName = skin;
-            return button;
-        }
         private touchTarget:swan.UIComponent;
         private offsetX:number = 0;
         private offsetY:number = 0;
 
         private onTouchBegin(event:TouchEvent):void {
-            var target = <lark.DisplayObject>event.target;
-            var list = this.list;
-            //var progressBar:swan.ProgressBar = list["progressBar"];
-            //progressBar.value = Math.random()*100;
-            return;
-            //this.touchTarget = target;
+            var target = <swan.UIComponent>event.target;
+            this.touchTarget = target;
+
             //target.includeInLayout = false;
             //var pos = target.parent.localToGlobal(target.x, target.y);
             //this.addChild(target);

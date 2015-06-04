@@ -77,7 +77,7 @@ module swan {
         }
 
         /**
-         * 皮肤标识符。有效值可为：皮肤类定义,皮肤类名,或皮肤实例，
+         * 皮肤标识符。有效值可为：皮肤类定义,皮肤类名,皮肤实例,EXML文件内容,或外部EXML文件路径，
          */
         public get skinName():any {
             return this.$Component[Keys.skinName];
@@ -103,7 +103,18 @@ module swan {
                     skin = new skinName();
                 }
                 else if (typeof(skinName) == "string") {
-                    var clazz:any = lark.getDefinitionByName(<string><any> skinName);
+                    var clazz:any;
+                    var text:string = skinName.trim();
+                    if (text.charAt(0) == "<") {
+                        clazz = EXML.parse(text);
+                    }
+                    else if (text.substr(text.length - 5, 5).toLowerCase() == ".exml") {
+                        EXML.load(skinName,this.onExmlLoaded,this);
+                        return;
+                    }
+                    else{
+                        clazz = lark.getDefinitionByName(skinName);
+                    }
                     if (clazz) {
                         skin = new clazz();
                     }
@@ -112,13 +123,16 @@ module swan {
                     skin = skinName;
                 }
             }
-            if (!lark.is(skin, Types.Skin)) {
-                skin = null;
-                DEBUG && lark.$error(2202);
-            }
             this.$setSkin(skin);
         }
 
+        private onExmlLoaded(clazz:any,url:string):void {
+            if(this.skinName!=url){
+                return;
+            }
+            var skin = new clazz();
+            this.$setSkin(skin)
+        }
 
         /**
          * [只读]皮肤对象实例。
@@ -131,6 +145,10 @@ module swan {
          * 设置皮肤实例
          */
         $setSkin(skin:Skin):void {
+            if (!lark.is(skin, Types.Skin)) {
+                skin = null;
+                DEBUG && lark.$error(2202);
+            }
             var values = this.$Component;
             var oldSkin = values[Keys.skin];
             if (oldSkin) {

@@ -57,7 +57,7 @@ module swan {
                 loader.removeListener(lark.Event.COMPLETE, onLoadFinish, null);
                 loader.removeListener(lark.Event.IO_ERROR, onLoadFinish, null);
                 var data:lark.BitmapData;
-                if (event.type == lark.Event.COMPLETE) {
+                if (event.$type == lark.Event.COMPLETE) {
                     data = loader.data;
                     loader.data = null;
                 }

@@ -516,8 +516,7 @@ module lark {
 
 
         $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):DisplayObject {
-            if (!this.$visible || !this.$hasAnyFlags(sys.DisplayObjectFlags.TouchEnabled |
-                    sys.DisplayObjectFlags.TouchChildren)) {
+            if (!this.$visible) {
                 return null;
             }
             var m = this.$getInvertedConcatenatedMatrix();
@@ -533,6 +532,7 @@ module lark {
                 return null
             }
             var children = this.$children;
+            var found = false;
             for (var i = children.length - 1; i >= 0; i--) {
                 var child = children[i];
                 if (child.$maskedObject) {
@@ -540,7 +540,13 @@ module lark {
                 }
                 var target = child.$hitTest(stageX, stageY, shapeFlag);
                 if (target) {
-                    break;
+                    found = true;
+                    if(target.$hasFlags(sys.DisplayObjectFlags.TouchEnabled)){
+                        break;
+                    }
+                    else{
+                        target = null;
+                    }
                 }
             }
             if (target) {
@@ -549,10 +555,10 @@ module lark {
                 }
                 return this;
             }
-            if (this.$hasFlags(sys.DisplayObjectFlags.TouchEnabled)) {
-                return super.$hitTest(stageX, stageY, shapeFlag);
+            if (found) {
+                return this;
             }
-            return null;
+            return super.$hitTest(stageX, stageY, shapeFlag);
         }
 
     }

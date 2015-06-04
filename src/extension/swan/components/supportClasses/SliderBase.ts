@@ -151,8 +151,9 @@ module swan {
             var offsetY = event.$stageY - (thumbH / 2);
             var p = this.track.globalToLocal(offsetX, offsetY, lark.$TempPoint);
 
+            var values = this.$Range
             var newValue = this.pointToValue(p.x, p.y);
-            newValue = this.nearestValidValue(newValue, this.$snapInterval);
+            newValue = this.nearestValidValue(newValue, values[sys.RangeKeys.snapInterval]);
 
             if (newValue != this.$pendingValue) {
                 if (this.slideDuration != 0) {
@@ -165,7 +166,7 @@ module swan {
                         this.stopAnimation();
                     this.slideToValue = newValue;
                     animation.duration = this.slideDuration *
-                        (Math.abs(this.$pendingValue - this.slideToValue) / (this.$maximum - this.$minimum));
+                        (Math.abs(this.$pendingValue - this.slideToValue) / (values[sys.RangeKeys.maximum] - values[sys.RangeKeys.minimum]));
                     animation.from = this.$pendingValue;
                     animation.to = this.slideToValue;
                     UIEvent.emitUIEvent(this, UIEvent.CHANGE_START);

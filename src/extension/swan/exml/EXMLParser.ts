@@ -42,6 +42,7 @@ module swan.sys {
     var TYPE_CLASS = "Class";
     var TYPE_ARRAY = "Array";
     var TYPE_STATE = "State[]";
+    var SKIN_NAME = "skinName";
     var ELEMENTS_CONTENT = "elementsContent";
     var basicTypes:string[] = [TYPE_ARRAY, "boolean", "string", "number"];
     var wingKeys:string[] = ["id", "locked", "includeIn", "excludeFrom"];
@@ -111,9 +112,59 @@ module swan.sys {
          * @param xmlData 要编译的EXML文件内容
          * @param className 要编译成的完整类名，包括模块名。
          */
-        public parse(xmlData:XML, className:string):string {
-            var clazz = this.parseClass(xmlData, className);
-            return clazz.toCode();
+        public parse(text:string):{new():any} {
+            if (DEBUG) {
+                if (!text) {
+                    lark.$error(1003, "text");
+                }
+            }
+            try {
+                var xmlData = sys.XML.parse(text);
+            }
+            catch (e) {
+                if (DEBUG) {
+                    lark.$error(2002, text + "\n" + e.message);
+                }
+            }
+            var className:string = "";
+            var hasClass:boolean = false;
+            if (xmlData.attributes["class"]) {
+                className = xmlData.attributes["class"];
+                delete xmlData.attributes["class"];
+                hasClass = !!className;
+            }
+            else {
+                className = "$exmlClass" + innerClassCount++;
+            }
+            var exClass = this.parseClass(xmlData, className);
+            var code = exClass.toCode();
+            try {
+                var clazz = eval(code);
+            }
+            catch (e) {
+                if (DEBUG) {
+                    lark.log(code);
+                }
+                return null;
+            }
+            if (hasClass && clazz) {
+                var paths = className.split(".");
+                var length = paths.length;
+                var definition = __global;
+                for (var i = 0; i < length - 1; i++) {
+                    var path = paths[i];
+                    definition = definition[path] || (definition[path] = {});
+                }
+                if (definition[paths[length - 1]]) {
+                    if (DEBUG) {
+                        lark.$warn(2101, className, toXMLString(xmlData));
+                    }
+                }
+                else {
+                    definition[paths[length - 1]] = clazz;
+                }
+            }
+            return clazz;
         }
 
         /**
@@ -142,6 +193,7 @@ module swan.sys {
             else {
                 this.currentClass.className = className;
             }
+
             this.startCompile();
             var clazz = this.currentClass;
             this.currentClass = null;
@@ -504,9 +556,12 @@ module swan.sys {
                 if (this.isInnerClass(child)) {
                     if (child.localName == "Skin") {
                         var innerClassName = this.parseInnerClass(child);
-                        var type = exmlConfig.getPropertyType("skinName", className);
+                        var type = exmlConfig.getPropertyType(SKIN_NAME, className);
                         if (type) {
-                            cb.addAssignment(varName, innerClassName, "skinName");
+                            cb.addAssignment(varName, innerClassName, SKIN_NAME);
+                        }
+                        else{
+                            lark.$error(2005, this.currentClassName, SKIN_NAME, getPropertyStr(child));
                         }
                     }
                     continue;

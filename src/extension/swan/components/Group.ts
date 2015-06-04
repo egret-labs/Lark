@@ -244,7 +244,7 @@ module swan {
 
         $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):lark.DisplayObject {
             var target = super.$hitTest(stageX, stageY, shapeFlag);
-            if (target || !this.touchThrough || shapeFlag ||
+            if (target || this.$Group[Keys.touchThrough] || shapeFlag ||
                 this.$displayFlags & lark.sys.DisplayObjectFlags.PixelHitTest) {
                 return target;
             }
