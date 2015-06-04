@@ -38,6 +38,8 @@ module lark {
             textarea.height = 300;
             textarea.y = 100;
             textarea.x = 100;
+            textarea.displayAsPassword=true;
+            textarea.displayAsPassword=false;
             textarea.wordWrap = true;
             textarea.text = "Text Area !";
             textarea.fontSize=40;
@@ -59,12 +61,13 @@ module lark {
             textarea.on("input",e=>console.log("input",textarea.text),this);
             textarea.on("change", e=> console.log("change", textarea.text), this);
 
-            var input = new TextInput();;
+            var input = new TextInput();
+            input.displayAsPassword = true;
             input.width = 300;
             input.height = 50;
             input.y = 500;
             input.x = 100;
-            input.text = "Text Input!"
+            input.text = "Text Input!";
             input.fontSize = 40;
 
             var inputbg = new Shape();
@@ -75,7 +78,7 @@ module lark {
             inputbg.graphics.fillRect(0, 0, 300, 50);
             this.addChild(inputbg);
 
-
+            window['t'] = input;
 
             this.addChild(textarea);
             this.addChild(input);

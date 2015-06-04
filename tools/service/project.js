@@ -37,9 +37,9 @@ var Project = (function () {
     };
     Project.prototype.buildWholeProject = function () {
         var _this = this;
-        this.shutdown();
+        this.shutdown(11);
         var larkPath = FileUtil.joinPath(utils.getLarkRoot(), 'tools/bin/lark');
-        var build = cprocess.spawn(process.execPath, [larkPath, 'buildService', this.path], {
+        var build = cprocess.spawn(process.execPath, ['--expose-gc', larkPath, 'buildService', this.path], {
             detached: true,
             cwd: this.path
         });
@@ -60,15 +60,23 @@ var Project = (function () {
     };
     Project.prototype.sendCommand = function (cmd) {
         //this.buildProcess.stdin.write(JSON.stringify(cmd), 'utf8');
-        console.log(cmd);
         this.buildPort && this.buildPort.write(JSON.stringify(cmd));
         //this.buildProcess.send(cmd);
     };
-    Project.prototype.shutdown = function () {
-        this.sendCommand({ command: 'shutdown' });
-        if (this.buildProcess) {
-            this.buildProcess.removeAllListeners('exit');
-            this.buildProcess.kill();
+    Project.prototype.shutdown = function (retry) {
+        var _this = this;
+        if (retry === void 0) { retry = 0; }
+        if (this.penddingRequest == null || retry >= 10) {
+            this.buildProcess = null;
+            this.sendCommand({ command: 'shutdown' });
+            if (this.buildProcess) {
+                this.buildProcess.removeAllListeners('exit');
+                this.buildProcess.kill();
+                this.buildProcess = null;
+            }
+        }
+        else {
+            setTimeout(function () { return _this.shutdown(retry++); }, 5000);
         }
     };
     Project.prototype.onBuildServiceMessage = function (msg) {
@@ -77,6 +85,7 @@ var Project = (function () {
         if (this.penddingRequest) {
             this.penddingRequest.writeHead(200, { 'Content-Type': 'text/plain' });
             this.penddingRequest.end(JSON.stringify(msg));
+            this.penddingRequest = null;
         }
     };
     Project.prototype.onBuildServiceExit = function (code, signal) {

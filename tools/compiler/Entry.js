@@ -76,7 +76,7 @@ var Entry = (function () {
                 run.run();
                 exitCode = DontExitCode;
                 break;
-            case "buildLark":
+            case "make":
                 var build = new Build(options);
                 build.buildLarkSource();
                 break;

@@ -32,25 +32,34 @@ export function run() {
             shutdown();
         }
 
+        var proj: Project = getProject(task.path);
+
         if (task.command == 'init') {
-            var proj: Project = getProject(task.path);
             res.writeHead(200, { 'Content-Type': 'text/plain' });
             proj.buildPort = res;
             setInterval(() => res.write("{}"), 15000);
         }
         else if (task.command == 'buildResult') {
-            var proj: Project = getProject(task.path);
             proj.onBuildServiceMessage(<lark.ServiceCommandResult>task);
             res.writeHead(200, { 'Content-Type': 'text/plain' });
             res.end("");
         }
-        else if (task.command == 'build'){
+        else if (task.command == 'build') {
             handleBuildTask(task, res);
             global.gc && global.gc();
+        }
+        else if (task.command == 'status') {
+            var heapTotal: number = task['status']['heapTotal'];
+            console.log(heapTotal);
+            if (heapTotal > 500 * 1024 * 1024) {
+                proj.shutdown();
+            }
         }
 
 
     }).listen(LARK_SERVICE_PORT, '127.0.0.1');
+
+    process.on('exit', shutdown);
 }
 
 
@@ -86,6 +95,8 @@ export function execCommand(command :lark.ServiceCommand, callback?: Function,st
 
 
 function getProject(path: string) {
+    if (!path)
+        return null;
     var project: Project;
     if (!projects[path]) {
         project = new Project();

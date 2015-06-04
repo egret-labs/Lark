@@ -76,6 +76,7 @@ var Build = (function (_super) {
         this._lastExitCode = exitCode;
         this._lastMessages = compileResult.messages;
         this.sendCommand();
+        global.gc && global.gc();
         return exitCode;
     };
     Build.prototype.buildChanges = function (filesChanged) {
@@ -96,6 +97,7 @@ var Build = (function (_super) {
             this._lastMessages = result.messages;
         }
         this.sendCommand();
+        global.gc && global.gc();
         return this._lastExitCode;
     };
     Build.prototype.buildChangedTS = function (filesChanged) {

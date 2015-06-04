@@ -20,14 +20,13 @@ function run() {
             res.end("{}");
             shutdown();
         }
+        var proj = getProject(task.path);
         if (task.command == 'init') {
-            var proj = getProject(task.path);
             res.writeHead(200, { 'Content-Type': 'text/plain' });
             proj.buildPort = res;
             setInterval(function () { return res.write("{}"); }, 15000);
         }
         else if (task.command == 'buildResult') {
-            var proj = getProject(task.path);
             proj.onBuildServiceMessage(task);
             res.writeHead(200, { 'Content-Type': 'text/plain' });
             res.end("");
@@ -36,7 +35,15 @@ function run() {
             handleBuildTask(task, res);
             global.gc && global.gc();
         }
+        else if (task.command == 'status') {
+            var heapTotal = task['status']['heapTotal'];
+            console.log(heapTotal);
+            if (heapTotal > 500 * 1024 * 1024) {
+                proj.shutdown();
+            }
+        }
     }).listen(LARK_SERVICE_PORT, '127.0.0.1');
+    process.on('exit', shutdown);
 }
 exports.run = run;
 /**
@@ -71,6 +78,8 @@ function execCommand(command, callback, startServer) {
 }
 exports.execCommand = execCommand;
 function getProject(path) {
+    if (!path)
+        return null;
     var project;
     if (!projects[path]) {
         project = new Project();

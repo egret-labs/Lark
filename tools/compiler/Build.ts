@@ -76,6 +76,7 @@ class Build extends Action {
         this._lastExitCode = exitCode;
         this._lastMessages = compileResult.messages;
         this.sendCommand();
+        global.gc && global.gc();
         return exitCode;
     }
 
@@ -98,6 +99,7 @@ class Build extends Action {
             this._lastMessages = result.messages;
         }
         this.sendCommand();
+        global.gc && global.gc();
         return this._lastExitCode;
     }
 

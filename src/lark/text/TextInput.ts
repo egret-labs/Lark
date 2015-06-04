@@ -40,6 +40,39 @@ module lark{
 
         }
 
+        /**
+         * 一个布尔值，表示是否显示为一个密码输入框
+         * @returns {boolean}
+         */
+        public get displayAsPassword():boolean{
+            return this.$TextField[sys.TextKeys.displayAsPassword];
+        }
+        public set displayAsPassword(value:boolean){
+            if(this.$TextField[sys.TextKeys.displayAsPassword] == value)
+                return;
+            this.$TextField[sys.TextKeys.displayAsPassword] = value;
+            if(value)
+                this.wordWrap = false;
+            this.$invalidateContentBounds();
+        }
+
+        /**
+         * 设置或获取TextInput的最大输入长度，这个属性只限制用户输入的字符长度
+         * 通过 text 属性可以设置比 maxChars 更长的字符串
+         * @returns {number}
+         */
+        public get maxChars():number{
+            return this.$TextField[sys.TextKeys.maxChars];
+        }
+
+        public set maxChars(value:number){
+            var values = this.$TextField;
+            if(values[sys.TextKeys.maxChars] == value)
+                return;
+            values[sys.TextKeys.maxChars] = value;
+            this.updateTextAdapter();
+        }
+
         private _isTyping:boolean = false;
         private _isFocus:boolean = false;
 
@@ -114,6 +147,13 @@ module lark{
                 layer.$initializeInput();
                 this.timeoutId = -1;
             },0);
+        }
+
+        protected $splitWords(line:string):string[] {
+            var words = new Array<string>(line.length);
+            for(var i=0;i<line.length;i++)
+                words[i] = line.charAt(i);
+            return words;
         }
     }
 
