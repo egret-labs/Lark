@@ -45,7 +45,15 @@ module lark.web {
                     capabilities.$os = "Android";
                 }
                 else if(ua.indexOf("windows")>0){
-                    capabilities.$os = "Widnows Phone";
+                    capabilities.$os = "Windows Phone";
+                }
+            }
+            else{
+                if(ua.indexOf("windows nt")>0){
+                    capabilities.$os = "Windows";
+                }
+                else if(ua.indexOf("mac os")>0){
+                    capabilities.$os = "Mac OS";
                 }
             }
 

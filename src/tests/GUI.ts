@@ -33,6 +33,7 @@ module lark {
 
         public constructor() {
             super();
+            log(Capabilities.os);
         }
 
         protected createChildren():void {

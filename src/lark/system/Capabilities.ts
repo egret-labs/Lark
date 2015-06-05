@@ -72,7 +72,13 @@ module lark {
 
         /**
          * 指示当前的操作系统。os 属性返回下列字符串：
-         * "iOS", "Android", "Windows Phone", "Unknown"
+         *
+         * 苹果移动操作系统     "iOS"
+         * 安卓移动操作系统     "Android"
+         * 微软移动操作系统     "Windows Phone"
+         * 微软桌面操作系统     "Windows"
+         * 苹果桌面操作系统     "Mac OS"
+         * 未知操作系统        "Unknown"
          */
         public static get os():string{
             return Capabilities.$os;

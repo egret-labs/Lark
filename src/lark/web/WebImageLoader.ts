@@ -29,8 +29,8 @@
 
 module lark.web {
 
-    var isIOS = Capabilities.os == "iOS";
     var winURL = window["URL"] || window["webkitURL"];
+    var useXHR = winURL&&Capabilities.os == "iOS";
 
     /**
      * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
@@ -58,7 +58,7 @@ module lark.web {
          * @param url 要加载的图像文件的地址。
          */
         public load(url:string):void {
-            if (isIOS && winURL) {
+            if (useXHR) {
                 var request = this.request;
                 if (!request) {
                     request = this.request = new lark.web.WebHttpRequest();
@@ -90,7 +90,6 @@ module lark.web {
         }
 
         private loadImage(src:string):void {
-            log(src);
             var image = new Image();
             this.data = null;
             this.currentImage = image;
@@ -124,7 +123,7 @@ module lark.web {
 
         private getImage(event:any):HTMLImageElement {
             var image:HTMLImageElement = event.target;
-            if (this.request) {
+            if (useXHR) {
                 winURL.revokeObjectURL(image.src);
             }
             image.onerror = null;
