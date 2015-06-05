@@ -62,29 +62,38 @@ module lark {
             return Capabilities.$language;
         }
 
-        public static $isMobile:boolean;
+        static $isMobile:boolean;
 
         public static get isMobile():boolean{
             return Capabilities.$isMobile;
         }
 
+        static $os:string = "Unknown";
+
+        /**
+         * 指示当前的操作系统。os 属性返回下列字符串：
+         * "iOS", "Android", "Windows Phone", "Unknown"
+         */
+        public static get os():string{
+            return Capabilities.$os;
+        }
 
 
-        public static $location: boolean;
+        static $location: boolean;
 
         public static get location(): boolean {
             return Capabilities.$location;
         }
 
 
-        public static $orientation: boolean;
+        static $orientation: boolean;
 
         public static get orientation(): boolean {
             return Capabilities.$orientation;
         }
 
 
-        public static $motion: boolean;
+        static $motion: boolean;
 
         public static get motion(): boolean {
             return Capabilities.$motion;
@@ -96,6 +105,8 @@ module lark {
         lark.$markReadOnly(Capabilities,"isMobile");
         lark.$markReadOnly(Capabilities,"orientation");
         lark.$markReadOnly(Capabilities,"motion");
+        lark.$markReadOnly(Capabilities,"location");
+        lark.$markReadOnly(Capabilities,"os");
     }
 
 }
