@@ -63,7 +63,7 @@ module swan {
         private onConfigLoaded(event:lark.Event):void {
             var request:lark.HttpRequest = event.target;
             try {
-                var data = request.response;
+                var data = JSON.parse(request.response);
             }
             catch (e) {
                 if (DEBUG) {
@@ -142,7 +142,7 @@ module swan {
             }
             var key = this.flagToClassName[flag];
             var skinName = this.skinMap[key];
-            if (skinName || flag === Types.Component) { 
+            if (skinName || flag === Types.Component) {
                 return skinName;
             }
             return this.findSkinName(Object.getPrototypeOf(prototype));
