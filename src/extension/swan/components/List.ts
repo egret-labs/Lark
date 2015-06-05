@@ -180,6 +180,7 @@ module swan {
                     values[sys.ListBaseKeys.dispatchChangeAfterSelection] = false;
                 }
                 PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"selectedIndex");
+                PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"selectedItem");
             }
 
             return retVal;

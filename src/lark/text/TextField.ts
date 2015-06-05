@@ -283,7 +283,10 @@ module lark {
         }
 
         public set text(value:string) {
-            value = (value || "") + "";
+            if(value===null||value===undefined){
+                value = "";
+            }
+            value = value + "";
             this.$setText(value);
         }
 

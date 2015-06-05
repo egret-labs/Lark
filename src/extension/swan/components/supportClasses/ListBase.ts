@@ -299,6 +299,7 @@ module swan {
                     values[sys.ListBaseKeys.dispatchChangeAfterSelection] = false;
                 }
                 PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"selectedIndex");
+                PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"selectedItem");
             }
 
             return true;
@@ -438,5 +439,6 @@ module swan {
     }
 
     registerBindable(ListBase.prototype,"selectedIndex");
+    registerBindable(ListBase.prototype,"selectedItem");
     lark.registerClass(ListBase, Types.ListBase);
 }
