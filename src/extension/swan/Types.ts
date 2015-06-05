@@ -220,6 +220,16 @@ module swan {
         /**
          * 可编辑文本
          */
-        EditableText
+        EditableText,
+
+        /**
+         * 水平滑块控件
+         */
+        HSlider,
+
+        /**
+         * 垂直滑块控件
+         */
+        VSilder
     }
 }

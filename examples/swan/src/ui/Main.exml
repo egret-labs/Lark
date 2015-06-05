@@ -29,5 +29,5 @@
     </l:List>
 
   </s:Scroller>
-  <s:Panel x="10" y="300" title="Panel"/>
+  <s:Panel x="10" y="500" title="Panel"/>
 </s:Group>

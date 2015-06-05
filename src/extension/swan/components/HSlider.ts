@@ -87,4 +87,5 @@ module swan {
         }
     }
 
+    lark.registerClass(HSlider,Types.HSlider);
 }

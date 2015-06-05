@@ -651,6 +651,7 @@ declare module swan {
          * @param thisObject callBack的 this 引用
          */
         getAsset(source: string, callBack: (data: any, source: string) => void, thisObject: any): void;
+        private onLoadFinish(event);
     }
 }
 declare module swan.sys {
@@ -670,9 +671,10 @@ declare module swan.sys {
          * 创建一个 TouchScroll 实例
          * @param updateFunction 滚动位置更新回调函数
          */
-        constructor(updateFunction: (scrollPos: number) => void, target: lark.IEventEmitter);
+        constructor(updateFunction: (scrollPos: number) => void, endFunction: () => void, target: lark.IEventEmitter);
         private target;
         private updateFunction;
+        private endFunction;
         private previousTime;
         private velocity;
         private previousVelocity;
@@ -688,6 +690,10 @@ declare module swan.sys {
          * 停止触摸时继续滚动的动画实例
          */
         private animation;
+        /**
+         * 正在播放缓动动画的标志。
+         */
+        isPlaying(): boolean;
         /**
          * 如果正在执行缓动滚屏，停止缓动。
          */
@@ -3031,6 +3037,8 @@ declare module swan.sys {
 declare module swan {
     /**
      * Component 类定义可设置外观的组件的基类。Component 类所使用的外观通常是 Skin 类的子类。
+     *
+     * @event lark.Event.COMPLETE 当设置skinName为外部exml文件路径时，加载并完成EXML解析后调度。
      */
     class Component extends lark.Sprite implements UIComponent {
         constructor();
@@ -3565,6 +3573,9 @@ declare module swan {
 declare module swan {
     /**
      * 滚动条组件
+     *
+     * @event swan.UIEvent.CHANGE_START 滚动位置改变开始
+     * @event swan.UIEvent.CHANGE_END 滚动位置改变结束
      */
     class Scroller extends Component {
         /**
@@ -3617,9 +3628,12 @@ declare module swan {
         private onTouchBegin(event);
         private onTouchMove(event);
         private onTouchEnd(event);
-        private onAutoHideTimer(event);
         private horizontalUpdateHandler(scrollPos);
         private verticalUpdateHandler(scrollPos);
+        private horizontalEndHandler();
+        private verticalEndHanlder();
+        private onChangeEnd();
+        private onAutoHideTimer(event);
         protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
         protected partAdded(partName: string, instance: any): void;
     }
@@ -4259,26 +4273,6 @@ declare module swan {
 }
 declare module swan {
     /**
-     * 水平滑块控件
-     */
-    class HSlider extends SliderBase {
-        /**
-         * 创建一个水平滑块控件
-         */
-        constructor();
-        /**
-         * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值
-         */
-        protected pointToValue(x: number, y: number): number;
-        private getThumbRange();
-        /**
-         * 设置外观部件的边界，这些外观部件的几何图形不是完全由外观的布局指定的
-         */
-        protected updateSkinDisplayList(): void;
-    }
-}
-declare module swan {
-    /**
      * 垂直滑块控件
      */
     class VSlider extends SliderBase {
@@ -4295,6 +4289,26 @@ declare module swan {
          * 设置外观部件（通常为滑块）的边界，这些外观部件的几何图形不是完全由外观的布局指定的
          */
         updateSkinDisplayList(): void;
+    }
+}
+declare module swan {
+    /**
+     * 水平滑块控件
+     */
+    class HSlider extends SliderBase {
+        /**
+         * 创建一个水平滑块控件
+         */
+        constructor();
+        /**
+         * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值
+         */
+        protected pointToValue(x: number, y: number): number;
+        private getThumbRange();
+        /**
+         * 设置外观部件的边界，这些外观部件的几何图形不是完全由外观的布局指定的
+         */
+        protected updateSkinDisplayList(): void;
     }
 }
 declare module swan {
@@ -4557,5 +4571,13 @@ declare module swan {
          * 可编辑文本
          */
         EditableText = 1043,
+        /**
+         * 水平滑块控件
+         */
+        HSlider = 1044,
+        /**
+         * 垂直滑块控件
+         */
+        VSilder = 1045,
     }
 }

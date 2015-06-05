@@ -2330,7 +2330,7 @@ var lark;
         };
         p.$notifyListener = function (event) {
             var values = this.$EventEmitter;
-            var eventMap = event.$eventPhase == 1 ? values[2 /* captureEventsMap */] : values[1 /* eventsMap */];
+            var eventMap = event.$eventPhase == 1 /* CAPTURING_PHASE */ ? values[2 /* captureEventsMap */] : values[1 /* eventsMap */];
             var list = eventMap[event.$type];
             if (!list) {
                 return true;
