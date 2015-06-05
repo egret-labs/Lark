@@ -42,9 +42,6 @@ module lark {
          * 返回二进制的ArrayBuffer对象。
          */
         public static ARRAY_BUFFER = "arraybuffer";
-        /**
-         * 返回 JavaScript 对象，将自动解析自服务器传递回来的 JSON 字符串。
-         */
-        public static JSON = "json";
+
     }
 }

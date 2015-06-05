@@ -54,7 +54,6 @@ module swan {
 
         private load(url:string):void {
             var request = new lark.HttpRequest();
-            request.responseType = lark.HttpResponseType.JSON;
             request.on(lark.Event.COMPLETE, this.onConfigLoaded, this);
             request.on(lark.Event.IO_ERROR, this.onConfigLoaded, this);
             request.open(url);
@@ -63,16 +62,24 @@ module swan {
 
         private onConfigLoaded(event:lark.Event):void {
             var request:lark.HttpRequest = event.target;
-            var data = request.response;
+            try {
+                var data = request.response;
+            }
+            catch (e) {
+                if (DEBUG) {
+                    lark.error(e.message);
+                }
+            }
+
             if (data && data.skins) {
                 var skinMap = this.skinMap
                 var skins = data.skins;
                 var keys = Object.keys(skins);
                 var length = keys.length;
-                for(var i=0;i<length;i++){
+                for (var i = 0; i < length; i++) {
                     var key = keys[i];
-                    if(!skinMap[key]){
-                        this.mapSkin(key,skins[key]);
+                    if (!skinMap[key]) {
+                        this.mapSkin(key, skins[key]);
                     }
                 }
             }
@@ -135,7 +142,7 @@ module swan {
             }
             var key = this.flagToClassName[flag];
             var skinName = this.skinMap[key];
-            if (skinName||flag===Types.Component) {
+            if (skinName || flag === Types.Component) { 
                 return skinName;
             }
             return this.findSkinName(Object.getPrototypeOf(prototype));
