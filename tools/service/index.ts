@@ -71,7 +71,7 @@ export function execCommand(command :lark.ServiceCommand, callback?: Function,st
     var requestUrl = getServiceURL(command);
     var commandRequest = http.get(requestUrl, function (res) {
         res.setEncoding('utf-8');
-        res.on('data', function (text) {
+        res.on('data', function (text:string) {
             try {
                 var cmd: lark.ServiceCommandResult = JSON.parse(text);
             }

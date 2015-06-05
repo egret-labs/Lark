@@ -30,7 +30,7 @@
 /**
 * 判断一个字符串是否为合法变量名,第一个字符为字母,下划线或$开头，第二个字符开始为字母,下划线，数字或$
 */
-function isVariableWord(word) {
+export function isVariableWord(word) {
     if (!word)
         return false;
     var char = word.charAt(0);
@@ -50,21 +50,21 @@ function isVariableWord(word) {
 /**
 * 是否为合法变量字符,字符为字母,下划线，数字或$
 */
-function isVariableChar(char) {
+export function isVariableChar(char) {
     return (char <= "Z" && char >= "A" || char <= "z" && char >= "a" || char <= "9" && char >= "0" || char == "_" || char == "$");
 }
 
 /**
 * 是否为合法变量字符串的第一个字符,字符为字母,下划线或$
 */
-function isVariableFirstChar(char) {
+export function isVariableFirstChar(char) {
     return (char <= "Z" && char >= "A" || char <= "z" && char >= "a" || char == "_" || char == "$");
 }
 
 /**
 * 判断一段代码中是否含有某个变量字符串，且该字符串的前后都不是变量字符。
 */
-function containsVariable(key, codeText) {
+export function containsVariable(key, codeText) {
     var contains = false;
     while (codeText.length > 0) {
         var index = codeText.indexOf(key);
@@ -85,7 +85,7 @@ function containsVariable(key, codeText) {
 /**
 * 获取第一个含有key关键字的起始索引，且该关键字的前后都不是变量字符。
 */
-function getFirstVariableIndex(key, codeText) {
+export function getFirstVariableIndex(key, codeText) {
     var subLength = 0;
     while (codeText.length) {
         var index = codeText.indexOf(key);
@@ -107,7 +107,7 @@ function getFirstVariableIndex(key, codeText) {
 /**
 * 获取最后一个含有key关键字的起始索引，且该关键字的前后都不是变量字符。
 */
-function getLastVariableIndex(key, codeText) {
+export function getLastVariableIndex(key, codeText) {
     while (codeText.length) {
         var index = codeText.lastIndexOf(key);
         if (index == -1) {
@@ -127,7 +127,7 @@ function getLastVariableIndex(key, codeText) {
 /**
 * 获取第一个词,遇到空白字符或 \n \r \t 后停止。
 */
-function getFirstWord(str) {
+export function getFirstWord(str) {
     str = str.trim();
     var index = str.indexOf(" ");
     if (index == -1)
@@ -151,7 +151,7 @@ function getFirstWord(str) {
 * @param str 要处理的字符串
 * @param word 要移除的词，若不传入则自动获取。
 */
-function removeFirstWord(str, word="") {
+export function removeFirstWord(str, word="") {
     if (!word) {
         word = getFirstWord(str);
     }
@@ -164,7 +164,7 @@ function removeFirstWord(str, word="") {
 /**
 * 获取最后一个词,遇到空白字符或 \n \r \t 后停止。
 */
-function getLastWord(str) {
+export function getLastWord(str) {
     str = str.trim();
     var index = str.lastIndexOf(" ");
     var rIndex = str.lastIndexOf("\r");
@@ -180,7 +180,7 @@ function getLastWord(str) {
 * @param str 要处理的字符串
 * @param word 要移除的词，若不传入则自动获取。
 */
-function removeLastWord(str, word) {
+export function removeLastWord(str, word) {
     if (typeof word === "undefined") { word = ""; }
     if (!word) {
         word = getLastWord(str);
@@ -194,7 +194,7 @@ function removeLastWord(str, word) {
 /**
 * 获取字符串起始的第一个变量，返回的字符串两端均没有空白。若第一个非空白字符就不是合法变量字符，则返回空字符串。
 */
-function getFirstVariable(str) {
+export function getFirstVariable(str) {
     str = str.trim();
     var word = "";
     var length = str.length;
@@ -214,7 +214,7 @@ function getFirstVariable(str) {
 * @param str 要处理的字符串
 * @param word 要移除的变量，若不传入则自动获取。
 */
-function removeFirstVariable(str, word="") {
+export function removeFirstVariable(str, word="") {
     if (!word) {
         word = getFirstVariable(str);
     }
@@ -227,7 +227,7 @@ function removeFirstVariable(str, word="") {
 /**
 * 获取字符串末尾的最后一个变量,返回的字符串两端均没有空白。若最后一个非空白字符就不是合法变量字符，则返回空字符串。
 */
-function getLastVariable(str) {
+export function getLastVariable(str) {
     str = str.trim();
     var word = "";
     for (var i = str.length - 1; i >= 0; i--) {
@@ -246,7 +246,7 @@ function getLastVariable(str) {
 * @param str 要处理的字符串
 * @param word 要移除的变量，若不传入则自动获取。
 */
-function removeLastVariable(str, word) {
+export function removeLastVariable(str, word) {
     if (typeof word === "undefined") { word = ""; }
     if (!word) {
         word = getLastVariable(str);
@@ -260,7 +260,7 @@ function removeLastVariable(str, word) {
 /**
 * 获取一对括号的结束点,例如"class A{ function B(){} } class",返回24,若查找失败，返回-1。
 */
-function getBracketEndIndex(codeText, left='{', right='}') {
+export function getBracketEndIndex(codeText, left='{', right='}') {
     var indent = 0;
     var text = "";
     while (codeText.length > 0) {
@@ -292,7 +292,7 @@ function getBracketEndIndex(codeText, left='{', right='}') {
 /**
 * 从后往前搜索，获取一对括号的起始点,例如"class A{ function B(){} } class",返回7，若查找失败，返回-1。
 */
-function getBracketStartIndex(codeText, left, right) {
+export function getBracketStartIndex(codeText, left, right) {
     if (typeof left === "undefined") { left = "{"; }
     if (typeof right === "undefined") { right = "}"; }
     var indent = 0;
@@ -321,7 +321,7 @@ function getBracketStartIndex(codeText, left, right) {
 * 去掉字符串两端所有连续的非变量字符。
 * @param str 要格式化的字符串
 */
-function trimVariable(str) {
+export function trimVariable(str) {
     return trimVariableLeft(trimVariableRight(str));
 }
 
@@ -329,7 +329,7 @@ function trimVariable(str) {
 * 去除字符串左边所有连续的非变量字符。
 * @param str 要格式化的字符串
 */
-function trimVariableLeft(str) {
+export function trimVariableLeft(str) {
     if (!str)
         return "";
     var char = str.charAt(0);
@@ -344,7 +344,7 @@ function trimVariableLeft(str) {
 * 去除字符串右边所有连续的非变量字符。
 * @param str 要格式化的字符串
 */
-function trimVariableRight(str) {
+export function trimVariableRight(str) {
     if (!str)
         return "";
     var char = str.charAt(str.length - 1);
@@ -359,7 +359,7 @@ var removeCommentCache = {};
 /**
 * 移除代码注释和字符串常量
 */
-function removeComment(codeText,path) {
+export function removeComment(codeText,path) {
 
     if(path&&removeCommentCache[path]){
         return removeCommentCache[path];
@@ -436,7 +436,7 @@ function removeComment(codeText,path) {
 /**
  * 移除代码注释不移除字符串常量
  */
-function removeCommentExceptQuote(codeText) {
+export function removeCommentExceptQuote(codeText) {
 
     var NBSP = "";
     var trimText = "";
@@ -500,28 +500,4 @@ function removeCommentExceptQuote(codeText) {
     codeText = codeText.split("\v1\v").join("\\\"");
     codeText = codeText.split("\v2\v").join("\\\'");
     return codeText;
-}
-
-export = {
-    isVariableWord : isVariableWord,
-    isVariableChar : isVariableChar,
-    isVariableFirstChar : isVariableFirstChar,
-    containsVariable : containsVariable,
-    getFirstVariableIndex : getFirstVariableIndex,
-    getLastVariableIndex : getLastVariableIndex,
-    getFirstWord : getFirstWord,
-    removeFirstWord : removeFirstWord,
-    getLastWord : getLastWord,
-    removeLastWord : removeLastWord,
-    getFirstVariable : getFirstVariable,
-    removeFirstVariable : removeFirstVariable,
-    getLastVariable : getLastVariable,
-    removeLastVariable : removeLastVariable,
-    getBracketEndIndex : getBracketEndIndex,
-    getBracketStartIndex : getBracketStartIndex,
-    trimVariable : trimVariable,
-    trimVariableLeft : trimVariableLeft,
-    trimVariableRight : trimVariableRight,
-    removeComment : removeComment,
-    removeCommentExceptQuote : removeCommentExceptQuote
 }

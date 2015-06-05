@@ -27,7 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-/// <reference path="node.d.ts" />
+/// <reference path="./node.d.ts" />
 
 import cp = require('child_process');
 import path = require('path');
@@ -143,7 +143,7 @@ export function open(target, appName?, callback?) {
             break;
     }
 
-    return cp.exec(opener + ' "' + escape(target) + '"', callback);
+    return cp.exec(opener + ' "' + escape(target) + '"',null, callback);
 }
 
 
