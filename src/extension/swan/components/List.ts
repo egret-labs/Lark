@@ -179,7 +179,7 @@ module swan {
                     this.emitWith(lark.Event.CHANGE)
                     values[sys.ListBaseKeys.dispatchChangeAfterSelection] = false;
                 }
-                UIEvent.emitUIEvent(this, UIEvent.VALUE_COMMIT);
+                PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"selectedIndex");
             }
 
             return retVal;

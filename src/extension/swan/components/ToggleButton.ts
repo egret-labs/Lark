@@ -54,7 +54,7 @@ module swan {
 				return;
 			this.$selected = value;
 			this.invalidateState();
-			UIEvent.emitUIEvent(this, UIEvent.VALUE_COMMIT);
+			PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"selected");
 		}
 
 		/**
@@ -89,5 +89,6 @@ module swan {
 			this.emitWith(lark.Event.CHANGE);
 		}
 	}
+	registerBindable(ToggleButton.prototype,"selected");
 	lark.registerClass(ToggleButton, Types.ToggleButton);
 }

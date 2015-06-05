@@ -284,6 +284,10 @@ module lark {
 
         public set text(value:string) {
             value = (value || "") + "";
+            this.$setText(value);
+        }
+
+        $setText(value:string):void{
             var values = this.$TextField;
             if (value == values[sys.TextKeys.text])
                 return;

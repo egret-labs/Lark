@@ -53,29 +53,34 @@ module swan {
 
         $setDataProvider(value:ICollection){
             if(lark.is(this.$dataProvider, swan.Types.ViewStack)){
-                this.$dataProvider.removeListener("IndexChanged",this.onViewStackIndexChange,this);
+                this.$dataProvider.removeListener(PropertyEvent.PROPERTY_CHANGE,this.onViewStackIndexChange,this);
                 this.removeListener(lark.Event.CHANGE,this.onIndexChanged,this);
             }
 
             if(lark.is(value, swan.Types.ViewStack)){
-                value.on("IndexChanged",this.onViewStackIndexChange,this);
+                value.on(PropertyEvent.PROPERTY_CHANGE,this.onViewStackIndexChange,this);
                 this.on(lark.Event.CHANGE,this.onIndexChanged,this);
             }
             super.$setDataProvider(value);
         }
 
+        private indexBeingUpdated:boolean = false;
         /**
          * 鼠标点击的选中项改变
          */
         private onIndexChanged(event:lark.Event):void{
-            (<ViewStack><any> (this.$dataProvider)).$setSelectedIndex(this.selectedIndex,false);
+            this.indexBeingUpdated = true;
+            (<ViewStack><any> (this.$dataProvider)).selectedIndex = this.selectedIndex;
+            this.indexBeingUpdated = false;
         }
 
         /**
          * ViewStack选中项发生改变
          */
-        private onViewStackIndexChange(event:lark.Event):void{
-            this.setSelectedIndex((<ViewStack><any> (this.$dataProvider)).selectedIndex, false);
+        private onViewStackIndexChange(event:PropertyEvent):void{
+            if(event.property=="selectedIndex"&&!this.indexBeingUpdated){
+                this.setSelectedIndex((<ViewStack><any> (this.$dataProvider)).selectedIndex, false);
+            }
         }
     }
 

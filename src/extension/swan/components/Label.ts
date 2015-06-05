@@ -58,6 +58,11 @@ module swan {
             UIImpl.prototype.$setHeight.call(this, value);
         }
 
+        $setText(value:string):void{
+            super.$setText(value);
+            PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"text");
+        }
+
         private _widthConstraint:number = lark.NONE;
 
 
@@ -297,5 +302,6 @@ module swan {
     }
 
     sys.implementUIComponent(Label, lark.TextField);
+    registerBindable(Label.prototype,"text");
     lark.registerClass(Label, Types.Label, [Types.UIComponent]);
 }

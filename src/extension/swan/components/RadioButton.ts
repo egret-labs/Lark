@@ -147,8 +147,9 @@ module swan {
 
             this._value = value;
 
-            if (this.$selected && this.group)
-                UIEvent.emitUIEvent(this.group, UIEvent.VALUE_COMMIT);
+            if (this.$selected && this.group){
+                PropertyEvent.emitPropertyEvent(this.group,PropertyEvent.PROPERTY_CHANGE,"selectedValue");
+            }
         }
 
         protected commitProperties():void {

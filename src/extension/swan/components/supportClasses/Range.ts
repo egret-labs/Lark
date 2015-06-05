@@ -239,7 +239,7 @@ module swan {
                 values[sys.RangeKeys.value] = value;
             values[sys.RangeKeys.valueChanged] = false;
             this.invalidateDisplayList();
-            UIEvent.emitUIEvent(this, UIEvent.VALUE_COMMIT);
+            PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"value");
         }
 
         /**
@@ -258,4 +258,6 @@ module swan {
         }
     }
 
+    registerBindable(Range.prototype,"value");
+    lark.registerClass(Range,Types.Range);
 }
