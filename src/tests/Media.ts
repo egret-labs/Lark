@@ -37,14 +37,7 @@ module lark {
 
         start() {
 
-            var audio = new Audio({
-                sources:{
-                    ogg: "sound/ogg.ogg",
-                    mp3: 'sound/mp3.mp3',
-                    wav: 'sound/wav.wav',
-                    m4a:'sound/weba.weba'
-                }
-            });
+            var audio = new Audio();
             audio.load();
             audio.on("timeupdate", this.showOrg, this);
 

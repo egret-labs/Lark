@@ -5,10 +5,19 @@ module lark.web {
     var AudioContextClass: typeof AudioContext = window["AudioContext"] || window["webkitAudioContext"];
     var $AudioContext = AudioContextClass ? new AudioContextClass() : null;
 
+    var $supportCheckAudio: HTMLAudioElement = null;
+    function $isMediaSupport(mime: string, isAudio = true): boolean {
+        var element = $supportCheckAudio;
+        if (element == null) {
+            element = $supportCheckAudio = document.createElement('audio');
+        }
+        return !!element.canPlayType(mime).replace(/^no$/, '');
+    }
+
     export class WebAudio extends EventEmitter implements lark.Audio {
 
         public $option: IMediaOption;
-        public sources: IMediaSource;
+        public sources: IMediaSource[];
         public isPlaying: boolean = false;
         public canPlay: boolean = false;
         public loadStart = false;
@@ -114,17 +123,15 @@ module lark.web {
         }
 
         protected getMediaSource() {
-            var audioSupport = Capabilities.audio;
             var sources = this.sources;
-            for (var type in sources)
-            {
-                if (!sources.default)
-                    sources.default = sources[type];
-                var canPlay = audioSupport[type];
-                if (canPlay)
-                    return sources[type];
-            }
-            return sources.default;
+            var source: string;
+            sources.some(s=> {
+                var support = $isMediaSupport(s.type);
+                if (support)
+                    source = s.src;
+                return support;
+            })
+            source = source || sources[0].src;
         }
 
         protected loadAudioData(url) {
@@ -154,6 +161,9 @@ module lark.web {
             this.emitWith(MediaEvent.ERROR, false, error);
         }
     }
+
+    var webaudio = ('webkitAudioContext' in window) || ('AudioContext' in window);
+    if (webaudio)
+        lark.Audio = lark.web.WebAudio;
+
 }
-if (lark.Capabilities.webAudio && !lark.Audio)
-    lark.Audio = lark.web.WebAudio;

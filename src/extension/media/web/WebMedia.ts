@@ -1,8 +1,8 @@
 ﻿module lark.web {
+
     export class WebMedia extends EventEmitter implements Media {
 
-        public $option:IMediaOption;
-        public sources:IMediaSource;
+        public sources: IMediaSource[];
         public isPlaying:boolean = false;
         public canPlay:boolean = false;
         public loadStart = false;
@@ -10,23 +10,11 @@
 
         public constructor(option:IMediaOption) {
             super();
-            this.$option = option;
             this.sources = option.sources;
-            this.sources.default = option.sources.default || option.src;
         }
 
 
         protected _domElement:HTMLMediaElement;
-        public get domElement():HTMLMediaElement {
-            return this._domElement;
-        }
-
-        public set domElement(value:HTMLMediaElement) {
-            if (value == this._domElement)
-                return;
-            this._domElement = value;
-            this.$addDomListeners(value);
-        }
 
         public load() {
 
@@ -35,38 +23,39 @@
             dom.setAttribute("webkit-playsinline", "");
             dom.volume = this._volume;
             dom.loop = false;
-            for (var type in this.sources) {
-                var source = this.sources[type];
-                var sourceElement = document.createElement("SOURCE");
-                sourceElement.src = source;
+
+            this.sources.forEach(source=> {
+                var sourceElement = <HTMLSourceElement>document.createElement("source");
+                sourceElement.src = source.src;
+                if (source.type)
+                    sourceElement.type = source.type;
                 dom.appendChild(sourceElement);
-            }
+            });
             this.$addDomListeners(dom);
             this.loadStart = true;
             dom.load();
-            this.domElement = dom;
         }
 
         protected createDomElement():HTMLMediaElement {
             return null;
-        }
+        } 
 
         public play(loop:boolean = false) {
             if (this.canPlay) {
-                this.domElement.loop = loop;
-                this.domElement.play();
+                this._domElement.loop = loop;
+                this._domElement.play();
             }
             else
                 this.playAfterLoad(loop);
         }
 
         public pause() {
-            this.domElement.pause();
+            this._domElement.pause();
         }
 
         public stop() {
-            this.domElement.pause();
-            this.domElement.currentTime = 0;
+            this._domElement.pause();
+            this._domElement.currentTime = 0;
             this.isPlaying = false;
             this.emitWith("ended");
         }
@@ -82,15 +71,15 @@
         }
 
         protected getPosition():number {
-            if (this.domElement)
-                return this.domElement.currentTime;
+            if (this._domElement)
+                return this._domElement.currentTime;
             return this._position;
         }
 
         protected setPosition(value:number) {
             this._position = value;
-            if (this.domElement)
-                this.domElement.currentTime = value;
+            if (this._domElement)
+                this._domElement.currentTime = value;
         }
 
         protected _volume:number = 1;
@@ -103,15 +92,15 @@
         }
 
         protected getVolume():number {
-            if (this.domElement)
-                return this.domElement.volume;
+            if (this._domElement)
+                return this._domElement.volume;
             return this._volume;
         }
 
         protected setVolume(value:number) {
             this._volume = value;
-            if (this.domElement)
-                this.domElement.volume = value;
+            if (this._domElement)
+                this._domElement.volume = value;
         }
 
         protected playAfterLoad(loop:boolean = false) {
@@ -145,5 +134,8 @@
             media.addEventListener("volumechange", e=> this.emitWith("volumechange"));
             media.addEventListener("error", e=> this.emitWith("error", false, false, error));
         }
+
+
     }
+
 }

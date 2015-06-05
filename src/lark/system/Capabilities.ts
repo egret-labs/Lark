@@ -68,46 +68,6 @@ module lark {
             return Capabilities.$isMobile;
         }
 
-        public static $canvas:boolean;
-
-        public static get canvas(): boolean {
-            return Capabilities.$canvas;
-        }
-
-
-        public static $audio: IAudioSupport;
-
-        public static get audio():IAudioSupport {
-            return Capabilities.$audio;
-        }
-
-
-        public static $video: IVideoSupport;
-
-        public static get video(): IVideoSupport {
-            return Capabilities.$video;
-        }
-
-
-        public static $webGL: boolean;
-
-        public static get webGL(): boolean {
-            return Capabilities.$webGL;
-        }
-
-
-        public static $webAudio: boolean;
-
-        public static get webAudio(): boolean {
-            return Capabilities.$webAudio;
-        }
-
-
-        public static $webSocket: boolean;
-
-        public static get webSocket(): boolean {
-            return Capabilities.$webSocket;
-        }
 
 
         public static $location: boolean;
@@ -138,19 +98,4 @@ module lark {
         lark.$markReadOnly(Capabilities,"motion");
     }
 
-    export interface IAudioSupport {
-        ogg: boolean;
-        mp3: boolean;
-        wav: boolean;
-        m4a: boolean;
-        opus: boolean;
-    }
-
-    export interface IVideoSupport {
-        ogg: boolean;
-        h264:boolean;
-        webm:boolean;
-        vp9 :boolean;
-        hls :boolean;
-    }
 }

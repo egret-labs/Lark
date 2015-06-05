@@ -15,16 +15,7 @@
     export var Video: { new (option: IVideoOption): Video };
 
 
-    export interface IVideoSource extends IMediaSource {
-        ogg?: string;
-        h264?: string;
-        webm?: string;
-        vp9?: string;
-        hls?: string;
-    }
-
     export interface IVideoOption extends IMediaOption {
-        sources?: IVideoSource;
         height: number;
         width: number;
     }

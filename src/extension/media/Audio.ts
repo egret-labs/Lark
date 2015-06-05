@@ -16,6 +16,6 @@
     }
 
     export interface IAudioOption extends IMediaOption {
-        sources?: IAudioSource;
+        sources?: IMediaSource[];
     }
 }

@@ -14,16 +14,15 @@
 
         protected createDomElement(): HTMLMediaElement {
             var video = document.createElement('video');
-            video.height = this.$option.height;
-            video.width = this.$option.width;
             video.addEventListener("loadedmetadata", e=> this.onLoadedMeta(e));
-            this.domElement = video;
+            this._domElement = video;
+            this.$addDomListeners(video);
             this._bitmapData = toBitmapData(video);
             return video;
         }
 
         protected onLoadedMeta(e:SystemEvent) {
-            var video = <HTMLVideoElement>this.domElement;
+            var video = <HTMLVideoElement>this._domElement;
             video.height = video.videoHeight;
             video.width = video.videoWidth;
             this.emitWith(MediaEvent.RESIZE);

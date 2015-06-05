@@ -4,7 +4,7 @@ interface SystemEvent extends Event { }
 module lark {
 
     export interface Media extends EventEmitter {
-        sources: IMediaSource;
+        sources: IMediaSource[];
         isPlaying: boolean;
         canPlay: boolean;
         loadStart: boolean;
@@ -28,21 +28,20 @@ module lark {
         on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
     }
 
-    export interface IMediaSource {
-        [type: string]: string;
-        default?: string;
-    }
-
     export interface IMediaOption {
         src?: string;
         mimeType?: string;
-        sources?: IMediaSource;
+        sources?: IMediaSource[];
         poster?: string|BitmapData;
         width?: number;
         height?: number;
         volume?: number;
     }
 
+    export interface IMediaSource {
+        src: string;
+        type?: string;
+    }
 
     export class MediaEvent extends Event {
         public static VOLUME_CHANGE = 'volumechange';
