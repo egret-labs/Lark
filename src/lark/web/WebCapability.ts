@@ -38,21 +38,21 @@ module lark.web {
             var ua = navigator.userAgent.toLowerCase();
             capabilities.$isMobile = (ua.indexOf('mobile') != -1 || ua.indexOf('android') != -1);
             if(capabilities.$isMobile){
-                if(ua.indexOf("windows") < 0&&(ua.indexOf("iphone") >= 0 || ua.indexOf("ipad") >= 0 || ua.indexOf("ipod") >= 0)){
+                if(ua.indexOf("windows") < 0&&(ua.indexOf("iphone") != -1 || ua.indexOf("ipad") != -1 || ua.indexOf("ipod") != -1)){
                     capabilities.$os = "iOS";
                 }
-                else if(ua.indexOf("android")>0&&ua.indexOf("linux")>0){
+                else if(ua.indexOf("android")!= -1&&ua.indexOf("linux")!= -1){
                     capabilities.$os = "Android";
                 }
-                else if(ua.indexOf("windows")>0){
+                else if(ua.indexOf("windows")!= -1){
                     capabilities.$os = "Windows Phone";
                 }
             }
             else{
-                if(ua.indexOf("windows nt")>0){
+                if(ua.indexOf("windows nt")!= -1){
                     capabilities.$os = "Windows";
                 }
-                else if(ua.indexOf("mac os")>0){
+                else if(ua.indexOf("mac os")!= -1){
                     capabilities.$os = "Mac OS";
                 }
             }
