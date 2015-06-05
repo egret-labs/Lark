@@ -341,6 +341,9 @@ module swan {
                 if (verticalBar && values[Keys.verticalCanScroll]) {
                     verticalBar.visible = true;
                 }
+                if(values[Keys.autoHideTimer]){
+                    values[Keys.autoHideTimer].reset();
+                }
             }
             UIEvent.emitUIEvent(this, UIEvent.CHANGE_START);
             if (values[Keys.delayTouchEvent]) {
