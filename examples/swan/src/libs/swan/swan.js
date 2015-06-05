@@ -1622,6 +1622,8 @@ var swan;
 var swan;
 (function (swan) {
     var loaderPool = [];
+    var callBackMap = {};
+    var loaderMap = {};
     /**
      * 默认的IAssetAdapter接口实现
      */
@@ -1636,23 +1638,39 @@ var swan;
          * @param thisObject callBack的 this 引用
          */
         p.getAsset = function (source, callBack, thisObject) {
+            var list = callBackMap[source];
+            if (list) {
+                list.push([callBack, thisObject]);
+                return;
+            }
             var loader = loaderPool.pop();
             if (!loader) {
                 loader = new lark.ImageLoader();
             }
-            loader.on(lark.Event.COMPLETE, onLoadFinish, null);
-            loader.on(lark.Event.IO_ERROR, onLoadFinish, null);
+            callBackMap[source] = [[callBack, thisObject]];
+            loaderMap[loader.$hashCode] = source;
+            loader.on(lark.Event.COMPLETE, this.onLoadFinish, this);
+            loader.on(lark.Event.IO_ERROR, this.onLoadFinish, this);
             loader.load(source);
-            function onLoadFinish(event) {
-                loader.removeListener(lark.Event.COMPLETE, onLoadFinish, null);
-                loader.removeListener(lark.Event.IO_ERROR, onLoadFinish, null);
-                var data;
-                if (event.$type == lark.Event.COMPLETE) {
-                    data = loader.data;
-                    loader.data = null;
-                }
-                loaderPool.push(loader);
-                callBack.call(thisObject, data, source);
+        };
+        p.onLoadFinish = function (event) {
+            var loader = event.currentTarget;
+            loader.removeListener(lark.Event.COMPLETE, this.onLoadFinish, this);
+            loader.removeListener(lark.Event.IO_ERROR, this.onLoadFinish, this);
+            var data;
+            if (event.$type == lark.Event.COMPLETE) {
+                data = loader.data;
+                loader.data = null;
+            }
+            loaderPool.push(loader);
+            var source = loaderMap[loader.$hashCode];
+            delete loaderMap[loader.$hashCode];
+            var list = callBackMap[source];
+            delete callBackMap[source];
+            var length = list.length;
+            for (var i = 0; i < length; i++) {
+                var arr = list[i];
+                arr[0].call(arr[1], data, source);
             }
         };
         return DefaultAssetAdapter;
@@ -2073,7 +2091,7 @@ var swan;
              * 创建一个 TouchScroll 实例
              * @param updateFunction 滚动位置更新回调函数
              */
-            function TouchScroll(updateFunction, target) {
+            function TouchScroll(updateFunction, endFunction, target) {
                 this.previousTime = 0;
                 this.velocity = 0;
                 this.previousVelocity = [];
@@ -2089,12 +2107,19 @@ var swan;
                     lark.$error(1003, "updateFunction");
                 }
                 this.updateFunction = updateFunction;
+                this.endFunction = endFunction;
                 this.target = target;
                 this.animation = new sys.Animation(this.onScrollingUpdate, this);
                 this.animation.endFunction = this.finishScrolling;
                 this.animation.easerFunction = easeOut;
             }
             var d = __define,c=TouchScroll;p=c.prototype;
+            /**
+             * 正在播放缓动动画的标志。
+             */
+            p.isPlaying = function () {
+                return this.animation.isPlaying;
+            };
             /**
              * 如果正在执行缓动滚屏，停止缓动。
              */
@@ -2210,6 +2235,7 @@ var swan;
                 if (duration === void 0) { duration = 500; }
                 var hsp = this.currentScrollPos;
                 if (hsp == hspTo) {
+                    this.endFunction.call(this.target);
                     return;
                 }
                 var animation = this.animation;
@@ -4157,7 +4183,6 @@ var swan;
     locale_strings[2104] = "Instantiate class {0} error，the parameters of its constructor method must be empty.";
     locale_strings[2201] = "BasicLayout doesn't support virtualization.";
     locale_strings[2202] = "parse skinName error，the parsing result of skinName must be a instance of swan.Skin.";
-    locale_strings[2203] = "this method is not available in the DataGroup class or its subclass. Instead, use dataProvider to modify children.";
     locale_strings[2301] = "parse source failed，could not find asset from URL：{0} .";
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -4360,6 +4385,7 @@ var swan;
          */
         sys.exmlConfig;
         var exmlParserPool = [];
+        var parsedClasses = {};
         var innerClassCount = 1;
         var DECLARATIONS = "Declarations";
         var RECTANGLE = "lark.Rectangle";
@@ -4434,11 +4460,14 @@ var swan;
                         definition = definition[path] || (definition[path] = {});
                     }
                     if (definition[paths[length - 1]]) {
-                        if (DEBUG) {
+                        if (DEBUG && !parsedClasses[className]) {
                             lark.$warn(2101, className, toXMLString(xmlData));
                         }
                     }
                     else {
+                        if (DEBUG) {
+                            parsedClasses[className] = true;
+                        }
                         definition[paths[length - 1]] = clazz;
                     }
                 }
@@ -5667,6 +5696,8 @@ var EXML;
 (function (EXML) {
     var parser = new swan.sys.EXMLParser();
     var requestPool = [];
+    var callBackMap = {};
+    var requestMap = {};
     /**
      * 解析一个 EXML 文件的文本内容为一个类定义。您可以在 EXML 文件的根节点上声明 class 属性作为要注册到全局的类名。
      * 若指定的类名已经存在，将会注册失败，并输出一个警告。注册成功后，您也可以通过 lark.getDefinitionByName(className) 方法获取这个 EXML 文件对应的类定义。
@@ -5689,26 +5720,42 @@ var EXML;
                 lark.$error(1003, "url");
             }
         }
+        var list = callBackMap[url];
+        if (list) {
+            list.push([callBack, thisObject]);
+            return;
+        }
         var request = requestPool.pop();
         if (!request) {
             request = new lark.HttpRequest();
         }
+        callBackMap[url] = [[callBack, thisObject]];
+        requestMap[request.$hashCode] = url;
         request.on(lark.Event.COMPLETE, onLoadFinish, null);
         request.on(lark.Event.IO_ERROR, onLoadFinish, null);
         request.open(url);
         request.send();
-        function onLoadFinish(event) {
-            request.removeListener(lark.Event.COMPLETE, onLoadFinish, null);
-            request.removeListener(lark.Event.IO_ERROR, onLoadFinish, null);
-            var text = event.type == lark.Event.COMPLETE ? request.response : "";
-            if (text) {
-                var clazz = parse(text);
-            }
-            requestPool.push(request);
-            callBack.call(thisObject, clazz, url);
-        }
     }
     EXML.load = load;
+    function onLoadFinish(event) {
+        var request = event.currentTarget;
+        request.removeListener(lark.Event.COMPLETE, onLoadFinish, null);
+        request.removeListener(lark.Event.IO_ERROR, onLoadFinish, null);
+        var text = event.type == lark.Event.COMPLETE ? request.response : "";
+        if (text) {
+            var clazz = parse(text);
+        }
+        requestPool.push(request);
+        var url = requestMap[request.$hashCode];
+        delete requestMap[request.$hashCode];
+        var list = callBackMap[url];
+        delete callBackMap[url];
+        var length = list.length;
+        for (var i = 0; i < length; i++) {
+            var arr = list[i];
+            arr[0].call(arr[1], clazz, url);
+        }
+    }
 })(EXML || (EXML = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -5844,7 +5891,6 @@ var swan;
     //Swan 报错与警告信息
     locale_strings[2201] = "BasicLayout 不支持虚拟化。";
     locale_strings[2202] = "皮肤解析出错，属性 skinName 的值必须要能够解析为一个 swan.Skin 的实例。";
-    locale_strings[2203] = "此方法在 swan.DataGroup 以及它的子类中不可用， 请通过数据源 dataProvider 来操作子项的添加或删除。";
     locale_strings[2301] = "素材解析失败，找不到URL：{0} 所对应的资源。";
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -9396,6 +9442,8 @@ var swan;
     var parsedClasses = {};
     /**
      * Component 类定义可设置外观的组件的基类。Component 类所使用的外观通常是 Skin 类的子类。
+     *
+     * @event lark.Event.COMPLETE 当设置skinName为外部exml文件路径时，加载并完成EXML解析后调度。
      */
     var Component = (function (_super) {
         __extends(Component, _super);
@@ -9466,6 +9514,7 @@ var swan;
                             EXML.load(skinName, this.onExmlLoaded, this);
                             return;
                         }
+                        this.emitWith(lark.Event.COMPLETE);
                     }
                     else {
                         clazz = lark.getDefinitionByName(skinName);
@@ -9487,6 +9536,7 @@ var swan;
             }
             var skin = new clazz();
             this.$setSkin(skin);
+            this.emitWith(lark.Event.COMPLETE);
         };
         d(p, "skin",
             /**
@@ -9515,9 +9565,18 @@ var swan;
                         this.setSkinPart(partName, null);
                     }
                 }
+                var children = oldSkin.$elementsContent;
+                if (children) {
+                    length = children.length;
+                    for (var i = 0; i < length; i++) {
+                        var child = children[i];
+                        if (child.$parent == this) {
+                            this.removeChild(child);
+                        }
+                    }
+                }
                 oldSkin.hostComponent = null;
             }
-            this.removeChildren();
             values[8 /* skin */] = skin;
             if (skin) {
                 skin.hostComponent = this;
@@ -9530,10 +9589,10 @@ var swan;
                         this.setSkinPart(partName, instance);
                     }
                 }
-                var children = skin.$elementsContent;
+                children = skin.$elementsContent;
                 if (children) {
-                    var length = children.length;
-                    for (var i = 0; i < length; i++) {
+                    length = children.length;
+                    for (i = 0; i < length; i++) {
                         this.addChild(children[i]);
                     }
                 }
@@ -10348,7 +10407,7 @@ var swan;
                 this.endIndex = -1;
                 return false;
             }
-            var maxVisibleX = target.scrollV + values[10 /* width */];
+            var maxVisibleX = target.scrollH + values[10 /* width */];
             if (maxVisibleX < this.$paddingLeft) {
                 this.startIndex = -1;
                 this.endIndex = -1;
@@ -10802,7 +10861,7 @@ var swan;
                 this.endIndex = -1;
                 return false;
             }
-            var maxVisibleY = target.scrollH + values[11 /* height */];
+            var maxVisibleY = target.scrollV + values[11 /* height */];
             if (maxVisibleY < this.$paddingTop) {
                 this.startIndex = -1;
                 this.endIndex = -1;
@@ -11369,6 +11428,9 @@ var swan;
 (function (swan) {
     /**
      * 滚动条组件
+     *
+     * @event swan.UIEvent.CHANGE_START 滚动位置改变开始
+     * @event swan.UIEvent.CHANGE_END 滚动位置改变结束
      */
     var Scroller = (function (_super) {
         __extends(Scroller, _super);
@@ -11385,8 +11447,8 @@ var swan;
              * [SkinPart] 垂直滚动条
              */
             this.verticalScrollBar = null;
-            var touchScrollH = new swan.sys.TouchScroll(this.horizontalUpdateHandler, this);
-            var touchScrollV = new swan.sys.TouchScroll(this.verticalUpdateHandler, this);
+            var touchScrollH = new swan.sys.TouchScroll(this.horizontalUpdateHandler, this.horizontalEndHandler, this);
+            var touchScrollV = new swan.sys.TouchScroll(this.verticalUpdateHandler, this.verticalEndHanlder, this);
             this.$Scroller = {
                 0: "auto",
                 1: "auto",
@@ -11638,6 +11700,7 @@ var swan;
                     verticalBar.visible = true;
                 }
             }
+            swan.UIEvent.emitUIEvent(this, swan.UIEvent.CHANGE_START);
             if (values[11 /* delayTouchEvent */]) {
                 values[11 /* delayTouchEvent */] = null;
                 values[10 /* delayTouchTimer */].stop();
@@ -11665,16 +11728,36 @@ var swan;
             if (values[7 /* verticalCanScroll */]) {
                 values[9 /* touchScrollV */].finish(viewport.scrollV, viewport.contentHeight - uiValues[11 /* height */]);
             }
+        };
+        p.horizontalUpdateHandler = function (scrollPos) {
+            this.$Scroller[12 /* viewport */].scrollH = scrollPos;
+        };
+        p.verticalUpdateHandler = function (scrollPos) {
+            this.$Scroller[12 /* viewport */].scrollV = scrollPos;
+        };
+        p.horizontalEndHandler = function () {
+            if (!this.$Scroller[9 /* touchScrollV */].isPlaying()) {
+                this.onChangeEnd();
+            }
+        };
+        p.verticalEndHanlder = function () {
+            if (!this.$Scroller[8 /* touchScrollH */].isPlaying()) {
+                this.onChangeEnd();
+            }
+        };
+        p.onChangeEnd = function () {
+            var values = this.$Scroller;
             var horizontalBar = this.horizontalScrollBar;
             var verticalBar = this.verticalScrollBar;
             if (horizontalBar && horizontalBar.visible || verticalBar && verticalBar.visible) {
                 if (!values[2 /* autoHideTimer */]) {
-                    values[2 /* autoHideTimer */] = new lark.Timer(500, 1);
+                    values[2 /* autoHideTimer */] = new lark.Timer(200, 1);
                     values[2 /* autoHideTimer */].on(lark.TimerEvent.TIMER_COMPLETE, this.onAutoHideTimer, this);
                 }
                 values[2 /* autoHideTimer */].reset();
                 values[2 /* autoHideTimer */].start();
             }
+            swan.UIEvent.emitUIEvent(this, swan.UIEvent.CHANGE_END);
         };
         p.onAutoHideTimer = function (event) {
             var horizontalBar = this.horizontalScrollBar;
@@ -11685,12 +11768,6 @@ var swan;
             if (verticalBar) {
                 verticalBar.visible = false;
             }
-        };
-        p.horizontalUpdateHandler = function (scrollPos) {
-            this.$Scroller[12 /* viewport */].scrollH = scrollPos;
-        };
-        p.verticalUpdateHandler = function (scrollPos) {
-            this.$Scroller[12 /* viewport */].scrollV = scrollPos;
         };
         p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
             _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
@@ -12196,7 +12273,7 @@ var swan;
             if (!lark.is(renderer, 1007 /* IItemRenderer */)) {
                 return null;
             }
-            _super.prototype.addChild.call(this, renderer);
+            this.addChild(renderer);
             return renderer;
         };
         d(p, "dataProvider",
@@ -12317,7 +12394,7 @@ var swan;
                 }
                 else {
                     this.rendererRemoved(oldRenderer, index, item);
-                    _super.prototype.removeChild.call(this, oldRenderer);
+                    this.removeChild(oldRenderer);
                 }
             }
         };
@@ -12537,7 +12614,7 @@ var swan;
                 this.doFreeRenderer(typicalRenderer);
             }
             else {
-                _super.prototype.removeChild.call(this, typicalRenderer);
+                this.removeChild(typicalRenderer);
             }
             this.setTypicalLayoutRect(rect);
             values[4 /* createNewRendererFlag */] = false;
@@ -12568,7 +12645,7 @@ var swan;
                 var renderer = indexToRenderer[index];
                 if (renderer) {
                     this.rendererRemoved(renderer, renderer.itemIndex, renderer.data);
-                    _super.prototype.removeChild.call(this, renderer);
+                    this.removeChild(renderer);
                 }
             }
             this.$indexToRenderer = [];
@@ -12584,7 +12661,7 @@ var swan;
                     for (var i = 0; i < length; i++) {
                         renderer = list[i];
                         this.rendererRemoved(renderer, renderer.itemIndex, renderer.data);
-                        _super.prototype.removeChild.call(this, renderer);
+                        this.removeChild(renderer);
                     }
                 }
                 values[3 /* freeRenderers */] = {};
@@ -13931,33 +14008,6 @@ var swan;
     })(swan.DataGroup);
     swan.ListBase = ListBase;
     lark.registerClass(ListBase, 1004 /* ListBase */);
-    if (DEBUG) {
-        ListBase.prototype.addChild = function (child) {
-            lark.$error(2203);
-            return null;
-        };
-        ListBase.prototype.addChildAt = function (child, index) {
-            lark.$error(2203);
-            return null;
-        };
-        ListBase.prototype.removeChild = function (child) {
-            lark.$error(2203);
-            return null;
-        };
-        ListBase.prototype.removeChildAt = function (index) {
-            lark.$error(2203);
-            return null;
-        };
-        ListBase.prototype.setChildIndex = function (child, index) {
-            lark.$error(2203);
-        };
-        ListBase.prototype.swapChildren = function (child1, child2) {
-            lark.$error(2203);
-        };
-        ListBase.prototype.swapChildrenAt = function (index1, index2) {
-            lark.$error(2203);
-        };
-    }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -14263,93 +14313,6 @@ var swan;
 var swan;
 (function (swan) {
     /**
-     * 水平滑块控件
-     */
-    var HSlider = (function (_super) {
-        __extends(HSlider, _super);
-        /**
-         * 创建一个水平滑块控件
-         */
-        function HSlider() {
-            _super.call(this);
-        }
-        var d = __define,c=HSlider;p=c.prototype;
-        /**
-         * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值
-         */
-        p.pointToValue = function (x, y) {
-            if (!this.thumb || !this.track)
-                return 0;
-            var values = this.$Range;
-            var range = values[0 /* maximum */] - values[2 /* minimum */];
-            var thumbRange = this.getThumbRange();
-            return values[2 /* minimum */] + (thumbRange != 0 ? (x / thumbRange) * range : 0);
-        };
-        p.getThumbRange = function () {
-            var bounds = lark.$TempRectangle;
-            this.track.getLayoutBounds(bounds);
-            var thumbRange = bounds.width;
-            this.thumb.getLayoutBounds(bounds);
-            return thumbRange - bounds.width;
-        };
-        /**
-         * 设置外观部件的边界，这些外观部件的几何图形不是完全由外观的布局指定的
-         */
-        p.updateSkinDisplayList = function () {
-            if (!this.thumb || !this.track)
-                return;
-            var values = this.$Range;
-            var thumbRange = this.getThumbRange();
-            var range = values[0 /* maximum */] - values[2 /* minimum */];
-            var thumbPosTrackX = (range > 0) ? ((this.pendingValue - values[2 /* minimum */]) / range) * thumbRange : 0;
-            var thumbPos = this.track.localToGlobal(thumbPosTrackX, 0, lark.$TempPoint);
-            var thumbPosX = thumbPos.x;
-            var thumbPosY = thumbPos.y;
-            var thumbPosParentX = this.thumb.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).x;
-            var bounds = lark.$TempRectangle;
-            this.thumb.getLayoutBounds(bounds);
-            this.thumb.setLayoutBoundsPosition(Math.round(thumbPosParentX), bounds.y);
-            if (this.trackHighlight && this.trackHighlight.$parent) {
-                var trackHighlightX = this.trackHighlight.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).x - thumbPosTrackX;
-                this.trackHighlight.x = Math.round(trackHighlightX);
-                this.trackHighlight.width = Math.round(thumbPosTrackX);
-            }
-        };
-        return HSlider;
-    })(swan.SliderBase);
-    swan.HSlider = HSlider;
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
      * 垂直滑块控件
      */
     var VSlider = (function (_super) {
@@ -14406,6 +14369,95 @@ var swan;
         return VSlider;
     })(swan.SliderBase);
     swan.VSlider = VSlider;
+    lark.registerClass(VSlider, 1045 /* VSilder */);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * 水平滑块控件
+     */
+    var HSlider = (function (_super) {
+        __extends(HSlider, _super);
+        /**
+         * 创建一个水平滑块控件
+         */
+        function HSlider() {
+            _super.call(this);
+        }
+        var d = __define,c=HSlider;p=c.prototype;
+        /**
+         * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值
+         */
+        p.pointToValue = function (x, y) {
+            if (!this.thumb || !this.track)
+                return 0;
+            var values = this.$Range;
+            var range = values[0 /* maximum */] - values[2 /* minimum */];
+            var thumbRange = this.getThumbRange();
+            return values[2 /* minimum */] + (thumbRange != 0 ? (x / thumbRange) * range : 0);
+        };
+        p.getThumbRange = function () {
+            var bounds = lark.$TempRectangle;
+            this.track.getLayoutBounds(bounds);
+            var thumbRange = bounds.width;
+            this.thumb.getLayoutBounds(bounds);
+            return thumbRange - bounds.width;
+        };
+        /**
+         * 设置外观部件的边界，这些外观部件的几何图形不是完全由外观的布局指定的
+         */
+        p.updateSkinDisplayList = function () {
+            if (!this.thumb || !this.track)
+                return;
+            var values = this.$Range;
+            var thumbRange = this.getThumbRange();
+            var range = values[0 /* maximum */] - values[2 /* minimum */];
+            var thumbPosTrackX = (range > 0) ? ((this.pendingValue - values[2 /* minimum */]) / range) * thumbRange : 0;
+            var thumbPos = this.track.localToGlobal(thumbPosTrackX, 0, lark.$TempPoint);
+            var thumbPosX = thumbPos.x;
+            var thumbPosY = thumbPos.y;
+            var thumbPosParentX = this.thumb.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).x;
+            var bounds = lark.$TempRectangle;
+            this.thumb.getLayoutBounds(bounds);
+            this.thumb.setLayoutBoundsPosition(Math.round(thumbPosParentX), bounds.y);
+            if (this.trackHighlight && this.trackHighlight.$parent) {
+                var trackHighlightX = this.trackHighlight.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).x - thumbPosTrackX;
+                this.trackHighlight.x = Math.round(trackHighlightX);
+                this.trackHighlight.width = Math.round(thumbPosTrackX);
+            }
+        };
+        return HSlider;
+    })(swan.SliderBase);
+    swan.HSlider = HSlider;
+    lark.registerClass(HSlider, 1044 /* HSlider */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
