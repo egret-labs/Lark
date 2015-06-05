@@ -58,7 +58,7 @@ module lark.web {
          * @param url 要加载的图像文件的地址。
          */
         public load(url:string):void {
-            if (useXHR) {
+            if (useXHR&&url.indexOf("data:")!=0) {//如果是base64编码图片，直接使用Image.src解析。
                 var request = this.request;
                 if (!request) {
                     request = this.request = new lark.web.WebHttpRequest();

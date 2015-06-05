@@ -33,7 +33,6 @@ module lark {
 
         public constructor() {
             super();
-            log(Capabilities.os);
         }
 
         protected createChildren():void {
@@ -51,6 +50,10 @@ module lark {
             var button = new swan.Button();
             this.addChild(button);
             var button2 = new swan.Button();
+            var image = new swan.Image();
+            image.source = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEkAAAAaCAIAAAB0C+bSAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAElJREFUeNrs0UENwDAMALGsKqPhLpSAyL8c2vcYTJGPgXXPu040beZuKqsc0Tc2NjY2NjY2NjY2NjY2NjY2tm8zKn1j+1NXgAEAVEMHLB0TEsYAAAAASUVORK5CYII=";
+            image.horizontalCenter = 0;
+            this.addChild(image);
             this.addChild(button2);
             this.addChild(component);
         }
