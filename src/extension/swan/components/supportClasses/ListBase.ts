@@ -49,7 +49,6 @@ module swan {
      * @event lark.Event.CHANGING 选中的索引即将发生改变，可以通过调用事件对象的 preventDefault() 方法来阻止改变。
      * 注意：此事件仅在索引改变是由用户触摸操作引起时才抛出。
      * @event swan.ItemTapEvent.ITEM_TAP 项呈示器单击事件。
-     * @event swan.UIEvent.VALUE_COMMIT 选中的索引已经发生改变。此事件无论索引改变是否由触摸操作引起都会抛出。
      */
     export class ListBase extends DataGroup {
 
@@ -221,7 +220,7 @@ module swan {
             if (values[sys.ListBaseKeys.selectedIndexAdjusted]) {
                 values[sys.ListBaseKeys.selectedIndexAdjusted] = false;
                 if (!changedSelection) {
-                    UIEvent.emitUIEvent(this, UIEvent.VALUE_COMMIT);
+                    PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"selectedIndex");
                 }
             }
         }
@@ -299,7 +298,8 @@ module swan {
                     this.emitWith(lark.Event.CHANGE);
                     values[sys.ListBaseKeys.dispatchChangeAfterSelection] = false;
                 }
-                UIEvent.emitUIEvent(this, UIEvent.VALUE_COMMIT);
+                PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"selectedIndex");
+                PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"selectedItem");
             }
 
             return true;
@@ -438,5 +438,7 @@ module swan {
         }
     }
 
+    registerBindable(ListBase.prototype,"selectedIndex");
+    registerBindable(ListBase.prototype,"selectedItem");
     lark.registerClass(ListBase, Types.ListBase);
 }

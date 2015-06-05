@@ -96,7 +96,7 @@ module lark{
         $setUserInputText(text:string){
             if(text==this.text)
                 return;
-            this.text = text;
+            this.$setText(text);
             this.emitWith(TextInputEvent.INPUT);
         }
 

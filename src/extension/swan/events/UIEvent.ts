@@ -54,10 +54,6 @@ module swan {
         public static CHANGE_START:string = "changeStart";
 
         /**
-         * 值发生改变
-         */
-        public static VALUE_COMMIT:string = "valueCommit";
-        /**
          * 即将关闭面板事件
          */
         public static CLOSING:string = "close";

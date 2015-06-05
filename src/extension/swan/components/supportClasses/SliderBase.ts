@@ -337,4 +337,6 @@ module swan {
 
     }
 
+    lark.registerClass(SliderBase,Types.SliderBase);
+
 }

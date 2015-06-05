@@ -145,7 +145,7 @@ module swan {
                     radioButton.label == value) {
                     this.changeSelection(i, false);
                     this._selectedValue = null;
-                    UIEvent.emitUIEvent(this, UIEvent.VALUE_COMMIT);
+                    PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"selectedValue");
                     break;
                 }
             }
@@ -238,7 +238,7 @@ module swan {
                     }
                 }
             }
-            UIEvent.emitUIEvent(this, UIEvent.VALUE_COMMIT);
+            PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"selectedValue");
         }
 
         /**
@@ -280,7 +280,7 @@ module swan {
             }
         }
     }
-
+    registerBindable(RadioButtonGroup.prototype,"selectedValue");
     lark.registerClass(RadioButtonGroup,Types.RadioButtonGroup);
 
 }

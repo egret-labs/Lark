@@ -53,6 +53,11 @@ module swan {
             UIImpl.prototype.$setHeight.call(this, value);
         }
 
+        $setText(value:string):void{
+            super.$setText(value);
+            PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"text");
+        }
+
         private _widthConstraint:number = lark.NONE;
 
 
@@ -293,5 +298,6 @@ module swan {
     }
 
     sys.implementUIComponent(EditableText, lark.TextInput);
+    registerBindable(EditableText.prototype,"text");
     lark.registerClass(EditableText, Types.EditableText, [Types.UIComponent]);
 }

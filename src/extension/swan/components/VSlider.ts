@@ -90,5 +90,5 @@ module swan {
         }
     }
 
-    lark.registerClass(VSlider,Types.VSilder);
+    lark.registerClass(VSlider,Types.VSlider);
 }

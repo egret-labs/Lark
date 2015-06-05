@@ -43,5 +43,5 @@
             </s:layout>
         </s:List>
     </s:Scroller>
-
+    <s:Label text="{list.selectedIndex}"/>
 </s:Skin>

@@ -210,6 +210,22 @@ module swan {
          */
         HScrollBar,
         /**
+         * 范围选取组件,该组件包含一个值和这个值所允许的最大最小约束范围。
+         */
+        Range,
+        /**
+         * 滑块控件基类
+         */
+        SliderBase,
+        /**
+         * 水平滑块
+         */
+        HSlider,
+        /**
+         * 垂直滑块
+         */
+        VSlider,
+        /**
          * 支持视区的组件接口
          */
         IViewport,
@@ -220,16 +236,6 @@ module swan {
         /**
          * 可编辑文本
          */
-        EditableText,
-
-        /**
-         * 水平滑块控件
-         */
-        HSlider,
-
-        /**
-         * 垂直滑块控件
-         */
-        VSilder
+        EditableText
     }
 }

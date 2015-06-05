@@ -62,7 +62,7 @@ module swan {
         public set selectedChild(value:lark.DisplayObject) {
             var index = this.getChildIndex(value);
             if (index >= 0 && index < this.numChildren)
-                this.$setSelectedIndex(index);
+                this.setSelectedIndex(index);
         }
 
         /**
@@ -80,23 +80,18 @@ module swan {
 
         public set selectedIndex(value:number) {
             value = +value|0;
-            this.$setSelectedIndex(value);
+            this.setSelectedIndex(value);
         }
-
-        private notifyTabBar:boolean = false;
 
         /**
          * 设置选中项索引
          */
-        $setSelectedIndex(value:number, notifyListeners:boolean = true):void {
+        private setSelectedIndex(value:number):void {
             if (value == this.selectedIndex) {
                 return;
             }
-
             this.proposedSelectedIndex = value;
-            this.notifyTabBar = this.notifyTabBar || notifyListeners;
-            this.invalidateProperties();
-            UIEvent.emitUIEvent(this, UIEvent.VALUE_COMMIT);
+            PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"selectedIndex");
         }
 
         /**
@@ -108,10 +103,10 @@ module swan {
             this.showOrHide(child, false);
             var selectedIndex = this.selectedIndex;
             if (selectedIndex == -1) {
-                this.$setSelectedIndex(index, false);
+                this.setSelectedIndex(index);
             }
             else if (index <= this.selectedIndex && this.$stage) {
-                this.$setSelectedIndex(selectedIndex + 1);
+                this.setSelectedIndex(selectedIndex + 1);
             }
             CollectionEvent.emitCollectionEvent(this, CollectionEvent.COLLECTION_CHANGE,
                 CollectionEventKind.ADD, index, -1, [child.name]);
@@ -132,13 +127,13 @@ module swan {
                         this.invalidateProperties();
                     }
                     else
-                        this.$setSelectedIndex(0, false);
+                        this.setSelectedIndex(0);
                 }
                 else
-                    this.$setSelectedIndex(-1);
+                    this.setSelectedIndex(-1);
             }
             else if (index < selectedIndex) {
-                this.$setSelectedIndex(selectedIndex - 1);
+                this.setSelectedIndex(selectedIndex - 1);
             }
             CollectionEvent.emitCollectionEvent(this, CollectionEvent.COLLECTION_CHANGE,
                 CollectionEventKind.REMOVE, index, -1, [child.name]);
@@ -152,11 +147,6 @@ module swan {
             if (this.proposedSelectedIndex != ListBase.NO_PROPOSED_SELECTION) {
                 this.commitSelection(this.proposedSelectedIndex);
                 this.proposedSelectedIndex = ListBase.NO_PROPOSED_SELECTION;
-            }
-
-            if (this.notifyTabBar) {
-                this.notifyTabBar = true;
-                this.emitWith("IndexChanged");//通知TabBar自己的选中项发生改变
             }
         }
 
@@ -207,6 +197,6 @@ module swan {
             return -1;
         }
     }
-
+    registerBindable(ViewStack.prototype,"selectedIndex");
     lark.registerClass(ViewStack,Types.ViewStack);
 }
