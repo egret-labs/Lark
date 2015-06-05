@@ -28,11 +28,12 @@
 //////////////////////////////////////////////////////////////////////////////////////
 /// <reference path="../lib/types.d.ts" />
 require('../locales/zh_CN');
-var Parser = require("./Parser");
-var Build = require("./Build");
 var Run = require("./Run");
-var Publish = require("./Publish");
+var Build = require("./Build");
+var Clean = require("./Clean");
+var Parser = require("./Parser");
 var Create = require("./Create");
+var Publish = require("./Publish");
 var server = require('../server/server');
 var service = require("../service/index");
 global.lark = global.lark || {};
@@ -88,13 +89,11 @@ var Entry = (function () {
                 exitCode = DontExitCode;
                 break;
             case "buildService":
-                var build = new Build(options);
-                exitCode = build.run();
+                new Build(options).run();
                 exitCode = DontExitCode;
                 break;
             case "clean":
-                service.execCommand({ path: options.projectDir, command: "shutdown" }, null, false);
-                setTimeout(function () { return service.execCommand({ path: options.projectDir, command: "build" }, gotCommandResult, true); }, 500);
+                new Clean(options).run();
                 exitCode = DontExitCode;
                 break;
             case "build":
@@ -119,4 +118,5 @@ function gotCommandResult(cmd) {
     }
     process.exit(cmd.exitCode || 0);
 }
+exports.gotCommandResult = gotCommandResult;
 //# sourceMappingURL=Entry.js.map
