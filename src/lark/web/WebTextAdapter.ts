@@ -32,7 +32,7 @@ module lark.web {
     var tempPoint = new Point();
 
     /**
-     * HTML5 环境下的输入文本
+     * Web 环境下的输入文本
      */
     export class WebTextAdapter extends LarkObject implements sys.ITextAdapter{
         constructor(container:HTMLDivElement,stage:Stage,canvas:HTMLCanvasElement){
