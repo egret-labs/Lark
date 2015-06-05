@@ -41,7 +41,6 @@ var Build = (function (_super) {
         _super.apply(this, arguments);
         this._lastExitCode = 0;
         this._lastMessages = [];
-        this._id = Math.random() * 1000000;
         this._request = null;
     }
     Build.prototype.run = function () {
@@ -49,18 +48,13 @@ var Build = (function (_super) {
         this._request = service.execCommand({
             command: "init",
             path: this.options.projectDir
-        }, function (msg) {
-            if (msg.command == 'build')
-                _this.buildChanges(msg.changes);
-            if (msg.command == 'shutdown')
-                process.exit(0);
-        }, false);
+        }, function (m) { return _this.onServiceMessage(m); }, false);
         this._request.once('error', function () { return process.exit(); });
         setInterval(function () { return _this.sendCommand({
             command: "status",
             status: process.memoryUsage(),
             path: _this.options.projectDir
-        }); }, 6000);
+        }); }, 60000);
         return this.buildProject();
     };
     Build.prototype.buildProject = function () {
@@ -137,6 +131,12 @@ var Build = (function (_super) {
         console.log('Compile Template: ' + index);
         Action.compileTemplates(this.options);
         return 0;
+    };
+    Build.prototype.onServiceMessage = function (msg) {
+        if (msg.command == 'build')
+            this.buildChanges(msg.changes);
+        if (msg.command == 'shutdown')
+            process.exit(0);
     };
     Build.prototype.sendCommand = function (cmd) {
         if (!cmd) {

@@ -164,6 +164,8 @@ var Action = (function () {
                     tss.push(path);
                 }
             });
+            if (tss.length == 0)
+                return;
             tss = depends.concat(tss);
             var dts = platform.declaration && configuration.declaration;
             console.log("compile:" + m.name);

@@ -1,4 +1,4 @@
-<xs:schema elementFormDefault="qualified" targetNamespace="http://ns.egret-labs.org/egret" xmlns="http://ns.egret-labs.org/egret" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:m="http://ns.egret-labs.org/manifest">
+<xs:schema elementFormDefault="qualified" targetNamespace="http://ns.egret.com/swan" xmlns="http://ns.egret.com/swan" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:m="http://ns.egret-labs.org/manifest">
   <xs:simpleType name="egret.BitmapFillMode">
     <xs:restriction base="xs:string">
       <xs:enumeration value="repeat"/>
@@ -1710,6 +1710,7 @@
       <xs:element ref="VScrollBar"/>
       <xs:element ref="VSlider"/>
       <xs:element ref="ViewStack"/>
+      <xs:element ref="Image"/>
     </xs:choice>
   </xs:group>
   <xs:complexType name="Array_egret.gui.IVisualElement">
@@ -1726,6 +1727,7 @@
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:any namespace="##other"/>
         <xs:group ref="Group_attributeElement"/>
+        <xs:element ref="Skin"/>
         <xs:group ref="egret.gui.IVisualElement"/>
       </xs:choice>
       <xs:attributeGroup ref="egret.gui.Group"/>
@@ -2811,6 +2813,7 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:any namespace="##other"/>
+        <xs:element ref="Skin"/>
         <xs:group ref="SkinnableComponent_attributeElement"/>
       </xs:choice>
       <xs:attributeGroup ref="egret.gui.SkinnableComponent"/>
@@ -3431,6 +3434,15 @@
     </xs:choice>
   </xs:group>
   <xs:element name="UIAsset">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:any namespace="##other"/>
+        <xs:group ref="UIAsset_attributeElement"/>
+      </xs:choice>
+      <xs:attributeGroup ref="egret.gui.UIAsset"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Image">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:any namespace="##other"/>

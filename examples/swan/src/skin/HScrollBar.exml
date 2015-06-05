@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin class="skin.HScrollBar" xmlns:s="http://ns.egret.com/swan" minWidth="20" minHeight="8">
+    <s:states>
+        <s:State name="normal" />
+        <s:State name="disabled" />
+    </s:states>
+    <s:Image id="thumb" source="image/skin/scrollbar/roundthumb.png" scale9Grid="3,3,2,2" height="8" width="20" verticalCenter="0" />
+</s:Skin>

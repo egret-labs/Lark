@@ -1,0 +1,12 @@
+{
+  "skins":{
+    "swan.Button":"skin/Button.exml",
+    "swan.CheckBox":"skin/CheckBox.exml",
+    "swan.HScrollBar":"skin/HScrollBar.exml",
+    "swan.HSlider":"skin/HSlider.exml",
+    "swan.Panel":"skin/Panel.exml",
+    "swan.Scroller":"skin/Scroller.exml",
+    "swan.VScrollBar":"skin/VScrollBar.exml",
+    "swan.VSlider":"skin/VSlider.exml"
+  }
+}

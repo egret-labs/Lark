@@ -30,16 +30,16 @@
 /// <reference path="../lib/types.d.ts" />
 
 require('../locales/zh_CN');
-
-import Parser = require("./Parser");
-import Build = require("./Build");
 import Run = require("./Run");
-import Publish = require("./Publish");
+import Build = require("./Build");
+import Clean = require("./Clean");
+import Parser = require("./Parser");
 import Create = require("./Create");
+import Publish = require("./Publish");
 import utils = require('../lib/utils');
-import FileUtil = require('../lib/FileUtil');
 import server = require('../server/server');
 import service = require("../service/index");
+import FileUtil = require('../lib/FileUtil');
 
 import http = require('http');
 import childProcess = require('child_process');
@@ -100,13 +100,11 @@ class Entry {
                 exitCode = DontExitCode;
                 break;
             case "buildService":
-                var build = new Build(options);
-                exitCode = build.run();
+                new Build(options).run();
                 exitCode = DontExitCode;
                 break;
             case "clean":
-                service.execCommand({ path: options.projectDir, command: "shutdown" },null, false);
-                setTimeout(() => service.execCommand({ path: options.projectDir, command: "build" }, gotCommandResult, true), 500);
+                new Clean(options).run();
                 exitCode = DontExitCode;
                 break;
             case "build":
@@ -128,7 +126,7 @@ class Entry {
 var entry = new Entry();
 
 
-function gotCommandResult(cmd: lark.ServiceCommandResult) {
+export function gotCommandResult(cmd: lark.ServiceCommandResult) {
     if (cmd.messages) {
         cmd.messages.forEach(m=> console.log(m));
     }

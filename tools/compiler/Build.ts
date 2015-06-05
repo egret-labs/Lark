@@ -38,25 +38,19 @@ import service = require("../service/index");
 class Build extends Action {
     private _lastExitCode = 0;
     private _lastMessages: string[] = [];
-    private _id = Math.random() * 1000000;
     private _request:http.ClientRequest = null;
     public run(): number {
         this._request = service.execCommand({
             command: "init",
             path: this.options.projectDir
-        }, (msg: lark.ServiceBuildCommand) => {
-                if (msg.command == 'build')
-                    this.buildChanges(msg.changes);
-                if (msg.command == 'shutdown')
-                    process.exit(0);
-            }, false);
+        }, m=> this.onServiceMessage(m), false);
         this._request.once('error',() => process.exit());
 
         setInterval(() => this.sendCommand({
             command: "status",
             status: process.memoryUsage(),
             path: this.options.projectDir
-        }), 6000);
+        }), 60000);
 
         return this.buildProject();
     }
@@ -150,6 +144,13 @@ class Build extends Action {
         console.log('Compile Template: ' + index);
         Action.compileTemplates(this.options);
         return 0;
+    }
+
+    private onServiceMessage(msg: lark.ServiceBuildCommand) {
+        if (msg.command == 'build')
+            this.buildChanges(msg.changes);
+        if (msg.command == 'shutdown')
+            process.exit(0);
     }
 
     private sendCommand(cmd?: lark.ServiceCommand) {
