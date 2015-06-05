@@ -1,6 +1,6 @@
 {
 	"skins":
 	{
-		"swan.Component":"tests/List.exml"
+		"swan.Component":"tests/ButtonSkin.exml"
 	}
 }

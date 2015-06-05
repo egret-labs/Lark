@@ -31,6 +31,8 @@
 module swan {
 
     var loaderPool:lark.ImageLoader[] = [];
+    var callBackMap:any = {};
+    var loaderMap:any = {};
 
     /**
      * 默认的IAssetAdapter接口实现
@@ -44,25 +46,41 @@ module swan {
          * @param thisObject callBack的 this 引用
          */
         public getAsset(source:string, callBack:(data:any, source:string) => void, thisObject:any):void {
-
+            var list = callBackMap[source];
+            if (list) {
+                list.push([callBack, thisObject]);
+                return;
+            }
             var loader = loaderPool.pop();
             if (!loader) {
                 loader = new lark.ImageLoader();
             }
-            loader.on(lark.Event.COMPLETE, onLoadFinish, null);
-            loader.on(lark.Event.IO_ERROR, onLoadFinish, null);
-            loader.load(source);
+            callBackMap[source] = [[callBack, thisObject]];
+            loaderMap[loader.$hashCode] = source;
 
-            function onLoadFinish(event:lark.Event):void {
-                loader.removeListener(lark.Event.COMPLETE, onLoadFinish, null);
-                loader.removeListener(lark.Event.IO_ERROR, onLoadFinish, null);
-                var data:lark.BitmapData;
-                if (event.$type == lark.Event.COMPLETE) {
-                    data = loader.data;
-                    loader.data = null;
-                }
-                loaderPool.push(loader);
-                callBack.call(thisObject,data,source);
+            loader.on(lark.Event.COMPLETE, this.onLoadFinish, this);
+            loader.on(lark.Event.IO_ERROR, this.onLoadFinish, this);
+            loader.load(source);
+        }
+
+        private onLoadFinish(event:lark.Event):void {
+            var loader = event.currentTarget;
+            loader.removeListener(lark.Event.COMPLETE, this.onLoadFinish, this);
+            loader.removeListener(lark.Event.IO_ERROR, this.onLoadFinish, this);
+            var data:lark.BitmapData;
+            if (event.$type == lark.Event.COMPLETE) {
+                data = loader.data;
+                loader.data = null;
+            }
+            loaderPool.push(loader);
+            var source = loaderMap[loader.$hashCode];
+            delete loaderMap[loader.$hashCode];
+            var list:any[] = callBackMap[source];
+            delete callBackMap[source];
+            var length = list.length;
+            for(var i=0;i<length;i++){
+                var arr:any[] = list[i];
+                arr[0].call(arr[1],data,source);
             }
         }
     }

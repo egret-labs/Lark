@@ -47,6 +47,8 @@ module swan {
 
     /**
      * Component 类定义可设置外观的组件的基类。Component 类所使用的外观通常是 Skin 类的子类。
+     *
+     * @event lark.Event.COMPLETE 当设置skinName为外部exml文件路径时，加载并完成EXML解析后调度。
      */
     export class Component extends lark.Sprite implements UIComponent {
         public constructor() {
@@ -113,11 +115,12 @@ module swan {
                         clazz = EXML.parse(text);
                     }
                     else if (text.substr(text.length - 5, 5).toLowerCase() == ".exml") {
-                        clazz = parsedClasses[skinName]
+                        clazz = parsedClasses[skinName];
                         if(!clazz){
                             EXML.load(skinName,this.onExmlLoaded,this);
                             return;
                         }
+                        this.emitWith(lark.Event.COMPLETE);
                     }
                     else{
                         clazz = lark.getDefinitionByName(skinName);
@@ -140,6 +143,7 @@ module swan {
             }
             var skin = new clazz();
             this.$setSkin(skin)
+            this.emitWith(lark.Event.COMPLETE);
         }
 
         /**
@@ -158,7 +162,7 @@ module swan {
                 DEBUG && lark.$error(2202);
             }
             var values = this.$Component;
-            var oldSkin = values[sys.ComponentKeys.skin];
+            var oldSkin:Skin = values[sys.ComponentKeys.skin];
             if (oldSkin) {
                 var skinParts:string[] = oldSkin.skinParts;
                 var length = skinParts.length;
@@ -168,9 +172,18 @@ module swan {
                         this.setSkinPart(partName, null);
                     }
                 }
+                var children = oldSkin.$elementsContent;
+                if (children) {
+                    length = children.length;
+                    for (var i = 0; i < length; i++) {
+                        var child = children[i];
+                        if(child.$parent==this){
+                            this.removeChild(child);
+                        }
+                    }
+                }
                 oldSkin.hostComponent = null;
             }
-            this.removeChildren();
             values[sys.ComponentKeys.skin] = skin;
             if (skin) {
                 skin.hostComponent = this;
@@ -183,10 +196,10 @@ module swan {
                         this.setSkinPart(partName, instance);
                     }
                 }
-                var children = skin.$elementsContent;
+                children = skin.$elementsContent;
                 if (children) {
-                    var length = children.length;
-                    for (var i = 0; i < length; i++) {
+                    length = children.length;
+                    for (i = 0; i < length; i++) {
                         this.addChild(children[i]);
                     }
                 }

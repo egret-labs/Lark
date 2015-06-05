@@ -15,7 +15,7 @@
                 </s:Skin>
             </s:HScrollBar>
         </s:Skin>
-        <s:List >
+        <s:List id="list">
             <s:itemRenderer>
                 <s:ItemRenderer states="up,down" height="500">
                     <s:Image source="image/button_up.png" includeIn="up" width="100%" height="100%"

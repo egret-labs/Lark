@@ -43,9 +43,22 @@ module lark {
             this.width = this.stage.stageWidth;
             this.height = this.stage.stageHeight;
             var component = new swan.Component();
+            component.skinName = "tests/List.exml";
             component.horizontalCenter = 0;
             component.verticalCenter = 0;
+            component.once(lark.Event.COMPLETE,this.onLoaded,this);
+            var button = new swan.Button();
+            this.addChild(button);
+            var button2 = new swan.Button();
+            this.addChild(button2);
             this.addChild(component);
+        }
+
+        private onLoaded(event:Event):void{
+            var component = event.currentTarget;
+            var list = component["list"];
+            var button = new swan.Button();
+            list.addChild(button);
         }
 
         private touchTarget:swan.UIComponent;

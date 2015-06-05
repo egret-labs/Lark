@@ -35,6 +35,7 @@ module swan.sys {
     export var exmlConfig:EXMLConfig;
 
     var exmlParserPool:EXMLParser[] = [];
+    var parsedClasses:any = {};
     var innerClassCount = 1;
 
     var DECLARATIONS = "Declarations";
@@ -156,11 +157,14 @@ module swan.sys {
                     definition = definition[path] || (definition[path] = {});
                 }
                 if (definition[paths[length - 1]]) {
-                    if (DEBUG) {
+                    if (DEBUG&&!parsedClasses[className]) {
                         lark.$warn(2101, className, toXMLString(xmlData));
                     }
                 }
                 else {
+                    if(DEBUG){
+                        parsedClasses[className] = true;
+                    }
                     definition[paths[length - 1]] = clazz;
                 }
             }

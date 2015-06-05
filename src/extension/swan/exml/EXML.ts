@@ -32,6 +32,8 @@ module EXML {
     var parser = new swan.sys.EXMLParser();
 
     var requestPool:lark.HttpRequest[] = [];
+    var callBackMap:any = {};
+    var requestMap:any = {};
 
     /**
      * 解析一个 EXML 文件的文本内容为一个类定义。您可以在 EXML 文件的根节点上声明 class 属性作为要注册到全局的类名。
@@ -49,30 +51,46 @@ module EXML {
      * @param callBack 加载并解析完成后的回调函数，无论加载成功还是失败，此函数均会被回调。失败时将传入 undefined 作为回调函数参数。
      * @param thisObject 回调函数的 this 引用
      */
-    export function load(url:string, callBack?:(clazz:any,url:string)=>void, thisObject?:any):void {
+    export function load(url:string, callBack?:(clazz:any, url:string)=>void, thisObject?:any):void {
         if (DEBUG) {
             if (!url) {
                 lark.$error(1003, "url");
             }
         }
+        var list = callBackMap[url];
+        if (list) {
+            list.push([callBack, thisObject]);
+            return;
+        }
         var request = requestPool.pop();
         if (!request) {
             request = new lark.HttpRequest();
         }
+        callBackMap[url] = [[callBack, thisObject]];
+        requestMap[request.$hashCode] = url;
         request.on(lark.Event.COMPLETE, onLoadFinish, null);
         request.on(lark.Event.IO_ERROR, onLoadFinish, null);
         request.open(url);
         request.send();
+    }
 
-        function onLoadFinish(event:lark.Event):void {
-            request.removeListener(lark.Event.COMPLETE, onLoadFinish, null);
-            request.removeListener(lark.Event.IO_ERROR, onLoadFinish, null);
-            var text:string = event.type == lark.Event.COMPLETE ? request.response : "";
-            if(text){
-                var clazz = parse(text);
-            }
-            requestPool.push(request);
-            callBack.call(thisObject, clazz, url);
+    function onLoadFinish(event:lark.Event):void {
+        var request:lark.HttpRequest = event.currentTarget;
+        request.removeListener(lark.Event.COMPLETE, onLoadFinish, null);
+        request.removeListener(lark.Event.IO_ERROR, onLoadFinish, null);
+        var text:string = event.type == lark.Event.COMPLETE ? request.response : "";
+        if (text) {
+            var clazz = parse(text);
+        }
+        requestPool.push(request);
+        var url = requestMap[request.$hashCode];
+        delete requestMap[request.$hashCode];
+        var list:any[] = callBackMap[url];
+        delete callBackMap[url];
+        var length = list.length;
+        for (var i = 0; i < length; i++) {
+            var arr = list[i];
+            arr[0].call(arr[1],clazz,url);
         }
     }
 
