@@ -33,22 +33,42 @@ module lark.web {
         /**
          * 检测系统属性
          */
-        public static detect(): void {
+        public static detect():void {
             var capabilities = lark.Capabilities;
             var ua = navigator.userAgent.toLowerCase();
             capabilities.$isMobile = (ua.indexOf('mobile') != -1 || ua.indexOf('android') != -1);
+            if(capabilities.$isMobile){
+                if(ua.indexOf("windows") < 0&&(ua.indexOf("iphone") != -1 || ua.indexOf("ipad") != -1 || ua.indexOf("ipod") != -1)){
+                    capabilities.$os = "iOS";
+                }
+                else if(ua.indexOf("android")!= -1&&ua.indexOf("linux")!= -1){
+                    capabilities.$os = "Android";
+                }
+                else if(ua.indexOf("windows")!= -1){
+                    capabilities.$os = "Windows Phone";
+                }
+            }
+            else{
+                if(ua.indexOf("windows nt")!= -1){
+                    capabilities.$os = "Windows";
+                }
+                else if(ua.indexOf("mac os")!= -1){
+                    capabilities.$os = "Mac OS";
+                }
+            }
+
             var h5 = WebCapability.checkHtml5Support();
             capabilities.$location = h5.geo;
             capabilities.$motion = h5.m;
             capabilities.$orientation = h5.ortt;
             var language = (navigator.language || navigator.browserLanguage).toLowerCase();
             var strings = language.split("-");
-            if(strings.length>1){
+            if (strings.length > 1) {
                 strings[1] = strings[1].toUpperCase();
             }
             capabilities.$language = strings.join("-");
         }
-        
+
         private static checkHtml5Support() {
 
             var webaudio = ('webkitAudioContext' in window) || ('AudioContext' in window);

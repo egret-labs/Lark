@@ -29,6 +29,9 @@
 
 module lark.web {
 
+    var winURL = window["URL"] || window["webkitURL"];
+    var useXHR = winURL&&Capabilities.os == "iOS";
+
     /**
      * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
      */
@@ -46,11 +49,47 @@ module lark.web {
 
         private currentImage:HTMLImageElement = null;
 
+        private currentURL:string;
+
+        private request:WebHttpRequest = null;
+
         /**
          * 启动一次图像加载。注意：若之前已经调用过加载请求，重新调用 load() 将终止先前的请求，并开始新的加载。
          * @param url 要加载的图像文件的地址。
          */
         public load(url:string):void {
+            if (useXHR&&url.indexOf("data:")!=0) {//如果是base64编码图片，直接使用Image.src解析。
+                var request = this.request;
+                if (!request) {
+                    request = this.request = new lark.web.WebHttpRequest();
+                    request.on(lark.Event.COMPLETE, this.onBlobLoaded, this);
+                    request.on(lark.Event.IO_ERROR, this.onBlobError, this);
+                    request.responseType = "blob";
+                }
+                if (DEBUG) {
+                    this.currentURL = url;
+                }
+                request.open(url);
+                request.send();
+            }
+            else {
+                this.loadImage(url);
+            }
+        }
+
+        private onBlobLoaded(event:lark.Event):void {
+            var blob:Blob = this.request.response;
+            this.loadImage(winURL.createObjectURL(blob));
+        }
+
+        private onBlobError(event:lark.Event):void {
+            if (DEBUG && !this.hasListener(Event.IO_ERROR)) {
+                $error(1011, this.currentURL);
+            }
+            this.emitWith(Event.IO_ERROR);
+        }
+
+        private loadImage(src:string):void {
             var image = new Image();
             this.data = null;
             this.currentImage = image;
@@ -59,13 +98,12 @@ module lark.web {
             }
             image.onload = this.onImageComplete;
             image.onerror = this.onLoadError;
-            image.src = url;
-
+            image.src = src;
         }
 
         private onImageComplete = (event):void=> {
             var image = this.getImage(event);
-            if(!image){
+            if (!image) {
                 return;
             }
             this.data = toBitmapData(image);
@@ -74,7 +112,7 @@ module lark.web {
 
         private onLoadError = (event):void => {
             var image = this.getImage(event);
-            if(!image){
+            if (!image) {
                 return;
             }
             if (DEBUG && !this.hasListener(Event.IO_ERROR)) {
@@ -85,15 +123,20 @@ module lark.web {
 
         private getImage(event:any):HTMLImageElement {
             var image:HTMLImageElement = event.target;
+            if (useXHR) {
+                winURL.revokeObjectURL(image.src);
+            }
             image.onerror = null;
             image.onload = null;
-            if(this.currentImage!==image){
+            if (this.currentImage !== image) {
                 return null;
             }
             this.currentImage = null;
             return image;
         }
+
     }
+
     registerClass(WebImageLoader, Types.ImageLoader);
     ImageLoader = WebImageLoader;
 }
