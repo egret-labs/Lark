@@ -37,4 +37,5 @@ declare var RELEASE:boolean;
 module lark {
     export declare function $error(code:number,...params:any[]):void;
     export declare function $warn(code:number,...params:any[]):void;
+    export declare function $markReadOnly(instance:any,property:string):void;
 }

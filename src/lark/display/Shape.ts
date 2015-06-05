@@ -63,4 +63,8 @@ module lark {
         }
     }
     registerClass(Shape,Types.Shape);
+
+    if(DEBUG){
+        lark.$markReadOnly(Shape.prototype,"graphics");
+    }
 }

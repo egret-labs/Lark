@@ -1108,6 +1108,9 @@ module swan.sys {
         }
 
         if (DEBUG) {//用于调试时查看布局尺寸的便利属性，发行版时移除。
+            lark.$markReadOnly(prototype,"explicitWidth");
+            lark.$markReadOnly(prototype,"explicitHeight");
+
             Object.defineProperty(prototype, "preferredWidth", {
                 get: function () {
                     var bounds = lark.$TempRectangle;

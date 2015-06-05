@@ -140,4 +140,9 @@ module lark {
             }
         }
     }
+
+    if(DEBUG){
+        lark.$markReadOnly(Timer.prototype,"currentCount");
+        lark.$markReadOnly(Timer.prototype,"running");
+    }
 }

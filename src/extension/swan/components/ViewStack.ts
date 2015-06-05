@@ -199,4 +199,9 @@ module swan {
     }
     registerBindable(ViewStack.prototype,"selectedIndex");
     lark.registerClass(ViewStack,Types.ViewStack);
+
+    if(DEBUG){
+        lark.$markReadOnly(ViewStack.prototype,"length");
+        lark.$markReadOnly(ViewStack.prototype,"layout");
+    }
 }

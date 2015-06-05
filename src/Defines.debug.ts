@@ -52,6 +52,7 @@ this["RELEASE"] = false;
 module lark {
     export declare function $error(code:number,...params:any[]):void;
     export declare function $warn(code:number,...params:any[]):void;
+    export declare function $markReadOnly(instance:any,property:string):void;
 
     function _error(code:number,...params:any[]):void{
         var text:string = lark.tr.apply(null,arguments);
@@ -70,5 +71,15 @@ module lark {
         lark.warn("Warning #"+code+": "+text);
     }
     lark.$warn = _warn;
+
+    function _markReadOnly(instance:any,property:string):void{
+        var data:PropertyDescriptor = Object.getOwnPropertyDescriptor(instance, property);
+        data.set = function(value:any){
+            lark.$warn(1010,property);
+        };
+        Object.defineProperty(instance, property, data);
+    }
+
+    lark.$markReadOnly = _markReadOnly;
 }
 

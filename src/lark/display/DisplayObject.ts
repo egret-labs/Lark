@@ -1133,4 +1133,9 @@ module lark {
 
     }
     registerClass(DisplayObject, Types.DisplayObject);
+
+    if(DEBUG){
+        lark.$markReadOnly(DisplayObject.prototype,"parent");
+        lark.$markReadOnly(DisplayObject.prototype,"stage");
+    }
 }

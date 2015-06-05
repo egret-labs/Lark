@@ -131,6 +131,13 @@ module lark {
         }
     }
 
+    if(DEBUG){
+        lark.$markReadOnly(Capabilities,"language");
+        lark.$markReadOnly(Capabilities,"isMobile");
+        lark.$markReadOnly(Capabilities,"orientation");
+        lark.$markReadOnly(Capabilities,"motion");
+    }
+
     export interface IAudioSupport {
         ogg: boolean;
         mp3: boolean;

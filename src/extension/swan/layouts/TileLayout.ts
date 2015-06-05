@@ -833,4 +833,10 @@ module swan {
     }
 
     lark.registerClass(TileLayout,Types.TileLayout);
+
+
+    if(DEBUG){
+        lark.$markReadOnly(TileLayout.prototype,"columnCount");
+        lark.$markReadOnly(TileLayout.prototype,"rowCount");
+    }
 }

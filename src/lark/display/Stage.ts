@@ -250,4 +250,8 @@ module lark {
         });
     }
     registerClass(Stage,Types.Stage);
+    if(DEBUG){
+        lark.$markReadOnly(Stage.prototype,"stageWidth");
+        lark.$markReadOnly(Stage.prototype,"stageHeight");
+    }
 }

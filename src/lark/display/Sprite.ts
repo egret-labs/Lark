@@ -563,4 +563,8 @@ module lark {
 
     }
     registerClass(Sprite, Types.Sprite, [Types.DisplayObjectContainer]);
+
+    if(DEBUG){
+        lark.$markReadOnly(Sprite.prototype,"numChildren");
+    }
 }

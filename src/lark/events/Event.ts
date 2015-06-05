@@ -276,4 +276,13 @@ module lark {
     }
 
     registerClass(Event,Types.Event);
+
+    if(DEBUG){
+        lark.$markReadOnly(Event.prototype,"type");
+        lark.$markReadOnly(Event.prototype,"bubbles");
+        lark.$markReadOnly(Event.prototype,"cancelable");
+        lark.$markReadOnly(Event.prototype,"eventPhase");
+        lark.$markReadOnly(Event.prototype,"currentTarget");
+        lark.$markReadOnly(Event.prototype,"target");
+    }
 }

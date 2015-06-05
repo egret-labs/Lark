@@ -610,4 +610,10 @@ module lark.sys {
         }
         return "#" + color;
     }
+
+    if(DEBUG){
+        lark.$markReadOnly(TextField.prototype,"numLines");
+        lark.$markReadOnly(TextField.prototype,"textWidth");
+        lark.$markReadOnly(TextField.prototype,"textWidth");
+    }
 }

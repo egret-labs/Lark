@@ -283,4 +283,7 @@ module swan {
     registerBindable(RadioButtonGroup.prototype,"selectedValue");
     lark.registerClass(RadioButtonGroup,Types.RadioButtonGroup);
 
+    if(DEBUG){
+        lark.$markReadOnly(RadioButtonGroup.prototype,"numRadioButtons");
+    }
 }

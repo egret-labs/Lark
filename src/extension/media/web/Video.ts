@@ -12,11 +12,6 @@
             return this._bitmapData;
         }
 
-        public set bitmapData(video) {
-            // Read only
-            error(tr(1010, 'Video.bitmapData'));
-        }
-
         protected createDomElement(): HTMLMediaElement {
             var video = document.createElement('video');
             video.height = this.$option.height;
@@ -33,6 +28,10 @@
             video.width = video.videoWidth;
             this.emitWith(MediaEvent.RESIZE);
         }
+    }
+
+    if(DEBUG){
+        lark.$markReadOnly(Video.prototype,"bitmapData");
     }
 }
 

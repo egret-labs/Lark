@@ -54,4 +54,8 @@ module lark {
             return this.$hashCode;
         }
     }
+
+    if(DEBUG){
+        lark.$markReadOnly(LarkObject.prototype,"hashCode");
+    }
 }

@@ -536,4 +536,10 @@ module swan {
     registerProperty(Group, "elementsContent", "Array", true);
     registerProperty(Group, "states", "State[]");
     lark.registerClass(Group, Types.Group, [Types.UIComponent, Types.IViewport]);
+
+    if(DEBUG){
+        lark.$markReadOnly(Group.prototype,"contentWidth");
+        lark.$markReadOnly(Group.prototype,"contentHeight");
+        lark.$markReadOnly(Group.prototype,"numElements");
+    }
 }
