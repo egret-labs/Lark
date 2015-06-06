@@ -155,10 +155,11 @@ class Build extends Action {
 
     private sendCommand(cmd?: lark.ServiceCommand) {
         if (!cmd) {
+            var msg = this._lastMessages.length > 20 ? this._lastMessages.slice(0,20): this._lastMessages;
             cmd = {
                 command: 'buildResult',
                 exitCode: this._lastExitCode,
-                messages: this._lastMessages,
+                messages: msg,
                 path:this.options.projectDir
             }
         }
