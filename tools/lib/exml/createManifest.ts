@@ -73,7 +73,7 @@ var W = "http://ns.egret-labs.org/wing";
  * @param args
  * @param opts
  */
-function run(currDir, args, opts) {
+export function run(currDir, args, opts) {
     var createAll = opts["-all"];
     currDir = lark.options.projectDir
     var srcPath = lark.options.srcDir;
@@ -104,7 +104,7 @@ function escapeSrcPath(srcPath) {
 /**
  * 获取项目中所有类名和文件路径的映射数据
  */
-function getClassToPathInfo(srcPath) {
+export function getClassToPathInfo(srcPath) {
     srcPath = escapeSrcPath(srcPath);
     if (!classNameToPath) {
         getManifest(srcPath);
@@ -112,7 +112,7 @@ function getClassToPathInfo(srcPath) {
     return classNameToPath;
 }
 
-function getModuleReferenceInfo(fileList) {
+export function getModuleReferenceInfo(fileList) {
     resetCache();
     var length = fileList.length;
     for (var i = 0; i < length; i++) {
@@ -153,7 +153,7 @@ function resetCache() {
     moduleReferenceList = null;
 }
 
-function getModuleReferenceList(referenceInfo) {
+export function getModuleReferenceList(referenceInfo) {
     return moduleReferenceList;
 }
 
@@ -161,7 +161,7 @@ function getModuleReferenceList(referenceInfo) {
 /**
  * 创建manifest列表
  */
-function create(srcPath, createAll, referenceInfo?) {
+export function create(srcPath, createAll, referenceInfo?) {
     srcPath = escapeSrcPath(srcPath);
     var manifest = getManifest(srcPath);
     if (referenceInfo) {
@@ -1261,13 +1261,4 @@ function trimKeyWords(codeText) {
         codeText = CodeUtil.removeFirstVariable(codeText, word);
     }
     return codeText;
-}
-
-
-export = {
-    run,
-    create,
-    getClassToPathInfo,
-    getModuleReferenceInfo,
-    getModuleReferenceList
 }

@@ -19,7 +19,7 @@
 import sax = require("./sax");
 var saxparser = sax.parser(true);
 
-function parse(xmlString) {
+export function parse(xmlString) {
     var object:sax.Tag = null;
     var namespaces = {};
     var hasError = false;
@@ -99,4 +99,3 @@ function toString() {
     return this.text;
 };
 
-export = { parse: parse };
