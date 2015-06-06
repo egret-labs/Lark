@@ -9,11 +9,11 @@
 }
 
 export declare class DefaultHandler {
-    constructor(callback: (err, dom) => void)
+    constructor(callback: (err, dom) => void);
     dom: Element[];
 }
 
 export declare class Parser {
-    constructor(handler: DefaultHandler)
+    constructor(handler: DefaultHandler);
     parseComplete(html: string);
 }
