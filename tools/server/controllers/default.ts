@@ -2,11 +2,9 @@
 
 import url = require('url');
 import file = require('../../lib/FileUtil');
-import Entry = require('../../compiler/Entry');
-import Action = require('../../compiler/Action');
-import Create = require('../../compiler/Create');
-import Project = require('../../compiler/Project');
-import CompileOptions = require('../../compiler/CompileOptions');
+import DoCreate = require('../../commands/DoCreateCommand');
+import Entry = require('../../Entry');
+import CompileOptions = require('../../parser/CompileOptions');
 
 var exportObject = {
     LarkStaticContentPath: '$/content/',
@@ -53,11 +51,10 @@ function doCreate() {
     var projJSON = self.req.query['proj'];
     try {
         var proj = JSON.parse(projJSON);
-            
-        var create = new Create(lark.options);
-        create.doCreate(proj,() => {
-            self.res.send(200, 'OK');
-        });
+        var create = new DoCreate();
+        create.project = proj;
+        create.execute();
+        self.res.send(200, 'OK');
     }
     catch (e) {
         console.log(e);

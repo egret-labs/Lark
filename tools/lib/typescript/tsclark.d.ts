@@ -3686,11 +3686,11 @@ declare module ts {
         static mapFile(source: string, used: string): void;
     }
 }
-declare module ts {
-    function executeWithOption(commandLine: ParsedCommandLine): TSC.LarkCompileResult;
+ declare module ts {
+    function executeWithOption(commandLine: ParsedCommandLine): Compiler.LarkCompileResult;
 }
-declare module TSC {
-    export function executeWithOption(options: lark.ICompileOptions, files: string[], out?: string, outDir?: string): TSC.LarkCompileResult;
+export declare module Compiler {
+    export function executeWithOption(options: lark.LarkToolArgs, files: string[], out?: string, outDir?: string): Compiler.LarkCompileResult;
     export function exit (exitCode: number) : number;
     export function write (msg: any): void;
     export interface LarkCompileResult {
@@ -3702,4 +3702,4 @@ declare module TSC {
     }
 }
 
-export = TSC;
+export declare var tsc:typeof ts;

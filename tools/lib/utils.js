@@ -26,10 +26,11 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-/// <reference path="node.d.ts" />
+/// <reference path="./node.d.ts" />
 var cp = require('child_process');
 var path = require('path');
 var file = require('./FileUtil');
+var UglifyJS = require("./uglify-js/uglifyjs");
 global["$locale_strings"] = global["$locale_strings"] || {};
 var $locale_strings = global["$locale_strings"];
 /**
@@ -144,7 +145,7 @@ function open(target, appName, callback) {
             }
             break;
     }
-    return cp.exec(opener + ' "' + escape(target) + '"', callback);
+    return cp.exec(opener + ' "' + escape(target) + '"', null, callback);
 }
 exports.open = open;
 function endWith(text, match) {
@@ -154,4 +155,28 @@ exports.endWith = endWith;
 function escape(s) {
     return s.replace(/"/, '\\\"');
 }
-//# sourceMappingURL=utils.js.map
+function minify(sourceFile, output) {
+    var defines = {
+        DEBUG: false,
+        RELEASE: true
+    };
+    //UglifyJS参数参考这个页面：https://github.com/mishoo/UglifyJS2
+    var result = UglifyJS.minify(sourceFile, { compress: { global_defs: defines }, output: { beautify: false } });
+    file.save(output, result.code);
+}
+exports.minify = minify;
+function clean(path) {
+    var excludes = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        excludes[_i - 1] = arguments[_i];
+    }
+    var fileList = file.getDirectoryListing(path);
+    var length = fileList.length;
+    for (var i = 0; i < length; i++) {
+        var path = fileList[i];
+        if (excludes && excludes.indexOf(path) >= 0)
+            continue;
+        file.remove(path);
+    }
+}
+exports.clean = clean;

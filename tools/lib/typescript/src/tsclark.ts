@@ -297,8 +297,8 @@ module ts {
 
 
 
-class TSC {
-    static executeWithOption(options: lark.ICompileOptions, files: string[], out?: string, outDir?: string): ts.LarkCompileResult {
+class Compiler {
+    static executeWithOption(options: lark.LarkToolArgs, files: string[], out?: string, outDir?: string): ts.LarkCompileResult {
 
         var target = options.esTarget.toLowerCase();
         var targetEnum = ts.ScriptTarget.ES5;
@@ -329,11 +329,12 @@ class TSC {
     static exit: (exitCode: number) => number = null;
     static write = msg=> console.log(msg);
 }
-module.exports = TSC;
+module.exports.Compiler = Compiler;
+module.exports.tsc = ts;
 ts.sys.exit = function (code) {
-    return TSC.exit(code);
+    return Compiler.exit(code);
 }
 
 ts.sys.write = function (msg) {
-    return TSC.write(msg);
+    return Compiler.write(msg);
 };

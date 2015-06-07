@@ -52,7 +52,7 @@ class Project {
         this.shutdown(11);
         var larkPath = FileUtil.joinPath(utils.getLarkRoot(), 'tools/bin/lark');
 
-        var build = cprocess.spawn(process.execPath, ['--expose-gc',larkPath, 'buildService', this.path], {
+        var build = cprocess.spawn(process.execPath, ['--expose-gc',larkPath, 'autocompile', this.path], {
             detached: true,
             cwd: this.path
         });

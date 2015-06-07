@@ -32,6 +32,9 @@
 import cp = require('child_process');
 import path = require('path');
 import file = require('./FileUtil');
+import UglifyJS = require("./uglify-js/uglifyjs");
+
+
 global["$locale_strings"] = global["$locale_strings"] || {};
 var $locale_strings = global["$locale_strings"];
 /**
@@ -155,4 +158,28 @@ export function endWith(text: string, match: string) {
 
 function escape(s) {
     return s.replace(/"/, '\\\"');
+}
+
+export function minify(sourceFile: string, output: string) {
+
+
+    var defines = {
+        DEBUG: false,
+        RELEASE: true
+    }
+    //UglifyJS参数参考这个页面：https://github.com/mishoo/UglifyJS2
+    var result = UglifyJS.minify(sourceFile, { compress: { global_defs: defines }, output: { beautify: false } });
+    file.save(output, result.code);
+}
+
+export function clean(path: string,...excludes:string[]) {
+    var fileList = file.getDirectoryListing(path);
+    var length = fileList.length;
+    for (var i = 0; i < length; i++)
+    {
+        var path = fileList[i];
+        if (excludes && excludes.indexOf(path) >= 0)
+            continue;
+        file.remove(path);
+    }
 }

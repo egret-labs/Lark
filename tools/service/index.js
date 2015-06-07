@@ -131,4 +131,3 @@ function getServiceURL(params) {
     return "http://127.0.0.1:" + LARK_SERVICE_PORT + "/?q=" + encodeURIComponent(json);
 }
 /// <reference path="../lib/types.d.ts" /> 
-//# sourceMappingURL=index.js.map

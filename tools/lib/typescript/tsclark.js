@@ -21380,10 +21380,10 @@ var ts;
         return result;
     }
 })(ts || (ts = {}));
-var TSC = (function () {
-    function TSC() {
+var Compiler = (function () {
+    function Compiler() {
     }
-    TSC.executeWithOption = function (options, files, out, outDir) {
+    Compiler.executeWithOption = function (options, files, out, outDir) {
         var target = options.esTarget.toLowerCase();
         var targetEnum = 1 /* ES5 */;
         if (target == 'es6')
@@ -21406,14 +21406,15 @@ var TSC = (function () {
         }
         return ts.executeWithOption(parsedCmd);
     };
-    TSC.exit = null;
-    TSC.write = function (msg) { return console.log(msg); };
-    return TSC;
+    Compiler.exit = null;
+    Compiler.write = function (msg) { return console.log(msg); };
+    return Compiler;
 })();
-module.exports = TSC;
+module.exports.Compiler = Compiler;
+module.exports.typescript = ts;
 ts.sys.exit = function (code) {
-    return TSC.exit(code);
+    return Compiler.exit(code);
 };
 ts.sys.write = function (msg) {
-    return TSC.write(msg);
+    return Compiler.write(msg);
 };

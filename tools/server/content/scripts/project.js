@@ -10,21 +10,13 @@ var lark;
             function Project() {
                 var _this = this;
                 this.larkManifest = lark.manifest;
-                this.name = portal.project.name;
                 this.scaleModes = lark.manifest.scaleModes;
-                this.larkVersion = portal.project.larkVersion;
-                this.version = portal.project.version;
-                this.entry = portal.project.entry;
-                this.modules = portal.project.modules || [];
-                this.platforms = portal.project.platforms || [];
-                this.port = portal.project.port;
-                this.host = portal.project.host;
-                this.ip = portal.project.ip;
-                this.startupHtml = portal.project.startupHtml;
-                this.scaleMode = portal.project.scaleMode;
-                this.contentWidth = portal.project.contentWidth;
-                this.contentHeight = portal.project.contentHeight;
-                this.showPaintRects = portal.project.showPaintRects;
+                this.modules = [];
+                this.platforms = [];
+                this.scaleMode = 'noScale';
+                this.contentWidth = 480;
+                this.contentHeight = 800;
+                this.showPaintRects = false;
                 this.template = "Empty";
                 this.isConfig = location.pathname.indexOf("/$/config") >= 0;
                 this.larkManifest.modules.forEach(function (lm) {
@@ -46,8 +38,12 @@ var lark;
             }
             Project.prototype.finish = function () {
                 var manifest = this.larkManifest;
-                this.modules = manifest.modules.filter(function (m) { return m.checked; }).map(function (m) { return { name: m.name }; });
-                this.platforms = manifest.platforms.filter(function (p) { return p.checked; }).map(function (p) { return { name: p.name }; });
+                this.modules = manifest.modules.filter(function (m) { return m.checked; }).map(function (m) {
+                    return { name: m.name };
+                });
+                this.platforms = manifest.platforms.filter(function (p) { return p.checked; }).map(function (p) {
+                    return { name: p.name };
+                });
                 this.larkManifest = undefined;
                 var modes = this.scaleModes;
                 this.scaleModes = undefined;

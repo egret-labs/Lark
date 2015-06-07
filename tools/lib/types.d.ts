@@ -5,6 +5,14 @@
 
 declare module lark {
 
+    export interface Command {
+        execute():number;
+    }
+    
+    export interface Action {
+        
+    }
+
     export interface Map<T> {
         [index: string]: T;
     }
@@ -21,7 +29,7 @@ declare module lark {
         Error,
         Message,
     }
-    export interface ICompileOptions {
+    export interface LarkToolArgs {
         action: string;
         projectDir: string;
         srcDir: string;
@@ -73,7 +81,6 @@ declare module lark {
         showPaintRects: boolean;
         template: string;
         toJSON?(): ILarkProject;
-        read?(path?: string);
         save?(path?: string);
     }
 
@@ -100,12 +107,12 @@ declare module lark {
         messages: string[];
     }
 
-    export var options: ICompileOptions;
+    export var options: LarkToolArgs;
 
     module server {
-        export var options: ICompileOptions;
+        export var options: LarkToolArgs;
         export interface ViewModel {
-            options: ICompileOptions;
+            options: LarkToolArgs;
         }
         export var console: {
             on(event: string, listener: Function): any;

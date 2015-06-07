@@ -6,7 +6,7 @@ module lark {
     export var app:ng.IModule = angular.module('lark', []);
 
     export module server {
-        export var options:ICompileOptions = null;
+        export var options:LarkToolArgs = null;
     }
 
     export module portal {
