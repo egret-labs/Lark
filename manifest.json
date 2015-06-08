@@ -48,10 +48,6 @@
         {
             "name":"Empty",
             "description":"空项目"
-        },
-        {
-            "name":"Demo",
-            "description":"示例项目"
         }
     ],
     "scaleModes":[

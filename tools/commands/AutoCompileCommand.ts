@@ -29,7 +29,6 @@ class AutoCompileCommand implements lark.Command {
         }), 60000);
 
         setTimeout(() => this.buildProject(), 20);
-        setTimeout(() => this.buildChanges(['D:/Draft/testLark/test/src/Main.ts']), 5000);
 
         return 0;
     }

@@ -25,7 +25,6 @@ var AutoCompileCommand = (function () {
             path: lark.options.projectDir
         }); }, 60000);
         setTimeout(function () { return _this.buildProject(); }, 20);
-        setTimeout(function () { return _this.buildChanges(['D:/Draft/testLark/test/src/Main.ts']); }, 5000);
         return 0;
     };
     AutoCompileCommand.prototype.buildProject = function () {

@@ -89,10 +89,9 @@ class CompileLark {
             }            
         });
         if (tss.length == 0)
-            return;
+            return 0;
         tss = depends.concat(tss);
         var dts = platform.declaration && configuration.declaration;
-        console.log("compile:" + m.name);
         var result = this.compiler.compile({args:options,def:dts,out:singleFile,files:tss,outDir:null});
         if (result.exitStatus != 0) {
             result.messages.forEach(m=> console.log(m));
@@ -101,8 +100,9 @@ class CompileLark {
         if (dts) {
             this.dtsFiles.push([declareFile, depends]);
         }
-        if(configuration.minify)
+        if(configuration.minify) {
             utils.minify(singleFile, singleFile);
+        }
         return 0;
     }
     

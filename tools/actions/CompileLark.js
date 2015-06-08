@@ -77,10 +77,9 @@ var CompileLark = (function () {
             }
         });
         if (tss.length == 0)
-            return;
+            return 0;
         tss = depends.concat(tss);
         var dts = platform.declaration && configuration.declaration;
-        console.log("compile:" + m.name);
         var result = this.compiler.compile({ args: options, def: dts, out: singleFile, files: tss, outDir: null });
         if (result.exitStatus != 0) {
             result.messages.forEach(function (m) { return console.log(m); });
@@ -89,8 +88,9 @@ var CompileLark = (function () {
         if (dts) {
             this.dtsFiles.push([declareFile, depends]);
         }
-        if (configuration.minify)
+        if (configuration.minify) {
             utils.minify(singleFile, singleFile);
+        }
         return 0;
     };
     CompileLark.prototype.getModuleOutputPath = function (m, filePath) {

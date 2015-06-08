@@ -10,7 +10,7 @@ var PublishCommand = (function () {
         var options = lark.options;
         options.minify = true;
         options.publish = true;
-        utils.clean(options.debugDir);
+        utils.clean(options.releaseDir);
         var compileProject = new CompileProject();
         var result = compileProject.compileProject(options);
         if (result.exitStatus)
