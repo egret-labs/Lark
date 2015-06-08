@@ -1,9 +1,10 @@
 var url = require('url');
-var http = require('http');
+var net = require('net');
 var Project = require('./project');
+var ServiceSocket = require('./ServiceSocket');
 var file = require('../lib/FileUtil');
 var childProcess = require('child_process');
-var LARK_SERVICE_PORT = 51598;
+exports.LARK_SERVICE_PORT = 51598;
 //Lark version, use to shutdown if the version is different to the value passed by the build command
 var version = process.argv[2];
 var projects = {};
@@ -12,40 +13,44 @@ var serviceCreated = false;
 * Start Lark Service
 */
 function run() {
-    http.createServer(function (req, res) {
-        console.log(req.url);
-        var task = parseRequest(req);
-        if (task.command == 'shutdown' || task.version && task.version != version) {
-            res.writeHead(200, { 'Content-Type': 'text/plain' });
-            res.end("{}");
-            shutdown();
-        }
-        var proj = getProject(task.path);
-        if (task.command == 'init') {
-            res.writeHead(200, { 'Content-Type': 'text/plain' });
-            proj.buildPort = res;
-            setInterval(function () { return res.write("{}"); }, 15000);
-        }
-        else if (task.command == 'buildResult') {
-            proj.onBuildServiceMessage(task);
-            res.writeHead(200, { 'Content-Type': 'text/plain' });
-            res.end("");
-        }
-        else if (task.command == 'build') {
-            handleBuildTask(task, res);
-            global.gc && global.gc();
-        }
-        else if (task.command == 'status') {
-            var heapTotal = task['status']['heapTotal'];
-            console.log(heapTotal);
-            if (heapTotal > 500 * 1024 * 1024) {
-                proj.shutdown();
-            }
-        }
-    }).listen(LARK_SERVICE_PORT, '127.0.0.1');
+    var server = net.createServer(function (socket) {
+        var ss = new ServiceSocket(socket);
+        ss.on("message", function (msg) { return handleCommands(msg, ss); });
+    });
+    try {
+        server.listen(exports.LARK_SERVICE_PORT);
+    }
+    catch (e) {
+        console.error("Service.run", e);
+    }
+    process.on('uncaughtException', function (e) {
+    });
     process.on('exit', shutdown);
 }
 exports.run = run;
+function handleCommands(task, res) {
+    console.log("task.version:", task.version);
+    console.log('version:', version);
+    //|| task.version && task.version != version
+    if (task.command == 'shutdown') {
+        res.send({});
+        shutdown();
+    }
+    var proj = getProject(task.path);
+    if (task.command == 'init') {
+        proj.buildPort = res;
+    }
+    else if (task.command == 'build') {
+        proj.fileChanged(res);
+    }
+    else if (task.command == 'status') {
+        var heapTotal = task['status']['heapTotal'];
+        console.log(heapTotal);
+        if (heapTotal > 500 * 1024 * 1024) {
+            proj.shutdown();
+        }
+    }
+}
 /**
 *  Send command to Lark Service
 */
@@ -53,19 +58,9 @@ function execCommand(command, callback, startServer) {
     if (startServer === void 0) { startServer = true; }
     var options = lark.options;
     var requestUrl = getServiceURL(command);
-    var commandRequest = http.get(requestUrl, function (res) {
-        res.setEncoding('utf-8');
-        res.on('data', function (text) {
-            try {
-                var cmd = JSON.parse(text);
-            }
-            catch (e) {
-                cmd = { exitCode: 0, messages: [], command: "build" };
-            }
-            callback && callback(cmd);
-        });
-    });
-    commandRequest.once('error', function (e) {
+    var client = net.connect(exports.LARK_SERVICE_PORT);
+    var ss = new ServiceSocket(client);
+    client.on('error', function (e) {
         if (!startServer)
             return;
         if (!serviceCreated) {
@@ -73,8 +68,9 @@ function execCommand(command, callback, startServer) {
         }
         setTimeout(function () { return execCommand(command, callback); }, 200);
     });
-    commandRequest.setTimeout(100);
-    return commandRequest;
+    ss.send(command);
+    ss.on('message', function (cmd) { return callback && callback(cmd); });
+    return ss;
 }
 exports.execCommand = execCommand;
 function getProject(path) {
@@ -89,16 +85,6 @@ function getProject(path) {
         return project;
     }
     return projects[path];
-}
-function handleBuildTask(info, currentRes) {
-    var project = getProject(info.path);
-    project.fileChanged();
-    var res = project.penddingRequest;
-    if (res) {
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.end(JSON.stringify({ command: "build", exitCode: 0 }));
-    }
-    project.penddingRequest = currentRes;
 }
 function startBackgroundService() {
     serviceCreated = true;
@@ -118,7 +104,7 @@ function shutdown() {
         var project = projects[path];
         project.shutdown();
     }
-    console.log("shutdown");
+    console.log("shutdown method");
     process.exit(0);
 }
 function parseRequest(req) {
@@ -128,7 +114,6 @@ function parseRequest(req) {
 }
 function getServiceURL(params) {
     var json = JSON.stringify(params);
-    return "http://127.0.0.1:" + LARK_SERVICE_PORT + "/?q=" + encodeURIComponent(json);
+    return "http://127.0.0.1:" + exports.LARK_SERVICE_PORT + "/?q=" + encodeURIComponent(json);
 }
 /// <reference path="../lib/types.d.ts" /> 
-//# sourceMappingURL=index.js.map

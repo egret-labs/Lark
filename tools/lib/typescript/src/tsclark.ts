@@ -263,7 +263,7 @@ module ts {
                 exitStatus = emitOutput.emitResultStatus;
                 var reportStart = new Date().getTime();
                 errors = concatenate(errors, emitErrors);
-
+                
             }
         }
 
@@ -296,7 +296,7 @@ module ts {
 
 
 class Compiler {
-    static executeWithOption(options: lark.ICompileOptions, files: string[], out?: string, outDir?: string): ts.LarkCompileResult {
+    static executeWithOption(options: lark.LarkToolArgs, files: string[], out?: string, outDir?: string): ts.LarkCompileResult {
 
         var target = options.esTarget.toLowerCase();
         var targetEnum = ts.ScriptTarget.ES5;

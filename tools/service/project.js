@@ -5,14 +5,33 @@ var FileUtil = require('../lib/FileUtil');
 var Project = (function () {
     function Project() {
     }
+    Object.defineProperty(Project.prototype, "buildPort", {
+        get: function () {
+            return this._buildPort;
+        },
+        set: function (value) {
+            var _this = this;
+            if (this._buildPort) {
+                this._buildPort.send({ command: "shutdown", path: this.path });
+            }
+            this._buildPort = value;
+            this._buildPort.on('message', function (msg) { return _this.onBuildServiceMessage(msg); });
+            setInterval(function () { return _this._buildPort.send({}); }, 15000);
+        },
+        enumerable: true,
+        configurable: true
+    });
     Project.prototype.init = function () {
         var stat = new state.DirectoryState();
         stat.path = this.path;
         stat.init();
         this.state = stat;
     };
-    Project.prototype.fileChanged = function (path, changeType) {
+    Project.prototype.fileChanged = function (socket, path, changeType) {
         var _this = this;
+        if (this.pendingRequest)
+            this.pendingRequest.end({ command: "build", exitCode: 0 });
+        this.pendingRequest = socket;
         if (path && changeType) {
             this.initChanges();
             this.changes[changeType].push(path);
@@ -39,7 +58,7 @@ var Project = (function () {
         var _this = this;
         this.shutdown(11);
         var larkPath = FileUtil.joinPath(utils.getLarkRoot(), 'tools/bin/lark');
-        var build = cprocess.spawn(process.execPath, ['--expose-gc', larkPath, 'buildService', this.path], {
+        var build = cprocess.spawn(process.execPath, ['--expose-gc', larkPath, 'autocompile', this.path], {
             detached: true,
             cwd: this.path
         });
@@ -60,13 +79,13 @@ var Project = (function () {
     };
     Project.prototype.sendCommand = function (cmd) {
         //this.buildProcess.stdin.write(JSON.stringify(cmd), 'utf8');
-        this.buildPort && this.buildPort.write(JSON.stringify(cmd));
+        this.buildPort && this.buildPort.send(cmd);
         //this.buildProcess.send(cmd);
     };
     Project.prototype.shutdown = function (retry) {
         var _this = this;
         if (retry === void 0) { retry = 0; }
-        if (this.penddingRequest == null || retry >= 10) {
+        if (this.pendingRequest == null || retry >= 10) {
             this.buildProcess = null;
             this.sendCommand({ command: 'shutdown' });
             if (this.buildProcess) {
@@ -80,12 +99,9 @@ var Project = (function () {
         }
     };
     Project.prototype.onBuildServiceMessage = function (msg) {
-        if (msg.messages.length > 20)
-            msg.messages.length = 20;
-        if (this.penddingRequest) {
-            this.penddingRequest.writeHead(200, { 'Content-Type': 'text/plain' });
-            this.penddingRequest.end(JSON.stringify(msg));
-            this.penddingRequest = null;
+        if (this.pendingRequest) {
+            this.pendingRequest.send(msg);
+            this.pendingRequest = null;
         }
     };
     Project.prototype.onBuildServiceExit = function (code, signal) {
@@ -110,4 +126,3 @@ var Project = (function () {
 })();
 module.exports = Project;
 /// <reference path="../lib/types.d.ts" /> 
-//# sourceMappingURL=project.js.map

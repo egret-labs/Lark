@@ -98,4 +98,3 @@ function getLocalIPAddress() {
     });
     return ips;
 }
-//# sourceMappingURL=server.js.map

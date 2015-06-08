@@ -1,7 +1,7 @@
 /// <reference path="../../lib/types.d.ts" />
 var url = require('url');
 var file = require('../../lib/FileUtil');
-var Create = require('../../compiler/Create');
+var DoCreate = require('../../commands/DoCreateCommand');
 var exportObject = {
     LarkStaticContentPath: '$/content/',
     UserProjectPath: null,
@@ -37,10 +37,10 @@ function doCreate() {
     var projJSON = self.req.query['proj'];
     try {
         var proj = JSON.parse(projJSON);
-        var create = new Create(lark.options);
-        create.doCreate(proj, function () {
-            self.res.send(200, 'OK');
-        });
+        var create = new DoCreate();
+        create.project = proj;
+        create.execute();
+        self.res.send(200, 'OK');
     }
     catch (e) {
         console.log(e);
@@ -89,4 +89,3 @@ function getUserProjectContentFullName(req) {
     return fullpath;
 }
 module.exports = exportObject;
-//# sourceMappingURL=default.js.map

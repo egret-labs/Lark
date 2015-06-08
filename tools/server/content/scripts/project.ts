@@ -15,24 +15,15 @@ module lark.portal {
 
     export var project: lark.ILarkProject;
 
-    export class Project implements lark.ILarkProject {
+    export class Project {
         larkManifest = lark.manifest;
-        name = project.name;
         scaleModes = lark.manifest.scaleModes;
-
-        larkVersion: string = project.larkVersion;
-        version: string = project.version;
-        entry: string = project.entry;
-        modules: lark.LarkModule[] = project.modules || [];
-        platforms: { name: string }[] = project.platforms || [];
-        port: number = project.port; 
-        host: string = project.host; 
-        ip: string = project.ip;
-        startupHtml: string = project.startupHtml;
-        scaleMode: string = project.scaleMode; 
-        contentWidth: number = project.contentWidth;
-        contentHeight: number = project.contentHeight;
-        showPaintRects: boolean = project.showPaintRects;
+        modules: lark.LarkModule[] = [];
+        platforms: { name: string }[] = [];
+        scaleMode: string = 'noScale'; 
+        contentWidth: number = 480;
+        contentHeight: number = 800;
+        showPaintRects: boolean = false;
         template: string = "Empty";
         isConfig = location.pathname.indexOf("/$/config") >= 0;
 
