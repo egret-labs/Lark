@@ -15,5 +15,4 @@ bin-release
 .idea
 tmp
 *.iml
-/build
 proj.json
