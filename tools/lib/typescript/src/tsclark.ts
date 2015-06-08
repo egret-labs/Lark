@@ -12,7 +12,7 @@
 
 module ts {
     var version = "1.4.0.0";
-    var formatedMessages:string[] = [];
+    var formatedMessages: string[] = [];
     /**
      * Checks to see if the locale is in the appropriate format,
      * and if it is, attempts to set the appropriate language.
@@ -97,7 +97,7 @@ module ts {
         }
 
         var category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += category + " TS" + diagnostic.code + ": " + diagnostic.messageText ;
+        output += category + " TS" + diagnostic.code + ": " + diagnostic.messageText;
 
         formatedMessages.push(output);
     }
@@ -132,7 +132,7 @@ module ts {
     }
 
     function reportTimeStatistic(name: string, time: number) {
-        reportStatisticalValue(name,(time / 1000).toFixed(2) + "s");
+        reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
     }
 
 
@@ -144,20 +144,18 @@ module ts {
             program: null,
             compileWithChanges: null,
             files: [],
-            messages:formatedMessages
+            messages: formatedMessages
         };
 
         // If there are any errors due to command line parsing and/or
         // setting up localization, report them and quit.
-        if (commandLine.errors.length > 0)
-        {
+        if (commandLine.errors.length > 0) {
             reportDiagnostics(commandLine.errors);
             result.exitStatus = EmitReturnStatus.CompilerOptionsErrors;
             return result;
         }
 
-        if (commandLine.filenames.length === 0)
-        {
+        if (commandLine.filenames.length === 0) {
             result.exitStatus = EmitReturnStatus.CompilerOptionsErrors;
             return result;
         }
@@ -183,7 +181,7 @@ module ts {
         result.compileWithChanges = compileWithChanges;
         return result;
 
-        function compileWithChanges(filesChanged: string[]):LarkCompileResult {
+        function compileWithChanges(filesChanged: string[]): LarkCompileResult {
             filesChanged.forEach(filename=> updatedFiles[getCanonicalName(filename)] = true);
             var changedFiles = updatedFiles;
             updatedFiles = {};
@@ -191,7 +189,7 @@ module ts {
         }
 
 
-        function recompile(changedFiles: Map<boolean>):LarkCompileResult {
+        function recompile(changedFiles: Map<boolean>): LarkCompileResult {
             console.log(changedFiles);
 
             // Reuse source files from the last compilation so long as they weren't changed.
@@ -265,7 +263,7 @@ module ts {
                 exitStatus = emitOutput.emitResultStatus;
                 var reportStart = new Date().getTime();
                 errors = concatenate(errors, emitErrors);
-                
+
             }
         }
 
@@ -297,7 +295,7 @@ module ts {
 
 
 
-class TSC {
+class Compiler {
     static executeWithOption(options: lark.ICompileOptions, files: string[], out?: string, outDir?: string): ts.LarkCompileResult {
 
         var target = options.esTarget.toLowerCase();
@@ -305,23 +303,21 @@ class TSC {
         if (target == 'es6')
             targetEnum = ts.ScriptTarget.ES6;
 
-        var parsedCmd:ts.ParsedCommandLine = {
+        var parsedCmd: ts.ParsedCommandLine = {
             filenames: files,
             options: {
                 sourceMap: options.sourceMap,
-                target: targetEnum ,
+                target: targetEnum,
                 removeComments: options.removeComments,
                 declaration: options.declaration
             },
             errors: []
         };
 
-        if (out)
-        {
+        if (out) {
             parsedCmd.options.out = out;
         }
-        else
-        {
+        else {
             parsedCmd.options.outDir = outDir;
         }
         return ts.executeWithOption(parsedCmd);
@@ -329,11 +325,12 @@ class TSC {
     static exit: (exitCode: number) => number = null;
     static write = msg=> console.log(msg);
 }
-module.exports = TSC;
+module.exports.Compiler = Compiler;
+module.exports.tsc = ts;
 ts.sys.exit = function (code) {
-    return TSC.exit(code);
+    return Compiler.exit(code);
 }
 
 ts.sys.write = function (msg) {
-    return TSC.write(msg);
+    return Compiler.write(msg);
 };

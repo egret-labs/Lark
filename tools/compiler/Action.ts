@@ -32,7 +32,7 @@ import utils = require('../lib/utils');
 import exmlc = require('../lib/exml/exmlc');
 import FileUtil = require("../lib/FileUtil");
 import htmlparser = require("../lib/htmlparser");
-import TypeScript = require("../lib/typescript/tsclark");
+import tsclark = require("../lib/typescript/tsclark");
 import UglifyJS = require("../lib/uglify-js/uglifyjs");
 
 
@@ -46,7 +46,7 @@ class Action {
     public projectDir: string;
     public options: lark.ICompileOptions;
     private projectManifest: any = {};
-    private recompile: (files: string[]) => TypeScript.LarkCompileResult;
+    private recompile: (files: string[]) => tsclark.Compiler.LarkCompileResult;
 
     public run(): number {
         return 0;
@@ -334,7 +334,7 @@ class Action {
         var defTemp = options.declaration;
         options.declaration = def;
         files = files.map(f=> f.replace(options.projectDir, ""));
-        var compileResult = TypeScript.executeWithOption(options, files, out, outDir);
+        var compileResult = tsclark.Compiler.executeWithOption(options, files, out, outDir);
 
         options.declaration = defTemp;
         this.recompile = compileResult.compileWithChanges;
@@ -423,7 +423,7 @@ class Action {
     }
 }
 
-TypeScript.exit = exitCode => {
+tsclark.Compiler.exit = exitCode => {
     if (exitCode != 0)
         console.log(utils.tr(10003, exitCode));
     return exitCode;
