@@ -36,7 +36,11 @@ function copyTemplate(project:lark.ILarkProject) {
     var platforms = project.platforms;
     modules.forEach(m=> {
         larkFiles.push(utils.format("libs/{0}/{0}", m.name));
-        platforms.forEach(p=> larkFiles.push(utils.format("libs/{0}/{0}.{1}", m.name, p.name)));
+        platforms.forEach(p=> {
+            var scriptName = utils.format("libs/{0}/{0}.{1}", m.name, p.name);
+            if(FileUtil.exists(FileUtil.joinPath(options.srcDir,scriptName+".js")))
+                larkFiles.push(scriptName);
+        });
     });
 
     

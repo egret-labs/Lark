@@ -123,4 +123,3 @@ var AutoCompileCommand = (function () {
     return AutoCompileCommand;
 })();
 module.exports = AutoCompileCommand;
-//# sourceMappingURL=AutoCompileCommand.js.map

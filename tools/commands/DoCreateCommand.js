@@ -32,7 +32,11 @@ function copyTemplate(project) {
     var platforms = project.platforms;
     modules.forEach(function (m) {
         larkFiles.push(utils.format("libs/{0}/{0}", m.name));
-        platforms.forEach(function (p) { return larkFiles.push(utils.format("libs/{0}/{0}.{1}", m.name, p.name)); });
+        platforms.forEach(function (p) {
+            var scriptName = utils.format("libs/{0}/{0}.{1}", m.name, p.name);
+            if (FileUtil.exists(FileUtil.joinPath(options.srcDir, scriptName + ".js")))
+                larkFiles.push(scriptName);
+        });
     });
     var content = FileUtil.read(templateFile);
     var scripts = larkFiles.map(function (f) { return utils.format('<script src="{0}.js" src-release="{0}.min.js"></script>', f); }).join('\r\n    ');
