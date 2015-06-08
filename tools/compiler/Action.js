@@ -31,7 +31,7 @@ var utils = require('../lib/utils');
 var exmlc = require('../lib/exml/exmlc');
 var FileUtil = require("../lib/FileUtil");
 var htmlparser = require("../lib/htmlparser");
-var TypeScript = require("../lib/typescript/tsclark");
+var tsclark = require("../lib/typescript/tsclark");
 var UglifyJS = require("../lib/uglify-js/uglifyjs");
 var Action = (function () {
     function Action(options) {
@@ -286,7 +286,7 @@ var Action = (function () {
         var defTemp = options.declaration;
         options.declaration = def;
         files = files.map(function (f) { return f.replace(options.projectDir, ""); });
-        var compileResult = TypeScript.executeWithOption(options, files, out, outDir);
+        var compileResult = tsclark.Compiler.executeWithOption(options, files, out, outDir);
         options.declaration = defTemp;
         this.recompile = compileResult.compileWithChanges;
         if (!options.minify)
@@ -366,7 +366,7 @@ var Action = (function () {
     };
     return Action;
 })();
-TypeScript.exit = function (exitCode) {
+tsclark.Compiler.exit = function (exitCode) {
     if (exitCode != 0)
         console.log(utils.tr(10003, exitCode));
     return exitCode;

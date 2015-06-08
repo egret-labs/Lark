@@ -3687,12 +3687,12 @@ declare module ts {
     }
 }
 declare module ts {
-    function executeWithOption(commandLine: ParsedCommandLine): TSC.LarkCompileResult;
+    function executeWithOption(commandLine: ParsedCommandLine): Compiler.LarkCompileResult;
 }
-declare module TSC {
-    export function executeWithOption(options: lark.ICompileOptions, files: string[], out?: string, outDir?: string): TSC.LarkCompileResult;
-    export function exit (exitCode: number) : number;
-    export function write (msg: any): void;
+export declare module Compiler {
+    export function executeWithOption(options: lark.ICompileOptions, files: string[], out?: string, outDir?: string): Compiler.LarkCompileResult;
+    export function exit(exitCode: number): number;
+    export function write(msg: any): void;
     export interface LarkCompileResult {
         program: ts.Program;
         files?: string[];
@@ -3702,4 +3702,4 @@ declare module TSC {
     }
 }
 
-export = TSC;
+export declare var tsc: typeof ts;
