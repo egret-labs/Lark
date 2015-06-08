@@ -1,8 +1,12 @@
 /// <reference path="../lib/types.d.ts" />
+var os = require('os');
+var crypto = require('crypto');
 var FileUtil = require('../lib/FileUtil');
 var CompileOptions = (function () {
     function CompileOptions() {
+        this._port = NaN;
         this.esTarget = 'ES5';
+        this._tmpDir = null;
     }
     Object.defineProperty(CompileOptions.prototype, "dirName", {
         get: function () {
@@ -70,7 +74,10 @@ var CompileOptions = (function () {
     });
     Object.defineProperty(CompileOptions.prototype, "port", {
         get: function () {
-            return 3000;
+            return isNaN(this._port) ? this.getProject().port : this._port;
+        },
+        set: function (value) {
+            this._port = value;
         },
         enumerable: true,
         configurable: true
@@ -99,6 +106,31 @@ var CompileOptions = (function () {
         enumerable: true,
         configurable: true
     });
+    CompileOptions.prototype.getTmpDir = function () {
+        if (this._tmpDir == null) {
+            var sha1 = crypto.createHash('sha1');
+            sha1.update(this.projectDir);
+            var folder = sha1.digest('hex');
+            var systemTmp = os.tmpdir();
+            var dir = FileUtil.joinPath(systemTmp, "lark/" + folder + "/");
+            FileUtil.createDirectory(dir);
+            this._tmpDir = dir;
+        }
+        return this._tmpDir;
+    };
+    CompileOptions.prototype.getProject = function () {
+        if (this._tmpProj == null) {
+            var tmpFile = FileUtil.joinPath(this.getTmpDir(), "proj.json");
+            if (!FileUtil.exists(tmpFile))
+                this._tmpProj = { port: 3000 };
+            else {
+                var content = FileUtil.read(tmpFile);
+                this._tmpProj = JSON.parse(content);
+            }
+        }
+        console.log(this._tmpProj);
+        return this._tmpProj;
+    };
     CompileOptions.parse = function (option) {
         var it = new CompileOptions();
         for (var p in option) {

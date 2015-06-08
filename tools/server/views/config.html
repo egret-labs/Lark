@@ -71,6 +71,25 @@
 </section>-->
 
 
-<div id="mask">
+<div id="loadingMask" style="display:none" class="mask">
     <img id="loading" src="/$/content/images/config/loading.png" />
+</div>
+
+<div id="confirmMask" ng-hide="model.isConfirmed" class="mask">
+    <div id="confirm">
+        <p>在这个目录中发现了 src 目录，如果继续创建 Lark 项目可能会覆盖这些文件，是否要继续创建项目？</p>
+        <p class="buttons">
+            <button ng-click="model.isConfirmed=true">确定</button>
+            <button ng-click="model.cancel()">取消</button>
+        </p>
+    </div>
+</div>
+
+<div id="createdMask" style="display:none" class="mask">
+    <div id="confirm">
+        <p>项目创建完成</p>
+        <p class="buttons">
+            <button ng-click="model.close()">确定</button>
+        </p>
+    </div>
 </div>

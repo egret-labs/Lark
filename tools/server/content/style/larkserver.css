@@ -112,7 +112,7 @@ a {
         background-color: #197de3;
     }
 
-#mask{
+.mask{
     text-align:center;
     position:absolute;
     top:0; 
@@ -120,11 +120,31 @@ a {
     width:100%;
     height:100%; 
     background-color:rgba(0, 0, 0, 0.4);
-    display:none;
 }
-#mask #loading{
+.mask #loading{
     margin-top:100px
 }
+
+.mask #confirm {
+    width: 500px;
+    margin: 100px auto;
+    background-color: black;
+    font-size: 18px;
+    padding: 30px;
+    text-align: left;
+}
+.mask .buttons {
+    width: 500px;
+    margin: 10px auto;
+    font-size: 18px;
+    text-align: center;
+}
+    .mask .buttons button {
+        background-color: #4ea6fc;
+        border-radius: 0px;
+        font-size: 20px;
+        padding:4px 8px;
+    }
 
 @media (max-width: 1000px) {
     .finish {

@@ -20,7 +20,10 @@ class DoCreateCommand implements lark.Command {
         var compileProject = new CompileProject();
         var result = compileProject.compileProject(options);
         CopyFiles.copyProjectFiles();
-        CompileTemplate.compileTemplates(options,result.files);
+        CompileTemplate.compileTemplates(options, result.files);
+        var project = JSON.stringify(this.project, null, "  ");
+        var tmpFile = FileUtil.joinPath(options.getTmpDir(), "proj.json");
+        FileUtil.save(tmpFile, project);
         return result.exitStatus;
     }
 }

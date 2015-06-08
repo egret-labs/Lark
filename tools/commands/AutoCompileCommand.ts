@@ -42,7 +42,7 @@ class AutoCompileCommand implements lark.Command {
     buildProject() {
         var exitCode = 0;
         var options = lark.options;   
-        utils.clean(options.debugDir, FileUtil.joinPath(options.debugDir, 'tmp'));
+        utils.clean(options.debugDir);
         var compileProject = new CompileProject();
         var result = compileProject.compileProject(options);
         this.compileProject = compileProject;
@@ -80,7 +80,7 @@ class AutoCompileCommand implements lark.Command {
     }
 
     private buildChangedTS(filesChanged: string[]) {
-        filesChanged = filesChanged.map(f=> f.replace(lark.options.projectDir, ""));
+        filesChanged = filesChanged.map(f=> f.replace(FileUtil.escapePath(process.cwd()+"/"), ""));
         return this.compileProject.compileProject(lark.options,filesChanged);
     }
 

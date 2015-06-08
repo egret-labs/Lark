@@ -30,8 +30,10 @@ export function startServer(options: lark.LarkToolArgs, startupUrl?:string) {
     var manifestContent = file.read(file.joinPath(options.larkRoot, 'manifest.json'));
     lark.manifest = JSON.parse(manifestContent);
 
-    framework.config['directory-temp'] = '~' + options.projectDir + '/bin-debug/tmp/';
-    framework.config['directory-public'] = '~' + options.projectDir + '/bin-debug/tmp/';
+    var serverTmp = '~' + options.getTmpDir() + 'server/';
+
+    framework.config['directory-temp'] = serverTmp;
+    framework.config['directory-public'] = serverTmp;
     framework.config['directory-views'] = '~' + __dirname + '/views/';
     framework.config['directory-controllers'] = '~' + __dirname + '/controllers/';
     framework.config['default-websocket-encodedecode'] = false;

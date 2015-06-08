@@ -18,6 +18,9 @@ var DoCreateCommand = (function () {
         var result = compileProject.compileProject(options);
         CopyFiles.copyProjectFiles();
         CompileTemplate.compileTemplates(options, result.files);
+        var project = JSON.stringify(this.project, null, "  ");
+        var tmpFile = FileUtil.joinPath(options.getTmpDir(), "proj.json");
+        FileUtil.save(tmpFile, project);
         return result.exitStatus;
     };
     return DoCreateCommand;

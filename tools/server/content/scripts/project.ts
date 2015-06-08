@@ -25,7 +25,11 @@ module lark.portal {
         contentHeight: number = 800;
         showPaintRects: boolean = false;
         template: string = "Empty";
+        port: number = 3000;
         isConfig = location.pathname.indexOf("/$/config") >= 0;
+        isConfirmed = true;
+        isLoadingShow = false;
+        isCreated = false;
 
         constructor() {
             this.larkManifest.modules.forEach(lm=> {
@@ -44,6 +48,11 @@ module lark.portal {
                         lm.checked = true;
                 });
             });
+            var port = parseInt(location.port || "80");
+            this.port = port;
+            var exist = location.search && location.search.indexOf("exist=true") >= 0;
+            if (exist)
+                this.isConfirmed = false;
         }
 
         finish() {
@@ -55,13 +64,27 @@ module lark.portal {
             this.scaleModes = undefined;
             var json = JSON.stringify(this);
             console.log(json);
-            $.get('', { proj: json }, function () {
-                setTimeout(() => location.href = "/bin-debug/index.html", 500);
+
+            $.get('', { proj: json },  ()=> {
+                this.isCreated = true;
+                this.isLoadingShow = false;
+                $("#createdMask").show();
+                $("#loadingMask").hide();
+                $("#loading").remove();
             });
             this.scaleModes = modes;
 
             this.larkManifest = manifest;
+            this.isLoadingShow = true;
             showLoading();
+        }
+        cancel() {
+            $.get('', { cancel: true }, function () {});
+            setTimeout(() => window.close(), 20);
+        }
+
+        close() {
+            window.close();
         }
     }
 }
@@ -71,7 +94,7 @@ lark.app.controller('ProjectController', lark.portal.Project);
 
 
 function showLoading() {
-    $("#mask").show();
+    $("#loadingMask").show();
     var elem = $("#loading");
     elem.show();
 

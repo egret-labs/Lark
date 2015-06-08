@@ -1,5 +1,7 @@
 ﻿/// <reference path="../lib/types.d.ts" />
 
+import os = require('os');
+import crypto = require('crypto');
 import FileUtil = require('../lib/FileUtil');
 
 
@@ -43,11 +45,16 @@ class CompileOptions implements lark.LarkToolArgs {
         return FileUtil.joinPath(this.projectDir, "template/");
     }
 
+
     get host(): string {
         return "localhost";
     }
+    private _port: number = NaN;
     get port(): number {
-        return 3000;
+        return isNaN(this._port) ? this.getProject().port : this._port;
+    }
+    set port(value) {
+        this._port = value;
     }
     get websocketUrl(): string {
         var url = "ws://" + this.host + ':' + this.port;
@@ -73,6 +80,35 @@ class CompileOptions implements lark.LarkToolArgs {
     fileName:string;
 
     project: lark.ILarkProject;
+
+    private _tmpDir = null;
+    private _tmpProj: lark.ILarkProject;
+    getTmpDir() {
+        if (this._tmpDir == null) {
+            var sha1 = crypto.createHash('sha1');
+            sha1.update(this.projectDir);
+            var folder = sha1.digest('hex');
+            var systemTmp = os.tmpdir();
+            var dir = FileUtil.joinPath(systemTmp, "lark/" + folder + "/");
+            FileUtil.createDirectory(dir);
+            this._tmpDir = dir;
+        }
+        return this._tmpDir;
+    }
+
+    getProject() {
+        if (this._tmpProj == null) {
+            var tmpFile = FileUtil.joinPath(this.getTmpDir(), "proj.json");
+            if (!FileUtil.exists(tmpFile))
+                this._tmpProj = { port: 3000 };
+            else {
+                var content = FileUtil.read(tmpFile);
+                this._tmpProj = JSON.parse(content);
+            }
+        }
+        console.log(this._tmpProj);
+        return this._tmpProj;
+    }
 
     static parse(option: lark.LarkToolArgs) {
         var it = new CompileOptions();

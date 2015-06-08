@@ -30,7 +30,7 @@ var AutoCompileCommand = (function () {
     AutoCompileCommand.prototype.buildProject = function () {
         var exitCode = 0;
         var options = lark.options;
-        utils.clean(options.debugDir, FileUtil.joinPath(options.debugDir, 'tmp'));
+        utils.clean(options.debugDir);
         var compileProject = new CompileProject();
         var result = compileProject.compileProject(options);
         this.compileProject = compileProject;
@@ -65,7 +65,7 @@ var AutoCompileCommand = (function () {
         return this._lastExitCode;
     };
     AutoCompileCommand.prototype.buildChangedTS = function (filesChanged) {
-        filesChanged = filesChanged.map(function (f) { return f.replace(lark.options.projectDir, ""); });
+        filesChanged = filesChanged.map(function (f) { return f.replace(FileUtil.escapePath(process.cwd() + "/"), ""); });
         return this.compileProject.compileProject(lark.options, filesChanged);
     };
     AutoCompileCommand.prototype.buildChangedRes = function (fileNames) {

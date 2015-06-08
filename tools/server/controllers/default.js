@@ -31,6 +31,8 @@ function addRoute(path, method) {
 function create() {
     if (this.req.query['proj'])
         return doCreate();
+    if (this.req.query['cancel'])
+        return cancelCreate();
     this.view('create');
 }
 function doCreate() {
@@ -41,11 +43,16 @@ function doCreate() {
         create.project = proj;
         create.execute();
         self.res.send(200, 'OK');
+        setTimeout(function () { return process.exit(0); }, 1000);
     }
     catch (e) {
         console.log(e);
         self.res.send(500, JSON.stringify(e, null, '  '));
     }
+}
+function cancelCreate() {
+    self.res.send(200, 'OK');
+    setTimeout(function () { return process.exit(0); }, 200);
 }
 function help() {
     this.view('help');

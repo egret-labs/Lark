@@ -30,6 +30,9 @@ export var optionDeclarations: lark.CommandLineOption[] = [
         name: 'fileName',
         type: 'string',
         shortName:'f'
+    }, {
+        name: 'port',
+        type: 'number'
     }
 ];
 

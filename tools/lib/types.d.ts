@@ -32,6 +32,7 @@ declare module lark {
     export interface LarkToolArgs {
         action: string;
         projectDir: string;
+        getTmpDir(): string;
         srcDir: string;
         projManifest: any;
         larkPropertiesFile: string;
@@ -65,21 +66,13 @@ declare module lark {
     }
 
     export interface ILarkProject {
-        name: string;
-        version: string;
-        modules: LarkModule[];
-        platforms: LarkPlatform[];
-        port: number;
-        ip: string;
-        host: string;
-        larkVersion: string;
-        entry: string;
-        startupHtml: string;
-        scaleMode: string;
-        contentWidth: number;
-        contentHeight: number;
-        showPaintRects: boolean;
-        template: string;
+        modules?: LarkModule[];
+        platforms?: LarkPlatform[];
+        port?: number;
+        scaleMode?: string;
+        contentWidth?: number;
+        contentHeight?: number;
+        template?: string;
         toJSON?(): ILarkProject;
         save?(path?: string);
     }

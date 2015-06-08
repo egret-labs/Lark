@@ -6,9 +6,12 @@ var CreateCommand = (function () {
     }
     CreateCommand.prototype.execute = function () {
         var option = lark.options;
-        FileUtil.createDirectory(option.srcDir);
-        FileUtil.createDirectory(option.debugDir);
-        server.startServer(option, option.manageUrl + "create/");
+        option.port = 3000 + Math.ceil(Math.random() * 30000);
+        var url = option.manageUrl + "create/";
+        var exist = FileUtil.exists(option.srcDir);
+        if (exist)
+            url += "?exist=true";
+        server.startServer(option, url);
         return 0;
     };
     return CreateCommand;

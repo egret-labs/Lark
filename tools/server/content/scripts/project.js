@@ -18,7 +18,11 @@ var lark;
                 this.contentHeight = 800;
                 this.showPaintRects = false;
                 this.template = "Empty";
+                this.port = 3000;
                 this.isConfig = location.pathname.indexOf("/$/config") >= 0;
+                this.isConfirmed = true;
+                this.isLoadingShow = false;
+                this.isCreated = false;
                 this.larkManifest.modules.forEach(function (lm) {
                     if (lm.name == 'lark')
                         lm.checked = true;
@@ -35,26 +39,40 @@ var lark;
                             lm.checked = true;
                     });
                 });
+                var port = parseInt(location.port || "80");
+                this.port = port;
+                var exist = location.search && location.search.indexOf("exist=true") >= 0;
+                if (exist)
+                    this.isConfirmed = false;
             }
             Project.prototype.finish = function () {
+                var _this = this;
                 var manifest = this.larkManifest;
-                this.modules = manifest.modules.filter(function (m) { return m.checked; }).map(function (m) {
-                    return { name: m.name };
-                });
-                this.platforms = manifest.platforms.filter(function (p) { return p.checked; }).map(function (p) {
-                    return { name: p.name };
-                });
+                this.modules = manifest.modules.filter(function (m) { return m.checked; }).map(function (m) { return { name: m.name }; });
+                this.platforms = manifest.platforms.filter(function (p) { return p.checked; }).map(function (p) { return { name: p.name }; });
                 this.larkManifest = undefined;
                 var modes = this.scaleModes;
                 this.scaleModes = undefined;
                 var json = JSON.stringify(this);
                 console.log(json);
                 $.get('', { proj: json }, function () {
-                    setTimeout(function () { return location.href = "/bin-debug/index.html"; }, 500);
+                    _this.isCreated = true;
+                    _this.isLoadingShow = false;
+                    $("#createdMask").show();
+                    $("#loadingMask").hide();
+                    $("#loading").remove();
                 });
                 this.scaleModes = modes;
                 this.larkManifest = manifest;
+                this.isLoadingShow = true;
                 showLoading();
+            };
+            Project.prototype.cancel = function () {
+                $.get('', { cancel: true }, function () { });
+                setTimeout(function () { return window.close(); }, 20);
+            };
+            Project.prototype.close = function () {
+                window.close();
             };
             return Project;
         })();
@@ -63,7 +81,7 @@ var lark;
 })(lark || (lark = {}));
 lark.app.controller('ProjectController', lark.portal.Project);
 function showLoading() {
-    $("#mask").show();
+    $("#loadingMask").show();
     var elem = $("#loading");
     elem.show();
     $({ deg: 0 }).animate({ deg: 360 }, {
