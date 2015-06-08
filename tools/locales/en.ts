@@ -37,13 +37,19 @@ locale_strings[10001] = "Compiler option {0} expects an argument";
 locale_strings[10002] = "Unknown Compiler option {0}";
 locale_strings[10003] = "TSC is trying to exit, exit code is: {0}";
 locale_strings[10004] = "No output file name when minify flag is true";
-locale_strings[10005] = "Can not load Lark project properties from lark.json";
 locale_strings[10006] = "manifest.json has been generated";
-locale_strings[10007] = "{0}: error ÀàÎÄ¼þÖ®¼ä´æÔÚÑ­»·ÒÀÀµ£¬Çë¼ì²éÀàµÄ¼Ì³Ð¹ØÏµ»ò¾²Ì¬±äÁ¿µÄ³õÊ¼»¯ÒýÓÃ¡£";
-locale_strings[10008] = "Duplicate interface or class name£º¡®{0}¡¯ is defined both in these files £º\n{1}\n{2}";
+locale_strings[10008] = "Duplicate interface or class nameï¼šâ€˜{0}â€™ is defined both in these files ï¼š\n{1}\n{2}";
 locale_strings[10009] = "manifest.json is not in the right format, you may need to reinstall Lark.";
 locale_strings[10010] = "Auto compile service is running...";
 locale_strings[10011] = "Auto compile is done.";
 locale_strings[10012] = 'If you are not using auto compile on file save, you can enable auto compile by adding "-a" after the "run" command';
 locale_strings[10013] = "lark server is running, you can access by URL: {0}";
-locale_strings[10014] = "Error occurred while compiling your code£º";
+locale_strings[10014] = "Error occurred while compiling your codeï¼š";
+
+
+locale_strings[12000] = "Create Lark Project";
+locale_strings[12001] = "Please select a template";
+locale_strings[12002] = "Please set the default screen size";
+locale_strings[12003] = "Please select the Scale Mode";
+locale_strings[12004] = "Please select modules";
+locale_strings[12005] = "Please select the platform";
