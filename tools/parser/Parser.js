@@ -6,21 +6,26 @@ exports.optionDeclarations = [
     {
         name: "action",
         type: "string"
-    }, {
+    },
+    {
         name: "includeLark",
         type: "boolean",
         shortName: "e"
-    }, {
+    },
+    {
         name: "sourceMap",
         type: "boolean"
-    }, {
+    },
+    {
         name: 'serverOnly',
         type: "boolean"
-    }, {
+    },
+    {
         name: 'autoCompile',
         type: 'boolean',
         shortName: "a"
-    }, {
+    },
+    {
         name: 'fileName',
         type: 'string',
         shortName: 'f'

@@ -32,11 +32,13 @@ var Run = require("./commands/RunCommand");
 var Make = require("./commands/MakeCommand");
 var Build = require("./commands/BuildCommand");
 var Clean = require("./commands/CleanCommand");
+var Shutdown = require("./commands/ShutdownCommand");
 var AutoCompile = require("./commands/AutoCompileCommand");
 var Parser = require("./parser/Parser");
+var Info = require("./commands/InfoCommand");
+var Help = require("./commands/HelpCommand");
 var Create = require("./commands/CreateCommand");
 var Publish = require("./commands/PublishCommand");
-var server = require('./server/server');
 var service = require("./service/index");
 global.lark = global.lark || {};
 var DontExitCode = -0xF000;
@@ -67,12 +69,11 @@ var Entry = (function () {
                 exitCode = DontExitCode;
                 break;
             case "help":
-                server.startServer(options, options.manageUrl + "help/");
+                new Help().execute();
                 exitCode = DontExitCode;
                 break;
             case "info":
-                console.log("    lark version: " + lark.manifest.version);
-                console.log('    lark root:    ' + options.larkRoot);
+                exitCode = new Info().execute();
                 break;
             case "run":
                 var run = new Run();
@@ -84,7 +85,7 @@ var Entry = (function () {
                 build.execute();
                 break;
             case "shutdown":
-                this.exit(0);
+                exitCode = new Shutdown().execute();
                 break;
             case "service":
                 service.run();

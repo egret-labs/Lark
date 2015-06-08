@@ -17,13 +17,16 @@ var AutoCompileCommand = (function () {
             command: "init",
             path: lark.options.projectDir
         }, function (m) { return _this.onServiceMessage(m); }, false);
-        this._request.once('error', function () { return process.exit(); });
+        this._request.once('end', function () { return process.exit(); });
+        this._request.once('close', function () { return process.exit(); });
         setInterval(function () { return _this.sendCommand({
             command: "status",
             status: process.memoryUsage(),
             path: lark.options.projectDir
         }); }, 60000);
-        return this.buildProject();
+        setTimeout(function () { return _this.buildProject(); }, 20);
+        setTimeout(function () { return _this.buildChanges(['D:/Draft/testLark/test/src/Main.ts']); }, 5000);
+        return 0;
     };
     AutoCompileCommand.prototype.buildProject = function () {
         var exitCode = 0;
@@ -89,10 +92,10 @@ var AutoCompileCommand = (function () {
                 console.log('Remove: ', output);
             }
             if (fileName.indexOf(start) >= 0)
-                return _this.onTemplateIndexChanged(fileName);
+                return _this.onTemplateIndexChanged();
         });
     };
-    AutoCompileCommand.prototype.onTemplateIndexChanged = function (file) {
+    AutoCompileCommand.prototype.onTemplateIndexChanged = function () {
         var index = FileUtil.joinPath(lark.options.templateDir, "index.html");
         index = FileUtil.escapePath(index);
         console.log('Compile Template: ' + index);
@@ -107,7 +110,7 @@ var AutoCompileCommand = (function () {
     };
     AutoCompileCommand.prototype.sendCommand = function (cmd) {
         if (!cmd) {
-            var msg = this._lastMessages.length > 20 ? this._lastMessages.slice(0, 20) : this._lastMessages;
+            var msg = this._lastMessages;
             cmd = {
                 command: 'buildResult',
                 exitCode: this._lastExitCode,
@@ -115,7 +118,7 @@ var AutoCompileCommand = (function () {
                 path: lark.options.projectDir
             };
         }
-        service.execCommand(cmd, null, false);
+        this._request.send(cmd);
     };
     return AutoCompileCommand;
 })();

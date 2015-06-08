@@ -7,8 +7,8 @@ var CompileProject = (function () {
     CompileProject.prototype.compileProject = function (option, files) {
         if (files && this.recompile) {
             files = files.map(function (f) { return f.replace(option.projectDir, ""); });
-            this.recompile(files);
-            return;
+            var result = this.recompile(files);
+            return result;
         }
         var compiler = new Compiler();
         var tsList = FileUtil.search(option.srcDir, "ts");
@@ -42,3 +42,4 @@ function GetJavaScriptFileNames(tsFiles, root, prefix) {
     return files;
 }
 module.exports = CompileProject;
+//# sourceMappingURL=CompileProject.js.map

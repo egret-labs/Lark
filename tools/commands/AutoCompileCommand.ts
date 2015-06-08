@@ -5,6 +5,7 @@ import http = require("http");
 import utils = require('../lib/utils');
 import server = require('../server/server');
 import service = require('../service/index');
+import ServiceSocket = require('../service/ServiceSocket');
 import FileUtil = require('../lib/FileUtil');
 import CopyFiles = require('../actions/CopyFiles');
 import CompileProject = require('../actions/CompileProject');
@@ -18,7 +19,8 @@ class AutoCompileCommand implements lark.Command {
             command: "init",
             path: lark.options.projectDir
         }, m=> this.onServiceMessage(m), false);
-        this._request.once('error',() => process.exit());
+        this._request.once('end', () => process.exit());
+        this._request.once('close', () => process.exit());
 
         setInterval(() => this.sendCommand({
             command: "status",
@@ -26,13 +28,16 @@ class AutoCompileCommand implements lark.Command {
             path: lark.options.projectDir
         }), 60000);
 
-        return this.buildProject();
+        setTimeout(() => this.buildProject(), 20);
+        setTimeout(() => this.buildChanges(['D:/Draft/testLark/test/src/Main.ts']), 5000);
+
+        return 0;
     }
     
     
     private _lastExitCode = 0;
     private _lastMessages: string[] = [];
-    private _request:http.ClientRequest = null;
+    private _request: ServiceSocket = null;
     private _scripts:string[];
 
     buildProject() {
@@ -111,12 +116,12 @@ class AutoCompileCommand implements lark.Command {
             }
 
             if (fileName.indexOf(start) >= 0)
-                return this.onTemplateIndexChanged(fileName);
+                return this.onTemplateIndexChanged();
         });
     }
 
 
-    private onTemplateIndexChanged(file: string): number {
+    private onTemplateIndexChanged(): number {
         var index = FileUtil.joinPath(lark.options.templateDir, "index.html");
         index = FileUtil.escapePath(index);
         console.log('Compile Template: ' + index);
@@ -133,7 +138,7 @@ class AutoCompileCommand implements lark.Command {
 
     private sendCommand(cmd?: lark.ServiceCommand) {
         if (!cmd) {
-            var msg = this._lastMessages.length > 20 ? this._lastMessages.slice(0,20): this._lastMessages;
+            var msg = this._lastMessages;
             cmd = {
                 command: 'buildResult',
                 exitCode: this._lastExitCode,
@@ -141,7 +146,7 @@ class AutoCompileCommand implements lark.Command {
                 path:lark.options.projectDir
             }
         }
-        service.execCommand(cmd, null, false);
+        this._request.send(cmd);
     }
     
 }

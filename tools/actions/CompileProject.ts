@@ -12,8 +12,8 @@ class CompileProject {
         
         if(files&&this.recompile){
             files = files.map(f=> f.replace(option.projectDir, ""));
-            this.recompile(files);
-            return;
+            var result = this.recompile(files);
+            return result;
         }
         
         var compiler = new Compiler();

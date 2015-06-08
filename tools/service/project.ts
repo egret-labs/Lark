@@ -4,6 +4,7 @@ import state = require('./state');
 import cprocess = require('child_process')
 import utils = require('../lib/utils');
 import FileUtil = require('../lib/FileUtil');
+import ServiceSocket = require('./ServiceSocket');
 
 class Project {
     path: string;
@@ -11,8 +12,21 @@ class Project {
     changes: state.FileChanges;
     timer: NodeJS.Timer;
     buildProcess: cprocess.ChildProcess;
-    buildPort: http.ServerResponse;
-    penddingRequest: http.ServerResponse;
+    _buildPort: ServiceSocket;
+    pendingRequest: ServiceSocket;
+
+    set buildPort(value: ServiceSocket) {
+        if (this._buildPort) {
+            this._buildPort.send({ command: "shutdown", path: this.path });
+        }
+        this._buildPort = value;
+        this._buildPort.on('message', msg => this.onBuildServiceMessage(msg));
+        setInterval(() => this._buildPort.send({}), 15000);
+    }
+
+    get buildPort() {
+        return this._buildPort;
+    }
 
     init() {
         var stat = new state.DirectoryState();
@@ -21,7 +35,10 @@ class Project {
         this.state = stat;
     }
 
-    fileChanged(path?:string,changeType?:string) {
+    fileChanged(socket: ServiceSocket, path?: string, changeType?: string) {
+        if (this.pendingRequest)
+            this.pendingRequest.end({ command: "build", exitCode: 0 });
+        this.pendingRequest = socket;
         if (path && changeType) {
             this.initChanges();
             this.changes[changeType].push(path);
@@ -78,12 +95,12 @@ class Project {
 
     private sendCommand(cmd: lark.ServiceCommand) {
         //this.buildProcess.stdin.write(JSON.stringify(cmd), 'utf8');
-        this.buildPort && this.buildPort.write(JSON.stringify(cmd));
+        this.buildPort && this.buildPort.send(cmd);
         //this.buildProcess.send(cmd);
     }
 
     public shutdown(retry = 0) {
-        if (this.penddingRequest == null || retry >= 10) {
+        if (this.pendingRequest == null || retry >= 10) {
             this.buildProcess = null;
             this.sendCommand({ command: 'shutdown' });
             if (this.buildProcess) {
@@ -98,12 +115,9 @@ class Project {
     }
 
     onBuildServiceMessage(msg: lark.ServiceCommandResult) {
-        if (msg.messages.length > 20)
-            msg.messages.length = 20;
-        if (this.penddingRequest) {
-            this.penddingRequest.writeHead(200, { 'Content-Type': 'text/plain' });
-            this.penddingRequest.end(JSON.stringify(msg));
-            this.penddingRequest = null;
+        if (this.pendingRequest) {
+            this.pendingRequest.send(msg);
+            this.pendingRequest = null;
         }
     }
 

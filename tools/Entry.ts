@@ -34,8 +34,11 @@ import Run = require("./commands/RunCommand");
 import Make = require("./commands/MakeCommand");
 import Build = require("./commands/BuildCommand");
 import Clean = require("./commands/CleanCommand");
+import Shutdown = require("./commands/ShutdownCommand");
 import AutoCompile = require("./commands/AutoCompileCommand");
 import Parser = require("./parser/Parser");
+import Info = require("./commands/InfoCommand");
+import Help = require("./commands/HelpCommand");
 import Create = require("./commands/CreateCommand");
 import Publish = require("./commands/PublishCommand");
 import utils = require('./lib/utils');
@@ -78,12 +81,11 @@ class Entry {
                 exitCode = DontExitCode;
                 break;
             case "help":
-                server.startServer(options, options.manageUrl + "help/");
+                new Help().execute();
                 exitCode = DontExitCode;
                 break;
             case "info":
-                console.log("    lark version: " + lark.manifest.version);
-                console.log('    lark root:    ' + options.larkRoot);
+                exitCode = new Info().execute();
                 break;
             case "run":
                 var run = new Run();
@@ -95,7 +97,7 @@ class Entry {
                 build.execute();
                 break;
             case "shutdown":
-                this.exit(0);
+                exitCode = new Shutdown().execute();
                 break;
             case "service":
                 service.run();
