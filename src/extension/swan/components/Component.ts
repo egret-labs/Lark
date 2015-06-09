@@ -186,7 +186,6 @@ module swan {
             }
             values[sys.ComponentKeys.skin] = skin;
             if (skin) {
-                skin.hostComponent = this;
                 var skinParts:string[] = skin.skinParts;
                 var length = skinParts.length;
                 for (var i = 0; i < length; i++) {
@@ -203,6 +202,7 @@ module swan {
                         this.addChild(children[i]);
                     }
                 }
+                skin.hostComponent = this;
             }
             this.invalidateSize();
             this.invalidateDisplayList();

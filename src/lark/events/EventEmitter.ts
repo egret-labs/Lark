@@ -60,7 +60,7 @@ module lark {
                 0: target ? target : this,
                 1: {},
                 2: {},
-                3: 0,
+                3: 0
             };
         }
 
