@@ -12,6 +12,12 @@ import CompileTemplate = require('../actions/CompileTemplate');
 class CleanCommand implements lark.Command {
     execute():number {
         var options = lark.options;
+
+        if (FileUtil.exists(options.srcDir) == false ||
+            FileUtil.exists(options.templateDir) == false) {
+            utils.exit(10015, options.projectDir);
+        }
+
         service.execCommand({ path: options.projectDir, command: "shutdown" }, null, false);
         utils.clean(options.debugDir)
         CopyFiles.copyLark();

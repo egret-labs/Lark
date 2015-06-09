@@ -12,6 +12,10 @@ import CompileTemplate = require('../actions/CompileTemplate');
 class PublishCommand implements lark.Command {
     execute():number {
         var options = lark.options;
+        if (FileUtil.exists(options.srcDir) == false ||
+            FileUtil.exists(options.templateDir) == false) {
+            utils.exit(10015, options.projectDir);
+        }
         options.minify = true;
         options.publish = true;
                 

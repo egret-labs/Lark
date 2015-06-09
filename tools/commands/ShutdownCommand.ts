@@ -11,6 +11,13 @@ import CompileTemplate = require('../actions/CompileTemplate');
 
 class ShutdownCommand implements lark.Command {
     execute(): number {
+
+        var options = lark.options;
+        if (FileUtil.exists(options.srcDir) == false ||
+            FileUtil.exists(options.templateDir) == false) {
+            utils.exit(10015, options.projectDir);
+        }
+
         service.execCommand({ path: lark.options.projectDir, command: "shutdown" }, null, true);
         return 0;
     }

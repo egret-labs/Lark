@@ -43,6 +43,7 @@ var lark;
     locale_strings[10012] = "如果你没有设置 IDE 保存自动编译，可以添加参数 -a 来启动自动编译";
     locale_strings[10013] = "lark 服务器已经启动, URL: {0}";
     locale_strings[10014] = "自动编译失败，请参考下面的错误信息：";
+    locale_strings[10015] = "\"{0}\" 不是一个有效的 Lark 项目目录";
     locale_strings[12000] = "创建一个全新的 Lark 项目";
     locale_strings[12001] = "选择一个项目模板";
     locale_strings[12002] = "请输入默认的屏幕尺寸";

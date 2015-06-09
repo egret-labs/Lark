@@ -2,6 +2,7 @@
 var utils = require('../lib/utils');
 var watch = require("../lib/watch");
 var server = require('../server/server');
+var FileUtil = require('../lib/FileUtil');
 var service = require('../service/index');
 var CopyFiles = require('../actions/CopyFiles');
 var CompileProject = require('../actions/CompileProject');
@@ -10,6 +11,11 @@ var RunCommand = (function () {
     function RunCommand() {
     }
     RunCommand.prototype.execute = function () {
+        var options = lark.options;
+        if (FileUtil.exists(options.srcDir) == false ||
+            FileUtil.exists(options.templateDir) == false) {
+            utils.exit(10015, options.projectDir);
+        }
         if (lark.options.autoCompile) {
             console.log(utils.tr(10010));
             this.watchFiles(lark.options.srcDir);

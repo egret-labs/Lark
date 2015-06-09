@@ -13,7 +13,13 @@ import CompileTemplate = require('../actions/CompileTemplate');
 class RunCommand implements lark.Command {
 	
     execute():number {
-        
+
+        var options = lark.options;
+        if (FileUtil.exists(options.srcDir) == false ||
+            FileUtil.exists(options.templateDir) == false) {
+            utils.exit(10015, options.projectDir);
+        }
+
         if (lark.options.autoCompile) {
             console.log(utils.tr(10010));
             this.watchFiles(lark.options.srcDir);
