@@ -31,19 +31,64 @@
 module swan {
 
 	/**
+	 * @language en_US
 	 * 列表的集合类数据源对象接口
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
+	 */
+	/**
+	 * @language zh_CN
+	 * 列表的集合类数据源对象接口
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
 	 */
 	export interface ICollection extends lark.IEventEmitter{
 		/**
-		 * 此集合中的项目数。0 表示不包含项目。
+		 * @language en_US
+		 * [read-only] The number of items in this view.
+		 * 0 means no items, while -1 means that the length is unknown.
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
+		 * [只读] 此集合中的项目数。0 表示不包含项目。
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		length:number;
 		/**
+		 * @language en_US
 		 * 获取指定索引处的项目。
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
+		 * 获取指定索引处的项目。
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		getItemAt(index:number):any;
 		/**
+		 * @language en_US
 		 * 如果项目位于列表中,返回该项目的索引。否则返回-1。
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
+		 * 如果项目位于列表中,返回该项目的索引。否则返回-1。
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		getItemIndex(item:any):number;
 	}
