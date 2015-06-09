@@ -35,9 +35,15 @@ class CompileOptions implements lark.LarkToolArgs {
         var filename = this.publish ? FileUtil.joinPath(this.outDir, 'main.min.js') : undefined;
         return filename;
     }
-
+    private _outDir: string = null;
     get outDir(): string {
+        if (this._outDir)
+            return this._outDir;
         return this.publish ? this.releaseDir : this.debugDir;
+    }
+
+    set outDir(value: string) {
+        this._outDir = value;
     }
 
 

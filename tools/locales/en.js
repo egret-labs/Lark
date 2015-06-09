@@ -41,6 +41,7 @@ locale_strings[10011] = "Auto compile is done.";
 locale_strings[10012] = 'If you are not using auto compile on file save, you can enable auto compile by adding "-a" after the "run" command';
 locale_strings[10013] = "lark server is running, you can access by URL: {0}";
 locale_strings[10014] = "Error occurred while compiling your code：";
+locale_strings[10015] = "\"{0}\" is not a valid Lark project folder";
 locale_strings[12000] = "Create Lark Project";
 locale_strings[12001] = "Please select a template";
 locale_strings[12002] = "Please set the default screen size";

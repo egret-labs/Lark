@@ -4,6 +4,7 @@ var crypto = require('crypto');
 var FileUtil = require('../lib/FileUtil');
 var CompileOptions = (function () {
     function CompileOptions() {
+        this._outDir = null;
         this._port = NaN;
         this.esTarget = 'ES5';
         this._tmpDir = null;
@@ -53,7 +54,12 @@ var CompileOptions = (function () {
     });
     Object.defineProperty(CompileOptions.prototype, "outDir", {
         get: function () {
+            if (this._outDir)
+                return this._outDir;
             return this.publish ? this.releaseDir : this.debugDir;
+        },
+        set: function (value) {
+            this._outDir = value;
         },
         enumerable: true,
         configurable: true
