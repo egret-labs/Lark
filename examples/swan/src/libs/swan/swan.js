@@ -2312,7 +2312,6 @@ var swan;
         var d = __define,c=Theme;p=c.prototype;
         p.load = function (url) {
             var request = new lark.HttpRequest();
-            request.responseType = lark.HttpResponseType.JSON;
             request.on(lark.Event.COMPLETE, this.onConfigLoaded, this);
             request.on(lark.Event.IO_ERROR, this.onConfigLoaded, this);
             request.open(url);
@@ -2320,7 +2319,14 @@ var swan;
         };
         p.onConfigLoaded = function (event) {
             var request = event.target;
-            var data = request.response;
+            try {
+                var data = JSON.parse(request.response);
+            }
+            catch (e) {
+                if (DEBUG) {
+                    lark.error(e.message);
+                }
+            }
             if (data && data.skins) {
                 var skinMap = this.skinMap;
                 var skins = data.skins;
@@ -3364,6 +3370,9 @@ var swan;
     swan.ArrayCollection = ArrayCollection;
     swan.registerProperty(ArrayCollection, "source", "Array", true);
     lark.registerClass(ArrayCollection, 1018 /* ArrayCollection */);
+    if (DEBUG) {
+        lark.$markReadOnly(ArrayCollection.prototype, "length");
+    }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -3635,7 +3644,7 @@ var swan;
                     if (radioButton.value == value || radioButton.label == value) {
                         this.changeSelection(i, false);
                         this._selectedValue = null;
-                        swan.UIEvent.emitUIEvent(this, swan.UIEvent.VALUE_COMMIT);
+                        swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selectedValue");
                         break;
                     }
                 }
@@ -3723,7 +3732,7 @@ var swan;
                     }
                 }
             }
-            swan.UIEvent.emitUIEvent(this, swan.UIEvent.VALUE_COMMIT);
+            swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selectedValue");
         };
         /**
          * 改变选中项
@@ -3762,7 +3771,11 @@ var swan;
         return RadioButtonGroup;
     })(lark.EventEmitter);
     swan.RadioButtonGroup = RadioButtonGroup;
+    swan.registerBindable(RadioButtonGroup.prototype, "selectedValue");
     lark.registerClass(RadioButtonGroup, 1030 /* RadioButtonGroup */);
+    if (DEBUG) {
+        lark.$markReadOnly(RadioButtonGroup.prototype, "numRadioButtons");
+    }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -4250,10 +4263,6 @@ var swan;
          * 改变开始
          */
         UIEvent.CHANGE_START = "changeStart";
-        /**
-         * 值发生改变
-         */
-        UIEvent.VALUE_COMMIT = "valueCommit";
         /**
          * 即将关闭面板事件
          */
@@ -6721,6 +6730,8 @@ var swan;
                 };
             }
             if (DEBUG) {
+                lark.$markReadOnly(prototype, "explicitWidth");
+                lark.$markReadOnly(prototype, "explicitHeight");
                 Object.defineProperty(prototype, "preferredWidth", {
                     get: function () {
                         var bounds = lark.$TempRectangle;
@@ -7797,7 +7808,11 @@ var swan;
         return TileLayout;
     })(swan.LayoutBase);
     swan.TileLayout = TileLayout;
-    lark.registerClass(TileLayout, 1042 /* TileLayout */);
+    lark.registerClass(TileLayout, 1046 /* TileLayout */);
+    if (DEBUG) {
+        lark.$markReadOnly(TileLayout.prototype, "columnCount");
+        lark.$markReadOnly(TileLayout.prototype, "rowCount");
+    }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -8295,6 +8310,10 @@ var swan;
             _super.prototype.$setHeight.call(this, value);
             UIImpl.prototype.$setHeight.call(this, value);
         };
+        p.$setText = function (value) {
+            _super.prototype.$setText.call(this, value);
+            swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "text");
+        };
         /**
          * 子类覆盖此方法可以执行一些初始化子项操作。此方法仅在组件第一次添加到舞台时回调一次。
          * 请务必调用super.createChildren()以完成父类组件的初始化
@@ -8428,7 +8447,8 @@ var swan;
     })(lark.TextInput);
     swan.EditableText = EditableText;
     swan.sys.implementUIComponent(EditableText, lark.TextInput);
-    lark.registerClass(EditableText, 1043 /* EditableText */, [1001 /* UIComponent */]);
+    swan.registerBindable(EditableText.prototype, "text");
+    lark.registerClass(EditableText, 1047 /* EditableText */, [1001 /* UIComponent */]);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -8887,6 +8907,10 @@ var swan;
             _super.prototype.$setHeight.call(this, value);
             UIImpl.prototype.$setHeight.call(this, value);
         };
+        p.$setText = function (value) {
+            _super.prototype.$setText.call(this, value);
+            swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "text");
+        };
         /**
          * 子类覆盖此方法可以执行一些初始化子项操作。此方法仅在组件第一次添加到舞台时回调一次。
          * 请务必调用super.createChildren()以完成父类组件的初始化
@@ -9020,6 +9044,7 @@ var swan;
     })(lark.TextField);
     swan.Label = Label;
     swan.sys.implementUIComponent(Label, lark.TextField);
+    swan.registerBindable(Label.prototype, "text");
     lark.registerClass(Label, 1010 /* Label */, [1001 /* UIComponent */]);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -9407,7 +9432,12 @@ var swan;
     swan.sys.mixin(Group, swan.sys.StateClient);
     swan.registerProperty(Group, "elementsContent", "Array", true);
     swan.registerProperty(Group, "states", "State[]");
-    lark.registerClass(Group, 1002 /* Group */, [1001 /* UIComponent */, 1041 /* IViewport */]);
+    lark.registerClass(Group, 1002 /* Group */, [1001 /* UIComponent */, 1045 /* IViewport */]);
+    if (DEBUG) {
+        lark.$markReadOnly(Group.prototype, "contentWidth");
+        lark.$markReadOnly(Group.prototype, "contentHeight");
+        lark.$markReadOnly(Group.prototype, "numElements");
+    }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -9865,6 +9895,9 @@ var swan;
     swan.registerProperty(Component, "skinName", "Class");
     swan.sys.implementUIComponent(Component, lark.Sprite, true);
     lark.registerClass(Component, 1009 /* Component */, [1001 /* UIComponent */]);
+    if (DEBUG) {
+        lark.$markReadOnly(Component.prototype, "skin");
+    }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -11053,6 +11086,84 @@ var swan;
 var swan;
 (function (swan) {
     /**
+     * 滚动条基类
+     */
+    var ScrollBarBase = (function (_super) {
+        __extends(ScrollBarBase, _super);
+        /**
+         * 创建一个ScrollBarBase实例
+         */
+        function ScrollBarBase() {
+            _super.call(this);
+            /**
+             * [SkinPart]滑块显示对象
+             */
+            this.thumb = null;
+            this.$viewport = null;
+        }
+        var d = __define,c=ScrollBarBase;p=c.prototype;
+        d(p, "viewport",
+            function () {
+                return this.$viewport;
+            },
+            function (value) {
+                if (value == this.$viewport) {
+                    return;
+                }
+                var viewport = this.$viewport;
+                if (viewport) {
+                    viewport.removeListener(swan.PropertyEvent.PROPERTY_CHANGE, this.onPropertyChanged, this);
+                    viewport.removeListener(lark.Event.RESIZE, this.onViewportResize, this);
+                }
+                this.$viewport = value;
+                if (value) {
+                    value.on(swan.PropertyEvent.PROPERTY_CHANGE, this.onPropertyChanged, this);
+                    value.on(lark.Event.RESIZE, this.onViewportResize, this);
+                }
+                this.invalidateDisplayList();
+            }
+        );
+        p.onViewportResize = function (event) {
+            this.invalidateDisplayList();
+        };
+        p.onPropertyChanged = function (event) {
+        };
+        return ScrollBarBase;
+    })(swan.Component);
+    swan.ScrollBarBase = ScrollBarBase;
+    lark.registerClass(ScrollBarBase, 1038 /* ScrollBarBase */);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
      * 范围选取组件,该组件包含一个值和这个值所允许的最大最小约束范围。
      */
     var Range = (function (_super) {
@@ -11228,7 +11339,7 @@ var swan;
                 values[4 /* value */] = value;
             values[6 /* valueChanged */] = false;
             this.invalidateDisplayList();
-            swan.UIEvent.emitUIEvent(this, swan.UIEvent.VALUE_COMMIT);
+            swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "value");
         };
         /**
          * 绘制对象和/或设置其子项的大小和位置
@@ -11246,6 +11357,8 @@ var swan;
         return Range;
     })(swan.Component);
     swan.Range = Range;
+    swan.registerBindable(Range.prototype, "value");
+    lark.registerClass(Range, 1041 /* Range */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -11699,6 +11812,9 @@ var swan;
                 if (verticalBar && values[7 /* verticalCanScroll */]) {
                     verticalBar.visible = true;
                 }
+                if (values[2 /* autoHideTimer */]) {
+                    values[2 /* autoHideTimer */].reset();
+                }
             }
             swan.UIEvent.emitUIEvent(this, swan.UIEvent.CHANGE_START);
             if (values[11 /* delayTouchEvent */]) {
@@ -11831,84 +11947,6 @@ var swan;
 var swan;
 (function (swan) {
     /**
-     * 滚动条基类
-     */
-    var ScrollBarBase = (function (_super) {
-        __extends(ScrollBarBase, _super);
-        /**
-         * 创建一个ScrollBarBase实例
-         */
-        function ScrollBarBase() {
-            _super.call(this);
-            /**
-             * [SkinPart]滑块显示对象
-             */
-            this.thumb = null;
-            this.$viewport = null;
-        }
-        var d = __define,c=ScrollBarBase;p=c.prototype;
-        d(p, "viewport",
-            function () {
-                return this.$viewport;
-            },
-            function (value) {
-                if (value == this.$viewport) {
-                    return;
-                }
-                var viewport = this.$viewport;
-                if (viewport) {
-                    viewport.removeListener(swan.PropertyEvent.PROPERTY_CHANGE, this.onPropertyChanged, this);
-                    viewport.removeListener(lark.Event.RESIZE, this.onViewportResize, this);
-                }
-                this.$viewport = value;
-                if (value) {
-                    value.on(swan.PropertyEvent.PROPERTY_CHANGE, this.onPropertyChanged, this);
-                    value.on(lark.Event.RESIZE, this.onViewportResize, this);
-                }
-                this.invalidateDisplayList();
-            }
-        );
-        p.onViewportResize = function (event) {
-            this.invalidateDisplayList();
-        };
-        p.onPropertyChanged = function (event) {
-        };
-        return ScrollBarBase;
-    })(swan.Component);
-    swan.ScrollBarBase = ScrollBarBase;
-    lark.registerClass(ScrollBarBase, 1038 /* ScrollBarBase */);
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
      * 层级堆叠容器,一次只显示一个子对象。
      */
     var ViewStack = (function (_super) {
@@ -11924,7 +11962,6 @@ var swan;
              */
             this.proposedSelectedIndex = swan.ListBase.NO_PROPOSED_SELECTION;
             this._selectedIndex = -1;
-            this.notifyTabBar = false;
         }
         var d = __define,c=ViewStack;p=c.prototype;
         d(p, "layout",
@@ -11948,7 +11985,7 @@ var swan;
             function (value) {
                 var index = this.getChildIndex(value);
                 if (index >= 0 && index < this.numChildren)
-                    this.$setSelectedIndex(index);
+                    this.setSelectedIndex(index);
             }
         );
         d(p, "selectedIndex",
@@ -11960,21 +11997,18 @@ var swan;
             },
             function (value) {
                 value = +value | 0;
-                this.$setSelectedIndex(value);
+                this.setSelectedIndex(value);
             }
         );
         /**
          * 设置选中项索引
          */
-        p.$setSelectedIndex = function (value, notifyListeners) {
-            if (notifyListeners === void 0) { notifyListeners = true; }
+        p.setSelectedIndex = function (value) {
             if (value == this.selectedIndex) {
                 return;
             }
             this.proposedSelectedIndex = value;
-            this.notifyTabBar = this.notifyTabBar || notifyListeners;
-            this.invalidateProperties();
-            swan.UIEvent.emitUIEvent(this, swan.UIEvent.VALUE_COMMIT);
+            swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selectedIndex");
         };
         /**
          * 一个子项被添加到容器内，此方法不仅在操作addChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
@@ -11985,10 +12019,10 @@ var swan;
             this.showOrHide(child, false);
             var selectedIndex = this.selectedIndex;
             if (selectedIndex == -1) {
-                this.$setSelectedIndex(index, false);
+                this.setSelectedIndex(index);
             }
             else if (index <= this.selectedIndex && this.$stage) {
-                this.$setSelectedIndex(selectedIndex + 1);
+                this.setSelectedIndex(selectedIndex + 1);
             }
             swan.CollectionEvent.emitCollectionEvent(this, swan.CollectionEvent.COLLECTION_CHANGE, swan.CollectionEventKind.ADD, index, -1, [child.name]);
         };
@@ -12007,13 +12041,13 @@ var swan;
                         this.invalidateProperties();
                     }
                     else
-                        this.$setSelectedIndex(0, false);
+                        this.setSelectedIndex(0);
                 }
                 else
-                    this.$setSelectedIndex(-1);
+                    this.setSelectedIndex(-1);
             }
             else if (index < selectedIndex) {
-                this.$setSelectedIndex(selectedIndex - 1);
+                this.setSelectedIndex(selectedIndex - 1);
             }
             swan.CollectionEvent.emitCollectionEvent(this, swan.CollectionEvent.COLLECTION_CHANGE, swan.CollectionEventKind.REMOVE, index, -1, [child.name]);
         };
@@ -12025,10 +12059,6 @@ var swan;
             if (this.proposedSelectedIndex != swan.ListBase.NO_PROPOSED_SELECTION) {
                 this.commitSelection(this.proposedSelectedIndex);
                 this.proposedSelectedIndex = swan.ListBase.NO_PROPOSED_SELECTION;
-            }
-            if (this.notifyTabBar) {
-                this.notifyTabBar = true;
-                this.emitWith("IndexChanged"); //通知TabBar自己的选中项发生改变
             }
         };
         p.commitSelection = function (newIndex) {
@@ -12078,7 +12108,12 @@ var swan;
         return ViewStack;
     })(swan.Group);
     swan.ViewStack = ViewStack;
+    swan.registerBindable(ViewStack.prototype, "selectedIndex");
     lark.registerClass(ViewStack, 1036 /* ViewStack */);
+    if (DEBUG) {
+        lark.$markReadOnly(ViewStack.prototype, "length");
+        lark.$markReadOnly(ViewStack.prototype, "layout");
+    }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -12732,6 +12767,9 @@ var swan;
     swan.registerProperty(DataGroup, "itemRenderer", "Class");
     swan.registerProperty(DataGroup, "dataProvider", "swan.ICollection", true);
     lark.registerClass(DataGroup, 1003 /* DataGroup */);
+    if (DEBUG) {
+        lark.$markReadOnly(DataGroup.prototype, "numElements");
+    }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -12909,7 +12947,7 @@ var swan;
                 return;
             this.$selected = value;
             this.invalidateState();
-            swan.UIEvent.emitUIEvent(this, swan.UIEvent.VALUE_COMMIT);
+            swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selected");
         };
         /**
          * 返回要应用到外观的状态的名称
@@ -12940,6 +12978,7 @@ var swan;
         return ToggleButton;
     })(swan.Button);
     swan.ToggleButton = ToggleButton;
+    swan.registerBindable(ToggleButton.prototype, "selected");
     lark.registerClass(ToggleButton, 1026 /* ToggleButton */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -13161,90 +13200,6 @@ var swan;
         return ProgressBar;
     })(swan.Range);
     swan.ProgressBar = ProgressBar;
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * 垂直滚动条
-     */
-    var VScrollBar = (function (_super) {
-        __extends(VScrollBar, _super);
-        function VScrollBar() {
-            _super.apply(this, arguments);
-        }
-        var d = __define,c=VScrollBar;p=c.prototype;
-        p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
-            _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
-            var thumb = this.thumb;
-            var viewport = this.$viewport;
-            if (!thumb || !viewport) {
-                return;
-            }
-            var bounds = lark.$TempRectangle;
-            thumb.getPreferredBounds(bounds);
-            var thumbHeight = bounds.height;
-            var thumbX = bounds.x;
-            var vsp = viewport.scrollV;
-            var contentHeight = viewport.contentHeight;
-            var height = viewport.height;
-            if (vsp <= 0) {
-                var scaleHeight = thumbHeight * (1 - (-vsp) / (height * 0.5));
-                scaleHeight = Math.max(5, Math.round(scaleHeight));
-                thumb.setLayoutBoundsSize(lark.NONE, scaleHeight);
-                thumb.setLayoutBoundsPosition(thumbX, 0);
-            }
-            else if (vsp >= contentHeight - height) {
-                scaleHeight = thumbHeight * (1 - (vsp - contentHeight + height) / (height * 0.5));
-                scaleHeight = Math.max(5, Math.round(scaleHeight));
-                thumb.setLayoutBoundsSize(lark.NONE, scaleHeight);
-                thumb.setLayoutBoundsPosition(thumbX, unscaledHeight - scaleHeight);
-            }
-            else {
-                var thumbY = (unscaledHeight - thumbHeight) * vsp / (contentHeight - height);
-                thumb.setLayoutBoundsSize(lark.NONE, lark.NONE);
-                thumb.setLayoutBoundsPosition(thumbX, thumbY);
-            }
-        };
-        p.onPropertyChanged = function (event) {
-            switch (event.property) {
-                case "scrollV":
-                case "contentHeight":
-                    this.invalidateDisplayList();
-                    break;
-            }
-        };
-        return VScrollBar;
-    })(swan.ScrollBarBase);
-    swan.VScrollBar = VScrollBar;
-    lark.registerClass(VScrollBar, 1039 /* VScrollBar */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -13541,6 +13496,91 @@ var swan;
         return SliderBase;
     })(swan.Range);
     swan.SliderBase = SliderBase;
+    lark.registerClass(SliderBase, 1042 /* SliderBase */);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * 垂直滚动条
+     */
+    var VScrollBar = (function (_super) {
+        __extends(VScrollBar, _super);
+        function VScrollBar() {
+            _super.apply(this, arguments);
+        }
+        var d = __define,c=VScrollBar;p=c.prototype;
+        p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
+            _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
+            var thumb = this.thumb;
+            var viewport = this.$viewport;
+            if (!thumb || !viewport) {
+                return;
+            }
+            var bounds = lark.$TempRectangle;
+            thumb.getPreferredBounds(bounds);
+            var thumbHeight = bounds.height;
+            var thumbX = bounds.x;
+            var vsp = viewport.scrollV;
+            var contentHeight = viewport.contentHeight;
+            var height = viewport.height;
+            if (vsp <= 0) {
+                var scaleHeight = thumbHeight * (1 - (-vsp) / (height * 0.5));
+                scaleHeight = Math.max(5, Math.round(scaleHeight));
+                thumb.setLayoutBoundsSize(lark.NONE, scaleHeight);
+                thumb.setLayoutBoundsPosition(thumbX, 0);
+            }
+            else if (vsp >= contentHeight - height) {
+                scaleHeight = thumbHeight * (1 - (vsp - contentHeight + height) / (height * 0.5));
+                scaleHeight = Math.max(5, Math.round(scaleHeight));
+                thumb.setLayoutBoundsSize(lark.NONE, scaleHeight);
+                thumb.setLayoutBoundsPosition(thumbX, unscaledHeight - scaleHeight);
+            }
+            else {
+                var thumbY = (unscaledHeight - thumbHeight) * vsp / (contentHeight - height);
+                thumb.setLayoutBoundsSize(lark.NONE, lark.NONE);
+                thumb.setLayoutBoundsPosition(thumbX, thumbY);
+            }
+        };
+        p.onPropertyChanged = function (event) {
+            switch (event.property) {
+                case "scrollV":
+                case "contentHeight":
+                    this.invalidateDisplayList();
+                    break;
+            }
+        };
+        return VScrollBar;
+    })(swan.ScrollBarBase);
+    swan.VScrollBar = VScrollBar;
+    lark.registerClass(VScrollBar, 1039 /* VScrollBar */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -13662,7 +13702,6 @@ var swan;
      * @event lark.Event.CHANGING 选中的索引即将发生改变，可以通过调用事件对象的 preventDefault() 方法来阻止改变。
      * 注意：此事件仅在索引改变是由用户触摸操作引起时才抛出。
      * @event swan.ItemTapEvent.ITEM_TAP 项呈示器单击事件。
-     * @event swan.UIEvent.VALUE_COMMIT 选中的索引已经发生改变。此事件无论索引改变是否由触摸操作引起都会抛出。
      */
     var ListBase = (function (_super) {
         __extends(ListBase, _super);
@@ -13803,7 +13842,7 @@ var swan;
             if (values[6 /* selectedIndexAdjusted */]) {
                 values[6 /* selectedIndexAdjusted */] = false;
                 if (!changedSelection) {
-                    swan.UIEvent.emitUIEvent(this, swan.UIEvent.VALUE_COMMIT);
+                    swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selectedIndex");
                 }
             }
         };
@@ -13871,7 +13910,8 @@ var swan;
                     this.emitWith(lark.Event.CHANGE);
                     values[4 /* dispatchChangeAfterSelection */] = false;
                 }
-                swan.UIEvent.emitUIEvent(this, swan.UIEvent.VALUE_COMMIT);
+                swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selectedIndex");
+                swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selectedItem");
             }
             return true;
         };
@@ -14007,6 +14047,8 @@ var swan;
         return ListBase;
     })(swan.DataGroup);
     swan.ListBase = ListBase;
+    swan.registerBindable(ListBase.prototype, "selectedIndex");
+    swan.registerBindable(ListBase.prototype, "selectedItem");
     lark.registerClass(ListBase, 1004 /* ListBase */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -14167,7 +14209,7 @@ var swan;
              * 组件是否可以接受用户交互。默认值为true。设置此属性将影响组内所有单选按钮
              */
             function () {
-                if (!this.enabled) {
+                if (!this.$Component[3 /* enabled */]) {
                     return false;
                 }
                 return !this.$radioButtonGroup || this.$radioButtonGroup.$enabled;
@@ -14240,8 +14282,9 @@ var swan;
                 if (this._value == value)
                     return;
                 this._value = value;
-                if (this.$selected && this.group)
-                    swan.UIEvent.emitUIEvent(this.group, swan.UIEvent.VALUE_COMMIT);
+                if (this.$selected && this.group) {
+                    swan.PropertyEvent.emitPropertyEvent(this.group, swan.PropertyEvent.PROPERTY_CHANGE, "selectedValue");
+                }
             }
         );
         p.commitProperties = function () {
@@ -14281,6 +14324,94 @@ var swan;
     })(swan.ToggleButton);
     swan.RadioButton = RadioButton;
     lark.registerClass(RadioButton, 1029 /* RadioButton */);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * 水平滑块控件
+     */
+    var HSlider = (function (_super) {
+        __extends(HSlider, _super);
+        /**
+         * 创建一个水平滑块控件
+         */
+        function HSlider() {
+            _super.call(this);
+        }
+        var d = __define,c=HSlider;p=c.prototype;
+        /**
+         * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值
+         */
+        p.pointToValue = function (x, y) {
+            if (!this.thumb || !this.track)
+                return 0;
+            var values = this.$Range;
+            var range = values[0 /* maximum */] - values[2 /* minimum */];
+            var thumbRange = this.getThumbRange();
+            return values[2 /* minimum */] + (thumbRange != 0 ? (x / thumbRange) * range : 0);
+        };
+        p.getThumbRange = function () {
+            var bounds = lark.$TempRectangle;
+            this.track.getLayoutBounds(bounds);
+            var thumbRange = bounds.width;
+            this.thumb.getLayoutBounds(bounds);
+            return thumbRange - bounds.width;
+        };
+        /**
+         * 设置外观部件的边界，这些外观部件的几何图形不是完全由外观的布局指定的
+         */
+        p.updateSkinDisplayList = function () {
+            if (!this.thumb || !this.track)
+                return;
+            var values = this.$Range;
+            var thumbRange = this.getThumbRange();
+            var range = values[0 /* maximum */] - values[2 /* minimum */];
+            var thumbPosTrackX = (range > 0) ? ((this.pendingValue - values[2 /* minimum */]) / range) * thumbRange : 0;
+            var thumbPos = this.track.localToGlobal(thumbPosTrackX, 0, lark.$TempPoint);
+            var thumbPosX = thumbPos.x;
+            var thumbPosY = thumbPos.y;
+            var thumbPosParentX = this.thumb.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).x;
+            var bounds = lark.$TempRectangle;
+            this.thumb.getLayoutBounds(bounds);
+            this.thumb.setLayoutBoundsPosition(Math.round(thumbPosParentX), bounds.y);
+            if (this.trackHighlight && this.trackHighlight.$parent) {
+                var trackHighlightX = this.trackHighlight.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).x - thumbPosTrackX;
+                this.trackHighlight.x = Math.round(trackHighlightX);
+                this.trackHighlight.width = Math.round(thumbPosTrackX);
+            }
+        };
+        return HSlider;
+    })(swan.SliderBase);
+    swan.HSlider = HSlider;
+    lark.registerClass(HSlider, 1043 /* HSlider */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -14369,95 +14500,7 @@ var swan;
         return VSlider;
     })(swan.SliderBase);
     swan.VSlider = VSlider;
-    lark.registerClass(VSlider, 1045 /* VSilder */);
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * 水平滑块控件
-     */
-    var HSlider = (function (_super) {
-        __extends(HSlider, _super);
-        /**
-         * 创建一个水平滑块控件
-         */
-        function HSlider() {
-            _super.call(this);
-        }
-        var d = __define,c=HSlider;p=c.prototype;
-        /**
-         * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值
-         */
-        p.pointToValue = function (x, y) {
-            if (!this.thumb || !this.track)
-                return 0;
-            var values = this.$Range;
-            var range = values[0 /* maximum */] - values[2 /* minimum */];
-            var thumbRange = this.getThumbRange();
-            return values[2 /* minimum */] + (thumbRange != 0 ? (x / thumbRange) * range : 0);
-        };
-        p.getThumbRange = function () {
-            var bounds = lark.$TempRectangle;
-            this.track.getLayoutBounds(bounds);
-            var thumbRange = bounds.width;
-            this.thumb.getLayoutBounds(bounds);
-            return thumbRange - bounds.width;
-        };
-        /**
-         * 设置外观部件的边界，这些外观部件的几何图形不是完全由外观的布局指定的
-         */
-        p.updateSkinDisplayList = function () {
-            if (!this.thumb || !this.track)
-                return;
-            var values = this.$Range;
-            var thumbRange = this.getThumbRange();
-            var range = values[0 /* maximum */] - values[2 /* minimum */];
-            var thumbPosTrackX = (range > 0) ? ((this.pendingValue - values[2 /* minimum */]) / range) * thumbRange : 0;
-            var thumbPos = this.track.localToGlobal(thumbPosTrackX, 0, lark.$TempPoint);
-            var thumbPosX = thumbPos.x;
-            var thumbPosY = thumbPos.y;
-            var thumbPosParentX = this.thumb.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).x;
-            var bounds = lark.$TempRectangle;
-            this.thumb.getLayoutBounds(bounds);
-            this.thumb.setLayoutBoundsPosition(Math.round(thumbPosParentX), bounds.y);
-            if (this.trackHighlight && this.trackHighlight.$parent) {
-                var trackHighlightX = this.trackHighlight.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).x - thumbPosTrackX;
-                this.trackHighlight.x = Math.round(trackHighlightX);
-                this.trackHighlight.width = Math.round(thumbPosTrackX);
-            }
-        };
-        return HSlider;
-    })(swan.SliderBase);
-    swan.HSlider = HSlider;
-    lark.registerClass(HSlider, 1044 /* HSlider */);
+    lark.registerClass(VSlider, 1044 /* VSlider */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -14634,7 +14677,8 @@ var swan;
                     this.emitWith(lark.Event.CHANGE);
                     values[4 /* dispatchChangeAfterSelection */] = false;
                 }
-                swan.UIEvent.emitUIEvent(this, swan.UIEvent.VALUE_COMMIT);
+                swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selectedIndex");
+                swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selectedItem");
             }
             return retVal;
         };
@@ -14789,6 +14833,7 @@ var swan;
         __extends(TabBar, _super);
         function TabBar() {
             _super.call(this);
+            this.indexBeingUpdated = false;
             this.requireSelection = true;
             this.useVirtualLayout = false;
         }
@@ -14805,11 +14850,11 @@ var swan;
         };
         p.$setDataProvider = function (value) {
             if (lark.is(this.$dataProvider, 1036 /* ViewStack */)) {
-                this.$dataProvider.removeListener("IndexChanged", this.onViewStackIndexChange, this);
+                this.$dataProvider.removeListener(swan.PropertyEvent.PROPERTY_CHANGE, this.onViewStackIndexChange, this);
                 this.removeListener(lark.Event.CHANGE, this.onIndexChanged, this);
             }
             if (lark.is(value, 1036 /* ViewStack */)) {
-                value.on("IndexChanged", this.onViewStackIndexChange, this);
+                value.on(swan.PropertyEvent.PROPERTY_CHANGE, this.onViewStackIndexChange, this);
                 this.on(lark.Event.CHANGE, this.onIndexChanged, this);
             }
             _super.prototype.$setDataProvider.call(this, value);
@@ -14818,13 +14863,17 @@ var swan;
          * 鼠标点击的选中项改变
          */
         p.onIndexChanged = function (event) {
-            (this.$dataProvider).$setSelectedIndex(this.selectedIndex, false);
+            this.indexBeingUpdated = true;
+            (this.$dataProvider).selectedIndex = this.selectedIndex;
+            this.indexBeingUpdated = false;
         };
         /**
          * ViewStack选中项发生改变
          */
         p.onViewStackIndexChange = function (event) {
-            this.setSelectedIndex((this.$dataProvider).selectedIndex, false);
+            if (event.property == "selectedIndex" && !this.indexBeingUpdated) {
+                this.setSelectedIndex((this.$dataProvider).selectedIndex, false);
+            }
         };
         return TabBar;
     })(swan.ListBase);

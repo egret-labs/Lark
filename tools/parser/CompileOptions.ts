@@ -106,7 +106,6 @@ class CompileOptions implements lark.LarkToolArgs {
                 this._tmpProj = JSON.parse(content);
             }
         }
-        console.log(this._tmpProj);
         return this._tmpProj;
     }
 

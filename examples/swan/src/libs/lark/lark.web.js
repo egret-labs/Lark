@@ -38,6 +38,8 @@ var lark;
 (function (lark) {
     var web;
     (function (web) {
+        var winURL = window["URL"] || window["webkitURL"];
+        var useXHR = winURL && lark.Capabilities.os == "iOS";
         /**
          * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
          */
@@ -56,6 +58,7 @@ var lark;
                  */
                 this.crossOrigin = null;
                 this.currentImage = null;
+                this.request = null;
                 this.onImageComplete = function (event) {
                     var image = _this.getImage(event);
                     if (!image) {
@@ -81,6 +84,35 @@ var lark;
              * @param url 要加载的图像文件的地址。
              */
             p.load = function (url) {
+                if (useXHR && url.indexOf("data:") != 0) {
+                    var request = this.request;
+                    if (!request) {
+                        request = this.request = new lark.web.WebHttpRequest();
+                        request.on(lark.Event.COMPLETE, this.onBlobLoaded, this);
+                        request.on(lark.Event.IO_ERROR, this.onBlobError, this);
+                        request.responseType = "blob";
+                    }
+                    if (DEBUG) {
+                        this.currentURL = url;
+                    }
+                    request.open(url);
+                    request.send();
+                }
+                else {
+                    this.loadImage(url);
+                }
+            };
+            p.onBlobLoaded = function (event) {
+                var blob = this.request.response;
+                this.loadImage(winURL.createObjectURL(blob));
+            };
+            p.onBlobError = function (event) {
+                if (DEBUG && !this.hasListener(lark.Event.IO_ERROR)) {
+                    lark.$error(1011, this.currentURL);
+                }
+                this.emitWith(lark.Event.IO_ERROR);
+            };
+            p.loadImage = function (src) {
                 var image = new Image();
                 this.data = null;
                 this.currentImage = image;
@@ -89,10 +121,13 @@ var lark;
                 }
                 image.onload = this.onImageComplete;
                 image.onerror = this.onLoadError;
-                image.src = url;
+                image.src = src;
             };
             p.getImage = function (event) {
                 var image = event.target;
+                if (useXHR) {
+                    winURL.revokeObjectURL(image.src);
+                }
                 image.onerror = null;
                 image.onload = null;
                 if (this.currentImage !== image) {
@@ -251,6 +286,9 @@ var lark;
         web.WebHttpRequest = WebHttpRequest;
         lark.registerClass(WebHttpRequest, 19 /* HttpRequest */);
         lark.HttpRequest = WebHttpRequest;
+        if (DEBUG) {
+            lark.$markReadOnly(WebHttpRequest.prototype, "response");
+        }
     })(web = lark.web || (lark.web = {}));
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -296,16 +334,29 @@ var lark;
                 var capabilities = lark.Capabilities;
                 var ua = navigator.userAgent.toLowerCase();
                 capabilities.$isMobile = (ua.indexOf('mobile') != -1 || ua.indexOf('android') != -1);
+                if (capabilities.$isMobile) {
+                    if (ua.indexOf("windows") < 0 && (ua.indexOf("iphone") != -1 || ua.indexOf("ipad") != -1 || ua.indexOf("ipod") != -1)) {
+                        capabilities.$os = "iOS";
+                    }
+                    else if (ua.indexOf("android") != -1 && ua.indexOf("linux") != -1) {
+                        capabilities.$os = "Android";
+                    }
+                    else if (ua.indexOf("windows") != -1) {
+                        capabilities.$os = "Windows Phone";
+                    }
+                }
+                else {
+                    if (ua.indexOf("windows nt") != -1) {
+                        capabilities.$os = "Windows";
+                    }
+                    else if (ua.indexOf("mac os") != -1) {
+                        capabilities.$os = "Mac OS";
+                    }
+                }
                 var h5 = WebCapability.checkHtml5Support();
-                capabilities.$audio = h5.a;
-                capabilities.$canvas = h5.cvs;
                 capabilities.$location = h5.geo;
                 capabilities.$motion = h5.m;
                 capabilities.$orientation = h5.ortt;
-                capabilities.$video = h5.v;
-                capabilities.$webAudio = h5.wa;
-                capabilities.$webGL = h5.gl;
-                capabilities.$webSocket = h5.ws;
                 var language = (navigator.language || navigator.browserLanguage).toLowerCase();
                 var strings = language.split("-");
                 if (strings.length > 1) {
@@ -314,68 +365,11 @@ var lark;
                 capabilities.$language = strings.join("-");
             };
             WebCapability.checkHtml5Support = function () {
-                var createElement = function (tag) { return document.createElement(tag); };
                 var webaudio = ('webkitAudioContext' in window) || ('AudioContext' in window);
-                var websocket = 'WebSocket' in window && window["WebSocket"].CLOSING === 2;
-                var canvas = (function () {
-                    var elem = createElement("canvas");
-                    return !!(elem.getContext && elem.getContext('2d'));
-                })();
-                var support = function (elem, mime) {
-                    return elem.canPlayType(mime).replace(/^no$/, '');
-                };
-                var audio = (function () {
-                    var elem = createElement('audio');
-                    var bool = false;
-                    try {
-                        if (bool = !!elem.canPlayType) {
-                            bool = new Boolean(bool);
-                            bool.ogg = support(elem, 'audio/ogg; codecs="vorbis"');
-                            bool.mp3 = support(elem, 'audio/mpeg;');
-                            bool.opus = support(elem, ('audio/ogg; codecs="opus"'));
-                            bool.wav = support(elem, ('audio/wav; codecs="1"'));
-                            bool.m4a = support(elem, 'audio/x-m4a;') || support(elem, 'audio/aac;');
-                        }
-                    }
-                    catch (e) {
-                    }
-                    return bool;
-                })();
-                var video = (function () {
-                    var elem = createElement('video');
-                    var bool = false;
-                    try {
-                        if (bool = !!elem.canPlayType) {
-                            bool = new Boolean(bool);
-                            bool.ogg = support(elem, 'video/ogg; codecs="theora"');
-                            bool.h264 = support(elem, 'video/mp4; codecs="avc1.42E01E"');
-                            bool.webm = support(elem, 'video/webm; codecs="vp8, vorbis"');
-                            bool.vp9 = support(elem, 'video/webm; codecs="vp9"');
-                            bool.hls = support(elem, 'application/x-mpegURL; codecs="avc1.42E01E"');
-                        }
-                    }
-                    catch (e) {
-                    }
-                    return bool;
-                })();
-                var webgl = (function () {
-                    var canvas = createElement('canvas');
-                    var supports = 'probablySupportsContext' in canvas ? 'probablySupportsContext' : 'supportsContext';
-                    if (supports in canvas) {
-                        return canvas[supports]('webgl') || canvas[supports]('experimental-webgl');
-                    }
-                    return 'WebGLRenderingContext' in window;
-                })();
                 var geolocation = 'geolocation' in navigator;
                 var orientation = 'DeviceOrientationEvent' in window;
                 var motion = 'DeviceMotionEvent' in window;
                 return {
-                    a: audio,
-                    v: video,
-                    cvs: canvas,
-                    gl: webgl,
-                    wa: webaudio,
-                    ws: websocket,
                     geo: geolocation,
                     ortt: orientation,
                     m: motion
@@ -978,7 +972,7 @@ var lark;
     (function (web) {
         var tempPoint = new lark.Point();
         /**
-         * HTML5 环境下的输入文本
+         * Web 环境下的输入文本
          */
         var WebTextAdapter = (function (_super) {
             __extends(WebTextAdapter, _super);

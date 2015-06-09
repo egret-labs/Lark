@@ -3,6 +3,9 @@ var utils = require('../lib/utils');
 var watch = require("../lib/watch");
 var server = require('../server/server');
 var service = require('../service/index');
+var CopyFiles = require('../actions/CopyFiles');
+var CompileProject = require('../actions/CompileProject');
+var CompileTemplate = require('../actions/CompileTemplate');
 var RunCommand = (function () {
     function RunCommand() {
     }
@@ -15,16 +18,20 @@ var RunCommand = (function () {
         else {
             console.log(utils.tr(10012));
         }
+        var compileProject = new CompileProject();
+        var result = compileProject.compileProject(lark.options);
+        CopyFiles.copyProjectFiles();
+        CompileTemplate.compileTemplates(lark.options, result.files);
         server.startServer(lark.options, lark.options.startUrl);
         console.log(utils.tr(10013, lark.options.startUrl));
-        service.execCommand({ command: "build", path: lark.options.projectDir }, function (cmd) {
-        });
         return 0;
     };
     RunCommand.prototype.watchFiles = function (dir) {
         var _this = this;
         watch.createMonitor(dir, { persistent: true, interval: 2007 }, function (m) {
-            m.on("created", function () { return _this.sendBuildCMD(); }).on("removed", function () { return _this.sendBuildCMD(); }).on("changed", function () { return _this.sendBuildCMD(); });
+            m.on("created", function () { return _this.sendBuildCMD(); })
+                .on("removed", function () { return _this.sendBuildCMD(); })
+                .on("changed", function () { return _this.sendBuildCMD(); });
         });
     };
     RunCommand.prototype.sendBuildCMD = function () {

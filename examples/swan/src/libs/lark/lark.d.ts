@@ -77,61 +77,6 @@ declare module lark {
     function log(message?: any, ...optionalParams: any[]): void;
 }
 declare module lark {
-    class Capabilities {
-        /**
-         * 指定运行内容的系统的语言代码。语言指定为 ISO 639-1 中的小写双字母语言代码。
-         * 对于中文，另外使用 ISO 3166 中的大写双字母国家/地区代码，以区分简体中文和繁体中文。
-         * 以下是可能但不限于的语言和值：
-         * 简体中文  zh-CN
-         * 繁体中文  zh-TW
-         * 英语      en
-         * 日语      ja
-         * 韩语      ko
-         * 法语      fr
-         * 捷克语    cs
-         * 丹麦语    da
-         * 荷兰语    nl
-         * 芬兰语    fi
-         * 德语      de
-         * 匈牙利语   hu
-         * 意大利语   it
-         * 挪威语    no
-         * 其他/未知 xu
-         * 波兰语    pl
-         * 葡萄牙语  pt
-         * 俄语      ru
-         * 西班牙语  es
-         * 瑞典语    sv
-         * 土耳其语  tr
-         */
-        static language: string;
-        static isMobile: boolean;
-        static canvas: boolean;
-        static audio: IAudioSupport;
-        static video: IVideoSupport;
-        static webGL: boolean;
-        static webAudio: boolean;
-        static webSocket: boolean;
-        static location: boolean;
-        static orientation: boolean;
-        static motion: boolean;
-    }
-    interface IAudioSupport {
-        ogg: boolean;
-        mp3: boolean;
-        wav: boolean;
-        m4a: boolean;
-        opus: boolean;
-    }
-    interface IVideoSupport {
-        ogg: boolean;
-        h264: boolean;
-        webm: boolean;
-        vp9: boolean;
-        hls: boolean;
-    }
-}
-declare module lark {
     var $START_TIME: number;
     /**
      * 用于计算相对时间。此方法返回自启动 Lark 框架以来经过的毫秒数。
@@ -144,7 +89,28 @@ declare module lark.sys {
      * 平台实现输入文本的接口
      */
     interface ITextAdapter {
+        /**
+         * 当用户点击TextInput时，将它设置为正在输入的TextInput对象，HTML text input 会显示出来并获得焦点
+         * @param currentTextInput 要输入的TextInput对象
+         */
+        $setCurrentTextInput(currentTextInput: TextInput): void;
+        /**
+         * 清空正在输入的TextInput，隐藏HTML text input。
+         */
+        $removeCurrentTextInput(): void;
+        /**
+         * 更新HTML5 或 runtime 中 text input 的属性值
+         */
+        $initializeInput(): void;
+        $stage: Stage;
     }
+    /**
+     * 获取
+     * @param textInput
+     * @returns {any}
+     */
+    function $getTextAdapter(textInput: TextInput): ITextAdapter;
+    function $cacheTextAdapter(adapter: ITextAdapter): void;
 }
 declare module lark {
     /**
@@ -165,26 +131,105 @@ declare module lark {
         static CENTER: string;
     }
 }
+declare module lark {
+    /**
+     * DisplayObjectContainer 接口定义显示列表中的显示对象容器。
+     * 该显示列表管理运行时中显示的所有对象。使用 DisplayObjectContainer 排列显示列表中的显示对象。
+     * 每个 DisplayObjectContainer 对象都有自己的子级列表，用于组织对象的 Z 轴顺序。Z 轴顺序是由前至后的顺序，
+     * 可确定哪个对象绘制在前，哪个对象绘制在后等。
+     */
+    interface DisplayObjectContainer extends DisplayObject {
+        /**
+         * 返回此对象的子项数目。
+         */
+        numChildren: number;
+        /**
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
+         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         */
+        addChild(child: DisplayObject): DisplayObject;
+        /**
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。索引为 0 表示该 DisplayObjectContainer 对象的显示列表的后（底）部。
+         * 如果索引值为-1，则表示该 DisplayObjectContainer 对象的显示列表的前（上）部。
+         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
+         * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         */
+        addChildAt(child: DisplayObject, index: number): DisplayObject;
+        /**
+         * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。孙项、曾孙项等，每项都返回 true。
+         * @param child 要测试的子对象。
+         * @returns 如果指定的显示对象为 DisplayObjectContainer 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
+         */
+        contains(child: DisplayObject): boolean;
+        /**
+         * 返回位于指定索引处的子显示对象实例。
+         * @param index 子对象的索引位置。
+         * @returns 位于指定索引位置处的子显示对象。
+         */
+        getChildAt(index: number): DisplayObject;
+        /**
+         * 返回 DisplayObject 的 child 实例的索引位置。
+         * @returns 要标识的子显示对象的索引位置。
+         */
+        getChildIndex(child: DisplayObject): number;
+        /**
+         * 返回具有指定名称的子显示对象。
+         * @param name 要返回的子项的名称。
+         * @returns 具有指定名称的子显示对象。
+         */
+        getChildByName(name: string): DisplayObject;
+        /**
+         * 将一个 DisplayObject 子实例从 DisplayObjectContainer 实例中移除。
+         * @param child 要删除的 DisplayObject 实例。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         */
+        removeChild(child: DisplayObject): DisplayObject;
+        /**
+         * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject。
+         * @param index 要删除的 DisplayObject 的子索引。
+         * @returns 已删除的 DisplayObject 实例。
+         */
+        removeChildAt(index: number): DisplayObject;
+        /**
+         * 更改现有子项在显示对象容器中的位置。这会影响子对象的分层。
+         * @param child 要为其更改索引编号的 DisplayObject 子实例。
+         * @param index 生成的 child 显示对象的索引编号。当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
+         */
+        setChildIndex(child: DisplayObject, index: number): void;
+        /**
+         * 在子级列表中两个指定的索引位置，交换子对象的 Z 轴顺序（前后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
+         * @param index1 第一个子对象的索引位置。
+         * @param index2 第二个子对象的索引位置。
+         */
+        swapChildrenAt(index1: number, index2: number): void;
+        /**
+         * 交换两个指定子对象的 Z 轴顺序（从前到后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
+         * @param child1 第一个子对象。
+         * @param child2 第二个子对象。
+         */
+        swapChildren(child1: DisplayObject, child2: DisplayObject): void;
+        /**
+         * 从 DisplayObjectContainer 实例的子级列表中删除所有 child DisplayObject 实例。
+         */
+        removeChildren(): void;
+        /**
+         * 指定此对象的子项以及子孙项是否接收鼠标/触摸事件
+         * 默认值为 true 即可以接收。
+         */
+        touchChildren: boolean;
+    }
+}
 declare module lark.sys {
     /**
-     * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
+     * 呈现最终绘图结果的画布
      */
-    var sharedRenderContext: sys.RenderContext;
-    /**
-     * surfaceFactory实例
-     */
-    var surfaceFactory: SurfaceFactory;
-    interface SurfaceFactory {
+    interface Surface extends BitmapData {
         /**
-         * 从对象池取出或创建一个新的Surface实例
-         * @param useOnce 表示对取出实例的使用是一次性的，用完后立即会释放。
+         * 绘图上下文
          */
-        create(useOnce?: boolean): Surface;
-        /**
-         * 释放一个Surface实例
-         * @param surface 要释放的Surface实例
-         */
-        release(surface: Surface): void;
+        renderContext: RenderContext;
     }
 }
 declare module lark {
@@ -205,17 +250,6 @@ declare module lark {
      * GraphicsPattern 接口表示描述一个模板（基于BitmapData）的不透明对象，通过 Graphics.createPattern() 静态方法创建.
      */
     interface GraphicsPattern {
-    }
-}
-declare module lark.sys {
-    /**
-     * 呈现最终绘图结果的画布
-     */
-    interface Surface extends BitmapData {
-        /**
-         * 绘图上下文
-         */
-        renderContext: RenderContext;
     }
 }
 declare module lark.sys {
@@ -342,6 +376,30 @@ declare module lark {
 }
 declare module lark.sys {
     interface Renderable extends LarkObject {
+        /**
+         * 是否需要重绘的标志
+         */
+        $isDirty: boolean;
+        /**
+         * 在舞台上的透明度
+         */
+        $renderAlpha: number;
+        /**
+         * 在舞台上的矩阵对象
+         */
+        $renderMatrix: Matrix;
+        /**
+         * 在屏幕上的显示区域
+         */
+        $renderRegion: Region;
+        /**
+         * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
+         */
+        $update(): boolean;
+        /**
+         * 执行绘制
+         */
+        $render(context: RenderContext): void;
     }
 }
 declare module lark {
@@ -355,19 +413,41 @@ declare module lark {
         static measureText(text: string, font: string): number;
     }
 }
-declare module lark {
+declare module lark.sys {
     /**
-     * EventPhase 可为 Event 类的 eventPhase 属性提供值。
+     * 屏幕适配器接口，当播放器视口尺寸改变时，屏幕适配器将被用于计算当前对应的舞台显示尺寸。
      */
-    const enum EventPhase {
+    interface IScreenAdapter {
         /**
-         * 捕获阶段。
+         * 计算舞台显示尺寸
+         * @param scaleMode 当前的缩放模式
+         * @param screenWidth 播放器视口宽度
+         * @param screenHeight 播放器视口高度
+         * @param contentWidth 初始化内容宽度
+         * @param contentHeight 初始化内容高度
          */
-        CAPTURING_PHASE = 1,
+        calculateStageSize(scaleMode: string, screenWidth: number, screenHeight: number, contentWidth: number, contentHeight: number): StageDisplaySize;
+    }
+    /**
+     * 舞台显示尺寸数据
+     */
+    interface StageDisplaySize {
         /**
-         * 冒泡阶段。
+         * 舞台宽度
          */
-        BUBBLING_PHASE = 3,
+        stageWidth: number;
+        /**
+         * 舞台高度
+         */
+        stageHeight: number;
+        /**
+         * 显示宽度，若跟舞台宽度不同，将会产生缩放。
+         */
+        displayWidth: number;
+        /**
+         * 显示高度，若跟舞台高度不同，将会产生缩放。
+         */
+        displayHeight: number;
     }
 }
 declare module lark {
@@ -389,6 +469,29 @@ declare module lark {
         static MIDDLE: string;
     }
 }
+declare module lark {
+    /**
+     * EventPhase 可为 Event 类的 eventPhase 属性提供值。
+     */
+    const enum EventPhase {
+        /**
+         * 捕获阶段。
+         */
+        CAPTURING_PHASE = 1,
+        /**
+         * 冒泡阶段。
+         */
+        BUBBLING_PHASE = 3,
+    }
+}
+declare module lark {
+    /**
+     * 返回 name 参数指定的类的类对象引用。
+     * @param name 类的名称。
+     */
+    function getDefinitionByName(name: string): any;
+}
+declare var __global: any;
 declare module lark {
     /**
      * IEventEmitter 接口定义用于添加或删除事件侦听器的方法，检查是否已注册特定类型的事件侦听器，并调度事件。
@@ -454,51 +557,6 @@ declare module lark {
          * @returns 是否注册过监听器，如果注册过返回true，反之返回false
          */
         willTrigger(type: string): boolean;
-    }
-}
-declare module lark {
-    /**
-     * 返回 name 参数指定的类的类对象引用。
-     * @param name 类的名称。
-     */
-    function getDefinitionByName(name: string): any;
-}
-declare var __global: any;
-declare module lark.sys {
-    /**
-     * 屏幕适配器接口，当播放器视口尺寸改变时，屏幕适配器将被用于计算当前对应的舞台显示尺寸。
-     */
-    interface IScreenAdapter {
-        /**
-         * 计算舞台显示尺寸
-         * @param scaleMode 当前的缩放模式
-         * @param screenWidth 播放器视口宽度
-         * @param screenHeight 播放器视口高度
-         * @param contentWidth 初始化内容宽度
-         * @param contentHeight 初始化内容高度
-         */
-        calculateStageSize(scaleMode: string, screenWidth: number, screenHeight: number, contentWidth: number, contentHeight: number): StageDisplaySize;
-    }
-    /**
-     * 舞台显示尺寸数据
-     */
-    interface StageDisplaySize {
-        /**
-         * 舞台宽度
-         */
-        stageWidth: number;
-        /**
-         * 舞台高度
-         */
-        stageHeight: number;
-        /**
-         * 显示宽度，若跟舞台宽度不同，将会产生缩放。
-         */
-        displayWidth: number;
-        /**
-         * 显示高度，若跟舞台高度不同，将会产生缩放。
-         */
-        displayHeight: number;
     }
 }
 declare module lark {
@@ -628,94 +686,26 @@ declare module lark {
         static POST: string;
     }
 }
-declare module lark {
+declare module lark.sys {
     /**
-     * DisplayObjectContainer 接口定义显示列表中的显示对象容器。
-     * 该显示列表管理运行时中显示的所有对象。使用 DisplayObjectContainer 排列显示列表中的显示对象。
-     * 每个 DisplayObjectContainer 对象都有自己的子级列表，用于组织对象的 Z 轴顺序。Z 轴顺序是由前至后的顺序，
-     * 可确定哪个对象绘制在前，哪个对象绘制在后等。
+     * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
      */
-    interface DisplayObjectContainer extends DisplayObject {
+    var sharedRenderContext: sys.RenderContext;
+    /**
+     * surfaceFactory实例
+     */
+    var surfaceFactory: SurfaceFactory;
+    interface SurfaceFactory {
         /**
-         * 返回此对象的子项数目。
+         * 从对象池取出或创建一个新的Surface实例
+         * @param useOnce 表示对取出实例的使用是一次性的，用完后立即会释放。
          */
-        numChildren: number;
+        create(useOnce?: boolean): Surface;
         /**
-         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
-         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
-         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * 释放一个Surface实例
+         * @param surface 要释放的Surface实例
          */
-        addChild(child: DisplayObject): DisplayObject;
-        /**
-         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。索引为 0 表示该 DisplayObjectContainer 对象的显示列表的后（底）部。
-         * 如果索引值为-1，则表示该 DisplayObjectContainer 对象的显示列表的前（上）部。
-         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
-         * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
-         * @returns 在 child 参数中传递的 DisplayObject 实例。
-         */
-        addChildAt(child: DisplayObject, index: number): DisplayObject;
-        /**
-         * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。孙项、曾孙项等，每项都返回 true。
-         * @param child 要测试的子对象。
-         * @returns 如果指定的显示对象为 DisplayObjectContainer 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
-         */
-        contains(child: DisplayObject): boolean;
-        /**
-         * 返回位于指定索引处的子显示对象实例。
-         * @param index 子对象的索引位置。
-         * @returns 位于指定索引位置处的子显示对象。
-         */
-        getChildAt(index: number): DisplayObject;
-        /**
-         * 返回 DisplayObject 的 child 实例的索引位置。
-         * @returns 要标识的子显示对象的索引位置。
-         */
-        getChildIndex(child: DisplayObject): number;
-        /**
-         * 返回具有指定名称的子显示对象。
-         * @param name 要返回的子项的名称。
-         * @returns 具有指定名称的子显示对象。
-         */
-        getChildByName(name: string): DisplayObject;
-        /**
-         * 将一个 DisplayObject 子实例从 DisplayObjectContainer 实例中移除。
-         * @param child 要删除的 DisplayObject 实例。
-         * @returns 在 child 参数中传递的 DisplayObject 实例。
-         */
-        removeChild(child: DisplayObject): DisplayObject;
-        /**
-         * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject。
-         * @param index 要删除的 DisplayObject 的子索引。
-         * @returns 已删除的 DisplayObject 实例。
-         */
-        removeChildAt(index: number): DisplayObject;
-        /**
-         * 更改现有子项在显示对象容器中的位置。这会影响子对象的分层。
-         * @param child 要为其更改索引编号的 DisplayObject 子实例。
-         * @param index 生成的 child 显示对象的索引编号。当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
-         */
-        setChildIndex(child: DisplayObject, index: number): void;
-        /**
-         * 在子级列表中两个指定的索引位置，交换子对象的 Z 轴顺序（前后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
-         * @param index1 第一个子对象的索引位置。
-         * @param index2 第二个子对象的索引位置。
-         */
-        swapChildrenAt(index1: number, index2: number): void;
-        /**
-         * 交换两个指定子对象的 Z 轴顺序（从前到后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
-         * @param child1 第一个子对象。
-         * @param child2 第二个子对象。
-         */
-        swapChildren(child1: DisplayObject, child2: DisplayObject): void;
-        /**
-         * 从 DisplayObjectContainer 实例的子级列表中删除所有 child DisplayObject 实例。
-         */
-        removeChildren(): void;
-        /**
-         * 指定此对象的子项以及子孙项是否接收鼠标/触摸事件
-         * 默认值为 true 即可以接收。
-         */
-        touchChildren: boolean;
+        release(surface: Surface): void;
     }
 }
 declare module lark {
@@ -731,15 +721,35 @@ declare module lark {
          * 返回二进制的ArrayBuffer对象。
          */
         static ARRAY_BUFFER: string;
-        /**
-         * 返回 JavaScript 对象，将自动解析自服务器传递回来的 JSON 字符串。
-         */
-        static JSON: string;
     }
+}
+declare module lark {
+    /**
+     * 为一个类定义注册运行时类信息,用此方法往类定义上注册它自身以及所有接口对应的枚举值。
+     * 在运行时，这个类的实例将可以使用 lark.is() 方法传入一个枚举值来判断实例类型。
+     * 例如：
+     * //为lark.EventEmitter类注册运行时类信息，由于它实现了IEventEmitter接口，这里应同时传入两个枚举值。
+     * lark.registerClass(lark.EventEmitter,lark.Types.EventEmitter,[lark.Types.IEventEmitter]);
+     * var emitter = new lark.EventEmitter();
+     * lark.log(lark.is(emitter, lark.Types.IEventEmitter));  //输出true。
+     * lark.log(lark.is(emitter, lark.Types.EventEmitter));   //输出true。
+     * lark.log(lark.is(emitter, lark.Types.Bitmap));   //输出false。
+     *
+     * 注意：传入的自定义枚举数值范围要避免与Lark框架(1~2000的数值)或其他第三方库的数值范围重合,
+     * 否则有可能会导致运行时 lark.is() 方法类型判断错误。
+     *
+     * @param classDefinition 要注册的类定义。
+     * @param classFlags 要注册的类对应的枚举值。
+     * @param interfaceFlags 要注册的类所实现的接口的枚举值列表。
+     */
+    function registerClass(classDefinition: any, classFlag: number, interfaceFlags?: number[]): void;
 }
 declare var DEBUG: boolean;
 declare var RELEASE: boolean;
 declare module lark {
+    function $error(code: number, ...params: any[]): void;
+    function $warn(code: number, ...params: any[]): void;
+    function $markReadOnly(instance: any, property: string): void;
 }
 declare module lark {
     var $locale_strings: any;
@@ -796,46 +806,6 @@ declare module lark.sys {
 }
 declare module lark {
     /**
-     * 为一个类定义注册运行时类信息,用此方法往类定义上注册它自身以及所有接口对应的枚举值。
-     * 在运行时，这个类的实例将可以使用 lark.is() 方法传入一个枚举值来判断实例类型。
-     * 例如：
-     * //为lark.EventEmitter类注册运行时类信息，由于它实现了IEventEmitter接口，这里应同时传入两个枚举值。
-     * lark.registerClass(lark.EventEmitter,lark.Types.EventEmitter,[lark.Types.IEventEmitter]);
-     * var emitter = new lark.EventEmitter();
-     * lark.log(lark.is(emitter, lark.Types.IEventEmitter));  //输出true。
-     * lark.log(lark.is(emitter, lark.Types.EventEmitter));   //输出true。
-     * lark.log(lark.is(emitter, lark.Types.Bitmap));   //输出false。
-     *
-     * 注意：传入的自定义枚举数值范围要避免与Lark框架(1~2000的数值)或其他第三方库的数值范围重合,
-     * 否则有可能会导致运行时 lark.is() 方法类型判断错误。
-     *
-     * @param classDefinition 要注册的类定义。
-     * @param classFlags 要注册的类对应的枚举值。
-     * @param interfaceFlags 要注册的类所实现的接口的枚举值列表。
-     */
-    function registerClass(classDefinition: any, classFlag: number, interfaceFlags?: number[]): void;
-}
-declare module lark {
-    /**
-     * 哈希计数
-     */
-    var $hashCount: number;
-    /**
-     * Lark顶级对象。框架内所有对象的基类，为对象实例提供唯一的hashCode值。
-     */
-    class LarkObject {
-        /**
-         * 创建一个 lark.HashObject 对象
-         */
-        constructor();
-        /**
-         * 返回此对象唯一的哈希值,用于唯一确定一个对象。hashCode为大于等于1的整数。
-         */
-        hashCode: number;
-    }
-}
-declare module lark {
-    /**
      * 提供混合模式可视效果的常量值的类。
      */
     class BlendMode {
@@ -858,25 +828,56 @@ declare module lark.sys {
     function blendModeToNumber(blendMode: string): number;
     function numberToBlendMode(blendMode: number): string;
 }
-declare module lark.sys {
-    /**
-     * 屏幕适配器实例，开发者可以通过给这个变量赋值实现了IScreenAdapter接口的实例，从而注入自定义的屏幕适配器。
-     */
-    var screenAdapter: IScreenAdapter;
-    /**
-     * 屏幕适配器默认实现，开发者可以实现自定义规则的屏幕适配器。并在初始化加载时将适配器的实例赋值给lark.sys.screenAdapter上，从而替换掉默认适配器。
-     */
-    class ScreenAdapter extends LarkObject implements IScreenAdapter {
-        constructor();
+declare module lark {
+    class Capabilities {
+        static $language: string;
         /**
-         * 计算舞台显示尺寸
-         * @param scaleMode 当前的缩放模式
-         * @param screenWidth 播放器视口宽度
-         * @param screenHeight 播放器视口高度
-         * @param contentWidth 初始化内容宽度
-         * @param contentHeight 初始化内容高度
+         * 指定运行内容的系统的语言代码。语言指定为 ISO 639-1 中的小写双字母语言代码。
+         * 对于中文，另外使用 ISO 3166 中的大写双字母国家/地区代码，以区分简体中文和繁体中文。
+         * 以下是可能但不限于的语言和值：
+         * 简体中文  zh-CN
+         * 繁体中文  zh-TW
+         * 英语      en
+         * 日语      ja
+         * 韩语      ko
+         * 法语      fr
+         * 捷克语    cs
+         * 丹麦语    da
+         * 荷兰语    nl
+         * 芬兰语    fi
+         * 德语      de
+         * 匈牙利语   hu
+         * 意大利语   it
+         * 挪威语    no
+         * 其他/未知 xu
+         * 波兰语    pl
+         * 葡萄牙语  pt
+         * 俄语      ru
+         * 西班牙语  es
+         * 瑞典语    sv
+         * 土耳其语  tr
          */
-        calculateStageSize(scaleMode: string, screenWidth: number, screenHeight: number, contentWidth: number, contentHeight: number): StageDisplaySize;
+        static language: string;
+        static $isMobile: boolean;
+        static isMobile: boolean;
+        static $os: string;
+        /**
+         * 指示当前的操作系统。os 属性返回下列字符串：
+         *
+         * 苹果移动操作系统     "iOS"
+         * 安卓移动操作系统     "Android"
+         * 微软移动操作系统     "Windows Phone"
+         * 微软桌面操作系统     "Windows"
+         * 苹果桌面操作系统     "Mac OS"
+         * 未知操作系统        "Unknown"
+         */
+        static os: string;
+        static $location: boolean;
+        static location: boolean;
+        static $orientation: boolean;
+        static orientation: boolean;
+        static $motion: boolean;
+        static motion: boolean;
     }
 }
 declare module lark.sys {
@@ -898,11 +899,29 @@ declare module lark.sys {
     class Ticker {
         constructor();
         private playerList;
+        /**
+         * 注册一个播放器实例并运行
+         */
+        $addPlayer(player: Player): void;
+        /**
+         * 停止一个播放器实例的运行。
+         */
+        $removePlayer(player: Player): void;
         private callBackList;
         private thisObjectList;
+        $startTick(callBack: (timeStamp: number) => boolean, thisObject: any): void;
+        $stopTick(callBack: (timeStamp: number) => boolean, thisObject: any): void;
         private getTickIndex(callBack, thisObject);
         private concatTick();
+        /**
+         * 全局帧率
+         */
+        $frameRate: number;
         private frameInterval;
+        /**
+         * 设置全局帧率
+         */
+        $setFrameRate(value: number): void;
         private lastCount;
         /**
          * 执行一次刷新
@@ -921,164 +940,6 @@ declare module lark.sys {
          */
         private broadcastRender();
     }
-}
-declare module lark {
-}
-declare module lark {
-    /**
-     * EventEmitter 是 Lark 的事件派发器类，负责进行事件的发送和侦听。
-     * 事件目标是事件如何通过显示列表层次结构这一问题的焦点。当发生鼠标单击、触摸或按键等事件时，
-     * 框架会将事件对象调度到从显示列表根开始的事件流中。然后该事件对象在显示列表中前进，直到到达事件目标，
-     * 然后从这一点开始其在显示列表中的回程。在概念上，到事件目标的此往返行程被划分为两个阶段：
-     * 捕获阶段包括从根到事件目标节点的行程，冒泡阶段与捕获阶段完全相反，从事件目标节点到根的行程。
-     */
-    class EventEmitter extends LarkObject implements IEventEmitter {
-        /**
-         * EventEmitter 类是可调度事件的所有类的基类。
-         * EventEmitter 类实现 IEventEmitter 接口 ，并且是 DisplayObject 类的基类。
-         * EventEmitter 类允许显示列表上的任何对象都是一个事件目标，同样允许使用 IEventEmitter 接口的方法。
-         */
-        constructor(target?: IEventEmitter);
-        /**
-         * 添加事件侦听器
-         * @param type 事件的类型。
-         * @param listener 处理事件的侦听器函数。此函数必须接受 Event 对象作为其唯一的参数，并且不能返回任何结果，
-         * 如下面的示例所示： function(evt:Event):void 函数可以有任何名称。
-         * @param thisObject 侦听函数绑定的this对象
-         * @param useCapture 确定侦听器是运行于捕获阶段还是运行于冒泡阶段。如果将 useCapture 设置为 true，
-         * 则侦听器只在捕获阶段处理事件，而不在冒泡阶段处理事件。如果 useCapture 为 false，则侦听器只在冒泡阶段处理事件。
-         * 要在两个阶段都侦听事件，请调用 on() 两次：一次将 useCapture 设置为 true，一次将 useCapture 设置为 false。
-         * @param  priority 事件侦听器的优先级。优先级由一个带符号的 32 位整数指定。数字越大，优先级越高。优先级为 n 的所有侦听器会在
-         * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
-         */
-        on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        /**
-         * 添加仅回调一次的事件侦听器，此方法与on()方法不同，on()方法会持续产生回调，而此方法在第一次回调时就会自动移除监听。
-         * @param type 事件的类型。
-         * @param listener 处理事件的侦听器函数。此函数必须接受 Event 对象作为其唯一的参数，并且不能返回任何结果，
-         * 如下面的示例所示： function(evt:Event):void 函数可以有任何名称。
-         * @param thisObject 侦听函数绑定的this对象
-         * @param useCapture useCapture 确定侦听器是运行于捕获阶段还是运行于冒泡阶段。如果将 useCapture 设置为 true，
-         * 则侦听器只在捕获阶段处理事件，而不在冒泡阶段处理事件。如果 useCapture 为 false，则侦听器只在冒泡阶段处理事件。
-         * 要在两个阶段都侦听事件，请调用 once() 两次：一次将 useCapture 设置为 true，一次将 useCapture 设置为 false。
-         * @param  priority 事件侦听器的优先级。优先级由一个带符号的 32 位整数指定。数字越大，优先级越高。优先级为 n 的所有侦听器会在
-         * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
-         */
-        once(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        /**
-         * 移除事件侦听器
-         * @param type 事件名
-         * @param listener 侦听函数
-         * @param thisObject 侦听函数绑定的this对象
-         * @param useCapture 是否使用捕获，这个属性只在显示列表中生效。
-         */
-        removeListener(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean): void;
-        /**
-         * 检测是否存在监听器
-         * @param type 事件类型
-         * @returns 是否存在监听器，若存在返回true，反之返回false。
-         */
-        hasListener(type: string): boolean;
-        /**
-         * 检查是否用此 EventEmitter 对象或其任何始祖为指定事件类型注册了事件侦听器。将指定类型的事件调度给此
-         * EventEmitter 对象或其任一后代时，如果在事件流的任何阶段触发了事件侦听器，则此方法返回 true。
-         * hasListener() 与 willTrigger() 方法的区别是：hasListener() 只检查它所属的对象，
-         * 而 willTrigger() 方法检查整个事件流以查找由 type 参数指定的事件。
-         * @param type 事件类型
-         * @returns 是否注册过监听器，如果注册过返回true，反之返回false
-         */
-        willTrigger(type: string): boolean;
-        /**
-         * 将事件分派到事件流中。事件目标是对其调用 emit() 方法的 EventEmitter 对象。
-         * @param event 调度到事件流中的 Event 对象。
-         * @returns 如果成功调度了事件，则值为 true。值 false 表示失败或对事件调用了 preventDefault()。
-         */
-        emit(event: Event): boolean;
-        /**
-         * 派发一个包含了特定参数的事件到所有注册了特定类型侦听器的对象中。 这个方法使用了一个内部的事件对象池因避免重复的分配导致的额外开销。
-         * @param type 事件类型
-         * @param bubbles 是否冒泡，默认false
-         * @param data 附加数据(可选)
-         * @returns 如果成功调度了事件，则值为 true。值 false 表示失败或对事件调用了 preventDefault()。
-         */
-        emitWith(type: string, bubbles?: boolean, cancelable?: boolean, data?: any): boolean;
-    }
-}
-declare module lark.sys {
-    /**
-     * 事件信息对象
-     */
-    interface EventBin {
-        type: string;
-        listener: (event: Event) => void;
-        thisObject: any;
-        priority: number;
-        target: IEventEmitter;
-        useCapture: boolean;
-        emitOnce: boolean;
-    }
-}
-declare module lark {
-    /**
-     * Point 对象表示二维坐标系统中的某个位置，其中 x 表示水平轴，y 表示垂直轴。
-     */
-    class Point extends LarkObject {
-        /**
-         * 释放一个Point实例到对象池
-         */
-        static release(point: Point): void;
-        /**
-         * 从对象池中取出或创建一个新的Point对象。
-         * 建议对于一次性使用的对象，均使用此方法创建，而不是直接new一个。
-         * 使用完后调用对应的release()静态方法回收对象，能有效减少对象创建数量造成的性能开销。
-         */
-        static create(x: number, y: number): Point;
-        /**
-         * 创建一个 lark.Point 对象
-         * @param x 该对象的x属性值，默认为0
-         * @param y 该对象的y属性值，默认为0
-         */
-        constructor(x?: number, y?: number);
-        /**
-         * 该点的水平坐标。默认值为 0。
-         */
-        x: number;
-        /**
-         * 该点的垂直坐标。默认值为 0。
-         */
-        y: number;
-        /**
-         * 从 (0,0) 到此点的线段长度。
-         */
-        length(): number;
-        /**
-         * 将 Point 的成员设置为指定值
-         * @param x 该对象的x属性值
-         * @param y 该对象的y属性值
-         */
-        setTo(x: number, y: number): Point;
-        /**
-         * 克隆点对象
-         */
-        clone(): Point;
-        /**
-         * 确定两个点是否相同。如果两个点具有相同的 x 和 y 值，则它们是相同的点。
-         * @param toCompare 要比较的点。
-         * @returns 如果该对象与此 Point 对象相同，则为 true 值，如果不相同，则为 false。
-         */
-        equals(toCompare: Point): boolean;
-        /**
-         * 返回 pt1 和 pt2 之间的距离。
-         * @param p1 第一个点
-         * @param p2 第二个点
-         * @returns 第一个点和第二个点之间的距离。
-         */
-        static distance(p1: Point, p2: Point): number;
-    }
-    /**
-     * 仅供框架内复用，要防止暴露引用到外部。
-     */
-    var $TempPoint: Point;
 }
 declare module lark.sys {
     /**
@@ -1108,6 +969,51 @@ declare module lark.sys {
          * 合并脏矩形列表
          */
         private mergeDirtyList(dirtyList);
+    }
+}
+declare module lark {
+}
+declare module lark {
+    /**
+     * 哈希计数
+     */
+    var $hashCount: number;
+    /**
+     * Lark顶级对象。框架内所有对象的基类，为对象实例提供唯一的hashCode值。
+     */
+    class LarkObject {
+        /**
+         * 创建一个 lark.HashObject 对象
+         */
+        constructor();
+        $hashCode: number;
+        /**
+         * 返回此对象唯一的哈希值,用于唯一确定一个对象。hashCode为大于等于1的整数。
+         */
+        hashCode: number;
+    }
+}
+declare module lark {
+}
+declare module lark.sys {
+    /**
+     * 屏幕适配器实例，开发者可以通过给这个变量赋值实现了IScreenAdapter接口的实例，从而注入自定义的屏幕适配器。
+     */
+    var screenAdapter: IScreenAdapter;
+    /**
+     * 屏幕适配器默认实现，开发者可以实现自定义规则的屏幕适配器。并在初始化加载时将适配器的实例赋值给lark.sys.screenAdapter上，从而替换掉默认适配器。
+     */
+    class ScreenAdapter extends LarkObject implements IScreenAdapter {
+        constructor();
+        /**
+         * 计算舞台显示尺寸
+         * @param scaleMode 当前的缩放模式
+         * @param screenWidth 播放器视口宽度
+         * @param screenHeight 播放器视口高度
+         * @param contentWidth 初始化内容宽度
+         * @param contentHeight 初始化内容高度
+         */
+        calculateStageSize(scaleMode: string, screenWidth: number, screenHeight: number, contentWidth: number, contentHeight: number): StageDisplaySize;
     }
 }
 declare module lark {
@@ -1173,13 +1079,182 @@ declare module lark {
         private hasStroke;
         private hasFill;
         private reset();
+        /**
+         * 目标显示对象
+         */
+        $targetDisplay: DisplayObject;
+        /**
+         * 绘图命令列表
+         */
+        $commands: GraphicsCommand[];
         private pushCommand(graphicsType, args);
         private checkMoveTo();
         private extendByPoint(x, y);
+        $measureContentBounds(bounds: Rectangle): void;
+        $render(context: sys.RenderContext): void;
     }
     interface GraphicsCommand {
         type: number;
         arguments: any[];
+    }
+}
+declare module lark {
+    /**
+     * Point 对象表示二维坐标系统中的某个位置，其中 x 表示水平轴，y 表示垂直轴。
+     */
+    class Point extends LarkObject {
+        /**
+         * 释放一个Point实例到对象池
+         */
+        static release(point: Point): void;
+        /**
+         * 从对象池中取出或创建一个新的Point对象。
+         * 建议对于一次性使用的对象，均使用此方法创建，而不是直接new一个。
+         * 使用完后调用对应的release()静态方法回收对象，能有效减少对象创建数量造成的性能开销。
+         */
+        static create(x: number, y: number): Point;
+        /**
+         * 创建一个 lark.Point 对象
+         * @param x 该对象的x属性值，默认为0
+         * @param y 该对象的y属性值，默认为0
+         */
+        constructor(x?: number, y?: number);
+        /**
+         * 该点的水平坐标。默认值为 0。
+         */
+        x: number;
+        /**
+         * 该点的垂直坐标。默认值为 0。
+         */
+        y: number;
+        /**
+         * 从 (0,0) 到此点的线段长度。
+         */
+        length(): number;
+        /**
+         * 将 Point 的成员设置为指定值
+         * @param x 该对象的x属性值
+         * @param y 该对象的y属性值
+         */
+        setTo(x: number, y: number): Point;
+        /**
+         * 克隆点对象
+         */
+        clone(): Point;
+        /**
+         * 确定两个点是否相同。如果两个点具有相同的 x 和 y 值，则它们是相同的点。
+         * @param toCompare 要比较的点。
+         * @returns 如果该对象与此 Point 对象相同，则为 true 值，如果不相同，则为 false。
+         */
+        equals(toCompare: Point): boolean;
+        /**
+         * 返回 pt1 和 pt2 之间的距离。
+         * @param p1 第一个点
+         * @param p2 第二个点
+         * @returns 第一个点和第二个点之间的距离。
+         */
+        static distance(p1: Point, p2: Point): number;
+    }
+    /**
+     * 仅供框架内复用，要防止暴露引用到外部。
+     */
+    var $TempPoint: Point;
+}
+declare module lark {
+    /**
+     * EventEmitter 是 Lark 的事件派发器类，负责进行事件的发送和侦听。
+     * 事件目标是事件如何通过显示列表层次结构这一问题的焦点。当发生鼠标单击、触摸或按键等事件时，
+     * 框架会将事件对象调度到从显示列表根开始的事件流中。然后该事件对象在显示列表中前进，直到到达事件目标，
+     * 然后从这一点开始其在显示列表中的回程。在概念上，到事件目标的此往返行程被划分为两个阶段：
+     * 捕获阶段包括从根到事件目标节点的行程，冒泡阶段与捕获阶段完全相反，从事件目标节点到根的行程。
+     */
+    class EventEmitter extends LarkObject implements IEventEmitter {
+        /**
+         * EventEmitter 类是可调度事件的所有类的基类。
+         * EventEmitter 类实现 IEventEmitter 接口 ，并且是 DisplayObject 类的基类。
+         * EventEmitter 类允许显示列表上的任何对象都是一个事件目标，同样允许使用 IEventEmitter 接口的方法。
+         */
+        constructor(target?: IEventEmitter);
+        $EventEmitter: Object;
+        /**
+         * 添加事件侦听器
+         * @param type 事件的类型。
+         * @param listener 处理事件的侦听器函数。此函数必须接受 Event 对象作为其唯一的参数，并且不能返回任何结果，
+         * 如下面的示例所示： function(evt:Event):void 函数可以有任何名称。
+         * @param thisObject 侦听函数绑定的this对象
+         * @param useCapture 确定侦听器是运行于捕获阶段还是运行于冒泡阶段。如果将 useCapture 设置为 true，
+         * 则侦听器只在捕获阶段处理事件，而不在冒泡阶段处理事件。如果 useCapture 为 false，则侦听器只在冒泡阶段处理事件。
+         * 要在两个阶段都侦听事件，请调用 on() 两次：一次将 useCapture 设置为 true，一次将 useCapture 设置为 false。
+         * @param  priority 事件侦听器的优先级。优先级由一个带符号的 32 位整数指定。数字越大，优先级越高。优先级为 n 的所有侦听器会在
+         * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
+         */
+        on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        /**
+         * 添加仅回调一次的事件侦听器，此方法与on()方法不同，on()方法会持续产生回调，而此方法在第一次回调时就会自动移除监听。
+         * @param type 事件的类型。
+         * @param listener 处理事件的侦听器函数。此函数必须接受 Event 对象作为其唯一的参数，并且不能返回任何结果，
+         * 如下面的示例所示： function(evt:Event):void 函数可以有任何名称。
+         * @param thisObject 侦听函数绑定的this对象
+         * @param useCapture useCapture 确定侦听器是运行于捕获阶段还是运行于冒泡阶段。如果将 useCapture 设置为 true，
+         * 则侦听器只在捕获阶段处理事件，而不在冒泡阶段处理事件。如果 useCapture 为 false，则侦听器只在冒泡阶段处理事件。
+         * 要在两个阶段都侦听事件，请调用 once() 两次：一次将 useCapture 设置为 true，一次将 useCapture 设置为 false。
+         * @param  priority 事件侦听器的优先级。优先级由一个带符号的 32 位整数指定。数字越大，优先级越高。优先级为 n 的所有侦听器会在
+         * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
+         */
+        once(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        $addListener(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number, emitOnce?: boolean): void;
+        /**
+         * 移除事件侦听器
+         * @param type 事件名
+         * @param listener 侦听函数
+         * @param thisObject 侦听函数绑定的this对象
+         * @param useCapture 是否使用捕获，这个属性只在显示列表中生效。
+         */
+        removeListener(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean): void;
+        /**
+         * 检测是否存在监听器
+         * @param type 事件类型
+         * @returns 是否存在监听器，若存在返回true，反之返回false。
+         */
+        hasListener(type: string): boolean;
+        /**
+         * 检查是否用此 EventEmitter 对象或其任何始祖为指定事件类型注册了事件侦听器。将指定类型的事件调度给此
+         * EventEmitter 对象或其任一后代时，如果在事件流的任何阶段触发了事件侦听器，则此方法返回 true。
+         * hasListener() 与 willTrigger() 方法的区别是：hasListener() 只检查它所属的对象，
+         * 而 willTrigger() 方法检查整个事件流以查找由 type 参数指定的事件。
+         * @param type 事件类型
+         * @returns 是否注册过监听器，如果注册过返回true，反之返回false
+         */
+        willTrigger(type: string): boolean;
+        /**
+         * 将事件分派到事件流中。事件目标是对其调用 emit() 方法的 EventEmitter 对象。
+         * @param event 调度到事件流中的 Event 对象。
+         * @returns 如果成功调度了事件，则值为 true。值 false 表示失败或对事件调用了 preventDefault()。
+         */
+        emit(event: Event): boolean;
+        $notifyListener(event: Event): boolean;
+        /**
+         * 派发一个包含了特定参数的事件到所有注册了特定类型侦听器的对象中。 这个方法使用了一个内部的事件对象池因避免重复的分配导致的额外开销。
+         * @param type 事件类型
+         * @param bubbles 是否冒泡，默认false
+         * @param data 附加数据(可选)
+         * @returns 如果成功调度了事件，则值为 true。值 false 表示失败或对事件调用了 preventDefault()。
+         */
+        emitWith(type: string, bubbles?: boolean, cancelable?: boolean, data?: any): boolean;
+    }
+}
+declare module lark.sys {
+    /**
+     * 事件信息对象
+     */
+    interface EventBin {
+        type: string;
+        listener: (event: Event) => void;
+        thisObject: any;
+        priority: number;
+        target: IEventEmitter;
+        useCapture: boolean;
+        emitOnce: boolean;
     }
 }
 declare module lark {
@@ -1256,18 +1331,22 @@ declare module lark {
          * 事件附带的数据对象
          */
         data: any;
+        $type: string;
         /**
          * 事件的类型。类型区分大小写。
          */
         type: string;
+        $bubbles: boolean;
         /**
          * 表示事件是否为冒泡事件。如果事件可以冒泡，则此值为 true；否则为 false。
          */
         bubbles: boolean;
+        $cancelable: boolean;
         /**
          * 表示是否可以阻止与事件相关联的行为。如果可以取消该行为，则此值为 true；否则为 false。
          */
         cancelable: boolean;
+        $eventPhase: number;
         /**
          * 事件流中的当前阶段。此属性可以包含以下数值：
          * 捕获阶段 (EventPhase.CAPTURING_PHASE)。
@@ -1275,15 +1354,18 @@ declare module lark {
          * 冒泡阶段 (EventPhase.BUBBLING_PHASE)。
          */
         eventPhase: number;
+        $currentTarget: any;
         /**
          * 当前正在使用某个事件侦听器处理 Event 对象的对象。例如，如果用户单击“确定”按钮，
          * 则当前目标可以是包含该按钮的节点，也可以是它的已为该事件注册了事件侦听器的始祖之一。
          */
         currentTarget: any;
+        $target: any;
         /**
          * 事件目标。此属性包含目标节点。例如，如果用户单击“确定”按钮，则目标节点就是包含该按钮的显示列表节点。
          */
         target: any;
+        $isDefaultPrevented: boolean;
         /**
          * 检查是否已对事件调用 preventDefault() 方法。
          * @returns 如果已调用 preventDefault() 方法，则返回 true；否则返回 false。
@@ -1296,6 +1378,7 @@ declare module lark {
          * 注意：当cancelable属性为false时，此方法不可用。
          */
         preventDefault(): void;
+        $isPropagationStopped: boolean;
         /**
          * 防止对事件流中当前节点的后续节点中的所有事件侦听器进行处理。此方法不会影响当前节点 currentTarget 中的任何事件侦听器。
          * 相比之下，stopImmediatePropagation() 方法可以防止对当前节点中和后续节点中的事件侦听器进行处理。
@@ -1303,6 +1386,7 @@ declare module lark {
          * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
          */
         stopPropagation(): void;
+        $isPropagationImmediateStopped: boolean;
         /**
          * 防止对事件流中当前节点中和所有后续节点中的事件侦听器进行处理。此方法会立即生效，并且会影响当前节点中的事件侦听器。
          * 相比之下，在当前节点中的所有事件侦听器都完成处理之前，stopPropagation() 方法不会生效。
@@ -1343,6 +1427,98 @@ declare module lark {
         static release(event: Event): void;
     }
 }
+declare module lark.sys {
+    /**
+     * 显示列表
+     */
+    class DisplayList extends LarkObject implements Renderable {
+        /**
+         * 释放一个DisplayList实例到对象池
+         */
+        static release(displayList: DisplayList): void;
+        /**
+         * 从对象池中取出或创建一个新的DisplayList对象。
+         */
+        static create(target: DisplayObject): DisplayList;
+        /**
+         * 创建一个DisplayList对象
+         */
+        constructor(root: DisplayObject);
+        /**
+         * 是否需要重绘
+         */
+        $isDirty: boolean;
+        /**
+         * 在舞台上的透明度
+         */
+        $renderAlpha: number;
+        /**
+         * 在舞台上的矩阵对象
+         */
+        $renderMatrix: Matrix;
+        /**
+         * 在舞台上的显示区域
+         */
+        $renderRegion: Region;
+        /**
+         * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
+         */
+        $update(): boolean;
+        /**
+         * 呈现绘制结果的目标画布
+         */
+        surface: Surface;
+        offsetX: number;
+        offsetY: number;
+        $render(context: RenderContext): void;
+        /**
+         * 显示列表根节点
+         */
+        root: DisplayObject;
+        needRedraw: boolean;
+        private drawToStage;
+        /**
+         * 绘图上下文
+         */
+        renderContext: RenderContext;
+        /**
+         * 设置剪裁边界，不再绘制完整目标对象，画布尺寸由外部决定，超过边界的节点将跳过绘制。
+         */
+        setClipRect(width: number, height: number): void;
+        /**
+         * 显示对象的渲染节点发生改变时，把自身的IRenderable对象注册到此列表上。
+         */
+        private dirtyNodes;
+        private dirtyNodeList;
+        /**
+         * 标记一个节点需要重新渲染
+         */
+        markDirty(node: Renderable): void;
+        private dirtyList;
+        private dirtyRegion;
+        /**
+         * 更新节点属性并返回脏矩形列表。
+         */
+        updateDirtyRegions(): Region[];
+        /**
+         * 绘制根节点显示对象到目标画布，返回draw的次数。
+         */
+        drawToSurface(): number;
+        /**
+         * 绘制一个显示对象
+         */
+        private drawDisplayObject(displayObject, context, dirtyList, drawToStage, displayList, clipRegion);
+        private drawWidthBlendMode(displayObject, context, dirtyList, drawToStage, clipRegion);
+        private drawWidthClip(displayObject, context, dirtyList, drawToStage, clipRegion);
+        private createRenderContext(width, height);
+        private drawWidthSurface(context, surface, drawToStage, offsetX, offsetY);
+        private sizeChanged;
+        /**
+         * 改变画布的尺寸，由于画布尺寸修改会清空原始画布。所以这里将原始画布绘制到一个新画布上，再与原始画布交换。
+         */
+        changeSurfaceSize(): void;
+    }
+}
 declare module lark {
     /**
      * 文本输入框相关事件。
@@ -1360,6 +1536,216 @@ declare module lark {
          * TextInput 正在输入文本,通过事件对象的text属性可以读取最新的文本内容。
          */
         static INPUT: string;
+    }
+}
+declare module lark {
+    /**
+     * 使用 TouchEvent 类，您可以处理设备上那些检测用户与设备之间的接触的事件。
+     * 当用户与带有触摸屏的移动电话或平板电脑等设备交互时，用户通常使用手指或指针设备接触屏幕。可使用 TouchEvent
+     * 类开发响应基本触摸事件（如单个手指点击）的应用程序。使用此类中定义的事件类型创建事件侦听器。
+     * 注意：当对象嵌套在显示列表中时，触摸事件的目标将是显示列表中可见的最深的可能嵌套对象。
+     * 此对象称为目标节点。要使目标节点的祖代（祖代是一个包含显示列表中所有目标节点的对象，从舞台到目标节点的父节点均包括在内）
+     * 接收触摸事件的通知，请对祖代节点使用 EventEmitter.on() 并将 type 参数设置为要检测的特定触摸事件。
+     *
+     * @version Lark 1.0
+     * @platform Web,Runtime,Native
+     */
+    class TouchEvent extends Event {
+        /**
+         * 移动
+         *
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        static TOUCH_MOVE: string;
+        /**
+         * 开始触摸
+         *
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        static TOUCH_BEGIN: string;
+        /**
+         * 结束触摸
+         *
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        static TOUCH_END: string;
+        /**
+         * 轻拍，开始和结束触摸都在同一对象上
+         *
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        static TOUCH_TAP: string;
+        /**
+         * 在开始触摸的对象的外部结束触摸
+         *
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        static TOUCH_RELEASE_OUTSIDE: string;
+        /**
+         * 创建一个 TouchEvent 对象，其中包含有关Touch事件的信息
+         * @param type 事件的类型，可以作为 Event.type 访问。
+         * @param bubbles 确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
+         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
+         * @param stageX 事件发生点在全局舞台坐标系中的水平坐标
+         * @param stageY 事件发生点在全局舞台坐标系中的垂直坐标
+         * @param touchPointID 分配给触摸点的唯一标识号
+         *
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        constructor(type: string, bubbles?: boolean, cancelable?: boolean, stageX?: number, stageY?: number, touchPointID?: number);
+        /**
+         * @private
+         */
+        $setTo(stageX: number, stageY: number, touchPointID: number): void;
+        /**
+         * @private
+         */
+        $stageX: number;
+        /**
+         * 事件发生点在全局舞台坐标中的水平坐标。
+         *
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        stageX: number;
+        /**
+         * @private
+         */
+        $stageY: number;
+        /**
+         * 事件发生点在全局舞台坐标中的垂直坐标。
+         *
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        stageY: number;
+        /**
+         * @private
+         */
+        private localPoint;
+        /**
+         * @private
+         */
+        private getLocalXY();
+        /**
+         * 事件发生点相对于currentTarget的水平坐标。
+         *
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        localX: number;
+        /**
+         * 事件发生点相对于currentTarget的垂直坐标。
+         *
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        localY: number;
+        /**
+         * 分配给触摸点的唯一标识号
+         *
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        touchPointID: number;
+        /**
+         * 如果已修改显示列表，调用此方法将会忽略帧频限制，在此事件处理完成后立即重绘屏幕。
+         *
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        updateAfterEvent(): void;
+        /**
+         * 使用指定的EventEmitter对象来抛出Event事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         * @param target 派发事件目标
+         * @param type 事件的类型，可以作为 Event.type 访问。
+         * @param bubbles 确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
+         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
+         * @param stageX 事件发生点在全局舞台坐标系中的水平坐标
+         * @param stageY 事件发生点在全局舞台坐标系中的垂直坐标
+         * @param touchPointID 分配给触摸点的唯一标识号
+         *
+         * @see lark.Event.create()
+         * @see lark.Event.release()
+         *
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        static emitTouchEvent(target: IEventEmitter, type: string, bubbles?: boolean, cancelable?: boolean, stageX?: number, stageY?: number, touchPointID?: number): boolean;
+    }
+}
+declare module lark {
+    /**
+     * 每当 Timer 对象达到由 Timer.delay 属性指定的间隔时，Timer 对象即会调度 TimerEvent 对象。
+     */
+    class TimerEvent extends Event {
+        /**
+         * 每当 Timer 对象达到根据 Timer.delay 属性指定的间隔时调度。
+         */
+        static TIMER: string;
+        /**
+         * 每当它完成 Timer.repeatCount 设置的请求数后调度。
+         */
+        static TIMER_COMPLETE: string;
+        /**
+         * 创建一个 TimerEvent 对象
+         * @param type 事件的类型。事件侦听器可以通过继承的 type 属性访问此信息。
+         * @param bubbles 确定 Event 对象是否冒泡。事件侦听器可以通过继承的 bubbles 属性访问此信息。
+         * @param cancelable 确定是否可以取消 Event 对象。事件侦听器可以通过继承的 cancelable 属性访问此信息。
+         */
+        constructor(type: string, bubbles?: boolean, cancelable?: boolean);
+        /**
+         * 如果已修改显示列表，调用此方法将会忽略帧频限制，在此事件处理完成后立即重绘屏幕。
+         */
+        updateAfterEvent(): void;
+        /**
+         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         * @param target 事件派发目标
+         * @param type 事件类型
+         */
+        static emitTimerEvent(target: IEventEmitter, type: string, bubbles?: boolean, cancelable?: boolean): boolean;
+    }
+}
+declare module lark {
+    /**
+     * 当加载操作已开始或套接字已接收到数据时，将调度 ProgressEvent 对象。
+     * 有两种类型的进程事件：ProgressEvent.PROGRESS 和 ProgressEvent.SOCKET_DATA。
+     */
+    class ProgressEvent extends Event {
+        /**
+         * 在下载操作过程中收到数据时调度。
+         */
+        static PROGRESS: string;
+        /**
+         * 在套接字接收到数据后调度。
+         */
+        static SOCKET_DATA: string;
+        /**
+         * 在侦听器处理事件时加载的项数或字节数。
+         */
+        bytesLoaded: number;
+        /**
+         * 如果加载过程成功，将加载的总项数或总字节数。
+         */
+        bytesTotal: number;
+        /**
+         * 创建一个 ProgressEvent 对象
+         */
+        constructor(type: string, bubbles?: boolean, cancelable?: boolean, bytesLoaded?: number, bytesTotal?: number);
+        /**
+         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         * @param target 派发事件目标
+         * @param type 事件类型
+         * @param bytesLoaded 加载的项数或字节数
+         * @param bytesTotal 加载的总项数或总字节数
+         */
+        static emitProgressEvent(target: IEventEmitter, type: string, bytesLoaded?: number, bytesTotal?: number): boolean;
     }
 }
 declare module lark {
@@ -1411,79 +1797,387 @@ declare module lark {
         stop(): void;
         private updateInterval;
         private lastCount;
+        /**
+         * Ticker以60FPS频率刷新此方法
+         */
+        $update(timeStamp: number): boolean;
     }
-}
-declare module lark {
 }
 declare module lark.sys {
     /**
-     * 显示列表
+     * 显示对象失效标志
      */
-    class DisplayList extends LarkObject implements Renderable {
+    const enum DisplayObjectFlags {
         /**
-         * 释放一个DisplayList实例到对象池
+         * 显示对象是否开启像素级精确碰撞，开启后显示对象的透明区域将可以穿透，Graphics默认开启此功能，。
          */
-        static release(displayList: DisplayList): void;
+        PixelHitTest = 1,
         /**
-         * 从对象池中取出或创建一个新的DisplayList对象。
+         * 显示对象自身的绘制区域尺寸失效
          */
-        static create(target: DisplayObject): DisplayList;
+        InvalidContentBounds = 2,
         /**
-         * 创建一个DisplayList对象
+         * 显示对象的矩形区域尺寸失效，包括自身绘制区域和子项的区域集合
          */
-        constructor(root: DisplayObject);
+        InvalidBounds = 4,
         /**
-         * 呈现绘制结果的目标画布
+         * 显示对象的matrix属性失效标志，通常因为scaleX，width等属性发生改变。
          */
-        surface: Surface;
-        offsetX: number;
-        offsetY: number;
+        InvalidMatrix = 8,
         /**
-         * 显示列表根节点
+         * 显示对象祖代的矩阵失效。
          */
-        root: DisplayObject;
-        needRedraw: boolean;
-        private drawToStage;
+        InvalidConcatenatedMatrix = 16,
         /**
-         * 绘图上下文
+         * 显示对象祖代的逆矩阵失效。
          */
-        renderContext: RenderContext;
+        InvalidInvertedConcatenatedMatrix = 32,
         /**
-         * 设置剪裁边界，不再绘制完整目标对象，画布尺寸由外部决定，超过边界的节点将跳过绘制。
+         * 显示对象祖代的透明度属性失效。
          */
-        setClipRect(width: number, height: number): void;
+        InvalidConcatenatedAlpha = 64,
         /**
-         * 显示对象的渲染节点发生改变时，把自身的IRenderable对象注册到此列表上。
+         * 显示对象应该被缓存成位图的标志，即使没有设置这个标志，也有可能被缓存成位图，例如含有滤镜的情况。
+         * 而当设置了这个标志，如果内存不足，也会放弃缓存。
          */
-        private dirtyNodes;
-        private dirtyNodeList;
+        CacheAsBitmap = 128,
         /**
-         * 标记一个节点需要重新渲染
+         * 显示对象自身需要重绘的标志
          */
-        markDirty(node: Renderable): void;
-        private dirtyList;
-        private dirtyRegion;
+        DirtyRender = 256,
         /**
-         * 更新节点属性并返回脏矩形列表。
+         * 子项中已经全部含有DirtyRender标志，无需继续遍历。
          */
-        updateDirtyRegions(): Region[];
+        DirtyChildren = 512,
         /**
-         * 绘制根节点显示对象到目标画布，返回draw的次数。
+         * 对象自身在舞台上的显示尺寸发生改变。
          */
-        drawToSurface(): number;
+        TouchEnabled = 1024,
         /**
-         * 绘制一个显示对象
+         * 对象自身以及子项在舞台上显示尺寸发生改变。
          */
-        private drawDisplayObject(displayObject, context, dirtyList, drawToStage, displayList, clipRegion);
-        private drawWidthBlendMode(displayObject, context, dirtyList, drawToStage, clipRegion);
-        private drawWidthClip(displayObject, context, dirtyList, drawToStage, clipRegion);
-        private createRenderContext(width, height);
-        private drawWidthSurface(context, surface, drawToStage, offsetX, offsetY);
-        private sizeChanged;
+        TouchChildren = 2048,
         /**
-         * 改变画布的尺寸，由于画布尺寸修改会清空原始画布。所以这里将原始画布绘制到一个新画布上，再与原始画布交换。
+         * DirtyRender|DirtyChildren
          */
-        changeSurfaceSize(): void;
+        Dirty = 768,
+        /**
+         * 添加或删除子项时，需要向子项传递的标志。
+         */
+        DownOnAddedOrRemoved = 624,
+        /**
+         * 显示对象初始化时的标志量
+         */
+        InitFlags = 3952,
+    }
+}
+declare module lark {
+    /**
+     * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时显示的所有对象。使用 DisplayObjectContainer 类排列显示列表中的显示对象。
+     * DisplayObjectContainer 对象可以有子显示对象，而其他显示对象是“叶”节点，只有父级和同级，没有子级。
+     * DisplayObject 类支持基本功能（如对象的 x 和 y 位置），也支持更高级的对象属性（如它的转换矩阵），所有显示对象都继承自 DisplayObject 类。
+     * DisplayObject 类包含若干广播事件。通常，任何特定事件的目标均为一个特定的 DisplayObject 实例。
+     * 若只有一个目标，则会将事件侦听器限制为只能放置到该目标上（在某些情况下，可放置到显示列表中该目标的祖代上），这意味着您可以向任何 DisplayObject 实例添加侦听器来侦听广播事件。
+     */
+    class DisplayObject extends EventEmitter implements sys.Renderable {
+        /**
+         * 创建一个显示对象
+         */
+        constructor();
+        $DisplayObject: Object;
+        $displayFlags: number;
+        $setFlags(flags: number): void;
+        $toggleFlags(flags: number, on: boolean): void;
+        $removeFlags(flags: number): void;
+        /**
+         * 沿着显示列表向上移除标志量，如果标志量没被设置过就停止移除。
+         */
+        $removeFlagsUp(flags: number): void;
+        $hasFlags(flags: number): boolean;
+        /**
+         * 沿着显示列表向上传递标志量，如果标志量已经被设置过就停止传递。
+         */
+        $propagateFlagsUp(flags: number): void;
+        /**
+         * 沿着显示列表向下传递标志量，非容器直接设置自身的flag，此方法会在 DisplayObjectContainer 中被覆盖。
+         */
+        $propagateFlagsDown(flags: number): void;
+        $hasAnyFlags(flags: number): boolean;
+        private invalidateMatrix();
+        /**
+         * 标记这个显示对象在父级容器的位置发生了改变。
+         */
+        private invalidatePosition();
+        /**
+         * 能够含有子项的类将子项列表存储在这个属性里。
+         */
+        $children: DisplayObject[];
+        /**
+         * 表示 DisplayObject 的实例名称。
+         * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
+         */
+        name: string;
+        $parent: DisplayObjectContainer;
+        /**
+         * 表示包含此显示对象的 DisplayObjectContainer 对象。
+         * 使用 parent 属性可以指定高于显示列表层次结构中当前显示对象的显示对象的相对路径。
+         */
+        parent: DisplayObjectContainer;
+        $setParent(parent: DisplayObjectContainer): void;
+        $onAddToStage(stage: Stage, nestLevel: number): void;
+        $onRemoveFromStage(): void;
+        $stage: Stage;
+        /**
+         * 这个对象在显示列表中的嵌套深度，舞台为1，它的子项为2，子项的子项为3，以此类推。当对象不在显示列表中时此属性值为0.
+         */
+        $nestLevel: number;
+        /**
+         * 显示对象的舞台。
+         * 例如，您可以创建多个显示对象并加载到显示列表中，每个显示对象的 stage 属性是指相同的 Stage 对象。
+         * 如果显示对象未添加到显示列表，则其 stage 属性会设置为 null。
+         */
+        stage: Stage;
+        /**
+         * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。
+         * 注意：必须对matrix属性重新赋值改变的值才能生效，若获取matrix引用来修改对象属性，将不会发生任何改变。
+         */
+        matrix: Matrix;
+        $getMatrix(): Matrix;
+        $setMatrix(matrix: Matrix): void;
+        /**
+         * 获得这个显示对象以及它所有父级对象的连接矩阵。
+         */
+        $getConcatenatedMatrix(): Matrix;
+        $getInvertedConcatenatedMatrix(): Matrix;
+        /**
+         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。
+         * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
+         * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
+         */
+        x: number;
+        $getX(): number;
+        $setX(value: number): boolean;
+        /**
+         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 y 坐标。
+         * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
+         * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
+         */
+        y: number;
+        $getY(): number;
+        $setY(value: number): boolean;
+        /**
+         * 表示从注册点开始应用的对象的水平缩放比例（百分比）。
+         * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
+         * 默认值为 1，即不缩放。
+         * @default 1
+         */
+        scaleX: number;
+        $setScaleX(value: number): boolean;
+        /**
+         * 表示从对象注册点开始应用的对象的垂直缩放比例（百分比）。
+         * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
+         * 默认值为 1，即不缩放。
+         * @default 1
+         */
+        scaleY: number;
+        $setScaleY(value: number): boolean;
+        /**
+         * 表示 DisplayObject 实例距其原始方向的旋转程度，以度为单位。
+         * 从 0 到 180 的值表示顺时针方向旋转；从 0 到 -180 的值表示逆时针方向旋转。对于此范围之外的值，可以通过加上或
+         * 减去 360 获得该范围内的值。例如，my_video.rotation = 450语句与 my_video.rotation = 90 是相同的。
+         * @default 0 默认值为 0 不旋转。
+         */
+        rotation: number;
+        /**
+         * 表示显示对象的宽度，以像素为单位。
+         */
+        width: number;
+        $getWidth(): number;
+        $setWidth(value: number): void;
+        /**
+         * 表示显示对象的高度，以像素为单位。
+         */
+        height: number;
+        $getHeight(): number;
+        $setHeight(value: number): void;
+        $visible: boolean;
+        /**
+         * 显示对象是否可见。
+         * 不可见的显示对象已被禁用。例如，如果实例的 visible=false，则无法单击该对象。
+         * 默认值为 true 可见
+         */
+        visible: boolean;
+        /**
+         * cacheAsBitmap创建的缓存位图节点。
+         */
+        $displayList: lark.sys.DisplayList;
+        /**
+         * 如果设置为 true，则 Lark 播放器将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
+         * 将 cacheAsBitmap 属性设置为 true 后，呈现并不更改，但是，显示对象将自动执行像素贴紧。执行速度可能会大大加快，
+         * 具体取决于显示对象内容的复杂性。在内存超过上限的情况下，即使将 cacheAsBitmap 属性设置为 true，显示对象也不使用位图缓存。
+         * 最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放和旋转的显示对象一起使用。
+         */
+        cacheAsBitmap: boolean;
+        /**
+         * cacheAsBitmap属性改变
+         */
+        $cacheAsBitmapChanged(): void;
+        /**
+         * 渲染时会用到的属性，独立声明一个变量
+         */
+        $alpha: number;
+        /**
+         * 表示指定对象的 Alpha 透明度值。
+         * 有效值为 0（完全透明）到 1（完全不透明）。alpha 设置为 0 的显示对象是活动的，即使它们不可见。
+         *  @default 1 默认值为 1。
+         */
+        alpha: number;
+        /**
+         * 获取这个显示对象跟它所有父级透明度的乘积
+         */
+        $getConcatenatedAlpha(): number;
+        /**
+         * 指定此对象是否接收鼠标/触摸事件
+         * @default true 默认为 true 即可以接收。
+         */
+        touchEnabled: boolean;
+        $setTouchEnabled(value: boolean): void;
+        /**
+         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，设置为false将只检查显示对象测量的最大矩形区域。
+         * 开启此属性将会有一定量的额外性能损耗，Shape和Sprite等含有矢量图的类默认开启此属性，其他类默认关闭。
+         */
+        pixelHitTest: boolean;
+        $scrollRect: Rectangle;
+        /**
+         * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
+         * 注意：必须对scrollRect属性重新赋值改变的值才能生效，若获取scrollRect引用来修改对象属性，将不会发生任何改变。
+         */
+        scrollRect: Rectangle;
+        $blendMode: number;
+        /**
+         * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上
+         * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
+         */
+        blendMode: string;
+        /**
+         * 被遮罩的对象
+         */
+        $maskedObject: DisplayObject;
+        $mask: DisplayObject;
+        /**
+         * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
+         * 但不绘制 mask 对象本身。将 mask 设置为 null 可删除蒙版。要能够缩放遮罩对象，它必须在显示列表中。要能够拖动蒙版
+         * Sprite 对象，它必须在显示列表中。
+         * 注意：单个 mask 对象不能用于遮罩多个执行调用的显示对象。在将 mask 分配给第二个显示对象时，会撤消其作为第一个对象的遮罩，
+         * 该对象的 mask 属性将变为 null。
+         */
+        mask: DisplayObject;
+        /**
+         * 返回一个矩形，该矩形定义相对于 targetCoordinateSpace 对象坐标系的显示对象区域。
+         * @param targetCoordinateSpace 定义要使用的坐标系的显示对象。
+         * @param resultRect 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Rectangle对象来存储结果，
+         * 若不传入将创建一个新的Rectangle对象返回。
+         * @returns 定义与 targetCoordinateSpace 对象坐标系统相关的显示对象面积的矩形。
+         */
+        getBounds(targetCoordinateSpace: DisplayObject, resultRect?: Rectangle): Rectangle;
+        $getTransformedBounds(targetCoordinateSpace: DisplayObject, resultRect?: Rectangle): Rectangle;
+        /**
+         * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
+         * @param stageX 舞台坐标x
+         * @param stageY 舞台坐标y
+         * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
+         * 若不传入将创建一个新的Point对象返回。
+         * @returns 具有相对于显示对象的坐标的 Point 对象。
+         */
+        globalToLocal(stageX: number, stageY: number, resultPoint?: Point): Point;
+        /**
+         * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
+         * @param localX 舞台坐标x
+         * @param localY 舞台坐标y
+         * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
+         * 若不传入将创建一个新的Point对象返回。
+         * @returns 具有相对于显示对象的坐标的 Point 对象。
+         */
+        localToGlobal(localX: number, localY: number, resultPoint?: Point): Point;
+        /**
+         * 标记自身的测量尺寸失效
+         */
+        $invalidateContentBounds(): void;
+        /**
+         * 获取显示对象占用的矩形区域集合，通常包括自身绘制的测量区域，如果是容器，还包括所有子项占据的区域。
+         */
+        $getOriginalBounds(): Rectangle;
+        /**
+         * 测量子项占用的矩形区域
+         * @param bounds 测量结果存储在这个矩形对象内
+         */
+        $measureChildBounds(bounds: Rectangle): void;
+        $getContentBounds(): Rectangle;
+        /**
+         * 测量自身占用的矩形区域，注意：此测量结果并不包括子项占据的区域。
+         * @param bounds 测量结果存储在这个矩形对象内
+         */
+        $measureContentBounds(bounds: Rectangle): void;
+        $parentDisplayList: lark.sys.DisplayList;
+        /**
+         * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
+         * @param notiryChildren 是否标记子项也需要重绘。传入false或不传入，将只标记自身需要重绘。通常只有alpha属性改变会需要通知子项重绘。
+         */
+        $invalidate(notifyChildren?: boolean): void;
+        /**
+         * 标记自身以及所有子项在父级中变换叠加的显示内容失效。此方法不会触发自身的cacheAsBitmap重绘。
+         * 通常用于矩阵改变或从显示列表添加和移除时。若自身的显示内容已经改变需要重绘，应该调用$invalidate()。
+         */
+        $invalidateTransform(): void;
+        /**
+         * 是否需要重绘的标志，此属性在渲染时会被访问，所以单独声明一个直接的变量。
+         */
+        $isDirty: boolean;
+        /**
+         * 这个对象在舞台上的整体透明度
+         */
+        $renderAlpha: number;
+        /**
+         * 在舞台上的矩阵对象
+         */
+        $renderMatrix: Matrix;
+        /**
+         * 此显示对象自身（不包括子项）在屏幕上的显示尺寸。
+         */
+        $renderRegion: sys.Region;
+        /**
+         * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
+         */
+        $update(): boolean;
+        /**
+         * 执行渲染,绘制自身到屏幕
+         */
+        $render(context: sys.RenderContext): void;
+        $hitTest(stageX: number, stageY: number, shapeFlag?: boolean): DisplayObject;
+        private hitTestPixel(localX, localY);
+        static $enterFrameCallBackList: DisplayObject[];
+        static $renderCallBackList: DisplayObject[];
+        $addListener(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number, emitOnce?: boolean): void;
+        removeListener(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean): void;
+        emit(event: Event): boolean;
+        /**
+         * 获取事件流列表。注意：Lark框架的事件流与Flash实现并不一致。
+         *
+         * Flash的事件流有三个阶段：捕获，目标，冒泡。
+         * 默认的的事件监听若不开始useCapture将监听目标和冒泡阶段。若开始capture将只能监听捕获当不包括目标的事件。
+         * 可以在Flash中写一个简单的测试：实例化一个非容器显示对象，例如TextField。分别监听useCapture为true和false时的鼠标事件。
+         * 点击后将只有useCapture为false的回调函数输出信息。也就带来一个问题「Flash的捕获阶段不能监听到最内层对象本身，只在父级列表有效」。
+         *
+         * 而HTML里的事件流只有两个阶段：捕获，冒泡。
+         * 最初是由于各个浏览器都只有一个方向的事件流，并且存在捕获和冒泡两种相反的顺序。w3c最终决定同时实现两种事件流，监听时用useCapture来区分监。
+         * HTML里与Flash里事件流最根本的区别：没有目标阶段，最内层的点击对象会触发两次事件，一次捕获一次冒泡。而Flash只触发一次，
+         * 是与「捕获」和「冒泡」独立的「目标」阶段。出于拥抱web标准的考虑，加上大部分Flash开发者其实也并不知道有「目标」阶段的存在。
+         *
+         * Lark最终采用了HTML里只有两个阶段的事件流机制。
+         */
+        $getPropagationList(target: DisplayObject): DisplayObject[];
+        $emitPropagationEvent(event: Event, list: DisplayObject[], targetIndex: number): void;
+        willTrigger(type: string): boolean;
     }
 }
 declare module lark {
@@ -1583,400 +2277,13 @@ declare module lark {
          * @returns 返回克隆后的矩形
          */
         clone(): Rectangle;
+        $getBaseWidth(angle: number): number;
+        $getBaseHeight(angle: number): number;
     }
     /**
      * 仅供框架内复用，要防止暴露引用到外部。
      */
     var $TempRectangle: Rectangle;
-}
-declare module lark {
-    /**
-     * 每当 Timer 对象达到由 Timer.delay 属性指定的间隔时，Timer 对象即会调度 TimerEvent 对象。
-     */
-    class TimerEvent extends Event {
-        /**
-         * 每当 Timer 对象达到根据 Timer.delay 属性指定的间隔时调度。
-         */
-        static TIMER: string;
-        /**
-         * 每当它完成 Timer.repeatCount 设置的请求数后调度。
-         */
-        static TIMER_COMPLETE: string;
-        /**
-         * 创建一个 TimerEvent 对象
-         * @param type 事件的类型。事件侦听器可以通过继承的 type 属性访问此信息。
-         * @param bubbles 确定 Event 对象是否冒泡。事件侦听器可以通过继承的 bubbles 属性访问此信息。
-         * @param cancelable 确定是否可以取消 Event 对象。事件侦听器可以通过继承的 cancelable 属性访问此信息。
-         */
-        constructor(type: string, bubbles?: boolean, cancelable?: boolean);
-        /**
-         * 如果已修改显示列表，调用此方法将会忽略帧频限制，在此事件处理完成后立即重绘屏幕。
-         */
-        updateAfterEvent(): void;
-        /**
-         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-         * @param target 事件派发目标
-         * @param type 事件类型
-         */
-        static emitTimerEvent(target: IEventEmitter, type: string, bubbles?: boolean, cancelable?: boolean): boolean;
-    }
-}
-declare module lark {
-    /**
-     * 使用 TouchEvent 类，您可以处理设备上那些检测用户与设备之间的接触的事件。
-     * 当用户与带有触摸屏的移动电话或平板电脑等设备交互时，用户通常使用手指或指针设备接触屏幕。可使用 TouchEvent
-     * 类开发响应基本触摸事件（如单个手指点击）的应用程序。使用此类中定义的事件类型创建事件侦听器。
-     * 注意：当对象嵌套在显示列表中时，触摸事件的目标将是显示列表中可见的最深的可能嵌套对象。
-     * 此对象称为目标节点。要使目标节点的祖代（祖代是一个包含显示列表中所有目标节点的对象，从舞台到目标节点的父节点均包括在内）
-     * 接收触摸事件的通知，请对祖代节点使用 EventEmitter.on() 并将 type 参数设置为要检测的特定触摸事件。
-     *
-     * @version Lark 1.0
-     * @platform HTML5,Runtime,Native
-     */
-    class TouchEvent extends Event {
-        /**
-         * 移动
-         *
-         * @version Lark 1.0
-         * @platform HTML5,Runtime,Native
-         */
-        static TOUCH_MOVE: string;
-        /**
-         * 开始触摸
-         *
-         * @version Lark 1.0
-         * @platform HTML5,Runtime,Native
-         */
-        static TOUCH_BEGIN: string;
-        /**
-         * 结束触摸
-         *
-         * @version Lark 1.0
-         * @platform HTML5,Runtime,Native
-         */
-        static TOUCH_END: string;
-        /**
-         * 轻拍，开始和结束触摸都在同一对象上
-         *
-         * @version Lark 1.0
-         * @platform HTML5,Runtime,Native
-         */
-        static TOUCH_TAP: string;
-        /**
-         * 在开始触摸的对象的外部结束触摸
-         *
-         * @version Lark 1.0
-         * @platform HTML5,Runtime,Native
-         */
-        static TOUCH_RELEASE_OUTSIDE: string;
-        /**
-         * 创建一个 TouchEvent 对象，其中包含有关Touch事件的信息
-         * @param type 事件的类型，可以作为 Event.type 访问。
-         * @param bubbles 确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
-         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
-         * @param stageX 事件发生点在全局舞台坐标系中的水平坐标
-         * @param stageY 事件发生点在全局舞台坐标系中的垂直坐标
-         * @param touchPointID 分配给触摸点的唯一标识号
-         *
-         * @version Lark 1.0
-         * @platform HTML5,Runtime,Native
-         */
-        constructor(type: string, bubbles?: boolean, cancelable?: boolean, stageX?: number, stageY?: number, touchPointID?: number);
-        /**
-         * 事件发生点在全局舞台坐标中的水平坐标。
-         *
-         * @version Lark 1.0
-         * @platform HTML5,Runtime,Native
-         */
-        stageX: number;
-        /**
-         * 事件发生点在全局舞台坐标中的垂直坐标。
-         *
-         * @version Lark 1.0
-         * @platform HTML5,Runtime,Native
-         */
-        stageY: number;
-        /**
-         * @private
-         */
-        private localPoint;
-        /**
-         * @private
-         */
-        private getLocalXY();
-        /**
-         * 事件发生点相对于currentTarget的水平坐标。
-         *
-         * @version Lark 1.0
-         * @platform HTML5,Runtime,Native
-         */
-        localX: number;
-        /**
-         * 事件发生点相对于currentTarget的垂直坐标。
-         *
-         * @version Lark 1.0
-         * @platform HTML5,Runtime,Native
-         */
-        localY: number;
-        /**
-         * 分配给触摸点的唯一标识号
-         *
-         * @version Lark 1.0
-         * @platform HTML5,Runtime,Native
-         */
-        touchPointID: number;
-        /**
-         * 如果已修改显示列表，调用此方法将会忽略帧频限制，在此事件处理完成后立即重绘屏幕。
-         *
-         * @version Lark 1.0
-         * @platform HTML5,Runtime,Native
-         */
-        updateAfterEvent(): void;
-        /**
-         * 使用指定的EventEmitter对象来抛出Event事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-         * @param target 派发事件目标
-         * @param type 事件的类型，可以作为 Event.type 访问。
-         * @param bubbles 确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
-         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
-         * @param stageX 事件发生点在全局舞台坐标系中的水平坐标
-         * @param stageY 事件发生点在全局舞台坐标系中的垂直坐标
-         * @param touchPointID 分配给触摸点的唯一标识号
-         *
-         * @see lark.Event.create()
-         * @see lark.Event.release()
-         *
-         * @version Lark 1.0
-         * @platform HTML5,Runtime,Native
-         */
-        static emitTouchEvent(target: IEventEmitter, type: string, bubbles?: boolean, cancelable?: boolean, stageX?: number, stageY?: number, touchPointID?: number): boolean;
-    }
-}
-declare module lark.sys {
-    /**
-     * 显示对象失效标志
-     */
-    const enum DisplayObjectFlags {
-        /**
-         * 显示对象是否开启像素级精确碰撞，开启后显示对象的透明区域将可以穿透，Graphics默认开启此功能，。
-         */
-        PixelHitTest = 1,
-        /**
-         * 显示对象自身的绘制区域尺寸失效
-         */
-        InvalidContentBounds = 2,
-        /**
-         * 显示对象的矩形区域尺寸失效，包括自身绘制区域和子项的区域集合
-         */
-        InvalidBounds = 4,
-        /**
-         * 显示对象的matrix属性失效标志，通常因为scaleX，width等属性发生改变。
-         */
-        InvalidMatrix = 8,
-        /**
-         * 显示对象祖代的矩阵失效。
-         */
-        InvalidConcatenatedMatrix = 16,
-        /**
-         * 显示对象祖代的逆矩阵失效。
-         */
-        InvalidInvertedConcatenatedMatrix = 32,
-        /**
-         * 显示对象祖代的透明度属性失效。
-         */
-        InvalidConcatenatedAlpha = 64,
-        /**
-         * 显示对象应该被缓存成位图的标志，即使没有设置这个标志，也有可能被缓存成位图，例如含有滤镜的情况。
-         * 而当设置了这个标志，如果内存不足，也会放弃缓存。
-         */
-        CacheAsBitmap = 128,
-        /**
-         * 显示对象自身需要重绘的标志
-         */
-        DirtyRender = 256,
-        /**
-         * 子项中已经全部含有DirtyRender标志，无需继续遍历。
-         */
-        DirtyChildren = 512,
-        /**
-         * 对象自身在舞台上的显示尺寸发生改变。
-         */
-        TouchEnabled = 1024,
-        /**
-         * 对象自身以及子项在舞台上显示尺寸发生改变。
-         */
-        TouchChildren = 2048,
-        /**
-         * DirtyRender|DirtyChildren
-         */
-        Dirty = 768,
-        /**
-         * 添加或删除子项时，需要向子项传递的标志。
-         */
-        DownOnAddedOrRemoved = 624,
-        /**
-         * 显示对象初始化时的标志量
-         */
-        InitFlags = 3952,
-    }
-}
-declare module lark {
-    /**
-     * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时显示的所有对象。使用 DisplayObjectContainer 类排列显示列表中的显示对象。
-     * DisplayObjectContainer 对象可以有子显示对象，而其他显示对象是“叶”节点，只有父级和同级，没有子级。
-     * DisplayObject 类支持基本功能（如对象的 x 和 y 位置），也支持更高级的对象属性（如它的转换矩阵），所有显示对象都继承自 DisplayObject 类。
-     * DisplayObject 类包含若干广播事件。通常，任何特定事件的目标均为一个特定的 DisplayObject 实例。
-     * 若只有一个目标，则会将事件侦听器限制为只能放置到该目标上（在某些情况下，可放置到显示列表中该目标的祖代上），这意味着您可以向任何 DisplayObject 实例添加侦听器来侦听广播事件。
-     */
-    class DisplayObject extends EventEmitter implements sys.Renderable {
-        /**
-         * 创建一个显示对象
-         */
-        constructor();
-        private invalidateMatrix();
-        /**
-         * 标记这个显示对象在父级容器的位置发生了改变。
-         */
-        private invalidatePosition();
-        /**
-         * 表示 DisplayObject 的实例名称。
-         * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
-         */
-        name: string;
-        /**
-         * 表示包含此显示对象的 DisplayObjectContainer 对象。
-         * 使用 parent 属性可以指定高于显示列表层次结构中当前显示对象的显示对象的相对路径。
-         */
-        parent: DisplayObjectContainer;
-        /**
-         * 显示对象的舞台。
-         * 例如，您可以创建多个显示对象并加载到显示列表中，每个显示对象的 stage 属性是指相同的 Stage 对象。
-         * 如果显示对象未添加到显示列表，则其 stage 属性会设置为 null。
-         */
-        stage: Stage;
-        /**
-         * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。
-         * 注意：必须对matrix属性重新赋值改变的值才能生效，若获取matrix引用来修改对象属性，将不会发生任何改变。
-         */
-        matrix: Matrix;
-        /**
-         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。
-         * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
-         * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
-         */
-        x: number;
-        /**
-         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 y 坐标。
-         * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
-         * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
-         */
-        y: number;
-        /**
-         * 表示从注册点开始应用的对象的水平缩放比例（百分比）。
-         * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
-         * 默认值为 1，即不缩放。
-         * @default 1
-         */
-        scaleX: number;
-        /**
-         * 表示从对象注册点开始应用的对象的垂直缩放比例（百分比）。
-         * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
-         * 默认值为 1，即不缩放。
-         * @default 1
-         */
-        scaleY: number;
-        /**
-         * 表示 DisplayObject 实例距其原始方向的旋转程度，以度为单位。
-         * 从 0 到 180 的值表示顺时针方向旋转；从 0 到 -180 的值表示逆时针方向旋转。对于此范围之外的值，可以通过加上或
-         * 减去 360 获得该范围内的值。例如，my_video.rotation = 450语句与 my_video.rotation = 90 是相同的。
-         * @default 0 默认值为 0 不旋转。
-         */
-        rotation: number;
-        /**
-         * 表示显示对象的宽度，以像素为单位。
-         */
-        width: number;
-        /**
-         * 表示显示对象的高度，以像素为单位。
-         */
-        height: number;
-        /**
-         * 显示对象是否可见。
-         * 不可见的显示对象已被禁用。例如，如果实例的 visible=false，则无法单击该对象。
-         * 默认值为 true 可见
-         */
-        visible: boolean;
-        /**
-         * 如果设置为 true，则 Lark 播放器将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
-         * 将 cacheAsBitmap 属性设置为 true 后，呈现并不更改，但是，显示对象将自动执行像素贴紧。执行速度可能会大大加快，
-         * 具体取决于显示对象内容的复杂性。在内存超过上限的情况下，即使将 cacheAsBitmap 属性设置为 true，显示对象也不使用位图缓存。
-         * 最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放和旋转的显示对象一起使用。
-         */
-        cacheAsBitmap: boolean;
-        /**
-         * 表示指定对象的 Alpha 透明度值。
-         * 有效值为 0（完全透明）到 1（完全不透明）。alpha 设置为 0 的显示对象是活动的，即使它们不可见。
-         *  @default 1 默认值为 1。
-         */
-        alpha: number;
-        /**
-         * 指定此对象是否接收鼠标/触摸事件
-         * @default true 默认为 true 即可以接收。
-         */
-        touchEnabled: boolean;
-        /**
-         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，设置为false将只检查显示对象测量的最大矩形区域。
-         * 开启此属性将会有一定量的额外性能损耗，Shape和Sprite等含有矢量图的类默认开启此属性，其他类默认关闭。
-         */
-        pixelHitTest: boolean;
-        /**
-         * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
-         * 注意：必须对scrollRect属性重新赋值改变的值才能生效，若获取scrollRect引用来修改对象属性，将不会发生任何改变。
-         */
-        scrollRect: Rectangle;
-        /**
-         * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上
-         * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
-         */
-        blendMode: string;
-        /**
-         * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
-         * 但不绘制 mask 对象本身。将 mask 设置为 null 可删除蒙版。要能够缩放遮罩对象，它必须在显示列表中。要能够拖动蒙版
-         * Sprite 对象，它必须在显示列表中。
-         * 注意：单个 mask 对象不能用于遮罩多个执行调用的显示对象。在将 mask 分配给第二个显示对象时，会撤消其作为第一个对象的遮罩，
-         * 该对象的 mask 属性将变为 null。
-         */
-        mask: DisplayObject;
-        /**
-         * 返回一个矩形，该矩形定义相对于 targetCoordinateSpace 对象坐标系的显示对象区域。
-         * @param targetCoordinateSpace 定义要使用的坐标系的显示对象。
-         * @param resultRect 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Rectangle对象来存储结果，
-         * 若不传入将创建一个新的Rectangle对象返回。
-         * @returns 定义与 targetCoordinateSpace 对象坐标系统相关的显示对象面积的矩形。
-         */
-        getBounds(targetCoordinateSpace: DisplayObject, resultRect?: Rectangle): Rectangle;
-        /**
-         * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
-         * @param stageX 舞台坐标x
-         * @param stageY 舞台坐标y
-         * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
-         * 若不传入将创建一个新的Point对象返回。
-         * @returns 具有相对于显示对象的坐标的 Point 对象。
-         */
-        globalToLocal(stageX: number, stageY: number, resultPoint?: Point): Point;
-        /**
-         * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
-         * @param localX 舞台坐标x
-         * @param localY 舞台坐标y
-         * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
-         * 若不传入将创建一个新的Point对象返回。
-         * @returns 具有相对于显示对象的坐标的 Point 对象。
-         */
-        localToGlobal(localX: number, localY: number, resultPoint?: Point): Point;
-        private hitTestPixel(localX, localY);
-        removeListener(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean): void;
-        emit(event: Event): boolean;
-        willTrigger(type: string): boolean;
-    }
 }
 declare module lark {
     /**
@@ -2052,6 +2359,7 @@ declare module lark {
          * 您可以将一个逆矩阵应用于对象来撤消在应用原始矩阵时执行的转换。
          */
         invert(): void;
+        $invertInto(target: Matrix): void;
         /**
          * 对 Matrix 对象应用旋转转换。
          * rotate() 方法将更改 Matrix 对象的 a、b、c 和 d 属性。
@@ -2095,100 +2403,22 @@ declare module lark {
          * @returns 是否相等，ture表示相等。
          */
         equals(other: Matrix): boolean;
+        $transformBounds(bounds: Rectangle): void;
         private getDeterminant();
+        $getScaleX(): number;
+        $getScaleY(): number;
+        $getSkewX(): number;
+        $getSkewY(): number;
+        $updateScaleAndRotation(scaleX: number, scaleY: number, skewX: number, skewY: number): void;
+        /**
+         * target = other * this
+         */
+        $preMultiplyInto(other: Matrix, target: Matrix): void;
     }
     /**
      * 仅供框架内复用，要防止暴露引用到外部。
      */
     var $TempMatrix: Matrix;
-}
-declare module lark {
-    /**
-     * 当加载操作已开始或套接字已接收到数据时，将调度 ProgressEvent 对象。
-     * 有两种类型的进程事件：ProgressEvent.PROGRESS 和 ProgressEvent.SOCKET_DATA。
-     */
-    class ProgressEvent extends Event {
-        /**
-         * 在下载操作过程中收到数据时调度。
-         */
-        static PROGRESS: string;
-        /**
-         * 在套接字接收到数据后调度。
-         */
-        static SOCKET_DATA: string;
-        /**
-         * 在侦听器处理事件时加载的项数或字节数。
-         */
-        bytesLoaded: number;
-        /**
-         * 如果加载过程成功，将加载的总项数或总字节数。
-         */
-        bytesTotal: number;
-        /**
-         * 创建一个 ProgressEvent 对象
-         */
-        constructor(type: string, bubbles?: boolean, cancelable?: boolean, bytesLoaded?: number, bytesTotal?: number);
-        /**
-         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-         * @param target 派发事件目标
-         * @param type 事件类型
-         * @param bytesLoaded 加载的项数或字节数
-         * @param bytesTotal 加载的总项数或总字节数
-         */
-        static emitProgressEvent(target: IEventEmitter, type: string, bytesLoaded?: number, bytesTotal?: number): boolean;
-    }
-}
-declare module lark.sys {
-    /**
-     * 用户交互操作管理器
-     */
-    class TouchHandler extends LarkObject {
-        constructor(stage: Stage);
-        private stage;
-        private touchDownTarget;
-        /**
-         * 触摸开始（按下）
-         * @param x 事件发生处相对于舞台的坐标x
-         * @param y 事件发生处相对于舞台的坐标y
-         * @param touchPointID 分配给触摸点的唯一标识号
-         */
-        onTouchBegin(x: number, y: number, touchPointID: number): void;
-        private lastTouchX;
-        private lastTouchY;
-        /**
-         * 触摸移动
-         * @param x 事件发生处相对于舞台的坐标x
-         * @param y 事件发生处相对于舞台的坐标y
-         * @param touchPointID 分配给触摸点的唯一标识号
-         */
-        onTouchMove(x: number, y: number, touchPointID: number): void;
-        /**
-         * 触摸结束（弹起）
-         * @param x 事件发生处相对于舞台的坐标x
-         * @param y 事件发生处相对于舞台的坐标y
-         * @param touchPointID 分配给触摸点的唯一标识号
-         */
-        onTouchEnd(x: number, y: number, touchPointID: number): void;
-        /**
-         * 获取舞台坐标下的触摸对象
-         */
-        private findTarget(stageX, stageY);
-    }
-}
-declare module lark {
-    /**
-     * 此类用于使用 Lark 绘图应用程序编程接口 (API) 创建简单形状。Shape 类包括 graphics 属性，该属性使您可以从 Graphics 类访问方法。
-     */
-    class Shape extends DisplayObject {
-        /**
-         * 创建一个 Shape 对象
-         */
-        constructor();
-        /**
-         * 获取 Shape 中的 Graphics 对象。
-         */
-        graphics: Graphics;
-    }
 }
 declare module lark {
     /**
@@ -2204,15 +2434,20 @@ declare module lark {
          * 创建一个Bitmap对象
          */
         constructor(bitmapData?: BitmapData);
+        $bitmapData: BitmapData;
         /**
          * 被引用的 BitmapData 对象。
          */
         bitmapData: BitmapData;
+        $setBitmapData(value: BitmapData): void;
+        $smoothing: boolean;
         /**
          * 控制在缩放时是否对位图进行平滑处理。如果为 true，则会在缩放时对位图进行平滑处理。
          * 如果为 false，则不会在缩放时对位图进行平滑处理。默认true。
          */
         smoothing: boolean;
+        $measureContentBounds(bounds: Rectangle): void;
+        $render(context: sys.RenderContext): void;
     }
 }
 declare module lark.sys {
@@ -2256,6 +2491,7 @@ declare module lark {
          * 创建一个TextField对象
          */
         constructor(text?: string);
+        $TextField: Object;
         /**
          * 字体名称 。默认值：sans-serif
          */
@@ -2304,6 +2540,7 @@ declare module lark {
          * 要显示的文本内容
          */
         text: string;
+        $setText(value: string): void;
         private textLines;
         /**
          * 文本行数。
@@ -2317,7 +2554,15 @@ declare module lark {
          * 文本内容高度
          */
         textHeight: number;
+        $getWidth(): number;
+        $setWidth(value: number): void;
+        $getHeight(): number;
+        $setHeight(value: number): void;
+        $invalidateContentBounds(): void;
+        $measureContentBounds(bounds: Rectangle): void;
+        $render(context: sys.RenderContext): void;
         private updateTextLines();
+        protected $splitWords(line: string): string[];
     }
 }
 declare module lark.sys {
@@ -2334,10 +2579,13 @@ declare module lark {
      * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
      */
     class Sprite extends DisplayObject implements DisplayObjectContainer {
+        static $EVENT_ADD_TO_STAGE_LIST: DisplayObject[];
+        static $EVENT_REMOVE_FROM_STAGE_LIST: DisplayObject[];
         /**
          * 实例化一个容器
          */
         constructor();
+        $propagateFlagsDown(flags: sys.DisplayObjectFlags): void;
         /**
          * 返回此对象的子项数目。
          */
@@ -2421,12 +2669,96 @@ declare module lark {
          */
         removeChildren(): void;
         /**
+         * 一个子项被添加到容器内，此方法不仅在操作addChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
+         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
+         */
+        $childAdded(child: DisplayObject, index: number): void;
+        /**
+         * 一个子项从容器内移除，此方法不仅在操作removeChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
+         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
+         */
+        $childRemoved(child: DisplayObject, index: number): void;
+        $onAddToStage(stage: Stage, nestLevel: number): void;
+        $onRemoveFromStage(): void;
+        $measureChildBounds(bounds: Rectangle): void;
+        /**
          * 指定此对象的子项以及子孙项是否接收鼠标/触摸事件
          * 默认值为 true 即可以接收。
          */
         touchChildren: boolean;
+        $setTouchChildren(value: boolean): void;
+        /**
+         * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
+         * @param notiryChildren 是否标记子项也需要重绘。传入false或不传入，将只标记自身需要重绘。通常只有alpha属性改变会需要通知子项重绘。
+         */
+        $invalidate(notifyChildren?: boolean): void;
+        /**
+         * 标记自身以及所有子项在父级中变换叠加的显示内容失效。此方法不会触发自身的cacheAsBitmap重绘。
+         * 通常用于矩阵改变或从显示列表添加和移除时。若自身的显示内容已经改变需要重绘，应该调用$invalidate()。
+         */
+        $invalidateTransform(): void;
         private markChildDirty(child, parentCache);
+        /**
+         * cacheAsBitmap属性改变
+         */
+        $cacheAsBitmapChanged(): void;
         private assignParentDisplayList(child, parentCache, newParent);
+        $hitTest(stageX: number, stageY: number, shapeFlag?: boolean): DisplayObject;
+    }
+}
+declare module lark {
+    /**
+     * 此类用于使用 Lark 绘图应用程序编程接口 (API) 创建简单形状。Shape 类包括 graphics 属性，该属性使您可以从 Graphics 类访问方法。
+     */
+    class Shape extends DisplayObject {
+        /**
+         * 创建一个 Shape 对象
+         */
+        constructor();
+        $graphics: Graphics;
+        /**
+         * 获取 Shape 中的 Graphics 对象。
+         */
+        graphics: Graphics;
+        $measureContentBounds(bounds: Rectangle): void;
+        $render(context: sys.RenderContext): void;
+    }
+}
+declare module lark.sys {
+    /**
+     * 用户交互操作管理器
+     */
+    class TouchHandler extends LarkObject {
+        constructor(stage: Stage);
+        private stage;
+        private touchDownTarget;
+        /**
+         * 触摸开始（按下）
+         * @param x 事件发生处相对于舞台的坐标x
+         * @param y 事件发生处相对于舞台的坐标y
+         * @param touchPointID 分配给触摸点的唯一标识号
+         */
+        onTouchBegin(x: number, y: number, touchPointID: number): void;
+        private lastTouchX;
+        private lastTouchY;
+        /**
+         * 触摸移动
+         * @param x 事件发生处相对于舞台的坐标x
+         * @param y 事件发生处相对于舞台的坐标y
+         * @param touchPointID 分配给触摸点的唯一标识号
+         */
+        onTouchMove(x: number, y: number, touchPointID: number): void;
+        /**
+         * 触摸结束（弹起）
+         * @param x 事件发生处相对于舞台的坐标x
+         * @param y 事件发生处相对于舞台的坐标y
+         * @param touchPointID 分配给触摸点的唯一标识号
+         */
+        onTouchEnd(x: number, y: number, touchPointID: number): void;
+        /**
+         * 获取舞台坐标下的触摸对象
+         */
+        private findTarget(stageX, stageY);
     }
 }
 declare module lark {
@@ -2450,8 +2782,20 @@ declare module lark {
         private _isFocus;
         private handleTouchBegin(e);
         private setAsCurrent();
+        /**
+         * Call by TextAdapter set text
+         * @param text
+         */
+        $setUserInputText(text: string): void;
+        $startInput(): void;
+        $endInput(): void;
+        $setX(value: number): boolean;
+        $setY(value: number): boolean;
+        $measureContentBounds(bounds: Rectangle): void;
+        $render(context: sys.RenderContext): void;
         private timeoutId;
         private updateTextAdapter();
+        protected $splitWords(line: string): string[];
     }
 }
 declare module lark {
@@ -2471,10 +2815,12 @@ declare module lark {
          * 注意，若同一个网页中包含多个lark.Stage实例，修改任何一个Stage的frameRate属性都会同步修改其他Stage的帧率。
          */
         frameRate: number;
+        $stageWidth: number;
         /**
          * 舞台的当前宽度（以像素为单位）。
          */
         stageWidth: number;
+        $stageHeight: number;
         /**
          * 舞台的当前高度（以像素为单位）。
          */
@@ -2536,6 +2882,10 @@ declare module lark.sys {
          * 暂停播放器，后续可以通过调用start()重新启动播放器。
          */
         pause(): void;
+        /**
+         * 渲染屏幕
+         */
+        $render(triggerByFrame: boolean): void;
         /**
          * 更新舞台尺寸
          * @param stageWidth 舞台宽度（以像素为单位）

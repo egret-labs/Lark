@@ -6,6 +6,9 @@ import watch = require("../lib/watch");
 import server = require('../server/server');
 import FileUtil = require('../lib/FileUtil');
 import service = require('../service/index');
+import CopyFiles = require('../actions/CopyFiles');
+import CompileProject = require('../actions/CompileProject');
+import CompileTemplate = require('../actions/CompileTemplate');
 
 class RunCommand implements lark.Command {
 	
@@ -19,9 +22,15 @@ class RunCommand implements lark.Command {
         else {
             console.log(utils.tr(10012));
         }
+
+
+        var compileProject = new CompileProject();
+        var result = compileProject.compileProject(lark.options);
+        CopyFiles.copyProjectFiles();
+        CompileTemplate.compileTemplates(lark.options, result.files);
+
         server.startServer(lark.options, lark.options.startUrl);
         console.log(utils.tr(10013, lark.options.startUrl));
-        service.execCommand({ command: "build", path: lark.options.projectDir }, (cmd: lark.ServiceCommandResult) => { });
         return 0;
     }
     private watchFiles(dir:string) {
