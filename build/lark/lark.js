@@ -1664,23 +1664,60 @@ var lark;
     //IOS中的所有浏览器以及Android内的部分浏览器还支持：Multiply,Screen,Lighten,Darken,Difference,Overlay,HardLight。
     //仅在Egret Runtime支持的有：Subtract,Invert。
     /**
+     * @language en_US
      * 提供混合模式可视效果的常量值的类。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 提供混合模式可视效果的常量值的类。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     var BlendMode = (function () {
         function BlendMode() {
         }
         var d = __define,c=BlendMode;p=c.prototype;
         /**
+         * @language en_US
          * 该显示对象出现在背景前面。显示对象的像素值会覆盖背景的像素值。在显示对象为透明的区域，背景是可见的。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 该显示对象出现在背景前面。显示对象的像素值会覆盖背景的像素值。在显示对象为透明的区域，背景是可见的。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         BlendMode.NORMAL = "normal";
         /**
+         * @language en_US
          * 将显示对象的原色值添加到它的背景颜色中，上限值为 0xFF。此设置通常用于使两个对象间的加亮溶解产生动画效果。
          * 例如，如果显示对象的某个像素的 RGB 值为 0xAAA633，背景像素的 RGB 值为 0xDD2200，则显示像素的结果 RGB 值为 0xFFC833（因为 0xAA + 0xDD > 0xFF，0xA6 + 0x22 = 0xC8，且 0x33 + 0x00 = 0x33）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将显示对象的原色值添加到它的背景颜色中，上限值为 0xFF。此设置通常用于使两个对象间的加亮溶解产生动画效果。
+         * 例如，如果显示对象的某个像素的 RGB 值为 0xAAA633，背景像素的 RGB 值为 0xDD2200，则显示像素的结果 RGB 值为 0xFFC833（因为 0xAA + 0xDD > 0xFF，0xA6 + 0x22 = 0xC8，且 0x33 + 0x00 = 0x33）。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         BlendMode.ADD = "add";
         /**
+         * @language en_US
          * 根据显示对象的 Alpha 值擦除背景。Alpha 值不为0的区域将被擦除。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 根据显示对象的 Alpha 值擦除背景。Alpha 值不为0的区域将被擦除。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         BlendMode.ERASE = "erase";
         return BlendMode;
@@ -1691,18 +1728,39 @@ var lark;
 (function (lark) {
     var sys;
     (function (sys) {
+        /**
+         * @private
+         */
         var blendModeString = ["normal", "add", "erase"];
+        /**
+         * @private
+         */
         var blendModeNumber = {};
+        /**
+         * @private
+         */
         var length = blendModeString.length;
         for (var i = 0; i < length; i++) {
             var str = blendModeString[i];
             blendModeNumber[str] = i;
         }
+        /**
+         * @private
+         *
+         * @param blendMode
+         * @returns
+         */
         function blendModeToNumber(blendMode) {
             var num = blendModeNumber[blendMode];
             return num === undefined ? 0 : num;
         }
         sys.blendModeToNumber = blendModeToNumber;
+        /**
+         * @private
+         *
+         * @param blendMode
+         * @returns
+         */
         function numberToBlendMode(blendMode) {
             var str = blendModeString[blendMode];
             return str === undefined ? "normal" : str;
@@ -2775,14 +2833,36 @@ var lark;
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
+    /**
+     * @private
+     */
     var PI = Math.PI;
+    /**
+     * @private
+     */
     var HalfPI = PI / 2;
+    /**
+     * @private
+     */
     var PacPI = PI + HalfPI;
+    /**
+     * @private
+     */
     var TwoPI = PI * 2;
+    /**
+     * @private
+     */
     var vector = { x: 0, y: 0 };
+    /**
+     * @private
+     */
     var vector1 = { x: 0, y: 0 };
+    /**
+     * @private
+     */
     var vector3 = { x: 0, y: 0 };
     /**
+     * @private
      * 格式化弧线角度的值
      */
     function clampAngle(value) {
@@ -2793,12 +2873,14 @@ var lark;
         return value;
     }
     /**
+     * @private
      * 两个点距离
      */
     function distance(x1, y1, x2, y2) {
         return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
     /**
+     * @private
      * 取两点之间的向量
      */
     function getVector(x1, y1, x2, y2, v) {
@@ -2807,14 +2889,35 @@ var lark;
         v.y = (y2 - y1) / l;
     }
     /**
+     * @language en_US
      * Graphics 类包含一组可用来创建矢量形状的方法。支持绘制的显示对象包括 Sprite 和 Shape 对象。
      * 这些类中的每一个类都包括 graphics 属性，该属性是一个 Graphics 对象。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Graphics 类包含一组可用来创建矢量形状的方法。支持绘制的显示对象包括 Sprite 和 Shape 对象。
+     * 这些类中的每一个类都包括 graphics 属性，该属性是一个 Graphics 对象。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     var Graphics = (function (_super) {
         __extends(Graphics, _super);
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         function Graphics() {
             _super.call(this);
             /**
+             * @private
              * 绘图命令列表
              */
             this.$commands = [];
@@ -2822,80 +2925,254 @@ var lark;
         }
         var d = __define,c=Graphics;p=c.prototype;
         /**
+         * @language en_US
          * 创建一个放射状渐变填充对象
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个放射状渐变填充对象
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         Graphics.createRadialGradient = function (x0, y0, r0, x1, y1, r1) {
             return lark.sys.sharedRenderContext.createRadialGradient(x0, y0, r0, x1, y1, r1);
         };
         /**
+         * @language en_US
          * 创建一个沿参数坐标指定的直线的渐变。该方法返回一个线性 GraphicsGradient 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个沿参数坐标指定的直线的渐变。该方法返回一个线性 GraphicsGradient 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         Graphics.createLinearGradient = function (x0, y0, x1, y1) {
             return lark.sys.sharedRenderContext.createLinearGradient(x0, y0, x1, y1);
         };
         /**
+         * @language en_US
          * 基于指定的源图象(BitmapData)创建一个模板，通过repetition参数指定源图像在什么方向上进行重复，返回一个GraphicsPattern对象。
          * @param bitmapData 做为重复图像源的 BitmapData 对象。
          * @param repetition 指定如何重复图像。
          * 可能的值有："repeat" (两个方向重复),"repeat-x" (仅水平方向重复),"repeat-y" (仅垂直方向重复),"no-repeat" (不重复).
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 基于指定的源图象(BitmapData)创建一个模板，通过repetition参数指定源图像在什么方向上进行重复，返回一个GraphicsPattern对象。
+         * @param bitmapData 做为重复图像源的 BitmapData 对象。
+         * @param repetition 指定如何重复图像。
+         * 可能的值有："repeat" (两个方向重复),"repeat-x" (仅水平方向重复),"repeat-y" (仅垂直方向重复),"no-repeat" (不重复).
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         Graphics.createPattern = function (bitmapData, repetition) {
             return lark.sys.sharedRenderContext.createPattern(bitmapData, repetition);
         };
         d(p, "fillStyle",
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function () {
                 return this._fillStyle;
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this._fillStyle = value;
                 this.pushCommand(5 /* fillStyle */, arguments);
             }
         );
         d(p, "lineWidth",
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function () {
                 return this._lineWidth;
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this._lineWidth = value;
                 this.pushCommand(3 /* lineWidth */, arguments);
             }
         );
         d(p, "lineCap",
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function () {
                 return this._lineCap;
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this._lineCap = value;
                 this.pushCommand(1 /* lineCap */, arguments);
             }
         );
         d(p, "strokeStyle",
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function () {
                 return this._strokeStyle;
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this._strokeStyle = value;
                 this.pushCommand(4 /* strokeStyle */, arguments);
             }
         );
         d(p, "lineJoin",
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function () {
                 return this._lineJoin;
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this._lineJoin = value;
                 this.pushCommand(2 /* lineJoin */, arguments);
             }
         );
         d(p, "miterLimit",
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function () {
                 return this._miterLimit;
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this._miterLimit = value;
                 this.pushCommand(0 /* miterLimit */, arguments);
             }
         );
+        /**
+         * @language en_US
+         *
+         * @param x
+         * @param y
+         * @param radius
+         * @param startAngle
+         * @param endAngle
+         * @param anticlockwise
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param x
+         * @param y
+         * @param radius
+         * @param startAngle
+         * @param endAngle
+         * @param anticlockwise
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.arc = function (x, y, radius, startAngle, endAngle, anticlockwise) {
             this.pushCommand(6 /* arc */, arguments);
             if (radius < 0) {
@@ -2908,6 +3185,15 @@ var lark;
             }
             this.arcBounds(x, y, radius, startAngle, endAngle);
         };
+        /**
+         * @private
+         *
+         * @param x
+         * @param y
+         * @param radius
+         * @param startAngle
+         * @param endAngle
+         */
         p.arcBounds = function (x, y, radius, startAngle, endAngle) {
             startAngle = clampAngle(startAngle);
             endAngle = clampAngle(endAngle);
@@ -2944,12 +3230,56 @@ var lark;
             this.extendByPoint(xMin + x, yMin + y);
             this.extendByPoint(xMax + x, yMax + y);
         };
+        /**
+         * @language en_US
+         *
+         * @param cpx
+         * @param cpy
+         * @param x
+         * @param y
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param cpx
+         * @param cpy
+         * @param x
+         * @param y
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.quadraticCurveTo = function (cpx, cpy, x, y) {
             this.pushCommand(7 /* quadraticCurveTo */, arguments);
             this.checkMoveTo();
             this.extendByPoint(cpx, cpy);
             this.extendByPoint(x, y);
         };
+        /**
+         * @language en_US
+         *
+         * @param cp1x
+         * @param cp1y
+         * @param cp2x
+         * @param cp2y
+         * @param x
+         * @param y
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param cp1x
+         * @param cp1y
+         * @param cp2x
+         * @param cp2y
+         * @param x
+         * @param y
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.bezierCurveTo = function (cp1x, cp1y, cp2x, cp2y, x, y) {
             this.pushCommand(14 /* bezierCurveTo */, arguments);
             this.checkMoveTo();
@@ -2957,51 +3287,215 @@ var lark;
             this.extendByPoint(cp2x, cp2y);
             this.extendByPoint(x, y);
         };
+        /**
+         * @language en_US
+         *
+         * @param x
+         * @param y
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param x
+         * @param y
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.lineTo = function (x, y) {
             this.pushCommand(8 /* lineTo */, arguments);
             this.checkMoveTo();
             this.extendByPoint(x, y);
         };
+        /**
+         * @language en_US
+         *
+         * @param fillRule
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param fillRule
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.fill = function (fillRule) {
             this.pushCommand(9 /* fill */, arguments);
             this.hasFill = true;
         };
+        /**
+         * @language en_US
+         *
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.closePath = function () {
             this.pushCommand(10 /* closePath */, arguments);
         };
+        /**
+         * @language en_US
+         *
+         * @param x
+         * @param y
+         * @param w
+         * @param h
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param x
+         * @param y
+         * @param w
+         * @param h
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.rect = function (x, y, w, h) {
             this.pushCommand(11 /* rect */, arguments);
             this.extendByPoint(x, y);
             this.extendByPoint(x + w, y + h);
         };
+        /**
+         * @language en_US
+         *
+         * @param x
+         * @param y
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param x
+         * @param y
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.moveTo = function (x, y) {
             this.pushCommand(12 /* moveTo */, arguments);
             this.moveToX = x;
             this.moveToY = y;
             this.hasMoved = true;
         };
+        /**
+         * @language en_US
+         *
+         * @param x
+         * @param y
+         * @param w
+         * @param h
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param x
+         * @param y
+         * @param w
+         * @param h
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.fillRect = function (x, y, w, h) {
             this.pushCommand(13 /* fillRect */, arguments);
             this.extendByPoint(x, y);
             this.extendByPoint(x + w, y + h);
             this.hasFill = true;
         };
+        /**
+         * @language en_US
+         *
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.stroke = function () {
             this.pushCommand(15 /* stroke */, arguments);
             this.hasStroke = true;
         };
+        /**
+         * @language en_US
+         *
+         * @param x
+         * @param y
+         * @param w
+         * @param h
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param x
+         * @param y
+         * @param w
+         * @param h
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.strokeRect = function (x, y, w, h) {
             this.pushCommand(16 /* strokeRect */, arguments);
             this.hasStroke = true;
             this.extendByPoint(x, y);
             this.extendByPoint(x + w, y + h);
         };
+        /**
+         * @language en_US
+         *
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.beginPath = function () {
             this.pushCommand(17 /* beginPath */, arguments);
             this.hasMoved = false;
             this.moveToX = 0x8000000;
             this.moveToY = 0x8000000;
         };
+        /**
+         * @language en_US
+         *
+         * @param x1
+         * @param y1
+         * @param x2
+         * @param y2
+         * @param radius
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param x1
+         * @param y1
+         * @param x2
+         * @param y2
+         * @param radius
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.arcTo = function (x1, y1, x2, y2, radius) {
             this.pushCommand(18 /* arcTo */, arguments);
             if (this.moveToX === 0x8000000) {
@@ -3044,13 +3538,26 @@ var lark;
             this.arcBounds(centerX, centerY, radius, startAngle, endAngle);
         };
         /**
+         * @language en_US
          * 清除绘制到此 Graphics 对象的图形，并重置填充和线条样式设置。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 清除绘制到此 Graphics 对象的图形，并重置填充和线条样式设置。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.clear = function () {
             this.reset();
             this.$commands.length = 0;
             this.$targetDisplay.$invalidateContentBounds();
         };
+        /**
+         * @private
+         *
+         */
         p.reset = function () {
             this._fillStyle = "#000000";
             this._lineCap = "butt";
@@ -3069,16 +3576,32 @@ var lark;
             this.hasStroke = false;
             this.hasFill = false;
         };
+        /**
+         * @private
+         *
+         * @param graphicsType
+         * @param args
+         */
         p.pushCommand = function (graphicsType, args) {
             this.$commands.push({ type: graphicsType, arguments: args });
             this.$targetDisplay.$invalidateContentBounds();
         };
+        /**
+         * @private
+         *
+         */
         p.checkMoveTo = function () {
             if (this.hasMoved) {
                 this.hasMoved = false;
                 this.extendByPoint(this.moveToX, this.moveToY);
             }
         };
+        /**
+         * @private
+         *
+         * @param x
+         * @param y
+         */
         p.extendByPoint = function (x, y) {
             if (this.isFirst) {
                 this.isFirst = false;
@@ -3092,6 +3615,11 @@ var lark;
                 this.maxY = Math.max(this.maxY, y);
             }
         };
+        /**
+         * @private
+         *
+         * @param bounds
+         */
         p.$measureContentBounds = function (bounds) {
             if (!this.hasFill && !this.hasStroke) {
                 bounds.setEmpty();
@@ -3106,6 +3634,11 @@ var lark;
             }
             bounds.setTo(this.minX - half, this.minY - half, this.maxX - this.minX + lineWidth, this.maxY - this.minY + lineWidth);
         };
+        /**
+         * @private
+         *
+         * @param context
+         */
         p.$render = function (context) {
             context.save();
             context.fillStyle = "#000000";
@@ -3129,7 +3662,16 @@ var lark;
         return Graphics;
     })(lark.LarkObject);
     lark.Graphics = Graphics;
+    /**
+     * @private
+     */
     lark.registerClass(Graphics, 8 /* Graphics */);
+    /**
+     * @private
+     *
+     * @param context
+     * @returns
+     */
     function mapGraphicsFunction(context) {
         var map = context["graphicsMap"] = {};
         map[6 /* arc */] = context.arc;
@@ -4471,6 +5013,7 @@ var lark;
 var lark;
 (function (lark) {
     /**
+     * @private
      * 格式化旋转角度的值
      */
     function clampRotation(value) {
@@ -4484,59 +5027,111 @@ var lark;
         return value;
     }
     /**
+     * @language en_US
      * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时显示的所有对象。使用 DisplayObjectContainer 类排列显示列表中的显示对象。
      * DisplayObjectContainer 对象可以有子显示对象，而其他显示对象是“叶”节点，只有父级和同级，没有子级。
      * DisplayObject 类支持基本功能（如对象的 x 和 y 位置），也支持更高级的对象属性（如它的转换矩阵），所有显示对象都继承自 DisplayObject 类。
      * DisplayObject 类包含若干广播事件。通常，任何特定事件的目标均为一个特定的 DisplayObject 实例。
      * 若只有一个目标，则会将事件侦听器限制为只能放置到该目标上（在某些情况下，可放置到显示列表中该目标的祖代上），这意味着您可以向任何 DisplayObject 实例添加侦听器来侦听广播事件。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时显示的所有对象。使用 DisplayObjectContainer 类排列显示列表中的显示对象。
+     * DisplayObjectContainer 对象可以有子显示对象，而其他显示对象是“叶”节点，只有父级和同级，没有子级。
+     * DisplayObject 类支持基本功能（如对象的 x 和 y 位置），也支持更高级的对象属性（如它的转换矩阵），所有显示对象都继承自 DisplayObject 类。
+     * DisplayObject 类包含若干广播事件。通常，任何特定事件的目标均为一个特定的 DisplayObject 实例。
+     * 若只有一个目标，则会将事件侦听器限制为只能放置到该目标上（在某些情况下，可放置到显示列表中该目标的祖代上），这意味着您可以向任何 DisplayObject 实例添加侦听器来侦听广播事件。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     var DisplayObject = (function (_super) {
         __extends(DisplayObject, _super);
         /**
+         * @language en_US
          * 创建一个显示对象
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个显示对象
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         function DisplayObject() {
             _super.call(this);
             /**
+             * @private
              * 能够含有子项的类将子项列表存储在这个属性里。
              */
             this.$children = null;
+            /**
+             * @private
+             */
             this.$parent = null;
+            /**
+             * @private
+             */
             this.$stage = null;
             /**
+             * @private
              * 这个对象在显示列表中的嵌套深度，舞台为1，它的子项为2，子项的子项为3，以此类推。当对象不在显示列表中时此属性值为0.
              */
             this.$nestLevel = 0;
+            /**
+             * @private
+             */
             this.$visible = true;
             /**
+             * @private
              * cacheAsBitmap创建的缓存位图节点。
              */
             this.$displayList = null;
             /**
+             * @private
              * 渲染时会用到的属性，独立声明一个变量
              */
             this.$alpha = 1;
+            /**
+             * @private
+             */
             this.$scrollRect = null;
+            /**
+             * @private
+             */
             this.$blendMode = 0;
             /**
+             * @private
              * 被遮罩的对象
              */
             this.$maskedObject = null;
+            /**
+             * @private
+             */
             this.$mask = null;
+            /**
+             * @private
+             */
             this.$parentDisplayList = null;
             /**
+             * @private
              * 是否需要重绘的标志，此属性在渲染时会被访问，所以单独声明一个直接的变量。
              */
             this.$isDirty = false;
             /**
+             * @private
              * 这个对象在舞台上的整体透明度
              */
             this.$renderAlpha = 1;
             /**
+             * @private
              * 在舞台上的矩阵对象
              */
             this.$renderMatrix = new lark.Matrix();
             /**
+             * @private
              * 此显示对象自身（不包括子项）在屏幕上的显示尺寸。
              */
             this.$renderRegion = null;
@@ -4555,9 +5150,20 @@ var lark;
             };
         }
         var d = __define,c=DisplayObject;p=c.prototype;
+        /**
+         * @private
+         *
+         * @param flags
+         */
         p.$setFlags = function (flags) {
             this.$displayFlags |= flags;
         };
+        /**
+         * @private
+         *
+         * @param flags
+         * @param on
+         */
         p.$toggleFlags = function (flags, on) {
             if (on) {
                 this.$displayFlags |= flags;
@@ -4566,10 +5172,16 @@ var lark;
                 this.$displayFlags &= ~flags;
             }
         };
+        /**
+         * @private
+         *
+         * @param flags
+         */
         p.$removeFlags = function (flags) {
             this.$displayFlags &= ~flags;
         };
         /**
+         * @private
          * 沿着显示列表向上移除标志量，如果标志量没被设置过就停止移除。
          */
         p.$removeFlagsUp = function (flags) {
@@ -4582,10 +5194,17 @@ var lark;
                 parent.$removeFlagsUp(flags);
             }
         };
+        /**
+         * @private
+         *
+         * @param flags
+         * @returns
+         */
         p.$hasFlags = function (flags) {
             return (this.$displayFlags & flags) === flags;
         };
         /**
+         * @private
          * 沿着显示列表向上传递标志量，如果标志量已经被设置过就停止传递。
          */
         p.$propagateFlagsUp = function (flags) {
@@ -4599,19 +5218,31 @@ var lark;
             }
         };
         /**
+         * @private
          * 沿着显示列表向下传递标志量，非容器直接设置自身的flag，此方法会在 DisplayObjectContainer 中被覆盖。
          */
         p.$propagateFlagsDown = function (flags) {
             this.$setFlags(flags);
         };
+        /**
+         * @private
+         *
+         * @param flags
+         * @returns
+         */
         p.$hasAnyFlags = function (flags) {
             return !!(this.$displayFlags & flags);
         };
+        /**
+         * @private
+         *
+         */
         p.invalidateMatrix = function () {
             this.$setFlags(8 /* InvalidMatrix */);
             this.invalidatePosition();
         };
         /**
+         * @private
          * 标记这个显示对象在父级容器的位置发生了改变。
          */
         p.invalidatePosition = function () {
@@ -4623,42 +5254,98 @@ var lark;
         };
         d(p, "name",
             /**
+             * @language en_US
              * 表示 DisplayObject 的实例名称。
              * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示 DisplayObject 的实例名称。
+             * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$DisplayObject[5 /* name */];
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this.$DisplayObject[5 /* name */] = value;
             }
         );
         d(p, "parent",
             /**
+             * @language en_US
              * 表示包含此显示对象的 DisplayObjectContainer 对象。
              * 使用 parent 属性可以指定高于显示列表层次结构中当前显示对象的显示对象的相对路径。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示包含此显示对象的 DisplayObjectContainer 对象。
+             * 使用 parent 属性可以指定高于显示列表层次结构中当前显示对象的显示对象的相对路径。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$parent;
             },undefined
         );
+        /**
+         * @private
+         *
+         * @param parent
+         */
         p.$setParent = function (parent) {
             this.$parent = parent;
         };
+        /**
+         * @private
+         *
+         * @param stage
+         * @param nestLevel
+         */
         p.$onAddToStage = function (stage, nestLevel) {
             this.$stage = stage;
             this.$nestLevel = nestLevel;
             lark.Sprite.$EVENT_ADD_TO_STAGE_LIST.push(this);
         };
+        /**
+         * @private
+         *
+         */
         p.$onRemoveFromStage = function () {
             this.$nestLevel = 0;
             lark.Sprite.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
         };
         d(p, "stage",
             /**
+             * @language en_US
              * 显示对象的舞台。
              * 例如，您可以创建多个显示对象并加载到显示列表中，每个显示对象的 stage 属性是指相同的 Stage 对象。
              * 如果显示对象未添加到显示列表，则其 stage 属性会设置为 null。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 显示对象的舞台。
+             * 例如，您可以创建多个显示对象并加载到显示列表中，每个显示对象的 stage 属性是指相同的 Stage 对象。
+             * 如果显示对象未添加到显示列表，则其 stage 属性会设置为 null。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$stage;
@@ -4666,12 +5353,32 @@ var lark;
         );
         d(p, "matrix",
             /**
+             * @language en_US
              * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。
              * 注意：必须对matrix属性重新赋值改变的值才能生效，若获取matrix引用来修改对象属性，将不会发生任何改变。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。
+             * 注意：必须对matrix属性重新赋值改变的值才能生效，若获取matrix引用来修改对象属性，将不会发生任何改变。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$getMatrix().clone();
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this.$setMatrix(value);
                 if (value) {
@@ -4679,6 +5386,11 @@ var lark;
                 }
             }
         );
+        /**
+         * @private
+         *
+         * @returns
+         */
         p.$getMatrix = function () {
             var values = this.$DisplayObject;
             if (this.$hasFlags(8 /* InvalidMatrix */)) {
@@ -4687,6 +5399,11 @@ var lark;
             }
             return values[6 /* matrix */];
         };
+        /**
+         * @private
+         *
+         * @param matrix
+         */
         p.$setMatrix = function (matrix) {
             var values = this.$DisplayObject;
             var m = values[6 /* matrix */];
@@ -4703,6 +5420,7 @@ var lark;
             this.invalidatePosition();
         };
         /**
+         * @private
          * 获得这个显示对象以及它所有父级对象的连接矩阵。
          */
         p.$getConcatenatedMatrix = function () {
@@ -4727,6 +5445,11 @@ var lark;
             }
             return this.$renderMatrix;
         };
+        /**
+         * @private
+         *
+         * @returns
+         */
         p.$getInvertedConcatenatedMatrix = function () {
             var values = this.$DisplayObject;
             if (this.$hasFlags(32 /* InvalidInvertedConcatenatedMatrix */)) {
@@ -4737,20 +5460,52 @@ var lark;
         };
         d(p, "x",
             /**
+             * @language en_US
              * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。
              * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
              * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。
+             * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
+             * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$getX();
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this.$setX(value);
             }
         );
+        /**
+         * @private
+         *
+         * @returns
+         */
         p.$getX = function () {
             return this.$DisplayObject[6 /* matrix */].tx;
         };
+        /**
+         * @private
+         *
+         * @param value
+         * @returns
+         */
         p.$setX = function (value) {
             value = +value || 0;
             var m = this.$DisplayObject[6 /* matrix */];
@@ -4763,20 +5518,52 @@ var lark;
         };
         d(p, "y",
             /**
+             * @language en_US
              * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 y 坐标。
              * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
              * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 y 坐标。
+             * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
+             * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$getY();
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this.$setY(value);
             }
         );
+        /**
+         * @private
+         *
+         * @returns
+         */
         p.$getY = function () {
             return this.$DisplayObject[6 /* matrix */].ty;
         };
+        /**
+         * @private
+         *
+         * @param value
+         * @returns
+         */
         p.$setY = function (value) {
             value = +value || 0;
             var m = this.$DisplayObject[6 /* matrix */];
@@ -4789,18 +5576,46 @@ var lark;
         };
         d(p, "scaleX",
             /**
+             * @language en_US
              * 表示从注册点开始应用的对象的水平缩放比例（百分比）。
              * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
              * 默认值为 1，即不缩放。
              * @default 1
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示从注册点开始应用的对象的水平缩放比例（百分比）。
+             * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
+             * 默认值为 1，即不缩放。
+             * @default 1
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$DisplayObject[0 /* scaleX */];
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this.$setScaleX(value);
             }
         );
+        /**
+         * @private
+         *
+         * @param value
+         * @returns
+         */
         p.$setScaleX = function (value) {
             value = +value || 0;
             var values = this.$DisplayObject;
@@ -4813,18 +5628,46 @@ var lark;
         };
         d(p, "scaleY",
             /**
+             * @language en_US
              * 表示从对象注册点开始应用的对象的垂直缩放比例（百分比）。
              * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
              * 默认值为 1，即不缩放。
              * @default 1
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示从对象注册点开始应用的对象的垂直缩放比例（百分比）。
+             * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
+             * 默认值为 1，即不缩放。
+             * @default 1
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$DisplayObject[1 /* scaleY */];
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this.$setScaleY(value);
             }
         );
+        /**
+         * @private
+         *
+         * @param value
+         * @returns
+         */
         p.$setScaleY = function (value) {
             value = +value || 0;
             if (value === this.$DisplayObject[1 /* scaleY */]) {
@@ -4836,14 +5679,36 @@ var lark;
         };
         d(p, "rotation",
             /**
+             * @language en_US
              * 表示 DisplayObject 实例距其原始方向的旋转程度，以度为单位。
              * 从 0 到 180 的值表示顺时针方向旋转；从 0 到 -180 的值表示逆时针方向旋转。对于此范围之外的值，可以通过加上或
              * 减去 360 获得该范围内的值。例如，my_video.rotation = 450语句与 my_video.rotation = 90 是相同的。
              * @default 0 默认值为 0 不旋转。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示 DisplayObject 实例距其原始方向的旋转程度，以度为单位。
+             * 从 0 到 180 的值表示顺时针方向旋转；从 0 到 -180 的值表示逆时针方向旋转。对于此范围之外的值，可以通过加上或
+             * 减去 360 获得该范围内的值。例如，my_video.rotation = 450语句与 my_video.rotation = 90 是相同的。
+             * @default 0 默认值为 0 不旋转。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$DisplayObject[4 /* rotation */];
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 value = +value || 0;
                 value = clampRotation(value);
@@ -4861,18 +5726,47 @@ var lark;
         );
         d(p, "width",
             /**
+             * @language en_US
              * 表示显示对象的宽度，以像素为单位。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示显示对象的宽度，以像素为单位。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$getWidth();
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this.$setWidth(value);
             }
         );
+        /**
+         * @private
+         *
+         * @returns
+         */
         p.$getWidth = function () {
             return this.$getTransformedBounds(this.$parent, lark.$TempRectangle).width;
         };
+        /**
+         * @private
+         *
+         * @param value
+         */
         p.$setWidth = function (value) {
             value = +value || 0;
             if (value < 0) {
@@ -4893,18 +5787,47 @@ var lark;
         };
         d(p, "height",
             /**
+             * @language en_US
              * 表示显示对象的高度，以像素为单位。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示显示对象的高度，以像素为单位。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$getHeight();
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this.$setHeight(value);
             }
         );
+        /**
+         * @private
+         *
+         * @returns
+         */
         p.$getHeight = function () {
             return this.$getTransformedBounds(this.$parent, lark.$TempRectangle).height;
         };
+        /**
+         * @private
+         *
+         * @param value
+         */
         p.$setHeight = function (value) {
             value = +value || 0;
             if (value < 0) {
@@ -4925,13 +5848,34 @@ var lark;
         };
         d(p, "visible",
             /**
+             * @language en_US
              * 显示对象是否可见。
              * 不可见的显示对象已被禁用。例如，如果实例的 visible=false，则无法单击该对象。
              * 默认值为 true 可见
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 显示对象是否可见。
+             * 不可见的显示对象已被禁用。例如，如果实例的 visible=false，则无法单击该对象。
+             * 默认值为 true 可见
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$visible;
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 value = !!value;
                 if (value === this.$visible) {
@@ -4943,14 +5887,36 @@ var lark;
         );
         d(p, "cacheAsBitmap",
             /**
+             * @language en_US
              * 如果设置为 true，则 Lark 播放器将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
              * 将 cacheAsBitmap 属性设置为 true 后，呈现并不更改，但是，显示对象将自动执行像素贴紧。执行速度可能会大大加快，
              * 具体取决于显示对象内容的复杂性。在内存超过上限的情况下，即使将 cacheAsBitmap 属性设置为 true，显示对象也不使用位图缓存。
              * 最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放和旋转的显示对象一起使用。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 如果设置为 true，则 Lark 播放器将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
+             * 将 cacheAsBitmap 属性设置为 true 后，呈现并不更改，但是，显示对象将自动执行像素贴紧。执行速度可能会大大加快，
+             * 具体取决于显示对象内容的复杂性。在内存超过上限的情况下，即使将 cacheAsBitmap 属性设置为 true，显示对象也不使用位图缓存。
+             * 最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放和旋转的显示对象一起使用。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$hasFlags(128 /* CacheAsBitmap */);
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 value = !!value;
                 this.$toggleFlags(128 /* CacheAsBitmap */, value);
@@ -4976,6 +5942,7 @@ var lark;
             }
         );
         /**
+         * @private
          * cacheAsBitmap属性改变
          */
         p.$cacheAsBitmapChanged = function () {
@@ -4986,13 +5953,34 @@ var lark;
         };
         d(p, "alpha",
             /**
+             * @language en_US
              * 表示指定对象的 Alpha 透明度值。
              * 有效值为 0（完全透明）到 1（完全不透明）。alpha 设置为 0 的显示对象是活动的，即使它们不可见。
              *  @default 1 默认值为 1。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示指定对象的 Alpha 透明度值。
+             * 有效值为 0（完全透明）到 1（完全不透明）。alpha 设置为 0 的显示对象是活动的，即使它们不可见。
+             *  @default 1 默认值为 1。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$alpha;
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 value = +value || 0;
                 if (value === this.$alpha) {
@@ -5004,6 +5992,7 @@ var lark;
             }
         );
         /**
+         * @private
          * 获取这个显示对象跟它所有父级透明度的乘积
          */
         p.$getConcatenatedAlpha = function () {
@@ -5021,39 +6010,104 @@ var lark;
         };
         d(p, "touchEnabled",
             /**
+             * @language en_US
              * 指定此对象是否接收鼠标/触摸事件
              * @default true 默认为 true 即可以接收。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 指定此对象是否接收鼠标/触摸事件
+             * @default true 默认为 true 即可以接收。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$hasFlags(1024 /* TouchEnabled */);
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this.$setTouchEnabled(value);
             }
         );
+        /**
+         * @private
+         *
+         * @param value
+         */
         p.$setTouchEnabled = function (value) {
             this.$toggleFlags(1024 /* TouchEnabled */, !!value);
         };
         d(p, "pixelHitTest",
             /**
+             * @language en_US
              * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，设置为false将只检查显示对象测量的最大矩形区域。
              * 开启此属性将会有一定量的额外性能损耗，Shape和Sprite等含有矢量图的类默认开启此属性，其他类默认关闭。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，设置为false将只检查显示对象测量的最大矩形区域。
+             * 开启此属性将会有一定量的额外性能损耗，Shape和Sprite等含有矢量图的类默认开启此属性，其他类默认关闭。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$hasFlags(1 /* PixelHitTest */);
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this.$toggleFlags(1 /* PixelHitTest */, !!value);
             }
         );
         d(p, "scrollRect",
             /**
+             * @language en_US
              * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
              * 注意：必须对scrollRect属性重新赋值改变的值才能生效，若获取scrollRect引用来修改对象属性，将不会发生任何改变。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
+             * 注意：必须对scrollRect属性重新赋值改变的值才能生效，若获取scrollRect引用来修改对象属性，将不会发生任何改变。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$scrollRect ? this.$scrollRect.clone() : null;
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 if (!value && !this.$scrollRect) {
                     return;
@@ -5072,12 +6126,32 @@ var lark;
         );
         d(p, "blendMode",
             /**
+             * @language en_US
              * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上
              * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上
+             * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return lark.sys.numberToBlendMode(this.$blendMode);
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 var mode = lark.sys.blendModeToNumber(value);
                 if (mode === this.$blendMode) {
@@ -5089,15 +6163,38 @@ var lark;
         );
         d(p, "mask",
             /**
+             * @language en_US
              * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
              * 但不绘制 mask 对象本身。将 mask 设置为 null 可删除蒙版。要能够缩放遮罩对象，它必须在显示列表中。要能够拖动蒙版
              * Sprite 对象，它必须在显示列表中。
              * 注意：单个 mask 对象不能用于遮罩多个执行调用的显示对象。在将 mask 分配给第二个显示对象时，会撤消其作为第一个对象的遮罩，
              * 该对象的 mask 属性将变为 null。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
+             * 但不绘制 mask 对象本身。将 mask 设置为 null 可删除蒙版。要能够缩放遮罩对象，它必须在显示列表中。要能够拖动蒙版
+             * Sprite 对象，它必须在显示列表中。
+             * 注意：单个 mask 对象不能用于遮罩多个执行调用的显示对象。在将 mask 分配给第二个显示对象时，会撤消其作为第一个对象的遮罩，
+             * 该对象的 mask 属性将变为 null。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$mask;
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 if (value === this.$mask || value === this) {
                     return;
@@ -5113,16 +6210,36 @@ var lark;
             }
         );
         /**
+         * @language en_US
          * 返回一个矩形，该矩形定义相对于 targetCoordinateSpace 对象坐标系的显示对象区域。
          * @param targetCoordinateSpace 定义要使用的坐标系的显示对象。
          * @param resultRect 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Rectangle对象来存储结果，
          * 若不传入将创建一个新的Rectangle对象返回。
          * @returns 定义与 targetCoordinateSpace 对象坐标系统相关的显示对象面积的矩形。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回一个矩形，该矩形定义相对于 targetCoordinateSpace 对象坐标系的显示对象区域。
+         * @param targetCoordinateSpace 定义要使用的坐标系的显示对象。
+         * @param resultRect 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Rectangle对象来存储结果，
+         * 若不传入将创建一个新的Rectangle对象返回。
+         * @returns 定义与 targetCoordinateSpace 对象坐标系统相关的显示对象面积的矩形。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.getBounds = function (targetCoordinateSpace, resultRect) {
             targetCoordinateSpace = targetCoordinateSpace || this;
             return this.$getTransformedBounds(targetCoordinateSpace, resultRect);
         };
+        /**
+         * @private
+         *
+         * @param targetCoordinateSpace
+         * @param resultRect
+         * @returns
+         */
         p.$getTransformedBounds = function (targetCoordinateSpace, resultRect) {
             var bounds = this.$getOriginalBounds();
             if (!resultRect) {
@@ -5145,30 +6262,59 @@ var lark;
             return resultRect;
         };
         /**
+         * @language en_US
          * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
          * @param stageX 舞台坐标x
          * @param stageY 舞台坐标y
          * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
          * 若不传入将创建一个新的Point对象返回。
          * @returns 具有相对于显示对象的坐标的 Point 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
+         * @param stageX 舞台坐标x
+         * @param stageY 舞台坐标y
+         * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
+         * 若不传入将创建一个新的Point对象返回。
+         * @returns 具有相对于显示对象的坐标的 Point 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.globalToLocal = function (stageX, stageY, resultPoint) {
             var m = this.$getInvertedConcatenatedMatrix();
             return m.transformPoint(stageX, stageY, resultPoint);
         };
         /**
+         * @language en_US
          * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
          * @param localX 舞台坐标x
          * @param localY 舞台坐标y
          * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
          * 若不传入将创建一个新的Point对象返回。
          * @returns 具有相对于显示对象的坐标的 Point 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
+         * @param localX 舞台坐标x
+         * @param localY 舞台坐标y
+         * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
+         * 若不传入将创建一个新的Point对象返回。
+         * @returns 具有相对于显示对象的坐标的 Point 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.localToGlobal = function (localX, localY, resultPoint) {
             var m = this.$getConcatenatedMatrix();
             return m.transformPoint(localX, localY, resultPoint);
         };
         /**
+         * @private
          * 标记自身的测量尺寸失效
          */
         p.$invalidateContentBounds = function () {
@@ -5177,6 +6323,7 @@ var lark;
             this.$propagateFlagsUp(4 /* InvalidBounds */);
         };
         /**
+         * @private
          * 获取显示对象占用的矩形区域集合，通常包括自身绘制的测量区域，如果是容器，还包括所有子项占据的区域。
          */
         p.$getOriginalBounds = function () {
@@ -5192,11 +6339,17 @@ var lark;
             return bounds;
         };
         /**
+         * @private
          * 测量子项占用的矩形区域
          * @param bounds 测量结果存储在这个矩形对象内
          */
         p.$measureChildBounds = function (bounds) {
         };
+        /**
+         * @private
+         *
+         * @returns
+         */
         p.$getContentBounds = function () {
             var bounds = this.$DisplayObject[9 /* contentBounds */];
             if (this.$hasFlags(2 /* InvalidContentBounds */)) {
@@ -5209,12 +6362,14 @@ var lark;
             return bounds;
         };
         /**
+         * @private
          * 测量自身占用的矩形区域，注意：此测量结果并不包括子项占据的区域。
          * @param bounds 测量结果存储在这个矩形对象内
          */
         p.$measureContentBounds = function (bounds) {
         };
         /**
+         * @private
          * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
          * @param notiryChildren 是否标记子项也需要重绘。传入false或不传入，将只标记自身需要重绘。通常只有alpha属性改变会需要通知子项重绘。
          */
@@ -5229,6 +6384,7 @@ var lark;
             }
         };
         /**
+         * @private
          * 标记自身以及所有子项在父级中变换叠加的显示内容失效。此方法不会触发自身的cacheAsBitmap重绘。
          * 通常用于矩阵改变或从显示列表添加和移除时。若自身的显示内容已经改变需要重绘，应该调用$invalidate()。
          */
@@ -5243,6 +6399,7 @@ var lark;
             }
         };
         /**
+         * @private
          * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
          */
         p.$update = function () {
@@ -5263,10 +6420,19 @@ var lark;
             return true;
         };
         /**
+         * @private
          * 执行渲染,绘制自身到屏幕
          */
         p.$render = function (context) {
         };
+        /**
+         * @private
+         *
+         * @param stageX
+         * @param stageY
+         * @param shapeFlag
+         * @returns
+         */
         p.$hitTest = function (stageX, stageY, shapeFlag) {
             if (!this.$renderRegion || !this.$visible) {
                 return null;
@@ -5291,6 +6457,13 @@ var lark;
             }
             return null;
         };
+        /**
+         * @private
+         *
+         * @param localX
+         * @param localY
+         * @returns
+         */
         p.hitTestPixel = function (localX, localY) {
             var alpha = this.$getConcatenatedAlpha();
             if (alpha === 0) {
@@ -5315,6 +6488,16 @@ var lark;
             }
             return this;
         };
+        /**
+         * @private
+         *
+         * @param type
+         * @param listener
+         * @param thisObject
+         * @param useCapture
+         * @param priority
+         * @param emitOnce
+         */
         p.$addListener = function (type, listener, thisObject, useCapture, priority, emitOnce) {
             _super.prototype.$addListener.call(this, type, listener, thisObject, useCapture, priority, emitOnce);
             var isEnterFrame = (type == lark.Event.ENTER_FRAME);
@@ -5325,6 +6508,26 @@ var lark;
                 }
             }
         };
+        /**
+         * @language en_US
+         *
+         * @param type
+         * @param listener
+         * @param thisObject
+         * @param useCapture
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param type
+         * @param listener
+         * @param thisObject
+         * @param useCapture
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.removeListener = function (type, listener, thisObject, useCapture) {
             _super.prototype.removeListener.call(this, type, listener, thisObject, useCapture);
             var isEnterFrame = (type == lark.Event.ENTER_FRAME);
@@ -5336,6 +6539,22 @@ var lark;
                 }
             }
         };
+        /**
+         * @language en_US
+         *
+         * @param event
+         * @returns
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param event
+         * @returns
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.emit = function (event) {
             if (!event.$bubbles) {
                 return _super.prototype.emit.call(this, event);
@@ -5347,6 +6566,7 @@ var lark;
             return !event.$isDefaultPrevented;
         };
         /**
+         * @private
          * 获取事件流列表。注意：Lark框架的事件流与Flash实现并不一致。
          *
          * Flash的事件流有三个阶段：捕获，目标，冒泡。
@@ -5372,6 +6592,13 @@ var lark;
             list = captureList.concat(list);
             return list;
         };
+        /**
+         * @private
+         *
+         * @param event
+         * @param list
+         * @param targetIndex
+         */
         p.$emitPropagationEvent = function (event, list, targetIndex) {
             var length = list.length;
             for (var i = 0; i < length; i++) {
@@ -5387,6 +6614,22 @@ var lark;
                 }
             }
         };
+        /**
+         * @language en_US
+         *
+         * @param type
+         * @returns
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param type
+         * @returns
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.willTrigger = function (type) {
             var parent = this;
             while (parent) {
@@ -5396,12 +6639,24 @@ var lark;
             }
             return false;
         };
+        /**
+         * @private
+         */
         DisplayObject.$enterFrameCallBackList = [];
+        /**
+         * @private
+         */
         DisplayObject.$renderCallBackList = [];
         return DisplayObject;
     })(lark.EventEmitter);
     lark.DisplayObject = DisplayObject;
+    /**
+     * @private
+     */
     lark.registerClass(DisplayObject, 3 /* DisplayObject */);
+    /**
+     * @private
+     */
     if (DEBUG) {
         lark.$markReadOnly(DisplayObject.prototype, "parent");
         lark.$markReadOnly(DisplayObject.prototype, "stage");
@@ -6645,12 +7900,30 @@ var lark;
 var lark;
 (function (lark) {
     /**
+     * @language en_US
      * 此类用于使用 Lark 绘图应用程序编程接口 (API) 创建简单形状。Shape 类包括 graphics 属性，该属性使您可以从 Graphics 类访问方法。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 此类用于使用 Lark 绘图应用程序编程接口 (API) 创建简单形状。Shape 类包括 graphics 属性，该属性使您可以从 Graphics 类访问方法。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     var Shape = (function (_super) {
         __extends(Shape, _super);
         /**
+         * @language en_US
          * 创建一个 Shape 对象
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 Shape 对象
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         function Shape() {
             _super.call(this);
@@ -6662,22 +7935,47 @@ var lark;
         var d = __define,c=Shape;p=c.prototype;
         d(p, "graphics",
             /**
+             * @language en_US
              * 获取 Shape 中的 Graphics 对象。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 获取 Shape 中的 Graphics 对象。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$graphics;
             },undefined
         );
+        /**
+         * @private
+         *
+         * @param bounds
+         */
         p.$measureContentBounds = function (bounds) {
             this.$graphics.$measureContentBounds(bounds);
         };
+        /**
+         * @private
+         *
+         * @param context
+         */
         p.$render = function (context) {
             this.$graphics.$render(context);
         };
         return Shape;
     })(lark.DisplayObject);
     lark.Shape = Shape;
+    /**
+     * @private
+     */
     lark.registerClass(Shape, 9 /* Shape */);
+    /**
+     * @private
+     */
     if (DEBUG) {
         lark.$markReadOnly(Shape.prototype, "graphics");
     }
@@ -6713,20 +8011,43 @@ var lark;
 var lark;
 (function (lark) {
     /**
+     * @language en_US
+     * The Bitmap class represents display objects that represent bitmap images. These can be images that you load with the flash.display.Loader class, or they can be images that you create with the Bitmap() constructor.
+     * The Bitmap() constructor allows you to create a Bitmap object that contains a reference to a BitmapData object. After you create a Bitmap object, use the addChild() or addChildAt() method of the parent DisplayObjectContainer instance to place the bitmap on the display list.
+     * A Bitmap object can share its BitmapData reference among several Bitmap objects, independent of translation or rotation properties. Because you can create multiple Bitmap objects that reference the same BitmapData object, multiple display objects can use the same complex BitmapData object without incurring the memory overhead of a BitmapData object for each display object instance.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * Bitmap 类表示用于表示位图图像的显示对象。这些图像可以是使用 Bitmap() 构造函数创建的图像。
      * 利用 Bitmap() 构造函数，可以创建包含对 BitmapData 对象的引用的 Bitmap 对象。创建了 Bitmap 对象后，
      * 使用父 DisplayObjectContainer 实例的 addChild() 或 addChildAt() 方法将位图放在显示列表中。
-     * 一个 Bitmap 对象可在若干 Bitmap 对象之中共享其 BitmapData 引用，与转换属性或旋转属性无关。
+     * 一个 Bitmap 对象可在若干 Bitmap 对象之中共享其 BitmapData 引用，与缩放或旋转属性无关。
      * 由于能够创建引用相同 BitmapData 对象的多个 Bitmap 对象，因此，多个显示对象可以使用相同的复杂 BitmapData 对象，
      * 而不会因为每个显示对象实例使用一个 BitmapData 对象而产生内存开销。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     var Bitmap = (function (_super) {
         __extends(Bitmap, _super);
         /**
+         * @language en_US
          * 创建一个Bitmap对象
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个Bitmap对象
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         function Bitmap(bitmapData) {
             _super.call(this);
+            /**
+             * @private
+             */
             this.$smoothing = true;
             this.$renderRegion = new lark.sys.Region();
             this.bitmapData = bitmapData;
@@ -6734,15 +8055,39 @@ var lark;
         var d = __define,c=Bitmap;p=c.prototype;
         d(p, "bitmapData",
             /**
+             * @language en_US
              * 被引用的 BitmapData 对象。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 被引用的 BitmapData 对象。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$bitmapData;
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this.$setBitmapData(value);
             }
         );
+        /**
+         * @private
+         *
+         * @param value
+         */
         p.$setBitmapData = function (value) {
             if (value === this.$bitmapData) {
                 return;
@@ -6752,12 +8097,32 @@ var lark;
         };
         d(p, "smoothing",
             /**
+             * @language en_US
              * 控制在缩放时是否对位图进行平滑处理。如果为 true，则会在缩放时对位图进行平滑处理。
              * 如果为 false，则不会在缩放时对位图进行平滑处理。默认true。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 控制在缩放时是否对位图进行平滑处理。如果为 true，则会在缩放时对位图进行平滑处理。
+             * 如果为 false，则不会在缩放时对位图进行平滑处理。默认true。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$smoothing;
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 value = !!value;
                 if (value === this.$smoothing) {
@@ -6767,6 +8132,11 @@ var lark;
                 this.$invalidate();
             }
         );
+        /**
+         * @private
+         *
+         * @param bounds
+         */
         p.$measureContentBounds = function (bounds) {
             var bitmapData = this.$bitmapData;
             if (bitmapData) {
@@ -6776,6 +8146,11 @@ var lark;
                 bounds.setEmpty();
             }
         };
+        /**
+         * @private
+         *
+         * @param context
+         */
         p.$render = function (context) {
             var bitmapData = this.$bitmapData;
             if (bitmapData) {
@@ -6786,6 +8161,9 @@ var lark;
         return Bitmap;
     })(lark.DisplayObject);
     lark.Bitmap = Bitmap;
+    /**
+     * @private
+     */
     lark.registerClass(Bitmap, 6 /* Bitmap */);
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -6819,18 +8197,41 @@ var lark;
 var lark;
 (function (lark) {
     /**
+     * @language en_US
      * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     var Sprite = (function (_super) {
         __extends(Sprite, _super);
         /**
+         * @language en_US
          * 实例化一个容器
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 实例化一个容器
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         function Sprite() {
             _super.call(this);
             this.$children = [];
         }
         var d = __define,c=Sprite;p=c.prototype;
+        /**
+         * @private
+         *
+         * @param flags
+         */
         p.$propagateFlagsDown = function (flags) {
             if (this.$hasFlags(flags)) {
                 return;
@@ -6843,17 +8244,38 @@ var lark;
         };
         d(p, "numChildren",
             /**
+             * @language en_US
              * 返回此对象的子项数目。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 返回此对象的子项数目。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$children.length;
             },undefined
         );
         /**
+         * @language en_US
          * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他所有子项的前（上）面。
          * （要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
          * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他所有子项的前（上）面。
+         * （要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
+         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.addChild = function (child) {
             var index = this.$children.length;
@@ -6862,12 +8284,26 @@ var lark;
             return this.doAddChild(child, index);
         };
         /**
+         * @language en_US
          * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。
          * 索引为 0 表示该 DisplayObjectContainer 对象的显示列表的后（底）部。
          * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
          * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
          * 当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。
+         * 索引为 0 表示该 DisplayObjectContainer 对象的显示列表的后（底）部。
+         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
+         * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
+         * 当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.addChildAt = function (child, index) {
             index = +index | 0;
@@ -6879,6 +8315,13 @@ var lark;
             }
             return this.doAddChild(child, index);
         };
+        /**
+         * @private
+         *
+         * @param child
+         * @param index
+         * @returns
+         */
         p.doAddChild = function (child, index) {
             if (DEBUG) {
                 if (child == this) {
@@ -6920,10 +8363,22 @@ var lark;
             return child;
         };
         /**
+         * @language en_US
          * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。
          * 孙项、曾孙项等，每项都返回 true。
          * @param child 要测试的子对象。
          * @returns 如果指定的显示对象为 DisplayObjectContainer 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。
+         * 孙项、曾孙项等，每项都返回 true。
+         * @param child 要测试的子对象。
+         * @returns 如果指定的显示对象为 DisplayObjectContainer 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.contains = function (child) {
             while (child) {
@@ -6935,9 +8390,20 @@ var lark;
             return false;
         };
         /**
+         * @language en_US
          * 返回位于指定索引处的子显示对象实例。
          * @param index 子对象的索引位置。
          * @returns 位于指定索引位置处的子显示对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回位于指定索引处的子显示对象实例。
+         * @param index 子对象的索引位置。
+         * @returns 位于指定索引位置处的子显示对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.getChildAt = function (index) {
             index = +index | 0;
@@ -6950,16 +8416,37 @@ var lark;
             }
         };
         /**
+         * @language en_US
          * 返回 DisplayObject 的 child 实例的索引位置。
          * @returns 要标识的子显示对象的索引位置。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回 DisplayObject 的 child 实例的索引位置。
+         * @returns 要标识的子显示对象的索引位置。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.getChildIndex = function (child) {
             return this.$children.indexOf(child);
         };
         /**
+         * @language en_US
          * 返回具有指定名称的子显示对象。
          * @param name 要返回的子项的名称。
          * @returns 具有指定名称的子显示对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回具有指定名称的子显示对象。
+         * @param name 要返回的子项的名称。
+         * @returns 具有指定名称的子显示对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.getChildByName = function (name) {
             var children = this.$children;
@@ -6974,9 +8461,20 @@ var lark;
             return null;
         };
         /**
+         * @language en_US
          * 将一个 DisplayObject 子实例从 DisplayObjectContainer 实例中移除。
          * @param child 要删除的 DisplayObject 实例。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将一个 DisplayObject 子实例从 DisplayObjectContainer 实例中移除。
+         * @param child 要删除的 DisplayObject 实例。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.removeChild = function (child) {
             var index = this.$children.indexOf(child);
@@ -6989,9 +8487,20 @@ var lark;
             }
         };
         /**
+         * @language en_US
          * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject。
          * @param index 要删除的 DisplayObject 的子索引。
          * @returns 已删除的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject。
+         * @param index 要删除的 DisplayObject 的子索引。
+         * @returns 已删除的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.removeChildAt = function (index) {
             index = +index | 0;
@@ -7003,6 +8512,12 @@ var lark;
                 return null;
             }
         };
+        /**
+         * @private
+         *
+         * @param index
+         * @returns
+         */
         p.doRemoveChild = function (index) {
             index = +index | 0;
             var children = this.$children;
@@ -7027,9 +8542,20 @@ var lark;
             return child;
         };
         /**
+         * @language en_US
          * 更改现有子项在显示对象容器中的位置。这会影响子对象的分层。
          * @param child 要为其更改索引编号的 DisplayObject 子实例。
          * @param index 生成的 child 显示对象的索引编号。当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 更改现有子项在显示对象容器中的位置。这会影响子对象的分层。
+         * @param child 要为其更改索引编号的 DisplayObject 子实例。
+         * @param index 生成的 child 显示对象的索引编号。当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.setChildIndex = function (child, index) {
             index = +index | 0;
@@ -7038,6 +8564,12 @@ var lark;
             }
             this.doSetChildIndex(child, index);
         };
+        /**
+         * @private
+         *
+         * @param child
+         * @param index
+         */
         p.doSetChildIndex = function (child, index) {
             var lastIndex = this.$children.indexOf(child);
             if (lastIndex < 0) {
@@ -7056,9 +8588,20 @@ var lark;
             this.$propagateFlagsUp(4 /* InvalidBounds */);
         };
         /**
+         * @language en_US
          * 在子级列表中两个指定的索引位置，交换子对象的 Z 轴顺序（前后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
          * @param index1 第一个子对象的索引位置。
          * @param index2 第二个子对象的索引位置。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在子级列表中两个指定的索引位置，交换子对象的 Z 轴顺序（前后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
+         * @param index1 第一个子对象的索引位置。
+         * @param index2 第二个子对象的索引位置。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.swapChildrenAt = function (index1, index2) {
             index1 = +index1 | 0;
@@ -7071,9 +8614,20 @@ var lark;
             }
         };
         /**
+         * @language en_US
          * 交换两个指定子对象的 Z 轴顺序（从前到后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
          * @param child1 第一个子对象。
          * @param child2 第二个子对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 交换两个指定子对象的 Z 轴顺序（从前到后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
+         * @param child1 第一个子对象。
+         * @param child2 第二个子对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.swapChildren = function (child1, child2) {
             var index1 = this.$children.indexOf(child1);
@@ -7085,6 +8639,12 @@ var lark;
                 this.doSwapChildrenAt(index1, index2);
             }
         };
+        /**
+         * @private
+         *
+         * @param index1
+         * @param index2
+         */
         p.doSwapChildrenAt = function (index1, index2) {
             if (index1 > index2) {
                 var temp = index2;
@@ -7108,7 +8668,16 @@ var lark;
             this.$propagateFlagsUp(4 /* InvalidBounds */);
         };
         /**
+         * @language en_US
          * 从 DisplayObjectContainer 实例的子级列表中删除所有 child DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从 DisplayObjectContainer 实例的子级列表中删除所有 child DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.removeChildren = function () {
             var children = this.$children;
@@ -7117,17 +8686,25 @@ var lark;
             }
         };
         /**
+         * @private
          * 一个子项被添加到容器内，此方法不仅在操作addChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
          * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
          */
         p.$childAdded = function (child, index) {
         };
         /**
+         * @private
          * 一个子项从容器内移除，此方法不仅在操作removeChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
          * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
          */
         p.$childRemoved = function (child, index) {
         };
+        /**
+         * @private
+         *
+         * @param stage
+         * @param nestLevel
+         */
         p.$onAddToStage = function (stage, nestLevel) {
             _super.prototype.$onAddToStage.call(this, stage, nestLevel);
             var children = this.$children;
@@ -7138,6 +8715,10 @@ var lark;
                 child.$onAddToStage(stage, nestLevel);
             }
         };
+        /**
+         * @private
+         *
+         */
         p.$onRemoveFromStage = function () {
             _super.prototype.$onRemoveFromStage.call(this);
             var children = this.$children;
@@ -7147,6 +8728,11 @@ var lark;
                 child.$onRemoveFromStage();
             }
         };
+        /**
+         * @private
+         *
+         * @param bounds
+         */
         p.$measureChildBounds = function (bounds) {
             var children = this.$children;
             var length = children.length;
@@ -7178,20 +8764,46 @@ var lark;
         };
         d(p, "touchChildren",
             /**
+             * @language en_US
              * 指定此对象的子项以及子孙项是否接收鼠标/触摸事件
              * 默认值为 true 即可以接收。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 指定此对象的子项以及子孙项是否接收鼠标/触摸事件
+             * 默认值为 true 即可以接收。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$hasFlags(2048 /* TouchChildren */);
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 this.$setTouchChildren(value);
             }
         );
+        /**
+         * @private
+         *
+         * @param value
+         */
         p.$setTouchChildren = function (value) {
             this.$toggleFlags(2048 /* TouchChildren */, !!value);
         };
         /**
+         * @private
          * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
          * @param notiryChildren 是否标记子项也需要重绘。传入false或不传入，将只标记自身需要重绘。通常只有alpha属性改变会需要通知子项重绘。
          */
@@ -7209,12 +8821,19 @@ var lark;
             }
         };
         /**
+         * @private
          * 标记自身以及所有子项在父级中变换叠加的显示内容失效。此方法不会触发自身的cacheAsBitmap重绘。
          * 通常用于矩阵改变或从显示列表添加和移除时。若自身的显示内容已经改变需要重绘，应该调用$invalidate()。
          */
         p.$invalidateTransform = function () {
             this.markChildDirty(this, this.$parentDisplayList);
         };
+        /**
+         * @private
+         *
+         * @param child
+         * @param parentCache
+         */
         p.markChildDirty = function (child, parentCache) {
             if (child.$hasFlags(512 /* DirtyChildren */)) {
                 return;
@@ -7235,6 +8854,7 @@ var lark;
             }
         };
         /**
+         * @private
          * cacheAsBitmap属性改变
          */
         p.$cacheAsBitmapChanged = function () {
@@ -7245,6 +8865,13 @@ var lark;
                 this.assignParentDisplayList(children[i], cacheRoot, cacheRoot);
             }
         };
+        /**
+         * @private
+         *
+         * @param child
+         * @param parentCache
+         * @param newParent
+         */
         p.assignParentDisplayList = function (child, parentCache, newParent) {
             child.$parentDisplayList = newParent;
             child.$setFlags(512 /* DirtyChildren */);
@@ -7262,6 +8889,14 @@ var lark;
                 }
             }
         };
+        /**
+         * @private
+         *
+         * @param stageX
+         * @param stageY
+         * @param shapeFlag
+         * @returns
+         */
         p.$hitTest = function (stageX, stageY, shapeFlag) {
             if (!this.$visible) {
                 return null;
@@ -7307,12 +8942,24 @@ var lark;
             }
             return _super.prototype.$hitTest.call(this, stageX, stageY, shapeFlag);
         };
+        /**
+         * @private
+         */
         Sprite.$EVENT_ADD_TO_STAGE_LIST = [];
+        /**
+         * @private
+         */
         Sprite.$EVENT_REMOVE_FROM_STAGE_LIST = [];
         return Sprite;
     })(lark.DisplayObject);
     lark.Sprite = Sprite;
+    /**
+     * @private
+     */
     lark.registerClass(Sprite, 5 /* Sprite */, [4 /* DisplayObjectContainer */]);
+    /**
+     * @private
+     */
     if (DEBUG) {
         lark.$markReadOnly(Sprite.prototype, "numChildren");
     }
@@ -7461,20 +9108,50 @@ var lark;
 var lark;
 (function (lark) {
     /**
+     * @language en_US
      * Stage 类代表主绘图区，表示显示 Lark 内容的整个区域。
      * 可以利用 DisplayObject 实例的 stage 属性进行访问。
      * Stage 类具有多个祖代类 -- DisplayObjectContainer、DisplayObject 和 EventDispatcher，属性和方法便是从这些类继承而来的。
      * 从这些继承的许多属性和方法不适用于 Stage 对象。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Stage 类代表主绘图区，表示显示 Lark 内容的整个区域。
+     * 可以利用 DisplayObject 实例的 stage 属性进行访问。
+     * Stage 类具有多个祖代类 -- DisplayObjectContainer、DisplayObject 和 EventDispatcher，属性和方法便是从这些类继承而来的。
+     * 从这些继承的许多属性和方法不适用于 Stage 对象。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     var Stage = (function (_super) {
         __extends(Stage, _super);
         /**
+         * @language en_US
          * 舞台对象不允许自行实例化。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 舞台对象不允许自行实例化。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         function Stage() {
             _super.call(this);
+            /**
+             * @private
+             */
             this.$stageWidth = 0;
+            /**
+             * @private
+             */
             this.$stageHeight = 0;
+            /**
+             * @private
+             */
             this.implMap = {};
             this.$stage = this;
             this.$nestLevel = 1;
@@ -7482,19 +9159,48 @@ var lark;
         var d = __define,c=Stage;p=c.prototype;
         d(p, "frameRate",
             /**
+             * @language en_US
              * 获取并设置舞台的帧速率。帧速率是指每秒显示的帧数。帧速率的有效范围为每秒 0.01 到 60 个帧。
              * 注意，若同一个网页中包含多个lark.Stage实例，修改任何一个Stage的frameRate属性都会同步修改其他Stage的帧率。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 获取并设置舞台的帧速率。帧速率是指每秒显示的帧数。帧速率的有效范围为每秒 0.01 到 60 个帧。
+             * 注意，若同一个网页中包含多个lark.Stage实例，修改任何一个Stage的frameRate属性都会同步修改其他Stage的帧率。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return lark.sys.$ticker.$frameRate;
             },
+            /**
+             * @language en_US
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             function (value) {
                 lark.sys.$ticker.$setFrameRate(value);
             }
         );
         d(p, "stageWidth",
             /**
+             * @language en_US
              * 舞台的当前宽度（以像素为单位）。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 舞台的当前宽度（以像素为单位）。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$stageWidth;
@@ -7502,31 +9208,72 @@ var lark;
         );
         d(p, "stageHeight",
             /**
+             * @language en_US
              * 舞台的当前高度（以像素为单位）。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 舞台的当前高度（以像素为单位）。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$stageHeight;
             },undefined
         );
         /**
+         * @language en_US
          * 调用 invalidate() 方法后，在显示列表下次呈现时，Lark 会向每个已注册侦听 Event.RENDER 事件的显示对象发送一个 Event.RENDER 事件。
          * 每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 invalidate() 方法。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 调用 invalidate() 方法后，在显示列表下次呈现时，Lark 会向每个已注册侦听 Event.RENDER 事件的显示对象发送一个 Event.RENDER 事件。
+         * 每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 invalidate() 方法。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.invalidate = function () {
             lark.sys.$invalidateRenderFlag = true;
         };
         /**
+         * @language en_US
          * 注册一个接口实现。Lark框架内预留了多个可由项目高度定制化的功能接口，使用此方法能够将项目中针对某接口的具体实现实例注入到框架中使用。
          * @param interfaceName 注入的接口名称。例如："swan.IAssetAdapter","swan.Theme"
          * @param instance 实现此接口的实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 注册一个接口实现。Lark框架内预留了多个可由项目高度定制化的功能接口，使用此方法能够将项目中针对某接口的具体实现实例注入到框架中使用。
+         * @param interfaceName 注入的接口名称。例如："swan.IAssetAdapter","swan.Theme"
+         * @param instance 实现此接口的实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.registerImplementation = function (interfaceName, instance) {
             this.implMap[interfaceName] = instance;
         };
         /**
+         * @language en_US
          * 获取一个接口实现。此方法通常由框架内部调用。获取项目注入的自定义实现实例。
          * @param interfaceName 要获取的接口名称。例如："swan.IAssetAdapter","swan.Theme"
          * @returns 返回实现此接口的实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取一个接口实现。此方法通常由框架内部调用。获取项目注入的自定义实现实例。
+         * @param interfaceName 要获取的接口名称。例如："swan.IAssetAdapter","swan.Theme"
+         * @returns 返回实现此接口的实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.getImplementation = function (interfaceName) {
             return this.implMap[interfaceName];
@@ -7534,6 +9281,9 @@ var lark;
         return Stage;
     })(lark.Sprite);
     lark.Stage = Stage;
+    /**
+     * @private
+     */
     if (DEBUG) {
         Object.defineProperty(Stage.prototype, "alpha", {
             get: function () {
@@ -7666,7 +9416,13 @@ var lark;
             configurable: true
         });
     }
+    /**
+     * @private
+     */
     lark.registerClass(Stage, 10 /* Stage */);
+    /**
+     * @private
+     */
     if (DEBUG) {
         lark.$markReadOnly(Stage.prototype, "stageWidth");
         lark.$markReadOnly(Stage.prototype, "stageHeight");

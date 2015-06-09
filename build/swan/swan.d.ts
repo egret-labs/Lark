@@ -1029,7 +1029,6 @@ declare module swan {
          * 创建一个 CollectionEvent 实例
          */
         constructor(type: string, bubbles?: boolean, cancelable?: boolean, kind?: string, location?: number, oldLocation?: number, items?: any[], oldItems?: any[]);
-        $setTo(kind?: string, location?: number, oldLocation?: number, items?: any[], oldItems?: any[]): void;
         /**
          * 指示发生的事件类型。此属性值可以是 CollectionEventKind 类中的一个值，也可以是 null，用于指示类型未知。
          */
@@ -1136,10 +1135,6 @@ declare module swan {
          */
         constructor();
         /**
-         * 组名
-         */
-        $name: string;
-        /**
          * 单选按钮列表
          */
         private radioButtons;
@@ -1148,7 +1143,6 @@ declare module swan {
          * @param index 单选按钮的索引
          */
         getRadioButtonAt(index: number): RadioButton;
-        $enabled: boolean;
         /**
          * 组件是否可以接受用户交互。默认值为true。设置此属性将影响组内所有单选按钮。
          */
@@ -1167,18 +1161,6 @@ declare module swan {
          * 当前被选中的单选按钮引用,注意，此属性仅当目标RadioButton在显示列表时有效。
          */
         selection: RadioButton;
-        /**
-         * 添加单选按钮到组内
-         */
-        $addInstance(instance: RadioButton): void;
-        /**
-         * 从组里移除单选按钮
-         */
-        $removeInstance(instance: RadioButton, addListener?: boolean): void;
-        /**
-         * 设置选中的单选按钮
-         */
-        $setSelection(value: RadioButton, fireChange?: boolean): void;
         /**
          * 改变选中项
          */
@@ -1223,7 +1205,6 @@ declare module swan {
 }
 declare module swan.sys {
     class StateClient {
-        $stateValues: StateValues;
         /**
          * 为此组件定义的视图状态。
          */
@@ -1323,12 +1304,10 @@ declare module swan {
      */
     class LayoutBase extends lark.EventEmitter {
         constructor();
-        $target: Group;
         /**
          * 目标容器
          */
         target: Group;
-        $useVirtualLayout: boolean;
         /**
          * 若要配置容器使用虚拟布局，请为与容器关联的布局的 useVirtualLayout 属性设置为 true。
          * 只有布局设置为 VerticalLayout、HorizontalLayout
@@ -1336,8 +1315,6 @@ declare module swan {
          * 才支持虚拟布局。不支持虚拟化的布局子类必须禁止更改此属性。
          */
         useVirtualLayout: boolean;
-        $typicalWidth: number;
-        $typicalHeight: number;
         setTypicalSize(width: number, height: number): void;
         /**
          * 滚动条位置改变
@@ -1576,8 +1553,6 @@ declare module swan {
      * @event swan.UIEvent.CREATION_COMPLETE 当UI组件第一次被添加到舞台并完成初始化后调度
      */
     interface UIComponent extends lark.DisplayObject {
-        $UIComponent: Object;
-        $includeInLayout: boolean;
         /**
          * 指定此组件是否包含在父容器的布局中。若为false，则父级容器在测量和布局阶段都忽略此组件。默认值为true。
          * 注意，visible属性与此属性不同，设置visible为false，父级容器仍会对其布局。
@@ -1762,15 +1737,11 @@ declare module swan.sys {
          * 更新显示列表
          */
         protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
-        $super: any;
-        $UIComponent: Object;
-        $includeInLayout: boolean;
         /**
          * 指定此组件是否包含在父容器的布局中。若为false，则父级容器在测量和布局阶段都忽略此组件。默认值为true。
          * 注意，visible属性与此属性不同，设置visible为false，父级容器仍会对其布局。
          */
         includeInLayout: boolean;
-        $onAddToStage(stage: lark.Stage, nestLevel: number): void;
         /**
          * 检查属性失效标记并应用
          */
@@ -1816,21 +1787,9 @@ declare module swan.sys {
          */
         explicitHeight: number;
         /**
-         * 组件宽度,默认值为lark.lark.NONE,设置为lark.NONE将使用组件的measure()方法自动计算尺寸
-         */
-        $getWidth(): number;
-        $setWidth(value: number): void;
-        /**
          * 立即验证自身的尺寸。
          */
         private validateSizeNow();
-        /**
-         * 组件高度,默认值为NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
-         */
-        $getHeight(): number;
-        $setHeight(value: number): void;
-        $setScaleX(value: number): boolean;
-        $setScaleY(value: number): boolean;
         /**
          * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
          */
@@ -1858,8 +1817,6 @@ declare module swan.sys {
          * 不会影响显式标记尺寸属性
          */
         private setActualSize(w, h);
-        $setX(value: number): boolean;
-        $setY(value: number): boolean;
         /**
          * 标记属性失效
          */
@@ -2209,37 +2166,30 @@ declare module swan {
      * 线性布局基类，通常作为 HorizontalLayout 和 VerticalLayout 的父类。
      */
     class LinearLayoutBase extends LayoutBase {
-        $horizontalAlign: string;
         /**
          * 布局元素的水平对齐策略。请使用 HorizontalAlign 定义的常量。
          */
         horizontalAlign: string;
-        $verticalAlign: string;
         /**
          * 布局元素的竖直对齐策略。请使用 VerticalAlign 定义的常量。
          */
         verticalAlign: string;
-        $gap: number;
         /**
          * 布局元素之间的间隔空间（以像素为单位）
          */
         gap: number;
-        $paddingLeft: number;
         /**
          * 容器的左边缘与布局元素的左边缘之间的最少像素数,默认值：0。
          */
         paddingLeft: number;
-        $paddingRight: number;
         /**
          * 容器的右边缘与布局元素的右边缘之间的最少像素数,默认值：0。
          */
         paddingRight: number;
-        $paddingTop: number;
         /**
          * 容器的顶边缘与第一个布局元素的顶边缘之间的像素数,默认值：0。
          */
         paddingTop: number;
-        $paddingBottom: number;
         /**
          * 容器的底边缘与最后一个布局元素的底边缘之间的像素数0,默认值：0。
          */
@@ -2339,10 +2289,6 @@ declare module swan.sys {
 declare module swan {
     class EditableText extends lark.TextInput implements UIComponent {
         constructor();
-        $invalidateContentBounds(): void;
-        $setWidth(value: number): void;
-        $setHeight(value: number): void;
-        $setText(value: string): void;
         private _widthConstraint;
         /**
          * UIComponentImpl 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
@@ -2373,8 +2319,6 @@ declare module swan {
          * 标记父级容器的尺寸和显示列表为失效
          */
         protected invalidateParentLayout(): void;
-        $UIComponent: Object;
-        $includeInLayout: boolean;
         /**
          * 指定此组件是否包含在父容器的布局中。若为false，则父级容器在测量和布局阶段都忽略此组件。默认值为true。
          * 注意，visible属性与此属性不同，设置visible为false，父级容器仍会对其布局。
@@ -2525,7 +2469,6 @@ declare module swan {
          * 皮肤显式设置高度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
          */
         height: number;
-        $elementsContent: lark.DisplayObject[];
         elementsContent: lark.DisplayObject[];
         private _hostComponent;
         /**
@@ -2533,7 +2476,6 @@ declare module swan {
          */
         hostComponent: Component;
         private onAddedToStage(event?);
-        $stateValues: sys.StateValues;
         /**
          * 为此组件定义的视图状态。
          */
@@ -2567,10 +2509,6 @@ declare module swan {
      */
     class Label extends lark.TextField implements UIComponent {
         constructor(text?: string);
-        $invalidateContentBounds(): void;
-        $setWidth(value: number): void;
-        $setHeight(value: number): void;
-        $setText(value: string): void;
         private _widthConstraint;
         /**
          * UIComponentImpl 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
@@ -2601,8 +2539,6 @@ declare module swan {
          * 标记父级容器的尺寸和显示列表为失效
          */
         protected invalidateParentLayout(): void;
-        $UIComponent: Object;
-        $includeInLayout: boolean;
         /**
          * 指定此组件是否包含在父容器的布局中。若为false，则父级容器在测量和布局阶段都忽略此组件。默认值为true。
          * 注意，visible属性与此属性不同，设置visible为false，父级容器仍会对其布局。
@@ -2741,7 +2677,6 @@ declare module swan {
      */
     class Component extends lark.Sprite implements UIComponent {
         constructor();
-        $Component: Object;
         /**
          * 主机组件标识符。用于唯一确定一个组件的名称。通常用于在主题中查询默认皮肤名。
          *
@@ -2752,19 +2687,11 @@ declare module swan {
          * 皮肤标识符。有效值可为：皮肤类定义,皮肤类名,皮肤实例,EXML文件内容,或外部EXML文件路径，
          */
         skinName: any;
-        /**
-         * 解析skinName
-         */
-        $parseSkinName(): void;
         private onExmlLoaded(clazz, url);
         /**
          * [只读]皮肤对象实例。
          */
         skin: Skin;
-        /**
-         * 设置皮肤实例
-         */
-        $setSkin(skin: Skin): void;
         /**
          * 关联一个对象到逻辑组件的指定皮肤部件上。通常您不需要手动调用此方法，当使用EXML文件作为组件皮肤，此方法将会被自动调用。
          * 在运行时，EXML文件内声明的id名称将作为此方法的partName参数，而id所对应的节点对象，将作为此方法的instance参数被依次传入。
@@ -2784,14 +2711,11 @@ declare module swan {
          * @param instance 要卸载的皮肤部件实例
          */
         protected partRemoved(partName: string, instance: any): void;
-        $setTouchChildren(value: boolean): void;
-        $setTouchEnabled(value: boolean): void;
         /**
          * 组件是否可以接受用户交互。将 enabled 属性设置为 false 后，组件会自动禁用触摸事件(将 touchEnabled 和 touchChildren 同时设置为 false)，
          * 部分组件可能还会将皮肤的视图状态设置为"disabled",使其所有子项的颜色变暗。默认值为 true。
          */
         enabled: boolean;
-        $setEnabled(value: boolean): void;
         /**
          * 组件的当前视图状态。显式设置此属性，将采用显式设置的值去更新皮肤状态，而忽略组件内部 getCurrentState() 方法返回的值。
          * 将其设置为 "" 或 null 可将取消组件外部显式设置的视图状态名称，从而采用内部 getCurrentState() 方法返回的状态。
@@ -2834,8 +2758,6 @@ declare module swan {
          * 标记父级容器的尺寸和显示列表为失效
          */
         protected invalidateParentLayout(): void;
-        $UIComponent: Object;
-        $includeInLayout: boolean;
         /**
          * 指定此组件是否包含在父容器的布局中。若为false，则父级容器在测量和布局阶段都忽略此组件。默认值为true。
          * 注意，visible属性与此属性不同，设置visible为false，父级容器仍会对其布局。
@@ -2960,17 +2882,14 @@ declare module swan {
      */
     class Group extends lark.Sprite implements UIComponent {
         constructor();
-        $Group: Object;
         /**
          * [只写] 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
          */
         elementsContent: lark.DisplayObject[];
-        $layout: LayoutBase;
         /**
          * 此容器的布局对象
          */
         layout: LayoutBase;
-        $setLayout(value: LayoutBase): void;
         /**
          * 视域的内容的宽度
          */
@@ -3016,8 +2935,6 @@ declare module swan {
          * 触摸组件的背景透明区域是否可以穿透。设置为true表示可以穿透，反之透明区域也会响应触摸事件。默认 false。
          */
         touchThrough: boolean;
-        $hitTest(stageX: number, stageY: number, shapeFlag?: boolean): lark.DisplayObject;
-        $stateValues: sys.StateValues;
         /**
          * 为此组件定义的视图状态。
          */
@@ -3076,8 +2993,6 @@ declare module swan {
          * 标记父级容器的尺寸和显示列表为失效
          */
         protected invalidateParentLayout(): void;
-        $UIComponent: Object;
-        $includeInLayout: boolean;
         /**
          * 指定此组件是否包含在父容器的布局中。若为false，则父级容器在测量和布局阶段都忽略此组件。默认值为true。
          * 注意，visible属性与此属性不同，设置visible为false，父级容器仍会对其布局。
@@ -3226,7 +3141,6 @@ declare module swan {
          * 用于显示位图的数据源。可以为一个网络图片url或BitmapData实例。
          */
         source: string | lark.BitmapData;
-        $setBitmapData(value: lark.BitmapData): void;
         /**
          * 解析source
          */
@@ -3235,8 +3149,6 @@ declare module swan {
          * 资源发生改变
          */
         private contentChanged(data, source);
-        $measureContentBounds(bounds: lark.Rectangle): void;
-        $render(context: lark.sys.RenderContext): void;
         /**
          * 绘制九宫格位图
          */
@@ -3270,8 +3182,6 @@ declare module swan {
          * 标记父级容器的尺寸和显示列表为失效
          */
         protected invalidateParentLayout(): void;
-        $UIComponent: Object;
-        $includeInLayout: boolean;
         /**
          * 指定此组件是否包含在父容器的布局中。若为false，则父级容器在测量和布局阶段都忽略此组件。默认值为true。
          * 注意，visible属性与此属性不同，设置visible为false，父级容器仍会对其布局。
@@ -3524,7 +3434,6 @@ declare module swan {
          * [SkinPart]滑块显示对象
          */
         thumb: swan.UIComponent;
-        $viewport: IViewport;
         viewport: IViewport;
         private onViewportResize(event?);
         protected onPropertyChanged(event: swan.PropertyEvent): void;
@@ -3591,12 +3500,10 @@ declare module swan {
      */
     class DataGroup extends Group {
         constructor();
-        $DataGroup: Object;
         /**
          * 是否使用虚拟布局,默认true
          */
         useVirtualLayout: boolean;
-        $setLayout(value: LayoutBase): void;
         /**
          * 是否使用虚拟布局标记改变
          */
@@ -3620,13 +3527,10 @@ declare module swan {
          * 根据rendererClass创建一个Renderer,并添加到显示列表
          */
         private createOneRenderer(rendererClass);
-        $dataProviderChanged: boolean;
-        $dataProvider: ICollection;
         /**
          * 列表数据源，请使用实现了ICollection接口的数据类型，例如 ArrayCollection
          */
         dataProvider: ICollection;
-        $setDataProvider(value: ICollection): void;
         /**
          * 移除数据源监听
          */
@@ -3703,10 +3607,6 @@ declare module swan {
          * 设置项目默认大小
          */
         private setTypicalLayoutRect(rect);
-        /**
-         * 索引到项呈示器的转换数组
-         */
-        $indexToRenderer: IItemRenderer[];
         /**
          * 移除所有项呈示器
          */
@@ -3823,7 +3723,6 @@ declare module swan {
          * 创建一个 Range 实例
          */
         constructor();
-        $Range: Object;
         /**
          * 最大有效值
          */
@@ -3836,7 +3735,6 @@ declare module swan {
          * 此范围的当前值。
          */
         value: number;
-        $setValue(newValue: number): void;
         /**
          * snapInterval 属性定义 value 属性的有效值。如果为非零，则有效值为 minimum 与此属性的整数倍数之和，且小于或等于 maximum。
          * 例如，如果 minimum 为 10，maximum 为 20，而此属性为 3，则可能的有效值为 10、13、16、19 和 20.
@@ -3905,16 +3803,6 @@ declare module swan {
          */
         private setSelectedIndex(value);
         /**
-         * 一个子项被添加到容器内，此方法不仅在操作addChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
-         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
-         */
-        $childAdded(child: lark.DisplayObject, index: number): void;
-        /**
-         * 一个子项从容器内移除，此方法不仅在操作removeChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
-         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
-         */
-        $childRemoved(child: lark.DisplayObject, index: number): void;
-        /**
          * 处理对组件设置的属性
          */
         protected commitProperties(): void;
@@ -3944,7 +3832,6 @@ declare module swan {
          * 创建一个 Scroller 实例
          */
         constructor();
-        $Scroller: Object;
         /**
          * [SkinPart] 水平滚动条
          */
@@ -3973,7 +3860,6 @@ declare module swan {
          * 卸载视域组件
          */
         private uninstallViewport();
-        $setSkin(skin: Skin): void;
         private onTouchEndCapture(event);
         /**
          * 若这个Scroller可以滚动，阻止当前事件，延迟100ms再抛出。
@@ -4042,7 +3928,6 @@ declare module swan {
          * 动画播放结束时要到达的value。
          */
         private slideToValue;
-        $setValue(newValue: number): void;
         private animationValue;
         /**
          * 动画播放更新数值
@@ -4075,20 +3960,14 @@ declare module swan {
      * @event lark.Event.CHANGE 选中状态发生改变，仅当触摸操作引起的选中状态改变才会抛出此事件。
      */
     class ToggleButton extends Button {
-        $selected: boolean;
         /**
          * 按钮处于按下状态时为 true，而按钮处于弹起状态时为 false。
          */
         selected: boolean;
-        $setSelected(value: boolean): void;
         /**
          * 返回要应用到外观的状态的名称
          */
         protected getCurrentState(): string;
-        /**
-         * 是否根据鼠标事件自动变换选中状态,默认true。仅框架内使用。
-         */
-        $autoSelected: boolean;
         /**
          * 当在用户单击按钮之后处理 MouseEvent.MOUSE_UP 事件时，将调用此方法
          */
@@ -4116,7 +3995,6 @@ declare module swan {
          * 创建一个 SliderBase 实例
          */
         constructor();
-        $SliderBase: Object;
         /**
          * [SkinPart]轨道高亮显示对象
          */
@@ -4186,10 +4064,6 @@ declare module swan {
          */
         private stageTouchEndHandler(event);
         /**
-         * 动画播放更新数值
-         */
-        $animationUpdateHandler(animation: sys.Animation): void;
-        /**
          * 动画播放完毕
          */
         private animationEndHandler(animation);
@@ -4222,7 +4096,6 @@ declare module swan {
      */
     class ListBase extends DataGroup {
         constructor();
-        $ListBase: Object;
         /**
          * 未选中任何项时的索引值
          */
@@ -4243,7 +4116,6 @@ declare module swan {
          * 当以编程方式更改 selectedIndex 属性的值时，此控件不分派 change 和 changing 事件。
          */
         selectedIndex: number;
-        $getSelectedIndex(): number;
         /**
          * 设置选中项
          */
@@ -4272,10 +4144,6 @@ declare module swan {
          * @param selected true为选中，false取消选中
          */
         protected itemSelected(index: number, selected: boolean): void;
-        /**
-         * 返回指定索引是否等于当前选中索引
-         */
-        $isItemIndexSelected(index: number): boolean;
         /**
          * 提交选中项属性，返回是否成功提交，false表示被取消
          */
@@ -4398,7 +4266,6 @@ declare module swan {
          * 提交多项选中项属性
          */
         protected commitMultipleSelection(): void;
-        $isItemIndexSelected(index: number): boolean;
         /**
          * 数据源发生刷新
          */
@@ -4443,14 +4310,6 @@ declare module swan {
          */
         constructor();
         /**
-         * 在RadioButtonGroup中的索引
-         */
-        $indexNumber: number;
-        /**
-         * 所属的RadioButtonGroup
-         */
-        $radioButtonGroup: RadioButtonGroup;
-        /**
          * 组件是否可以接受用户交互。默认值为true。设置此属性将影响组内所有单选按钮
          */
         enabled: boolean;
@@ -4467,7 +4326,6 @@ declare module swan {
          * 可以把此属性当做设置组的一个简便方式，作用与设置group属性相同,。
          */
         groupName: string;
-        $setSelected(value: boolean): void;
         private _value;
         /**
          * 与此单选按钮关联的自定义数据。
@@ -4509,7 +4367,6 @@ declare module swan {
     class TabBar extends ListBase {
         constructor();
         protected createChildren(): void;
-        $setDataProvider(value: ICollection): void;
         private indexBeingUpdated;
         /**
          * 鼠标点击的选中项改变

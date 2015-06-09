@@ -20,28 +20,7 @@ declare module lark.sys {
      * 平台实现输入文本的接口
      */
     interface ITextAdapter {
-        /**
-         * 当用户点击TextInput时，将它设置为正在输入的TextInput对象，HTML text input 会显示出来并获得焦点
-         * @param currentTextInput 要输入的TextInput对象
-         */
-        $setCurrentTextInput(currentTextInput: TextInput): void;
-        /**
-         * 清空正在输入的TextInput，隐藏HTML text input。
-         */
-        $removeCurrentTextInput(): void;
-        /**
-         * 更新HTML5 或 runtime 中 text input 的属性值
-         */
-        $initializeInput(): void;
-        $stage: Stage;
     }
-    /**
-     * 获取
-     * @param textInput
-     * @returns {any}
-     */
-    function $getTextAdapter(textInput: TextInput): ITextAdapter;
-    function $cacheTextAdapter(adapter: ITextAdapter): void;
 }
 declare module lark.sys {
     /**
@@ -122,30 +101,6 @@ declare module lark.sys {
 }
 declare module lark.sys {
     interface Renderable extends LarkObject {
-        /**
-         * 是否需要重绘的标志
-         */
-        $isDirty: boolean;
-        /**
-         * 在舞台上的透明度
-         */
-        $renderAlpha: number;
-        /**
-         * 在舞台上的矩阵对象
-         */
-        $renderMatrix: Matrix;
-        /**
-         * 在屏幕上的显示区域
-         */
-        $renderRegion: Region;
-        /**
-         * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
-         */
-        $update(): boolean;
-        /**
-         * 执行绘制
-         */
-        $render(context: RenderContext): void;
     }
 }
 declare module lark.sys {
@@ -498,13 +453,45 @@ declare module lark {
 }
 declare module lark {
     /**
+     * @language en_US
      * BitmapData 对象包含像素数据的数组。此数据可以表示完全不透明的位图，或表示包含 Alpha 通道数据的透明位图。
      * 以上任一类型的 BitmapData 对象都作为 32 位整数的缓冲区进行存储。每个 32 位整数确定位图中单个像素的属性。
      * 每个 32 位整数都是四个 8 位通道值（从 0 到 255）的组合，这些值描述像素的 Alpha 透明度以及红色、绿色、蓝色 (ARGB) 值。
      * （对于 ARGB 值，最高有效字节代表 Alpha 通道值，其后的有效字节分别代表红色、绿色和蓝色通道值。）
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * BitmapData 对象包含像素数据的数组。此数据可以表示完全不透明的位图，或表示包含 Alpha 通道数据的透明位图。
+     * 以上任一类型的 BitmapData 对象都作为 32 位整数的缓冲区进行存储。每个 32 位整数确定位图中单个像素的属性。
+     * 每个 32 位整数都是四个 8 位通道值（从 0 到 255）的组合，这些值描述像素的 Alpha 透明度以及红色、绿色、蓝色 (ARGB) 值。
+     * （对于 ARGB 值，最高有效字节代表 Alpha 通道值，其后的有效字节分别代表红色、绿色和蓝色通道值。）
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     interface BitmapData extends LarkObject {
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         width: number;
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         height: number;
     }
 }
@@ -518,7 +505,16 @@ declare module lark {
 declare var __global: any;
 declare module lark {
     /**
+     * @language en_US
      * GraphicsPattern 接口表示描述一个模板（基于BitmapData）的不透明对象，通过 Graphics.createPattern() 静态方法创建.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * GraphicsPattern 接口表示描述一个模板（基于BitmapData）的不透明对象，通过 Graphics.createPattern() 静态方法创建.
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     interface GraphicsPattern {
     }
@@ -535,13 +531,33 @@ declare module lark {
 }
 declare module lark {
     /**
+     * @language en_US
      * GraphicsGradient 接口表示描述渐变的不透明对象。通过 Graphics.createLinearGradient() 或 Graphics.createRadialGradient() 等静态方法的返回值得到.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * GraphicsGradient 接口表示描述渐变的不透明对象。通过 Graphics.createLinearGradient() 或 Graphics.createRadialGradient() 等静态方法的返回值得到.
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     interface GraphicsGradient {
         /**
+         * @language en_US
          * 添加一个由偏移值和颜色值指定的断点到渐变。如果偏移值不在0到1之间，将抛出错误，如果颜色值不能被解析为有效的CSS颜色值 <color>，也将抛出错误。
          * @param offset 0到1之间的值，超出范围将抛出错误
          * @param color CSS颜色值 <color>。如果颜色值不能被解析为有效的CSS颜色值 <color>，将抛出错误。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 添加一个由偏移值和颜色值指定的断点到渐变。如果偏移值不在0到1之间，将抛出错误，如果颜色值不能被解析为有效的CSS颜色值 <color>，也将抛出错误。
+         * @param offset 0到1之间的值，超出范围将抛出错误
+         * @param color CSS颜色值 <color>。如果颜色值不能被解析为有效的CSS颜色值 <color>，将抛出错误。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         addColorStop(offset: number, color: string): void;
     }
@@ -557,90 +573,252 @@ declare module lark {
 }
 declare module lark {
     /**
+     * @language en_US
      * DisplayObjectContainer 接口定义显示列表中的显示对象容器。
      * 该显示列表管理运行时中显示的所有对象。使用 DisplayObjectContainer 排列显示列表中的显示对象。
      * 每个 DisplayObjectContainer 对象都有自己的子级列表，用于组织对象的 Z 轴顺序。Z 轴顺序是由前至后的顺序，
      * 可确定哪个对象绘制在前，哪个对象绘制在后等。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * DisplayObjectContainer 接口定义显示列表中的显示对象容器。
+     * 该显示列表管理运行时中显示的所有对象。使用 DisplayObjectContainer 排列显示列表中的显示对象。
+     * 每个 DisplayObjectContainer 对象都有自己的子级列表，用于组织对象的 Z 轴顺序。Z 轴顺序是由前至后的顺序，
+     * 可确定哪个对象绘制在前，哪个对象绘制在后等。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     interface DisplayObjectContainer extends DisplayObject {
         /**
+         * @language en_US
          * 返回此对象的子项数目。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回此对象的子项数目。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         numChildren: number;
         /**
+         * @language en_US
          * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
          * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
+         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         addChild(child: DisplayObject): DisplayObject;
         /**
+         * @language en_US
          * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。索引为 0 表示该 DisplayObjectContainer 对象的显示列表的后（底）部。
          * 如果索引值为-1，则表示该 DisplayObjectContainer 对象的显示列表的前（上）部。
          * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
          * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。索引为 0 表示该 DisplayObjectContainer 对象的显示列表的后（底）部。
+         * 如果索引值为-1，则表示该 DisplayObjectContainer 对象的显示列表的前（上）部。
+         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
+         * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         addChildAt(child: DisplayObject, index: number): DisplayObject;
         /**
+         * @language en_US
          * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。孙项、曾孙项等，每项都返回 true。
          * @param child 要测试的子对象。
          * @returns 如果指定的显示对象为 DisplayObjectContainer 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。孙项、曾孙项等，每项都返回 true。
+         * @param child 要测试的子对象。
+         * @returns 如果指定的显示对象为 DisplayObjectContainer 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         contains(child: DisplayObject): boolean;
         /**
+         * @language en_US
          * 返回位于指定索引处的子显示对象实例。
          * @param index 子对象的索引位置。
          * @returns 位于指定索引位置处的子显示对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回位于指定索引处的子显示对象实例。
+         * @param index 子对象的索引位置。
+         * @returns 位于指定索引位置处的子显示对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         getChildAt(index: number): DisplayObject;
         /**
+         * @language en_US
          * 返回 DisplayObject 的 child 实例的索引位置。
          * @returns 要标识的子显示对象的索引位置。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回 DisplayObject 的 child 实例的索引位置。
+         * @returns 要标识的子显示对象的索引位置。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         getChildIndex(child: DisplayObject): number;
         /**
+         * @language en_US
          * 返回具有指定名称的子显示对象。
          * @param name 要返回的子项的名称。
          * @returns 具有指定名称的子显示对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回具有指定名称的子显示对象。
+         * @param name 要返回的子项的名称。
+         * @returns 具有指定名称的子显示对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         getChildByName(name: string): DisplayObject;
         /**
+         * @language en_US
          * 将一个 DisplayObject 子实例从 DisplayObjectContainer 实例中移除。
          * @param child 要删除的 DisplayObject 实例。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将一个 DisplayObject 子实例从 DisplayObjectContainer 实例中移除。
+         * @param child 要删除的 DisplayObject 实例。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         removeChild(child: DisplayObject): DisplayObject;
         /**
+         * @language en_US
          * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject。
          * @param index 要删除的 DisplayObject 的子索引。
          * @returns 已删除的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject。
+         * @param index 要删除的 DisplayObject 的子索引。
+         * @returns 已删除的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         removeChildAt(index: number): DisplayObject;
         /**
+         * @language en_US
          * 更改现有子项在显示对象容器中的位置。这会影响子对象的分层。
          * @param child 要为其更改索引编号的 DisplayObject 子实例。
          * @param index 生成的 child 显示对象的索引编号。当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 更改现有子项在显示对象容器中的位置。这会影响子对象的分层。
+         * @param child 要为其更改索引编号的 DisplayObject 子实例。
+         * @param index 生成的 child 显示对象的索引编号。当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         setChildIndex(child: DisplayObject, index: number): void;
         /**
+         * @language en_US
          * 在子级列表中两个指定的索引位置，交换子对象的 Z 轴顺序（前后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
          * @param index1 第一个子对象的索引位置。
          * @param index2 第二个子对象的索引位置。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在子级列表中两个指定的索引位置，交换子对象的 Z 轴顺序（前后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
+         * @param index1 第一个子对象的索引位置。
+         * @param index2 第二个子对象的索引位置。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         swapChildrenAt(index1: number, index2: number): void;
         /**
+         * @language en_US
          * 交换两个指定子对象的 Z 轴顺序（从前到后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
          * @param child1 第一个子对象。
          * @param child2 第二个子对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 交换两个指定子对象的 Z 轴顺序（从前到后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
+         * @param child1 第一个子对象。
+         * @param child2 第二个子对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         swapChildren(child1: DisplayObject, child2: DisplayObject): void;
         /**
+         * @language en_US
          * 从 DisplayObjectContainer 实例的子级列表中删除所有 child DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从 DisplayObjectContainer 实例的子级列表中删除所有 child DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         removeChildren(): void;
         /**
+         * @language en_US
          * 指定此对象的子项以及子孙项是否接收鼠标/触摸事件
          * 默认值为 true 即可以接收。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指定此对象的子项以及子孙项是否接收鼠标/触摸事件
+         * 默认值为 true 即可以接收。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         touchChildren: boolean;
     }
@@ -726,9 +904,6 @@ declare module lark {
 declare var DEBUG: boolean;
 declare var RELEASE: boolean;
 declare module lark {
-    function $error(code: number, ...params: any[]): void;
-    function $warn(code: number, ...params: any[]): void;
-    function $markReadOnly(instance: any, property: string): void;
 }
 declare module lark {
     /**
@@ -806,7 +981,6 @@ declare module lark.sys {
 }
 declare module lark {
     class Capabilities {
-        static $language: string;
         /**
          * 指定运行内容的系统的语言代码。语言指定为 ISO 639-1 中的小写双字母语言代码。
          * 对于中文，另外使用 ISO 3166 中的大写双字母国家/地区代码，以区分简体中文和繁体中文。
@@ -834,9 +1008,7 @@ declare module lark {
          * 土耳其语  tr
          */
         static language: string;
-        static $isMobile: boolean;
         static isMobile: boolean;
-        static $os: string;
         /**
          * 指示当前的操作系统。os 属性返回下列字符串：
          *
@@ -848,37 +1020,69 @@ declare module lark {
          * 未知操作系统        "Unknown"
          */
         static os: string;
-        static $location: boolean;
         static location: boolean;
-        static $orientation: boolean;
         static orientation: boolean;
-        static $motion: boolean;
         static motion: boolean;
     }
 }
 declare module lark {
     /**
+     * @language en_US
      * 提供混合模式可视效果的常量值的类。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 提供混合模式可视效果的常量值的类。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     class BlendMode {
         /**
+         * @language en_US
          * 该显示对象出现在背景前面。显示对象的像素值会覆盖背景的像素值。在显示对象为透明的区域，背景是可见的。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 该显示对象出现在背景前面。显示对象的像素值会覆盖背景的像素值。在显示对象为透明的区域，背景是可见的。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         static NORMAL: string;
         /**
+         * @language en_US
          * 将显示对象的原色值添加到它的背景颜色中，上限值为 0xFF。此设置通常用于使两个对象间的加亮溶解产生动画效果。
          * 例如，如果显示对象的某个像素的 RGB 值为 0xAAA633，背景像素的 RGB 值为 0xDD2200，则显示像素的结果 RGB 值为 0xFFC833（因为 0xAA + 0xDD > 0xFF，0xA6 + 0x22 = 0xC8，且 0x33 + 0x00 = 0x33）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将显示对象的原色值添加到它的背景颜色中，上限值为 0xFF。此设置通常用于使两个对象间的加亮溶解产生动画效果。
+         * 例如，如果显示对象的某个像素的 RGB 值为 0xAAA633，背景像素的 RGB 值为 0xDD2200，则显示像素的结果 RGB 值为 0xFFC833（因为 0xAA + 0xDD > 0xFF，0xA6 + 0x22 = 0xC8，且 0x33 + 0x00 = 0x33）。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         static ADD: string;
         /**
+         * @language en_US
          * 根据显示对象的 Alpha 值擦除背景。Alpha 值不为0的区域将被擦除。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 根据显示对象的 Alpha 值擦除背景。Alpha 值不为0的区域将被擦除。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         static ERASE: string;
     }
 }
 declare module lark.sys {
-    function blendModeToNumber(blendMode: string): number;
-    function numberToBlendMode(blendMode: number): string;
 }
 declare module lark.sys {
     /**
@@ -899,29 +1103,11 @@ declare module lark.sys {
     class Ticker {
         constructor();
         private playerList;
-        /**
-         * 注册一个播放器实例并运行
-         */
-        $addPlayer(player: Player): void;
-        /**
-         * 停止一个播放器实例的运行。
-         */
-        $removePlayer(player: Player): void;
         private callBackList;
         private thisObjectList;
-        $startTick(callBack: (timeStamp: number) => boolean, thisObject: any): void;
-        $stopTick(callBack: (timeStamp: number) => boolean, thisObject: any): void;
         private getTickIndex(callBack, thisObject);
         private concatTick();
-        /**
-         * 全局帧率
-         */
-        $frameRate: number;
         private frameInterval;
-        /**
-         * 设置全局帧率
-         */
-        $setFrameRate(value: number): void;
         private lastCount;
         /**
          * 执行一次刷新
@@ -956,7 +1142,6 @@ declare module lark {
          * 创建一个 lark.HashObject 对象
          */
         constructor();
-        $hashCode: number;
         /**
          * 返回此对象唯一的哈希值,用于唯一确定一个对象。hashCode为大于等于1的整数。
          */
@@ -1090,22 +1275,18 @@ declare module lark {
          * 事件附带的数据对象
          */
         data: any;
-        $type: string;
         /**
          * 事件的类型。类型区分大小写。
          */
         type: string;
-        $bubbles: boolean;
         /**
          * 表示事件是否为冒泡事件。如果事件可以冒泡，则此值为 true；否则为 false。
          */
         bubbles: boolean;
-        $cancelable: boolean;
         /**
          * 表示是否可以阻止与事件相关联的行为。如果可以取消该行为，则此值为 true；否则为 false。
          */
         cancelable: boolean;
-        $eventPhase: number;
         /**
          * 事件流中的当前阶段。此属性可以包含以下数值：
          * 捕获阶段 (EventPhase.CAPTURING_PHASE)。
@@ -1113,18 +1294,15 @@ declare module lark {
          * 冒泡阶段 (EventPhase.BUBBLING_PHASE)。
          */
         eventPhase: number;
-        $currentTarget: any;
         /**
          * 当前正在使用某个事件侦听器处理 Event 对象的对象。例如，如果用户单击“确定”按钮，
          * 则当前目标可以是包含该按钮的节点，也可以是它的已为该事件注册了事件侦听器的始祖之一。
          */
         currentTarget: any;
-        $target: any;
         /**
          * 事件目标。此属性包含目标节点。例如，如果用户单击“确定”按钮，则目标节点就是包含该按钮的显示列表节点。
          */
         target: any;
-        $isDefaultPrevented: boolean;
         /**
          * 检查是否已对事件调用 preventDefault() 方法。
          * @returns 如果已调用 preventDefault() 方法，则返回 true；否则返回 false。
@@ -1137,7 +1315,6 @@ declare module lark {
          * 注意：当cancelable属性为false时，此方法不可用。
          */
         preventDefault(): void;
-        $isPropagationStopped: boolean;
         /**
          * 防止对事件流中当前节点的后续节点中的所有事件侦听器进行处理。此方法不会影响当前节点 currentTarget 中的任何事件侦听器。
          * 相比之下，stopImmediatePropagation() 方法可以防止对当前节点中和后续节点中的事件侦听器进行处理。
@@ -1145,7 +1322,6 @@ declare module lark {
          * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
          */
         stopPropagation(): void;
-        $isPropagationImmediateStopped: boolean;
         /**
          * 防止对事件流中当前节点中和所有后续节点中的事件侦听器进行处理。此方法会立即生效，并且会影响当前节点中的事件侦听器。
          * 相比之下，在当前节点中的所有事件侦听器都完成处理之前，stopPropagation() 方法不会生效。
@@ -1250,83 +1426,591 @@ declare module lark {
 }
 declare module lark {
     /**
+     * @language en_US
      * Graphics 类包含一组可用来创建矢量形状的方法。支持绘制的显示对象包括 Sprite 和 Shape 对象。
      * 这些类中的每一个类都包括 graphics 属性，该属性是一个 Graphics 对象。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Graphics 类包含一组可用来创建矢量形状的方法。支持绘制的显示对象包括 Sprite 和 Shape 对象。
+     * 这些类中的每一个类都包括 graphics 属性，该属性是一个 Graphics 对象。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     class Graphics extends LarkObject {
         /**
+         * @language en_US
          * 创建一个放射状渐变填充对象
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个放射状渐变填充对象
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         static createRadialGradient(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): GraphicsGradient;
         /**
+         * @language en_US
          * 创建一个沿参数坐标指定的直线的渐变。该方法返回一个线性 GraphicsGradient 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个沿参数坐标指定的直线的渐变。该方法返回一个线性 GraphicsGradient 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         static createLinearGradient(x0: number, y0: number, x1: number, y1: number): GraphicsGradient;
         /**
+         * @language en_US
          * 基于指定的源图象(BitmapData)创建一个模板，通过repetition参数指定源图像在什么方向上进行重复，返回一个GraphicsPattern对象。
          * @param bitmapData 做为重复图像源的 BitmapData 对象。
          * @param repetition 指定如何重复图像。
          * 可能的值有："repeat" (两个方向重复),"repeat-x" (仅水平方向重复),"repeat-y" (仅垂直方向重复),"no-repeat" (不重复).
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 基于指定的源图象(BitmapData)创建一个模板，通过repetition参数指定源图像在什么方向上进行重复，返回一个GraphicsPattern对象。
+         * @param bitmapData 做为重复图像源的 BitmapData 对象。
+         * @param repetition 指定如何重复图像。
+         * 可能的值有："repeat" (两个方向重复),"repeat-x" (仅水平方向重复),"repeat-y" (仅垂直方向重复),"no-repeat" (不重复).
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         static createPattern(bitmapData: BitmapData, repetition: string): GraphicsPattern;
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         constructor();
+        /**
+         * @private
+         */
         private _fillStyle;
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         fillStyle: any;
+        /**
+         * @private
+         */
         private _lineWidth;
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         lineWidth: number;
+        /**
+         * @private
+         */
         private _lineCap;
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         lineCap: string;
+        /**
+         * @private
+         */
         private _strokeStyle;
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         strokeStyle: any;
+        /**
+         * @private
+         */
         private _lineJoin;
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         lineJoin: string;
+        /**
+         * @private
+         */
         private _miterLimit;
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         miterLimit: number;
+        /**
+         * @language en_US
+         *
+         * @param x
+         * @param y
+         * @param radius
+         * @param startAngle
+         * @param endAngle
+         * @param anticlockwise
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param x
+         * @param y
+         * @param radius
+         * @param startAngle
+         * @param endAngle
+         * @param anticlockwise
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void;
+        /**
+         * @private
+         *
+         * @param x
+         * @param y
+         * @param radius
+         * @param startAngle
+         * @param endAngle
+         */
         private arcBounds(x, y, radius, startAngle, endAngle);
+        /**
+         * @language en_US
+         *
+         * @param cpx
+         * @param cpy
+         * @param x
+         * @param y
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param cpx
+         * @param cpy
+         * @param x
+         * @param y
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void;
+        /**
+         * @language en_US
+         *
+         * @param cp1x
+         * @param cp1y
+         * @param cp2x
+         * @param cp2y
+         * @param x
+         * @param y
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param cp1x
+         * @param cp1y
+         * @param cp2x
+         * @param cp2y
+         * @param x
+         * @param y
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void;
+        /**
+         * @language en_US
+         *
+         * @param x
+         * @param y
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param x
+         * @param y
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         lineTo(x: number, y: number): void;
+        /**
+         * @language en_US
+         *
+         * @param fillRule
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param fillRule
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         fill(fillRule?: string): void;
+        /**
+         * @language en_US
+         *
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         closePath(): void;
+        /**
+         * @language en_US
+         *
+         * @param x
+         * @param y
+         * @param w
+         * @param h
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param x
+         * @param y
+         * @param w
+         * @param h
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         rect(x: number, y: number, w: number, h: number): void;
+        /**
+         * @language en_US
+         *
+         * @param x
+         * @param y
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param x
+         * @param y
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         moveTo(x: number, y: number): void;
+        /**
+         * @language en_US
+         *
+         * @param x
+         * @param y
+         * @param w
+         * @param h
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param x
+         * @param y
+         * @param w
+         * @param h
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         fillRect(x: number, y: number, w: number, h: number): void;
+        /**
+         * @language en_US
+         *
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         stroke(): void;
+        /**
+         * @language en_US
+         *
+         * @param x
+         * @param y
+         * @param w
+         * @param h
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param x
+         * @param y
+         * @param w
+         * @param h
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         strokeRect(x: number, y: number, w: number, h: number): void;
+        /**
+         * @language en_US
+         *
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         beginPath(): void;
+        /**
+         * @language en_US
+         *
+         * @param x1
+         * @param y1
+         * @param x2
+         * @param y2
+         * @param radius
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param x1
+         * @param y1
+         * @param x2
+         * @param y2
+         * @param radius
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void;
         /**
+         * @language en_US
          * 清除绘制到此 Graphics 对象的图形，并重置填充和线条样式设置。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 清除绘制到此 Graphics 对象的图形，并重置填充和线条样式设置。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         clear(): void;
+        /**
+         * @private
+         */
         private isFirst;
+        /**
+         * @private
+         */
         private minX;
+        /**
+         * @private
+         */
         private minY;
+        /**
+         * @private
+         */
         private maxX;
+        /**
+         * @private
+         */
         private maxY;
+        /**
+         * @private
+         */
         private hasMoved;
+        /**
+         * @private
+         */
         private moveToX;
+        /**
+         * @private
+         */
         private moveToY;
+        /**
+         * @private
+         */
         private hasStroke;
+        /**
+         * @private
+         */
         private hasFill;
+        /**
+         * @private
+         *
+         */
         private reset();
         /**
-         * 目标显示对象
+         * @private
+         *
+         * @param graphicsType
+         * @param args
          */
-        $targetDisplay: DisplayObject;
-        /**
-         * 绘图命令列表
-         */
-        $commands: GraphicsCommand[];
         private pushCommand(graphicsType, args);
+        /**
+         * @private
+         *
+         */
         private checkMoveTo();
+        /**
+         * @private
+         *
+         * @param x
+         * @param y
+         */
         private extendByPoint(x, y);
-        $measureContentBounds(bounds: Rectangle): void;
-        $render(context: sys.RenderContext): void;
     }
+    /**
+     * @language en_US
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
     interface GraphicsCommand {
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         type: number;
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         arguments: any[];
     }
 }
@@ -1345,7 +2029,6 @@ declare module lark {
          * EventEmitter 类允许显示列表上的任何对象都是一个事件目标，同样允许使用 IEventEmitter 接口的方法。
          */
         constructor(target?: IEventEmitter);
-        $EventEmitter: Object;
         /**
          * 添加事件侦听器
          * @param type 事件的类型。
@@ -1372,7 +2055,6 @@ declare module lark {
          * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
          */
         once(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        $addListener(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number, emitOnce?: boolean): void;
         /**
          * 移除事件侦听器
          * @param type 事件名
@@ -1402,7 +2084,6 @@ declare module lark {
          * @returns 如果成功调度了事件，则值为 true。值 false 表示失败或对事件调用了 preventDefault()。
          */
         emit(event: Event): boolean;
-        $notifyListener(event: Event): boolean;
         /**
          * 派发一个包含了特定参数的事件到所有注册了特定类型侦听器的对象中。 这个方法使用了一个内部的事件对象池因避免重复的分配导致的额外开销。
          * @param type 事件类型
@@ -1445,32 +2126,11 @@ declare module lark.sys {
          */
         constructor(root: DisplayObject);
         /**
-         * 是否需要重绘
-         */
-        $isDirty: boolean;
-        /**
-         * 在舞台上的透明度
-         */
-        $renderAlpha: number;
-        /**
-         * 在舞台上的矩阵对象
-         */
-        $renderMatrix: Matrix;
-        /**
-         * 在舞台上的显示区域
-         */
-        $renderRegion: Region;
-        /**
-         * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
-         */
-        $update(): boolean;
-        /**
          * 呈现绘制结果的目标画布
          */
         surface: Surface;
         offsetX: number;
         offsetY: number;
-        $render(context: RenderContext): void;
         /**
          * 显示列表根节点
          */
@@ -1600,24 +2260,12 @@ declare module lark {
          */
         constructor(type: string, bubbles?: boolean, cancelable?: boolean, stageX?: number, stageY?: number, touchPointID?: number);
         /**
-         * @private
-         */
-        $setTo(stageX: number, stageY: number, touchPointID: number): void;
-        /**
-         * @private
-         */
-        $stageX: number;
-        /**
          * 事件发生点在全局舞台坐标中的水平坐标。
          *
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
         stageX: number;
-        /**
-         * @private
-         */
-        $stageY: number;
         /**
          * 事件发生点在全局舞台坐标中的垂直坐标。
          *
@@ -1797,386 +2445,667 @@ declare module lark {
         stop(): void;
         private updateInterval;
         private lastCount;
-        /**
-         * Ticker以60FPS频率刷新此方法
-         */
-        $update(timeStamp: number): boolean;
     }
 }
 declare module lark.sys {
-    /**
-     * 显示对象失效标志
-     */
-    const enum DisplayObjectFlags {
-        /**
-         * 显示对象是否开启像素级精确碰撞，开启后显示对象的透明区域将可以穿透，Graphics默认开启此功能，。
-         */
-        PixelHitTest = 1,
-        /**
-         * 显示对象自身的绘制区域尺寸失效
-         */
-        InvalidContentBounds = 2,
-        /**
-         * 显示对象的矩形区域尺寸失效，包括自身绘制区域和子项的区域集合
-         */
-        InvalidBounds = 4,
-        /**
-         * 显示对象的matrix属性失效标志，通常因为scaleX，width等属性发生改变。
-         */
-        InvalidMatrix = 8,
-        /**
-         * 显示对象祖代的矩阵失效。
-         */
-        InvalidConcatenatedMatrix = 16,
-        /**
-         * 显示对象祖代的逆矩阵失效。
-         */
-        InvalidInvertedConcatenatedMatrix = 32,
-        /**
-         * 显示对象祖代的透明度属性失效。
-         */
-        InvalidConcatenatedAlpha = 64,
-        /**
-         * 显示对象应该被缓存成位图的标志，即使没有设置这个标志，也有可能被缓存成位图，例如含有滤镜的情况。
-         * 而当设置了这个标志，如果内存不足，也会放弃缓存。
-         */
-        CacheAsBitmap = 128,
-        /**
-         * 显示对象自身需要重绘的标志
-         */
-        DirtyRender = 256,
-        /**
-         * 子项中已经全部含有DirtyRender标志，无需继续遍历。
-         */
-        DirtyChildren = 512,
-        /**
-         * 对象自身在舞台上的显示尺寸发生改变。
-         */
-        TouchEnabled = 1024,
-        /**
-         * 对象自身以及子项在舞台上显示尺寸发生改变。
-         */
-        TouchChildren = 2048,
-        /**
-         * DirtyRender|DirtyChildren
-         */
-        Dirty = 768,
-        /**
-         * 添加或删除子项时，需要向子项传递的标志。
-         */
-        DownOnAddedOrRemoved = 624,
-        /**
-         * 显示对象初始化时的标志量
-         */
-        InitFlags = 3952,
-    }
 }
 declare module lark {
     /**
+     * @language en_US
      * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时显示的所有对象。使用 DisplayObjectContainer 类排列显示列表中的显示对象。
      * DisplayObjectContainer 对象可以有子显示对象，而其他显示对象是“叶”节点，只有父级和同级，没有子级。
      * DisplayObject 类支持基本功能（如对象的 x 和 y 位置），也支持更高级的对象属性（如它的转换矩阵），所有显示对象都继承自 DisplayObject 类。
      * DisplayObject 类包含若干广播事件。通常，任何特定事件的目标均为一个特定的 DisplayObject 实例。
      * 若只有一个目标，则会将事件侦听器限制为只能放置到该目标上（在某些情况下，可放置到显示列表中该目标的祖代上），这意味着您可以向任何 DisplayObject 实例添加侦听器来侦听广播事件。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时显示的所有对象。使用 DisplayObjectContainer 类排列显示列表中的显示对象。
+     * DisplayObjectContainer 对象可以有子显示对象，而其他显示对象是“叶”节点，只有父级和同级，没有子级。
+     * DisplayObject 类支持基本功能（如对象的 x 和 y 位置），也支持更高级的对象属性（如它的转换矩阵），所有显示对象都继承自 DisplayObject 类。
+     * DisplayObject 类包含若干广播事件。通常，任何特定事件的目标均为一个特定的 DisplayObject 实例。
+     * 若只有一个目标，则会将事件侦听器限制为只能放置到该目标上（在某些情况下，可放置到显示列表中该目标的祖代上），这意味着您可以向任何 DisplayObject 实例添加侦听器来侦听广播事件。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     class DisplayObject extends EventEmitter implements sys.Renderable {
         /**
+         * @language en_US
          * 创建一个显示对象
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个显示对象
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         constructor();
-        $DisplayObject: Object;
-        $displayFlags: number;
-        $setFlags(flags: number): void;
-        $toggleFlags(flags: number, on: boolean): void;
-        $removeFlags(flags: number): void;
         /**
-         * 沿着显示列表向上移除标志量，如果标志量没被设置过就停止移除。
+         * @private
+         *
          */
-        $removeFlagsUp(flags: number): void;
-        $hasFlags(flags: number): boolean;
-        /**
-         * 沿着显示列表向上传递标志量，如果标志量已经被设置过就停止传递。
-         */
-        $propagateFlagsUp(flags: number): void;
-        /**
-         * 沿着显示列表向下传递标志量，非容器直接设置自身的flag，此方法会在 DisplayObjectContainer 中被覆盖。
-         */
-        $propagateFlagsDown(flags: number): void;
-        $hasAnyFlags(flags: number): boolean;
         private invalidateMatrix();
         /**
+         * @private
          * 标记这个显示对象在父级容器的位置发生了改变。
          */
         private invalidatePosition();
         /**
-         * 能够含有子项的类将子项列表存储在这个属性里。
-         */
-        $children: DisplayObject[];
-        /**
+         * @language en_US
          * 表示 DisplayObject 的实例名称。
          * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 表示 DisplayObject 的实例名称。
+         * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         name: string;
-        $parent: DisplayObjectContainer;
         /**
+         * @language en_US
          * 表示包含此显示对象的 DisplayObjectContainer 对象。
          * 使用 parent 属性可以指定高于显示列表层次结构中当前显示对象的显示对象的相对路径。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 表示包含此显示对象的 DisplayObjectContainer 对象。
+         * 使用 parent 属性可以指定高于显示列表层次结构中当前显示对象的显示对象的相对路径。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         parent: DisplayObjectContainer;
-        $setParent(parent: DisplayObjectContainer): void;
-        $onAddToStage(stage: Stage, nestLevel: number): void;
-        $onRemoveFromStage(): void;
-        $stage: Stage;
         /**
-         * 这个对象在显示列表中的嵌套深度，舞台为1，它的子项为2，子项的子项为3，以此类推。当对象不在显示列表中时此属性值为0.
-         */
-        $nestLevel: number;
-        /**
+         * @language en_US
          * 显示对象的舞台。
          * 例如，您可以创建多个显示对象并加载到显示列表中，每个显示对象的 stage 属性是指相同的 Stage 对象。
          * 如果显示对象未添加到显示列表，则其 stage 属性会设置为 null。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 显示对象的舞台。
+         * 例如，您可以创建多个显示对象并加载到显示列表中，每个显示对象的 stage 属性是指相同的 Stage 对象。
+         * 如果显示对象未添加到显示列表，则其 stage 属性会设置为 null。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         stage: Stage;
         /**
+         * @language en_US
          * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。
          * 注意：必须对matrix属性重新赋值改变的值才能生效，若获取matrix引用来修改对象属性，将不会发生任何改变。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。
+         * 注意：必须对matrix属性重新赋值改变的值才能生效，若获取matrix引用来修改对象属性，将不会发生任何改变。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         matrix: Matrix;
-        $getMatrix(): Matrix;
-        $setMatrix(matrix: Matrix): void;
         /**
-         * 获得这个显示对象以及它所有父级对象的连接矩阵。
-         */
-        $getConcatenatedMatrix(): Matrix;
-        $getInvertedConcatenatedMatrix(): Matrix;
-        /**
+         * @language en_US
          * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。
          * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
          * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。
+         * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
+         * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         x: number;
-        $getX(): number;
-        $setX(value: number): boolean;
         /**
+         * @language en_US
          * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 y 坐标。
          * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
          * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 y 坐标。
+         * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
+         * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         y: number;
-        $getY(): number;
-        $setY(value: number): boolean;
         /**
+         * @language en_US
          * 表示从注册点开始应用的对象的水平缩放比例（百分比）。
          * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
          * 默认值为 1，即不缩放。
          * @default 1
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 表示从注册点开始应用的对象的水平缩放比例（百分比）。
+         * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
+         * 默认值为 1，即不缩放。
+         * @default 1
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         scaleX: number;
-        $setScaleX(value: number): boolean;
         /**
+         * @language en_US
          * 表示从对象注册点开始应用的对象的垂直缩放比例（百分比）。
          * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
          * 默认值为 1，即不缩放。
          * @default 1
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 表示从对象注册点开始应用的对象的垂直缩放比例（百分比）。
+         * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
+         * 默认值为 1，即不缩放。
+         * @default 1
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         scaleY: number;
-        $setScaleY(value: number): boolean;
         /**
+         * @language en_US
          * 表示 DisplayObject 实例距其原始方向的旋转程度，以度为单位。
          * 从 0 到 180 的值表示顺时针方向旋转；从 0 到 -180 的值表示逆时针方向旋转。对于此范围之外的值，可以通过加上或
          * 减去 360 获得该范围内的值。例如，my_video.rotation = 450语句与 my_video.rotation = 90 是相同的。
          * @default 0 默认值为 0 不旋转。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 表示 DisplayObject 实例距其原始方向的旋转程度，以度为单位。
+         * 从 0 到 180 的值表示顺时针方向旋转；从 0 到 -180 的值表示逆时针方向旋转。对于此范围之外的值，可以通过加上或
+         * 减去 360 获得该范围内的值。例如，my_video.rotation = 450语句与 my_video.rotation = 90 是相同的。
+         * @default 0 默认值为 0 不旋转。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         rotation: number;
         /**
+         * @language en_US
          * 表示显示对象的宽度，以像素为单位。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 表示显示对象的宽度，以像素为单位。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         width: number;
-        $getWidth(): number;
-        $setWidth(value: number): void;
         /**
+         * @language en_US
          * 表示显示对象的高度，以像素为单位。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 表示显示对象的高度，以像素为单位。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         height: number;
-        $getHeight(): number;
-        $setHeight(value: number): void;
-        $visible: boolean;
         /**
+         * @language en_US
          * 显示对象是否可见。
          * 不可见的显示对象已被禁用。例如，如果实例的 visible=false，则无法单击该对象。
          * 默认值为 true 可见
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 显示对象是否可见。
+         * 不可见的显示对象已被禁用。例如，如果实例的 visible=false，则无法单击该对象。
+         * 默认值为 true 可见
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         visible: boolean;
         /**
-         * cacheAsBitmap创建的缓存位图节点。
-         */
-        $displayList: lark.sys.DisplayList;
-        /**
+         * @language en_US
          * 如果设置为 true，则 Lark 播放器将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
          * 将 cacheAsBitmap 属性设置为 true 后，呈现并不更改，但是，显示对象将自动执行像素贴紧。执行速度可能会大大加快，
          * 具体取决于显示对象内容的复杂性。在内存超过上限的情况下，即使将 cacheAsBitmap 属性设置为 true，显示对象也不使用位图缓存。
          * 最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放和旋转的显示对象一起使用。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果设置为 true，则 Lark 播放器将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
+         * 将 cacheAsBitmap 属性设置为 true 后，呈现并不更改，但是，显示对象将自动执行像素贴紧。执行速度可能会大大加快，
+         * 具体取决于显示对象内容的复杂性。在内存超过上限的情况下，即使将 cacheAsBitmap 属性设置为 true，显示对象也不使用位图缓存。
+         * 最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放和旋转的显示对象一起使用。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         cacheAsBitmap: boolean;
         /**
-         * cacheAsBitmap属性改变
-         */
-        $cacheAsBitmapChanged(): void;
-        /**
-         * 渲染时会用到的属性，独立声明一个变量
-         */
-        $alpha: number;
-        /**
+         * @language en_US
          * 表示指定对象的 Alpha 透明度值。
          * 有效值为 0（完全透明）到 1（完全不透明）。alpha 设置为 0 的显示对象是活动的，即使它们不可见。
          *  @default 1 默认值为 1。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 表示指定对象的 Alpha 透明度值。
+         * 有效值为 0（完全透明）到 1（完全不透明）。alpha 设置为 0 的显示对象是活动的，即使它们不可见。
+         *  @default 1 默认值为 1。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         alpha: number;
         /**
-         * 获取这个显示对象跟它所有父级透明度的乘积
-         */
-        $getConcatenatedAlpha(): number;
-        /**
+         * @language en_US
          * 指定此对象是否接收鼠标/触摸事件
          * @default true 默认为 true 即可以接收。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指定此对象是否接收鼠标/触摸事件
+         * @default true 默认为 true 即可以接收。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         touchEnabled: boolean;
-        $setTouchEnabled(value: boolean): void;
         /**
+         * @language en_US
          * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，设置为false将只检查显示对象测量的最大矩形区域。
          * 开启此属性将会有一定量的额外性能损耗，Shape和Sprite等含有矢量图的类默认开启此属性，其他类默认关闭。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，设置为false将只检查显示对象测量的最大矩形区域。
+         * 开启此属性将会有一定量的额外性能损耗，Shape和Sprite等含有矢量图的类默认开启此属性，其他类默认关闭。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         pixelHitTest: boolean;
-        $scrollRect: Rectangle;
         /**
+         * @language en_US
          * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
          * 注意：必须对scrollRect属性重新赋值改变的值才能生效，若获取scrollRect引用来修改对象属性，将不会发生任何改变。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
+         * 注意：必须对scrollRect属性重新赋值改变的值才能生效，若获取scrollRect引用来修改对象属性，将不会发生任何改变。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         scrollRect: Rectangle;
-        $blendMode: number;
         /**
+         * @language en_US
          * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上
          * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上
+         * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         blendMode: string;
         /**
-         * 被遮罩的对象
-         */
-        $maskedObject: DisplayObject;
-        $mask: DisplayObject;
-        /**
+         * @language en_US
          * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
          * 但不绘制 mask 对象本身。将 mask 设置为 null 可删除蒙版。要能够缩放遮罩对象，它必须在显示列表中。要能够拖动蒙版
          * Sprite 对象，它必须在显示列表中。
          * 注意：单个 mask 对象不能用于遮罩多个执行调用的显示对象。在将 mask 分配给第二个显示对象时，会撤消其作为第一个对象的遮罩，
          * 该对象的 mask 属性将变为 null。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
+         * 但不绘制 mask 对象本身。将 mask 设置为 null 可删除蒙版。要能够缩放遮罩对象，它必须在显示列表中。要能够拖动蒙版
+         * Sprite 对象，它必须在显示列表中。
+         * 注意：单个 mask 对象不能用于遮罩多个执行调用的显示对象。在将 mask 分配给第二个显示对象时，会撤消其作为第一个对象的遮罩，
+         * 该对象的 mask 属性将变为 null。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         mask: DisplayObject;
         /**
+         * @language en_US
          * 返回一个矩形，该矩形定义相对于 targetCoordinateSpace 对象坐标系的显示对象区域。
          * @param targetCoordinateSpace 定义要使用的坐标系的显示对象。
          * @param resultRect 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Rectangle对象来存储结果，
          * 若不传入将创建一个新的Rectangle对象返回。
          * @returns 定义与 targetCoordinateSpace 对象坐标系统相关的显示对象面积的矩形。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回一个矩形，该矩形定义相对于 targetCoordinateSpace 对象坐标系的显示对象区域。
+         * @param targetCoordinateSpace 定义要使用的坐标系的显示对象。
+         * @param resultRect 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Rectangle对象来存储结果，
+         * 若不传入将创建一个新的Rectangle对象返回。
+         * @returns 定义与 targetCoordinateSpace 对象坐标系统相关的显示对象面积的矩形。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         getBounds(targetCoordinateSpace: DisplayObject, resultRect?: Rectangle): Rectangle;
-        $getTransformedBounds(targetCoordinateSpace: DisplayObject, resultRect?: Rectangle): Rectangle;
         /**
+         * @language en_US
          * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
          * @param stageX 舞台坐标x
          * @param stageY 舞台坐标y
          * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
          * 若不传入将创建一个新的Point对象返回。
          * @returns 具有相对于显示对象的坐标的 Point 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
+         * @param stageX 舞台坐标x
+         * @param stageY 舞台坐标y
+         * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
+         * 若不传入将创建一个新的Point对象返回。
+         * @returns 具有相对于显示对象的坐标的 Point 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         globalToLocal(stageX: number, stageY: number, resultPoint?: Point): Point;
         /**
+         * @language en_US
          * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
          * @param localX 舞台坐标x
          * @param localY 舞台坐标y
          * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
          * 若不传入将创建一个新的Point对象返回。
          * @returns 具有相对于显示对象的坐标的 Point 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
+         * @param localX 舞台坐标x
+         * @param localY 舞台坐标y
+         * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
+         * 若不传入将创建一个新的Point对象返回。
+         * @returns 具有相对于显示对象的坐标的 Point 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         localToGlobal(localX: number, localY: number, resultPoint?: Point): Point;
         /**
-         * 标记自身的测量尺寸失效
+         * @private
+         *
+         * @param localX
+         * @param localY
+         * @returns
          */
-        $invalidateContentBounds(): void;
-        /**
-         * 获取显示对象占用的矩形区域集合，通常包括自身绘制的测量区域，如果是容器，还包括所有子项占据的区域。
-         */
-        $getOriginalBounds(): Rectangle;
-        /**
-         * 测量子项占用的矩形区域
-         * @param bounds 测量结果存储在这个矩形对象内
-         */
-        $measureChildBounds(bounds: Rectangle): void;
-        $getContentBounds(): Rectangle;
-        /**
-         * 测量自身占用的矩形区域，注意：此测量结果并不包括子项占据的区域。
-         * @param bounds 测量结果存储在这个矩形对象内
-         */
-        $measureContentBounds(bounds: Rectangle): void;
-        $parentDisplayList: lark.sys.DisplayList;
-        /**
-         * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
-         * @param notiryChildren 是否标记子项也需要重绘。传入false或不传入，将只标记自身需要重绘。通常只有alpha属性改变会需要通知子项重绘。
-         */
-        $invalidate(notifyChildren?: boolean): void;
-        /**
-         * 标记自身以及所有子项在父级中变换叠加的显示内容失效。此方法不会触发自身的cacheAsBitmap重绘。
-         * 通常用于矩阵改变或从显示列表添加和移除时。若自身的显示内容已经改变需要重绘，应该调用$invalidate()。
-         */
-        $invalidateTransform(): void;
-        /**
-         * 是否需要重绘的标志，此属性在渲染时会被访问，所以单独声明一个直接的变量。
-         */
-        $isDirty: boolean;
-        /**
-         * 这个对象在舞台上的整体透明度
-         */
-        $renderAlpha: number;
-        /**
-         * 在舞台上的矩阵对象
-         */
-        $renderMatrix: Matrix;
-        /**
-         * 此显示对象自身（不包括子项）在屏幕上的显示尺寸。
-         */
-        $renderRegion: sys.Region;
-        /**
-         * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
-         */
-        $update(): boolean;
-        /**
-         * 执行渲染,绘制自身到屏幕
-         */
-        $render(context: sys.RenderContext): void;
-        $hitTest(stageX: number, stageY: number, shapeFlag?: boolean): DisplayObject;
         private hitTestPixel(localX, localY);
-        static $enterFrameCallBackList: DisplayObject[];
-        static $renderCallBackList: DisplayObject[];
-        $addListener(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number, emitOnce?: boolean): void;
+        /**
+         * @language en_US
+         *
+         * @param type
+         * @param listener
+         * @param thisObject
+         * @param useCapture
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param type
+         * @param listener
+         * @param thisObject
+         * @param useCapture
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         removeListener(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean): void;
+        /**
+         * @language en_US
+         *
+         * @param event
+         * @returns
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @param event
+         * @returns
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         emit(event: Event): boolean;
         /**
-         * 获取事件流列表。注意：Lark框架的事件流与Flash实现并不一致。
+         * @language en_US
          *
-         * Flash的事件流有三个阶段：捕获，目标，冒泡。
-         * 默认的的事件监听若不开始useCapture将监听目标和冒泡阶段。若开始capture将只能监听捕获当不包括目标的事件。
-         * 可以在Flash中写一个简单的测试：实例化一个非容器显示对象，例如TextField。分别监听useCapture为true和false时的鼠标事件。
-         * 点击后将只有useCapture为false的回调函数输出信息。也就带来一个问题「Flash的捕获阶段不能监听到最内层对象本身，只在父级列表有效」。
-         *
-         * 而HTML里的事件流只有两个阶段：捕获，冒泡。
-         * 最初是由于各个浏览器都只有一个方向的事件流，并且存在捕获和冒泡两种相反的顺序。w3c最终决定同时实现两种事件流，监听时用useCapture来区分监。
-         * HTML里与Flash里事件流最根本的区别：没有目标阶段，最内层的点击对象会触发两次事件，一次捕获一次冒泡。而Flash只触发一次，
-         * 是与「捕获」和「冒泡」独立的「目标」阶段。出于拥抱web标准的考虑，加上大部分Flash开发者其实也并不知道有「目标」阶段的存在。
-         *
-         * Lark最终采用了HTML里只有两个阶段的事件流机制。
+         * @param type
+         * @returns
+         * @version Lark 1.0
+         * @platform Web,Native
          */
-        $getPropagationList(target: DisplayObject): DisplayObject[];
-        $emitPropagationEvent(event: Event, list: DisplayObject[], targetIndex: number): void;
+        /**
+         * @language zh_CN
+         *
+         * @param type
+         * @returns
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         willTrigger(type: string): boolean;
     }
 }
@@ -2277,8 +3206,6 @@ declare module lark {
          * @returns 返回克隆后的矩形
          */
         clone(): Rectangle;
-        $getBaseWidth(angle: number): number;
-        $getBaseHeight(angle: number): number;
     }
     /**
      * 仅供框架内复用，要防止暴露引用到外部。
@@ -2359,7 +3286,6 @@ declare module lark {
          * 您可以将一个逆矩阵应用于对象来撤消在应用原始矩阵时执行的转换。
          */
         invert(): void;
-        $invertInto(target: Matrix): void;
         /**
          * 对 Matrix 对象应用旋转转换。
          * rotate() 方法将更改 Matrix 对象的 a、b、c 和 d 属性。
@@ -2403,17 +3329,7 @@ declare module lark {
          * @returns 是否相等，ture表示相等。
          */
         equals(other: Matrix): boolean;
-        $transformBounds(bounds: Rectangle): void;
         private getDeterminant();
-        $getScaleX(): number;
-        $getScaleY(): number;
-        $getSkewX(): number;
-        $getSkewY(): number;
-        $updateScaleAndRotation(scaleX: number, scaleY: number, skewX: number, skewY: number): void;
-        /**
-         * target = other * this
-         */
-        $preMultiplyInto(other: Matrix, target: Matrix): void;
     }
     /**
      * 仅供框架内复用，要防止暴露引用到外部。
@@ -2461,7 +3377,6 @@ declare module lark {
          * 创建一个TextField对象
          */
         constructor(text?: string);
-        $TextField: Object;
         /**
          * 字体名称 。默认值：sans-serif
          */
@@ -2510,7 +3425,6 @@ declare module lark {
          * 要显示的文本内容
          */
         text: string;
-        $setText(value: string): void;
         private textLines;
         /**
          * 文本行数。
@@ -2524,15 +3438,7 @@ declare module lark {
          * 文本内容高度
          */
         textHeight: number;
-        $getWidth(): number;
-        $setWidth(value: number): void;
-        $getHeight(): number;
-        $setHeight(value: number): void;
-        $invalidateContentBounds(): void;
-        $measureContentBounds(bounds: Rectangle): void;
-        $render(context: sys.RenderContext): void;
         private updateTextLines();
-        protected $splitWords(line: string): string[];
     }
 }
 declare module lark.sys {
@@ -2546,182 +3452,447 @@ declare module lark.sys {
 }
 declare module lark {
     /**
+     * @language en_US
      * 此类用于使用 Lark 绘图应用程序编程接口 (API) 创建简单形状。Shape 类包括 graphics 属性，该属性使您可以从 Graphics 类访问方法。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 此类用于使用 Lark 绘图应用程序编程接口 (API) 创建简单形状。Shape 类包括 graphics 属性，该属性使您可以从 Graphics 类访问方法。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     class Shape extends DisplayObject {
         /**
+         * @language en_US
          * 创建一个 Shape 对象
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 Shape 对象
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         constructor();
-        $graphics: Graphics;
         /**
+         * @language en_US
          * 获取 Shape 中的 Graphics 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取 Shape 中的 Graphics 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         graphics: Graphics;
-        $measureContentBounds(bounds: Rectangle): void;
-        $render(context: sys.RenderContext): void;
     }
 }
 declare module lark {
     /**
+     * @language en_US
+     * The Bitmap class represents display objects that represent bitmap images. These can be images that you load with the flash.display.Loader class, or they can be images that you create with the Bitmap() constructor.
+     * The Bitmap() constructor allows you to create a Bitmap object that contains a reference to a BitmapData object. After you create a Bitmap object, use the addChild() or addChildAt() method of the parent DisplayObjectContainer instance to place the bitmap on the display list.
+     * A Bitmap object can share its BitmapData reference among several Bitmap objects, independent of translation or rotation properties. Because you can create multiple Bitmap objects that reference the same BitmapData object, multiple display objects can use the same complex BitmapData object without incurring the memory overhead of a BitmapData object for each display object instance.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * Bitmap 类表示用于表示位图图像的显示对象。这些图像可以是使用 Bitmap() 构造函数创建的图像。
      * 利用 Bitmap() 构造函数，可以创建包含对 BitmapData 对象的引用的 Bitmap 对象。创建了 Bitmap 对象后，
      * 使用父 DisplayObjectContainer 实例的 addChild() 或 addChildAt() 方法将位图放在显示列表中。
-     * 一个 Bitmap 对象可在若干 Bitmap 对象之中共享其 BitmapData 引用，与转换属性或旋转属性无关。
+     * 一个 Bitmap 对象可在若干 Bitmap 对象之中共享其 BitmapData 引用，与缩放或旋转属性无关。
      * 由于能够创建引用相同 BitmapData 对象的多个 Bitmap 对象，因此，多个显示对象可以使用相同的复杂 BitmapData 对象，
      * 而不会因为每个显示对象实例使用一个 BitmapData 对象而产生内存开销。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     class Bitmap extends DisplayObject {
         /**
+         * @language en_US
          * 创建一个Bitmap对象
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个Bitmap对象
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         constructor(bitmapData?: BitmapData);
-        $bitmapData: BitmapData;
         /**
+         * @language en_US
          * 被引用的 BitmapData 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 被引用的 BitmapData 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         bitmapData: BitmapData;
-        $setBitmapData(value: BitmapData): void;
-        $smoothing: boolean;
         /**
+         * @language en_US
          * 控制在缩放时是否对位图进行平滑处理。如果为 true，则会在缩放时对位图进行平滑处理。
          * 如果为 false，则不会在缩放时对位图进行平滑处理。默认true。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 控制在缩放时是否对位图进行平滑处理。如果为 true，则会在缩放时对位图进行平滑处理。
+         * 如果为 false，则不会在缩放时对位图进行平滑处理。默认true。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         smoothing: boolean;
-        $measureContentBounds(bounds: Rectangle): void;
-        $render(context: sys.RenderContext): void;
     }
 }
 declare module lark {
     /**
+     * @language en_US
      * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     class Sprite extends DisplayObject implements DisplayObjectContainer {
-        static $EVENT_ADD_TO_STAGE_LIST: DisplayObject[];
-        static $EVENT_REMOVE_FROM_STAGE_LIST: DisplayObject[];
         /**
+         * @language en_US
          * 实例化一个容器
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 实例化一个容器
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         constructor();
-        $propagateFlagsDown(flags: sys.DisplayObjectFlags): void;
         /**
+         * @language en_US
          * 返回此对象的子项数目。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回此对象的子项数目。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         numChildren: number;
         /**
+         * @language en_US
          * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他所有子项的前（上）面。
          * （要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
          * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他所有子项的前（上）面。
+         * （要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
+         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         addChild(child: DisplayObject): DisplayObject;
         /**
+         * @language en_US
          * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。
          * 索引为 0 表示该 DisplayObjectContainer 对象的显示列表的后（底）部。
          * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
          * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
          * 当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。
+         * 索引为 0 表示该 DisplayObjectContainer 对象的显示列表的后（底）部。
+         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
+         * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
+         * 当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         addChildAt(child: DisplayObject, index: number): DisplayObject;
+        /**
+         * @private
+         *
+         * @param child
+         * @param index
+         * @returns
+         */
         private doAddChild(child, index);
         /**
+         * @language en_US
          * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。
          * 孙项、曾孙项等，每项都返回 true。
          * @param child 要测试的子对象。
          * @returns 如果指定的显示对象为 DisplayObjectContainer 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。
+         * 孙项、曾孙项等，每项都返回 true。
+         * @param child 要测试的子对象。
+         * @returns 如果指定的显示对象为 DisplayObjectContainer 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         contains(child: DisplayObject): boolean;
         /**
+         * @language en_US
          * 返回位于指定索引处的子显示对象实例。
          * @param index 子对象的索引位置。
          * @returns 位于指定索引位置处的子显示对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回位于指定索引处的子显示对象实例。
+         * @param index 子对象的索引位置。
+         * @returns 位于指定索引位置处的子显示对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         getChildAt(index: number): DisplayObject;
         /**
+         * @language en_US
          * 返回 DisplayObject 的 child 实例的索引位置。
          * @returns 要标识的子显示对象的索引位置。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回 DisplayObject 的 child 实例的索引位置。
+         * @returns 要标识的子显示对象的索引位置。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         getChildIndex(child: DisplayObject): number;
         /**
+         * @language en_US
          * 返回具有指定名称的子显示对象。
          * @param name 要返回的子项的名称。
          * @returns 具有指定名称的子显示对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回具有指定名称的子显示对象。
+         * @param name 要返回的子项的名称。
+         * @returns 具有指定名称的子显示对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         getChildByName(name: string): DisplayObject;
         /**
+         * @language en_US
          * 将一个 DisplayObject 子实例从 DisplayObjectContainer 实例中移除。
          * @param child 要删除的 DisplayObject 实例。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将一个 DisplayObject 子实例从 DisplayObjectContainer 实例中移除。
+         * @param child 要删除的 DisplayObject 实例。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         removeChild(child: DisplayObject): DisplayObject;
         /**
+         * @language en_US
          * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject。
          * @param index 要删除的 DisplayObject 的子索引。
          * @returns 已删除的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject。
+         * @param index 要删除的 DisplayObject 的子索引。
+         * @returns 已删除的 DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         removeChildAt(index: number): DisplayObject;
+        /**
+         * @private
+         *
+         * @param index
+         * @returns
+         */
         private doRemoveChild(index);
         /**
+         * @language en_US
          * 更改现有子项在显示对象容器中的位置。这会影响子对象的分层。
          * @param child 要为其更改索引编号的 DisplayObject 子实例。
          * @param index 生成的 child 显示对象的索引编号。当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 更改现有子项在显示对象容器中的位置。这会影响子对象的分层。
+         * @param child 要为其更改索引编号的 DisplayObject 子实例。
+         * @param index 生成的 child 显示对象的索引编号。当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         setChildIndex(child: DisplayObject, index: number): void;
+        /**
+         * @private
+         *
+         * @param child
+         * @param index
+         */
         private doSetChildIndex(child, index);
         /**
+         * @language en_US
          * 在子级列表中两个指定的索引位置，交换子对象的 Z 轴顺序（前后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
          * @param index1 第一个子对象的索引位置。
          * @param index2 第二个子对象的索引位置。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在子级列表中两个指定的索引位置，交换子对象的 Z 轴顺序（前后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
+         * @param index1 第一个子对象的索引位置。
+         * @param index2 第二个子对象的索引位置。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         swapChildrenAt(index1: number, index2: number): void;
         /**
+         * @language en_US
          * 交换两个指定子对象的 Z 轴顺序（从前到后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
          * @param child1 第一个子对象。
          * @param child2 第二个子对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 交换两个指定子对象的 Z 轴顺序（从前到后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
+         * @param child1 第一个子对象。
+         * @param child2 第二个子对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         swapChildren(child1: DisplayObject, child2: DisplayObject): void;
+        /**
+         * @private
+         *
+         * @param index1
+         * @param index2
+         */
         private doSwapChildrenAt(index1, index2);
         /**
+         * @language en_US
          * 从 DisplayObjectContainer 实例的子级列表中删除所有 child DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从 DisplayObjectContainer 实例的子级列表中删除所有 child DisplayObject 实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         removeChildren(): void;
         /**
-         * 一个子项被添加到容器内，此方法不仅在操作addChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
-         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
-         */
-        $childAdded(child: DisplayObject, index: number): void;
-        /**
-         * 一个子项从容器内移除，此方法不仅在操作removeChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
-         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
-         */
-        $childRemoved(child: DisplayObject, index: number): void;
-        $onAddToStage(stage: Stage, nestLevel: number): void;
-        $onRemoveFromStage(): void;
-        $measureChildBounds(bounds: Rectangle): void;
-        /**
+         * @language en_US
          * 指定此对象的子项以及子孙项是否接收鼠标/触摸事件
          * 默认值为 true 即可以接收。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指定此对象的子项以及子孙项是否接收鼠标/触摸事件
+         * 默认值为 true 即可以接收。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         touchChildren: boolean;
-        $setTouchChildren(value: boolean): void;
         /**
-         * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
-         * @param notiryChildren 是否标记子项也需要重绘。传入false或不传入，将只标记自身需要重绘。通常只有alpha属性改变会需要通知子项重绘。
+         * @private
+         *
+         * @param child
+         * @param parentCache
          */
-        $invalidate(notifyChildren?: boolean): void;
-        /**
-         * 标记自身以及所有子项在父级中变换叠加的显示内容失效。此方法不会触发自身的cacheAsBitmap重绘。
-         * 通常用于矩阵改变或从显示列表添加和移除时。若自身的显示内容已经改变需要重绘，应该调用$invalidate()。
-         */
-        $invalidateTransform(): void;
         private markChildDirty(child, parentCache);
         /**
-         * cacheAsBitmap属性改变
+         * @private
+         *
+         * @param child
+         * @param parentCache
+         * @param newParent
          */
-        $cacheAsBitmapChanged(): void;
         private assignParentDisplayList(child, parentCache, newParent);
-        $hitTest(stageX: number, stageY: number, shapeFlag?: boolean): DisplayObject;
     }
 }
 declare module lark.sys {
@@ -2763,47 +3934,139 @@ declare module lark.sys {
 }
 declare module lark {
     /**
+     * @language en_US
      * Stage 类代表主绘图区，表示显示 Lark 内容的整个区域。
      * 可以利用 DisplayObject 实例的 stage 属性进行访问。
      * Stage 类具有多个祖代类 -- DisplayObjectContainer、DisplayObject 和 EventDispatcher，属性和方法便是从这些类继承而来的。
      * 从这些继承的许多属性和方法不适用于 Stage 对象。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Stage 类代表主绘图区，表示显示 Lark 内容的整个区域。
+     * 可以利用 DisplayObject 实例的 stage 属性进行访问。
+     * Stage 类具有多个祖代类 -- DisplayObjectContainer、DisplayObject 和 EventDispatcher，属性和方法便是从这些类继承而来的。
+     * 从这些继承的许多属性和方法不适用于 Stage 对象。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     class Stage extends Sprite {
         /**
+         * @language en_US
          * 舞台对象不允许自行实例化。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 舞台对象不允许自行实例化。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         constructor();
         /**
+         * @language en_US
          * 获取并设置舞台的帧速率。帧速率是指每秒显示的帧数。帧速率的有效范围为每秒 0.01 到 60 个帧。
          * 注意，若同一个网页中包含多个lark.Stage实例，修改任何一个Stage的frameRate属性都会同步修改其他Stage的帧率。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取并设置舞台的帧速率。帧速率是指每秒显示的帧数。帧速率的有效范围为每秒 0.01 到 60 个帧。
+         * 注意，若同一个网页中包含多个lark.Stage实例，修改任何一个Stage的frameRate属性都会同步修改其他Stage的帧率。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         frameRate: number;
-        $stageWidth: number;
         /**
+         * @language en_US
          * 舞台的当前宽度（以像素为单位）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 舞台的当前宽度（以像素为单位）。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         stageWidth: number;
-        $stageHeight: number;
         /**
+         * @language en_US
          * 舞台的当前高度（以像素为单位）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 舞台的当前高度（以像素为单位）。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         stageHeight: number;
         /**
+         * @language en_US
          * 调用 invalidate() 方法后，在显示列表下次呈现时，Lark 会向每个已注册侦听 Event.RENDER 事件的显示对象发送一个 Event.RENDER 事件。
          * 每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 invalidate() 方法。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 调用 invalidate() 方法后，在显示列表下次呈现时，Lark 会向每个已注册侦听 Event.RENDER 事件的显示对象发送一个 Event.RENDER 事件。
+         * 每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 invalidate() 方法。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         invalidate(): void;
+        /**
+         * @private
+         */
         private implMap;
         /**
+         * @language en_US
          * 注册一个接口实现。Lark框架内预留了多个可由项目高度定制化的功能接口，使用此方法能够将项目中针对某接口的具体实现实例注入到框架中使用。
          * @param interfaceName 注入的接口名称。例如："swan.IAssetAdapter","swan.Theme"
          * @param instance 实现此接口的实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 注册一个接口实现。Lark框架内预留了多个可由项目高度定制化的功能接口，使用此方法能够将项目中针对某接口的具体实现实例注入到框架中使用。
+         * @param interfaceName 注入的接口名称。例如："swan.IAssetAdapter","swan.Theme"
+         * @param instance 实现此接口的实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         registerImplementation(interfaceName: string, instance: any): void;
         /**
+         * @language en_US
          * 获取一个接口实现。此方法通常由框架内部调用。获取项目注入的自定义实现实例。
          * @param interfaceName 要获取的接口名称。例如："swan.IAssetAdapter","swan.Theme"
          * @returns 返回实现此接口的实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取一个接口实现。此方法通常由框架内部调用。获取项目注入的自定义实现实例。
+         * @param interfaceName 要获取的接口名称。例如："swan.IAssetAdapter","swan.Theme"
+         * @returns 返回实现此接口的实例。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         getImplementation(interfaceName: string): any;
     }
@@ -2829,20 +4092,8 @@ declare module lark {
         private _isFocus;
         private handleTouchBegin(e);
         private setAsCurrent();
-        /**
-         * Call by TextAdapter set text
-         * @param text
-         */
-        $setUserInputText(text: string): void;
-        $startInput(): void;
-        $endInput(): void;
-        $setX(value: number): boolean;
-        $setY(value: number): boolean;
-        $measureContentBounds(bounds: Rectangle): void;
-        $render(context: sys.RenderContext): void;
         private timeoutId;
         private updateTextAdapter();
-        protected $splitWords(line: string): string[];
     }
 }
 declare module lark.sys {
@@ -2882,10 +4133,6 @@ declare module lark.sys {
          * 暂停播放器，后续可以通过调用start()重新启动播放器。
          */
         pause(): void;
-        /**
-         * 渲染屏幕
-         */
-        $render(triggerByFrame: boolean): void;
         /**
          * 更新舞台尺寸
          * @param stageWidth 舞台宽度（以像素为单位）
