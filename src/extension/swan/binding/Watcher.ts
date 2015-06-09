@@ -29,9 +29,22 @@
 
 module swan {
 
+    /**
+     * @private
+     */
     var bindables = "__bindables__";
+    /**
+     * @private
+     */
     var bindableCount = 0;
 
+    /**
+     * @private
+     * 
+     * @param host 
+     * @param property 
+     * @returns 
+     */
     function getPropertyDescriptor(host:any, property:string):any {
         var data = Object.getOwnPropertyDescriptor(host, property);
         if (data) {
@@ -45,17 +58,56 @@ module swan {
     }
 
     /**
+     * @language en_US
+     * The Watcher class defines utility method that you can use with bindable properties.
+     * These methods let you define an event handler that is executed whenever a bindable property is updated.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * Watcher 类能够监视可绑定属性的改变，您可以定义一个事件处理函数作为 Watcher 的回调方法，在每次可绑定属性的值改变时都执行此函数。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class Watcher {
 
         /**
-         * 创建并启动 Watcher 实例。注意：Watcher 只能监视 host 为 IEventEmitter 对象的属性改变。若属性链中某个属性所对应的实例不是 IEventEmitter，则属性链中在它之后的属性改变将无法检测到。
+         * @language en_US
+         * Creates and starts a Watcher instance.
+         * The Watcher can only watch the property of a Object which host is instance of IEventEmitter.
+         * @param host The object that hosts the property or property chain to be watched.
+         * You can use the use the <code>reset()</code> method to change the value of the <code>host</code> argument
+         * after creating the Watcher instance.
+         * The <code>host</code> maintains a list of <code>handlers</code> to invoke when <code>prop</code> changes.
+         * @param chain A value specifying the property or chain to be watched.
+         * For example, to watch the property <code>host.a.b.c</code>,
+         * call the method as: <code>watch(host, ["a","b","c"], ...)</code>.
+         * @param handler  An event handler function called when the value of the watched property
+         * (or any property in a watched chain) is modified.
+         * @param thisObject <code>this</code> object of which binding with handler
+         * @returns he ChangeWatcher instance, if at least one property name has been specified to
+         * the <code>chain</code> argument; null otherwise.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建并启动 Watcher 实例。注意：Watcher 只能监视 host 为 IEventEmitter 对象的属性改变。若属性链中某个属性所对应的实例不是 IEventEmitter，
+         * 则属性链中在它之后的属性改变将无法检测到。
          * @param host 用于承载要监视的属性或属性链的对象。
-         * @param chain 用于指定要监视的属性链的值。例如，要监视属性 host.a.b.c，需按以下形式调用此方法：watch(host, ["a","b","c"], ...)。
+         * 创建Watcher实例后，您可以利用<code>reset()</code>方法更改<code>host</code>参数的值。
+         * 当<code>prop</code>改变的时候，会使得host对应的一系列<code>handlers</code>被触发。
+         * @param chain 用于指定要监视的属性链的值。例如，要监视属性 host.a.b.c，需按以下形式调用此方法：watch¬(host, ["a","b","c"], ...)。
          * @param handler 在监视的目标属性链中任何属性的值发生改变时调用的事件处理函数。
          * @param thisObject handler 方法绑定的this对象
          * @returns 如果已为 chain 参数至少指定了一个属性名称，则返回 Watcher 实例；否则返回 null。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static watch(host:any, chain:string[], handler:(value:any)=>void, thisObject:any):Watcher {
             if (DEBUG) {
@@ -76,6 +128,7 @@ module swan {
         }
 
         /**
+         * @private
          * 检查属性是否可以绑定。若还未绑定，尝试添加绑定事件。若是只读或只写属性，返回false。
          */
         private static checkBindable(host:any, property:string):boolean {
@@ -116,7 +169,20 @@ module swan {
         }
 
         /**
+         * @language en_US
+         * Constructor.
+         * Not for public use. This method is called only from the <code>watch()</code> method.
+         * See the <code>watch()</code> method for parameter usage.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 构造函数，非公开。只能从 watch() 方法中调用此方法。有关参数用法，请参阅 watch() 方法。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor(property:string, handler:(value:any)=>void, thisObject:any, next?:Watcher) {
             this.property = property;
@@ -125,20 +191,49 @@ module swan {
             this.thisObject = thisObject;
         }
 
+        /**
+         * @private
+         */
         private host:any;
 
+        /**
+         * @private
+         */
         private property:string;
 
+        /**
+         * @private
+         */
         private handler:(value:any)=>void;
 
+        /**
+         * @private
+         */
         private thisObject:any;
 
+        /**
+         * @private
+         */
         private next:Watcher;
 
+        /**
+         * @private
+         */
         private isExecuting:boolean = false;
 
         /**
+         * @language en_US
+         * Detaches this Watcher instance, and its handler function, from the current host.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 从当前宿主中断开此 Watcher 实例及其处理函数。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public unwatch():void {
             this.reset(null);
@@ -149,7 +244,26 @@ module swan {
         }
 
         /**
+         * @language en_US
+         * Retrieves the current value of the watched property or property chain, or null if the host object is null.
+         * @example
+         * <code>
+         * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
+         * </code>
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 检索观察的属性或属性链的当前值，当宿主对象为空时此值为空。
+         * @example
+         * <code>
+         * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
+         * </code>
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public getValue():any {
             if (this.next) {
@@ -159,8 +273,20 @@ module swan {
         }
 
         /**
+         * @language en_US
+         * Sets the handler function.s
+         * @param handler The handler function. This argument must not be null.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 设置处理函数。
-         * @param handler 处理函数
+         * @param handler 处理函数，此参数必须为非空。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public setHandler(handler:(value:any)=>void,thisObject:any):void {
             this.handler = handler;
@@ -172,7 +298,20 @@ module swan {
         }
 
         /**
+         * @language en_US
+         * Resets this ChangeWatcher instance to use a new host object.
+         * You can call this method to reuse a watcher instance on a different host.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 重置此 Watcher 实例使用新的宿主对象。
+         * 您可以通过该方法实现一个Watcher实例用于不同的宿主。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public reset(newHost:lark.IEventEmitter):void {
             if (lark.is(this.host,lark.Types.IEventEmitter)) {
@@ -191,10 +330,20 @@ module swan {
         }
 
 
+        /**
+         * @private
+         * 
+         * @returns 
+         */
         private getHostPropertyValue():any {
             return this.host ? this.host[this.property] : null;
         }
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private wrapHandler(event:PropertyEvent):void {
             if (event.property == this.property && !this.isExecuting) {
                 try {
@@ -210,5 +359,8 @@ module swan {
         }
     }
 
+    /**
+     * @private
+     */
     lark.registerClass(Watcher, Types.Watcher);
 }

@@ -99,25 +99,12 @@ module swan {
                 return;
             }
             this._source = value;
-            if (!value) {
-                this.$setBitmapData(null);
-            }
-            else if (typeof value == "string") {
-                if(this.$stage){
-                    this.parseSource();
-                }
-                else{
-                    this.sourceChanged = true;
-                    this.invalidateProperties();
-                }
-            }
-            else {
-                this.$setBitmapData(<lark.BitmapData>value);
-            }
+            this.sourceChanged = true;
+            this.invalidateProperties();
         }
 
         $setBitmapData(value:lark.BitmapData):void {
-            if (value === this.$bitmapData) {
+            if (value == this.$bitmapData) {
                 return;
             }
             super.$setBitmapData(value);
@@ -130,30 +117,36 @@ module swan {
         /**
          * 解析source
          */
-        private parseSource():void{
+        private parseSource():void {
             this.sourceChanged = false;
-            var adapter:IAssetAdapter = this.$stage.getImplementation("swan.IAssetAdapter");
-            if(!adapter){
-                adapter = assetAdapter;
+            var source = this._source;
+            if (source && typeof source == "string") {
+                var adapter:IAssetAdapter = this.$stage.getImplementation("swan.IAssetAdapter");
+                if (!adapter) {
+                    adapter = assetAdapter;
+                }
+                adapter.getAsset(<string>this._source, this.contentChanged, this);
             }
-            adapter.getAsset(<string>this._source,this.contentChanged,this);
+            else {
+                this.$setBitmapData(<lark.BitmapData>source);
+            }
         }
 
         /**
          * 资源发生改变
          */
-        private contentChanged(data:any,source:any):void {
+        private contentChanged(data:any, source:any):void {
             if (source !== this._source)
                 return;
-            if(!lark.is(data,lark.Types.BitmapData)){
+            if (!lark.is(data, lark.Types.BitmapData)) {
                 return;
             }
             this.$setBitmapData(data);
             if (data) {
                 this.emitWith(lark.Event.COMPLETE);
             }
-            else if(DEBUG){
-                lark.$warn(2301,source);
+            else if (DEBUG) {
+                lark.$warn(2301, source);
             }
         }
 
@@ -190,7 +183,7 @@ module swan {
             var values = this.$UIComponent;
             var width = values[sys.UIKeys.width];
             var height = values[sys.UIKeys.height];
-            if (width===0 || height===0) {
+            if (width === 0 || height === 0) {
                 return;
             }
             switch (this._fillMode) {
@@ -258,7 +251,7 @@ module swan {
             var sourceY2 = sourceY1 + sourceH1;
             var sourceH2 = imageHeight - sourceH0 - sourceH1;
 
-            if(sourceW0+sourceW2>surfaceWidth||sourceH0+sourceH2>surfaceHeight){
+            if (sourceW0 + sourceW2 > surfaceWidth || sourceH0 + sourceH2 > surfaceHeight) {
                 context.drawImage(image, 0, 0, surfaceWidth, surfaceHeight);
                 return;
             }
@@ -300,12 +293,12 @@ module swan {
         }
 
 
-
         //=======================UIComponent接口实现===========================
         /**
          * UIComponentImpl 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
          */
         private initializeUIValues:()=>void;
+
         /**
          * 子类覆盖此方法可以执行一些初始化子项操作。此方法仅在组件第一次添加到舞台时回调一次。
          * 请务必调用super.createChildren()以完成父类组件的初始化
@@ -317,7 +310,7 @@ module swan {
         /**
          * 子项创建完成,此方法在createChildren()之后执行。
          */
-        protected childrenCreated():void{
+        protected childrenCreated():void {
 
         }
 
@@ -326,7 +319,7 @@ module swan {
          */
         protected commitProperties():void {
             sys.UIComponentImpl.prototype["commitProperties"].call(this);
-            if(this.sourceChanged){
+            if (this.sourceChanged) {
                 this.parseSource();
             }
         }

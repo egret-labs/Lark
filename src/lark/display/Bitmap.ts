@@ -29,17 +29,47 @@
 
 module lark {
     /**
-     * Bitmap 类表示用于表示位图图像的显示对象。这些图像可以是使用 Bitmap() 构造函数创建的图像。
-     * 利用 Bitmap() 构造函数，可以创建包含对 BitmapData 对象的引用的 Bitmap 对象。创建了 Bitmap 对象后，
-     * 使用父 DisplayObjectContainer 实例的 addChild() 或 addChildAt() 方法将位图放在显示列表中。
-     * 一个 Bitmap 对象可在若干 Bitmap 对象之中共享其 BitmapData 引用，与转换属性或旋转属性无关。
-     * 由于能够创建引用相同 BitmapData 对象的多个 Bitmap 对象，因此，多个显示对象可以使用相同的复杂 BitmapData 对象，
-     * 而不会因为每个显示对象实例使用一个 BitmapData 对象而产生内存开销。
+     * @language en_US
+     * The Bitmap class represents display objects that represent bitmap images.
+     * The Bitmap() constructor allows you to create a Bitmap object that contains a reference to a BitmapData object.
+     * After you create a Bitmap object, use the addChild() or addChildAt() method of the parent DisplayObjectContainer
+     * instance to place the bitmap on the display list.A Bitmap object can share its BitmapData reference among several
+     * Bitmap objects, independent of translation or rotation properties. Because you can create multiple Bitmap objects
+     * that reference the same BitmapData object, multiple display objects can use the same complex BitmapData object
+     * without incurring the memory overhead of a BitmapData object for each display object instance.
+     *
+     * @see lark.BitmapData
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Bitmap 类表示用于显示位图图片的显示对象。
+     * 利用 Bitmap() 构造函数，可以创建包含对 BitmapData 对象引用的 Bitmap 对象。创建了 Bitmap 对象后，
+     * 使用父级 DisplayObjectContainer 实例的 addChild() 或 addChildAt() 方法可以将位图放在显示列表中。
+     * 一个 Bitmap 对象可在若干 Bitmap 对象之中共享其 BitmapData 引用，与缩放或旋转属性无关。
+     * 由于能够创建引用相同 BitmapData 对象的多个 Bitmap 对象，因此，多个显示对象可以使用相同的 BitmapData 对象，
+     * 而不会因为每个显示对象实例使用一个 BitmapData 对象而产生额外内存开销。
+     *
+     * @see lark.BitmapData
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     export class Bitmap extends DisplayObject {
 
         /**
-         * 创建一个Bitmap对象
+         * @language en_US
+         * Initializes a Bitmap object to refer to the specified BitmapData object.
+         * @param bitmapData The BitmapData object being referenced.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个引用指定 BitmapData 实例的 Bitmap 对象
+         * @param bitmapData 被引用的 BitmapData 实例
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public constructor(bitmapData?:BitmapData) {
             super();
@@ -47,10 +77,22 @@ module lark {
             this.bitmapData = bitmapData;
         }
 
+        /**
+         * @private
+         */
         $bitmapData:BitmapData;
 
         /**
+         * @language en_US
+         * bitmapData The BitmapData object being referenced.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 被引用的 BitmapData 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public get bitmapData():BitmapData{
             return this.$bitmapData;
@@ -60,6 +102,9 @@ module lark {
             this.$setBitmapData(value);
         }
 
+        /**
+         * @private
+         */
         $setBitmapData(value:BitmapData):void{
             if(value===this.$bitmapData){
                 return;
@@ -68,10 +113,23 @@ module lark {
             this.$invalidateContentBounds();
         }
 
+        /**
+         * @private
+         */
         $smoothing:boolean = true;
         /**
-         * 控制在缩放时是否对位图进行平滑处理。如果为 true，则会在缩放时对位图进行平滑处理。
-         * 如果为 false，则不会在缩放时对位图进行平滑处理。默认true。
+         * @language en_US
+         * Whether or not the bitmap is smoothed when scaled.
+         * @default true。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 控制在缩放时是否对位图进行平滑处理。
+         * @default true。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public get smoothing():boolean{
             return this.$smoothing;
@@ -86,6 +144,9 @@ module lark {
             this.$invalidate();
         }
 
+        /**
+         * @private
+         */
         $measureContentBounds(bounds:Rectangle):void {
             var bitmapData = this.$bitmapData;
             if(bitmapData){
@@ -96,6 +157,9 @@ module lark {
             }
         }
 
+        /**
+         * @private
+         */
         $render(context:sys.RenderContext):void{
             var bitmapData = this.$bitmapData;
             if (bitmapData) {
