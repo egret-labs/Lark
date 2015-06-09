@@ -63,14 +63,14 @@ module lark.web {
         var length = list.length;
         for (var i = 0; i < length; i++) {
             var container = <HTMLDivElement>list[i];
-            createsys(container);
+            createPlayer(container);
         }
     }
 
     /**
      * Lark网页版程序入口
      */
-    function createsys(container:HTMLDivElement):void {
+    function createPlayer(container:HTMLDivElement):void {
         containerList.push(container);
         var entryClassName = container.getAttribute("data-entry-class");
         var contentWidth = +container.getAttribute("data-content-width")||480;
