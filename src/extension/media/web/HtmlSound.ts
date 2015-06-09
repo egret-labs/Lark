@@ -36,7 +36,7 @@ module lark.web {
 
         private url:string;
         private originAudio:HTMLAudioElement;
-        private audios: HTMLAudioElement[];
+        private audios: HTMLAudioElement[] = [];
         private loaded: boolean = false;
         private closed: boolean = false;
 
@@ -68,19 +68,25 @@ module lark.web {
          * @inheritDoc
          */
         play(startTime:number = 0, loops:number = 0):lark.SoundChannel {
+            startTime = startTime / 1000;
             if(DEBUG && this.loaded == false){
                 lark.$error(3001);
             }
 
             var audio = this.audios.pop();
-            if(audio==undefined)
+            if(audio==undefined) {
                 audio = <HTMLAudioElement>this.originAudio.cloneNode();
-            audio.currentTime = startTime;
+                audio.addEventListener("canplaythrough",()=>audio.currentTime = startTime);
+            }
+            else{
+                audio.currentTime = startTime;
+            }
             audio.loop = loops < 0 || loops > 0;
             var channel = new HtmlSoundChannel(audio);
             channel.$sound = this;
             channel.$loops = loops;
             channel.$startTime = startTime;
+            audio.play();
             return channel;
         }
         
@@ -116,7 +122,9 @@ module lark.web {
 
 
 
-
+    /**
+     * @inheritDoc
+     */
     export class HtmlSoundChannel extends lark.EventEmitter implements lark.SoundChannel{
 
         $sound:HtmlSound;
@@ -137,10 +145,11 @@ module lark.web {
 
             if(this.$loops==0) {
                 this.stop();
+                return;
             }
             this.audio.currentTime = this.$startTime;
             this.$loops--;
-        }
+        };
 
         /**
          * @inheritDoc
@@ -174,7 +183,9 @@ module lark.web {
          * @inheritDoc
          */
         public get position():number {
-            return this.audio.currentTime;
+            return this.audio.currentTime / 1000;
         }
     }
+
+    lark.Sound = HtmlSound;
 }

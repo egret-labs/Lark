@@ -44,7 +44,7 @@ module lark {
      * The Sound class lets you create a Sound object, load and play an external audio file into that object.
      * More detailed control of the sound is performed through the SoundChannel
      *
-     * @event egret.Event.COMPLETE 音频加载完成时抛出
+     * @event egret.Event.COMPLETE Emit when the audio resource is loaded and ready to play
      */
     export interface Sound {
 
@@ -52,6 +52,11 @@ module lark {
          * @language zh_CN
          * 启动从指定 URL 加载外部音频文件的过程。
          * @param url 需要加载的音频文件URL
+         */
+        /**
+         * @language en_US
+         * Initiates loading of an external audio file from the specified URL.
+         * @param url Audio file URL
          */
         load(url?:string):void;
 
@@ -61,11 +66,21 @@ module lark {
          * @param startTime 应开始播放的初始位置（以毫秒为单位），默认值是 0
          * @param loops 定义在声道停止播放之前，声音循环回 startTime 值的次数，默认值是 0
          */
+        /**
+         * @language en_US
+         * Generates a new SoundChannel object to play back the sound.
+         * @param startTime The initial position in milliseconds at which playback should start, (default = 0)
+         * @param loops Defines the number of times a sound loops back to the startTime value before the sound channel stops playback. (default = 0)
+         */
         play(startTime?:number, loops?:number):SoundChannel;
 
         /**
          * @language zh_CN
          * 关闭该流，从而停止所有数据的下载。
+         */
+        /**
+         * @language en_US
+         * Closes the stream, causing any download of data to cease
          */
         close():void;
     }
@@ -77,11 +92,25 @@ module lark {
      *
      * @event egret.Event.COMPLETE 音频播放完成时抛出
     */
+    /**
+     * @language en_US
+     * The SoundChannel class controls a sound in an application.
+     * Every sound is assigned to a sound channel, and the application
+     * can have multiple sound channels that are mixed together.
+     * The SoundChannel class contains a stop() method, properties for
+     * set the volume of the channel
+     *
+     * @event egret.Event.COMPLETE Emit when a sound has finished playing
+     */
     export interface SoundChannel {
 
         /**
          * @language zh_CN
          * 音量范围从 0（静音）至 1（最大音量）。
+         */
+        /**
+         * @language en_US
+         * The volume, ranging from 0 (silent) to 1 (full volume).
          */
         volume:number;
 
@@ -89,11 +118,20 @@ module lark {
          * @language zh_CN
          * [只读] 当播放声音时，position 属性表示声音文件中当前播放的位置（以毫秒为单位）
          */
+        /**
+         * @language en_US
+         * [read-only]  When the sound is playing, the position property indicates
+         * in milliseconds the current point that is being played in the sound file.
+         */
         position:number;
 
         /**
          * @language zh_CN
          * 停止在该声道中播放声音。
+         */
+        /**
+         * @language en_US
+         * Stops the sound playing in the channel.
          */
         stop():void;
     }
@@ -104,6 +142,11 @@ module lark {
          * @language zh_CN
          * 创建 Sound 对象、将外部音频文件加载到该对象并播放该文件
          * @param url 需要加载的音频文件URL
+         */
+        /**
+         * @language en_US
+         * Create Sound object, load an external audio file and play
+         * @param url Audio file URL
          */
         new(url?:string):Sound
     };
