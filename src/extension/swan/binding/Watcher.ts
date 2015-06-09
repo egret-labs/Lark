@@ -77,7 +77,7 @@ module swan {
         /**
          * @language en_US
          * Creates and starts a Watcher instance.
-         * The Watcher can only watch the property of a Object witch host is instance of IEventEmitter.
+         * The Watcher can only watch the property of a Object which host is instance of IEventEmitter.
          * @param host The object that hosts the property or property chain to be watched.
          * You can use the use the <code>reset()</code> method to change the value of the <code>host</code> argument
          * after creating the Watcher instance.

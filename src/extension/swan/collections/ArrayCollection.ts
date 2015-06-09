@@ -31,13 +31,39 @@
 module swan {
 
     /**
-     * 数组的集合类数据结构包装器
-     * 通常作为列表组件的数据源，使用这种数据结构包装普通数组，
-     * 能在数据源发生改变的时候主动通知视图刷新变更的数据项
+     * @language en_US
+     * The ArrayCollection class is a wrapper class that exposes an <code>any[]</code> as a collection that can be
+     * accessed and manipulated using the methods and properties of the <code>ICollection</code> interfaces.
+     * ArrayCollection can notify the view to update item when data source changed.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * ArrayCollection 类是数组的集合类数据结构包装器，可使用<code>ICollection</code>接口的方法和属性对其进行访问和处理。
+     * 使用这种数据结构包装普通数组，能在数据源发生改变的时候主动通知视图刷新变更数据项。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class ArrayCollection extends lark.EventEmitter implements ICollection {
         /**
-         * 创建一个 ArrayCollection 实例
+         * @language en_US
+         * Constructor. <p/>
+         * Creates a new ArrayCollection using the specified source array.
+         * If no array is specified an empty array will be used.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。<p/>
+         * 用指定的原始数组创建一个 ArrayCollection 实例。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor(source?:any[]) {
             super();
@@ -49,11 +75,27 @@ module swan {
             }
         }
 
+        /**
+         * @private
+         */
         private _source:any[];
         /**
+         * @language en_US
+         * The source of data in the ArrayCollection.
+         * The ArrayCollection object does not represent any changes that you make
+         * directly to the source array. Always use the ICollection methods to modify the collection.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 数据源
-         * 通常情况下请不要直接调用Array的方法操作数据源，否则对应的视图无法收到数据改变的通知。
+         * 通常情况下请不要直接调用Array的方法操作数据源，否则对应的视图无法收到数据改变的通知。通常都是通过ICollection的接口方法来改变数据。
          * 若对数据源进行了排序或过滤等操作，请手动调用refresh()方法刷新数据。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get source():any[] {
             return this._source;
@@ -67,7 +109,22 @@ module swan {
         }
 
         /**
+         * @language en_US
+         * Applies the sort and filter to the view.
+         * The ArrayCollection does not detect source data changes automatically,
+         * so you must call the <code>refresh()</code>
+         * method to update the view after changing the source data.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 在对数据源进行排序或过滤操作后可以手动调用此方法刷新所有数据,以更新视图。
+         * ArrayCollection 不会自动检原始数据进行了改变,所以你必须调用<code>refresh()</code>方法去更新显示。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public refresh():void {
             this.dispatchCoEvent(CollectionEventKind.REFRESH);
@@ -80,14 +137,28 @@ module swan {
         //--------------------------------------------------------------------------
 
         /**
-         * 此集合中的项目数。0 表示不包含项目。
+         * @inheritDoc
          */
         public get length():number {
             return this._source.length;
         }
 
         /**
-         * 向列表末尾添加指定项目。等效于 addItemAt(item, length)。
+         * @language en_US
+         * Adds the specified item to the end of the list.
+         * Equivalent to <code>addItemAt(item, length)</code>.
+         * @param item The item to add.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 向列表末尾添加指定项目。等效于 <code>addItemAt(item, length)</code>。
+         * @param item 要被添加的项。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public addItem(item:any):void {
             this._source.push(item);
@@ -95,8 +166,27 @@ module swan {
         }
 
         /**
+         * @language en_US
+         * Adds the item at the specified index.
+         * The index of any item greater than the index of the added item is increased by one.
+         * If the the specified index is less than zero or greater than the length
+         * of the list, a Error which code is 1007 is thrown.
+         * @param item The item to place at the index.
+         * @param index The index at which to place the item.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 在指定的索引处添加项目。
          * 任何大于已添加项目的索引的项目索引都会增加 1。
+         * 如果指定的索引比0小或者比最大长度要大。则会抛出1007异常。
+         * @param item 要添加的项
+         * @param index 要添加的指定索引位置
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public addItemAt(item:any, index:number):void {
             if (index < 0 || index > this._source.length) {
@@ -107,14 +197,44 @@ module swan {
         }
 
         /**
-         * 获取指定索引处的项目
+         * @language en_US
+         * Gets the item at the specified index.
+         * @param index The index in the list from which to retrieve the item.
+         * @return The item at that index, or <code>null</code> if there is none.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取指定索引处的项目。
+         * @param index 要得到的项的指定位置。
+         * @return 在索引位置的项，如果没有该项则返回null。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public getItemAt(index:number):any {
             return this._source[index];
         }
 
         /**
+         * @language en_US
+         * Returns the index of the item if it is in the list。-1 otherwise.
+         * @param item The item to find.
+         * @return The index of the item, or -1 if the item is not in the list.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 如果项目位于列表中,返回该项目的索引。否则返回-1。
+         * @param item 要查找的项。
+         * @return 项的索引，如果该项没有在列表中将返回-1.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public getItemIndex(item:any):number {
             var length:number = this._source.length;
@@ -127,7 +247,20 @@ module swan {
         }
 
         /**
+         * @language en_US
+         * Notifies the view that an item has been updated.
+         * @param item The item within the view that was updated.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 通知视图，某个项目的属性已更新。
+         * @param item 视图中需要被更新的项。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public itemUpdated(item:any):void {
             var index:number = this.getItemIndex(item);
@@ -137,7 +270,18 @@ module swan {
         }
 
         /**
+         * @language en_US
+         * Removes all items from the list.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 删除列表中的所有项目。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public removeAll():void {
             var items:any[] = this._source.concat();
@@ -146,7 +290,23 @@ module swan {
         }
 
         /**
+         * @language en_US
+         * Removes the item at the specified index and returns it.
+         * Any items that were after this index are now one index earlier.
+         * @param index The index from which to remove the item.
+         * @return The item that was removed.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 删除指定索引处的项目并返回该项目。原先位于此索引之后的所有项目的索引现在都向前移动一个位置。
+         * @param index 要被移除的项的索引。
+         * @return 被移除的项。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public removeItemAt(index:number):any {
             if (index < 0 || index >= this._source.length) {
@@ -159,7 +319,24 @@ module swan {
         }
 
         /**
+         * @language en_US
+         * Replaces the item at the specified index.
+         * @param item The new item to be placed at the specified index.
+         * @param index The index at which to place the item.
+         * @return The item that was replaced, or <code>null</code> if none.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 替换在指定索引处的项目，并返回该项目。
+         * @param item 要在指定索引放置的新的项。
+         * @param index 要被替换的项的索引位置。
+         * @return 被替换的项目，如果没有该项则返回<code>null</code> 。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public replaceItemAt(item:any, index:number):any {
             if (index < 0 || index >= this._source.length) {
@@ -172,7 +349,20 @@ module swan {
         }
 
         /**
+         * @language en_US
+         * Replaces all items with a new source data, this method can not reset the scroller position of view.
+         * @param newSource new source data.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 用新数据源替换原始数据源，此方法与直接设置source不同，它不会导致目标视图重置滚动位置。
+         * @param newSource 新数据。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public replaceAll(newSource:any[]):void {
             if (!newSource)
@@ -192,6 +382,7 @@ module swan {
         }
 
         /**
+         * @private
          * 抛出事件
          */
         private dispatchCoEvent(kind:string, location?:number, oldLocation?:number, items?:any[], oldItems?:any[]):void {
@@ -200,9 +391,18 @@ module swan {
         }
     }
 
+    /**
+     * @private
+     */
     registerProperty(ArrayCollection,"source","Array",true)
+    /**
+     * @private
+     */
     lark.registerClass(ArrayCollection,Types.ArrayCollection);
 
+    /**
+     * @private
+     */
     if(DEBUG){
         lark.$markReadOnly(ArrayCollection.prototype,"length");
     }
