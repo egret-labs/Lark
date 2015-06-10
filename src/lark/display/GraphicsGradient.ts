@@ -33,7 +33,8 @@ module lark {
      * @language en_US
      * The CanvasGradient interface represents an opaque object describing a gradient. It is returned by the static methods
      * Graphics.createLinearGradient() or Graphics.createRadialGradient().
-     * @see lark.Graphics
+     * @see lark.Graphics#createLinearGradient()
+     * @see lark.Graphics#createRadialGradient()
      * @see lark.Shape
      * @version Lark 1.0
      * @platform Web,Native
@@ -41,7 +42,8 @@ module lark {
     /**
      * @language zh_CN
      * GraphicsGradient 接口表示描述渐变的不透明对象。通过 Graphics.createLinearGradient() 或 Graphics.createRadialGradient() 等静态方法的返回值得到.
-     * @see lark.Graphics
+     * @see lark.Graphics#createLinearGradient()
+     * @see lark.Graphics#createRadialGradient()
      * @see lark.Shape
      * @version Lark 1.0
      * @platform Web,Native
