@@ -628,7 +628,7 @@ module lark {
         }
 
     }
-    
+
     registerClass(Sprite, Types.Sprite, [Types.DisplayObjectContainer]);
 
     if(DEBUG){
