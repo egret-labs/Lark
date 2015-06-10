@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<s:Group class="skins.Main" touchThrough="true" xmlns:s="http://ns.egret.com/swan" xmlns:l="skins.*">
-    <l:TabBar width="500" height="60" dataProvider="{viewStack}"/>
+<s:Group class="components.MainGroup" touchThrough="true" xmlns:s="http://ns.egret.com/swan" xmlns:c="components.*">
+    <c:TabBar width="500" height="60" dataProvider="{viewStack}"/>
     <s:ViewStack id="viewStack" y="60">
         <s:Group name="Button">
             <s:Button x="10" y="10" label="Button"/>
-            <s:ToggleSwitch x="120" y="10"/>
-            <s:CheckBox x="10" y="80" label="CheckBox"/>
-            <s:RadioButton x="140" y="80" label="RadioButton"/>
+            <s:ToggleSwitch x="10" y="60"/>
+            <s:CheckBox x="10" y="100" label="CheckBox"/>
+            <s:RadioButton x="140" y="100" label="RadioButton"/>
         </s:Group>
         <s:Group name="Slider">
-            <s:HSlider x="10" y="140" maximum="100" width="200"/>
-            <s:VSlider x="240" y="140" maximum="100" height="200"/>
+            <s:HSlider x="10" maximum="100" width="200"/>
+            <s:VSlider x="240" maximum="100" height="200"/>
         </s:Group>
         <s:Group name="Panel">
             <s:Panel title="Panel"/>
@@ -18,7 +18,7 @@
         <s:Group name="List" height="300" width="200">
             <s:Image width="100%" height="100%" source="resource/assets/green/Panel/border.png" scale9Grid="2,2,173,43"/>
             <s:Scroller left="1" right="1" top="1" bottom="1">
-                <l:List>
+                <c:List>
                     <s:ArrayCollection>
                         <s:Array>
                             <s:Object label="项目1"/>
@@ -33,9 +33,8 @@
                             <s:Object label="项目10"/>
                         </s:Array>
                     </s:ArrayCollection>
-                </l:List>
+                </c:List>
             </s:Scroller>
         </s:Group>
     </s:ViewStack>
-    <!--<s:EditableText x="300" y="10"/>-->
 </s:Group>
