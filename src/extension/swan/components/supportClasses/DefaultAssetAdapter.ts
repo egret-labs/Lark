@@ -30,20 +30,55 @@
 
 module swan {
 
+    /**
+     * @private
+     */
     var loaderPool:lark.ImageLoader[] = [];
+    /**
+     * @private
+     */
     var callBackMap:any = {};
+    /**
+     * @private
+     */
     var loaderMap:any = {};
 
     /**
-     * 默认的IAssetAdapter接口实现
+     * @language en_US
+     * Default instance of interface <code>IAssetAdapter</code>.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 默认的IAssetAdapter接口实现。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class DefaultAssetAdapter implements IAssetAdapter {
 
         /**
+         * @language en_US
+         * resolve asset.
+         * @param source the identifier of new asset need to be resolved
+         * @param callBack callback function when resolving complete
+         * example：callBack(content:any,source:string):void;
+         * @param thisObject <code>this</code> object of callback method
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 解析素材
          * @param source 待解析的新素材标识符
          * @param callBack 解析完成回调函数，示例：callBack(content:any,source:string):void;
          * @param thisObject callBack的 this 引用
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public getAsset(source:string, callBack:(data:any, source:string) => void, thisObject:any):void {
             var list = callBackMap[source];
@@ -63,6 +98,11 @@ module swan {
             loader.load(source);
         }
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private onLoadFinish(event:lark.Event):void {
             var loader = event.currentTarget;
             loader.removeListener(lark.Event.COMPLETE, this.onLoadFinish, this);

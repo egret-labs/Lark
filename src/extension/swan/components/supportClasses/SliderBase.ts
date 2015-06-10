@@ -29,25 +29,179 @@
 
 module swan {
 
+    /**
+     * @language en_US
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
     export const enum Keys {
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         clickOffsetX,
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         clickOffsetY,
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         moveStageX,
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         moveStageY,
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         touchDownTarget,
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         animation,
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         slideDuration,
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         pendingValue,
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         slideToValue,
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         liveDragging
     }
 
     /**
+     * @language en_US
      * 滑块控件基类
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 滑块控件基类
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class SliderBase extends Range {
         /**
+         * @language en_US
          * 创建一个 SliderBase 实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 SliderBase 实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor() {
             super();
@@ -67,24 +221,71 @@ module swan {
             this.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
+        /**
+         * @private
+         */
         $SliderBase:Object;
 
         /**
+         * @language en_US
          * [SkinPart]轨道高亮显示对象
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [SkinPart]轨道高亮显示对象
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public trackHighlight:lark.DisplayObject = null;
         /**
+         * @language en_US
          * [SkinPart]滑块显示对象
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [SkinPart]滑块显示对象
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public thumb:swan.UIComponent = null;
 
         /**
+         * @language en_US
          * [SkinPart]轨道显示对象
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [SkinPart]轨道显示对象
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public track:swan.UIComponent = null;
 
         /**
+         * @language en_US
          * 在轨道上单击以移动滑块时，滑动动画持续的时间（以毫秒为单位）。设置为0将不执行缓动。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在轨道上单击以移动滑块时，滑动动画持续的时间（以毫秒为单位）。设置为0将不执行缓动。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get slideDuration():number {
             return this.$SliderBase[Keys.slideDuration];
@@ -95,16 +296,40 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值。
          * @param x 相对于轨道原点的位置的x坐标。
          * @param y 相对于轨道原点的位置的y坐标。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值。
+         * @param x 相对于轨道原点的位置的x坐标。
+         * @param y 相对于轨道原点的位置的y坐标。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected pointToValue(x:number, y:number):number {
             return this.minimum;
         }
 
         /**
+         * @language en_US
          * 如果为 true，则将在沿着轨道拖动滑块时，而不是在释放滑块按钮时，提交此滑块的值。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果为 true，则将在沿着轨道拖动滑块时，而不是在释放滑块按钮时，提交此滑块的值。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get liveDragging():boolean {
             return this.$SliderBase[Keys.liveDragging];
@@ -116,8 +341,20 @@ module swan {
 
 
         /**
+         * @language en_US
          * 释放鼠标按键时滑块将具有的值。无论 liveDragging 是否为 true，在滑块拖动期间始终更新此属性。
          * 而 value 属性在当 liveDragging 为 false 时，只在鼠标释放时更新一次。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 释放鼠标按键时滑块将具有的值。无论 liveDragging 是否为 true，在滑块拖动期间始终更新此属性。
+         * 而 value 属性在当 liveDragging 为 false 时，只在鼠标释放时更新一次。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get pendingValue():number {
             return this.$SliderBase[Keys.pendingValue];
@@ -133,7 +370,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 在 value 属性改变时为该属性设置后备存储，并调度 valueCommit 事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在 value 属性改变时为该属性设置后备存储，并调度 valueCommit 事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected setValue(value:number):void {
             this.$SliderBase[Keys.pendingValue] = value;
@@ -142,7 +390,18 @@ module swan {
 
 
         /**
+         * @language en_US
          * 添加外观部件时调用
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 添加外观部件时调用
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected partAdded(partName:string, instance:any):void {
             super.partAdded(partName, instance);
@@ -164,7 +423,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 删除外观部件的实例时调用
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 删除外观部件的实例时调用
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected partRemoved(partName:string, instance:any):void {
             super.partRemoved(partName, instance);
@@ -180,6 +450,7 @@ module swan {
         }
 
         /**
+         * @private
          * 滑块或轨道尺寸改变事件
          */
         private onTrackOrThumbResize(event:lark.Event):void {
@@ -188,7 +459,18 @@ module swan {
 
 
         /**
+         * @language en_US
          * 滑块按下事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 滑块按下事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected onThumbTouchBegin(event:lark.TouchEvent):void {
             var values = this.$SliderBase;
@@ -207,6 +489,7 @@ module swan {
         }
 
         /**
+         * @private
          * 舞台上触摸移动事件
          */
         private onStageTouchMove(event:lark.TouchEvent):void {
@@ -223,6 +506,22 @@ module swan {
             event.updateAfterEvent();
         }
 
+        /**
+         * @language en_US
+         * 
+         * @param newValue 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param newValue 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected updateWhenTouchMove(newValue:number):void {
             if (newValue != this.$SliderBase[Keys.pendingValue]) {
                 if (this.liveDragging) {
@@ -236,7 +535,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 触摸结束事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 触摸结束事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected onStageTouchEnd(event:lark.Event):void {
             var stage:lark.Stage = event.$currentTarget;
@@ -251,6 +561,7 @@ module swan {
         }
 
         /**
+         * @private
          * 当在组件上按下时记录被按下的子显示对象
          */
         private onTouchBegin(event:lark.TouchEvent):void {
@@ -259,6 +570,7 @@ module swan {
         }
 
         /**
+         * @private
          * 当结束时，若不是在 touchDownTarget 上弹起，而是另外的子显示对象上弹起时，额外抛出一个触摸单击事件。
          */
         private stageTouchEndHandler(event:lark.TouchEvent):void {
@@ -274,6 +586,7 @@ module swan {
 
 
         /**
+         * @private
          * 动画播放更新数值
          */
         $animationUpdateHandler(animation:sys.Animation):void {
@@ -281,6 +594,7 @@ module swan {
         }
 
         /**
+         * @private
          * 动画播放完毕
          */
         private animationEndHandler(animation:sys.Animation):void {
@@ -290,6 +604,7 @@ module swan {
         }
 
         /**
+         * @private
          * 停止播放动画
          */
         private stopAnimation():void {
@@ -299,6 +614,22 @@ module swan {
             UIEvent.emitUIEvent(this, UIEvent.CHANGE_END);
         }
 
+        /**
+         * @language en_US
+         * 
+         * @param event 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param event 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected onTrackTouchBegin(event:lark.TouchEvent):void {
             var thumbW = this.thumb ? this.thumb.width : 0;
             var thumbH = this.thumb ? this.thumb.height : 0;
@@ -337,6 +668,9 @@ module swan {
 
     }
 
+    /**
+     * @private
+     */
     lark.registerClass(SliderBase,Types.SliderBase);
 
 }

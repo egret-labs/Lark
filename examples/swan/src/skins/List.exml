@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:List class="skins.List" xmlns:s="http://ns.egret.com/swan" xmlns:l="skins.*">
+    <s:itemRenderer>
+        <l:ItemRenderer/>
+    </s:itemRenderer>
+</s:List>

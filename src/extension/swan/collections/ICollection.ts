@@ -32,14 +32,15 @@ module swan {
 
 	/**
 	 * @language en_US
-	 * 列表的集合类数据源对象接口
+	 * An <code>ICollectionView</code> is a view onto a collection of data.
 	 * @version Lark 1.0
 	 * @version Swan 1.0
 	 * @platform Web,Native
 	 */
 	/**
 	 * @language zh_CN
-	 * 列表的集合类数据源对象接口
+	 *
+	 * <code>ICollection</code>是一个列表的集合类数据源对象的查看接口。
 	 * @version Lark 1.0
 	 * @version Swan 1.0
 	 * @platform Web,Native
@@ -63,7 +64,9 @@ module swan {
 		length:number;
 		/**
 		 * @language en_US
-		 * 获取指定索引处的项目。
+		 * Gets the item at the specified index.
+		 * @param index The index in the list from which to retrieve the item.
+		 * @return The item at that index, or <code>null</code> if there is none.
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native
@@ -71,6 +74,8 @@ module swan {
 		/**
 		 * @language zh_CN
 		 * 获取指定索引处的项目。
+		 * @param index 要得到的项的指定位置。
+		 * @return 在索引位置的项，如果没有该项则返回null。
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native
@@ -78,7 +83,9 @@ module swan {
 		getItemAt(index:number):any;
 		/**
 		 * @language en_US
-		 * 如果项目位于列表中,返回该项目的索引。否则返回-1。
+		 * Returns the index of the item if it is in the list。-1 otherwise.
+		 * @param item The item to find.
+		 * @return The index of the item, or -1 if the item is not in the list.
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native
@@ -86,6 +93,8 @@ module swan {
 		/**
 		 * @language zh_CN
 		 * 如果项目位于列表中,返回该项目的索引。否则返回-1。
+		 * @param item 要查找的项。
+		 * @return 项的索引，如果该项没有在列表中将返回-1.
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native

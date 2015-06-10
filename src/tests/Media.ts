@@ -6,7 +6,7 @@ module lark {
         pause: TextField;
         stop: TextField;
         progress: TextField;
-        audio: Audio;
+        audio: Sound;
         constructor() {
             super();
 
@@ -18,9 +18,10 @@ module lark {
             var progress = new TextField("0");
             progress.y = 90;
 
-            play.on(TouchEvent.TOUCH_BEGIN, e=> this.audio.play(), this);
-            pause.on(TouchEvent.TOUCH_BEGIN, e=> this.audio.pause(), this);
-            stop.on(TouchEvent.TOUCH_BEGIN, e=> this.audio.stop(), this);
+            var channel:lark.SoundChannel;
+
+            play.on(TouchEvent.TOUCH_BEGIN, e=> channel =this.audio.play(10000), this);
+            stop.on(TouchEvent.TOUCH_END, e=> channel.stop(), this);
 
             this.addChild(play);
             this.addChild(pause);
@@ -37,15 +38,13 @@ module lark {
 
         start() {
 
-            var audio = new Audio();
-            audio.load();
-            audio.on("timeupdate", this.showOrg, this);
-
-            this.audio = audio;
+            var sound = new Sound('sound/sound_bg.mp3');
+            sound.load();
+            this.audio = sound;
         }
 
         showOrg(e: Event) {
-            this.progress.text = this.audio.position.toString();
+
         }
     }
 
