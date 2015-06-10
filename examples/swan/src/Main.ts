@@ -15,9 +15,11 @@ class Main extends swan.Group {
     constructor() {
         super();
         Loader.load(this.skins, () => this.loaded());
-    }   
+    }
 
     loaded() {
+        new swan.Theme("resource/theme/green-theme.json",this.stage);
+
         var ui = new components.MainGroup();
         this.addChild(ui);
     }
@@ -25,9 +27,6 @@ class Main extends swan.Group {
 
     protected createChildren():void {
         super.createChildren();
-
-        new swan.Theme("resource/theme/green-theme.json",this.stage);
-
         this.width = this.stage.stageWidth;
         this.height = this.stage.stageHeight;
     }
