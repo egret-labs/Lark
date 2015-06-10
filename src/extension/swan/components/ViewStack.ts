@@ -91,6 +91,7 @@ module swan {
                 return;
             }
             this.proposedSelectedIndex = value;
+            this.invalidateProperties();
             PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"selectedIndex");
         }
 

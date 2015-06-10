@@ -454,41 +454,49 @@ declare module lark {
 declare module lark {
     /**
      * @language en_US
-     * BitmapData 对象包含像素数据的数组。此数据可以表示完全不透明的位图，或表示包含 Alpha 通道数据的透明位图。
-     * 以上任一类型的 BitmapData 对象都作为 32 位整数的缓冲区进行存储。每个 32 位整数确定位图中单个像素的属性。
-     * 每个 32 位整数都是四个 8 位通道值（从 0 到 255）的组合，这些值描述像素的 Alpha 透明度以及红色、绿色、蓝色 (ARGB) 值。
-     * （对于 ARGB 值，最高有效字节代表 Alpha 通道值，其后的有效字节分别代表红色、绿色和蓝色通道值。）
+     * A BitmapData object contains an array of pixel data. This data can represent either a fully opaque bitmap or a
+     * transparent bitmap that contains alpha channel data. Either type of BitmapData object is stored as a buffer of 32-bit
+     * integers. Each 32-bit integer determines the properties of a single pixel in the bitmap.
+     * Each 32-bit integer is a combination of four 8-bit channel values (from 0 to 255) that describe the alpha transparency
+     * and the red, green, and blue (ARGB) values of the pixel. (For ARGB values, the most significant byte represents the
+     * alpha channel value, followed by red, green, and blue.)
+     * @see lark.Bitmap
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * BitmapData 对象包含像素数据的数组。此数据可以表示完全不透明的位图，或表示包含 Alpha 通道数据的透明位图。
+     * BitmapData 对象是一个包含像素数据的数组。此数据可以表示完全不透明的位图，或表示包含 Alpha 通道数据的透明位图。
      * 以上任一类型的 BitmapData 对象都作为 32 位整数的缓冲区进行存储。每个 32 位整数确定位图中单个像素的属性。
      * 每个 32 位整数都是四个 8 位通道值（从 0 到 255）的组合，这些值描述像素的 Alpha 透明度以及红色、绿色、蓝色 (ARGB) 值。
      * （对于 ARGB 值，最高有效字节代表 Alpha 通道值，其后的有效字节分别代表红色、绿色和蓝色通道值。）
+     * @see lark.Bitmap
      * @version Lark 1.0
      * @platform Web,Native
      */
     interface BitmapData extends LarkObject {
         /**
          * @language en_US
+         * [read-only] The width of the bitmap image in pixels.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
+         * [只读] 位图图像的宽度，以像素为单位。
          * @version Lark 1.0
          * @platform Web,Native
          */
         width: number;
         /**
          * @language en_US
+         * [read-only] The height of the bitmap image in pixels.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
+         * [只读] 位图图像的高度，以像素为单位。
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -574,41 +582,47 @@ declare module lark {
 declare module lark {
     /**
      * @language en_US
-     * DisplayObjectContainer 接口定义显示列表中的显示对象容器。
-     * 该显示列表管理运行时中显示的所有对象。使用 DisplayObjectContainer 排列显示列表中的显示对象。
-     * 每个 DisplayObjectContainer 对象都有自己的子级列表，用于组织对象的 Z 轴顺序。Z 轴顺序是由前至后的顺序，
-     * 可确定哪个对象绘制在前，哪个对象绘制在后等。
+     * The DisplayObjectContainer class is the base class for all objects that can serve as display object containers on
+     * the display list. The display list manages all objects displayed in the runtime. Use the DisplayObjectContainer
+     * class to arrange the display objects in the display list. Each DisplayObjectContainer object has its own child list
+     * for organizing the z-order of the objects. The z-order is the front-to-back order that determines which object is
+     * drawn in front, which is behind, and so on.
+     * @see lark.DisplayObject
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * DisplayObjectContainer 接口定义显示列表中的显示对象容器。
-     * 该显示列表管理运行时中显示的所有对象。使用 DisplayObjectContainer 排列显示列表中的显示对象。
-     * 每个 DisplayObjectContainer 对象都有自己的子级列表，用于组织对象的 Z 轴顺序。Z 轴顺序是由前至后的顺序，
+     * DisplayObjectContainer 接口定义显示列表中的显示对象容器。该显示列表管理运行时中显示的所有对象。使用 DisplayObjectContainer
+     * 排列显示列表中的显示对象。每个 DisplayObjectContainer 对象都有自己的子级列表，用于组织对象的 Z 轴顺序。Z 轴顺序是由前至后的顺序，
      * 可确定哪个对象绘制在前，哪个对象绘制在后等。
+     * @see lark.DisplayObject
      * @version Lark 1.0
      * @platform Web,Native
      */
     interface DisplayObjectContainer extends DisplayObject {
         /**
          * @language en_US
-         * 返回此对象的子项数目。
+         * [read-only] Returns the number of children of this object.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 返回此对象的子项数目。
+         * [只读] 返回此对象的子项数目。
          * @version Lark 1.0
          * @platform Web,Native
          */
         numChildren: number;
         /**
          * @language en_US
-         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
-         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
-         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * Adds a child DisplayObject instance to this DisplayObjectContainer instance. The child is added to the front
+         * (top) of all other children in this DisplayObjectContainer instance. (To add a child to a specific index position,
+         * use the addChildAt() method.)If you add a child object that already has a different display object container
+         * as a parent, the object is removed from the child list of the other display object container.
+         * @param child The DisplayObject instance to add as a child of this DisplayObjectContainer instance.
+         * @returns 在 child The DisplayObject instance that you pass in the child parameter.
+         * @see #addChildAt()
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -617,42 +631,51 @@ declare module lark {
          * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
          * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @see #addChildAt()
          * @version Lark 1.0
          * @platform Web,Native
          */
         addChild(child: DisplayObject): DisplayObject;
         /**
          * @language en_US
-         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。索引为 0 表示该 DisplayObjectContainer 对象的显示列表的后（底）部。
-         * 如果索引值为-1，则表示该 DisplayObjectContainer 对象的显示列表的前（上）部。
-         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
-         * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
-         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * Adds a child DisplayObject instance to this DisplayObjectContainer instance. The child is added at the index position
+         * specified. An index of 0 represents the back (bottom) of the display list for this DisplayObjectContainer object.
+         * If you add a child object that already has a different display object container as a parent, the object is removed
+         * from the child list of the other display object container.
+         * @param child The DisplayObject instance to add as a child of this DisplayObjectContainer instance.
+         * @param index The index position to which the child is added. If you specify a currently occupied index position,
+         * the child object that exists at that position and all higher positions are moved up one position in the child list.
+         * @returns The DisplayObject instance that you pass in the child parameter.
+         * @see #addChild()
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。索引为 0 表示该 DisplayObjectContainer 对象的显示列表的后（底）部。
-         * 如果索引值为-1，则表示该 DisplayObjectContainer 对象的显示列表的前（上）部。
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。索引为 0 表示该
+         * DisplayObjectContainer 对象的显示列表的后（底）部。如果添加一个已将其它显示对象容器作为父项的子对象，则会从其它显示对象容器的子列表中删除该对象。
          * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
          * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @see #addChild()
          * @version Lark 1.0
          * @platform Web,Native
          */
         addChildAt(child: DisplayObject, index: number): DisplayObject;
         /**
          * @language en_US
-         * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。孙项、曾孙项等，每项都返回 true。
-         * @param child 要测试的子对象。
-         * @returns 如果指定的显示对象为 DisplayObjectContainer 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
+         * Determines whether the specified display object is a child of the DisplayObjectContainer instance or the instance
+         * itself. The search includes the entire display list including this DisplayObjectContainer instance. Grandchildren,
+         * great-grandchildren, and so on each return true.
+         * @param child The child object to test.
+         * @returns true if the child object is a child of the DisplayObjectContainer or the container itself; otherwise false.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。孙项、曾孙项等，每项都返回 true。
+         * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。
+         * 孙项、曾孙项等，每项都返回 true。
          * @param child 要测试的子对象。
          * @returns 如果指定的显示对象为 DisplayObjectContainer 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
          * @version Lark 1.0
@@ -661,9 +684,10 @@ declare module lark {
         contains(child: DisplayObject): boolean;
         /**
          * @language en_US
-         * 返回位于指定索引处的子显示对象实例。
-         * @param index 子对象的索引位置。
-         * @returns 位于指定索引位置处的子显示对象。
+         * Returns the child display object instance that exists at the specified index.
+         * @param index The index position of the child object.
+         * @returns The child display object at the specified index position.
+         * @see #getChildByName()
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -672,81 +696,104 @@ declare module lark {
          * 返回位于指定索引处的子显示对象实例。
          * @param index 子对象的索引位置。
          * @returns 位于指定索引位置处的子显示对象。
+         * @see #getChildByName()
          * @version Lark 1.0
          * @platform Web,Native
          */
         getChildAt(index: number): DisplayObject;
         /**
          * @language en_US
-         * 返回 DisplayObject 的 child 实例的索引位置。
-         * @returns 要标识的子显示对象的索引位置。
+         * Returns the index position of a child DisplayObject instance.
+         * @param child The DisplayObject instance to identify.
+         * @returns The index position of the child display object to identify.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 返回 DisplayObject 的 child 实例的索引位置。
-         * @returns 要标识的子显示对象的索引位置。
+         * @returns 要查找的子显示对象的索引位置。
          * @version Lark 1.0
          * @platform Web,Native
          */
         getChildIndex(child: DisplayObject): number;
         /**
          * @language en_US
-         * 返回具有指定名称的子显示对象。
-         * @param name 要返回的子项的名称。
-         * @returns 具有指定名称的子显示对象。
+         * Returns the child display object that exists with the specified name. If more that one child display object has
+         * the specified name, the method returns the first object in the child list.The getChildAt() method is faster than
+         * the getChildByName() method. The getChildAt() method accesses a child from a cached array, whereas the getChildByName()
+         * method has to traverse a linked list to access a child.
+         * @param name The name of the child to return.
+         * @returns The child display object with the specified name.
+         * @see #getChildAt()
+         * @see lark.DisplayObject#name
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 返回具有指定名称的子显示对象。
+         * 返回具有指定名称的子显示对象。如果多个子显示对象具有指定名称，则该方法会返回子级列表中的第一个对象。
+         * getChildAt() 方法比 getChildByName() 方法快。getChildAt() 方法从缓存数组中访问子项，而 getChildByName() 方法则必须遍历链接的列表来访问子项。
          * @param name 要返回的子项的名称。
          * @returns 具有指定名称的子显示对象。
+         * @see #getChildAt()
+         * @see lark.DisplayObject#name
          * @version Lark 1.0
          * @platform Web,Native
          */
         getChildByName(name: string): DisplayObject;
         /**
          * @language en_US
-         * 将一个 DisplayObject 子实例从 DisplayObjectContainer 实例中移除。
-         * @param child 要删除的 DisplayObject 实例。
-         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * Removes the specified child DisplayObject instance from the child list of the DisplayObjectContainer instance.
+         * The parent property of the removed child is set to null , and the object is garbage collected if no other references
+         * to the child exist. The index positions of any display objects above the child in the DisplayObjectContainer are
+         * decreased by 1.
+         * @param child The DisplayObject instance to remove.
+         * @returns The DisplayObject instance that you pass in the child parameter.
+         * @see #removeChildAt()
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 将一个 DisplayObject 子实例从 DisplayObjectContainer 实例中移除。
+         * 从 DisplayObjectContainer 实例的子列表中删除指定的 child DisplayObject 实例。将已删除子项的 parent 属性设置为 null；
+         * 如果不存在对该子项的任何其它引用，则将该对象作为垃圾回收。DisplayObjectContainer 中该子项之上的任何显示对象的索引位置都减去 1。
          * @param child 要删除的 DisplayObject 实例。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @see #removeChildAt()
          * @version Lark 1.0
          * @platform Web,Native
          */
         removeChild(child: DisplayObject): DisplayObject;
         /**
          * @language en_US
-         * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject。
-         * @param index 要删除的 DisplayObject 的子索引。
-         * @returns 已删除的 DisplayObject 实例。
+         * Removes a child DisplayObject from the specified index position in the child list of the DisplayObjectContainer.
+         * The parent property of the removed child is set to null, and the object is garbage collected if no other references
+         * to the child exist. The index positions of any display objects above the child in the DisplayObjectContainer are decreased by 1.
+         * @param index The child index of the DisplayObject to remove.
+         * @returns The DisplayObject instance that was removed.
+         * @see #removeChild()
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject。
+         * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject。将已删除子项的 parent 属性设置为 null；
+         * 如果没有对该子项的任何其他引用，则将该对象作为垃圾回收。DisplayObjectContainer 中该子项之上的任何显示对象的索引位置都减去 1。
          * @param index 要删除的 DisplayObject 的子索引。
          * @returns 已删除的 DisplayObject 实例。
+         * @see #removeChild()
          * @version Lark 1.0
          * @platform Web,Native
          */
         removeChildAt(index: number): DisplayObject;
         /**
          * @language en_US
-         * 更改现有子项在显示对象容器中的位置。这会影响子对象的分层。
-         * @param child 要为其更改索引编号的 DisplayObject 子实例。
-         * @param index 生成的 child 显示对象的索引编号。当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
+         * Changes the position of an existing child in the display object container. This affects the layering of child objects.
+         * @param child The child DisplayObject instance for which you want to change the index number.
+         * @param index The resulting index number for the child display object.
+         * @see #addChildAt()
+         * @see #getChildAt()
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -755,15 +802,19 @@ declare module lark {
          * 更改现有子项在显示对象容器中的位置。这会影响子对象的分层。
          * @param child 要为其更改索引编号的 DisplayObject 子实例。
          * @param index 生成的 child 显示对象的索引编号。当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
+         * @see #addChildAt()
+         * @see #getChildAt()
          * @version Lark 1.0
          * @platform Web,Native
          */
         setChildIndex(child: DisplayObject, index: number): void;
         /**
          * @language en_US
-         * 在子级列表中两个指定的索引位置，交换子对象的 Z 轴顺序（前后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
-         * @param index1 第一个子对象的索引位置。
-         * @param index2 第二个子对象的索引位置。
+         * Swaps the z-order (front-to-back order) of the child objects at the two specified index positions in the child
+         * list. All other child objects in the display object container remain in the same index positions.
+         * @param index1 The index position of the first child object.
+         * @param index2 The index position of the second child object.
+         * @see #swapChildren()
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -772,15 +823,18 @@ declare module lark {
          * 在子级列表中两个指定的索引位置，交换子对象的 Z 轴顺序（前后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
          * @param index1 第一个子对象的索引位置。
          * @param index2 第二个子对象的索引位置。
+         * @see #swapChildren()
          * @version Lark 1.0
          * @platform Web,Native
          */
         swapChildrenAt(index1: number, index2: number): void;
         /**
          * @language en_US
-         * 交换两个指定子对象的 Z 轴顺序（从前到后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
-         * @param child1 第一个子对象。
-         * @param child2 第二个子对象。
+         * Swaps the z-order (front-to-back order) of the two specified child objects. All other child objects in the
+         * display object container remain in the same index positions.
+         * @param child1 The first child object.
+         * @param child2 The second child object.
+         * @see #swapChildrenAt()
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -789,34 +843,41 @@ declare module lark {
          * 交换两个指定子对象的 Z 轴顺序（从前到后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
          * @param child1 第一个子对象。
          * @param child2 第二个子对象。
+         * @see #swapChildrenAt()
          * @version Lark 1.0
          * @platform Web,Native
          */
         swapChildren(child1: DisplayObject, child2: DisplayObject): void;
         /**
          * @language en_US
-         * 从 DisplayObjectContainer 实例的子级列表中删除所有 child DisplayObject 实例。
+         * Removes all child DisplayObject instances from the child list of the DisplayObjectContainer instance. The parent
+         * property of the removed children is set to null , and the objects are garbage collected if no other references to the children exist.
+         * @see #removeChild()
+         * @see #removeChildAt()
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 从 DisplayObjectContainer 实例的子级列表中删除所有 child DisplayObject 实例。
+         * @see #removeChild()
+         * @see #removeChildAt()
          * @version Lark 1.0
          * @platform Web,Native
          */
         removeChildren(): void;
         /**
          * @language en_US
-         * 指定此对象的子项以及子孙项是否接收鼠标/触摸事件
-         * 默认值为 true 即可以接收。
+         * Determines whether or not the children of the object are touch, or user input device, enabled. If an object is
+         * enabled, a user can interact with it by using a touch or user input device.
+         * @default true
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 指定此对象的子项以及子孙项是否接收鼠标/触摸事件
-         * 默认值为 true 即可以接收。
+         * 确定对象的子级是否支持触摸或用户输入设备。如果对象支持触摸或用户输入设备，用户可以通过使用触摸或用户输入设备与之交互。
+         * @default true
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -1028,20 +1089,24 @@ declare module lark {
 declare module lark {
     /**
      * @language en_US
-     * 提供混合模式可视效果的常量值的类。
+     * A class that provides constant values for visual blend mode effects. These constants are used in the blendMode
+     * property of the DisplayObject class.
+     * @see lark.DisplayObject#blendMode
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 提供混合模式可视效果的常量值的类。
+     * 提供混合模式可视效果的常量值的类,通常用于 DisplayObject 的 blendMode 属性上。
+     * @see lark.DisplayObject#blendMode
      * @version Lark 1.0
      * @platform Web,Native
      */
     class BlendMode {
         /**
          * @language en_US
-         * 该显示对象出现在背景前面。显示对象的像素值会覆盖背景的像素值。在显示对象为透明的区域，背景是可见的。
+         * The display object appears in front of the background. Pixel values of the display object override the pixel
+         * values of the background. Where the display object is transparent, the background is visible.
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -1054,22 +1119,26 @@ declare module lark {
         static NORMAL: string;
         /**
          * @language en_US
-         * 将显示对象的原色值添加到它的背景颜色中，上限值为 0xFF。此设置通常用于使两个对象间的加亮溶解产生动画效果。
-         * 例如，如果显示对象的某个像素的 RGB 值为 0xAAA633，背景像素的 RGB 值为 0xDD2200，则显示像素的结果 RGB 值为 0xFFC833（因为 0xAA + 0xDD > 0xFF，0xA6 + 0x22 = 0xC8，且 0x33 + 0x00 = 0x33）。
+         * Adds the values of the constituent colors of the display object to the colors of its background, applying a
+         * ceiling of 0xFF. This setting is commonly used for animating a lightening dissolve between two objects.
+         * For example, if the display object has a pixel with an RGB value of 0xAAA633, and the background pixel has an
+         * RGB value of 0xDD2200, the resulting RGB value for the displayed pixel is 0xFFC833 (because 0xAA + 0xDD > 0xFF,
+         * 0xA6 + 0x22 = 0xC8, and 0x33 + 0x00 = 0x33).
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 将显示对象的原色值添加到它的背景颜色中，上限值为 0xFF。此设置通常用于使两个对象间的加亮溶解产生动画效果。
-         * 例如，如果显示对象的某个像素的 RGB 值为 0xAAA633，背景像素的 RGB 值为 0xDD2200，则显示像素的结果 RGB 值为 0xFFC833（因为 0xAA + 0xDD > 0xFF，0xA6 + 0x22 = 0xC8，且 0x33 + 0x00 = 0x33）。
+         * 例如，如果显示对象的某个像素的 RGB 值为 0xAAA633，背景像素的 RGB 值为 0xDD2200，则显示像素的结果 RGB 值为 0xFFC833
+         * （因为 0xAA + 0xDD > 0xFF，0xA6 + 0x22 = 0xC8，且 0x33 + 0x00 = 0x33）。
          * @version Lark 1.0
          * @platform Web,Native
          */
         static ADD: string;
         /**
          * @language en_US
-         * 根据显示对象的 Alpha 值擦除背景。Alpha 值不为0的区域将被擦除。
+         * Erases the background based on the alpha value of the display object.
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -1510,31 +1579,11 @@ declare module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
         fillStyle: any;
         /**
          * @private
          */
         private _lineWidth;
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
         /**
          * @language en_US
          * @version Lark 1.0
@@ -1560,31 +1609,11 @@ declare module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
         lineCap: string;
         /**
          * @private
          */
         private _strokeStyle;
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
         /**
          * @language en_US
          * @version Lark 1.0
@@ -1610,31 +1639,11 @@ declare module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
         lineJoin: string;
         /**
          * @private
          */
         private _miterLimit;
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
         /**
          * @language en_US
          * @version Lark 1.0
@@ -2452,28 +2461,51 @@ declare module lark.sys {
 declare module lark {
     /**
      * @language en_US
-     * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时显示的所有对象。使用 DisplayObjectContainer 类排列显示列表中的显示对象。
-     * DisplayObjectContainer 对象可以有子显示对象，而其他显示对象是“叶”节点，只有父级和同级，没有子级。
-     * DisplayObject 类支持基本功能（如对象的 x 和 y 位置），也支持更高级的对象属性（如它的转换矩阵），所有显示对象都继承自 DisplayObject 类。
-     * DisplayObject 类包含若干广播事件。通常，任何特定事件的目标均为一个特定的 DisplayObject 实例。
-     * 若只有一个目标，则会将事件侦听器限制为只能放置到该目标上（在某些情况下，可放置到显示列表中该目标的祖代上），这意味着您可以向任何 DisplayObject 实例添加侦听器来侦听广播事件。
+     * The DisplayObject class is the base class for all objects that can be placed on the display list. The display list
+     * manages all objects displayed in the runtime. Use the DisplayObjectContainer class to arrange the display
+     * objects in the display list. DisplayObjectContainer objects can have child display objects, while other display objects,
+     * such as Shape and TextField objects, are "leaf" nodes that have only parents and siblings, no children.
+     * The DisplayObject class supports basic functionality like the x and y position of an object, as well as more advanced
+     * properties of the object such as its transformation matrix.
+     * The DisplayObject class contains several broadcast events.Normally, the target of any particular event is a specific
+     * DisplayObject instance. For example, the target of an added event is the specific DisplayObject instance that was added
+     * to the display list. Having a single target restricts the placement of event listeners to that target and in some cases
+     * the target's ancestors on the display list. With broadcast events, however, the target is not a specific DisplayObject
+     * instance, but rather all DisplayObject instances, including those that are not on the display list. This means that you
+     * can add a listener to any DisplayObject instance to listen for broadcast events.
+     *
+     * @event lark.Event.ADDED Emitted when a display object is added to the display list.
+     * @event lark.Event.ADDED_TO_STAGE Emitted when a display object is added to the on stage display list, either directly or through the addition of a sub tree in which the display object is contained.
+     * @event lark.Event.REMOVED Emitted when a display object is about to be removed from the display list.
+     * @event lark.Event.REMOVED_FROM_STAGE Emitted when a display object is about to be removed from the display list, either directly or through the removal of a sub tree in which the display object is contained.
+     * @event lark.Event.ENTER_FRAME [broadcast event] Emitted when the playhead is entering a new frame.
+     * @event lark.Event.RENDER [broadcast event] Emitted when the display list is about to be updated and rendered.
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时显示的所有对象。使用 DisplayObjectContainer 类排列显示列表中的显示对象。
-     * DisplayObjectContainer 对象可以有子显示对象，而其他显示对象是“叶”节点，只有父级和同级，没有子级。
-     * DisplayObject 类支持基本功能（如对象的 x 和 y 位置），也支持更高级的对象属性（如它的转换矩阵），所有显示对象都继承自 DisplayObject 类。
-     * DisplayObject 类包含若干广播事件。通常，任何特定事件的目标均为一个特定的 DisplayObject 实例。
-     * 若只有一个目标，则会将事件侦听器限制为只能放置到该目标上（在某些情况下，可放置到显示列表中该目标的祖代上），这意味着您可以向任何 DisplayObject 实例添加侦听器来侦听广播事件。
+     * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时中显示的所有对象。使用 DisplayObjectContainer 类排列
+     * 显示列表中的显示对象。DisplayObjectContainer 对象可以有子显示对象，而其他显示对象（如 Shape 和 TextField 对象）是“叶”节点，没有子项，只有父级和
+     * 同级。DisplayObject 类有一些基本的属性（如确定坐标位置的 x 和 y 属性），也有一些高级的对象属性（如 Matrix 矩阵变换）。
+     * DisplayObject 类包含若干广播事件。通常，任何特定事件的目标均为一个特定的 DisplayObject 实例。例如，added 事件的目标是已添加到显示列表
+     * 的目标 DisplayObject 实例。若只有一个目标，则会将事件侦听器限制为只能监听在该目标上（在某些情况下，可监听在显示列表中该目标的祖代上）。
+     * 但是对于广播事件，目标不是特定的 DisplayObject 实例，而是所有 DisplayObject 实例（包括那些不在显示列表中的实例）。这意味着您可以向任何
+     * DisplayObject 实例添加侦听器来侦听广播事件。
+     *
+     * @event lark.Event.ADDED 将显示对象添加到显示列表中时调度。
+     * @event lark.Event.ADDED_TO_STAGE 在将显示对象直接添加到舞台显示列表或将包含显示对象的子树添加至舞台显示列表中时调度。
+     * @event lark.Event.REMOVED 将要从显示列表中删除显示对象时调度。
+     * @event lark.Event.REMOVED_FROM_STAGE 在从显示列表中直接删除显示对象或删除包含显示对象的子树时调度。
+     * @event lark.Event.ENTER_FRAME [广播事件] 播放头进入新帧时调度。
+     * @event lark.Event.RENDER [广播事件] 将要更新和呈现显示列表时调度。
      * @version Lark 1.0
      * @platform Web,Native
      */
     class DisplayObject extends EventEmitter implements sys.Renderable {
         /**
          * @language en_US
-         * 创建一个显示对象
+         * Initializes a DisplayObject object
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -2486,7 +2518,7 @@ declare module lark {
         constructor();
         /**
          * @private
-         *
+         * 标记矩阵失效
          */
         private invalidateMatrix();
         /**
@@ -2496,8 +2528,8 @@ declare module lark {
         private invalidatePosition();
         /**
          * @language en_US
-         * 表示 DisplayObject 的实例名称。
-         * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
+         * Indicates the instance name of the DisplayObject. The object can be identified in the child list of its parent
+         * display object container by calling the getChildByName() method of the display object container.
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -2505,24 +2537,14 @@ declare module lark {
          * @language zh_CN
          * 表示 DisplayObject 的实例名称。
          * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
          * @version Lark 1.0
          * @platform Web,Native
          */
         name: string;
         /**
          * @language en_US
-         * 表示包含此显示对象的 DisplayObjectContainer 对象。
-         * 使用 parent 属性可以指定高于显示列表层次结构中当前显示对象的显示对象的相对路径。
+         * Indicates the DisplayObjectContainer object that contains this display object. Use the parent property to specify
+         * a relative path to display objects that are above the current display object in the display list hierarchy.
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -2536,9 +2558,9 @@ declare module lark {
         parent: DisplayObjectContainer;
         /**
          * @language en_US
-         * 显示对象的舞台。
-         * 例如，您可以创建多个显示对象并加载到显示列表中，每个显示对象的 stage 属性是指相同的 Stage 对象。
-         * 如果显示对象未添加到显示列表，则其 stage 属性会设置为 null。
+         * The Stage of the display object. you can create and load multiple display objects into the display list, and
+         * the stage property of each display object refers to the same Stage object.
+         * If a display object is not added to the display list, its stage property is set to null.
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -2553,34 +2575,40 @@ declare module lark {
         stage: Stage;
         /**
          * @language en_US
-         * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。
-         * 注意：必须对matrix属性重新赋值改变的值才能生效，若获取matrix引用来修改对象属性，将不会发生任何改变。
+         * A Matrix object containing values that alter the scaling, rotation, and translation of the display object.
+         * Note: to change the value of a display object's matrix, you must make a copy of the entire matrix object, then copy
+         * the new object into the matrix property of the display object.
+         * @example the following code increases the tx value of a display object's matrix
+         * <code>
+         *     var myMatrix:Matrix = myDisplayObject.matrix;
+         *     myMatrix.tx += 10;
+         *     myDisplayObject.matrix = myMatrix;
+         * </code>
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。
-         * 注意：必须对matrix属性重新赋值改变的值才能生效，若获取matrix引用来修改对象属性，将不会发生任何改变。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
+         * 注意：要改变一个显示对象矩阵的值，您必引用整个矩阵对象，然后将它重新赋值给显示对象的 matrix 属性。
+         * @example 以下代码改变了显示对象矩阵的tx属性值：
+         * <code>
+         *     var myMatrix:Matrix = myDisplayObject.matrix;
+         *     myMatrix.tx += 10;
+         *     myDisplayObject.matrix = myMatrix;
+         * </code>
          * @version Lark 1.0
          * @platform Web,Native
          */
         matrix: Matrix;
         /**
          * @language en_US
-         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。
-         * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
-         * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
+         * Indicates the x coordinate of the DisplayObject instance relative to the local coordinates of the parent
+         * DisplayObjectContainer. If the object is inside a DisplayObjectContainer that has transformations, it is in
+         * the local coordinate system of the enclosing DisplayObjectContainer. Thus, for a DisplayObjectContainer
+         * rotated 90° counterclockwise, the DisplayObjectContainer's children inherit a coordinate system that is
+         * rotated 90° counterclockwise. The object's coordinates refer to the registration point position.
+         * @default 0
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -2589,25 +2617,19 @@ declare module lark {
          * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。
          * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
          * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
+         * @default 0
          * @version Lark 1.0
          * @platform Web,Native
          */
         x: number;
         /**
          * @language en_US
-         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 y 坐标。
-         * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
-         * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
+         * Indicates the y coordinate of the DisplayObject instance relative to the local coordinates of the parent
+         * DisplayObjectContainer. If the object is inside a DisplayObjectContainer that has transformations, it is in
+         * the local coordinate system of the enclosing DisplayObjectContainer. Thus, for a DisplayObjectContainer rotated
+         * 90° counterclockwise, the DisplayObjectContainer's children inherit a coordinate system that is rotated 90°
+         * counterclockwise. The object's coordinates refer to the registration point position.
+         * @default 0
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -2616,84 +2638,54 @@ declare module lark {
          * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 y 坐标。
          * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
          * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
+         * @default 0
          * @version Lark 1.0
          * @platform Web,Native
          */
         y: number;
         /**
          * @language en_US
-         * 表示从注册点开始应用的对象的水平缩放比例（百分比）。
-         * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
-         * 默认值为 1，即不缩放。
+         * Indicates the horizontal scale (percentage) of the object as applied from the registration point. The default
+         * 1.0 equals 100% scale.Scaling the local coordinate system changes the x and y property values, which are
+         * defined in whole pixels.
          * @default 1
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 表示从注册点开始应用的对象的水平缩放比例（百分比）。
+         * 表示从注册点开始应用的对象的水平缩放比例（百分比）。1.0 等于 100% 缩放。
          * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
-         * 默认值为 1，即不缩放。
          * @default 1
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
          * @version Lark 1.0
          * @platform Web,Native
          */
         scaleX: number;
         /**
          * @language en_US
-         * 表示从对象注册点开始应用的对象的垂直缩放比例（百分比）。
-         * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
-         * 默认值为 1，即不缩放。
+         * Indicates the vertical scale (percentage) of an object as applied from the registration point of the object.
+         * 1.0 is 100% scale.Scaling the local coordinate system changes the x and y property values, which are defined
+         * in whole pixels.
          * @default 1
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 表示从对象注册点开始应用的对象的垂直缩放比例（百分比）。
+         * 表示从对象注册点开始应用的对象的垂直缩放比例（百分比）。1.0 是 100% 缩放。
          * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
-         * 默认值为 1，即不缩放。
          * @default 1
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
          * @version Lark 1.0
          * @platform Web,Native
          */
         scaleY: number;
         /**
          * @language en_US
-         * 表示 DisplayObject 实例距其原始方向的旋转程度，以度为单位。
-         * 从 0 到 180 的值表示顺时针方向旋转；从 0 到 -180 的值表示逆时针方向旋转。对于此范围之外的值，可以通过加上或
-         * 减去 360 获得该范围内的值。例如，my_video.rotation = 450语句与 my_video.rotation = 90 是相同的。
-         * @default 0 默认值为 0 不旋转。
+         * Indicates the rotation of the DisplayObject instance, in degrees, from its original orientation. Values from
+         * 0 to 180 represent clockwise rotation; values from 0 to -180 represent counterclockwise rotation. Values outside
+         * this range are added to or subtracted from 360 to obtain a value within the range. For example, the statement
+         * myDisplayObject.rotation = 450 is the same as myDisplayObject.rotation = 90.
+         * @default 0
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -2701,230 +2693,180 @@ declare module lark {
          * @language zh_CN
          * 表示 DisplayObject 实例距其原始方向的旋转程度，以度为单位。
          * 从 0 到 180 的值表示顺时针方向旋转；从 0 到 -180 的值表示逆时针方向旋转。对于此范围之外的值，可以通过加上或
-         * 减去 360 获得该范围内的值。例如，my_video.rotation = 450语句与 my_video.rotation = 90 是相同的。
-         * @default 0 默认值为 0 不旋转。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
+         * 减去 360 获得该范围内的值。例如，myDisplayObject.rotation = 450语句与 myDisplayObject.rotation = 90 是相同的。
+         * @default 0
          * @version Lark 1.0
          * @platform Web,Native
          */
         rotation: number;
         /**
          * @language en_US
-         * 表示显示对象的宽度，以像素为单位。
+         * Indicates the width of the display object, in pixels. The width is calculated based on the bounds of the content
+         * of the display object. When you set the width property, the scaleX property is adjusted accordingly.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 表示显示对象的宽度，以像素为单位。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
+         * 表示显示对象的宽度，以像素为单位。宽度是根据显示对象内容的范围来计算的。如果您设置了 width 属性，则 scaleX 属性会相应调整.
          * @version Lark 1.0
          * @platform Web,Native
          */
         width: number;
         /**
          * @language en_US
-         * 表示显示对象的高度，以像素为单位。
+         * Indicates the height of the display object, in pixels. The height is calculated based on the bounds of the
+         * content of the display object. When you set the height property, the scaleY property is adjusted accordingly.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 表示显示对象的高度，以像素为单位。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
+         * 表示显示对象的高度，以像素为单位。高度是根据显示对象内容的范围来计算的。如果您设置了 height 属性，则 scaleY 属性会相应调整。
          * @version Lark 1.0
          * @platform Web,Native
          */
         height: number;
         /**
          * @language en_US
-         * 显示对象是否可见。
-         * 不可见的显示对象已被禁用。例如，如果实例的 visible=false，则无法单击该对象。
-         * 默认值为 true 可见
+         * Whether or not the display object is visible. Display objects that are not visible are disabled. For example,
+         * if visible=false for an DisplayObject instance, it cannot receive touch or other user input.
+         * @default true
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 显示对象是否可见。
-         * 不可见的显示对象已被禁用。例如，如果实例的 visible=false，则无法单击该对象。
-         * 默认值为 true 可见
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
+         * 显示对象是否可见。不可见的显示对象将被禁用。例如，如果实例的 visible 为 false，则无法接受触摸或用户交互操作。
+         * @default true
          * @version Lark 1.0
          * @platform Web,Native
          */
         visible: boolean;
         /**
          * @language en_US
-         * 如果设置为 true，则 Lark 播放器将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
-         * 将 cacheAsBitmap 属性设置为 true 后，呈现并不更改，但是，显示对象将自动执行像素贴紧。执行速度可能会大大加快，
-         * 具体取决于显示对象内容的复杂性。在内存超过上限的情况下，即使将 cacheAsBitmap 属性设置为 true，显示对象也不使用位图缓存。
-         * 最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放和旋转的显示对象一起使用。
+         * If set to true, Lark runtime caches an internal bitmap representation of the display object. This caching can
+         * increase performance for display objects that contain complex vector content. After you set the cacheAsBitmap
+         * property to true, the rendering does not change, however the display object performs pixel snapping automatically.
+         * The execution speed can be significantly faster depending on the complexity of the content.The cacheAsBitmap
+         * property is best used with display objects that have mostly static content and that do not scale and rotate frequently.
+         * Note: The display object will not create the bitmap caching when the memory exceeds the upper limit,even if you set it to true.
+         * @default false
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 如果设置为 true，则 Lark 播放器将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
+         * 如果设置为 true，则 Lark 运行时将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
          * 将 cacheAsBitmap 属性设置为 true 后，呈现并不更改，但是，显示对象将自动执行像素贴紧。执行速度可能会大大加快，
-         * 具体取决于显示对象内容的复杂性。在内存超过上限的情况下，即使将 cacheAsBitmap 属性设置为 true，显示对象也不使用位图缓存。
-         * 最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放和旋转的显示对象一起使用。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
+         * 具体取决于显示对象内容的复杂性。最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放或旋转的显示对象一起使用。
+         * 注意：在内存超过上限的情况下，即使将 cacheAsBitmap 属性设置为 true，显示对象也不使用位图缓存。
+         * @default false
          * @version Lark 1.0
          * @platform Web,Native
          */
         cacheAsBitmap: boolean;
         /**
          * @language en_US
-         * 表示指定对象的 Alpha 透明度值。
-         * 有效值为 0（完全透明）到 1（完全不透明）。alpha 设置为 0 的显示对象是活动的，即使它们不可见。
-         *  @default 1 默认值为 1。
+         * Indicates the alpha transparency value of the object specified. Valid values are 0 (fully transparent) to 1 (fully opaque).
+         * The default value is 1. Display objects with alpha set to 0 are active, even though they are invisible.
+         * @default 1
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 表示指定对象的 Alpha 透明度值。
-         * 有效值为 0（完全透明）到 1（完全不透明）。alpha 设置为 0 的显示对象是活动的，即使它们不可见。
-         *  @default 1 默认值为 1。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
+         * 有效值为 0（完全透明）到 1（完全不透明）。alpha 设置为 0 的显示对象是可触摸的，即使它们不可见。
+         * @default 1
          * @version Lark 1.0
          * @platform Web,Native
          */
         alpha: number;
         /**
          * @language en_US
-         * 指定此对象是否接收鼠标/触摸事件
-         * @default true 默认为 true 即可以接收。
+         * Specifies whether this object receives touch or other user input. The default value is true, which means that
+         * by default any DisplayObject instance that is on the display list receives touch events. If touchEnabled is
+         * set to false, the instance does not receive any touch events (or other user input events). Any children of
+         * this instance on the display list are not affected. To change the touchEnabled behavior for all children of
+         * an object on the display list, use DisplayObjectContainer.touchChildren.
+         * @see lark.DisplayObjectContainer#touchChildren
+         * @default true
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 指定此对象是否接收鼠标/触摸事件
-         * @default true 默认为 true 即可以接收。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
+         * 指定此对象是否接收触摸或其他用户输入。默认值为 true，这表示默认情况下，显示列表上的任何 isplayObject 实例都会接收触摸事件或
+         * 其他用户输入事件。如果将 touchEnabled 设置为 false，则实例将不接收任何触摸事件（或其他用户输入事件）。显示列表上的该实例的任
+         * 何子级都不会受到影响。要更改显示列表上对象的所有子级的 touchEnabled 行为，请使用 DisplayObjectContainer.touchChildren。
+         * @see lark.DisplayObjectContainer#touchChildren
+         * @default true
          * @version Lark 1.0
          * @platform Web,Native
          */
         touchEnabled: boolean;
         /**
          * @language en_US
-         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，设置为false将只检查显示对象测量的最大矩形区域。
-         * 开启此属性将会有一定量的额外性能损耗，Shape和Sprite等含有矢量图的类默认开启此属性，其他类默认关闭。
+         * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
+         * is set to true,the transparent area of the display object will be touch through.
+         * Enabling this property will cause certain mount of performance loss. This property is set to true in the Shape class,
+         * while the other is set to false by default.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，设置为false将只检查显示对象测量的最大矩形区域。
-         * 开启此属性将会有一定量的额外性能损耗，Shape和Sprite等含有矢量图的类默认开启此属性，其他类默认关闭。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
+         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，
+         * 开启此属性将会有一定量的额外性能损耗，Shape等含有矢量图的类默认开启此属性，其他类默认关闭。
          * @version Lark 1.0
          * @platform Web,Native
          */
         pixelHitTest: boolean;
         /**
          * @language en_US
-         * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
-         * 注意：必须对scrollRect属性重新赋值改变的值才能生效，若获取scrollRect引用来修改对象属性，将不会发生任何改变。
+         * The scroll rectangle bounds of the display object. The display object is cropped to the size defined by the rectangle,
+         * and it scrolls within the rectangle when you change the x and y properties of the scrollRect object. A scrolled display
+         * object always scrolls in whole pixel increments.You can scroll an object left and right by setting the x property of
+         * the scrollRect Rectangle object. You can scroll an object up and down by setting the y property of the scrollRect
+         * Rectangle object. If the display object is rotated 90° and you scroll it left and right, the display object actually
+         * scrolls up and down.
+         *
+         * Note: to change the value of a display object's scrollRect, you must make a copy of the entire scrollRect object, then copy
+         * the new object into the scrollRect property of the display object.
+         * @example the following code increases the x value of a display object's scrollRect
+         * <code>
+         *     var myRectangle:Rectangle = myDisplayObject.scrollRect;
+         *     myRectangle.x += 10;
+         *     myDisplayObject.scrollRect = myRectangle;
+         * </code>
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
-         * 注意：必须对scrollRect属性重新赋值改变的值才能生效，若获取scrollRect引用来修改对象属性，将不会发生任何改变。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
+         * 滚动的显示对象始终以整像素为增量进行滚动。您可以通过设置 scrollRect Rectangle 对象的 x 属性来左右滚动对象， 还可以通过设置
+         * scrollRect 对象的 y 属性来上下滚动对象。如果显示对象旋转了 90 度，并且您左右滚动它，则实际上显示对象会上下滚动。
+         *
+         * 注意：要改变一个显示对象 scrollRect 属性的值，您必引用整个 scrollRect 对象，然后将它重新赋值给显示对象的 scrollRect 属性。
+         * @example 以下代码改变了显示对象 scrollRect 的 x 属性值：
+         * <code>
+         *     var myRectangle:Rectangle = myDisplayObject.scrollRect;
+         *     myRectangle.x += 10;
+         *     myDisplayObject.scrollRect = myRectangle;
+         * </code>
          * @version Lark 1.0
          * @platform Web,Native
          */
         scrollRect: Rectangle;
         /**
          * @language en_US
-         * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上
-         * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
+         * A value from the BlendMode class that specifies which blend mode to use. Determine how a source image (new one)
+         * is drawn on the target image (old one).
+         * If you attempt to set this property to an invalid value, Flash runtimes set the value to BlendMode.NORMAL.
+         * @default lark.BlendMode.NORMAL
+         * @see lark.BlendMode
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -2932,27 +2874,20 @@ declare module lark {
          * @language zh_CN
          * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上
          * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
+         * @default lark.BlendMode.NORMAL
+         * @see lark.BlendMode
          * @version Lark 1.0
          * @platform Web,Native
          */
         blendMode: string;
         /**
          * @language en_US
-         * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
-         * 但不绘制 mask 对象本身。将 mask 设置为 null 可删除蒙版。要能够缩放遮罩对象，它必须在显示列表中。要能够拖动蒙版
-         * Sprite 对象，它必须在显示列表中。
-         * 注意：单个 mask 对象不能用于遮罩多个执行调用的显示对象。在将 mask 分配给第二个显示对象时，会撤消其作为第一个对象的遮罩，
-         * 该对象的 mask 属性将变为 null。
+         * The calling display object is masked by the specified mask object. To ensure that masking works when the Stage
+         * is scaled, the mask display object must be in an active part of the display list. The mask object itself is not drawn.
+         * Set mask to null to remove the mask. To be able to scale a mask object, it must be on the display list. To be
+         * able to drag a mask Sprite object , it must be on the display list.
+         * Note: A single mask object cannot be used to mask more than one calling display object. When the mask is assigned
+         * to a second display object, it is removed as the mask of the first object, and that object's mask property becomes null.
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -2963,27 +2898,17 @@ declare module lark {
          * Sprite 对象，它必须在显示列表中。
          * 注意：单个 mask 对象不能用于遮罩多个执行调用的显示对象。在将 mask 分配给第二个显示对象时，会撤消其作为第一个对象的遮罩，
          * 该对象的 mask 属性将变为 null。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
          * @version Lark 1.0
          * @platform Web,Native
          */
         mask: DisplayObject;
         /**
          * @language en_US
-         * 返回一个矩形，该矩形定义相对于 targetCoordinateSpace 对象坐标系的显示对象区域。
-         * @param targetCoordinateSpace 定义要使用的坐标系的显示对象。
-         * @param resultRect 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Rectangle对象来存储结果，
-         * 若不传入将创建一个新的Rectangle对象返回。
-         * @returns 定义与 targetCoordinateSpace 对象坐标系统相关的显示对象面积的矩形。
+         * Returns a rectangle that defines the area of the display object relative to the coordinate system of the targetCoordinateSpace object.
+         * @param targetCoordinateSpace The display object that defines the coordinate system to use.
+         * @param resultRect A reusable instance of Rectangle for saving the results. Passing this parameter can reduce the number of reallocate objects
+         * for better performance.
+         * @returns The rectangle that defines the area of the display object relative to the targetCoordinateSpace object's coordinate system.
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -2991,8 +2916,7 @@ declare module lark {
          * @language zh_CN
          * 返回一个矩形，该矩形定义相对于 targetCoordinateSpace 对象坐标系的显示对象区域。
          * @param targetCoordinateSpace 定义要使用的坐标系的显示对象。
-         * @param resultRect 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Rectangle对象来存储结果，
-         * 若不传入将创建一个新的Rectangle对象返回。
+         * @param resultRect 一个用于存储结果的可复用Rectangle实例，传入此参数能够减少内部创建对象的次数，从而获得更高的运行性能。
          * @returns 定义与 targetCoordinateSpace 对象坐标系统相关的显示对象面积的矩形。
          * @version Lark 1.0
          * @platform Web,Native
@@ -3000,12 +2924,12 @@ declare module lark {
         getBounds(targetCoordinateSpace: DisplayObject, resultRect?: Rectangle): Rectangle;
         /**
          * @language en_US
-         * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
-         * @param stageX 舞台坐标x
-         * @param stageY 舞台坐标y
-         * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
-         * 若不传入将创建一个新的Point对象返回。
-         * @returns 具有相对于显示对象的坐标的 Point 对象。
+         * Converts the point object from the Stage (global) coordinates to the display object's (local) coordinates.
+         * @param stageX the x value in the global coordinates
+         * @param stageY the y value in the global coordinates
+         * @param resultPoint A reusable instance of Point for saving the results. Passing this parameter can reduce the
+         * number of reallocate objects for better performance.
+         * @returns A Point object with coordinates relative to the display object.
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -3014,8 +2938,7 @@ declare module lark {
          * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
          * @param stageX 舞台坐标x
          * @param stageY 舞台坐标y
-         * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
-         * 若不传入将创建一个新的Point对象返回。
+         * @param resultPoint 一个用于存储结果的可复用 Point 实例，传入此参数能够减少内部创建对象的次数，从而获得更高的运行性能。
          * @returns 具有相对于显示对象的坐标的 Point 对象。
          * @version Lark 1.0
          * @platform Web,Native
@@ -3023,86 +2946,44 @@ declare module lark {
         globalToLocal(stageX: number, stageY: number, resultPoint?: Point): Point;
         /**
          * @language en_US
-         * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
-         * @param localX 舞台坐标x
-         * @param localY 舞台坐标y
-         * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
-         * 若不传入将创建一个新的Point对象返回。
-         * @returns 具有相对于显示对象的坐标的 Point 对象。
+         * Converts the point object from the display object's (local) coordinates to the Stage (global) coordinates.
+         * @param localX the x value in the local coordinates
+         * @param localY the x value in the local coordinates
+         * @param resultPoint A reusable instance of Point for saving the results. Passing this parameter can reduce the
+         * number of reallocate objects for better performance.
+         * @returns  A Point object with coordinates relative to the Stage.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
-         * @param localX 舞台坐标x
-         * @param localY 舞台坐标y
-         * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，
-         * 若不传入将创建一个新的Point对象返回。
-         * @returns 具有相对于显示对象的坐标的 Point 对象。
+         * 将显示对象的（本地）坐标转换为舞台（全局）坐标。
+         * @param localX 本地坐标 x
+         * @param localY 本地坐标 y
+         * @param resultPoint 一个用于存储结果的可复用 Point 实例，传入此参数能够减少内部创建对象的次数，从而获得更高的运行性能。
+         * @returns 一个具有相对于舞台坐标的 Point 对象。
          * @version Lark 1.0
          * @platform Web,Native
          */
         localToGlobal(localX: number, localY: number, resultPoint?: Point): Point;
         /**
          * @private
-         *
-         * @param localX
-         * @param localY
-         * @returns
          */
         private hitTestPixel(localX, localY);
         /**
-         * @language en_US
-         *
-         * @param type
-         * @param listener
-         * @param thisObject
-         * @param useCapture
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         *
-         * @param type
-         * @param listener
-         * @param thisObject
-         * @param useCapture
+         * @inheritDoc
          * @version Lark 1.0
          * @platform Web,Native
          */
         removeListener(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean): void;
         /**
-         * @language en_US
-         *
-         * @param event
-         * @returns
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         *
-         * @param event
-         * @returns
+         * @inheritDoc
          * @version Lark 1.0
          * @platform Web,Native
          */
         emit(event: Event): boolean;
         /**
-         * @language en_US
-         *
-         * @param type
-         * @returns
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         *
-         * @param type
-         * @returns
+         * @inheritDoc
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -3495,81 +3376,71 @@ declare module lark {
 declare module lark {
     /**
      * @language en_US
-     * The Bitmap class represents display objects that represent bitmap images. These can be images that you load with the flash.display.Loader class, or they can be images that you create with the Bitmap() constructor.
-     * The Bitmap() constructor allows you to create a Bitmap object that contains a reference to a BitmapData object. After you create a Bitmap object, use the addChild() or addChildAt() method of the parent DisplayObjectContainer instance to place the bitmap on the display list.
-     * A Bitmap object can share its BitmapData reference among several Bitmap objects, independent of translation or rotation properties. Because you can create multiple Bitmap objects that reference the same BitmapData object, multiple display objects can use the same complex BitmapData object without incurring the memory overhead of a BitmapData object for each display object instance.
+     * The Bitmap class represents display objects that represent bitmap images.
+     * The Bitmap() constructor allows you to create a Bitmap object that contains a reference to a BitmapData object.
+     * After you create a Bitmap object, use the addChild() or addChildAt() method of the parent DisplayObjectContainer
+     * instance to place the bitmap on the display list.A Bitmap object can share its BitmapData reference among several
+     * Bitmap objects, independent of translation or rotation properties. Because you can create multiple Bitmap objects
+     * that reference the same BitmapData object, multiple display objects can use the same complex BitmapData object
+     * without incurring the memory overhead of a BitmapData object for each display object instance.
+     *
+     * @see lark.BitmapData
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * Bitmap 类表示用于表示位图图像的显示对象。这些图像可以是使用 Bitmap() 构造函数创建的图像。
-     * 利用 Bitmap() 构造函数，可以创建包含对 BitmapData 对象的引用的 Bitmap 对象。创建了 Bitmap 对象后，
-     * 使用父 DisplayObjectContainer 实例的 addChild() 或 addChildAt() 方法将位图放在显示列表中。
+     * Bitmap 类表示用于显示位图图片的显示对象。
+     * 利用 Bitmap() 构造函数，可以创建包含对 BitmapData 对象引用的 Bitmap 对象。创建了 Bitmap 对象后，
+     * 使用父级 DisplayObjectContainer 实例的 addChild() 或 addChildAt() 方法可以将位图放在显示列表中。
      * 一个 Bitmap 对象可在若干 Bitmap 对象之中共享其 BitmapData 引用，与缩放或旋转属性无关。
-     * 由于能够创建引用相同 BitmapData 对象的多个 Bitmap 对象，因此，多个显示对象可以使用相同的复杂 BitmapData 对象，
-     * 而不会因为每个显示对象实例使用一个 BitmapData 对象而产生内存开销。
+     * 由于能够创建引用相同 BitmapData 对象的多个 Bitmap 对象，因此，多个显示对象可以使用相同的 BitmapData 对象，
+     * 而不会因为每个显示对象实例使用一个 BitmapData 对象而产生额外内存开销。
+     *
+     * @see lark.BitmapData
      * @version Lark 1.0
      * @platform Web,Native
      */
     class Bitmap extends DisplayObject {
         /**
          * @language en_US
-         * 创建一个Bitmap对象
+         * Initializes a Bitmap object to refer to the specified BitmapData object.
+         * @param bitmapData The BitmapData object being referenced.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 创建一个Bitmap对象
+         * 创建一个引用指定 BitmapData 实例的 Bitmap 对象
+         * @param bitmapData 被引用的 BitmapData 实例
          * @version Lark 1.0
          * @platform Web,Native
          */
         constructor(bitmapData?: BitmapData);
         /**
          * @language en_US
-         * 被引用的 BitmapData 对象。
+         * bitmapData The BitmapData object being referenced.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 被引用的 BitmapData 对象。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
          * @version Lark 1.0
          * @platform Web,Native
          */
         bitmapData: BitmapData;
         /**
          * @language en_US
-         * 控制在缩放时是否对位图进行平滑处理。如果为 true，则会在缩放时对位图进行平滑处理。
-         * 如果为 false，则不会在缩放时对位图进行平滑处理。默认true。
+         * Whether or not the bitmap is smoothed when scaled.
+         * @default true。
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 控制在缩放时是否对位图进行平滑处理。如果为 true，则会在缩放时对位图进行平滑处理。
-         * 如果为 false，则不会在缩放时对位图进行平滑处理。默认true。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
+         * 控制在缩放时是否对位图进行平滑处理。
+         * @default true。
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -3867,16 +3738,6 @@ declare module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
         touchChildren: boolean;
         /**
          * @private
@@ -3935,64 +3796,51 @@ declare module lark.sys {
 declare module lark {
     /**
      * @language en_US
-     * Stage 类代表主绘图区，表示显示 Lark 内容的整个区域。
-     * 可以利用 DisplayObject 实例的 stage 属性进行访问。
-     * Stage 类具有多个祖代类 -- DisplayObjectContainer、DisplayObject 和 EventDispatcher，属性和方法便是从这些类继承而来的。
-     * 从这些继承的许多属性和方法不适用于 Stage 对象。
+     * The Stage class represents the main drawing area.The Stage object is not globally accessible. You need to access
+     * it through the stage property of a DisplayObject instance.
+     * The Stage class has several ancestor classes — Sprite, DisplayObject, and EventEmitter — from which it inherits
+     * properties and methods. Many of these properties and methods are inapplicable to Stage objects.
+     * @event lark.Event.RESIZE Dispatched when the stageWidth or stageHeight property of the Stage object is changed.
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * Stage 类代表主绘图区，表示显示 Lark 内容的整个区域。
+     * Stage 类代表主绘图区。
      * 可以利用 DisplayObject 实例的 stage 属性进行访问。
-     * Stage 类具有多个祖代类 -- DisplayObjectContainer、DisplayObject 和 EventDispatcher，属性和方法便是从这些类继承而来的。
+     * Stage 类具有多个祖代类: Sprite、DisplayObject 和 EventEmitter，属性和方法便是从这些类继承而来的。
      * 从这些继承的许多属性和方法不适用于 Stage 对象。
+     * @event lark.Event.RESIZE 当stageWidth或stageHeight属性发生改变时调度
      * @version Lark 1.0
      * @platform Web,Native
      */
     class Stage extends Sprite {
         /**
-         * @language en_US
-         * 舞台对象不允许自行实例化。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 舞台对象不允许自行实例化。
-         * @version Lark 1.0
-         * @platform Web,Native
+         * @private
+         * Stage不许允许自行实例化
          */
         constructor();
         /**
          * @language en_US
-         * 获取并设置舞台的帧速率。帧速率是指每秒显示的帧数。帧速率的有效范围为每秒 0.01 到 60 个帧。
-         * 注意，若同一个网页中包含多个lark.Stage实例，修改任何一个Stage的frameRate属性都会同步修改其他Stage的帧率。
+         * Gets and sets the frame rate of the stage. The frame rate is defined as frames per second. Valid range for the
+         * frame rate is from 0.01 to 1000 frames per second.
+         * Note: setting the frameRate property of one Stage object changes the frame rate for all Stage objects
+         * @default 30
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 获取并设置舞台的帧速率。帧速率是指每秒显示的帧数。帧速率的有效范围为每秒 0.01 到 60 个帧。
-         * 注意，若同一个网页中包含多个lark.Stage实例，修改任何一个Stage的frameRate属性都会同步修改其他Stage的帧率。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
+         * 注意: 修改任何一个Stage的frameRate属性都会同步修改其他Stage的帧率。
+         * @default 30
          * @version Lark 1.0
          * @platform Web,Native
          */
         frameRate: number;
         /**
          * @language en_US
-         * 舞台的当前宽度（以像素为单位）。
+         * Indicates the width of the stage, in pixels.
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -4005,7 +3853,7 @@ declare module lark {
         stageWidth: number;
         /**
          * @language en_US
-         * 舞台的当前高度（以像素为单位）。
+         * Indicates the height of the stage, in pixels.
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -4018,8 +3866,9 @@ declare module lark {
         stageHeight: number;
         /**
          * @language en_US
-         * 调用 invalidate() 方法后，在显示列表下次呈现时，Lark 会向每个已注册侦听 Event.RENDER 事件的显示对象发送一个 Event.RENDER 事件。
-         * 每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 invalidate() 方法。
+         * After you call the invalidate() method, when the display list is next rendered, the Lark runtime sends a render
+         * event to each display object that has registered to listen for the render event. You must call the invalidate()
+         * method each time you want the Flash runtime to send render events.
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -4037,15 +3886,15 @@ declare module lark {
         private implMap;
         /**
          * @language en_US
-         * 注册一个接口实现。Lark框架内预留了多个可由项目高度定制化的功能接口，使用此方法能够将项目中针对某接口的具体实现实例注入到框架中使用。
-         * @param interfaceName 注入的接口名称。例如："swan.IAssetAdapter","swan.Theme"
-         * @param instance 实现此接口的实例。
+         * Adds an interface-name-to-implementation-class mapping to the registry.
+         * @param interfaceName the interface name to register. For example："swan.IAssetAdapter","swan.Theme"
+         * @param instance the instance to register.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 注册一个接口实现。Lark框架内预留了多个可由项目高度定制化的功能接口，使用此方法能够将项目中针对某接口的具体实现实例注入到框架中使用。
+         * 注册一个接口实现。
          * @param interfaceName 注入的接口名称。例如："swan.IAssetAdapter","swan.Theme"
          * @param instance 实现此接口的实例。
          * @version Lark 1.0
@@ -4054,9 +3903,10 @@ declare module lark {
         registerImplementation(interfaceName: string, instance: any): void;
         /**
          * @language en_US
-         * 获取一个接口实现。此方法通常由框架内部调用。获取项目注入的自定义实现实例。
-         * @param interfaceName 要获取的接口名称。例如："swan.IAssetAdapter","swan.Theme"
-         * @returns 返回实现此接口的实例。
+         * Returns the singleton instance of the implementation class that was registered for the specified interface.
+         * This method is usually called by lark framework.
+         * @param interfaceName The interface name to identify. For example："swan.IAssetAdapter","swan.Theme"
+         * @returns the singleton instance of the implementation class
          * @version Lark 1.0
          * @platform Web,Native
          */
