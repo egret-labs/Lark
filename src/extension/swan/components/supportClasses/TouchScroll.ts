@@ -29,40 +29,54 @@
 
 module swan.sys {
     /**
+     * @private
      * 需要记录的历史速度的最大次数。
      */
     var MAX_VELOCITY_COUNT = 4;
     /**
+     * @private
      * 记录的历史速度的权重列表。
      */
     var VELOCITY_WEIGHTS:number[] = [1, 1.33, 1.66, 2];
     /**
+     * @private
      * 当前速度所占的权重。
      */
     var CURRENT_VELOCITY_WEIGHT = 2.33;
     /**
+     * @private
      * 最小的改变速度，解决浮点数精度问题。
      */
     var MINIMUM_VELOCITY = 0.02;
     /**
+     * @private
      * 当容器自动滚动时要应用的摩擦系数
      */
     var FRICTION = 0.998;
     /**
+     * @private
      * 当容器自动滚动时并且滚动位置超出容器范围时要额外应用的摩擦系数
      */
     var EXTRA_FRICTION = 0.95;
     /**
+     * @private
      * 摩擦系数的自然对数
      */
     var FRICTION_LOG = Math.log(FRICTION);
 
+    /**
+     * @private
+     * 
+     * @param ratio 
+     * @returns 
+     */
     function easeOut(ratio:number):number {
         var invRatio:number = ratio - 1.0;
         return invRatio * invRatio * invRatio + 1;
     }
 
     /**
+     * @private
      * 一个工具类,用于容器的滚屏拖动操作，计算在一段时间持续滚动后释放，应该继续滚动到的值和缓动时间。
      * 使用此工具类，您需要创建一个 ScrollThrown 实例,并在滚动发生时调用start()方法，然后在触摸移动过程中调用update()更新当前舞台坐标。
      * 内部将会启动一个计时器定时根据当前位置计算出速度值，并缓存下来最后4个值。当停止滚动时，再调用finish()方法，
@@ -71,6 +85,7 @@ module swan.sys {
     export class TouchScroll {
 
         /**
+         * @private
          * 创建一个 TouchScroll 实例
          * @param updateFunction 滚动位置更新回调函数
          */
@@ -86,27 +101,60 @@ module swan.sys {
             this.animation.easerFunction = easeOut;
         }
 
+        /**
+         * @private
+         */
         private target:lark.IEventEmitter;
+        /**
+         * @private
+         */
         private updateFunction:(scrollPos:number)=>void;
+        /**
+         * @private
+         */
         private endFunction:()=>void;
 
+        /**
+         * @private
+         */
         private previousTime:number = 0;
+        /**
+         * @private
+         */
         private velocity:number = 0;
+        /**
+         * @private
+         */
         private previousVelocity:number[] = [];
+        /**
+         * @private
+         */
         private currentPosition:number = 0;
+        /**
+         * @private
+         */
         private previousPosition:number = 0;
+        /**
+         * @private
+         */
         private currentScrollPos:number = 0;
+        /**
+         * @private
+         */
         private maxScrollPos:number = 0;
         /**
+         * @private
          * 鼠标按下时的偏移量
          */
         private offsetPoint:number = 0;
         /**
+         * @private
          * 停止触摸时继续滚动的动画实例
          */
         private animation:sys.Animation;
 
         /**
+         * @private
          * 正在播放缓动动画的标志。
          */
         public isPlaying():boolean{
@@ -114,6 +162,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 如果正在执行缓动滚屏，停止缓动。
          */
         public stop():void{
@@ -122,6 +171,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 开始记录位移变化。注意：当使用完毕后，必须调用 finish() 方法结束记录，否则该对象将无法被回收。
          * @param touchPoint 起始触摸位置，以像素为单位，通常是stageX或stageY。
          */
@@ -135,6 +185,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 更新当前移动到的位置
          * @param touchPoint 当前触摸位置，以像素为单位，通常是stageX或stageY。
          */
@@ -153,6 +204,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 停止记录位移变化，并计算出目标值和继续缓动的时间。
          * @param currentScrollPos 容器当前的滚动值。
          * @param maxScrollPos 容器可以滚动的最大值。当目标值不在 0~maxValue之间时，将会应用更大的摩擦力，从而影响缓动时间的长度。
@@ -200,6 +252,12 @@ module swan.sys {
             }
         }
 
+        /**
+         * @private
+         * 
+         * @param timeStamp 
+         * @returns 
+         */
         private onTick(timeStamp:number):boolean {
             var timeOffset = timeStamp - this.previousTime;
             if (timeOffset > 0) {
@@ -215,6 +273,11 @@ module swan.sys {
             return true;
         }
 
+        /**
+         * @private
+         * 
+         * @param animation 
+         */
         private finishScrolling(animation?:Animation):void {
             var hsp = this.currentScrollPos;
             var maxHsp = this.maxScrollPos;
@@ -229,6 +292,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 缓动到水平滚动位置
          */
         private throwTo(hspTo:number, duration:number = 500):void {
@@ -245,6 +309,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 更新水平滚动位置
          */
         private onScrollingUpdate(animation:Animation):void {

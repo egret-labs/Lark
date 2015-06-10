@@ -31,23 +31,71 @@
 module swan {
 
     /**
+     * @language en_US
      * 滚动条基类
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 滚动条基类
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class ScrollBarBase extends Component {
         /**
+         * @language en_US
          * 创建一个ScrollBarBase实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个ScrollBarBase实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor() {
             super();
         }
 
         /**
+         * @language en_US
          * [SkinPart]滑块显示对象
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [SkinPart]滑块显示对象
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public thumb:swan.UIComponent = null;
 
+        /**
+         * @private
+         */
         $viewport:IViewport = null;
 
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         public get viewport():IViewport {
             return this.$viewport;
         }
@@ -71,14 +119,38 @@ module swan {
             this.invalidateDisplayList();
         }
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private onViewportResize(event?:lark.Event):void{
             this.invalidateDisplayList();
         }
 
+        /**
+         * @language en_US
+         * 
+         * @param event 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param event 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected onPropertyChanged(event:swan.PropertyEvent):void{
 
         }
     }
 
+    /**
+     * @private
+     */
     lark.registerClass(ScrollBarBase,Types.ScrollBarBase);
 }
