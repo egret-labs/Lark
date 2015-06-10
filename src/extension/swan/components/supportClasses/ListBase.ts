@@ -590,9 +590,17 @@ module swan {
 
         /**
          * @language en_US
-         * 仅调整选中索引值而不更新选中项,即在提交属性阶段itemSelected方法不会被调用，也不会触发changing和change事件。
-         * @param newIndex 新索引。
-         * @param add 如果已将项目添加到组件，则为 true；如果已删除项目，则为 false。
+         * Adjusts the selected index to account for items being added to or
+         * removed from this component.
+         * It does not dispatch a <code>change</code> event because the change did not
+         * occur as a direct result of user-interaction.  Moreover,
+         * it does not dispatch a <code>changing</code> event
+         * or allow the cancellation of the selection.
+         * It also does not call the <code>itemSelected()</code> method,
+         * since the same item is selected;
+         * @param newIndex The new index.
+         * @param add <code>true</code> if an item was added to the component,
+         *  and <code>false</code> if an item was removed.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -601,7 +609,7 @@ module swan {
          * @language zh_CN
          * 仅调整选中索引值而不更新选中项,即在提交属性阶段itemSelected方法不会被调用，也不会触发changing和change事件。
          * @param newIndex 新索引。
-         * @param add 如果已将项目添加到组件，则为 true；如果已删除项目，则为 false。
+         * @param add 如果已将项目添加到组件，则为<code>true</code>；如果已删除项目，则为<code>false</code>。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -618,7 +626,10 @@ module swan {
 
         /**
          * @language en_US
-         * 数据项添加
+         * Called when an item has been added to this component. Selection
+         * and caret related properties are adjusted accordingly.
+         * @param item The item being added.
+         * @param index The index of the item being added.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -626,6 +637,8 @@ module swan {
         /**
          * @language zh_CN
          * 数据项添加
+         * @param item 被添加的项。
+         * @param index 被添加的项的索引。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -644,7 +657,11 @@ module swan {
 
         /**
          * @language en_US
-         * 数据项移除
+         * Called when an item has been removed from this component.
+         * Selection and caret related properties are adjusted
+         * accordingly.
+         * @param item The item being removed.
+         * @param index The index of the item being removed.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -652,6 +669,8 @@ module swan {
         /**
          * @language zh_CN
          * 数据项移除
+         * @param item 被移除的项。
+         * @param index 被移除的项的索引。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -682,14 +701,16 @@ module swan {
 
         /**
          * @language en_US
-         * 数据源改变事件处理
+         * Event Listener of source data changed.
+         * @param event CollectionEvent
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 数据源改变事件处理
+         * 数据源改变事件处理。
+         * @param event CollectionEvent
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -708,7 +729,7 @@ module swan {
 
         /**
          * @language en_US
-         * 数据源刷新
+         * Default response to dataProvider refresh events: clear the selection and caret.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -726,10 +747,10 @@ module swan {
 
         /**
          * @language en_US
-         * 项呈示器被添加
-         * @param renderer 添加的项呈示器
-         * @param index 项呈示器的索引
-         * @param item 项呈示器对应的数据
+         * Called when an item has been added to this component.
+         * @param renderer the renderer being added.
+         * @param index the index of renderer
+         * @param item the data of renderer
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -751,10 +772,10 @@ module swan {
 
         /**
          * @language en_US
-         * 项呈示器被移除
-         * @param renderer 移除的项呈示器
-         * @param index 项呈示器的索引
-         * @param item 项呈示器对应的数据
+         * Called when an item has been removed to this component.
+         * @param renderer the renderer being removed.
+         * @param index the index of renderer.
+         * @param item the data of renderer.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -776,14 +797,18 @@ module swan {
 
         /**
          * @language en_US
-         * 鼠标在项呈示器上按下
+         * Handles <code>lark.TouchEvent.TOUCH_BEGIN</code> events from any of the
+         * item renderers. This method handles <code>lark.TouchEvent.TOUCH_END</code>.
+         * @param event The <code>lark.TouchEvent</code> object.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 鼠标在项呈示器上按下
+         * 侦听项呈示器<code>lark.TouchEvent.TOUCH_BEGIN</code>事件的方法。同时会添加对舞台<code>lark.TouchEvent.TOUCH_END</code>
+         * 事件的侦听。
+         * @param event 事件<code>lark.TouchEvent</code>的对象。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -797,14 +822,16 @@ module swan {
 
         /**
          * @language en_US
-         * 鼠标在项呈示器上弹起，抛出ItemClick事件。
+         * Handles <code>lark.TouchEvent.TOUCH_END</code> events and dispatch <code>ItemTapEvent.ITEM_TAP</code> event.
+         * @param event The <code>lark.TouchEvent</code> object.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 鼠标在项呈示器上弹起，抛出ItemClick事件。
+         * 鼠标在项呈示器上弹起，抛出<code>ItemTapEvent.ITEM_TAP</code>事件。
+         * @param event 事件<code>lark.TouchEvent</code>的对象。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
