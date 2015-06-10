@@ -1,4 +1,4 @@
-﻿declare module skin{
+﻿declare module skins{
     export class Main extends swan.Group{
 
     }
@@ -9,6 +9,7 @@ class Main extends swan.Group {
     skins = [
         "skins/ItemRenderer.exml",
         "skins/List.exml",
+        "skins/TabBar.exml",
         "ui/Main.exml"
     ];
 
@@ -18,7 +19,7 @@ class Main extends swan.Group {
     }   
 
     loaded() {
-        var ui = new skin.Main();
+        var ui = new skins.Main();
         this.addChild(ui);
     }
 
