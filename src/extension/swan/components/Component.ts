@@ -133,7 +133,7 @@ module swan {
                     skin = skinName;
                 }
             }
-            this.$setSkin(skin);
+            this.setSkin(skin);
         }
 
         private onExmlLoaded(clazz:any,url:string):void {
@@ -142,7 +142,7 @@ module swan {
                 return;
             }
             var skin = new clazz();
-            this.$setSkin(skin)
+            this.setSkin(skin)
             this.emitWith(lark.Event.COMPLETE);
         }
 
@@ -156,7 +156,7 @@ module swan {
         /**
          * 设置皮肤实例
          */
-        $setSkin(skin:Skin):void {
+        protected setSkin(skin:Skin):void {
             if (!lark.is(skin, Types.Skin)) {
                 skin = null;
                 DEBUG && lark.$error(2202);

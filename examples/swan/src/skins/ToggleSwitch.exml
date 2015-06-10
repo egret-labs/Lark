@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Skin class="skins.ToggleSwitch" xmlns:s="http://ns.egret.com/swan">
-    <s:states>
-        <s:State name="up" />
-        <s:State name="down" />
-        <s:State name="disabled" />
-        <s:State name="upAndSelected" />
-        <s:State name="downAndSelected" />
-        <s:State name="disabledAndSelected" />
-    </s:states>
-    <s:Image source="image/skin/toggleswitch/green/on1.png"
-             horizontalCenter="0" verticalCenter="0"/>
-    <s:Image source="image/skin/toggleswitch/off1.png"
-             includeIn="up,down,disabled"
-             horizontalCenter="0" verticalCenter="0"/>
-    <s:Image source="image/skin/toggleswitch/handle.png"
+<s:Skin class="skins.ToggleSwitch" states="up,down,disabled,upAndSelected,downAndSelected,disabledAndSelected" xmlns:s="http://ns.egret.com/swan">
+    <s:Image source="resource/assets/green/ToggleSwitch/on.png"
+             source.up="resource/assets/green/ToggleSwitch/off.png"
+             source.down="resource/assets/green/ToggleSwitch/off.png"
+             source.disabled="resource/assets/green/ToggleSwitch/off.png"/>
+    <s:Image source="resource/assets/green/ToggleSwitch/handle.png"
              horizontalCenter="-18"
              horizontalCenter.upAndSelected="18"
              horizontalCenter.downAndSelected="18"
