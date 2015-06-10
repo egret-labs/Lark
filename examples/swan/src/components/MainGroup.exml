@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <s:Group class="components.MainGroup" touchThrough="true" xmlns:s="http://ns.egret.com/swan" xmlns:c="components.*">
-    <c:TabBar width="500" height="60" dataProvider="{viewStack}"/>
-    <s:ViewStack id="viewStack" y="60">
+    <c:TabBar width="600" height="60" dataProvider="{viewStack}"/>
+    <s:ViewStack id="viewStack" width="600" height="300" y="60">
         <s:Group name="Button">
             <s:Button x="10" y="10" label="Button"/>
             <s:ToggleSwitch x="10" y="60"/>
@@ -9,13 +9,16 @@
             <s:RadioButton x="140" y="100" label="RadioButton"/>
         </s:Group>
         <s:Group name="Slider">
-            <s:HSlider x="10" maximum="100" width="200"/>
-            <s:VSlider x="240" maximum="100" height="200"/>
+            <s:VSlider x="10" y="10" height="200" maximum="100"/>
+            <s:HSlider x="50" y="200" width="200" maximum="100"/>
         </s:Group>
-        <s:Group name="Panel">
-            <s:Panel title="Panel"/>
+        <s:Group name="ProgressBar">
+            <s:ProgressBar x="10" y="10" width="200" maximum="100" value="20"/>
         </s:Group>
-        <s:Group name="List" height="300" width="200">
+        <s:Group name="Panel" width="100%" height="100%">
+            <s:Panel title="Panel" verticalCenter="0" horizontalCenter="0"/>
+        </s:Group>
+        <s:Group name="List" height="100%" width="200" horizontalCenter="0">
             <s:Image width="100%" height="100%" source="resource/assets/green/Panel/border.png" scale9Grid="2,2,173,43"/>
             <s:Scroller left="1" right="1" top="1" bottom="1">
                 <c:List>
