@@ -30,13 +30,39 @@
 module lark {
 
     /**
+     * @language en_US
+     * The CanvasGradient interface represents an opaque object describing a gradient. It is returned by the static methods
+     * Graphics.createLinearGradient() or Graphics.createRadialGradient().
+     * @see lark.Graphics
+     * @see lark.Shape
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * GraphicsGradient 接口表示描述渐变的不透明对象。通过 Graphics.createLinearGradient() 或 Graphics.createRadialGradient() 等静态方法的返回值得到.
+     * @see lark.Graphics
+     * @see lark.Shape
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     export interface GraphicsGradient {
         /**
-         * 添加一个由偏移值和颜色值指定的断点到渐变。如果偏移值不在0到1之间，将抛出错误，如果颜色值不能被解析为有效的CSS颜色值 <color>，也将抛出错误。
-         * @param offset 0到1之间的值，超出范围将抛出错误
-         * @param color CSS颜色值 <color>。如果颜色值不能被解析为有效的CSS颜色值 <color>，将抛出错误。
+         * @language en_US
+         * Adds a new stop, defined by an offset and a color, to the gradient. If the offset is not between 0 and 1 an
+         * error is thrown, if the color can't be parsed as a color, an error is thrown.
+         * @param offset the value between 0 and 1.
+         * @param color the color to add.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 添加一个由偏移值和颜色值指定的断点到渐变。如果偏移值不在0到1之间，将抛出错误，如果 color 不能被解析为有效的颜色值，也将抛出错误。
+         * @param offset 0到1之间的值
+         * @param color 要设置颜色值。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         addColorStop(offset:number, color:string): void;
     }
