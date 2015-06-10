@@ -101,7 +101,7 @@ module lark {
             this.$graphics.$render(context);
         }
     }
-    
+
     registerClass(Shape, Types.Shape);
 
     if (DEBUG) {

@@ -29,21 +29,48 @@
 
 module lark {
     /**
+     * @language en_US
+     * The Sprite class is a basic display list building block: a display list node that can contain children.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     export class Sprite extends DisplayObject implements DisplayObjectContainer {
 
+        /**
+         * @private
+         */
         static $EVENT_ADD_TO_STAGE_LIST:DisplayObject[] = [];
+        /**
+         * @private
+         */
         static $EVENT_REMOVE_FROM_STAGE_LIST:DisplayObject[] = [];
 
         /**
+         * @language en_US
+         * Creates a new Sprite instance.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 实例化一个容器
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public constructor() {
             super();
             this.$children = [];
         }
 
+        /**
+         * @private
+         */
         $propagateFlagsDown(flags:sys.DisplayObjectFlags) {
             if (this.$hasFlags(flags)) {
                 return;
@@ -56,17 +83,18 @@ module lark {
         }
 
         /**
-         * 返回此对象的子项数目。
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public get numChildren():number {
             return this.$children.length;
         }
 
         /**
-         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他所有子项的前（上）面。
-         * （要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
-         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
-         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public addChild(child:DisplayObject):DisplayObject {
             var index:number = this.$children.length;
@@ -79,12 +107,9 @@ module lark {
 
 
         /**
-         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。
-         * 索引为 0 表示该 DisplayObjectContainer 对象的显示列表的后（底）部。
-         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
-         * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
-         * 当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
-         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public addChildAt(child:DisplayObject, index:number):DisplayObject {
             index = +index | 0;
@@ -97,6 +122,9 @@ module lark {
             return this.doAddChild(child, index);
         }
 
+        /**
+         * @private
+         */
         private doAddChild(child:DisplayObject, index:number):DisplayObject {
             if (DEBUG) {
                 if (child == this) {
@@ -143,10 +171,9 @@ module lark {
         }
 
         /**
-         * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。
-         * 孙项、曾孙项等，每项都返回 true。
-         * @param child 要测试的子对象。
-         * @returns 如果指定的显示对象为 DisplayObjectContainer 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public contains(child:DisplayObject):boolean {
             while (child) {
@@ -159,9 +186,9 @@ module lark {
         }
 
         /**
-         * 返回位于指定索引处的子显示对象实例。
-         * @param index 子对象的索引位置。
-         * @returns 位于指定索引位置处的子显示对象。
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public getChildAt(index:number):DisplayObject {
             index = +index | 0;
@@ -175,17 +202,18 @@ module lark {
         }
 
         /**
-         * 返回 DisplayObject 的 child 实例的索引位置。
-         * @returns 要标识的子显示对象的索引位置。
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public getChildIndex(child:DisplayObject):number {
             return this.$children.indexOf(child);
         }
 
         /**
-         * 返回具有指定名称的子显示对象。
-         * @param name 要返回的子项的名称。
-         * @returns 具有指定名称的子显示对象。
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public getChildByName(name:string):DisplayObject {
             var children = this.$children;
@@ -201,9 +229,9 @@ module lark {
         }
 
         /**
-         * 将一个 DisplayObject 子实例从 DisplayObjectContainer 实例中移除。
-         * @param child 要删除的 DisplayObject 实例。
-         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public removeChild(child:DisplayObject):DisplayObject {
             var index = this.$children.indexOf(child);
@@ -217,9 +245,9 @@ module lark {
         }
 
         /**
-         * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject。
-         * @param index 要删除的 DisplayObject 的子索引。
-         * @returns 已删除的 DisplayObject 实例。
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public removeChildAt(index:number):DisplayObject {
             index = +index | 0;
@@ -232,6 +260,9 @@ module lark {
             }
         }
 
+        /**
+         * @private
+         */
         private doRemoveChild(index:number):DisplayObject {
             index = +index | 0;
             var children = this.$children;
@@ -258,9 +289,9 @@ module lark {
         }
 
         /**
-         * 更改现有子项在显示对象容器中的位置。这会影响子对象的分层。
-         * @param child 要为其更改索引编号的 DisplayObject 子实例。
-         * @param index 生成的 child 显示对象的索引编号。当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public setChildIndex(child:DisplayObject, index:number):void {
             index = +index | 0;
@@ -270,6 +301,9 @@ module lark {
             this.doSetChildIndex(child, index);
         }
 
+        /**
+         * @private
+         */
         private doSetChildIndex(child:DisplayObject, index:number):void {
             var lastIndex = this.$children.indexOf(child);
             if (lastIndex < 0) {
@@ -289,9 +323,9 @@ module lark {
         }
 
         /**
-         * 在子级列表中两个指定的索引位置，交换子对象的 Z 轴顺序（前后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
-         * @param index1 第一个子对象的索引位置。
-         * @param index2 第二个子对象的索引位置。
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public swapChildrenAt(index1:number, index2:number):void {
             index1 = +index1 | 0;
@@ -306,9 +340,9 @@ module lark {
         }
 
         /**
-         * 交换两个指定子对象的 Z 轴顺序（从前到后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
-         * @param child1 第一个子对象。
-         * @param child2 第二个子对象。
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public swapChildren(child1:DisplayObject, child2:DisplayObject):void {
             var index1 = this.$children.indexOf(child1);
@@ -321,6 +355,9 @@ module lark {
             }
         }
 
+        /**
+         * @private
+         */
         private doSwapChildrenAt(index1:number, index2:number):void {
             if (index1 > index2) {
                 var temp = index2;
@@ -345,7 +382,9 @@ module lark {
         }
 
         /**
-         * 从 DisplayObjectContainer 实例的子级列表中删除所有 child DisplayObject 实例。
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public removeChildren():void {
             var children = this.$children;
@@ -355,6 +394,7 @@ module lark {
         }
 
         /**
+         * @private
          * 一个子项被添加到容器内，此方法不仅在操作addChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
          * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
          */
@@ -363,6 +403,7 @@ module lark {
         }
 
         /**
+         * @private
          * 一个子项从容器内移除，此方法不仅在操作removeChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
          * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
          */
@@ -370,6 +411,9 @@ module lark {
 
         }
 
+        /**
+         * @private
+         */
         $onAddToStage(stage:Stage, nestLevel:number):void {
             super.$onAddToStage(stage, nestLevel);
             var children = this.$children;
@@ -381,6 +425,10 @@ module lark {
             }
         }
 
+        /**
+         * @private
+         * 
+         */
         $onRemoveFromStage():void {
             super.$onRemoveFromStage();
             var children = this.$children;
@@ -392,6 +440,9 @@ module lark {
         }
 
 
+        /**
+         * @private
+         */
         $measureChildBounds(bounds:Rectangle):void {
             var children = this.$children;
             var length = children.length;
@@ -423,8 +474,9 @@ module lark {
         }
 
         /**
-         * 指定此对象的子项以及子孙项是否接收鼠标/触摸事件
-         * 默认值为 true 即可以接收。
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public get touchChildren():boolean {
             return this.$hasFlags(sys.DisplayObjectFlags.TouchChildren);
@@ -434,11 +486,15 @@ module lark {
             this.$setTouchChildren(value);
         }
 
+        /**
+         * @private
+         */
         $setTouchChildren(value:boolean):void {
             this.$toggleFlags(sys.DisplayObjectFlags.TouchChildren, !!value);
         }
 
         /**
+         * @private
          * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
          * @param notiryChildren 是否标记子项也需要重绘。传入false或不传入，将只标记自身需要重绘。通常只有alpha属性改变会需要通知子项重绘。
          */
@@ -457,6 +513,7 @@ module lark {
         }
 
         /**
+         * @private
          * 标记自身以及所有子项在父级中变换叠加的显示内容失效。此方法不会触发自身的cacheAsBitmap重绘。
          * 通常用于矩阵改变或从显示列表添加和移除时。若自身的显示内容已经改变需要重绘，应该调用$invalidate()。
          */
@@ -464,6 +521,9 @@ module lark {
             this.markChildDirty(this, this.$parentDisplayList);
         }
 
+        /**
+         * @private
+         */
         private markChildDirty(child:DisplayObject, parentCache:lark.sys.DisplayList):void {
             if (child.$hasFlags(sys.DisplayObjectFlags.DirtyChildren)) {
                 return;
@@ -485,7 +545,7 @@ module lark {
         }
 
         /**
-         * cacheAsBitmap属性改变
+         * @private
          */
         $cacheAsBitmapChanged():void {
             super.$cacheAsBitmapChanged();
@@ -496,6 +556,9 @@ module lark {
             }
         }
 
+        /**
+         * @private
+         */
         private assignParentDisplayList(child:DisplayObject, parentCache:lark.sys.DisplayList, newParent:lark.sys.DisplayList):void {
             child.$parentDisplayList = newParent;
             child.$setFlags(sys.DisplayObjectFlags.DirtyChildren);
@@ -515,6 +578,9 @@ module lark {
         }
 
 
+        /**
+         * @private
+         */
         $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):DisplayObject {
             if (!this.$visible) {
                 return null;
@@ -562,6 +628,7 @@ module lark {
         }
 
     }
+    
     registerClass(Sprite, Types.Sprite, [Types.DisplayObjectContainer]);
 
     if(DEBUG){
