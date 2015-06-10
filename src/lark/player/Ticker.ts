@@ -129,7 +129,7 @@ module lark.sys {
         /**
          * 全局帧率
          */
-        $frameRate:number = 60;
+        $frameRate:number = 30;
 
         private frameInterval:number = 1;
 
