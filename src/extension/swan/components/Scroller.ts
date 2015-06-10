@@ -441,11 +441,13 @@ module swan {
             if (instance == this.horizontalScrollBar) {
                 this.horizontalScrollBar.touchChildren = false;
                 this.horizontalScrollBar.touchEnabled = false;
+                this.horizontalScrollBar.viewport = this.viewport;
                 this.horizontalScrollBar.visible = false;
             }
             else if (instance == this.verticalScrollBar) {
                 this.verticalScrollBar.touchChildren = false;
                 this.verticalScrollBar.touchEnabled = false;
+                this.verticalScrollBar.viewport = this.viewport;
                 this.verticalScrollBar.visible = false;
             }
         }
