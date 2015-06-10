@@ -83,7 +83,7 @@ module swan {
          * @language en_US
          * The source of data in the ArrayCollection.
          * The ArrayCollection object does not represent any changes that you make
-         * directly to the source array. Always use the ICollection methods to modify the collection.
+         * directly to the source array. Always use the ICollection methods to view the collection.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -91,8 +91,8 @@ module swan {
         /**
          * @language zh_CN
          * 数据源
-         * 通常情况下请不要直接调用Array的方法操作数据源，否则对应的视图无法收到数据改变的通知。通常都是通过ICollection的接口方法来改变数据。
-         * 若对数据源进行了排序或过滤等操作，请手动调用refresh()方法刷新数据。
+         * 通常情况下请不要直接调用Array的方法操作数据源，否则对应的视图无法收到数据改变的通知。通常都是通过ICollection的接口方法来查看数据。
+         * 若对数据源进行了修改，请手动调用refresh()方法刷新数据。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -197,44 +197,14 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * Gets the item at the specified index.
-         * @param index The index in the list from which to retrieve the item.
-         * @return The item at that index, or <code>null</code> if there is none.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取指定索引处的项目。
-         * @param index 要得到的项的指定位置。
-         * @return 在索引位置的项，如果没有该项则返回null。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @inheritDoc
          */
         public getItemAt(index:number):any {
             return this._source[index];
         }
 
         /**
-         * @language en_US
-         * Returns the index of the item if it is in the list。-1 otherwise.
-         * @param item The item to find.
-         * @return The index of the item, or -1 if the item is not in the list.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果项目位于列表中,返回该项目的索引。否则返回-1。
-         * @param item 要查找的项。
-         * @return 项的索引，如果该项没有在列表中将返回-1.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @inheritDoc
          */
         public getItemIndex(item:any):number {
             var length:number = this._source.length;
