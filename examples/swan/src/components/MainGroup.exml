@@ -18,26 +18,8 @@
         <s:Group name="Panel" width="100%" height="100%">
             <s:Panel title="Panel" verticalCenter="0" horizontalCenter="0"/>
         </s:Group>
-        <s:Group name="List" height="100%" width="200" horizontalCenter="0">
-            <s:Image width="100%" height="100%" source="resource/assets/green/Panel/border.png" scale9Grid="2,2,173,43"/>
-            <s:Scroller left="1" right="1" top="1" bottom="1">
-                <c:List>
-                    <s:ArrayCollection>
-                        <s:Array>
-                            <s:Object label="项目1"/>
-                            <s:Object label="项目2"/>
-                            <s:Object label="项目3"/>
-                            <s:Object label="项目4"/>
-                            <s:Object label="项目5"/>
-                            <s:Object label="项目6"/>
-                            <s:Object label="项目7"/>
-                            <s:Object label="项目8"/>
-                            <s:Object label="项目9"/>
-                            <s:Object label="项目10"/>
-                        </s:Array>
-                    </s:ArrayCollection>
-                </c:List>
-            </s:Scroller>
+        <s:Group name="List" top="10" bottom="0" width="200" horizontalCenter="0">
+            <c:ListGroup width="100%" height="100%"/>
         </s:Group>
     </s:ViewStack>
 </s:Group>
