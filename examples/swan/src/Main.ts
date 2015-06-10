@@ -7,8 +7,8 @@
 class Main extends swan.Group {
 
     skins = [
-        "skin/ItemRenderer.exml",
-        "skin/List.exml",
+        "skins/ItemRenderer.exml",
+        "skins/List.exml",
         "ui/Main.exml"
     ];
 
@@ -26,7 +26,7 @@ class Main extends swan.Group {
     protected createChildren():void {
         super.createChildren();
 
-        new swan.Theme("skin/green-theme.json",this.stage);
+        new swan.Theme("resource/theme/green-theme.json",this.stage);
 
         this.width = this.stage.stageWidth;
         this.height = this.stage.stageHeight;
