@@ -1,5 +1,5 @@
-﻿declare module skins{
-    export class Main extends swan.Group{
+﻿declare module components{
+    export class MainGroup extends swan.Group{
 
     }
 }
@@ -7,28 +7,26 @@
 class Main extends swan.Group {
 
     skins = [
-        "skins/ItemRenderer.exml",
-        "skins/List.exml",
-        "skins/TabBar.exml",
-        "ui/Main.exml"
+        "components/List.exml",
+        "components/TabBar.exml",
+        "components/MainGroup.exml"
     ];
 
     constructor() {
         super();
         Loader.load(this.skins, () => this.loaded());
-    }   
+    }
 
     loaded() {
-        var ui = new skins.Main();
+        new swan.Theme("resource/theme/green-theme.json",this.stage);
+
+        var ui = new components.MainGroup();
         this.addChild(ui);
     }
 
 
     protected createChildren():void {
         super.createChildren();
-
-        new swan.Theme("resource/theme/green-theme.json",this.stage);
-
         this.width = this.stage.stageWidth;
         this.height = this.stage.stageHeight;
     }
