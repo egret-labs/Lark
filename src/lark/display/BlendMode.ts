@@ -98,15 +98,6 @@ module lark {
          */
         public static ERASE = "erase";
 
-        ///**
-        // * 强制为该显示对象创建一个透明度组。此值通常在容器上设置，可以限制容器内部的混合模式只作用于容器内部的子项。
-        // */
-        //public Layer = "layer";
-        ///**
-        // * 将显示对象的每个像素的 Alpha 值应用于背景。
-        // */
-        //public static Alpha = "alpha";
-
     }
 }
 
@@ -131,7 +122,7 @@ module lark.sys {
 
     /**
      * @private
-     * 转换数字为 blendMode 字符串为字符串。
+     * 转换数字为 blendMode 字符串。
      */
     export function numberToBlendMode(blendMode:number):string {
         var str = blendModeString[blendMode];

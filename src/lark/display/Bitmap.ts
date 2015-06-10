@@ -106,7 +106,7 @@ module lark {
          * @private
          */
         $setBitmapData(value:BitmapData):void{
-            if(value===this.$bitmapData){
+            if(value==this.$bitmapData){
                 return;
             }
             this.$bitmapData = value;
