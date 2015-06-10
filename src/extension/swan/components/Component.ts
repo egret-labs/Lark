@@ -46,11 +46,49 @@ module swan {
     var parsedClasses:any = {};
 
     /**
-     * Component 类定义可设置外观的组件的基类。Component 类所使用的外观通常是 Skin 类的子类。
+     * @language en_US
+     * The Component class defines the base class for skinnable components.
+     * The skins used by a Component class are typically child classes of
+     * the Skin class.<p/>
+     *
+     * Associate a skin class with a component class by setting the <code>skinClass</code> style property of the
+     * component class.
      *
      * @event lark.Event.COMPLETE 当设置skinName为外部exml文件路径时，加载并完成EXML解析后调度。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Component 类定义可设置外观的组件的基类。Component 类所使用的外观通常是 Skin 类的子类。<p/>
+     *
+     * 通过设置 component 类的 skinClass 样式属性，将 skin 类与 component 类相关联。
+     *
+     * @event lark.Event.COMPLETE 当设置skinName为外部exml文件路径时，加载并完成EXML解析后调度。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class Component extends lark.Sprite implements UIComponent {
+        /**
+         * Constructor.
+         *
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * 构造函数。
+         *
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         public constructor() {
             super();
             this.initializeUIValues();
@@ -67,12 +105,30 @@ module swan {
             };
         }
 
+        /**
+         * @private
+         */
         $Component:Object;
 
         /**
+         * @language en_US
+         * A identifier of host component which can determine only one component names.
+         * Usually used for quering a default skin name in theme.
+         * @default null
+         * @see swan.Theme#getSkinName()
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 主机组件标识符。用于唯一确定一个组件的名称。通常用于在主题中查询默认皮肤名。
          *
+         * @default null
          * @see swan.Theme#getSkinName()
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get hostComponentKey():string {
             return this.$Component[sys.ComponentKeys.hostComponentKey];
@@ -83,7 +139,19 @@ module swan {
         }
 
         /**
+         * @language en_US
+         * Identifier of skin. Valid values: class definition of skin,
+         * class name of skin, instance of skin, EXML or external EXML file path.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 皮肤标识符。有效值可为：皮肤类定义,皮肤类名,皮肤实例,EXML文件内容,或外部EXML文件路径，
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get skinName():any {
             return this.$Component[sys.ComponentKeys.skinName];
@@ -99,6 +167,7 @@ module swan {
         }
 
         /**
+         * @private
          * 解析skinName
          */
         $parseSkinName():void {
@@ -136,6 +205,11 @@ module swan {
             this.setSkin(skin);
         }
 
+        /**
+         * @private
+         * @param clazz
+         * @param url 
+         */
         private onExmlLoaded(clazz:any,url:string):void {
             parsedClasses[url] = clazz;
             if(this.skinName!=url){
@@ -147,14 +221,36 @@ module swan {
         }
 
         /**
+         * @language en_US
+         * [read-only] The instance of the skin class for this component instance.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * [只读]皮肤对象实例。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get skin():Skin {
             return this.$Component[sys.ComponentKeys.skin];
         }
 
         /**
+         * @language en_US
+         * Setter for the skin instance.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 设置皮肤实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected setSkin(skin:Skin):void {
             if (!lark.is(skin, Types.Skin)) {
@@ -210,10 +306,26 @@ module swan {
 
 
         /**
+         * @language en_US
+         * Find the skin parts in the skin class and assign them to the properties of the component.
+         * You do not call this method directly. This method will be invoked automatically when using a EXML as skin.
+         * The ID for a tag in an EXML will be passed in as <code>partName</code>, and the instance of the tag will be
+         * passed in as <code>instance</code>.
+         * @param partName name of a skin part
+         * @param instance instance of a skin part
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 关联一个对象到逻辑组件的指定皮肤部件上。通常您不需要手动调用此方法，当使用EXML文件作为组件皮肤，此方法将会被自动调用。
          * 在运行时，EXML文件内声明的id名称将作为此方法的partName参数，而id所对应的节点对象，将作为此方法的instance参数被依次传入。
          * @param partName 皮肤部件名称
          * @param instance 皮肤部件实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public setSkinPart(partName:string, instance:any):void {
             var oldInstance = this[partName];
@@ -227,23 +339,72 @@ module swan {
         }
 
         /**
+         * @language en_US
+         * Called when a skin part is added.
+         * You do not call this method directly.
+         * Swan calls it automatically when it calls the <code>setSkinPart()</code> method.<p/>
+         *
+         * Override this function to attach behavior to the part, such as add event listener or
+         * assign property values cached.
+         * @param partName name of a skin part to add.
+         * @param instance instance of a skin part to add.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 添加皮肤部件时调用。
+         * 您无需直接调用此方法。
+         * Swan 会在调用 setSkinPart()方法时自动调用此方法。<p/>
+         *
          * 子类覆盖此方法，以在皮肤部件第一次附加时对其执行一些初始化操作，例如添加事件监听，赋值缓存的属性值等。
-         * @param partName 要附加的皮肤部件名称
-         * @param instance 要附加的皮肤部件实例
+         * @param partName 要附加的皮肤部件名称。
+         * @param instance 要附加的皮肤部件实例。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected partAdded(partName:string, instance:any):void {
 
         }
 
         /**
+         * @language en_US
+         * Called when an instance of a skin part is being removed.
+         * You do not call this method directly.
+         * Swan calls it automatically when it calls the <code>setSkinPart()</code> method.<p/>
+         *
+         * Override this function to clean behavior of the part, such as remove event listener or
+         * disconnect the cache reference
+         * @param partName name of a skin part to remove.
+         * @param instance instance of a skin part to remove.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 正删除外观部件的实例时调用。
+         * 您无需直接调用此方法。
+         * Swan 会在调用 setSkinPart()方法时自动调用此方法。<p/>
+         *
          * 子类覆盖此方法，以在皮肤部件从逻辑组件卸载时对其执行一些清理操作，例如移除事件监听，断开缓存的引用等。
          * @param partName 要卸载的皮肤部件名称
          * @param instance 要卸载的皮肤部件实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected partRemoved(partName:string, instance:any):void {
 
         }
 
+        /**
+         * @private
+         * 
+         * @param value 
+         */
         $setTouchChildren(value:boolean) {
             value = !!value;
             var values = this.$Component;
@@ -255,6 +416,11 @@ module swan {
             }
         }
 
+        /**
+         * @private
+         * 
+         * @param value 
+         */
         $setTouchEnabled(value:boolean) {
             value = !!value;
             var values = this.$Component;
@@ -267,8 +433,29 @@ module swan {
         }
 
         /**
-         * 组件是否可以接受用户交互。将 enabled 属性设置为 false 后，组件会自动禁用触摸事件(将 touchEnabled 和 touchChildren 同时设置为 false)，
-         * 部分组件可能还会将皮肤的视图状态设置为"disabled",使其所有子项的颜色变暗。默认值为 true。
+         * @language en_US
+         * Whether the component can accept user interaction.
+         * After setting the <code>enabled</code> property to <code>false</code>, components will disabled touch event
+         * (set <code>touchEnabled</code> and <code>touchChildren</code> to false) and set state of skin to "disabled".
+         *
+         * @default true
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 组件是否可以接受用户交互。
+         * 将 enabled 属性设置为 false 后，
+         * 组件会自动禁用触摸事件(将 touchEnabled 和 touchChildren 同时设置为 false)，
+         * 部分组件可能还会将皮肤的视图状态设置为"disabled",使其所有子项的颜色变暗。
+         *
+         * @default true
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get enabled():boolean {
             return this.$Component[sys.ComponentKeys.enabled];
@@ -279,6 +466,11 @@ module swan {
             this.$setEnabled(value);
         }
 
+        /**
+         * @private
+         * 
+         * @param value 
+         */
         $setEnabled(value:boolean):void {
 
             var values = this.$Component;
@@ -300,8 +492,20 @@ module swan {
         //========================皮肤视图状态=====================start=======================
 
         /**
+         * @language en_US
          * 组件的当前视图状态。显式设置此属性，将采用显式设置的值去更新皮肤状态，而忽略组件内部 getCurrentState() 方法返回的值。
          * 将其设置为 "" 或 null 可将取消组件外部显式设置的视图状态名称，从而采用内部 getCurrentState() 方法返回的状态。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 组件的当前视图状态。显式设置此属性，将采用显式设置的值去更新皮肤状态，而忽略组件内部 getCurrentState() 方法返回的值。
+         * 将其设置为 "" 或 null 可将取消组件外部显式设置的视图状态名称，从而采用内部 getCurrentState() 方法返回的状态。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get currentState():string {
             var values = this.$Component;
@@ -319,7 +523,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 标记组件当前的视图状态失效，调用此方法后，子类应该覆盖 getCurrentState() 方法来返回当前的视图状态名称。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 标记组件当前的视图状态失效，调用此方法后，子类应该覆盖 getCurrentState() 方法来返回当前的视图状态名称。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public invalidateState():void {
             var values = this.$Component;
@@ -331,7 +546,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 返回组件当前的皮肤状态名称,子类覆盖此方法定义各种状态名
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回组件当前的皮肤状态名称,子类覆盖此方法定义各种状态名
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected getCurrentState():string {
             return "";
@@ -342,13 +568,26 @@ module swan {
 
         //=======================UIComponent接口实现===========================
         /**
+         * @private
          * UIComponentImpl 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
          */
         private initializeUIValues:()=>void;
 
         /**
+         * @language en_US
          * 子类覆盖此方法可以执行一些初始化子项操作。此方法仅在组件第一次添加到舞台时回调一次。
          * 请务必调用super.createChildren()以完成父类组件的初始化
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 子类覆盖此方法可以执行一些初始化子项操作。此方法仅在组件第一次添加到舞台时回调一次。
+         * 请务必调用super.createChildren()以完成父类组件的初始化
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected createChildren():void {
             var values = this.$Component;
@@ -365,14 +604,36 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 子项创建完成,此方法在createChildren()之后执行。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 子项创建完成,此方法在createChildren()之后执行。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected childrenCreated():void {
 
         }
 
         /**
+         * @language en_US
          * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected commitProperties():void {
             sys.UIComponentImpl.prototype["commitProperties"].call(this);
@@ -386,7 +647,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 测量组件尺寸
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 测量组件尺寸
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected measure():void {
             sys.measure(this);
@@ -421,171 +693,503 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 更新显示列表
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 更新显示列表
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
             sys.updateDisplayList(this, unscaledWidth, unscaledHeight);
         }
 
         /**
+         * @language en_US
          * 标记父级容器的尺寸和显示列表为失效
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 标记父级容器的尺寸和显示列表为失效
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected invalidateParentLayout():void {
         }
 
+        /**
+         * @private
+         */
         $UIComponent:Object;
 
+        /**
+         * @private
+         */
         $includeInLayout:boolean;
 
         /**
+         * @language en_US
          * 指定此组件是否包含在父容器的布局中。若为false，则父级容器在测量和布局阶段都忽略此组件。默认值为true。
          * 注意，visible属性与此属性不同，设置visible为false，父级容器仍会对其布局。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指定此组件是否包含在父容器的布局中。若为false，则父级容器在测量和布局阶段都忽略此组件。默认值为true。
+         * 注意，visible属性与此属性不同，设置visible为false，父级容器仍会对其布局。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public includeInLayout:boolean;
         /**
+         * @language en_US
          * 距父级容器离左边距离
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 距父级容器离左边距离
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public left:number;
 
         /**
+         * @language en_US
          * 距父级容器右边距离
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 距父级容器右边距离
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public right:number;
 
         /**
+         * @language en_US
          * 距父级容器顶部距离
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 距父级容器顶部距离
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public top:number;
 
         /**
+         * @language en_US
          * 距父级容器底部距离
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 距父级容器底部距离
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public bottom:number;
 
         /**
+         * @language en_US
          * 在父级容器中距水平中心位置的距离
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在父级容器中距水平中心位置的距离
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public horizontalCenter:number;
 
         /**
+         * @language en_US
          * 在父级容器中距竖直中心位置的距离
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在父级容器中距竖直中心位置的距离
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public verticalCenter:number;
 
         /**
+         * @language en_US
          * 相对父级容器宽度的百分比
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 相对父级容器宽度的百分比
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public percentWidth:number;
 
         /**
+         * @language en_US
          * 相对父级容器高度的百分比
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 相对父级容器高度的百分比
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public percentHeight:number;
 
         /**
+         * @language en_US
          * 外部显式指定的宽度
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 外部显式指定的宽度
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public explicitWidth:number;
 
         /**
+         * @language en_US
          * 外部显式指定的高度
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 外部显式指定的高度
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public explicitHeight:number;
 
 
         /**
+         * @language en_US
          * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public minWidth:number;
         /**
+         * @language en_US
          * 组件的最大高度。同时影响测量和自动布局的尺寸。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 组件的最大高度。同时影响测量和自动布局的尺寸。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public maxWidth:number;
 
         /**
+         * @language en_US
          * 组件的最小高度,此属性设置为大于maxHeight的值时无效。同时影响测量和自动布局的尺寸。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 组件的最小高度,此属性设置为大于maxHeight的值时无效。同时影响测量和自动布局的尺寸。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public minHeight:number;
         /**
+         * @language en_US
          * 组件的最大高度,同时影响测量和自动布局的尺寸。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 组件的最大高度,同时影响测量和自动布局的尺寸。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public maxHeight:number;
 
 
         /**
+         * @language en_US
          * 设置测量结果。
          * @param width 测量宽度
          * @param height 测量高度
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设置测量结果。
+         * @param width 测量宽度
+         * @param height 测量高度
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public setMeasuredSize(width:number, height:number):void {
         }
 
         /**
+         * @language en_US
          * 标记提交过需要延迟应用的属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 标记提交过需要延迟应用的属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public invalidateProperties():void {
         }
 
         /**
+         * @language en_US
          * 验证组件的属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 验证组件的属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public validateProperties():void {
         }
 
         /**
+         * @language en_US
          * 标记提交过需要验证组件尺寸
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 标记提交过需要验证组件尺寸
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public invalidateSize():void {
         }
 
         /**
+         * @language en_US
          * 验证组件的尺寸
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 验证组件的尺寸
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public validateSize(recursive?:boolean):void {
         }
 
         /**
+         * @language en_US
          * 标记需要验证显示列表
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 标记需要验证显示列表
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public invalidateDisplayList():void {
         }
 
         /**
+         * @language en_US
          * 验证子项的位置和大小，并绘制其他可视内容
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 验证子项的位置和大小，并绘制其他可视内容
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public validateDisplayList():void {
         }
 
         /**
+         * @language en_US
          * 立即应用组件及其子项的所有属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 立即应用组件及其子项的所有属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public validateNow():void {
         }
 
         /**
+         * @language en_US
          * 设置组件的布局宽高
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设置组件的布局宽高
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public setLayoutBoundsSize(layoutWidth:number, layoutHeight:number):void {
         }
 
         /**
+         * @language en_US
          * 设置组件的布局位置
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设置组件的布局位置
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public setLayoutBoundsPosition(x:number, y:number):void {
         }
 
         /**
+         * @language en_US
          * 组件的布局尺寸,常用于父级的updateDisplayList()方法中
          * 按照：布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸,
          * 注意此方法返回值已经包含scale和rotation。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 组件的布局尺寸,常用于父级的updateDisplayList()方法中
+         * 按照：布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸,
+         * 注意此方法返回值已经包含scale和rotation。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public getLayoutBounds(bounds:lark.Rectangle):void {
         }
 
         /**
+         * @language en_US
          * 获取组件的首选尺寸,常用于父级的measure()方法中
          * 按照：外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸，
          * 注意此方法返回值已经包含scale和rotation。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取组件的首选尺寸,常用于父级的measure()方法中
+         * 按照：外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸，
+         * 注意此方法返回值已经包含scale和rotation。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public getPreferredBounds(bounds:lark.Rectangle):void {
         }

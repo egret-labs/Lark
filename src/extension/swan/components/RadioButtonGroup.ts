@@ -64,11 +64,33 @@ module swan {
 
 
     /**
+     * @language en_US
      * RadioButtonGroup 组件定义一组 RadioButton 组件，这些组件相互排斥；因此，用户每次只能选择一个 RadioButton 组件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * RadioButtonGroup 组件定义一组 RadioButton 组件，这些组件相互排斥；因此，用户每次只能选择一个 RadioButton 组件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class RadioButtonGroup extends lark.EventEmitter {
         /**
+         * @language en_US
          * 创建一个RadioButtonGroup实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个RadioButtonGroup实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor() {
             super();
@@ -76,26 +98,54 @@ module swan {
         }
 
         /**
+         * @private
          * 组名
          */
         $name:string = null;
         /**
+         * @private
          * 单选按钮列表
          */
         private radioButtons:RadioButton[] = [];
 
         /**
+         * @language en_US
          * 获取指定索引的单选按钮
          * @param index 单选按钮的索引
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取指定索引的单选按钮
+         * @param index 单选按钮的索引
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public getRadioButtonAt(index:number):RadioButton {
             return this.radioButtons[index];
         }
 
+        /**
+         * @private
+         */
         $enabled:boolean = true;
 
         /**
+         * @language en_US
          * 组件是否可以接受用户交互。默认值为true。设置此属性将影响组内所有单选按钮。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 组件是否可以接受用户交互。默认值为true。设置此属性将影响组内所有单选按钮。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get enabled():boolean {
             return this.$enabled;
@@ -113,15 +163,40 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 组内单选按钮数量
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 组内单选按钮数量
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get numRadioButtons():number {
             return this.radioButtons.length;
         }
 
+        /**
+         * @private
+         */
         private _selectedValue:any = null;
         /**
+         * @language en_US
          * 当前被选中的单选按钮的value属性值。注意，此属性仅当目标RadioButton在显示列表时有效。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当前被选中的单选按钮的value属性值。注意，此属性仅当目标RadioButton在显示列表时有效。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get selectedValue():any {
             if (this.selection) {
@@ -151,9 +226,23 @@ module swan {
             }
         }
 
+        /**
+         * @private
+         */
         private _selection:RadioButton = null;
         /**
+         * @language en_US
          * 当前被选中的单选按钮引用,注意，此属性仅当目标RadioButton在显示列表时有效。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当前被选中的单选按钮引用,注意，此属性仅当目标RadioButton在显示列表时有效。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get selection():RadioButton {
             return this._selection;
@@ -166,6 +255,7 @@ module swan {
         }
 
         /**
+         * @private
          * 添加单选按钮到组内
          */
         $addInstance(instance:RadioButton):void {
@@ -187,6 +277,7 @@ module swan {
         }
 
         /**
+         * @private
          * 从组里移除单选按钮
          */
         $removeInstance(instance:RadioButton, addListener?:boolean):void {
@@ -215,6 +306,7 @@ module swan {
         }
 
         /**
+         * @private
          * 设置选中的单选按钮
          */
         $setSelection(value:RadioButton, fireChange?:boolean):void {
@@ -242,6 +334,7 @@ module swan {
         }
 
         /**
+         * @private
          * 改变选中项
          */
         private changeSelection(index:number, fireChange?:boolean):void {
@@ -259,6 +352,7 @@ module swan {
 
 
         /**
+         * @private
          * 单选按钮添加到显示列表
          */
         private addedHandler(event:lark.Event):void {
@@ -270,6 +364,7 @@ module swan {
         }
 
         /**
+         * @private
          * 单选按钮从显示列表移除
          */
         private removedHandler(event:lark.Event):void {

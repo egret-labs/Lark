@@ -31,11 +31,33 @@
 module swan {
 
     /**
+     * @language en_US
      * 开关按钮
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 开关按钮
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class ToggleSwitch extends ToggleButton {
         /**
+         * @language en_US
          * 创建一个ToggleSwitch
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个ToggleSwitch
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor() {
             super();

@@ -30,6 +30,9 @@
 
 module swan {
 
+    /**
+     * @private
+     */
     const enum Keys {
         scrollPolicyV,
         scrollPolicyH,
@@ -46,20 +49,56 @@ module swan {
         viewport
     }
     /**
+     * @language en_US
      * 滚动条组件
      *
      * @event swan.UIEvent.CHANGE_START 滚动位置改变开始
      * @event swan.UIEvent.CHANGE_END 滚动位置改变结束
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 滚动条组件
+     *
+     * @event swan.UIEvent.CHANGE_START 滚动位置改变开始
+     * @event swan.UIEvent.CHANGE_END 滚动位置改变结束
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class Scroller extends Component {
 
         /**
+         * @language en_US
          * 开始触发滚动的阈值（以像素为单位），当触摸点偏离初始触摸点的距离超过这个值时才会触发滚动。默认值：5 。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 开始触发滚动的阈值（以像素为单位），当触摸点偏离初始触摸点的距离超过这个值时才会触发滚动。默认值：5 。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static scrollThreshold:number = 5;
 
         /**
+         * @language en_US
          * 创建一个 Scroller 实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 Scroller 实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor() {
             super();
@@ -82,18 +121,54 @@ module swan {
             };
         }
 
+        /**
+         * @private
+         */
         $Scroller:Object;
         /**
+         * @language en_US
          * [SkinPart] 水平滚动条
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [SkinPart] 水平滚动条
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public horizontalScrollBar:swan.HScrollBar = null;
         /**
+         * @language en_US
          * [SkinPart] 垂直滚动条
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [SkinPart] 垂直滚动条
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public verticalScrollBar:swan.VScrollBar = null;
 
         /**
+         * @language en_US
          * 垂直方向是否允许滚动的策略，参见 ScrollPolicy 类定义的常量。默认值：ScrollPolicy.AUTO
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 垂直方向是否允许滚动的策略，参见 ScrollPolicy 类定义的常量。默认值：ScrollPolicy.AUTO
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get scrollPolicyV():string {
             return this.$Scroller[Keys.scrollPolicyV];
@@ -104,7 +179,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 水平方向是否允许滚动的策略，参见ScrollPolicy类定义的常量。默认值：ScrollPolicy.AUTO
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 水平方向是否允许滚动的策略，参见ScrollPolicy类定义的常量。默认值：ScrollPolicy.AUTO
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get scrollPolicyH():string {
             return this.$Scroller[Keys.scrollPolicyH];
@@ -115,7 +201,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 要滚动的视域组件。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要滚动的视域组件。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get viewport():IViewport {
             return this.$Scroller[Keys.viewport];
@@ -131,6 +228,7 @@ module swan {
         }
 
         /**
+         * @private
          * 安装并初始化视域组件
          */
         private installViewport():void {
@@ -150,6 +248,7 @@ module swan {
         }
 
         /**
+         * @private
          * 卸载视域组件
          */
         private uninstallViewport():void {
@@ -168,6 +267,22 @@ module swan {
             }
         }
 
+        /**
+         * @language en_US
+         * 
+         * @param skin 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param skin 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected setSkin(skin:Skin):void {
             super.setSkin(skin);
             var viewport = this.viewport;
@@ -176,6 +291,11 @@ module swan {
             }
         }
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private onTouchEndCapture(event:lark.TouchEvent):void {
             if (this.$Scroller[Keys.delayTouchEvent]) {
                 this.delayEmitEvent(event);
@@ -183,6 +303,7 @@ module swan {
         }
 
         /**
+         * @private
          * 若这个Scroller可以滚动，阻止当前事件，延迟100ms再抛出。
          */
         private onTouchBeginCapture(event:lark.TouchEvent):void {
@@ -205,6 +326,11 @@ module swan {
             this.onTouchBegin(event);
         }
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private delayEmitEvent(event:lark.TouchEvent):void {
             var values = this.$Scroller;
             if (values[Keys.delayTouchEvent]) {
@@ -222,6 +348,11 @@ module swan {
             values[Keys.delayTouchTimer].start();
         }
 
+        /**
+         * @private
+         * 
+         * @param e 
+         */
         private onDelayTouchEventTimer(e?:lark.TimerEvent):void {
             var values = this.$Scroller;
             values[Keys.delayTouchTimer].stop();
@@ -249,6 +380,7 @@ module swan {
         }
 
         /**
+         * @private
          * 检查当前滚动策略，若有一个方向可以滚动，返回true。
          */
         private checkScrollPolicy():boolean {
@@ -295,6 +427,11 @@ module swan {
             return hCanScroll || vCanScroll;
         }
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private onTouchBegin(event:lark.TouchEvent):void {
             if (event.isDefaultPrevented()) {
                 return;
@@ -325,6 +462,11 @@ module swan {
             event.preventDefault();
         }
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private onTouchMove(event:lark.TouchEvent):void {
             var values = this.$Scroller;
             if (!values[Keys.touchMoved]) {
@@ -361,6 +503,11 @@ module swan {
         }
 
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private onTouchEnd(event:lark.Event):void {
             var values = this.$Scroller;
             values[Keys.touchMoved] = false;
@@ -378,26 +525,48 @@ module swan {
             }
         }
 
+        /**
+         * @private
+         * 
+         * @param scrollPos 
+         */
         private horizontalUpdateHandler(scrollPos:number):void {
             this.$Scroller[Keys.viewport].scrollH = scrollPos;
         }
 
+        /**
+         * @private
+         * 
+         * @param scrollPos 
+         */
         private verticalUpdateHandler(scrollPos:number):void {
             this.$Scroller[Keys.viewport].scrollV = scrollPos;
         }
 
+        /**
+         * @private
+         * 
+         */
         private horizontalEndHandler():void {
             if(!this.$Scroller[Keys.touchScrollV].isPlaying()){
                 this.onChangeEnd();
             }
         }
 
+        /**
+         * @private
+         * 
+         */
         private verticalEndHanlder():void {
             if(!this.$Scroller[Keys.touchScrollH].isPlaying()){
                 this.onChangeEnd();
             }
         }
 
+        /**
+         * @private
+         * 
+         */
         private onChangeEnd():void{
             var values = this.$Scroller;
             var horizontalBar = this.horizontalScrollBar;
@@ -415,6 +584,11 @@ module swan {
 
         }
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private onAutoHideTimer(event:lark.TimerEvent):void {
             var horizontalBar = this.horizontalScrollBar;
             var verticalBar = this.verticalScrollBar;
@@ -426,6 +600,24 @@ module swan {
             }
         }
 
+        /**
+         * @language en_US
+         * 
+         * @param unscaledWidth 
+         * @param unscaledHeight 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param unscaledWidth 
+         * @param unscaledHeight 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
             super.updateDisplayList(unscaledWidth, unscaledHeight);
             var viewport = this.viewport;
@@ -436,6 +628,24 @@ module swan {
 
         }
 
+        /**
+         * @language en_US
+         * 
+         * @param partName 
+         * @param instance 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param partName 
+         * @param instance 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected partAdded(partName:string, instance:any):void {
             super.partAdded(partName, instance);
             if (instance == this.horizontalScrollBar) {

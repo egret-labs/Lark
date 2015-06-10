@@ -30,40 +30,131 @@
 module swan {
 
     /**
+     * @language en_US
      * 皮肤基类。通常情况下，您不需要手动创建这个类的实例，而是通过解析EXML文件后自动生成。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 皮肤基类。通常情况下，您不需要手动创建这个类的实例，而是通过解析EXML文件后自动生成。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class Skin extends lark.LarkObject {
 
         /**
+         * @language en_US
          * 皮肤部件名称列表
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 皮肤部件名称列表
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public skinParts:string[];
 
         /**
+         * @language en_US
          * 皮肤的最大宽度。仅影响主机组件的测量结果。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 皮肤的最大宽度。仅影响主机组件的测量结果。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public maxWidth:number = 100000;
         /**
+         * @language en_US
          * 皮肤的最小宽度,此属性设置为大于maxWidth的值时无效。仅影响主机组件的测量结果。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 皮肤的最小宽度,此属性设置为大于maxWidth的值时无效。仅影响主机组件的测量结果。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public minWidth:number = 0;
         /**
+         * @language en_US
          * 皮肤的最大高度。仅影响主机组件的测量结果。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 皮肤的最大高度。仅影响主机组件的测量结果。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public maxHeight:number = 100000;
         /**
+         * @language en_US
          * 皮肤的最小高度,此属性设置为大于maxHeight的值时无效。仅影响主机组件的测量结果。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 皮肤的最小高度,此属性设置为大于maxHeight的值时无效。仅影响主机组件的测量结果。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public minHeight:number = 0;
         /**
+         * @language en_US
          * 皮肤显式设置宽度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 皮肤显式设置宽度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public width:number = lark.NONE;
         /**
+         * @language en_US
          * 皮肤显式设置高度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 皮肤显式设置高度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public height:number = lark.NONE;
 
+        /**
+         * @private
+         */
         $elementsContent:lark.DisplayObject[] = [];
 
         public set elementsContent(value:lark.DisplayObject[]) {
@@ -71,9 +162,23 @@ module swan {
         }
 
 
+        /**
+         * @private
+         */
         private _hostComponent:Component = null;
         /**
+         * @language en_US
          * 此皮肤附加到的主机组件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 此皮肤附加到的主机组件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get hostComponent():Component {
             return this._hostComponent;
@@ -98,35 +203,79 @@ module swan {
             }
         }
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private onAddedToStage(event?:lark.Event):void{
             this.initializeStates(this._hostComponent.$stage);
         }
 
 
+        /**
+         * @private
+         */
         $stateValues:sys.StateValues = new sys.StateValues();
 
         /**
+         * @language en_US
          * 为此组件定义的视图状态。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 为此组件定义的视图状态。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public states:State[];
 
         /**
+         * @language en_US
          * 组件的当前视图状态。将其设置为 "" 或 null 可将组件重置回其基本状态。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 组件的当前视图状态。将其设置为 "" 或 null 可将组件重置回其基本状态。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public currentState:string;
 
         /**
+         * @language en_US
          * 返回是否含有指定名称的视图状态
          * @param stateName 要检查的视图状态名称
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回是否含有指定名称的视图状态
+         * @param stateName 要检查的视图状态名称
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public hasState:(stateName:string)=>boolean;
 
         /**
+         * @private
          * 初始化所有视图状态
          */
         private initializeStates:(stage:lark.Stage)=>void;
 
         /**
+         * @private
          * 应用当前的视图状态。子类覆盖此方法在视图状态发生改变时执行相应更新操作。
          */
         private commitCurrentState:()=>void;

@@ -30,22 +30,61 @@
 module swan {
 
     /**
+     * @language en_US
      * List 控件可显示垂直或水平的项目列表。您可以通过设置 allowMultipleSelection 属性为true来允许同时选中多项。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * List 控件可显示垂直或水平的项目列表。您可以通过设置 allowMultipleSelection 属性为true来允许同时选中多项。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class List extends ListBase {
 
 
         /**
+         * @language en_US
          * 是否允许同时选中多项,设置为true时，触摸按下未选中的项呈示器，将会设置该项选中，再次按下将会取消选中。可以设置多项为选中状态。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 是否允许同时选中多项,设置为true时，触摸按下未选中的项呈示器，将会设置该项选中，再次按下将会取消选中。可以设置多项为选中状态。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public allowMultipleSelection:boolean = false;
 
+        /**
+         * @private
+         */
         private _selectedIndices:number[] = [];
 
+        /**
+         * @private
+         */
         private _proposedSelectedIndices:number[];
 
         /**
+         * @language en_US
          * 当前选中的一个或多个项目的索引列表
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当前选中的一个或多个项目的索引列表
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get selectedIndices():number[] {
             if (this._proposedSelectedIndices)
@@ -57,6 +96,18 @@ module swan {
             this.setSelectedIndices(value, false);
         }
 
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         public get selectedIndex():number {
             if (this._proposedSelectedIndices) {
                 if (this._proposedSelectedIndices.length > 0)
@@ -71,7 +122,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 当前选中的一个或多个项目的数据源列表
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当前选中的一个或多个项目的数据源列表
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get selectedItems():any[] {
             var result:any[] = [];
@@ -106,7 +168,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 设置多个选中项
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设置多个选中项
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected setSelectedIndices(value:number[], dispatchChangeEvent?:boolean):void {
             var values = this.$ListBase;
@@ -122,7 +195,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 处理对组件设置的属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 处理对组件设置的属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected commitProperties():void {
             super.commitProperties();
@@ -131,6 +215,24 @@ module swan {
             }
         }
 
+        /**
+         * @language en_US
+         * 
+         * @param dispatchChangedEvents 
+         * @returns 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param dispatchChangedEvents 
+         * @returns 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected commitSelection(dispatchChangedEvents:boolean = true):boolean {
             var values = this.$ListBase;
             var oldSelectedIndex = values[sys.ListBaseKeys.selectedIndex];
@@ -187,6 +289,7 @@ module swan {
         }
 
         /**
+         * @private
          * 是否是有效的索引
          */
         private isValidIndex = (item:number, index:number, v:number[]):boolean => {
@@ -194,7 +297,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 提交多项选中项属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 提交多项选中项属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected commitMultipleSelection():void {
             var removedItems:number[] = [];
@@ -242,6 +356,12 @@ module swan {
             this._proposedSelectedIndices = null;
         }
 
+        /**
+         * @private
+         * 
+         * @param index 
+         * @returns 
+         */
         $isItemIndexSelected(index:number):boolean {
             if (this.allowMultipleSelection)
                 return this._selectedIndices.indexOf(index) != -1;
@@ -249,7 +369,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 数据源发生刷新
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 数据源发生刷新
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public dataProviderRefreshed():void {
             if (this.allowMultipleSelection) {
@@ -259,6 +390,7 @@ module swan {
         }
 
         /**
+         * @private
          * 计算当前的选中项列表
          */
         private calculateSelectedIndices(index:number):number[] {
@@ -296,7 +428,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 鼠标在项呈示器上弹起，抛出ItemClick事件。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 鼠标在项呈示器上弹起，抛出ItemClick事件。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected onRendererTouchEnd(event:lark.TouchEvent):void {
             if (this.allowMultipleSelection) {

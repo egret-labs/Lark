@@ -31,11 +31,33 @@
 module swan {
 
 	/**
+	 * @language en_US
 	 * 复选框
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
+	 */
+	/**
+	 * @language zh_CN
+	 * 复选框
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
 	 */
 	export class CheckBox extends ToggleButton{
 		/**
+		 * @language en_US
 		 * 创建一个CheckBox
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
+		 * 创建一个CheckBox
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public constructor(){
 			super();

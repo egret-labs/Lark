@@ -30,11 +30,33 @@
 module swan {
 
     /**
+     * @language en_US
      * 按钮组件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 按钮组件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class Button extends Component {
         /**
+         * @language en_US
          * 创建一个按钮实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个按钮实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor() {
             super();
@@ -43,13 +65,38 @@ module swan {
         }
 
         /**
+         * @language en_US
          * [SkinPart]按钮上的文本标签
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [SkinPart]按钮上的文本标签
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public labelDisplay:IDisplayText = null;
 
+        /**
+         * @private
+         */
         private _label:string = "";
         /**
+         * @language en_US
          * 要在按钮上显示的文本
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要在按钮上显示的文本
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get label():string {
             return this._label;
@@ -63,13 +110,38 @@ module swan {
         }
 
         /**
+         * @language en_US
          * [SkinPart]按钮上的图标显示对象。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [SkinPart]按钮上的图标显示对象。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public iconDisplay:Image = null;
 
+        /**
+         * @private
+         */
         private _icon:string|lark.BitmapData = null;
         /**
+         * @language en_US
          * 要在按钮上显示的图标数据
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要在按钮上显示的图标数据
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get icon():string|lark.BitmapData {
             return this._icon;
@@ -83,12 +155,24 @@ module swan {
         }
 
         /**
+         * @private
          * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，是否按下鼠标以及触摸点是否在按钮上。
          */
         private touchCaptured:boolean = false;
 
         /**
+         * @language en_US
          * 鼠标事件处理
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 鼠标事件处理
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected onTouchBegin(event:lark.TouchEvent):void {
             this.$stage.on(lark.TouchEvent.TOUCH_END, this.onStageTouchEnd, this);
@@ -98,6 +182,7 @@ module swan {
         }
 
         /**
+         * @private
          * 舞台上触摸弹起事件
          */
         private onStageTouchEnd(event:lark.Event):void {
@@ -111,7 +196,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 返回要应用到外观的状态的名称
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回要应用到外观的状态的名称
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected getCurrentState():string {
             if (!this.enabled)
@@ -124,9 +220,22 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 子类覆盖此方法，以在皮肤部件第一次附加时对其执行一些初始化操作，例如添加事件监听，赋值缓存的属性值等。
          * @param partName 要附加的皮肤部件名称
          * @param instance 要附加的皮肤部件实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 子类覆盖此方法，以在皮肤部件第一次附加时对其执行一些初始化操作，例如添加事件监听，赋值缓存的属性值等。
+         * @param partName 要附加的皮肤部件名称
+         * @param instance 要附加的皮肤部件实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected partAdded(partName:string, instance:any):void {
             if (instance === this.labelDisplay) {
@@ -138,7 +247,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 按钮弹起事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 按钮弹起事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected buttonReleased():void {
         }

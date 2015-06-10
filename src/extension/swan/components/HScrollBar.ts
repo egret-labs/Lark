@@ -30,10 +30,39 @@
 module swan {
 
     /**
+     * @language en_US
      * 水平滚动条
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 水平滚动条
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class HScrollBar extends ScrollBarBase {
 
+        /**
+         * @language en_US
+         * 
+         * @param unscaledWidth 
+         * @param unscaledHeight 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param unscaledWidth 
+         * @param unscaledHeight 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
             super.updateDisplayList(unscaledWidth, unscaledHeight);
             var thumb = this.thumb;
@@ -67,6 +96,22 @@ module swan {
             }
         }
 
+        /**
+         * @language en_US
+         * 
+         * @param event 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param event 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected onPropertyChanged(event:swan.PropertyEvent):void {
             switch (event.property) {
                 case "scrollH":

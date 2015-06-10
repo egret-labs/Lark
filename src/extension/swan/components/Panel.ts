@@ -31,13 +31,37 @@
 module swan {
 
     /**
+     * @language en_US
      * 带有标题，关闭按钮，可移动区域的面板组件。注意：当第一次通过触摸交互操作移动面板时，面板的 includeInLayout 属性将会自动被设置为false，
      * 以确保移动不会受到自动布局属性的影响。若之后还需要启用面板在父级容器中的自动布局，需手动设置 includeInLayout 为 true。
      * @event swan.UIEvent.CLOSING 面板即将关闭事件，在关闭按钮被点击后抛出，监听此事件并调用event.preventDefault()能够阻止面板被关闭。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 带有标题，关闭按钮，可移动区域的面板组件。注意：当第一次通过触摸交互操作移动面板时，面板的 includeInLayout 属性将会自动被设置为false，
+     * 以确保移动不会受到自动布局属性的影响。若之后还需要启用面板在父级容器中的自动布局，需手动设置 includeInLayout 为 true。
+     * @event swan.UIEvent.CLOSING 面板即将关闭事件，在关闭按钮被点击后抛出，监听此事件并调用event.preventDefault()能够阻止面板被关闭。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class Panel extends Component {
         /**
+         * @language en_US
          * 创建一个Panel实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个Panel实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor() {
             super();
@@ -45,6 +69,7 @@ module swan {
         }
 
         /**
+         * @private
          * 在窗体上按下时前置窗口
          */
         private onWindowMouseDown(event:lark.TouchEvent):void {
@@ -52,24 +77,71 @@ module swan {
         }
 
         /**
+         * @language en_US
          * [SkinPart]关闭按钮
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [SkinPart]关闭按钮
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public closeButton:Button = null;
 
         /**
+         * @language en_US
          * [SkinPart]可移动区域
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [SkinPart]可移动区域
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public moveArea:lark.DisplayObject = null;
 
         /**
+         * @language en_US
          * [SkinPart]标题显示对象
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [SkinPart]标题显示对象
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public titleDisplay:IDisplayText = null;
 
+        /**
+         * @private
+         */
         private _title:string = "";
 
         /**
+         * @language en_US
          * 标题文本内容
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 标题文本内容
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get title():string {
             return this._title;
@@ -81,6 +153,24 @@ module swan {
                 this.titleDisplay.text = this.title;
         }
 
+        /**
+         * @language en_US
+         * 
+         * @param partName 
+         * @param instance 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param partName 
+         * @param instance 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected partAdded(partName:string, instance:any):void {
             super.partAdded(partName, instance);
             if (instance == this.titleDisplay) {
@@ -94,6 +184,24 @@ module swan {
             }
         }
 
+        /**
+         * @language en_US
+         * 
+         * @param partName 
+         * @param instance 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param partName 
+         * @param instance 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected partRemoved(partName:string, instance:any):void {
             super.partRemoved(partName, instance);
             if (instance == this.moveArea) {
@@ -105,7 +213,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 关闭按钮被点击事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 关闭按钮被点击事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected onCloseButtonClick(event:lark.TouchEvent):void {
             if (UIEvent.emitUIEvent(this, UIEvent.CLOSING)) {
@@ -114,7 +233,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 关闭面板，从父级容器移除自身。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 关闭面板，从父级容器移除自身。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public close():void {
             if (!this.$parent) {
@@ -124,13 +254,28 @@ module swan {
         }
 
         /**
+         * @private
          * 鼠标按下时的偏移量
          */
         private offsetPointX:number = 0;
+        /**
+         * @private
+         */
         private offsetPointY:number = 0;
 
         /**
+         * @language en_US
          * 在可移动区域按下
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在可移动区域按下
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected onTouchBegin(event:lark.TouchEvent):void {
             this.$includeInLayout = false;
@@ -141,7 +286,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 触摸拖拽时的移动事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 触摸拖拽时的移动事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public onTouchMove(event:lark.TouchEvent):void {
             this.x = event.$stageX + this.offsetPointX;
@@ -149,7 +305,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 鼠标在舞台上弹起事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 鼠标在舞台上弹起事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public onTouchEnd(event:lark.TouchEvent):void {
             this.$stage.removeListener(lark.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);

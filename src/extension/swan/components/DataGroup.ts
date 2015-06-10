@@ -30,6 +30,9 @@
 
 module swan {
 
+    /**
+     * @private
+     */
     const enum Keys{
         useVirtualLayout,
         useVirtualLayoutChanged,
@@ -47,10 +50,33 @@ module swan {
     }
 
     /**
+     * @language en_US
      * DataGroup 是数据容器基类,将数据项目转换为可视元素以进行显示
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * DataGroup 是数据容器基类,将数据项目转换为可视元素以进行显示
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class DataGroup extends Group {
 
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         public constructor() {
             super();
             this.$DataGroup = {
@@ -70,10 +96,24 @@ module swan {
             };
         }
 
+        /**
+         * @private
+         */
         $DataGroup:Object;
 
         /**
+         * @language en_US
          * 是否使用虚拟布局,默认true
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 是否使用虚拟布局,默认true
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get useVirtualLayout():boolean {
             return this.$layout ? this.$layout.$useVirtualLayout :
@@ -91,6 +131,11 @@ module swan {
                 this.$layout.useVirtualLayout = value;
         }
 
+        /**
+         * @private
+         * 
+         * @param value 
+         */
         $setLayout(value:LayoutBase) {
             if (value == this.$layout)
                 return;
@@ -114,6 +159,7 @@ module swan {
         }
 
         /**
+         * @private
          * 是否使用虚拟布局标记改变
          */
         private onUseVirtualLayoutChanged(event?:lark.Event):void {
@@ -124,6 +170,24 @@ module swan {
             this.invalidateProperties();
         }
 
+        /**
+         * @language en_US
+         * 
+         * @param startIndex 
+         * @param endIndex 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param startIndex 
+         * @param endIndex 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         public setVirtualElementIndicesInView(startIndex:number, endIndex:number):void {
             if (!this.$layout || !this.$layout.$useVirtualLayout) {
                 return;
@@ -139,6 +203,24 @@ module swan {
             }
         }
 
+        /**
+         * @language en_US
+         * 
+         * @param index 
+         * @returns 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param index 
+         * @returns 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         public getElementAt(index:number):lark.DisplayObject {
             index = +index | 0;
             if (index < 0 || index >= this.$dataProvider.length)
@@ -160,6 +242,7 @@ module swan {
         }
 
         /**
+         * @private
          * 释放指定索引处的项呈示器
          */
         private freeRendererByIndex(index:number):void {
@@ -170,6 +253,11 @@ module swan {
             }
         }
 
+        /**
+         * @private
+         * 
+         * @param renderer 
+         */
         private doFreeRenderer(renderer:IItemRenderer):void {
             var values = this.$DataGroup;
             var rendererClass = values[Keys.rendererToClassMap][renderer.$hashCode];
@@ -182,7 +270,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 标记组件，以便在稍后屏幕更新期间调用该组件的 measure() 方法
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 标记组件，以便在稍后屏幕更新期间调用该组件的 measure() 方法
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public invalidateSize():void {
             if (!this.$DataGroup[Keys.createNewRendererFlag]) {//虚拟布局时创建子项不需要重新验证
@@ -191,6 +290,7 @@ module swan {
         }
 
         /**
+         * @private
          * 为指定索引创建虚拟的项呈示器
          */
         private createVirtualRenderer(item:any):IItemRenderer {
@@ -209,6 +309,7 @@ module swan {
         }
 
         /**
+         * @private
          * 根据rendererClass创建一个Renderer,并添加到显示列表
          */
         private createOneRenderer(rendererClass:any):IItemRenderer {
@@ -221,12 +322,29 @@ module swan {
             return renderer;
         }
 
+        /**
+         * @private
+         */
         $dataProviderChanged:boolean = false;
 
+        /**
+         * @private
+         */
         $dataProvider:ICollection = null;
 
         /**
+         * @language en_US
          * 列表数据源，请使用实现了ICollection接口的数据类型，例如 ArrayCollection
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 列表数据源，请使用实现了ICollection接口的数据类型，例如 ArrayCollection
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get dataProvider():ICollection {
             return this.$dataProvider;
@@ -236,6 +354,11 @@ module swan {
             this.$setDataProvider(value);
         }
 
+        /**
+         * @private
+         * 
+         * @param value 
+         */
         $setDataProvider(value:ICollection):void {
             if (this.$dataProvider == value)
                 return;
@@ -249,6 +372,7 @@ module swan {
         }
 
         /**
+         * @private
          * 移除数据源监听
          */
         private removeDataProviderListener():void {
@@ -257,7 +381,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 数据源改变事件处理
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 数据源改变事件处理
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected onCollectionChange(event:CollectionEvent):void {
             switch (event.kind) {
@@ -292,6 +427,7 @@ module swan {
         }
 
         /**
+         * @private
          * 数据源添加项目事件处理
          */
         private itemAddedHandler(items:any[], index:number):void {
@@ -303,6 +439,7 @@ module swan {
         }
 
         /**
+         * @private
          * 数据源移除项目事件处理
          */
         private itemRemovedHandler(items:any[], location:number):void {
@@ -315,7 +452,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 添加一项
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 添加一项
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected itemAdded(item:any, index:number):void {
             if (this.$layout)
@@ -338,7 +486,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 移除一项
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 移除一项
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected itemRemoved(item:any, index:number):void {
             if (this.$layout)
@@ -360,6 +519,7 @@ module swan {
         }
 
         /**
+         * @private
          * 更新当前所有项的索引
          */
         private resetRenderersIndices():void {
@@ -384,6 +544,7 @@ module swan {
         }
 
         /**
+         * @private
          * 数据源更新或替换项目事件处理
          */
         private itemUpdatedHandler(item:any, location:number):void {
@@ -397,6 +558,7 @@ module swan {
         }
 
         /**
+         * @private
          * 调整指定项呈示器的索引值
          */
         private resetRendererItemIndex(index:number):void {
@@ -407,8 +569,20 @@ module swan {
 
 
         /**
+         * @language en_US
          * 用于数据项目的项呈示器。您应该直接为此属性赋值自定义类的类定义，而不是一个实例。注意：该类必须实现 IItemRenderer 接口。<br/>
          * rendererClass获取顺序：itemRendererFunction > itemRenderer > 默认ItemRenerer。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 用于数据项目的项呈示器。您应该直接为此属性赋值自定义类的类定义，而不是一个实例。注意：该类必须实现 IItemRenderer 接口。<br/>
+         * rendererClass获取顺序：itemRendererFunction > itemRenderer > 默认ItemRenerer。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get itemRenderer():any {
             return this.$DataGroup[Keys.itemRenderer];
@@ -427,8 +601,20 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 为某个特定数据项返回一个项呈示器类定义的函数。
          * rendererClass获取顺序：itemRendererFunction > itemRenderer > 默认ItemRenerer。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 为某个特定数据项返回一个项呈示器类定义的函数。
+         * rendererClass获取顺序：itemRendererFunction > itemRenderer > 默认ItemRenerer。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get itemRendererFunction():(item:any)=>any {
             return this.$DataGroup[Keys.itemRendererFunction];
@@ -446,6 +632,7 @@ module swan {
         }
 
         /**
+         * @private
          * 为特定的数据项返回项呈示器的工厂实例
          */
         private itemToRendererClass(item:any):any {
@@ -467,8 +654,20 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 子类覆盖此方法可以执行一些初始化子项操作。此方法仅在组件第一次添加到舞台时回调一次。
          * 请务必调用super.createChildren()以完成父类组件的初始化
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 子类覆盖此方法可以执行一些初始化子项操作。此方法仅在组件第一次添加到舞台时回调一次。
+         * 请务必调用super.createChildren()以完成父类组件的初始化
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected createChildren():void {
             if (!this.$layout) {
@@ -482,7 +681,18 @@ module swan {
 
 
         /**
+         * @language en_US
          * 处理对组件设置的属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 处理对组件设置的属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected commitProperties():void {
             var values = this.$DataGroup;
@@ -520,7 +730,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 计算组件的默认大小和（可选）默认最小大小
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 计算组件的默认大小和（可选）默认最小大小
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected measure():void {
             if (this.$layout && this.$layout.$useVirtualLayout) {
@@ -530,6 +751,24 @@ module swan {
         }
 
 
+        /**
+         * @language en_US
+         * 
+         * @param unscaledWidth 
+         * @param unscaledHeight 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param unscaledWidth 
+         * @param unscaledHeight 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
             var useVirtualLayout = (this.$layout && this.$layout.$useVirtualLayout);
             if (useVirtualLayout) {
@@ -554,6 +793,7 @@ module swan {
         }
 
         /**
+         * @private
          * 确保测量过默认条目大小。
          */
         private ensureTypicalLayoutElement():void {
@@ -567,6 +807,7 @@ module swan {
         }
 
         /**
+         * @private
          * 测量项呈示器默认尺寸
          */
         private measureRendererSize():void {
@@ -599,6 +840,7 @@ module swan {
         }
 
         /**
+         * @private
          * 设置项目默认大小
          */
         private setTypicalLayoutRect(rect:lark.Rectangle):void {
@@ -615,11 +857,13 @@ module swan {
 
 
         /**
+         * @private
          * 索引到项呈示器的转换数组
          */
         $indexToRenderer:IItemRenderer[] = [];
 
         /**
+         * @private
          * 移除所有项呈示器
          */
         private removeAllRenderers():void {
@@ -657,6 +901,7 @@ module swan {
         }
 
         /**
+         * @private
          * 为数据项创建项呈示器
          */
         private createRenderers():void {
@@ -678,7 +923,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 更新项呈示器
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 更新项呈示器
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public updateRenderer(renderer:IItemRenderer, itemIndex:number, data:any):IItemRenderer {
             var values = this.$DataGroup;
@@ -690,7 +946,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 获得对象容器的子对象总数
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获得对象容器的子对象总数
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get numElements():number {
             if (!this.$dataProvider)
@@ -700,19 +967,47 @@ module swan {
 
 
         /**
+         * @language en_US
          * 项呈示器被添加
          * @param renderer 添加的项呈示器
          * @param index 项呈示器的索引
          * @param item 项呈示器对应的数据
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 项呈示器被添加
+         * @param renderer 添加的项呈示器
+         * @param index 项呈示器的索引
+         * @param item 项呈示器对应的数据
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected rendererAdded(renderer:IItemRenderer, index:number, item:any):void {
         }
 
         /**
+         * @language en_US
          * 项呈示器被移除
          * @param renderer 移除的项呈示器
          * @param index 项呈示器的索引
          * @param item 项呈示器对应的数据
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 项呈示器被移除
+         * @param renderer 移除的项呈示器
+         * @param index 项呈示器的索引
+         * @param item 项呈示器对应的数据
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected rendererRemoved(renderer:IItemRenderer, index:number, item:any):void {
         }

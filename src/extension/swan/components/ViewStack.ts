@@ -31,26 +31,73 @@
 module swan {
 
     /**
+     * @language en_US
      * 层级堆叠容器,一次只显示一个子对象。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 层级堆叠容器,一次只显示一个子对象。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class ViewStack extends Group implements ICollection {
         /**
+         * @language en_US
          * 创建一个ViewStack实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个ViewStack实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor() {
             super();
         }
 
         /**
+         * @language en_US
          * 此容器的布局对象为只读,默认限制为BasicLayout。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 此容器的布局对象为只读,默认限制为BasicLayout。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get layout():LayoutBase {
             return this.$layout;
         }
 
+        /**
+         * @private
+         */
         private _selectedChild:lark.DisplayObject = null;
         /**
+         * @language en_US
          * 当前选中的子项
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当前选中的子项
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get selectedChild():lark.DisplayObject {
             var index = this.selectedIndex;
@@ -66,13 +113,28 @@ module swan {
         }
 
         /**
+         * @private
          * 在属性提交前缓存选中项索引
          */
         private proposedSelectedIndex:number = ListBase.NO_PROPOSED_SELECTION;
 
+        /**
+         * @private
+         */
         public _selectedIndex:number = -1;
         /**
+         * @language en_US
          * 当前选中子项的索引
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当前选中子项的索引
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get selectedIndex():number {
             return this.proposedSelectedIndex != ListBase.NO_PROPOSED_SELECTION ? this.proposedSelectedIndex : this._selectedIndex;
@@ -84,6 +146,7 @@ module swan {
         }
 
         /**
+         * @private
          * 设置选中项索引
          */
         private setSelectedIndex(value:number):void {
@@ -95,6 +158,7 @@ module swan {
         }
 
         /**
+         * @private
          * 一个子项被添加到容器内，此方法不仅在操作addChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
          * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
          */
@@ -113,6 +177,7 @@ module swan {
         }
 
         /**
+         * @private
          * 一个子项从容器内移除，此方法不仅在操作removeChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
          * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
          */
@@ -140,7 +205,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 处理对组件设置的属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 处理对组件设置的属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected commitProperties():void {
             super.commitProperties();
@@ -150,6 +226,11 @@ module swan {
             }
         }
 
+        /**
+         * @private
+         * 
+         * @param newIndex 
+         */
         private commitSelection(newIndex:number):void {
             if (newIndex >= 0 && newIndex < this.numChildren) {
                 this._selectedIndex = newIndex;
@@ -167,6 +248,12 @@ module swan {
             this.invalidateDisplayList();
         }
 
+        /**
+         * @private
+         * 
+         * @param child 
+         * @param visible 
+         */
         private showOrHide(child:lark.DisplayObject, visible:boolean):void {
             if (lark.is(child, swan.Types.UIComponent)) {
                 (<swan.UIComponent><any>child).includeInLayout = visible;
@@ -175,17 +262,64 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 子项数量
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 子项数量
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get length():number {
             return this.$children.length;
         }
 
+        /**
+         * @language en_US
+         * 
+         * @param index 
+         * @returns 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param index 
+         * @returns 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         public getItemAt(index:number):any {
             var element:lark.DisplayObject = this.$children[index];
             return element ? element.name : "";
         }
 
+        /**
+         * @language en_US
+         * 
+         * @param item 
+         * @returns 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param item 
+         * @returns 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         public getItemIndex(item:any):number {
             var list = this.$children;
             var length = list.length;

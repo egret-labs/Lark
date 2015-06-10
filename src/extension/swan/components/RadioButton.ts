@@ -36,11 +36,33 @@ module swan {
     var automaticRadioButtonGroups = {};
 
     /**
+     * @language en_US
      * RadioButton 组件使用户可在一组互相排斥的选择中做出一种选择
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * RadioButton 组件使用户可在一组互相排斥的选择中做出一种选择
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class RadioButton extends ToggleButton {
         /**
+         * @language en_US
          * 创建一个RadioButton
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个RadioButton
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor() {
             super();
@@ -48,16 +70,29 @@ module swan {
         }
 
         /**
+         * @private
          * 在RadioButtonGroup中的索引
          */
         $indexNumber:number = 0;
         /**
+         * @private
          * 所属的RadioButtonGroup
          */
         $radioButtonGroup:RadioButtonGroup = null;
 
         /**
+         * @language en_US
          * 组件是否可以接受用户交互。默认值为true。设置此属性将影响组内所有单选按钮
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 组件是否可以接受用户交互。默认值为true。设置此属性将影响组内所有单选按钮
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get enabled():boolean {
             if (!this.$Component[sys.ComponentKeys.enabled]) {
@@ -73,10 +108,25 @@ module swan {
         }
 
 
+        /**
+         * @private
+         */
         private _group:RadioButtonGroup = null;
         /**
+         * @language en_US
          * 此单选按钮所属的组。同一个组的多个单选按钮之间互斥。
          * 若不设置此属性，则根据groupName属性自动创建一个唯一的RadioButtonGroup。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 此单选按钮所属的组。同一个组的多个单选按钮之间互斥。
+         * 若不设置此属性，则根据groupName属性自动创建一个唯一的RadioButtonGroup。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get group():RadioButtonGroup {
             if (!this._group && this._groupName) {
@@ -104,12 +154,30 @@ module swan {
             this.invalidateDisplayList();
         }
 
+        /**
+         * @private
+         */
         private groupChanged:boolean = false;
 
+        /**
+         * @private
+         */
         private _groupName:string = "radioGroup";
         /**
+         * @language en_US
          * 所属组的名称,具有相同组名的多个单选按钮之间互斥。默认值:"radioGroup"。
          * 可以把此属性当做设置组的一个简便方式，作用与设置group属性相同,。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 所属组的名称,具有相同组名的多个单选按钮之间互斥。默认值:"radioGroup"。
+         * 可以把此属性当做设置组的一个简便方式，作用与设置group属性相同,。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get groupName():string {
             return this._groupName;
@@ -127,15 +195,34 @@ module swan {
             this.invalidateDisplayList();
         }
 
+        /**
+         * @private
+         * 
+         * @param value 
+         */
         $setSelected(value:boolean) {
             super.$setSelected(value);
             this.invalidateDisplayList();
         }
 
 
+        /**
+         * @private
+         */
         private _value:any = null;
         /**
+         * @language en_US
          * 与此单选按钮关联的自定义数据。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 与此单选按钮关联的自定义数据。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get value():any {
             return this._value;
@@ -152,6 +239,20 @@ module swan {
             }
         }
 
+        /**
+         * @language en_US
+         * 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected commitProperties():void {
             if (this.groupChanged) {
                 this.addToGroup();
@@ -161,6 +262,24 @@ module swan {
         }
 
 
+        /**
+         * @language en_US
+         * 
+         * @param unscaledWidth 
+         * @param unscaledHeight 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param unscaledWidth 
+         * @param unscaledHeight 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
             super.updateDisplayList(unscaledWidth, unscaledHeight);
             if (this.group) {
@@ -171,6 +290,20 @@ module swan {
             }
         }
 
+        /**
+         * @language en_US
+         * 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected buttonReleased():void {
             if (!this.enabled || this.selected)
                 return;
@@ -181,6 +314,7 @@ module swan {
         }
 
         /**
+         * @private
          * 添此单选按钮加到组
          */
         private addToGroup():RadioButtonGroup {

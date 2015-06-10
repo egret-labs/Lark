@@ -31,11 +31,33 @@
 module swan {
 
     /**
+     * @language en_US
      * 进度条控件。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 进度条控件。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class ProgressBar extends Range {
         /**
+         * @language en_US
          * 实例化一个进度条控件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 实例化一个进度条控件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor() {
             super();
@@ -43,17 +65,53 @@ module swan {
         }
 
         /**
+         * @language en_US
          * [SkinPart]进度高亮显示对象。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [SkinPart]进度高亮显示对象。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public thumb:swan.UIComponent = null;
         /**
+         * @language en_US
          * [SkinPart]进度条文本
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [SkinPart]进度条文本
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public labelDisplay:Label = null;
 
+        /**
+         * @private
+         */
         private _labelFunction:(value:number, maximum:number)=>string = null;
         /**
+         * @language en_US
          * 进度条文本格式化回调函数。示例：labelFunction(value:Number,maximum:Number):String;
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 进度条文本格式化回调函数。示例：labelFunction(value:Number,maximum:Number):String;
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get labelFunction():(value:number, maximum:number)=>string {
             return this._labelFunction;
@@ -67,7 +125,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 将当前value转换成文本
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将当前value转换成文本
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected valueToLabel(value:number, maximum:number):string {
             if (this.labelFunction != null) {
@@ -76,10 +145,24 @@ module swan {
             return value + " / " + maximum;
         }
 
+        /**
+         * @private
+         */
         private _slideDuration:number = 500;
 
         /**
+         * @language en_US
          * value改变时更新视图的缓动动画时间，单位毫秒。设置为0则不执行缓动。默认值500。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * value改变时更新视图的缓动动画时间，单位毫秒。设置为0则不执行缓动。默认值500。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get slideDuration():number {
             return this._slideDuration;
@@ -96,9 +179,23 @@ module swan {
             }
         }
 
+        /**
+         * @private
+         */
         private _direction:string = Direction.LTR;
         /**
+         * @language en_US
          * 进度条增长方向。请使用 Direction 定义的常量。默认值：Direction.LTR（从左向右增长）。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 进度条增长方向。请使用 Direction 定义的常量。默认值：Direction.LTR（从左向右增长）。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get direction():string {
             return this._direction;
@@ -112,14 +209,21 @@ module swan {
         }
 
         /**
+         * @private
          * 动画实例
          */
         private animation:sys.Animation;
         /**
+         * @private
          * 动画播放结束时要到达的value。
          */
         private slideToValue:number = 0;
 
+        /**
+         * @private
+         * 
+         * @param newValue 
+         */
         $setValue(newValue:number) {
             if (this.value === newValue)
                 return;
@@ -148,9 +252,13 @@ module swan {
             }
         }
 
+        /**
+         * @private
+         */
         private animationValue:number = 0;
 
         /**
+         * @private
          * 动画播放更新数值
          */
         private animationUpdateHandler(animation:sys.Animation):void {
@@ -161,6 +269,24 @@ module swan {
         }
 
 
+        /**
+         * @language en_US
+         * 
+         * @param partName 
+         * @param instance 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param partName 
+         * @param instance 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected partAdded(partName:string, instance:any):void {
             super.partAdded(partName, instance);
             if (instance === this.thumb) {
@@ -168,6 +294,24 @@ module swan {
             }
         }
 
+        /**
+         * @language en_US
+         * 
+         * @param partName 
+         * @param instance 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param partName 
+         * @param instance 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected partRemoved(partName:string, instance:any):void {
             super.partRemoved(partName, instance);
             if (instance === this.thumb) {
@@ -176,6 +320,7 @@ module swan {
         }
 
         /**
+         * @private
          * thumb的位置或尺寸发生改变
          */
         private onThumbResize(event:lark.Event):void {
@@ -183,7 +328,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 更新皮肤部件大小和可见性。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 更新皮肤部件大小和可见性。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected updateSkinDisplayList():void {
             var currentValue = this.animation.isPlaying ? this.animationValue : this.value;

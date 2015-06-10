@@ -30,18 +30,55 @@
 module swan {
 
     /**
+     * @language en_US
      * 项呈示器基类，通常作为List类的项目视图模板。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 项呈示器基类，通常作为List类的项目视图模板。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class ItemRenderer extends Group implements IItemRenderer {
 
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         public constructor() {
             super();
             this.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
+        /**
+         * @private
+         */
         private _data:any = null;
         /**
+         * @language en_US
          * 要呈示或编辑的数据。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要呈示或编辑的数据。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get data():any {
             return this._data;
@@ -54,15 +91,40 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 子类复写此方法以在 data 数据源发生改变时跟新显示列表。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 子类复写此方法以在 data 数据源发生改变时跟新显示列表。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected dataChanged():void {
 
         }
 
+        /**
+         * @private
+         */
         private _selected:boolean = false;
         /**
+         * @language en_US
          * 如果项呈示器可以将其自身显示为已选中，则为 true。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果项呈示器可以将其自身显示为已选中，则为 true。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get selected():boolean {
             return this._selected;
@@ -76,17 +138,40 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 项呈示器的数据提供程序中的项目索引。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 项呈示器的数据提供程序中的项目索引。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public itemIndex:number = -1;
 
         /**
+         * @private
          * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，是否按下鼠标以及触摸点是否在按钮上。
          */
         private touchCaptured:boolean = false;
 
         /**
+         * @language en_US
          * 鼠标事件处理
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 鼠标事件处理
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected onTouchBegin(event:lark.TouchEvent):void {
             this.$stage.on(lark.TouchEvent.TOUCH_END, this.onStageTouchEnd, this);
@@ -96,6 +181,7 @@ module swan {
         }
 
         /**
+         * @private
          * 舞台上触摸弹起事件
          */
         private onStageTouchEnd(event:lark.Event):void {
@@ -106,7 +192,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 返回要应用到外观的状态的名称
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回要应用到外观的状态的名称
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected getCurrentState():string {
             if (this._selected||this.touchCaptured)

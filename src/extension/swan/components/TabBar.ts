@@ -30,16 +30,53 @@
 module swan {
 
     /**
+     * @language en_US
      * 选项卡组件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 选项卡组件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class TabBar extends ListBase {
 
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         public constructor(){
             super();
             this.requireSelection = true;
             this.useVirtualLayout = false;
         }
 
+        /**
+         * @language en_US
+         * 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected createChildren():void{
             if (!this.$layout) {
                 var layout = new HorizontalLayout();
@@ -51,6 +88,11 @@ module swan {
             super.createChildren();
         }
 
+        /**
+         * @private
+         * 
+         * @param value 
+         */
         $setDataProvider(value:ICollection){
             if(lark.is(this.$dataProvider, swan.Types.ViewStack)){
                 this.$dataProvider.removeListener(PropertyEvent.PROPERTY_CHANGE,this.onViewStackIndexChange,this);
@@ -64,8 +106,12 @@ module swan {
             super.$setDataProvider(value);
         }
 
+        /**
+         * @private
+         */
         private indexBeingUpdated:boolean = false;
         /**
+         * @private
          * 鼠标点击的选中项改变
          */
         private onIndexChanged(event:lark.Event):void{
@@ -75,6 +121,7 @@ module swan {
         }
 
         /**
+         * @private
          * ViewStack选中项发生改变
          */
         private onViewStackIndexChange(event:PropertyEvent):void{

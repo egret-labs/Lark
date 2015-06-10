@@ -31,18 +31,51 @@
 module swan {
 
     /**
+     * @language en_US
      * 垂直滑块控件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 垂直滑块控件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class VSlider extends SliderBase {
         /**
+         * @language en_US
          * 创建一个垂直滑块控件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个垂直滑块控件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor() {
             super();
         }
 
         /**
+         * @language en_US
          * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected pointToValue(x:number, y:number):number {
             if (!this.thumb || !this.track)
@@ -54,6 +87,11 @@ module swan {
             return values[sys.RangeKeys.minimum] + ((thumbRange != 0) ? ((thumbRange - y) / thumbRange) * range : 0);
         }
 
+        /**
+         * @private
+         * 
+         * @returns 
+         */
         private getThumbRange():number {
             var bounds = lark.$TempRectangle;
             this.track.getLayoutBounds(bounds);
@@ -64,7 +102,18 @@ module swan {
 
 
         /**
+         * @language en_US
          * 设置外观部件（通常为滑块）的边界，这些外观部件的几何图形不是完全由外观的布局指定的
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设置外观部件（通常为滑块）的边界，这些外观部件的几何图形不是完全由外观的布局指定的
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public updateSkinDisplayList():void {
             if (!this.thumb || !this.track)

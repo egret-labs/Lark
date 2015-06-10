@@ -31,14 +31,40 @@
 module swan {
 
 	/**
+	 * @language en_US
 	 * 切换按钮
 	 * @event lark.Event.CHANGE 选中状态发生改变，仅当触摸操作引起的选中状态改变才会抛出此事件。
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
+	 */
+	/**
+	 * @language zh_CN
+	 * 切换按钮
+	 * @event lark.Event.CHANGE 选中状态发生改变，仅当触摸操作引起的选中状态改变才会抛出此事件。
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
 	 */
 	export class ToggleButton extends Button{
 
+		/**
+		 * @private
+		 */
 		$selected: boolean = false;
 		/**
+		 * @language en_US
 		 * 按钮处于按下状态时为 true，而按钮处于弹起状态时为 false。
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
+		 * 按钮处于按下状态时为 true，而按钮处于弹起状态时为 false。
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public get selected():boolean{
 			return this.$selected;
@@ -48,6 +74,11 @@ module swan {
 			this.$setSelected(value);
 		}
 
+		/**
+		 * @private
+		 * 
+		 * @param value 
+		 */
 		$setSelected(value:boolean):void{
 			value = !!value;
 			if (value === this.$selected)
@@ -58,7 +89,18 @@ module swan {
 		}
 
 		/**
+		 * @language en_US
 		 * 返回要应用到外观的状态的名称
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
+		 * 返回要应用到外观的状态的名称
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		protected getCurrentState():string{
 			var state = super.getCurrentState();
@@ -75,12 +117,24 @@ module swan {
 			}
 		}
 		/**
+		 * @private
 		 * 是否根据鼠标事件自动变换选中状态,默认true。仅框架内使用。
 		 */
 		$autoSelected:boolean = true;
 
 		/**
+		 * @language en_US
 		 * 当在用户单击按钮之后处理 MouseEvent.MOUSE_UP 事件时，将调用此方法
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
+		 * 当在用户单击按钮之后处理 MouseEvent.MOUSE_UP 事件时，将调用此方法
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		protected buttonReleased():void{
 			if(!this.$autoSelected)
