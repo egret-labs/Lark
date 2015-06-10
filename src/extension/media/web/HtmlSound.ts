@@ -30,17 +30,34 @@
 module lark.web {
 
     /**
+     * @private
      * @inheritDoc
      */
     export class HtmlSound extends lark.EventEmitter implements lark.Sound {
 
+        /**
+         * @private
+         */
         private url:string;
+        /**
+         * @private
+         */
         private originAudio:HTMLAudioElement;
+        /**
+         * @private
+         */
         private audios: HTMLAudioElement[] = [];
+        /**
+         * @private
+         */
         private loaded: boolean = false;
+        /**
+         * @private
+         */
         private closed: boolean = false;
 
         /**
+         * @private
          * @inheritDoc
          */
         constructor(url?: string) {
@@ -49,6 +66,7 @@ module lark.web {
         }
 
         /**
+         * @private
          * @inheritDoc
          */
         load(url?:string){
@@ -65,10 +83,10 @@ module lark.web {
         }
 
         /**
+         * @private
          * @inheritDoc
          */
-        play(startTime:number = 0, loops:number = 0):lark.SoundChannel {
-            startTime = startTime / 1000;
+        play(startTime:number = 0, loop = false):lark.SoundChannel {
             if(DEBUG && this.loaded == false){
                 lark.$error(3001);
             }
@@ -81,16 +99,17 @@ module lark.web {
             else{
                 audio.currentTime = startTime;
             }
-            audio.loop = loops < 0 || loops > 0;
+            audio.loop = !!loop;
             var channel = new HtmlSoundChannel(audio);
             channel.$sound = this;
-            channel.$loops = loops;
+            channel.$loop = loop;
             channel.$startTime = startTime;
             audio.play();
             return channel;
         }
         
         /**
+         * @private
          * @inheritDoc
          */
         close() {
@@ -103,6 +122,11 @@ module lark.web {
             this.closed = true;
         }
 
+        /**
+         * @private
+         * 
+         * @param audio 
+         */
         $recycle(audio: HTMLAudioElement) {
             if(this.closed)
                 return;
@@ -110,11 +134,19 @@ module lark.web {
         }
 
 
+        /**
+         * @private
+         * 
+         */
         private onAudioLoaded(){
             this.loaded = true;
             this.emitWith(lark.Event.COMPLETE);
         }
 
+        /**
+         * @private
+         * 
+         */
         private onAudioError(){
             this.emitWith(lark.Event.IO_ERROR);
         }
@@ -123,35 +155,52 @@ module lark.web {
 
 
     /**
+     * @private
      * @inheritDoc
      */
     export class HtmlSoundChannel extends lark.EventEmitter implements lark.SoundChannel{
 
+        /**
+         * @private
+         */
         $sound:HtmlSound;
-        $loops:number = 0;
+        /**
+         * @private
+         */
+        $loop:boolean = false;
+        /**
+         * @private
+         */
         $startTime:number = 0;
-        private audio:HTMLAudioElement;
+        /**
+         * @private
+         */
+        private audio:HTMLAudioElement = null;
 
+        /**
+         * @private
+         */
         constructor(audio: HTMLAudioElement) {
             super();
             audio.addEventListener("ended",this.onPlayEnd);
             this.audio = audio;
         }
 
+        /**
+         * @private
+         */
         onPlayEnd = () => {
-            if(this.$loops < 0){
-                return;
-            }
-
-            if(this.$loops==0) {
+            if(this.$loop==false) {
                 this.stop();
                 return;
             }
+            this.audio.load();
             this.audio.currentTime = this.$startTime;
-            this.$loops--;
+            this.audio.play();
         };
 
         /**
+         * @private
          * @inheritDoc
          */
         public stop(){
@@ -166,9 +215,12 @@ module lark.web {
         }
 
         /**
+         * @private
          * @inheritDoc
          */
         public get volume():number {
+            if(!this.audio)
+                return 1;
             return this.audio.volume;
         }
 
@@ -176,14 +228,19 @@ module lark.web {
          * @inheritDoc
          */
         public set volume(value:number){
+            if(!this.audio)
+                return;
             this.audio.volume = value;
         }
 
         /**
+         * @private
          * @inheritDoc
          */
         public get position():number {
-            return this.audio.currentTime / 1000;
+            if(!this.audio)
+                return 0;
+            return this.audio.currentTime;
         }
     }
 

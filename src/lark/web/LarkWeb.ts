@@ -93,7 +93,9 @@ module lark.web {
             if(showFPS||showLog){
                 player.displayFPS(showFPS,showLog,logFilter);
             }
-            var language = navigator.language.replace("-", "_");
+            var language = navigator.language || navigator.browserLanguage || "en_US";
+            language = language.replace("-", "_");
+
             if (language in lark.$locale_strings)
                 lark.$language = language;
         }

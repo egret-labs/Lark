@@ -1,4 +1,4 @@
-﻿//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
 //  All rights reserved.
@@ -37,6 +37,8 @@ module lark {
      * 可通过 SoundChannel 对声音执行更精细的控制，如控制音量和监控播放进度。
      *
      * @event egret.Event.COMPLETE 音频加载完成时抛出
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     /**
      * @language en_US
@@ -45,6 +47,8 @@ module lark {
      * More detailed control of the sound is performed through the SoundChannel
      *
      * @event egret.Event.COMPLETE Emit when the audio resource is loaded and ready to play
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     export interface Sound {
 
@@ -52,35 +56,47 @@ module lark {
          * @language zh_CN
          * 启动从指定 URL 加载外部音频文件的过程。
          * @param url 需要加载的音频文件URL
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         /**
          * @language en_US
          * Initiates loading of an external audio file from the specified URL.
          * @param url Audio file URL
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         load(url?:string):void;
 
         /**
          * @language zh_CN
          * 生成一个新的 SoundChannel 对象来播放该声音。此方法返回 SoundChannel 对象，访问该对象可停止声音调整音量。
-         * @param startTime 应开始播放的初始位置（以毫秒为单位），默认值是 0
-         * @param loops 定义在声道停止播放之前，声音循环回 startTime 值的次数，默认值是 0
+         * @param startTime 应开始播放的初始位置（以秒为单位），默认值是 0
+         * @param loop 是否需要循环播放，默认值是 false
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         /**
          * @language en_US
          * Generates a new SoundChannel object to play back the sound.
-         * @param startTime The initial position in milliseconds at which playback should start, (default = 0)
-         * @param loops Defines the number of times a sound loops back to the startTime value before the sound channel stops playback. (default = 0)
+         * @param startTime The initial position in seconds at which playback should start, (default = 0)
+         * @param loop Defines should play the audio again when the audio is ended. (default = false)
+         * @version Lark 1.0
+         * @platform Web,Native
          */
-        play(startTime?:number, loops?:number):SoundChannel;
+        play(startTime?:number, loop?:boolean):SoundChannel;
 
         /**
          * @language zh_CN
          * 关闭该流，从而停止所有数据的下载。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         /**
          * @language en_US
          * Closes the stream, causing any download of data to cease
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         close():void;
     }
@@ -91,6 +107,8 @@ module lark {
      * SoundChannel 类包含 stop() 方法、用于设置音量和监视播放进度的属性。
      *
      * @event egret.Event.COMPLETE 音频播放完成时抛出
+     * @version Lark 1.0
+     * @platform Web,Native
     */
     /**
      * @language en_US
@@ -101,41 +119,65 @@ module lark {
      * set the volume of the channel
      *
      * @event egret.Event.COMPLETE Emit when a sound has finished playing
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     export interface SoundChannel {
 
         /**
          * @language zh_CN
          * 音量范围从 0（静音）至 1（最大音量）。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         /**
          * @language en_US
          * The volume, ranging from 0 (silent) to 1 (full volume).
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         volume:number;
 
         /**
          * @language zh_CN
-         * [只读] 当播放声音时，position 属性表示声音文件中当前播放的位置（以毫秒为单位）
+         * [只读] 当播放声音时，position 属性表示声音文件中当前播放的位置（以秒为单位）
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         /**
          * @language en_US
          * [read-only]  When the sound is playing, the position property indicates
-         * in milliseconds the current point that is being played in the sound file.
+         * in seconds the current point that is being played in the sound file.
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         position:number;
 
         /**
          * @language zh_CN
          * 停止在该声道中播放声音。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         /**
          * @language en_US
          * Stops the sound playing in the channel.
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         stop():void;
     }
 
+    /**
+     * @language en_US
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
     export var Sound:{
 
         /**

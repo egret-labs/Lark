@@ -3,7 +3,6 @@
 module lark {
     export class MediaMain extends Sprite {
         play: TextField;
-        pause: TextField;
         stop: TextField;
         progress: TextField;
         audio: Sound;
@@ -11,8 +10,6 @@ module lark {
             super();
 
             var play = new TextField("play");
-            var pause = new TextField("pause");
-            pause.y = 30;
             var stop = new TextField("stop");
             stop.y = 60;
             var progress = new TextField("0");
@@ -20,16 +17,27 @@ module lark {
 
             var channel:lark.SoundChannel;
 
-            play.on(TouchEvent.TOUCH_BEGIN, e=> channel =this.audio.play(10000), this);
+            var onChannelTimer = ()=>{
+                if(!channel)
+                    return;
+                progress.text = channel.position;
+            };
+
+            play.on(TouchEvent.TOUCH_BEGIN, e => {
+                channel =this.audio.play(0,true);
+
+                var timer = new Timer(200);
+                timer.on("timer",onChannelTimer,this);
+                timer.start();
+
+            }, this);
             stop.on(TouchEvent.TOUCH_END, e=> channel.stop(), this);
 
             this.addChild(play);
-            this.addChild(pause);
             this.addChild(stop);
             this.addChild(progress);
 
             this.play = play;
-            this.pause = pause;
             this.stop = stop;
             this.progress = progress;
 
@@ -38,10 +46,11 @@ module lark {
 
         start() {
 
-            var sound = new Sound('sound/sound_bg.mp3');
+            var sound = new Sound('sound/sound_go.mp3');
             sound.load();
             this.audio = sound;
         }
+
 
         showOrg(e: Event) {
 
