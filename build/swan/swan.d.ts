@@ -398,19 +398,73 @@ declare module swan {
 }
 declare module swan {
     /**
-     * 列表的集合类数据源对象接口
+     * @language en_US
+     * An <code>ICollectionView</code> is a view onto a collection of data.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     *
+     * <code>ICollection</code>是一个列表的集合类数据源对象的查看接口。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     interface ICollection extends lark.IEventEmitter {
         /**
-         * 此集合中的项目数。0 表示不包含项目。
+         * @language en_US
+         * [read-only] The number of items in this view.
+         * 0 means no items, while -1 means that the length is unknown.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [只读] 此集合中的项目数。0 表示不包含项目。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         length: number;
         /**
+         * @language en_US
+         * Gets the item at the specified index.
+         * @param index The index in the list from which to retrieve the item.
+         * @return The item at that index, or <code>null</code> if there is none.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 获取指定索引处的项目。
+         * @param index 要得到的项的指定位置。
+         * @return 在索引位置的项，如果没有该项则返回null。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         getItemAt(index: number): any;
         /**
+         * @language en_US
+         * Returns the index of the item if it is in the list。-1 otherwise.
+         * @param item The item to find.
+         * @return The index of the item, or -1 if the item is not in the list.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 如果项目位于列表中,返回该项目的索引。否则返回-1。
+         * @param item 要查找的项。
+         * @return 项的索引，如果该项没有在列表中将返回-1.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         getItemIndex(item: any): number;
     }
@@ -473,67 +527,6 @@ declare module swan {
     }
 }
 declare module swan.sys {
-    /**
-     * 数值缓动工具类
-     */
-    class Animation {
-        /**
-         */
-        constructor(updateFunction: (animation: Animation) => void, thisObject: any);
-        /**
-         * 此动画的缓动行为。设置为null意味着不使用缓动，默认值为 sineInOut
-         */
-        easerFunction: (fraction: number) => number;
-        private thisObject;
-        /**
-         * 是否正在播放动画，不包括延迟等待和暂停的阶段
-         */
-        isPlaying: boolean;
-        /**
-         * 动画持续时间,单位毫秒，默认值500
-         */
-        duration: number;
-        /**
-         * 动画到当前时间对应的值。
-         */
-        currentValue: number;
-        /**
-         * 起始值
-         */
-        from: number;
-        /**
-         * 终点值。
-         */
-        to: number;
-        /**
-         * 动画启动时刻
-         */
-        private startTime;
-        /**
-         * 动画播放结束时的回调函数
-         */
-        endFunction: (animation: Animation) => void;
-        /**
-         * 动画更新时的回调函数
-         */
-        updateFunction: Function;
-        /**
-         * 开始正向播放动画,无论何时调用都重新从零时刻开始，若设置了延迟会首先进行等待。
-         */
-        play(): void;
-        /**
-         * 开始播放动画
-         */
-        private start();
-        /**
-         * 停止播放动画
-         */
-        stop(): void;
-        /**
-         * 计算当前值并返回动画是否结束
-         */
-        private doInterval(currentTime);
-    }
 }
 declare module swan {
     /**
@@ -603,16 +596,47 @@ declare module swan.sys {
 }
 declare module swan {
     /**
-     * 默认的IAssetAdapter接口实现
+     * @language en_US
+     * Default instance of interface <code>IAssetAdapter</code>.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 默认的IAssetAdapter接口实现。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     class DefaultAssetAdapter implements IAssetAdapter {
         /**
+         * @language en_US
+         * resolve asset.
+         * @param source the identifier of new asset need to be resolved
+         * @param callBack callback function when resolving complete
+         * example：callBack(content:any,source:string):void;
+         * @param thisObject <code>this</code> object of callback method
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 解析素材
          * @param source 待解析的新素材标识符
          * @param callBack 解析完成回调函数，示例：callBack(content:any,source:string):void;
          * @param thisObject callBack的 this 引用
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         getAsset(source: string, callBack: (data: any, source: string) => void, thisObject: any): void;
+        /**
+         * @private
+         *
+         * @param event
+         */
         private onLoadFinish(event);
     }
 }
@@ -655,71 +679,6 @@ declare module swan {
     function registerProperty(classDefinition: any, property: string, type: string, asDefault?: boolean): void;
 }
 declare module swan.sys {
-    /**
-     * 一个工具类,用于容器的滚屏拖动操作，计算在一段时间持续滚动后释放，应该继续滚动到的值和缓动时间。
-     * 使用此工具类，您需要创建一个 ScrollThrown 实例,并在滚动发生时调用start()方法，然后在触摸移动过程中调用update()更新当前舞台坐标。
-     * 内部将会启动一个计时器定时根据当前位置计算出速度值，并缓存下来最后4个值。当停止滚动时，再调用finish()方法，
-     * 将立即停止记录位移，并将计算出的最终结果存储到 Thrown.scrollTo 和 Thrown.duration 属性上。
-     */
-    class TouchScroll {
-        /**
-         * 创建一个 TouchScroll 实例
-         * @param updateFunction 滚动位置更新回调函数
-         */
-        constructor(updateFunction: (scrollPos: number) => void, endFunction: () => void, target: lark.IEventEmitter);
-        private target;
-        private updateFunction;
-        private endFunction;
-        private previousTime;
-        private velocity;
-        private previousVelocity;
-        private currentPosition;
-        private previousPosition;
-        private currentScrollPos;
-        private maxScrollPos;
-        /**
-         * 鼠标按下时的偏移量
-         */
-        private offsetPoint;
-        /**
-         * 停止触摸时继续滚动的动画实例
-         */
-        private animation;
-        /**
-         * 正在播放缓动动画的标志。
-         */
-        isPlaying(): boolean;
-        /**
-         * 如果正在执行缓动滚屏，停止缓动。
-         */
-        stop(): void;
-        /**
-         * 开始记录位移变化。注意：当使用完毕后，必须调用 finish() 方法结束记录，否则该对象将无法被回收。
-         * @param touchPoint 起始触摸位置，以像素为单位，通常是stageX或stageY。
-         */
-        start(touchPoint: number, scrollValue: number, maxScrollValue: number): void;
-        /**
-         * 更新当前移动到的位置
-         * @param touchPoint 当前触摸位置，以像素为单位，通常是stageX或stageY。
-         */
-        update(touchPoint: number, maxScrollValue: number): void;
-        /**
-         * 停止记录位移变化，并计算出目标值和继续缓动的时间。
-         * @param currentScrollPos 容器当前的滚动值。
-         * @param maxScrollPos 容器可以滚动的最大值。当目标值不在 0~maxValue之间时，将会应用更大的摩擦力，从而影响缓动时间的长度。
-         */
-        finish(currentScrollPos: number, maxScrollPos: number): void;
-        private onTick(timeStamp);
-        private finishScrolling(animation?);
-        /**
-         * 缓动到水平滚动位置
-         */
-        private throwTo(hspTo, duration?);
-        /**
-         * 更新水平滚动位置
-         */
-        private onScrollingUpdate(animation);
-    }
 }
 declare module swan.sys {
     class MatrixUtil {
@@ -775,68 +734,229 @@ declare module swan {
 }
 declare module swan {
     /**
-     * 数组的集合类数据结构包装器
-     * 通常作为列表组件的数据源，使用这种数据结构包装普通数组，
-     * 能在数据源发生改变的时候主动通知视图刷新变更的数据项
+     * @language en_US
+     * The ArrayCollection class is a wrapper class that exposes an <code>any[]</code> as a collection that can be
+     * accessed and manipulated using the methods and properties of the <code>ICollection</code> interfaces.
+     * ArrayCollection can notify the view to update item when data source changed.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * ArrayCollection 类是数组的集合类数据结构包装器，可使用<code>ICollection</code>接口的方法和属性对其进行访问和处理。
+     * 使用这种数据结构包装普通数组，能在数据源发生改变的时候主动通知视图刷新变更数据项。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     class ArrayCollection extends lark.EventEmitter implements ICollection {
         /**
-         * 创建一个 ArrayCollection 实例
+         * @language en_US
+         * Constructor. <p/>
+         * Creates a new ArrayCollection using the specified source array.
+         * If no array is specified an empty array will be used.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。<p/>
+         * 用指定的原始数组创建一个 ArrayCollection 实例。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         constructor(source?: any[]);
+        /**
+         * @private
+         */
         private _source;
         /**
+         * @language en_US
+         * The source of data in the ArrayCollection.
+         * The ArrayCollection object does not represent any changes that you make
+         * directly to the source array. Always use the ICollection methods to view the collection.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 数据源
-         * 通常情况下请不要直接调用Array的方法操作数据源，否则对应的视图无法收到数据改变的通知。
-         * 若对数据源进行了排序或过滤等操作，请手动调用refresh()方法刷新数据。
+         * 通常情况下请不要直接调用Array的方法操作数据源，否则对应的视图无法收到数据改变的通知。通常都是通过ICollection的接口方法来查看数据。
+         * 若对数据源进行了修改，请手动调用refresh()方法刷新数据。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         source: any[];
         /**
+         * @language en_US
+         * Applies the sort and filter to the view.
+         * The ArrayCollection does not detect source data changes automatically,
+         * so you must call the <code>refresh()</code>
+         * method to update the view after changing the source data.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 在对数据源进行排序或过滤操作后可以手动调用此方法刷新所有数据,以更新视图。
+         * ArrayCollection 不会自动检原始数据进行了改变,所以你必须调用<code>refresh()</code>方法去更新显示。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         refresh(): void;
         /**
-         * 此集合中的项目数。0 表示不包含项目。
+         * @inheritDoc
          */
         length: number;
         /**
-         * 向列表末尾添加指定项目。等效于 addItemAt(item, length)。
+         * @language en_US
+         * Adds the specified item to the end of the list.
+         * Equivalent to <code>addItemAt(item, length)</code>.
+         * @param item The item to add.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 向列表末尾添加指定项目。等效于 <code>addItemAt(item, length)</code>。
+         * @param item 要被添加的项。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         addItem(item: any): void;
         /**
+         * @language en_US
+         * Adds the item at the specified index.
+         * The index of any item greater than the index of the added item is increased by one.
+         * If the the specified index is less than zero or greater than the length
+         * of the list, a Error which code is 1007 is thrown.
+         * @param item The item to place at the index.
+         * @param index The index at which to place the item.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 在指定的索引处添加项目。
          * 任何大于已添加项目的索引的项目索引都会增加 1。
+         * 如果指定的索引比0小或者比最大长度要大。则会抛出1007异常。
+         * @param item 要添加的项
+         * @param index 要添加的指定索引位置
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         addItemAt(item: any, index: number): void;
         /**
-         * 获取指定索引处的项目
+         * @inheritDoc
          */
         getItemAt(index: number): any;
         /**
-         * 如果项目位于列表中,返回该项目的索引。否则返回-1。
+         * @inheritDoc
          */
         getItemIndex(item: any): number;
         /**
+         * @language en_US
+         * Notifies the view that an item has been updated.
+         * @param item The item within the view that was updated.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 通知视图，某个项目的属性已更新。
+         * @param item 视图中需要被更新的项。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         itemUpdated(item: any): void;
         /**
+         * @language en_US
+         * Removes all items from the list.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 删除列表中的所有项目。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         removeAll(): void;
         /**
+         * @language en_US
+         * Removes the item at the specified index and returns it.
+         * Any items that were after this index are now one index earlier.
+         * @param index The index from which to remove the item.
+         * @return The item that was removed.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 删除指定索引处的项目并返回该项目。原先位于此索引之后的所有项目的索引现在都向前移动一个位置。
+         * @param index 要被移除的项的索引。
+         * @return 被移除的项。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         removeItemAt(index: number): any;
         /**
+         * @language en_US
+         * Replaces the item at the specified index.
+         * @param item The new item to be placed at the specified index.
+         * @param index The index at which to place the item.
+         * @return The item that was replaced, or <code>null</code> if none.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 替换在指定索引处的项目，并返回该项目。
+         * @param item 要在指定索引放置的新的项。
+         * @param index 要被替换的项的索引位置。
+         * @return 被替换的项目，如果没有该项则返回<code>null</code> 。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         replaceItemAt(item: any, index: number): any;
         /**
+         * @language en_US
+         * Replaces all items with a new source data, this method can not reset the scroller position of view.
+         * @param newSource new source data.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 用新数据源替换原始数据源，此方法与直接设置source不同，它不会导致目标视图重置滚动位置。
+         * @param newSource 新数据。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         replaceAll(newSource: any[]): void;
         /**
+         * @private
          * 抛出事件
          */
         private dispatchCoEvent(kind, location?, oldLocation?, items?, oldItems?);
@@ -1352,50 +1472,186 @@ declare module swan {
 }
 declare module swan {
     /**
+     * @language en_US
+     * The Watcher class defines utility method that you can use with bindable properties.
+     * These methods let you define an event handler that is executed whenever a bindable property is updated.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * Watcher 类能够监视可绑定属性的改变，您可以定义一个事件处理函数作为 Watcher 的回调方法，在每次可绑定属性的值改变时都执行此函数。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     class Watcher {
         /**
-         * 创建并启动 Watcher 实例。注意：Watcher 只能监视 host 为 IEventEmitter 对象的属性改变。若属性链中某个属性所对应的实例不是 IEventEmitter，则属性链中在它之后的属性改变将无法检测到。
+         * @language en_US
+         * Creates and starts a Watcher instance.
+         * The Watcher can only watch the property of a Object which host is instance of IEventEmitter.
+         * @param host The object that hosts the property or property chain to be watched.
+         * You can use the use the <code>reset()</code> method to change the value of the <code>host</code> argument
+         * after creating the Watcher instance.
+         * The <code>host</code> maintains a list of <code>handlers</code> to invoke when <code>prop</code> changes.
+         * @param chain A value specifying the property or chain to be watched.
+         * For example, to watch the property <code>host.a.b.c</code>,
+         * call the method as: <code>watch(host, ["a","b","c"], ...)</code>.
+         * @param handler  An event handler function called when the value of the watched property
+         * (or any property in a watched chain) is modified.
+         * @param thisObject <code>this</code> object of which binding with handler
+         * @returns he ChangeWatcher instance, if at least one property name has been specified to
+         * the <code>chain</code> argument; null otherwise.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建并启动 Watcher 实例。注意：Watcher 只能监视 host 为 IEventEmitter 对象的属性改变。若属性链中某个属性所对应的实例不是 IEventEmitter，
+         * 则属性链中在它之后的属性改变将无法检测到。
          * @param host 用于承载要监视的属性或属性链的对象。
-         * @param chain 用于指定要监视的属性链的值。例如，要监视属性 host.a.b.c，需按以下形式调用此方法：watch(host, ["a","b","c"], ...)。
+         * 创建Watcher实例后，您可以利用<code>reset()</code>方法更改<code>host</code>参数的值。
+         * 当<code>prop</code>改变的时候，会使得host对应的一系列<code>handlers</code>被触发。
+         * @param chain 用于指定要监视的属性链的值。例如，要监视属性 host.a.b.c，需按以下形式调用此方法：watch¬(host, ["a","b","c"], ...)。
          * @param handler 在监视的目标属性链中任何属性的值发生改变时调用的事件处理函数。
          * @param thisObject handler 方法绑定的this对象
          * @returns 如果已为 chain 参数至少指定了一个属性名称，则返回 Watcher 实例；否则返回 null。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         static watch(host: any, chain: string[], handler: (value: any) => void, thisObject: any): Watcher;
         /**
+         * @private
          * 检查属性是否可以绑定。若还未绑定，尝试添加绑定事件。若是只读或只写属性，返回false。
          */
         private static checkBindable(host, property);
         /**
+         * @language en_US
+         * Constructor.
+         * Not for public use. This method is called only from the <code>watch()</code> method.
+         * See the <code>watch()</code> method for parameter usage.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 构造函数，非公开。只能从 watch() 方法中调用此方法。有关参数用法，请参阅 watch() 方法。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         constructor(property: string, handler: (value: any) => void, thisObject: any, next?: Watcher);
+        /**
+         * @private
+         */
         private host;
+        /**
+         * @private
+         */
         private property;
+        /**
+         * @private
+         */
         private handler;
+        /**
+         * @private
+         */
         private thisObject;
+        /**
+         * @private
+         */
         private next;
+        /**
+         * @private
+         */
         private isExecuting;
         /**
+         * @language en_US
+         * Detaches this Watcher instance, and its handler function, from the current host.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 从当前宿主中断开此 Watcher 实例及其处理函数。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         unwatch(): void;
         /**
+         * @language en_US
+         * Retrieves the current value of the watched property or property chain, or null if the host object is null.
+         * @example
+         * <code>
+         * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
+         * </code>
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 检索观察的属性或属性链的当前值，当宿主对象为空时此值为空。
+         * @example
+         * <code>
+         * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
+         * </code>
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         getValue(): any;
         /**
+         * @language en_US
+         * Sets the handler function.s
+         * @param handler The handler function. This argument must not be null.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 设置处理函数。
-         * @param handler 处理函数
+         * @param handler 处理函数，此参数必须为非空。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         setHandler(handler: (value: any) => void, thisObject: any): void;
         /**
+         * @language en_US
+         * Resets this ChangeWatcher instance to use a new host object.
+         * You can call this method to reuse a watcher instance on a different host.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 重置此 Watcher 实例使用新的宿主对象。
+         * 您可以通过该方法实现一个Watcher实例用于不同的宿主。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         reset(newHost: lark.IEventEmitter): void;
+        /**
+         * @private
+         *
+         * @returns
+         */
         private getHostPropertyValue();
+        /**
+         * @private
+         *
+         * @param event
+         */
         private wrapHandler(event);
     }
 }
@@ -1524,23 +1780,76 @@ declare module EXML {
     function load(url: string, callBack?: (clazz: any, url: string) => void, thisObject?: any): void;
 }
 declare module swan {
+    /**
+     * @language en_US
+     * The Binding class defines utility methods for performing data binding.
+     * You can use the methods defined in this class to configure data bindings.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 绑定工具类，用于执行数据绑定用的方法集。您可以使用此类中定义的方法来配置数据绑定。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
     class Binding {
         /**
-         * 绑定一个对象的属性值到要监视的对象属性上。当 host上 chain 所对应的值发生改变时，target 上的 prop 属性将被自动更新。
-         * @param host 用于承载要监视的属性链的对象
-         * @param chain 用于指定要监视的属性链的值。例如，要监视属性 host.a.b.c，需按以下形式调用此方法：bindProperty(host, ["a","b","c"], ...)。
+         * @language en_US
+         * Binds a property, <prop>prop</code> on the <code>target</code> Object, to a bindable property or peoperty chain.
+         * @param host The object that hosts the property or property chain to be watched.
+         * The <code>host</code> maintains a list of <code>targets</code> to update theirs <code>prop</code> when <code>chain</code> changes.
+         * @param chain A value specifying the property or chain to be watched. For example, when watch the property <code>host.a.b.c</code>,
+         * you need call the method like this: <code>indProperty(host, ["a","b","c"], ...)</code>
+         * @param target The Object defining the property to be bound to <code>chain</code>.
+         * @param prop The name of the public property defined in the <code>site</code> Object to be bound.
+         * @returns A ChangeWatcher instance, if at least one property name has been specified
+         * to the <code>chain</code> argument; null otherwise.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 绑定一个对象的属性值到要监视的对象属性上。
+         * @param host 用于承载要监视的属性或属性链的对象。
+         * 当 <code>host</code>上<code>chain</code>所对应的值发生改变时，<code>target</code>上的<code>prop</code>属性将被自动更新。
+         * @param chain 用于指定要监视的属性链的值。例如，要监视属性 <code>host.a.b.c</code>，需按以下形式调用此方法：<code>bindProperty(host, ["a","b","c"], ...)。</code>
          * @param target 本次绑定要更新的目标对象。
          * @param prop 本次绑定要更新的目标属性名称。
          * @returns 如果已为 chain 参数至少指定了一个属性名称，则返回 Watcher 实例；否则返回 null。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         static bindProperty(host: any, chain: string[], target: any, prop: string): Watcher;
         /**
+         * @language en_US
+         * Binds a callback, <prop>handler</code> on the <code>target</code> Object, to a bindable property or peoperty chain.
+         * Callback method to invoke with an argument of the current value of <code>chain</code> when that value changes.
+         * @param host The object that hosts the property or property chain to be watched.
+         * @param chain A value specifying the property or chain to be watched. For example, when watch the property <code>host.a.b.c</code>,
+         * you need call the method like this: <code>indProperty(host, ["a","b","c"], ...)</code>
+         * @param handler method to invoke with an argument of the current value of <code>chain</code> when that value changes.
+         * @param thisObject <code>this</code> object of binding method
+         * @returns A ChangeWatcher instance, if at least one property name has been  specified to the <code>chain</code> argument; null otherwise.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 绑定一个回调函数到要监视的对象属性上。当 host上 chain 所对应的值发生改变时，handler 方法将被自动调用。
          * @param host 用于承载要监视的属性或属性链的对象。
          * @param chain 用于指定要监视的属性链的值。例如，要监视属性 host.a.b.c，需按以下形式调用此方法：bindSetter(host, ["a","b","c"], ...)。
          * @param handler 在监视的目标属性链中任何属性的值发生改变时调用的事件处理函数。
          * @param thisObject handler 方法绑定的this对象
          * @returns 如果已为 chain 参数至少指定了一个属性名称，则返回 Watcher 实例；否则返回 null。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         static bindHandler(host: any, chain: string[], handler: (value: any) => void, thisObject: any): Watcher;
     }
@@ -2693,6 +3002,10 @@ declare module swan {
          */
         skin: Skin;
         /**
+         * 设置皮肤实例
+         */
+        protected setSkin(skin: Skin): void;
+        /**
          * 关联一个对象到逻辑组件的指定皮肤部件上。通常您不需要手动调用此方法，当使用EXML文件作为组件皮肤，此方法将会被自动调用。
          * 在运行时，EXML文件内声明的id名称将作为此方法的partName参数，而id所对应的节点对象，将作为此方法的instance参数被依次传入。
          * @param partName 皮肤部件名称
@@ -3423,19 +3736,128 @@ declare module swan {
 }
 declare module swan {
     /**
-     * 滚动条基类
+     * @language en_US
+     * The ScrollBarBase class helps to position
+     * the portion of data that is displayed when there is too much data
+     * to fit in a display area.
+     * The ScrollBarBase class displays a pair of viewport and a thumb.
+     * viewport is a instance that implements IViewport.
+     *
+     * @see swan.IViewport
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * <code>ScrollBarBase</code> 滚动条基类，该类帮助在因数据太多而不能在显示区域完全显示时定位显示的数据部分。
+     * ScrollBarBase 类显示视区的一部分和一个指示滑块。
+     * 视区是一个IViewport接口实现的实例。
+     *
+     * @see swan.IViewport
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     class ScrollBarBase extends Component {
         /**
-         * 创建一个ScrollBarBase实例
+         * @language en_US
+         * Constructor.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个ScrollBarBase实例。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         constructor();
         /**
+         * @language en_US
+         * [SkinPart] Thumb display object.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * [SkinPart]滑块显示对象
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         thumb: swan.UIComponent;
+        /**
+         * @language en_US
+         * The viewport controlled by this scrollbar.
+         *
+         * If a viewport is specified, then changes to its actual size, content
+         * size, and scroll position cause the corresponding ScrollBarBase methods to
+         * run:
+         * <ul>
+         *     <li><code>onViewportResize()</code></li>
+         *     <li><code>onPropertyChanged()</code></li>
+         * </ul><p/>
+         *
+         * The VScrollBar and HScrollBar classes override these methods to keep their properties in
+         * sync with the viewport.
+         *
+         * @default null
+         * @see swan.VScrollBar
+         * @see swan.HScrollBar
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 由该滚动条控制的视区。
+         *
+         * 如果指定了视区，则对其实际大小、内容大小和滚动位置的更改会导致运行相对应的 ScrollBarBase 方法：
+         * <ul>
+         *     <li><code>onViewportResize()</code></li>
+         *     <li><code>onPropertyChanged()</code></li>
+         * </ul><p/>
+         *
+         * VScrollBar 和 HScrollBar 类需要重写这些方法以保证属性与视区的同步。
+         *
+         * @default null
+         * @see swan.VScrollBar
+         * @see swan.HScrollBar
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         viewport: IViewport;
+        /**
+         * @private
+         *
+         * @param event
+         */
         private onViewportResize(event?);
+        /**
+         * @language en_US
+         * Properties of viewport changed.
+         * @param event
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 视区属性发生改变。
+         * @param event
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected onPropertyChanged(event: swan.PropertyEvent): void;
     }
 }
@@ -3701,72 +4123,323 @@ declare module swan {
     }
 }
 declare module swan.sys {
-    const enum RangeKeys {
-        maximum = 0,
-        maxChanged = 1,
-        minimum = 2,
-        minChanged = 3,
-        value = 4,
-        changedValue = 5,
-        valueChanged = 6,
-        snapInterval = 7,
-        snapIntervalChanged = 8,
-        explicitSnapInterval = 9,
-    }
 }
 declare module swan {
     /**
+     * @language en_US
+     * The Range class holds a value and an allowed range for that
+     * value, defined by <code>minimum</code> and <code>maximum</code> properties.
+     *
+     * The <code>value</code> property
+     * is always constrained to be between the current <code>minimum</code> and
+     * <code>maximum</code>, and the <code>minimum</code>,
+     * and <code>maximum</code> are always constrained
+     * to be in the proper numerical order, such that
+     * <code>(minimum <= value <= maximum)</code> is <code>true</code>.
+     *
+     * If the value of the <code>snapInterval</code> property is not 0,
+     * then the <code>value</code> property is also constrained to be a multiple of
+     * <code>snapInterval</code>.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 范围选取组件,该组件包含一个值和这个值所允许的最大最小约束范围。
+     *
+     * <code>value</code>属性的值永远被限制于当前的<code>minimum</code>和
+     * <code>maximum</code>之间，并且<code>minimum</code>和 <code>maximum</code>永远按照固定的书序排列，
+     * 即<code>(minimum <= value <= maximum)</code> 为真。
+     *
+     * 如果<code>snapInterval</code>属性的值不是0，那么<code>value</code>的值也会被<code>snapInterval</code>所约束。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     class Range extends Component {
         /**
-         * 创建一个 Range 实例
+         * @language en_US
+         * Constructor.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 Range 实例。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         constructor();
         /**
-         * 最大有效值
+         * @language en_US
+         * The maximum valid <code>value</code>.<p/>
+         *
+         * Changes to the value property are constrained
+         * by <code>commitProperties()</code> to be less than or equal to
+         * maximum with the <code>nearestValidValue()</code> method.
+         *
+         * @default 100
+         * @see #nearestValidValue()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 最大有效值。<p/>
+         *
+         * 规定<code>value<code/>属性的值不能够超过的最大值。该修正过程
+         * 将在<code>nearestValidValue()</code>方法中进行。
+         *
+         * @default 100
+         * @see #nearestValidValue()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         maximum: number;
         /**
-         * 最小有效值
+         * @language en_US
+         * The minimum valid <code>value</code>.<p/>
+         *
+         * Changes to the value property are constrained
+         * by <code>commitProperties()</code> to be greater than or equal to
+         * minimum with the <code>nearestValidValue()</code> method.
+         *
+         * @default 0
+         * @see #nearestValidValue()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 最小有效值<p/>
+         *
+         * 规定<code>value<code/>属性的值不能够低于的最小值。该修正过程
+         * 将在<code>nearestValidValue()</code>方法中进行。
+         *
+         * @default 0
+         * @see #nearestValidValue()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         minimum: number;
         /**
-         * 此范围的当前值。
+         * @language en_US
+         * The current value for this range.<p/>
+         *
+         * Changes to the value property are constrained
+         * by <code>commitProperties()</code> to be greater than or equal to
+         * the <code>minimum</code> property, less than or equal to the <code>maximum</code> property, and a
+         * multiple of <code>snapInterval</code> with the <code>nearestValidValue()</code>
+         * method.
+         *
+         * @default 0
+         * @see #setValue()
+         * @see #nearestValidValue()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 此范围的当前值。<p/>
+         *
+         * 改变的<code>value</code>属性将在<code>commitProperties()</code>方法中被<code>minimum</code>属性
+         * 和<code>minimum</code>属性所限制。此修正过程将在<code>nearestValidValue()</code>方法中进行。
+         *
+         * @default 0
+         * @see #setValue()
+         * @see #nearestValidValue()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         value: number;
         /**
-         * snapInterval 属性定义 value 属性的有效值。如果为非零，则有效值为 minimum 与此属性的整数倍数之和，且小于或等于 maximum。
-         * 例如，如果 minimum 为 10，maximum 为 20，而此属性为 3，则可能的有效值为 10、13、16、19 和 20.
+         * @language en_US
+         * The snapInterval property controls the valid values of the <code>value</code> property.
+         *
+         * If nonzero, valid values are the sum of the <code>minimum</code> and integer multiples
+         * of this property, for all sums that are less than or equal to the <code>maximum</code>.<p/>
+         *
+         * For example, if <code>minimum</code> is 10, <code>maximum</code> is 20, and this property is 3, then the
+         * valid values of this Range are 10, 13, 16, 19, and 20.<p/>
+         *
+         * If the value of this property is zero, then valid values are only constrained
+         * to be between minimum and maximum inclusive.
+         *
+         * @default 1
+         * @see #nearestValidValue()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * snapInterval 属性定义 value 属性的有效值。
+         * 如果为非零，则有效值为 minimum 与此属性的整数倍数之和，且小于或等于 maximum。</p>
+         *
+         * 例如，如果 minimum 为 10，maximum 为 20，而此属性为 3，则可能的有效值为 10、13、16、19 和 20.</p>
+         *
          * 如果此属性的值为零，则仅会将有效值约束到介于 minimum 和 maximum 之间（包括两者）。
+         *
+         * @default 1
+         * @see #nearestValidValue()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         snapInterval: number;
         /**
+         * @language en_US
+         * Processes the properties set on the component.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 处理对组件设置的属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected commitProperties(): void;
         /**
+         * @private
          * 修正size到最接近snapInterval的整数倍
          */
         private nearestValidSize(size);
         /**
-         * 修正输入的值为有效值
+         * @language en_US
+         * Returns the sum of the minimum with an integer multiple of <code>interval</code> that's
+         * closest to <code>value</code>, unless <code>value</code> is closer to the maximum limit,
+         * in which case the maximum is returned.<p/>
+         *
+         * If <code>interval</code> is equal to 0, the value is clipped to the minimum and maximum
+         * limits.<p/>
+         *
+         * The valid values for a range are defined by the sum of the <code>minimum</code> property
+         * with multiples of the <code>interval</code> and also defined to be less than or equal to the
+         * <code>maximum</code> property.
+         * The maximum need not be a multiple of <code>snapInterval</code>.<p/>
+         *
+         * For example, if <code>minimum</code> is equal to 1, <code>maximum</code> is equal to 6,
+         * and <code>snapInterval</code> is equal to 2, the valid
+         * values for the Range are 1, 3, 5, 6.
+         *
+         * Similarly, if <code>minimum</code> is equal to 2, <code>maximum</code> is equal to 9,
+         * and <code>snapInterval</code> is equal to 1.5, the valid
+         * values for the Range are 2, 3.5, 5, 6.5, 8, and 9.
+         *
+         * @param value The input value.
+         * @param interval The value of snapInterval or an integer multiple of snapInterval.
+         * @return The valid value that's closest to the input.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回 <code>minimum</code> 与最接近 <code>value</code> 的 <code>interval</code> 的整数倍数之和，
+         * 除非 <code>value</code> 接近最大值限制的时候会返回 maximum。<p/>
+         *
+         * 如果 <code>interval</code> 等于 0，则会将该值剪裁到限制的最小值和最大值。<p/>
+         *
+         * 范围的有效值由 <code>minimum</code> 属性与 <code>interval</code> 的倍数之和决定，
+         * 与此同时也要小于等于 <code>maximum</code> 属性。
+         * 最大值不能是 <code>snapInterval</code> 属性的倍数。<p/>
+         *
+         * 例如，如果 <code>minimum</code> 等于 1，<code>maximum</code> 等于 6，且 <code>snapInterval</code> 等于 3，
+         * 则 Range 的有效值有 1、2、5、6。
+         *
+         * 类似地，如果 <code>minimum</code> 等于 2，<code>maximum</code> 等于 9，
+         * 且 <code>snapInterval</code> 等于 1.5，则 Range 的有效值有 2、3.5、5、6.5、8 和 9。
+         *
+         *
          * @param value 输入值。
          * @param interval snapInterval 的值，或 snapInterval 的整数倍数。
+         * @return 最近接输入值的有效值。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected nearestValidValue(value: number, interval: number): number;
         /**
-         * 设置当前值。此方法假定调用者已经使用了 nearestValidValue() 方法来约束 value 参数
+         * @language en_US
+         * Sets the current value for the <code>value</code> property.<p/>
+         *
+         * This method assumes that the caller has already used the <code>nearestValidValue()</code> method
+         * to constrain the value parameter
+         *
+         * @param value The new value of the <code>value</code> property.
+         * @see #nearestValidValue()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设置当前值。<p/>
+         *
+         * 此方法假定调用者已经使用了 nearestValidValue() 方法来约束 value 参数。
+         *
          * @param value value属性的新值
+         * @see #nearestValidValue()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected setValue(value: number): void;
         /**
+         * @language en_US
+         * Draws the object and/or sizes and positions its children.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 绘制对象和/或设置其子项的大小和位置
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected updateDisplayList(w: number, h: number): void;
         /**
-         * 更新皮肤部件（通常为滑块）的大小和可见性。
+         * @language en_US
+         * Update size and visible of skin parts.<p/>
+         * Subclasses override this method to update skin parts display based on <code>minimum</code>, <code>maximum</code>
+         * and <code>value</code> properties.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 更新皮肤部件（通常为滑块）的大小和可见性。<p/>
          * 子类覆盖此方法以基于 minimum、maximum 和 value 属性更新滑块的大小、位置和可见性。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected updateSkinDisplayList(): void;
     }
@@ -3860,6 +4533,7 @@ declare module swan {
          * 卸载视域组件
          */
         private uninstallViewport();
+        protected setSkin(skin: Skin): void;
         private onTouchEndCapture(event);
         /**
          * 若这个Scroller可以滚动，阻止当前事件，延迟100ms再抛出。
@@ -3988,211 +4662,825 @@ declare module swan {
         liveDragging = 9,
     }
     /**
-     * 滑块控件基类
+     * @language en_US
+     * The SliderBase class lets users select a value by moving a slider thumb between
+     * the end points of the slider track.
+     * The current value of the slider is determined by the relative location of
+     * the thumb between the end points of the slider,
+     * corresponding to the slider's minimum and maximum values.
+     * The SliderBase class is a base class for HSlider and VSlider.
+     *
+     * @see swan.HSlider
+     * @see swan.VSlider
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 滑块控件基类，通过使用 SliderBase 类，用户可以在滑块轨道的端点之间移动滑块来选择值。
+     * 滑块的当前值由滑块端点（对应于滑块的最小值和最大值）之间滑块的相对位置确定。
+     * SliderBase 类是 HSlider 和 VSlider 的基类。
+     *
+     * @see swan.HSlider
+     * @see swan.VSlider
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     class SliderBase extends Range {
         /**
+         * @language en_US
+         * Constructor
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 创建一个 SliderBase 实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         constructor();
         /**
-         * [SkinPart]轨道高亮显示对象
+         * @language en_US
+         * [SkinPart] Highlight of track
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [SkinPart] 轨道高亮显示对象
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         trackHighlight: lark.DisplayObject;
         /**
+         * @language en_US
+         * [SkinPart] Thumb display object
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * [SkinPart]滑块显示对象
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         thumb: swan.UIComponent;
         /**
+         * @language en_US
+         * [SkinPart] Track display object
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * [SkinPart]轨道显示对象
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         track: swan.UIComponent;
         /**
+         * @language en_US
+         * Duration in milliseconds for the sliding animation when you tap on the track to move a thumb.
+         *
+         * @default 300
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 在轨道上单击以移动滑块时，滑动动画持续的时间（以毫秒为单位）。设置为0将不执行缓动。
+         *
+         * @default 300
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         slideDuration: number;
         /**
+         * @language en_US
+         * Converts a track-relative x,y pixel location into a value between
+         * the minimum and maximum, inclusive.
+         *
+         * @param x The x coordinate of the location relative to the track's origin.
+         * @param y The y coordinate of the location relative to the track's origin.
+         * @return A value between the minimum and maximum, inclusive.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值。
+         *
          * @param x 相对于轨道原点的位置的x坐标。
          * @param y 相对于轨道原点的位置的y坐标。
+         * @return 介于最小值和最大值（包括两者）之间的一个值。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected pointToValue(x: number, y: number): number;
         /**
+         * @language en_US
+         * Specifies whether live dragging is enabled for the slider. If true, sets the value
+         * and values properties and dispatches the change event continuously as
+         * the user moves the thumb.
+         *
+         * @default true
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 如果为 true，则将在沿着轨道拖动滑块时，而不是在释放滑块按钮时，提交此滑块的值。
+         *
+         * @default true
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         liveDragging: boolean;
         /**
-         * 释放鼠标按键时滑块将具有的值。无论 liveDragging 是否为 true，在滑块拖动期间始终更新此属性。
+         * @language en_US
+         * The value the slider will have when the mouse button is released.
+         * This property is updated when the slider thumb moves, even if <code>liveDragging</code> is false.<p/>
+         * If the <code>liveDragging</code> style is false, then the slider's value is only set
+         * when the mouse button is released.
+         *
+         * @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 释放鼠标按键时滑块将具有的值。
+         * 无论 liveDragging 是否为 true，在滑块拖动期间始终更新此属性。
          * 而 value 属性在当 liveDragging 为 false 时，只在鼠标释放时更新一次。
+         *
+         * @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         pendingValue: number;
         /**
-         * 在 value 属性改变时为该属性设置后备存储，并调度 valueCommit 事件
+         * @language en_US
+         * Sets the backing store for the <code>value</code> property and
+         * dispatches a <code>valueCommit</code> event if the property changes.
+         *
+         * @param value The new value of the <code>value</code> property.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在 value 属性改变时为该属性设置后备存储，并调度 valueCommit 事件。
+         *
+         * @param value The new value of the <code>value</code> property.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected setValue(value: number): void;
         /**
-         * 添加外观部件时调用
+         * @inheritDoc
          */
         protected partAdded(partName: string, instance: any): void;
         /**
-         * 删除外观部件的实例时调用
+         * @inheritDoc
          */
         protected partRemoved(partName: string, instance: any): void;
         /**
+         * @private
          * 滑块或轨道尺寸改变事件
          */
         private onTrackOrThumbResize(event);
         /**
-         * 滑块按下事件
+         * @language en_US
+         * Handle touch-begin events on the scroll thumb. Records the touch begin point in clickOffset.
+         *
+         * @param The <code>lark.TouchEvent</code> object.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 滑块触摸开始事件，记录触碰开始的坐标偏移量。
+         *
+         * @param event 事件 <code>lark.TouchEvent</code> 的对象.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected onThumbTouchBegin(event: lark.TouchEvent): void;
         /**
+         * @private
          * 舞台上触摸移动事件
          */
         private onStageTouchMove(event);
+        /**
+         * @language en_US
+         * Capture touch-move events anywhere on or off the stage.
+         * @param newValue new value
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 监听舞台的触碰移动事件。
+         * @param newValue 新的值
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected updateWhenTouchMove(newValue: number): void;
         /**
+         * @language en_US
+         * Handle mouse-up events anywhere on or off the stage.
+         *
+         * @param The <code>lark.Event</code> object.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 触摸结束事件
+         *
+         * @param event 事件 <code>lark.Event</code> 的对象。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected onStageTouchEnd(event: lark.Event): void;
         /**
+         * @private
          * 当在组件上按下时记录被按下的子显示对象
          */
         private onTouchBegin(event);
         /**
+         * @private
          * 当结束时，若不是在 touchDownTarget 上弹起，而是另外的子显示对象上弹起时，额外抛出一个触摸单击事件。
          */
         private stageTouchEndHandler(event);
         /**
+         * @private
          * 动画播放完毕
          */
         private animationEndHandler(animation);
         /**
+         * @private
          * 停止播放动画
          */
         private stopAnimation();
+        /**
+         * @language en_US
+         * Handle touch-begin events for the slider track. We
+         * calculate the value based on the new position and then
+         * move the thumb to the correct location as well as
+         * commit the value.
+         * @param The <code>lark.TouchEvent</code> object.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 轨道的触碰开始事件。我们会在这里根据新的坐标位置计算value，然后移动滑块到当前位置。
+         *
+         * @param event 事件 <code>lark.TouchEvent</code> 的对象.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected onTrackTouchBegin(event: lark.TouchEvent): void;
     }
 }
 declare module swan.sys {
-    const enum ListBaseKeys {
-        requireSelection = 0,
-        requireSelectionChanged = 1,
-        proposedSelectedIndex = 2,
-        selectedIndex = 3,
-        dispatchChangeAfterSelection = 4,
-        pendingSelectedItem = 5,
-        selectedIndexAdjusted = 6,
-        mouseDownItemRenderer = 7,
-    }
 }
 declare module swan {
     /**
+     * @language en_US
+     * The ListBase class is the base class for list component.
+     * It can display items of list as vertical or horizontal such as SELECT of HTML.
+     * @event lark.Event.CHANGE Dispatched after the selection has changed.
+     * This event is dispatched when the user interacts with the control.
+     * @event lark.Event.CHANGING Dispatched when the selection is going to change.
+     * Calling the <code>preventDefault()</code> method
+     * on the event prevents the selection from changing.<p/>
+     * This event is dispatched when the user interacts with the control.
+     * @event swan.ItemTapEvent.ITEM_TAP Dispatched when the user tap an item in the control.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * ListBase 是列表控件基类。可显示垂直或水平的项目列表。其功能与 HTML 中的 SELECT 表单元素的功能相似。
      * @event lark.Event.CHANGE 选中的索引已经发生改变,注意：此事件仅在索引改变是由用户触摸操作引起时才抛出。
-     * @event lark.Event.CHANGING 选中的索引即将发生改变，可以通过调用事件对象的 preventDefault() 方法来阻止改变。
+     * @event lark.Event.CHANGING 选中的索引即将发生改变，可以通过调用事件对象的 preventDefault() 方法来阻止改变。<p/>
      * 注意：此事件仅在索引改变是由用户触摸操作引起时才抛出。
      * @event swan.ItemTapEvent.ITEM_TAP 项呈示器单击事件。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     class ListBase extends DataGroup {
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         constructor();
         /**
+         * @language en_US
+         * Static constant representing the value "no selection".
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 未选中任何项时的索引值
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         static NO_SELECTION: number;
         /**
+         * @language en_US
+         * Static constant representing no proposed selection.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 未设置缓存选中项的值
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         static NO_PROPOSED_SELECTION: number;
         /**
+         * @language en_US
+         * If <code>true</code>, a data item must always be selected in the control.
+         * If the value is <code>true</code>, the <code>selectedIndex</code> property
+         * is always set to a value between 0 and (<code>dataProvider.length</code> - 1).
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 如果为 true，则控件中必须含有选中的数据项目。
          * 如果该值为 true，则始终将 selectedIndex 属性设置为 0 和 (dataProvider.length - 1) 之间的一个值。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         requireSelection: boolean;
         /**
-         * 选中项目的基于 0 的索引。<br/>
-         * 或者如果未选中项目，则为-1。设置 selectedIndex 属性会取消选择当前选定的项目并选择指定索引位置的数据项目。
+         * @language en_US
+         * he 0-based index of the selected item, or -1 if no item is selected.
+         * Setting the <code>selectedIndex</code> property deselects the currently selected
+         * item and selects the data item at the specified index.<p/>
+         *
+         * The value is always between -1 and (<code>dataProvider.length</code> - 1).
+         * If items at a lower index than <code>selectedIndex</code> are
+         * removed from the component, the selected index is adjusted downward
+         * accordingly. <p/>
+         *
+         * If the selected item is removed, the selected index is set to:<p/>
+         *
+         * <ul>
+         *   <li>-1 if <code>requireSelection == false</code> or there are no remaining items.</li>
+         *   <li>0 if <code>requireSelection == true</code> and there is at least one item.</li>
+         * </ul><p/>
+         *
+         * When the user changes the <code>selectedIndex</code> property by interacting with the control,
+         * the control dispatches the <code>change</code> and <code>changing</code> events.
+         * When you change the value of the <code>selectedIndex</code> property programmatically,
+         * it does not dispatches the <code>change</code> and <code>changing</code> events.</p>
+         *
+         * @default -1
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 选中项目的基于 0 的索引。
+         * 或者如果未选中项目，则为-1。设置 selectedIndex 属性会取消选择当前选定的项目并选择指定索引位置的数据项目。<p/>
+         *
+         * 这个值会之中在-1到<code>(dataProvider.length - 1)</code>之间。如果从该组件中删除一个低于
+         * <code>selectedIndex</code>的值，则<code>selectedIndex</code>也会相应的调节选定的索引。<p/>
+         *
+         * 如果删除的项为当前选中项，则该值会变为：<p/>
+         *
+         * <ul>
+         *    <li>-1: 如果 <code>requireSelection == false</code> 或者已经没有剩余项目。</li>
+         *    <li> 0: 如果 <code>requireSelection == true</code> 并且当前至少还有一个剩余项目。</li>
+         * </ul><p/>
          * 当用户通过与控件交互来更改 selectedIndex 属性时，此控件将分派 change 和 changing 事件。
          * 当以编程方式更改 selectedIndex 属性的值时，此控件不分派 change 和 changing 事件。
+         *
+         * @default -1
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         selectedIndex: number;
         /**
-         * 设置选中项
+         * @language en_US
+         * Used internally to specify whether the selectedIndex changed programmatically or due to
+         * user interaction.
+         * @param value the new index need to select.
+         * @param dispatchChangeEvent if true, the component will dispatch a "change" event if the
+         * value has changed.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 由程序或者用户设置选中项。
+         * @param value 索引值。
+         * @param dispatchChangeEvent 当索引值发生改变，且该参数为true的时候，组件派发出一个“change”事件。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected setSelectedIndex(value: number, dispatchChangeEvent?: boolean): void;
         /**
-         * 当前已选中的项目。设置此属性会取消选中当前选定的项目并选择新指定的项目。<br/>
-         * 当用户通过与控件交互来更改 selectedItem 属性时，此控件将分派 change 和 changing 事件。<br/>
-         * 当以编程方式更改 selectedItem 属性的值时，此控件不分派 change 和 changing 事件。
+         * @language en_US
+         * The item that is currently selected.
+         * Setting this property deselects the currently selected
+         * item and selects the newly specified item.<p/>
+         *
+         * Setting <code>selectedItem</code> to an item that is not
+         * in this component results in no selection,
+         * and <code>selectedItem</code> being set to <code>undefined</code>.<p/>
+         *
+         * If the selected item is removed, the selected item is set to:<p/>
+         * <ul>
+         *   <li><code>undefined</code> if <code>requireSelection == false</code>
+         *     or there are no remaining items.</li>
+         *   <li>The first item if <code>requireSelection</code> = <code>true</code>
+         *     and there is at least one item.</li>
+         * </ul><p/>
+         *
+         * When the user changes the <code>selectedItem</code> property by interacting with the control,
+         * the control dispatches the <code>change</code> and <code>changing</code> events.
+         * When you change the value of the <code>selectedIndex</code> property programmatically,
+         * it does not dispatches the <code>change</code> and <code>changing</code> events.</p>
+         *
+         * @default undefined
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当前已选中的项目。设置此属性会取消选中当前选定的项目并选择新指定的项目。<p/>
+         *
+         * 如果设置的<code>selectedItem</code>不在当前列表里那么<code>selectedItem</code>将被设置
+         * 为<code>undefined</code>。<p/>
+         *
+         * 如果选择项目被移除，那选择项会被设置为：<p/>
+         * <ul>
+         *   <li><code>undefined</code>: 如果 <code>requireSelection == false</code>
+         *     或者已经没有剩余项。</li>
+         *   <li>第一项: 当 <code>requireSelection == true</code>
+         *     并且列表中还至少存有一项.</li>
+         * </ul><p/>
+         *
+         * 当用户通过与控件交互来更改 selectedItem 属性时，此控件将分派 change 和 changing 事件。
+         * 当以编程方式更改 selectedItem 属性的值时，此控件不分派 change 和 changing 事件。<p/>
+         *
+         * @default undefined
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         selectedItem: any;
         /**
-         * 设置选中项数据源
+         * @language en_US
+         * Used internally to specify whether the selectedItem changed programmatically or due to
+         * user interaction.
+         * @param value the new item need to select.
+         * @param dispatchChangeEvent if true, the component will dispatch a "change" event if the
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 由程序或用户设置选中项数据源。
+         * @param value 要选中的项。
+         * @param dispatchChangeEvent 当索引值发生改变，且该参数为true的时候，组件派发出一个“change”事件。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected setSelectedItem(value: any, dispatchChangeEvent?: boolean): void;
         /**
+         * @language en_US
+         * Processes the properties set on the component.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 处理对组件设置的属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected commitProperties(): void;
         /**
+         * @language en_US
+         * Updates an item renderer for use or reuse.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 更新项呈示器，以备使用或重用
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         updateRenderer(renderer: IItemRenderer, itemIndex: number, data: any): IItemRenderer;
         /**
+         * @language en_US
+         * Called when an item is selected or deselected.
+         * Subclasses must override this method to display the selection.
+         * @param index The item index that was selected.
+         * @param selected <code>true</code> if the item is selected,
+         * and <code>false</code> if it is deselected.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 选中或取消选中项目时调用。子类必须覆盖此方法才可设置选中项。
          * @param index 已选中的项目索引。
-         * @param selected true为选中，false取消选中
+         * @param selected <code>true</code>为选中，<code>false</code>取消选中
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected itemSelected(index: number, selected: boolean): void;
         /**
-         * 提交选中项属性，返回是否成功提交，false表示被取消
+         * @language en_US
+         * The selection validation and commitment workhorse method.
+         * Called to commit the pending selected index. This method dispatches
+         * the "changing" event, and if the event is not cancelled,
+         * commits the selection change and then dispatches the "change"
+         * event.
+         * @param dispatchChangedEvents if dispatch a "changed" event.
+         * @return true if the selection was committed, or false if the selection
+         * was cancelled.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 提交选中项属性。该方法会派发一个“changing”事件，如果该事件没有被阻止，
+         * 该方法将会提交选择项病根据参数派发“change”事件。
+         * @param dispatchChangedEvents 是否派发一个“changed”事件。
+         * @return true 表示提交成功, false表示被取消
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected commitSelection(dispatchChangedEvents?: boolean): boolean;
         /**
+         * @language en_US
+         * Adjusts the selected index to account for items being added to or
+         * removed from this component.
+         * It does not dispatch a <code>change</code> event because the change did not
+         * occur as a direct result of user-interaction.  Moreover,
+         * it does not dispatch a <code>changing</code> event
+         * or allow the cancellation of the selection.
+         * It also does not call the <code>itemSelected()</code> method,
+         * since the same item is selected;
+         * @param newIndex The new index.
+         * @param add <code>true</code> if an item was added to the component,
+         *  and <code>false</code> if an item was removed.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 仅调整选中索引值而不更新选中项,即在提交属性阶段itemSelected方法不会被调用，也不会触发changing和change事件。
          * @param newIndex 新索引。
-         * @param add 如果已将项目添加到组件，则为 true；如果已删除项目，则为 false。
+         * @param add 如果已将项目添加到组件，则为<code>true</code>；如果已删除项目，则为<code>false</code>。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected adjustSelection(newIndex: number, add?: boolean): void;
         /**
+         * @language en_US
+         * Called when an item has been added to this component. Selection
+         * and caret related properties are adjusted accordingly.
+         * @param item The item being added.
+         * @param index The index of the item being added.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 数据项添加
+         * @param item 被添加的项。
+         * @param index 被添加的项的索引。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected itemAdded(item: any, index: number): void;
         /**
+         * @language en_US
+         * Called when an item has been removed from this component.
+         * Selection and caret related properties are adjusted
+         * accordingly.
+         * @param item The item being removed.
+         * @param index The index of the item being removed.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 数据项移除
+         * @param item 被移除的项。
+         * @param index 被移除的项的索引。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected itemRemoved(item: any, index: number): void;
         /**
-         * 数据源改变事件处理
+         * @language en_US
+         * Event Listener of source data changed.
+         * @param The <code>lark.CollectionEvent</code> object.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 数据源改变事件处理。
+         * @param event 事件 <code>lark.CollectionEvent</code> 的对象.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected onCollectionChange(event: CollectionEvent): void;
         /**
+         * @language en_US
+         * Default response to dataProvider refresh events: clear the selection and caret.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 数据源刷新
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected dataProviderRefreshed(): void;
         /**
+         * @language en_US
+         * Called when an item has been added to this component.
+         * @param renderer the renderer being added.
+         * @param index the index of renderer
+         * @param item the data of renderer
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 项呈示器被添加
          * @param renderer 添加的项呈示器
          * @param index 项呈示器的索引
          * @param item 项呈示器对应的数据
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected rendererAdded(renderer: IItemRenderer, index: number, item: any): void;
         /**
+         * @language en_US
+         * Called when an item has been removed to this component.
+         * @param renderer the renderer being removed.
+         * @param index the index of renderer.
+         * @param item the data of renderer.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 项呈示器被移除
          * @param renderer 移除的项呈示器
          * @param index 项呈示器的索引
          * @param item 项呈示器对应的数据
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected rendererRemoved(renderer: IItemRenderer, index: number, item: any): void;
         /**
-         * 鼠标在项呈示器上按下
+         * @language en_US
+         * Handles <code>lark.TouchEvent.TOUCH_BEGIN</code> events from any of the
+         * item renderers. This method handles <code>lark.TouchEvent.TOUCH_END</code>.
+         * @param event The <code>lark.TouchEvent</code> object.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 侦听项呈示器<code>lark.TouchEvent.TOUCH_BEGIN</code>事件的方法。同时会添加对舞台<code>lark.TouchEvent.TOUCH_END</code>
+         * 事件的侦听。
+         * @param event 事件<code>lark.TouchEvent</code>的对象。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected onRendererTouchBegin(event: lark.TouchEvent): void;
         /**
-         * 鼠标在项呈示器上弹起，抛出ItemClick事件。
+         * @language en_US
+         * Handles <code>lark.TouchEvent.TOUCH_END</code> events and dispatch <code>ItemTapEvent.ITEM_TAP</code> event.
+         * @param event The <code>lark.TouchEvent</code> object.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 鼠标在项呈示器上弹起，抛出<code>ItemTapEvent.ITEM_TAP</code>事件。
+         * @param event 事件<code>lark.TouchEvent</code>的对象。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected onRendererTouchEnd(event: lark.TouchEvent): void;
         /**
+         * @private
          * 鼠标在舞台上弹起
          */
         private stage_touchEndHandler(event);
