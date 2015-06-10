@@ -702,7 +702,7 @@ module swan {
         /**
          * @language en_US
          * Event Listener of source data changed.
-         * @param event CollectionEvent
+         * @param The <code>lark.CollectionEvent</code> object.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -710,7 +710,7 @@ module swan {
         /**
          * @language zh_CN
          * 数据源改变事件处理。
-         * @param event CollectionEvent
+         * @param event 事件 <code>lark.CollectionEvent</code> 的对象.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native

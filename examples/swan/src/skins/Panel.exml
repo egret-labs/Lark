@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Skin class="skins.Panel" xmlns:s="http://ns.egret.com/swan"
-        minHeight="230" minWidth="470" maxWidth="710">
-    <s:states>
-        <s:State name="normal"/>
-        <s:State name="disabled"/>
-    </s:states>
-    <s:Image left="0" right="0" bottom="0"  top="0" source="image/skin/panel/border.png" scale9Grid="2,3,173,42" />
-    <s:Group left="0" right="0" height="38"  id="moveArea" >
-        <s:Image left="0" right="0" bottom="0"  top="0" source="image/skin/panel/green/header.png"/>
-        <s:Label id="titleDisplay" fontSize="20"
-                 textColor="0xEEEEEE" wordWrap="false" left="15" right="5" verticalCenter="0"
-                 minHeight="28" verticalAlign="middle" textAlign="left" />
+<s:Skin class="skins.Panel" minHeight="230" minWidth="470" xmlns:s="http://ns.egret.com/swan">
+    <s:Image left="0" right="0" bottom="0"  top="0" source="resource/assets/green/Panel/border.png" scale9Grid="2,2,173,43" />
+    <s:Group id="moveArea" left="1" right="1" top="1" height="38">
+        <s:Image left="0" right="0" bottom="0"  top="0" source="resource/assets/green/Panel/header.png"/>
+        <s:Label id="titleDisplay" fontSize="20" fontFamily="Tahoma" textColor="0xEEEEEE"
+                 wordWrap="false" left="15" right="5" verticalCenter="0"/>
     </s:Group>
-    <s:Group width="100%" bottom="38"  top="50" id="contentGroup">
-    </s:Group>
-    <s:Button id="closeButton" label="close" bottom="5" horizontalCenter="0" height="38"/>
+    <s:Group id="contentGroup" width="100%" top="50" bottom="30"/>
+    <s:Button id="closeButton" label="close" bottom="5" horizontalCenter="0"/>
 </s:Skin>

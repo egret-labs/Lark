@@ -29,161 +29,44 @@
 
 module swan {
 
-    /**
-     * @language en_US
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
     export const enum Keys {
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
         clickOffsetX,
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
         clickOffsetY,
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
         moveStageX,
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
         moveStageY,
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
         touchDownTarget,
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
         animation,
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
         slideDuration,
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
         pendingValue,
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
         slideToValue,
-        /**
-         * @language en_US
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
         liveDragging
     }
 
     /**
      * @language en_US
-     * 滑块控件基类
+     * The SliderBase class lets users select a value by moving a slider thumb between
+     * the end points of the slider track.
+     * The current value of the slider is determined by the relative location of
+     * the thumb between the end points of the slider,
+     * corresponding to the slider's minimum and maximum values.
+     * The SliderBase class is a base class for HSlider and VSlider.
+     *
+     * @see swan.HSlider
+     * @see swan.VSlider
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 滑块控件基类
+     * 滑块控件基类，通过使用 SliderBase 类，用户可以在滑块轨道的端点之间移动滑块来选择值。
+     * 滑块的当前值由滑块端点（对应于滑块的最小值和最大值）之间滑块的相对位置确定。
+     * SliderBase 类是 HSlider 和 VSlider 的基类。
+     *
+     * @see swan.HSlider
+     * @see swan.VSlider
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -191,7 +74,7 @@ module swan {
     export class SliderBase extends Range {
         /**
          * @language en_US
-         * 创建一个 SliderBase 实例
+         * Constructor
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -228,14 +111,14 @@ module swan {
 
         /**
          * @language en_US
-         * [SkinPart]轨道高亮显示对象
+         * [SkinPart] Highlight of track
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart]轨道高亮显示对象
+         * [SkinPart] 轨道高亮显示对象
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -243,7 +126,7 @@ module swan {
         public trackHighlight:lark.DisplayObject = null;
         /**
          * @language en_US
-         * [SkinPart]滑块显示对象
+         * [SkinPart] Thumb display object
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -259,7 +142,7 @@ module swan {
 
         /**
          * @language en_US
-         * [SkinPart]轨道显示对象
+         * [SkinPart] Track display object
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -275,7 +158,10 @@ module swan {
 
         /**
          * @language en_US
-         * 在轨道上单击以移动滑块时，滑动动画持续的时间（以毫秒为单位）。设置为0将不执行缓动。
+         * Duration in milliseconds for the sliding animation when you tap on the track to move a thumb.
+         *
+         * @default 300
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -283,6 +169,9 @@ module swan {
         /**
          * @language zh_CN
          * 在轨道上单击以移动滑块时，滑动动画持续的时间（以毫秒为单位）。设置为0将不执行缓动。
+         *
+         * @default 300
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -297,9 +186,13 @@ module swan {
 
         /**
          * @language en_US
-         * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值。
-         * @param x 相对于轨道原点的位置的x坐标。
-         * @param y 相对于轨道原点的位置的y坐标。
+         * Converts a track-relative x,y pixel location into a value between
+         * the minimum and maximum, inclusive.
+         *
+         * @param x The x coordinate of the location relative to the track's origin.
+         * @param y The y coordinate of the location relative to the track's origin.
+         * @return A value between the minimum and maximum, inclusive.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -307,8 +200,11 @@ module swan {
         /**
          * @language zh_CN
          * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值。
+         *
          * @param x 相对于轨道原点的位置的x坐标。
          * @param y 相对于轨道原点的位置的y坐标。
+         * @return 介于最小值和最大值（包括两者）之间的一个值。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -319,7 +215,12 @@ module swan {
 
         /**
          * @language en_US
-         * 如果为 true，则将在沿着轨道拖动滑块时，而不是在释放滑块按钮时，提交此滑块的值。
+         * Specifies whether live dragging is enabled for the slider. If true, sets the value
+         * and values properties and dispatches the change event continuously as
+         * the user moves the thumb.
+         *
+         * @default true
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -327,6 +228,9 @@ module swan {
         /**
          * @language zh_CN
          * 如果为 true，则将在沿着轨道拖动滑块时，而不是在释放滑块按钮时，提交此滑块的值。
+         *
+         * @default true
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -342,16 +246,25 @@ module swan {
 
         /**
          * @language en_US
-         * 释放鼠标按键时滑块将具有的值。无论 liveDragging 是否为 true，在滑块拖动期间始终更新此属性。
-         * 而 value 属性在当 liveDragging 为 false 时，只在鼠标释放时更新一次。
+         * The value the slider will have when the mouse button is released.
+         * This property is updated when the slider thumb moves, even if <code>liveDragging</code> is false.<p/>
+         * If the <code>liveDragging</code> style is false, then the slider's value is only set
+         * when the mouse button is released.
+         *
+         * @default 0
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 释放鼠标按键时滑块将具有的值。无论 liveDragging 是否为 true，在滑块拖动期间始终更新此属性。
+         * 释放鼠标按键时滑块将具有的值。
+         * 无论 liveDragging 是否为 true，在滑块拖动期间始终更新此属性。
          * 而 value 属性在当 liveDragging 为 false 时，只在鼠标释放时更新一次。
+         *
+         * @default 0
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -371,14 +284,21 @@ module swan {
 
         /**
          * @language en_US
-         * 在 value 属性改变时为该属性设置后备存储，并调度 valueCommit 事件
+         * Sets the backing store for the <code>value</code> property and
+         * dispatches a <code>valueCommit</code> event if the property changes.
+         *
+         * @param value The new value of the <code>value</code> property.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 在 value 属性改变时为该属性设置后备存储，并调度 valueCommit 事件
+         * 在 value 属性改变时为该属性设置后备存储，并调度 valueCommit 事件。
+         *
+         * @param value The new value of the <code>value</code> property.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -390,18 +310,7 @@ module swan {
 
 
         /**
-         * @language en_US
-         * 添加外观部件时调用
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 添加外观部件时调用
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @inheritDoc
          */
         protected partAdded(partName:string, instance:any):void {
             super.partAdded(partName, instance);
@@ -423,18 +332,7 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 删除外观部件的实例时调用
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 删除外观部件的实例时调用
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @inheritDoc
          */
         protected partRemoved(partName:string, instance:any):void {
             super.partRemoved(partName, instance);
@@ -460,14 +358,20 @@ module swan {
 
         /**
          * @language en_US
-         * 滑块按下事件
+         * Handle touch-begin events on the scroll thumb. Records the touch begin point in clickOffset.
+         *
+         * @param The <code>lark.TouchEvent</code> object.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 滑块按下事件
+         * 滑块触摸开始事件，记录触碰开始的坐标偏移量。
+         *
+         * @param event 事件 <code>lark.TouchEvent</code> 的对象.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -508,16 +412,16 @@ module swan {
 
         /**
          * @language en_US
-         * 
-         * @param newValue 
+         * Capture touch-move events anywhere on or off the stage.
+         * @param newValue new value
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 
-         * @param newValue 
+         * 监听舞台的触碰移动事件。
+         * @param newValue 新的值
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -536,7 +440,10 @@ module swan {
 
         /**
          * @language en_US
-         * 触摸结束事件
+         * Handle mouse-up events anywhere on or off the stage.
+         *
+         * @param The <code>lark.Event</code> object.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -544,6 +451,9 @@ module swan {
         /**
          * @language zh_CN
          * 触摸结束事件
+         *
+         * @param event 事件 <code>lark.Event</code> 的对象。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -616,16 +526,21 @@ module swan {
 
         /**
          * @language en_US
-         * 
-         * @param event 
+         * Handle touch-begin events for the slider track. We
+         * calculate the value based on the new position and then
+         * move the thumb to the correct location as well as
+         * commit the value.
+         * @param The <code>lark.TouchEvent</code> object.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 
-         * @param event 
+         * 轨道的触碰开始事件。我们会在这里根据新的坐标位置计算value，然后移动滑块到当前位置。
+         *
+         * @param event 事件 <code>lark.TouchEvent</code> 的对象.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
