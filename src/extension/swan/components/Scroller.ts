@@ -168,8 +168,8 @@ module swan {
             }
         }
 
-        $setSkin(skin:Skin):void {
-            super.$setSkin(skin);
+        protected setSkin(skin:Skin):void {
+            super.setSkin(skin);
             var viewport = this.viewport;
             if (viewport) {
                 this.addChildAt(viewport, 0);
