@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Skin class="skins.PanelSkin" minHeight="230" minWidth="450" xmlns:s="http://ns.egret.com/swan">
-    <s:Image left="0" right="0" bottom="0"  top="0" source="resource/assets/green/Panel/border.png" scale9Grid="2,2,173,43" />
+    <s:Image left="0" right="0" bottom="0"  top="0" source="resource/assets/blue/Panel/border.png" scale9Grid="2,2,12,12" />
     <s:Group id="moveArea" left="1" right="1" top="1" height="38">
-        <s:Image left="0" right="0" bottom="0"  top="0" source="resource/assets/green/Panel/header.png"/>
+        <s:Image left="0" right="0" bottom="0"  top="0" source="resource/assets/blue/Panel/header.png"/>
         <s:Label id="titleDisplay" fontSize="20" fontFamily="Tahoma" textColor="0xEEEEEE"
                  wordWrap="false" left="15" right="5" verticalCenter="0"/>
     </s:Group>
