@@ -51,7 +51,7 @@ class AutoCompileCommand implements lark.Command {
         var result = compileProject.compileProject(options);
         this.compileProject = compileProject;
         CopyFiles.copyProjectFiles();
-        CompileTemplate.compileTemplates(options,result.files);
+        CompileTemplate.compileTemplates(options, result.files);
         this._scripts = result.files;
         this._lastExitCode = result.exitStatus;
         this._lastMessages = result.messages;

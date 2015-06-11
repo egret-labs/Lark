@@ -48,6 +48,8 @@ module lark {
     locale_strings[10013] = "lark 服务器已经启动, URL: {0}";
     locale_strings[10014] = "自动编译失败，请参考下面的错误信息：";
     locale_strings[10015] = "\"{0}\" 不是一个有效的 Lark 项目目录";
+    locale_strings[10016] = "如果浏览器没有启动，请手动打开URL: {0}";
+    locale_strings[10017] = "项目创建成功，您可以执行 lark run 来运行刚刚创建的应用";
     
 
 

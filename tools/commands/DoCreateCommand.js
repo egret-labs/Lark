@@ -21,6 +21,7 @@ var DoCreateCommand = (function () {
         var project = JSON.stringify(this.project, null, "  ");
         var tmpFile = FileUtil.joinPath(options.getTmpDir(), "proj.json");
         FileUtil.save(tmpFile, project);
+        console.log(utils.tr(10017));
         return result.exitStatus;
     };
     return DoCreateCommand;
