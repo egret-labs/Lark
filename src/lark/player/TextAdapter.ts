@@ -48,7 +48,9 @@ module lark.sys{
         /**
          * 更新HTML5 或 runtime 中 text input 的属性值
          */
-        $initializeInput():void;
+        $initializeInput(): void;
+
+        $setSelection(selectStart: number, selectEnd: number): void
 
         $stage:Stage;
     }

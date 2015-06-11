@@ -51,7 +51,9 @@ module lark.sys {
         textLinesChanged,
         wordWrap,
         displayAsPassword,
-        maxChars
+        maxChars,
+        selectionBeginIndex,
+        selectionEndIndex
     }
 }
 

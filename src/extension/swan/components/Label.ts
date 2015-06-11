@@ -32,11 +32,28 @@ module swan {
     var UIImpl = sys.UIComponentImpl;
     /**
      * @language en_US
-     * Label 是可以呈示一行或多行统一格式文本的UI组件。要显示的文本由 text 属性确定。文本格式由样式属性指定，例如 fontFamily 和 fontSize。
-     * 因为 Label 运行速度快且占用内存少，所以它特别适合用于显示多个小型非交互式文本的情况，例如，项呈示器和 Button 外观中的标签。
-     * 在 Label 中，将以下三个字符序列识别为显式换行符：CR（“\r”）、LF（“\n”）和 CR+LF（“\r\n”）。
-     * 如果没有为 Label 指定宽度，则由这些显式换行符确定的最长行确定 Label 的宽度。
-     * 如果指定了宽度，则指定文本将在组件边界的右边缘换行，如果文本扩展到低于组件底部，则将被剪切。
+     * Label is an UIComponent that can render one or more lines of text.
+     * The text to be displayed is determined by the <code>text</code> property.
+     * The formatting of the text is specified by the styles，
+     * such as <code>fontFamily</code> and <code>fontSize</code>.
+     *
+     * <p>Because Label is fast and lightweight, it is especially suitable
+     * for use cases that involve rendering many small pieces of non-interactive
+     * text, such as item renderers and labels in Button skins.</p>
+     *
+     * <p>In Label, three character sequences are recognized
+     * as explicit line breaks: CR (<code>"\r"</code>), LF (<code>"\n"</code>),
+     * and CR+LF (<code>"\r\n"</code>).</p>
+     *
+     * <p>If you don't specify any kind of width for a Label,
+     * then the longest line, as determined by these explicit line breaks,
+     * determines the width of the Label.</p>
+     *
+     * <p>If you do specify some kind of width, then the specified text is
+     * word-wrapped at the right edge of the component's bounds.
+     * If the text extends below the bottom of the component,
+     * it is clipped.</p>
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -48,19 +65,29 @@ module swan {
      * 在 Label 中，将以下三个字符序列识别为显式换行符：CR（“\r”）、LF（“\n”）和 CR+LF（“\r\n”）。
      * 如果没有为 Label 指定宽度，则由这些显式换行符确定的最长行确定 Label 的宽度。
      * 如果指定了宽度，则指定文本将在组件边界的右边缘换行，如果文本扩展到低于组件底部，则将被剪切。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     export class Label extends lark.TextField implements UIComponent {
+
         /**
          * @language en_US
+         * Constructor.
+         *
+         * @param text The text displayed by this text component.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
+         * 构造函数。
+         *
+         * @param text 此文本组件所显示的文本。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -122,17 +149,8 @@ module swan {
          */
         private initializeUIValues:()=>void;
         /**
-         * @language en_US
-         * 子类覆盖此方法可以执行一些初始化子项操作。此方法仅在组件第一次添加到舞台时回调一次。
-         * 请务必调用super.createChildren()以完成父类组件的初始化
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 子类覆盖此方法可以执行一些初始化子项操作。此方法仅在组件第一次添加到舞台时回调一次。
-         * 请务必调用super.createChildren()以完成父类组件的初始化
+         * @copy swan.UIComponent#createChildren
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -142,15 +160,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 子项创建完成,此方法在createChildren()之后执行。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 子项创建完成,此方法在createChildren()之后执行。
+         * @copy swan.UIComponent#childrenCreated
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -160,15 +171,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
+         * @copy swan.UIComponent#commitProperties
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -178,15 +182,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 测量组件尺寸
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 测量组件尺寸
+         * @copy swan.UIComponent#measure
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -213,15 +210,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 更新显示列表
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 更新显示列表
+         * @copy swan.UIComponent#updateDisplayList
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -232,15 +222,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 标记父级容器的尺寸和显示列表为失效
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 标记父级容器的尺寸和显示列表为失效
+         * @copy swan.UIComponent#invalidateParentLayout
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -259,32 +242,16 @@ module swan {
         $includeInLayout:boolean;
 
         /**
-         * @language en_US
-         * 指定此组件是否包含在父容器的布局中。若为false，则父级容器在测量和布局阶段都忽略此组件。默认值为true。
-         * 注意，visible属性与此属性不同，设置visible为false，父级容器仍会对其布局。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 指定此组件是否包含在父容器的布局中。若为false，则父级容器在测量和布局阶段都忽略此组件。默认值为true。
-         * 注意，visible属性与此属性不同，设置visible为false，父级容器仍会对其布局。
+         * @copy swan.UIComponent#includeInLayout
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         public includeInLayout:boolean;
         /**
-         * @language en_US
-         * 距父级容器离左边距离
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 距父级容器离左边距离
+         * @copy swan.UIComponent#left
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -292,15 +259,8 @@ module swan {
         public left:number;
 
         /**
-         * @language en_US
-         * 距父级容器右边距离
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 距父级容器右边距离
+         * @copy swan.UIComponent#right
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -308,15 +268,8 @@ module swan {
         public right:number;
 
         /**
-         * @language en_US
-         * 距父级容器顶部距离
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 距父级容器顶部距离
+         * @copy swan.UIComponent#top
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -324,15 +277,8 @@ module swan {
         public top:number;
 
         /**
-         * @language en_US
-         * 距父级容器底部距离
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 距父级容器底部距离
+         * @copy swan.UIComponent#bottom
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -340,15 +286,8 @@ module swan {
         public bottom:number;
 
         /**
-         * @language en_US
-         * 在父级容器中距水平中心位置的距离
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在父级容器中距水平中心位置的距离
+         * @copy swan.UIComponent#horizontalCenter
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -356,15 +295,8 @@ module swan {
         public horizontalCenter:number;
 
         /**
-         * @language en_US
-         * 在父级容器中距竖直中心位置的距离
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在父级容器中距竖直中心位置的距离
+         * @copy swan.UIComponent#verticalCenter
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -372,15 +304,8 @@ module swan {
         public verticalCenter:number;
 
         /**
-         * @language en_US
-         * 相对父级容器宽度的百分比
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 相对父级容器宽度的百分比
+         * @copy swan.UIComponent#percentWidth
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -388,15 +313,8 @@ module swan {
         public percentWidth:number;
 
         /**
-         * @language en_US
-         * 相对父级容器高度的百分比
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 相对父级容器高度的百分比
+         * @copy swan.UIComponent#percentHeight
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -404,15 +322,8 @@ module swan {
         public percentHeight:number;
 
         /**
-         * @language en_US
-         * 外部显式指定的宽度
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 外部显式指定的宽度
+         * @copy swan.UIComponent#explicitWidth
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -420,15 +331,8 @@ module swan {
         public explicitWidth:number;
 
         /**
-         * @language en_US
-         * 外部显式指定的高度
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 外部显式指定的高度
+         * @copy swan.UIComponent#explicitHeight
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -437,30 +341,16 @@ module swan {
 
 
         /**
-         * @language en_US
-         * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
+         * @copy swan.UIComponent#minWidth
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         public minWidth:number;
         /**
-         * @language en_US
-         * 组件的最大高度。同时影响测量和自动布局的尺寸。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 组件的最大高度。同时影响测量和自动布局的尺寸。
+         * @copy swan.UIComponent#maxWidth
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -468,30 +358,16 @@ module swan {
         public maxWidth:number;
 
         /**
-         * @language en_US
-         * 组件的最小高度,此属性设置为大于maxHeight的值时无效。同时影响测量和自动布局的尺寸。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 组件的最小高度,此属性设置为大于maxHeight的值时无效。同时影响测量和自动布局的尺寸。
+         * @copy swan.UIComponent#minHeight
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         public minHeight:number;
         /**
-         * @language en_US
-         * 组件的最大高度,同时影响测量和自动布局的尺寸。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 组件的最大高度,同时影响测量和自动布局的尺寸。
+         * @copy swan.UIComponent#maxHeight
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -499,19 +375,8 @@ module swan {
         public maxHeight:number;
 
         /**
-         * @language en_US
-         * 设置测量结果。
-         * @param width 测量宽度
-         * @param height 测量高度
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 设置测量结果。
-         * @param width 测量宽度
-         * @param height 测量高度
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -520,15 +385,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 标记提交过需要延迟应用的属性
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 标记提交过需要延迟应用的属性
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -537,15 +395,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 验证组件的属性
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 验证组件的属性
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -554,15 +405,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 标记提交过需要验证组件尺寸
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 标记提交过需要验证组件尺寸
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -571,15 +415,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 验证组件的尺寸
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 验证组件的尺寸
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -588,15 +425,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 标记需要验证显示列表
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 标记需要验证显示列表
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -605,15 +435,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 验证子项的位置和大小，并绘制其他可视内容
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 验证子项的位置和大小，并绘制其他可视内容
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -622,15 +445,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 立即应用组件及其子项的所有属性
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 立即应用组件及其子项的所有属性
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -639,15 +455,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 设置组件的布局宽高
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 设置组件的布局宽高
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -669,15 +478,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 设置组件的布局位置
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 设置组件的布局位置
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -686,19 +488,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 组件的布局尺寸,常用于父级的updateDisplayList()方法中
-         * 按照：布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸,
-         * 注意此方法返回值已经包含scale和rotation。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 组件的布局尺寸,常用于父级的updateDisplayList()方法中
-         * 按照：布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸,
-         * 注意此方法返回值已经包含scale和rotation。
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -707,19 +498,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 获取组件的首选尺寸,常用于父级的measure()方法中
-         * 按照：外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸，
-         * 注意此方法返回值已经包含scale和rotation。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取组件的首选尺寸,常用于父级的measure()方法中
-         * 按照：外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸，
-         * 注意此方法返回值已经包含scale和rotation。
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native

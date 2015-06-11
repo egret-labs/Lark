@@ -30,55 +30,124 @@
 
 module lark {
     /**
-     * 当加载操作已开始或套接字已接收到数据时，将调度 ProgressEvent 对象。
-     * 有两种类型的进程事件：ProgressEvent.PROGRESS 和 ProgressEvent.SOCKET_DATA。
+     * @language en_US
+     * A ProgressEvent object is emitted when a load operation has begun. These events are usually generated when data are
+     * loaded into an application.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 当加载操作已开始,将调度 ProgressEvent 事件。这些事件通常在数据加载到应用程序中时生成。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     export class ProgressEvent extends Event {
 
         /**
+         * @language en_US
+         * Emitted when data is received as the download operation progresses.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 在下载操作过程中收到数据时调度。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public static PROGRESS:string = "progress";
 
         /**
-         * 在套接字接收到数据后调度。
+         * @language en_US
+         * The number of items or bytes loaded when the listener processes the event.
+         * @version Lark 1.0
+         * @platform Web,Native
          */
-        public static SOCKET_DATA:string = "socketData";
-
         /**
+         * @language zh_CN
          * 在侦听器处理事件时加载的项数或字节数。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public bytesLoaded:number = 0;
         /**
+         * @language en_US
+         * The total number of items or bytes that will be loaded if the loading process succeeds.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 如果加载过程成功，将加载的总项数或总字节数。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public bytesTotal:number = 0;
 
         /**
+         * @language en_US
+         * Creates an Event object that contains information about progress events.
+         * @param type The type of the event. Event listeners can access this information through the inherited type property.
+         * @param bubbles Determines whether the Event object bubbles. Event listeners can access this information through the inherited bubbles property.
+         * @param cancelable Determines whether the Event object can be canceled. Event listeners can access this information through the inherited cancelable property.
+         * @param bytesLoaded The number of items or bytes loaded when the listener processes the event.
+         * @param bytesTotal The total number of items or bytes that will be loaded if the loading process succeeds.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 创建一个 ProgressEvent 对象
+         * @param type  事件的类型，可以作为 Event.type 访问。
+         * @param bubbles  确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
+         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
+         * @param bytesLoaded 加载的项数或字节数
+         * @param bytesTotal 加载的总项数或总字节数
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public constructor(type:string, bubbles?:boolean, cancelable?:boolean, bytesLoaded?:number, bytesTotal?:number) {
             super(type, bubbles, cancelable);
 
-            this.bytesLoaded = +bytesLoaded||0;
-            this.bytesTotal = +bytesTotal||0;
+            this.bytesLoaded = +bytesLoaded || 0;
+            this.bytesTotal = +bytesTotal || 0;
         }
 
         /**
-         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         * @language en_US
+         * uses a specified target to emit an event. Using this method can reduce the number of
+         * reallocate event objects, which allows you to get better code execution performance.
+         * @param target the event target
+         * @param type the type of event
+         * @param bytesLoaded The number of items or bytes loaded when the listener processes the event.
+         * @param bytesTotal The total number of items or bytes that will be loaded if the loading process succeeds.
+         * @see lark.Event.create()
+         * @see lark.Event.release()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用指定的EventEmitter对象来抛出事件对象。使用此方法能够减少事件对象创建的数量，从而获得更高的代码运行性能。
          * @param target 派发事件目标
          * @param type 事件类型
          * @param bytesLoaded 加载的项数或字节数
          * @param bytesTotal 加载的总项数或总字节数
+         * @see lark.Event.create()
+         * @see lark.Event.release()
+         * @version Lark 1.0
+         * @platform Web,Native
          */
-        public static emitProgressEvent(target:IEventEmitter, type:string,  bytesLoaded?:number, bytesTotal?:number):boolean {
+        public static emitProgressEvent(target:IEventEmitter, type:string, bytesLoaded?:number, bytesTotal?:number):boolean {
             var event = Event.create(ProgressEvent, type);
-            event.bytesLoaded = +bytesLoaded||0;
-            event.bytesTotal = +bytesTotal||0;
+            event.bytesLoaded = +bytesLoaded || 0;
+            event.bytesTotal = +bytesTotal || 0;
             var result = target.emit(event);
             Event.release(event);
             return result;
         }
     }
-    registerClass(ProgressEvent,Types.ProgressEvent);
+
+    registerClass(ProgressEvent, Types.ProgressEvent);
 }
