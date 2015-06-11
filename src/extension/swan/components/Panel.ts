@@ -65,14 +65,14 @@ module swan {
          */
         public constructor() {
             super();
-            this.on(lark.TouchEvent.TOUCH_BEGIN, this.onWindowMouseDown, this, false, 100);
+            this.on(lark.TouchEvent.TOUCH_BEGIN, this.onWindowTouchBegin, this, false, 100);
         }
 
         /**
          * @private
          * 在窗体上按下时前置窗口
          */
-        private onWindowMouseDown(event:lark.TouchEvent):void {
+        private onWindowTouchBegin(event:lark.TouchEvent):void {
             this.$parent.addChild(this);
         }
 

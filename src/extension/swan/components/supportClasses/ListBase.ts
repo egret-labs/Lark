@@ -64,7 +64,7 @@ module swan.sys {
         /**
          * @private
          */
-        mouseDownItemRenderer
+        touchDownItemRenderer
     }
 }
 
@@ -816,7 +816,7 @@ module swan {
         protected onRendererTouchBegin(event:lark.TouchEvent):void {
             if (event.$isDefaultPrevented)
                 return;
-            this.$ListBase[sys.ListBaseKeys.mouseDownItemRenderer] = <IItemRenderer> (event.$currentTarget);
+            this.$ListBase[sys.ListBaseKeys.touchDownItemRenderer] = <IItemRenderer> (event.$currentTarget);
             this.$stage.on(lark.TouchEvent.TOUCH_END, this.stage_touchEndHandler, this);
         }
 
@@ -838,8 +838,8 @@ module swan {
          */
         protected onRendererTouchEnd(event:lark.TouchEvent):void {
             var itemRenderer = <IItemRenderer> (event.$currentTarget);
-            var mouseDownItemRenderer = this.$ListBase[sys.ListBaseKeys.mouseDownItemRenderer];
-            if (itemRenderer != mouseDownItemRenderer)
+            var touchDownItemRenderer = this.$ListBase[sys.ListBaseKeys.touchDownItemRenderer];
+            if (itemRenderer != touchDownItemRenderer)
                 return;
             this.setSelectedIndex(itemRenderer.itemIndex, true);
             ItemTapEvent.emitItemTapEvent(this, ItemTapEvent.ITEM_TAP, itemRenderer);
@@ -852,7 +852,7 @@ module swan {
         private stage_touchEndHandler(event:lark.Event):void {
             var stage = <lark.Stage>event.$currentTarget;
             stage.removeListener(lark.TouchEvent.TOUCH_END, this.stage_touchEndHandler, this);
-            this.$ListBase[sys.ListBaseKeys.mouseDownItemRenderer] = null;
+            this.$ListBase[sys.ListBaseKeys.touchDownItemRenderer] = null;
         }
     }
 

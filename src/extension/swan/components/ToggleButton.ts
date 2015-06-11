@@ -124,14 +124,14 @@ module swan {
 
 		/**
 		 * @language en_US
-		 * 当在用户单击按钮之后处理 MouseEvent.MOUSE_UP 事件时，将调用此方法
+		 * 当在用户单击按钮之后处理 TouchEvent.TOUCH_END 事件时，将调用此方法
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native
 		 */
 		/**
 		 * @language zh_CN
-		 * 当在用户单击按钮之后处理 MouseEvent.MOUSE_UP 事件时，将调用此方法
+		 * 当在用户单击按钮之后处理 TouchEvent.TOUCH_END 事件时，将调用此方法
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native
