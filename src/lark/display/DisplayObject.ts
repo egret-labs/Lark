@@ -1090,7 +1090,7 @@ module lark {
         /**
          * @language en_US
          * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
-         * is set to true,the transparent area of the display object will be touch through.
+         * is set to true,the transparent area of the display object will be touched through.
          * Enabling this property will cause certain mount of performance loss. This property is set to true in the Shape class,
          * while the other is set to false by default.
          * @version Lark 1.0
