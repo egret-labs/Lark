@@ -57,6 +57,8 @@ module lark.web {
         private currentHtmlInput:HTMLInputElement|HTMLTextAreaElement;
         private singleLineTextInput:HTMLInputElement = null;
         private multiLineTextInput:HTMLTextAreaElement = null;
+        private lastSelectStart:number = 0;
+        private lastSelectEnd:number = 0;
 
         /**
          * 当用户点击TextInput时，将它设置为正在输入的TextInput对象，HTML text input 会显示出来并获得焦点
@@ -85,6 +87,9 @@ module lark.web {
 
             currentHtmlInput.onblur = null;
             currentHtmlInput.oninput = null;
+            currentHtmlInput.onclick = null;
+            currentHtmlInput.onselect = null;
+            currentHtmlInput.onkeydown = null;
             this.resetHtmlInputStyle(currentHtmlInput);
             this.resetTextContainerStyle();
 
@@ -141,10 +146,12 @@ module lark.web {
                 var currentHtmlInput = this.currentHtmlInput;
                 currentHtmlInput.onblur = this.handleHtmlInputBlur;
                 currentHtmlInput.oninput = this.handleHtmlInputInputEvent;
-                currentHtmlInput.selectionStart = currentHtmlInput.value.length;
-                currentHtmlInput.selectionEnd = currentHtmlInput.value.length;
                 currentHtmlInput.focus();
-
+                currentHtmlInput.onclick = this.getInputSelection;
+                currentHtmlInput.onselect = this.getInputSelection;
+                currentHtmlInput.onkeydown = this.getInputSelection;
+                this.$setSelection(this.currentTextInput.selectionBeginIndex, this.currentTextInput.selectionEndIndex);
+                this.getInputSelection();
                 this.currentTextInput.$startInput();
             }
             else if(this.currentTextInput != null){
@@ -154,10 +161,14 @@ module lark.web {
 
         private handleHtmlInputInputEvent = (e)=>{
             this.currentTextInput.$setUserInputText(this.currentHtmlInput.value);
+            this.getInputSelection();
         };
 
         private handleHtmlInputBlur = (e) => {
+            var htmlInput = this.currentHtmlInput;
+            var textInput = this.currentTextInput;
             this.$removeCurrentTextInput();
+            textInput.setSelection(this.lastSelectStart, this.lastSelectEnd);
         };
 
         private resetHtmlElementStyle(element:HTMLElement){
@@ -225,8 +236,6 @@ module lark.web {
 
 
             var setElementStyle = this.setElementStyle.bind(this);
-
-
             setElementStyle("fontFamily", textInput.fontFamily);
             setElementStyle("fontStyle", textInput.italic ? "italic" : "normal");
             setElementStyle("fontWeight", textInput.bold ? "bold" : "normal");
@@ -250,20 +259,32 @@ module lark.web {
                 setElementStyle(styleName,padding + "px");
                 setElementStyle("height", textInput.fontSize + "px");
             }
+
             if (textInput.text != htmlInput.value) {
                 htmlInput.value = textInput.text;
             }
+
             if(textInput.maxChars != 0)
                 htmlInput.maxLength = textInput.maxChars;
             else if(htmlInput.maxLength>=0)
                 htmlInput.maxLength = 0x800000;
+        }
 
+        public $setSelection(selectStart:number,selectEnd:number):void {
+            this.currentHtmlInput.selectionStart = selectStart;
+            this.currentHtmlInput.selectionEnd = selectEnd;
         }
 
         private setElementStyle(style:string, value:any):void {
             if (this.currentHtmlInput) {
                 this.currentHtmlInput.style[style] = value;
             }
+        }
+
+        private getInputSelection = () => {
+            this.lastSelectEnd = this.currentHtmlInput.selectionEnd;
+            this.lastSelectStart = this.currentHtmlInput.selectionStart;
+            log(this.lastSelectStart,this.lastSelectEnd);
         }
     }
 
