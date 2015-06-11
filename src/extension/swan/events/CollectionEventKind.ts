@@ -31,16 +31,19 @@ module swan {
 
     /**
      * @language en_US
-     * 定义  CollectionEvent 类 kind 属性的有效值的常量。
-     * 这些常量指示对集合进行的更改类型。
+     * The CollectionEventKind class contains constants for the valid values
+     * of the <code>CollectionEvent</code> class <code>kind</code> property.
+     * These constants indicate the kind of change that was made to the collection.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 定义  CollectionEvent 类 kind 属性的有效值的常量。
+     * 定义 <code>CollectionEvent</code> 类 <code>kind</code> 属性的有效值的常量。
      * 这些常量指示对集合进行的更改类型。
+
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -48,7 +51,7 @@ module swan {
     export class CollectionEventKind {
         /**
          * @language en_US
-         * 指示集合添加了一个或多个项目。
+         * Indicates that the collection added an item or items.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -63,7 +66,8 @@ module swan {
         public static ADD:string = "add";
         /**
          * @language en_US
-         * 指示集合应用了排序或/和筛选。
+         * Indicates that the collection applied a sort, a filter, or both.
+         * This change can potentially be easier to handle than a RESET.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -78,7 +82,7 @@ module swan {
         public static REFRESH:string = "refresh";
         /**
          * @language en_US
-         * 指示集合删除了一个或多个项目。
+         * Indicates that the collection removed an item or items.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -93,7 +97,8 @@ module swan {
         public static REMOVE:string = "remove";
         /**
          * @language en_US
-         * 指示已替换由 CollectionEvent.location 属性确定的位置处的项目。
+         * Indicates that the item at the position identified by the
+         * CollectionEvent <code>location</code> property has been replaced.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -108,7 +113,8 @@ module swan {
         public static REPLACE:string = "replace";
         /**
          * @language en_US
-         * 指示集合已彻底更改，需要进行重置。
+         * Indicates that the collection has changed so drastically that
+         * a reset is required.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -123,7 +129,9 @@ module swan {
         public static RESET:string = "reset";
         /**
          * @language en_US
-         * 指示集合中一个或多个项目进行了更新。受影响的项目将存储在  CollectionEvent.items 属性中。
+         * Indicates that one or more items were updated within the collection.
+         * The affected item(s)
+         * are stored in the <code>CollectionEvent.items</code> property.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -136,35 +144,5 @@ module swan {
          * @platform Web,Native
          */
         public static UPDATE:string = "update";
-        /**
-         * @language en_US
-         * 指示集合中某个节点的子项列表已打开，通常应用于Tree的数据源XMLCollection。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 指示集合中某个节点的子项列表已打开，通常应用于Tree的数据源XMLCollection。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        public static OPEN:string = "open";
-        /**
-         * @language en_US
-         * 指示集合中某个节点的子项列表已关闭，通常应用于Tree的数据源XMLCollection。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 指示集合中某个节点的子项列表已关闭，通常应用于Tree的数据源XMLCollection。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        public static CLOSE:string = "close";
     }
 }
