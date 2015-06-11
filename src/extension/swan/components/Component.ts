@@ -845,7 +845,6 @@ module swan {
          */
         public explicitHeight:number;
 
-
         /**
          * @inheritDoc
          *
@@ -854,6 +853,7 @@ module swan {
          * @platform Web,Native
          */
         public minWidth:number;
+
         /**
          * @inheritDoc
          *
