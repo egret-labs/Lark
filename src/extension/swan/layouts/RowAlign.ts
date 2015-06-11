@@ -30,20 +30,64 @@
 module swan {
 
 	/**
+	 * @language en_US
 	 * RowAlign 类为 TileLayout 类的 rowAlign 属性定义可能的值。
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
+	 */
+	/**
+	 * @language zh_CN
+	 * RowAlign 类为 TileLayout 类的 rowAlign 属性定义可能的值。
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
 	 */
 	export class RowAlign{
 		/**
+		 * @language en_US
 		 * 不进行两端对齐。
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
+		 * 不进行两端对齐。
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public static TOP:string = "top";
 		/**
+		 * @language en_US
 		 * 通过增大垂直间隙将行两端对齐。 
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
+		 * 通过增大垂直间隙将行两端对齐。 
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public static JUSTIFY_USING_GAP:string = "justifyUsingGap";
 		
 		/**
+		 * @language en_US
 		 * 通过增大行高度将行两端对齐。
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
+		 * 通过增大行高度将行两端对齐。
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public static JUSTIFY_USING_HEIGHT:string = "justifyUsingHeight";
 	}

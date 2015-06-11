@@ -30,12 +30,35 @@
 module swan {
 
     /**
+     * @language en_US
      * BasicLayout 类根据其各个设置彼此独立地排列布局元素。
      * BasicLayout（也称为绝对布局）要求显式定位每个容器子代。可以使用子代的 x 和 y 属性，或使用约束来定位每个子代。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * BasicLayout 类根据其各个设置彼此独立地排列布局元素。
+     * BasicLayout（也称为绝对布局）要求显式定位每个容器子代。可以使用子代的 x 和 y 属性，或使用约束来定位每个子代。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class BasicLayout extends LayoutBase {
         /**
+         * @language en_US
          * 创建一个基本布局实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个基本布局实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor() {
             super();
@@ -43,12 +66,34 @@ module swan {
 
 
         /**
+         * @language en_US
          * BasicLayout不支持虚拟布局，设置这个属性无效
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * BasicLayout不支持虚拟布局，设置这个属性无效
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public useVirtualLayout:boolean;
 
         /**
+         * @language en_US
          *基于目标的内容测量其默认大小，并（可选）测量目标的默认最小大小
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *基于目标的内容测量其默认大小，并（可选）测量目标的默认最小大小
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public measure():void {
             super.measure();
@@ -57,9 +102,22 @@ module swan {
 
 
         /**
+         * @language en_US
          * 调整目标的元素的大小并定位这些元素
          * @param unscaledWidth
          * @param unscaledHeight
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 调整目标的元素的大小并定位这些元素
+         * @param unscaledWidth
+         * @param unscaledHeight
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
             super.updateDisplayList(unscaledWidth, unscaledHeight);
@@ -90,6 +148,7 @@ module swan {
 module swan.sys {
 
     /**
+     * @private
      * 一个工具方法，使用BasicLayout规则测量目标对象。
      */
     export function measure(target:swan.Group|swan.Component):void{
@@ -157,6 +216,7 @@ module swan.sys {
     }
 
     /**
+     * @private
      * 一个工具方法，使用BasicLayout规则布局目标对象。
      */
     export function updateDisplayList(target:swan.Group|swan.Component,
