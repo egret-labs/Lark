@@ -31,6 +31,7 @@
 module swan {
 
     /**
+     * @private
      * 存储根据groupName自动创建的RadioButtonGroup列表
      */
     var automaticRadioButtonGroups = {};
@@ -53,16 +54,19 @@ module swan {
      * @platform Web,Native
      */
     export class RadioButton extends ToggleButton {
+
         /**
          * @language en_US
-         * 创建一个RadioButton
+         * Constructor.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 创建一个RadioButton
+         * 构造函数。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
