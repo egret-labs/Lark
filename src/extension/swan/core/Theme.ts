@@ -31,7 +31,8 @@ module swan {
 
     /**
      * @language en_US
-     * 皮肤主题。注意：皮肤主题是一次性设置的默认值,并不能运行时切换所有组件默认皮肤。切换单个皮肤您可以自行对Component.skinName赋值来修改。
+     * Pay atention: The skin theme is the default value for once setting, and it can not be changed while running.
+     * You can change a skin of a component with <code>skinName</code> property.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -47,11 +48,12 @@ module swan {
 
         /**
          * @language en_US
-         * 创建一个主题实例
-         * @param configURL 要加载并解析的外部主题配置文件路径。若传入null，将不进行配置文件加载，
-         * 之后需要在外部以代码方式手动调用 mapSkin() 方法完成每条默认皮肤名的注册。
-         * @param stage 当前舞台引用。传入此参数，主题会自动注册自身到舞台上。
-         * 若传入null，需要在外部手动调用stage.registerImplementation("swan.Theme",theme) 来完成主题的注册。
+         * create an instance of Theme
+         * @param configURL the external theme path. if <code>null</code>, you need to register the default skin name with
+         * <code>mapSkin()</code> manually.
+         * @param stage current stage. The theme will register to the stage with this parameter.
+         * If <code>null</code>, you need to register with <code>stage.registerImplementation("swan.Theme",theme)</code>
+         * manually.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -59,10 +61,10 @@ module swan {
         /**
          * @language zh_CN
          * 创建一个主题实例
-         * @param configURL 要加载并解析的外部主题配置文件路径。若传入null，将不进行配置文件加载，
-         * 之后需要在外部以代码方式手动调用 mapSkin() 方法完成每条默认皮肤名的注册。
+         * @param configURL 要加载并解析的外部主题配置文件路径。若传入 <code>null</code>，将不进行配置文件加载，
+         * 之后需要在外部以代码方式手动调用 <code>mapSkin()</code> 方法完成每条默认皮肤名的注册。
          * @param stage 当前舞台引用。传入此参数，主题会自动注册自身到舞台上。
-         * 若传入null，需要在外部手动调用stage.registerImplementation("swan.Theme",theme) 来完成主题的注册。
+         * 若传入null，需要在外部手动调用 <code>stage.registerImplementation("swan.Theme",theme)</code> 来完成主题的注册。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -163,12 +165,13 @@ module swan {
 
         /**
          * @language en_US
-         * 根据主机组件，获取对应的默认皮肤名。查询规则如下：
-         * 1.使用client的hostComponentKey作为键查询默认皮肤名
-         * 2.使用client的类名作为键查询默认皮肤名
-         * 3.使用client的父类名作为键查询默认皮肤名
-         * 4.不断重复3直到查询到皮肤名或父类为swan.Component时停止
-         * @param client 要获取默认皮肤的组件
+         * According to the host component to get the default skin name.
+         * Search rules are as follows:
+         * <li>1. Use the <code>hostComponentKey</code> of client to search.</li>
+         * <li>2. Use the class name of client to search.</li>
+         * <li>3. Use the parent class name of client to search.</li>
+         * <li>4. Repeat step 3 until find the skin name or the parent is <code>swan.Component</code>.</li>
+         * @param client the component need to get the default skin.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -176,11 +179,11 @@ module swan {
         /**
          * @language zh_CN
          * 根据主机组件，获取对应的默认皮肤名。查询规则如下：
-         * 1.使用client的hostComponentKey作为键查询默认皮肤名
-         * 2.使用client的类名作为键查询默认皮肤名
-         * 3.使用client的父类名作为键查询默认皮肤名
-         * 4.不断重复3直到查询到皮肤名或父类为swan.Component时停止
-         * @param client 要获取默认皮肤的组件
+         * <li>1.使用client的hostComponentKey作为键查询默认皮肤名。</li>
+         * <li>2.使用client的类名作为键查询默认皮肤名。</li>
+         * <li>3.使用client的父类名作为键查询默认皮肤名。</li>
+         * <li>4.不断重复3直到查询到皮肤名或父类为swan.Component时停止。</li>
+         * @param client 要获取默认皮肤的组件。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -224,18 +227,18 @@ module swan {
 
         /**
          * @language en_US
-         * 为指定的主机组件映射一个默认皮肤
-         * @param hostComponentKey 主机组件名称，例如：“swan.Button”
-         * @param skinName 皮肤名称 例如："app.MyButtonSkin";
+         * Map a default skin for the specified host component.
+         * @param hostComponentKey the name of host component, such as "swan.Button".
+         * @param skinName the name of skin, such as "app.MyButtonSkin".
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 为指定的主机组件映射一个默认皮肤
-         * @param hostComponentKey 主机组件名称，例如：“swan.Button”
-         * @param skinName 皮肤名称 例如："app.MyButtonSkin";
+         * 为指定的主机组件映射一个默认皮肤。
+         * @param hostComponentKey 主机组件名称，例如：“swan.Button”。
+         * @param skinName 皮肤名称 例如："app.MyButtonSkin"。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
