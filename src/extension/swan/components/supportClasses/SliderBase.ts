@@ -289,21 +289,7 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * Sets the backing store for the <code>value</code> property and
-         * dispatches a <code>valueCommit</code> event if the property changes.
-         *
-         * @param value The new value of the <code>value</code> property.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在 value 属性改变时为该属性设置后备存储，并调度 valueCommit 事件。
-         *
-         * @param value The new value of the <code>value</code> property.
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
