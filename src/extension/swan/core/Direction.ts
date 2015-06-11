@@ -30,23 +30,79 @@
 module swan {
 
 	/**
+	 * @language en_US
+	 * Defines values for setting the <code>direction</code> property
+	 * of the <code>ProgressBar</code> class.
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
+	 */
+	/**
+	 * @language zh_CN
 	 * 定义进度条等控件增长方向的常量
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
 	 */
 	export class Direction{
 		/**
+		 * @language en_US
+		 * Specifies left-to-right direction.
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
 		 * 水平从左到右增长
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public static LTR:string = "ltr";
 		/**
+		 * @language en_US
+		 * Specifies right-to-left direction.
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
 		 * 水平从右到左增长
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public static RTL:string = "rtl";
 		/**
+		 * @language en_US
+		 * Specifies top-to-bottom direction.
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
 		 * 竖直从上到下增长
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public static TTB:string = "ttb";
 		/**
+		 * @language en_US
+		 * Specifies bottom-to-top direction.
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
 		 * 竖直从下到上增长
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public static BTT:string = "btt";
 	}

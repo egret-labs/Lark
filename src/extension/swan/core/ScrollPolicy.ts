@@ -30,21 +30,69 @@
 module swan {
 
 	/**
-	 * 滚动条显示策略常量
+	 * @language en_US
+	 * Values for the <code>horizontalCanScroll</code> and
+	 * <code>verticalCanScroll</code> properties of the Scroller classes.
+	 *
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
+	 */
+	/**
+	 * @language zh_CN
+	 * 滚动条显示策略常量。
+	 * Scroller 类的 <code>horizontalCanScroll</code> 和 <code>verticalCanScroll</code> 属性的值。
+	 *
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
 	 */
 	export class ScrollPolicy{
 		/**
+		 * @language en_US
+		 * Show the scrollbar if the children exceed the owner's dimension.
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
 		 * 如果子项超出父级的尺寸，则允许滚动，反之不允许滚动。
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public static AUTO:string = "auto";
 		
 		/**
+		 * @language en_US
+		 * Never show the scrollbar.
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
 		 * 从不允许滚动。
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public static OFF:string = "off";
 
 		/**
+		 * @language en_US
+		 * Always show the scrollbar.
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
 		 * 总是允许滚动。
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public static ON:string = "on";
 	}
