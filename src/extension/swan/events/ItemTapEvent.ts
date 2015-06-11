@@ -31,14 +31,14 @@ module swan {
 
     /**
      * @language en_US
-     * 列表项单击事件
+     * Represents events that are emitted when a item has been touched.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 列表项单击事件
+     * 列表项触碰事件
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -46,14 +46,14 @@ module swan {
     export class ItemTapEvent extends lark.Event {
         /**
          * @language en_US
-         *
+         * The type of the event object for an <code>itemTap</code> event.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         *
+         * <code>itemTap</code> 事件的对象类型。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -62,7 +62,7 @@ module swan {
 
         /**
          * @language en_US
-         * 触发触摸事件的项呈示器数据源项。
+         * The item in the data provider of the associated item.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -78,7 +78,7 @@ module swan {
 
         /**
          * @language en_US
-         * 触发触摸事件的项呈示器。
+         * The item renderer in the list of the associated item.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -94,7 +94,7 @@ module swan {
 
         /**
          * @language en_US
-         * 触发触摸事件的项索引
+         * The index of the associated navigation item.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -109,15 +109,8 @@ module swan {
         public itemIndex:number = -1;
 
         /**
-         * @language en_US
-         * 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -129,9 +122,13 @@ module swan {
 
         /**
          * @language en_US
-         * 使用指定的 EventEmitter 对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-         * @param target 事件派发目标
-         * @param eventType 事件类型
+         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * for the next cycle of reuse.
+         *
+         * @param target the target of event emitter.
+         * @param eventType The event type; indicates the action that triggered the event.
+         * @param itemRenderer The item renderer in the list of the associated item.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -139,8 +136,11 @@ module swan {
         /**
          * @language zh_CN
          * 使用指定的 EventEmitter 对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         *
          * @param target 事件派发目标
-         * @param eventType 事件类型
+         * @param eventType 事件类型；指示触发事件的动作。
+         * @param itemRenderer 触发触摸事件的项呈示器。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
