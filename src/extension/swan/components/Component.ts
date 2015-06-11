@@ -740,7 +740,6 @@ module swan {
 
         /**
          * @inheritDoc
-         * @default true
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -749,7 +748,6 @@ module swan {
         public includeInLayout:boolean;
         /**
          * @inheritDoc
-         * @default lark.NONE
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -759,7 +757,6 @@ module swan {
 
         /**
          * @inheritDoc
-         * @default lark.NONE
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -769,7 +766,6 @@ module swan {
 
         /**
          * @inheritDoc
-         * @default lark.NONE
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -779,7 +775,6 @@ module swan {
 
         /**
          * @inheritDoc
-         * @default lark.NONE
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -789,7 +784,6 @@ module swan {
 
         /**
          * @inheritDoc
-         * @default lark.NONE
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -799,7 +793,6 @@ module swan {
 
         /**
          * @inheritDoc
-         * @default lark.NONE
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -809,7 +802,6 @@ module swan {
 
         /**
          * @inheritDoc
-         * @default lark.NONE
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -819,7 +811,6 @@ module swan {
 
         /**
          * @inheritDoc
-         * @default lark.NONE
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -845,7 +836,6 @@ module swan {
          */
         public explicitHeight:number;
 
-
         /**
          * @inheritDoc
          *
@@ -854,6 +844,7 @@ module swan {
          * @platform Web,Native
          */
         public minWidth:number;
+
         /**
          * @inheritDoc
          *

@@ -32,29 +32,34 @@ module swan {
 
     /**
      * @language en_US
-     * 进度条控件。
+     * The ProgressBar control provides a visual representation of the progress of a task over time.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 进度条控件。
+     * ProgressBar 控件为随时间而变的任务进度提供了形象化的表示。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     export class ProgressBar extends Range {
+
         /**
          * @language en_US
-         * 实例化一个进度条控件
+         * Constructor.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 实例化一个进度条控件
+         * 构造函数。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -66,14 +71,20 @@ module swan {
 
         /**
          * @language en_US
-         * [SkinPart]进度高亮显示对象。
+         * this hightlight component of the progressbar.
+         *
+         * @skinPart
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart]进度高亮显示对象。
+         * 进度高亮显示对象。
+         *
+         * @skinPart
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -81,14 +92,20 @@ module swan {
         public thumb:swan.UIComponent = null;
         /**
          * @language en_US
-         * [SkinPart]进度条文本
+         * the label of the progressbar.
+         *
+         * @skinPart
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart]进度条文本
+         * 进度条文本
+         *
+         * @skinPart
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -101,14 +118,18 @@ module swan {
         private _labelFunction:(value:number, maximum:number)=>string = null;
         /**
          * @language en_US
-         * 进度条文本格式化回调函数。示例：labelFunction(value:Number,maximum:Number):String;
+         * a text format callback function。example：
+         * <code>labelFunction(value:Number,maximum:Number):String;</code>
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 进度条文本格式化回调函数。示例：labelFunction(value:Number,maximum:Number):String;
+         * 进度条文本格式化回调函数。示例：
+         * <code>labelFunction(value:Number,maximum:Number):String;</code>
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -126,7 +147,13 @@ module swan {
 
         /**
          * @language en_US
-         * 将当前value转换成文本
+         * Convert the current value to display text
+         *
+         * @param value the current value
+         * @param maximum the maximum value
+         *
+         * @return a converted text
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -134,6 +161,12 @@ module swan {
         /**
          * @language zh_CN
          * 将当前value转换成文本
+         *
+         * @param value 当前值
+         * @param maximum 最大值
+         *
+         * @return 转换后的文本
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -152,14 +185,21 @@ module swan {
 
         /**
          * @language en_US
-         * value改变时更新视图的缓动动画时间，单位毫秒。设置为0则不执行缓动。默认值500。
+         * Duration in milliseconds for a sliding animation
+         * when the value changing. If the vlaue is 0, no animation will be done.
+         *
+         * @default 500
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * value改变时更新视图的缓动动画时间，单位毫秒。设置为0则不执行缓动。默认值500。
+         * value改变时更新视图的缓动动画时间(毫秒为单位)。设置为0则不执行缓动。
+         *
+         * @default 500
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -185,14 +225,21 @@ module swan {
         private _direction:string = Direction.LTR;
         /**
          * @language en_US
-         * 进度条增长方向。请使用 Direction 定义的常量。默认值：Direction.LTR（从左向右增长）。
+         * Direction in which the fill of the ProgressBar expands toward completion.
+         * you should use the <code>Direction</code> class constants to set the property.
+         *
+         * @default Direction.LTR
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 进度条增长方向。请使用 Direction 定义的常量。默认值：Direction.LTR（从左向右增长）。
+         * ProgressBar 填充在逐步完成过程中扩展的方向。使用 <code>Direction</code> 类定义的常量。
+         *
+         * @default Direction.LTR
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -270,19 +317,8 @@ module swan {
 
 
         /**
-         * @language en_US
-         * 
-         * @param partName 
-         * @param instance 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param partName 
-         * @param instance 
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -295,19 +331,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 
-         * @param partName 
-         * @param instance 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param partName 
-         * @param instance 
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -328,15 +353,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 更新皮肤部件大小和可见性。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 更新皮肤部件大小和可见性。
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
