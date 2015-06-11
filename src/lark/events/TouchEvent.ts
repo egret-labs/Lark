@@ -31,6 +31,22 @@
 module lark {
 
     /**
+     * @language en_US
+     * The TouchEvent class lets you handle events on devices that detect user contact with the device (such as a finger
+     * on a touch screen).When a user interacts with a device such as a mobile phone or tablet with a touch screen, the
+     * user typically touches the screen with his or her fingers or a pointing device. You can develop applications that
+     * respond to basic touch events (such as a single finger tap) with the TouchEvent class. Create event listeners using
+     * the event types defined in this class.
+     * Note: When objects are nested on the display list, touch events target the deepest possible nested object that is
+     * visible in the display list. This object is called the target node. To have a target node's ancestor (an object
+     * containing the target node in the display list) receive notification of a touch event, use EventDispatcher.addEventListener()
+     * on the ancestor node with the type parameter set to the specific touch event you want to detect.
+     *
+     * @version Lark 1.0
+     * @platform Web,Runtime,Native
+     */
+    /**
+     * @language zh_CN
      * 使用 TouchEvent 类，您可以处理设备上那些检测用户与设备之间的接触的事件。
      * 当用户与带有触摸屏的移动电话或平板电脑等设备交互时，用户通常使用手指或指针设备接触屏幕。可使用 TouchEvent
      * 类开发响应基本触摸事件（如单个手指点击）的应用程序。使用此类中定义的事件类型创建事件侦听器。
@@ -44,45 +60,92 @@ module lark {
     export class TouchEvent extends Event {
 
         /**
-         * 移动
-         *
+         * @language en_US
+         * Emitted when the user touches the device, and is continuously dispatched until the point of contact is removed.
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        /**
+         * @language zh_CN
+         * 当用户触碰设备时进行调度，而且会连续调度，直到接触点被删除。
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
         public static TOUCH_MOVE:string = "touchMove";
 
         /**
-         * 开始触摸
-         *
+         * @language en_US
+         * Emitted when the user first contacts a touch-enabled device (such as touches a finger to a mobile phone or tablet with a touch screen).
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        /**
+         * @language zh_CN
+         * 当用户第一次触摸启用触摸的设备时（例如，用手指触摸配有触摸屏的移动电话或平板电脑）调度。
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
         public static TOUCH_BEGIN:string = "touchBegin";
 
         /**
-         * 结束触摸
-         *
+         * @language en_US
+         * Emitted when the user removes contact with a touch-enabled device (such as lifts a finger off a mobile phone
+         * or tablet with a touch screen).
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        /**
+         * @language zh_CN
+         * 当用户移除与启用触摸的设备的接触时（例如，将手指从配有触摸屏的移动电话或平板电脑上抬起）调度。
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
         public static TOUCH_END:string = "touchEnd";
 
         /**
-         * 轻拍，开始和结束触摸都在同一对象上
-         *
+         * @language en_US
+         * Emitted when the user lifts the point of contact over the same DisplayObject instance on which the contact
+         * was initiated on a touch-enabled device.
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        /**
+         * @language zh_CN
+         * 当用户在触摸设备上与开始触摸的同一 DisplayObject 实例上抬起接触点时调度。
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
         public static TOUCH_TAP:string = "touchTap";
         /**
-         * 在开始触摸的对象的外部结束触摸
-         *
+         * @language en_US
+         * Emitted when the user lifts the point of contact over the different DisplayObject instance on which the contact
+         * was initiated on a touch-enabled device (such as presses and releases a finger from a single point over a display
+         * object on a mobile phone or tablet with a touch screen).
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        /**
+         * @language zh_CN
+         * 当用户在触摸设备上与开始触摸的不同 DisplayObject 实例上抬起接触点时调度。
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
         public static TOUCH_RELEASE_OUTSIDE:string = "touchReleaseOutside";
 
         /**
+         * @language en_US
+         * Creates an Event object that contains information about touch events.
+         * @param type  The type of the event, accessible as Event.type.
+         * @param bubbles  Determines whether the Event object participates in the bubbling stage of the event flow. The default value is false.
+         * @param cancelable Determines whether the Event object can be canceled. The default values is false.
+         * @param stageX The horizontal coordinate at which the event occurred in global Stage coordinates.
+         * @param stageY The vertical coordinate at which the event occurred in global Stage coordinates.
+         * @param touchPointID A unique identification number (as an int) assigned to the touch point.
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        /**
+         * @language zh_CN
          * 创建一个 TouchEvent 对象，其中包含有关Touch事件的信息
          * @param type 事件的类型，可以作为 Event.type 访问。
          * @param bubbles 确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
@@ -90,7 +153,6 @@ module lark {
          * @param stageX 事件发生点在全局舞台坐标系中的水平坐标
          * @param stageY 事件发生点在全局舞台坐标系中的垂直坐标
          * @param touchPointID 分配给触摸点的唯一标识号
-         *
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
@@ -115,8 +177,14 @@ module lark {
         $stageX:number;
 
         /**
+         * @language en_US
+         * The horizontal coordinate at which the event occurred in global Stage coordinates.
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        /**
+         * @language zh_CN
          * 事件发生点在全局舞台坐标中的水平坐标。
-         *
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
@@ -130,8 +198,14 @@ module lark {
         $stageY:number;
 
         /**
+         * @language en_US
+         * The vertical coordinate at which the event occurred in global Stage coordinates.
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        /**
+         * @language zh_CN
          * 事件发生点在全局舞台坐标中的垂直坐标。
-         *
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
@@ -157,8 +231,14 @@ module lark {
         }
 
         /**
-         * 事件发生点相对于currentTarget的水平坐标。
-         *
+         * @language en_US
+         * The horizontal coordinate at which the event occurred relative to the display object.
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        /**
+         * @language zh_CN
+         * 事件发生点相对于所属显示对象的水平坐标。
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
@@ -167,8 +247,14 @@ module lark {
         }
 
         /**
-         * 事件发生点相对于currentTarget的垂直坐标。
-         *
+         * @language en_US
+         * The vertical coordinate at which the event occurred relative to the display object.
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        /**
+         * @language zh_CN
+         * 事件发生点相对于所属显示对象的垂直坐标。
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
@@ -177,24 +263,55 @@ module lark {
         }
 
         /**
+         * @language en_US
+         * A unique identification number (as an int) assigned to the touch point.
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        /**
+         * @language zh_CN
          * 分配给触摸点的唯一标识号
-         *
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
         public touchPointID:number;
 
         /**
-         * 如果已修改显示列表，调用此方法将会忽略帧频限制，在此事件处理完成后立即重绘屏幕。
-         *
+         * @language en_US
+         * Instructs Flash Player or the AIR runtime to render after processing of this event completes, if the display list has been modified.
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果已修改显示列表，调用此方法将会忽略帧频限制，在此事件处理完成后立即重绘屏幕。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public updateAfterEvent():void {
             sys.$requestRenderingFlag = true;
         }
 
         /**
+         * @language en_US
+         * uses a specified target to emit an event. Using this method can reduce the number of
+         * reallocate event objects, which allows you to get better code execution performance.
+         * @param target the event target
+         * @param type  The type of the event, accessible as Event.type.
+         * @param bubbles  Determines whether the Event object participates in the bubbling stage of the event flow. The default value is false.
+         * @param cancelable Determines whether the Event object can be canceled. The default values is false.
+         * @param stageX The horizontal coordinate at which the event occurred in global Stage coordinates.
+         * @param stageY The vertical coordinate at which the event occurred in global Stage coordinates.
+         * @param touchPointID A unique identification number (as an int) assigned to the touch point.
+         *
+         * @see lark.Event.create()
+         * @see lark.Event.release()
+         *
+         * @version Lark 1.0
+         * @platform Web,Runtime,Native
+         */
+        /**
+         * @language zh_CN
          * 使用指定的EventEmitter对象来抛出Event事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
          * @param target 派发事件目标
          * @param type 事件的类型，可以作为 Event.type 访问。
@@ -224,6 +341,7 @@ module lark {
     }
 
     registerClass(TouchEvent, Types.TouchEvent);
+
     if(DEBUG){
         lark.$markReadOnly(TouchEvent.prototype,"stageX");
         lark.$markReadOnly(TouchEvent.prototype,"stageY");
