@@ -257,7 +257,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public constructor(type:string, bubbles?:boolean, cancelable?:boolean,data?:any) {
+        public constructor(type:string, bubbles?:boolean, cancelable?:boolean, data?:any) {
             super();
             this.$type = type;
             this.$bubbles = !!bubbles;
@@ -658,14 +658,14 @@ module lark {
 
     }
 
-    registerClass(Event,Types.Event);
+    registerClass(Event, Types.Event);
 
-    if(DEBUG){
-        lark.$markReadOnly(Event.prototype,"type");
-        lark.$markReadOnly(Event.prototype,"bubbles");
-        lark.$markReadOnly(Event.prototype,"cancelable");
-        lark.$markReadOnly(Event.prototype,"eventPhase");
-        lark.$markReadOnly(Event.prototype,"currentTarget");
-        lark.$markReadOnly(Event.prototype,"target");
+    if (DEBUG) {
+        lark.$markReadOnly(Event.prototype, "type");
+        lark.$markReadOnly(Event.prototype, "bubbles");
+        lark.$markReadOnly(Event.prototype, "cancelable");
+        lark.$markReadOnly(Event.prototype, "eventPhase");
+        lark.$markReadOnly(Event.prototype, "currentTarget");
+        lark.$markReadOnly(Event.prototype, "target");
     }
 }

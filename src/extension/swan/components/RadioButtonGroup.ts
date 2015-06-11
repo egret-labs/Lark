@@ -70,7 +70,7 @@ module swan {
      * that act as a single mutually exclusive component; therefore,
      * a user can select only one RadioButton component at a time.
      *
-     * @event lark.Event.CHANGE Dispatched when the value of the selected RadioButton component in
+     * @event lark.Event.CHANGE Emitted when the value of the selected RadioButton component in
      * this group changes.
      *
      * @version Lark 1.0
