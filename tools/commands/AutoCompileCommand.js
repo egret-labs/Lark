@@ -10,6 +10,7 @@ var AutoCompileCommand = (function () {
         this._lastExitCode = 0;
         this._lastMessages = [];
         this._request = null;
+        this._lastBuildTime = Date.now();
     }
     AutoCompileCommand.prototype.execute = function () {
         var _this = this;
@@ -19,11 +20,14 @@ var AutoCompileCommand = (function () {
         }, function (m) { return _this.onServiceMessage(m); }, false);
         this._request.once('end', function () { return process.exit(); });
         this._request.once('close', function () { return process.exit(); });
-        setInterval(function () { return _this.sendCommand({
-            command: "status",
-            status: process.memoryUsage(),
-            path: lark.options.projectDir
-        }); }, 60000);
+        setInterval(function () {
+            _this.sendCommand({
+                command: "status",
+                status: process.memoryUsage(),
+                path: lark.options.projectDir
+            });
+            _this.exitAfter5Minutes();
+        }, 60000);
         setTimeout(function () { return _this.buildProject(); }, 20);
         return 0;
     };
@@ -37,13 +41,14 @@ var AutoCompileCommand = (function () {
         CopyFiles.copyProjectFiles();
         CompileTemplate.compileTemplates(options, result.files);
         this._scripts = result.files;
-        this._lastExitCode = exitCode;
+        this._lastExitCode = result.exitStatus;
         this._lastMessages = result.messages;
         this.sendCommand();
         global.gc && global.gc();
         return exitCode;
     };
     AutoCompileCommand.prototype.buildChanges = function (filesChanged) {
+        this._lastBuildTime = Date.now();
         if (!this.compileProject)
             return this.buildProject();
         var codes = [];
@@ -118,6 +123,12 @@ var AutoCompileCommand = (function () {
             };
         }
         this._request.send(cmd);
+    };
+    AutoCompileCommand.prototype.exitAfter5Minutes = function () {
+        var now = Date.now();
+        var timespan = (now - this._lastBuildTime) / 1000 / 60;
+        if (timespan > 5)
+            process.exit(0);
     };
     return AutoCompileCommand;
 })();
