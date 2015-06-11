@@ -31,14 +31,23 @@ module swan {
 
     /**
      * @language en_US
-     * 水平滚动条
+     * The HScrollBar (horizontal scrollbar) control lets you control
+     * the portion of data that is displayed when there is too much data
+     * to fit horizontally in a display area.
+     *
+     * <p>Although you can use the HScrollBar control as a stand-alone control,
+     * you usually combine it as part of another group of components to
+     * provide scrolling functionality.</p>
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 水平滚动条
+     * HScrollBar（水平 ScrollBar）控件可以在因数据太多而不能在显示区域中以水平方向完全显示时控制显示的数据部分。
+     * <p>虽然 HScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。</p>
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -46,19 +55,8 @@ module swan {
     export class HScrollBar extends ScrollBarBase {
 
         /**
-         * @language en_US
+         * @inheritDoc
          * 
-         * @param unscaledWidth 
-         * @param unscaledHeight 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param unscaledWidth 
-         * @param unscaledHeight 
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -97,17 +95,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 
-         * @param event 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param event 
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
