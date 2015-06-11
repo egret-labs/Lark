@@ -46,7 +46,7 @@ module swan {
     /**
      * @language zh_CN
      * VScrollBar（垂直 ScrollBar）控件可以在因数据太多而不能在显示区域中以垂直方向完全显示时控制显示的数据部分。
-     * 虽然 VScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。
+     * <p>虽然 VScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。</p>
      *
      * @version Lark 1.0
      * @version Swan 1.0
