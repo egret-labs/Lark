@@ -15,6 +15,7 @@ class CreateCommand implements lark.Command {
         if (exist)
             url += "?exist=true";
         server.startServer(option, url);
+        console.log(utils.tr(10016, url));
         return 0;
     }
 }

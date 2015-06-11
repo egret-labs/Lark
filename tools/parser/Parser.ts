@@ -118,8 +118,11 @@ export function parseCommandLine(commandLine: string[]) {
             options.projectDir = process.cwd()
         else {
             var absPath = file.joinPath(process.cwd(), options.projectDir);
-            if (file.exists(absPath))
-                options.projectDir = absPath;
+            if (!file.isDirectory(absPath)) {
+                file.createDirectory(absPath)
+            }
+            options.projectDir = absPath;
+            process.chdir(absPath);
         }
         options.projectDir = file.joinPath(options.projectDir, "/");
 
