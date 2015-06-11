@@ -573,15 +573,15 @@ module lark {
          * 创建一段矩形路径，矩形的起点位置是 (x, y) ，尺寸为 width 和 height。矩形的4个点通过直线连接，子路径做为闭合的标记，所以你可以填充或者描边矩形。
          * @param x 矩形起点的 x 轴坐标。
          * @param y 矩形起点的 y 轴坐标。
-         * @param w 矩形的宽度。
-         * @param h 矩形的高度。
+         * @param width 矩形的宽度。
+         * @param height 矩形的高度。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public rect(x:number, y:number, w:number, h:number):void {
+        public rect(x:number, y:number, width:number, height:number):void {
             this.pushCommand(sys.GraphicsCommandType.rect, arguments);
             this.extendByPoint(x, y);
-            this.extendByPoint(x + w, y + h);
+            this.extendByPoint(x + width, y + height);
         }
 
         /**
@@ -623,15 +623,15 @@ module lark {
          * 绘制一个填充矩形。矩形的起点在 (x, y) 位置，矩形的尺寸是 width 和 height ，fillStyle 属性决定矩形的样式。
          * @param x 矩形起始点的 x 轴坐标。
          * @param y 矩形起始点的 y 轴坐标。
-         * @param w 矩形的宽度。
-         * @param h 矩形的高度。
+         * @param width 矩形的宽度。
+         * @param height 矩形的高度。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public fillRect(x:number, y:number, w:number, h:number):void {
+        public fillRect(x:number, y:number, width:number, height:number):void {
             this.pushCommand(sys.GraphicsCommandType.fillRect, arguments);
             this.extendByPoint(x, y);
-            this.extendByPoint(x + w, y + h);
+            this.extendByPoint(x + width, y + height);
             this.hasFill = true;
         }
 
@@ -667,16 +667,16 @@ module lark {
          * 使用当前的绘画样式，描绘一个起点在 (x, y) 、宽度为 w 、高度为 h 的矩形的方法。
          * @param x 矩形起点的 x 轴坐标。
          * @param y 矩形起点的 y 轴坐标。
-         * @param w 矩形的宽度。
-         * @param h 矩形的高度。
+         * @param width 矩形的宽度。
+         * @param height 矩形的高度。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public strokeRect(x:number, y:number, w:number, h:number):void {
+        public strokeRect(x:number, y:number, width:number, height:number):void {
             this.pushCommand(sys.GraphicsCommandType.strokeRect, arguments);
             this.hasStroke = true;
             this.extendByPoint(x, y);
-            this.extendByPoint(x + w, y + h);
+            this.extendByPoint(x + width, y + height);
         }
 
         /**

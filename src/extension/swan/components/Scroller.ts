@@ -68,8 +68,8 @@ module swan {
      * Rather than allow the child to extend past the boundaries of the parent container,
      * the Scroller specifies to clip the child to the boundaries and display scroll bars.</p>
      *
-     * @event swan.UIEvent.CHANGE_START Dispatched when the scroll position is going to change
-     * @event swan.UIEvent.CHANGE_END Dispatched when the scroll position changed complete
+     * @event swan.UIEvent.CHANGE_START Emitted when the scroll position is going to change
+     * @event swan.UIEvent.CHANGE_END Emitted when the scroll position changed complete
      *
      * @version Lark 1.0
      * @version Swan 1.0

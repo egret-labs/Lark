@@ -40,9 +40,9 @@ module swan {
 	 * <p>You can get or set this state programmatically
 	 * by using the <code>selected</code> property.</p>
 	 *
-	 * @event lark.Event.CHANGE Dispatched when the <code>selected</code> property
+	 * @event lark.Event.CHANGE Emitted when the <code>selected</code> property
 	 * changes for the ToggleButton control.
-	 * This event is dispatched only when the
+	 * This event is emitted only when the
 	 * user interacts with the control by touching.
 	 *
 	 * @version Lark 1.0
