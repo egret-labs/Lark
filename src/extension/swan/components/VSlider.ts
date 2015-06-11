@@ -32,14 +32,20 @@ module swan {
 
     /**
      * @language en_US
-     * 垂直滑块控件
+     * The VSlider (vertical slider) control lets users select a value
+     * by moving a slider thumb between the end points of the slider track.
+     * The current value of the slider is determined by the relative location of the thumb between
+     * the end points of the slider, corresponding to the slider's minimum and maximum values.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 垂直滑块控件
+     * 使用 VSlider（垂直滑块）控件，用户可通过在滑块轨道的端点之间移动滑块来选择值。
+     * 滑块的当前值由滑块端点之间滑块的相对位置确定，端点对应于滑块的最小值和最大值。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -47,14 +53,16 @@ module swan {
     export class VSlider extends SliderBase {
         /**
          * @language en_US
-         * 创建一个垂直滑块控件
+         * Constructor.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 创建一个垂直滑块控件
+         * 构造函数。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -65,7 +73,11 @@ module swan {
 
         /**
          * @language en_US
-         * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值
+         * A value of the relative to the track of x, y pixel position
+         * is converted to a value between the minimum and the maximum.
+         * @param x A value of the relative to the track of x position.
+         * @param y A value of the relative to the track of y position.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -73,6 +85,9 @@ module swan {
         /**
          * @language zh_CN
          * 将相对于轨道的 x,y 像素位置转换为介于最小值和最大值（包括两者）之间的一个值
+         * @param x 相对于轨道的x位置
+         * @param y 相对于轨道的y位置
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -102,15 +117,8 @@ module swan {
 
 
         /**
-         * @language en_US
-         * 设置外观部件（通常为滑块）的边界，这些外观部件的几何图形不是完全由外观的布局指定的
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 设置外观部件（通常为滑块）的边界，这些外观部件的几何图形不是完全由外观的布局指定的
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
