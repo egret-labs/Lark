@@ -27,16 +27,16 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark{
+module lark {
 
     /**
      * TextInput 用于创建显示对象来输入文本. 默认为单行文本，当需要使用多行文本时，请设置 multiLine 为 true
      */
-    export class TextInput extends TextField{
-        constructor(){
+    export class TextInput extends TextField {
+        constructor() {
             super();
             this.$TextField[sys.TextKeys.wordWrap] = false;
-            this.on(TouchEvent.TOUCH_BEGIN,this.handleTouchBegin,this);
+            this.on(TouchEvent.TOUCH_BEGIN, this.handleTouchBegin, this);
 
         }
 
@@ -44,14 +44,15 @@ module lark{
          * 一个布尔值，表示是否显示为一个密码输入框
          * @returns {boolean}
          */
-        public get displayAsPassword():boolean{
+        public get displayAsPassword():boolean {
             return this.$TextField[sys.TextKeys.displayAsPassword];
         }
-        public set displayAsPassword(value:boolean){
-            if(this.$TextField[sys.TextKeys.displayAsPassword] == value)
+
+        public set displayAsPassword(value:boolean) {
+            if (this.$TextField[sys.TextKeys.displayAsPassword] == value)
                 return;
             this.$TextField[sys.TextKeys.displayAsPassword] = value;
-            if(value)
+            if (value)
                 this.wordWrap = false;
             this.$invalidateContentBounds();
         }
@@ -61,13 +62,13 @@ module lark{
          * 通过 text 属性可以设置比 maxChars 更长的字符串
          * @returns {number}
          */
-        public get maxChars():number{
+        public get maxChars():number {
             return this.$TextField[sys.TextKeys.maxChars];
         }
 
-        public set maxChars(value:number){
+        public set maxChars(value:number) {
             var values = this.$TextField;
-            if(values[sys.TextKeys.maxChars] == value)
+            if (values[sys.TextKeys.maxChars] == value)
                 return;
             values[sys.TextKeys.maxChars] = value;
             this.updateTextAdapter();
@@ -77,14 +78,14 @@ module lark{
         private _isFocus:boolean = false;
 
 
-        private handleTouchBegin(e:TouchEvent){
-            if(this._isFocus)
+        private handleTouchBegin(e:TouchEvent) {
+            if (this._isFocus)
                 return;
             this._isFocus = true;
             this.setAsCurrent();
         }
 
-        private setAsCurrent(){
+        private setAsCurrent() {
             var layer = sys.$getTextAdapter(this);
             layer.$setCurrentTextInput(this);
         }
@@ -93,31 +94,33 @@ module lark{
          * Call by TextAdapter set text
          * @param text
          */
-        $setUserInputText(text:string){
-            if(text==this.text)
+        $setUserInputText(text:string) {
+            if (text == this.text)
                 return;
-            this.$setText(text);
-            this.emitWith(TextInputEvent.INPUT);
+            if (TextEvent.emitTextEvent(this, TextEvent.TEXT_INPUT, text)) {
+                this.$setText(text);
+                this.emitWith(Event.CHANGE);
+            }
         }
 
-        $startInput(){
+        $startInput() {
             this._isTyping = true;
             this.$invalidateContentBounds();
-            this.emitWith(TextInputEvent.FOCUS);
+            this.emitWith(Event.FOCUS_IN);
         }
 
-        $endInput(){
+        $endInput() {
             this._isTyping = false;
             this._isFocus = false;
             this.$invalidateContentBounds();
-            this.emitWith(TextInputEvent.BLUR);
-            this.emitWith(TextInputEvent.CHANGE);
+            this.emitWith(Event.FOCUS_OUT);
         }
 
         $setX(value:number):boolean {
             this.updateTextAdapter();
             return super.$setX(value);
         }
+
         $setY(value:number):boolean {
             this.updateTextAdapter();
             return super.$setY(value);
@@ -127,31 +130,33 @@ module lark{
             super.$measureContentBounds(bounds);
             this.updateTextAdapter();
         }
+
         $render(context:sys.RenderContext):void {
-            if(this._isTyping){
+            if (this._isTyping) {
                 return;
             }
             super.$render(context);
         }
 
         private timeoutId:number = -1;
-        private updateTextAdapter(){
-            if(!this._isFocus){
+
+        private updateTextAdapter() {
+            if (!this._isFocus) {
                 return;
             }
 
-            if(this.timeoutId != -1)
+            if (this.timeoutId != -1)
                 clearTimeout(this.timeoutId);
-            this.timeoutId = setTimeout(()=>{
+            this.timeoutId = setTimeout(()=> {
                 var layer = sys.$getTextAdapter(this);
                 layer.$initializeInput();
                 this.timeoutId = -1;
-            },0);
+            }, 0);
         }
 
         protected $splitWords(line:string):string[] {
             var words = new Array<string>(line.length);
-            for(var i=0;i<line.length;i++)
+            for (var i = 0; i < line.length; i++)
                 words[i] = line.charAt(i);
             return words;
         }
