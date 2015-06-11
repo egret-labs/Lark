@@ -31,7 +31,7 @@ module lark {
 
     /**
      * @language en_US
-     * EventPhase 可为 Event 类的 eventPhase 属性提供值。
+     * The EventPhase class provides values for the eventPhase property of the Event class.
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -45,7 +45,7 @@ module lark {
 
         /**
          * @language en_US
-         * 捕获阶段。
+         * The capturing phase, which is the first phase of the event flow.
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -58,7 +58,7 @@ module lark {
         CAPTURING_PHASE = 1,
         /**
          * @language en_US
-         * 目标阶段，是事件流的第二个阶段。
+         * The target phase, which is the second phase of the event flow.
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -71,7 +71,7 @@ module lark {
         AT_TARGET = 2,
         /**
          * @language en_US
-         * 冒泡阶段。
+         * The bubbling phase, which is the third phase of the event flow.
          * @version Lark 1.0
          * @platform Web,Native
          */

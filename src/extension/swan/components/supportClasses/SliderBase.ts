@@ -291,7 +291,7 @@ module swan {
         /**
          * @language en_US
          * Sets the backing store for the <code>value</code> property and
-         * dispatches a <code>valueCommit</code> event if the property changes.
+         * emits a <code>valueCommit</code> event if the property changes.
          *
          * @param value The new value of the <code>value</code> property.
          *
