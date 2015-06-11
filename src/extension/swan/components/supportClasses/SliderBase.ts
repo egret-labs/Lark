@@ -246,10 +246,10 @@ module swan {
 
         /**
          * @language en_US
-         * The value the slider will have when the mouse button is released.
+         * The value the slider will have when the touch is end.
          * This property is updated when the slider thumb moves, even if <code>liveDragging</code> is false.<p/>
          * If the <code>liveDragging</code> style is false, then the slider's value is only set
-         * when the mouse button is released.
+         * when the touch is end.
          *
          * @default 0
          *
@@ -259,7 +259,7 @@ module swan {
          */
         /**
          * @language zh_CN
-         * 释放鼠标按键时滑块将具有的值。
+         * 触摸结束时滑块将具有的值。
          * 无论 liveDragging 是否为 true，在滑块拖动期间始终更新此属性。
          * 而 value 属性在当 liveDragging 为 false 时，只在鼠标释放时更新一次。
          *
@@ -440,7 +440,7 @@ module swan {
 
         /**
          * @language en_US
-         * Handle mouse-up events anywhere on or off the stage.
+         * Handle touch-end events anywhere on or off the stage.
          *
          * @param The <code>lark.Event</code> object.
          *
