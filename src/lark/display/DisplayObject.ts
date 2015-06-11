@@ -1181,7 +1181,7 @@ module lark {
          * @language en_US
          * A value from the BlendMode class that specifies which blend mode to use. Determine how a source image (new one)
          * is drawn on the target image (old one).
-         * If you attempt to set this property to an invalid value, Flash runtimes set the value to BlendMode.NORMAL.
+         * If you attempt to set this property to an invalid value, Lark runtime set the value to BlendMode.NORMAL.
          * @default lark.BlendMode.NORMAL
          * @see lark.BlendMode
          * @version Lark 1.0

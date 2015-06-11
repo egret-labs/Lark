@@ -30,27 +30,87 @@
 module lark {
 
     /**
+     * @language en_US
+     * The Loader class is used to load image (JPG, PNG, or GIF) files. Use the load() method to initiate loading.
+     * The loaded image data is in the data property of ImageLoader.
+     * @event lark.Event.COMPLETE Emitted when the net request is complete.
+     * @event lark.Event.IO_ERROR Emitted when the net request is failed.
+     * @see lark.HttpRequest
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
      * @event lark.Event.COMPLETE 加载完成
      * @event lark.Event.IO_ERROR 加载失败
+     * @see lark.HttpRequest
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     export interface ImageLoader extends EventEmitter {
         /**
+         * @language en_US
+         * The data received from the load operation.
+         * @default null
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 使用 load() 方法加载成功的 BitmapData 图像数据。
+         * @default null
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         data:BitmapData;
         /**
+         * @language en_US
+         * Specifies whether or not cross-site Access-Control requests should be made when loading a image from foreign origins.
+         * possible values are:"anonymous","use-credentials" or null.
+         * @default null
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 当从其他站点加载一个图片时，指定是否启用跨域资源共享(CORS)，默认值为null。
          * 可以设置为"anonymous","use-credentials"或null,设置为其他值将等同于"anonymous"。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         crossOrigin:string;
         /**
+         * @language en_US
+         * start a load operation。
+         * Note: Calling this method for an already active request (one for which load() has already been
+         * called) will abort the last load operation immediately.
+         * @param url 要加载的图像文件的地址。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 启动一次图像加载。注意：若之前已经调用过加载请求，重新调用 load() 将终止先前的请求，并开始新的加载。
          * @param url 要加载的图像文件的地址。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         load(url:string):void;
 
     }
 
+    /**
+     * @language en_US
+     * Creates a ImageLoader object
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 创建一个 ImageLoader 实例
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
     export var ImageLoader:{new():ImageLoader};
 }

@@ -124,12 +124,14 @@ module lark {
         /**
          * @language en_US
          * The x coordinate of the top-left corner of the rectangle.
+         * @default 0
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 矩形左上角的 x 坐标。
+         * @default 0
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -137,12 +139,14 @@ module lark {
         /**
          * @language en_US
          * The y coordinate of the top-left corner of the rectangle.
+         * @default 0
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 矩形左上角的 y 坐标。
+         * @default 0
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -150,12 +154,14 @@ module lark {
         /**
          * @language en_US
          * The width of the rectangle, in pixels.
+         * @default 0
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 矩形的宽度（以像素为单位）。
+         * @default 0
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -163,12 +169,14 @@ module lark {
         /**
          * @language en_US
          * 矩形的高度（以像素为单位）。
+         * @default 0
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * The height of the rectangle, in pixels.
+         * @default 0
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -436,7 +444,7 @@ module lark {
             return v * this.width + u * this.height;
         }
     }
-    
+
     registerClass(Rectangle, Types.Rectangle);
     /**
      * @private

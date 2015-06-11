@@ -100,7 +100,7 @@ module lark {
 
         /**
          * @language en_US
-         * Instructs Flash Player or the AIR runtime to render after processing of this event completes, if the display list has been modified.
+         * Instructs Lark runtime to render after processing of this event completes, if the display list has been modified.
          * @example
          * <code>
          *    function onTimer(event:TimerEvent):void {
