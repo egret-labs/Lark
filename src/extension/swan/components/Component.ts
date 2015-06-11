@@ -49,7 +49,7 @@ module swan {
      * @language en_US
      *
      * @copy swan.UIComponents
-     * @event lark.Event.COMPLETE 当设置skinName为外部exml文件路径时，加载并完成EXML解析后调度。
+     * @event lark.Event.COMPLETE Emit when <code>skinName</code> property is set the path of external EXML file and the EXML file is resolved.
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -98,9 +98,6 @@ module swan {
             };
         }
 
-        /**
-         * @private
-         */
         $Component:Object;
 
         /**
@@ -874,6 +871,7 @@ module swan {
          * @platform Web,Native
          */
         public minHeight:number;
+
         /**
          * @inheritDoc
          *

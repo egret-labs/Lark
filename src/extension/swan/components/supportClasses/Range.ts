@@ -29,49 +29,16 @@
 
 module swan.sys {
 
-    /**
-     * @private
-     */
     export const enum RangeKeys{
-        /**
-         * @private
-         */
         maximum,
-        /**
-         * @private
-         */
         maxChanged,
-        /**
-         * @private
-         */
         minimum,
-        /**
-         * @private
-         */
         minChanged,
-        /**
-         * @private
-         */
         value,
-        /**
-         * @private
-         */
         changedValue,
-        /**
-         * @private
-         */
         valueChanged,
-        /**
-         * @private
-         */
         snapInterval,
-        /**
-         * @private
-         */
         snapIntervalChanged,
-        /**
-         * @private
-         */
         explicitSnapInterval
     }
 }
@@ -93,6 +60,7 @@ module swan {
      * If the value of the <code>snapInterval</code> property is not 0,
      * then the <code>value</code> property is also constrained to be a multiple of
      * <code>snapInterval</code>.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
