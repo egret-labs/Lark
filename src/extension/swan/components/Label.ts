@@ -149,7 +149,7 @@ module swan {
          */
         private initializeUIValues:()=>void;
         /**
-         * @see swan.UIComponent#createChildren
+         * @copy swan.UIComponent#createChildren
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -160,7 +160,7 @@ module swan {
         }
 
         /**
-         * @see swan.UIComponent#childrenCreated
+         * @copy swan.UIComponent#childrenCreated
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -171,7 +171,7 @@ module swan {
         }
 
         /**
-         * @see swan.UIComponent#commitProperties
+         * @copy swan.UIComponent#commitProperties
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -182,7 +182,7 @@ module swan {
         }
 
         /**
-         * @see swan.UIComponent#measure
+         * @copy swan.UIComponent#measure
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -210,7 +210,7 @@ module swan {
         }
 
         /**
-         * @see swan.UIComponent#updateDisplayList
+         * @copy swan.UIComponent#updateDisplayList
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -222,7 +222,7 @@ module swan {
         }
 
         /**
-         * @see swan.UIComponent#invalidateParentLayout
+         * @copy swan.UIComponent#invalidateParentLayout
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -242,7 +242,7 @@ module swan {
         $includeInLayout:boolean;
 
         /**
-         * @see swan.UIComponent#includeInLayout
+         * @copy swan.UIComponent#includeInLayout
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -250,7 +250,7 @@ module swan {
          */
         public includeInLayout:boolean;
         /**
-         * @see swan.UIComponent#left
+         * @copy swan.UIComponent#left
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -259,7 +259,7 @@ module swan {
         public left:number;
 
         /**
-         * @see swan.UIComponent#right
+         * @copy swan.UIComponent#right
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -268,7 +268,7 @@ module swan {
         public right:number;
 
         /**
-         * @see swan.UIComponent#top
+         * @copy swan.UIComponent#top
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -277,7 +277,7 @@ module swan {
         public top:number;
 
         /**
-         * @see swan.UIComponent#bottom
+         * @copy swan.UIComponent#bottom
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -286,7 +286,7 @@ module swan {
         public bottom:number;
 
         /**
-         * @see swan.UIComponent#horizontalCenter
+         * @copy swan.UIComponent#horizontalCenter
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -295,7 +295,7 @@ module swan {
         public horizontalCenter:number;
 
         /**
-         * @see swan.UIComponent#verticalCenter
+         * @copy swan.UIComponent#verticalCenter
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -304,7 +304,7 @@ module swan {
         public verticalCenter:number;
 
         /**
-         * @see swan.UIComponent#percentWidth
+         * @copy swan.UIComponent#percentWidth
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -313,7 +313,7 @@ module swan {
         public percentWidth:number;
 
         /**
-         * @see swan.UIComponent#percentHeight
+         * @copy swan.UIComponent#percentHeight
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -322,7 +322,7 @@ module swan {
         public percentHeight:number;
 
         /**
-         * @see swan.UIComponent#explicitWidth
+         * @copy swan.UIComponent#explicitWidth
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -331,7 +331,7 @@ module swan {
         public explicitWidth:number;
 
         /**
-         * @see swan.UIComponent#explicitHeight
+         * @copy swan.UIComponent#explicitHeight
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -341,7 +341,7 @@ module swan {
 
 
         /**
-         * @see swan.UIComponent#minWidth
+         * @copy swan.UIComponent#minWidth
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -349,7 +349,7 @@ module swan {
          */
         public minWidth:number;
         /**
-         * @see swan.UIComponent#maxWidth
+         * @copy swan.UIComponent#maxWidth
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -358,7 +358,7 @@ module swan {
         public maxWidth:number;
 
         /**
-         * @see swan.UIComponent#minHeight
+         * @copy swan.UIComponent#minHeight
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -366,7 +366,7 @@ module swan {
          */
         public minHeight:number;
         /**
-         * @see swan.UIComponent#maxHeight
+         * @copy swan.UIComponent#maxHeight
          *
          * @version Lark 1.0
          * @version Swan 1.0
