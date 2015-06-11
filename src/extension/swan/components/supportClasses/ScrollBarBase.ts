@@ -78,13 +78,15 @@ module swan {
         /**
          * @language en_US
          * [SkinPart] Thumb display object.
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart]滑块显示对象
+         * [SkinPart]滑块显示对象。
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native

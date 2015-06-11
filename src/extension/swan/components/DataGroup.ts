@@ -989,7 +989,7 @@ module swan {
          * @param renderer 添加的项呈示器
          * @param index 项呈示器的索引
          * @param item 项呈示器对应的数据
-         * 
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native

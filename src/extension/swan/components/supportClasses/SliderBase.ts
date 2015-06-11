@@ -111,14 +111,16 @@ module swan {
 
         /**
          * @language en_US
-         * [SkinPart] Highlight of track
+         * [SkinPart] Highlight of track.
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart] 轨道高亮显示对象
+         * [SkinPart] 轨道高亮显示对象。
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -126,14 +128,16 @@ module swan {
         public trackHighlight:lark.DisplayObject = null;
         /**
          * @language en_US
-         * [SkinPart] Thumb display object
+         * [SkinPart] Thumb display object.
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart]滑块显示对象
+         * [SkinPart]滑块显示对象。
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -142,14 +146,16 @@ module swan {
 
         /**
          * @language en_US
-         * [SkinPart] Track display object
+         * [SkinPart] Track display object.
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart]轨道显示对象
+         * [SkinPart]轨道显示对象。
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native

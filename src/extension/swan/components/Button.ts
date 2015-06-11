@@ -69,13 +69,15 @@ module swan {
         /**
          * @language en_US
          * [SkinPart] A skin part that defines the label of the button.
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart] 按钮上的文本标签
+         * [SkinPart] 按钮上的文本标签。
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -114,6 +116,7 @@ module swan {
         /**
          * @language en_US
          * [SkinPart] A skin part that defines an optional icon for the button.
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -121,6 +124,7 @@ module swan {
         /**
          * @language zh_CN
          * [SkinPart] 按钮上的图标显示对象。
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
