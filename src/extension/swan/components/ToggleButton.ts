@@ -32,16 +32,32 @@ module swan {
 
 	/**
 	 * @language en_US
-	 * 切换按钮
-	 * @event lark.Event.CHANGE 选中状态发生改变，仅当触摸操作引起的选中状态改变才会抛出此事件。
+	 * The ToggleButton component defines a toggle button.
+	 * Clicking the button toggles it between the up and an down states.
+	 * If you click the button while it is in the up state,
+	 * it toggles to the down state. You must click the button again
+	 * to toggle it back to the up state.
+	 * <p>You can get or set this state programmatically
+	 * by using the <code>selected</code> property.</p>
+	 *
+	 * @event lark.Event.CHANGE Dispatched when the <code>selected</code> property
+	 * changes for the ToggleButton control.
+	 * This event is dispatched only when the
+	 * user interacts with the control by touching.
+	 *
 	 * @version Lark 1.0
 	 * @version Swan 1.0
 	 * @platform Web,Native
 	 */
 	/**
 	 * @language zh_CN
-	 * 切换按钮
-	 * @event lark.Event.CHANGE 选中状态发生改变，仅当触摸操作引起的选中状态改变才会抛出此事件。
+	 * ToggleButton 组件定义切换按钮。单击该按钮会在弹起状态和按下状态之间进行切换。
+	 * 如果在按钮处于弹起状态时单击该按钮，则它会切换到按下状态。必须再次单击该按钮才可将其切换回弹起状态。
+	 * <p>可以使用 <code>selected</code> 属性以编程方式获取或设置此状态。</p>
+	 *
+	 * @event lark.Event.CHANGE ToggleButtonBase 控件的 <code>selected</code> 属性更改时分派。
+	 * 仅当用户使用鼠标与控件交互时，才分派此事件。
+
 	 * @version Lark 1.0
 	 * @version Swan 1.0
 	 * @platform Web,Native
@@ -54,14 +70,17 @@ module swan {
 		$selected: boolean = false;
 		/**
 		 * @language en_US
-		 * 按钮处于按下状态时为 true，而按钮处于弹起状态时为 false。
+		 * Contains <code>true</code> if the button is in the down state,
+		 * and <code>false</code> if it is in the up state.
+		 *
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native
 		 */
 		/**
 		 * @language zh_CN
-		 * 按钮处于按下状态时为 true，而按钮处于弹起状态时为 false。
+		 * 按钮处于按下状态时为 <code>true</code>，而按钮处于弹起状态时为 <code>false</code>。
+		 *
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native
@@ -89,15 +108,8 @@ module swan {
 		}
 
 		/**
-		 * @language en_US
-		 * 返回要应用到外观的状态的名称
-		 * @version Lark 1.0
-		 * @version Swan 1.0
-		 * @platform Web,Native
-		 */
-		/**
-		 * @language zh_CN
-		 * 返回要应用到外观的状态的名称
+		 * @inheritDoc
+		 *
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native
@@ -123,15 +135,8 @@ module swan {
 		$autoSelected:boolean = true;
 
 		/**
-		 * @language en_US
-		 * 当在用户单击按钮之后处理 TouchEvent.TOUCH_END 事件时，将调用此方法
-		 * @version Lark 1.0
-		 * @version Swan 1.0
-		 * @platform Web,Native
-		 */
-		/**
-		 * @language zh_CN
-		 * 当在用户单击按钮之后处理 TouchEvent.TOUCH_END 事件时，将调用此方法
+		 * @inheritDoc
+		 *
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native

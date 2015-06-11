@@ -31,14 +31,16 @@ module swan {
 
     /**
      * @language en_US
-     * 按钮组件
+     * The Button component is a commonly used rectangular button.
+     * The Button component looks like it can be pressed.
+     * The default skin has a text label and a icon display object.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 按钮组件
+     * Button 组件是常用的矩形按钮。Button 组件看起来可以按压。默认外观具有一个文本标签和图标显示对象。
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -46,7 +48,7 @@ module swan {
     export class Button extends Component {
         /**
          * @language en_US
-         * 创建一个按钮实例
+         * Constructor.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -66,14 +68,14 @@ module swan {
 
         /**
          * @language en_US
-         * [SkinPart]按钮上的文本标签
+         * [SkinPart] A skin part that defines the label of the button.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart]按钮上的文本标签
+         * [SkinPart] 按钮上的文本标签
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -86,14 +88,14 @@ module swan {
         private _label:string = "";
         /**
          * @language en_US
-         * 要在按钮上显示的文本
+         * Text to appear on the Button control.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 要在按钮上显示的文本
+         * 要在按钮上显示的文本。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -111,14 +113,14 @@ module swan {
 
         /**
          * @language en_US
-         * [SkinPart]按钮上的图标显示对象。
+         * [SkinPart] A skin part that defines an optional icon for the button.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart]按钮上的图标显示对象。
+         * [SkinPart] 按钮上的图标显示对象。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -131,7 +133,7 @@ module swan {
         private _icon:string|lark.BitmapData = null;
         /**
          * @language en_US
-         * 要在按钮上显示的图标数据
+         * Icon to appear on the Button control.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -162,14 +164,16 @@ module swan {
 
         /**
          * @language en_US
-         * 鼠标事件处理
+         * This method handles the touch events
+         * @param  The <code>lark.TouchEvent</code> object.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 鼠标事件处理
+         * 触碰事件处理。
+         * @param event 事件 <code>lark.TouchEvent</code> 的对象。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -196,15 +200,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 返回要应用到外观的状态的名称
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回要应用到外观的状态的名称
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -220,19 +217,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 子类覆盖此方法，以在皮肤部件第一次附加时对其执行一些初始化操作，例如添加事件监听，赋值缓存的属性值等。
-         * @param partName 要附加的皮肤部件名称
-         * @param instance 要附加的皮肤部件实例
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 子类覆盖此方法，以在皮肤部件第一次附加时对其执行一些初始化操作，例如添加事件监听，赋值缓存的属性值等。
-         * @param partName 要附加的皮肤部件名称
-         * @param instance 要附加的皮肤部件实例
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -248,14 +234,17 @@ module swan {
 
         /**
          * @language en_US
-         * 按钮弹起事件
+         * This method is called when handling a <code>lark.TouchEvent.TOUCH_END</code> event
+         * when the user touches on the button. It is only called when the button
+         * is the target and when <code>touchCaptured</code> is <code>true</code>.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 按钮弹起事件
+         * 当在用户单击按钮之后处理 <code>lark.TouchEvent.TOUCH_END</code> 事件时，将调用此方法。
+         * 仅当以按钮为目标，并且 <code>touchCaptured</code> 为 <code>true</code> 时，才会调用此方法。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native

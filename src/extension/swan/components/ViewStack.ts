@@ -32,14 +32,27 @@ module swan {
 
     /**
      * @language en_US
-     * 层级堆叠容器,一次只显示一个子对象。
+     * An ViewStack navigator container consists of a collection of child
+     * containers stacked on top of each other, where only one child
+     * at a time is visible.
+     * When a different child container is selected, it seems to replace
+     * the old one because it appears in the same location.
+     * However, the old child container still exists; it is just invisible.
+     *
+     * @event swan.CollectionEvent.COLLECTION_CHANGE Dispatched when the ICollection has been updated in some way.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 层级堆叠容器,一次只显示一个子对象。
+     * ViewStack 导航器容器由一组彼此上下堆叠的子容器组成，其中一次只可以显示一个子容器。
+     * 选择另一个子容器后，它将显示在原来子容器的位置处，所以看起来好像此子容器替换了原来的子容器。
+     * 但是，原来的子容器仍然存在，只不过它现在处于不可见状态。
+     *
+     * @event swan.CollectionEvent.COLLECTION_CHANGE 以某种方式更新 ICollection 后分派。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -47,14 +60,16 @@ module swan {
     export class ViewStack extends Group implements ICollection {
         /**
          * @language en_US
-         * 创建一个ViewStack实例
+         * Constructor.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 创建一个ViewStack实例
+         * 构造函数。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -65,14 +80,22 @@ module swan {
 
         /**
          * @language en_US
-         * 此容器的布局对象为只读,默认限制为BasicLayout。
+         * [read-only]The layout object for this container.
+         * This object is responsible for the measurement and layout of
+         * the visual elements in the container.
+         *
+         * @default swan.BasicLayout
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 此容器的布局对象为只读,默认限制为BasicLayout。
+         * [只读]此容器的 layout 对象。此对象负责容器中可视元素的测量和布局。
+         *
+         * @default swan.BasicLayout
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -87,14 +110,18 @@ module swan {
         private _selectedChild:lark.DisplayObject = null;
         /**
          * @language en_US
-         * 当前选中的子项
+         * A reference to the currently visible child container.
+         * The default is a reference to the first child.
+         * If there are no children, this property is <code>null</code>.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 当前选中的子项
+         * 对当前可见子容器的引用。默认设置为对第一个子容器的引用。如果没有子项，则此属性为 <code>null</code>。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -124,14 +151,21 @@ module swan {
         public _selectedIndex:number = -1;
         /**
          * @language en_US
-         * 当前选中子项的索引
+         * The zero-based index of the currently visible child container.
+         * Child indexes are in the range 0, 1, 2, ..., n - 1,
+         * where <code>n</code> is the number of children.
+         * The default value is 0, corresponding to the first child.
+         * If there are no children, the value of this property is <code>-1</code>.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 当前选中子项的索引
+         * 当前可见子容器的从零开始的索引。子索引的范围是 0、1、2、...、n - 1，其中 <code>n</code> 是子项的数目。
+         * 默认值是 0，对应于第一个子项。如果不存在子容器，则此属性的值为 -1。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -206,15 +240,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 处理对组件设置的属性
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 处理对组件设置的属性
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -264,7 +291,8 @@ module swan {
 
         /**
          * @language en_US
-         * 子项数量
+         * number of children
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -272,6 +300,7 @@ module swan {
         /**
          * @language zh_CN
          * 子项数量
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -281,19 +310,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 
-         * @param index 
-         * @returns 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param index 
-         * @returns 
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -304,19 +322,8 @@ module swan {
         }
 
         /**
-         * @language en_US
+         * @inheritDoc
          * 
-         * @param item 
-         * @returns 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param item 
-         * @returns 
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
