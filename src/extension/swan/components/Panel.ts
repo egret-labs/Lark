@@ -224,7 +224,7 @@ module swan {
 
         /**
          * @language en_US
-         * Dispatches the "closing" event when the closeButton is clicked.
+         * Emites the "closing" event when the closeButton is clicked.
          *
          * @version Lark 1.0
          * @version Swan 1.0
