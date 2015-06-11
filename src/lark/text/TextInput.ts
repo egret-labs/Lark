@@ -36,6 +36,8 @@ module lark {
         constructor() {
             super();
             this.$TextField[sys.TextKeys.wordWrap] = false;
+            this.$TextField[sys.TextKeys.selectionBeginIndex] = lark.NONE;
+            this.$TextField[sys.TextKeys.selectionEndIndex] = lark.NONE;
             this.on(TouchEvent.TOUCH_BEGIN, this.handleTouchBegin, this);
 
         }
@@ -74,6 +76,34 @@ module lark {
             this.updateTextAdapter();
         }
 
+        public get selectionBeginIndex(): number {
+            var begin = this.$TextField[sys.TextKeys.selectionBeginIndex];
+            if (isNone(begin))
+                begin = this.text.length;
+            return begin;
+        }
+
+        public get selectionEndIndex(): number {
+            var end = this.$TextField[sys.TextKeys.selectionEndIndex];
+            if (isNone(end))
+                end = this.text.length;
+            return end;
+        }
+
+        public setSelection(beginIndex: number, endIndex: number): void {
+            beginIndex = beginIndex | 0;
+            endIndex = endIndex | 0;
+            if (beginIndex == this.$TextField[sys.TextKeys.selectionBeginIndex]
+                && endIndex == this.$TextField[sys.TextKeys.selectionEndIndex])
+                return;
+            this.$TextField[sys.TextKeys.selectionBeginIndex] = beginIndex;
+            this.$TextField[sys.TextKeys.selectionEndIndex] = endIndex;
+            if (this._isFocus) {
+                var layer = sys.$getTextAdapter(this);
+                layer.$setSelection(beginIndex, endIndex);
+            }
+        }
+
         private _isTyping:boolean = false;
         private _isFocus:boolean = false;
 
@@ -97,10 +127,8 @@ module lark {
         $setUserInputText(text:string) {
             if (text == this.text)
                 return;
-            if (TextEvent.emitTextEvent(this, TextEvent.TEXT_INPUT, text)) {
-                this.$setText(text);
-                this.emitWith(Event.CHANGE);
-            }
+            this.$setText(text);
+            this.emitWith(Event.CHANGE);
         }
 
         $startInput() {
@@ -148,8 +176,10 @@ module lark {
             if (this.timeoutId != -1)
                 clearTimeout(this.timeoutId);
             this.timeoutId = setTimeout(()=> {
-                var layer = sys.$getTextAdapter(this);
-                layer.$initializeInput();
+                if(this._isFocus) {
+                    var layer = sys.$getTextAdapter(this);
+                    layer.$initializeInput();
+                }
                 this.timeoutId = -1;
             }, 0);
         }
