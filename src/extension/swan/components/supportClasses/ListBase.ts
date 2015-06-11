@@ -710,7 +710,7 @@ module swan {
         /**
          * @language zh_CN
          * 数据源改变事件处理。
-         * @param event 事件 <code>lark.CollectionEvent</code> 的对象.
+         * @param event 事件 <code>lark.CollectionEvent</code> 的对象。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
