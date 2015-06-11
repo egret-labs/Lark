@@ -31,42 +31,133 @@
 module swan {
 
     /**
+     * @language en_US
      * UI事件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * UI事件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class UIEvent extends lark.Event{
 
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         public constructor(type:string, bubbles?:boolean, cancelable?:boolean){
             super(type, bubbles, cancelable);
         }
 
         /**
+         * @language en_US
          * 组件创建完成
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 组件创建完成
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static CREATION_COMPLETE:string = "creationComplete";
         /**
+         * @language en_US
          * 改变结束
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 改变结束
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static CHANGE_END:string = "changeEnd";
 
         /**
+         * @language en_US
          * 改变开始
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 改变开始
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static CHANGE_START:string = "changeStart";
 
         /**
+         * @language en_US
          * 即将关闭面板事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 即将关闭面板事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static CLOSING:string = "close";
 
         /**
+         * @language en_US
          * UI组件在父级容器中的坐标发生改变事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * UI组件在父级容器中的坐标发生改变事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static MOVE:string = "move";
 
         /**
+         * @language en_US
          * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
          * @param target 事件派发目标
          * @param eventType 事件类型
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         * @param target 事件派发目标
+         * @param eventType 事件类型
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static emitUIEvent(target:lark.IEventEmitter, eventType:string):boolean {
             if(!target.hasListener(eventType)){

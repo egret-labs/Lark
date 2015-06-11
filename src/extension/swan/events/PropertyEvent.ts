@@ -31,16 +31,49 @@
 module swan {
 
     /**
+     * @language en_US
      * 对象的一个属性发生更改时传递到事件侦听器的事件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 对象的一个属性发生更改时传递到事件侦听器的事件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class PropertyEvent extends lark.Event {
         /**
+         * @language en_US
          * 属性改变
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 属性改变
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static PROPERTY_CHANGE:string = "propertyChange";
 
         /**
+         * @language en_US
          * 创建一个属性改变事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个属性改变事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor(type:string, bubbles?:boolean, cancelable?:boolean, property?:string) {
             super(type, bubbles, cancelable);
@@ -48,14 +81,38 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 发生改变的属性名称。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 发生改变的属性名称。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public property:string;
 
         /**
+         * @language en_US
          * 使用指定的 EventEmitter 对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
          * @param target 事件派发目标
          * @param eventType 事件类型
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用指定的 EventEmitter 对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         * @param target 事件派发目标
+         * @param eventType 事件类型
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static emitPropertyEvent(target:lark.IEventEmitter, eventType:string, property?:string):boolean {
             if (!target.hasListener(eventType)) {
