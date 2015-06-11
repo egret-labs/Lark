@@ -31,16 +31,89 @@
 module swan {
 
     /**
+     * @language en_US
+     * The swan.CollectionEvent class represents an event that is
+     * dispatched when the associated collection changes.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 集合类型数据改变事件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class CollectionEvent extends lark.Event {
         /**
+         * @language en_US
+         * Emitted when a collection has changed.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 集合类数据发生改变
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static COLLECTION_CHANGE:string = "collectionChange";
 
         /**
+         * @language en_US
+         * Constructor.
+         *
+         * @param type The event type; indicates the action that triggered the event.
+         * @param bubbles Specifies whether the event can bubble
+         * up the display list hierarchy.
+         * @param cancelable Specifies whether the behavior
+         * associated with the event can be prevented.
+         * @param kind Indicates the kind of event that occured.
+         * The parameter value can be one of the values in the CollectionEventKind
+         * class, or <code>null</code>, which indicates that the kind is unknown.
+         * @param location When the <code>kind</code> is
+         * <code>CollectionEventKind.ADD</code>,
+         * <code>CollectionEventKind.REMOVE</code>,
+         * <code>CollectionEventKind.REPLACE</code>,or
+         * <code>CollectionEventKind.UPDATE</code>
+         * this value indicates at what location the item(s) specified
+         * in the <code>items property</code> can be found
+         * within the target collection.
+         * @param oldLocation this value indicates
+         * the old location within the target collection
+         * of the item(s) specified in the <code>items</code> property.
+         * @param items Array of objects with information about the items
+         * affected by the event.
+         * @param oldItems When the <code>kine</code> is <code>CollectionEventKind.REPLACE</code> the value represents
+         * a list of items before replaced.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 创建一个 CollectionEvent 实例
+         *
+         * @param type 事件类型；指示触发事件的动作。
+         * @param bubbles 指定该事件是否可以在显示列表层次结构得到冒泡处理。
+         * @param cancelable 指定是否可以防止与事件相关联的行为。
+         * @param kind 指示发生的事件类型。此属性值可以是 CollectionEventKind 类中的一个值，也可以是 null，用于指示类型未知。
+         * @param location 如果 kind 值为 <code>CollectionEventKind.ADD</code>,
+         * <code>CollectionEventKind.REMOVE</code>,
+         * <code>CollectionEventKind.REPLACE</code>,或
+         * <code>CollectionEventKind.UPDATE</code>
+         * 则此属性为 items 属性中指定的项目集合中零号元素的的索引。
+         * @param oldLocation 此值指示 <code>items</code> 属性中指定的项目在目标集合中的原位置。
+         * @param items 受事件影响的项目的列表。
+         * @param oldItems 仅当kind的值为CollectionEventKind.REPLACE时，表示替换前的项目列表。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor(type:string, bubbles?:boolean, cancelable?:boolean,
                            kind?:string, location?:number, oldLocation?:number,
@@ -49,6 +122,15 @@ module swan {
             this.$setTo(kind, location, oldLocation, items, oldItems);
         }
 
+        /**
+         * @private
+         * 
+         * @param kind 
+         * @param location 
+         * @param oldLocation 
+         * @param items 
+         * @param oldItems 
+         */
         $setTo(kind?:string, location?:number, oldLocation?:number, items?:any[], oldItems?:any[]):void {
             this.kind = kind;
             this.location = +location | 0;
@@ -58,39 +140,158 @@ module swan {
         }
 
         /**
+         * @language en_US
+         * Indicates the kind of event that occured.
+         * The parameter value can be one of the values in the CollectionEventKind
+         * class, or <code>null</code>, which indicates that the kind is unknown.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 指示发生的事件类型。此属性值可以是 CollectionEventKind 类中的一个值，也可以是 null，用于指示类型未知。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public kind:string;
         /**
-         * 受事件影响的项目的列表
+         * @language en_US
+         * Array of objects with information about the items.
+         * affected by the event.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 受事件影响的项目的列表。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public items:any[];
         /**
-         * 仅当kind的值为CollectionEventKind.REPLACE时，表示替换前的项目列表
+         * @language en_US
+         * When the <code>kine</code> is <code>CollectionEventKind.REPLACE</code> the value represents
+         * a list of items before replaced.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 仅当kind的值为CollectionEventKind.REPLACE时，表示替换前的项目列表。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public oldItems:any[];
         /**
-         * 如果 kind 值为 CollectionEventKind.ADD、 CollectionEventKind.MOVE、
+         * @language en_US
+         * When the <code>kind</code> is
+         * <code>CollectionEventKind.ADD</code>,
+         * <code>CollectionEventKind.REMOVE</code>,
+         * <code>CollectionEventKind.REPLACE</code>,or
+         * <code>CollectionEventKind.UPDATE</code>
+         * this value indicates at what location the item(s) specified
+         * in the <code>items property</code> can be found
+         * within the target collection.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果 kind 值为 CollectionEventKind.ADD、
          * CollectionEventKind.REMOVE 或 CollectionEventKind.REPLACE，
          * CollectionEventKind.UPDATE
          * 则此属性为 items 属性中指定的项目集合中零号元素的的索引。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public location:number;
         /**
-         * 如果 kind 的值为 CollectionEventKind.MOVE，
-         * 则此属性为 items 属性中指定的项目在目标集合中原来位置的从零开始的索引。
+         * @language en_US
+         * this value indicates
+         * the old location within the target collection
+         * of the item(s) specified in the <code>items</code> property.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 此属性为 items 属性中指定的项目在目标集合中原来位置的从零开始的索引。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public oldLocation:number;
 
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected clean():void{
             super.clean();
             this.items = this.oldItems = null;
         }
 
         /**
+         * @language en_US
+         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * for the next cycle of reuse.
+         *
+         * @param target the target of event emitter.
+         * @param eventType The event type; indicates the action that triggered the event.
+         * @param kind Indicates the kind of event that occured.
+         * The parameter value can be one of the values in the CollectionEventKind
+         * class, or <code>null</code>, which indicates that the kind is unknown.
+         * @param location When the <code>kind</code> is
+         * <code>CollectionEventKind.ADD</code>,
+         * <code>CollectionEventKind.REMOVE</code>,
+         * <code>CollectionEventKind.REPLACE</code>,or
+         * <code>CollectionEventKind.UPDATE</code>
+         * this value indicates at what location the item(s) specified
+         * in the <code>items property</code> can be found
+         * within the target collection.
+         * @param oldLocation this value indicates
+         * the old location within the target collection
+         * of the item(s) specified in the <code>items</code> property.
+         * @param items Array of objects with information about the items
+         * affected by the event.
+         * @param oldItems When the <code>kine</code> is <code>CollectionEventKind.REPLACE</code> the value represents
+         * a list of items before replaced.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-         * @param target 事件派发目标
-         * @param eventType 事件类型
+         *
+         * @param target 事件派发目标。
+         * @param eventType 事件类型；指示触发事件的动作。
+         * @param kind 指示发生的事件类型。此属性值可以是 CollectionEventKind 类中的一个值，也可以是 null，用于指示类型未知。
+         * @param location 如果 kind 值为 <code>CollectionEventKind.ADD</code>,
+         * <code>CollectionEventKind.REMOVE</code>,
+         * <code>CollectionEventKind.REPLACE</code>,或
+         * <code>CollectionEventKind.UPDATE</code>
+         * 则此属性为 items 属性中指定的项目集合中零号元素的的索引。
+         * @param oldLocation 此值指示 <code>items</code> 属性中指定的项目在目标集合中的原位置。
+         * @param items 受事件影响的项目的列表。
+         * @param oldItems 仅当kind的值为CollectionEventKind.REPLACE时，表示替换前的项目列表。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static emitCollectionEvent(target:lark.IEventEmitter, eventType:string, kind?:string, location?:number,
                                           oldLocation?:number, items?:any[], oldItems?:any[]):boolean {

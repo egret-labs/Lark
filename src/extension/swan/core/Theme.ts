@@ -48,7 +48,7 @@ module swan {
 
         /**
          * @language en_US
-         * create an instance of Theme
+         * Create an instance of Theme
          * @param configURL the external theme path. if <code>null</code>, you need to register the default skin name with
          * <code>mapSkin()</code> manually.
          * @param stage current stage. The theme will register to the stage with this parameter.

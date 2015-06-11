@@ -30,40 +30,140 @@
 module swan {
 
     /**
+     * @language en_US
      * 定义  CollectionEvent 类 kind 属性的有效值的常量。
      * 这些常量指示对集合进行的更改类型。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 定义  CollectionEvent 类 kind 属性的有效值的常量。
+     * 这些常量指示对集合进行的更改类型。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class CollectionEventKind {
         /**
+         * @language en_US
          * 指示集合添加了一个或多个项目。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示集合添加了一个或多个项目。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static ADD:string = "add";
         /**
+         * @language en_US
          * 指示集合应用了排序或/和筛选。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示集合应用了排序或/和筛选。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static REFRESH:string = "refresh";
         /**
+         * @language en_US
          * 指示集合删除了一个或多个项目。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示集合删除了一个或多个项目。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static REMOVE:string = "remove";
         /**
+         * @language en_US
          * 指示已替换由 CollectionEvent.location 属性确定的位置处的项目。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示已替换由 CollectionEvent.location 属性确定的位置处的项目。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static REPLACE:string = "replace";
         /**
+         * @language en_US
          * 指示集合已彻底更改，需要进行重置。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示集合已彻底更改，需要进行重置。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static RESET:string = "reset";
         /**
+         * @language en_US
          * 指示集合中一个或多个项目进行了更新。受影响的项目将存储在  CollectionEvent.items 属性中。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示集合中一个或多个项目进行了更新。受影响的项目将存储在  CollectionEvent.items 属性中。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static UPDATE:string = "update";
         /**
+         * @language en_US
          * 指示集合中某个节点的子项列表已打开，通常应用于Tree的数据源XMLCollection。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示集合中某个节点的子项列表已打开，通常应用于Tree的数据源XMLCollection。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static OPEN:string = "open";
         /**
+         * @language en_US
          * 指示集合中某个节点的子项列表已关闭，通常应用于Tree的数据源XMLCollection。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示集合中某个节点的子项列表已关闭，通常应用于Tree的数据源XMLCollection。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static CLOSE:string = "close";
     }

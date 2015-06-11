@@ -30,38 +30,120 @@
 module swan {
 
     /**
+     * @language en_US
      * 列表项单击事件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 列表项单击事件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class ItemTapEvent extends lark.Event {
         /**
+         * @language en_US
          *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static ITEM_TAP:string = "itemTap";
 
         /**
+         * @language en_US
          * 触发触摸事件的项呈示器数据源项。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 触发触摸事件的项呈示器数据源项。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public item:any = null;
 
         /**
+         * @language en_US
          * 触发触摸事件的项呈示器。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 触发触摸事件的项呈示器。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public itemRenderer:IItemRenderer = null;
 
         /**
+         * @language en_US
          * 触发触摸事件的项索引
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 触发触摸事件的项索引
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public itemIndex:number = -1;
 
+        /**
+         * @language en_US
+         * 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected clean():void{
             super.clean();
             this.item = this.itemRenderer = null;
         }
 
         /**
+         * @language en_US
          * 使用指定的 EventEmitter 对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
          * @param target 事件派发目标
          * @param eventType 事件类型
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用指定的 EventEmitter 对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         * @param target 事件派发目标
+         * @param eventType 事件类型
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static emitItemTapEvent(target:lark.IEventEmitter, eventType:string, itemRenderer?:IItemRenderer):boolean {
             if (!target.hasListener(eventType)) {
