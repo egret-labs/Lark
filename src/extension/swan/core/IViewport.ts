@@ -61,7 +61,9 @@ module swan {
 		scrollV:number;
 		
 		/**
-		 * 如果为 true，指定将子代剪切到视区的边界。如果为 false，则容器子代会从容器边界扩展过去，而不管组件的大小规范。默认false
+		 * 是否启用容器滚动。如果为 true，则将子项剪切到视区的边界，配合设置scrollH和scrollV属性将能滚动视区。
+		 * 如果为 false，则容器子代会从容器边界扩展过去，而设置scrollH和scrollV也无效。默认false。
+		 * @default false
 		 */
 		scrollEnabled:boolean;
 	}

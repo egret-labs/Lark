@@ -80,7 +80,9 @@ module swan {
      * Calling the <code>preventDefault()</code> method
      * on the event prevents the selection from changing.<p/>
      * This event is dispatched when the user interacts with the control.
+     *
      * @event swan.ItemTapEvent.ITEM_TAP Dispatched when the user tap an item in the control.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -91,7 +93,9 @@ module swan {
      * @event lark.Event.CHANGE 选中的索引已经发生改变,注意：此事件仅在索引改变是由用户触摸操作引起时才抛出。
      * @event lark.Event.CHANGING 选中的索引即将发生改变，可以通过调用事件对象的 preventDefault() 方法来阻止改变。<p/>
      * 注意：此事件仅在索引改变是由用户触摸操作引起时才抛出。
+     *
      * @event swan.ItemTapEvent.ITEM_TAP 项呈示器单击事件。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native

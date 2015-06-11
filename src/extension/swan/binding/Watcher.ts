@@ -61,6 +61,7 @@ module swan {
      * @language en_US
      * The Watcher class defines utility method that you can use with bindable properties.
      * These methods let you define an event handler that is executed whenever a bindable property is updated.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -68,6 +69,7 @@ module swan {
     /**
      * @language zh_CN
      * Watcher 类能够监视可绑定属性的改变，您可以定义一个事件处理函数作为 Watcher 的回调方法，在每次可绑定属性的值改变时都执行此函数。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
