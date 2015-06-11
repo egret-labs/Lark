@@ -1,15 +1,15 @@
 #Lark
 ------------------
 
-Lark ÊÇÒ»Ì×ÓÉ Egret ÍÅ¶ÓÖÆ×÷µÄ»ùÓÚHTML5¼¼Êõ¹¹½¨¿çÆ½Ì¨ÒÆ¶¯WebÓ¦ÓÃ£¬Î¢Õ¾ºÍ¸»Ã½Ìå¹ã¸æÓªÏúµÄ½»»¥Ó¦ÓÃ¿ò¼Ü¡£
+Lark æ˜¯ä¸€å¥—ç”± Egret å›¢é˜Ÿåˆ¶ä½œçš„åŸºäºŽHTML5æŠ€æœ¯æž„å»ºè·¨å¹³å°ç§»åŠ¨Webåº”ç”¨ï¼Œå¾®ç«™å’Œå¯Œåª’ä½“å¹¿å‘Šè¥é”€çš„äº¤äº’åº”ç”¨æ¡†æž¶ã€‚
 
-* **¼«ËÙäÖÈ¾** Lark Ê¹ÓÃ Canvas À´äÖÈ¾ UI, ÊµÏÖÁË±È DOM ¸üÇáÁ¿µÄÏÔÊ½ÁÐ±í£¬
-    ¿ª·¢Õß²»±Ø¹ØÐÄ»æÖÆÏ¸½Ú¡£Lark ÊµÏÖÁËÈ«×Ô¶¯µÄÔàÇøÓòäÖÈ¾´ïµ½±È DOM ¸ü¼ÓÓÅÐãµÄÐÔÄÜ±íÏÖ¡£
-* **¿ìËÙ¿ª·¢** Lark ¿ÉÒÔÊ¹ÓÃ EXML À´¿ª·¢Ó¦ÓÃ½çÃæ£¬±êÇ©Ê½µÄÓï·¨¸ü¼ÓÊÊºÏ UI ¿ª·¢£¬
-  EXML ¿ª·¢¿ÉÒÔ×öµ½ UI ÓëÂß¼­´úÂëµÄ·ÖÀë£¬¸üÀûÓÚÍÅ¶ÓÐ­×÷ºÍ°æ±¾µü´ú¡£
-  Lark ÄÚÖÃ³£ÓÃµÄ UI ×é¼þ£¬¼òµ¥×éºÏ¾ÍÄÜÊµÏÖ¸´ÔÓ¹¦ÄÜ¡£
-* **Ó²¼þ·ÃÎÊ** Lark Ìá¹©·á¸»µÄÓ²¼þ·ÃÎÊÀ©Õ¹£¬³ä·Ö·¢»Ó HTML5 ÄÜÁ¦¡£
-  ½èÖú App ´ò°ü·½°¸ÄÜ¹»»ñµÃ¸ü¼Ó·á¸»µÄÏµÍ³ API £¨¼´½«µ½À´£©¡£
+* **æžé€Ÿæ¸²æŸ“** Lark ä½¿ç”¨ Canvas æ¥æ¸²æŸ“ UI, å®žçŽ°äº†æ¯” DOM æ›´è½»é‡çš„æ˜¾å¼åˆ—è¡¨ï¼Œ
+    å¼€å‘è€…ä¸å¿…å…³å¿ƒç»˜åˆ¶ç»†èŠ‚ã€‚Lark å®žçŽ°äº†å…¨è‡ªåŠ¨çš„è„åŒºåŸŸæ¸²æŸ“è¾¾åˆ°æ¯” DOM æ›´åŠ ä¼˜ç§€çš„æ€§èƒ½è¡¨çŽ°ã€‚
+* **å¿«é€Ÿå¼€å‘** Lark å¯ä»¥ä½¿ç”¨ EXML æ¥å¼€å‘åº”ç”¨ç•Œé¢ï¼Œæ ‡ç­¾å¼çš„è¯­æ³•æ›´åŠ é€‚åˆ UI å¼€å‘ï¼Œ
+  EXML å¼€å‘å¯ä»¥åšåˆ° UI ä¸Žé€»è¾‘ä»£ç çš„åˆ†ç¦»ï¼Œæ›´åˆ©äºŽå›¢é˜Ÿåä½œå’Œç‰ˆæœ¬è¿­ä»£ã€‚
+  Lark å†…ç½®å¸¸ç”¨çš„ UI ç»„ä»¶ï¼Œç®€å•ç»„åˆå°±èƒ½å®žçŽ°å¤æ‚åŠŸèƒ½ã€‚
+* **ç¡¬ä»¶è®¿é—®** Lark æä¾›ä¸°å¯Œçš„ç¡¬ä»¶è®¿é—®æ‰©å±•ï¼Œå……åˆ†å‘æŒ¥ HTML5 èƒ½åŠ›ã€‚
+  å€ŸåŠ© App æ‰“åŒ…æ–¹æ¡ˆèƒ½å¤ŸèŽ·å¾—æ›´åŠ ä¸°å¯Œçš„ç³»ç»Ÿ API ï¼ˆå³å°†åˆ°æ¥ï¼‰ã€‚
 
 
 
@@ -17,7 +17,7 @@ Lark ÊÇÒ»Ì×ÓÉ Egret ÍÅ¶ÓÖÆ×÷µÄ»ùÓÚHTML5¼¼Êõ¹¹½¨¿çÆ½Ì¨ÒÆ¶¯WebÓ¦ÓÃ£¬Î¢Õ¾ºÍ¸»Ã½Ìå¹ã
 ##Hello Lark
 ---------------------
 
-ÏÂÃæÊÇÒ»¸ö¼òµ¥µÄ Hello World Ê¾Àý
+ä¸‹é¢æ˜¯ä¸€ä¸ªç®€å•çš„ Hello World ç¤ºä¾‹
 
 ```html
 
@@ -47,43 +47,43 @@ Lark ÊÇÒ»Ì×ÓÉ Egret ÍÅ¶ÓÖÆ×÷µÄ»ùÓÚHTML5¼¼Êõ¹¹½¨¿çÆ½Ì¨ÒÆ¶¯WebÓ¦ÓÃ£¬Î¢Õ¾ºÍ¸»Ã½Ìå¹ã
 </html>
 
 ```
-Õâ¸öÀý×Ó»áÔÚä¯ÀÀÆ÷ÖÐÏÔÊ¾Ò»¸ö "Hello World"¡£
+è¿™ä¸ªä¾‹å­ä¼šåœ¨æµè§ˆå™¨ä¸­æ˜¾ç¤ºä¸€ä¸ª "Hello World"ã€‚
 
-ÔÚÕâ¶Î HTML ´úÂëÖÐÎÒÃÇÒýÈëÁË lark ºÍ swan µÄ script ÎÄ¼þ¡£½« EXML °ü×°ÔÚÒ»¸ö script Tag ÖÐ£¬
-Í¨¹ý JavaScript È¡µÃ EXML ÎÄ±¾¡£ EXMLParser ¸ù¾Ý EXML ÖÐµÄ `class="Main"` ½«Ëü½âÎö³ÉÒ»¸ö
-JavaScript Àà `Main`¡£ÍøÒ³¼ÓÔØÍê³ÉÊ±£¬lark »á²éÕÒ `class="lark-player"` µÄ HTML ÔªËØ£¬
-¸ù¾ÝËüµÄÊôÐÔÀ´´´½¨»­²¼¡£`data-entry-class="Main"` ±ê¼ÇÁË³ÌÐòÖ´ÐÐµÄÈë¿Ú£¬Lark»á×Ô¶¯ÊµÀý»¯ `Main`
-²¢ÔÚ»­²¼ÖÐÏÔÊ¾³öÀ´¡£
+åœ¨è¿™æ®µ HTML ä»£ç ä¸­æˆ‘ä»¬å¼•å…¥äº† lark å’Œ swan çš„ script æ–‡ä»¶ã€‚å°† EXML åŒ…è£…åœ¨ä¸€ä¸ª script Tag ä¸­ï¼Œ
+é€šè¿‡ JavaScript å–å¾— EXML æ–‡æœ¬ã€‚ EXMLParser æ ¹æ® EXML ä¸­çš„ `class="Main"` å°†å®ƒè§£æžæˆä¸€ä¸ª
+JavaScript ç±» `Main`ã€‚ç½‘é¡µåŠ è½½å®Œæˆæ—¶ï¼Œlark ä¼šæŸ¥æ‰¾ `class="lark-player"` çš„ HTML å…ƒç´ ï¼Œ
+æ ¹æ®å®ƒçš„å±žæ€§æ¥åˆ›å»ºç”»å¸ƒã€‚`data-entry-class="Main"` æ ‡è®°äº†ç¨‹åºæ‰§è¡Œçš„å…¥å£ï¼ŒLarkä¼šè‡ªåŠ¨å®žä¾‹åŒ– `Main`
+å¹¶åœ¨ç”»å¸ƒä¸­æ˜¾ç¤ºå‡ºæ¥ã€‚
 
 
 
-##°²×° Lark
+##å®‰è£… Lark
 --------------------
 
-Lark Ô´´úÂëÓÉ TypeScript ±àÐ´£¬µ«ÄãÒ²¿ÉÒÔÊ¹ÓÃ JavaScript À´¿ª·¢ Lark Ó¦ÓÃ¡£
+Lark æºä»£ç ç”± TypeScript ç¼–å†™ï¼Œä½†ä½ ä¹Ÿå¯ä»¥ä½¿ç”¨ JavaScript æ¥å¼€å‘ Lark åº”ç”¨ã€‚
 
 ###JavaScript
-JavaScript ¿ª·¢Õß¿ÉÒÔÖ±½ÓÏÂÔØ [build](https://github.com/egret-labs/Lark/tree/master/build)
-Ä¿Â¼ÖÐÔ¤±àÒëµÄ Lark script ÎÄ¼þ£¬½«ÐèÒªµÄÄ£¿éÒýÈëµ½ÄúµÄ HTML ÎÄ¼þÖÐ£¬¼´¿É¿ª·¢ Lark Ó¦ÓÃ¡£
+JavaScript å¼€å‘è€…å¯ä»¥ç›´æŽ¥ä¸‹è½½ [build](https://github.com/egret-labs/Lark/tree/master/build)
+ç›®å½•ä¸­é¢„ç¼–è¯‘çš„ Lark script æ–‡ä»¶ï¼Œå°†éœ€è¦çš„æ¨¡å—å¼•å…¥åˆ°æ‚¨çš„ HTML æ–‡ä»¶ä¸­ï¼Œå³å¯å¼€å‘ Lark åº”ç”¨ã€‚
 
 ###TypeScript
-Lark Ìá¹©ÁËÃüÁîÐÐ¹¤¾ßÀ´¸¨Öú¿ª·¢¡£Ê¹ÓÃÃüÁîÐÐ¹¤¾ß¿ÉÒÔ·½±ãµÄ´´½¨¡¢±àÒëºÍ·¢²¼ Lark ÏîÄ¿¡£
+Lark æä¾›äº†å‘½ä»¤è¡Œå·¥å…·æ¥è¾…åŠ©å¼€å‘ã€‚ä½¿ç”¨å‘½ä»¤è¡Œå·¥å…·å¯ä»¥æ–¹ä¾¿çš„åˆ›å»ºã€ç¼–è¯‘å’Œå‘å¸ƒ Lark é¡¹ç›®ã€‚
 
-####°²×°Ç°µÄ×¼±¸
-Lark ÃüÁîÐÐ¹¤¾ßÒÀÀµÓÚ Node.js ºÍ NPM »·¾³£¬Î´°²×° Node.js µÄ¿ª·¢Õß¿ÉÒÔµ½ [Node.js ¹ÙÍø](https://nodejs.org/) ÏÂÔØ°²×°¡£
-NPM ÊÇ Node.js µÄ°ü¹ÜÀí¹¤¾ß£¬Ä¬ÈÏÅäÖÃÏÂ»áËæ Node.js Ò»Æð°²×°¡£
+####å®‰è£…å‰çš„å‡†å¤‡
+Lark å‘½ä»¤è¡Œå·¥å…·ä¾èµ–äºŽ Node.js å’Œ NPM çŽ¯å¢ƒï¼Œæœªå®‰è£… Node.js çš„å¼€å‘è€…å¯ä»¥åˆ° [Node.js å®˜ç½‘](https://nodejs.org/) ä¸‹è½½å®‰è£…ã€‚
+NPM æ˜¯ Node.js çš„åŒ…ç®¡ç†å·¥å…·ï¼Œé»˜è®¤é…ç½®ä¸‹ä¼šéš Node.js ä¸€èµ·å®‰è£…ã€‚
 
-####°²×°ÃüÁîÐÐ¹¤¾ß
-Äã¿ÉÒÔ´Ó github ¿ËÂ¡ Lark µÄÔ´´úÂë£¬»òÕß [ÏÂÔØ´ò°üºóµÄÔ´´úÂë](https://github.com/egret-labs/Lark/archive/master.zip)¡£
-È»ºóÔÚÃüÁîÐÐ¹¤¾ßÖÐ½øÈëµ½ Lark µÄ¸ùÄ¿Â¼Ö´ÐÐ `npm install -g` °²×° Lark ÃüÁîÐÐ¹¤¾ß¡£
-°²×°Íê³ÉºóÖ´ÐÐ `lark` ÄÜ¿´µ½ Lark Êä³öµÄ°æ±¾ÐÅÏ¢¡£
+####å®‰è£…å‘½ä»¤è¡Œå·¥å…·
+ä½ å¯ä»¥ä»Ž github å…‹éš† Lark çš„æºä»£ç ï¼Œæˆ–è€… [ä¸‹è½½æ‰“åŒ…åŽçš„æºä»£ç ](https://github.com/egret-labs/Lark/archive/master.zip)ã€‚
+ç„¶åŽåœ¨å‘½ä»¤è¡Œå·¥å…·ä¸­è¿›å…¥åˆ° Lark çš„æ ¹ç›®å½•æ‰§è¡Œ `npm install -g` å®‰è£… Lark å‘½ä»¤è¡Œå·¥å…·ã€‚
+å®‰è£…å®ŒæˆåŽæ‰§è¡Œ `lark` èƒ½çœ‹åˆ° Lark è¾“å‡ºçš„ç‰ˆæœ¬ä¿¡æ¯ã€‚
 
-####´´½¨ÏîÄ¿
-½øÈëÄúµÄ¹¤×÷Ä¿Â¼£¬Ö´ÐÐ `lark create HelloWorld` Lark »á´´½¨Ò»¸ö HelloWorld Ä¿Â¼×÷ÎªÏîÄ¿µÄ¸ùÄ¿Â¼, 
-Èç¹ûÄúÏëÒªÔÚµ±Ç°Ä¿Â¼´´½¨ÏîÄ¿£¬ÇëÖ±½ÓÖ´ÐÐ `lark create`¡£ÃüÁîÐÐ¹¤¾ß»á×Ô¶¯´ò¿ªÒ»¸öä¯ÀÀÆ÷´°¿Ú£¬Çë°´ÕÕÌáÊ¾
-Ñ¡ÔñÏîÄ¿Ä£°å¡¢ÆÁÄ»³ß´çºÍÒªÊ¹ÓÃµÄÀ©Õ¹Ä£¿é¡£
+####åˆ›å»ºé¡¹ç›®
+è¿›å…¥æ‚¨çš„å·¥ä½œç›®å½•ï¼Œæ‰§è¡Œ `lark create HelloWorld` Lark ä¼šåˆ›å»ºä¸€ä¸ª HelloWorld ç›®å½•ä½œä¸ºé¡¹ç›®çš„æ ¹ç›®å½•, 
+å¦‚æžœæ‚¨æƒ³è¦åœ¨å½“å‰ç›®å½•åˆ›å»ºé¡¹ç›®ï¼Œè¯·ç›´æŽ¥æ‰§è¡Œ `lark create`ã€‚å‘½ä»¤è¡Œå·¥å…·ä¼šè‡ªåŠ¨æ‰“å¼€ä¸€ä¸ªæµè§ˆå™¨çª—å£ï¼Œè¯·æŒ‰ç…§æç¤º
+é€‰æ‹©é¡¹ç›®æ¨¡æ¿ã€å±å¹•å°ºå¯¸å’Œè¦ä½¿ç”¨çš„æ‰©å±•æ¨¡å—ã€‚
 
-¸ü¶àÃüÁîÐÐÊ¹ÓÃËµÃ÷Çë²Î¿¼ [Lark ÃüÁîÐÐ¹¤¾ßÊÖ²á](https://github.com/egret-labs/Lark/blob/master/docs/cmd-tools.md)
+æ›´å¤šå‘½ä»¤è¡Œä½¿ç”¨è¯´æ˜Žè¯·å‚è€ƒ [Lark å‘½ä»¤è¡Œå·¥å…·æ‰‹å†Œ](https://github.com/egret-labs/Lark/blob/master/docs/cmd-tools.md)
 
 
 
@@ -91,4 +91,4 @@ NPM ÊÇ Node.js µÄ°ü¹ÜÀí¹¤¾ß£¬Ä¬ÈÏÅäÖÃÏÂ»áËæ Node.js Ò»Æð°²×°¡£
 
 
 ##Next:
-¸ü¼ÓÏêÏ¸µÄ Lark Ê¹ÓÃ·½·¨Çë²Î¿¼: https://github.com/egret-labs/Lark
+æ›´åŠ è¯¦ç»†çš„ Lark ä½¿ç”¨æ–¹æ³•è¯·å‚è€ƒ: https://github.com/egret-labs/Lark
