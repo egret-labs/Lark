@@ -87,17 +87,12 @@ function getLarkRoot() {
         for (var i = 0; i < globalpath.length; i++) {
             var prefix = globalpath[i];
             var url = path.join(prefix, "../lark");
-            if (file.exists(url)) {
+            if (file.isDirectory(url)) {
                 existsFlag = true;
                 break;
             }
             var url = path.join(prefix, "lark");
-            if (file.exists(url)) {
-                existsFlag = true;
-                break;
-            }
-            var url = path.join(prefix, "../lark");
-            if (file.exists(url)) {
+            if (file.isDirectory(url)) {
                 existsFlag = true;
                 break;
             }

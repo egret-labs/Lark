@@ -31,56 +31,80 @@ module lark {
 
     /**
      * @language en_US
-     * EventPhase 可为 Event 类的 eventPhase 属性提供值。
+     * An object emits a TextEvent object when a user enters text in a text input.
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * EventPhase 可为 Event 类的 eventPhase 属性提供值。
+     * 每当用户对 TextInput 对象输入一段文本时，TextInput 对象将调度 TextEvent 事件。
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export const enum EventPhase{
+    export class TextEvent extends Event {
 
         /**
          * @language en_US
-         * 捕获阶段。
+         * Emitted when a user enters text in a text input.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 捕获阶段。
+         * 当用户在一个文本输入框中输入一段文本时调度
          * @version Lark 1.0
          * @platform Web,Native
          */
-        CAPTURING_PHASE = 1,
+        public static TEXT_INPUT:string = "textInput";
+
+
         /**
          * @language en_US
-         * 目标阶段，是事件流的第二个阶段。
+         * Creates an Event object to pass as a parameter to event listeners.
+         * @param type  The type of the event, accessible as Event.type.
+         * @param bubbles  Determines whether the Event object participates in the bubbling stage of the event flow. The default value is false.
+         * @param cancelable Determines whether the Event object can be canceled. The default values is false.
+         * @param data the optional data associated with this event
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 目标阶段，是事件流的第二个阶段。
+         * 创建一个作为参数传递给事件侦听器的 Event 对象。
+         * @param type  事件的类型，可以作为 Event.type 访问。
+         * @param bubbles  确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
+         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
+         * @param data 与此事件对象关联的可选数据。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        AT_TARGET = 2,
+        public constructor(type:string, bubbles?:boolean, cancelable?:boolean) {
+            super(type, bubbles, cancelable);
+        }
+
         /**
          * @language en_US
-         * 冒泡阶段。
+         * For a textInput event, the character or sequence of characters entered by the user.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 冒泡阶段。
+         * 如果已修改显示列表，调用此方法将会忽略帧频限制，在此事件处理完成后立即重绘屏幕。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        BUBBLING_PHASE = 3
+        public text:string = "";
+
+
+        public static emitTextEvent(target:IEventEmitter, type:string,text:string):boolean {
+            var event = Event.create(TextEvent, type, true, true);
+            event.text = text;
+            var result = target.emit(event);
+            Event.release(event);
+            return result;
+        }
     }
+
+    registerClass(TimerEvent,Types.TimerEvent);
 }
