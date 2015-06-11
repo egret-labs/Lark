@@ -31,25 +31,40 @@
 module swan.sys {
 
     /**
+     * @private
      * 失效验证管理器
      */
     export class Validator extends lark.EventEmitter {
         /**
+         * @private
          * 创建一个Validator对象
          */
         public constructor() {
             super();
         }
 
+        /**
+         * @private
+         */
         private targetLevel:number = Number.POSITIVE_INFINITY;
 
+        /**
+         * @private
+         */
         private invalidatePropertiesFlag:boolean = false;
 
+        /**
+         * @private
+         */
         private invalidateClientPropertiesFlag:boolean = false;
 
+        /**
+         * @private
+         */
         private invalidatePropertiesQueue:DepthQueue = new DepthQueue();
 
         /**
+         * @private
          * 标记组件属性失效
          */
         public invalidateProperties(client:UIComponent):void {
@@ -64,6 +79,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 验证失效的属性
          */
         private validateProperties():void {
@@ -79,13 +95,23 @@ module swan.sys {
                 this.invalidatePropertiesFlag = false;
         }
 
+        /**
+         * @private
+         */
         private invalidateSizeFlag:boolean = false;
 
+        /**
+         * @private
+         */
         private invalidateClientSizeFlag:boolean = false;
 
+        /**
+         * @private
+         */
         private invalidateSizeQueue:DepthQueue = new DepthQueue();
 
         /**
+         * @private
          * 标记需要重新测量尺寸
          */
         public invalidateSize(client:UIComponent):void {
@@ -100,6 +126,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 测量尺寸
          */
         private validateSize():void {
@@ -116,11 +143,18 @@ module swan.sys {
         }
 
 
+        /**
+         * @private
+         */
         private invalidateDisplayListFlag:boolean = false;
 
+        /**
+         * @private
+         */
         private invalidateDisplayListQueue:DepthQueue = new DepthQueue();
 
         /**
+         * @private
          * 标记需要重新布局
          */
         public invalidateDisplayList(client:UIComponent):void {
@@ -133,6 +167,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 重新布局
          */
         private validateDisplayList():void {
@@ -148,13 +183,18 @@ module swan.sys {
                 this.invalidateDisplayListFlag = false;
         }
 
+        /**
+         * @private
+         */
         private eventDisplay:lark.Bitmap = new lark.Bitmap();
         /**
+         * @private
          * 是否已经添加了事件监听
          */
         private listenersAttached:boolean = false;
 
         /**
+         * @private
          * 添加事件监听
          */
         private attachListeners():void {
@@ -165,6 +205,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 执行属性应用
          */
         private doPhasedInstantiationCallBack(event?:lark.Event):void {
@@ -173,6 +214,10 @@ module swan.sys {
             this.doPhasedInstantiation();
         }
 
+        /**
+         * @private
+         * 
+         */
         private doPhasedInstantiation():void {
             if (this.invalidatePropertiesFlag) {
                 this.validateProperties();
@@ -196,6 +241,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 使大于等于指定组件层级的元素立即应用属性
          * @param target 要立即应用属性的组件
          */
@@ -291,6 +337,7 @@ module swan.sys {
 
 
     /**
+     * @private
      * 显示列表嵌套深度排序队列
      */
     class DepthQueue {
@@ -493,6 +540,7 @@ module swan.sys {
         }
     }
     /**
+     * @private
      * 列表项
      */
     class DepthBin {

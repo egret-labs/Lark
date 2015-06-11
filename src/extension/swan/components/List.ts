@@ -138,14 +138,16 @@ module swan {
 
         /**
          * @language en_US
-         * 当前选中的一个或多个项目的数据源列表
+         * An Array representing the currently selected data items.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 当前选中的一个或多个项目的数据源列表
+         * 表示当前选定数据项的列表
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -184,14 +186,23 @@ module swan {
 
         /**
          * @language en_US
-         * 设置多个选中项
+         * Specify whether the selectedIndices changed programmatically or due to
+         * user interaction.
+         *
+         * @param value An array of numbers representing the indices of the selected
+         * @param emitChangeEvent whether emitted a change event.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 设置多个选中项
+         * 设置多个选中项。
+         *
+         * @param value 选中项索引的数组
+         * @param emitChangeEvent 是否派发changed事件
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -210,15 +221,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 处理对组件设置的属性
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 处理对组件设置的属性
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -231,19 +235,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 
-         * @param emitChangedEvents
-         * @returns 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param emitChangedEvents
-         * @returns 
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -313,14 +306,18 @@ module swan {
 
         /**
          * @language en_US
-         * 提交多项选中项属性
+         * Given a new selection interval, figure out which
+         * items are newly added/removed from the selection interval and update
+         * selection properties and view accordingly.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 提交多项选中项属性
+         * 从给定的选择区间中找出新增或者移除的项，并更新属性。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -384,15 +381,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 数据源发生刷新
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 数据源发生刷新
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -443,15 +433,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 鼠标在项呈示器上弹起，抛出ItemClick事件。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 鼠标在项呈示器上弹起，抛出ItemClick事件。
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native

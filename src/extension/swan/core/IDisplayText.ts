@@ -31,12 +31,35 @@
 module swan {
 
     /**
-     * 简单文本显示控件接口。
+     * @language en_US
+     * The IDisplayText interface defines the properties
+     * for simple text display.。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * IDisplayText 接口定义简单文本显示的属性.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export interface IDisplayText
     {
         /**
+         * @language en_US
+         * The text displayed by this text component.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 此文本组件所显示的文本。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         text:string;
     }
