@@ -211,7 +211,7 @@ module swan {
 
         /**
          * @inheritDoc
-         * 
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
