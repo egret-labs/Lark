@@ -444,8 +444,8 @@ module swan {
         protected onRendererTouchEnd(event:lark.TouchEvent):void {
             if (this.allowMultipleSelection) {
                 var itemRenderer = <IItemRenderer> (event.currentTarget);
-                var mouseDownItemRenderer = this.$ListBase[sys.ListBaseKeys.mouseDownItemRenderer];
-                if (itemRenderer != mouseDownItemRenderer)
+                var touchDownItemRenderer = this.$ListBase[sys.ListBaseKeys.touchDownItemRenderer];
+                if (itemRenderer != touchDownItemRenderer)
                     return;
                 this.setSelectedIndices(this.calculateSelectedIndices(itemRenderer.itemIndex), true);
                 ItemTapEvent.emitItemTapEvent(this, ItemTapEvent.ITEM_TAP, itemRenderer);
