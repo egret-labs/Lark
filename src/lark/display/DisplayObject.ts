@@ -1264,7 +1264,7 @@ module lark {
          * Returns a rectangle that defines the area of the display object relative to the coordinate system of the targetCoordinateSpace object.
          * @param targetCoordinateSpace The display object that defines the coordinate system to use.
          * @param resultRect A reusable instance of Rectangle for saving the results. Passing this parameter can reduce the number of reallocate objects
-         * for better performance.
+         *, which allows you to get better code execution performance..
          * @returns The rectangle that defines the area of the display object relative to the targetCoordinateSpace object's coordinate system.
          * @version Lark 1.0
          * @platform Web,Native
@@ -1313,7 +1313,7 @@ module lark {
          * @param stageX the x value in the global coordinates
          * @param stageY the y value in the global coordinates
          * @param resultPoint A reusable instance of Point for saving the results. Passing this parameter can reduce the
-         * number of reallocate objects for better performance.
+         * number of reallocate objects, which allows you to get better code execution performance.
          * @returns A Point object with coordinates relative to the display object.
          * @version Lark 1.0
          * @platform Web,Native
@@ -1339,7 +1339,7 @@ module lark {
          * @param localX the x value in the local coordinates
          * @param localY the x value in the local coordinates
          * @param resultPoint A reusable instance of Point for saving the results. Passing this parameter can reduce the
-         * number of reallocate objects for better performance.
+         * number of reallocate objects, which allows you to get better code execution performance.
          * @returns  A Point object with coordinates relative to the Stage.
          * @version Lark 1.0
          * @platform Web,Native

@@ -50,17 +50,44 @@ module swan {
     }
     /**
      * @language en_US
-     * 滚动条组件
+     * The Scroller component displays a single scrollable component,
+     * called a viewport, and horizontal and vertical scroll bars.
+     * The viewport must implement the IViewport interface.
+     * <p>The Group components implement the IViewport interface
+     * and can be used as the children of the Scroller control,
+     * as the following example shows:</p>
+     * <code>
+     *       <s:Scroller width="100" height="100">
+     *           <s:Group>
+     *               <s:Image width="300" height="400" source="assets/logo.jpg"/>
+     *           </s:Group>
+     *       </s:Scroller>
+     * </code>
+     * <p>The size of the Image control is set larger than that of its parent Group container.
+     * By default, the child extends past the boundaries of the parent container.
+     * Rather than allow the child to extend past the boundaries of the parent container,
+     * the Scroller specifies to clip the child to the boundaries and display scroll bars.</p>
      *
-     * @event swan.UIEvent.CHANGE_START 滚动位置改变开始
-     * @event swan.UIEvent.CHANGE_END 滚动位置改变结束
+     * @event swan.UIEvent.CHANGE_START Dispatched when the scroll position is going to change
+     * @event swan.UIEvent.CHANGE_END Dispatched when the scroll position changed complete
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 滚动条组件
+     * Scroller 组件显示一个称为视域的单个可滚动组件，以及水平滚动条和垂直滚动条。该视域必须实现 IViewport 接口。
+     * <p>Group 组件实现 IViewport 接口，且可以用作 Scroller 控件的子代，如下例所示：</p>
+     * <code>
+     *       <s:Scroller width="100" height="100">
+     *           <s:Group>
+     *               <s:Image width="300" height="400" source="assets/logo.jpg"/>
+     *           </s:Group>
+     *       </s:Scroller>
+     * </code>
+     * Image 控件的大小比其父 Group 容器设置得大。默认情况下，子代超过父容器的边界。
+     * Scroller 会指定将子代剪切到边界并显示滚动条，而不是让子代超过父容器的边界。
      *
      * @event swan.UIEvent.CHANGE_START 滚动位置改变开始
      * @event swan.UIEvent.CHANGE_END 滚动位置改变结束
@@ -72,14 +99,21 @@ module swan {
 
         /**
          * @language en_US
-         * 开始触发滚动的阈值（以像素为单位），当触摸点偏离初始触摸点的距离超过这个值时才会触发滚动。默认值：5 。
+         * The threshold value(in pixels) trigger the rolling.
+         * when the touch points deviate from the initial touch point than this value will trigger the rolling.
+         *
+         * @default 5
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 开始触发滚动的阈值（以像素为单位），当触摸点偏离初始触摸点的距离超过这个值时才会触发滚动。默认值：5 。
+         * 开始触发滚动的阈值（以像素为单位），当触摸点偏离初始触摸点的距离超过这个值时才会触发滚动。
+         *
+         * @default 5
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -88,14 +122,16 @@ module swan {
 
         /**
          * @language en_US
-         * 创建一个 Scroller 实例
+         * Constructor.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 创建一个 Scroller 实例
+         * 构造函数。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -127,14 +163,20 @@ module swan {
         $Scroller:Object;
         /**
          * @language en_US
-         * [SkinPart] 水平滚动条
+         * the horizontal scroll bar
+         *
+         * @skinPart
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart] 水平滚动条
+         * 水平滚动条
+         *
+         * @skinPart
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -142,14 +184,20 @@ module swan {
         public horizontalScrollBar:swan.HScrollBar = null;
         /**
          * @language en_US
-         * [SkinPart] 垂直滚动条
+         * the vertical scroll bar
+         *
+         * @skinPart
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart] 垂直滚动条
+         * 垂直滚动条
+         *
+         * @skinPart
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -158,14 +206,27 @@ module swan {
 
         /**
          * @language en_US
-         * 垂直方向是否允许滚动的策略，参见 ScrollPolicy 类定义的常量。默认值：ScrollPolicy.AUTO
+         * Indicates under what conditions the vertical scroll bar is displayed.
+         * <p><code>ScrollPolicy.ON</code> - the scroll bar is always displayed.</p>
+         * <p><code>ScrollPolicy.OFF</code> - the scroll bar is never displayed.</p>
+         * <p><code>ScrollPolicy.AUTO</code> - the scroll bar is displayed when
+         *  the viewport's contentHeight is larger than its height.
+         *
+         * @default ScrollPolicy.AUTO
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 垂直方向是否允许滚动的策略，参见 ScrollPolicy 类定义的常量。默认值：ScrollPolicy.AUTO
+         * 指示在哪些条件下会显示垂直滑动条。
+         * <p><code>ScrollPolicy.ON</code> - 始终显示滚动条。</p>
+         * <p><code>ScrollPolicy.OFF</code> - 从不显示滚动条。</p>
+         * <p><code>ScrollPolicy.AUTO</code> - 当视域的 contentHeight 大于其自身的高度时显示滚动条。</p>
+         *
+         * @default ScrollPolicy.AUTO
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -180,14 +241,27 @@ module swan {
 
         /**
          * @language en_US
-         * 水平方向是否允许滚动的策略，参见ScrollPolicy类定义的常量。默认值：ScrollPolicy.AUTO
+         * Indicates under what conditions the horizontal scroll bar is displayed.
+         * <p><code>ScrollPolicy.ON</code> - the scroll bar is always displayed.</p>
+         * <p><code>ScrollPolicy.OFF</code> - the scroll bar is never displayed.</p>
+         * <p><code>ScrollPolicy.AUTO</code> - the scroll bar is displayed when
+         *  the viewport's contentWidth is larger than its width.
+         *
+         * @default ScrollPolicy.AUTO
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 水平方向是否允许滚动的策略，参见ScrollPolicy类定义的常量。默认值：ScrollPolicy.AUTO
+         * 指示在哪些条件下会显示水平滑动条。
+         * <p><code>ScrollPolicy.ON</code> - 始终显示滚动条。</p>
+         * <p><code>ScrollPolicy.OFF</code> - 从不显示滚动条。</p>
+         * <p><code>ScrollPolicy.AUTO</code> - 当视域的 contentWidth 大于其自身的宽度时显示滚动条。</p>
+         *
+         * @default ScrollPolicy.AUTO
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -202,7 +276,8 @@ module swan {
 
         /**
          * @language en_US
-         * 要滚动的视域组件。
+         * The viewport component to be scrolled.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -210,6 +285,7 @@ module swan {
         /**
          * @language zh_CN
          * 要滚动的视域组件。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -268,17 +344,8 @@ module swan {
         }
 
         /**
-         * @language en_US
+         * @inheritDoc
          * 
-         * @param skin 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param skin 
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -601,19 +668,8 @@ module swan {
         }
 
         /**
-         * @language en_US
+         * @inheritDoc
          * 
-         * @param unscaledWidth 
-         * @param unscaledHeight 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param unscaledWidth 
-         * @param unscaledHeight 
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -629,19 +685,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 
-         * @param partName 
-         * @param instance 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param partName 
-         * @param instance 
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native

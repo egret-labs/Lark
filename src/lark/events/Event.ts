@@ -329,12 +329,14 @@ module lark {
          * @language en_US
          * [read-only] Indicates whether the behavior associated with the event can be prevented. If the behavior can be
          * canceled, this value is true; otherwise it is false.
+         * @see #preventDefault()
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * [只读] 表示是否可以阻止与事件相关联的行为。如果可以取消该行为，则此值为 true；否则为 false。
+         * @see #preventDefault()
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -353,6 +355,7 @@ module lark {
          * The capture phase (EventPhase.CAPTURING_PHASE).
          * The target phase (EventPhase.AT_TARGET)
          * The bubbling phase (EventPhase.BUBBLING_PHASE).
+         * @see lark.EventPhase
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -362,6 +365,7 @@ module lark {
          * 捕获阶段 (EventPhase.CAPTURING_PHASE)。
          * 目标阶段 (EventPhase.AT_TARGET)。
          * 冒泡阶段 (EventPhase.BUBBLING_PHASE)。
+         * @see lark.EventPhase
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -425,6 +429,7 @@ module lark {
          * Checks whether the preventDefault() method has been called on the event. If the preventDefault() method has been
          * called, returns true; otherwise, returns false.
          * @returns If preventDefault() has been called, returns true; otherwise, returns false.
+         * @see #preventDefault()
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -432,6 +437,7 @@ module lark {
          * @language zh_CN
          * 检查是否已对事件调用 preventDefault() 方法。
          * @returns 如果已调用 preventDefault() 方法，则返回 true；否则返回 false。
+         * @see #preventDefault()
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -442,8 +448,14 @@ module lark {
         /**
          * @language en_US
          * Cancels an event's default behavior if that behavior can be canceled.Many events have associated behaviors that
-         * are carried out by default. For example, if a user types a character into a text field, the default behavior
-         * is that the character is displayed in the text field. Because the TextEvent.TEXT_INPUT event's default behavior can be canceled, you can use the preventDefault() method to prevent the character from appearing.An example of a behavior that is not cancelable is the default behavior associated with the Event.REMOVED event, which is generated whenever Flash Player is about to remove a display object from the display list. The default behavior (removing the element) cannot be canceled, so the preventDefault() method has no effect on this default behavior.You can use the Event.cancelable property to check whether you can prevent the default behavior associated with a particular event. If the value of Event.cancelable is true, then preventDefault() can be used to cancel the event; otherwise, preventDefault() has no effect.
+         * are carried out by default. For example, if a user types a character into a text input, the default behavior
+         * is that the character is displayed in the text input. Because the TextEvent.TEXT_INPUT event's default behavior
+         * can be canceled, you can use the preventDefault() method to prevent the character from appearing.
+         * You can use the Event.cancelable property to check whether you can prevent the default behavior associated with
+         * a particular event. If the value of Event.cancelable is true, then preventDefault() can be used to cancel the event;
+         * otherwise, preventDefault() has no effect.
+         * @see #cancelable
+         * @see #isDefaultPrevented
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -452,7 +464,10 @@ module lark {
          * 如果可以取消事件的默认行为，则取消该行为。
          * 许多事件都有默认执行的关联行为。例如，如果用户在文本字段中键入一个字符，则默认行为就是在文本字段中显示该字符。
          * 由于可以取消 TextEvent.TEXT_INPUT 事件的默认行为，因此您可以使用 preventDefault() 方法来防止显示该字符。
-         * 注意：当cancelable属性为false时，此方法不可用。
+         * 您可以使用 Event.cancelable 属性来检查是否可以防止与特定事件关联的默认行为。如果 Event.cancelable 的值为 true，
+         * 则可以使用 preventDefault() 来取消事件；否则，preventDefault() 无效。
+         * @see #cancelable
+         * @see #isDefaultPrevented
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -468,10 +483,13 @@ module lark {
 
         /**
          * @language en_US
-         * 防止对事件流中当前节点的后续节点中的所有事件侦听器进行处理。此方法不会影响当前节点 currentTarget 中的任何事件侦听器。
-         * 相比之下，stopImmediatePropagation() 方法可以防止对当前节点中和后续节点中的事件侦听器进行处理。
-         * 对此方法的其它调用没有任何效果。可以在事件流的任何阶段中调用此方法。
-         * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
+         * Prevents processing of any event listeners in nodes subsequent to the current node in the event flow. This method
+         * does not affect any event listeners in the current node (currentTarget). In contrast, the stopImmediatePropagation()
+         * method prevents processing of event listeners in both the current node and subsequent nodes. Additional calls to this
+         * method have no effect. This method can be called in any phase of the event flow.
+         * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
+         * @see #stopImmediatePropagation()
+         * @see #preventDefault()
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -481,6 +499,8 @@ module lark {
          * 相比之下，stopImmediatePropagation() 方法可以防止对当前节点中和后续节点中的事件侦听器进行处理。
          * 对此方法的其它调用没有任何效果。可以在事件流的任何阶段中调用此方法。
          * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
+         * @see #stopImmediatePropagation()
+         * @see #preventDefault()
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -496,9 +516,12 @@ module lark {
 
         /**
          * @language en_US
-         * 防止对事件流中当前节点中和所有后续节点中的事件侦听器进行处理。此方法会立即生效，并且会影响当前节点中的事件侦听器。
-         * 相比之下，在当前节点中的所有事件侦听器都完成处理之前，stopPropagation() 方法不会生效。
-         * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
+         * Prevents processing of any event listeners in the current node and any subsequent nodes in the event flow.
+         * This method takes effect immediately, and it affects event listeners in the current node. In contrast, the
+         * stopPropagation() method doesn't take effect until all the event listeners in the current node finish processing.
+         * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
+         * @see #stopPropagation()
+         * @see #preventDefault()
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -507,6 +530,8 @@ module lark {
          * 防止对事件流中当前节点中和所有后续节点中的事件侦听器进行处理。此方法会立即生效，并且会影响当前节点中的事件侦听器。
          * 相比之下，在当前节点中的所有事件侦听器都完成处理之前，stopPropagation() 方法不会生效。
          * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
+         * @see #stopPropagation()
+         * @see #preventDefault()
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -517,8 +542,11 @@ module lark {
 
         /**
          * @language en_US
-         * 当事件实例传递给Event.release()静态方法时，实例上的clean()方法将会被自动调用。
-         * 若此自定义事件的实例设计为可以循环复用的，为了避免引起内存泄露，自定义事件需要覆盖此方法来确保实例被缓存前断开对外部对象的一切引用。
+         * This method will be called automatically when you pass the event object as the parameters to the Event.release() method.
+         * If your custom event is designed for reusable,you should override this method to make sure all the references to external
+         * objects are cleaned. if not,it may cause memory leaking.
+         * @see lark.Event.create()
+         * @see lark.Event.release()
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -526,6 +554,8 @@ module lark {
          * @language zh_CN
          * 当事件实例传递给Event.release()静态方法时，实例上的clean()方法将会被自动调用。
          * 若此自定义事件的实例设计为可以循环复用的，为了避免引起内存泄露，自定义事件需要覆盖此方法来确保实例被缓存前断开对外部对象的一切引用。
+         * @see lark.Event.create()
+         * @see lark.Event.release()
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -535,29 +565,34 @@ module lark {
 
         /**
          * @language en_US
-         * 从对象池中取出或创建一个新的事件实例。注意：若使用此方法来创建自定义事件的实例，自定义的构造函数参数列表必须跟Event类一致。
-         * 在JavaScript中，减少对象的创建次数可以获得更高的运行性能。因此我们建议您尽可能使用Event.create()和Event.release()
-         * 这一对方法来创建和释放事件对象，这一对方法会将事件实例在内部缓存下来供下次循环使用，从而避免过多地重复创建对象。
-         *
-         * 外部调用范例：
+         * Gets one event instance from the object pool or create a new one. We highly recommend using the Event.create()
+         * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
+         * which allows you to get better code execution performance.
+         * Note: If you want to use this method to initialize your custom event object,you must make sure the constructor
+         * of your custom event is the same as the constructor of lark.Event.
+         * @example
+         * <code>
          *    var event = Event.create(Event,type, bubbles);
-         *    event.data = data;   //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
+         *    event.data = data;    //optional,initializes custom data here
          *    this.emit(event);
          *    Event.release(event);
+         * </code>
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 从对象池中取出或创建一个新的事件实例。注意：若使用此方法来创建自定义事件的实例，自定义的构造函数参数列表必须跟Event类一致。
-         * 在JavaScript中，减少对象的创建次数可以获得更高的运行性能。因此我们建议您尽可能使用Event.create()和Event.release()
-         * 这一对方法来创建和释放事件对象，这一对方法会将事件实例在内部缓存下来供下次循环使用，从而避免过多地重复创建对象。
-         *
-         * 外部调用范例：
+         * 从对象池中取出或创建一个新的事件实例。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
+         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。
+         * 注意：若使用此方法来创建自定义事件的实例，自定义的构造函数参数列表必须跟Event类一致。
+         * @example
+         * <code>
          *    var event = Event.create(Event,type, bubbles);
-         *    event.data = data;   //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
+         *    event.data = data;  //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
          *    this.emit(event);
          *    Event.release(event);
+         * </code>
+         * @see #clean()
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -583,29 +618,35 @@ module lark {
 
         /**
          * @language en_US
-         * 释放一个事件对象，并缓存到对象池。注意：此方法只能传入由Event.create()创建的事件实例，传入非法对象实例可能会导致报错。
-         * 在JavaScript中，减少对象的创建次数可以获得更高的运行性能。因此我们建议您尽可能使用Event.create()和Event.release()
-         * 这一对方法来创建和释放事件对象，这一对方法会将事件实例在内部缓存下来供下次循环使用，从而避免过多地重复创建对象。
-         *
-         * 外部调用范例：
+         * Releases an event object and cache it into the object pool.We highly recommend using the Event.create()
+         * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
+         * which allows you to get better code execution performance.
+         * Note: The parameters of this method only accepts an instance created by the Event.create() method.
+         * if not,it may throw an error.
+         * @example
+         * <code>
          *    var event = Event.create(Event,type, bubbles);
-         *    event.data = data;   //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
+         *    event.data = data; //optional,initializes custom data here
          *    this.emit(event);
          *    Event.release(event);
+         * </code>
+         * @see #clean()
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 释放一个事件对象，并缓存到对象池。注意：此方法只能传入由Event.create()创建的事件实例，传入非法对象实例可能会导致报错。
-         * 在JavaScript中，减少对象的创建次数可以获得更高的运行性能。因此我们建议您尽可能使用Event.create()和Event.release()
-         * 这一对方法来创建和释放事件对象，这一对方法会将事件实例在内部缓存下来供下次循环使用，从而避免过多地重复创建对象。
-         *
-         * 外部调用范例：
+         * 释放一个事件对象，并缓存到对象池。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
+         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。
+         * 注意：此方法只能传入由Event.create()创建的事件实例，传入非法对象实例可能会导致报错。
+         * @example
+         * <code>
          *    var event = Event.create(Event,type, bubbles);
          *    event.data = data;   //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
          *    this.emit(event);
          *    Event.release(event);
+         * </code>
+         * @see #clean()
          * @version Lark 1.0
          * @platform Web,Native
          */

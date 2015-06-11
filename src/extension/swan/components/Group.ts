@@ -61,7 +61,7 @@ module swan {
      * @version Swan 1.0
      * @platform Web,Native
      */
-    export class Group extends lark.Sprite implements UIComponent {
+    export class Group extends lark.Sprite implements IViewport {
 
         /**
          * @language en_US
