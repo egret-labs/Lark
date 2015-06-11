@@ -39,7 +39,7 @@ module swan {
      * the old one because it appears in the same location.
      * However, the old child container still exists; it is just invisible.
      *
-     * @event swan.CollectionEvent.COLLECTION_CHANGE Dispatched when the ICollection has been updated in some way.
+     * @event swan.CollectionEvent.COLLECTION_CHANGE Emitted when the ICollection has been updated in some way.
      *
      * @version Lark 1.0
      * @version Swan 1.0

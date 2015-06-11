@@ -222,7 +222,7 @@ module swan {
         /**
          * @language en_US
          * Specifies whether live dragging is enabled for the slider. If true, sets the value
-         * and values properties and dispatches the change event continuously as
+         * and values properties and emits the change event continuously as
          * the user moves the thumb.
          *
          * @default true

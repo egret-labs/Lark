@@ -9,7 +9,7 @@ module lark {
 
     /**
      * @language en_US
-     * The Motion class dispatches events based on activity detected by the device's motion sensor.
+     * The Motion class emits events based on activity detected by the device's motion sensor.
      * This data represents the device's movement along a 3-dimensional axis. When the device moves,
      * the sensor detects this movement and emit the CHANGE event. @see lark.MotionEvent
      *

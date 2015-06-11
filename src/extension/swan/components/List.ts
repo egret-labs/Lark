@@ -196,11 +196,11 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        protected setSelectedIndices(value:number[], dispatchChangeEvent?:boolean):void {
+        protected setSelectedIndices(value:number[], emitChangeEvent?:boolean):void {
             var values = this.$ListBase;
-            if (dispatchChangeEvent)
-                values[sys.ListBaseKeys.dispatchChangeAfterSelection] =
-                    (values[sys.ListBaseKeys.dispatchChangeAfterSelection] || dispatchChangeEvent);
+            if (emitChangeEvent)
+                values[sys.ListBaseKeys.emitChangeAfterSelection] =
+                    (values[sys.ListBaseKeys.emitChangeAfterSelection] || emitChangeEvent);
 
             if (value)
                 this._proposedSelectedIndices = value;
@@ -233,7 +233,7 @@ module swan {
         /**
          * @language en_US
          * 
-         * @param dispatchChangedEvents 
+         * @param emitChangedEvents
          * @returns 
          * @version Lark 1.0
          * @version Swan 1.0
@@ -242,13 +242,13 @@ module swan {
         /**
          * @language zh_CN
          * 
-         * @param dispatchChangedEvents 
+         * @param emitChangedEvents
          * @returns 
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        protected commitSelection(dispatchChangedEvents:boolean = true):boolean {
+        protected commitSelection(emitChangedEvents:boolean = true):boolean {
             var values = this.$ListBase;
             var oldSelectedIndex = values[sys.ListBaseKeys.selectedIndex];
             if (this._proposedSelectedIndices) {
@@ -291,10 +291,10 @@ module swan {
                 this.commitMultipleSelection();
             }
 
-            if (dispatchChangedEvents && retVal) {
-                if (values[sys.ListBaseKeys.dispatchChangeAfterSelection]) {
+            if (emitChangedEvents && retVal) {
+                if (values[sys.ListBaseKeys.emitChangeAfterSelection]) {
                     this.emitWith(lark.Event.CHANGE)
-                    values[sys.ListBaseKeys.dispatchChangeAfterSelection] = false;
+                    values[sys.ListBaseKeys.emitChangeAfterSelection] = false;
                 }
                 PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"selectedIndex");
                 PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"selectedItem");
