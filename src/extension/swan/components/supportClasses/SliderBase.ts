@@ -311,6 +311,10 @@ module swan {
 
         /**
          * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected partAdded(partName:string, instance:any):void {
             super.partAdded(partName, instance);
@@ -333,6 +337,10 @@ module swan {
 
         /**
          * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected partRemoved(partName:string, instance:any):void {
             super.partRemoved(partName, instance);

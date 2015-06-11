@@ -144,6 +144,10 @@ module swan {
 
         /**
          * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get length():number {
             return this._source.length;
@@ -204,6 +208,10 @@ module swan {
 
         /**
          * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public getItemAt(index:number):any {
             return this._source[index];
@@ -211,6 +219,10 @@ module swan {
 
         /**
          * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public getItemIndex(item:any):number {
             var length:number = this._source.length;
