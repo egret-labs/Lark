@@ -32,14 +32,21 @@ module swan {
 
 	/**
 	 * @language en_US
-	 * 复选框
+	 * The CheckBox component consists of an optional label and a small box
+	 * that can contain a check mark or not.<p/>
+	 *
+	 * When a user clicks a CheckBox component or its associated text,
+	 * the CheckBox component sets its <code>selected</code> property
+	 * to <code>true</code> for checked, and to <code>false</code> for unchecked.
+	 *
 	 * @version Lark 1.0
 	 * @version Swan 1.0
 	 * @platform Web,Native
 	 */
 	/**
 	 * @language zh_CN
-	 * 复选框
+	 * CheckBox 组件包含一个可选标签和一个小方框，该方框内可以包含/不包含复选标记。<p/>
+	 * 用户单击 CheckBox 组件或其关联文本时，CheckBox 组件会将其 selected 属性设置为 true（表示选中）或 false（表示取消选中）。
 	 * @version Lark 1.0
 	 * @version Swan 1.0
 	 * @platform Web,Native
@@ -47,7 +54,7 @@ module swan {
 	export class CheckBox extends ToggleButton{
 		/**
 		 * @language en_US
-		 * 创建一个CheckBox
+		 * Constructor.
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native

@@ -30,17 +30,8 @@
 
 module swan {
 
-    /**
-     * @private
-     */
     var loaderPool:lark.ImageLoader[] = [];
-    /**
-     * @private
-     */
     var callBackMap:any = {};
-    /**
-     * @private
-     */
     var loaderMap:any = {};
 
     /**
