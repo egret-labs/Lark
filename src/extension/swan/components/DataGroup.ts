@@ -30,9 +30,6 @@
 
 module swan {
 
-    /**
-     * @private
-     */
     const enum Keys{
         useVirtualLayout,
         useVirtualLayoutChanged,
@@ -51,14 +48,24 @@ module swan {
 
     /**
      * @language en_US
-     * DataGroup 是数据容器基类,将数据项目转换为可视元素以进行显示
+     * The DataGroup class is the base container class for data items.
+     * The DataGroup class converts data items to visual elements for display.
+     * While this container can hold visual elements, it is often used only
+     * to hold data items as children.
+     *
+     * @see swan.Group
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * DataGroup 是数据容器基类,将数据项目转换为可视元素以进行显示
+     * DataGroup 类将数据项目转换为可视元素以进行显示。
+     * 尽管此容器可以包含可视元素，但它通常仅用于包含作为子项的数据项目。
+     *
+     * @see swan.Group
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -67,12 +74,16 @@ module swan {
 
         /**
          * @language en_US
+         * Constructor.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
+         * 构造函数。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -96,21 +107,11 @@ module swan {
             };
         }
 
-        /**
-         * @private
-         */
         $DataGroup:Object;
 
         /**
-         * @language en_US
-         * 是否使用虚拟布局,默认true
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 是否使用虚拟布局,默认true
+         * @copy swan.LayoutBase#useVirtualLayout
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -171,19 +172,8 @@ module swan {
         }
 
         /**
-         * @language en_US
+         * @inheritDoc
          * 
-         * @param startIndex 
-         * @param endIndex 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param startIndex 
-         * @param endIndex 
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -204,19 +194,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 
-         * @param index 
-         * @returns 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param index 
-         * @returns 
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -270,15 +249,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 标记组件，以便在稍后屏幕更新期间调用该组件的 measure() 方法
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 标记组件，以便在稍后屏幕更新期间调用该组件的 measure() 方法
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -334,7 +306,12 @@ module swan {
 
         /**
          * @language en_US
-         * 列表数据源，请使用实现了ICollection接口的数据类型，例如 ArrayCollection
+         * The data provider for this DataGroup.
+         * It must be an ICollection, such as ArrayCollection
+         *
+         * @see swan.ICollection
+         * @see swan.ArrayCollection
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -342,6 +319,10 @@ module swan {
         /**
          * @language zh_CN
          * 列表数据源，请使用实现了ICollection接口的数据类型，例如 ArrayCollection
+         *
+         * @see swan.ICollection
+         * @see swan.ArrayCollection
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -382,14 +363,21 @@ module swan {
 
         /**
          * @language en_US
-         * 数据源改变事件处理
+         * Called when contents within the dataProvider changes.  We will catch certain
+         * events and update our children based on that.
+         *
+         * @param event 事件<code>swan.CollectionEvent</code>的对象。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 数据源改变事件处理
+         * 数据源改变事件处理。
+         *
+         * @param event 事件<code>swan.CollectionEvent</code>的对象。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -453,14 +441,27 @@ module swan {
 
         /**
          * @language en_US
-         * 添加一项
+         * Adds the item for the specified dataProvider item to this DataGroup.
+         *
+         * This method is called as needed by the DataGroup implementation,
+         * it should not be called directly.
+         *
+         * @param item The item that was added, the value of dataProvider[index].
+         * @param index The index where the dataProvider item was added.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 添加一项
+         * 添加一个指定的数据到数据源。
+         *
+         * 这个方法不应该由开发者直接调用，而用于本类自动内调用。
+         *
+         * @param item 添加的数据项。
+         * @param index 被添加到的索引。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -487,14 +488,27 @@ module swan {
 
         /**
          * @language en_US
-         * 移除一项
+         * Removes the itemRenderer for the specified dataProvider item from this DataGroup.
+         *
+         * This method is called as needed by the DataGroup implementation,
+         * it should not be called directly.
+         *
+         * @param item The item that is being removed.
+         * @param index The index of the item that is being removed.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 移除一项
+         * 删除数据源中指定的项。
+         *
+         * 这个方法不应该由开发者直接调用，而用于本类自动内调用。
+         *
+         * @param item 移除的数据项。
+         * @param index 被移除的索引。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -570,8 +584,11 @@ module swan {
 
         /**
          * @language en_US
-         * 用于数据项目的项呈示器。您应该直接为此属性赋值自定义类的类定义，而不是一个实例。注意：该类必须实现 IItemRenderer 接口。<br/>
-         * rendererClass获取顺序：itemRendererFunction > itemRenderer > 默认ItemRenerer。
+         * The item renderer to use for data items.
+         * The class must implement the IItemRenderer interface.
+         * If defined, the <code>itemRendererFunction</code> property
+         * takes precedence over this property.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -580,6 +597,7 @@ module swan {
          * @language zh_CN
          * 用于数据项目的项呈示器。您应该直接为此属性赋值自定义类的类定义，而不是一个实例。注意：该类必须实现 IItemRenderer 接口。<br/>
          * rendererClass获取顺序：itemRendererFunction > itemRenderer > 默认ItemRenerer。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -602,8 +620,12 @@ module swan {
 
         /**
          * @language en_US
-         * 为某个特定数据项返回一个项呈示器类定义的函数。
-         * rendererClass获取顺序：itemRendererFunction > itemRenderer > 默认ItemRenerer。
+         * Function that returns an item renderer for a
+         * specific item.
+         *
+         * If defined, this property
+         * takes precedence over the <code>itemRenderer</code> property.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -654,17 +676,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 子类覆盖此方法可以执行一些初始化子项操作。此方法仅在组件第一次添加到舞台时回调一次。
-         * 请务必调用super.createChildren()以完成父类组件的初始化
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 子类覆盖此方法可以执行一些初始化子项操作。此方法仅在组件第一次添加到舞台时回调一次。
-         * 请务必调用super.createChildren()以完成父类组件的初始化
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -681,15 +694,8 @@ module swan {
 
 
         /**
-         * @language en_US
-         * 处理对组件设置的属性
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 处理对组件设置的属性
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -730,15 +736,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 计算组件的默认大小和（可选）默认最小大小
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 计算组件的默认大小和（可选）默认最小大小
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -752,19 +751,8 @@ module swan {
 
 
         /**
-         * @language en_US
-         * 
-         * @param unscaledWidth 
-         * @param unscaledHeight 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param unscaledWidth 
-         * @param unscaledHeight 
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -924,14 +912,32 @@ module swan {
 
         /**
          * @language en_US
-         * 更新项呈示器
+         * Updates the renderer for reuse.
+         * This method first prepares the item
+         * renderer for reuse by cleaning out any stale properties
+         * as well as updating it with new properties.<p/>
+         *
+         * The last thing this method should do is set the <code>data</code> property
+         * of the item renderer.
+         *
+         * @param renderer The item renderer.
+         * @param itemIndex The index of the data in the data provider.
+         * @param data The data object this item renderer is representing.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 更新项呈示器
+         * 此方法首先会准备项呈示器以重用，方法是清除任何旧属性，同时使用新属性进行更新。<p/>
+         *
+         * 最后，此方法应对项呈示器设置 data 属性。
+         *
+         * @param renderer 项呈示器。
+         * @param itemIndex 数据提供程序中的数据索引。
+         * @param data 此项呈示器正在表示的数据对象。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -946,15 +952,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 获得对象容器的子对象总数
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获得对象容器的子对象总数
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -968,20 +967,29 @@ module swan {
 
         /**
          * @language en_US
-         * 项呈示器被添加
-         * @param renderer 添加的项呈示器
-         * @param index 项呈示器的索引
-         * @param item 项呈示器对应的数据
+         * Adds the itemRenderer for the specified dataProvider item to this DataGroup.
+         *
+         * This method is called as needed by the DataGroup implementation,
+         * it should not be called directly.
+         *
+         * @param renderer The renderer that was added.
+         * @param index The index where the dataProvider item was added.
+         * @param item The item that was added, the value of dataProvider[index].
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 项呈示器被添加
+         * 项呈示器被添加.
+         *
+         * 这个方法不能直接调用，它是由该类自身自动调用的。
+         *
          * @param renderer 添加的项呈示器
          * @param index 项呈示器的索引
          * @param item 项呈示器对应的数据
+         * 
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -991,20 +999,28 @@ module swan {
 
         /**
          * @language en_US
-         * 项呈示器被移除
-         * @param renderer 移除的项呈示器
-         * @param index 项呈示器的索引
-         * @param item 项呈示器对应的数据
+         * Removes the itemRenderer for the specified dataProvider item from this DataGroup.
+         *
+         * This method is called as needed by the DataGroup implementation,
+         * it should not be called directly.
+         *
+         * @param renderer The renderer that is being removed.
+         * @param index The index of the item that is being removed.
+         * @param item The item that is being removed.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 项呈示器被移除
+         * 项呈示器被移除。
+         * 这个方法不能直接调用，它是由该类自身自动调用的。
+         *
          * @param renderer 移除的项呈示器
          * @param index 项呈示器的索引
          * @param item 项呈示器对应的数据
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
