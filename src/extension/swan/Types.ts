@@ -32,8 +32,7 @@ module swan {
     //1001~2000预留给swan包下的类和接口
     /**
      * @language en_US
-     * The enum class for definition of class and interface within Swan.
-     * This class is usually used for checking an type of class through <code>lark.is()</code>
+     * Provides constant enum values for type checking in the module of Swan. It is usually passed as the parameters of the lark.is() method.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -61,7 +60,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        Group,
+        Group = 1002,
         /**
          * @copy swan.DataGroup
          *
@@ -69,7 +68,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        DataGroup,
+        DataGroup = 1003,
         /**
          * @copy swan.ListBase
          *
@@ -77,7 +76,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        ListBase,
+        ListBase = 1004,
         /**
          * @copy swan.TabBar
          *
@@ -85,7 +84,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        TabBar,
+        TabBar = 1005,
         /**
          * @copy swan.List
          *
@@ -93,7 +92,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        List,
+        List = 1006,
         /**
          * @copy swan.IItemRenderer
          *
@@ -101,7 +100,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        IItemRenderer,
+        IItemRenderer = 1007,
         /**
          * @copy swan.ItemRenderer
          *
@@ -109,7 +108,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        ItemRenderer,
+        ItemRenderer = 1008,
         /**
          * @copy swan.Component
          *
@@ -117,7 +116,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        Component,
+        Component = 1009,
         /**
          * @copy swan.Label
          *
@@ -125,7 +124,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        Label,
+        Label = 1010,
         /**
          * @copy swan.Image
          *
@@ -133,7 +132,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        Image,
+        Image = 1011,
         /**
          * @copy swan.Skin
          *
@@ -141,7 +140,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        Skin,
+        Skin = 1012,
         /**
          * @copy swan.Theme
          *
@@ -149,7 +148,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        Theme,
+        Theme = 1013,
         /**
          * @copy swan.UIEvent
          *
@@ -157,7 +156,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        UIEvent,
+        UIEvent = 1014,
         /**
          * @copy swan.CollectionEvent
          *
@@ -165,7 +164,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        CollectionEvent,
+        CollectionEvent = 1015,
         /**
          * @copy swan.PropertyEvent
          *
@@ -173,7 +172,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        PropertyEvent,
+        PropertyEvent = 1016,
         /**
          * @copy swan.ItemTapEvent
          *
@@ -181,7 +180,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        ItemTapEvent,
+        ItemTapEvent = 1017,
         /**
          * @copy swan.ArrayCollection
          *
@@ -189,7 +188,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        ArrayCollection,
+        ArrayCollection = 1018,
         /**
          * @copy swan.LayoutBase
          *
@@ -197,7 +196,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        LayoutBase,
+        LayoutBase = 1019,
         /**
          * @copy swan.LinearLayoutBase
          *
@@ -205,7 +204,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        LinearLayoutBase,
+        LinearLayoutBase = 1020,
         /**
          * @copy swan.BasicLayout
          *
@@ -213,7 +212,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        BasicLayout,
+        BasicLayout = 1021,
         /**
          * @copy swan.HorizontalLayout
          *
@@ -221,7 +220,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        HorizontalLayout,
+        HorizontalLayout = 1022,
         /**
          * @copy swan.VerticalLayout
          *
@@ -229,7 +228,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        VerticalLayout,
+        VerticalLayout = 1023,
         /**
          * @copy swan.Panel
          *
@@ -237,7 +236,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        Panel,
+        Panel = 1024,
         /**
          * @copy swan.Button
          *
@@ -245,7 +244,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        Button,
+        Button = 1025,
         /**
          * @copy swan.ToggleButton
          *
@@ -253,7 +252,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        ToggleButton,
+        ToggleButton = 1026,
         /**
          * @copy swan.CheckBox
          *
@@ -261,7 +260,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        CheckBox,
+        CheckBox = 1027,
         /**
          * @copy swan.ToggleSwitch
          *
@@ -269,7 +268,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        ToggleSwitch,
+        ToggleSwitch = 1028,
         /**
          * @copy swan.RadioButton
          *
@@ -277,7 +276,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        RadioButton,
+        RadioButton = 1029,
         /**
          * @copy swan.RadioButtonGroup
          *
@@ -285,7 +284,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        RadioButtonGroup,
+        RadioButtonGroup = 1030,
         /**
          * @copy swan.State
          *
@@ -293,7 +292,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        State,
+        State = 1031,
         /**
          * @copy swan.IOverride
          *
@@ -301,7 +300,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        IOverride,
+        IOverride = 1032,
         /**
          * @copy swan.AddItems
          *
@@ -309,7 +308,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        AddItems,
+        AddItems = 1033,
         /**
          * @copy swan.SetProperty
          *
@@ -317,7 +316,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        SetProperty,
+        SetProperty = 1034,
         /**
          * @copy swan.Watcher
          *
@@ -325,7 +324,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        Watcher,
+        Watcher = 1035,
         /**
          * @copy swan.ViewStack
          *
@@ -333,7 +332,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        ViewStack,
+        ViewStack = 1036,
         /**
          * @copy swan.Scroller
          *
@@ -341,7 +340,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        Scroller,
+        Scroller = 1037,
         /**
          * @copy swan.ScrollBarBase
          *
@@ -349,7 +348,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        ScrollBarBase,
+        ScrollBarBase = 1038,
         /**
          * @copy swan.VScrollBar
          *
@@ -357,7 +356,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        VScrollBar,
+        VScrollBar = 1039,
         /**
          * @copy swan.HScrollBar
          *
@@ -365,7 +364,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        HScrollBar,
+        HScrollBar = 1040,
         /**
          * @copy swan.Range
          *
@@ -373,7 +372,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        Range,
+        Range = 1041,
         /**
          * @copy swan.SliderBase
          *
@@ -381,7 +380,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        SliderBase,
+        SliderBase = 1042,
         /**
          * @copy swan.HSlider
          *
@@ -389,7 +388,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        HSlider,
+        HSlider = 1043,
         /**
          * @copy swan.VSlider
          *
@@ -397,7 +396,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        VSlider,
+        VSlider = 1044,
         /**
          * @copy swan.IViewport
          *
@@ -405,7 +404,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        IViewport,
+        IViewport = 1045,
         /**
          * @copy swan.TileLayout
          *
@@ -413,7 +412,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        TileLayout,
+        TileLayout = 1046,
         /**
          * @copy swan.EditableText
          *
@@ -421,6 +420,6 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        EditableText
+        EditableText = 1047
     }
 }

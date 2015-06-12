@@ -31,7 +31,7 @@ module lark {
     //1~1000预留给lark包下的类和接口
     /**
      * @language en_US
-     * Provides constant enum values for type checking. It is usually passed as the parameters of the lark.is() method.
+     * Provides constant enum values for type checking in the module of Lark. It is usually passed as the parameters of the lark.is() method.
      * @see lark.is()
      * @version Lark 1.0
      * @platform Web,Native
@@ -55,121 +55,121 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        EventEmitter,
+        EventEmitter = 2,
         /**
          * @copy lark.DisplayObject
          * @version Lark 1.0
          * @platform Web,Native
          */
-        DisplayObject,
+        DisplayObject = 3,
         /**
          * @copy lark.DisplayObjectContainer
          * @version Lark 1.0
          * @platform Web,Native
          */
-        DisplayObjectContainer,
+        DisplayObjectContainer = 4,
         /**
          * @copy lark.Sprite
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Sprite,
+        Sprite = 5,
         /**
          * @copy lark.Bitmap
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Bitmap,
+        Bitmap = 6,
         /**
          * @copy lark.BitmapData
          * @version Lark 1.0
          * @platform Web,Native
          */
-        BitmapData,
+        BitmapData = 7,
         /**
          * @copy lark.Graphics
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Graphics,
+        Graphics = 8,
         /**
          * @copy lark.Shape
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Shape,
+        Shape = 9,
         /**
          * @copy lark.Stage
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Stage,
+        Stage = 10,
         /**
          * @copy lark.Event
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Event,
+        Event = 11,
         /**
          * @copy lark.TimerEvent
          * @version Lark 1.0
          * @platform Web,Native
          */
-        TimerEvent,
+        TimerEvent = 12,
         /**
          * @copy lark.TouchEvent
          * @version Lark 1.0
          * @platform Web,Native
          */
-        TouchEvent,
+        TouchEvent = 13,
         /**
          * @copy lark.ProgressEvent
          * @version Lark 1.0
          * @platform Web,Native
          */
-        ProgressEvent,
+        ProgressEvent = 14,
         /**
          * @copy lark.Matrix
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Matrix,
+        Matrix = 15,
         /**
          * @copy lark.Point
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Point,
+        Point = 16,
         /**
          * @copy lark.Rectangle
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Rectangle,
+        Rectangle = 17,
         /**
          * @copy lark.TextField
          * @version Lark 1.0
          * @platform Web,Native
          */
-        TextField,
+        TextField = 18,
         /**
          * @copy lark.HttpRequest
          * @version Lark 1.0
          * @platform Web,Native
          */
-        HttpRequest,
+        HttpRequest = 19,
         /**
          * @copy lark.ImageLoader
          * @version Lark 1.0
          * @platform Web,Native
          */
-        ImageLoader,
+        ImageLoader = 20,
         /**
          * @copy lark.TextInput
          * @version Lark 1.0
          * @platform Web,Native
          */
-        TextInput
+        TextInput = 21
 
     }
 }
