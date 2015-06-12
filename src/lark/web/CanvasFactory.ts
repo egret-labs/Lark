@@ -107,7 +107,7 @@ module lark.web {
                 var keys = ["webkitImageSmoothingEnabled", "mozImageSmoothingEnabled", "msImageSmoothingEnabled"];
                 for (var i = keys.length - 1; i >= 0; i--) {
                     var key = keys[i];
-                    if (context.hasOwnProperty(key)) {
+                    if (context[key]!==void 0) {
                         break;
                     }
                 }
