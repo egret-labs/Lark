@@ -31,6 +31,9 @@ module lark.sys {
 
     var ENTER_LIST:DisplayObject[] = [], LEAVE_LIST:DisplayObject[] = [];
 
+    /**
+     * @private
+     */
     function getParentList(target:DisplayObject, list):DisplayObject[] {
         while (target) {
             list.push(target);
@@ -40,20 +43,31 @@ module lark.sys {
     }
 
     /**
+     * @private
      * 用户交互操作管理器
      */
     export class TouchHandler extends LarkObject {
 
+        /**
+         * @private
+         */
         public constructor(stage:Stage) {
             super();
             this.stage = stage;
         }
 
+        /**
+         * @private
+         */
         private stage:Stage;
 
+        /**
+         * @private
+         */
         private touchDownTarget:{[key:number]:number} = {};
 
         /**
+         * @private
          * 触摸开始（按下）
          * @param x 事件发生处相对于舞台的坐标x
          * @param y 事件发生处相对于舞台的坐标y
@@ -65,10 +79,17 @@ module lark.sys {
             TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_BEGIN, true, true, x, y, touchPointID);
         }
 
+        /**
+         * @private
+         */
         private lastTouchX:number = -1;
+        /**
+         * @private
+         */
         private lastTouchY:number = -1;
 
         /**
+         * @private
          * 触摸移动
          * @param x 事件发生处相对于舞台的坐标x
          * @param y 事件发生处相对于舞台的坐标y
@@ -85,6 +106,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 触摸结束（弹起）
          * @param x 事件发生处相对于舞台的坐标x
          * @param y 事件发生处相对于舞台的坐标y
@@ -105,6 +127,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 获取舞台坐标下的触摸对象
          */
         private findTarget(stageX:number, stageY:number):DisplayObject {

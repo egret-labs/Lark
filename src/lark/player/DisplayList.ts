@@ -34,11 +34,13 @@ module lark.sys {
     var blendModes = ["source-over","lighter","destination-out"];
 
     /**
+     * @private
      * 显示列表
      */
     export class DisplayList extends LarkObject implements Renderable {
 
         /**
+         * @private
          * 释放一个DisplayList实例到对象池
          */
         public static release(displayList:DisplayList):void {
@@ -53,6 +55,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 从对象池中取出或创建一个新的DisplayList对象。
          */
         public static create(target:DisplayObject):DisplayList {
@@ -71,6 +74,7 @@ module lark.sys {
 
 
         /**
+         * @private
          * 创建一个DisplayList对象
          */
         public constructor(root:DisplayObject) {
@@ -79,23 +83,28 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 是否需要重绘
          */
         $isDirty:boolean = false;
         /**
+         * @private
          * 在舞台上的透明度
          */
         $renderAlpha:number = 1;
         /**
+         * @private
          * 在舞台上的矩阵对象
          */
         $renderMatrix:Matrix;
         /**
+         * @private
          * 在舞台上的显示区域
          */
         $renderRegion:Region = new Region();
 
         /**
+         * @private
          * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
          */
         $update():boolean {
@@ -120,12 +129,24 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 呈现绘制结果的目标画布
          */
         public surface:Surface = null;
+        /**
+         * @private
+         */
         public offsetX:number = 0;
+        /**
+         * @private
+         */
         public offsetY:number = 0;
 
+        /**
+         * @private
+         * 
+         * @param context 
+         */
         $render(context:RenderContext):void {
             var data = this.surface;
             if (data) {
@@ -134,20 +155,29 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 显示列表根节点
          */
         public root:DisplayObject;
 
+        /**
+         * @private
+         */
         public needRedraw:boolean = false;
 
+        /**
+         * @private
+         */
         private drawToStage:boolean = false;
 
         /**
+         * @private
          * 绘图上下文
          */
         public renderContext:RenderContext;
 
         /**
+         * @private
          * 设置剪裁边界，不再绘制完整目标对象，画布尺寸由外部决定，超过边界的节点将跳过绘制。
          */
         public setClipRect(width:number, height:number):void {
@@ -160,13 +190,18 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 显示对象的渲染节点发生改变时，把自身的IRenderable对象注册到此列表上。
          */
         private dirtyNodes:any = {};
 
+        /**
+         * @private
+         */
         private dirtyNodeList:Renderable[] = [];
 
         /**
+         * @private
          * 标记一个节点需要重新渲染
          */
         public markDirty(node:Renderable):void {
@@ -185,11 +220,18 @@ module lark.sys {
             }
         }
 
+        /**
+         * @private
+         */
         private dirtyList:Region[] = null;
 
+        /**
+         * @private
+         */
         private dirtyRegion:DirtyRegion = new DirtyRegion();
 
         /**
+         * @private
          * 更新节点属性并返回脏矩形列表。
          */
         public updateDirtyRegions():Region[] {
@@ -218,6 +260,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 绘制根节点显示对象到目标画布，返回draw的次数。
          */
         public drawToSurface():number {
@@ -247,6 +290,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 绘制一个显示对象
          */
         private drawDisplayObject(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.sys.Region[],
@@ -326,6 +370,9 @@ module lark.sys {
             return drawCalls;
         }
 
+        /**
+         * @private
+         */
         private drawWidthBlendMode(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.sys.Region[],
                               drawToStage:boolean,clipRegion:Region):number {
             var drawCalls = 0;
@@ -361,6 +408,9 @@ module lark.sys {
             Region.release(region);
             return drawCalls;
         }
+        /**
+         * @private
+         */
         private drawWidthClip(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.sys.Region[],
                               drawToStage:boolean,clipRegion:Region):number {
             var drawCalls = 0;
@@ -458,6 +508,9 @@ module lark.sys {
             return drawCalls;
         }
 
+        /**
+         * @private
+         */
         private createRenderContext(width:number,height:number):RenderContext{
             var surface = surfaceFactory.create(true);
             if(!surface){
@@ -468,6 +521,9 @@ module lark.sys {
             return surface.renderContext;
         }
 
+        /**
+         * @private
+         */
         private drawWidthSurface(context:RenderContext,surface:Surface,drawToStage:boolean,offsetX:number,offsetY:number):void{
             if (drawToStage) {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
                 context.setTransform(1, 0, 0, 1, offsetX, offsetY);
@@ -481,9 +537,13 @@ module lark.sys {
             }
         }
 
+        /**
+         * @private
+         */
         private sizeChanged:boolean = false;
 
         /**
+         * @private
          * 改变画布的尺寸，由于画布尺寸修改会清空原始画布。所以这里将原始画布绘制到一个新画布上，再与原始画布交换。
          */
         public changeSurfaceSize():void {

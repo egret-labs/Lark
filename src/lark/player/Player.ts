@@ -29,11 +29,13 @@
 
 module lark.sys {
     /**
+     * @private
      * Lark播放器
      */
     export class Player extends LarkObject {
 
         /**
+         * @private
          * 实例化一个播放器对象。
          */
         public constructor(context:RenderContext, stage:Stage, entryClassName:string) {
@@ -59,6 +61,9 @@ module lark.sys {
             }
         }
 
+        /**
+         * @private
+         */
         private createDisplayList(stage:Stage, context:RenderContext):DisplayList {
             var displayList = new DisplayList(stage);
             displayList.renderContext = context;
@@ -67,23 +72,33 @@ module lark.sys {
         }
 
 
+        /**
+         * @private
+         */
         private screenDisplayList:DisplayList;
         /**
+         * @private
          * 入口类的完整类名
          */
         private entryClassName:string;
         /**
+         * @private
          * 舞台引用
          */
         public stage:Stage;
         /**
+         * @private
          * 入口类实例
          */
         private root:DisplayObject;
 
+        /**
+         * @private
+         */
         private isPlaying:boolean = false;
 
         /**
+         * @private
          * 启动播放器
          */
         public start():void {
@@ -97,6 +112,10 @@ module lark.sys {
             $ticker.$addPlayer(this);
         }
 
+        /**
+         * @private
+         * 
+         */
         private initialize():void {
             var rootClass;
             if (this.entryClassName) {
@@ -118,6 +137,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 停止播放器，停止后将不能重新启动。
          */
         public stop():void {
@@ -126,6 +146,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 暂停播放器，后续可以通过调用start()重新启动播放器。
          */
         public pause():void {
@@ -137,6 +158,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 渲染屏幕
          */
         $render(triggerByFrame:boolean):void {
@@ -173,6 +195,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 更新舞台尺寸
          * @param stageWidth 舞台宽度（以像素为单位）
          * @param stageHeight 舞台高度（以像素为单位）
@@ -192,27 +215,54 @@ module lark.sys {
 
 
         /**
+         * @private
          * 显示FPS，仅在DEBUG模式下有效。
          */
         public displayFPS:(showFPS:boolean, showLog:boolean, logFilter:string)=>void;
+        /**
+         * @private
+         */
         private showFPS:boolean;
+        /**
+         * @private
+         */
         private showLog:boolean;
+        /**
+         * @private
+         */
         private fpsDisplay:FPS;
 
         /**
+         * @private
          * 是否显示脏矩形重绘区，仅在DEBUG模式下有效。
          */
         public showPaintRect:(value:boolean)=>void;
+        /**
+         * @private
+         */
         private drawDirtyRect:(x:number, y:number, width:number, height:number, context:RenderContext)=>void;
+        /**
+         * @private
+         */
         private _showPaintRect:boolean;
+        /**
+         * @private
+         */
         private stageDisplayList:DisplayList;
+        /**
+         * @private
+         */
         private paintList:any[];
+        /**
+         * @private
+         */
         private drawPaintRect:(dirtyList:Region[])=>void;
 
     }
 
 
     /**
+     * @private
      * FPS显示对象
      */
     interface FPS extends Sprite {
@@ -230,7 +280,13 @@ module lark.sys {
 
     declare var FPS:{new (stage:Stage, showFPS:boolean, showLog:boolean, logFilter:string):FPS};
 
+    /**
+     * @private
+     */
     declare var __extends:Function;
+    /**
+     * @private
+     */
     export var $logToFPS:(info:string)=>void;
     
 

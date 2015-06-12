@@ -30,11 +30,13 @@
 module lark.sys {
 
     /**
+     * @private
      * 屏幕适配器接口，当播放器视口尺寸改变时，屏幕适配器将被用于计算当前对应的舞台显示尺寸。
      */
     export interface IScreenAdapter{
 
         /**
+         * @private
          * 计算舞台显示尺寸
          * @param scaleMode 当前的缩放模式
          * @param screenWidth 播放器视口宽度
@@ -47,23 +49,28 @@ module lark.sys {
     }
 
     /**
+     * @private
      * 舞台显示尺寸数据
      */
     export interface StageDisplaySize{
 
         /**
+         * @private
          * 舞台宽度
          */
         stageWidth:number;
         /**
+         * @private
          * 舞台高度
          */
         stageHeight:number;
         /**
+         * @private
          * 显示宽度，若跟舞台宽度不同，将会产生缩放。
          */
         displayWidth:number;
         /**
+         * @private
          * 显示高度，若跟舞台高度不同，将会产生缩放。
          */
         displayHeight:number;

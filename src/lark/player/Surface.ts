@@ -29,10 +29,12 @@
 
 module lark.sys {
     /**
+     * @private
      * 呈现最终绘图结果的画布
      */
     export interface Surface extends BitmapData{
         /**
+         * @private
          * 绘图上下文
          */
         renderContext:RenderContext;

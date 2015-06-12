@@ -30,24 +30,31 @@
 module lark.sys {
 
     /**
+     * @private
      * 心跳计时器单例
      */
     export var $ticker:Ticker;
     /**
+     * @private
      * 是否要广播Event.RENDER事件的标志。
      */
     export var $invalidateRenderFlag:boolean = false;
     /**
+     * @private
      * 需要立即刷新屏幕的标志
      */
     export var $requestRenderingFlag:boolean = false;
 
     /**
+     * @private
      * Lark心跳计时器
      */
     export class Ticker {
 
 
+        /**
+         * @private
+         */
         public constructor() {
             if (DEBUG && $ticker) {
                 $error(1008, "lark.sys.Ticker");
@@ -55,9 +62,13 @@ module lark.sys {
             lark.$START_TIME = Date.now();
         }
 
+        /**
+         * @private
+         */
         private playerList:Player[] = [];
 
         /**
+         * @private
          * 注册一个播放器实例并运行
          */
         $addPlayer(player:Player):void {
@@ -72,6 +83,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 停止一个播放器实例的运行。
          */
         $removePlayer(player:Player):void {
@@ -86,9 +98,18 @@ module lark.sys {
             }
         }
 
+        /**
+         * @private
+         */
         private callBackList:Function[] = [];
+        /**
+         * @private
+         */
         private thisObjectList:any[] = [];
 
+        /**
+         * @private
+         */
         $startTick(callBack:(timeStamp:number)=>boolean, thisObject:any):void {
             var index = this.getTickIndex(callBack, thisObject);
             if (index != -1) {
@@ -99,6 +120,9 @@ module lark.sys {
             this.thisObjectList.push(thisObject);
         }
 
+        /**
+         * @private
+         */
         $stopTick(callBack:(timeStamp:number)=>boolean, thisObject:any):void {
             var index = this.getTickIndex(callBack, thisObject);
             if (index == -1) {
@@ -109,6 +133,9 @@ module lark.sys {
             this.thisObjectList.splice(index, 1);
         }
 
+        /**
+         * @private
+         */
         private getTickIndex(callBack:(timeStamp:number)=>boolean, thisObject:any):number {
             var callBackList = this.callBackList;
             var thisObjectList = this.thisObjectList;
@@ -121,19 +148,28 @@ module lark.sys {
             return -1;
         }
 
+        /**
+         * @private
+         * 
+         */
         private concatTick():void {
             this.callBackList = this.callBackList.concat();
             this.thisObjectList = this.thisObjectList.concat();
         }
 
         /**
+         * @private
          * 全局帧率
          */
         $frameRate:number = 30;
 
+        /**
+         * @private
+         */
         private frameInterval:number = 1;
 
         /**
+         * @private
          * 设置全局帧率
          */
         $setFrameRate(value:number):void {
@@ -152,9 +188,13 @@ module lark.sys {
             this.lastCount = this.frameInterval = Math.round(60000 / value);
         }
 
+        /**
+         * @private
+         */
         private lastCount:number = 1000;
 
         /**
+         * @private
          * 执行一次刷新
          */
         public update():void {
@@ -182,6 +222,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 执行一次屏幕渲染
          */
         private render(triggerByFrame:boolean):void {
@@ -201,6 +242,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 广播EnterFrame事件。
          */
         private broadcastEnterFrame():void {
@@ -216,6 +258,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 广播Render事件。
          */
         private broadcastRender():void {

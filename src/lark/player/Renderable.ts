@@ -29,30 +29,39 @@
 
 module lark.sys {
 
+    /**
+     * @private
+     */
     export interface Renderable extends LarkObject{
 
         /**
+         * @private
          * 是否需要重绘的标志
          */
         $isDirty:boolean;
         /**
+         * @private
          * 在舞台上的透明度
          */
         $renderAlpha:number;
         /**
+         * @private
          * 在舞台上的矩阵对象
          */
         $renderMatrix:Matrix;
         /**
+         * @private
          * 在屏幕上的显示区域
          */
         $renderRegion:Region;
 
         /**
+         * @private
          * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
          */
         $update():boolean;
         /**
+         * @private
          * 执行绘制
          */
         $render(context:RenderContext):void;

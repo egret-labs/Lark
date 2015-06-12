@@ -31,9 +31,13 @@ module lark.sys {
 
     var regionPool:Region[] = [];
 
+    /**
+     * @private
+     */
     export class Region {
 
         /**
+         * @private
          * 释放一个Region实例到对象池
          */
         public static release(region:Region):void {
@@ -41,6 +45,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 从对象池中取出或创建一个新的Region对象。
          * 建议对于一次性使用的对象，均使用此方法创建，而不是直接new一个。
          * 使用完后调用对应的release()静态方法回收对象，能有效减少对象创建数量造成的性能开销。
@@ -53,20 +58,45 @@ module lark.sys {
             return region;
         }
 
+        /**
+         * @private
+         */
         public minX:number = 0;
+        /**
+         * @private
+         */
         public minY:number = 0;
+        /**
+         * @private
+         */
         public maxX:number = 0;
+        /**
+         * @private
+         */
         public maxY:number = 0;
 
+        /**
+         * @private
+         */
         public width:number = 0;
+        /**
+         * @private
+         */
         public height:number = 0;
+        /**
+         * @private
+         */
         public area:number = 0;
 
         /**
+         * @private
          * 是否发生移动
          */
         moved:boolean = false;
 
+        /**
+         * @private
+         */
         public setTo(minX:number, minY:number, maxX:number, maxY:number):Region {
             this.minX = minX;
             this.minY = minY;
@@ -76,6 +106,9 @@ module lark.sys {
             return this;
         }
 
+        /**
+         * @private
+         */
         public updateArea():void {
             this.width = this.maxX - this.minX;
             this.height = this.maxY - this.minY;
@@ -83,6 +116,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 注意！由于性能优化，此方法不判断自身是否为空，必须在外部确认自身和目标区域都不为空再调用合并。否则结果始终从0，0点开始。
          */
         public union(target:Region):void {
@@ -102,6 +136,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 注意！由于性能优化，此方法不判断自身是否为空，必须在外部确认自身和目标区域都不为空再调用合并。否则结果始终从0，0点开始。
          */
         public intersect(target:Region):void {
@@ -129,6 +164,9 @@ module lark.sys {
             this.updateArea();
         }
 
+        /**
+         * @private
+         */
         private setEmpty():void {
             this.minX = 0;
             this.minY = 0;
@@ -140,12 +178,16 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 确定此 Region 对象是否为空。
          */
         public isEmpty():boolean {
             return this.width <= 0 || this.height <= 0;
         }
 
+        /**
+         * @private
+         */
         public intersects(target:Region):boolean {
             var max = this.minX > target.minX ? this.minX : target.minX;
             var min = this.maxX < target.maxX ? this.maxX : target.maxX;
@@ -158,6 +200,9 @@ module lark.sys {
             return max <= min;
         }
 
+        /**
+         * @private
+         */
         public updateRegion(bounds:Rectangle, matrix:Matrix):void {
             var m = matrix;
             var a = m.a;

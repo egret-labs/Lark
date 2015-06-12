@@ -35,6 +35,9 @@ module lark.sys {
         }
     }
 
+    /**
+     * @private
+     */
     function unionArea(r1:Region, r2:Region):number {
         var minX = r1.minX < r2.minX ? r1.minX : r2.minX;
         var minY = r1.minY < r2.minY ? r1.minY : r2.minY;
@@ -44,18 +47,38 @@ module lark.sys {
     }
 
     /**
+     * @private
      * 脏矩形计算工具类
      */
     export class DirtyRegion {
 
+        /**
+         * @private
+         */
         private dirtyList:Region[] = [];
+        /**
+         * @private
+         */
         private hasClipRect:boolean = false;
+        /**
+         * @private
+         */
         private clipWidth:number = 0;
+        /**
+         * @private
+         */
         private clipHeight:number = 0;
+        /**
+         * @private
+         */
         private clipArea:number = 0;
+        /**
+         * @private
+         */
         private clipRectChanged:boolean = false;
 
         /**
+         * @private
          * 设置剪裁边界，超过边界的节点将跳过绘制。
          */
         public setClipRect(width:number, height:number):void {
@@ -67,6 +90,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 添加一个脏矩形区域，返回是否添加成功，当矩形为空或者在屏幕之外时返回false。
          */
         public addRegion(target:Region):boolean {
@@ -103,6 +127,9 @@ module lark.sys {
             return true;
         }
 
+        /**
+         * @private
+         */
         public clear():void {
             var dirtyList = this.dirtyList;
             var length = dirtyList.length;
@@ -113,6 +140,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 获取最终的脏矩形列表
          */
         public getDirtyRegions():Region[] {
@@ -131,6 +159,7 @@ module lark.sys {
         }
 
         /**
+         * @private
          * 合并脏矩形列表
          */
         private mergeDirtyList(dirtyList:Region[]):boolean {
