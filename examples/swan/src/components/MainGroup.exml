@@ -3,9 +3,9 @@
     <s:Image source="resource/assets/whiteBg.png" width="800" maxHeight="300" height="300" />
     <c:TabBar dataProvider="{viewStack}"  left="0" top="0"/>
     <s:ViewStack id="viewStack"  height="300" width = "800" verticalCenter="0" left="130">
-        <s:Group name="Button" horizontalCenter="0" >
+        <s:Group name="Button" width = "700" height = "300">
             <s:layout>
-                <s:VerticalLayout gap="20" horizontalAlign="left"/>
+                <s:VerticalLayout gap="15" horizontalAlign="center" verticalAlign ="middle"/>
             </s:layout>
             <s:Button x="10" y="10" label="确定"/>
              <c:CloseButton width="40" height="40" />
@@ -26,21 +26,21 @@
                 <s:RadioButton x="140" y="140" label="SelectTwo"/>
              </s:Group>
         </s:Group>
-        <s:Group name="Slider" horizontalCenter="0" >
+        <s:Group name="Slider"  width = "700" height = "300">
             <s:layout>
-                <s:HorizontalLayout gap="5" />
+                <s:HorizontalLayout gap="5" verticalAlign ="middle"  horizontalAlign ="center"/>
             </s:layout>
-            <s:VSlider x="10" y="10" height="200" maximum="100"/>
-            <s:HSlider x="50" y="200" width="200" maximum="100"/>
+            <s:VSlider x="250" verticalCenter="0" height="200" maximum="100"/>
+            <s:HSlider x="300" verticalCenter="0" width="200" maximum="100"/>
         </s:Group>
-        <s:Group name="ProgressBar" horizontalCenter="0" verticalCenter ="0">
-            <s:ProgressBar width="200" maximum="100" value="20"/>
+        <s:Group name="ProgressBar"  width = "700" height = "300">
+            <s:ProgressBar width="200" maximum="100" value="20" verticalCenter="0" horizontalCenter="0"/>
         </s:Group>
-        <s:Group name="Panel" width="100%" height="100%">
+        <s:Group name="Panel"  width = "700" height = "300">
             <s:Panel title="Panel" verticalCenter="0" horizontalCenter="0"/>
         </s:Group>
-        <s:Group name="List" width="300" height="300" verticalCenter="0" horizontalCenter="0">
-            <c:ListGroup width="100%" height="100%"/>
+        <s:Group name="List" width = "700" height = "300">
+            <c:ListGroup width="300" height="98%" verticalCenter="0" horizontalCenter="0"/>
         </s:Group>
         <s:Group name="Label" width = "600" height = "300" >
            	<s:Label top="0" width="100%" height="100%"
@@ -72,8 +72,8 @@
                       fontSize="20" fontFamily="Tahoma" text="UserName"
                       textColor="0x727070"  textAlign="left"/>
               <s:Group>
-                      <s:Image source="resource/assets/checkbox_unselect.png" width="120" height="30" scale9Grid="2,2,19,19"/>
-                      <s:EditableText width = "120" x="2"
+                      <s:Image source="resource/assets/checkbox_unselect.png" width="120" height="28" scale9Grid="2,2,19,19"/>
+                      <s:EditableText width = "120" x="2" y="2"
                                   fontSize="20" fontFamily="Tahoma" text="输入账号"
                                   textColor="0x727070"   textAlign="left"/>
               </s:Group>
@@ -81,8 +81,8 @@
                       fontSize="20" fontFamily="Tahoma" text="Password"
                       textColor="0x727070"   textAlign="left"/>
               <s:Group>
-                     <s:Image source="resource/assets/checkbox_unselect.png" width="120" height="30" scale9Grid="2,2,19,19"/>
-                     <s:EditableText width = "120" x="2"
+                     <s:Image source="resource/assets/checkbox_unselect.png" width="120" height="28" scale9Grid="2,2,19,19"/>
+                     <s:EditableText width = "120" x="2" y="2"
                                  fontSize="20" fontFamily="Tahoma" text="输入密码" displayAsPassword = "true"
                                  textColor="0x727070"   textAlign="left"/>
               </s:Group>
