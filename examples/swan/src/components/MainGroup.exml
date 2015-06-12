@@ -7,7 +7,9 @@
             <s:layout>
                 <s:VerticalLayout gap="20" horizontalAlign="left"/>
             </s:layout>
-            <s:Button x="10" y="10" label="Button"/>
+            <s:Button x="10" y="10" label="确定"/>
+             <c:CloseButton width="40" height="40" />
+             <c:CancelButton />
              <s:Group>
                  <s:layout>
                     <s:HorizontalLayout gap="5" horizontalAlign="left"/>
@@ -69,15 +71,21 @@
               <s:Label  width = "120"
                       fontSize="20" fontFamily="Tahoma" text="UserName"
                       textColor="0x727070"  textAlign="left"/>
-               <s:EditableText   width = "120"
-                     fontSize="20" fontFamily="Tahoma" text="输入账号"
-                     textColor="0x727070"  textAlign="left"/>
+              <s:Group>
+                      <s:Image source="resource/assets/checkbox_unselect.png" width="120" height="30" scale9Grid="2,2,19,19"/>
+                      <s:EditableText width = "120" x="2"
+                                  fontSize="20" fontFamily="Tahoma" text="输入账号"
+                                  textColor="0x727070"   textAlign="left"/>
+              </s:Group>
               <s:Label  width = "120"
                       fontSize="20" fontFamily="Tahoma" text="Password"
                       textColor="0x727070"   textAlign="left"/>
-            <s:EditableText width = "120"
-                       fontSize="20" fontFamily="Tahoma" text="输入密码" displayAsPassword = "true"
-                       textColor="0x727070"   textAlign="left"/>
-          </s:Group>
+              <s:Group>
+                     <s:Image source="resource/assets/checkbox_unselect.png" width="120" height="30" scale9Grid="2,2,19,19"/>
+                     <s:EditableText width = "120" x="2"
+                                 fontSize="20" fontFamily="Tahoma" text="输入密码" displayAsPassword = "true"
+                                 textColor="0x727070"   textAlign="left"/>
+              </s:Group>
+         </s:Group>
     </s:ViewStack>
 </s:Group>
