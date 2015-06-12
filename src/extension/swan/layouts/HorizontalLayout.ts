@@ -30,12 +30,34 @@
 module swan {
 
     /**
+     * @language en_US
      * 水平布局
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 水平布局
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class HorizontalLayout extends LinearLayoutBase {
 
         /**
+         * @language en_US
          * 测量使用真实布局的尺寸
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 测量使用真实布局的尺寸
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected measureReal():void {
             var target = this.$target;
@@ -61,7 +83,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 测量使用虚拟布局的尺寸
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 测量使用虚拟布局的尺寸
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected measureVirtual():void {
             var target = this.$target;
@@ -87,7 +120,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 更新使用真实布局的显示列表
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 更新使用真实布局的显示列表
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected updateDisplayListReal(width:number, height:number):void {
             var target = this.$target;
@@ -269,7 +313,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 更新使用虚拟布局的显示列表
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 更新使用虚拟布局的显示列表
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected updateDisplayListVirtual(width:number, height:number):void {
             var target = this.$target;
@@ -375,7 +430,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 获取指定索引的起始位置
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取指定索引的起始位置
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected getStartPosition(index:number):number {
             if (!this.$useVirtualLayout) {
@@ -398,7 +464,18 @@ module swan {
 
 
         /**
+         * @language en_US
          * 获取指定索引的元素尺寸
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取指定索引的元素尺寸
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected getElementSize(index:number):number {
 
@@ -412,7 +489,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 获取缓存的子对象尺寸总和
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取缓存的子对象尺寸总和
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected getElementTotalSize():number {
             var typicalWidth = this.$typicalWidth;
@@ -427,6 +515,22 @@ module swan {
             return totalSize;
         }
 
+        /**
+         * @language en_US
+         * 
+         * @param index 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @param index 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         public elementAdded(index:number):void {
             if (!this.useVirtualLayout)
                 return;
@@ -435,7 +539,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 获取视图中第一个和最后一个元素的索引,返回是否发生改变
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取视图中第一个和最后一个元素的索引,返回是否发生改变
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected getIndexInView():boolean {
             var target = this.$target;

@@ -32,60 +32,75 @@ module swan {
 
     /**
      * @language en_US
-     * 带有标题，关闭按钮，可移动区域的面板组件。注意：当第一次通过触摸交互操作移动面板时，面板的 includeInLayout 属性将会自动被设置为false，
-     * 以确保移动不会受到自动布局属性的影响。若之后还需要启用面板在父级容器中的自动布局，需手动设置 includeInLayout 为 true。
-     * @event swan.UIEvent.CLOSING 面板即将关闭事件，在关闭按钮被点击后抛出，监听此事件并调用event.preventDefault()能够阻止面板被关闭。
+     * The Panel class defines a container that includes a title bar,
+     * a closeButton, a moveArea, and a content area for its children.
+     *
+     * @event swan.UIEvent.CLOSING Dispatched when the close button is taped
+     * you can use <code>event.preventDefault()</code> to prevent close.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 带有标题，关闭按钮，可移动区域的面板组件。注意：当第一次通过触摸交互操作移动面板时，面板的 includeInLayout 属性将会自动被设置为false，
-     * 以确保移动不会受到自动布局属性的影响。若之后还需要启用面板在父级容器中的自动布局，需手动设置 includeInLayout 为 true。
-     * @event swan.UIEvent.CLOSING 面板即将关闭事件，在关闭按钮被点击后抛出，监听此事件并调用event.preventDefault()能够阻止面板被关闭。
+     * Panel 类定义一个容器，该容器为其子代提供标题栏、关闭按钮、可移动区域和内容区域。
+     *
+     * @event swan.UIEvent.CLOSING 面板即将关闭事件，在关闭按钮被点击后抛出，
+     * 监听此事件并调用<code>event.preventDefault()</code>能够阻止面板被关闭。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     export class Panel extends Component {
+
         /**
          * @language en_US
-         * 创建一个Panel实例
+         * Constructor.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 创建一个Panel实例
+         * 构造函数。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         public constructor() {
             super();
-            this.on(lark.TouchEvent.TOUCH_BEGIN, this.onWindowMouseDown, this, false, 100);
+            this.on(lark.TouchEvent.TOUCH_BEGIN, this.onWindowTouchBegin, this, false, 100);
         }
 
         /**
          * @private
          * 在窗体上按下时前置窗口
          */
-        private onWindowMouseDown(event:lark.TouchEvent):void {
+        private onWindowTouchBegin(event:lark.TouchEvent):void {
             this.$parent.addChild(this);
         }
 
         /**
          * @language en_US
-         * [SkinPart]关闭按钮
+         * The skin part that defines the appearance of the close button.
+         * When taped, the close button dispatches a <code>closing</code> event.
+         *
+         * @skinPart
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart]关闭按钮
+         * 关闭按钮
+         *
+         * @skinPart
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -94,14 +109,18 @@ module swan {
 
         /**
          * @language en_US
-         * [SkinPart]可移动区域
+         * The area where the user must drag to move the window.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart]可移动区域
+         * 可移动区域
+         *
+         * @skinPart
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -110,14 +129,21 @@ module swan {
 
         /**
          * @language en_US
-         * [SkinPart]标题显示对象
+         * The skin part that defines the appearance of the
+         * title text in the container.
+         *
+         * @skinPart
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart]标题显示对象
+         * 标题显示对象
+         *
+         * @skinPart
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -131,14 +157,20 @@ module swan {
 
         /**
          * @language en_US
-         * 标题文本内容
+         * Title or caption displayed in the title bar.
+         *
+         * @default ""
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 标题文本内容
+         * 标题栏中显示的标题。
+         *
+         * @default ""
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -154,19 +186,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 
-         * @param partName 
-         * @param instance 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param partName 
-         * @param instance 
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -185,19 +206,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 
-         * @param partName 
-         * @param instance 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param partName 
-         * @param instance 
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -214,14 +224,16 @@ module swan {
 
         /**
          * @language en_US
-         * 关闭按钮被点击事件
+         * Emites the "closing" event when the closeButton is clicked.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 关闭按钮被点击事件
+         * 当 closeButton 被点击时派发 “closing” 事件
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -234,7 +246,8 @@ module swan {
 
         /**
          * @language en_US
-         * 关闭面板，从父级容器移除自身。
+         * Close the panel and remove from the parent container.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -242,6 +255,7 @@ module swan {
         /**
          * @language zh_CN
          * 关闭面板，从父级容器移除自身。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -265,7 +279,8 @@ module swan {
 
         /**
          * @language en_US
-         * 在可移动区域按下
+         * Called when the user starts dragging a Panel.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -273,6 +288,7 @@ module swan {
         /**
          * @language zh_CN
          * 在可移动区域按下
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -287,7 +303,8 @@ module swan {
 
         /**
          * @language en_US
-         * 触摸拖拽时的移动事件
+         * Called when the user drags a Panel.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -295,30 +312,33 @@ module swan {
         /**
          * @language zh_CN
          * 触摸拖拽时的移动事件
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        public onTouchMove(event:lark.TouchEvent):void {
+        protected onTouchMove(event:lark.TouchEvent):void {
             this.x = event.$stageX + this.offsetPointX;
             this.y = event.$stageY + this.offsetPointY;
         }
 
         /**
          * @language en_US
-         * 鼠标在舞台上弹起事件
+         * Called when the user releases the Panel.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 鼠标在舞台上弹起事件
+         * 在舞台上弹起事件
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        public onTouchEnd(event:lark.TouchEvent):void {
+        protected onTouchEnd(event:lark.TouchEvent):void {
             this.$stage.removeListener(lark.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
             this.$stage.removeListener(lark.TouchEvent.TOUCH_END, this.onTouchEnd, this);
         }

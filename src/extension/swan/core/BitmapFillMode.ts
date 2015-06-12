@@ -30,21 +30,72 @@
 
 module swan {
     /**
+     * @language en_US
+     * The BitmapFillMode class defines an enumeration of the resize modes that
+     * determine how a Bitmap fills in the dimensions specified by the layout system.
+     *
+     * @see swan.Image#fillMode
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * BitmapFillMode 类定义 Image 控件的图像填充方式。
      * BitmapFillMode 类定义了调整大小模式的一个枚举，这些模式确定 Bitmap 如何填充由布局系统指定的尺寸。
+     *
+     * @see swan.Image#fillMode
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class BitmapFillMode{
 
         /**
+         * @language en_US
+         * The bitmap ends at the edge of the region.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 在区域的边缘处截断不显示位图。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static CLIP:string = "clip";
         /**
+         * @language en_US
+         * The bitmap is repeated to fill the region.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 重复位图以填充区域。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static REPEAT:string = "repeat";
         /**
+         * @language en_US
+         * The bitmap fill stretches to fill the region.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 拉伸位图以填充区域。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static SCALE: string = "scale";
 

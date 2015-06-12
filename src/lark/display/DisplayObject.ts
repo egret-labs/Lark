@@ -1090,7 +1090,7 @@ module lark {
         /**
          * @language en_US
          * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
-         * is set to true,the transparent area of the display object will be touch through.
+         * is set to true,the transparent area of the display object will be touched through.
          * Enabling this property will cause certain mount of performance loss. This property is set to true in the Shape class,
          * while the other is set to false by default.
          * @version Lark 1.0
@@ -1181,7 +1181,7 @@ module lark {
          * @language en_US
          * A value from the BlendMode class that specifies which blend mode to use. Determine how a source image (new one)
          * is drawn on the target image (old one).
-         * If you attempt to set this property to an invalid value, Flash runtimes set the value to BlendMode.NORMAL.
+         * If you attempt to set this property to an invalid value, Lark runtime set the value to BlendMode.NORMAL.
          * @default lark.BlendMode.NORMAL
          * @see lark.BlendMode
          * @version Lark 1.0
@@ -1264,7 +1264,7 @@ module lark {
          * Returns a rectangle that defines the area of the display object relative to the coordinate system of the targetCoordinateSpace object.
          * @param targetCoordinateSpace The display object that defines the coordinate system to use.
          * @param resultRect A reusable instance of Rectangle for saving the results. Passing this parameter can reduce the number of reallocate objects
-         * for better performance.
+         *, which allows you to get better code execution performance..
          * @returns The rectangle that defines the area of the display object relative to the targetCoordinateSpace object's coordinate system.
          * @version Lark 1.0
          * @platform Web,Native
@@ -1313,7 +1313,7 @@ module lark {
          * @param stageX the x value in the global coordinates
          * @param stageY the y value in the global coordinates
          * @param resultPoint A reusable instance of Point for saving the results. Passing this parameter can reduce the
-         * number of reallocate objects for better performance.
+         * number of reallocate objects, which allows you to get better code execution performance.
          * @returns A Point object with coordinates relative to the display object.
          * @version Lark 1.0
          * @platform Web,Native
@@ -1339,7 +1339,7 @@ module lark {
          * @param localX the x value in the local coordinates
          * @param localY the x value in the local coordinates
          * @param resultPoint A reusable instance of Point for saving the results. Passing this parameter can reduce the
-         * number of reallocate objects for better performance.
+         * number of reallocate objects, which allows you to get better code execution performance.
          * @returns  A Point object with coordinates relative to the Stage.
          * @version Lark 1.0
          * @platform Web,Native
@@ -1624,17 +1624,15 @@ module lark {
          * @private
          * 获取事件流列表。注意：Lark框架的事件流与Flash实现并不一致。
          *
-         * Flash的事件流有三个阶段：捕获，目标，冒泡。
-         * 默认的的事件监听若不开始useCapture将监听目标和冒泡阶段。若开始capture将只能监听捕获当不包括目标的事件。
+         * 事件流有三个阶段：捕获，目标，冒泡。
+         * Flash里默认的的事件监听若不开启useCapture将监听目标和冒泡阶段。若开始capture将只能监听捕获当不包括目标的事件。
          * 可以在Flash中写一个简单的测试：实例化一个非容器显示对象，例如TextField。分别监听useCapture为true和false时的鼠标事件。
          * 点击后将只有useCapture为false的回调函数输出信息。也就带来一个问题「Flash的捕获阶段不能监听到最内层对象本身，只在父级列表有效」。
          *
-         * 而HTML里的事件流只有两个阶段：捕获，冒泡。
-         * 最初是由于各个浏览器都只有一个方向的事件流，并且存在捕获和冒泡两种相反的顺序。w3c最终决定同时实现两种事件流，监听时用useCapture来区分监。
-         * HTML里与Flash里事件流最根本的区别：没有目标阶段，最内层的点击对象会触发两次事件，一次捕获一次冒泡。而Flash只触发一次，
-         * 是与「捕获」和「冒泡」独立的「目标」阶段。出于拥抱web标准的考虑，加上大部分Flash开发者其实也并不知道有「目标」阶段的存在。
+         * 而HTML里的事件流设置useCapture为true时是能监听到目标阶段的，也就是目标阶段会被触发两次，在捕获和冒泡过程各触发一次。这样可以避免
+         * 前面提到的监听捕获无法监听目标本身的问题。
          *
-         * Lark最终采用了HTML里只有两个阶段的事件流机制。
+         * Lark最终采用了HTML里目标节点触发两次的事件流方式。
          */
         $getPropagationList(target:DisplayObject):DisplayObject[] {
             var list:DisplayObject[] = [];
@@ -1653,11 +1651,14 @@ module lark {
          */
         $emitPropagationEvent(event:Event, list:DisplayObject[], targetIndex:number):void {
             var length = list.length;
+            var captureIndex = targetIndex-1;
             for (var i = 0; i < length; i++) {
                 var currentTarget = list[i];
                 event.$currentTarget = currentTarget;
-                if (i < targetIndex)
+                if (i < captureIndex)
                     event.$eventPhase = EventPhase.CAPTURING_PHASE;
+                else if (i == targetIndex||i==captureIndex)
+                    event.$eventPhase = EventPhase.AT_TARGET;
                 else
                     event.$eventPhase = EventPhase.BUBBLING_PHASE;
                 currentTarget.$notifyListener(event);

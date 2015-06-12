@@ -47,14 +47,9 @@ module swan {
 
     /**
      * @language en_US
-     * The Component class defines the base class for skinnable components.
-     * The skins used by a Component class are typically child classes of
-     * the Skin class.<p/>
      *
-     * Associate a skin class with a component class by setting the <code>skinClass</code> style property of the
-     * component class.
-     *
-     * @event lark.Event.COMPLETE 当设置skinName为外部exml文件路径时，加载并完成EXML解析后调度。
+     * @copy swan.UIComponents
+     * @event lark.Event.COMPLETE Emit when <code>skinName</code> property is set the path of external EXML file and the EXML file is resolved.
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -62,10 +57,8 @@ module swan {
      */
     /**
      * @language zh_CN
-     * Component 类定义可设置外观的组件的基类。Component 类所使用的外观通常是 Skin 类的子类。<p/>
      *
-     * 通过设置 component 类的 skinClass 样式属性，将 skin 类与 component 类相关联。
-     *
+     * @copy swan.UIComponents
      * @event lark.Event.COMPLETE 当设置skinName为外部exml文件路径时，加载并完成EXML解析后调度。
      *
      * @version Lark 1.0
@@ -105,9 +98,6 @@ module swan {
             };
         }
 
-        /**
-         * @private
-         */
         $Component:Object;
 
         /**
@@ -749,25 +739,7 @@ module swan {
         $includeInLayout:boolean;
 
         /**
-         * @language en_US
-         * Specifies whether this component is included in the layout of the
-         * parent container.
-         * If <code>false</code>, the object size and position are not affected by its parent container's
-         * layout.
-         * This value is different with <code>visible</code>. the object size and position is still affected by its parent
-         * container's layout when the <code>visible</code> is false.
-         * @default true
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 指定此组件是否包含在父容器的布局中。若为false，则父级容器在测量和布局阶段都忽略此组件。
-         * 注意，visible属性与此属性不同，设置visible为false，父级容器仍会对其布局。
-         *
-         * @default true
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -775,21 +747,7 @@ module swan {
          */
         public includeInLayout:boolean;
         /**
-         * @language en_US
-         * The horizontal distance in pixels from the left edge of the component to the
-         * anchor target's left edge.
-         *
-         * @default lark.NONE
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 距父级容器离左边距离。
-         *
-         * @default lark.NONE
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -798,21 +756,7 @@ module swan {
         public left:number;
 
         /**
-         * @language en_US
-         * The horizontal distance in pixels from the right edge of the component to the
-         * anchor target's right edge.
-         *
-         * @default lark.NONE
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 距父级容器右边距离。
-         *
-         * @default lark.NONE
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -821,21 +765,7 @@ module swan {
         public right:number;
 
         /**
-         * @language en_US
-         * The vertical distance in pixels from the top edge of the component to the
-         * anchor target's top edge.
-         *
-         * @default lark.NONE
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 距父级容器顶部距离。
-         *
-         * @default lark.NONE
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -844,21 +774,7 @@ module swan {
         public top:number;
 
         /**
-         * @language en_US
-         * The vertical distance in pixels from the bottom edge of the component to the
-         * anchor target's bottom edge.
-         *
-         * @default lark.NONE
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 距父级容器底部距离。
-         *
-         * @default lark.NONE
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -867,21 +783,7 @@ module swan {
         public bottom:number;
 
         /**
-         * @language en_US
-         * The horizontal distance in pixels from the center of the component to the
-         * center of the anchor target's content area.
-         *
-         * @default lark.NONE
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在父级容器中距水平中心位置的距离。
-         *
-         * @default lark.NONE
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -890,21 +792,7 @@ module swan {
         public horizontalCenter:number;
 
         /**
-         * @language en_US
-         * The vertical distance in pixels from the center of the component to the
-         *  center of the anchor target's content area.
-         *
-         * @default lark.NONE
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在父级容器中距竖直中心位置的距离。
-         *
-         * @default lark.NONE
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -913,23 +801,7 @@ module swan {
         public verticalCenter:number;
 
         /**
-         * @language en_US
-         * Specifies the width of a component as a percentage
-         * of its parent's size. Allowed values are 0-100.
-         * Setting the <code>width</code> or <code>explicitWidth</code> properties
-         * resets this property to lark.NONE.
-         *
-         * @default lark.NONE
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 相对父级容器宽度的百分比。
-         *
-         * @default lark.NONE
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -938,23 +810,7 @@ module swan {
         public percentWidth:number;
 
         /**
-         * @language en_US
-         * Specifies the height of a component as a percentage
-         * of its parent's size. Allowed values are 0-100.
-         * Setting the <code>height</code> or <code>explicitHeight</code> properties
-         * resets this property to lark.NONE.
-         *
-         * @default lark.NONE
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 相对父级容器高度的百分比。
-         *
-         * @default lark.NONE
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -963,16 +819,8 @@ module swan {
         public percentHeight:number;
 
         /**
-         * @language en_US
-         * Number that specifies the explicit width of the component,
-         * in pixels, in the component's coordinates.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 外部显式指定的宽度。
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -980,54 +828,26 @@ module swan {
         public explicitWidth:number;
 
         /**
-         * @language en_US
-         * Number that specifies the explicit height of the component,
-         * in pixels, in the component's coordinates.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 外部显式指定的高度。
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         public explicitHeight:number;
 
-
         /**
-         * @language en_US
-         * The minimum recommended width of the component to be considered
-         * by the parent during layout. This value is in the
-         * component's coordinates, in pixels. The default value depends on
-         * the component's implementation.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         public minWidth:number;
+
         /**
-         * @language en_US
-         * The maximum recommended width of the component to be considered
-         * by the parent during layout. This value is in the
-         * component's coordinates, in pixels. The default value of this property is
-         * set by the component developer.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 组件的最大高度。同时影响测量和自动布局的尺寸。
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1035,57 +855,26 @@ module swan {
         public maxWidth:number;
 
         /**
-         * @language en_US
-         * The minimum recommended height of the component to be considered
-         * by the parent during layout. This value is in the
-         * component's coordinates, in pixels. The default value depends on
-         * the component's implementation.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 组件的最小高度,此属性设置为大于maxHeight的值时无效。同时影响测量和自动布局的尺寸。
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         public minHeight:number;
+
         /**
-         * @language en_US
-         * The maximum recommended height of the component to be considered
-         * by the parent during layout. This value is in the
-         * component's coordinates, in pixels. The default value of this property is
-         * set by the component developer.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 组件的最大高度,同时影响测量和自动布局的尺寸。
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         public maxHeight:number;
 
-
         /**
-         * @language en_US
-         * Set the result of measuring.
-         * @param width measured width
-         * @param height measured height
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 设置测量结果。
-         * @param width 测量宽度
-         * @param height 测量高度
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1094,38 +883,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * Marks a component so that its <code>commitProperties()</code>
-         * method gets called during a later screen update.<p/>
+         * @inheritDoc
          *
-         * Invalidation is a useful mechanism for eliminating duplicate
-         * work by delaying processing of changes to a component until a
-         * later screen update.<p/>
-         *
-         * For example, if you want to change the text color and size,
-         * it would be wasteful to update the color immediately after you
-         * change it and then update the size when it gets set.
-         * It is more efficient to change both properties and then render
-         * the text with its new size and color once.<p/>
-         *
-         * Invalidation methods rarely get called.
-         * In general, setting a property on a component automatically
-         * calls the appropriate invalidation method.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 标记提交过需要延迟应用的属性，以便在稍后屏幕更新期间调用该组件的 commitProperties() 方法。<p/>
-         *
-         * 这是一个很有用的机制，可将组件更改延迟到稍后屏幕更新时进行处理，从而消除了重复的工作。<p/>
-         *
-         * 例如，要更改文本颜色和大小，如果在更改颜色后立即进行更新，然后在设置大小后再更新大小，就有些浪费。
-         * 同时更改两个属性后再使用新的大小和颜色一次性呈示文本，效率会更高。<p/>
-         *
-         * 很少调用 Invalidation 方法。通常，在组件上设置属性会自动调用合适的 invalidation 方法。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1134,19 +893,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * Used by layout logic to validate the properties of a component
-         * by calling the <code>commitProperties()</code> method.
-         * In general, subclassers should
-         * override the <code>commitProperties()</code> method and not this method.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 由布局逻辑用于通过调用 commitProperties() 方法来验证组件的属性。
-         * 通常，子类应覆盖 commitProperties() 方法，而不是覆盖此方法。
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1155,38 +903,7 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * Marks a component so that its <code>measure()</code>
-         * method gets called during a later screen update.<p/>
-         *
-         * Invalidation is a useful mechanism for eliminating duplicate
-         * work by delaying processing of changes to a component until a
-         * later screen update.<p/>
-         *
-         * For example, if you want to change the text and font size,
-         * it would be wasteful to update the text immediately after you
-         * change it and then update the size when it gets set.
-         * It is more efficient to change both properties and then render
-         * the text with its new size once.<p/>
-         *
-         * Invalidation methods rarely get called.
-         * In general, setting a property on a component automatically
-         * calls the appropriate invalidation method.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 标记提交过需要验证组件尺寸，以便在稍后屏幕更新期间调用该组件的 measure() 方法。<p/>
-         *
-         * Invalidation 是一个很有用的机制，可将组件更改延迟到稍后屏幕更新时进行处理，从而消除了重复的工作。<p/>
-         *
-         * 例如，要更改文本和字体大小，如果在更改文本后立即进行更新，然后在设置大小后再更新大小，就有些浪费。
-         * 更改两个属性后再使用新的大小一次性呈示文本，效率会更高。<p/>
-         *
-         * 很少调用 Invalidation 方法。通常，在组件上设置属性会自动调用合适的 invalidation 方法。
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -1196,18 +913,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * Validates the measured size of the component.
-         * @param recursive If <code>true</code>, call this method
-         *  on the objects children.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 验证组件的尺寸。
-         * @param recursive 如果为 true，则调用对象子项的此方法。
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1216,38 +923,7 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * Marks a component so that its <code>updateDisplayList()</code>
-         * method gets called during a later screen update.<p/>
-         *
-         * Invalidation is a useful mechanism for eliminating duplicate
-         * work by delaying processing of changes to a component until a
-         * later screen update.<p/>
-         *
-         * For example, if you want to change the width and height,
-         * it would be wasteful to update the component immediately after you
-         * change the width and then update again with the new height.
-         * It is more efficient to change both properties and then render
-         * the component with its new size once.<p/>
-         *
-         * Invalidation methods rarely get called.
-         * In general, setting a property on a component automatically
-         * calls the appropriate invalidation method.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 标记需要验证显示列表，以便在稍后屏幕更新期间调用该组件的 updateDisplayList() 方法。<p/>
-         *
-         * Invalidation 是一个很有用的机制，可将组件更改延迟到稍后屏幕更新时进行处理，从而消除了重复的工作。<p/>
-         *
-         * 例如，要更改宽度和高度，如果在更改宽度后立即更新组件，然后在设置新高度后再次更新组件，就有些浪费。
-         * 更改两个属性后再使用新的大小一次性呈示组件，效率会更高。<p/>
-         *
-         * 很少调用 Invalidation 方法。通常，在组件上设置属性会自动调用合适的 invalidation 方法。
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -1257,16 +933,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * Validates the position and size of children and draws other
-         * visuals.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 验证子项的位置和大小，并绘制其他可视内容。
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1275,30 +943,7 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * Validate and update the properties and layout of this object
-         * and redraw it, if necessary.<p/>
-         *
-         * Processing properties that require substantial computation are normally
-         * not processed until the script finishes executing.<p/>
-         *
-         * For example setting the <code>width</code> property is delayed, because it can
-         * require recalculating the widths of the objects children or its parent.
-         * Delaying the processing prevents it from being repeated
-         * multiple times if the script sets the <code>width</code> property more than once.
-         * This method lets you manually override this behavior.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 验证并更新此对象的属性和布局，如果需要的话重绘对象。<p/>
-         *
-         * 通常只有当脚本执行完毕后，才会处理要求进行大量计算的处理属性。<p/>
-         *
-         * 例如，对 width 属性的设置可能会延迟，因为此设置需要重新计算这些对象的子项或父项的宽度。
-         * 如果脚本多次设置了 width 属性，则延迟处理可防止进行多次处理。此方法允许您手动覆盖此行为。
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -1308,34 +953,7 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * Sets the layout size of the element.
-         * This is the size that the element uses to draw on screen.<p/>
-         *
-         * If the <code>width</code> and/or <code>height</code> parameters are left unspecified (lark.NONE),
-         * Swan sets the element's layout size to its preferred width and/or preferred height.<p/>
-         *
-         * Note that calls to the <code>setLayoutBoundSize()</code> method can affect the layout position, so
-         * call <code>setLayoutBoundPosition()</code> after calling <code>setLayoutBoundSize()</code>.<p/>
-         *
-         * @param layoutWidth The element's layout width.
-         * @param layoutHeight The element's layout height.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 设置元素的布局大小。这是元素在屏幕上进行绘制时所用的大小。<p/>
-         *
-         * 如果 width 和/或 height 参数尚未指定 (lark.NONE))，则 Swan 会将该元素的布局大小设置为首选宽度和/或首选高度。<p/>
-         *
-         * 请注意，调用 setLayoutBoundSize() 方法会影响布局位置，因此请在调用 setLayoutBoundSize()
-         * 之后再调用 setLayoutBoundPosition()。
-         *
-         * @param layoutWidth 元素的布局宽度。
-         * @param layoutHeight 元素的布局高度。
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -1345,28 +963,7 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * Sets the coordinates that the element uses to draw on screen.<p/>
-         *
-         * Note that calls to the <code>setLayoutBoundSize()</code> method can affect the layout position, so
-         * call <code>setLayoutBoundPosition()</code> after calling <code>setLayoutBoundSize()</code>.<p/>
-         *
-         * @param x The x-coordinate of the top-left corner of the bounding box.
-         * @param y The y-coordinate of the top-left corner of the bounding box.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 设置元素在屏幕上进行绘制时所用的布局坐标。<p/>
-         *
-         * 请注意，调用 setLayoutBoundSize() 方法会影响布局位置，因此请在调用 setLayoutBoundSize()
-         * 之后再调用 setLayoutBoundPosition()。
-         *
-         * @param x 边框左上角的 X 坐标。
-         * @param y 边框左上角的 Y 坐标。
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -1376,25 +973,7 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * Get the layout bounds that the element uses to draw on screen.
-         * Commonly used in the <code>updateDisplayList()</code> method in parent container.<p/>
-         * Priority: layout > explicit > measure.<p/>
-         * The result of this method is contains <code>scale</code> and <code>rotation</code>.
-         *
-         * @param bounds the instance of <code>lark.Rectangle</code> can set result.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 组件的布局尺寸,常用于父级的<code>updateDisplayList()</code>方法中。<p/>
-         * 按照：布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸。<p/>
-         * 注意此方法返回值已经包含scale和rotation。
-         *
-         * @param bounds 可以放置结果的<code>lark.Rectangle</code>实例。
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -1404,25 +983,7 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * Get the element's preferred bounds。
-         * Commonly used in the <code>measure()</code> method in parent container.<p/>
-         * Priority: explicit > measure.<p/>
-         * The result of this method is contains <code>scale</code> and <code>rotation</code>.
-         *
-         * @param bounds the instance of <code>lark.Rectangle</code> can set result.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取组件的首选尺寸,常用于父级的<code>measure()</code>方法中。<p/>
-         * 按照：外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸。<p/>
-         * 注意此方法返回值已经包含scale和rotation。
-         *
-         * @param bounds 可以放置结果的<code>lark.Rectangle</code>实例。
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0

@@ -22,11 +22,14 @@ class AutoCompileCommand implements lark.Command {
         this._request.once('end', () => process.exit());
         this._request.once('close', () => process.exit());
 
-        setInterval(() => this.sendCommand({
-            command: "status",
-            status: process.memoryUsage(),
-            path: lark.options.projectDir
-        }), 60000);
+        setInterval(() => {
+            this.sendCommand({
+                command: "status",
+                status: process.memoryUsage(),
+                path: lark.options.projectDir
+            });
+            this.exitAfter5Minutes();
+        }, 60000);
 
         setTimeout(() => this.buildProject(), 20);
 
@@ -37,7 +40,8 @@ class AutoCompileCommand implements lark.Command {
     private _lastExitCode = 0;
     private _lastMessages: string[] = [];
     private _request: ServiceSocket = null;
-    private _scripts:string[];
+    private _scripts: string[];
+    private _lastBuildTime = Date.now();
 
     buildProject() {
         var exitCode = 0;
@@ -47,16 +51,17 @@ class AutoCompileCommand implements lark.Command {
         var result = compileProject.compileProject(options);
         this.compileProject = compileProject;
         CopyFiles.copyProjectFiles();
-        CompileTemplate.compileTemplates(options,result.files);
+        CompileTemplate.compileTemplates(options, result.files);
         this._scripts = result.files;
-        this._lastExitCode = exitCode;
+        this._lastExitCode = result.exitStatus;
         this._lastMessages = result.messages;
         this.sendCommand();
         global.gc && global.gc();
         return exitCode;
     }
 
-    buildChanges(filesChanged:string[]) {
+    buildChanges(filesChanged: string[]) {
+        this._lastBuildTime = Date.now();
         if (!this.compileProject)
             return this.buildProject();
         var codes: string[] = [];
@@ -146,6 +151,13 @@ class AutoCompileCommand implements lark.Command {
             }
         }
         this._request.send(cmd);
+    }
+
+    private exitAfter5Minutes() {
+        var now = Date.now();
+        var timespan = (now - this._lastBuildTime) / 1000 / 60;
+        if (timespan > 5)
+            process.exit(0);
     }
     
 }

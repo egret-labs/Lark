@@ -32,9 +32,27 @@ module swan {
     var key = "__bindables__";
 
     /**
+     * @language en_US
+     * Register a property of an instance is can be bound.
+     * This method is ususally invoked by Watcher class.
+     *
+     * @param instance the instance to be registered.
+     * @param property the property of specified instance to be registered.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 标记实例的一个属性是可绑定的,此方法通常由 Watcher 类调用。
+     *
      * @param instance 要标记的实例
      * @param property 可绑定的属性。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export function registerBindable(instance:any,property:string):void{
         if (DEBUG) {

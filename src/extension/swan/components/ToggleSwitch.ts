@@ -32,14 +32,16 @@ module swan {
 
     /**
      * @language en_US
-     * 开关按钮
+     * The ToggleSwitch control defines an on-off control.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 开关按钮
+     * ToggleSwitch 表示一个开关组件。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -47,14 +49,16 @@ module swan {
     export class ToggleSwitch extends ToggleButton {
         /**
          * @language en_US
-         * 创建一个ToggleSwitch
+         * Constructor.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 创建一个ToggleSwitch
+         * 构造函数。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native

@@ -30,6 +30,7 @@
 module swan.sys {
 
     /**
+     * @private
      * EXML配置管理器实例
      */
     export var exmlConfig:EXMLConfig;
@@ -49,8 +50,14 @@ module swan.sys {
     var wingKeys:string[] = ["id", "locked", "includeIn", "excludeFrom"];
     var htmlEntities:string[][] = [["<", "&lt;"], [">", "&gt;"], ["&", "&amp;"], ["\"", "&quot;"], ["'", "&apos;"]];
 
+    /**
+     * @private
+     */
     export class EXMLParser {
 
+        /**
+         * @private
+         */
         public constructor() {
 
             if (DEBUG) {
@@ -62,53 +69,86 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 获取重复的ID名
          */
         public getRepeatedIds:(xml:lark.XML)=>string[];
+        /**
+         * @private
+         */
         private getIds:(xml:any, result:string[])=>void;
+        /**
+         * @private
+         */
         private repeatedIdMap:any;
+        /**
+         * @private
+         */
         private checkDeclarations:(declarations:lark.XML, list:string[])=>void;
 
         /**
+         * @private
          * 当前类
          */
         private currentClass:EXClass;
         /**
+         * @private
          * 当前编译的类名
          */
         private currentClassName:string;
         /**
+         * @private
          * 当前要编译的EXML文件
          */
         private currentXML:lark.XML;
         /**
+         * @private
          * id缓存字典
          */
         private idDic:any;
         /**
+         * @private
          * 状态代码列表
          */
         private stateCode:EXState[];
 
+        /**
+         * @private
+         */
         private stateNames:string[];
         /**
+         * @private
          * 需要单独创建的实例id列表
          */
         private stateIds:string[];
 
+        /**
+         * @private
+         */
         private idToNode:any;
 
+        /**
+         * @private
+         */
         private skinParts:string[];
 
+        /**
+         * @private
+         */
         private bindings:EXBinding[];
 
+        /**
+         * @private
+         */
         private declarations:any;
         /**
+         * @private
          * 延迟赋值字典
          */
         private delayAssignmentDic:any = {};
 
         /**
+         * @private
          * 编译指定的XML对象为JavaScript代码。
          * @param xmlData 要编译的EXML文件内容
          * @param className 要编译成的完整类名，包括模块名。
@@ -172,6 +212,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 编译指定的XML对象为CpClass对象。
          */
         private parseClass(xmlData:lark.XML, className:string):EXClass {
@@ -205,6 +246,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 开始编译
          */
         private startCompile():void {
@@ -252,6 +294,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 添加必须的id
          */
         private addIds(items:any):void {
@@ -308,6 +351,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 是否为内部类。
          */
         private isInnerClass(node:lark.XML):boolean {
@@ -343,6 +387,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 检测指定节点的属性是否含有视图状态
          */
         private containsState(node:lark.XML):boolean {
@@ -362,6 +407,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 为指定节点创建id属性
          */
         private createIdForNode(node:lark.XML):void {
@@ -375,6 +421,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 获取节点ID
          */
         private getNodeId(node:lark.XML):string {
@@ -384,6 +431,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 为指定节点创建变量
          */
         private createVarForNode(node:lark.XML):void {
@@ -395,6 +443,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 为指定节点创建初始化函数,返回函数名引用
          */
         private createFuncForNode(node:lark.XML):string {
@@ -439,6 +488,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 检查目标类名是否是基本数据类型
          */
         private isBasicTypeData(className:string):boolean {
@@ -446,6 +496,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 为指定基本数据类型节点实例化,返回实例化后的值。
          */
         private createBasicTypeForNode(node:lark.XML):string {
@@ -492,6 +543,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 将节点属性赋值语句添加到代码块
          */
         private addAttributesToCodeBlock(cb:EXCodeBlock, varName:string, node:lark.XML):void {
@@ -542,6 +594,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 初始化子项
          */
         private initlizeChildNode(node:lark.XML, cb:EXCodeBlock, varName:string):void {
@@ -616,6 +669,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 解析内部类节点，并返回类名。
          */
         private parseInnerClass(node:lark.XML):string {
@@ -631,6 +685,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 添加多个子节点到指定的属性
          */
         private addChildrenToProp(children:Array<any>, type:string, prop:string,
@@ -724,6 +779,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 指定节点是否是属性节点
          */
         private isProperty(node:lark.XML):boolean {
@@ -750,6 +806,7 @@ module swan.sys {
 
 
         /**
+         * @private
          * 是否是普通赋值的key
          */
         private isNormalKey(key:string):boolean {
@@ -759,6 +816,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 格式化key
          */
         private formatKey(key:string, value:string):string {
@@ -772,6 +830,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 格式化值
          */
         private formatValue(key:string, value:string, node:lark.XML):string {
@@ -835,6 +894,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 格式化字符串
          */
         private formatString(value:string):string {
@@ -847,6 +907,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          /**
          * 转换HTML实体字符为普通字符
          */
@@ -864,6 +925,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 创建构造函数
          */
         private createConstructFunc():void {
@@ -991,6 +1053,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 是否含有includeIn和excludeFrom属性
          */
         private isStateNode(node:lark.XML):boolean {
@@ -999,6 +1062,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 获取视图状态名称列表
          */
         private getStateNames():void {
@@ -1088,6 +1152,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 解析视图状态代码
          */
         private createStates(parentNode:lark.XML):void {
@@ -1235,6 +1300,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 检查指定的ID是否创建了类成员变量，若没创建则为其创建。
          */
         private checkIdForState(node:lark.XML):void {
@@ -1257,6 +1323,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 通过视图状态名称获取对应的视图状态
          */
         private getStateByName(name:string, node:lark.XML):EXState[] {
@@ -1292,6 +1359,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 寻找节点的临近节点ID和位置
          */
         private findNearNodeId(node:lark.XML):any {
@@ -1342,6 +1410,7 @@ module swan.sys {
 
 
         /**
+         * @private
          * 获取节点的完整类名，包括模块名
          */
         private getClassNameOfNode(node:lark.XML):string {

@@ -30,20 +30,73 @@
 module swan {
 
 	/**
-	 * RowAlign 类为 TileLayout 类的 rowAlign 属性定义可能的值。
+	 * @language en_US
+	 * The RowAlign class defines the possible values for the
+	 * <code>rowAlign</code> property of the TileLayout class.
+	 *
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
+	 */
+	/**
+	 * @language zh_CN
+	 * RowAlign 类为 TileLayout 类的 <code>rowAlign</code> 属性定义可能的值。
+	 *
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
 	 */
 	export class RowAlign{
 		/**
+		 * @language en_US
+		 * Do not justify the rows.
+		 *
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
 		 * 不进行两端对齐。
+		 *
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public static TOP:string = "top";
 		/**
-		 * 通过增大垂直间隙将行两端对齐。 
+		 * @language en_US
+		 * Justify the rows by increasing the vertical gap.
+		 *
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
+		 * 通过增大垂直间隙将行两端对齐。
+		 *
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public static JUSTIFY_USING_GAP:string = "justifyUsingGap";
 		
 		/**
+		 * @language en_US
+		 * Justify the rows by increasing the row height.
+		 *
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
 		 * 通过增大行高度将行两端对齐。
+		 *
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public static JUSTIFY_USING_HEIGHT:string = "justifyUsingHeight";
 	}

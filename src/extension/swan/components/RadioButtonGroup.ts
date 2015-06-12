@@ -33,6 +33,7 @@ module swan {
     var groupCount:number = 0;
 
     /**
+     * @private
      * 显示列表深度排序
      */
     function breadthOrderCompare(a:lark.DisplayObject, b:lark.DisplayObject):number {
@@ -65,7 +66,13 @@ module swan {
 
     /**
      * @language en_US
-     * RadioButtonGroup 组件定义一组 RadioButton 组件，这些组件相互排斥；因此，用户每次只能选择一个 RadioButton 组件
+     * The RadioButtonGroup component defines a group of RadioButton components
+     * that act as a single mutually exclusive component; therefore,
+     * a user can select only one RadioButton component at a time.
+     *
+     * @event lark.Event.CHANGE Emitted when the value of the selected RadioButton component in
+     * this group changes.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -73,21 +80,27 @@ module swan {
     /**
      * @language zh_CN
      * RadioButtonGroup 组件定义一组 RadioButton 组件，这些组件相互排斥；因此，用户每次只能选择一个 RadioButton 组件
+     *
+     * @event lark.Event.CHANGE 此组中所选 RadioButton 组件的值更改时分派。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     export class RadioButtonGroup extends lark.EventEmitter {
+
         /**
          * @language en_US
-         * 创建一个RadioButtonGroup实例
+         * Constructor.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 创建一个RadioButtonGroup实例
+         * 构造函数。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -110,16 +123,32 @@ module swan {
 
         /**
          * @language en_US
-         * 获取指定索引的单选按钮
-         * @param index 单选按钮的索引
+         * Returns the RadioButton component at the specified index.
+         *
+         * @param index The 0-based index of the RadioButton in the
+         * RadioButtonGroup.
+         *
+         * @return The specified RadioButton component if index is between
+         * 0 and <code>numRadioButtons</code> - 1.  Returns
+         * <code>null</code> if the index is invalid.
+         *
+         * @see swan.RadioButtonGroup#numRadioButtons
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 获取指定索引的单选按钮
-         * @param index 单选按钮的索引
+         * 返回指定索引处的 RadioButton 组件。
+         *
+         * @param index RadioButtonGroup 中的 RadioButton 的从零开始的索引。
+         *
+         * @return 当索引位于 0 和 <code>numRadioButtons</code> 之间时，指定的 RadioButton 组件为 1。
+         * 如果索引无效，则返回 <code>null</code>。
+         *
+         * @see swan.RadioButtonGroup#numRadioButtons
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -135,14 +164,24 @@ module swan {
 
         /**
          * @language en_US
-         * 组件是否可以接受用户交互。默认值为true。设置此属性将影响组内所有单选按钮。
+         * Determines whether selection is allowed.  Note that the value returned
+         * only reflects the value that was explicitly set on the
+         * <code>RadioButtonGroup</code> and does not reflect any values explicitly
+         * set on the individual RadioButtons.
+         *
+         * @default true
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 组件是否可以接受用户交互。默认值为true。设置此属性将影响组内所有单选按钮。
+         * 确定是否允许选择。请注意，返回的值仅反映对 <code>RadioButtonGroup</code> 显式设置的值，
+         * 而不反映对各个 RadioButton 显式设置的任何值。
+         *
+         * @default true
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -164,14 +203,20 @@ module swan {
 
         /**
          * @language en_US
-         * 组内单选按钮数量
+         * The number of RadioButtons that belong to this RadioButtonGroup.
+         *
+         * @default 0
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 组内单选按钮数量
+         * [只读] 属于此 RadioButtonGroup 的 RadioButton 数。
+         *
+         * @default 0
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -186,14 +231,32 @@ module swan {
         private _selectedValue:any = null;
         /**
          * @language en_US
-         * 当前被选中的单选按钮的value属性值。注意，此属性仅当目标RadioButton在显示列表时有效。
+         * The <code>value</code> property of the selected
+         * RadioButton component in the group, if it has been set,
+         * otherwise, the <code>label</code> property of the selected RadioButton.
+         * If no RadioButton is selected, this property is <code>null</code>.
+         *
+         * <p>If you set <code>selectedValue</code>, selects the
+         * first RadioButton component whose <code>value</code> or
+         * <code>label</code> property matches this value.</p>
+         *
+         * @default null
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 当前被选中的单选按钮的value属性值。注意，此属性仅当目标RadioButton在显示列表时有效。
+         * 组中所选 RadioButton 组件的 <code>value</code> 属性（如果未设置），
+         * 否则为所选 RadioButton 组件的 <code>label</code> 属性。
+         * 如果未选择任何 RadioButton，则此属性为 <code>null</code>。
+         *
+         * <p>如果设置了 <code>selectedValue</code>，则会选择 <code>value</code> 或 <code>label</code> 属性
+         * 与此值匹配的第一个 RadioButton 组件。</p>
+         *
+         * @default null
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -232,14 +295,22 @@ module swan {
         private _selection:RadioButton = null;
         /**
          * @language en_US
-         * 当前被选中的单选按钮引用,注意，此属性仅当目标RadioButton在显示列表时有效。
+         * Contains a reference to the currently selected
+         * RadioButton component in the group.This property is valid only
+         * when the target RadioButton is displayed on the display list
+         *
+         * @default null
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 当前被选中的单选按钮引用,注意，此属性仅当目标RadioButton在显示列表时有效。
+         * 当前被选中的单选按钮引用。此属性仅当目标RadioButton在显示列表时有效。
+         *
+         * @default null
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native

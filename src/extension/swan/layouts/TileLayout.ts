@@ -31,24 +31,61 @@
 module swan {
 
     /**
+     * @language en_US
      * 网格布局
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 网格布局
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class TileLayout extends LayoutBase {
         /**
+         * @language en_US
          * 创建一个网格布局实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个网格布局实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor() {
             super();
         }
 
         /**
+         * @private
          * 标记horizontalGap被显式指定过
          */
         private explicitHorizontalGap:number = lark.NONE;
 
+        /**
+         * @private
+         */
         private _horizontalGap:number = 6;
         /**
+         * @language en_US
          * 列之间的水平空间（以像素为单位）。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 列之间的水平空间（以像素为单位）。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get horizontalGap():number {
             return this._horizontalGap;
@@ -65,14 +102,29 @@ module swan {
         }
 
         /**
+         * @private
          * 标记verticalGap被显式指定过
          */
         private explicitVerticalGap:number = lark.NONE;
 
+        /**
+         * @private
+         */
         private _verticalGap:number = 6;
 
         /**
+         * @language en_US
          * 行之间的垂直空间（以像素为单位）。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 行之间的垂直空间（以像素为单位）。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get verticalGap():number {
             return this._verticalGap;
@@ -88,18 +140,47 @@ module swan {
         }
 
 
+        /**
+         * @private
+         */
         private _columnCount:number = -1;
         /**
+         * @language en_US
          * 实际列计数。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 实际列计数。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get columnCount():number {
             return this._columnCount;
         }
 
+        /**
+         * @private
+         */
         private _requestedColumnCount:number = 0;
         /**
+         * @language en_US
          * 要显示的列数。设置为0表示自动确定列计数,默认值0。
          * 注意:当orientation为TileOrientation.COLUMNS(逐列排列元素)且tagert被显式设置宽度时，此属性无效。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要显示的列数。设置为0表示自动确定列计数,默认值0。
+         * 注意:当orientation为TileOrientation.COLUMNS(逐列排列元素)且tagert被显式设置宽度时，此属性无效。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get requestedColumnCount():number {
             return this._requestedColumnCount;
@@ -115,18 +196,47 @@ module swan {
         }
 
 
+        /**
+         * @private
+         */
         private _rowCount:number = -1;
         /**
+         * @language en_US
          * 实际行计数。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 实际行计数。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get rowCount():number {
             return this._rowCount;
         }
 
+        /**
+         * @private
+         */
         private _requestedRowCount:number = 0;
         /**
+         * @language en_US
          * 要显示的行数。设置为0表示自动确定行计数,默认值0。
          * 注意:当orientation为TileOrientation.ROWS(即逐行排列元素,此为默认值)且target被显式设置高度时，此属性无效。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要显示的行数。设置为0表示自动确定行计数,默认值0。
+         * 注意:当orientation为TileOrientation.ROWS(即逐行排列元素,此为默认值)且target被显式设置高度时，此属性无效。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get requestedRowCount():number {
             return this._requestedRowCount;
@@ -143,13 +253,28 @@ module swan {
 
 
         /**
+         * @private
          * 外部显式指定的列宽
          */
         private explicitColumnWidth:number = lark.NONE;
 
+        /**
+         * @private
+         */
         private _columnWidth:number = lark.NONE;
         /**
+         * @language en_US
          * 实际列宽（以像素为单位）。 若未显式设置，则从根据最宽的元素的宽度确定列宽度。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 实际列宽（以像素为单位）。 若未显式设置，则从根据最宽的元素的宽度确定列宽度。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get columnWidth():number {
             return this._columnWidth;
@@ -165,13 +290,28 @@ module swan {
         }
 
         /**
+         * @private
          * 外部显式指定的行高
          */
         private explicitRowHeight:number = lark.NONE;
 
+        /**
+         * @private
+         */
         private _rowHeight:number = lark.NONE;
         /**
+         * @language en_US
          * 行高（以像素为单位）。 如果未显式设置，则从元素的高度的最大值确定行高度。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 行高（以像素为单位）。 如果未显式设置，则从元素的高度的最大值确定行高度。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get rowHeight():number {
             return this._rowHeight;
@@ -187,9 +327,23 @@ module swan {
         }
 
 
+        /**
+         * @private
+         */
         private _paddingLeft:number = 0;
         /**
+         * @language en_US
          * 容器的左边缘与布局元素的左边缘之间的最少像素数,默认值：0。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 容器的左边缘与布局元素的左边缘之间的最少像素数,默认值：0。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get paddingLeft():number {
             return this._paddingLeft;
@@ -204,9 +358,23 @@ module swan {
             this.invalidateTargetLayout();
         }
 
+        /**
+         * @private
+         */
         private _paddingRight:number = 0;
         /**
+         * @language en_US
          * 容器的右边缘与布局元素的右边缘之间的最少像素数,默认值：0。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 容器的右边缘与布局元素的右边缘之间的最少像素数,默认值：0。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get paddingRight():number {
             return this._paddingRight;
@@ -221,9 +389,23 @@ module swan {
             this.invalidateTargetLayout();
         }
 
+        /**
+         * @private
+         */
         private _paddingTop:number = 0;
         /**
+         * @language en_US
          * 容器的顶边缘与第一个布局元素的顶边缘之间的像素数,默认值：0。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 容器的顶边缘与第一个布局元素的顶边缘之间的像素数,默认值：0。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get paddingTop():number {
             return this._paddingTop;
@@ -237,9 +419,23 @@ module swan {
             this.invalidateTargetLayout();
         }
 
+        /**
+         * @private
+         */
         private _paddingBottom:number = 0;
         /**
+         * @language en_US
          * 容器的底边缘与最后一个布局元素的底边缘之间的像素数,默认值：0。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 容器的底边缘与最后一个布局元素的底边缘之间的像素数,默认值：0。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get paddingBottom():number {
             return this._paddingBottom;
@@ -254,12 +450,29 @@ module swan {
         }
 
 
+        /**
+         * @private
+         */
         private _horizontalAlign:string = JustifyAlign.JUSTIFY;
         /**
+         * @language en_US
          * 指定如何在水平方向上对齐单元格内的元素。
          * 支持的值有 HorizontalAlign.LEFT、HorizontalAlign.CENTER、
          * HorizontalAlign.RIGHT、JustifyAlign.JUSTIFY。
          * 默认值：JustifyAlign.JUSTIFY
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指定如何在水平方向上对齐单元格内的元素。
+         * 支持的值有 HorizontalAlign.LEFT、HorizontalAlign.CENTER、
+         * HorizontalAlign.RIGHT、JustifyAlign.JUSTIFY。
+         * 默认值：JustifyAlign.JUSTIFY
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get horizontalAlign():string {
             return this._horizontalAlign;
@@ -273,13 +486,30 @@ module swan {
             this.invalidateTargetLayout();
         }
 
+        /**
+         * @private
+         */
         private _verticalAlign:string = JustifyAlign.JUSTIFY;
 
         /**
+         * @language en_US
          * 指定如何在垂直方向上对齐单元格内的元素。
          * 支持的值有 VerticalAlign.TOP、VerticalAlign.MIDDLE、
          * VerticalAlign.BOTTOM、JustifyAlign.JUSTIFY。
          * 默认值：JustifyAlign.JUSTIFY。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指定如何在垂直方向上对齐单元格内的元素。
+         * 支持的值有 VerticalAlign.TOP、VerticalAlign.MIDDLE、
+         * VerticalAlign.BOTTOM、JustifyAlign.JUSTIFY。
+         * 默认值：JustifyAlign.JUSTIFY。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get verticalAlign():string {
             return this._verticalAlign;
@@ -293,9 +523,13 @@ module swan {
             this.invalidateTargetLayout();
         }
 
+        /**
+         * @private
+         */
         private _columnAlign:string = ColumnAlign.LEFT;
 
         /**
+         * @language en_US
          * 指定如何将完全可见列与容器宽度对齐。
          * 设置为 ColumnAlign.LEFT 时，它会关闭列两端对齐。在容器的最后一列和右边缘之间可能存在部分可见的列或空白。这是默认值。
          * 设置为 ColumnAlign.JUSTIFY_USING_GAP 时，horizontalGap 的实际值将增大，
@@ -305,6 +539,24 @@ module swan {
          * 设置为 ColumnAlign.JUSTIFY_USING_WIDTH 时，columnWidth 的实际值将增大，
          * 这样最后一个完全可见列右边缘会与容器的右边缘对齐。请注意显式设置 columnWidth 属性不会关闭两端对齐。
          * 它仅确定初始列宽度值。两端对齐可能会增大它。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指定如何将完全可见列与容器宽度对齐。
+         * 设置为 ColumnAlign.LEFT 时，它会关闭列两端对齐。在容器的最后一列和右边缘之间可能存在部分可见的列或空白。这是默认值。
+         * 设置为 ColumnAlign.JUSTIFY_USING_GAP 时，horizontalGap 的实际值将增大，
+         * 这样最后一个完全可见列右边缘会与容器的右边缘对齐。仅存在一个完全可见列时，
+         * horizontalGap 的实际值将增大，这样它会将任何部分可见列推到容器的右边缘之外。
+         * 请注意显式设置 horizontalGap 属性不会关闭两端对齐。它仅确定初始间隙值。两端对齐可能会增大它。
+         * 设置为 ColumnAlign.JUSTIFY_USING_WIDTH 时，columnWidth 的实际值将增大，
+         * 这样最后一个完全可见列右边缘会与容器的右边缘对齐。请注意显式设置 columnWidth 属性不会关闭两端对齐。
+         * 它仅确定初始列宽度值。两端对齐可能会增大它。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get columnAlign():string {
             return this._columnAlign;
@@ -318,8 +570,12 @@ module swan {
             this.invalidateTargetLayout();
         }
 
+        /**
+         * @private
+         */
         private _rowAlign:string = RowAlign.TOP;
         /**
+         * @language en_US
          * 指定如何将完全可见行与容器高度对齐。
          * 设置为 RowAlign.TOP 时，它会关闭列两端对齐。在容器的最后一行和底边缘之间可能存在部分可见的行或空白。这是默认值。
          *
@@ -331,6 +587,26 @@ module swan {
          * 设置为 RowAlign.JUSTIFY_USING_HEIGHT 时，rowHeight 的实际值会增大，
          * 这样最后一个完全可见行底边缘会与容器的底边缘对齐。请注意，显式设置 rowHeight
          * 不会关闭两端对齐，而只是确定初始行高度值。两端对齐接着可以增大它。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指定如何将完全可见行与容器高度对齐。
+         * 设置为 RowAlign.TOP 时，它会关闭列两端对齐。在容器的最后一行和底边缘之间可能存在部分可见的行或空白。这是默认值。
+         *
+         * 设置为 RowAlign.JUSTIFY_USING_GAP 时，verticalGap 的实际值会增大，
+         * 这样最后一个完全可见行底边缘会与容器的底边缘对齐。仅存在一个完全可见行时，verticalGap 的值会增大，
+         * 这样它会将任何部分可见行推到容器的底边缘之外。请注意，显式设置 verticalGap
+         * 不会关闭两端对齐，而只是确定初始间隙值。两端对齐接着可以增大它。
+         *
+         * 设置为 RowAlign.JUSTIFY_USING_HEIGHT 时，rowHeight 的实际值会增大，
+         * 这样最后一个完全可见行底边缘会与容器的底边缘对齐。请注意，显式设置 rowHeight
+         * 不会关闭两端对齐，而只是确定初始行高度值。两端对齐接着可以增大它。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get rowAlign():string {
             return this._rowAlign;
@@ -344,9 +620,23 @@ module swan {
             this.invalidateTargetLayout();
         }
 
+        /**
+         * @private
+         */
         private _orientation:string = TileOrientation.ROWS;
         /**
+         * @language en_US
          * 指定是逐行还是逐列排列元素。默认值：TileOrientation.ROWS
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指定是逐行还是逐列排列元素。默认值：TileOrientation.ROWS
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get orientation():string {
             return this._orientation;
@@ -361,6 +651,7 @@ module swan {
         }
 
         /**
+         * @private
          * 标记目标容器的尺寸和显示列表失效
          */
         private invalidateTargetLayout():void {
@@ -372,7 +663,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 基于目标的内容测量其默认大小，并（可选）测量目标的默认最小大小
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 基于目标的内容测量其默认大小，并（可选）测量目标的默认最小大小
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public measure():void {
             var target = this.$target;
@@ -413,6 +715,7 @@ module swan {
         }
 
         /**
+         * @private
          * 计算行和列的尺寸及数量
          */
         private calculateRowAndColumn(explicitWidth:number, explicitHeight:number):void {
@@ -508,15 +811,18 @@ module swan {
         }
 
         /**
+         * @private
          * 缓存的最大子对象宽度
          */
         private maxElementWidth:number = 0;
         /**
+         * @private
          * 缓存的最大子对象高度
          */
         private maxElementHeight:number = 0;
 
         /**
+         * @private
          * 更新最大子对象尺寸
          */
         private updateMaxElementSize():void {
@@ -533,6 +839,7 @@ module swan {
         }
 
         /**
+         * @private
          * 更新虚拟布局的最大子对象尺寸
          */
         private doUpdateMaxElementSize(startIndex:number, endIndex:number):void {
@@ -557,7 +864,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 如果 useVirtualLayout 为 true，则当布局目标改变时，布局目标可以使用此方法来清除已缓存布局信息
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果 useVirtualLayout 为 true，则当布局目标改变时，布局目标可以使用此方法来清除已缓存布局信息
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public clearVirtualLayoutCache():void {
             super.clearVirtualLayoutCache();
@@ -566,20 +884,34 @@ module swan {
         }
 
         /**
+         * @private
          * 当前视图中的第一个元素索引
          */
         private startIndex:number = -1;
         /**
+         * @private
          * 当前视图中的最后一个元素的索引
          */
         private endIndex:number = -1;
         /**
+         * @private
          * 视图的第一个和最后一个元素的索引值已经计算好的标志
          */
         private indexInViewCalculated:boolean = false;
 
         /**
+         * @language en_US
          * scrollV 或 scrollH 属性更改时调用
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * scrollV 或 scrollH 属性更改时调用
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public scrollPositionChanged():void {
             if (this.$useVirtualLayout) {
@@ -593,6 +925,7 @@ module swan {
         }
 
         /**
+         * @private
          * 获取视图中第一个和最后一个元素的索引,返回是否发生改变
          */
         private getIndexInView():boolean {
@@ -661,7 +994,18 @@ module swan {
         }
 
         /**
+         * @language en_US
          * 调整目标的元素的大小并定位这些元素
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 调整目标的元素的大小并定位这些元素
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public updateDisplayList(width:number, height:number):void {
             super.updateDisplayList(width, height);
@@ -741,6 +1085,7 @@ module swan {
         }
 
         /**
+         * @private
          * 为单个元素布局
          */
         private sizeAndPositionElement(element:UIComponent, cellX:number, cellY:number,
@@ -787,6 +1132,7 @@ module swan {
 
 
         /**
+         * @private
          * 为两端对齐调整间隔或格子尺寸
          */
         private adjustForJustify(width:number, height:number):void {

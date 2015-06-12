@@ -31,13 +31,16 @@
 module swan {
 
     /**
+     * @private
      * 存储根据groupName自动创建的RadioButtonGroup列表
      */
     var automaticRadioButtonGroups = {};
 
     /**
      * @language en_US
-     * RadioButton 组件使用户可在一组互相排斥的选择中做出一种选择
+     * The RadioButton component allows the user make a single choice
+     * within a set of mutually exclusive choices.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -45,21 +48,25 @@ module swan {
     /**
      * @language zh_CN
      * RadioButton 组件使用户可在一组互相排斥的选择中做出一种选择
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     export class RadioButton extends ToggleButton {
+
         /**
          * @language en_US
-         * 创建一个RadioButton
+         * Constructor.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 创建一个RadioButton
+         * 构造函数。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -82,14 +89,17 @@ module swan {
 
         /**
          * @language en_US
-         * 组件是否可以接受用户交互。默认值为true。设置此属性将影响组内所有单选按钮
+         * The RadioButton component is enabled if the
+         * RadioButtonGroup is enabled and the RadioButton itself is enabled.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 组件是否可以接受用户交互。默认值为true。设置此属性将影响组内所有单选按钮
+         * 如果 RadioButtonGroup 启用且 RadioButton 本身也启用，则 RadioButton 组件启用。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -104,9 +114,7 @@ module swan {
 
         public set enabled(value:boolean) {
             this.$setEnabled(value);
-
         }
-
 
         /**
          * @private
@@ -114,16 +122,23 @@ module swan {
         private _group:RadioButtonGroup = null;
         /**
          * @language en_US
-         * 此单选按钮所属的组。同一个组的多个单选按钮之间互斥。
-         * 若不设置此属性，则根据groupName属性自动创建一个唯一的RadioButtonGroup。
+         * The RadioButtonGroup component to which this RadioButton belongs.
+         * If this property is not set,
+         * a unique RadioButtonGroup is created automatically based on the groupName property.
+         *
+         * @see swan.RadioButton#groupName
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 此单选按钮所属的组。同一个组的多个单选按钮之间互斥。
+         * 此 RadioButton 所属的 RadioButtonGroup 组件。
          * 若不设置此属性，则根据groupName属性自动创建一个唯一的RadioButtonGroup。
+         *
+         * @see swan.RadioButton#groupName
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -165,16 +180,24 @@ module swan {
         private _groupName:string = "radioGroup";
         /**
          * @language en_US
-         * 所属组的名称,具有相同组名的多个单选按钮之间互斥。默认值:"radioGroup"。
-         * 可以把此属性当做设置组的一个简便方式，作用与设置group属性相同,。
+         * Specifies the name of the group to which this RadioButton component belongs
+         *
+         * @default “radioGroup”
+         *
+         * @see swan.RadioButton#group
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 所属组的名称,具有相同组名的多个单选按钮之间互斥。默认值:"radioGroup"。
-         * 可以把此属性当做设置组的一个简便方式，作用与设置group属性相同,。
+         * RadioButton 组件所属的组的名称
+         *
+         * @default “radioGroup”
+         *
+         * @see swan.RadioButton#group
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -212,14 +235,21 @@ module swan {
         private _value:any = null;
         /**
          * @language en_US
-         * 与此单选按钮关联的自定义数据。
+         * Optional user-defined value
+         * that is associated with a RadioButton component.
+         *
+         * @default null
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 与此单选按钮关联的自定义数据。
+         * 与 RadioButton 组件关联的可选用户定义值。
+         *
+         * @default null
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -240,15 +270,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -263,19 +286,8 @@ module swan {
 
 
         /**
-         * @language en_US
+         * @inheritDoc
          * 
-         * @param unscaledWidth 
-         * @param unscaledHeight 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param unscaledWidth 
-         * @param unscaledHeight 
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -291,14 +303,7 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
+         * @inheritDoc
          * 
          * @version Lark 1.0
          * @version Swan 1.0

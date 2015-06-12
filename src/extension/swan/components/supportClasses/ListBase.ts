@@ -52,7 +52,7 @@ module swan.sys {
         /**
          * @private
          */
-        dispatchChangeAfterSelection,
+        emitChangeAfterSelection,
         /**
          * @private
          */
@@ -64,7 +64,7 @@ module swan.sys {
         /**
          * @private
          */
-        mouseDownItemRenderer
+        touchDownItemRenderer
     }
 }
 
@@ -74,13 +74,15 @@ module swan {
      * @language en_US
      * The ListBase class is the base class for list component.
      * It can display items of list as vertical or horizontal such as SELECT of HTML.
-     * @event lark.Event.CHANGE Dispatched after the selection has changed.
-     * This event is dispatched when the user interacts with the control.
-     * @event lark.Event.CHANGING Dispatched when the selection is going to change.
+     * @event lark.Event.CHANGE Emitted after the selection has changed.
+     * This event is emitted when the user interacts with the control.
+     * @event lark.Event.CHANGING Emitted when the selection is going to change.
      * Calling the <code>preventDefault()</code> method
      * on the event prevents the selection from changing.<p/>
-     * This event is dispatched when the user interacts with the control.
-     * @event swan.ItemTapEvent.ITEM_TAP Dispatched when the user tap an item in the control.
+     * This event is emitted when the user interacts with the control.
+     *
+     * @event swan.ItemTapEvent.ITEM_TAP emitted when the user tap an item in the control.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -91,7 +93,9 @@ module swan {
      * @event lark.Event.CHANGE 选中的索引已经发生改变,注意：此事件仅在索引改变是由用户触摸操作引起时才抛出。
      * @event lark.Event.CHANGING 选中的索引即将发生改变，可以通过调用事件对象的 preventDefault() 方法来阻止改变。<p/>
      * 注意：此事件仅在索引改变是由用户触摸操作引起时才抛出。
+     *
      * @event swan.ItemTapEvent.ITEM_TAP 项呈示器单击事件。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -117,7 +121,7 @@ module swan {
                 1: false,       //requireSelectionChanged
                 2: -2,          //proposedSelectedIndex
                 3: -1,          //selectedIndex
-                4: false,       //dispatchChangeAfterSelection
+                4: false,       //emitChangeAfterSelection
                 5: undefined,   //pendingSelectedItem
                 6: false,       //selectedIndexAdjusted
                 7: null,        //mouseDownItemRenderer
@@ -213,9 +217,9 @@ module swan {
          * </ul><p/>
          *
          * When the user changes the <code>selectedIndex</code> property by interacting with the control,
-         * the control dispatches the <code>change</code> and <code>changing</code> events.
+         * the control emits the <code>change</code> and <code>changing</code> events.
          * When you change the value of the <code>selectedIndex</code> property programmatically,
-         * it does not dispatches the <code>change</code> and <code>changing</code> events.</p>
+         * it does not emits the <code>change</code> and <code>changing</code> events.</p>
          *
          * @default -1
          * @version Lark 1.0
@@ -270,7 +274,7 @@ module swan {
          * Used internally to specify whether the selectedIndex changed programmatically or due to
          * user interaction.
          * @param value the new index need to select.
-         * @param dispatchChangeEvent if true, the component will dispatch a "change" event if the
+         * @param emitChangeEvent if true, the component will emit a "change" event if the
          * value has changed.
          * @version Lark 1.0
          * @version Swan 1.0
@@ -280,19 +284,19 @@ module swan {
          * @language zh_CN
          * 由程序或者用户设置选中项。
          * @param value 索引值。
-         * @param dispatchChangeEvent 当索引值发生改变，且该参数为true的时候，组件派发出一个“change”事件。
+         * @param emitChangeEvent 当索引值发生改变，且该参数为true的时候，组件派发出一个“change”事件。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        protected setSelectedIndex(value:number, dispatchChangeEvent?:boolean):void {
+        protected setSelectedIndex(value:number, emitChangeEvent?:boolean):void {
             if (value == this.selectedIndex) {
                 return;
             }
             var values = this.$ListBase;
-            if (dispatchChangeEvent)
-                values[sys.ListBaseKeys.dispatchChangeAfterSelection] =
-                    (values[sys.ListBaseKeys.dispatchChangeAfterSelection] || dispatchChangeEvent);
+            if (emitChangeEvent)
+                values[sys.ListBaseKeys.emitChangeAfterSelection] =
+                    (values[sys.ListBaseKeys.emitChangeAfterSelection] || emitChangeEvent);
             values[sys.ListBaseKeys.proposedSelectedIndex] = value;
             this.invalidateProperties();
         }
@@ -317,9 +321,9 @@ module swan {
          * </ul><p/>
          *
          * When the user changes the <code>selectedItem</code> property by interacting with the control,
-         * the control dispatches the <code>change</code> and <code>changing</code> events.
+         * the control emits the <code>change</code> and <code>changing</code> events.
          * When you change the value of the <code>selectedIndex</code> property programmatically,
-         * it does not dispatches the <code>change</code> and <code>changing</code> events.</p>
+         * it does not emits the <code>change</code> and <code>changing</code> events.</p>
          *
          * @default undefined
          * @version Lark 1.0
@@ -370,7 +374,7 @@ module swan {
          * Used internally to specify whether the selectedItem changed programmatically or due to
          * user interaction.
          * @param value the new item need to select.
-         * @param dispatchChangeEvent if true, the component will dispatch a "change" event if the
+         * @param emitChangeEvent if true, the component will emit a "change" event if the
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -379,19 +383,19 @@ module swan {
          * @language zh_CN
          * 由程序或用户设置选中项数据源。
          * @param value 要选中的项。
-         * @param dispatchChangeEvent 当索引值发生改变，且该参数为true的时候，组件派发出一个“change”事件。
+         * @param emitChangeEvent 当索引值发生改变，且该参数为true的时候，组件派发出一个“change”事件。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        protected setSelectedItem(value:any, dispatchChangeEvent:boolean = false):void {
+        protected setSelectedItem(value:any, emitChangeEvent:boolean = false):void {
             if (this.selectedItem === value)
                 return;
 
             var values = this.$ListBase;
-            if (dispatchChangeEvent)
-                values[sys.ListBaseKeys.dispatchChangeAfterSelection] =
-                    (values[sys.ListBaseKeys.dispatchChangeAfterSelection] || dispatchChangeEvent);
+            if (emitChangeEvent)
+                values[sys.ListBaseKeys.emitChangeAfterSelection] =
+                    (values[sys.ListBaseKeys.emitChangeAfterSelection] || emitChangeEvent);
 
             values[sys.ListBaseKeys.pendingSelectedItem] = value;
             this.invalidateProperties();
@@ -517,11 +521,11 @@ module swan {
         /**
          * @language en_US
          * The selection validation and commitment workhorse method.
-         * Called to commit the pending selected index. This method dispatches
+         * Called to commit the pending selected index. This method emits
          * the "changing" event, and if the event is not cancelled,
-         * commits the selection change and then dispatches the "change"
+         * commits the selection change and then emits the "change"
          * event.
-         * @param dispatchChangedEvents if dispatch a "changed" event.
+         * @param emitChangedEvents if emit a "changed" event.
          * @return true if the selection was committed, or false if the selection
          * was cancelled.
          * @version Lark 1.0
@@ -532,13 +536,13 @@ module swan {
          * @language zh_CN
          * 提交选中项属性。该方法会派发一个“changing”事件，如果该事件没有被阻止，
          * 该方法将会提交选择项病根据参数派发“change”事件。
-         * @param dispatchChangedEvents 是否派发一个“changed”事件。
+         * @param emitChangedEvents 是否派发一个“changed”事件。
          * @return true 表示提交成功, false表示被取消
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        protected commitSelection(dispatchChangedEvents:boolean = true):boolean {
+        protected commitSelection(emitChangedEvents:boolean = true):boolean {
             var dataProvider = this.$dataProvider;
             var values = this.$ListBase;
             var maxIndex = dataProvider ? dataProvider.length - 1 : -1;
@@ -551,17 +555,17 @@ module swan {
             if (values[sys.ListBaseKeys.requireSelection] && tmpProposedIndex == ListBase.NO_SELECTION &&
                 dataProvider && dataProvider.length > 0) {
                 values[sys.ListBaseKeys.proposedSelectedIndex] = ListBase.NO_PROPOSED_SELECTION;
-                values[sys.ListBaseKeys.dispatchChangeAfterSelection] = false;
+                values[sys.ListBaseKeys.emitChangeAfterSelection] = false;
                 return false;
             }
 
 
-            if (values[sys.ListBaseKeys.dispatchChangeAfterSelection]) {
+            if (values[sys.ListBaseKeys.emitChangeAfterSelection]) {
                 var result = this.emitWith(lark.Event.CHANGING, false, true);
                 if (!result) {
                     this.itemSelected(values[sys.ListBaseKeys.proposedSelectedIndex], false);
                     values[sys.ListBaseKeys.proposedSelectedIndex] = ListBase.NO_PROPOSED_SELECTION;
-                    values[sys.ListBaseKeys.dispatchChangeAfterSelection] = false;
+                    values[sys.ListBaseKeys.emitChangeAfterSelection] = false;
                     return false;
                 }
 
@@ -575,11 +579,11 @@ module swan {
             if (values[sys.ListBaseKeys.selectedIndex] != ListBase.NO_SELECTION)
                 this.itemSelected(values[sys.ListBaseKeys.selectedIndex], true);
 
-            //子类若需要自身抛出Change事件，而不是在此处抛出，可以设置dispatchChangedEvents为false
-            if (dispatchChangedEvents) {
-                if (values[sys.ListBaseKeys.dispatchChangeAfterSelection]) {
+            //子类若需要自身抛出Change事件，而不是在此处抛出，可以设置emitChangedEvents为false
+            if (emitChangedEvents) {
+                if (values[sys.ListBaseKeys.emitChangeAfterSelection]) {
                     this.emitWith(lark.Event.CHANGE);
-                    values[sys.ListBaseKeys.dispatchChangeAfterSelection] = false;
+                    values[sys.ListBaseKeys.emitChangeAfterSelection] = false;
                 }
                 PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"selectedIndex");
                 PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"selectedItem");
@@ -592,9 +596,9 @@ module swan {
          * @language en_US
          * Adjusts the selected index to account for items being added to or
          * removed from this component.
-         * It does not dispatch a <code>change</code> event because the change did not
+         * It does not emit a <code>change</code> event because the change did not
          * occur as a direct result of user-interaction.  Moreover,
-         * it does not dispatch a <code>changing</code> event
+         * it does not emit a <code>changing</code> event
          * or allow the cancellation of the selection.
          * It also does not call the <code>itemSelected()</code> method,
          * since the same item is selected;
@@ -710,7 +714,7 @@ module swan {
         /**
          * @language zh_CN
          * 数据源改变事件处理。
-         * @param event 事件 <code>lark.CollectionEvent</code> 的对象.
+         * @param event 事件 <code>lark.CollectionEvent</code> 的对象。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -816,13 +820,13 @@ module swan {
         protected onRendererTouchBegin(event:lark.TouchEvent):void {
             if (event.$isDefaultPrevented)
                 return;
-            this.$ListBase[sys.ListBaseKeys.mouseDownItemRenderer] = <IItemRenderer> (event.$currentTarget);
+            this.$ListBase[sys.ListBaseKeys.touchDownItemRenderer] = <IItemRenderer> (event.$currentTarget);
             this.$stage.on(lark.TouchEvent.TOUCH_END, this.stage_touchEndHandler, this);
         }
 
         /**
          * @language en_US
-         * Handles <code>lark.TouchEvent.TOUCH_END</code> events and dispatch <code>ItemTapEvent.ITEM_TAP</code> event.
+         * Handles <code>lark.TouchEvent.TOUCH_END</code> events and emit <code>ItemTapEvent.ITEM_TAP</code> event.
          * @param event The <code>lark.TouchEvent</code> object.
          * @version Lark 1.0
          * @version Swan 1.0
@@ -838,8 +842,8 @@ module swan {
          */
         protected onRendererTouchEnd(event:lark.TouchEvent):void {
             var itemRenderer = <IItemRenderer> (event.$currentTarget);
-            var mouseDownItemRenderer = this.$ListBase[sys.ListBaseKeys.mouseDownItemRenderer];
-            if (itemRenderer != mouseDownItemRenderer)
+            var touchDownItemRenderer = this.$ListBase[sys.ListBaseKeys.touchDownItemRenderer];
+            if (itemRenderer != touchDownItemRenderer)
                 return;
             this.setSelectedIndex(itemRenderer.itemIndex, true);
             ItemTapEvent.emitItemTapEvent(this, ItemTapEvent.ITEM_TAP, itemRenderer);
@@ -852,7 +856,7 @@ module swan {
         private stage_touchEndHandler(event:lark.Event):void {
             var stage = <lark.Stage>event.$currentTarget;
             stage.removeListener(lark.TouchEvent.TOUCH_END, this.stage_touchEndHandler, this);
-            this.$ListBase[sys.ListBaseKeys.mouseDownItemRenderer] = null;
+            this.$ListBase[sys.ListBaseKeys.touchDownItemRenderer] = null;
         }
     }
 

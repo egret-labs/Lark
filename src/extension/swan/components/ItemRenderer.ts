@@ -31,14 +31,16 @@ module swan {
 
     /**
      * @language en_US
-     * 项呈示器基类，通常作为List类的项目视图模板。
+     * The ItemRenderer class is the base class for item renderers.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 项呈示器基类，通常作为List类的项目视图模板。
+     * ItemRenderer 类是项呈示器的基类。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -47,12 +49,16 @@ module swan {
 
         /**
          * @language en_US
+         * Constructor.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
+         * 构造函数。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -68,7 +74,8 @@ module swan {
         private _data:any = null;
         /**
          * @language en_US
-         * 要呈示或编辑的数据。
+         * The data to render or edit.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -76,6 +83,7 @@ module swan {
         /**
          * @language zh_CN
          * 要呈示或编辑的数据。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -92,14 +100,16 @@ module swan {
 
         /**
          * @language en_US
-         * 子类复写此方法以在 data 数据源发生改变时跟新显示列表。
+         * Update the view when the <code>data</code> property changes.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 子类复写此方法以在 data 数据源发生改变时跟新显示列表。
+         * 当数据改变时，更新视图。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -114,7 +124,9 @@ module swan {
         private _selected:boolean = false;
         /**
          * @language en_US
-         * 如果项呈示器可以将其自身显示为已选中，则为 true。
+         * Contains <code>true</code> if the item renderer
+         * can show itself as selected.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -122,6 +134,7 @@ module swan {
         /**
          * @language zh_CN
          * 如果项呈示器可以将其自身显示为已选中，则为 true。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -139,7 +152,9 @@ module swan {
 
         /**
          * @language en_US
-         * 项呈示器的数据提供程序中的项目索引。
+         * The index of the item in the data provider
+         * of the host component of the item renderer.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -147,6 +162,7 @@ module swan {
         /**
          * @language zh_CN
          * 项呈示器的数据提供程序中的项目索引。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -161,14 +177,16 @@ module swan {
 
         /**
          * @language en_US
-         * 鼠标事件处理
+         * Handles <code>TouchEvent.TOUCH_BEGIN</code> events
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 鼠标事件处理
+         * 触碰开始时触发事件
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -192,15 +210,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 返回要应用到外观的状态的名称
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回要应用到外观的状态的名称
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native

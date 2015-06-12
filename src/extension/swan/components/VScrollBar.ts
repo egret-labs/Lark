@@ -31,14 +31,23 @@ module swan {
 
     /**
      * @language en_US
-     * 垂直滚动条
+     * The VScrollBar (vertical scrollbar) control lets you control
+     * the portion of data that is displayed when there is too much data
+     * to fit vertically in a display area.
+     *
+     * <p>Although you can use the VScrollBar control as a stand-alone control,
+     * you usually combine it as part of another group of components to
+     * provide scrolling functionality.</p>
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 垂直滚动条
+     * VScrollBar（垂直 ScrollBar）控件可以在因数据太多而不能在显示区域中以垂直方向完全显示时控制显示的数据部分。
+     * <p>虽然 VScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。</p>
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -46,19 +55,8 @@ module swan {
     export class VScrollBar extends ScrollBarBase {
 
         /**
-         * @language en_US
-         * 
-         * @param unscaledWidth 
-         * @param unscaledHeight 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param unscaledWidth 
-         * @param unscaledHeight 
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -98,17 +96,8 @@ module swan {
 
 
         /**
-         * @language en_US
-         * 
-         * @param event 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param event 
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native

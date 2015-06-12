@@ -31,42 +31,153 @@
 module swan {
 
     /**
+     * @language en_US
+     * The UIEvent class represents the event object passed to
+     * the event listener for many UI events.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * UI事件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class UIEvent extends lark.Event{
 
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @param type The event type; indicates the action that triggered the event.
+         * @param bubbles Specifies whether the event can bubble
+         * up the display list hierarchy.
+         * @param cancelable Specifies whether the behavior
+         * associated with the event can be prevented.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 UIEvent 实例
+         *
+         * @param type 事件类型；指示触发事件的动作。
+         * @param bubbles 指定该事件是否可以在显示列表层次结构得到冒泡处理。
+         * @param cancelable 指定是否可以防止与事件相关联的行为。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         public constructor(type:string, bubbles?:boolean, cancelable?:boolean){
             super(type, bubbles, cancelable);
         }
 
         /**
+         * @language en_US
+         * creation complete of component.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 组件创建完成
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static CREATION_COMPLETE:string = "creationComplete";
         /**
+         * @language en_US
+         * the ending of change.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 改变结束
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static CHANGE_END:string = "changeEnd";
 
         /**
+         * @language en_US
+         * The begining of change.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 改变开始
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static CHANGE_START:string = "changeStart";
 
         /**
+         * @language en_US
+         * Before close the panel.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 即将关闭面板事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static CLOSING:string = "close";
 
         /**
+         * @language en_US
+         * The coordinates of the UI components changed in it's parent.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * UI组件在父级容器中的坐标发生改变事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static MOVE:string = "move";
 
         /**
+         * @language en_US
+         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * for the next cycle of reuse.
+         *
+         * @param target the target of event emitter.
+         * @param eventType The event type; indicates the action that triggered the event.
+         * 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-         * @param target 事件派发目标
-         * @param eventType 事件类型
+         *
+         * @param target 事件派发目标。
+         * @param eventType 事件类型；指示触发事件的动作。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static emitUIEvent(target:lark.IEventEmitter, eventType:string):boolean {
             if(!target.hasListener(eventType)){

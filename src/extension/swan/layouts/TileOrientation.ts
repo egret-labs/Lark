@@ -30,16 +30,56 @@
 module swan {
 
     /**
-     * TileOrientation 类为 TileLayout 类的 orientation 属性定义可能的值。
+     * @language en_US
+     * The TileOrientation class defines the possible values for the
+     * <code>orientation</code> property of the TileLayout class.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * TileOrientation 类为 TileLayout 类的 <code>orientation</code> 属性定义可能的值。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class TileOrientation {
         /**
+         * @language en_US
+         * Arranges elements row by row.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 逐行排列元素。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static ROWS:string = "rows";
 
         /**
+         * @language en_US
+         * Arranges elements column by column.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 逐列排列元素。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public static COLUMNS:string = "columns";
     }

@@ -34,7 +34,7 @@ module lark {
      * it through the stage property of a DisplayObject instance.
      * The Stage class has several ancestor classes — Sprite, DisplayObject, and EventEmitter — from which it inherits
      * properties and methods. Many of these properties and methods are inapplicable to Stage objects.
-     * @event lark.Event.RESIZE Dispatched when the stageWidth or stageHeight property of the Stage object is changed.
+     * @event lark.Event.RESIZE Emitted when the stageWidth or stageHeight property of the Stage object is changed.
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -131,7 +131,7 @@ module lark {
          * @language en_US
          * After you call the invalidate() method, when the display list is next rendered, the Lark runtime sends a render
          * event to each display object that has registered to listen for the render event. You must call the invalidate()
-         * method each time you want the Flash runtime to send render events.
+         * method each time you want the Lark runtime to send render events.
          * @version Lark 1.0
          * @platform Web,Native
          */

@@ -35,6 +35,9 @@ module swan {
      * The ArrayCollection class is a wrapper class that exposes an <code>any[]</code> as a collection that can be
      * accessed and manipulated using the methods and properties of the <code>ICollection</code> interfaces.
      * ArrayCollection can notify the view to update item when data source changed.
+     *
+     * @event swan.CollectionEvent.COLLECTION_CHANGE Emited when the ArrayCollection has been updated in some way.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -43,6 +46,9 @@ module swan {
      * @language zh_CN
      * ArrayCollection 类是数组的集合类数据结构包装器，可使用<code>ICollection</code>接口的方法和属性对其进行访问和处理。
      * 使用这种数据结构包装普通数组，能在数据源发生改变的时候主动通知视图刷新变更数据项。
+     *
+     * @event swan.CollectionEvent.COLLECTION_CHANGE 当 ArrayCollection 更新的的时候会派发此事件。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -105,7 +111,7 @@ module swan {
             if (!value)
                 value = [];
             this._source = value;
-            this.dispatchCoEvent(CollectionEventKind.RESET);
+            this.emitCoEvent(CollectionEventKind.RESET);
         }
 
         /**
@@ -127,7 +133,7 @@ module swan {
          * @platform Web,Native
          */
         public refresh():void {
-            this.dispatchCoEvent(CollectionEventKind.REFRESH);
+            this.emitCoEvent(CollectionEventKind.REFRESH);
         }
 
         //--------------------------------------------------------------------------
@@ -138,6 +144,10 @@ module swan {
 
         /**
          * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public get length():number {
             return this._source.length;
@@ -162,7 +172,7 @@ module swan {
          */
         public addItem(item:any):void {
             this._source.push(item);
-            this.dispatchCoEvent(CollectionEventKind.ADD, this._source.length - 1, -1, [item]);
+            this.emitCoEvent(CollectionEventKind.ADD, this._source.length - 1, -1, [item]);
         }
 
         /**
@@ -193,11 +203,15 @@ module swan {
                 DEBUG && lark.$error(1007);
             }
             this._source.splice(index, 0, item);
-            this.dispatchCoEvent(CollectionEventKind.ADD, index, -1, [item]);
+            this.emitCoEvent(CollectionEventKind.ADD, index, -1, [item]);
         }
 
         /**
          * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public getItemAt(index:number):any {
             return this._source[index];
@@ -205,6 +219,10 @@ module swan {
 
         /**
          * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public getItemIndex(item:any):number {
             var length:number = this._source.length;
@@ -235,7 +253,7 @@ module swan {
         public itemUpdated(item:any):void {
             var index:number = this.getItemIndex(item);
             if (index != -1) {
-                this.dispatchCoEvent(CollectionEventKind.UPDATE, index, -1, [item]);
+                this.emitCoEvent(CollectionEventKind.UPDATE, index, -1, [item]);
             }
         }
 
@@ -256,7 +274,7 @@ module swan {
         public removeAll():void {
             var items:any[] = this._source.concat();
             this._source.length = 0;
-            this.dispatchCoEvent(CollectionEventKind.REMOVE, 0, -1, items);
+            this.emitCoEvent(CollectionEventKind.REMOVE, 0, -1, items);
         }
 
         /**
@@ -284,7 +302,7 @@ module swan {
                 return;
             }
             var item:any = this._source.splice(index, 1)[0];
-            this.dispatchCoEvent(CollectionEventKind.REMOVE, index, -1, [item]);
+            this.emitCoEvent(CollectionEventKind.REMOVE, index, -1, [item]);
             return item;
         }
 
@@ -314,7 +332,7 @@ module swan {
                 return;
             }
             var oldItem:any = this._source.splice(index, 1, item)[0];
-            this.dispatchCoEvent(CollectionEventKind.REPLACE, index, -1, [item], [oldItem]);
+            this.emitCoEvent(CollectionEventKind.REPLACE, index, -1, [item], [oldItem]);
             return oldItem;
         }
 
@@ -355,7 +373,7 @@ module swan {
          * @private
          * 抛出事件
          */
-        private dispatchCoEvent(kind:string, location?:number, oldLocation?:number, items?:any[], oldItems?:any[]):void {
+        private emitCoEvent(kind:string, location?:number, oldLocation?:number, items?:any[], oldItems?:any[]):void {
 
             CollectionEvent.emitCollectionEvent(this, CollectionEvent.COLLECTION_CHANGE, kind, location, oldLocation, items, oldItems);
         }

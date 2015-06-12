@@ -111,14 +111,16 @@ module swan {
 
         /**
          * @language en_US
-         * [SkinPart] Highlight of track
+         * [SkinPart] Highlight of track.
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart] 轨道高亮显示对象
+         * [SkinPart] 轨道高亮显示对象。
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -126,14 +128,16 @@ module swan {
         public trackHighlight:lark.DisplayObject = null;
         /**
          * @language en_US
-         * [SkinPart] Thumb display object
+         * [SkinPart] Thumb display object.
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart]滑块显示对象
+         * [SkinPart]滑块显示对象。
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -142,14 +146,16 @@ module swan {
 
         /**
          * @language en_US
-         * [SkinPart] Track display object
+         * [SkinPart] Track display object.
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart]轨道显示对象
+         * [SkinPart]轨道显示对象。
+         * @skinPart
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -216,7 +222,7 @@ module swan {
         /**
          * @language en_US
          * Specifies whether live dragging is enabled for the slider. If true, sets the value
-         * and values properties and dispatches the change event continuously as
+         * and values properties and emits the change event continuously as
          * the user moves the thumb.
          *
          * @default true
@@ -246,10 +252,10 @@ module swan {
 
         /**
          * @language en_US
-         * The value the slider will have when the mouse button is released.
+         * The value the slider will have when the touch is end.
          * This property is updated when the slider thumb moves, even if <code>liveDragging</code> is false.<p/>
          * If the <code>liveDragging</code> style is false, then the slider's value is only set
-         * when the mouse button is released.
+         * when the touch is end.
          *
          * @default 0
          *
@@ -259,7 +265,7 @@ module swan {
          */
         /**
          * @language zh_CN
-         * 释放鼠标按键时滑块将具有的值。
+         * 触摸结束时滑块将具有的值。
          * 无论 liveDragging 是否为 true，在滑块拖动期间始终更新此属性。
          * 而 value 属性在当 liveDragging 为 false 时，只在鼠标释放时更新一次。
          *
@@ -283,21 +289,7 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * Sets the backing store for the <code>value</code> property and
-         * dispatches a <code>valueCommit</code> event if the property changes.
-         *
-         * @param value The new value of the <code>value</code> property.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在 value 属性改变时为该属性设置后备存储，并调度 valueCommit 事件。
-         *
-         * @param value The new value of the <code>value</code> property.
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -311,6 +303,10 @@ module swan {
 
         /**
          * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected partAdded(partName:string, instance:any):void {
             super.partAdded(partName, instance);
@@ -333,6 +329,10 @@ module swan {
 
         /**
          * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         protected partRemoved(partName:string, instance:any):void {
             super.partRemoved(partName, instance);
@@ -440,7 +440,7 @@ module swan {
 
         /**
          * @language en_US
-         * Handle mouse-up events anywhere on or off the stage.
+         * Handle touch-end events anywhere on or off the stage.
          *
          * @param The <code>lark.Event</code> object.
          *

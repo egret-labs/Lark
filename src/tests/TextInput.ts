@@ -42,6 +42,7 @@ module lark {
             textarea.displayAsPassword=false;
             textarea.wordWrap = true;
             textarea.text = "Text Area !";
+            textarea.setSelection(0,45);
             textarea.fontSize=40;
             textarea.bold = true;
             textarea.verticalAlign = VerticalAlign.TOP;
@@ -56,19 +57,23 @@ module lark {
             bg.graphics.fillRect(0, 0, 300, 300);
             this.addChild(bg);
 
-            textarea.on("focus",e=>console.log("focus",textarea.text),this);
-            textarea.on("blur",e=>console.log("blur",textarea.text),this);
-            textarea.on("input",e=>console.log("input",textarea.text),this);
-            textarea.on("change", e=> console.log("change", textarea.text), this);
 
             var input = new TextInput();
-            input.displayAsPassword = true;
             input.width = 300;
             input.height = 50;
             input.y = 500;
             input.x = 100;
             input.text = "Text Input!";
             input.fontSize = 40;
+
+
+            textarea.on(Event.CHANGE, e=> {
+                console.log(textarea.selectionBeginIndex,textarea.selectionEndIndex);
+            }, this);
+            textarea.on(Event.FOCUS_IN, e=> {
+
+                textarea.setSelection(0,45);
+            }, this);
 
             var inputbg = new Shape();
             inputbg.x = 100;

@@ -30,21 +30,74 @@
 module swan {
 
 	/**
-	 * ColumnAlign 类为 TileLayout 类的 columnAlign 属性定义可能的值。
+	 * @language en_US
+	 * The ColumnAlign class defines the possible values for the
+	 * <code>columnAlign</code> property of the TileLayout class.
+	 *
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
+	 */
+	/**
+	 * @language zh_CN
+	 * ColumnAlign 类为 TileLayout 类的 <code>columnAlign</code> 属性定义可能的值。
+	 *
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
 	 */
 	export class ColumnAlign{
 		/**
-		 * 不将行两端对齐。 
+		 * @language en_US
+		 * Do not justify the rows.
+		 *
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
+		 * 不将行两端对齐。
+		 *
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public static LEFT:string = "left";
 		
 		/**
+		 * @language en_US
+		 * Justify the rows by increasing the vertical gap.
+		 *
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
 		 * 通过增大水平间隙将行两端对齐。
+		 *
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public static JUSTIFY_USING_GAP:string = "justifyUsingGap";
 		
 		/**
-		 * 通过增大行高度将行两端对齐。 
+		 * @language en_US
+		 * Justify the rows by increasing the row height.
+		 *
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
+		 * 通过增大行高度将行两端对齐。
+		 *
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		public static JUSTIFY_USING_WIDTH:string = "justifyUsingWidth";
 	}

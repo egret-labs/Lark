@@ -31,37 +31,151 @@
 module swan {
 
 	/**
-	 * 支持视区的组件接口
+	 * @language en_US
+	 * The IViewport interface is implemented by components that support a viewport.
+	 *
+	 * If a component's children are larger than the component,
+	 * and you want to clip the children to the component boundaries, you can define a viewport.
+	 *
+	 * A viewport is a rectangular subset of the area of a component that you want to display,
+	 * rather than displaying the entire component.
+	 *
+	 * @see swan.Scroller
+	 *
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
+	 */
+	/**
+	 * @language zh_CN
+	 * 支持视区的组件接口。
+	 *
+	 * 如果组件的内容子项比组件要大，而且您向往子项可以在父级组件的边缘处被裁减，您可以定义一个视区。
+	 *
+	 * 视区是您希望显示的组件的区域的矩形子集，而不是显示整个组件。
+	 *
+	 * @see swan.Scroller
+	 *
+	 * @version Lark 1.0
+	 * @version Swan 1.0
+	 * @platform Web,Native
 	 */
 	export interface IViewport extends UIComponent{
 		/**
+		 * @language en_US
+		 * The width of the viewport's contents.
+		 *
+		 * If <code>scrollEnabled</code> is true, the viewport's
+		 * <code>contentWidth</code> defines the limit for horizontal scrolling
+		 * and the viewport's actual width defines how much of the content is visible.
+		 *
+		 * To scroll through the content horizontally, vary the
+		 * <code>scrollH</code> between 0 and
+		 * <code>contentWidth - width</code>.
+		 *
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
 		 * 视域的内容的宽度。
-		 * 如果 clipAndEnabledScrolling 为 true， 则视域的 contentWidth 为水平滚动定义限制，
-		 * 且视域的实际宽度定义可见的内容量。要在内容中水平滚动， 请在 0 和 contentWidth - width 
-		 * 之间更改 scrollH。
+		 *
+		 * 如果 <code>scrollEnabled</code> 为 true， 则视域的 <code>contentWidth</code> 为水平滚动定义限制，
+		 * 且视域的实际宽度定义可见的内容量。
+		 *
+		 * 要在内容中水平滚动， 请在 0 和 contentWidth - width 之间更改 <code>scrollH</code> 。
+		 *
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		contentWidth:number;
 		
 		/**
+		 * @language en_US
+		 * The height of the viewport's content.
+		 *
+		 * If <code>scrollEnabled</code> is true, the viewport's
+		 * <code>contentHeight</code> defines the limit for vertical scrolling
+		 * and the viewport's actual height defines how much of the content is visible.
+		 *
+		 * To scroll through the content vertically, vary the
+		 * <code>scrollV</code> between 0 and
+		 * <code>contentHeight - height</code>.
+		 *
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
 		 * 视域的内容的高度。
-		 * 如果 scrollEnabled 为 true，则视域的 contentHeight 为垂直滚动定义限制，
-		 * 且视域的实际高度定义可见的内容量。要在内容中垂直滚动，请在 0 和 contentHeight - height 
-		 * 之间更改 scrollV。
+		 *
+		 * 如果 <code>scrollEnabled</code> 为 true，则视域的 <code>contentHeight</code> 为垂直滚动定义限制，
+		 * 且视域的实际高度定义可见的内容量。要在内容中垂直滚动，请在 0 和 contentHeight - height
+		 * 之间更改 <code>scrollV</code>。
+		 *
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		contentHeight:number;
 		
 		/**
-		 * 可视区域水平方向起始点
+		 * @language en_US
+		 * The x coordinate of the origin of the viewport in the component's coordinate system,
+		 * where the default value is (0,0) corresponding to the upper-left corner of the component.
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
+		 * 可视区域水平方向起始点。
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		scrollH:number;
 		
 		/**
-		 * 可视区域竖直方向起始点
+		 * @language en_US
+		 * The y coordinate of the origin of the viewport in the component's coordinate system,
+		 * where the default value is (0,0) corresponding to the upper-left corner of the component.
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
+		 * 可视区域竖直方向起始点。
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		scrollV:number;
 		
 		/**
-		 * 如果为 true，指定将子代剪切到视区的边界。如果为 false，则容器子代会从容器边界扩展过去，而不管组件的大小规范。默认false
+		 * @language en_US
+		 * If <code>true</code>, specifies to clip the children to the boundaries of the viewport.
+		 * If <code>false</code>, the container children extend past the container boundaries,
+		 * regardless of the size specification of the component.
+		 *
+		 * @default false
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
+		 */
+		/**
+		 * @language zh_CN
+		 * 是否启用容器滚动。如果为 true，则将子项剪切到视区的边界，配合设置scrollH和scrollV属性将能滚动视区。
+		 * 如果为 false，则容器子代会从容器边界扩展过去，而设置scrollH和scrollV也无效。默认false。
+		 *
+		 * @default false
+		 * @version Lark 1.0
+		 * @version Swan 1.0
+		 * @platform Web,Native
 		 */
 		scrollEnabled:boolean;
 	}

@@ -72,9 +72,6 @@ var Entry = (function () {
                 new Help().execute();
                 exitCode = DontExitCode;
                 break;
-            case "info":
-                exitCode = new Info().execute();
-                break;
             case "run":
                 var run = new Run();
                 run.execute();
@@ -100,9 +97,12 @@ var Entry = (function () {
                 exitCode = DontExitCode;
                 break;
             case "build":
-            default:
                 new Build().execute();
                 exitCode = DontExitCode;
+                break;
+            case "info":
+            default:
+                exitCode = new Info().execute();
                 break;
         }
         return exitCode;
