@@ -12,8 +12,7 @@ var RunCommand = (function () {
     }
     RunCommand.prototype.execute = function () {
         var options = lark.options;
-        if (FileUtil.exists(options.srcDir) == false ||
-            FileUtil.exists(options.templateDir) == false) {
+        if (FileUtil.exists(options.srcDir) == false || FileUtil.exists(options.templateDir) == false) {
             utils.exit(10015, options.projectDir);
         }
         if (lark.options.autoCompile) {
@@ -35,9 +34,7 @@ var RunCommand = (function () {
     RunCommand.prototype.watchFiles = function (dir) {
         var _this = this;
         watch.createMonitor(dir, { persistent: true, interval: 2007 }, function (m) {
-            m.on("created", function () { return _this.sendBuildCMD(); })
-                .on("removed", function () { return _this.sendBuildCMD(); })
-                .on("changed", function () { return _this.sendBuildCMD(); });
+            m.on("created", function () { return _this.sendBuildCMD(); }).on("removed", function () { return _this.sendBuildCMD(); }).on("changed", function () { return _this.sendBuildCMD(); });
         });
     };
     RunCommand.prototype.sendBuildCMD = function () {

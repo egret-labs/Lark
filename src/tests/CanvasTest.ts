@@ -28,8 +28,32 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark {
+    /**
+     * @language en_US
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
     export class CanvasTest extends Sprite {
 
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         public constructor() {
             super();
             var loader = new ImageLoader();
@@ -37,8 +61,16 @@ module lark {
             loader.load("image/test.png");
         }
 
+        /**
+         * @private
+         */
         private image:any;
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private start(event:Event):void {
             var loader:ImageLoader = event.target;
             var bitmapData = loader.data;
@@ -55,9 +87,19 @@ module lark {
 
         }
 
+        /**
+         * @private
+         */
         private textField:TextField;
+        /**
+         * @private
+         */
         private canvasCount:number = 2;
 
+        /**
+         * @private
+         * 
+         */
         private createCanvas():void {
             var canvas = this.createCanvasElement();
             if (canvas == null) {
@@ -75,10 +117,20 @@ module lark {
         }
 
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private onTouchBegin(event:TouchEvent):void {
             this.createCanvas();
         }
 
+        /**
+         * @private
+         * 
+         * @param msg 
+         */
         private log(msg: string) {
             var tx = this.textField.text;
             tx += this.canvasCount + ":" + msg + "\n";
@@ -89,6 +141,11 @@ module lark {
             this.textField.text = tx;
         }
 
+        /**
+         * @private
+         * 
+         * @returns 
+         */
         private createCanvasElement(): HTMLCanvasElement {
             var canvas = document.createElement("canvas");
             canvas.height = 1;

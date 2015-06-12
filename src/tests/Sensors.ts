@@ -1,6 +1,30 @@
-﻿
+
 module lark {
+    /**
+     * @language en_US
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
     export class Sensors extends Sprite {
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         constructor() {
             super();
 
@@ -16,9 +40,9 @@ module lark {
             this.addChild(motionText);
             this.addChild(orgText);
 
-            var locator = new lark.Locator();
-            locator.on('change', (e: lark.LocatorEvent) => locationText.text = e.latitude + "," + e.longitude, this);
-            locator.on('ioError', (e: lark.LocatorEvent) => locationText.text = e.errorType, this);
+            var locator = new lark.Geolocation();
+            locator.on('change', (e: lark.GeolocationEvent) => locationText.text = e.latitude + "," + e.longitude, this);
+            locator.on('ioError', (e: lark.GeolocationEvent) => locationText.text = e.errorType, this);
             locator.start();
 
             var motion = new lark.Motion();

@@ -6,25 +6,31 @@ exports.optionDeclarations = [
     {
         name: "action",
         type: "string"
-    }, {
+    },
+    {
         name: "includeLark",
         type: "boolean",
         shortName: "e"
-    }, {
+    },
+    {
         name: "sourceMap",
         type: "boolean"
-    }, {
+    },
+    {
         name: 'serverOnly',
         type: "boolean"
-    }, {
+    },
+    {
         name: 'autoCompile',
         type: 'boolean',
         shortName: "a"
-    }, {
+    },
+    {
         name: 'fileName',
         type: 'string',
         shortName: 'f'
-    }, {
+    },
+    {
         name: 'port',
         type: 'number'
     }
@@ -91,11 +97,11 @@ function parseCommandLine(commandLine) {
             options.projectDir = process.cwd();
         else {
             var absPath = file.joinPath(process.cwd(), options.projectDir);
-            if(file.isDirectory(absPath)){
+            if (file.isDirectory(absPath)) {
                 options.projectDir = absPath;
                 process.chdir(absPath);
             }
-            else if(file.isDirectory(options.projectDir)){
+            else if (file.isDirectory(options.projectDir)) {
                 process.chdir(options.projectDir);
             }
         }

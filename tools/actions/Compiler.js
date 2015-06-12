@@ -9,7 +9,8 @@ var Compiler = (function () {
         var args = option.args, def = option.def, files = option.files, out = option.out, outDir = option.outDir;
         var defTemp = args.declaration;
         args.declaration = def;
-        files = files.map(function (f) { return f.replace(file.escapePath(process.cwd() + "/"), ""); });
+        var cwd = file.escapePath(process.cwd() + "/");
+        files = files.map(function (f) { return f.replace(cwd, ""); });
         var compileResult = tsclark.Compiler.executeWithOption(args, files, out, outDir);
         args.declaration = defTemp;
         return compileResult;

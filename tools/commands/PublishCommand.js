@@ -9,8 +9,7 @@ var PublishCommand = (function () {
     }
     PublishCommand.prototype.execute = function () {
         var options = lark.options;
-        if (FileUtil.exists(options.srcDir) == false ||
-            FileUtil.exists(options.templateDir) == false) {
+        if (FileUtil.exists(options.srcDir) == false || FileUtil.exists(options.templateDir) == false) {
             utils.exit(10015, options.projectDir);
         }
         options.minify = true;

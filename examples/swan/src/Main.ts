@@ -73,6 +73,8 @@ class Main extends swan.Group {
             var skins = [
                 "components/"+name+"/ListGroup.exml",
                 "components/"+name+"/TabBar.exml",
+                "components/CloseButton.exml",
+                "components/CancelButton.exml",
                 "components/MainGroup.exml"
             ];
 
