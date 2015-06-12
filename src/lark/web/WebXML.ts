@@ -30,30 +30,40 @@
 module lark.web {
 
     /**
+     * @private
      * XML节点基类
      */
     export class XMLNode {
 
+        /**
+         * @private
+         */
         public constructor(nodeType:number, parent:XML) {
             this.nodeType = nodeType;
             this.parent = parent;
         }
 
         /**
+         * @private
          * 节点类型，1：XML，2：XMLAttribute，3：XMLText
          */
         public nodeType:number;
         /**
+         * @private
          * 节点所属的父级节点
          */
         public parent:XML;
     }
 
     /**
+     * @private
      * XML节点对象
      */
     export class XML extends XMLNode {
 
+        /**
+         * @private
+         */
         public constructor(localName:string, parent:XML, prefix:string, namespace:string, name:string) {
             super(1, parent);
             this.localName = localName;
@@ -63,41 +73,52 @@ module lark.web {
         }
 
         /**
+         * @private
          * 当前节点上的属性列表
          */
         public attributes:{[key:string]:string} = {};
         /**
+         * @private
          * 当前节点的子节点列表
          */
         public children:XMLNode[] = [];
         /**
+         * @private
          * 节点完整名称。例如节点 <e:Button/> 的 name 为：e:Button
          */
         public name:string;
         /**
+         * @private
          * 节点的命名空间前缀。例如节点 <e:Button/> 的 prefix 为：e
          */
         public prefix:string;
         /**
+         * @private
          * 节点的本地名称。例如节点 <e:Button/> 的 prefix 为：Button
          */
         public localName:string;
         /**
+         * @private
          * 节点的命名空间地址。例如节点 <e:Skin xmlns:e="http://ns.egret.com/swan"/> 的 namespace 为： http://ns.egret.com/swan
          */
         public namespace:string;
     }
 
     /**
+     * @private
      * XML文本节点
      */
     export class XMLText extends XMLNode {
+        /**
+         * @private
+         */
         public  constructor(text:string, parent:XML) {
             super(3, parent);
             this.text = text;
         }
 
         /**
+         * @private
          * 文本内容
          */
         public text:string;
@@ -107,6 +128,7 @@ module lark.web {
     var parser = new DOMParser();
 
     /**
+     * @private
      * 解析字符串为XML对象
      * @param text 要解析的字符串
      */
@@ -123,6 +145,7 @@ module lark.web {
     }
 
     /**
+     * @private
      * 解析一个节点
      */
     function parseNode(node:Node, parent:XML):XML {

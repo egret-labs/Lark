@@ -34,6 +34,7 @@ module lark.web {
     registerClass(HTMLVideoElement,Types.BitmapData);
 
     /**
+     * @private
      * 转换 Image，Canvas，Video 为 Lark 框架内使用的 BitmapData 对象。
      */
     export function toBitmapData(data:HTMLImageElement|HTMLCanvasElement|HTMLVideoElement):BitmapData {

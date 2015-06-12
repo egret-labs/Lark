@@ -32,9 +32,13 @@ module lark.web {
     var tempPoint = new Point();
 
     /**
+     * @private
      * Web 环境下的输入文本
      */
     export class WebTextAdapter extends LarkObject implements sys.ITextAdapter {
+        /**
+         * @private
+         */
         constructor(container:HTMLDivElement, stage:Stage, canvas:HTMLCanvasElement) {
             super();
             this.$stage = stage;
@@ -44,23 +48,69 @@ module lark.web {
             this.createHtmlInputs();
         }
 
+        /**
+         * @private
+         */
         public $stage:Stage;
+        /**
+         * @private
+         */
         private scaleX:number = 1;
+        /**
+         * @private
+         */
         private scaleY:number = 1;
+        /**
+         * @private
+         */
         private offsetX:number = 1;
+        /**
+         * @private
+         */
         private offsetY:number = 1;
+        /**
+         * @private
+         */
         private canvas:HTMLCanvasElement;
+        /**
+         * @private
+         */
         private container:HTMLDivElement;
+        /**
+         * @private
+         */
         private textContainer:HTMLDivElement;
+        /**
+         * @private
+         */
         private pendingToShowHtmlInput = false;
+        /**
+         * @private
+         */
         private currentTextInput:TextInput = null;
+        /**
+         * @private
+         */
         private currentHtmlInput:HTMLInputElement|HTMLTextAreaElement;
+        /**
+         * @private
+         */
         private singleLineTextInput:HTMLInputElement = null;
+        /**
+         * @private
+         */
         private multiLineTextInput:HTMLTextAreaElement = null;
+        /**
+         * @private
+         */
         private lastSelectStart:number = 0;
+        /**
+         * @private
+         */
         private lastSelectEnd:number = 0;
 
         /**
+         * @private
          * 当用户点击TextInput时，将它设置为正在输入的TextInput对象，HTML text input 会显示出来并获得焦点
          * @param currentTextInput 要输入的TextInput对象
          */
@@ -78,6 +128,7 @@ module lark.web {
         }
 
         /**
+         * @private
          * 清空正在输入的TextInput，隐藏HTML text input。
          */
         public $removeCurrentTextInput() {
@@ -105,6 +156,7 @@ module lark.web {
 
 
         /**
+         * @private
          * 更新屏幕当前的缩放比例，用于计算准确的点击位置。
          * @param scaleX 水平方向的缩放比例。
          * @param scaleY 垂直方向的缩放比例。
@@ -118,6 +170,10 @@ module lark.web {
             this.offsetY = offsetY;
         }
 
+        /**
+         * @private
+         * 
+         */
         private createHtmlInputs() {
             var div = document.createElement("div");
             this.textContainer = div;
@@ -138,6 +194,9 @@ module lark.web {
             this.canvas.addEventListener("click", this.handleContainerClick)
         }
 
+        /**
+         * @private
+         */
         private handleContainerClick = (e) => {
             if (this.pendingToShowHtmlInput) {
                 this.pendingToShowHtmlInput = false;
@@ -159,11 +218,17 @@ module lark.web {
             }
         };
 
+        /**
+         * @private
+         */
         private handleHtmlInputInputEvent = (e)=> {
             this.currentTextInput.$setUserInputText(this.currentHtmlInput.value);
             this.getInputSelection();
         };
 
+        /**
+         * @private
+         */
         private handleHtmlInputBlur = (e) => {
             var htmlInput = this.currentHtmlInput;
             var textInput = this.currentTextInput;
@@ -171,6 +236,9 @@ module lark.web {
             textInput.selectRange(this.lastSelectStart, this.lastSelectEnd);
         };
 
+        /**
+         * @private
+         */
         private resetHtmlElementStyle(element:HTMLElement) {
             element.style.position = "absolute";
             element.style.left = "0px";
@@ -180,6 +248,9 @@ module lark.web {
             element.style[getPrefixStyleName("transformOrigin")] = "0% 0% 0px";
         }
 
+        /**
+         * @private
+         */
         private resetHtmlInputStyle(element:HTMLElement) {
             element.setAttribute("tabindex", "-1");
             element.style.width = "1px";
@@ -193,6 +264,9 @@ module lark.web {
             this.resetHtmlElementStyle(element);
         }
 
+        /**
+         * @private
+         */
         private resetTextContainerStyle() {
             var style = this.textContainer.style;
             style.height = "0px";
@@ -203,6 +277,7 @@ module lark.web {
 
 
         /**
+         * @private
          * 更新HTML5 text input 的属性值
          */
         public $initializeInput() {
@@ -270,17 +345,26 @@ module lark.web {
                 htmlInput.maxLength = 0x800000;
         }
 
+        /**
+         * @private
+         */
         public $selectRange(anchorPosition:number, activePosition:number):void {
             this.currentHtmlInput.selectionStart = anchorPosition;
             this.currentHtmlInput.selectionEnd = activePosition;
         }
 
+        /**
+         * @private
+         */
         private setElementStyle(style:string, value:any):void {
             if (this.currentHtmlInput) {
                 this.currentHtmlInput.style[style] = value;
             }
         }
 
+        /**
+         * @private
+         */
         private getInputSelection = () => {
             this.lastSelectEnd = this.currentHtmlInput.selectionEnd;
             this.lastSelectStart = this.currentHtmlInput.selectionStart;
@@ -289,14 +373,23 @@ module lark.web {
     }
 
 
+    /**
+     * @private
+     */
     var $CurrentPrefix:string = null;
 
+    /**
+     * @private
+     */
     function getPrefixStyleName(name:string):string {
         if ($CurrentPrefix == null)
             $CurrentPrefix = getPrefix();
         return $CurrentPrefix + name.charAt(0).toUpperCase() + name.substr(1);
     }
 
+    /**
+     * @private
+     */
     function getPrefix():string {
         var tempStyle = document.createElement('div').style;
         var prefix = "";

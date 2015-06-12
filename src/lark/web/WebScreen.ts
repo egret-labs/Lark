@@ -30,11 +30,13 @@
 module lark.web {
 
     /**
+     * @private
      * Canvas屏幕适配器
      */
     export class WebScreen extends LarkObject {
 
         /**
+         * @private
          * 创建一个WebScreen实例
          * @param container 播放器外层容器
          * @param scaleMode 舞台缩放模式
@@ -52,29 +54,35 @@ module lark.web {
         }
 
         /**
+         * @private
          * 画布实例
          */
         private canvas:HTMLCanvasElement;
         /**
+         * @private
          * 播放器容器实例
          */
         private container:HTMLElement;
 
         /**
+         * @private
          * 缩放模式,默认值为sys.ScaleMode.NO_SCALE。请参考sys.ScaleMode中定义的值,若设置的值不是sys.ScaleMode中的值，将会默认采用sys.ScaleMode.NO_SCALE。
          */
         private scaleMode:string;
 
         /**
+         * @private
          * 初始化内容宽度
          */
         private contentWidth:number;
         /**
+         * @private
          * 初始化内容高度
          */
         private contentHeight:number;
 
         /**
+         * @private
          * 添加canvas到container。
          */
         private attachCanvas(container:HTMLElement,canvas:HTMLCanvasElement):void {
@@ -94,6 +102,7 @@ module lark.web {
         }
 
         /**
+         * @private
          * 更新播放器视口尺寸
          */
         public updateScreenSize(player:sys.Player, webTouch:WebTouchHandler,webText:WebTextAdapter):void {

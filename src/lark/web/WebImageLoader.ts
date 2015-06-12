@@ -33,27 +33,40 @@ module lark.web {
     var useXHR = winURL&&Capabilities.os == "iOS";
 
     /**
+     * @private
      * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
      */
     export class WebImageLoader extends EventEmitter implements ImageLoader {
         /**
+         * @private
          * 使用 load() 方法加载成功的 BitmapData 图像数据。
          */
         public data:BitmapData = null;
 
         /**
+         * @private
          * 当从其他站点加载一个图片时，指定是否启用跨域资源共享(CORS)，默认值为null。
          * 可以设置为"anonymous","use-credentials"或null,设置为其他值将等同于"anonymous"。
          */
         public crossOrigin:string = null;
 
+        /**
+         * @private
+         */
         private currentImage:HTMLImageElement = null;
 
+        /**
+         * @private
+         */
         private currentURL:string;
 
+        /**
+         * @private
+         */
         private request:WebHttpRequest = null;
 
         /**
+         * @private
          * 启动一次图像加载。注意：若之前已经调用过加载请求，重新调用 load() 将终止先前的请求，并开始新的加载。
          * @param url 要加载的图像文件的地址。
          */
@@ -77,11 +90,17 @@ module lark.web {
             }
         }
 
+        /**
+         * @private
+         */
         private onBlobLoaded(event:lark.Event):void {
             var blob:Blob = this.request.response;
             this.loadImage(winURL.createObjectURL(blob));
         }
 
+        /**
+         * @private
+         */
         private onBlobError(event:lark.Event):void {
             if (DEBUG && !this.hasListener(Event.IO_ERROR)) {
                 $error(1011, this.currentURL);
@@ -89,6 +108,9 @@ module lark.web {
             this.emitWith(Event.IO_ERROR);
         }
 
+        /**
+         * @private
+         */
         private loadImage(src:string):void {
             var image = new Image();
             this.data = null;
@@ -101,6 +123,9 @@ module lark.web {
             image.src = src;
         }
 
+        /**
+         * @private
+         */
         private onImageComplete = (event):void=> {
             var image = this.getImage(event);
             if (!image) {
@@ -110,6 +135,9 @@ module lark.web {
             this.emitWith(Event.COMPLETE);
         }
 
+        /**
+         * @private
+         */
         private onLoadError = (event):void => {
             var image = this.getImage(event);
             if (!image) {
@@ -121,6 +149,9 @@ module lark.web {
             this.emitWith(Event.IO_ERROR);
         }
 
+        /**
+         * @private
+         */
         private getImage(event:any):HTMLImageElement {
             var image:HTMLImageElement = event.target;
             if (useXHR) {

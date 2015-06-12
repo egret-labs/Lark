@@ -29,8 +29,12 @@
 
 module lark.web {
 
+    /**
+     * @private
+     */
     export class WebCapability {
         /**
+         * @private
          * 检测系统属性
          */
         public static detect():void {
@@ -69,6 +73,10 @@ module lark.web {
             capabilities.$language = strings.join("-");
         }
 
+        /**
+         * @private
+         * 
+         */
         private static checkHtml5Support() {
 
             var webaudio = ('webkitAudioContext' in window) || ('AudioContext' in window);

@@ -33,8 +33,14 @@ module lark.web {
 
     var isQQBrowser = navigator.userAgent.indexOf("QQBrowser") != -1;
 
+    /**
+     * @private
+     */
     export class CanvasFactory implements sys.SurfaceFactory {
 
+        /**
+         * @private
+         */
         public constructor() {
             sys.sharedRenderContext = this.create().renderContext;
             for (var i = 0; i < 3; i++) {
@@ -43,6 +49,7 @@ module lark.web {
         }
 
         /**
+         * @private
          * 从对象池取出或创建一个新的Surface实例
          * @param useOnce 表示对取出实例的使用是一次性的，用完后立即会释放。
          */
@@ -60,6 +67,7 @@ module lark.web {
         }
 
         /**
+         * @private
          * 释放一个Surface实例
          * @param surface 要释放的Surface实例
          */
@@ -72,6 +80,7 @@ module lark.web {
         }
 
         /**
+         * @private
          * 检测创建的canvas是否有效，QQ浏览器对硬件内存小等于1G的手机，限制Canvas创建的数量为19个。
          * 针对这个限制,同时满足以下两个条件就不会对显示造成任何影响：
          * 1.不要嵌套使用BlendMode，即使用了混合模式的容器内部不要再设置另一个子项的混合模式。
@@ -88,6 +97,9 @@ module lark.web {
             return true;
         }
 
+        /**
+         * @private
+         */
         private createSurface(canvas:HTMLCanvasElement):sys.Surface {
             var context = canvas.getContext("2d");
             canvas["renderContext"] = context;

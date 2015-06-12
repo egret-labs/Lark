@@ -29,8 +29,14 @@
 
 module lark.web {
 
+    /**
+     * @private
+     */
     export class WebTouchHandler extends LarkObject {
 
+        /**
+         * @private
+         */
         public constructor(touch:lark.sys.TouchHandler, canvas:HTMLCanvasElement) {
             super();
             this.canvas = canvas;
@@ -38,10 +44,17 @@ module lark.web {
             this.addListeners();
         }
 
+        /**
+         * @private
+         */
         private canvas:HTMLCanvasElement;
+        /**
+         * @private
+         */
         private touch:lark.sys.TouchHandler;
 
         /**
+         * @private
          * 添加事件监听
          */
         private addListeners():void {
@@ -67,12 +80,20 @@ module lark.web {
             }
         }
 
+        /**
+         * @private
+         * 
+         */
         private addMouseListener():void {
             this.canvas.addEventListener("mousedown", this.onTouchBegin);
             this.canvas.addEventListener("mousemove", this.onTouchMove);
             window.addEventListener("mouseup", this.onTouchEnd);
         }
 
+        /**
+         * @private
+         * 
+         */
         private addTouchListener():void {
             this.canvas.addEventListener("touchstart", (event:any)=> {
                 var l = event.changedTouches.length;
@@ -104,6 +125,9 @@ module lark.web {
             }, false);
         }
 
+        /**
+         * @private
+         */
         private prevent(event):void {
             event.stopPropagation();
             if (event["isScroll"] != true && !this.canvas['userTyping']) {
@@ -111,22 +135,34 @@ module lark.web {
             }
         }
 
+        /**
+         * @private
+         */
         private onTouchBegin = (event:any):void => {
             var location = this.getLocation(event);
             this.touch.onTouchBegin(location.x, location.y, event.identifier);
         }
 
+        /**
+         * @private
+         */
         private onTouchMove = (event:any):void => {
             var location = this.getLocation(event);
             this.touch.onTouchMove(location.x, location.y, event.identifier);
 
         }
 
+        /**
+         * @private
+         */
         private onTouchEnd = (event:any):void => {
             var location = this.getLocation(event);
             this.touch.onTouchEnd(location.x, location.y, event.identifier);
         }
 
+        /**
+         * @private
+         */
         private getLocation(event:any):Point {
             event.identifier = +event.identifier || 0;
             var doc = document.documentElement;
@@ -138,10 +174,17 @@ module lark.web {
             return $TempPoint.setTo(Math.round(x), Math.round(y));
         }
 
+        /**
+         * @private
+         */
         private scaleX:number = 1;
+        /**
+         * @private
+         */
         private scaleY:number = 1;
 
         /**
+         * @private
          * 更新屏幕当前的缩放比例，用于计算准确的点击位置。
          * @param scaleX 水平方向的缩放比例。
          * @param scaleY 垂直方向的缩放比例。

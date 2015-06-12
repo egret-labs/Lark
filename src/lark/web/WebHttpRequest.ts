@@ -29,8 +29,14 @@
 
 module lark.web {
 
+    /**
+     * @private
+     */
     export class WebHttpRequest extends EventEmitter implements HttpRequest {
 
+        /**
+         * @private
+         */
         public constructor() {
             super();
             this._xhr = new XMLHttpRequest();
@@ -38,9 +44,13 @@ module lark.web {
             this._xhr.onprogress = this.updateProgress
         }
 
+        /**
+         * @private
+         */
         private _xhr:XMLHttpRequest;
 
         /**
+         * @private
          * 本次请求返回的数据，数据类型根据responseType设置的值确定。
          */
         public get response():any {
@@ -48,6 +58,7 @@ module lark.web {
         }
 
         /**
+         * @private
          * 设置返回的数据格式，请使用 HttpResponseType 里定义的枚举值。设置非法的值或不设置，都将使用HttpResponseType.TEXT。
          */
         public get responseType():string {
@@ -59,6 +70,7 @@ module lark.web {
         }
 
         /**
+         * @private
          * 表明在进行跨站(cross-site)的访问控制(Access-Control)请求时，是否使用认证信息(例如cookie或授权的header)。 默认为 false。(这个标志不会影响同站的请求)
          */
         public get withCredentials(): boolean{
@@ -69,9 +81,13 @@ module lark.web {
             this._xhr.withCredentials = !!value;
         }
 
+        /**
+         * @private
+         */
         private _url:string = "";
 
         /**
+         * @private
          * 初始化一个请求.注意，若在已经发出请求的对象上调用此方法，相当于立即调用abort().
          * @param url 该请求所要访问的URL该请求所要访问的URL
          * @param method 请求所使用的HTTP方法， 请使用 HttpMethod 定义的枚举值.
@@ -82,6 +98,7 @@ module lark.web {
         }
 
         /**
+         * @private
          * 发送请求.
          * @param data 需要发送的数据
          */
@@ -90,6 +107,7 @@ module lark.web {
         }
 
         /**
+         * @private
          * 如果请求已经被发送,则立刻中止请求.
          */
         public abort():void {
@@ -97,6 +115,7 @@ module lark.web {
         }
 
         /**
+         * @private
          * 返回所有响应头信息(响应头名和值), 如果响应头还没接受,则返回"".
          */
         public getAllResponseHeaders():string {
@@ -105,6 +124,7 @@ module lark.web {
         }
 
         /**
+         * @private
          * 给指定的HTTP请求头赋值.在这之前,您必须确认已经调用 open() 方法打开了一个url.
          * @param header 将要被赋值的请求头名称.
          * @param value 给指定的请求头赋的值.
@@ -114,6 +134,7 @@ module lark.web {
         }
 
         /**
+         * @private
          * 返回指定的响应头的值, 如果响应头还没被接受,或该响应头不存在,则返回"".
          * @param header 要返回的响应头名称
          */
@@ -122,6 +143,9 @@ module lark.web {
             return result ? result : "";
         }
 
+        /**
+         * @private
+         */
         private onReadyStateChange = ():void=> {
             var xhr = this._xhr;
             if (xhr.readyState == 4) {// 4 = "loaded"
@@ -137,6 +161,9 @@ module lark.web {
             }
         }
 
+        /**
+         * @private
+         */
         private updateProgress = (event):void=> {
             if (event.lengthComputable) {
                 ProgressEvent.emitProgressEvent(this,ProgressEvent.PROGRESS,event.loaded,event.total);

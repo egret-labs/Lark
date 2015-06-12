@@ -32,6 +32,7 @@ module lark.web {
     var containerList:HTMLDivElement[] = [];
 
     /**
+     * @private
      * 刷新所有Lark播放器的显示区域尺寸。仅当使用外部JavaScript代码动态修改了Lark容器大小时，需要手动调用此方法刷新显示区域。
      * 当网页尺寸发生改变时此方法会自动被调用。
      */
@@ -48,6 +49,7 @@ module lark.web {
     }
 
     /**
+     * @private
      * 网页加载完成，实例化页面中定义的Larksys标签
      */
     function runLark():void {
@@ -68,6 +70,7 @@ module lark.web {
     }
 
     /**
+     * @private
      * Lark网页版程序入口
      */
     function createPlayer(container:HTMLDivElement):void {
@@ -108,6 +111,7 @@ module lark.web {
     }
 
     /**
+     * @private
      * 启动心跳计时器。
      */
     function startTicker(ticker:lark.sys.Ticker):void {
