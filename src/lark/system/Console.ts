@@ -30,19 +30,73 @@
 declare module lark {
 
     /**
-     * 判断第一个参数是否为true，若为false则抛出异常并且在console输出相应信息。
+     * @language en_US
+     * Writes an error message to the console if the assertion is false. If the assertion is true, nothing will happen.
+     * @param assertion Any boolean expression. If the assertion is false, the message will get written to the console.
+     * @param message the message written to the console
+     * @param optionalParams the extra messages written to the console
+     * @version Lark 1.0
+     * @platform Web,Native
      */
-    function assert(test?:boolean, message?:string, ...optionalParams:any[]):void;
     /**
-     * 打印一个警告信息，传入多个参数会输出以空格分隔的字符串。
+     * @language zh_CN
+     * 判断参数assertion是否为true，若为false则抛出异常并且在console输出相应信息，反之什么也不做。
+     * @param assertion 一个 boolean 表达式，若结果为false，则抛出错误并输出信息。
+     * @param message 要输出到控制台的信息
+     * @param optionalParams 要输出到控制台的额外可选信息
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function assert(assertion?:boolean, message?:string, ...optionalParams:any[]):void;
+    /**
+     * @language en_US
+     * Writes a warning message to the console.
+     * @param message the message written to the console
+     * @param optionalParams the extra messages written to the console
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 输出一个警告信息到控制台。
+     * @param message 要输出到控制台的信息
+     * @param optionalParams 要输出到控制台的额外信息
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     function warn(message?:any, ...optionalParams:any[]):void;
     /**
-     * 打印一条错误信息,传入多个参数会输出以空格分隔的字符串。
+     * @language en_US
+     * Writes an error message to the console.
+     * @param message the message written to the console
+     * @param optionalParams the extra messages written to the console
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 输出一个错误信息到控制台。
+     * @param message 要输出到控制台的信息
+     * @param optionalParams 要输出到控制台的额外信息
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     function error(message?:any, ...optionalParams:any[]): void;
     /**
-     * 打印字符串,传入多个参数会输出以空格分隔的字符串。
+     * @language en_US
+     * Writes an message to the console.
+     * @param message the message written to the console
+     * @param optionalParams the extra messages written to the console
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 输出一个日志信息到控制台。
+     * @param message 要输出到控制台的信息
+     * @param optionalParams 要输出到控制台的额外信息
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     function log(message?:any, ...optionalParams:any[]):void;
 }
