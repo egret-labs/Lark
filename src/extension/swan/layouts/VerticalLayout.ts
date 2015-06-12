@@ -31,14 +31,18 @@ module swan {
 
     /**
      * @language en_US
-     * 垂直布局
+     * The VerticalLayout class arranges the layout elements in a vertical sequence,
+     * top to bottom, with optional gaps between the elements and optional padding
+     * around the sequence of elements.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 垂直布局
+     * VerticalLayout 类按垂直顺序从上向下排列布局元素，在元素和围绕元素顺序的可选填充之间带有可选间隙。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -46,15 +50,8 @@ module swan {
     export class VerticalLayout extends LinearLayoutBase {
 
         /**
-         * @language en_US
-         * 测量使用真实布局的尺寸
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 测量使用真实布局的尺寸
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -83,15 +80,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 测量使用虚拟布局的尺寸
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 测量使用虚拟布局的尺寸
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -120,15 +110,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 更新使用真实布局的显示列表
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 更新使用真实布局的显示列表
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -313,15 +296,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 更新使用虚拟布局的显示列表
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 更新使用虚拟布局的显示列表
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -430,15 +406,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 获取指定索引的起始位置
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取指定索引的起始位置
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -464,15 +433,8 @@ module swan {
 
 
         /**
-         * @language en_US
-         * 获取指定索引的元素尺寸
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取指定索引的元素尺寸
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -489,15 +451,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 获取缓存的子对象尺寸总和
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取缓存的子对象尺寸总和
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -516,17 +471,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 
-         * @param index 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 
-         * @param index 
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -539,15 +485,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 获取视图中第一个和最后一个元素的索引,返回是否发生改变
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取视图中第一个和最后一个元素的索引,返回是否发生改变
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
