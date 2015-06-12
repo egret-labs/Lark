@@ -30,10 +30,12 @@
 module swan.sys {
 
     /**
+     * @private
      * Swan 命名空间
      */
     export var NS_S:string = "http://ns.egret.com/swan";
     /**
+     * @private
      * Wing命名空间
      */
     export var NS_W:string = "http://ns.egret.com/wing";
@@ -44,10 +46,22 @@ module swan.sys {
 
     var hashCount = 0;
 
+    /**
+     * @private
+     */
     export class EXMLConfig {
 
+        /**
+         * @private
+         */
         private properties:any = {};
 
+        /**
+         * @private
+         * 
+         * @param instance 
+         * @returns 
+         */
         private describe(instance:any):any {
             if (!instance) {
                 return null;
@@ -117,6 +131,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 根据类的短名ID和命名空间获取完整类名(以"."分隔)
          * @param id 类的短名ID
          * @param ns 命名空间
@@ -145,6 +160,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 根据ID获取对应的默认属性
          * @param id 类的短名ID
          * @param ns 命名空间
@@ -160,6 +176,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 获取指定属性的类型,返回基本数据类型："boolean","string","number","any"。
          * @param property 属性名
          * @param className 要查询的完整类名
@@ -192,6 +209,7 @@ module swan.sys {
     }
 
     /**
+     * @private
      * 判断一个对象是数组
      */
     function isArray(o:any):boolean {
@@ -199,6 +217,7 @@ module swan.sys {
     }
 
     /**
+     * @private
      * 获取一个类名对应的prototype引用
      */
     function getPrototypeOf(className:string):any {
@@ -210,6 +229,7 @@ module swan.sys {
     }
 
     /**
+     * @private
      * 创建一个类名对应的实例
      */
     function getInstanceOf(clazz:any):any {

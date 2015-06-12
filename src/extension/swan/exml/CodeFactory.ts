@@ -35,17 +35,27 @@ module swan.sys {
     var BINDING_PROPERTY = "swan.Binding.bindProperty";
 
     /**
+     * @private
      * 代码生成工具基类
      */
     export class CodeBase {
 
+        /**
+         * @private
+         * 
+         * @returns 
+         */
         public toCode():string {
             return "";
         }
 
+        /**
+         * @private
+         */
         public indent:number = 0;
 
         /**
+         * @private
          * 获取缩进字符串
          */
         public getIndent(indent?:number):string {
@@ -60,28 +70,36 @@ module swan.sys {
     }
 
 
+    /**
+     * @private
+     */
     export class EXClass extends CodeBase {
 
         /**
+         * @private
          * 构造函数代码块
          */
         public constructCode:EXCodeBlock;
         /**
+         * @private
          * 类名,不包括模块名
          */
         public className:string = "";
 
         /**
+         * @private
          * 父类类名,包括完整模块名
          */
         public superClass:string = "";
 
         /**
+         * @private
          * 内部类区块
          */
         private innerClassBlock:EXClass[] = [];
 
         /**
+         * @private
          * 添加一个内部类
          */
         public addInnerClass(clazz:EXClass):void {
@@ -91,11 +109,13 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 变量定义区块
          */
         private variableBlock:EXVariable[] = [];
 
         /**
+         * @private
          * 添加变量
          */
         public addVariable(variableItem:EXVariable):void {
@@ -105,6 +125,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 根据变量名获取变量定义
          */
         public getVariableByName(name:string):EXVariable {
@@ -120,11 +141,13 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 函数定义区块
          */
         private functionBlock:EXFunction[] = [];
 
         /**
+         * @private
          * 添加函数
          */
         public addFunction(functionItem:EXFunction):void {
@@ -134,6 +157,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 根据函数名返回函数定义块
          */
         public getFuncByName(name:string):EXFunction {
@@ -148,6 +172,11 @@ module swan.sys {
             return null;
         }
 
+        /**
+         * @private
+         * 
+         * @returns 
+         */
         public toCode():string {
 
             var indent = this.indent;
@@ -222,9 +251,13 @@ module swan.sys {
 
     }
 
+    /**
+     * @private
+     */
     export class EXCodeBlock extends CodeBase {
 
         /**
+         * @private
          * 添加变量声明语句
          * @param name 变量名
          * @param value 变量初始值
@@ -235,6 +268,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 添加赋值语句
          * @param target 要赋值的目标
          * @param value 值
@@ -246,6 +280,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 添加返回值语句
          */
         public addReturn(data:string):void {
@@ -253,6 +288,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 添加一条空行
          */
         public addEmptyLine():void {
@@ -260,6 +296,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 开始添加if语句块,自动调用startBlock();
          */
         public startIf(expression:string):void {
@@ -268,6 +305,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 开始else语句块,自动调用startBlock();
          */
         public startElse():void {
@@ -276,6 +314,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 开始else if语句块,自动调用startBlock();
          */
         public startElseIf(expression:string):void {
@@ -284,6 +323,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 添加一个左大括号，开始新的语句块
          */
         public startBlock():void {
@@ -292,6 +332,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 添加一个右大括号,结束当前的语句块
          */
         public endBlock():void {
@@ -300,6 +341,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 添加执行函数语句块
          * @param functionName 要执行的函数名称
          * @param args 函数参数列表
@@ -309,9 +351,13 @@ module swan.sys {
             this.addCodeLine(functionName + "(" + argsStr + ")");
         }
 
+        /**
+         * @private
+         */
         private lines:string[] = [];
 
         /**
+         * @private
          * 添加一行代码
          */
         public addCodeLine(code:string):void {
@@ -319,6 +365,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 添加一行代码到指定行
          */
         public addCodeLineAt(code:string, index:number):void {
@@ -326,6 +373,7 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 是否存在某行代码内容
          */
         public containsCodeLine(code:string):boolean {
@@ -333,31 +381,50 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 在结尾追加另一个代码块的内容
          */
         public concat(cb:EXCodeBlock):void {
             this.lines = this.lines.concat(cb.lines);
         }
 
+        /**
+         * @private
+         * 
+         * @returns 
+         */
         public toCode():string {
             return this.lines.join("\n");
         }
     }
 
+    /**
+     * @private
+     */
     export class EXFunction extends CodeBase {
 
         /**
+         * @private
          * 代码块
          */
         public codeBlock:EXCodeBlock = null;
 
+        /**
+         * @private
+         */
         public isGet:boolean = false;
 
         /**
+         * @private
          * 函数名
          */
         public name:string = "";
 
+        /**
+         * @private
+         * 
+         * @returns 
+         */
         public toCode():string {
             var indentStr:string = this.getIndent();
             var indent1Str:string = this.getIndent(this.indent + 1);
@@ -393,8 +460,14 @@ module swan.sys {
         }
     }
 
+    /**
+     * @private
+     */
     export class EXVariable extends CodeBase {
 
+        /**
+         * @private
+         */
         public constructor(name:string, defaultValue?:string) {
             super();
             this.indent = 2;
@@ -403,14 +476,21 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 变量名
          */
         public name:string;
         /**
+         * @private
          * 默认值
          */
         public defaultValue:string;
 
+        /**
+         * @private
+         * 
+         * @returns 
+         */
         public toCode():string {
             if (!this.defaultValue) {
                 return "";
@@ -420,8 +500,14 @@ module swan.sys {
     }
 
 
+    /**
+     * @private
+     */
     export class EXState extends CodeBase {
 
+        /**
+         * @private
+         */
         public constructor(name:string, stateGroups?:Array<any>) {
             super();
             this.name = name;
@@ -430,17 +516,28 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 视图状态名称
          */
         public name:string = "";
 
+        /**
+         * @private
+         */
         public stateGroups:Array<any> = [];
 
+        /**
+         * @private
+         */
         public addItems:Array<any> = [];
 
+        /**
+         * @private
+         */
         public setProperty:Array<any> = [];
 
         /**
+         * @private
          * 添加一个覆盖
          */
         public addOverride(item:CodeBase):void {
@@ -450,6 +547,11 @@ module swan.sys {
                 this.setProperty.push(item);
         }
 
+        /**
+         * @private
+         * 
+         * @returns 
+         */
         public toCode():string {
             var indentStr:string = this.getIndent(1);
             var returnStr:string = "new " + STATE + " (\"" + this.name + "\",\n" + indentStr + "[\n";
@@ -476,7 +578,13 @@ module swan.sys {
         }
     }
 
+    /**
+     * @private
+     */
     export class EXAddItems extends CodeBase {
+        /**
+         * @private
+         */
         public constructor(target:string, property:string, position:number, relativeTo:string) {
             super();
             this.target = target;
@@ -486,32 +594,47 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 要添加的实例
          */
         public target:string;
 
         /**
+         * @private
          * 要添加到的属性
          */
         public property:string;
 
         /**
+         * @private
          * 添加的位置
          */
         public position:number;
 
         /**
+         * @private
          * 相对的显示元素
          */
         public relativeTo:string;
 
+        /**
+         * @private
+         * 
+         * @returns 
+         */
         public toCode():string {
             var returnStr:string = "new " + ADD_ITEMS + "(\"" + this.target + "\",\"" + this.property + "\"," + this.position + ",\"" + this.relativeTo + "\")";
             return returnStr;
         }
     }
 
+    /**
+     * @private
+     */
     export class EXSetProperty extends CodeBase {
+        /**
+         * @private
+         */
         public constructor(target:string, name:string, value:string) {
             super();
             this.target = target;
@@ -520,28 +643,42 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 要修改的属性名
          */
         public name:string;
 
         /**
+         * @private
          * 目标实例名
          */
         public target:string;
 
         /**
+         * @private
          * 属性值
          */
         public value:string;
 
+        /**
+         * @private
+         * 
+         * @returns 
+         */
         public toCode():string {
             return "new " + SET_PROPERTY + "(\"" + this.target + "\",\"" + this.name + "\"," + this.value + ")";
         }
     }
 
 
+    /**
+     * @private
+     */
     export class EXBinding extends CodeBase {
 
+        /**
+         * @private
+         */
         public constructor(target:string,property:string,expression:string){
             super();
             this.target = target;
@@ -550,18 +687,26 @@ module swan.sys {
         }
 
         /**
+         * @private
          * 目标实例名
          */
         public target:string;
         /**
+         * @private
          * 目标属性名
          */
         public property:string;
         /**
+         * @private
          * 绑定表达式
          */
         public expression:string;
 
+        /**
+         * @private
+         * 
+         * @returns 
+         */
         public toCode():string {
             var chain = this.expression.split(".").join("\",\"");
             return BINDING_PROPERTY+"(this, [\""+chain+"\"], this."+this.target+",\""+this.property+"\");";
