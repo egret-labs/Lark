@@ -50,7 +50,7 @@ module lark.sys{
          */
         $initializeInput(): void;
 
-        $setSelection(selectStart: number, selectEnd: number): void
+        $selectRange(anchorPosition: number, activePosition: number): void
 
         $stage:Stage;
     }

@@ -42,7 +42,7 @@ module lark {
             textarea.displayAsPassword=false;
             textarea.wordWrap = true;
             textarea.text = "Text Area !";
-            textarea.setSelection(0,45);
+            textarea.selectRange(0,45);
             textarea.fontSize=40;
             textarea.bold = true;
             textarea.verticalAlign = VerticalAlign.TOP;
@@ -68,11 +68,11 @@ module lark {
 
 
             textarea.on(Event.CHANGE, e=> {
-                console.log(textarea.selectionBeginIndex,textarea.selectionEndIndex);
+                console.log(textarea.selectionActivePosition,textarea.selectionAnchorPosition);
             }, this);
             textarea.on(Event.FOCUS_IN, e=> {
 
-                textarea.setSelection(0,45);
+                textarea.selectRange(0,45);
             }, this);
 
             var inputbg = new Shape();

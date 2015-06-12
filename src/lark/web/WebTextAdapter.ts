@@ -34,8 +34,8 @@ module lark.web {
     /**
      * Web 环境下的输入文本
      */
-    export class WebTextAdapter extends LarkObject implements sys.ITextAdapter{
-        constructor(container:HTMLDivElement,stage:Stage,canvas:HTMLCanvasElement){
+    export class WebTextAdapter extends LarkObject implements sys.ITextAdapter {
+        constructor(container:HTMLDivElement, stage:Stage, canvas:HTMLCanvasElement) {
             super();
             this.$stage = stage;
             this.canvas = canvas;
@@ -64,12 +64,12 @@ module lark.web {
          * 当用户点击TextInput时，将它设置为正在输入的TextInput对象，HTML text input 会显示出来并获得焦点
          * @param currentTextInput 要输入的TextInput对象
          */
-        public $setCurrentTextInput(currentTextInput: TextInput) {
+        public $setCurrentTextInput(currentTextInput:TextInput) {
             if (this.currentTextInput != null)
                 this.$removeCurrentTextInput();
             this.currentTextInput = currentTextInput;
             this.currentHtmlInput = currentTextInput.wordWrap ? this.multiLineTextInput : this.singleLineTextInput;
-            if(currentTextInput.displayAsPassword) {
+            if (currentTextInput.displayAsPassword) {
                 this.currentHtmlInput = this.singleLineTextInput;
             }
             this.currentHtmlInput.value = this.currentTextInput.text;
@@ -80,7 +80,7 @@ module lark.web {
         /**
          * 清空正在输入的TextInput，隐藏HTML text input。
          */
-        public $removeCurrentTextInput(){
+        public $removeCurrentTextInput() {
             window.scrollTo(0, 0);
             var currentTextInput = this.currentTextInput;
             var currentHtmlInput = this.currentHtmlInput;
@@ -118,16 +118,16 @@ module lark.web {
             this.offsetY = offsetY;
         }
 
-        private createHtmlInputs(){
+        private createHtmlInputs() {
             var div = document.createElement("div");
             this.textContainer = div;
-            div.id="text-container-"+this.hashCode;
+            div.id = "text-container-" + this.hashCode;
             this.resetTextContainerStyle();
 
             var singleHtmlInput = document.createElement("input");
-            singleHtmlInput.type="text";
+            singleHtmlInput.type = "text";
             var multiLineHtmlInput = document.createElement("textarea");
-            multiLineHtmlInput.style['resize']='none';
+            multiLineHtmlInput.style['resize'] = 'none';
             this.resetHtmlInputStyle(singleHtmlInput);
             this.resetHtmlInputStyle(multiLineHtmlInput);
             div.appendChild(singleHtmlInput);
@@ -135,11 +135,11 @@ module lark.web {
             this.container.appendChild(div);
             this.singleLineTextInput = singleHtmlInput;
             this.multiLineTextInput = multiLineHtmlInput;
-            this.canvas.addEventListener("click",this.handleContainerClick)
+            this.canvas.addEventListener("click", this.handleContainerClick)
         }
 
         private handleContainerClick = (e) => {
-            if(this.pendingToShowHtmlInput){
+            if (this.pendingToShowHtmlInput) {
                 this.pendingToShowHtmlInput = false;
                 e.stopImmediatePropagation();
                 this.$initializeInput();
@@ -150,16 +150,16 @@ module lark.web {
                 currentHtmlInput.onclick = this.getInputSelection;
                 currentHtmlInput.onselect = this.getInputSelection;
                 currentHtmlInput.onkeydown = this.getInputSelection;
-                this.$setSelection(this.currentTextInput.selectionBeginIndex, this.currentTextInput.selectionEndIndex);
+                this.$selectRange(this.currentTextInput.selectionActivePosition, this.currentTextInput.selectionAnchorPosition);
                 this.getInputSelection();
                 this.currentTextInput.$startInput();
             }
-            else if(this.currentTextInput != null){
+            else if (this.currentTextInput != null) {
                 this.$removeCurrentTextInput();
             }
         };
 
-        private handleHtmlInputInputEvent = (e)=>{
+        private handleHtmlInputInputEvent = (e)=> {
             this.currentTextInput.$setUserInputText(this.currentHtmlInput.value);
             this.getInputSelection();
         };
@@ -168,10 +168,10 @@ module lark.web {
             var htmlInput = this.currentHtmlInput;
             var textInput = this.currentTextInput;
             this.$removeCurrentTextInput();
-            textInput.setSelection(this.lastSelectStart, this.lastSelectEnd);
+            textInput.selectRange(this.lastSelectStart, this.lastSelectEnd);
         };
 
-        private resetHtmlElementStyle(element:HTMLElement){
+        private resetHtmlElementStyle(element:HTMLElement) {
             element.style.position = "absolute";
             element.style.left = "0px";
             element.style.top = "0px";
@@ -180,7 +180,7 @@ module lark.web {
             element.style[getPrefixStyleName("transformOrigin")] = "0% 0% 0px";
         }
 
-        private resetHtmlInputStyle(element:HTMLElement){
+        private resetHtmlInputStyle(element:HTMLElement) {
             element.setAttribute("tabindex", "-1");
             element.style.width = "1px";
             element.style.height = "12px";
@@ -193,11 +193,11 @@ module lark.web {
             this.resetHtmlElementStyle(element);
         }
 
-        private resetTextContainerStyle(){
+        private resetTextContainerStyle() {
             var style = this.textContainer.style;
-            style.height="0px";
-            style.width="0px";
-            style.top="-100px";
+            style.height = "0px";
+            style.width = "0px";
+            style.top = "-100px";
             this.resetHtmlElementStyle(this.textContainer);
         }
 
@@ -205,13 +205,13 @@ module lark.web {
         /**
          * 更新HTML5 text input 的属性值
          */
-        public $initializeInput(){
-            this.singleLineTextInput.style.display="none";
-            this.multiLineTextInput.style.display="none";
+        public $initializeInput() {
+            this.singleLineTextInput.style.display = "none";
+            this.multiLineTextInput.style.display = "none";
             var textInput = this.currentTextInput;
             var htmlInput = this.currentHtmlInput;
 
-            if(textInput.displayAsPassword) {
+            if (textInput.displayAsPassword) {
                 htmlInput.type = "password";
             }
             else {
@@ -221,18 +221,18 @@ module lark.web {
             var scaleX = this.scaleX;
             var scaleY = this.scaleY;
             var matrix = textInput.$getConcatenatedMatrix().clone();
-            matrix.scale(scaleX,scaleY);
+            matrix.scale(scaleX, scaleY);
 
-            var p = textInput.localToGlobal(0,0,tempPoint);
-            this.textContainer.style.left = this.offsetX + p.x *scaleX +"px";
-            this.textContainer.style.top = this.offsetY + p.y *scaleY +"px";
+            var p = textInput.localToGlobal(0, 0, tempPoint);
+            this.textContainer.style.left = this.offsetX + p.x * scaleX + "px";
+            this.textContainer.style.top = this.offsetY + p.y * scaleY + "px";
 
             scaleX = matrix.$getScaleX();
             scaleY = matrix.$getScaleY();
             var width = textInput.width * scaleX + "px";
             var height = textInput.height * scaleY + "px";
-            this.textContainer.style.width=width;
-            this.textContainer.style.height=height;
+            this.textContainer.style.width = width;
+            this.textContainer.style.height = height;
 
 
             var setElementStyle = this.setElementStyle.bind(this);
@@ -247,16 +247,16 @@ module lark.web {
             setElementStyle("display", "block");
             setElementStyle("width", textInput.width + "px");
             setElementStyle("height", textInput.height + "px");
-            setElementStyle(getPrefixStyleName('transform'), 'matrix(' + [matrix.a,matrix.b,matrix.c,matrix.d,0,0].join(",") + ')');
+            setElementStyle(getPrefixStyleName('transform'), 'matrix(' + [matrix.a, matrix.b, matrix.c, matrix.d, 0, 0].join(",") + ')');
 
-            setTimeout(()=>{
-                htmlInput.style.opacity='1';
-            },0);
+            setTimeout(()=> {
+                htmlInput.style.opacity = '1';
+            }, 0);
 
-            if(textInput.wordWrap == false && textInput.verticalAlign != VerticalAlign.MIDDLE){
+            if (textInput.wordWrap == false && textInput.verticalAlign != VerticalAlign.MIDDLE) {
                 var padding = textInput.height - textInput.fontSize + 2;
-                var styleName = textInput.verticalAlign == VerticalAlign.TOP?'paddingBottom':'paddingTop';
-                setElementStyle(styleName,padding + "px");
+                var styleName = textInput.verticalAlign == VerticalAlign.TOP ? 'paddingBottom' : 'paddingTop';
+                setElementStyle(styleName, padding + "px");
                 setElementStyle("height", textInput.fontSize + "px");
             }
 
@@ -264,15 +264,15 @@ module lark.web {
                 htmlInput.value = textInput.text;
             }
 
-            if(textInput.maxChars != 0)
+            if (textInput.maxChars != 0)
                 htmlInput.maxLength = textInput.maxChars;
-            else if(htmlInput.maxLength>=0)
+            else if (htmlInput.maxLength >= 0)
                 htmlInput.maxLength = 0x800000;
         }
 
-        public $setSelection(selectStart:number,selectEnd:number):void {
-            this.currentHtmlInput.selectionStart = selectStart;
-            this.currentHtmlInput.selectionEnd = selectEnd;
+        public $selectRange(anchorPosition:number, activePosition:number):void {
+            this.currentHtmlInput.selectionStart = anchorPosition;
+            this.currentHtmlInput.selectionEnd = activePosition;
         }
 
         private setElementStyle(style:string, value:any):void {
@@ -284,17 +284,17 @@ module lark.web {
         private getInputSelection = () => {
             this.lastSelectEnd = this.currentHtmlInput.selectionEnd;
             this.lastSelectStart = this.currentHtmlInput.selectionStart;
-            log(this.lastSelectStart,this.lastSelectEnd);
+            log(this.lastSelectStart, this.lastSelectEnd);
         }
     }
 
 
     var $CurrentPrefix:string = null;
 
-    function getPrefixStyleName(name:string):string{
-        if($CurrentPrefix==null)
+    function getPrefixStyleName(name:string):string {
+        if ($CurrentPrefix == null)
             $CurrentPrefix = getPrefix();
-        return $CurrentPrefix + name.charAt(0).toUpperCase()+name.substr(1);
+        return $CurrentPrefix + name.charAt(0).toUpperCase() + name.substr(1);
     }
 
     function getPrefix():string {
@@ -305,12 +305,12 @@ module lark.web {
         for (var i:number = 0; i < transArr.length; i++) {
             var transform:string = transArr[i] + 'ransform';
 
-            if (transform in tempStyle){
+            if (transform in tempStyle) {
                 prefix = transArr[i]
             }
         }
 
-        return prefix.substr(0,prefix.length-1);
+        return prefix.substr(0, prefix.length - 1);
     }
 
 }

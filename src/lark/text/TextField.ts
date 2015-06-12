@@ -1,4 +1,4 @@
-﻿//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
 //  All rights reserved.
@@ -29,48 +29,149 @@
 
 module lark.sys {
 
+    /**
+     * @private
+     */
     export const enum TextKeys {
+        /**
+         * @private
+         */
         fontSize,
+        /**
+         * @private
+         */
         lineSpacing,
+        /**
+         * @private
+         */
         textColor,
+        /**
+         * @private
+         */
         textFieldWidth,
+        /**
+         * @private
+         */
         textFieldHeight,
+        /**
+         * @private
+         */
         textWidth,
+        /**
+         * @private
+         */
         textHeight,
+        /**
+         * @private
+         */
         textDrawWidth,
+        /**
+         * @private
+         */
         fontFamily,
+        /**
+         * @private
+         */
         textAlign,
+        /**
+         * @private
+         */
         verticalAlign,
+        /**
+         * @private
+         */
         colorString,
+        /**
+         * @private
+         */
         fontString,
+        /**
+         * @private
+         */
         text,
+        /**
+         * @private
+         */
         measuredWidths,
+        /**
+         * @private
+         */
         bold,
+        /**
+         * @private
+         */
         italic,
+        /**
+         * @private
+         */
         fontStringChanged,
+        /**
+         * @private
+         */
         textLinesChanged,
+        /**
+         * @private
+         */
         wordWrap,
+        /**
+         * @private
+         */
         displayAsPassword,
+        /**
+         * @private
+         */
         maxChars,
-        selectionBeginIndex,
-        selectionEndIndex
+        /**
+         * @private
+         */
+        selectionActivePosition,
+        /**
+         * @private
+         */
+        selectionAnchorPosition
     }
 }
 
 module lark {
 
     /**
-     * TextField 类用于创建显示对象以显示文本。可以使用 TextField 类的方法和属性对文本字段进行操作。
-     * 注意:TextField.width和TextField.height与其他显示对象的定义不同。
-     * 其他显示对象的width，height属性始终等于getBounds(parent)方法返回的尺寸，即包含旋转和缩放值，若设置width或height也将会直接修改scaleX和scaleY的值。
-     * 而 TextField 返回的宽高值并不包含旋转和缩放值，设置TextField.width和TextField.height也不会影响scaleX或scaleY的值。
-     * 设置TextField.width可以强制让文本换行，若文本显示宽度超过您显式设置的值，将会自动换行。
-     * 设置TextField.height可以截断文本，若文本显示高度超过您显式设置的值，将会截断不显示。
-     * 若您需要重置文本宽高为未设置状态，请将宽高属性赋值为 lark.NONE 即可。
+     * @language en_US
+     * The TextField class is used to create display objects for text display. You can use the methods and properties of
+     * the TextField class to manipulate it.<br/>
+     * In TextField, three character sequences are recognized as explicit line breaks: CR ("\r"), LF ("\n"), and CR+LF ("\r\n").<br/>
+     * If you don't specify any kind of width for a TextField, then the longest line, as determined by these explicit line
+     * breaks, determines the width of the TextField.<br/>
+     * If you do specify some kind of width, then the specified text is word-wrapped at the right edge of the component's
+     * bounds, because the default value of the wordWrap is true. If the text extends below the bottom of the component, it is clipped.<br/>
+     * To disable this automatic wrapping, set the wordWrap to false. Then lines are broken only where the text contains
+     * an explicit line break, and the ends of lines extending past the right edge is clipped.
+     * @see lark.TextInput
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * TextField 类用于创建显示对象以显示文本。可以使用 TextField 类的方法和属性对文本字段进行操作。<br/>
+     * 在 TextField 中，将以下三个字符序列识别为显式换行符：CR（“\r”）、LF（“\n”）和 CR+LF（“\r\n”）。<br/>
+     * 如果没有为 TextField 指定宽度，则由这些显式换行符确定的最长行确定 TextField 的宽度。<br/>
+     * 如果指定了某个宽度，则指定文本将在组件边界的右边缘换行，因为 wordWrap 的默认值为 true。如果文本扩展到低于组件底部，则将被剪切。<br/>
+     * 要禁用此自动换行，请将 wordWrap 设置为 false。这样的话，只有 text 包含显式换行符时才会换行，且将剪切超过右边缘的行尾。
+     * @see lark.TextInput
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     export class TextField extends DisplayObject {
         /**
+         * @language en_US
+         * Creates a new TextField instance.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 创建一个TextField对象
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public constructor(text?:string) {
             super();
@@ -102,10 +203,24 @@ module lark {
             this.text = text;
         }
 
+        /**
+         * @private
+         */
         $TextField:Object;
 
         /**
-         * 字体名称 。默认值：sans-serif
+         * @language en_US
+         * The name of the font to use, or a comma-separated list of font names.
+         * @default "sans-serif"
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要使用的字体的名称或用逗号分隔的字体名称列表。
+         * @default "sans-serif"
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public get fontFamily():string {
             return this.$TextField[sys.TextKeys.fontFamily];
@@ -121,7 +236,18 @@ module lark {
         }
 
         /**
-         * 字号大小,默认值30 。
+         * @language en_US
+         * The size in pixels of text
+         * @default 30
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 文本的字号大小。
+         * @default 30
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public get fontSize():number {
             return this.$TextField[sys.TextKeys.fontSize];
@@ -138,7 +264,18 @@ module lark {
         }
 
         /**
-         * 是否显示为粗体，默认false。
+         * @language en_US
+         * Specifies whether the text is boldface.
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 是否显示为粗体。
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public get bold():boolean {
             return this.$TextField[sys.TextKeys.bold];
@@ -155,7 +292,18 @@ module lark {
         }
 
         /**
-         * 是否显示为斜体，默认false。
+         * @language en_US
+         * Determines whether the text is italic font.
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 是否显示为斜体。
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public get italic():boolean {
             return this.$TextField[sys.TextKeys.italic];
@@ -171,12 +319,17 @@ module lark {
             this.invalidateFontString();
         }
 
+        /**
+         * @private
+         * 
+         */
         private invalidateFontString():void {
             this.$TextField[sys.TextKeys.fontStringChanged] = true;
             this.$invalidateContentBounds();
         }
 
         /**
+         * @private
          * 获取字体信息的字符串形式。
          */
         private getFontString():string {
@@ -189,8 +342,18 @@ module lark {
         }
 
         /**
-         * 文字的水平对齐方式 ,请使用HorizontalAlign中定义的常量。
-         * 默认值：HorizontalAlign.LEFT。
+         * @language en_US
+         * Horizontal alignment of text.
+         * @default：lark.HorizontalAlign.LEFT
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 文本的水平对齐方式。
+         * @default：lark.HorizontalAlign.LEFT
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public get textAlign():string {
             return this.$TextField[sys.TextKeys.textAlign];
@@ -206,8 +369,18 @@ module lark {
         }
 
         /**
-         * 文字的垂直对齐方式 ,请使用VerticalAlign中定义的常量。
-         * 默认值：VerticalAlign.TOP。
+         * @language en_US
+         * Vertical alignment of text.
+         * @default：lark.VerticalAlign.TOP
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 文字的垂直对齐方式。
+         * @default：lark.VerticalAlign.TOP
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public get verticalAlign():string {
             return this.$TextField[sys.TextKeys.verticalAlign];
@@ -223,7 +396,18 @@ module lark {
         }
 
         /**
-         * 行间距。标准行高通常等于fontSize的值，设置此属性，将会在标准行高之间添加指定像素的空白间隔。可以设置为负值。默认值0.
+         * @language en_US
+         * An integer representing the amount of vertical space between lines.
+         * @default 0
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 一个整数，表示行与行之间的垂直间距量
+         * @default 0
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public get lineSpacing():number {
             return this.$TextField[sys.TextKeys.lineSpacing];
@@ -239,7 +423,18 @@ module lark {
         }
 
         /**
-         * 文本颜色，默认值0x000000
+         * @language en_US
+         * Color of the text.
+         * @default 0x000000
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 文本颜色
+         * @default 0x000000
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public get textColor():number {
             return this.$TextField[sys.TextKeys.textColor];
@@ -257,8 +452,20 @@ module lark {
         }
 
         /**
+         * @language en_US
+         * A Boolean value that indicates whether the text field has word wrap. If the value of wordWrap is true, the text
+         * field has word wrap; if the value is false, the text field does not have word wrap.
+         * @default true
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 一个布尔值，表示文本字段是否自动换行。如果 wordWrap 的值为 true，则该文本字段自动换行；
-         * 如果值为 false，则该文本字段不自动换行,如果同时显式设置过宽度，超出宽度的部分将被截断。默认值为 true。
+         * 如果值为 false，则该文本字段不自动换行,如果同时显式设置过宽度，超出宽度的部分将被截断。
+         * @default true
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public get wordWrap():boolean {
             return this.$TextField[sys.TextKeys.wordWrap];
@@ -278,7 +485,16 @@ module lark {
         }
 
         /**
+         * @language en_US
+         * A string to display in the text field.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 要显示的文本内容
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public get text():string {
             return this.$TextField[sys.TextKeys.text];
@@ -292,6 +508,9 @@ module lark {
             this.$setText(value);
         }
 
+        /**
+         * @private
+         */
         $setText(value:string):void{
             var values = this.$TextField;
             if (value == values[sys.TextKeys.text])
@@ -300,16 +519,38 @@ module lark {
             this.$invalidateContentBounds();
         }
 
+        /**
+         * @private
+         */
         private textLines:string[] = [];
         /**
-         * 文本行数。
+         * @language en_US
+         * [read-only] Defines the number of text lines in a multiline text field. If wordWrap property is set to true, the number of
+         * lines increases when text wraps.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [只读] 定义多行文本字段中的文本行数。如果 wordWrap 属性设置为 true，则在文本自动换行时会增加行数。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public get numLines():number {
             return this.textLines.length;
         }
 
         /**
-         * 文本内容宽度
+         * @language en_US
+         * [read-only] The width of the text in pixels.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [只读] 文本内容宽度
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public get textWidth():number {
             this.updateTextLines();
@@ -317,18 +558,33 @@ module lark {
         }
 
         /**
-         * 文本内容高度
+         * @language en_US
+         * [read-only] The height of the text in pixels.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [只读] 文本内容高度
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public get textHeight():number {
             this.updateTextLines();
             return this.$TextField[sys.TextKeys.textHeight];
         }
 
+        /**
+         * @private
+         */
         $getWidth():number {
             var w = this.$TextField[sys.TextKeys.textFieldWidth];
             return isNone(w) ? this.$getContentBounds().width : w;
         }
 
+        /**
+         * @private
+         */
         $setWidth(value:number) {
             value = +value || 0;
             var values = this.$TextField;
@@ -339,11 +595,17 @@ module lark {
             this.$invalidateContentBounds();
         }
 
+        /**
+         * @private
+         */
         $getHeight():number {
             var h = this.$TextField[sys.TextKeys.textFieldHeight];
             return isNone(h) ? this.$getContentBounds().height : h;
         }
 
+        /**
+         * @private
+         */
         $setHeight(value:number) {
             value = +value || 0;
             var values = this.$TextField;
@@ -354,11 +616,17 @@ module lark {
             this.$invalidateContentBounds();
         }
 
+        /**
+         * @private
+         */
         $invalidateContentBounds():void {
             super.$invalidateContentBounds();
             this.$TextField[sys.TextKeys.textLinesChanged] = true;
         }
 
+        /**
+         * @private
+         */
         $measureContentBounds(bounds:Rectangle):void {
             this.updateTextLines();
             var values = this.$TextField;
@@ -381,6 +649,9 @@ module lark {
             bounds.setTo(0, 0, width, height);
         }
 
+        /**
+         * @private
+         */
         $render(context:sys.RenderContext):void {
             var lines = this.updateTextLines();
             if (!lines) {
@@ -439,6 +710,9 @@ module lark {
             }
         }
 
+        /**
+         * @private
+         */
         private updateTextLines():string[] {
 
             var values = this.$TextField;
@@ -559,6 +833,9 @@ module lark {
             return lines;
         }
 
+        /**
+         * @private
+         */
         protected $splitWords(line:string):string[] {
             return line.split(/\b/);
         }
@@ -566,6 +843,7 @@ module lark {
     }
 
     /**
+     * @private
      * 返回不超过最大宽度的字符结束索引(不包括)。
      */
     function getMaxIndex(text:string, maxWidth:number, font:string):number {
@@ -590,6 +868,10 @@ module lark {
 
 module lark.sys {
 
+    /**
+     * @private
+     * 返回格式化的字体样式文本
+     */
     export function toFontString(style:{fontFamily?:string;fontSize?:number;bold?:boolean;italic?:boolean}):string {
         var font = "";
         if (style.italic)
@@ -601,6 +883,10 @@ module lark.sys {
         return font;
     }
 
+    /**
+     * @private
+     * 返回字符串形式的颜色值
+     */
     export function toColorString(value:number):string {
         if (value < 0)
             value = 0;
