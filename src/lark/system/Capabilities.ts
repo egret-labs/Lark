@@ -29,80 +29,181 @@
 
 module lark {
 
+    /**
+     * @language en_US
+     * The Capabilities class provides properties that describe the system and runtime that are hosting the application.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Capabilities 类提供一些属性，这些属性描述了承载应用程序的系统和运行时。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
     export class Capabilities {
 
+        /**
+         * @private
+         */
         static $language:string = "zh-CN";
         /**
-         * 指定运行内容的系统的语言代码。语言指定为 ISO 639-1 中的小写双字母语言代码。
-         * 对于中文，另外使用 ISO 3166 中的大写双字母国家/地区代码，以区分简体中文和繁体中文。
+         * @language en_US
+         * Specifies the language code of the system on which the content is running. The language is specified as a lowercase
+         * two-letter language code from ISO 639-1. For Chinese, an additional uppercase two-letter country code from ISO 3166
+         * distinguishes between Simplified and Traditional Chinese.<br/>
+         * The following table lists the possible values,but not limited to them:
+         * <ul>
+         * <li>Simplified    Chinese  zh-CN</li>
+         * <li>Traditional   Chinese  zh-TW</li>
+         * <li>English       en</li>
+         * <li>Japanese      ja</li>
+         * <li>Korean        ko</li>
+         * <ul>
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 表示运行内容的系统的语言代码。语言指定为 ISO 639-1 中的小写双字母语言代码。
+         * 对于中文，另外使用 ISO 3166 中的大写双字母国家/地区代码，以区分简体中文和繁体中文。<br/>
          * 以下是可能但不限于的语言和值：
-         * 简体中文  zh-CN
-         * 繁体中文  zh-TW
-         * 英语      en
-         * 日语      ja
-         * 韩语      ko
-         * 法语      fr
-         * 捷克语    cs
-         * 丹麦语    da
-         * 荷兰语    nl
-         * 芬兰语    fi
-         * 德语      de
-         * 匈牙利语   hu
-         * 意大利语   it
-         * 挪威语    no
-         * 其他/未知 xu
-         * 波兰语    pl
-         * 葡萄牙语  pt
-         * 俄语      ru
-         * 西班牙语  es
-         * 瑞典语    sv
-         * 土耳其语  tr
+         * <ul>
+         * <li>简体中文  zh-CN</li>
+         * <li>繁体中文  zh-TW</li>
+         * <li>英语      en</li>
+         * <li>日语      ja</li>
+         * <li>韩语      ko</li>
+         * <ul>
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public static get language():string{
             return Capabilities.$language;
         }
 
+        /**
+         * @private
+         */
         static $isMobile:boolean;
 
+        /**
+         * @language en_US
+         * Specifies whether the content is running in a mobile device.(such as a mobile phone or tablet)
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 表示程序内容是否运行在移动设备中（例如移动电话或平板电脑）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         public static get isMobile():boolean{
             return Capabilities.$isMobile;
         }
 
+        /**
+         * @private
+         */
         static $os:string = "Unknown";
 
         /**
+         * @language en_US
+         * Specifies the current operating system. The os property can return the following strings:
+         * <ul>
+         * <li>iPhone            "iOS"</li>
+         * <li>Android Phone     "Android"</li>
+         * <li>Windows Phone     "Windows Phone"</li>
+         * <li>Windows Desktop   "Windows PC"</li>
+         * <li>Mac Desktop       "Mac OS"</li>
+         * <li>Unknown OS        "Unknown"</li>
+         * <ul>
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 指示当前的操作系统。os 属性返回下列字符串：
-         *
-         * 苹果移动操作系统     "iOS"
-         * 安卓移动操作系统     "Android"
-         * 微软移动操作系统     "Windows Phone"
-         * 微软桌面操作系统     "Windows"
-         * 苹果桌面操作系统     "Mac OS"
-         * 未知操作系统        "Unknown"
+         * <ul>
+         * <li>苹果手机操作系统     "iOS"</li>
+         * <li>安卓手机操作系统     "Android"</li>
+         * <li>微软手机操作系统     "Windows Phone"</li>
+         * <li>微软桌面操作系统     "Windows PC"</li>
+         * <li>苹果桌面操作系统     "Mac OS"</li>
+         * <li>未知操作系统        "Unknown"</li>
+         * <ul>
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public static get os():string{
             return Capabilities.$os;
         }
 
 
-        static $location: boolean;
+        /**
+         * @private
+         */
+        static $hasGeolocation: boolean;
 
-        public static get location(): boolean {
-            return Capabilities.$location;
+        /**
+         * @language en_US
+         * Specifies whether the system supports the geolocation services
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示系统是否支持地理位置服务
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public static get hasGeolocation(): boolean {
+            return Capabilities.$hasGeolocation;
         }
 
 
-        static $orientation: boolean;
+        /**
+         * @private
+         */
+        static $hasOrientation: boolean;
 
-        public static get orientation(): boolean {
-            return Capabilities.$orientation;
+        /**
+         * @language en_US
+         * Specifies whether the system supports detecting the device orientation.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示系统是否支持检测设备方向
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public static get hasOrientation(): boolean {
+            return Capabilities.$hasOrientation;
         }
 
 
-        static $motion: boolean;
+        /**
+         * @private
+         */
+        static $hasMotion: boolean;
 
-        public static get motion(): boolean {
-            return Capabilities.$motion;
+        /**
+         * @language en_US
+         * Specifies whether the system supports the motion Sensor
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示系统是否支持运动传感器
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public static get hasMotion(): boolean {
+            return Capabilities.$hasMotion;
         }
     }
 

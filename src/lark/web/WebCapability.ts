@@ -50,7 +50,7 @@ module lark.web {
             }
             else{
                 if(ua.indexOf("windows nt")!= -1){
-                    capabilities.$os = "Windows";
+                    capabilities.$os = "Windows PC";
                 }
                 else if(ua.indexOf("mac os")!= -1){
                     capabilities.$os = "Mac OS";
@@ -58,9 +58,9 @@ module lark.web {
             }
 
             var h5 = WebCapability.checkHtml5Support();
-            capabilities.$location = h5.geo;
-            capabilities.$motion = h5.m;
-            capabilities.$orientation = h5.ortt;
+            capabilities.$hasGeolocation = h5.geo;
+            capabilities.$hasMotion = h5.m;
+            capabilities.$hasOrientation = h5.ortt;
             var language = (navigator.language || navigator.browserLanguage).toLowerCase();
             var strings = language.split("-");
             if (strings.length > 1) {
