@@ -30,14 +30,17 @@
 module swan {
     /**
      * @language en_US
-     * 线性布局基类，通常作为 HorizontalLayout 和 VerticalLayout 的父类。
+     * Linear layout base class, usually as the parent class of
+     * <code>HorizontalLayout</code> and <code>VerticalLayout</code>.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 线性布局基类，通常作为 HorizontalLayout 和 VerticalLayout 的父类。
+     * 线性布局基类，通常作为 <code>HorizontalLayout</code> 和 <code>VerticalLayout</code> 的父类。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -51,14 +54,24 @@ module swan {
 
         /**
          * @language en_US
-         * 布局元素的水平对齐策略。请使用 HorizontalAlign 定义的常量。
+         * The horizontal alignment of layout elements.
+         * <p>The <code>lark.HorizontalAlign</code> and <code>swan.JustifyAlign</code> class
+         * defines the possible values for this property.</p>
+         *
+         * @default "left"
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 布局元素的水平对齐策略。请使用 HorizontalAlign 定义的常量。
+         * 布局元素的水平对齐策略。
+         * <p><code>lark.HorizontalAlign</code> 和
+         * <code>swan.JustifyAlign</code>类定义此属性的可能值。<p>
+         *
+         * @default "left"
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -82,14 +95,24 @@ module swan {
 
         /**
          * @language en_US
-         * 布局元素的竖直对齐策略。请使用 VerticalAlign 定义的常量。
+         * The vertical alignment of layout elements.
+         * <p>The <code>lark.VerticalAlign</code> and <code>swan.JustifyAlign</code> class
+         * defines the possible values for this property.</p>
+         *
+         * @default "top"
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 布局元素的竖直对齐策略。请使用 VerticalAlign 定义的常量。
+         * 布局元素的垂直对齐策略。请使用 VerticalAlign 定义的常量。
+         * <p><code>lark.VerticalAlign</code> 和
+         * <code>swan.JustifyAlign</code>类定义此属性的可能值。<p>
+         *
+         * @default "top"
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -113,14 +136,20 @@ module swan {
 
         /**
          * @language en_US
-         * 布局元素之间的间隔空间（以像素为单位）
+         * The space between layout elements, in pixels.
+         *
+         * @default 6
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 布局元素之间的间隔空间（以像素为单位）
+         * 布局元素之间的间隔（以像素为单位）。
+         *
+         * @default 6
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -144,14 +173,21 @@ module swan {
 
         /**
          * @language en_US
-         * 容器的左边缘与布局元素的左边缘之间的最少像素数,默认值：0。
+         * Number of pixels between the container's left edge
+         * and the left edge of the first layout element.
+         *
+         * @default 0
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 容器的左边缘与布局元素的左边缘之间的最少像素数,默认值：0。
+         * 容器的左边缘与第一个布局元素的左边缘之间的像素数。
+         *
+         * @default 0
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -176,14 +212,21 @@ module swan {
 
         /**
          * @language en_US
-         * 容器的右边缘与布局元素的右边缘之间的最少像素数,默认值：0。
+         * Number of pixels between the container's right edge
+         * and the right edge of the last layout element.
+         *
+         *  @default 0
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 容器的右边缘与布局元素的右边缘之间的最少像素数,默认值：0。
+         * 容器的右边缘与最后一个布局元素的右边缘之间的像素数。
+         *
+         * @default 0
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -208,14 +251,21 @@ module swan {
 
         /**
          * @language en_US
-         * 容器的顶边缘与第一个布局元素的顶边缘之间的像素数,默认值：0。
+         * The minimum number of pixels between the container's top edge and
+         * the top of all the container's layout elements.
+         *
+         * @default 0
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 容器的顶边缘与第一个布局元素的顶边缘之间的像素数,默认值：0。
+         * 容器的顶边缘与所有容器的布局元素的顶边缘之间的最少像素数。
+         *
+         * @default 0
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -240,14 +290,21 @@ module swan {
 
         /**
          * @language en_US
-         * 容器的底边缘与最后一个布局元素的底边缘之间的像素数0,默认值：0。
+         * The minimum number of pixels between the container's bottom edge and
+         * the bottom of all the container's layout elements.
+         *
+         * @default 0
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 容器的底边缘与最后一个布局元素的底边缘之间的像素数0,默认值：0。
+         * 容器的底边缘与所有容器的布局元素的底边缘之间的最少像素数。
+         *
+         * @default 0
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -267,14 +324,19 @@ module swan {
 
         /**
          * @language en_US
-         * 标记目标容器的尺寸和显示列表失效
+         * Convenience function for subclasses that invalidates the
+         * target's size and displayList so that both layout's <code>measure()</code>
+         * and <code>updateDisplayList</code> methods get called.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 标记目标容器的尺寸和显示列表失效
+         * 失效目标容器的尺寸和显示列表的简便方法，调用目标容器的
+         * <code>measure()</code>和<code>updateDisplayList</code>方法
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -288,15 +350,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 基于目标的内容测量其默认大小，并（可选）测量目标的默认最小大小
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 基于目标的内容测量其默认大小，并（可选）测量目标的默认最小大小
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -314,14 +369,16 @@ module swan {
 
         /**
          * @language en_US
-         * 测量使用真实布局的尺寸
+         * Compute exact values for measuredWidth and measuredHeight.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 测量使用真实布局的尺寸
+         * 计算目标容器 measuredWidth 和 measuredHeight 的精确值
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -332,14 +389,15 @@ module swan {
 
         /**
          * @language en_US
-         * 测量使用虚拟布局的尺寸
+         * Compute potentially approximate values for measuredWidth and measuredHeight.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 测量使用虚拟布局的尺寸
+         * 计算目标容器 measuredWidth 和 measuredHeight 的近似值
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -349,15 +407,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 调整目标的元素的大小并定位这些元素
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 调整目标的元素的大小并定位这些元素
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -384,14 +435,16 @@ module swan {
 
         /**
          * @language en_US
-         * 虚拟布局使用的子对象尺寸缓存
+         * An Array of the virtual layout elements size cache.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 虚拟布局使用的子对象尺寸缓存
+         * 虚拟布局使用的尺寸缓存。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -400,14 +453,16 @@ module swan {
 
         /**
          * @language en_US
-         * 获取指定索引的起始位置
+         * Gets the starting position of the specified index element
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 获取指定索引的起始位置
+         * 获取指定索引元素的起始位置
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -418,14 +473,16 @@ module swan {
 
         /**
          * @language en_US
-         * 获取指定索引的元素尺寸
+         * Gets the size of the specified index element
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 获取指定索引的元素尺寸
+         * 获取指定索引元素的尺寸
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -436,7 +493,8 @@ module swan {
 
         /**
          * @language en_US
-         * 获取缓存的子对象尺寸总和
+         * Gets the sum of the size of cached elements
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -444,6 +502,7 @@ module swan {
         /**
          * @language zh_CN
          * 获取缓存的子对象尺寸总和
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -453,15 +512,7 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 
-         * @param index 
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
+         * @inheritDoc
          * 
          * @param index 
          * @version Lark 1.0
@@ -476,15 +527,8 @@ module swan {
         }
 
         /**
-         * @language en_US
-         * 如果 useVirtualLayout 为 true，则当布局目标改变时，布局目标可以使用此方法来清除已缓存布局信息
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果 useVirtualLayout 为 true，则当布局目标改变时，布局目标可以使用此方法来清除已缓存布局信息
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -499,7 +543,8 @@ module swan {
 
         /**
          * @language en_US
-         * 折半查找法寻找指定位置的显示对象索引
+         * The binary search to find the specified index position of the display object
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -507,6 +552,7 @@ module swan {
         /**
          * @language zh_CN
          * 折半查找法寻找指定位置的显示对象索引
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -527,7 +573,8 @@ module swan {
 
         /**
          * @language en_US
-         * 虚拟布局使用的当前视图中的第一个元素索引
+         * The first element index in the view of the virtual layout
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -535,6 +582,7 @@ module swan {
         /**
          * @language zh_CN
          * 虚拟布局使用的当前视图中的第一个元素索引
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -542,7 +590,8 @@ module swan {
         protected startIndex:number = -1;
         /**
          * @language en_US
-         * 虚拟布局使用的当前视图中的最后一个元素的索引
+         * The last element index in the view of the virtual layout
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -550,6 +599,7 @@ module swan {
         /**
          * @language zh_CN
          * 虚拟布局使用的当前视图中的最后一个元素的索引
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -557,7 +607,8 @@ module swan {
         protected endIndex:number = -1;
         /**
          * @language en_US
-         * 视图的第一个和最后一个元素的索引值已经计算好的标志
+         * A Flag of the first element and the end element has been calculated.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -565,6 +616,7 @@ module swan {
         /**
          * @language zh_CN
          * 视图的第一个和最后一个元素的索引值已经计算好的标志
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -572,15 +624,8 @@ module swan {
         protected indexInViewCalculated:boolean = false;
 
         /**
-         * @language en_US
-         * scrollV 或 scrollH 属性更改时调用
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * scrollV 或 scrollH 属性更改时调用
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -599,14 +644,21 @@ module swan {
 
         /**
          * @language en_US
-         * 获取视图中第一个和最后一个元素的索引,返回是否发生改变
+         * Get the index of the first and last element in the view,
+         * and to return whether or not to change.
+         *
+         * @return has the index changed
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 获取视图中第一个和最后一个元素的索引,返回是否发生改变
+         * 获取视图中第一个和最后一个元素的索引,返回是否发生改变。
+         *
+         * @return 索引是否已改变
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -617,14 +669,17 @@ module swan {
 
         /**
          * @language en_US
-         * 子对象最大宽度
+         * The maximum size of elements
+         *
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 子对象最大宽度
+         * 子元素最大的尺寸
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -633,14 +688,16 @@ module swan {
 
         /**
          * @language en_US
-         * 更新使用虚拟布局的显示列表
+         * Update the layout of the virtualized elements
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 更新使用虚拟布局的显示列表
+         * 更新虚拟布局的显示列表
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -652,14 +709,16 @@ module swan {
 
         /**
          * @language en_US
-         * 更新使用真实布局的显示列表
+         * Update the layout of the reality elements
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 更新使用真实布局的显示列表
+         * 更新真实布局的显示列表
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -670,14 +729,16 @@ module swan {
 
         /**
          * @language en_US
-         * 为每个可变尺寸的子项分配空白区域
+         * Allocate blank area for each variable size element.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 为每个可变尺寸的子项分配空白区域
+         * 为每个可变尺寸的子项分配空白区域。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
