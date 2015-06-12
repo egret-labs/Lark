@@ -29,20 +29,27 @@
 
 module swan.sys {
 
+    /**
+     * @private
+     */
     export const enum AddPosition {
         /**
+         * @private
          * 添加父级容器的底层
          */
         FIRST,
         /**
+         * @private
          * 添加在父级容器的顶层
          */
         LAST,
         /**
+         * @private
          * 添加在相对对象之前
          */
         BEFORE,
         /**
+         * @private
          * 添加在相对对象之后
          */
         AFTER
@@ -52,11 +59,33 @@ module swan.sys {
 module swan {
 
     /**
+     * @language en_US
+     * The operation of adding a state to view.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 视图添加状态显示元素操作
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class AddItems implements IOverride {
         /**
+         * @language en_US
+         * Constructor.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 创建一个AddItems实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor(target:string, propertyName:string, position:number, relativeTo:string) {
             this.target = target;
@@ -66,29 +95,75 @@ module swan {
         }
 
         /**
+         * @language en_US
+         * The name of the property that is being added.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 要添加到的属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public propertyName:string;
 
         /**
+         * @language en_US
+         * The position to be added. Valid values: "first","last","before","after"
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 添加的位置，有效值为: "first","last","before","after"
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public position:number;
 
         /**
+         * @language en_US
+         * an instance name of relative visual element.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 相对的显示元素的实例名
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public relativeTo:string;
 
         /**
+         * @language en_US
+         * The target instance name.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 目标实例名
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public target:string;
 
         /**
-         * 应用覆盖。将保留原始值，以便以后可以在 remove() 方法中恢复该值。
-         * @param host 含有视图状态的组件。
-         * @param parent 子项添加到的父级容器。
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public apply(host:any, parent:lark.DisplayObjectContainer):void {
             var index:number;
@@ -117,9 +192,11 @@ module swan {
         }
 
         /**
-         * 删除覆盖。在 apply() 方法中记住的值将被恢复。
-         * @param host 含有视图状态的组件。
-         * @param parent 子项添加到的父级容器。
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public remove(host:any,parent:lark.DisplayObjectContainer):void {
             var container:lark.DisplayObjectContainer = this.propertyName ? host[this.propertyName] : parent;

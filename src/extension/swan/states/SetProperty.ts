@@ -31,11 +31,49 @@
 module swan {
 
     /**
-     * 视图状态设置属性操作
+     * @language en_US
+     * The SetProperty class specifies a property value that is in effect only
+     * during the parent view state.
+     * You use this class in the <code>overrides</code> property of the State class.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+
+    /**
+     * @language zh_CN
+     * SetProperty 类指定只在父视图状态期间有效的属性值。可以在 State 类的 overrides 属性中使用该类。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export class SetProperty implements IOverride {
         /**
-         * 创建一个SetProperty实例
+         * @language en_US
+         * Constructor.
+         *
+         * @param target The object whose property is being set.
+         * By default, Swan uses the immediate parent of the State object.
+         * @param name The property to set.
+         * @param value The value of the property in the view state.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个SetProperty实例。
+         *
+         * @param target 要设置其属性的对象。默认情况下，Swan 使用 State 对象的直接父级。
+         * @param name 要设置的属性。
+         * @param value 视图状态中的属性值。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public constructor(target:string, name:string, value:any) {
             this.target = target;
@@ -44,29 +82,81 @@ module swan {
         }
 
         /**
-         * 要修改的属性名
+         * @language en_US
+         * he name of the property to change.
+         * You must set this property, either in
+         * the SetProperty constructor or by setting
+         * the property value directly.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要更改的属性的名称。
+         * 这个属性必须设置，在 SetProperty 构造函数中设置或通过直接设置该属性值设置。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public name:string;
 
         /**
-         * 目标实例名
+         * @language en_US
+         * The object containing the property to be changed.
+         * If the property value is <code>null</code>, Swan uses the
+         * immediate parent of the State object.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 包含要更改的属性的对象。如果属性值为 null，则 Swan 将使用 State 对象的直接父级。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public target:string;
 
         /**
-         * 属性值
+         * @language en_US
+         * The new value for the property.
+         *
+         * @default undefined
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 属性的新值。
+         *
+         * @default undefined
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public value:any;
 
         /**
+         * @private
          * 旧的属性值
          */
         private oldValue:any;
 
         /**
-         * 应用覆盖。将保留原始值，以便以后可以在 remove() 方法中恢复该值。
-         * @param host 含有视图状态的组件。
-         * @param parent 子项添加到的父级容器。
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public apply(host:Skin, parent:lark.DisplayObjectContainer):void {
             var obj:any = this.target ? host[this.target] : host;
@@ -77,9 +167,11 @@ module swan {
         }
 
         /**
-         * 删除覆盖。在 apply() 方法中记住的值将被恢复。
-         * @param host 含有视图状态的组件。
-         * @param parent 子项添加到的父级容器。
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         public remove(host:Skin, parent:lark.DisplayObjectContainer):void {
             var obj:any = this.target ? host[this.target] : host;
@@ -90,6 +182,7 @@ module swan {
         }
 
         /**
+         * @private
          * 设置属性值
          */
         private setPropertyValue(obj:any, name:string, value:any,
@@ -105,6 +198,7 @@ module swan {
         }
 
         /**
+         * @private
          * 转成Boolean值
          */
         private toBoolean(value:any):boolean {
