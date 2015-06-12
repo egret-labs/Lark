@@ -486,7 +486,7 @@ module lark {
          * Prevents processing of any event listeners in nodes subsequent to the current node in the event flow. This method
          * does not affect any event listeners in the current node (currentTarget). In contrast, the stopImmediatePropagation()
          * method prevents processing of event listeners in both the current node and subsequent nodes. Additional calls to this
-         * method have no effect. This method can be called in any phase of the event flow.
+         * method have no effect. This method can be called in any phase of the event flow.<br/>
          * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
          * @see #stopImmediatePropagation()
          * @see #preventDefault()
@@ -497,7 +497,7 @@ module lark {
          * @language zh_CN
          * 防止对事件流中当前节点的后续节点中的所有事件侦听器进行处理。此方法不会影响当前节点 currentTarget 中的任何事件侦听器。
          * 相比之下，stopImmediatePropagation() 方法可以防止对当前节点中和后续节点中的事件侦听器进行处理。
-         * 对此方法的其它调用没有任何效果。可以在事件流的任何阶段中调用此方法。
+         * 对此方法的其它调用没有任何效果。可以在事件流的任何阶段中调用此方法。<br/>
          * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
          * @see #stopImmediatePropagation()
          * @see #preventDefault()
@@ -518,7 +518,7 @@ module lark {
          * @language en_US
          * Prevents processing of any event listeners in the current node and any subsequent nodes in the event flow.
          * This method takes effect immediately, and it affects event listeners in the current node. In contrast, the
-         * stopPropagation() method doesn't take effect until all the event listeners in the current node finish processing.
+         * stopPropagation() method doesn't take effect until all the event listeners in the current node finish processing.<br/>
          * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
          * @see #stopPropagation()
          * @see #preventDefault()
@@ -528,7 +528,7 @@ module lark {
         /**
          * @language zh_CN
          * 防止对事件流中当前节点中和所有后续节点中的事件侦听器进行处理。此方法会立即生效，并且会影响当前节点中的事件侦听器。
-         * 相比之下，在当前节点中的所有事件侦听器都完成处理之前，stopPropagation() 方法不会生效。
+         * 相比之下，在当前节点中的所有事件侦听器都完成处理之前，stopPropagation() 方法不会生效。<br/>
          * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
          * @see #stopPropagation()
          * @see #preventDefault()
@@ -567,7 +567,7 @@ module lark {
          * @language en_US
          * Gets one event instance from the object pool or create a new one. We highly recommend using the Event.create()
          * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
-         * which allows you to get better code execution performance.
+         * which allows you to get better code execution performance.<br/>
          * Note: If you want to use this method to initialize your custom event object,you must make sure the constructor
          * of your custom event is the same as the constructor of lark.Event.
          * @example
@@ -583,7 +583,7 @@ module lark {
         /**
          * @language zh_CN
          * 从对象池中取出或创建一个新的事件实例。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
-         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。
+         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。<br/>
          * 注意：若使用此方法来创建自定义事件的实例，自定义的构造函数参数列表必须跟Event类一致。
          * @example
          * <code>
@@ -620,7 +620,7 @@ module lark {
          * @language en_US
          * Releases an event object and cache it into the object pool.We highly recommend using the Event.create()
          * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
-         * which allows you to get better code execution performance.
+         * which allows you to get better code execution performance.<br/>
          * Note: The parameters of this method only accepts an instance created by the Event.create() method.
          * if not,it may throw an error.
          * @example
@@ -637,7 +637,7 @@ module lark {
         /**
          * @language zh_CN
          * 释放一个事件对象，并缓存到对象池。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
-         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。
+         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。<br/>
          * 注意：此方法只能传入由Event.create()创建的事件实例，传入非法对象实例可能会导致报错。
          * @example
          * <code>

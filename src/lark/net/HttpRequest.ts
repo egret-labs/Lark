@@ -72,7 +72,7 @@ module lark {
         response: any;
         /**
          * @language en_US
-         * Controls whether the downloaded data is received as text (HttpResponseType.TEXT) or raw binary data (HttpResponseType.ArrayBuffer)
+         * Controls whether the downloaded data is received as text (HttpResponseType.TEXT) or raw binary data (HttpResponseType.ArrayBuffer)<br/>
          * Note:If you attempt to set this property to an invalid value, Lark runtime set the value to HttpResponseType.TEXT.
          * @default lark.HttpResponseType.TEXT
          * @version Lark 1.0
@@ -80,7 +80,7 @@ module lark {
          */
         /**
          * @language zh_CN
-         * 设置返回的数据格式为文本（HttpResponseType.TEXT）还是二进制数据（HttpResponseType.ArrayBuffer）
+         * 设置返回的数据格式为文本（HttpResponseType.TEXT）还是二进制数据（HttpResponseType.ArrayBuffer）<br/>
          * 注意：若尝试设置此属性为一个非法的值，运行时将使用HttpResponseType.TEXT。
          * @default lark.HttpResponseType.TEXT
          * @version Lark 1.0
@@ -105,7 +105,7 @@ module lark {
         withCredentials: boolean;
         /**
          * @language en_US
-         * Initializes a request.
+         * Initializes a request.<br/>
          * Note: Calling this method for an already active request (one for which open() or openRequest() has already been
          * called) is the equivalent of calling abort().
          * @param url The URL to send the request to.
@@ -115,7 +115,7 @@ module lark {
          */
         /**
          * @language zh_CN
-         * 初始化一个请求.
+         * 初始化一个请求.<br/>
          * 注意: 若在已经发出请求的对象上调用此方法，相当于立即调用abort().
          * @param url 该请求所要访问的URL该请求所要访问的URL
          * @param method 请求所使用的HTTP方法， 请使用 HttpMethod 定义的枚举值.

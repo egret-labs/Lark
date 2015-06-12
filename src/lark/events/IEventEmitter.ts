@@ -35,7 +35,7 @@ module lark {
      * of event listeners are registered, and emits events. Event targets are an important part of the Lark event model. 
      * The event target serves as the focal point for how events flow through the display list hierarchy. When an event 
      * such as a touch tap occurs, an event object is emitted into the event flow from the root of the display list.
-     * The event object makes a round-trip journey to the event target, which is conceptually divided into three phases: 
+     * The event object makes a round-trip journey to the event target, which is conceptually divided into three phases: <br/>
      * the capture phase includes the journey from the root to the last node before the event target's node; the target 
      * phase includes only the event target node; and the bubbling phase includes any subsequent nodes encountered on the
      * return trip to the root of the display list.In general, the easiest way for a user-defined class to gain event 
@@ -50,7 +50,7 @@ module lark {
      * @language zh_CN
      * IEventEmitter 接口定义用于添加或删除事件侦听器的方法，检查是否已注册特定类型的事件侦听器，并调度事件。
      * 事件目标是 Lark 事件模型的重要组成部分。事件目标是事件如何通过显示列表层次结构这一问题的焦点。当发生触摸轻拍事件时，
-     * 会将事件对象调度到从显示列表根开始的事件流中。事件对象进行到事件目标的往返行程，在概念上，此往返行程被划分为三个阶段：
+     * 会将事件对象调度到从显示列表根开始的事件流中。事件对象进行到事件目标的往返行程，在概念上，此往返行程被划分为三个阶段：<br/>
      * 捕获阶段包括从根到事件目标节点之前的最后一个节点的行程，目标阶段仅包括事件目标节点，冒泡阶段包括到显示列表的根的回程上遇到的任何后续节点。
      * 通常，使用户定义的类能够调度事件的最简单方法是扩展 EventEmitter。如果无法扩展（即，如果该类已经扩展了另一个类），
      * 则可以实现 IEventEmitter 接口，创建 EventEmitter 成员，并编写一些简单的挂钩，将调用连接到聚合的 EventEmitter 中。
@@ -67,7 +67,7 @@ module lark {
          * and priority.After you successfully register an event listener, you cannot change its priority through additional 
          * calls to on(). To change a listener's priority, you must first call removeListener(). Then you can register the 
          * listener again with the new priority level.After the listener is registered, subsequent calls to on() with a 
-         * different value for either type or useCapture result in the creation of a separate listener registration. 
+         * different value for either type or useCapture result in the creation of a separate listener registration. <br/>
          * When you no longer need an event listener, remove it by calling EventEmitter.removeListener(); otherwise, memory 
          * problems might result. Objects with registered event listeners are not automatically removed from memory because
          * the garbage collector does not remove objects that still have references.Copying an EventEmitter instance does 
@@ -101,7 +101,8 @@ module lark {
          * 使用 EventEmitter 对象注册事件侦听器对象，以使侦听器能够接收事件通知。可以为特定类型的事件、阶段和优先级在显示列表的所有节
          * 点上注册事件侦听器。成功注册一个事件侦听器后，无法通过额外调用 on() 来更改其优先级。要更改侦听器的优先级，必须
          * 先调用 removeListener()。然后，可以使用新的优先级再次注册该侦听器。注册该侦听器后，如果继续调用具有不同 type 或 useCapture
-         * 值的 on()，则会创建单独的侦听器注册。如果不再需要某个事件侦听器，可调用 EventEmitter.removeListener()
+         * 值的 on()，则会创建单独的侦听器注册。<br/>
+         * 如果不再需要某个事件侦听器，可调用 EventEmitter.removeListener()
          * 删除它；否则会产生内存问题。由于垃圾回收器不会删除仍包含引用的对象，因此不会从内存中自动删除使用已注册事件侦听器的对象。复制
          * EventEmitter 实例时并不复制其中附加的事件侦听器。（如果新近创建的节点需要一个事件侦听器，必须在创建该节点后附加该侦听器。）
          * 但是，如果移动 EventEmitter 实例，则其中附加的事件侦听器也会随之移动。如果在正在处理事件的节点上注册事件侦听器，则不会在当
