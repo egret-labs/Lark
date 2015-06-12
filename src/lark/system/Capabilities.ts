@@ -89,7 +89,7 @@ module lark {
 
         /**
          * @language en_US
-         * Specifies whether the content is running in a mobile device.(such as a mobile phone or tablet)
+         * Specifies whether the system is running in a mobile device.(such as a mobile phone or tablet)
          * @version Lark 1.0
          * @platform Web,Native
          */
