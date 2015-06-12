@@ -316,6 +316,7 @@ module swan {
                     break;
                 case "repeat":
                     var pattern = context.createPattern(bitmapData, "repeat");
+                    context.beginPath();
                     context.rect(0, 0, width, height);
                     context.fillStyle = pattern;
                     context.fill();
