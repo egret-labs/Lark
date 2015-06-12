@@ -210,9 +210,9 @@ module lark {
     if(DEBUG){
         lark.$markReadOnly(Capabilities,"language");
         lark.$markReadOnly(Capabilities,"isMobile");
-        lark.$markReadOnly(Capabilities,"orientation");
-        lark.$markReadOnly(Capabilities,"motion");
-        lark.$markReadOnly(Capabilities,"location");
+        lark.$markReadOnly(Capabilities,"hasOrientation");
+        lark.$markReadOnly(Capabilities,"hasMotion");
+        lark.$markReadOnly(Capabilities,"hasGeolocation");
         lark.$markReadOnly(Capabilities,"os");
     }
 
