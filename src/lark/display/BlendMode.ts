@@ -68,7 +68,7 @@ module lark {
         /**
          * @language en_US
          * Adds the values of the constituent colors of the display object to the colors of its background, applying a
-         * ceiling of 0xFF. This setting is commonly used for animating a lightening dissolve between two objects.
+         * ceiling of 0xFF. This setting is commonly used for animating a lightening dissolve between two objects.<br/>
          * For example, if the display object has a pixel with an RGB value of 0xAAA633, and the background pixel has an
          * RGB value of 0xDD2200, the resulting RGB value for the displayed pixel is 0xFFC833 (because 0xAA + 0xDD > 0xFF,
          * 0xA6 + 0x22 = 0xC8, and 0x33 + 0x00 = 0x33).
@@ -77,7 +77,7 @@ module lark {
          */
         /**
          * @language zh_CN
-         * 将显示对象的原色值添加到它的背景颜色中，上限值为 0xFF。此设置通常用于使两个对象间的加亮溶解产生动画效果。
+         * 将显示对象的原色值添加到它的背景颜色中，上限值为 0xFF。此设置通常用于使两个对象间的加亮溶解产生动画效果。<br/>
          * 例如，如果显示对象的某个像素的 RGB 值为 0xAAA633，背景像素的 RGB 值为 0xDD2200，则显示像素的结果 RGB 值为 0xFFC833
          * （因为 0xAA + 0xDD > 0xFF，0xA6 + 0x22 = 0xC8，且 0x33 + 0x00 = 0x33）。
          * @version Lark 1.0

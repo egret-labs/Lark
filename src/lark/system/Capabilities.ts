@@ -59,7 +59,7 @@ module lark {
          * <li>English       en</li>
          * <li>Japanese      ja</li>
          * <li>Korean        ko</li>
-         * <ul>
+         * </ul>
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -74,7 +74,7 @@ module lark {
          * <li>英语      en</li>
          * <li>日语      ja</li>
          * <li>韩语      ko</li>
-         * <ul>
+         * </ul>
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -118,7 +118,7 @@ module lark {
          * <li>Windows Desktop   "Windows PC"</li>
          * <li>Mac Desktop       "Mac OS"</li>
          * <li>Unknown OS        "Unknown"</li>
-         * <ul>
+         * </ul>
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -132,7 +132,7 @@ module lark {
          * <li>微软桌面操作系统     "Windows PC"</li>
          * <li>苹果桌面操作系统     "Mac OS"</li>
          * <li>未知操作系统        "Unknown"</li>
-         * <ul>
+         * </ul>
          * @version Lark 1.0
          * @platform Web,Native
          */

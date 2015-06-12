@@ -1,4 +1,4 @@
-﻿//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
 //  All rights reserved.
@@ -30,14 +30,39 @@
 
 module lark {
 
+    /**
+     * @private
+     */
     var $TextWidthCache = {}
     /**
+     * @language en_US
+     * Helper class to measure the width of text.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 用于文本宽度测量的辅助类
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     export class TextMeasurer {
 
         /**
-         * 测量文本在指定样式下的宽度
+         * @language en_US
+         * Returns the width of the text with some specific styles.
+         * @param text the text to be measured.
+         * @param font text font style of the given text.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 测量文本在指定样式下的宽度。
+         * @param text 要测量的文本内容。
+         * @param font 文本的样式值。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public static measureText(text:string, font:string):number {
             var context = sys.sharedRenderContext;

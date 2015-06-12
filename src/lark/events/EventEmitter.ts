@@ -52,12 +52,13 @@ module lark {
      * flow through the display list hierarchy. When an event such as a touch tap, Lark emits an event object into the
      * event flow from the root of the display list. The event object then makes its way through the display list until it
      * reaches the event target, at which point it begins its return trip through the display list. This round-trip journey
-     * to the event target is conceptually divided into three phases: the capture phase comprises the journey from the root
-     * to the last node before the event target's node, the target phase comprises only the event target node, and the bubbling
-     * phase comprises any subsequent nodes encountered on the return trip to the root of the display list. In general,
-     * the easiest way for a user-defined class to gain event emitting capabilities is to extend EventEmitter.
-     * If this is impossible (that is, if the class is already extending another class), you can instead implement the
-     * IEventEmitter interface, create an EventEmitter member, and write simple hooks to route calls into the aggregated EventEmitter.
+     * to the event target is conceptually divided into three phases: <br/>
+     * the capture phase comprises the journey from the root to the last node before the event target's node, the target
+     * phase comprises only the event target node, and the bubbling phase comprises any subsequent nodes encountered on
+     * the return trip to the root of the display list. In general, the easiest way for a user-defined class to gain event
+     * emitting capabilities is to extend EventEmitter. If this is impossible (that is, if the class is already extending
+     * another class), you can instead implement the IEventEmitter interface, create an EventEmitter member, and write simple
+     * hooks to route calls into the aggregated EventEmitter.
      * @see lark.IEventEmitter
      * @version Lark 1.0
      * @platform Web,Native
