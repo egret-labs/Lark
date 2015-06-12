@@ -1644,25 +1644,11 @@ module ts {
                         Debug.fail("isDeclarationVisible unknown: SyntaxKind: " + node.kind);
                 }
             }
-
-            function hasPrivateMark(node: Declaration) {
-                if (!global.ignoreDollar)
-                    return false;
-                var sourceFile = ts.getSourceFileOfNode(node);
-                var sourceCode = sourceFile.text;
-                var commonts = ts.getJsDocComments(node, sourceFile);
-
-                var hasMark = commonts && commonts.some(comment=> {
-                    var text = sourceCode.substring(comment.pos, comment.end);
-                    return text.indexOf("@private") >= 0;
-                });
-                return hasMark;
-            }
             
             if (node) {
                 var links = getNodeLinks(node);
                 if (links.isVisible === undefined) {
-                    links.isVisible = !!determineIfDeclarationIsVisible() && !hasPrivateMark(node);
+                    links.isVisible = !!determineIfDeclarationIsVisible();
                 }
                 return links.isVisible;
             }

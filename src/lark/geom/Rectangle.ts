@@ -34,7 +34,7 @@ module lark {
     /**
      * @language en_US
      * A Rectangle object is an area defined by its position, as indicated by its top-left corner point (x, y) and by its
-     * width and its height.
+     * width and its height.<br/>
      * The x, y, width, and height properties of the Rectangle class are independent of each other; changing the value of
      * one property has no effect on the others. However, the right and bottom properties are integrally related to those
      * four properties. For example, if you change the value of the right property, the value of the width property changes;
@@ -44,7 +44,7 @@ module lark {
      */
     /**
      * @language zh_CN
-     * Rectangle 对象是按其位置（由它左上角的点 (x, y) 确定）以及宽度和高度定义的区域。
+     * Rectangle 对象是按其位置（由它左上角的点 (x, y) 确定）以及宽度和高度定义的区域。<br/>
      * Rectangle 类的 x、y、width 和 height 属性相互独立；更改一个属性的值不会影响其他属性。
      * 但是，right 和 bottom 属性与这四个属性是整体相关的。例如，如果更改 right 属性的值，则 width
      * 属性的值将发生变化；如果更改 bottom 属性，则 height 属性的值将发生变化。
@@ -251,14 +251,14 @@ module lark {
          * @language en_US
          * The y coordinate of the top-left corner of the rectangle. Changing the top property of a Rectangle object has
          * no effect on the x and width properties. However it does affect the height property, whereas changing the y
-         * value does not affect the height property.
+         * value does not affect the height property.<br/>
          * The value of the top property is equal to the value of the y property.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 矩形左上角的 y 坐标。更改 Rectangle 对象的 top 属性对 x 和 width 属性没有影响。但是，它会影响 height 属性，而更改 y 值不会影响 height 属性。
+         * 矩形左上角的 y 坐标。更改 Rectangle 对象的 top 属性对 x 和 width 属性没有影响。但是，它会影响 height 属性，而更改 y 值不会影响 height 属性。<br/>
          * top 属性的值等于 y 属性的值。
          * @version Lark 1.0
          * @platform Web,Native

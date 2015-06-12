@@ -31,7 +31,7 @@ module lark {
     /**
      * @language en_US
      * The Stage class represents the main drawing area.The Stage object is not globally accessible. You need to access
-     * it through the stage property of a DisplayObject instance.
+     * it through the stage property of a DisplayObject instance.<br/>
      * The Stage class has several ancestor classes — Sprite, DisplayObject, and EventEmitter — from which it inherits
      * properties and methods. Many of these properties and methods are inapplicable to Stage objects.
      * @event lark.Event.RESIZE Emitted when the stageWidth or stageHeight property of the Stage object is changed.
@@ -41,7 +41,7 @@ module lark {
     /**
      * @language zh_CN
      * Stage 类代表主绘图区。
-     * 可以利用 DisplayObject 实例的 stage 属性进行访问。
+     * 可以利用 DisplayObject 实例的 stage 属性进行访问。<br/>
      * Stage 类具有多个祖代类: Sprite、DisplayObject 和 EventEmitter，属性和方法便是从这些类继承而来的。
      * 从这些继承的许多属性和方法不适用于 Stage 对象。
      * @event lark.Event.RESIZE 当stageWidth或stageHeight属性发生改变时调度
@@ -63,7 +63,7 @@ module lark {
         /**
          * @language en_US
          * Gets and sets the frame rate of the stage. The frame rate is defined as frames per second. Valid range for the
-         * frame rate is from 0.01 to 1000 frames per second.
+         * frame rate is from 0.01 to 1000 frames per second.<br/>
          * Note: setting the frameRate property of one Stage object changes the frame rate for all Stage objects
          * @default 30
          * @version Lark 1.0
@@ -71,7 +71,7 @@ module lark {
          */
         /**
          * @language zh_CN
-         * 获取并设置舞台的帧速率。帧速率是指每秒显示的帧数。帧速率的有效范围为每秒 0.01 到 60 个帧。
+         * 获取并设置舞台的帧速率。帧速率是指每秒显示的帧数。帧速率的有效范围为每秒 0.01 到 60 个帧。<br/>
          * 注意: 修改任何一个Stage的frameRate属性都会同步修改其他Stage的帧率。
          * @default 30
          * @version Lark 1.0

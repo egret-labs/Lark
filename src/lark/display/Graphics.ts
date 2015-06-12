@@ -229,20 +229,24 @@ module lark {
 
         /**
          * @language en_US
-         * determines how the end points of every line are drawn. There are three possible values for this property and those are:
-         * "butt": The ends of lines are squared off at the endpoints.
-         * "round": The ends of lines are rounded.
-         * "square": The ends of lines are squared off by adding a box with an equal width and half the height of the line's thickness.
+         * determines how the end points of every line are drawn. There are three possible values for this property and those are:<br/>
+         * <ul>
+         * <li>"butt": The ends of lines are squared off at the endpoints.</li>
+         * <li>"round": The ends of lines are rounded.</li>
+         * <li>"square": The ends of lines are squared off by adding a box with an equal width and half the height of the line's thickness.</li>
+         * </ul>
          * @default "butt"
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 指定如何绘制每一条线段末端的属性。有3个可能的值，分别是：
-         * "butt": 线段末端以方形结束。
-         * "round": 线段末端以圆形结束。
-         * "square": 线段末端以方形结束，但是增加了一个宽度和线段相同，高度是线段厚度一半的矩形区域。
+         * 指定如何绘制每一条线段末端的属性。有3个可能的值，分别是：<br/>
+         * <ul>
+         * <li>"butt": 线段末端以方形结束。</li>
+         * <li>"round": 线段末端以圆形结束。</li>
+         * <li>"square": 线段末端以方形结束，但是增加了一个宽度和线段相同，高度是线段厚度一半的矩形区域。</li>
+         * </ul>
          * @default "butt"
          * @version Lark 1.0
          * @platform Web,Native
@@ -291,23 +295,27 @@ module lark {
 
         /**
          * @language en_US
-         * specifies the type of joint appearance used at angles.There are three possible values for this property and those are:
-         * "round": Rounds off the corners of a shape by filling an additional sector of disc centered at the common endpoint
-         * of connected segments. The radius for these rounded corners is equal to the line width.
-         * "bevel": Fills an additional triangular area between the common endpoint of connected segments, and the separate
-         * outside rectangular corners of each segment.
-         * "miter": Connected segments are joined by extending their outside edges to connect at a single point, with the
-         * effect of filling an additional lozenge-shaped area. This setting is effected by the miterLimit property.
+         * specifies the type of joint appearance used at angles.There are three possible values for this property and those are:<br/>
+         * <ul>
+         * <li>"round": Rounds off the corners of a shape by filling an additional sector of disc centered at the common endpoint
+         * of connected segments. The radius for these rounded corners is equal to the line width.</li>
+         * <li>"bevel": Fills an additional triangular area between the common endpoint of connected segments, and the separate
+         * outside rectangular corners of each segment.</li>
+         * <li>"miter": Connected segments are joined by extending their outside edges to connect at a single point, with the
+         * effect of filling an additional lozenge-shaped area. This setting is effected by the miterLimit property.</li>
+         * </ul>
          * @default "miter"
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 指定用于拐角的连接外观的类型,有3个可能的值，分别是：
-         * "round": 圆角连接
-         * "bevel": 斜角连接。
-         * "miter": 尖角连接。当使用尖角模式时，还可以同时使用 miterLimit 参数限制尖角的长度。
+         * 指定用于拐角的连接外观的类型,有3个可能的值，分别是：<br/>
+         * <ul>
+         * <li>"round": 圆角连接</li>
+         * <li>"bevel": 斜角连接。</li>
+         * <li>"miter": 尖角连接。当使用尖角模式时，还可以同时使用 miterLimit 参数限制尖角的长度。</li>
+         * </ul>
          * @default "miter"
          * @version Lark 1.0
          * @platform Web,Native
@@ -923,6 +931,7 @@ module lark {
             context.lineWidth = 1;
             context.miterLimit = 10;
             context.strokeStyle = "#000000";
+            context.beginPath();//清理之前的缓存的路径
             var map = context["graphicsMap"];
             if (!map) {
                 map = mapGraphicsFunction(context);

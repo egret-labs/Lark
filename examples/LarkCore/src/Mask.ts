@@ -9,14 +9,14 @@ class Mask extends lark.Sprite {
         var imageLoader = new Loader();
         imageLoader.once(lark.Event.COMPLETE,e=>this.onLoaded(imageLoader.images),this);
         imageLoader.loadImages([
-            "resources/mask.png",
+            "resources/lark.png",
             "resources/products.png"
         ]);
     }
 
     private onLoaded(images:any){
 
-        var larkBitmapData = images["resources/mask.png"];
+        var larkBitmapData = images["resources/lark.png"];
         var productsBitmapData = images["resources/products.png"];
 
         var productBmp = new lark.Bitmap(productsBitmapData);

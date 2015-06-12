@@ -170,7 +170,7 @@ module lark {
      * objects in the display list. DisplayObjectContainer objects can have child display objects, while other display objects,
      * such as Shape and TextField objects, are "leaf" nodes that have only parents and siblings, no children.
      * The DisplayObject class supports basic functionality like the x and y position of an object, as well as more advanced
-     * properties of the object such as its transformation matrix.
+     * properties of the object such as its transformation matrix.<br/>
      * The DisplayObject class contains several broadcast events.Normally, the target of any particular event is a specific
      * DisplayObject instance. For example, the target of an added event is the specific DisplayObject instance that was added
      * to the display list. Having a single target restricts the placement of event listeners to that target and in some cases
@@ -191,7 +191,7 @@ module lark {
      * @language zh_CN
      * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时中显示的所有对象。使用 DisplayObjectContainer 类排列
      * 显示列表中的显示对象。DisplayObjectContainer 对象可以有子显示对象，而其他显示对象（如 Shape 和 TextField 对象）是“叶”节点，没有子项，只有父级和
-     * 同级。DisplayObject 类有一些基本的属性（如确定坐标位置的 x 和 y 属性），也有一些高级的对象属性（如 Matrix 矩阵变换）。
+     * 同级。DisplayObject 类有一些基本的属性（如确定坐标位置的 x 和 y 属性），也有一些高级的对象属性（如 Matrix 矩阵变换）。<br/>
      * DisplayObject 类包含若干广播事件。通常，任何特定事件的目标均为一个特定的 DisplayObject 实例。例如，added 事件的目标是已添加到显示列表
      * 的目标 DisplayObject 实例。若只有一个目标，则会将事件侦听器限制为只能监听在该目标上（在某些情况下，可监听在显示列表中该目标的祖代上）。
      * 但是对于广播事件，目标不是特定的 DisplayObject 实例，而是所有 DisplayObject 实例（包括那些不在显示列表中的实例）。这意味着您可以向任何
@@ -443,7 +443,7 @@ module lark {
         /**
          * @language en_US
          * The Stage of the display object. you can create and load multiple display objects into the display list, and
-         * the stage property of each display object refers to the same Stage object.
+         * the stage property of each display object refers to the same Stage object.<br/>
          * If a display object is not added to the display list, its stage property is set to null.
          * @version Lark 1.0
          * @platform Web,Native
@@ -451,7 +451,7 @@ module lark {
         /**
          * @language zh_CN
          * 显示对象的舞台。
-         * 例如，您可以创建多个显示对象并加载到显示列表中，每个显示对象的 stage 属性是指相同的 Stage 对象。
+         * 例如，您可以创建多个显示对象并加载到显示列表中，每个显示对象的 stage 属性是指相同的 Stage 对象。<br/>
          * 如果显示对象未添加到显示列表，则其 stage 属性会设置为 null。
          * @version Lark 1.0
          * @platform Web,Native
@@ -462,7 +462,7 @@ module lark {
 
         /**
          * @language en_US
-         * A Matrix object containing values that alter the scaling, rotation, and translation of the display object.
+         * A Matrix object containing values that alter the scaling, rotation, and translation of the display object.<br/>
          * Note: to change the value of a display object's matrix, you must make a copy of the entire matrix object, then copy
          * the new object into the matrix property of the display object.
          * @example the following code increases the tx value of a display object's matrix
@@ -476,7 +476,7 @@ module lark {
          */
         /**
          * @language zh_CN
-         * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。
+         * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。<br/>
          * 注意：要改变一个显示对象矩阵的值，您必引用整个矩阵对象，然后将它重新赋值给显示对象的 matrix 属性。
          * @example 以下代码改变了显示对象矩阵的tx属性值：
          * <code>
@@ -576,7 +576,8 @@ module lark {
         /**
          * @language en_US
          * Indicates the x coordinate of the DisplayObject instance relative to the local coordinates of the parent
-         * DisplayObjectContainer. If the object is inside a DisplayObjectContainer that has transformations, it is in
+         * DisplayObjectContainer.<br/>
+         * If the object is inside a DisplayObjectContainer that has transformations, it is in
          * the local coordinate system of the enclosing DisplayObjectContainer. Thus, for a DisplayObjectContainer
          * rotated 90° counterclockwise, the DisplayObjectContainer's children inherit a coordinate system that is
          * rotated 90° counterclockwise. The object's coordinates refer to the registration point position.
@@ -586,7 +587,7 @@ module lark {
          */
         /**
          * @language zh_CN
-         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。
+         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。<br/>
          * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
          * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
          * @default 0
@@ -627,7 +628,8 @@ module lark {
         /**
          * @language en_US
          * Indicates the y coordinate of the DisplayObject instance relative to the local coordinates of the parent
-         * DisplayObjectContainer. If the object is inside a DisplayObjectContainer that has transformations, it is in
+         * DisplayObjectContainer. <br/>
+         * If the object is inside a DisplayObjectContainer that has transformations, it is in
          * the local coordinate system of the enclosing DisplayObjectContainer. Thus, for a DisplayObjectContainer rotated
          * 90° counterclockwise, the DisplayObjectContainer's children inherit a coordinate system that is rotated 90°
          * counterclockwise. The object's coordinates refer to the registration point position.
@@ -637,7 +639,7 @@ module lark {
          */
         /**
          * @language zh_CN
-         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 y 坐标。
+         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 y 坐标。<br/>
          * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
          * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
          * @default 0
@@ -678,8 +680,8 @@ module lark {
 
         /**
          * @language en_US
-         * Indicates the horizontal scale (percentage) of the object as applied from the registration point. The default
-         * 1.0 equals 100% scale.Scaling the local coordinate system changes the x and y property values, which are
+         * Indicates the horizontal scale (percentage) of the object as applied from the registration point. <br/>
+         * The default 1.0 equals 100% scale.Scaling the local coordinate system changes the x and y property values, which are
          * defined in whole pixels.
          * @default 1
          * @version Lark 1.0
@@ -687,8 +689,8 @@ module lark {
          */
         /**
          * @language zh_CN
-         * 表示从注册点开始应用的对象的水平缩放比例（百分比）。1.0 等于 100% 缩放。
-         * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
+         * 表示从注册点开始应用的对象的水平缩放比例（百分比）。<br/>
+         * 1.0 等于 100% 缩放。缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
          * @default 1
          * @version Lark 1.0
          * @platform Web,Native
@@ -942,7 +944,7 @@ module lark {
          * increase performance for display objects that contain complex vector content. After you set the cacheAsBitmap
          * property to true, the rendering does not change, however the display object performs pixel snapping automatically.
          * The execution speed can be significantly faster depending on the complexity of the content.The cacheAsBitmap
-         * property is best used with display objects that have mostly static content and that do not scale and rotate frequently.
+         * property is best used with display objects that have mostly static content and that do not scale and rotate frequently.<br/>
          * Note: The display object will not create the bitmap caching when the memory exceeds the upper limit,even if you set it to true.
          * @default false
          * @version Lark 1.0
@@ -952,7 +954,7 @@ module lark {
          * @language zh_CN
          * 如果设置为 true，则 Lark 运行时将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
          * 将 cacheAsBitmap 属性设置为 true 后，呈现并不更改，但是，显示对象将自动执行像素贴紧。执行速度可能会大大加快，
-         * 具体取决于显示对象内容的复杂性。最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放或旋转的显示对象一起使用。
+         * 具体取决于显示对象内容的复杂性。最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放或旋转的显示对象一起使用。<br/>
          * 注意：在内存超过上限的情况下，即使将 cacheAsBitmap 属性设置为 true，显示对象也不使用位图缓存。
          * @default false
          * @version Lark 1.0
@@ -1090,7 +1092,7 @@ module lark {
         /**
          * @language en_US
          * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
-         * is set to true,the transparent area of the display object will be touched through.
+         * is set to true,the transparent area of the display object will be touched through.<br/>
          * Enabling this property will cause certain mount of performance loss. This property is set to true in the Shape class,
          * while the other is set to false by default.
          * @version Lark 1.0
@@ -1098,7 +1100,7 @@ module lark {
          */
         /**
          * @language zh_CN
-         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，
+         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，<br/>
          * 开启此属性将会有一定量的额外性能损耗，Shape等含有矢量图的类默认开启此属性，其他类默认关闭。
          * @version Lark 1.0
          * @platform Web,Native
@@ -1123,7 +1125,7 @@ module lark {
          * object always scrolls in whole pixel increments.You can scroll an object left and right by setting the x property of
          * the scrollRect Rectangle object. You can scroll an object up and down by setting the y property of the scrollRect
          * Rectangle object. If the display object is rotated 90° and you scroll it left and right, the display object actually
-         * scrolls up and down.
+         * scrolls up and down.<br/>
          *
          * Note: to change the value of a display object's scrollRect, you must make a copy of the entire scrollRect object, then copy
          * the new object into the scrollRect property of the display object.
@@ -1140,7 +1142,7 @@ module lark {
          * @language zh_CN
          * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
          * 滚动的显示对象始终以整像素为增量进行滚动。您可以通过设置 scrollRect Rectangle 对象的 x 属性来左右滚动对象， 还可以通过设置
-         * scrollRect 对象的 y 属性来上下滚动对象。如果显示对象旋转了 90 度，并且您左右滚动它，则实际上显示对象会上下滚动。
+         * scrollRect 对象的 y 属性来上下滚动对象。如果显示对象旋转了 90 度，并且您左右滚动它，则实际上显示对象会上下滚动。<br/>
          *
          * 注意：要改变一个显示对象 scrollRect 属性的值，您必引用整个 scrollRect 对象，然后将它重新赋值给显示对象的 scrollRect 属性。
          * @example 以下代码改变了显示对象 scrollRect 的 x 属性值：
@@ -1180,7 +1182,7 @@ module lark {
         /**
          * @language en_US
          * A value from the BlendMode class that specifies which blend mode to use. Determine how a source image (new one)
-         * is drawn on the target image (old one).
+         * is drawn on the target image (old one).<br/>
          * If you attempt to set this property to an invalid value, Lark runtime set the value to BlendMode.NORMAL.
          * @default lark.BlendMode.NORMAL
          * @see lark.BlendMode
@@ -1189,7 +1191,7 @@ module lark {
          */
         /**
          * @language zh_CN
-         * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上
+         * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上<br/>
          * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
          * @default lark.BlendMode.NORMAL
          * @see lark.BlendMode
@@ -1225,7 +1227,7 @@ module lark {
          * The calling display object is masked by the specified mask object. To ensure that masking works when the Stage
          * is scaled, the mask display object must be in an active part of the display list. The mask object itself is not drawn.
          * Set mask to null to remove the mask. To be able to scale a mask object, it must be on the display list. To be
-         * able to drag a mask Sprite object , it must be on the display list.
+         * able to drag a mask Sprite object , it must be on the display list.<br/>
          * Note: A single mask object cannot be used to mask more than one calling display object. When the mask is assigned
          * to a second display object, it is removed as the mask of the first object, and that object's mask property becomes null.
          * @version Lark 1.0
@@ -1235,7 +1237,7 @@ module lark {
          * @language zh_CN
          * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
          * 但不绘制 mask 对象本身。将 mask 设置为 null 可删除蒙版。要能够缩放遮罩对象，它必须在显示列表中。要能够拖动蒙版
-         * Sprite 对象，它必须在显示列表中。
+         * Sprite 对象，它必须在显示列表中。<br/>
          * 注意：单个 mask 对象不能用于遮罩多个执行调用的显示对象。在将 mask 分配给第二个显示对象时，会撤消其作为第一个对象的遮罩，
          * 该对象的 mask 属性将变为 null。
          * @version Lark 1.0

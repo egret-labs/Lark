@@ -1,7 +1,31 @@
-﻿
+
 
 module lark {
+    /**
+     * @language en_US
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
     export class ImagePickerTest extends lark.Sprite {
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         constructor() {
             super();
 

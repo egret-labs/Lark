@@ -347,16 +347,16 @@ var lark;
                 }
                 else {
                     if (ua.indexOf("windows nt") != -1) {
-                        capabilities.$os = "Windows";
+                        capabilities.$os = "Windows PC";
                     }
                     else if (ua.indexOf("mac os") != -1) {
                         capabilities.$os = "Mac OS";
                     }
                 }
                 var h5 = WebCapability.checkHtml5Support();
-                capabilities.$location = h5.geo;
-                capabilities.$motion = h5.m;
-                capabilities.$orientation = h5.ortt;
+                capabilities.$hasGeolocation = h5.geo;
+                capabilities.$hasMotion = h5.m;
+                capabilities.$hasOrientation = h5.ortt;
                 var language = (navigator.language || navigator.browserLanguage).toLowerCase();
                 var strings = language.split("-");
                 if (strings.length > 1) {
@@ -668,7 +668,7 @@ var lark;
                     var keys = ["webkitImageSmoothingEnabled", "mozImageSmoothingEnabled", "msImageSmoothingEnabled"];
                     for (var i = keys.length - 1; i >= 0; i--) {
                         var key = keys[i];
-                        if (context.hasOwnProperty(key)) {
+                        if (context[key] !== void 0) {
                             break;
                         }
                     }
@@ -987,6 +987,8 @@ var lark;
                 this.currentTextInput = null;
                 this.singleLineTextInput = null;
                 this.multiLineTextInput = null;
+                this.lastSelectStart = 0;
+                this.lastSelectEnd = 0;
                 this.handleContainerClick = function (e) {
                     if (_this.pendingToShowHtmlInput) {
                         _this.pendingToShowHtmlInput = false;
@@ -995,9 +997,12 @@ var lark;
                         var currentHtmlInput = _this.currentHtmlInput;
                         currentHtmlInput.onblur = _this.handleHtmlInputBlur;
                         currentHtmlInput.oninput = _this.handleHtmlInputInputEvent;
-                        currentHtmlInput.selectionStart = currentHtmlInput.value.length;
-                        currentHtmlInput.selectionEnd = currentHtmlInput.value.length;
                         currentHtmlInput.focus();
+                        currentHtmlInput.onclick = _this.getInputSelection;
+                        currentHtmlInput.onselect = _this.getInputSelection;
+                        currentHtmlInput.onkeydown = _this.getInputSelection;
+                        _this.$setSelection(_this.currentTextInput.selectionBeginIndex, _this.currentTextInput.selectionEndIndex);
+                        _this.getInputSelection();
                         _this.currentTextInput.$startInput();
                     }
                     else if (_this.currentTextInput != null) {
@@ -1006,9 +1011,18 @@ var lark;
                 };
                 this.handleHtmlInputInputEvent = function (e) {
                     _this.currentTextInput.$setUserInputText(_this.currentHtmlInput.value);
+                    _this.getInputSelection();
                 };
                 this.handleHtmlInputBlur = function (e) {
+                    var htmlInput = _this.currentHtmlInput;
+                    var textInput = _this.currentTextInput;
                     _this.$removeCurrentTextInput();
+                    textInput.setSelection(_this.lastSelectStart, _this.lastSelectEnd);
+                };
+                this.getInputSelection = function () {
+                    _this.lastSelectEnd = _this.currentHtmlInput.selectionEnd;
+                    _this.lastSelectStart = _this.currentHtmlInput.selectionStart;
+                    lark.log(_this.lastSelectStart, _this.lastSelectEnd);
                 };
                 this.$stage = stage;
                 this.canvas = canvas;
@@ -1042,6 +1056,9 @@ var lark;
                 var currentHtmlInput = this.currentHtmlInput;
                 currentHtmlInput.onblur = null;
                 currentHtmlInput.oninput = null;
+                currentHtmlInput.onclick = null;
+                currentHtmlInput.onselect = null;
+                currentHtmlInput.onkeydown = null;
                 this.resetHtmlInputStyle(currentHtmlInput);
                 this.resetTextContainerStyle();
                 currentTextInput.$setUserInputText(currentHtmlInput.value);
@@ -1165,6 +1182,10 @@ var lark;
                 else if (htmlInput.maxLength >= 0)
                     htmlInput.maxLength = 0x800000;
             };
+            p.$setSelection = function (selectStart, selectEnd) {
+                this.currentHtmlInput.selectionStart = selectStart;
+                this.currentHtmlInput.selectionEnd = selectEnd;
+            };
             p.setElementStyle = function (style, value) {
                 if (this.currentHtmlInput) {
                     this.currentHtmlInput.style[style] = value;
@@ -1286,7 +1307,8 @@ var lark;
                 if (showFPS || showLog) {
                     player.displayFPS(showFPS, showLog, logFilter);
                 }
-                var language = navigator.language.replace("-", "_");
+                var language = navigator.language || navigator.browserLanguage || "en_US";
+                language = language.replace("-", "_");
                 if (language in lark.$locale_strings)
                     lark.$language = language;
             }

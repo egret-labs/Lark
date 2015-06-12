@@ -1,5 +1,4 @@
 #Lark
-------------------
 
 Lark 是一套由 Egret 团队制作的基于HTML5技术构建跨平台移动Web应用，微站和富媒体广告营销的交互应用框架。
 
@@ -15,7 +14,6 @@ Lark 是一套由 Egret 团队制作的基于HTML5技术构建跨平台移动Web
 
 
 ##Hello Lark
----------------------
 
 下面是一个简单的 Hello World 示例
 
@@ -58,7 +56,6 @@ JavaScript 类 `Main`。网页加载完成时，lark 会查找 `class="lark-play
 
 
 ##安装 Lark
---------------------
 
 Lark 源代码由 TypeScript 编写，但你也可以使用 JavaScript 来开发 Lark 应用。
 
@@ -87,7 +84,7 @@ NPM 是 Node.js 的包管理工具，默认配置下会随 Node.js 一起安装�
 
 
 
-
+##路线图
 
 
 ##Next:

@@ -66,7 +66,7 @@ module lark {
         data:BitmapData;
         /**
          * @language en_US
-         * Specifies whether or not cross-site Access-Control requests should be made when loading a image from foreign origins.
+         * Specifies whether or not cross-site Access-Control requests should be made when loading a image from foreign origins.<br/>
          * possible values are:"anonymous","use-credentials" or null.
          * @default null
          * @version Lark 1.0
@@ -74,7 +74,7 @@ module lark {
          */
         /**
          * @language zh_CN
-         * 当从其他站点加载一个图片时，指定是否启用跨域资源共享(CORS)，默认值为null。
+         * 当从其他站点加载一个图片时，指定是否启用跨域资源共享(CORS)，默认值为null。<br/>
          * 可以设置为"anonymous","use-credentials"或null,设置为其他值将等同于"anonymous"。
          * @version Lark 1.0
          * @platform Web,Native
@@ -82,7 +82,7 @@ module lark {
         crossOrigin:string;
         /**
          * @language en_US
-         * start a load operation。
+         * start a load operation。<br/>
          * Note: Calling this method for an already active request (one for which load() has already been
          * called) will abort the last load operation immediately.
          * @param url 要加载的图像文件的地址。
@@ -91,7 +91,8 @@ module lark {
          */
         /**
          * @language zh_CN
-         * 启动一次图像加载。注意：若之前已经调用过加载请求，重新调用 load() 将终止先前的请求，并开始新的加载。
+         * 启动一次图像加载。<br/>
+         * 注意：若之前已经调用过加载请求，重新调用 load() 将终止先前的请求，并开始新的加载。
          * @param url 要加载的图像文件的地址。
          * @version Lark 1.0
          * @platform Web,Native

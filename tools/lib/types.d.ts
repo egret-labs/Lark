@@ -136,6 +136,7 @@ declare module lark {
         files?: Array<string|LarkSourceFile>;
         dependencies?: string[];
         root?: string;
+        noOtherTs?: boolean;
     }
 
     export interface LarkSourceFile {

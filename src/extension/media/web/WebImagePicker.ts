@@ -1,12 +1,25 @@
-﻿
+
 
 
 module lark.web {
+    /**
+     * @private
+     */
     export class WebImagePicker extends EventEmitter implements ImagePicker{
 
+        /**
+         * @private
+         */
         bitmapDatas:lark.BitmapData[];
+        /**
+         * @private
+         */
         multiple:boolean = false;
 
+        /**
+         * @private
+         * 
+         */
         pick() {
             var input = $createTempFileInput();
             input.multiple = !!this.multiple;
@@ -15,6 +28,9 @@ module lark.web {
 
         }
 
+        /**
+         * @private
+         */
         private onFileChange = (e) => {
             var target:HTMLInputElement = e.target;
             var count = target.files.length;
@@ -36,12 +52,24 @@ module lark.web {
             }
         };
 
+        /**
+         * @private
+         * 
+         */
         private onGotFiles(){
             this.emitWith(Event.CHANGE);
         }
     }
 
+    /**
+     * @private
+     */
     var $fileInput:HTMLInputElement = null;
+    /**
+     * @private
+     * 
+     * @returns 
+     */
     function $createTempFileInput():HTMLInputElement {
         if(!$fileInput){
             var input = document.createElement('input');
