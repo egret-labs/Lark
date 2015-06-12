@@ -931,6 +931,7 @@ module lark {
             context.lineWidth = 1;
             context.miterLimit = 10;
             context.strokeStyle = "#000000";
+            context.beginPath();//清理之前的缓存的路径
             var map = context["graphicsMap"];
             if (!map) {
                 map = mapGraphicsFunction(context);
