@@ -3,6 +3,9 @@
     <s:Image width="100%" height="100%" source="resource/assets/blue/Panel/border.png" scale9Grid="2,2,173,43"/>
     <s:Scroller left="1" right="1" top="1" bottom="1">
         <s:List id="list">
+            <s:layout>
+                <s:TileLayout horizontalGap="5" verticalGap="5"/>
+            </s:layout>
             <s:itemRenderer>
                 <s:ItemRenderer states="up,down,disabled" height="60" touchThrough="false">
                     <s:Image width="100%" height="100%" includeIn="down"

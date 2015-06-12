@@ -1,25 +1,83 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<s:Group class="components.MainGroup" touchThrough="true" xmlns:s="http://ns.egret.com/swan" xmlns:c="components.*">
-    <c:TabBar width="600" height="60" dataProvider="{viewStack}"/>
-    <s:ViewStack id="viewStack" width="600" height="300" y="60">
-        <s:Group name="Button">
+<s:Group class="components.MainGroup" touchThrough="true" xmlns:s="http://ns.egret.com/swan" xmlns:c="components.*" verticalCenter="0" horizontalCenter="0" width="800" height="300">
+    <s:Image source="resource/assets/whiteBg.png" width="800" maxHeight="300" height="300" fillMode="repeat"/>
+    <c:TabBar dataProvider="{viewStack}"  left="0" top="0"/>
+    <s:ViewStack id="viewStack"  height="300" width = "800" verticalCenter="0" left="130">
+        <s:Group name="Button" horizontalCenter="0" >
+            <s:layout>
+                <s:VerticalLayout gap="20" horizontalAlign="left"/>
+            </s:layout>
             <s:Button x="10" y="10" label="Button"/>
-            <s:ToggleSwitch x="10" y="60"/>
-            <s:CheckBox x="10" y="100" label="CheckBox"/>
-            <s:RadioButton x="140" y="100" label="RadioButton"/>
+             <s:Group>
+                 <s:layout>
+                    <s:HorizontalLayout gap="5" horizontalAlign="left"/>
+                </s:layout>
+                 <s:ToggleSwitch x="10" y="60" label="ToggleSwitch"/>
+                <s:Label fontSize="20" y="60" fontFamily="Tahoma" x="90" text="ToggleButton" textColor="0x727070"/>
+             </s:Group>
+              <s:CheckBox x="10" y="100" label="CheckBox"/>
+            <s:Group>
+                 <s:layout>
+                    <s:HorizontalLayout gap="5" horizontalAlign="left"/>
+                </s:layout>
+                <s:RadioButton x="10" y="140" label="SelectOne"/>
+                <s:RadioButton x="140" y="140" label="SelectTwo"/>
+             </s:Group>
         </s:Group>
-        <s:Group name="Slider">
+        <s:Group name="Slider" horizontalCenter="0" >
+            <s:layout>
+                <s:HorizontalLayout gap="5" />
+            </s:layout>
             <s:VSlider x="10" y="10" height="200" maximum="100"/>
             <s:HSlider x="50" y="200" width="200" maximum="100"/>
         </s:Group>
-        <s:Group name="ProgressBar">
-            <s:ProgressBar x="10" y="10" width="200" maximum="100" value="20"/>
+        <s:Group name="ProgressBar" horizontalCenter="0" verticalCenter ="0">
+            <s:ProgressBar width="200" maximum="100" value="20"/>
         </s:Group>
         <s:Group name="Panel" width="100%" height="100%">
             <s:Panel title="Panel" verticalCenter="0" horizontalCenter="0"/>
         </s:Group>
-        <s:Group name="List" top="10" bottom="0" width="200" horizontalCenter="0">
+        <s:Group name="List" top="10" bottom="0" horizontalCenter="0">
             <c:ListGroup width="100%" height="100%"/>
         </s:Group>
+        <s:Group name="Label" width = "600" height = "300" >
+           	<s:Label top="0" width="100%" height="100%"
+           					 fontSize="20" fontFamily="Tahoma" left = "0" text="左对齐文本"
+           					 textColor="0x727070" textAlign="left" />
+            <s:Label top="0"  width="100%" height="100%"
+                             textColor="0x727070" textAlign="center" />
+            <s:Label top="0" width="100%" height="100%"
+                             fontSize="20" fontFamily="Tahoma" text="右对齐文本"
+                             textColor="0x727070" textAlign="right"/>
+            <s:Label width="100%" height="100%"
+                             fontSize="20" fontFamily="Tahoma" text="垂直居中文本"
+                             textColor="0x727070" verticalAlign="middle" textAlign="center"/>
+            <s:Label bottom="0" width="100%" height="100%"  horizontalCenter="0"
+                             fontSize="20" fontFamily="Tahoma" text="底对齐文本"
+                             textColor="0x727070" verticalAlign="bottom"  textAlign="center"/>
+             <s:Label width="100%" height="100%"
+                             fontSize="20" fontFamily="Tahoma" text="粗体" bold="true"
+                             textColor="0x727070" verticalAlign="bottom" textAlign="left"/>
+            <s:Label bottom="0" width="100%" height="100%"  italic="true"
+                             fontSize="20" fontFamily="Tahoma" text="斜体"
+                             textColor="0x727070" verticalAlign="bottom"  textAlign="right"/>
+        </s:Group>
+         <s:Group name="editableText" width = "600" height = "300">
+         	<s:layout>
+         		<s:VerticalLayout gap="5" horizontalAlign="center" verticalAlign="middle"/>
+         	</s:layout>
+              <s:Label  width = "120"
+                      fontSize="20" fontFamily="Tahoma" text="UserName"
+                      textColor="0x727070"  textAlign="left"/>
+               <s:EditableText   width = "120"
+                     fontSize="20" fontFamily="Tahoma" text="输入账号"
+                     textColor="0x727070"  textAlign="left"/>
+              <s:Label  width = "120"
+                      fontSize="20" fontFamily="Tahoma" text="Password"
+                      textColor="0x727070"   textAlign="left"/>
+            <s:EditableText width = "120"
+                       fontSize="20" fontFamily="Tahoma" text="输入密码" displayAsPassword = "true"
+                       textColor="0x727070"   textAlign="left"/>
+          </s:Group>
     </s:ViewStack>
 </s:Group>
