@@ -30,6 +30,49 @@
 module swan {
 
     /**
+     * @language en_US
+     * Register a property for a class definition in running,
+     * so that the Swan can get type of property accurate when parsing a EXML.
+     * This need not be called directly in most of time. Only when you have a custom UI
+     * component need to be described in EXML, you may invoke this method explicitly.
+     *
+     * Contains no following：
+     * When the property is the basic data type(boolean, number, string or Array), you only need set a correct initial value
+     * for he custom property then the EXML parser can get the correct property type in running.
+     *
+     * If you can not set the correct initial value (such as <code>null</code>), the EXML parser will treat this property as
+     * <code>string</code>. If there is no inital value, Swan will throw an error. But you can invoked this method to register
+     * a property in this case.
+     *
+     *
+     * @param classDefinition The class definition need to be registered.
+     * @param property The property need to be registered. Note that the property
+     * name cannot start with "_" or "$".
+     * @param type The type need to be registered,
+     * such as “boolean","number","string","Array","lark.Rectangle" and so on.
+     * @param asDefault Whether register this property as a default property of component.
+     * One component can register only on default property. And the default property can be spare in an EXML.
+     *
+     * @example：
+     * <code>
+     *      <e:Scroller>
+     *          <e:viewport>
+     *          <e:Group/>
+     *          </e:viewport>
+     *      </e:Scroller>
+     * <code/>
+     * Cuz <code>viewport</code> is the default property of Scroller. So you can write as follow:
+     * <code>
+     *      <e:Scroller>
+     *          <e:Group/>
+     *      </e:Scroller>
+     * <code/>
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 为一个类定义注册运行时属性类型，以便运行时的EXML文件解析过程能获取准确的属性类型。大多数情况下，您都不需要手动调用此方法显式注册属性类型。
      * 仅当您有一个自定义的 UI 组件，需要在EXML中用标签描述时可能需要显式注册，但以下情况除外：
      * 当属性类型为基本数据类型：boolean,number,string,Array这四种其中之一时，您只需要为自定义的属性赋值上正确的初始值，
@@ -55,6 +98,9 @@ module swan {
      *     <e:Group/>
      * </e:Scroller>
      *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export function registerProperty(classDefinition:any,property:string,type:string,asDefault?:boolean):void{
         if (DEBUG) {

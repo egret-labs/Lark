@@ -31,210 +31,395 @@ module swan {
 
     //1001~2000预留给swan包下的类和接口
     /**
+     * @language en_US
+     * The enum class for definition of class and interface within Swan.
+     * This class is usually used for checking an type of class through <code>lark.is()</code>
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 为 Swan 内的类或接口定义的枚举值。通常作为实例检查类型 lark.is() 方法的参数。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
     export const enum Types {
         /**
-         * UI 显示对象基类
+         * @copy swan.Component
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         UIComponent = 1001,
         /**
-         * UI 容器基类
+         * @copy swan.Group
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         Group,
         /**
-         * DataGroup 是数据容器基类,将数据项目转换为可视元素以进行显示
+         * @copy swan.DataGroup
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         DataGroup,
         /**
-         * 数据项目的容器基类,将数据项目转换为可视元素以进行显示。
+         * @copy swan.ListBase
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         ListBase,
         /**
-         * 选项卡组件
+         * @copy swan.TabBar
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         TabBar,
         /**
-         * 列表组件
+         * @copy swan.List
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         List,
         /**
-         * 列表类组件的项呈示器接口
+         * @copy swan.IItemRenderer
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         IItemRenderer,
         /**
-         * 项呈示器基类，通常作为List类的项目视图模板。
+         * @copy swan.ItemRenderer
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         ItemRenderer,
         /**
-         * Component 类定义可设置外观的组件的基类。Component 类所使用的外观通常是 Skin 类的子类。
+         * @copy swan.Component
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         Component,
         /**
-         * Label 是可以呈示一行或多行统一格式文本的UI组件。要显示的文本由 text 属性确定。文本格式由样式属性指定，例如 fontFamily 和 fontSize。
-         * 因为 Label 运行速度快且占用内存少，所以它特别适合用于显示多个小型非交互式文本的情况，例如，项呈示器和 Button 外观中的标签。
-         * 在 Label 中，将以下三个字符序列识别为显式换行符：CR（“\r”）、LF（“\n”）和 CR+LF（“\r\n”）。
-         * 如果没有为 Label 指定宽度，则由这些显式换行符确定的最长行确定 Label 的宽度。
-         * 如果指定了宽度，则指定文本将在组件边界的右边缘换行，如果文本扩展到低于组件底部，则将被剪切。
+         * @copy swan.Label
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         Label,
         /**
-         * Image 控件允许您在运行时显示 JPEG、PNG 等图片文件文件。Image 继承至 Bitmap，因此您可以直接对其 bitmapData 属性，
-         * 赋值从外部加载得到的位图数据以显示对应图片。同时，Image 还提供了更加方便的 source 属性，source 属性可以接受一个网络图片url作为值，
-         * 赋值为url后，它内部会自动去加载并显示图片。并且您同样也可以直接把 BitmapData 对象赋值给 source 属性以显示图片。
-         * Image 控件可以直接替代 Bitmap 在显示列表中使用。
+         * @copy swan.Image
          *
-         * @event lark.Event.COMPLETE 当图片加载完成后调度
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         Image,
         /**
-         * 含有视图状态功能的皮肤基类。
+         * @copy swan.Skin
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         Skin,
         /**
-         * 皮肤主题。实例化一个主题，能够在运行时修改全局的默认皮肤。
+         * @copy swan.Theme
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         Theme,
         /**
-         * UI事件
+         * @copy swan.UIEvent
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         UIEvent,
         /**
-         * 集合类型数据改变事件
+         * @copy swan.CollectionEvent
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         CollectionEvent,
         /**
-         * 对象的一个属性发生更改时传递到事件侦听器的事件
+         * @copy swan.PropertyEvent
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         PropertyEvent,
         /**
-         * 列表单击事件
+         * @copy swan.ItemTapEvent
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         ItemTapEvent,
         /**
-         * 数组的集合类数据结构包装器
-         * 通常作为列表组件的数据源，使用这种数据结构包装普通数组，
-         * 能在数据源发生改变的时候主动通知视图刷新变更的数据项
+         * @copy swan.ArrayCollection
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         ArrayCollection,
         /**
-         * 容器布局基类。若要创建使用 Group 容器的自定义布局，必须扩展 LayoutBase 或其子类之一。
-         * 子类必须实现 updateDisplayList() 方法（定位 target Group 的子项并调整这些子项的大小）和 measure() 方法（计算 target 的默认大小）。
+         * @copy swan.LayoutBase
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         LayoutBase,
         /**
-         * 线性布局基类，通常作为 HorizontalLayout 和 VerticalLayout 的父类。
+         * @copy swan.LinearLayoutBase
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         LinearLayoutBase,
         /**
-         * BasicLayout 类根据其各个设置彼此独立地排列布局元素。
-         * BasicLayout（也称为绝对布局）要求显式定位每个容器子代。可以使用子代的 x 和 y 属性，或使用约束来定位每个子代。
+         * @copy swan.BasicLayout
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         BasicLayout,
         /**
-         * 水平布局
+         * @copy swan.HorizontalLayout
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         HorizontalLayout,
         /**
-         * 垂直布局
+         * @copy swan.VerticalLayout
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         VerticalLayout,
         /**
-         * 带有标题，关闭按钮，可移动区域的面板组件。注意：当第一次通过触摸交互操作移动面板时，面板的 includeInLayout 属性将会自动被设置为false，
-         * 以确保移动不会受到自动布局属性的影响。若之后还需要启用面板在父级容器中的自动布局，需手动设置 includeInLayout 为 true。
-         * @event swan.UIEvent.CLOSING 面板即将关闭事件，在关闭按钮被点击后抛出，监听此事件并调用event.preventDefault()能够阻止面板被关闭。
+         * @copy swan.Panel
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         Panel,
         /**
-         * 按钮组件
+         * @copy swan.Button
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         Button,
         /**
-         * 切换按钮
+         * @copy swan.ToggleButton
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         ToggleButton,
         /**
-         * 复选框
+         * @copy swan.CheckBox
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         CheckBox,
         /**
-         * 开关按钮
+         * @copy swan.ToggleSwitch
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         ToggleSwitch,
         /**
-         * RadioButton 组件使用户可在一组互相排斥的选择中做出一种选择
+         * @copy swan.RadioButton
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         RadioButton,
         /**
-         * RadioButtonGroup 组件定义一组 RadioButton 组件，这些组件相互排斥；因此，用户每次只能选择一个 RadioButton 组件
+         * @copy swan.RadioButtonGroup
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         RadioButtonGroup,
         /**
-         * State 类定义视图状态，即组件的特定视图。
+         * @copy swan.State
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         State,
         /**
-         * IOverride 接口定义视图状态的覆盖操作。State 类 overrides 属性数组中的所有条目均必须实现此接口。
+         * @copy swan.IOverride
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         IOverride,
         /**
-         * 视图添加状态显示元素操作
+         * @copy swan.AddItems
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         AddItems,
         /**
-         * 视图状态设置属性操作
+         * @copy swan.SetProperty
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         SetProperty,
         /**
-         * Watcher 类能够监视可绑定属性的改变，您可以定义一个事件处理函数作为 Watcher 的回调方法，在每次可绑定属性的值改变时都执行此函数。
+         * @copy swan.Watcher
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         Watcher,
         /**
-         * 层级堆叠容器,一次只显示一个子对象。
+         * @copy swan.ViewStack
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         ViewStack,
         /**
-         * 滚动条组件
+         * @copy swan.Scroller
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         Scroller,
         /**
-         * 滚动条基类
+         * @copy swan.ScrollBarBase
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         ScrollBarBase,
         /**
-         * 垂直滚动条
+         * @copy swan.VScrollBar
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         VScrollBar,
         /**
-         * 水平滚动条
+         * @copy swan.HScrollBar
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         HScrollBar,
         /**
-         * 范围选取组件,该组件包含一个值和这个值所允许的最大最小约束范围。
+         * @copy swan.Range
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         Range,
         /**
-         * 滑块控件基类
+         * @copy swan.SliderBase
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         SliderBase,
         /**
-         * 水平滑块
+         * @copy swan.HSlider
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         HSlider,
         /**
-         * 垂直滑块
+         * @copy swan.VSlider
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         VSlider,
         /**
-         * 支持视区的组件接口
+         * @copy swan.IViewport
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         IViewport,
         /**
-         * 网格布局
+         * @copy swan.TileLayout
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         TileLayout,
         /**
-         * 可编辑文本
+         * @copy swan.EditableText
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
         EditableText
     }
