@@ -55,7 +55,7 @@ module lark {
     export declare function $markReadOnly(instance:any,property:string):void;
 
     function _error(code:number,...params:any[]):void{
-        var text:string = lark.tr.apply(null,arguments);
+        var text:string = lark.sys.tr.apply(null,arguments);
         if(DEBUG){
             lark.sys.$logToFPS("Error #"+code+": "+text)
         }
@@ -64,7 +64,7 @@ module lark {
     lark.$error = _error;
 
     function _warn (code:number,...params:any[]):void{
-        var text:string = lark.tr.apply(null,arguments);
+        var text:string = lark.sys.tr.apply(null,arguments);
         if(DEBUG){
             lark.sys.$logToFPS("Warning #"+code+": "+text)
         }

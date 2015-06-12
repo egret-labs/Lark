@@ -29,11 +29,39 @@
 
 module lark {
     /**
+     * @language en_US
+     * Indicates whether an object is a instance of the class or interface specified as the parameter.This method has better performance
+     * compared width the instanceOf operator,and it can indicate whether an object is a instance of the specific interface.
+     * @param instance the instance to be checked.
+     * @param typeFlag the enum value representing a specific class or interface.
+     * @returns A value of true if the object is a instance of the class or interface specified as the parameter.
+     * @example
+     * <code>
+     *     var instance = new lark.Sprite();
+     *     lark.log(lark.is(instance,lark.Types.Sprite))  //true
+     *     lark.log(lark.is(instance,lark.Types.DisplayObjectContainer))  //true
+     *     lark.log(lark.is(instance,lark.Types.Bitmap))  //false
+     * </code>
+     * @see lark.registerClass()
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字相比具有更高的性能，并且能判断接口的实现。
-     * 若要判断对象是否为项目中的自定义类或接口的实例，请使用 lark.registerClass() 方法为自定义类注册运行时信息即可。
-     * @param instance 要判断的实例，注意：传入的值必须是实例，而不是类定义。若要判断类定义使用表达式：typeof instance == "function" 即可。
-     * @param typeFlag 类或接口的枚举值，请参考 lark.Types 或 swan.Types 定义的枚举常量。
+     * @param instance 要判断的实例。
+     * @param typeFlag 类或接口的枚举值.
      * @returns 返回true表示当前对象是指定类或接口的实例。
+     * @example
+     * <code>
+     *     var instance = new lark.Sprite();
+     *     lark.log(lark.is(instance,lark.Types.Sprite))  //true
+     *     lark.log(lark.is(instance,lark.Types.DisplayObjectContainer))  //true
+     *     lark.log(lark.is(instance,lark.Types.Bitmap))  //false
+     * </code>
+     * @see lark.registerClass()
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     export function is(instance:any, typeFlag:number):boolean {
         if (!instance || typeof instance != "object") {

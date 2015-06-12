@@ -140,7 +140,7 @@ module lark {
          * @param cancelable Determines whether the Event object can be canceled. The default values is false.
          * @param stageX The horizontal coordinate at which the event occurred in global Stage coordinates.
          * @param stageY The vertical coordinate at which the event occurred in global Stage coordinates.
-         * @param touchPointID A unique identification number (as an int) assigned to the touch point.
+         * @param touchPointID A unique identification number assigned to the touch point.
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
@@ -264,7 +264,7 @@ module lark {
 
         /**
          * @language en_US
-         * A unique identification number (as an int) assigned to the touch point.
+         * A unique identification number assigned to the touch point.
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */

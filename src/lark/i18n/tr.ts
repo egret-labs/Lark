@@ -29,25 +29,36 @@
 
 module lark {
 
+    /**
+     * @private
+     */
     export var $locale_strings:any = $locale_strings||{};
 
+    /**
+     * @private
+     */
     export var $language: string = "en_US";
 
-    /**
-     * 全局多语言翻译函数
-     * @param code 要查询的字符串代码
-     * @param args 替换字符串中{0}标志的参数列表
-     * @returns 返回拼接后的字符串
-     */
-    export function tr(code:number,...args):string{
-        var text = $locale_strings[$language][code];
-        if(!text){
-            return "{"+code+"}";
+    export module sys {
+        /**
+         * @private
+         * 全局多语言翻译函数
+         * @param code 要查询的字符串代码
+         * @param args 替换字符串中{0}标志的参数列表
+         * @returns 返回拼接后的字符串
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        export function tr(code:number,...args):string{
+            var text = $locale_strings[$language][code];
+            if(!text){
+                return "{"+code+"}";
+            }
+            var length = args.length;
+            for(var i=0;i<length;i++){
+                text = text.replace("{" + i + "}", args[i]);
+            }
+            return text;
         }
-        var length = args.length;
-        for(var i=0;i<length;i++){
-            text = text.replace("{" + i + "}", args[i]);
-        }
-        return text;
     }
 }

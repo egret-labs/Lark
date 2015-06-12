@@ -84,22 +84,22 @@ module lark.web {
         public children:XMLNode[] = [];
         /**
          * @private
-         * 节点完整名称。例如节点 <e:Button/> 的 name 为：e:Button
+         * 节点完整名称。例如节点 <s:Button/> 的 name 为：s:Button
          */
         public name:string;
         /**
          * @private
-         * 节点的命名空间前缀。例如节点 <e:Button/> 的 prefix 为：e
+         * 节点的命名空间前缀。例如节点 <s:Button/> 的 prefix 为：s
          */
         public prefix:string;
         /**
          * @private
-         * 节点的本地名称。例如节点 <e:Button/> 的 prefix 为：Button
+         * 节点的本地名称。例如节点 <s:Button/> 的 localName 为：Button
          */
         public localName:string;
         /**
          * @private
-         * 节点的命名空间地址。例如节点 <e:Skin xmlns:e="http://ns.egret.com/swan"/> 的 namespace 为： http://ns.egret.com/swan
+         * 节点的命名空间地址。例如节点 <s:Skin xmlns:s="http://ns.egret.com/swan"/> 的 namespace 为： http://ns.egret.com/swan
          */
         public namespace:string;
     }
