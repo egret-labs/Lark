@@ -32,8 +32,14 @@ module swan.sys {
     var SOLUTION_TOLERANCE = 0.1;
     var MIN_MAX_TOLERANCE = 0.1;
 
+    /**
+     * @private
+     */
     export class MatrixUtil {
 
+        /**
+         * @private
+         */
         public static fitBounds(width:number, height:number, matrix:lark.Matrix,
                                 explicitWidth:number, explicitHeight:number,
                                 preferredWidth:number, preferredHeight:number,
@@ -118,6 +124,9 @@ module swan.sys {
         }
     }
 
+    /**
+     * @private
+     */
     function fitTBoundsWidth(width:number, matrix:lark.Matrix,
                              explicitWidth:number, explicitHeight:number,
                              preferredWidth:number, preferredHeight:number,
@@ -151,6 +160,9 @@ module swan.sys {
         return actualSize;
     }
 
+    /**
+     * @private
+     */
     function fitTBoundsHeight(height:number, matrix:lark.Matrix,
                               explicitWidth:number, explicitHeight:number,
                               preferredWidth:number, preferredHeight:number,
@@ -185,6 +197,9 @@ module swan.sys {
     }
 
 
+    /**
+     * @private
+     */
     function calcUBoundsToFitTBoundsHeight(h:number,
                                            matrix:lark.Matrix,
                                            preferredX:number,
@@ -272,6 +287,9 @@ module swan.sys {
         return solveEquation(b, d1, h, minX, minY, maxX, maxY, a, c1);
     }
 
+    /**
+     * @private
+     */
     function calcUBoundsToFitTBoundsWidth(w:number,
                                           matrix:lark.Matrix,
                                           preferredX:number,
@@ -360,6 +378,9 @@ module swan.sys {
         return solveEquation(a, c1, w, minX, minY, maxX, maxY, b, d1);
     }
 
+    /**
+     * @private
+     */
     function solveEquation(a:number,
                            c:number,
                            w:number,
@@ -416,6 +437,9 @@ module swan.sys {
         return null;
     }
 
+    /**
+     * @private
+     */
     function calcUBoundsToFitTBounds(w:number,
                                      h:number,
                                      matrix:lark.Matrix,
@@ -503,6 +527,9 @@ module swan.sys {
         return null;
     }
 
+    /**
+     * @private
+     */
     function transformSize(width:number, height:number, matrix:lark.Matrix):lark.Rectangle {
 
         var bounds = lark.$TempRectangle.setTo(0, 0, width, height);
@@ -510,6 +537,9 @@ module swan.sys {
         return bounds;
     }
 
+    /**
+     * @private
+     */
     function solveSystem(a:number,
                          c:number,
                          b:number,
