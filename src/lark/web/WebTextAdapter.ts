@@ -27,9 +27,20 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
+// direction is not defined in the lib.d.ts as it's not support by IE
+interface HTMLInputElement {
+    setSelectionRange(start: number, end: number, direction?: string);
+    selectionDirection: string;
+}
+interface HTMLTextAreaElement {
+    setSelectionRange(start: number, end: number, direction?: string);
+    selectionDirection: string;
+}
+
 module lark.web {
 
     var tempPoint = new Point();
+
 
     /**
      * @private
@@ -103,11 +114,11 @@ module lark.web {
         /**
          * @private
          */
-        private lastSelectStart:number = 0;
+        private lastSelectAnchor:number = 0;
         /**
          * @private
          */
-        private lastSelectEnd:number = 0;
+        private lastSelectActive:number = 0;
 
         /**
          * @private
@@ -233,7 +244,7 @@ module lark.web {
             var htmlInput = this.currentHtmlInput;
             var textInput = this.currentTextInput;
             this.$removeCurrentTextInput();
-            textInput.selectRange(this.lastSelectStart, this.lastSelectEnd);
+            textInput.selectRange(this.lastSelectAnchor, this.lastSelectActive);
         };
 
         /**
@@ -349,8 +360,9 @@ module lark.web {
          * @private
          */
         public $selectRange(anchorPosition:number, activePosition:number):void {
-            this.currentHtmlInput.selectionStart = anchorPosition;
-            this.currentHtmlInput.selectionEnd = activePosition;
+            var start = Math.min(anchorPosition, activePosition);
+            var end = Math.max(anchorPosition, activePosition);
+            this.currentHtmlInput.setSelectionRange(start, end, anchorPosition < activePosition ? "forward" : "backward");
         }
 
         /**
@@ -366,9 +378,11 @@ module lark.web {
          * @private
          */
         private getInputSelection = () => {
-            this.lastSelectEnd = this.currentHtmlInput.selectionEnd;
-            this.lastSelectStart = this.currentHtmlInput.selectionStart;
-            log(this.lastSelectStart, this.lastSelectEnd);
+            var end = this.currentHtmlInput.selectionEnd;
+            var start = this.currentHtmlInput.selectionStart;
+            var direction = this.currentHtmlInput.selectionDirection || "forward";
+            this.lastSelectAnchor = direction == 'forward' ? start : end;
+            this.lastSelectActive = direction == 'forward' ? end : start;
         }
     }
 

@@ -51,7 +51,7 @@ module lark {
      * @version Lark 1.0
      * @platform Web,Native
     */
-    export interface SoundChannel {
+    export interface SoundChannel extends IEventEmitter {
 
         /**
          * @language en_US

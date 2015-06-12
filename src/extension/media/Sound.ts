@@ -50,7 +50,7 @@ module lark {
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export interface Sound {
+    export interface Sound extends IEventEmitter {
 
         /**
          * @language en_US

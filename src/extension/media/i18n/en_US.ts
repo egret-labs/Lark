@@ -30,8 +30,8 @@
 module lark {
 
     $locale_strings = $locale_strings || {};
-    $locale_strings["zh_CN"] = $locale_strings["zh_CN"] || {};
-    var locale_strings = $locale_strings["zh_CN"];
+    $locale_strings["en_US"] = $locale_strings["en_US"] || {};
+    var locale_strings = $locale_strings["en_US"];
 
     locale_strings[3001] = "Please call the play method when the audio is loaded";
     locale_strings[3002] = "Please pass the URL of audio you want to load";

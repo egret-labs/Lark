@@ -18,7 +18,7 @@ declare module lark {
      * @version Lark 1.0
      * @platform Web,Native
      */
-    interface Sound {
+    interface Sound extends lark.EventEmitter {
         /**
          * @language en_US
          * Initiates loading of an external audio file from the specified URL.

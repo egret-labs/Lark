@@ -18,7 +18,7 @@ declare module lark {
      * @version Lark 1.0
      * @platform Web,Native
      */
-    interface Sound {
+    interface Sound extends IEventEmitter {
         /**
          * @language en_US
          * Initiates loading of an external audio file from the specified URL.
@@ -108,7 +108,7 @@ declare module lark {
      * @version Lark 1.0
      * @platform Web,Native
     */
-    interface SoundChannel {
+    interface SoundChannel extends IEventEmitter {
         /**
          * @language en_US
          * The volume, ranging from 0 (silent) to 1 (full volume).

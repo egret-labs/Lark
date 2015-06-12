@@ -140,6 +140,7 @@ declare module lark {
 }
 declare module lark.sys {
     /**
+     * @private
      * 平台实现输入文本的接口
      */
     interface ITextAdapter {
@@ -147,19 +148,57 @@ declare module lark.sys {
 }
 declare module lark {
     /**
-     * 水平对齐方式
+     * @language en_US
+     * The HorizontalAlign class defines the possible values for the horizontal alignment.
+     * @see lark.TextField#textAlign
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * HorizontalAlign 类为水平对齐方式定义可能的值。
+     * @see lark.TextField#textAlign
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     class HorizontalAlign {
         /**
-         * 左对齐
+         * @language en_US
+         * Horizontally align content to the left of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将内容与容器的左侧对齐。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         static LEFT: string;
         /**
-         * 右对齐
+         * @language en_US
+         * Horizontally align content to the right of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将内容与容器的右侧对齐。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         static RIGHT: string;
         /**
-         * 水平居中对齐
+         * @language en_US
+         * Horizontally align content in the center of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在容器的水平中心对齐内容。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         static CENTER: string;
     }
@@ -213,7 +252,8 @@ declare module lark {
          */
         /**
          * @language zh_CN
-         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他
+         * 所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
          * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
          * @returns 在 child 参数中传递的 DisplayObject 实例。
          * @see #addChildAt()
@@ -471,10 +511,12 @@ declare module lark {
 }
 declare module lark.sys {
     /**
+     * @private
      * 呈现最终绘图结果的画布
      */
     interface Surface extends BitmapData {
         /**
+         * @private
          * 绘图上下文
          */
         renderContext: RenderContext;
@@ -542,35 +584,42 @@ declare module lark {
 }
 declare module lark.sys {
     /**
+     * @private
      * StageScaleMode 类为舞台缩放模式提供值。
      */
     class ScaleMode {
         /**
+         * @private
          * 不缩放应用程序内容。即使在更改播放器视口大小时，它仍然保持不变。如果播放器视口比内容小，则可能进行一些裁切。
          * 在此模式下，舞台尺寸（Stage.stageWidth,Stage.stageHeight）始终跟播放器视口大小保持一致。
          */
         static NO_SCALE: string;
         /**
+         * @private
          * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容的较宽方向填满播放器视口，另一个方向的两侧可能会不够宽而留有黑边。
          * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
          */
         static SHOW_ALL: string;
         /**
+         * @private
          * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容的较窄方向填满播放器视口，另一个方向的两侧可能会超出播放器视口而被裁切。
          * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
          */
         static NO_BORDER: string;
         /**
+         * @private
          * 不保持原始宽高比缩放应用程序内容，缩放后应用程序内容正好填满播放器视口。
          * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
          */
         static EXACT_FIT: string;
         /**
+         * @private
          * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容在水平和垂直方向都填满播放器视口，但只保持应用程序内容的原始宽度不变，高度可能会改变。
          * 在此模式下，舞台宽度(Stage.stageWidth)始终等于初始化时外部传入的应用程序内容宽度。舞台高度(Stage.stageHeight)由当前的缩放比例与播放器视口高度决定。
          */
         static FIXED_WIDTH: string;
         /**
+         * @private
          * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容在水平和垂直方向都填满播放器视口，但只保持应用程序内容的原始高度不变，宽度可能会改变。
          * 在此模式下，舞台高度(Stage.stageHeight)始终等于初始化时外部传入的应用程序内容高度。舞台宽度(Stage.stageWidth)由当前的缩放比例与播放器视口宽度决定。
          */
@@ -591,62 +640,208 @@ declare module lark {
 }
 declare module lark.sys {
     /**
+     * @private
      * 绘图上下文
      */
     interface RenderContext {
+        /**
+         * @private
+         */
         surface: Surface;
+        /**
+         * @private
+         */
         globalCompositeOperation: string;
+        /**
+         * @private
+         */
         globalAlpha: number;
+        /**
+         * @private
+         */
         miterLimit: number;
+        /**
+         * @private
+         */
         lineCap: string;
+        /**
+         * @private
+         */
         lineJoin: string;
+        /**
+         * @private
+         */
         lineWidth: number;
+        /**
+         * @private
+         */
         strokeStyle: any;
+        /**
+         * @private
+         */
         fillStyle: any;
+        /**
+         * @private
+         */
         imageSmoothingEnabled: boolean;
+        /**
+         * @private
+         */
         textAlign: string;
+        /**
+         * @private
+         */
         textBaseline: string;
+        /**
+         * @private
+         */
         font: string;
+        /**
+         * @private
+         */
         arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void;
+        /**
+         * @private
+         */
         quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void;
+        /**
+         * @private
+         */
         lineTo(x: number, y: number): void;
+        /**
+         * @private
+         */
         fill(fillRule?: string): void;
+        /**
+         * @private
+         */
         closePath(): void;
+        /**
+         * @private
+         */
         rect(x: number, y: number, w: number, h: number): void;
+        /**
+         * @private
+         */
         moveTo(x: number, y: number): void;
+        /**
+         * @private
+         */
         fillRect(x: number, y: number, w: number, h: number): void;
+        /**
+         * @private
+         */
         bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void;
+        /**
+         * @private
+         *
+         * @returns
+         */
         stroke(): void;
+        /**
+         * @private
+         */
         strokeRect(x: number, y: number, w: number, h: number): void;
+        /**
+         * @private
+         */
         beginPath(): void;
+        /**
+         * @private
+         * @returns
+         */
         arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void;
+        /**
+         * @private
+         */
         transform(m11: number, m12: number, m21: number, m22: number, dx: number, dy: number): void;
+        /**
+         * @private
+         */
         translate(x: number, y: number): void;
+        /**
+         * @private
+         */
         scale(x: number, y: number): void;
+        /**
+         * @private
+         */
         rotate(angle: number): void;
+        /**
+         * @private
+         */
         restore(): void;
+        /**
+         * @private
+         */
         save(): void;
+        /**
+         * @private
+         */
         clip(fillRule?: string): void;
+        /**
+         * @private
+         */
         clearRect(x: number, y: number, w: number, h: number): void;
+        /**
+         * @private
+         */
         setTransform(m11: number, m12: number, m21: number, m22: number, dx: number, dy: number): void;
+        /**
+         * @private
+         */
         createLinearGradient(x0: number, y0: number, x1: number, y1: number): GraphicsGradient;
+        /**
+         * @private
+         */
         createRadialGradient(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): GraphicsGradient;
+        /**
+         * @private
+         */
         fillText(text: string, x: number, y: number, maxWidth?: number): void;
+        /**
+         * @private
+         */
         measureText(text: string): TextMetrics;
         /**
+         * @private
          * 注意：如果要对绘制的图片进行缩放，出于性能优化考虑，系统不会主动去每次重置imageSmoothingEnabled属性，因此您在调用drawImage()方法前请务必
          * 确保 imageSmoothingEnabled 已被重置为正常的值，否则有可能沿用上个显示对象绘制过程留下的值。
          */
         drawImage(image: BitmapData, offsetX: number, offsetY: number, width?: number, height?: number, surfaceOffsetX?: number, surfaceOffsetY?: number, surfaceImageWidth?: number, surfaceImageHeight?: number): void;
+        /**
+         * @private
+         */
         createPattern(image: BitmapData, repetition: string): GraphicsPattern;
+        /**
+         * @private
+         */
         getImageData(sx: number, sy: number, sw: number, sh: number): ImageData;
     }
+    /**
+     * @private
+     */
     interface TextMetrics {
+        /**
+         * @private
+         */
         width: number;
     }
+    /**
+     * @private
+     */
     interface ImageData {
+        /**
+         * @private
+         */
         width: number;
+        /**
+         * @private
+         */
         data: Uint8Array;
+        /**
+         * @private
+         */
         height: number;
     }
 }
@@ -655,7 +850,7 @@ declare module lark {
      * @language en_US
      * A BitmapData object contains an array of pixel data. This data can represent either a fully opaque bitmap or a
      * transparent bitmap that contains alpha channel data. Either type of BitmapData object is stored as a buffer of 32-bit
-     * integers. Each 32-bit integer determines the properties of a single pixel in the bitmap.
+     * integers. Each 32-bit integer determines the properties of a single pixel in the bitmap.<br/>
      * Each 32-bit integer is a combination of four 8-bit channel values (from 0 to 255) that describe the alpha transparency
      * and the red, green, and blue (ARGB) values of the pixel. (For ARGB values, the most significant byte represents the
      * alpha channel value, followed by red, green, and blue.)
@@ -666,7 +861,7 @@ declare module lark {
     /**
      * @language zh_CN
      * BitmapData 对象是一个包含像素数据的数组。此数据可以表示完全不透明的位图，或表示包含 Alpha 通道数据的透明位图。
-     * 以上任一类型的 BitmapData 对象都作为 32 位整数的缓冲区进行存储。每个 32 位整数确定位图中单个像素的属性。
+     * 以上任一类型的 BitmapData 对象都作为 32 位整数的缓冲区进行存储。每个 32 位整数确定位图中单个像素的属性。<br/>
      * 每个 32 位整数都是四个 8 位通道值（从 0 到 255）的组合，这些值描述像素的 Alpha 透明度以及红色、绿色、蓝色 (ARGB) 值。
      * （对于 ARGB 值，最高有效字节代表 Alpha 通道值，其后的有效字节分别代表红色、绿色和蓝色通道值。）
      * @see lark.Bitmap
@@ -703,26 +898,53 @@ declare module lark {
     }
 }
 declare module lark.sys {
+    /**
+     * @private
+     */
     interface Renderable extends LarkObject {
     }
 }
 declare module lark {
     /**
+     * @language en_US
+     * Helper class to measure the width of text.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 用于文本宽度测量的辅助类
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     class TextMeasurer {
         /**
-         * 测量文本在指定样式下的宽度
+         * @language en_US
+         * Returns the width of the text with some specific styles.
+         * @param text the text to be measured.
+         * @param font text font style of the given text.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 测量文本在指定样式下的宽度。
+         * @param text 要测量的文本内容。
+         * @param font 文本的样式值。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         static measureText(text: string, font: string): number;
     }
 }
 declare module lark.sys {
     /**
+     * @private
      * 屏幕适配器接口，当播放器视口尺寸改变时，屏幕适配器将被用于计算当前对应的舞台显示尺寸。
      */
     interface IScreenAdapter {
         /**
+         * @private
          * 计算舞台显示尺寸
          * @param scaleMode 当前的缩放模式
          * @param screenWidth 播放器视口宽度
@@ -733,22 +955,27 @@ declare module lark.sys {
         calculateStageSize(scaleMode: string, screenWidth: number, screenHeight: number, contentWidth: number, contentHeight: number): StageDisplaySize;
     }
     /**
+     * @private
      * 舞台显示尺寸数据
      */
     interface StageDisplaySize {
         /**
+         * @private
          * 舞台宽度
          */
         stageWidth: number;
         /**
+         * @private
          * 舞台高度
          */
         stageHeight: number;
         /**
+         * @private
          * 显示宽度，若跟舞台宽度不同，将会产生缩放。
          */
         displayWidth: number;
         /**
+         * @private
          * 显示高度，若跟舞台高度不同，将会产生缩放。
          */
         displayHeight: number;
@@ -756,19 +983,57 @@ declare module lark.sys {
 }
 declare module lark {
     /**
-     * 垂直对齐方式
+     * @language en_US
+     * The VerticalAlign class defines the possible values for the vertical alignment.
+     * @see lark.TextField#verticalAlign
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * VerticalAlign 类为垂直对齐方式定义可能的值。
+     * @see lark.TextField#verticalAlign
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     class VerticalAlign {
         /**
-         * 顶对齐
+         * @language en_US
+         * Vertically align content to the top of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将内容与容器的顶部对齐。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         static TOP: string;
         /**
-         * 底对齐
+         * @language en_US
+         * Vertically align content to the bottom of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将内容与容器的底部对齐。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         static BOTTOM: string;
         /**
-         * 垂直居中对齐
+         * @language en_US
+         * Vertically align content in the middle of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在容器的垂直中心对齐内容。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         static MIDDLE: string;
     }
@@ -843,7 +1108,7 @@ declare module lark {
      * of event listeners are registered, and emits events. Event targets are an important part of the Lark event model.
      * The event target serves as the focal point for how events flow through the display list hierarchy. When an event
      * such as a touch tap occurs, an event object is emitted into the event flow from the root of the display list.
-     * The event object makes a round-trip journey to the event target, which is conceptually divided into three phases:
+     * The event object makes a round-trip journey to the event target, which is conceptually divided into three phases: <br/>
      * the capture phase includes the journey from the root to the last node before the event target's node; the target
      * phase includes only the event target node; and the bubbling phase includes any subsequent nodes encountered on the
      * return trip to the root of the display list.In general, the easiest way for a user-defined class to gain event
@@ -858,7 +1123,7 @@ declare module lark {
      * @language zh_CN
      * IEventEmitter 接口定义用于添加或删除事件侦听器的方法，检查是否已注册特定类型的事件侦听器，并调度事件。
      * 事件目标是 Lark 事件模型的重要组成部分。事件目标是事件如何通过显示列表层次结构这一问题的焦点。当发生触摸轻拍事件时，
-     * 会将事件对象调度到从显示列表根开始的事件流中。事件对象进行到事件目标的往返行程，在概念上，此往返行程被划分为三个阶段：
+     * 会将事件对象调度到从显示列表根开始的事件流中。事件对象进行到事件目标的往返行程，在概念上，此往返行程被划分为三个阶段：<br/>
      * 捕获阶段包括从根到事件目标节点之前的最后一个节点的行程，目标阶段仅包括事件目标节点，冒泡阶段包括到显示列表的根的回程上遇到的任何后续节点。
      * 通常，使用户定义的类能够调度事件的最简单方法是扩展 EventEmitter。如果无法扩展（即，如果该类已经扩展了另一个类），
      * 则可以实现 IEventEmitter 接口，创建 EventEmitter 成员，并编写一些简单的挂钩，将调用连接到聚合的 EventEmitter 中。
@@ -874,7 +1139,7 @@ declare module lark {
          * and priority.After you successfully register an event listener, you cannot change its priority through additional
          * calls to on(). To change a listener's priority, you must first call removeListener(). Then you can register the
          * listener again with the new priority level.After the listener is registered, subsequent calls to on() with a
-         * different value for either type or useCapture result in the creation of a separate listener registration.
+         * different value for either type or useCapture result in the creation of a separate listener registration. <br/>
          * When you no longer need an event listener, remove it by calling EventEmitter.removeListener(); otherwise, memory
          * problems might result. Objects with registered event listeners are not automatically removed from memory because
          * the garbage collector does not remove objects that still have references.Copying an EventEmitter instance does
@@ -908,7 +1173,8 @@ declare module lark {
          * 使用 EventEmitter 对象注册事件侦听器对象，以使侦听器能够接收事件通知。可以为特定类型的事件、阶段和优先级在显示列表的所有节
          * 点上注册事件侦听器。成功注册一个事件侦听器后，无法通过额外调用 on() 来更改其优先级。要更改侦听器的优先级，必须
          * 先调用 removeListener()。然后，可以使用新的优先级再次注册该侦听器。注册该侦听器后，如果继续调用具有不同 type 或 useCapture
-         * 值的 on()，则会创建单独的侦听器注册。如果不再需要某个事件侦听器，可调用 EventEmitter.removeListener()
+         * 值的 on()，则会创建单独的侦听器注册。<br/>
+         * 如果不再需要某个事件侦听器，可调用 EventEmitter.removeListener()
          * 删除它；否则会产生内存问题。由于垃圾回收器不会删除仍包含引用的对象，因此不会从内存中自动删除使用已注册事件侦听器的对象。复制
          * EventEmitter 实例时并不复制其中附加的事件侦听器。（如果新近创建的节点需要一个事件侦听器，必须在创建该节点后附加该侦听器。）
          * 但是，如果移动 EventEmitter 实例，则其中附加的事件侦听器也会随之移动。如果在正在处理事件的节点上注册事件侦听器，则不会在当
@@ -1111,7 +1377,7 @@ declare module lark {
         data: BitmapData;
         /**
          * @language en_US
-         * Specifies whether or not cross-site Access-Control requests should be made when loading a image from foreign origins.
+         * Specifies whether or not cross-site Access-Control requests should be made when loading a image from foreign origins.<br/>
          * possible values are:"anonymous","use-credentials" or null.
          * @default null
          * @version Lark 1.0
@@ -1119,7 +1385,7 @@ declare module lark {
          */
         /**
          * @language zh_CN
-         * 当从其他站点加载一个图片时，指定是否启用跨域资源共享(CORS)，默认值为null。
+         * 当从其他站点加载一个图片时，指定是否启用跨域资源共享(CORS)，默认值为null。<br/>
          * 可以设置为"anonymous","use-credentials"或null,设置为其他值将等同于"anonymous"。
          * @version Lark 1.0
          * @platform Web,Native
@@ -1127,7 +1393,7 @@ declare module lark {
         crossOrigin: string;
         /**
          * @language en_US
-         * start a load operation。
+         * start a load operation。<br/>
          * Note: Calling this method for an already active request (one for which load() has already been
          * called) will abort the last load operation immediately.
          * @param url 要加载的图像文件的地址。
@@ -1136,7 +1402,8 @@ declare module lark {
          */
         /**
          * @language zh_CN
-         * 启动一次图像加载。注意：若之前已经调用过加载请求，重新调用 load() 将终止先前的请求，并开始新的加载。
+         * 启动一次图像加载。<br/>
+         * 注意：若之前已经调用过加载请求，重新调用 load() 将终止先前的请求，并开始新的加载。
          * @param url 要加载的图像文件的地址。
          * @version Lark 1.0
          * @platform Web,Native
@@ -1213,7 +1480,7 @@ declare module lark {
         response: any;
         /**
          * @language en_US
-         * Controls whether the downloaded data is received as text (HttpResponseType.TEXT) or raw binary data (HttpResponseType.ArrayBuffer)
+         * Controls whether the downloaded data is received as text (HttpResponseType.TEXT) or raw binary data (HttpResponseType.ArrayBuffer)<br/>
          * Note:If you attempt to set this property to an invalid value, Lark runtime set the value to HttpResponseType.TEXT.
          * @default lark.HttpResponseType.TEXT
          * @version Lark 1.0
@@ -1221,7 +1488,7 @@ declare module lark {
          */
         /**
          * @language zh_CN
-         * 设置返回的数据格式为文本（HttpResponseType.TEXT）还是二进制数据（HttpResponseType.ArrayBuffer）
+         * 设置返回的数据格式为文本（HttpResponseType.TEXT）还是二进制数据（HttpResponseType.ArrayBuffer）<br/>
          * 注意：若尝试设置此属性为一个非法的值，运行时将使用HttpResponseType.TEXT。
          * @default lark.HttpResponseType.TEXT
          * @version Lark 1.0
@@ -1246,7 +1513,7 @@ declare module lark {
         withCredentials: boolean;
         /**
          * @language en_US
-         * Initializes a request.
+         * Initializes a request.<br/>
          * Note: Calling this method for an already active request (one for which open() or openRequest() has already been
          * called) is the equivalent of calling abort().
          * @param url The URL to send the request to.
@@ -1256,7 +1523,7 @@ declare module lark {
          */
         /**
          * @language zh_CN
-         * 初始化一个请求.
+         * 初始化一个请求.<br/>
          * 注意: 若在已经发出请求的对象上调用此方法，相当于立即调用abort().
          * @param url 该请求所要访问的URL该请求所要访问的URL
          * @param method 请求所使用的HTTP方法， 请使用 HttpMethod 定义的枚举值.
@@ -1412,20 +1679,27 @@ declare module lark {
 }
 declare module lark.sys {
     /**
+     * @private
      * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
      */
     var sharedRenderContext: sys.RenderContext;
     /**
+     * @private
      * surfaceFactory实例
      */
     var surfaceFactory: SurfaceFactory;
+    /**
+     * @private
+     */
     interface SurfaceFactory {
         /**
+         * @private
          * 从对象池取出或创建一个新的Surface实例
          * @param useOnce 表示对取出实例的使用是一次性的，用完后立即会释放。
          */
         create(useOnce?: boolean): Surface;
         /**
+         * @private
          * 释放一个Surface实例
          * @param surface 要释放的Surface实例
          */
@@ -1513,44 +1787,89 @@ declare module lark {
     function tr(code: number, ...args: any[]): string;
 }
 declare module lark.sys {
+    /**
+     * @private
+     */
     class Region {
         /**
+         * @private
          * 释放一个Region实例到对象池
          */
         static release(region: Region): void;
         /**
+         * @private
          * 从对象池中取出或创建一个新的Region对象。
          * 建议对于一次性使用的对象，均使用此方法创建，而不是直接new一个。
          * 使用完后调用对应的release()静态方法回收对象，能有效减少对象创建数量造成的性能开销。
          */
         static create(): Region;
+        /**
+         * @private
+         */
         minX: number;
+        /**
+         * @private
+         */
         minY: number;
+        /**
+         * @private
+         */
         maxX: number;
+        /**
+         * @private
+         */
         maxY: number;
+        /**
+         * @private
+         */
         width: number;
+        /**
+         * @private
+         */
         height: number;
+        /**
+         * @private
+         */
         area: number;
         /**
+         * @private
          * 是否发生移动
          */
         moved: boolean;
+        /**
+         * @private
+         */
         setTo(minX: number, minY: number, maxX: number, maxY: number): Region;
+        /**
+         * @private
+         */
         updateArea(): void;
         /**
+         * @private
          * 注意！由于性能优化，此方法不判断自身是否为空，必须在外部确认自身和目标区域都不为空再调用合并。否则结果始终从0，0点开始。
          */
         union(target: Region): void;
         /**
+         * @private
          * 注意！由于性能优化，此方法不判断自身是否为空，必须在外部确认自身和目标区域都不为空再调用合并。否则结果始终从0，0点开始。
          */
         intersect(target: Region): void;
+        /**
+         * @private
+         */
         private setEmpty();
         /**
+         * @private
          * 确定此 Region 对象是否为空。
          */
         isEmpty(): boolean;
+        /**
+         * @private
+         */
         intersects(target: Region): boolean;
+        /**
+         * @private
+         */
         updateRegion(bounds: Rectangle, matrix: Matrix): void;
     }
 }
@@ -1588,7 +1907,7 @@ declare module lark {
         /**
          * @language en_US
          * Adds the values of the constituent colors of the display object to the colors of its background, applying a
-         * ceiling of 0xFF. This setting is commonly used for animating a lightening dissolve between two objects.
+         * ceiling of 0xFF. This setting is commonly used for animating a lightening dissolve between two objects.<br/>
          * For example, if the display object has a pixel with an RGB value of 0xAAA633, and the background pixel has an
          * RGB value of 0xDD2200, the resulting RGB value for the displayed pixel is 0xFFC833 (because 0xAA + 0xDD > 0xFF,
          * 0xA6 + 0x22 = 0xC8, and 0x33 + 0x00 = 0x33).
@@ -1597,7 +1916,7 @@ declare module lark {
          */
         /**
          * @language zh_CN
-         * 将显示对象的原色值添加到它的背景颜色中，上限值为 0xFF。此设置通常用于使两个对象间的加亮溶解产生动画效果。
+         * 将显示对象的原色值添加到它的背景颜色中，上限值为 0xFF。此设置通常用于使两个对象间的加亮溶解产生动画效果。<br/>
          * 例如，如果显示对象的某个像素的 RGB 值为 0xAAA633，背景像素的 RGB 值为 0xDD2200，则显示像素的结果 RGB 值为 0xFFC833
          * （因为 0xAA + 0xDD > 0xFF，0xA6 + 0x22 = 0xC8，且 0x33 + 0x00 = 0x33）。
          * @version Lark 1.0
@@ -1657,7 +1976,7 @@ declare module lark {
          * <li>English       en</li>
          * <li>Japanese      ja</li>
          * <li>Korean        ko</li>
-         * <ul>
+         * </ul>
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -1672,7 +1991,7 @@ declare module lark {
          * <li>英语      en</li>
          * <li>日语      ja</li>
          * <li>韩语      ko</li>
-         * <ul>
+         * </ul>
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -1700,7 +2019,7 @@ declare module lark {
          * <li>Windows Desktop   "Windows PC"</li>
          * <li>Mac Desktop       "Mac OS"</li>
          * <li>Unknown OS        "Unknown"</li>
-         * <ul>
+         * </ul>
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -1714,7 +2033,7 @@ declare module lark {
          * <li>微软桌面操作系统     "Windows PC"</li>
          * <li>苹果桌面操作系统     "Mac OS"</li>
          * <li>未知操作系统        "Unknown"</li>
-         * <ul>
+         * </ul>
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -1762,42 +2081,75 @@ declare module lark {
 }
 declare module lark.sys {
     /**
+     * @private
      * 心跳计时器单例
      */
     var $ticker: Ticker;
     /**
+     * @private
      * 是否要广播Event.RENDER事件的标志。
      */
     var $invalidateRenderFlag: boolean;
     /**
+     * @private
      * 需要立即刷新屏幕的标志
      */
     var $requestRenderingFlag: boolean;
     /**
+     * @private
      * Lark心跳计时器
      */
     class Ticker {
+        /**
+         * @private
+         */
         constructor();
+        /**
+         * @private
+         */
         private playerList;
+        /**
+         * @private
+         */
         private callBackList;
+        /**
+         * @private
+         */
         private thisObjectList;
+        /**
+         * @private
+         */
         private getTickIndex(callBack, thisObject);
+        /**
+         * @private
+         *
+         */
         private concatTick();
+        /**
+         * @private
+         */
         private frameInterval;
+        /**
+         * @private
+         */
         private lastCount;
         /**
+         * @private
          * 执行一次刷新
          */
         update(): void;
         /**
+         * @private
          * 执行一次屏幕渲染
          */
         private render(triggerByFrame);
         /**
+         * @private
          * 广播EnterFrame事件。
          */
         private broadcastEnterFrame();
         /**
+         * @private
          * 广播Render事件。
          */
         private broadcastRender();
@@ -1805,29 +2157,55 @@ declare module lark.sys {
 }
 declare module lark.sys {
     /**
+     * @private
      * 脏矩形计算工具类
      */
     class DirtyRegion {
+        /**
+         * @private
+         */
         private dirtyList;
+        /**
+         * @private
+         */
         private hasClipRect;
+        /**
+         * @private
+         */
         private clipWidth;
+        /**
+         * @private
+         */
         private clipHeight;
+        /**
+         * @private
+         */
         private clipArea;
+        /**
+         * @private
+         */
         private clipRectChanged;
         /**
+         * @private
          * 设置剪裁边界，超过边界的节点将跳过绘制。
          */
         setClipRect(width: number, height: number): void;
         /**
+         * @private
          * 添加一个脏矩形区域，返回是否添加成功，当矩形为空或者在屏幕之外时返回false。
          */
         addRegion(target: Region): boolean;
+        /**
+         * @private
+         */
         clear(): void;
         /**
+         * @private
          * 获取最终的脏矩形列表
          */
         getDirtyRegions(): Region[];
         /**
+         * @private
          * 合并脏矩形列表
          */
         private mergeDirtyList(dirtyList);
@@ -1858,15 +2236,21 @@ declare module lark {
 }
 declare module lark.sys {
     /**
+     * @private
      * 屏幕适配器实例，开发者可以通过给这个变量赋值实现了IScreenAdapter接口的实例，从而注入自定义的屏幕适配器。
      */
     var screenAdapter: IScreenAdapter;
     /**
+     * @private
      * 屏幕适配器默认实现，开发者可以实现自定义规则的屏幕适配器。并在初始化加载时将适配器的实例赋值给lark.sys.screenAdapter上，从而替换掉默认适配器。
      */
     class ScreenAdapter extends LarkObject implements IScreenAdapter {
+        /**
+         * @private
+         */
         constructor();
         /**
+         * @private
          * 计算舞台显示尺寸
          * @param scaleMode 当前的缩放模式
          * @param screenWidth 播放器视口宽度
@@ -1999,20 +2383,24 @@ declare module lark {
         private _lineCap;
         /**
          * @language en_US
-         * determines how the end points of every line are drawn. There are three possible values for this property and those are:
-         * "butt": The ends of lines are squared off at the endpoints.
-         * "round": The ends of lines are rounded.
-         * "square": The ends of lines are squared off by adding a box with an equal width and half the height of the line's thickness.
+         * determines how the end points of every line are drawn. There are three possible values for this property and those are:<br/>
+         * <ul>
+         * <li>"butt": The ends of lines are squared off at the endpoints.</li>
+         * <li>"round": The ends of lines are rounded.</li>
+         * <li>"square": The ends of lines are squared off by adding a box with an equal width and half the height of the line's thickness.</li>
+         * </ul>
          * @default "butt"
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 指定如何绘制每一条线段末端的属性。有3个可能的值，分别是：
-         * "butt": 线段末端以方形结束。
-         * "round": 线段末端以圆形结束。
-         * "square": 线段末端以方形结束，但是增加了一个宽度和线段相同，高度是线段厚度一半的矩形区域。
+         * 指定如何绘制每一条线段末端的属性。有3个可能的值，分别是：<br/>
+         * <ul>
+         * <li>"butt": 线段末端以方形结束。</li>
+         * <li>"round": 线段末端以圆形结束。</li>
+         * <li>"square": 线段末端以方形结束，但是增加了一个宽度和线段相同，高度是线段厚度一半的矩形区域。</li>
+         * </ul>
          * @default "butt"
          * @version Lark 1.0
          * @platform Web,Native
@@ -2043,23 +2431,27 @@ declare module lark {
         private _lineJoin;
         /**
          * @language en_US
-         * specifies the type of joint appearance used at angles.There are three possible values for this property and those are:
-         * "round": Rounds off the corners of a shape by filling an additional sector of disc centered at the common endpoint
-         * of connected segments. The radius for these rounded corners is equal to the line width.
-         * "bevel": Fills an additional triangular area between the common endpoint of connected segments, and the separate
-         * outside rectangular corners of each segment.
-         * "miter": Connected segments are joined by extending their outside edges to connect at a single point, with the
-         * effect of filling an additional lozenge-shaped area. This setting is effected by the miterLimit property.
+         * specifies the type of joint appearance used at angles.There are three possible values for this property and those are:<br/>
+         * <ul>
+         * <li>"round": Rounds off the corners of a shape by filling an additional sector of disc centered at the common endpoint
+         * of connected segments. The radius for these rounded corners is equal to the line width.</li>
+         * <li>"bevel": Fills an additional triangular area between the common endpoint of connected segments, and the separate
+         * outside rectangular corners of each segment.</li>
+         * <li>"miter": Connected segments are joined by extending their outside edges to connect at a single point, with the
+         * effect of filling an additional lozenge-shaped area. This setting is effected by the miterLimit property.</li>
+         * </ul>
          * @default "miter"
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 指定用于拐角的连接外观的类型,有3个可能的值，分别是：
-         * "round": 圆角连接
-         * "bevel": 斜角连接。
-         * "miter": 尖角连接。当使用尖角模式时，还可以同时使用 miterLimit 参数限制尖角的长度。
+         * 指定用于拐角的连接外观的类型,有3个可能的值，分别是：<br/>
+         * <ul>
+         * <li>"round": 圆角连接</li>
+         * <li>"bevel": 斜角连接。</li>
+         * <li>"miter": 尖角连接。当使用尖角模式时，还可以同时使用 miterLimit 参数限制尖角的长度。</li>
+         * </ul>
          * @default "miter"
          * @version Lark 1.0
          * @platform Web,Native
@@ -2643,12 +3035,13 @@ declare module lark {
      * flow through the display list hierarchy. When an event such as a touch tap, Lark emits an event object into the
      * event flow from the root of the display list. The event object then makes its way through the display list until it
      * reaches the event target, at which point it begins its return trip through the display list. This round-trip journey
-     * to the event target is conceptually divided into three phases: the capture phase comprises the journey from the root
-     * to the last node before the event target's node, the target phase comprises only the event target node, and the bubbling
-     * phase comprises any subsequent nodes encountered on the return trip to the root of the display list. In general,
-     * the easiest way for a user-defined class to gain event emitting capabilities is to extend EventEmitter.
-     * If this is impossible (that is, if the class is already extending another class), you can instead implement the
-     * IEventEmitter interface, create an EventEmitter member, and write simple hooks to route calls into the aggregated EventEmitter.
+     * to the event target is conceptually divided into three phases: <br/>
+     * the capture phase comprises the journey from the root to the last node before the event target's node, the target
+     * phase comprises only the event target node, and the bubbling phase comprises any subsequent nodes encountered on
+     * the return trip to the root of the display list. In general, the easiest way for a user-defined class to gain event
+     * emitting capabilities is to extend EventEmitter. If this is impossible (that is, if the class is already extending
+     * another class), you can instead implement the IEventEmitter interface, create an EventEmitter member, and write simple
+     * hooks to route calls into the aggregated EventEmitter.
      * @see lark.IEventEmitter
      * @version Lark 1.0
      * @platform Web,Native
@@ -3149,7 +3542,7 @@ declare module lark {
          * Prevents processing of any event listeners in nodes subsequent to the current node in the event flow. This method
          * does not affect any event listeners in the current node (currentTarget). In contrast, the stopImmediatePropagation()
          * method prevents processing of event listeners in both the current node and subsequent nodes. Additional calls to this
-         * method have no effect. This method can be called in any phase of the event flow.
+         * method have no effect. This method can be called in any phase of the event flow.<br/>
          * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
          * @see #stopImmediatePropagation()
          * @see #preventDefault()
@@ -3160,7 +3553,7 @@ declare module lark {
          * @language zh_CN
          * 防止对事件流中当前节点的后续节点中的所有事件侦听器进行处理。此方法不会影响当前节点 currentTarget 中的任何事件侦听器。
          * 相比之下，stopImmediatePropagation() 方法可以防止对当前节点中和后续节点中的事件侦听器进行处理。
-         * 对此方法的其它调用没有任何效果。可以在事件流的任何阶段中调用此方法。
+         * 对此方法的其它调用没有任何效果。可以在事件流的任何阶段中调用此方法。<br/>
          * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
          * @see #stopImmediatePropagation()
          * @see #preventDefault()
@@ -3172,7 +3565,7 @@ declare module lark {
          * @language en_US
          * Prevents processing of any event listeners in the current node and any subsequent nodes in the event flow.
          * This method takes effect immediately, and it affects event listeners in the current node. In contrast, the
-         * stopPropagation() method doesn't take effect until all the event listeners in the current node finish processing.
+         * stopPropagation() method doesn't take effect until all the event listeners in the current node finish processing.<br/>
          * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
          * @see #stopPropagation()
          * @see #preventDefault()
@@ -3182,7 +3575,7 @@ declare module lark {
         /**
          * @language zh_CN
          * 防止对事件流中当前节点中和所有后续节点中的事件侦听器进行处理。此方法会立即生效，并且会影响当前节点中的事件侦听器。
-         * 相比之下，在当前节点中的所有事件侦听器都完成处理之前，stopPropagation() 方法不会生效。
+         * 相比之下，在当前节点中的所有事件侦听器都完成处理之前，stopPropagation() 方法不会生效。<br/>
          * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
          * @see #stopPropagation()
          * @see #preventDefault()
@@ -3214,7 +3607,7 @@ declare module lark {
          * @language en_US
          * Gets one event instance from the object pool or create a new one. We highly recommend using the Event.create()
          * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
-         * which allows you to get better code execution performance.
+         * which allows you to get better code execution performance.<br/>
          * Note: If you want to use this method to initialize your custom event object,you must make sure the constructor
          * of your custom event is the same as the constructor of lark.Event.
          * @example
@@ -3230,7 +3623,7 @@ declare module lark {
         /**
          * @language zh_CN
          * 从对象池中取出或创建一个新的事件实例。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
-         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。
+         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。<br/>
          * 注意：若使用此方法来创建自定义事件的实例，自定义的构造函数参数列表必须跟Event类一致。
          * @example
          * <code>
@@ -3251,7 +3644,7 @@ declare module lark {
          * @language en_US
          * Releases an event object and cache it into the object pool.We highly recommend using the Event.create()
          * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
-         * which allows you to get better code execution performance.
+         * which allows you to get better code execution performance.<br/>
          * Note: The parameters of this method only accepts an instance created by the Event.create() method.
          * if not,it may throw an error.
          * @example
@@ -3268,7 +3661,7 @@ declare module lark {
         /**
          * @language zh_CN
          * 释放一个事件对象，并缓存到对象池。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
-         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。
+         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。<br/>
          * 注意：此方法只能传入由Event.create()创建的事件实例，传入非法对象实例可能会导致报错。
          * @example
          * <code>
@@ -3286,70 +3679,120 @@ declare module lark {
 }
 declare module lark.sys {
     /**
+     * @private
      * 显示列表
      */
     class DisplayList extends LarkObject implements Renderable {
         /**
+         * @private
          * 释放一个DisplayList实例到对象池
          */
         static release(displayList: DisplayList): void;
         /**
+         * @private
          * 从对象池中取出或创建一个新的DisplayList对象。
          */
         static create(target: DisplayObject): DisplayList;
         /**
+         * @private
          * 创建一个DisplayList对象
          */
         constructor(root: DisplayObject);
         /**
+         * @private
          * 呈现绘制结果的目标画布
          */
         surface: Surface;
+        /**
+         * @private
+         */
         offsetX: number;
+        /**
+         * @private
+         */
         offsetY: number;
         /**
+         * @private
          * 显示列表根节点
          */
         root: DisplayObject;
+        /**
+         * @private
+         */
         needRedraw: boolean;
+        /**
+         * @private
+         */
         private drawToStage;
         /**
+         * @private
          * 绘图上下文
          */
         renderContext: RenderContext;
         /**
+         * @private
          * 设置剪裁边界，不再绘制完整目标对象，画布尺寸由外部决定，超过边界的节点将跳过绘制。
          */
         setClipRect(width: number, height: number): void;
         /**
+         * @private
          * 显示对象的渲染节点发生改变时，把自身的IRenderable对象注册到此列表上。
          */
         private dirtyNodes;
+        /**
+         * @private
+         */
         private dirtyNodeList;
         /**
+         * @private
          * 标记一个节点需要重新渲染
          */
         markDirty(node: Renderable): void;
+        /**
+         * @private
+         */
         private dirtyList;
+        /**
+         * @private
+         */
         private dirtyRegion;
         /**
+         * @private
          * 更新节点属性并返回脏矩形列表。
          */
         updateDirtyRegions(): Region[];
         /**
+         * @private
          * 绘制根节点显示对象到目标画布，返回draw的次数。
          */
         drawToSurface(): number;
         /**
+         * @private
          * 绘制一个显示对象
          */
         private drawDisplayObject(displayObject, context, dirtyList, drawToStage, displayList, clipRegion);
+        /**
+         * @private
+         */
         private drawWidthBlendMode(displayObject, context, dirtyList, drawToStage, clipRegion);
+        /**
+         * @private
+         */
         private drawWidthClip(displayObject, context, dirtyList, drawToStage, clipRegion);
+        /**
+         * @private
+         */
         private createRenderContext(width, height);
+        /**
+         * @private
+         */
         private drawWidthSurface(context, surface, drawToStage, offsetX, offsetY);
+        /**
+         * @private
+         */
         private sizeChanged;
         /**
+         * @private
          * 改变画布的尺寸，由于画布尺寸修改会清空原始画布。所以这里将原始画布绘制到一个新画布上，再与原始画布交换。
          */
         changeSurfaceSize(): void;
@@ -4349,7 +4792,7 @@ declare module lark {
      * objects in the display list. DisplayObjectContainer objects can have child display objects, while other display objects,
      * such as Shape and TextField objects, are "leaf" nodes that have only parents and siblings, no children.
      * The DisplayObject class supports basic functionality like the x and y position of an object, as well as more advanced
-     * properties of the object such as its transformation matrix.
+     * properties of the object such as its transformation matrix.<br/>
      * The DisplayObject class contains several broadcast events.Normally, the target of any particular event is a specific
      * DisplayObject instance. For example, the target of an added event is the specific DisplayObject instance that was added
      * to the display list. Having a single target restricts the placement of event listeners to that target and in some cases
@@ -4370,7 +4813,7 @@ declare module lark {
      * @language zh_CN
      * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时中显示的所有对象。使用 DisplayObjectContainer 类排列
      * 显示列表中的显示对象。DisplayObjectContainer 对象可以有子显示对象，而其他显示对象（如 Shape 和 TextField 对象）是“叶”节点，没有子项，只有父级和
-     * 同级。DisplayObject 类有一些基本的属性（如确定坐标位置的 x 和 y 属性），也有一些高级的对象属性（如 Matrix 矩阵变换）。
+     * 同级。DisplayObject 类有一些基本的属性（如确定坐标位置的 x 和 y 属性），也有一些高级的对象属性（如 Matrix 矩阵变换）。<br/>
      * DisplayObject 类包含若干广播事件。通常，任何特定事件的目标均为一个特定的 DisplayObject 实例。例如，added 事件的目标是已添加到显示列表
      * 的目标 DisplayObject 实例。若只有一个目标，则会将事件侦听器限制为只能监听在该目标上（在某些情况下，可监听在显示列表中该目标的祖代上）。
      * 但是对于广播事件，目标不是特定的 DisplayObject 实例，而是所有 DisplayObject 实例（包括那些不在显示列表中的实例）。这意味着您可以向任何
@@ -4442,7 +4885,7 @@ declare module lark {
         /**
          * @language en_US
          * The Stage of the display object. you can create and load multiple display objects into the display list, and
-         * the stage property of each display object refers to the same Stage object.
+         * the stage property of each display object refers to the same Stage object.<br/>
          * If a display object is not added to the display list, its stage property is set to null.
          * @version Lark 1.0
          * @platform Web,Native
@@ -4450,7 +4893,7 @@ declare module lark {
         /**
          * @language zh_CN
          * 显示对象的舞台。
-         * 例如，您可以创建多个显示对象并加载到显示列表中，每个显示对象的 stage 属性是指相同的 Stage 对象。
+         * 例如，您可以创建多个显示对象并加载到显示列表中，每个显示对象的 stage 属性是指相同的 Stage 对象。<br/>
          * 如果显示对象未添加到显示列表，则其 stage 属性会设置为 null。
          * @version Lark 1.0
          * @platform Web,Native
@@ -4458,7 +4901,7 @@ declare module lark {
         stage: Stage;
         /**
          * @language en_US
-         * A Matrix object containing values that alter the scaling, rotation, and translation of the display object.
+         * A Matrix object containing values that alter the scaling, rotation, and translation of the display object.<br/>
          * Note: to change the value of a display object's matrix, you must make a copy of the entire matrix object, then copy
          * the new object into the matrix property of the display object.
          * @example the following code increases the tx value of a display object's matrix
@@ -4472,7 +4915,7 @@ declare module lark {
          */
         /**
          * @language zh_CN
-         * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。
+         * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。<br/>
          * 注意：要改变一个显示对象矩阵的值，您必引用整个矩阵对象，然后将它重新赋值给显示对象的 matrix 属性。
          * @example 以下代码改变了显示对象矩阵的tx属性值：
          * <code>
@@ -4487,7 +4930,8 @@ declare module lark {
         /**
          * @language en_US
          * Indicates the x coordinate of the DisplayObject instance relative to the local coordinates of the parent
-         * DisplayObjectContainer. If the object is inside a DisplayObjectContainer that has transformations, it is in
+         * DisplayObjectContainer.<br/>
+         * If the object is inside a DisplayObjectContainer that has transformations, it is in
          * the local coordinate system of the enclosing DisplayObjectContainer. Thus, for a DisplayObjectContainer
          * rotated 90° counterclockwise, the DisplayObjectContainer's children inherit a coordinate system that is
          * rotated 90° counterclockwise. The object's coordinates refer to the registration point position.
@@ -4497,7 +4941,7 @@ declare module lark {
          */
         /**
          * @language zh_CN
-         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。
+         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。<br/>
          * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
          * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
          * @default 0
@@ -4508,7 +4952,8 @@ declare module lark {
         /**
          * @language en_US
          * Indicates the y coordinate of the DisplayObject instance relative to the local coordinates of the parent
-         * DisplayObjectContainer. If the object is inside a DisplayObjectContainer that has transformations, it is in
+         * DisplayObjectContainer. <br/>
+         * If the object is inside a DisplayObjectContainer that has transformations, it is in
          * the local coordinate system of the enclosing DisplayObjectContainer. Thus, for a DisplayObjectContainer rotated
          * 90° counterclockwise, the DisplayObjectContainer's children inherit a coordinate system that is rotated 90°
          * counterclockwise. The object's coordinates refer to the registration point position.
@@ -4518,7 +4963,7 @@ declare module lark {
          */
         /**
          * @language zh_CN
-         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 y 坐标。
+         * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 y 坐标。<br/>
          * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
          * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
          * @default 0
@@ -4528,8 +4973,8 @@ declare module lark {
         y: number;
         /**
          * @language en_US
-         * Indicates the horizontal scale (percentage) of the object as applied from the registration point. The default
-         * 1.0 equals 100% scale.Scaling the local coordinate system changes the x and y property values, which are
+         * Indicates the horizontal scale (percentage) of the object as applied from the registration point. <br/>
+         * The default 1.0 equals 100% scale.Scaling the local coordinate system changes the x and y property values, which are
          * defined in whole pixels.
          * @default 1
          * @version Lark 1.0
@@ -4537,8 +4982,8 @@ declare module lark {
          */
         /**
          * @language zh_CN
-         * 表示从注册点开始应用的对象的水平缩放比例（百分比）。1.0 等于 100% 缩放。
-         * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
+         * 表示从注册点开始应用的对象的水平缩放比例（百分比）。<br/>
+         * 1.0 等于 100% 缩放。缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
          * @default 1
          * @version Lark 1.0
          * @platform Web,Native
@@ -4632,7 +5077,7 @@ declare module lark {
          * increase performance for display objects that contain complex vector content. After you set the cacheAsBitmap
          * property to true, the rendering does not change, however the display object performs pixel snapping automatically.
          * The execution speed can be significantly faster depending on the complexity of the content.The cacheAsBitmap
-         * property is best used with display objects that have mostly static content and that do not scale and rotate frequently.
+         * property is best used with display objects that have mostly static content and that do not scale and rotate frequently.<br/>
          * Note: The display object will not create the bitmap caching when the memory exceeds the upper limit,even if you set it to true.
          * @default false
          * @version Lark 1.0
@@ -4642,7 +5087,7 @@ declare module lark {
          * @language zh_CN
          * 如果设置为 true，则 Lark 运行时将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
          * 将 cacheAsBitmap 属性设置为 true 后，呈现并不更改，但是，显示对象将自动执行像素贴紧。执行速度可能会大大加快，
-         * 具体取决于显示对象内容的复杂性。最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放或旋转的显示对象一起使用。
+         * 具体取决于显示对象内容的复杂性。最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放或旋转的显示对象一起使用。<br/>
          * 注意：在内存超过上限的情况下，即使将 cacheAsBitmap 属性设置为 true，显示对象也不使用位图缓存。
          * @default false
          * @version Lark 1.0
@@ -4692,7 +5137,7 @@ declare module lark {
         /**
          * @language en_US
          * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
-         * is set to true,the transparent area of the display object will be touched through.
+         * is set to true,the transparent area of the display object will be touched through.<br/>
          * Enabling this property will cause certain mount of performance loss. This property is set to true in the Shape class,
          * while the other is set to false by default.
          * @version Lark 1.0
@@ -4700,7 +5145,7 @@ declare module lark {
          */
         /**
          * @language zh_CN
-         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，
+         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，<br/>
          * 开启此属性将会有一定量的额外性能损耗，Shape等含有矢量图的类默认开启此属性，其他类默认关闭。
          * @version Lark 1.0
          * @platform Web,Native
@@ -4713,7 +5158,7 @@ declare module lark {
          * object always scrolls in whole pixel increments.You can scroll an object left and right by setting the x property of
          * the scrollRect Rectangle object. You can scroll an object up and down by setting the y property of the scrollRect
          * Rectangle object. If the display object is rotated 90° and you scroll it left and right, the display object actually
-         * scrolls up and down.
+         * scrolls up and down.<br/>
          *
          * Note: to change the value of a display object's scrollRect, you must make a copy of the entire scrollRect object, then copy
          * the new object into the scrollRect property of the display object.
@@ -4730,7 +5175,7 @@ declare module lark {
          * @language zh_CN
          * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
          * 滚动的显示对象始终以整像素为增量进行滚动。您可以通过设置 scrollRect Rectangle 对象的 x 属性来左右滚动对象， 还可以通过设置
-         * scrollRect 对象的 y 属性来上下滚动对象。如果显示对象旋转了 90 度，并且您左右滚动它，则实际上显示对象会上下滚动。
+         * scrollRect 对象的 y 属性来上下滚动对象。如果显示对象旋转了 90 度，并且您左右滚动它，则实际上显示对象会上下滚动。<br/>
          *
          * 注意：要改变一个显示对象 scrollRect 属性的值，您必引用整个 scrollRect 对象，然后将它重新赋值给显示对象的 scrollRect 属性。
          * @example 以下代码改变了显示对象 scrollRect 的 x 属性值：
@@ -4746,7 +5191,7 @@ declare module lark {
         /**
          * @language en_US
          * A value from the BlendMode class that specifies which blend mode to use. Determine how a source image (new one)
-         * is drawn on the target image (old one).
+         * is drawn on the target image (old one).<br/>
          * If you attempt to set this property to an invalid value, Lark runtime set the value to BlendMode.NORMAL.
          * @default lark.BlendMode.NORMAL
          * @see lark.BlendMode
@@ -4755,7 +5200,7 @@ declare module lark {
          */
         /**
          * @language zh_CN
-         * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上
+         * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上<br/>
          * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
          * @default lark.BlendMode.NORMAL
          * @see lark.BlendMode
@@ -4768,7 +5213,7 @@ declare module lark {
          * The calling display object is masked by the specified mask object. To ensure that masking works when the Stage
          * is scaled, the mask display object must be in an active part of the display list. The mask object itself is not drawn.
          * Set mask to null to remove the mask. To be able to scale a mask object, it must be on the display list. To be
-         * able to drag a mask Sprite object , it must be on the display list.
+         * able to drag a mask Sprite object , it must be on the display list.<br/>
          * Note: A single mask object cannot be used to mask more than one calling display object. When the mask is assigned
          * to a second display object, it is removed as the mask of the first object, and that object's mask property becomes null.
          * @version Lark 1.0
@@ -4778,7 +5223,7 @@ declare module lark {
          * @language zh_CN
          * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
          * 但不绘制 mask 对象本身。将 mask 设置为 null 可删除蒙版。要能够缩放遮罩对象，它必须在显示列表中。要能够拖动蒙版
-         * Sprite 对象，它必须在显示列表中。
+         * Sprite 对象，它必须在显示列表中。<br/>
          * 注意：单个 mask 对象不能用于遮罩多个执行调用的显示对象。在将 mask 分配给第二个显示对象时，会撤消其作为第一个对象的遮罩，
          * 该对象的 mask 属性将变为 null。
          * @version Lark 1.0
@@ -4877,7 +5322,7 @@ declare module lark {
     /**
      * @language en_US
      * A Rectangle object is an area defined by its position, as indicated by its top-left corner point (x, y) and by its
-     * width and its height.
+     * width and its height.<br/>
      * The x, y, width, and height properties of the Rectangle class are independent of each other; changing the value of
      * one property has no effect on the others. However, the right and bottom properties are integrally related to those
      * four properties. For example, if you change the value of the right property, the value of the width property changes;
@@ -4887,7 +5332,7 @@ declare module lark {
      */
     /**
      * @language zh_CN
-     * Rectangle 对象是按其位置（由它左上角的点 (x, y) 确定）以及宽度和高度定义的区域。
+     * Rectangle 对象是按其位置（由它左上角的点 (x, y) 确定）以及宽度和高度定义的区域。<br/>
      * Rectangle 类的 x、y、width 和 height 属性相互独立；更改一个属性的值不会影响其他属性。
      * 但是，right 和 bottom 属性与这四个属性是整体相关的。例如，如果更改 right 属性的值，则 width
      * 属性的值将发生变化；如果更改 bottom 属性，则 height 属性的值将发生变化。
@@ -5050,14 +5495,14 @@ declare module lark {
          * @language en_US
          * The y coordinate of the top-left corner of the rectangle. Changing the top property of a Rectangle object has
          * no effect on the x and width properties. However it does affect the height property, whereas changing the y
-         * value does not affect the height property.
+         * value does not affect the height property.<br/>
          * The value of the top property is equal to the value of the y property.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 矩形左上角的 y 坐标。更改 Rectangle 对象的 top 属性对 x 和 width 属性没有影响。但是，它会影响 height 属性，而更改 y 值不会影响 height 属性。
+         * 矩形左上角的 y 坐标。更改 Rectangle 对象的 top 属性对 x 和 width 属性没有影响。但是，它会影响 height 属性，而更改 y 值不会影响 height 属性。<br/>
          * top 属性的值等于 y 属性的值。
          * @version Lark 1.0
          * @platform Web,Native
@@ -5263,119 +5708,374 @@ declare module lark {
     }
 }
 declare module lark.sys {
+    /**
+     * @private
+     */
     const enum TextKeys {
+        /**
+         * @private
+         */
         fontSize = 0,
+        /**
+         * @private
+         */
         lineSpacing = 1,
+        /**
+         * @private
+         */
         textColor = 2,
+        /**
+         * @private
+         */
         textFieldWidth = 3,
+        /**
+         * @private
+         */
         textFieldHeight = 4,
+        /**
+         * @private
+         */
         textWidth = 5,
+        /**
+         * @private
+         */
         textHeight = 6,
+        /**
+         * @private
+         */
         textDrawWidth = 7,
+        /**
+         * @private
+         */
         fontFamily = 8,
+        /**
+         * @private
+         */
         textAlign = 9,
+        /**
+         * @private
+         */
         verticalAlign = 10,
+        /**
+         * @private
+         */
         colorString = 11,
+        /**
+         * @private
+         */
         fontString = 12,
+        /**
+         * @private
+         */
         text = 13,
+        /**
+         * @private
+         */
         measuredWidths = 14,
+        /**
+         * @private
+         */
         bold = 15,
+        /**
+         * @private
+         */
         italic = 16,
+        /**
+         * @private
+         */
         fontStringChanged = 17,
+        /**
+         * @private
+         */
         textLinesChanged = 18,
+        /**
+         * @private
+         */
         wordWrap = 19,
+        /**
+         * @private
+         */
         displayAsPassword = 20,
+        /**
+         * @private
+         */
         maxChars = 21,
-        selectionBeginIndex = 22,
-        selectionEndIndex = 23,
+        /**
+         * @private
+         */
+        selectionActivePosition = 22,
+        /**
+         * @private
+         */
+        selectionAnchorPosition = 23,
     }
 }
 declare module lark {
     /**
-     * TextField 类用于创建显示对象以显示文本。可以使用 TextField 类的方法和属性对文本字段进行操作。
-     * 注意:TextField.width和TextField.height与其他显示对象的定义不同。
-     * 其他显示对象的width，height属性始终等于getBounds(parent)方法返回的尺寸，即包含旋转和缩放值，若设置width或height也将会直接修改scaleX和scaleY的值。
-     * 而 TextField 返回的宽高值并不包含旋转和缩放值，设置TextField.width和TextField.height也不会影响scaleX或scaleY的值。
-     * 设置TextField.width可以强制让文本换行，若文本显示宽度超过您显式设置的值，将会自动换行。
-     * 设置TextField.height可以截断文本，若文本显示高度超过您显式设置的值，将会截断不显示。
-     * 若您需要重置文本宽高为未设置状态，请将宽高属性赋值为 lark.NONE 即可。
+     * @language en_US
+     * The TextField class is used to create display objects for text display. You can use the methods and properties of
+     * the TextField class to manipulate it.<br/>
+     * In TextField, three character sequences are recognized as explicit line breaks: CR ("\r"), LF ("\n"), and CR+LF ("\r\n").<br/>
+     * If you don't specify any kind of width for a TextField, then the longest line, as determined by these explicit line
+     * breaks, determines the width of the TextField.<br/>
+     * If you do specify some kind of width, then the specified text is word-wrapped at the right edge of the component's
+     * bounds, because the default value of the wordWrap is true. If the text extends below the bottom of the component, it is clipped.<br/>
+     * To disable this automatic wrapping, set the wordWrap to false. Then lines are broken only where the text contains
+     * an explicit line break, and the ends of lines extending past the right edge is clipped.
+     * @see lark.TextInput
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * TextField 类用于创建显示对象以显示文本。可以使用 TextField 类的方法和属性对文本字段进行操作。<br/>
+     * 在 TextField 中，将以下三个字符序列识别为显式换行符：CR（“\r”）、LF（“\n”）和 CR+LF（“\r\n”）。<br/>
+     * 如果没有为 TextField 指定宽度，则由这些显式换行符确定的最长行确定 TextField 的宽度。<br/>
+     * 如果指定了某个宽度，则指定文本将在组件边界的右边缘换行，因为 wordWrap 的默认值为 true。如果文本扩展到低于组件底部，则将被剪切。<br/>
+     * 要禁用此自动换行，请将 wordWrap 设置为 false。这样的话，只有 text 包含显式换行符时才会换行，且将剪切超过右边缘的行尾。
+     * @see lark.TextInput
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     class TextField extends DisplayObject {
         /**
+         * @language en_US
+         * Creates a new TextField instance.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 创建一个TextField对象
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         constructor(text?: string);
         /**
-         * 字体名称 。默认值：sans-serif
+         * @language en_US
+         * The name of the font to use, or a comma-separated list of font names.
+         * @default "sans-serif"
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要使用的字体的名称或用逗号分隔的字体名称列表。
+         * @default "sans-serif"
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         fontFamily: string;
         /**
-         * 字号大小,默认值30 。
+         * @language en_US
+         * The size in pixels of text
+         * @default 30
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 文本的字号大小。
+         * @default 30
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         fontSize: number;
         /**
-         * 是否显示为粗体，默认false。
+         * @language en_US
+         * Specifies whether the text is boldface.
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 是否显示为粗体。
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         bold: boolean;
         /**
-         * 是否显示为斜体，默认false。
+         * @language en_US
+         * Determines whether the text is italic font.
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 是否显示为斜体。
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         italic: boolean;
+        /**
+         * @private
+         *
+         */
         private invalidateFontString();
         /**
+         * @private
          * 获取字体信息的字符串形式。
          */
         private getFontString();
         /**
-         * 文字的水平对齐方式 ,请使用HorizontalAlign中定义的常量。
-         * 默认值：HorizontalAlign.LEFT。
+         * @language en_US
+         * Horizontal alignment of text.
+         * @default：lark.HorizontalAlign.LEFT
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 文本的水平对齐方式。
+         * @default：lark.HorizontalAlign.LEFT
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         textAlign: string;
         /**
-         * 文字的垂直对齐方式 ,请使用VerticalAlign中定义的常量。
-         * 默认值：VerticalAlign.TOP。
+         * @language en_US
+         * Vertical alignment of text.
+         * @default：lark.VerticalAlign.TOP
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 文字的垂直对齐方式。
+         * @default：lark.VerticalAlign.TOP
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         verticalAlign: string;
         /**
-         * 行间距。标准行高通常等于fontSize的值，设置此属性，将会在标准行高之间添加指定像素的空白间隔。可以设置为负值。默认值0.
+         * @language en_US
+         * An integer representing the amount of vertical space between lines.
+         * @default 0
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 一个整数，表示行与行之间的垂直间距量
+         * @default 0
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         lineSpacing: number;
         /**
-         * 文本颜色，默认值0x000000
+         * @language en_US
+         * Color of the text.
+         * @default 0x000000
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 文本颜色
+         * @default 0x000000
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         textColor: number;
         /**
+         * @language en_US
+         * A Boolean value that indicates whether the text field has word wrap. If the value of wordWrap is true, the text
+         * field has word wrap; if the value is false, the text field does not have word wrap.
+         * @default true
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 一个布尔值，表示文本字段是否自动换行。如果 wordWrap 的值为 true，则该文本字段自动换行；
-         * 如果值为 false，则该文本字段不自动换行,如果同时显式设置过宽度，超出宽度的部分将被截断。默认值为 true。
+         * 如果值为 false，则该文本字段不自动换行,如果同时显式设置过宽度，超出宽度的部分将被截断。
+         * @default true
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         wordWrap: boolean;
         /**
+         * @language en_US
+         * A string to display in the text field.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 要显示的文本内容
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         text: string;
+        /**
+         * @private
+         */
         private textLines;
         /**
-         * 文本行数。
+         * @language en_US
+         * [read-only] Defines the number of text lines in a multiline text field. If wordWrap property is set to true, the number of
+         * lines increases when text wraps.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [只读] 定义多行文本字段中的文本行数。如果 wordWrap 属性设置为 true，则在文本自动换行时会增加行数。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         numLines: number;
         /**
-         * 文本内容宽度
+         * @language en_US
+         * [read-only] The width of the text in pixels.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [只读] 文本内容宽度
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         textWidth: number;
         /**
-         * 文本内容高度
+         * @language en_US
+         * [read-only] The height of the text in pixels.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [只读] 文本内容高度
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         textHeight: number;
+        /**
+         * @private
+         */
         private updateTextLines();
     }
 }
 declare module lark.sys {
+    /**
+     * @private
+     * 返回格式化的字体样式文本
+     */
     function toFontString(style: {
         fontFamily?: string;
         fontSize?: number;
         bold?: boolean;
         italic?: boolean;
     }): string;
+    /**
+     * @private
+     * 返回字符串形式的颜色值
+     */
     function toColorString(value: number): string;
 }
 declare module lark {
@@ -5562,22 +6262,40 @@ declare module lark {
 }
 declare module lark.sys {
     /**
+     * @private
      * 用户交互操作管理器
      */
     class TouchHandler extends LarkObject {
+        /**
+         * @private
+         */
         constructor(stage: Stage);
+        /**
+         * @private
+         */
         private stage;
+        /**
+         * @private
+         */
         private touchDownTarget;
         /**
+         * @private
          * 触摸开始（按下）
          * @param x 事件发生处相对于舞台的坐标x
          * @param y 事件发生处相对于舞台的坐标y
          * @param touchPointID 分配给触摸点的唯一标识号
          */
         onTouchBegin(x: number, y: number, touchPointID: number): void;
+        /**
+         * @private
+         */
         private lastTouchX;
+        /**
+         * @private
+         */
         private lastTouchY;
         /**
+         * @private
          * 触摸移动
          * @param x 事件发生处相对于舞台的坐标x
          * @param y 事件发生处相对于舞台的坐标y
@@ -5585,6 +6303,7 @@ declare module lark.sys {
          */
         onTouchMove(x: number, y: number, touchPointID: number): void;
         /**
+         * @private
          * 触摸结束（弹起）
          * @param x 事件发生处相对于舞台的坐标x
          * @param y 事件发生处相对于舞台的坐标y
@@ -5592,6 +6311,7 @@ declare module lark.sys {
          */
         onTouchEnd(x: number, y: number, touchPointID: number): void;
         /**
+         * @private
          * 获取舞台坐标下的触摸对象
          */
         private findTarget(stageX, stageY);
@@ -5599,29 +6319,162 @@ declare module lark.sys {
 }
 declare module lark {
     /**
-     * TextInput 用于创建显示对象来输入文本. 默认为单行文本，当需要使用多行文本时，请设置 multiLine 为 true
+     * @language en_US
+     * The TextInput class is used to create display objects for text display and input.The methods of the TextInput class
+     * let you set, select, and manipulate the text inputted by a user.
+     * @see lark.TextField
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * TextInput 类用于创建显示对象以显示和输入文本。TextInput 类的方法允许您设置、选择并操作用户输入的文本。
+     * @see lark.TextField
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     class TextInput extends TextField {
+        /**
+         * @language en_US
+         * Creates a new TextInput instance.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 TextInput 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         constructor();
         /**
-         * 一个布尔值，表示是否显示为一个密码输入框
-         * @returns {boolean}
+         * @language en_US
+         * Specifies whether the text input is a password text input. If the value of this property is true, the text input
+         * is treated as a password text input and hides the input characters using asterisks instead of the actual characters.
+         * If false, the text input is not treated as a password text input.
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指定输入框是否是密码输入框。如果此属性的值为 true，则输入框被视为密码输入框，并使用星号而不是实际字符来隐藏输入的字符。如果为 false，
+         * 则不会将输入框视为密码输入框。
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         displayAsPassword: boolean;
         /**
-         * 设置或获取TextInput的最大输入长度，这个属性只限制用户输入的字符长度
-         * 通过 text 属性可以设置比 maxChars 更长的字符串
-         * @returns {number}
+         * @language en_US
+         * The maximum number of characters that the text field can contain, as entered by a user. A script can insert more
+         * text than maxChars allows; the maxChars property indicates only how much text a user can enter. If the value
+         * of this property is 0, a user can enter an unlimited amount of text.
+         * @default 0
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 输入框中最多可包含的字符数（即用户输入的字符数）。代码方式可以插入比 maxChars 允许的字符数更多的文本；maxChars 属性仅表示用户可
+         * 以输入多少文本。如果此属性的值为 0，则用户可以输入无限数量的文本。
+         * @default 0
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         maxChars: number;
-        selectionBeginIndex: number;
-        selectionEndIndex: number;
-        setSelection(beginIndex: number, endIndex: number): void;
+        /**
+         * @language en_US
+         * A character position, relative to the beginning of the text string, specifying the end of the selection that
+         * moves when the selection is extended with the arrow keys.The active position may be either the start or the
+         * end of the selection.<br/>
+         * For example, if you drag-select from position 12 to position 8, then selectionAnchorPosition will be 12 and
+         * selectionActivePosition will be 8, and when you press Left-Arrow selectionActivePosition will become 7.<br/>
+         * A value of -1 indicates "not set".
+         * @default -1
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 相对于 text 字符串开头的字符位置，用于指定用箭头键扩展选区时该选区的终点。活动位置可以是选区的起点或终点。<br/>
+         * 例如，如果拖动选择位置 12 到位置 8 之间的区域，则 selectionAnchorPosition 将为 12，selectionActivePosition 将为 8，
+         * 按向左箭头后 selectionActivePosition 将变为 7。<br/>
+         * 值为 -1 时，表示“未设置”。
+         * @default -1
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        selectionActivePosition: number;
+        /**
+         * @language en_US
+         * A character position, relative to the beginning of the text String, specifying the end of the selection that
+         * stays fixed when the selection is extended with the arrow keys.The anchor position may be either the start or
+         * the end of the selection.<br/>
+         * For example, if you drag-select from position 12 to position 8, then selectionAnchorPosition will be 12 and
+         * selectionActivePosition will be 8, and when you press Left-Arrow selectionActivePosition will become 7.<br/>
+         * A value of -1 indicates "not set".
+         * @default -1
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 相对于 text 字符串开头的字符位置，用于指定用箭头键扩展选区时该选区保持固定的终点。锚点位置可以是选区的起点或终点。<br/>
+         * 例如，如果拖动选择位置 12 到位置 8 之间的区域，则 selectionAnchorPosition 将为 12，selectionActivePosition 将为 8，
+         * 按向左箭头后 selectionActivePosition 将变为 7。<br/>
+         * 值为 -1 时，表示“未设置”。
+         * @default -1
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        selectionAnchorPosition: number;
+        /**
+         * @language en_US
+         * Selects a specified range of characters.<br/>
+         * If either position is negative, it will deselect the text range.
+         * @param anchorPosition The character position specifying the end of the selection that stays fixed when the selection is extended.
+         * @param activePosition The character position specifying the end of the selection that moves when the selection is extended.
+         * @see #selectionAnchorPosition
+         * @see #selectionActivePosition
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 选择指定范围的字符。<br/>
+         * 如果任一位置为负，则它将取消选择该文本范围。
+         * @param anchorPosition 字符位置，用于指定扩展选区时保持固定的选区的未端。
+         * @param activePosition 字符位置，用于指定扩展选区时移动的选区的未端。
+         * @see #selectionAnchorPosition
+         * @see #selectionActivePosition
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        selectRange(anchorPosition: number, activePosition: number): void;
+        /**
+         * @private
+         */
         private _isTyping;
+        /**
+         * @private
+         */
         private _isFocus;
+        /**
+         * @private
+         */
         private handleTouchBegin(e);
+        /**
+         * @private
+         */
         private setAsCurrent();
+        /**
+         * @private
+         */
         private timeoutId;
+        /**
+         * @private
+         */
         private updateTextAdapter();
     }
 }
@@ -5629,7 +6482,7 @@ declare module lark {
     /**
      * @language en_US
      * The Stage class represents the main drawing area.The Stage object is not globally accessible. You need to access
-     * it through the stage property of a DisplayObject instance.
+     * it through the stage property of a DisplayObject instance.<br/>
      * The Stage class has several ancestor classes — Sprite, DisplayObject, and EventEmitter — from which it inherits
      * properties and methods. Many of these properties and methods are inapplicable to Stage objects.
      * @event lark.Event.RESIZE Emitted when the stageWidth or stageHeight property of the Stage object is changed.
@@ -5639,7 +6492,7 @@ declare module lark {
     /**
      * @language zh_CN
      * Stage 类代表主绘图区。
-     * 可以利用 DisplayObject 实例的 stage 属性进行访问。
+     * 可以利用 DisplayObject 实例的 stage 属性进行访问。<br/>
      * Stage 类具有多个祖代类: Sprite、DisplayObject 和 EventEmitter，属性和方法便是从这些类继承而来的。
      * 从这些继承的许多属性和方法不适用于 Stage 对象。
      * @event lark.Event.RESIZE 当stageWidth或stageHeight属性发生改变时调度
@@ -5655,7 +6508,7 @@ declare module lark {
         /**
          * @language en_US
          * Gets and sets the frame rate of the stage. The frame rate is defined as frames per second. Valid range for the
-         * frame rate is from 0.01 to 1000 frames per second.
+         * frame rate is from 0.01 to 1000 frames per second.<br/>
          * Note: setting the frameRate property of one Stage object changes the frame rate for all Stage objects
          * @default 30
          * @version Lark 1.0
@@ -5663,7 +6516,7 @@ declare module lark {
          */
         /**
          * @language zh_CN
-         * 获取并设置舞台的帧速率。帧速率是指每秒显示的帧数。帧速率的有效范围为每秒 0.01 到 60 个帧。
+         * 获取并设置舞台的帧速率。帧速率是指每秒显示的帧数。帧速率的有效范围为每秒 0.01 到 60 个帧。<br/>
          * 注意: 修改任何一个Stage的frameRate属性都会同步修改其他Stage的帧率。
          * @default 30
          * @version Lark 1.0
@@ -5755,64 +6608,115 @@ declare module lark {
 }
 declare module lark.sys {
     /**
+     * @private
      * Lark播放器
      */
     class Player extends LarkObject {
         /**
+         * @private
          * 实例化一个播放器对象。
          */
         constructor(context: RenderContext, stage: Stage, entryClassName: string);
+        /**
+         * @private
+         */
         private createDisplayList(stage, context);
+        /**
+         * @private
+         */
         private screenDisplayList;
         /**
+         * @private
          * 入口类的完整类名
          */
         private entryClassName;
         /**
+         * @private
          * 舞台引用
          */
         stage: Stage;
         /**
+         * @private
          * 入口类实例
          */
         private root;
+        /**
+         * @private
+         */
         private isPlaying;
         /**
+         * @private
          * 启动播放器
          */
         start(): void;
+        /**
+         * @private
+         *
+         */
         private initialize();
         /**
+         * @private
          * 停止播放器，停止后将不能重新启动。
          */
         stop(): void;
         /**
+         * @private
          * 暂停播放器，后续可以通过调用start()重新启动播放器。
          */
         pause(): void;
         /**
+         * @private
          * 更新舞台尺寸
          * @param stageWidth 舞台宽度（以像素为单位）
          * @param stageHeight 舞台高度（以像素为单位）
          */
         updateStageSize(stageWidth: number, stageHeight: number): void;
         /**
+         * @private
          * 显示FPS，仅在DEBUG模式下有效。
          */
         displayFPS: (showFPS: boolean, showLog: boolean, logFilter: string) => void;
+        /**
+         * @private
+         */
         private showFPS;
+        /**
+         * @private
+         */
         private showLog;
+        /**
+         * @private
+         */
         private fpsDisplay;
         /**
+         * @private
          * 是否显示脏矩形重绘区，仅在DEBUG模式下有效。
          */
         showPaintRect: (value: boolean) => void;
+        /**
+         * @private
+         */
         private drawDirtyRect;
+        /**
+         * @private
+         */
         private _showPaintRect;
+        /**
+         * @private
+         */
         private stageDisplayList;
+        /**
+         * @private
+         */
         private paintList;
+        /**
+         * @private
+         */
         private drawPaintRect;
     }
+    /**
+     * @private
+     */
     var $logToFPS: (info: string) => void;
 }
 declare module lark {

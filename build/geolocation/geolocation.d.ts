@@ -22,7 +22,7 @@ declare module lark {
      * @version Lark 1.0
      * @platform Web,Native
      */
-    interface Geolocation extends EventEmitter {
+    interface Geolocation extends IEventEmitter {
         /**
          * @language en_US
          * Start to monitor the device's location
