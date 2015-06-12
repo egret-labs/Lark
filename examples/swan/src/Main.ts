@@ -33,6 +33,13 @@ class Main extends swan.Group {
         label.text = "选择一个主题";
         this.addChild(label);
 
+        var bg:swan.Image = new swan.Image();
+        bg.source = "resource/assets/blackBg.png";
+        bg.percentHeight = 100;
+        bg.percentWidth = 100;
+        bg.fillMode = "repeat";
+        this.addChild(bg);
+
         var themeGroup:swan.Group = new swan.Group();
         themeGroup.horizontalCenter = 0;
         themeGroup.verticalCenter = 0;
@@ -53,6 +60,7 @@ class Main extends swan.Group {
         image2.height = 40;
         image2.source = "resource/assets/green/Panel/header.png";
         themeGroup.addChild(image2);
+
     }
 
     private themeName:string;
