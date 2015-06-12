@@ -7,8 +7,7 @@ var BuildCommand = (function () {
     }
     BuildCommand.prototype.execute = function () {
         var options = lark.options;
-        if (FileUtil.exists(options.srcDir) == false ||
-            FileUtil.exists(options.templateDir) == false) {
+        if (FileUtil.exists(options.srcDir) == false || FileUtil.exists(options.templateDir) == false) {
             utils.exit(10015, options.projectDir);
         }
         service.execCommand({ path: lark.options.projectDir, command: "build" }, gotCommandResult, true);

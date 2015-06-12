@@ -124,7 +124,10 @@ class CompileLark {
             var singleFile = dts.replace(/\.d\.ts/, 'd.js');
             FileUtil.copy(dts, tempDtsName);
             var tss = depends.concat(tempDtsName);
-            this.compiler.compile({args:lark.options,def:true,out:singleFile,files:tss,outDir:null});
+            var result = this.compiler.compile({ args: lark.options, def: true, out: singleFile, files: tss, outDir: null });
+            if (result.messages && result.messages.length) {
+                result.messages.forEach(m=> console.log(m));
+            }
             FileUtil.remove(singleFile);
             FileUtil.remove(tempDtsName);
             tempDts.push(tempDtsName.replace(/\.ts$/,'.d.ts'));
@@ -157,7 +160,9 @@ function testConfig(value, array: Array<any>) {
 }
 
 function listModuleFiles(m: lark.LarkModule) {
-    var tsFiles = FileUtil.search(FileUtil.joinPath(lark.options.larkRoot, m.root), "ts");
+    var tsFiles = [];
+    if(m.noOtherTs!==true)
+        tsFiles = FileUtil.search(FileUtil.joinPath(lark.options.larkRoot, m.root), "ts");
     var specFiles = {};
     m.files.forEach(f=> {
         var fileName = typeof (f) == 'string' ? <string>f : (<lark.LarkSourceFile>f).path;

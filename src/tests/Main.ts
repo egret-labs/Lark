@@ -28,8 +28,32 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark {
+    /**
+     * @language en_US
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
     export class Main extends Sprite {
 
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         public constructor() {
             super();
             var loader = new ImageLoader();
@@ -37,10 +61,21 @@ module lark {
             loader.load("image/test.png");
         }
 
+        /**
+         * @private
+         */
         private targetIcon:DisplayObject;
 
+        /**
+         * @private
+         */
         private iconList:DisplayObject[] = [];
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private start(event:Event):void {
             var loader:ImageLoader = event.target;
             var bitmapData = loader.data;
@@ -102,13 +137,33 @@ module lark {
 
         }
 
+        /**
+         * @private
+         */
         private container:DisplayObjectContainer;
+        /**
+         * @private
+         */
         private timer = new Timer(16);
+        /**
+         * @private
+         */
         private touchTarget:DisplayObject;
+        /**
+         * @private
+         */
         private offsetX:number = 0;
+        /**
+         * @private
+         */
         private offsetY:number = 0;
 
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private onTouchBegin(event:TouchEvent):void {
             var target = <DisplayObject>event.target;
             if (target === this.stage) {
@@ -130,8 +185,16 @@ module lark {
             event.updateAfterEvent();
         }
 
+        /**
+         * @private
+         */
         private rect = new Rectangle(300, 300, 500, 500);
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private onTouchMove(event:TouchEvent):void {
             this.touchTarget.x = this.offsetX + event.stageX;
             this.touchTarget.y = this.offsetY + event.stageY;
@@ -143,6 +206,11 @@ module lark {
             event.updateAfterEvent();
         }
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private onTouchEnd(event:TouchEvent):void {
             this.targetIcon = this.touchTarget;
             if (this.iconList.indexOf(this.touchTarget) == -1) {
@@ -155,6 +223,11 @@ module lark {
             this.timer.start();
         }
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private onTick(event:TimerEvent):void {
             this.targetIcon.$invalidate();
             //this.targetIcon.rotation += 2;

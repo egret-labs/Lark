@@ -150,7 +150,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public length():number{
+        public get length():number{
             return Math.sqrt(this.x*this.x+this.y*this.y);
         }
         /**

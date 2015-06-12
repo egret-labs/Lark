@@ -29,12 +29,50 @@
 
 module lark {
 
+    /**
+     * @language en_US
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
     export class GUI extends swan.Group {
 
+        /**
+         * @language en_US
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         public constructor() {
             super();
         }
 
+        /**
+         * @language en_US
+         * 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
         protected createChildren():void {
             super.createChildren();
 
@@ -58,6 +96,11 @@ module lark {
             this.addChild(component);
         }
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private onLoaded(event:Event):void{
             var component = event.currentTarget;
             var list = component["list"];
@@ -65,10 +108,24 @@ module lark {
             list.addChild(button);
         }
 
+        /**
+         * @private
+         */
         private touchTarget:swan.UIComponent;
+        /**
+         * @private
+         */
         private offsetX:number = 0;
+        /**
+         * @private
+         */
         private offsetY:number = 0;
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private onTouchBegin(event:TouchEvent):void {
             var target = <swan.UIComponent>event.target;
             this.touchTarget = target;
@@ -86,12 +143,22 @@ module lark {
             //event.updateAfterEvent();
         }
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private onTouchMove(event:TouchEvent):void {
             this.touchTarget.x = this.offsetX + event.stageX;
             this.touchTarget.y = this.offsetY + event.stageY;
             event.updateAfterEvent();
         }
 
+        /**
+         * @private
+         * 
+         * @param event 
+         */
         private onTouchEnd(event:TouchEvent):void {
             this.touchTarget = null;
             this.stage.removeListener(TouchEvent.TOUCH_MOVE, this.onTouchMove, this);

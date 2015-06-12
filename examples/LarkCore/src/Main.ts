@@ -25,6 +25,8 @@
         var bitmap = new lark.Bitmap(bitmapData);
         bitmap.x = 30;
         bitmap.y = 10;
+        bitmap.width = 128;
+        bitmap.height = 128;
         this.addChild(bitmap);
         this.larkIcon = bitmap;
 

@@ -1,53 +1,104 @@
 ﻿{
-    "version": "0.5.0",
+    "version": "1.0.0",
     "modules": [
         {
             "name": "lark",
-            "description": "Lark Framework Core",
+            "description": "Lark 核心库",
             "files": [
-                { "path":"../Defines.debug.ts", "debug":true },
-                { "path":"../Defines.release.ts", "debug":false },
-                { "path":"i18n/en_US.ts","debug":true },
-                { "path":"i18n/zh_CN.ts","debug":true },
-                { "path":"web/CanvasFactory.ts", "platform":"web" },
-                { "path":"web/LarkWeb.ts","platform":"web"  },
-                { "path":"web/WebBitmapData.ts","platform":"web"  },
-                { "path":"web/WebCapability.ts","platform":"web"  },
-                { "path":"web/WebHttpRequest.ts","platform":"web"  },
-                { "path":"web/WebImageLoader.ts","platform":"web"  },
-                { "path":"web/WebScreen.ts","platform":"web"  },
-                { "path":"web/WebTextAdapter.ts","platform":"web"  },
-                { "path":"web/WebTouchHandler.ts","platform":"web"  },
-                { "path":"web/WebXML.ts", "platform": "web" }
+                { "path": "../Defines.debug.ts", "debug": true },
+                { "path": "../Defines.release.ts", "debug": false },
+                { "path": "i18n/en_US.ts", "debug": true },
+                { "path": "i18n/zh_CN.ts", "debug": true },
+                { "path": "web/CanvasFactory.ts", "platform": "web" },
+                { "path": "web/LarkWeb.ts", "platform": "web" },
+                { "path": "web/WebBitmapData.ts", "platform": "web" },
+                { "path": "web/WebCapability.ts", "platform": "web" },
+                { "path": "web/WebHttpRequest.ts", "platform": "web" },
+                { "path": "web/WebImageLoader.ts", "platform": "web" },
+                { "path": "web/WebScreen.ts", "platform": "web" },
+                { "path": "web/WebTextAdapter.ts", "platform": "web" },
+                { "path": "web/WebTouchHandler.ts", "platform": "web" },
+                { "path": "web/WebXML.ts", "platform": "web" }
             ],
-            "root":"src/lark",
-            "dependencies": []
-        },{
-            "name":"swan",
-            "description":"GUI Library for Lark",
-            "files":[
-                { "path":"i18n/en_US.ts","debug":true },
-                { "path":"i18n/zh_CN.ts","debug":true }
-            ],
-            "root":"src/extension/swan",
-            "dependencies": ["lark"]
-        }
-    ],
-    "platforms":[
-        {
-            "name":"any",
-            "declaration":true,
-            "hidden":true
+            "root": "src/lark",
+            "dependencies": [ ]
         },
         {
-            "name":"web",
-            "description":"Web"
+            "name": "swan",
+            "description": "Lark GUI 图形界面",
+            "files": [
+                { "path": "i18n/en_US.ts", "debug": true },
+                { "path": "i18n/zh_CN.ts", "debug": true }
+            ],
+            "root": "src/extension/swan",
+            "dependencies": [ "lark" ]
+        },
+        {
+            "name": "sound",
+            "description": "Sound 音频支持",
+            "files": [
+                { "path": "i18n/en_US.ts", "debug": true },
+                { "path": "i18n/zh_CN.ts", "debug": true },
+                { "path": "Sound.ts" },
+                { "path": "SoundChannel.ts" },
+                { "path": "web/HtmlSound.ts", "platform": "web" },
+                { "path": "web/HtmlSoundChannel.ts", "platform": "web" }
+            ],
+            "root": "src/extension/media",
+            "noOtherTs": true,
+            "dependencies": [ "lark" ]
+        },
+        {
+            "name": "geolocation",
+            "description": "Geolocation 定位服务",
+            "files": [
+                { "path": "i18n/en_US.ts", "debug": true },
+                { "path": "i18n/zh_CN.ts", "debug": true },
+                { "path": "Geolocation.ts" },
+                { "path": "web/WebGeolocation.ts", "platform": "web" }
+            ],
+            "root": "src/extension/sensor",
+            "noOtherTs": true,
+            "dependencies": [ "lark" ]
+        },
+        {
+            "name": "motion",
+            "description": "Motion 运动传感器",
+            "files": [
+                { "path": "Motion.ts" },
+                { "path": "web/WebMotion.ts", "platform": "web" }
+            ],
+            "root": "src/extension/sensor",
+            "noOtherTs": true,
+            "dependencies": [ "lark" ]
+        },
+        {
+            "name": "orientation",
+            "description": "Orientation 方向传感器",
+            "files": [
+                { "path": "Orientation.ts" },
+                { "path": "web/WebOrientation.ts", "platform": "web" }
+            ],
+            "root": "src/extension/sensor",
+            "noOtherTs": true,
+            "dependencies": [ "lark" ]
         }
     ],
-    "templates":[
+    "platforms": [
         {
-            "name":"Empty",
-            "description":"空项目"
+            "name": "any",
+            "declaration": true,
+            "hidden": true
+        },
+        {
+            "name": "web",
+            "description": "Web"
+        }
+    ],
+    "templates": [
+        {
+            "name": "Empty",
+            "description": "空项目"
         }
     ],
     "scaleModes":[
