@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Hello World</title>
+    <script src="libs/lark/lark.js"></script>
+    <script src="libs/lark/lark.web.js"></script>
+    <script src="libs/swan/swan.js"></script>
+</head>
+<body>
+<div class="lark-player" data-entry-class="Main" style="height:400px"></div>
+
+<script id="exml" type="text/xml">
+    <s:Group class="Main" xmlns:s="http://ns.egret.com/swan">
+        <s:Label text="Hello World" fontSize="64" fontFamily="Helvetica, Arial" left="150"/>
+    </s:Group>
+</script>
+
+<script>
+    var exml = document.getElementById('exml').textContent;
+    new swan.sys.EXMLParser().parse(exml); 
+</script>
+
+</body>
+</html>

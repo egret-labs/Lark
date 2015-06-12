@@ -46,6 +46,8 @@ locale_strings[10012] = 'If you are not using auto compile on file save, you can
 locale_strings[10013] = "lark server is running, you can access by URL: {0}";
 locale_strings[10014] = "Error occurred while compiling your code：";
 locale_strings[10015] = "\"{0}\" is not a valid Lark project folder";
+locale_strings[10016] = "Please visit {0} if no browser open it automatically";
+locale_strings[10017] = "Lark project is created, you can execute \"lark run\" to run the project";
 
 
 locale_strings[12000] = "Create Lark Project";

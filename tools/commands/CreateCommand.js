@@ -1,4 +1,5 @@
 /// <reference path="../lib/types.d.ts" />
+var utils = require('../lib/utils');
 var server = require('../server/server');
 var FileUtil = require('../lib/FileUtil');
 var CreateCommand = (function () {
@@ -12,6 +13,7 @@ var CreateCommand = (function () {
         if (exist)
             url += "?exist=true";
         server.startServer(option, url);
+        console.log(utils.tr(10016, url));
         return 0;
     };
     return CreateCommand;
