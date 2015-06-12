@@ -28,25 +28,63 @@
 //////////////////////////////////////////////////////////////////////////////////////
 module lark {
 
-	/**
-	 * 垂直对齐方式
-	 */
-	export class VerticalAlign{
+    /**
+     * @language en_US
+     * The VerticalAlign class defines the possible values for the vertical alignment.
+     * @see lark.TextField#verticalAlign
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * VerticalAlign 类为垂直对齐方式定义可能的值。
+     * @see lark.TextField#verticalAlign
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    export class VerticalAlign{
 
         /**
-         * 顶对齐
+         * @language en_US
+         * Vertically align content to the top of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将内容与容器的顶部对齐。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public static TOP:string = "top";
 
         /**
-         * 底对齐
+         * @language en_US
+         * Vertically align content to the bottom of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将内容与容器的底部对齐。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public static BOTTOM:string = "bottom";
 
         /**
-         * 垂直居中对齐
+         * @language en_US
+         * Vertically align content in the middle of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在容器的垂直中心对齐内容。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public static MIDDLE:string = "middle";
 
-	}
+    }
 }
