@@ -280,7 +280,7 @@ module lark {
                 }
             }
             var displayList = this.$displayList || this.$parentDisplayList;
-            this.assignParentDisplayList(child, displayList, displayList);
+            this.assignParentDisplayList(child, displayList, null);
             child.$propagateFlagsDown(sys.DisplayObjectFlags.DownOnAddedOrRemoved);
             child.$setParent(null);
             children.splice(index, 1);
@@ -566,7 +566,7 @@ module lark {
             if ((child.$renderRegion || displayList) && parentCache) {
                 parentCache.markDirty(displayList || child);
             }
-            if (child.$displayList) {
+            if (displayList) {
                 return;
             }
             var children = child.$children;
