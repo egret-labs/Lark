@@ -86,6 +86,28 @@ NPM 是 Node.js 的包管理工具，默认配置下会随 Node.js 一起安装�
 
 ##路线图
 
+###Lark 1.0
+Lark 核心显示列表
+<br/>Lark GUI类库
 
-##Next:
-更加详细的 Lark 使用方法请参考: https://github.com/egret-labs/Lark
+###Lark 1.5
+Lark 硬件访问能力
+<br/>Lark App 打包方案
+<br/>Wing 可视化编辑支持
+
+###Lark 2.0
+Lark 动画库
+<br/>Lark GUI 矢量库
+
+
+##工作机会
+我们正在等待你的加入，共同开发 Lark， 提供更加高效的跨平台开发方案。<br/>
+如果你
+* 有 ActionScript 或 JavaScript 富客户端开发经验
+* 有 Android 或 iOS 原生应用开发经验
+* 没有以上经验，但学习能力超强
+
+欢迎联系我们。<br/>
+
+公司地址：**北京市朝阳区望京阜荣街悠乐汇商业C座321室**<br/>
+邮件地址：**HR@egret.com**

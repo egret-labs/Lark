@@ -10,7 +10,7 @@ import service = require('../service/index');
 class HelpCommand implements lark.Command {
 
     execute(): number {
-        server.startServer(lark.options, lark.options.manageUrl + "help/");
+        utils.open("https://github.com/egret-labs/Lark/blob/master/docs/cmd-tools.md");
         return 0;
     }
 }

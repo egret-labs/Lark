@@ -1,10 +1,11 @@
 /// <reference path="../lib/types.d.ts" />
 var server = require('../server/server');
+var utils = require('../lib/utils');
 var HelpCommand = (function () {
     function HelpCommand() {
     }
     HelpCommand.prototype.execute = function () {
-        server.startServer(lark.options, lark.options.manageUrl + "help/");
+        utils.open("https://github.com/egret-labs/Lark/blob/master/docs/cmd-tools.md");
         return 0;
     };
     return HelpCommand;
