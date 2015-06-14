@@ -41,6 +41,7 @@ var lark;
         var winURL = window["URL"] || window["webkitURL"];
         var useXHR = winURL && lark.Capabilities.os == "iOS";
         /**
+         * @private
          * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
          */
         var WebImageLoader = (function (_super) {
@@ -49,16 +50,27 @@ var lark;
                 var _this = this;
                 _super.apply(this, arguments);
                 /**
+                 * @private
                  * 使用 load() 方法加载成功的 BitmapData 图像数据。
                  */
                 this.data = null;
                 /**
+                 * @private
                  * 当从其他站点加载一个图片时，指定是否启用跨域资源共享(CORS)，默认值为null。
                  * 可以设置为"anonymous","use-credentials"或null,设置为其他值将等同于"anonymous"。
                  */
                 this.crossOrigin = null;
+                /**
+                 * @private
+                 */
                 this.currentImage = null;
+                /**
+                 * @private
+                 */
                 this.request = null;
+                /**
+                 * @private
+                 */
                 this.onImageComplete = function (event) {
                     var image = _this.getImage(event);
                     if (!image) {
@@ -67,6 +79,9 @@ var lark;
                     _this.data = web.toBitmapData(image);
                     _this.emitWith(lark.Event.COMPLETE);
                 };
+                /**
+                 * @private
+                 */
                 this.onLoadError = function (event) {
                     var image = _this.getImage(event);
                     if (!image) {
@@ -80,6 +95,7 @@ var lark;
             }
             var d = __define,c=WebImageLoader;p=c.prototype;
             /**
+             * @private
              * 启动一次图像加载。注意：若之前已经调用过加载请求，重新调用 load() 将终止先前的请求，并开始新的加载。
              * @param url 要加载的图像文件的地址。
              */
@@ -102,16 +118,25 @@ var lark;
                     this.loadImage(url);
                 }
             };
+            /**
+             * @private
+             */
             p.onBlobLoaded = function (event) {
                 var blob = this.request.response;
                 this.loadImage(winURL.createObjectURL(blob));
             };
+            /**
+             * @private
+             */
             p.onBlobError = function (event) {
                 if (DEBUG && !this.hasListener(lark.Event.IO_ERROR)) {
                     lark.$error(1011, this.currentURL);
                 }
                 this.emitWith(lark.Event.IO_ERROR);
             };
+            /**
+             * @private
+             */
             p.loadImage = function (src) {
                 var image = new Image();
                 this.data = null;
@@ -123,6 +148,9 @@ var lark;
                 image.onerror = this.onLoadError;
                 image.src = src;
             };
+            /**
+             * @private
+             */
             p.getImage = function (event) {
                 var image = event.target;
                 if (useXHR) {
@@ -175,12 +203,24 @@ var lark;
 (function (lark) {
     var web;
     (function (web) {
+        /**
+         * @private
+         */
         var WebHttpRequest = (function (_super) {
             __extends(WebHttpRequest, _super);
+            /**
+             * @private
+             */
             function WebHttpRequest() {
                 var _this = this;
                 _super.call(this);
+                /**
+                 * @private
+                 */
                 this._url = "";
+                /**
+                 * @private
+                 */
                 this.onReadyStateChange = function () {
                     var xhr = _this._xhr;
                     if (xhr.readyState == 4) {
@@ -195,6 +235,9 @@ var lark;
                         }
                     }
                 };
+                /**
+                 * @private
+                 */
                 this.updateProgress = function (event) {
                     if (event.lengthComputable) {
                         lark.ProgressEvent.emitProgressEvent(_this, lark.ProgressEvent.PROGRESS, event.loaded, event.total);
@@ -207,6 +250,7 @@ var lark;
             var d = __define,c=WebHttpRequest;p=c.prototype;
             d(p, "response",
                 /**
+                 * @private
                  * 本次请求返回的数据，数据类型根据responseType设置的值确定。
                  */
                 function () {
@@ -215,6 +259,7 @@ var lark;
             );
             d(p, "responseType",
                 /**
+                 * @private
                  * 设置返回的数据格式，请使用 HttpResponseType 里定义的枚举值。设置非法的值或不设置，都将使用HttpResponseType.TEXT。
                  */
                 function () {
@@ -226,6 +271,7 @@ var lark;
             );
             d(p, "withCredentials",
                 /**
+                 * @private
                  * 表明在进行跨站(cross-site)的访问控制(Access-Control)请求时，是否使用认证信息(例如cookie或授权的header)。 默认为 false。(这个标志不会影响同站的请求)
                  */
                 function () {
@@ -236,6 +282,7 @@ var lark;
                 }
             );
             /**
+             * @private
              * 初始化一个请求.注意，若在已经发出请求的对象上调用此方法，相当于立即调用abort().
              * @param url 该请求所要访问的URL该请求所要访问的URL
              * @param method 请求所使用的HTTP方法， 请使用 HttpMethod 定义的枚举值.
@@ -246,6 +293,7 @@ var lark;
                 this._xhr.open(method, url, true);
             };
             /**
+             * @private
              * 发送请求.
              * @param data 需要发送的数据
              */
@@ -253,12 +301,14 @@ var lark;
                 this._xhr.send(data);
             };
             /**
+             * @private
              * 如果请求已经被发送,则立刻中止请求.
              */
             p.abort = function () {
                 this._xhr.abort();
             };
             /**
+             * @private
              * 返回所有响应头信息(响应头名和值), 如果响应头还没接受,则返回"".
              */
             p.getAllResponseHeaders = function () {
@@ -266,6 +316,7 @@ var lark;
                 return result ? result : "";
             };
             /**
+             * @private
              * 给指定的HTTP请求头赋值.在这之前,您必须确认已经调用 open() 方法打开了一个url.
              * @param header 将要被赋值的请求头名称.
              * @param value 给指定的请求头赋的值.
@@ -274,6 +325,7 @@ var lark;
                 this._xhr.setRequestHeader(header, value);
             };
             /**
+             * @private
              * 返回指定的响应头的值, 如果响应头还没被接受,或该响应头不存在,则返回"".
              * @param header 要返回的响应头名称
              */
@@ -323,11 +375,15 @@ var lark;
 (function (lark) {
     var web;
     (function (web) {
+        /**
+         * @private
+         */
         var WebCapability = (function () {
             function WebCapability() {
             }
             var d = __define,c=WebCapability;p=c.prototype;
             /**
+             * @private
              * 检测系统属性
              */
             WebCapability.detect = function () {
@@ -364,6 +420,10 @@ var lark;
                 }
                 capabilities.$language = strings.join("-");
             };
+            /**
+             * @private
+             *
+             */
             WebCapability.checkHtml5Support = function () {
                 var webaudio = ('webkitAudioContext' in window) || ('AudioContext' in window);
                 var geolocation = 'geolocation' in navigator;
@@ -417,6 +477,7 @@ var lark;
         lark.registerClass(HTMLCanvasElement, 7 /* BitmapData */);
         lark.registerClass(HTMLVideoElement, 7 /* BitmapData */);
         /**
+         * @private
          * 转换 Image，Canvas，Video 为 Lark 框架内使用的 BitmapData 对象。
          */
         function toBitmapData(data) {
@@ -459,9 +520,13 @@ var lark;
     var web;
     (function (web) {
         /**
+         * @private
          * XML节点基类
          */
         var XMLNode = (function () {
+            /**
+             * @private
+             */
             function XMLNode(nodeType, parent) {
                 this.nodeType = nodeType;
                 this.parent = parent;
@@ -471,17 +536,23 @@ var lark;
         })();
         web.XMLNode = XMLNode;
         /**
+         * @private
          * XML节点对象
          */
         var XML = (function (_super) {
             __extends(XML, _super);
+            /**
+             * @private
+             */
             function XML(localName, parent, prefix, namespace, name) {
                 _super.call(this, 1, parent);
                 /**
+                 * @private
                  * 当前节点上的属性列表
                  */
                 this.attributes = {};
                 /**
+                 * @private
                  * 当前节点的子节点列表
                  */
                 this.children = [];
@@ -495,10 +566,14 @@ var lark;
         })(XMLNode);
         web.XML = XML;
         /**
+         * @private
          * XML文本节点
          */
         var XMLText = (function (_super) {
             __extends(XMLText, _super);
+            /**
+             * @private
+             */
             function XMLText(text, parent) {
                 _super.call(this, 3, parent);
                 this.text = text;
@@ -509,6 +584,7 @@ var lark;
         web.XMLText = XMLText;
         var parser = new DOMParser();
         /**
+         * @private
          * 解析字符串为XML对象
          * @param text 要解析的字符串
          */
@@ -524,6 +600,7 @@ var lark;
             return null;
         }
         /**
+         * @private
          * 解析一个节点
          */
         function parseNode(node, parent) {
@@ -601,7 +678,13 @@ var lark;
     (function (web) {
         var surfacePool = [];
         var isQQBrowser = navigator.userAgent.indexOf("QQBrowser") != -1;
+        /**
+         * @private
+         */
         var CanvasFactory = (function () {
+            /**
+             * @private
+             */
             function CanvasFactory() {
                 lark.sys.sharedRenderContext = this.create().renderContext;
                 for (var i = 0; i < 3; i++) {
@@ -610,6 +693,7 @@ var lark;
             }
             var d = __define,c=CanvasFactory;p=c.prototype;
             /**
+             * @private
              * 从对象池取出或创建一个新的Surface实例
              * @param useOnce 表示对取出实例的使用是一次性的，用完后立即会释放。
              */
@@ -626,6 +710,7 @@ var lark;
                 return surface;
             };
             /**
+             * @private
              * 释放一个Surface实例
              * @param surface 要释放的Surface实例
              */
@@ -637,6 +722,7 @@ var lark;
                 surfacePool.push(surface);
             };
             /**
+             * @private
              * 检测创建的canvas是否有效，QQ浏览器对硬件内存小等于1G的手机，限制Canvas创建的数量为19个。
              * 针对这个限制,同时满足以下两个条件就不会对显示造成任何影响：
              * 1.不要嵌套使用BlendMode，即使用了混合模式的容器内部不要再设置另一个子项的混合模式。
@@ -652,6 +738,9 @@ var lark;
                     return false;
                 return true;
             };
+            /**
+             * @private
+             */
             p.createSurface = function (canvas) {
                 var context = canvas.getContext("2d");
                 canvas["renderContext"] = context;
@@ -721,11 +810,13 @@ var lark;
     var web;
     (function (web) {
         /**
+         * @private
          * Canvas屏幕适配器
          */
         var WebScreen = (function (_super) {
             __extends(WebScreen, _super);
             /**
+             * @private
              * 创建一个WebScreen实例
              * @param container 播放器外层容器
              * @param scaleMode 舞台缩放模式
@@ -743,6 +834,7 @@ var lark;
             }
             var d = __define,c=WebScreen;p=c.prototype;
             /**
+             * @private
              * 添加canvas到container。
              */
             p.attachCanvas = function (container, canvas) {
@@ -760,6 +852,7 @@ var lark;
                 style.position = "relative";
             };
             /**
+             * @private
              * 更新播放器视口尺寸
              */
             p.updateScreenSize = function (player, webTouch, webText) {
@@ -822,24 +915,45 @@ var lark;
 (function (lark) {
     var web;
     (function (web) {
+        /**
+         * @private
+         */
         var WebTouchHandler = (function (_super) {
             __extends(WebTouchHandler, _super);
+            /**
+             * @private
+             */
             function WebTouchHandler(touch, canvas) {
                 var _this = this;
                 _super.call(this);
+                /**
+                 * @private
+                 */
                 this.onTouchBegin = function (event) {
                     var location = _this.getLocation(event);
                     _this.touch.onTouchBegin(location.x, location.y, event.identifier);
                 };
+                /**
+                 * @private
+                 */
                 this.onTouchMove = function (event) {
                     var location = _this.getLocation(event);
                     _this.touch.onTouchMove(location.x, location.y, event.identifier);
                 };
+                /**
+                 * @private
+                 */
                 this.onTouchEnd = function (event) {
                     var location = _this.getLocation(event);
                     _this.touch.onTouchEnd(location.x, location.y, event.identifier);
                 };
+                /**
+                 * @private
+                 */
                 this.scaleX = 1;
+                /**
+                 * @private
+                 */
                 this.scaleY = 1;
                 this.canvas = canvas;
                 this.touch = touch;
@@ -847,6 +961,7 @@ var lark;
             }
             var d = __define,c=WebTouchHandler;p=c.prototype;
             /**
+             * @private
              * 添加事件监听
              */
             p.addListeners = function () {
@@ -872,11 +987,19 @@ var lark;
                     this.addTouchListener();
                 }
             };
+            /**
+             * @private
+             *
+             */
             p.addMouseListener = function () {
                 this.canvas.addEventListener("mousedown", this.onTouchBegin);
                 this.canvas.addEventListener("mousemove", this.onTouchMove);
                 window.addEventListener("mouseup", this.onTouchEnd);
             };
+            /**
+             * @private
+             *
+             */
             p.addTouchListener = function () {
                 var _this = this;
                 this.canvas.addEventListener("touchstart", function (event) {
@@ -908,12 +1031,18 @@ var lark;
                     _this.prevent(event);
                 }, false);
             };
+            /**
+             * @private
+             */
             p.prevent = function (event) {
                 event.stopPropagation();
                 if (event["isScroll"] != true && !this.canvas['userTyping']) {
                     event.preventDefault();
                 }
             };
+            /**
+             * @private
+             */
             p.getLocation = function (event) {
                 event.identifier = +event.identifier || 0;
                 var doc = document.documentElement;
@@ -925,6 +1054,7 @@ var lark;
                 return lark.$TempPoint.setTo(Math.round(x), Math.round(y));
             };
             /**
+             * @private
              * 更新屏幕当前的缩放比例，用于计算准确的点击位置。
              * @param scaleX 水平方向的缩放比例。
              * @param scaleY 垂直方向的缩放比例。
@@ -972,23 +1102,60 @@ var lark;
     (function (web) {
         var tempPoint = new lark.Point();
         /**
+         * @private
          * Web 环境下的输入文本
          */
         var WebTextAdapter = (function (_super) {
             __extends(WebTextAdapter, _super);
+            /**
+             * @private
+             */
             function WebTextAdapter(container, stage, canvas) {
                 var _this = this;
                 _super.call(this);
+                /**
+                 * @private
+                 */
                 this.scaleX = 1;
+                /**
+                 * @private
+                 */
                 this.scaleY = 1;
+                /**
+                 * @private
+                 */
                 this.offsetX = 1;
+                /**
+                 * @private
+                 */
                 this.offsetY = 1;
+                /**
+                 * @private
+                 */
                 this.pendingToShowHtmlInput = false;
+                /**
+                 * @private
+                 */
                 this.currentTextInput = null;
+                /**
+                 * @private
+                 */
                 this.singleLineTextInput = null;
+                /**
+                 * @private
+                 */
                 this.multiLineTextInput = null;
-                this.lastSelectStart = 0;
-                this.lastSelectEnd = 0;
+                /**
+                 * @private
+                 */
+                this.lastSelectAnchor = 0;
+                /**
+                 * @private
+                 */
+                this.lastSelectActive = 0;
+                /**
+                 * @private
+                 */
                 this.handleContainerClick = function (e) {
                     if (_this.pendingToShowHtmlInput) {
                         _this.pendingToShowHtmlInput = false;
@@ -1001,7 +1168,7 @@ var lark;
                         currentHtmlInput.onclick = _this.getInputSelection;
                         currentHtmlInput.onselect = _this.getInputSelection;
                         currentHtmlInput.onkeydown = _this.getInputSelection;
-                        _this.$setSelection(_this.currentTextInput.selectionBeginIndex, _this.currentTextInput.selectionEndIndex);
+                        _this.$selectRange(_this.currentTextInput.selectionActivePosition, _this.currentTextInput.selectionAnchorPosition);
                         _this.getInputSelection();
                         _this.currentTextInput.$startInput();
                     }
@@ -1009,20 +1176,31 @@ var lark;
                         _this.$removeCurrentTextInput();
                     }
                 };
+                /**
+                 * @private
+                 */
                 this.handleHtmlInputInputEvent = function (e) {
                     _this.currentTextInput.$setUserInputText(_this.currentHtmlInput.value);
                     _this.getInputSelection();
                 };
+                /**
+                 * @private
+                 */
                 this.handleHtmlInputBlur = function (e) {
                     var htmlInput = _this.currentHtmlInput;
                     var textInput = _this.currentTextInput;
                     _this.$removeCurrentTextInput();
-                    textInput.setSelection(_this.lastSelectStart, _this.lastSelectEnd);
+                    textInput.selectRange(_this.lastSelectAnchor, _this.lastSelectActive);
                 };
+                /**
+                 * @private
+                 */
                 this.getInputSelection = function () {
-                    _this.lastSelectEnd = _this.currentHtmlInput.selectionEnd;
-                    _this.lastSelectStart = _this.currentHtmlInput.selectionStart;
-                    lark.log(_this.lastSelectStart, _this.lastSelectEnd);
+                    var end = _this.currentHtmlInput.selectionEnd;
+                    var start = _this.currentHtmlInput.selectionStart;
+                    var direction = _this.currentHtmlInput.selectionDirection || "forward";
+                    _this.lastSelectAnchor = direction == 'forward' ? start : end;
+                    _this.lastSelectActive = direction == 'forward' ? end : start;
                 };
                 this.$stage = stage;
                 this.canvas = canvas;
@@ -1032,6 +1210,7 @@ var lark;
             }
             var d = __define,c=WebTextAdapter;p=c.prototype;
             /**
+             * @private
              * 当用户点击TextInput时，将它设置为正在输入的TextInput对象，HTML text input 会显示出来并获得焦点
              * @param currentTextInput 要输入的TextInput对象
              */
@@ -1048,6 +1227,7 @@ var lark;
                 this.canvas['userTyping'] = true;
             };
             /**
+             * @private
              * 清空正在输入的TextInput，隐藏HTML text input。
              */
             p.$removeCurrentTextInput = function () {
@@ -1069,6 +1249,7 @@ var lark;
                 this.canvas['userTyping'] = false;
             };
             /**
+             * @private
              * 更新屏幕当前的缩放比例，用于计算准确的点击位置。
              * @param scaleX 水平方向的缩放比例。
              * @param scaleY 垂直方向的缩放比例。
@@ -1081,6 +1262,10 @@ var lark;
                 this.offsetX = offsetX;
                 this.offsetY = offsetY;
             };
+            /**
+             * @private
+             *
+             */
             p.createHtmlInputs = function () {
                 var div = document.createElement("div");
                 this.textContainer = div;
@@ -1099,6 +1284,9 @@ var lark;
                 this.multiLineTextInput = multiLineHtmlInput;
                 this.canvas.addEventListener("click", this.handleContainerClick);
             };
+            /**
+             * @private
+             */
             p.resetHtmlElementStyle = function (element) {
                 element.style.position = "absolute";
                 element.style.left = "0px";
@@ -1107,6 +1295,9 @@ var lark;
                 element.style.padding = "2px 0";
                 element.style[getPrefixStyleName("transformOrigin")] = "0% 0% 0px";
             };
+            /**
+             * @private
+             */
             p.resetHtmlInputStyle = function (element) {
                 element.setAttribute("tabindex", "-1");
                 element.style.width = "1px";
@@ -1118,6 +1309,9 @@ var lark;
                 element.style.opacity = '0';
                 this.resetHtmlElementStyle(element);
             };
+            /**
+             * @private
+             */
             p.resetTextContainerStyle = function () {
                 var style = this.textContainer.style;
                 style.height = "0px";
@@ -1126,6 +1320,7 @@ var lark;
                 this.resetHtmlElementStyle(this.textContainer);
             };
             /**
+             * @private
              * 更新HTML5 text input 的属性值
              */
             p.$initializeInput = function () {
@@ -1182,10 +1377,17 @@ var lark;
                 else if (htmlInput.maxLength >= 0)
                     htmlInput.maxLength = 0x800000;
             };
-            p.$setSelection = function (selectStart, selectEnd) {
-                this.currentHtmlInput.selectionStart = selectStart;
-                this.currentHtmlInput.selectionEnd = selectEnd;
+            /**
+             * @private
+             */
+            p.$selectRange = function (anchorPosition, activePosition) {
+                var start = Math.min(anchorPosition, activePosition);
+                var end = Math.max(anchorPosition, activePosition);
+                this.currentHtmlInput.setSelectionRange(start, end, anchorPosition < activePosition ? "forward" : "backward");
             };
+            /**
+             * @private
+             */
             p.setElementStyle = function (style, value) {
                 if (this.currentHtmlInput) {
                     this.currentHtmlInput.style[style] = value;
@@ -1194,12 +1396,21 @@ var lark;
             return WebTextAdapter;
         })(lark.LarkObject);
         web.WebTextAdapter = WebTextAdapter;
+        /**
+         * @private
+         */
         var $CurrentPrefix = null;
+        /**
+         * @private
+         */
         function getPrefixStyleName(name) {
             if ($CurrentPrefix == null)
                 $CurrentPrefix = getPrefix();
             return $CurrentPrefix + name.charAt(0).toUpperCase() + name.substr(1);
         }
+        /**
+         * @private
+         */
         function getPrefix() {
             var tempStyle = document.createElement('div').style;
             var prefix = "";
@@ -1248,6 +1459,7 @@ var lark;
     (function (web) {
         var containerList = [];
         /**
+         * @private
          * 刷新所有Lark播放器的显示区域尺寸。仅当使用外部JavaScript代码动态修改了Lark容器大小时，需要手动调用此方法刷新显示区域。
          * 当网页尺寸发生改变时此方法会自动被调用。
          */
@@ -1264,6 +1476,7 @@ var lark;
         }
         web.updateScreenSize = updateScreenSize;
         /**
+         * @private
          * 网页加载完成，实例化页面中定义的Larksys标签
          */
         function runLark() {
@@ -1282,6 +1495,7 @@ var lark;
             }
         }
         /**
+         * @private
          * Lark网页版程序入口
          */
         function createPlayer(container) {
@@ -1320,6 +1534,7 @@ var lark;
             player.start();
         }
         /**
+         * @private
          * 启动心跳计时器。
          */
         function startTicker(ticker) {

@@ -1508,16 +1508,16 @@ declare module swan {
      *
      * @example：
      * <code>
-     *      <e:Scroller>
-     *          <e:viewport>
-     *          <e:Group/>
+     *      <s:Scroller>
+     *          <s:viewport>
+     *          <s:Group/>
      *          </e:viewport>
      *      </e:Scroller>
      * <code/>
      * Cuz <code>viewport</code> is the default property of Scroller. So you can write as follow:
      * <code>
-     *      <e:Scroller>
-     *          <e:Group/>
+     *      <s:Scroller>
+     *          <s:Group/>
      *      </e:Scroller>
      * <code/>
      * @version Lark 1.0
@@ -1539,16 +1539,16 @@ declare module swan {
      * @param asDefault 是否将此属性注册为组件的默认属性,一个组件只可以设置一个默认属性。注册了组件默认属性后，在EXML中可以使用省略属性节点的写法，
      * 例如：
      *
-     * <e:Scroller>
-     *     <e:viewport>
-     *         <e:Group/>
+     * <s:Scroller>
+     *     <s:viewport>
+     *         <s:Group/>
      *     </e:viewport>
      * </e:Scroller>
      *
      * 因为 viewport 已经注册为 Scroller 的默认属性，上面的例子可以等效为：
      *
-     * <e:Scroller>
-     *     <e:Group/>
+     * <s:Scroller>
+     *     <s:Group/>
      * </e:Scroller>
      *
      * @version Lark 1.0
@@ -13186,8 +13186,7 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * The enum class for definition of class and interface within Swan.
-     * This class is usually used for checking an type of class through <code>lark.is()</code>
+     * Provides constant enum values for type checking in the module of Swan. It is usually passed as the parameters of the lark.is() method.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native

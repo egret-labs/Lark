@@ -1,8 +1,0 @@
-<s:Skin states="up,over,down,disabled" xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
-    <s:Image source="image/button_up.png" includeIn="up" width="100%" height="100%" scale9Grid="5,5,63,16"/>
-    <s:Image source="image/button_over.png" includeIn="over" width="100%" height="100%" scale9Grid="5,5,63,16"/>
-    <s:Image source="image/button_down.png" includeIn="down" width="100%" height="100%" scale9Grid="5,5,63,16"/>
-    <s:Image source="image/button_disabled.png" includeIn="disabled" width="100%" height="100%" scale9Grid="5,5,63,16"/>
-    <s:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" left="20" right="20" top="10" bottom="10"/>
-    <s:Image id="iconDisplay" horizontalCenter="0" verticalCenter="0"/>
-</s:Skin>

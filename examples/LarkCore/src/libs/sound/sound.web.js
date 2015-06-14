@@ -229,6 +229,8 @@ var lark;
              * @inheritDoc
              */
             p.stop = function () {
+                if (!this.audio)
+                    return;
                 var audio = this.audio;
                 audio.pause();
                 audio.removeEventListener("ended", this.onPlayEnd);

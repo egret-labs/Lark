@@ -17,6 +17,18 @@
             border: 0;
             margin: 0;
             height: 100%;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+        }
+        #nav{
+            position: fixed;
+            bottom: 0;
+            padding: 0 5px;
+            background-color: black;
+            font-size: 30px;
+            width:100%;
+        }
+        #nav a{
+            color: white;
         }
     </style>
 
@@ -24,26 +36,43 @@
     <script src="libs/lark/lark.web.js" src-release="libs/lark/lark.web.min.js"></script>
     <script src="libs/sound/sound.js" src-release="libs/sound/sound.min.js"></script>
     <script src="libs/sound/sound.web.js" src-release="libs/sound/sound.web.min.js"></script>
-
+    <script src="libs/geolocation/geolocation.js" src-release="libs/geolocation/geolocation.min.js"></script>
+    <script src="libs/geolocation/geolocation.web.js" src-release="libs/geolocation/geolocation.web.min.js"></script>
+    <script src="libs/motion/motion.js" src-release="libs/motion/motion.min.js"></script>
+    <script src="libs/motion/motion.web.js" src-release="libs/motion/motion.web.min.js"></script>
+    <script src="libs/orientation/orientation.js" src-release="libs/orientation/orientation.min.js"></script>
+    <script src="libs/orientation/orientation.web.js" src-release="libs/orientation/orientation.web.min.js"></script>
     <!--这个标签会被替换为项目中所有的 javascript 文件-->
     <script id="project"></script>
 </head>
 <body>
 
     <div id="lark-sample" style="margin: auto;width: 100%;height: 100%;" class="lark-player"
-         data-entry-class="Main"
+         data-entry-class="Graphics"
          data-scale-mode="noScale"
          data-content-width="480"
          data-content-height="800"
          data-show-paint-rect="false"
          data-show-fps="false" data-show-log="false" data-log-filter="">
     </div>
-    
+
+    <div id="nav">
+        <a href="index.html?main=Graphics">矢量绘图</a> -
+        <a href="index.html?main=Mask">图形遮罩</a> -
+        <a href="index.html?main=BlendMode">混合模式</a> -
+        <a href="index.html?main=Sound">声音</a> -
+        <a href="index.html?main=Dirty">脏区域重绘</a>-
+        <a href="index.html?main=Sensors">传感器</a>
+    </div>
+
     <script>
         var entry = location.search && location.search.match(/\?main\=(.*)/)[1];
         if(entry){
             var stage = document.getElementById("lark-sample");
             stage.setAttribute("data-entry-class",entry);
+            if(entry=="Dirty")
+                stage.setAttribute("data-show-paint-rect",true);
+
         }
     </script>
 </body>

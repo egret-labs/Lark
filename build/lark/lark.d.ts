@@ -1,59 +1,189 @@
 declare module lark {
     /**
+     * @language en_US
+     * The XMLNode class is the base class for all xml node.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * XML节点基类
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     interface XMLNode {
         /**
+         * @language en_US
+         * a integer representing the type of the node, 1：XML，2：XMLAttribute，3：XMLText
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 节点类型，1：XML，2：XMLAttribute，3：XMLText
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         nodeType: number;
         /**
+         * @language en_US
+         * the parent node of this xml node.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 节点所属的父级节点
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         parent: XML;
     }
     /**
-     * XML节点对象
+     * @language en_US
+     * The XML class contains properties for working with XML objects.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * XML 类包含用于处理 XML 对象的属性。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     interface XML extends XMLNode {
         /**
+         * @language en_US
+         * the attributes of this xml node.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 当前节点上的属性列表
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         attributes: any;
         /**
+         * @language en_US
+         * the children of the xml node.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 当前节点的子节点列表
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         children: XMLNode[];
         /**
-         * 节点完整名称。例如节点 <e:Button/> 的 name 为：e:Button
+         * @language en_US
+         * the full name of this xml node. For example,the name of <s:Button/> is "s:Button".
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点完整名称。例如节点 <s:Button/> 的 name 为："s:Button"
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         name: string;
         /**
-         * 节点的命名空间前缀。例如节点 <e:Button/> 的 prefix 为：e
+         * @language en_US
+         * thie namesapce prefix of this xml node.For example,the prefix of <s:Button/> is "s".
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点的命名空间前缀。例如节点 <s:Button/> 的 prefix 为：s
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         prefix: string;
         /**
-         * 节点的本地名称。例如节点 <e:Button/> 的 prefix 为：Button
+         * @language en_US
+         * the local name of this xml node. For example,the local name of <s:Button/> is "Button".
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点的本地名称。例如节点 <s:Button/> 的 localName 为：Button
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         localName: string;
         /**
-         * 节点的命名空间地址。例如节点 <e:Skin xmlns:e="http://ns.egret.com/swan"/> 的 namespace 为： http://ns.egret.com/swan
+         * @language en_US
+         * the namesapce uri of this xml node.For example,the namespace uri of <s:Skin xmlns:s="http://ns.egret.com/swan"/> is "http://ns.egret.com/swan".
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点的命名空间地址。例如节点 <s:Skin xmlns:s="http://ns.egret.com/swan"/> 的 namespace 为： http://ns.egret.com/swan
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         namespace: string;
     }
     /**
-     * XML文本节点
+     * @language en_US
+     * The XMLText class represents a string node in the XML.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * XMLText 类表示在XML中的文本节点
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     interface XMLText extends XMLNode {
         /**
+         * @language en_US
+         * the text content
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 文本内容
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         text: string;
     }
+    /**
+     * @language en_US
+     * The XML class contains properties for working with XML objects.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * XML 类包含用于处理 XML 对象的属性。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
     var XML: {
         /**
+         * @language en_US
+         * parses a text to XML instance.
+         * @param text the text to be parsed.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 解析字符串为XML对象
          * @param text 要解析的XML对象。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         parse(text: string): XML;
     };
@@ -131,10 +261,23 @@ declare module lark {
     function log(message?: any, ...optionalParams: any[]): void;
 }
 declare module lark {
+    /**
+     * @private
+     */
     var $START_TIME: number;
     /**
+     * @language en_US
+     * Used to compute relative time.this method returns the number of milliseconds since the Lark framework was initialized
+     * @returns The number of milliseconds since the Lark framework was initialized
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 用于计算相对时间。此方法返回自启动 Lark 框架以来经过的毫秒数。
      * @returns 启动 Lark 框架以来经过的毫秒数。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     function getTimer(): number;
 }
@@ -628,13 +771,35 @@ declare module lark.sys {
 }
 declare module lark {
     /**
+     * @language en_US
+     * A special member of the number data type that represents a value that is "not set".
+     * For example,if you set the width property of TextField to lark.NONE,which will cancel the explicit setting of this
+     * property and refresh the line breaks of the TextField.<br/>
+     * Because the isNaN() method has some serious performance problems, Lark uses lark.NONE to replace NaN.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 空数字。通常用于标识一个数值属性未被外部显式设置。例如对 TextField.width 赋值NONE，将会取消之前显式设置的宽度，从而让TextFiled自动测量一个合适的宽度。
      * 框架内不直接使用NaN，是因为isNaN()方法有严重的性能问题。使用 isNone() 来作为显式设置的判断依据能获得非常高的运行性能。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     var NONE: number;
     /**
+     * @language en_US
+     * Returns true if the value is lark.NONE(not set).
+     * @param value A numeric value or mathematical expression to evaluate.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 判断数字是否为NONE
      * @param value 要判断的数字
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     function isNone(value: number): boolean;
 }
@@ -1095,8 +1260,18 @@ declare module lark {
 }
 declare module lark {
     /**
+     * @language en_US
+     * Returns a reference to the class object of the class specified by the name parameter.
+     * @param name The name of a class.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 返回 name 参数指定的类的类对象引用。
      * @param name 类的名称。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     function getDefinitionByName(name: string): any;
 }
@@ -1331,11 +1506,39 @@ declare module lark {
 }
 declare module lark {
     /**
+     * @language en_US
+     * Indicates whether an object is a instance of the class or interface specified as the parameter.This method has better performance
+     * compared width the instanceOf operator,and it can indicate whether an object is a instance of the specific interface.
+     * @param instance the instance to be checked.
+     * @param typeFlag the enum value representing a specific class or interface.
+     * @returns A value of true if the object is a instance of the class or interface specified as the parameter.
+     * @example
+     * <code>
+     *     var instance = new lark.Sprite();
+     *     lark.log(lark.is(instance,lark.Types.Sprite))  //true
+     *     lark.log(lark.is(instance,lark.Types.DisplayObjectContainer))  //true
+     *     lark.log(lark.is(instance,lark.Types.Bitmap))  //false
+     * </code>
+     * @see lark.registerClass()
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字相比具有更高的性能，并且能判断接口的实现。
-     * 若要判断对象是否为项目中的自定义类或接口的实例，请使用 lark.registerClass() 方法为自定义类注册运行时信息即可。
-     * @param instance 要判断的实例，注意：传入的值必须是实例，而不是类定义。若要判断类定义使用表达式：typeof instance == "function" 即可。
-     * @param typeFlag 类或接口的枚举值，请参考 lark.Types 或 swan.Types 定义的枚举常量。
+     * @param instance 要判断的实例。
+     * @param typeFlag 类或接口的枚举值.
      * @returns 返回true表示当前对象是指定类或接口的实例。
+     * @example
+     * <code>
+     *     var instance = new lark.Sprite();
+     *     lark.log(lark.is(instance,lark.Types.Sprite))  //true
+     *     lark.log(lark.is(instance,lark.Types.DisplayObjectContainer))  //true
+     *     lark.log(lark.is(instance,lark.Types.Bitmap))  //false
+     * </code>
+     * @see lark.registerClass()
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     function is(instance: any, typeFlag: number): boolean;
 }
@@ -1428,10 +1631,24 @@ declare module lark {
 }
 declare module lark {
     /**
+     * @language en_US
+     * Register and start a timer,which will notify the callback method at a rate of 60 FPS ,and pass the current time stamp as parameters.<br/>
+     * Note: After the registration,it will notify the callback method continuously,you can call the stopTick () method to stop it.
+     * @param callBack the call back method. the timeStamp parameter of this method represents the number of milliseconds
+     * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
+     * to render after processing of this method completes.
+     * @param thisObject the call back method's "this"
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 注册并启动一个计时器，通常会以60FPS的速率触发回调方法，并传入当前时间戳。注意：注册后将会持续触发回调方法，若要停止回调，需要手动调用stopTick()方法。
      * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
      * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
      * @param thisObject 回调方法的this对象引用。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     function startTick(callBack: (timeStamp: number) => boolean, thisObject: any): void;
 }
@@ -1624,10 +1841,23 @@ declare module lark {
 }
 declare module lark {
     /**
+     * @language en_US
+     * Stops the timer started by the lark.startTick() method.
+     * @param callBack the call back method. the timeStamp parameter of this method represents the number of milliseconds
+     * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
+     * to render after processing of this method completes.
+     * @param thisObject the call back method's "this"
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 停止之前用 startTick() 方法启动的计时器。
      * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
      * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
      * @param thisObject 回调方法的this对象引用。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     function stopTick(callBack: (timeStamp: number) => boolean, thisObject: any): void;
 }
@@ -1752,22 +1982,47 @@ declare module lark {
 }
 declare module lark {
     /**
+     * @language en_US
+     * Registers the class information at runtime for a class.This method will add some flags of class and interface to
+     * the class definition. After the registration,you can use lark.is() method to do the type checking for the instance
+     * of this class.<br/>
+     * Note: The value of the custom class flag or interface Flag must not in the type range of Lark framework (from 1 to 2000)
+     * or a third party library referenced to your project,it might result in a type check failure.
+     * @example the following code shows how to register the class flag for the EventEmitter class:
+     * <code>
+     *      lark.registerClass(lark.EventEmitter,lark.Types.EventEmitter,[lark.Types.IEventEmitter]);
+     *      var emitter = new lark.EventEmitter();
+     *      lark.log(lark.is(emitter, lark.Types.IEventEmitter));  //true。
+     *      lark.log(lark.is(emitter, lark.Types.EventEmitter));   //true。
+     *      lark.log(lark.is(emitter, lark.Types.Bitmap));   //false。
+     * </code>
+     * @param classDefinition the class definition to be registered.
+     * @param classFlag  a unique identification number of the specific class
+     * @param interfaceFlags a list of unique identification numbers of the specific interfaces.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 为一个类定义注册运行时类信息,用此方法往类定义上注册它自身以及所有接口对应的枚举值。
      * 在运行时，这个类的实例将可以使用 lark.is() 方法传入一个枚举值来判断实例类型。
-     * 例如：
-     * //为lark.EventEmitter类注册运行时类信息，由于它实现了IEventEmitter接口，这里应同时传入两个枚举值。
-     * lark.registerClass(lark.EventEmitter,lark.Types.EventEmitter,[lark.Types.IEventEmitter]);
-     * var emitter = new lark.EventEmitter();
-     * lark.log(lark.is(emitter, lark.Types.IEventEmitter));  //输出true。
-     * lark.log(lark.is(emitter, lark.Types.EventEmitter));   //输出true。
-     * lark.log(lark.is(emitter, lark.Types.Bitmap));   //输出false。
-     *
+     * @example 以下代码演示了如何为EventEmitter类注册运行时类信息：
+     * <code>
+     *      //为lark.EventEmitter类注册运行时类信息，由于它实现了IEventEmitter接口，这里应同时传入两个枚举值。
+     *      lark.registerClass(lark.EventEmitter,lark.Types.EventEmitter,[lark.Types.IEventEmitter]);
+     *      var emitter = new lark.EventEmitter();
+     *      lark.log(lark.is(emitter, lark.Types.IEventEmitter));  //true。
+     *      lark.log(lark.is(emitter, lark.Types.EventEmitter));   //true。
+     *      lark.log(lark.is(emitter, lark.Types.Bitmap));   //false。
+     * </code>
      * 注意：传入的自定义枚举数值范围要避免与Lark框架(1~2000的数值)或其他第三方库的数值范围重合,
      * 否则有可能会导致运行时 lark.is() 方法类型判断错误。
      *
      * @param classDefinition 要注册的类定义。
-     * @param classFlags 要注册的类对应的枚举值。
+     * @param classFlag 要注册的类对应的枚举值。
      * @param interfaceFlags 要注册的类所实现的接口的枚举值列表。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     function registerClass(classDefinition: any, classFlag: number, interfaceFlags?: number[]): void;
 }
@@ -1776,15 +2031,26 @@ declare var RELEASE: boolean;
 declare module lark {
 }
 declare module lark {
-    var $locale_strings: any;
-    var $language: string;
     /**
-     * 全局多语言翻译函数
-     * @param code 要查询的字符串代码
-     * @param args 替换字符串中{0}标志的参数列表
-     * @returns 返回拼接后的字符串
+     * @private
      */
-    function tr(code: number, ...args: any[]): string;
+    var $locale_strings: any;
+    /**
+     * @private
+     */
+    var $language: string;
+    module sys {
+        /**
+         * @private
+         * 全局多语言翻译函数
+         * @param code 要查询的字符串代码
+         * @param args 替换字符串中{0}标志的参数列表
+         * @returns 返回拼接后的字符串
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function tr(code: number, ...args: any[]): string;
+    }
 }
 declare module lark.sys {
     /**
@@ -2215,19 +2481,48 @@ declare module lark {
 }
 declare module lark {
     /**
+     * @private
      * 哈希计数
      */
     var $hashCount: number;
     /**
+     * @language en_US
+     * The LarkObject class is the base class for all objects in the Lark framework.The LarkObject
+     * class includes a hashCode property, which is a unique identification number of the instance.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * Lark顶级对象。框架内所有对象的基类，为对象实例提供唯一的hashCode值。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     class LarkObject {
         /**
-         * 创建一个 lark.HashObject 对象
+         * @language en_US
+         * Initializes a LarkObject
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 LarkObject 对象
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         constructor();
         /**
+         * @language en_US
+         * a unique identification number assigned to this instance.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 返回此对象唯一的哈希值,用于唯一确定一个对象。hashCode为大于等于1的整数。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         hashCode: number;
     }
@@ -3904,7 +4199,7 @@ declare module lark {
          * @param cancelable Determines whether the Event object can be canceled. The default values is false.
          * @param stageX The horizontal coordinate at which the event occurred in global Stage coordinates.
          * @param stageY The vertical coordinate at which the event occurred in global Stage coordinates.
-         * @param touchPointID A unique identification number (as an int) assigned to the touch point.
+         * @param touchPointID A unique identification number assigned to the touch point.
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
@@ -3983,7 +4278,7 @@ declare module lark {
         localY: number;
         /**
          * @language en_US
-         * A unique identification number (as an int) assigned to the touch point.
+         * A unique identification number assigned to the touch point.
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
@@ -4288,52 +4583,163 @@ declare module lark {
 }
 declare module lark {
     /**
+     * @language en_US
+     * The Timer class is the interface to timers, which let you run code on a specified time sequence. Use the start()
+     * method to start a timer. Add an event listener for the timer event to set up code to be run on the timer interval.<br/>
+     * You can create Timer objects to run once or repeat at specified intervals to execute code on a schedule. Depending
+     * on the framerate or the runtime environment (available memory and other factors), the runtime may emit events at
+     * slightly offset intervals.
+     * @see lark.TimerEvent
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * Timer 类是计时器的接口，它使您能按指定的时间序列运行代码。
      * 使用 start() 方法来启动计时器。为 timer 事件添加事件侦听器，以便将代码设置为按计时器间隔运行。
      * 可以创建 Timer 对象以运行一次或按指定间隔重复运行，从而按计划执行代码。
      * 根据 Lark 的帧速率或运行时环境（可用内存和其他因素），运行时调度事件的间隔可能稍有不同。
+     * @see lark.TimerEvent
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     class Timer extends EventEmitter {
         /**
-         * 创建一个 Timer 对象
-         * @param delay 计时器事件间的延迟（以毫秒为单位）。
-         * @param repeatCount 设置的计时器运行总次数。
+         * @language en_US
+         * Constructs a new Timer object with the specified delay and repeatCount states.
+         * @param delay The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.
+         * Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
+         * @param repeatCount Specifies the number of repetitions. If zero, the timer repeats indefinitely.If nonzero,
+         * the timer runs the specified number of times and then stops.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用指定的 delay 和 repeatCount 状态构造新的 Timer 对象。
+         * @param delay 计时器事件间的延迟（以毫秒为单位）。建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
+         * @param repeatCount 指定重复次数。如果为零，则计时器将持续不断重复运行。如果不为 0，则将运行计时器，运行次数为指定的次数，然后停止。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         constructor(delay: number, repeatCount?: number);
+        /**
+         * @private
+         */
         private _delay;
         /**
-         * 计时器事件间的延迟（以毫秒为单位）。如果在计时器正在运行时设置延迟间隔，则计时器将按相同的 repeatCount 迭代重新启动。
+         * @language en_US
+         * The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.<br/>
+         * Note: Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 计时器事件间的延迟（以毫秒为单位）。如果在计时器正在运行时设置延迟间隔，则计时器将按相同的 repeatCount 迭代重新启动。<br/>
          * 注意：建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         delay: number;
         /**
+         * @language en_US
+         * The total number of times the timer is set to run. If the repeat count is set to 0, the timer continues indefinitely,
+         * until the stop() method is invoked or the program stops. If the repeat count is nonzero, the timer runs the specified
+         * number of times. If repeatCount is set to a total that is the same or less then currentCount the timer stops and will not fire again.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 设置的计时器运行总次数。如果重复计数设置为 0，则计时器将持续不断运行，或直至调用了 stop() 方法或节目停止。
          * 如果重复计数不为 0，则将运行计时器，运行次数为指定的次数。如果设置的 repeatCount 总数等于或小于 currentCount，则计时器将停止并且不会再次触发。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         repeatCount: number;
+        /**
+         * @private
+         */
         private _currentCount;
         /**
+         * @language en_US
+         * The total number of times the timer has fired since it started at zero. If the timer has been reset, only the fires since the reset are counted.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 计时器从 0 开始后触发的总次数。如果已重置了计时器，则只会计入重置后的触发次数。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         currentCount: number;
+        /**
+         * @private
+         */
         private _running;
         /**
+         * @language en_US
+         * The timer's current state; true if the timer is running, otherwise false.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 计时器的当前状态；如果计时器正在运行，则为 true，否则为 false。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         running: boolean;
         /**
+         * @language en_US
+         * Stops the timer, if it is running, and sets the currentCount property back to 0, like the reset button of a stopwatch.
+         * Then, when start() is called, the timer instance runs for the specified number of repetitions, as set by the repeatCount value.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 如果计时器正在运行，则停止计时器，并将 currentCount 属性设回为 0，这类似于秒表的重置按钮。然后，在调用 start() 后，将运行计时器实例，运行次数为指定的重复次数（由 repeatCount 值设置）。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         reset(): void;
         /**
+         * @language en_US
+         * Starts the timer, if it is not already running.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 如果计时器尚未运行，则启动计时器。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         start(): void;
         /**
+         * @language en_US
+         * Stops the timer. When start() is called after stop(), the timer instance runs for the remaining number of
+         * repetitions, as set by the repeatCount property.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 停止计时器。如果在调用 stop() 后调用 start()，则将继续运行计时器实例，运行次数为剩余的 重复次数（由 repeatCount 属性设置）。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         stop(): void;
+        /**
+         * @private
+         */
         private updateInterval;
+        /**
+         * @private
+         */
         private lastCount;
     }
 }
@@ -6721,141 +7127,144 @@ declare module lark.sys {
 }
 declare module lark {
     /**
+     * @language en_US
+     * Provides constant enum values for type checking in the module of Lark. It is usually passed as the parameters of the lark.is() method.
+     * @see lark.is()
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 为Lark框架内的类或接口定义的枚举值。通常作为实例检查类型 lark.is() 方法的参数。
+     * @see lark.is()
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     const enum Types {
         /**
-         * IEventEmitter 接口定义用于添加或删除事件侦听器的方法，检查是否已注册特定类型的事件侦听器，并调度事件。
-         * 事件目标是 Lark 事件模型的重要组成部分。事件目标是事件如何通过显示列表层次结构这一问题的焦点。当发生鼠标单击或按键等事件时，
-         * 会将事件对象调度到从显示列表根开始的事件流中。事件对象进行到事件目标的往返行程，在概念上，到事件目标的此往返行程被划分为两个阶段：
-         * 捕获阶段包括从根到事件目标节点的行程，冒泡阶段与捕获阶段完全相反，从事件目标节点到根的行程。
-         * 通常，使用户定义的类能够调度事件的最简单方法是扩展 EventEmitter。如果无法扩展（即，如果该类已经扩展了另一个类），
-         * 则可以实现 IEventEmitter 接口，创建 EventEmitter 成员，并编写一些简单的挂钩，将调用连接到聚合的 EventEmitter 中。
+         * @copy lark.IEventEmitter
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         IEventEmitter = 1,
         /**
-         * EventEmitter 是 Lark 的事件派发器类，负责进行事件的发送和侦听。
-         * 事件目标是事件如何通过显示列表层次结构这一问题的焦点。当发生鼠标单击、触摸或按键等事件时，
-         * 框架会将事件对象调度到从显示列表根开始的事件流中。然后该事件对象在显示列表中前进，直到到达事件目标，
-         * 然后从这一点开始其在显示列表中的回程。在概念上，到事件目标的此往返行程被划分为两个阶段：
-         * 捕获阶段包括从根到事件目标节点的行程，冒泡阶段与捕获阶段完全相反，从事件目标节点到根的行程。
+         * @copy lark.EventEmitter
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         EventEmitter = 2,
         /**
-         * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时显示的所有对象。使用 DisplayObjectContainer 类排列显示列表中的显示对象。
-         * DisplayObjectContainer 对象可以有子显示对象，而其他显示对象是“叶”节点，只有父级和同级，没有子级。
-         * DisplayObject 类支持基本功能（如对象的 x 和 y 位置），也支持更高级的对象属性（如它的转换矩阵），所有显示对象都继承自 DisplayObject 类。
-         * DisplayObject 类包含若干广播事件。通常，任何特定事件的目标均为一个特定的 DisplayObject 实例。
-         * 若只有一个目标，则会将事件侦听器限制为只能放置到该目标上（在某些情况下，可放置到显示列表中该目标的祖代上），这意味着您可以向任何 DisplayObject 实例添加侦听器来侦听广播事件。
+         * @copy lark.DisplayObject
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         DisplayObject = 3,
         /**
-         * DisplayObjectContainer 类是可用作显示列表中显示对象容器的所有对象的基类。
-         * 该显示列表管理运行时中显示的所有对象。使用 DisplayObjectContainer 类排列显示列表中的显示对象。
-         * 每个 DisplayObjectContainer 对象都有自己的子级列表，用于组织对象的 Z 轴顺序。Z 轴顺序是由前至后的顺序，
-         * 可确定哪个对象绘制在前，哪个对象绘制在后等。
+         * @copy lark.DisplayObjectContainer
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         DisplayObjectContainer = 4,
         /**
-         * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
+         * @copy lark.Sprite
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         Sprite = 5,
         /**
-         * Bitmap 类表示用于表示位图图像的显示对象。这些图像可以是使用 Bitmap() 构造函数创建的图像。
-         * 利用 Bitmap() 构造函数，可以创建包含对 BitmapData 对象的引用的 Bitmap 对象。创建了 Bitmap 对象后，
-         * 使用父 DisplayObjectContainer 实例的 addChild() 或 addChildAt() 方法将位图放在显示列表中。
-         * 一个 Bitmap 对象可在若干 Bitmap 对象之中共享其 BitmapData 引用，与转换属性或旋转属性无关。
-         * 由于能够创建引用相同 BitmapData 对象的多个 Bitmap 对象，因此，多个显示对象可以使用相同的复杂 BitmapData 对象，
-         * 而不会因为每个显示对象实例使用一个 BitmapData 对象而产生内存开销。
+         * @copy lark.Bitmap
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         Bitmap = 6,
         /**
-         * BitmapData 对象包含像素数据的数组。此数据可以表示完全不透明的位图，或表示包含 Alpha 通道数据的透明位图。
-         * 以上任一类型的 BitmapData 对象都作为 32 位整数的缓冲区进行存储。每个 32 位整数确定位图中单个像素的属性。
-         * 每个 32 位整数都是四个 8 位通道值（从 0 到 255）的组合，这些值描述像素的 Alpha 透明度以及红色、绿色、蓝色 (ARGB) 值。
-         * （对于 ARGB 值，最高有效字节代表 Alpha 通道值，其后的有效字节分别代表红色、绿色和蓝色通道值。）
+         * @copy lark.BitmapData
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         BitmapData = 7,
         /**
-         * Graphics 类包含一组可用来创建矢量形状的方法。支持绘制的显示对象包括 Sprite 和 Shape 对象。
-         * 这些类中的每一个类都包括 graphics 属性，该属性是一个 Graphics 对象。
+         * @copy lark.Graphics
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         Graphics = 8,
         /**
-         * 此类用于使用 Lark 绘图应用程序编程接口 (API) 创建简单形状。Shape 类包括 graphics 属性，该属性使您可以从 Graphics 类访问方法。
+         * @copy lark.Shape
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         Shape = 9,
         /**
-         * Stage 类代表主绘图区，表示显示 Lark 内容的整个区域。
-         * 可以利用 DisplayObject 实例的 stage 属性进行访问。
-         * Stage 类具有多个祖代类 -- DisplayObjectContainer、DisplayObject 和 EventDispatcher，属性和方法便是从这些类继承而来的。
-         * 从这些继承的许多属性和方法不适用于 Stage 对象。
+         * @copy lark.Stage
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         Stage = 10,
         /**
-         * Event 类作为创建 Event 对象的基类，当发生事件时，Event 对象将作为参数传递给事件侦听器。
-         * Event 类的属性包含有关事件的基本信息，例如事件的类型或者是否可以取消事件的默认行为。
-         * 对于许多事件（如由 Event 类常量表示的事件），此基本信息就足够了。但其他事件可能需要更详细的信息。
-         * 例如，与触摸关联的事件需要包括有关触摸事件的位置以及在触摸事件期间是否按下了任何键的其他信息。
-         * 您可以通过扩展 Event 类（TouchEvent 类执行的操作）将此类其他信息传递给事件侦听器。
-         * Lark API 为需要其他信息的常见事件定义多个 Event 子类。与每个 Event 子类关联的事件将在每个类的文档中加以介绍。
-         * Event 类的方法可以在事件侦听器函数中使用以影响事件对象的行为。
-         * 某些事件有关联的默认行为，通过调用 preventDefault() 方法，您的事件侦听器可以取消此行为。
-         * 可以通过调用 stopPropagation() 或 stopImmediatePropagation() 方法，将当前事件侦听器作为处理事件的最后一个事件侦听器。
+         * @copy lark.Event
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         Event = 11,
         /**
-         * 每当 Timer 对象达到由 Timer.delay 属性指定的间隔时，Timer 对象即会调度 TimerEvent 对象。
+         * @copy lark.TimerEvent
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         TimerEvent = 12,
         /**
-         * 使用 TouchEvent 类，您可以处理设备上那些检测用户与设备之间的接触的事件。
-         * 当用户与带有触摸屏的移动电话或平板电脑等设备交互时，用户通常使用手指或指针设备接触屏幕。可使用 TouchEvent
-         * 类开发响应基本触摸事件（如单个手指点击）的应用程序。使用此类中定义的事件类型创建事件侦听器。
-         * 注意：当对象嵌套在显示列表中时，触摸事件的目标将是显示列表中可见的最深的可能嵌套对象。
-         * 此对象称为目标节点。要使目标节点的祖代（祖代是一个包含显示列表中所有目标节点的对象，从舞台到目标节点的父节点均包括在内）
-         * 接收触摸事件的通知，请对祖代节点使用 EventEmitter.on() 并将 type 参数设置为要检测的特定触摸事件。
+         * @copy lark.TouchEvent
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         TouchEvent = 13,
         /**
-         * 当加载操作已开始或套接字已接收到数据时，将调度 ProgressEvent 对象。
-         * 有两种类型的进程事件：ProgressEvent.PROGRESS 和 ProgressEvent.SOCKET_DATA。
+         * @copy lark.ProgressEvent
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         ProgressEvent = 14,
         /**
-         * Matrix 类表示一个转换矩阵，它确定如何将点从一个坐标空间映射到另一个坐标空间。
-         * 您可以对一个显示对象执行不同的图形转换，方法是设置 Matrix 对象的属性，将该 Matrix
-         * 对象应用于显示对象的 matrix 属性。这些转换函数包括平移（x 和 y 重新定位）、旋转、缩放和倾斜。
+         * @copy lark.Matrix
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         Matrix = 15,
         /**
-         * Point 对象表示二维坐标系统中的某个位置，其中 x 表示水平轴，y 表示垂直轴。
+         * @copy lark.Point
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         Point = 16,
         /**
-         * Rectangle 对象是按其位置（由它左上角的点 (x, y) 确定）以及宽度和高度定义的区域。
-         * Rectangle 类的 x、y、width 和 height 属性相互独立；更改一个属性的值不会影响其他属性。
-         * 但是，right 和 bottom 属性与这四个属性是整体相关的。例如，如果更改 right 属性的值，则 width
-         * 属性的值将发生变化；如果更改 bottom 属性，则 height 属性的值将发生变化。
+         * @copy lark.Rectangle
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         Rectangle = 17,
         /**
-         * TextField 类用于创建显示对象以显示文本。
-         * 可以使用 TextField 类的方法和属性对文本字段进行操作。
+         * @copy lark.TextField
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         TextField = 18,
         /**
-         * HttpRequest 类以文本、二进制数据或 JSON对象的形式从 URL 下载数据。。
-         * HttpRequest 对象会先从 URL 中下载所有数据，然后才将数据用于应用程序中的代码。它会发出有关下载进度的通知，
-         * 通过 bytesLoaded 和 bytesTotal 属性以及已调度的事件，可以监视下载进度。
+         * @copy lark.HttpRequest
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         HttpRequest = 19,
         /**
-         * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
+         * @copy lark.ImageLoader
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         ImageLoader = 20,
         /**
-         * TextInput 用于创建显示对象来输入文本. 默认为单行文本，当需要使用多行文本时，请设置 multiLine 为 true
+         * @copy lark.TextInput
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         TextInput = 21,
     }

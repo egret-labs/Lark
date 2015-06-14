@@ -30,6 +30,18 @@ var __define = this.__define || function (o, p, g, s) {
   Object.defineProperty(o, p, { configurable:true, enumerable:true, get:g,set:s }) };
 var lark;
 (function (lark) {
+    /**
+     * @language en_US
+     * The XML class contains properties for working with XML objects.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * XML 类包含用于处理 XML 对象的属性。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
     lark.XML;
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -90,10 +102,23 @@ var lark;
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
+    /**
+     * @private
+     */
     lark.$START_TIME = 0;
     /**
+     * @language en_US
+     * Used to compute relative time.this method returns the number of milliseconds since the Lark framework was initialized
+     * @returns The number of milliseconds since the Lark framework was initialized
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 用于计算相对时间。此方法返回自启动 Lark 框架以来经过的毫秒数。
      * @returns 启动 Lark 框架以来经过的毫秒数。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     function getTimer() {
         return Date.now() - lark.$START_TIME;
@@ -466,13 +491,35 @@ var lark;
 var lark;
 (function (lark) {
     /**
+     * @language en_US
+     * A special member of the number data type that represents a value that is "not set".
+     * For example,if you set the width property of TextField to lark.NONE,which will cancel the explicit setting of this
+     * property and refresh the line breaks of the TextField.<br/>
+     * Because the isNaN() method has some serious performance problems, Lark uses lark.NONE to replace NaN.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 空数字。通常用于标识一个数值属性未被外部显式设置。例如对 TextField.width 赋值NONE，将会取消之前显式设置的宽度，从而让TextFiled自动测量一个合适的宽度。
      * 框架内不直接使用NaN，是因为isNaN()方法有严重的性能问题。使用 isNone() 来作为显式设置的判断依据能获得非常高的运行性能。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     lark.NONE = 0x8000000;
     /**
+     * @language en_US
+     * Returns true if the value is lark.NONE(not set).
+     * @param value A numeric value or mathematical expression to evaluate.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 判断数字是否为NONE
      * @param value 要判断的数字
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     function isNone(value) {
         return value === lark.NONE;
@@ -824,10 +871,23 @@ var lark;
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
+    /**
+     * @private
+     */
     var $getDefinitionByNameCache = {};
     /**
+     * @language en_US
+     * Returns a reference to the class object of the class specified by the name parameter.
+     * @param name The name of a class.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 返回 name 参数指定的类的类对象引用。
      * @param name 类的名称。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     function getDefinitionByName(name) {
         if (!name)
@@ -911,11 +971,39 @@ var __global = __global || this;
 var lark;
 (function (lark) {
     /**
+     * @language en_US
+     * Indicates whether an object is a instance of the class or interface specified as the parameter.This method has better performance
+     * compared width the instanceOf operator,and it can indicate whether an object is a instance of the specific interface.
+     * @param instance the instance to be checked.
+     * @param typeFlag the enum value representing a specific class or interface.
+     * @returns A value of true if the object is a instance of the class or interface specified as the parameter.
+     * @example
+     * <code>
+     *     var instance = new lark.Sprite();
+     *     lark.log(lark.is(instance,lark.Types.Sprite))  //true
+     *     lark.log(lark.is(instance,lark.Types.DisplayObjectContainer))  //true
+     *     lark.log(lark.is(instance,lark.Types.Bitmap))  //false
+     * </code>
+     * @see lark.registerClass()
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字相比具有更高的性能，并且能判断接口的实现。
-     * 若要判断对象是否为项目中的自定义类或接口的实例，请使用 lark.registerClass() 方法为自定义类注册运行时信息即可。
-     * @param instance 要判断的实例，注意：传入的值必须是实例，而不是类定义。若要判断类定义使用表达式：typeof instance == "function" 即可。
-     * @param typeFlag 类或接口的枚举值，请参考 lark.Types 或 swan.Types 定义的枚举常量。
+     * @param instance 要判断的实例。
+     * @param typeFlag 类或接口的枚举值.
      * @returns 返回true表示当前对象是指定类或接口的实例。
+     * @example
+     * <code>
+     *     var instance = new lark.Sprite();
+     *     lark.log(lark.is(instance,lark.Types.Sprite))  //true
+     *     lark.log(lark.is(instance,lark.Types.DisplayObjectContainer))  //true
+     *     lark.log(lark.is(instance,lark.Types.Bitmap))  //false
+     * </code>
+     * @see lark.registerClass()
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     function is(instance, typeFlag) {
         if (!instance || typeof instance != "object") {
@@ -1005,10 +1093,24 @@ var lark;
 var lark;
 (function (lark) {
     /**
+     * @language en_US
+     * Register and start a timer,which will notify the callback method at a rate of 60 FPS ,and pass the current time stamp as parameters.<br/>
+     * Note: After the registration,it will notify the callback method continuously,you can call the stopTick () method to stop it.
+     * @param callBack the call back method. the timeStamp parameter of this method represents the number of milliseconds
+     * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
+     * to render after processing of this method completes.
+     * @param thisObject the call back method's "this"
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 注册并启动一个计时器，通常会以60FPS的速率触发回调方法，并传入当前时间戳。注意：注册后将会持续触发回调方法，若要停止回调，需要手动调用stopTick()方法。
      * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
      * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
      * @param thisObject 回调方法的this对象引用。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     function startTick(callBack, thisObject) {
         if (DEBUG && !callBack) {
@@ -1093,10 +1195,23 @@ var lark;
 var lark;
 (function (lark) {
     /**
+     * @language en_US
+     * Stops the timer started by the lark.startTick() method.
+     * @param callBack the call back method. the timeStamp parameter of this method represents the number of milliseconds
+     * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
+     * to render after processing of this method completes.
+     * @param thisObject the call back method's "this"
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 停止之前用 startTick() 方法启动的计时器。
      * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
      * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
      * @param thisObject 回调方法的this对象引用。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     function stopTick(callBack, thisObject) {
         if (DEBUG && !callBack) {
@@ -1339,22 +1454,47 @@ var lark;
 var lark;
 (function (lark) {
     /**
+     * @language en_US
+     * Registers the class information at runtime for a class.This method will add some flags of class and interface to
+     * the class definition. After the registration,you can use lark.is() method to do the type checking for the instance
+     * of this class.<br/>
+     * Note: The value of the custom class flag or interface Flag must not in the type range of Lark framework (from 1 to 2000)
+     * or a third party library referenced to your project,it might result in a type check failure.
+     * @example the following code shows how to register the class flag for the EventEmitter class:
+     * <code>
+     *      lark.registerClass(lark.EventEmitter,lark.Types.EventEmitter,[lark.Types.IEventEmitter]);
+     *      var emitter = new lark.EventEmitter();
+     *      lark.log(lark.is(emitter, lark.Types.IEventEmitter));  //true。
+     *      lark.log(lark.is(emitter, lark.Types.EventEmitter));   //true。
+     *      lark.log(lark.is(emitter, lark.Types.Bitmap));   //false。
+     * </code>
+     * @param classDefinition the class definition to be registered.
+     * @param classFlag  a unique identification number of the specific class
+     * @param interfaceFlags a list of unique identification numbers of the specific interfaces.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * 为一个类定义注册运行时类信息,用此方法往类定义上注册它自身以及所有接口对应的枚举值。
      * 在运行时，这个类的实例将可以使用 lark.is() 方法传入一个枚举值来判断实例类型。
-     * 例如：
-     * //为lark.EventEmitter类注册运行时类信息，由于它实现了IEventEmitter接口，这里应同时传入两个枚举值。
-     * lark.registerClass(lark.EventEmitter,lark.Types.EventEmitter,[lark.Types.IEventEmitter]);
-     * var emitter = new lark.EventEmitter();
-     * lark.log(lark.is(emitter, lark.Types.IEventEmitter));  //输出true。
-     * lark.log(lark.is(emitter, lark.Types.EventEmitter));   //输出true。
-     * lark.log(lark.is(emitter, lark.Types.Bitmap));   //输出false。
-     *
+     * @example 以下代码演示了如何为EventEmitter类注册运行时类信息：
+     * <code>
+     *      //为lark.EventEmitter类注册运行时类信息，由于它实现了IEventEmitter接口，这里应同时传入两个枚举值。
+     *      lark.registerClass(lark.EventEmitter,lark.Types.EventEmitter,[lark.Types.IEventEmitter]);
+     *      var emitter = new lark.EventEmitter();
+     *      lark.log(lark.is(emitter, lark.Types.IEventEmitter));  //true。
+     *      lark.log(lark.is(emitter, lark.Types.EventEmitter));   //true。
+     *      lark.log(lark.is(emitter, lark.Types.Bitmap));   //false。
+     * </code>
      * 注意：传入的自定义枚举数值范围要避免与Lark框架(1~2000的数值)或其他第三方库的数值范围重合,
      * 否则有可能会导致运行时 lark.is() 方法类型判断错误。
      *
      * @param classDefinition 要注册的类定义。
-     * @param classFlags 要注册的类对应的枚举值。
+     * @param classFlag 要注册的类对应的枚举值。
      * @param interfaceFlags 要注册的类所实现的接口的枚举值列表。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     function registerClass(classDefinition, classFlag, interfaceFlags) {
         if (DEBUG) {
@@ -1418,7 +1558,7 @@ var lark;
         for (var _i = 1; _i < arguments.length; _i++) {
             params[_i - 1] = arguments[_i];
         }
-        var text = lark.tr.apply(null, arguments);
+        var text = lark.sys.tr.apply(null, arguments);
         if (DEBUG) {
             lark.sys.$logToFPS("Error #" + code + ": " + text);
         }
@@ -1430,7 +1570,7 @@ var lark;
         for (var _i = 1; _i < arguments.length; _i++) {
             params[_i - 1] = arguments[_i];
         }
-        var text = lark.tr.apply(null, arguments);
+        var text = lark.sys.tr.apply(null, arguments);
         if (DEBUG) {
             lark.sys.$logToFPS("Warning #" + code + ": " + text);
         }
@@ -1476,30 +1616,42 @@ var lark;
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
-    lark.$locale_strings = lark.$locale_strings || {};
-    lark.$language = "en_US";
     /**
-     * 全局多语言翻译函数
-     * @param code 要查询的字符串代码
-     * @param args 替换字符串中{0}标志的参数列表
-     * @returns 返回拼接后的字符串
+     * @private
      */
-    function tr(code) {
-        var args = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            args[_i - 1] = arguments[_i];
+    lark.$locale_strings = lark.$locale_strings || {};
+    /**
+     * @private
+     */
+    lark.$language = "en_US";
+    var sys;
+    (function (sys) {
+        /**
+         * @private
+         * 全局多语言翻译函数
+         * @param code 要查询的字符串代码
+         * @param args 替换字符串中{0}标志的参数列表
+         * @returns 返回拼接后的字符串
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function tr(code) {
+            var args = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                args[_i - 1] = arguments[_i];
+            }
+            var text = lark.$locale_strings[lark.$language][code];
+            if (!text) {
+                return "{" + code + "}";
+            }
+            var length = args.length;
+            for (var i = 0; i < length; i++) {
+                text = text.replace("{" + i + "}", args[i]);
+            }
+            return text;
         }
-        var text = lark.$locale_strings[lark.$language][code];
-        if (!text) {
-            return "{" + code + "}";
-        }
-        var length = args.length;
-        for (var i = 0; i < length; i++) {
-            text = text.replace("{" + i + "}", args[i]);
-        }
-        return text;
-    }
-    lark.tr = tr;
+        sys.tr = tr;
+    })(sys = lark.sys || (lark.sys = {}));
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -2632,15 +2784,35 @@ var lark;
 var lark;
 (function (lark) {
     /**
+     * @private
      * 哈希计数
      */
     lark.$hashCount = 1;
     /**
+     * @language en_US
+     * The LarkObject class is the base class for all objects in the Lark framework.The LarkObject
+     * class includes a hashCode property, which is a unique identification number of the instance.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * Lark顶级对象。框架内所有对象的基类，为对象实例提供唯一的hashCode值。
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     var LarkObject = (function () {
         /**
-         * 创建一个 lark.HashObject 对象
+         * @language en_US
+         * Initializes a LarkObject
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 LarkObject 对象
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         function LarkObject() {
             this.$hashCode = lark.$hashCount++;
@@ -2648,7 +2820,16 @@ var lark;
         var d = __define,c=LarkObject;p=c.prototype;
         d(p, "hashCode",
             /**
+             * @language en_US
+             * a unique identification number assigned to this instance.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
              * 返回此对象唯一的哈希值,用于唯一确定一个对象。hashCode为大于等于1的整数。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this.$hashCode;
@@ -5399,7 +5580,7 @@ var lark;
          * @param cancelable Determines whether the Event object can be canceled. The default values is false.
          * @param stageX The horizontal coordinate at which the event occurred in global Stage coordinates.
          * @param stageY The vertical coordinate at which the event occurred in global Stage coordinates.
-         * @param touchPointID A unique identification number (as an int) assigned to the touch point.
+         * @param touchPointID A unique identification number assigned to the touch point.
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
@@ -6007,25 +6188,68 @@ var lark;
 var lark;
 (function (lark) {
     /**
+     * @language en_US
+     * The Timer class is the interface to timers, which let you run code on a specified time sequence. Use the start()
+     * method to start a timer. Add an event listener for the timer event to set up code to be run on the timer interval.<br/>
+     * You can create Timer objects to run once or repeat at specified intervals to execute code on a schedule. Depending
+     * on the framerate or the runtime environment (available memory and other factors), the runtime may emit events at
+     * slightly offset intervals.
+     * @see lark.TimerEvent
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
      * Timer 类是计时器的接口，它使您能按指定的时间序列运行代码。
      * 使用 start() 方法来启动计时器。为 timer 事件添加事件侦听器，以便将代码设置为按计时器间隔运行。
      * 可以创建 Timer 对象以运行一次或按指定间隔重复运行，从而按计划执行代码。
      * 根据 Lark 的帧速率或运行时环境（可用内存和其他因素），运行时调度事件的间隔可能稍有不同。
+     * @see lark.TimerEvent
+     * @version Lark 1.0
+     * @platform Web,Native
      */
     var Timer = (function (_super) {
         __extends(Timer, _super);
         /**
-         * 创建一个 Timer 对象
-         * @param delay 计时器事件间的延迟（以毫秒为单位）。
-         * @param repeatCount 设置的计时器运行总次数。
+         * @language en_US
+         * Constructs a new Timer object with the specified delay and repeatCount states.
+         * @param delay The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.
+         * Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
+         * @param repeatCount Specifies the number of repetitions. If zero, the timer repeats indefinitely.If nonzero,
+         * the timer runs the specified number of times and then stops.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用指定的 delay 和 repeatCount 状态构造新的 Timer 对象。
+         * @param delay 计时器事件间的延迟（以毫秒为单位）。建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
+         * @param repeatCount 指定重复次数。如果为零，则计时器将持续不断重复运行。如果不为 0，则将运行计时器，运行次数为指定的次数，然后停止。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         function Timer(delay, repeatCount) {
             if (repeatCount === void 0) { repeatCount = 0; }
             _super.call(this);
+            /**
+             * @private
+             */
             this._delay = 0;
+            /**
+             * @private
+             */
             this._currentCount = 0;
+            /**
+             * @private
+             */
             this._running = false;
+            /**
+             * @private
+             */
             this.updateInterval = 1000;
+            /**
+             * @private
+             */
             this.lastCount = 1000;
             this.delay = delay;
             this.repeatCount = +repeatCount | 0;
@@ -6033,8 +6257,18 @@ var lark;
         var d = __define,c=Timer;p=c.prototype;
         d(p, "delay",
             /**
-             * 计时器事件间的延迟（以毫秒为单位）。如果在计时器正在运行时设置延迟间隔，则计时器将按相同的 repeatCount 迭代重新启动。
+             * @language en_US
+             * The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.<br/>
+             * Note: Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 计时器事件间的延迟（以毫秒为单位）。如果在计时器正在运行时设置延迟间隔，则计时器将按相同的 repeatCount 迭代重新启动。<br/>
              * 注意：建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this._delay;
@@ -6053,7 +6287,16 @@ var lark;
         );
         d(p, "currentCount",
             /**
+             * @language en_US
+             * The total number of times the timer has fired since it started at zero. If the timer has been reset, only the fires since the reset are counted.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
              * 计时器从 0 开始后触发的总次数。如果已重置了计时器，则只会计入重置后的触发次数。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this._currentCount;
@@ -6061,21 +6304,49 @@ var lark;
         );
         d(p, "running",
             /**
+             * @language en_US
+             * The timer's current state; true if the timer is running, otherwise false.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
              * 计时器的当前状态；如果计时器正在运行，则为 true，否则为 false。
+             * @version Lark 1.0
+             * @platform Web,Native
              */
             function () {
                 return this._running;
             },undefined
         );
         /**
+         * @language en_US
+         * Stops the timer, if it is running, and sets the currentCount property back to 0, like the reset button of a stopwatch.
+         * Then, when start() is called, the timer instance runs for the specified number of repetitions, as set by the repeatCount value.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 如果计时器正在运行，则停止计时器，并将 currentCount 属性设回为 0，这类似于秒表的重置按钮。然后，在调用 start() 后，将运行计时器实例，运行次数为指定的重复次数（由 repeatCount 值设置）。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.reset = function () {
             this.stop();
             this._currentCount = 0;
         };
         /**
+         * @language en_US
+         * Starts the timer, if it is not already running.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 如果计时器尚未运行，则启动计时器。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.start = function () {
             if (this._running)
@@ -6084,7 +6355,17 @@ var lark;
             this._running = true;
         };
         /**
+         * @language en_US
+         * Stops the timer. When start() is called after stop(), the timer instance runs for the remaining number of
+         * repetitions, as set by the repeatCount property.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
          * 停止计时器。如果在调用 stop() 后调用 start()，则将继续运行计时器实例，运行次数为剩余的 重复次数（由 repeatCount 属性设置）。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         p.stop = function () {
             if (!this._running)
@@ -6093,6 +6374,7 @@ var lark;
             this._running = false;
         };
         /**
+         * @private
          * Ticker以60FPS频率刷新此方法
          */
         p.$update = function (timeStamp) {
@@ -9826,7 +10108,7 @@ var lark;
                 }
             }
             var displayList = this.$displayList || this.$parentDisplayList;
-            this.assignParentDisplayList(child, displayList, displayList);
+            this.assignParentDisplayList(child, displayList, null);
             child.$propagateFlagsDown(624 /* DownOnAddedOrRemoved */);
             child.$setParent(null);
             children.splice(index, 1);
@@ -10091,7 +10373,7 @@ var lark;
             if ((child.$renderRegion || displayList) && parentCache) {
                 parentCache.markDirty(displayList || child);
             }
-            if (child.$displayList) {
+            if (displayList) {
                 return;
             }
             var children = child.$children;

@@ -3,8 +3,10 @@ class Sound extends lark.Sprite{
     sound: lark.Sound;
     channel: lark.SoundChannel;
     constructor() {
-        super()
+        super();
         var title = new lark.TextField("Sound");
+        title.y = 50;
+        title.x = 50;
         this.addChild(title);
         
         var sound = new lark.Sound("resources/sound_go.mp3");
@@ -13,9 +15,11 @@ class Sound extends lark.Sprite{
         this.sound = sound;
     }
     
-    private onLoaded(images:any){
+    private onLoaded(){
         
         var play = new Button("Play");
+        play.x = 50;
+        play.y = 100;
         play.on(lark.TouchEvent.TOUCH_END,()=>{
             var r = this.play();
             console.log(r);
@@ -24,7 +28,8 @@ class Sound extends lark.Sprite{
         this.addChild(play);
         
         var stop = new Button("Stop");
-        stop.x = 240;
+        stop.x = 300;
+        stop.y = 100;
         stop.on(lark.TouchEvent.TOUCH_END,this.stop,this);
         this.addChild(stop);
         

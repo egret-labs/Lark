@@ -155,14 +155,17 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * ColumnAlign 类为 TileLayout 类的 columnAlign 属性定义可能的值。
+     * The ColumnAlign class defines the possible values for the
+     * <code>columnAlign</code> property of the TileLayout class.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * ColumnAlign 类为 TileLayout 类的 columnAlign 属性定义可能的值。
+     * ColumnAlign 类为 TileLayout 类的 <code>columnAlign</code> 属性定义可能的值。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -170,7 +173,8 @@ declare module swan {
     class ColumnAlign {
         /**
          * @language en_US
-         * 不将行两端对齐。
+         * Do not justify the rows.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -178,6 +182,7 @@ declare module swan {
         /**
          * @language zh_CN
          * 不将行两端对齐。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -185,7 +190,8 @@ declare module swan {
         static LEFT: string;
         /**
          * @language en_US
-         * 通过增大水平间隙将行两端对齐。
+         * Justify the rows by increasing the vertical gap.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -193,6 +199,7 @@ declare module swan {
         /**
          * @language zh_CN
          * 通过增大水平间隙将行两端对齐。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -200,7 +207,8 @@ declare module swan {
         static JUSTIFY_USING_GAP: string;
         /**
          * @language en_US
-         * 通过增大行高度将行两端对齐。
+         * Justify the rows by increasing the row height.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -208,6 +216,7 @@ declare module swan {
         /**
          * @language zh_CN
          * 通过增大行高度将行两端对齐。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -581,7 +590,10 @@ declare module swan.sys {
 declare module swan {
     /**
      * @language en_US
-     * JustifyAlign 定义布局类中 horizontalAlign 与 verticalAlign 属性需要的两端对齐常量值。
+     * The JustifyAlign class defines the possible values for the
+     * <code>horizontalAlign</code> 和 <code>verticalAlign</code> property of
+     * Layout class.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -589,6 +601,7 @@ declare module swan {
     /**
      * @language zh_CN
      * JustifyAlign 定义布局类中 horizontalAlign 与 verticalAlign 属性需要的两端对齐常量值。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -596,14 +609,18 @@ declare module swan {
     class JustifyAlign {
         /**
          * @language en_US
-         * 两端对齐，使用容器的尺寸作为对齐尺寸。
+         * Justify the children with respect to the container.
+         * This uniformly sizes all children to be the same size as the
+         * container.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 两端对齐，使用容器的尺寸作为对齐尺寸。
+         * 相对于容器对齐子代。这会将所有子代的大小统一调整为与容器相同的尺寸。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -611,14 +628,21 @@ declare module swan {
         static JUSTIFY: string;
         /**
          * @language en_US
-         * 相对于容器对子项进行内容对齐。与 JUSTIFY 不同，CONTENT_JUSTIFY 使用最大子项的尺寸与容器尺寸的两者中的较大值作为对齐尺寸。
+         * Content justify the children width/height respect to the container.
+         * This uniformly sizes all children to be the content width/height of the container.
+         * The content width/height of the container is the size of the largest child.
+         * If all children are smaller than the width/height of the container, then
+         * all the children will be sized to the width/height of the container.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 相对于容器对子项进行内容对齐。与 JUSTIFY 不同，CONTENT_JUSTIFY 使用最大子项的尺寸与容器尺寸的两者中的较大值作为对齐尺寸。
+         * 相对于容器对子代进行内容对齐。这会将所有子代的大小统一调整为容器的内容宽度/高度。
+         * 容器的内容宽度/高度是最大子代的大小。如果所有子代都小于容器的宽度/高度，则会将所有子代的大小调整为容器的宽度/高度。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -995,14 +1019,17 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * RowAlign 类为 TileLayout 类的 rowAlign 属性定义可能的值。
+     * The RowAlign class defines the possible values for the
+     * <code>rowAlign</code> property of the TileLayout class.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * RowAlign 类为 TileLayout 类的 rowAlign 属性定义可能的值。
+     * RowAlign 类为 TileLayout 类的 <code>rowAlign</code> 属性定义可能的值。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -1010,7 +1037,8 @@ declare module swan {
     class RowAlign {
         /**
          * @language en_US
-         * 不进行两端对齐。
+         * Do not justify the rows.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1018,6 +1046,7 @@ declare module swan {
         /**
          * @language zh_CN
          * 不进行两端对齐。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1025,7 +1054,8 @@ declare module swan {
         static TOP: string;
         /**
          * @language en_US
-         * 通过增大垂直间隙将行两端对齐。
+         * Justify the rows by increasing the vertical gap.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1033,6 +1063,7 @@ declare module swan {
         /**
          * @language zh_CN
          * 通过增大垂直间隙将行两端对齐。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1040,7 +1071,8 @@ declare module swan {
         static JUSTIFY_USING_GAP: string;
         /**
          * @language en_US
-         * 通过增大行高度将行两端对齐。
+         * Justify the rows by increasing the row height.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1048,6 +1080,7 @@ declare module swan {
         /**
          * @language zh_CN
          * 通过增大行高度将行两端对齐。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1129,14 +1162,17 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * TileOrientation 类为 TileLayout 类的 orientation 属性定义可能的值。
+     * The TileOrientation class defines the possible values for the
+     * <code>orientation</code> property of the TileLayout class.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * TileOrientation 类为 TileLayout 类的 orientation 属性定义可能的值。
+     * TileOrientation 类为 TileLayout 类的 <code>orientation</code> 属性定义可能的值。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -1144,7 +1180,8 @@ declare module swan {
     class TileOrientation {
         /**
          * @language en_US
-         * 逐行排列元素。
+         * Arranges elements row by row.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1152,6 +1189,7 @@ declare module swan {
         /**
          * @language zh_CN
          * 逐行排列元素。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1159,7 +1197,8 @@ declare module swan {
         static ROWS: string;
         /**
          * @language en_US
-         * 逐列排列元素。
+         * Arranges elements column by column.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1167,6 +1206,7 @@ declare module swan {
         /**
          * @language zh_CN
          * 逐列排列元素。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1468,16 +1508,16 @@ declare module swan {
      *
      * @example：
      * <code>
-     *      <e:Scroller>
-     *          <e:viewport>
-     *          <e:Group/>
+     *      <s:Scroller>
+     *          <s:viewport>
+     *          <s:Group/>
      *          </e:viewport>
      *      </e:Scroller>
      * <code/>
      * Cuz <code>viewport</code> is the default property of Scroller. So you can write as follow:
      * <code>
-     *      <e:Scroller>
-     *          <e:Group/>
+     *      <s:Scroller>
+     *          <s:Group/>
      *      </e:Scroller>
      * <code/>
      * @version Lark 1.0
@@ -1499,16 +1539,16 @@ declare module swan {
      * @param asDefault 是否将此属性注册为组件的默认属性,一个组件只可以设置一个默认属性。注册了组件默认属性后，在EXML中可以使用省略属性节点的写法，
      * 例如：
      *
-     * <e:Scroller>
-     *     <e:viewport>
-     *         <e:Group/>
+     * <s:Scroller>
+     *     <s:viewport>
+     *         <s:Group/>
      *     </e:viewport>
      * </e:Scroller>
      *
      * 因为 viewport 已经注册为 Scroller 的默认属性，上面的例子可以等效为：
      *
-     * <e:Scroller>
-     *     <e:Group/>
+     * <s:Scroller>
+     *     <s:Group/>
      * </e:Scroller>
      *
      * @version Lark 1.0
@@ -5237,8 +5277,12 @@ declare module swan.sys {
 declare module swan {
     /**
      * @language en_US
-     * BasicLayout 类根据其各个设置彼此独立地排列布局元素。
-     * BasicLayout（也称为绝对布局）要求显式定位每个容器子代。可以使用子代的 x 和 y 属性，或使用约束来定位每个子代。
+     * The BasicLayout class arranges the layout elements according to their individual settings,
+     * independent of each-other. BasicLayout, also called absolute layout, requires that you
+     * explicitly position each container child.
+     * You can use the <code>x</code> and <code>y</code> properties of the child,
+     * or constraints to position each child.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -5246,7 +5290,9 @@ declare module swan {
     /**
      * @language zh_CN
      * BasicLayout 类根据其各个设置彼此独立地排列布局元素。
-     * BasicLayout（也称为绝对布局）要求显式定位每个容器子代。可以使用子代的 x 和 y 属性，或使用约束来定位每个子代。
+     * BasicLayout（也称为绝对布局）要求显式定位每个容器子代。
+     * 可以使用子代的 <code>x</code> 和 <code>y</code> 属性，或使用约束来定位每个子代。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -5254,14 +5300,14 @@ declare module swan {
     class BasicLayout extends LayoutBase {
         /**
          * @language en_US
-         * 创建一个基本布局实例
+         * Constructor.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 创建一个基本布局实例
+         * 构造函数。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5269,48 +5315,32 @@ declare module swan {
         constructor();
         /**
          * @language en_US
-         * BasicLayout不支持虚拟布局，设置这个属性无效
+         * BasicLayout does not support virtual layout, setting this property is invalid.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * BasicLayout不支持虚拟布局，设置这个属性无效
+         * BasicLayout不支持虚拟布局，设置这个属性无效。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         useVirtualLayout: boolean;
         /**
-         * @language en_US
-         *基于目标的内容测量其默认大小，并（可选）测量目标的默认最小大小
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         *基于目标的内容测量其默认大小，并（可选）测量目标的默认最小大小
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         measure(): void;
         /**
-         * @language en_US
-         * 调整目标的元素的大小并定位这些元素
-         * @param unscaledWidth
-         * @param unscaledHeight
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 调整目标的元素的大小并定位这些元素
-         * @param unscaledWidth
-         * @param unscaledHeight
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5333,14 +5363,21 @@ declare module swan.sys {
 declare module swan {
     /**
      * @language en_US
-     * 网格布局
+     * The TileLayout class arranges layout elements in columns and rows
+     * of equally-sized cells.
+     * The TileLayout class uses a number of properties that control orientation,
+     * count, size, gap and justification of the columns and the rows
+     * as well as element alignment within the cells.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 网格布局
+     * TileLayout 类在单元格大小相等的列和行中排列布局元素。
+     * TileLayout 类使用许多属性来控制列和行的方向、计数、大小、间隙和两端对齐以及单元格内的元素对齐。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -5348,14 +5385,14 @@ declare module swan {
     class TileLayout extends LayoutBase {
         /**
          * @language en_US
-         * 创建一个网格布局实例
+         * Constructor.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 创建一个网格布局实例
+         * 构造函数。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5372,7 +5409,10 @@ declare module swan {
         private _horizontalGap;
         /**
          * @language en_US
-         * 列之间的水平空间（以像素为单位）。
+         * Horizontal space between columns, in pixels.
+         *
+         * @default 6
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5380,6 +5420,9 @@ declare module swan {
         /**
          * @language zh_CN
          * 列之间的水平空间（以像素为单位）。
+         *
+         * @default 6
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5396,7 +5439,10 @@ declare module swan {
         private _verticalGap;
         /**
          * @language en_US
-         * 行之间的垂直空间（以像素为单位）。
+         * Vertical space between rows, in pixels.
+         *
+         * @default 6
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5404,6 +5450,9 @@ declare module swan {
         /**
          * @language zh_CN
          * 行之间的垂直空间（以像素为单位）。
+         *
+         * @default 6
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5415,14 +5464,20 @@ declare module swan {
         private _columnCount;
         /**
          * @language en_US
-         * 实际列计数。
+         * [read-only]Contain the actual column count.
+         *
+         * @default -1
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 实际列计数。
+         * [只读] 实际列计数。
+         *
+         * @default -1
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5434,16 +5489,29 @@ declare module swan {
         private _requestedColumnCount;
         /**
          * @language en_US
-         * 要显示的列数。设置为0表示自动确定列计数,默认值0。
-         * 注意:当orientation为TileOrientation.COLUMNS(逐列排列元素)且tagert被显式设置宽度时，此属性无效。
+         * Number of columns to be displayed.
+         * <p>Set to 0 to allow the TileLayout to determine
+         * the column count automatically.</p>
+         * <p>If the <code>orientation</code> property is set to <code>TileOrientation.ROWS</code>,
+         * then setting this property has no effect
+         * In this case, the <code>rowCount</code> is explicitly set, and the
+         * container width is explicitly set. </p>
+         *
+         * @default 0
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 要显示的列数。设置为0表示自动确定列计数,默认值0。
-         * 注意:当orientation为TileOrientation.COLUMNS(逐列排列元素)且tagert被显式设置宽度时，此属性无效。
+         * 要显示的列数。
+         * <p>设置为 0 会允许 TileLayout 自动确定列计数。</p>
+         * <p>如果将 <code>orientation</code> 属性设置为 <code>TileOrientation.ROWS</code>，
+         * 则设置此属性不会产生任何效果。这种情况下，会显式设置 code>rowCount</code>，并显式设置容器宽度。</p>
+         *
+         * @default 0
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5455,14 +5523,16 @@ declare module swan {
         private _rowCount;
         /**
          * @language en_US
-         * 实际行计数。
+         * [read-only] The row count.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 实际行计数。
+         * [只读] 行计数。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5474,16 +5544,29 @@ declare module swan {
         private _requestedRowCount;
         /**
          * @language en_US
-         * 要显示的行数。设置为0表示自动确定行计数,默认值0。
-         * 注意:当orientation为TileOrientation.ROWS(即逐行排列元素,此为默认值)且target被显式设置高度时，此属性无效。
+         * Number of rows to be displayed.
+         * <p>Set to 0 to remove explicit override and allow the TileLayout to determine
+         * the row count automatically.</p>
+         * <p>If the <code>orientation</code> property is set to
+         * <code>TileOrientation.COLUMNS</code>, setting this property has no effect.
+         * in this case, <code>columnCount</code> is explicitly set, and the
+         * container height is explicitly set.</p>
+         *
+         * @default 0
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 要显示的行数。设置为0表示自动确定行计数,默认值0。
-         * 注意:当orientation为TileOrientation.ROWS(即逐行排列元素,此为默认值)且target被显式设置高度时，此属性无效。
+         * 要显示的行数。
+         * <code>设置为 -1 会删除显式覆盖并允许 TileLayout 自动确定行计数。</code>
+         * <code>如果将 <code>orientation</code> 属性设置为 <code>TileOrientation.COLUMNS</code>，
+         * 则设置此属性不会产生任何效果。这种情况下，会显式设置 <code>columnCount</code>，并显式设置容器高度。</code>
+         *
+         * @default 0
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5500,14 +5583,23 @@ declare module swan {
         private _columnWidth;
         /**
          * @language en_US
-         * 实际列宽（以像素为单位）。 若未显式设置，则从根据最宽的元素的宽度确定列宽度。
+         * Contain the actual column width, in pixels.
+         * <p>If not explicitly set, the column width is
+         * determined from the width of the widest element. </p>
+         *
+         * @default lark.NONE
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 实际列宽（以像素为单位）。 若未显式设置，则从根据最宽的元素的宽度确定列宽度。
+         * 包含实际列宽（以像素为单位）。
+         * <p>若未显式设置，则从根据最宽的元素的宽度确定列宽度。</p>
+         *
+         * @default lark.NONE
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5524,14 +5616,23 @@ declare module swan {
         private _rowHeight;
         /**
          * @language en_US
-         * 行高（以像素为单位）。 如果未显式设置，则从元素的高度的最大值确定行高度。
+         * The row height, in pixels.
+         * <p>If not explicitly set, the row height is
+         * determined from the maximum of elements' height.</p>
+         *
+         * @default lark.NONE
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 行高（以像素为单位）。 如果未显式设置，则从元素的高度的最大值确定行高度。
+         * 行高（以像素为单位）。
+         * <p>如果未显式设置，则从元素的高度的最大值确定行高度。<p>
+         *
+         * @default lark.NONE
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5542,15 +5643,8 @@ declare module swan {
          */
         private _paddingLeft;
         /**
-         * @language en_US
-         * 容器的左边缘与布局元素的左边缘之间的最少像素数,默认值：0。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 容器的左边缘与布局元素的左边缘之间的最少像素数,默认值：0。
+         * @copy swan.LinearLayoutBase#paddingLeft
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5561,15 +5655,8 @@ declare module swan {
          */
         private _paddingRight;
         /**
-         * @language en_US
-         * 容器的右边缘与布局元素的右边缘之间的最少像素数,默认值：0。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 容器的右边缘与布局元素的右边缘之间的最少像素数,默认值：0。
+         * @copy swan.LinearLayoutBase#paddingRight
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5580,15 +5667,8 @@ declare module swan {
          */
         private _paddingTop;
         /**
-         * @language en_US
-         * 容器的顶边缘与第一个布局元素的顶边缘之间的像素数,默认值：0。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 容器的顶边缘与第一个布局元素的顶边缘之间的像素数,默认值：0。
+         * @copy swan.LinearLayoutBase#paddingTop
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5599,15 +5679,8 @@ declare module swan {
          */
         private _paddingBottom;
         /**
-         * @language en_US
-         * 容器的底边缘与最后一个布局元素的底边缘之间的像素数,默认值：0。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 容器的底边缘与最后一个布局元素的底边缘之间的像素数,默认值：0。
+         * @copy swan.LinearLayoutBase#paddingBottom
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5619,20 +5692,25 @@ declare module swan {
         private _horizontalAlign;
         /**
          * @language en_US
-         * 指定如何在水平方向上对齐单元格内的元素。
-         * 支持的值有 HorizontalAlign.LEFT、HorizontalAlign.CENTER、
+         * Specifies how to align the elements within the cells in the horizontal direction.
+         * Supported values are
+         * HorizontalAlign.LEFT、HorizontalAlign.CENTER、
          * HorizontalAlign.RIGHT、JustifyAlign.JUSTIFY。
-         * 默认值：JustifyAlign.JUSTIFY
+         *
+         * @default <code>JustifyAlign.JUSTIFY</code>
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 指定如何在水平方向上对齐单元格内的元素。
-         * 支持的值有 HorizontalAlign.LEFT、HorizontalAlign.CENTER、
+         * 指定如何在水平方向上对齐单元格内的元素。支持的值有
+         * HorizontalAlign.LEFT、HorizontalAlign.CENTER、
          * HorizontalAlign.RIGHT、JustifyAlign.JUSTIFY。
-         * 默认值：JustifyAlign.JUSTIFY
+         *
+         * @default <code>JustifyAlign.JUSTIFY</code>
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5648,16 +5726,22 @@ declare module swan {
          * 支持的值有 VerticalAlign.TOP、VerticalAlign.MIDDLE、
          * VerticalAlign.BOTTOM、JustifyAlign.JUSTIFY。
          * 默认值：JustifyAlign.JUSTIFY。
+         *
+         * @default <code>swan.JustifyAlign.JUSTIFY</code>
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 指定如何在垂直方向上对齐单元格内的元素。
-         * 支持的值有 VerticalAlign.TOP、VerticalAlign.MIDDLE、
+         * Specifies how to align the elements within the cells in the vertical direction.
+         * Supported values are
+         * VerticalAlign.TOP、VerticalAlign.MIDDLE、
          * VerticalAlign.BOTTOM、JustifyAlign.JUSTIFY。
-         * 默认值：JustifyAlign.JUSTIFY。
+         *
+         * @default <code>swan.JustifyAlign.JUSTIFY</code>
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5669,15 +5753,31 @@ declare module swan {
         private _columnAlign;
         /**
          * @language en_US
-         * 指定如何将完全可见列与容器宽度对齐。
-         * 设置为 ColumnAlign.LEFT 时，它会关闭列两端对齐。在容器的最后一列和右边缘之间可能存在部分可见的列或空白。这是默认值。
-         * 设置为 ColumnAlign.JUSTIFY_USING_GAP 时，horizontalGap 的实际值将增大，
-         * 这样最后一个完全可见列右边缘会与容器的右边缘对齐。仅存在一个完全可见列时，
-         * horizontalGap 的实际值将增大，这样它会将任何部分可见列推到容器的右边缘之外。
-         * 请注意显式设置 horizontalGap 属性不会关闭两端对齐。它仅确定初始间隙值。两端对齐可能会增大它。
-         * 设置为 ColumnAlign.JUSTIFY_USING_WIDTH 时，columnWidth 的实际值将增大，
-         * 这样最后一个完全可见列右边缘会与容器的右边缘对齐。请注意显式设置 columnWidth 属性不会关闭两端对齐。
-         * 它仅确定初始列宽度值。两端对齐可能会增大它。
+         * Specifies how to justify the fully visible columns to the container width.
+         *
+         * <p>When set to <code>ColumnAlign.LEFT</code> it turns column justification off.
+         *  There may be partially visible columns or whitespace between the last column and
+         *  the right edge of the container.  This is the default value.</p>
+         *
+         * <p>When set to <code>ColumnAlign.JUSTIFY_USING_GAP</code> the <code>horizontalGap</code>
+         * actual value increases so that
+         * the last fully visible column right edge aligns with the container's right edge.
+         * In case there is only a single fully visible column, the <code>horizontalGap</code> actual value
+         * increases so that it pushes any partially visible column beyond the right edge
+         * of the container.
+         * Note that explicitly setting the <code>horizontalGap</code> property does not turn off
+         * justification. It only determines the initial gap value.
+         * Justification may increases it.</p>
+         *
+         * <p>When set to <code>ColumnAlign.JUSTIFY_USING_WIDTH</code> the <code>columnWidth</code>
+         * actual value increases so that
+         * the last fully visible column right edge aligns with the container's right edge.
+         * Note that explicitly setting the <code>columnWidth</code> property does not turn off justification.
+         * It only determines the initial column width value.
+         * Justification may increases it.</p>
+         *
+         * @default ColumnAlign.LEFT
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5685,14 +5785,21 @@ declare module swan {
         /**
          * @language zh_CN
          * 指定如何将完全可见列与容器宽度对齐。
-         * 设置为 ColumnAlign.LEFT 时，它会关闭列两端对齐。在容器的最后一列和右边缘之间可能存在部分可见的列或空白。这是默认值。
-         * 设置为 ColumnAlign.JUSTIFY_USING_GAP 时，horizontalGap 的实际值将增大，
+         *
+         * <p>设置为 <code>ColumnAlign.LEFT</code> 时，它会关闭列两端对齐。
+         * 在容器的最后一列和右边缘之间可能存在部分可见的列或空白。这是默认值。</p>
+         *
+         * <p>设置为 <code>ColumnAlign.JUSTIFY_USING_GAP</code> 时，<code>horizontalGap</code> 的实际值将增大，
          * 这样最后一个完全可见列右边缘会与容器的右边缘对齐。仅存在一个完全可见列时，
-         * horizontalGap 的实际值将增大，这样它会将任何部分可见列推到容器的右边缘之外。
-         * 请注意显式设置 horizontalGap 属性不会关闭两端对齐。它仅确定初始间隙值。两端对齐可能会增大它。
-         * 设置为 ColumnAlign.JUSTIFY_USING_WIDTH 时，columnWidth 的实际值将增大，
-         * 这样最后一个完全可见列右边缘会与容器的右边缘对齐。请注意显式设置 columnWidth 属性不会关闭两端对齐。
-         * 它仅确定初始列宽度值。两端对齐可能会增大它。
+         * <code>horizontalGap</code> 的实际值将增大，这样它会将任何部分可见列推到容器的右边缘之外。
+         * 请注意显式设置 <code>horizontalGap</code> 属性不会关闭两端对齐。它仅确定初始间隙值。两端对齐可能会增大它。</p>
+         *
+         * <p>设置为 <code>ColumnAlign.JUSTIFY_USING_WIDTH</code> 时，<code>columnWidth</code> 的实际值将增大，
+         * 这样最后一个完全可见列右边缘会与容器的右边缘对齐。请注意显式设置 <code>columnWidth</code> 属性不会关闭两端对齐。
+         * 它仅确定初始列宽度值。两端对齐可能会增大它。</p>
+         *
+         * @default ColumnAlign.LEFT
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5704,17 +5811,30 @@ declare module swan {
         private _rowAlign;
         /**
          * @language en_US
-         * 指定如何将完全可见行与容器高度对齐。
-         * 设置为 RowAlign.TOP 时，它会关闭列两端对齐。在容器的最后一行和底边缘之间可能存在部分可见的行或空白。这是默认值。
+         * Specifies how to justify the fully visible rows to the container height.
          *
-         * 设置为 RowAlign.JUSTIFY_USING_GAP 时，verticalGap 的实际值会增大，
-         * 这样最后一个完全可见行底边缘会与容器的底边缘对齐。仅存在一个完全可见行时，verticalGap 的值会增大，
-         * 这样它会将任何部分可见行推到容器的底边缘之外。请注意，显式设置 verticalGap
-         * 不会关闭两端对齐，而只是确定初始间隙值。两端对齐接着可以增大它。
+         * <p>When set to <code>RowAlign.TOP</code> it turns column justification off.
+         * There might be partially visible rows or whitespace between the last row and
+         * the bottom edge of the container.  This is the default value.</p>
          *
-         * 设置为 RowAlign.JUSTIFY_USING_HEIGHT 时，rowHeight 的实际值会增大，
-         * 这样最后一个完全可见行底边缘会与容器的底边缘对齐。请注意，显式设置 rowHeight
-         * 不会关闭两端对齐，而只是确定初始行高度值。两端对齐接着可以增大它。
+         * <p>When set to <code>RowAlign.JUSTIFY_USING_GAP</code> the <code>verticalGap</code>
+         * actual value increases so that
+         * the last fully visible row bottom edge aligns with the container's bottom edge.
+         * In case there is only a single fully visible row, the value of <code>verticalGap</code>
+         * increases so that it pushes any partially visible row beyond the bottom edge
+         * of the container.  Note that explicitly setting the <code>verticalGap</code> does not turn off
+         * justification, but just determines the initial gap value.
+         * Justification can then increases it.</p>
+         *
+         * <p>When set to <code>RowAlign.JUSTIFY_USING_HEIGHT</code> the <code>rowHeight</code>
+         * actual value increases so that
+         * the last fully visible row bottom edge aligns with the container's bottom edge.  Note that
+         * explicitly setting the <code>rowHeight</code> does not turn off justification, but
+         * determines the initial row height value.
+         * Justification can then increase it.</p>
+         *
+         * @default RowAlign.TOP
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5722,16 +5842,21 @@ declare module swan {
         /**
          * @language zh_CN
          * 指定如何将完全可见行与容器高度对齐。
-         * 设置为 RowAlign.TOP 时，它会关闭列两端对齐。在容器的最后一行和底边缘之间可能存在部分可见的行或空白。这是默认值。
          *
-         * 设置为 RowAlign.JUSTIFY_USING_GAP 时，verticalGap 的实际值会增大，
-         * 这样最后一个完全可见行底边缘会与容器的底边缘对齐。仅存在一个完全可见行时，verticalGap 的值会增大，
-         * 这样它会将任何部分可见行推到容器的底边缘之外。请注意，显式设置 verticalGap
-         * 不会关闭两端对齐，而只是确定初始间隙值。两端对齐接着可以增大它。
+         * <p>设置为 <code>RowAlign.TOP</code> 时，它会关闭列两端对齐。
+         * 在容器的最后一行和底边缘之间可能存在部分可见的行或空白。这是默认值。</p>
          *
-         * 设置为 RowAlign.JUSTIFY_USING_HEIGHT 时，rowHeight 的实际值会增大，
-         * 这样最后一个完全可见行底边缘会与容器的底边缘对齐。请注意，显式设置 rowHeight
-         * 不会关闭两端对齐，而只是确定初始行高度值。两端对齐接着可以增大它。
+         * <p>设置为 <code>RowAlign.JUSTIFY_USING_GAP</code> 时，<code>verticalGap</code> 的实际值会增大，
+         * 这样最后一个完全可见行底边缘会与容器的底边缘对齐。仅存在一个完全可见行时，<code>verticalGap</code> 的值会增大，
+         * 这样它会将任何部分可见行推到容器的底边缘之外。请注意，显式设置 <code>verticalGap</code>
+         * 不会关闭两端对齐，而只是确定初始间隙值。两端对齐接着可以增大它。</p>
+         *
+         * <p>设置为 <code>RowAlign.JUSTIFY_USING_HEIGHT</code> 时，<code>rowHeight</code> 的实际值会增大，
+         * 这样最后一个完全可见行底边缘会与容器的底边缘对齐。请注意，显式设置 <code>rowHeight</code>
+         * 不会关闭两端对齐，而只是确定初始行高度值。两端对齐接着可以增大它。</p>
+         *
+         * @default RowAlign.TOP
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5743,14 +5868,21 @@ declare module swan {
         private _orientation;
         /**
          * @language en_US
-         * 指定是逐行还是逐列排列元素。默认值：TileOrientation.ROWS
+         * Specifies whether elements are arranged row by row or
+         * column by column.
+         *
+         * @default TileOrientation.ROWS
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 指定是逐行还是逐列排列元素。默认值：TileOrientation.ROWS
+         * 指定是逐行还是逐列排列元素。
+         *
+         * @default TileOrientation.ROWS
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5762,15 +5894,8 @@ declare module swan {
          */
         private invalidateTargetLayout();
         /**
-         * @language en_US
-         * 基于目标的内容测量其默认大小，并（可选）测量目标的默认最小大小
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 基于目标的内容测量其默认大小，并（可选）测量目标的默认最小大小
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5802,15 +5927,8 @@ declare module swan {
          */
         private doUpdateMaxElementSize(startIndex, endIndex);
         /**
-         * @language en_US
-         * 如果 useVirtualLayout 为 true，则当布局目标改变时，布局目标可以使用此方法来清除已缓存布局信息
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果 useVirtualLayout 为 true，则当布局目标改变时，布局目标可以使用此方法来清除已缓存布局信息
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5832,15 +5950,8 @@ declare module swan {
          */
         private indexInViewCalculated;
         /**
-         * @language en_US
-         * scrollV 或 scrollH 属性更改时调用
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * scrollV 或 scrollH 属性更改时调用
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5852,15 +5963,8 @@ declare module swan {
          */
         private getIndexInView();
         /**
-         * @language en_US
-         * 调整目标的元素的大小并定位这些元素
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 调整目标的元素的大小并定位这些元素
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -9016,151 +9120,90 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * 水平布局
+     * The HorizontalLayout class arranges the layout elements in a horizontal sequence,
+     * left to right, with optional gaps between the elements and optional padding
+     * around the elements.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 水平布局
+     * HorizontalLayout 类按水平顺序从左到右排列布局元素，在元素和围绕元素的可选填充之间带有可选间隙。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     class HorizontalLayout extends LinearLayoutBase {
         /**
-         * @language en_US
-         * 测量使用真实布局的尺寸
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 测量使用真实布局的尺寸
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         protected measureReal(): void;
         /**
-         * @language en_US
-         * 测量使用虚拟布局的尺寸
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 测量使用虚拟布局的尺寸
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         protected measureVirtual(): void;
         /**
-         * @language en_US
-         * 更新使用真实布局的显示列表
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 更新使用真实布局的显示列表
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         protected updateDisplayListReal(width: number, height: number): void;
         /**
-         * @language en_US
-         * 更新使用虚拟布局的显示列表
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 更新使用虚拟布局的显示列表
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         protected updateDisplayListVirtual(width: number, height: number): void;
         /**
-         * @language en_US
-         * 获取指定索引的起始位置
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取指定索引的起始位置
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         protected getStartPosition(index: number): number;
         /**
-         * @language en_US
-         * 获取指定索引的元素尺寸
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取指定索引的元素尺寸
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         protected getElementSize(index: number): number;
         /**
-         * @language en_US
-         * 获取缓存的子对象尺寸总和
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取缓存的子对象尺寸总和
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         protected getElementTotalSize(): number;
         /**
-         * @language en_US
+         * @inheritDoc
          *
-         * @param index
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         *
-         * @param index
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         elementAdded(index: number): void;
         /**
-         * @language en_US
-         * 获取视图中第一个和最后一个元素的索引,返回是否发生改变
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取视图中第一个和最后一个元素的索引,返回是否发生改变
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -9171,151 +9214,90 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * 垂直布局
+     * The VerticalLayout class arranges the layout elements in a vertical sequence,
+     * top to bottom, with optional gaps between the elements and optional padding
+     * around the sequence of elements.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 垂直布局
+     * VerticalLayout 类按垂直顺序从上向下排列布局元素，在元素和围绕元素顺序的可选填充之间带有可选间隙。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     class VerticalLayout extends LinearLayoutBase {
         /**
-         * @language en_US
-         * 测量使用真实布局的尺寸
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 测量使用真实布局的尺寸
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         protected measureReal(): void;
         /**
-         * @language en_US
-         * 测量使用虚拟布局的尺寸
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 测量使用虚拟布局的尺寸
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         protected measureVirtual(): void;
         /**
-         * @language en_US
-         * 更新使用真实布局的显示列表
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 更新使用真实布局的显示列表
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         protected updateDisplayListReal(width: number, height: number): void;
         /**
-         * @language en_US
-         * 更新使用虚拟布局的显示列表
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 更新使用虚拟布局的显示列表
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         protected updateDisplayListVirtual(width: number, height: number): void;
         /**
-         * @language en_US
-         * 获取指定索引的起始位置
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取指定索引的起始位置
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         protected getStartPosition(index: number): number;
         /**
-         * @language en_US
-         * 获取指定索引的元素尺寸
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取指定索引的元素尺寸
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         protected getElementSize(index: number): number;
         /**
-         * @language en_US
-         * 获取缓存的子对象尺寸总和
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取缓存的子对象尺寸总和
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         protected getElementTotalSize(): number;
         /**
-         * @language en_US
+         * @inheritDoc
          *
-         * @param index
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         *
-         * @param index
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         elementAdded(index: number): void;
         /**
-         * @language en_US
-         * 获取视图中第一个和最后一个元素的索引,返回是否发生改变
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取视图中第一个和最后一个元素的索引,返回是否发生改变
+         * @inheritDoc
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -13204,8 +13186,7 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * The enum class for definition of class and interface within Swan.
-     * This class is usually used for checking an type of class through <code>lark.is()</code>
+     * Provides constant enum values for type checking in the module of Swan. It is usually passed as the parameters of the lark.is() method.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native

@@ -92,8 +92,8 @@ var lark;
 var lark;
 (function (lark) {
     lark.$locale_strings = lark.$locale_strings || {};
-    lark.$locale_strings["zh_CN"] = lark.$locale_strings["zh_CN"] || {};
-    var locale_strings = lark.$locale_strings["zh_CN"];
+    lark.$locale_strings["en_US"] = lark.$locale_strings["en_US"] || {};
+    var locale_strings = lark.$locale_strings["en_US"];
     locale_strings[3101] = "There is no location service on this device";
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
