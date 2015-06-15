@@ -10,7 +10,7 @@ class Video extends lark.Sprite {
         imageLoader.once(lark.Event.COMPLETE,this.onLoaded,this);
         imageLoader.load("resources/poster.png");
         
-        var video = new lark.Video("resources/trailer.mp4")
+        var video = new lark.Video("http://media.w3.org/2010/05/sintel/trailer.mp4")
         video.load();
         this.video = video;
     }
