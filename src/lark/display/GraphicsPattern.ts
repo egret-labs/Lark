@@ -30,7 +30,7 @@
 module lark{
     /**
      * @language en_US
-     * The CanvasPattern interface represents an opaque object describing a pattern, based on a BitmapData,
+     * The GraphicsPattern interface represents an opaque object describing a pattern, based on a BitmapData,
      * created by the Graphics.createPattern() method.
      * @see lark.Graphics#createPattern()
      * @version Lark 1.0

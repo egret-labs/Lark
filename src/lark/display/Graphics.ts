@@ -96,13 +96,25 @@ module lark {
          * @language en_US
          * creates a radial gradient given by the coordinates of the two circles represented by the parameters.
          * This method returns a radial GraphicsGradient.
+         * @param x0 The x axis of the coordinate of the start circle.
+         * @param y0 The y axis of the coordinate of the start circle.
+         * @param r0 The radius of the start circle.
+         * @param x1 The x axis of the coordinate of the end circle.
+         * @param y1 The y axis of the coordinate of the end circle.
+         * @param r1 The radius of the end circle.
          * @see lark.GraphicsGradient
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 根据参数确定的两个圆的坐标，创建一个放射性渐变。该方法返回一个放射性的 CanvasGradient。
+         * 根据参数确定的两个圆的坐标，创建一个放射性渐变。该方法返回一个放射性的 GraphicsGradient。
+         * @param x0 开始圆形的 x 轴坐标。
+         * @param y0 开始圆形的 y 轴坐标。
+         * @param r0 开始圆形的半径。
+         * @param x1 结束圆形的 x 轴坐标。
+         * @param y1 结束圆形的 y 轴坐标。
+         * @param r1 结束圆形的半径。
          * @see lark.GraphicsGradient
          * @version Lark 1.0
          * @platform Web,Native
@@ -115,12 +127,20 @@ module lark {
          * @language en_US
          * reates a gradient along the line given by the coordinates represented by the parameters.This method returns a linear GraphicsGradient.
          * @see lark.GraphicsGradient
+         * @param x0 The x axis of the coordinate of the start point.
+         * @param y0 The y axis of the coordinate of the start point.
+         * @param x1 The x axis of the coordinate of the end point.
+         * @param y1 The y axis of the coordinate of the end point.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 创建一个沿参数坐标指定的直线的渐变。该方法返回一个线性的 GraphicsGradient 对象。
+         * @param x0 起点的 x 轴坐标。
+         * @param y0 起点的 y 轴坐标。
+         * @param x1 终点的 x 轴坐标。
+         * @param y1 终点的 y 轴坐标。
          * @see lark.GraphicsGradient
          * @version Lark 1.0
          * @platform Web,Native
@@ -662,7 +682,8 @@ module lark {
 
         /**
          * @language en_US
-         * paints a rectangle which has a starting point at (x, y) and has a w width and an h height onto the canvas, using the current stroke style.
+         * paints a rectangle which has a starting point at (x, y) and has a w width and an h height onto the surface,
+         * using the current stroke style.
          * @param x The x axis of the coordinate for the rectangle starting point.
          * @param y The y axis of the coordinate for the rectangle starting point.
          * @param w The rectangle's width.
