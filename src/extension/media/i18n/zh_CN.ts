@@ -33,6 +33,6 @@ module lark {
     $locale_strings["zh_CN"] = $locale_strings["zh_CN"] || {};
     var locale_strings = $locale_strings["zh_CN"];
 
-    locale_strings[3001] = "请等待 Sound 加载完成后再调用 play 方法";
-    locale_strings[3002] = "请指定要加载的音频的URL";
+    locale_strings[3001] = "请等待媒体加载完成后再调用 play 方法";
+    locale_strings[3002] = "请指定要加载的媒体的URL";
 }

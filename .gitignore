@@ -15,6 +15,5 @@ bin-release
 .idea
 tmp
 *.iml
-proj.json
-template
-src/tests
+/template
+/src/tests

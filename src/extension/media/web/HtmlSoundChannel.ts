@@ -86,7 +86,7 @@ module lark.web {
             audio.removeEventListener("ended", this.onPlayEnd);
             audio['$channel'] = null;
             this.audio = null;
-            this.emitWith(lark.Event.COMPLETE);
+            this.emitWith(lark.Event.ENDED);
             this.$sound.$recycle(audio);
             this.$sound = null;
         }

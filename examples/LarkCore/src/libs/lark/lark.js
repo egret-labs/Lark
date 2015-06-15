@@ -4963,6 +4963,19 @@ var lark;
          * @platform Web,Native
          */
         Event.FOCUS_OUT = "focusOut";
+        /**
+         * @language en_US
+         * Emitted when the playback is ended.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 动画声音等播放完成
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.ENDED = "ended";
         return Event;
     })(lark.LarkObject);
     lark.Event = Event;

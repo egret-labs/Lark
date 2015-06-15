@@ -95,18 +95,12 @@ class Loader {
 
         var total = urls.length;
         var got = 0;
-        var parser = new swan.sys.EXMLParser();
         urls.forEach(url => {
-            var request = new lark.HttpRequest();
-            request.once(lark.Event.COMPLETE, () => {
+            EXML.load(url,()=>{
                 got++;
-                parser.parse(request.response);
-
                 if (got == total)
                     callback();
-            }, this);
-            request.open(url);
-            request.send();
+            },this)
         });
     }
 }
