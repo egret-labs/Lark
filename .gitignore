@@ -17,3 +17,4 @@ tmp
 *.iml
 proj.json
 template
+src/tests
