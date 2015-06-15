@@ -38,7 +38,7 @@ Lark 是一套由 Egret 团队制作的基于HTML5技术构建跨平台移动Web
 
 <script>
     var exml = document.getElementById('exml').textContent;
-    new swan.sys.EXMLParser().parse(exml);
+    new swan.EXML.parse(exml);
 </script>
 
 </body>
@@ -99,15 +99,26 @@ Lark 硬件访问能力
 Lark 动画库
 <br/>Lark GUI 矢量库
 
+##版本声明
+Lark 目前处于 Prerelease 阶段，仅供技术研究，请谨慎应用于生产环境。注意：当前版本的API并不是最终版，在测试阶段内，根据开发者具体反馈情况，可能会有少量不兼容重构，但在正式版发布后会开始持续的向后兼容。欢迎广大开发者试用反馈，或直接发起pull request，与我们共同推进 Lark 的版本迭代。如果您希望更加深入地参与到 Lark 框架的开发设计中，请参考下方「工作机会」。
 
 ##工作机会
-我们正在等待你的加入，共同开发 Lark， 提供更加高效的跨平台开发方案。<br/>
-如果你
-* 有 ActionScript 或 JavaScript 富客户端开发经验
-* 有 Android 或 iOS 原生应用开发经验
-* 没有以上经验，但学习能力超强
+Lark 框架团队期待您的加入，现招募核心研发工程师数名，岗位如下：
 
-欢迎联系我们。<br/>
+Lark 核心框架及扩展库研发：
+* 三年以上ActionScript游戏行业编程经验，或2年JavaScript前端开发经验。
+* 有参与设计或维护通用框架或开源项目经验。
+* 有个人技术博客优先。
 
-公司地址：**北京市朝阳区望京阜荣街悠乐汇商业C座321室**<br/>
-邮件地址：**HR@egret.com**
+Lark 原生打包方案研发：
+* 有1年以上 Android 或 iOS 原生应用开发经验
+* 熟悉移动设备Web App开发，如 React 或 Angularjs。
+* 有 Cordova 打包经验优先。
+
+「我没有以上经验，但学习能力超强」也欢迎联系我们。
+
+##联系方式
+*地址：**北京市朝阳区望京阜荣街悠乐汇商业C座321室**<br/>
+*邮箱：**HR@egret.com**
+*QQ群：**399919028** 
+*首页：**www.egret.com**
