@@ -33,7 +33,7 @@ module lark {
      * @language en_US
      * The Video class lets you work with video in an application.
      * The Video class lets you create a Video object, load and play an external video file into that object.
-     * [warning] On most mobile device, the video is playback in the full screen mode. 
+     * Note: On most mobile device, the video is playback in the full screen mode.<br/>
      *
      * @event egret.Event.COMPLETE Emit when the video resource is loaded and ready to play
      * @event egret.Event.ENDED Emit when the video playback ended
@@ -42,8 +42,8 @@ module lark {
      */
     /**
      * @language zh_CN
-     * Video 允许您在应用程序中使用视频。使用 Video 类可以创建 Video 对象、将外部视频文件加载到该对象并播放该文件。
-     * [警告] 在大多数移动设备中，视频是强制全屏播放的，所以你可以直接调用 play() 方法全屏播放视频，不用将它绘制在Stage中。
+     * Video 允许您在应用程序中使用视频。使用 Video 类可以创建 Video 对象、将外部视频文件加载到该对象并播放该文件。<br/>
+     * 注意: 在大多数移动设备中，视频是强制全屏播放的，所以你可以直接调用 play() 方法全屏播放视频，不用将它绘制在Stage中。
      *
      * @event egret.Event.COMPLETE 视频加载完成时抛出
      * @event egret.Event.ENDED 视频播放完成时抛出
