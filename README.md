@@ -38,7 +38,7 @@ Lark 是一套由 Egret 团队制作的基于HTML5技术构建跨平台移动Web
 
 <script>
     var exml = document.getElementById('exml').textContent;
-    new swan.EXML.parse(exml);
+    EXML.parse(exml);
 </script>
 
 </body>
@@ -76,13 +76,18 @@ NPM 是 Node.js 的包管理工具，默认配置下会随 Node.js 一起安装�
 安装完成后执行 `lark` 能看到 Lark 输出的版本信息。
 
 ####创建项目
-进入您的工作目录，执行 `lark create HelloWorld` Lark 会创建一个 HelloWorld 目录作为项目的根目录, 
-如果您想要在当前目录创建项目，请直接执行 `lark create`。命令行工具会自动打开一个浏览器窗口，请按照提示
+进入您的工作目录，执行 `lark create HelloWorld`, Lark 会创建一个 HelloWorld 目录作为项目的根目录
+( 如果您想要在当前目录创建项目，可以直接执行 `lark create` )。命令行工具会自动打开一个浏览器窗口，请按照提示
 选择项目模板、屏幕尺寸和要使用的扩展模块。
 
 更多命令行使用说明请参考 [Lark 命令行工具手册](https://github.com/egret-labs/Lark/blob/master/docs/cmd-tools.md)
 
+##更多示例
+在 [examples](https://github.com/egret-labs/Lark/tree/master/examples) 目录中有更多的示例项目。
+* **LarkCore** :  Lark 核心 API 相关示例，包括位图、文本、矢量图绘制、音频视频和设备传感器访问等。
+* **UIExamples** :  Lark GUI 类库示例，包括皮肤、EXML组件、主题等的使用。
 
+每个目录都是标准的 Lark 项目，你可以进入相应的目录，执行 `lark run` 来查看该项目的运行效果。
 
 ##路线图
 
