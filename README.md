@@ -121,4 +121,4 @@ Lark 原生打包方案研发：
 * 地址：北京市朝阳区望京阜荣街悠乐汇商业C座321室
 * 邮箱：HR@egret.com
 * QQ群：399919028
-* 首页：www.egret.com
+* 首页：http://www.egret.com
