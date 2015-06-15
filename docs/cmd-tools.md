@@ -13,7 +13,7 @@
 ##编译项目
 进入您的项目目录，执行 `lark build`， Lark 会编译您的 TypeScript 代码到 `bin-debug` 目录，
 拷贝 `src` 和 `template` 中的其他文件到 `bin-debug` 中。<br/>
-Lark 命令行工具采用部分编译机制，默认只编译上次编译之后改变的部分。
+Lark 命令行工具采用增量编译机制，默认只编译上次编译之后改变的部分。
 
 ##运行项目
 进入您的项目目录，执行 `lark run`， Lark 会启动内置的 HTTP Server 并打开浏览器。
