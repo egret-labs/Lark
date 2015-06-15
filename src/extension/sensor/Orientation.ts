@@ -55,7 +55,7 @@ module lark {
     /**
      * @language en_US
      * The OrientationEvent provides information from the physical orientation of the device.
-     * [Warning] Currently, Browsers on the iOS and Android does not handle the coordinates the same way.
+     * Note: Currently, Browsers on the iOS and Android does not handle the coordinates the same way.
      * Take care about this while using them.
      * @version Lark 1.0
      * @platform Web,Native
@@ -63,7 +63,7 @@ module lark {
     /**
      * @language zh_CN
      * OrientationEvent 提供设备的方向信息
-     * [警告] 目前各个浏览器和操作系统处理方向的方式不完全相同，请根据使用场景做相应的校正，
+     * 注意: 目前各个浏览器和操作系统处理方向的方式不完全相同，请根据使用场景做相应的校正，
      * 比如使用两次方向数据的变化而不是直接使用方向的值
      * @version Lark 1.0
      * @platform Web,Native
