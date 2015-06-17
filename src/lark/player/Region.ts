@@ -284,7 +284,13 @@ module lark.sys {
                     minX = minY = maxX = maxY = 0;
                 }
             }
-            this.setTo(minX,minY,maxX,maxY);
+            this.minX = minX;
+            this.minY = minY;
+            this.maxX = maxX;
+            this.maxY = maxY;
+            this.width = maxX - minX;
+            this.height = maxY - minY;
+            this.area = this.width * this.height;
         }
     }
 }
