@@ -9036,6 +9036,7 @@ var swan;
             body = body.substring(index + 1, lastIndex);
             return body.trim() == "";
         }
+
         /**
          * @private
          * 拷贝模板类的方法体和属性到目标类上。
@@ -9044,7 +9045,7 @@ var swan;
          */
         function mixin(target, template) {
             for (var property in template) {
-                if (template.hasOwnProperty(property)) {
+                if ( property!="prototype" && template.hasOwnProperty(property)) {
                     target[property] = template[property];
                 }
             }
