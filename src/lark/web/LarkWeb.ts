@@ -135,24 +135,32 @@ module lark.web {
         }
     }
 
-    lark.assert = console.assert.bind(console);
-    lark.warn = console.warn.bind(console);
-    lark.error = console.error.bind(console);
-    if(DEBUG){
-    lark.log = function(){
-        if(DEBUG){
-            var length = arguments.length;
-            var info = "";
-            for(var i=0;i<length;i++){
-                info += arguments[i]+" ";
-            }
-            sys.$logToFPS(info);
+    function toArray(argument){
+        var args = [];
+        for(var i=0;i<argument.length;i++){
+            args.push(argument[i]);
         }
-        console.log.apply(console,arguments);
+        return args;
     }
+
+    lark.warn = () => console.warn.apply(console,toArray(arguments));
+    lark.error = () => console.error.apply(console,toArray(arguments));
+    lark.assert = () => console.assert.apply(console,toArray(arguments));
+    if(DEBUG){
+        lark.log = function(){
+            if(DEBUG){
+                var length = arguments.length;
+                var info = "";
+                for(var i=0;i<length;i++){
+                    info += arguments[i]+" ";
+                }
+                sys.$logToFPS(info);
+            }
+            console.log.apply(console,toArray(arguments));
+        }
     }
     else{
-        lark.log = console.log.bind(console);
+        lark.log = ()=>console.log.apply(console,toArray(arguments));
     }
     window.addEventListener("load", runLark);
     window.addEventListener("resize",updateScreenSize);

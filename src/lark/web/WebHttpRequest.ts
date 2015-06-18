@@ -54,7 +54,13 @@ module lark.web {
          * 本次请求返回的数据，数据类型根据responseType设置的值确定。
          */
         public get response():any {
-            return this._xhr.response;
+            if(this._xhr.response)
+                return this._xhr.response;
+            if(this._xhr.responseXML)
+                return this._xhr.responseXML;
+            if(this._xhr.responseText)
+                return this._xhr.responseText;
+            return null;
         }
 
         /**

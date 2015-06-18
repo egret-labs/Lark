@@ -1726,7 +1726,7 @@ module swan.sys {
      */
     export function mixin(target:any, template:any):void {
         for (var property in template) {
-            if (template.hasOwnProperty(property)) {
+            if (property != "prototype" && template.hasOwnProperty(property)) {
                 target[property] = template[property];
             }
         }

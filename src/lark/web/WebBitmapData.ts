@@ -27,6 +27,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
+var HTMLVideoElement = HTMLVideoElement || HTMLDivElement;
 module lark.web {
 
     registerClass(HTMLImageElement,Types.BitmapData);
