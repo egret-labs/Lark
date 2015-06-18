@@ -9044,7 +9044,7 @@ var swan;
          */
         function mixin(target, template) {
             for (var property in template) {
-                if (template.hasOwnProperty(property)) {
+                if (property != "prototype" && template.hasOwnProperty(property)) {
                     target[property] = template[property];
                 }
             }

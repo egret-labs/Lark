@@ -10,7 +10,7 @@ class BlendMode extends lark.Sprite {
             "resources/blendMode3.png",
             "resources/blendMode.png",
             "resources/blendMode2.png",
-            "resources/blendModeBG.png"
+            "resources/blendModeBG.jpg"
         ]);
     }
 
@@ -19,7 +19,7 @@ class BlendMode extends lark.Sprite {
         var larkBitmapData = images["resources/blendMode3.png"];
         var larkOrangeBitmapData = images["resources/blendMode.png"];
         var larkGrayBitmapData = images["resources/blendMode2.png"];
-        var bgBitmapData = images["resources/blendModeBG.png"];
+        var bgBitmapData = images["resources/blendModeBG.jpg"];
 
 
         var bgBmp = new lark.Bitmap(bgBitmapData);

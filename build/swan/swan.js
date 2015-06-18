@@ -28,6 +28,159 @@
 //////////////////////////////////////////////////////////////////////////////////////
 var __define = this.__define || function (o, p, g, s) { 
   Object.defineProperty(o, p, { configurable:true, enumerable:true, get:g,set:s }) };
+var swan;
+(function (swan) {
+    var sys;
+    (function (sys) {
+        /**
+         * @private
+         *
+         * @param fraction
+         * @returns
+         */
+        function sineInOut(fraction) {
+            return -0.5 * (Math.cos(Math.PI * fraction) - 1);
+        }
+        /**
+         * @private
+         * 数值缓动工具类
+         */
+        var Animation = (function () {
+            /**
+             * @private
+             */
+            function Animation(updateFunction, thisObject) {
+                /**
+                 * @private
+                 * 此动画的缓动行为。设置为null意味着不使用缓动，默认值为 sineInOut
+                 */
+                this.easerFunction = sineInOut;
+                /**
+                 * @private
+                 * 是否正在播放动画，不包括延迟等待和暂停的阶段
+                 */
+                this.isPlaying = false;
+                /**
+                 * @private
+                 * 动画持续时间,单位毫秒，默认值500
+                 */
+                this.duration = 500;
+                /**
+                 * @private
+                 * 动画到当前时间对应的值。
+                 */
+                this.currentValue = 0;
+                /**
+                 * @private
+                 * 起始值
+                 */
+                this.from = 0;
+                /**
+                 * @private
+                 * 终点值。
+                 */
+                this.to = 0;
+                /**
+                 * @private
+                 * 动画启动时刻
+                 */
+                this.startTime = 0;
+                /**
+                 * @private
+                 * 动画播放结束时的回调函数
+                 */
+                this.endFunction = null;
+                this.updateFunction = updateFunction;
+                this.thisObject = thisObject;
+            }
+            var d = __define,c=Animation;p=c.prototype;
+            /**
+             * @private
+             * 开始正向播放动画,无论何时调用都重新从零时刻开始，若设置了延迟会首先进行等待。
+             */
+            p.play = function () {
+                this.stop();
+                this.start();
+            };
+            /**
+             * @private
+             * 开始播放动画
+             */
+            p.start = function () {
+                this.isPlaying = false;
+                this.currentValue = 0;
+                this.startTime = lark.getTimer();
+                this.doInterval(this.startTime);
+                lark.startTick(this.doInterval, this);
+            };
+            /**
+             * @private
+             * 停止播放动画
+             */
+            p.stop = function () {
+                this.isPlaying = false;
+                this.startTime = 0;
+                lark.stopTick(this.doInterval, this);
+            };
+            /**
+             * @private
+             * 计算当前值并返回动画是否结束
+             */
+            p.doInterval = function (currentTime) {
+                var runningTime = currentTime - this.startTime;
+                if (!this.isPlaying) {
+                    this.isPlaying = true;
+                }
+                var duration = this.duration;
+                var fraction = duration == 0 ? 1 : Math.min(runningTime, duration) / duration;
+                if (this.easerFunction) {
+                    fraction = this.easerFunction(fraction);
+                }
+                this.currentValue = this.from + (this.to - this.from) * fraction;
+                if (this.updateFunction)
+                    this.updateFunction.call(this.thisObject, this);
+                var isEnded = runningTime >= duration;
+                if (isEnded) {
+                    this.stop();
+                }
+                if (isEnded && this.endFunction) {
+                    this.endFunction.call(this.thisObject, this);
+                }
+                return true;
+            };
+            return Animation;
+        })();
+        sys.Animation = Animation;
+    })(sys = swan.sys || (swan.sys = {}));
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -790,9 +943,9 @@ var swan;
 (function (swan) {
     /**
      * @language en_US
-     * The CollectionEventKind class contains constants for the valid values
-     * of the <code>CollectionEvent</code> class <code>kind</code> property.
-     * These constants indicate the kind of change that was made to the collection.
+     * The JustifyAlign class defines the possible values for the
+     * <code>horizontalAlign</code> 和 <code>verticalAlign</code> property of
+     * Layout class.
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -800,115 +953,60 @@ var swan;
      */
     /**
      * @language zh_CN
-     * 定义 <code>CollectionEvent</code> 类 <code>kind</code> 属性的有效值的常量。
-     * 这些常量指示对集合进行的更改类型。
-
+     * JustifyAlign 定义布局类中 horizontalAlign 与 verticalAlign 属性需要的两端对齐常量值。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    var CollectionEventKind = (function () {
-        function CollectionEventKind() {
+    var JustifyAlign = (function () {
+        function JustifyAlign() {
         }
-        var d = __define,c=CollectionEventKind;p=c.prototype;
+        var d = __define,c=JustifyAlign;p=c.prototype;
         /**
          * @language en_US
-         * Indicates that the collection added an item or items.
+         * Justify the children with respect to the container.
+         * This uniformly sizes all children to be the same size as the
+         * container.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 指示集合添加了一个或多个项目。
+         * 相对于容器对齐子代。这会将所有子代的大小统一调整为与容器相同的尺寸。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        CollectionEventKind.ADD = "add";
+        JustifyAlign.JUSTIFY = "justify";
         /**
          * @language en_US
-         * Indicates that the collection applied a sort, a filter, or both.
-         * This change can potentially be easier to handle than a RESET.
+         * Content justify the children width/height respect to the container.
+         * This uniformly sizes all children to be the content width/height of the container.
+         * The content width/height of the container is the size of the largest child.
+         * If all children are smaller than the width/height of the container, then
+         * all the children will be sized to the width/height of the container.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 指示集合应用了排序或/和筛选。
+         * 相对于容器对子代进行内容对齐。这会将所有子代的大小统一调整为容器的内容宽度/高度。
+         * 容器的内容宽度/高度是最大子代的大小。如果所有子代都小于容器的宽度/高度，则会将所有子代的大小调整为容器的宽度/高度。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        CollectionEventKind.REFRESH = "refresh";
-        /**
-         * @language en_US
-         * Indicates that the collection removed an item or items.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 指示集合删除了一个或多个项目。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        CollectionEventKind.REMOVE = "remove";
-        /**
-         * @language en_US
-         * Indicates that the item at the position identified by the
-         * CollectionEvent <code>location</code> property has been replaced.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 指示已替换由 CollectionEvent.location 属性确定的位置处的项目。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        CollectionEventKind.REPLACE = "replace";
-        /**
-         * @language en_US
-         * Indicates that the collection has changed so drastically that
-         * a reset is required.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 指示集合已彻底更改，需要进行重置。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        CollectionEventKind.RESET = "reset";
-        /**
-         * @language en_US
-         * Indicates that one or more items were updated within the collection.
-         * The affected item(s)
-         * are stored in the <code>CollectionEvent.items</code> property.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 指示集合中一个或多个项目进行了更新。受影响的项目将存储在  CollectionEvent.items 属性中。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        CollectionEventKind.UPDATE = "update";
-        return CollectionEventKind;
+        JustifyAlign.CONTENT_JUSTIFY = "contentJustify";
+        return JustifyAlign;
     })();
-    swan.CollectionEventKind = CollectionEventKind;
+    swan.JustifyAlign = JustifyAlign;
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1039,75 +1137,6 @@ var swan;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The JustifyAlign class defines the possible values for the
-     * <code>horizontalAlign</code> 和 <code>verticalAlign</code> property of
-     * Layout class.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * JustifyAlign 定义布局类中 horizontalAlign 与 verticalAlign 属性需要的两端对齐常量值。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var JustifyAlign = (function () {
-        function JustifyAlign() {
-        }
-        var d = __define,c=JustifyAlign;p=c.prototype;
-        /**
-         * @language en_US
-         * Justify the children with respect to the container.
-         * This uniformly sizes all children to be the same size as the
-         * container.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 相对于容器对齐子代。这会将所有子代的大小统一调整为与容器相同的尺寸。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        JustifyAlign.JUSTIFY = "justify";
-        /**
-         * @language en_US
-         * Content justify the children width/height respect to the container.
-         * This uniformly sizes all children to be the content width/height of the container.
-         * The content width/height of the container is the size of the largest child.
-         * If all children are smaller than the width/height of the container, then
-         * all the children will be sized to the width/height of the container.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 相对于容器对子代进行内容对齐。这会将所有子代的大小统一调整为容器的内容宽度/高度。
-         * 容器的内容宽度/高度是最大子代的大小。如果所有子代都小于容器的宽度/高度，则会将所有子代的大小调整为容器的宽度/高度。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        JustifyAlign.CONTENT_JUSTIFY = "contentJustify";
-        return JustifyAlign;
-    })();
-    swan.JustifyAlign = JustifyAlign;
-})(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -1164,139 +1193,6 @@ var swan;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The BitmapFillMode class defines an enumeration of the resize modes that
-     * determine how a Bitmap fills in the dimensions specified by the layout system.
-     *
-     * @see swan.Image#fillMode
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * BitmapFillMode 类定义 Image 控件的图像填充方式。
-     * BitmapFillMode 类定义了调整大小模式的一个枚举，这些模式确定 Bitmap 如何填充由布局系统指定的尺寸。
-     *
-     * @see swan.Image#fillMode
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var BitmapFillMode = (function () {
-        function BitmapFillMode() {
-        }
-        var d = __define,c=BitmapFillMode;p=c.prototype;
-        /**
-         * @language en_US
-         * The bitmap ends at the edge of the region.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在区域的边缘处截断不显示位图。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        BitmapFillMode.CLIP = "clip";
-        /**
-         * @language en_US
-         * The bitmap is repeated to fill the region.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 重复位图以填充区域。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        BitmapFillMode.REPEAT = "repeat";
-        /**
-         * @language en_US
-         * The bitmap fill stretches to fill the region.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 拉伸位图以填充区域。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        BitmapFillMode.SCALE = "scale";
-        return BitmapFillMode;
-    })();
-    swan.BitmapFillMode = BitmapFillMode;
-})(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -1463,86 +1359,78 @@ var swan;
 (function (swan) {
     /**
      * @language en_US
-     * Defines values for setting the <code>direction</code> property
-     * of the <code>ProgressBar</code> class.
+     * The BitmapFillMode class defines an enumeration of the resize modes that
+     * determine how a Bitmap fills in the dimensions specified by the layout system.
+     *
+     * @see swan.Image#fillMode
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 定义进度条等控件增长方向的常量
+     * BitmapFillMode 类定义 Image 控件的图像填充方式。
+     * BitmapFillMode 类定义了调整大小模式的一个枚举，这些模式确定 Bitmap 如何填充由布局系统指定的尺寸。
+     *
+     * @see swan.Image#fillMode
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    var Direction = (function () {
-        function Direction() {
+    var BitmapFillMode = (function () {
+        function BitmapFillMode() {
         }
-        var d = __define,c=Direction;p=c.prototype;
+        var d = __define,c=BitmapFillMode;p=c.prototype;
         /**
          * @language en_US
-         * Specifies left-to-right direction.
+         * The bitmap ends at the edge of the region.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 水平从左到右增长
+         * 在区域的边缘处截断不显示位图。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        Direction.LTR = "ltr";
+        BitmapFillMode.CLIP = "clip";
         /**
          * @language en_US
-         * Specifies right-to-left direction.
+         * The bitmap is repeated to fill the region.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 水平从右到左增长
+         * 重复位图以填充区域。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        Direction.RTL = "rtl";
+        BitmapFillMode.REPEAT = "repeat";
         /**
          * @language en_US
-         * Specifies top-to-bottom direction.
+         * The bitmap fill stretches to fill the region.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 竖直从上到下增长
+         * 拉伸位图以填充区域。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        Direction.TTB = "ttb";
-        /**
-         * @language en_US
-         * Specifies bottom-to-top direction.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 竖直从下到上增长
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        Direction.BTT = "btt";
-        return Direction;
+        BitmapFillMode.SCALE = "scale";
+        return BitmapFillMode;
     })();
-    swan.Direction = Direction;
+    swan.BitmapFillMode = BitmapFillMode;
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1663,128 +1551,88 @@ var swan;
 //////////////////////////////////////////////////////////////////////////////////////
 var swan;
 (function (swan) {
-    var sys;
-    (function (sys) {
-        /**
-         * @private
-         *
-         * @param fraction
-         * @returns
-         */
-        function sineInOut(fraction) {
-            return -0.5 * (Math.cos(Math.PI * fraction) - 1);
+    /**
+     * @language en_US
+     * Defines values for setting the <code>direction</code> property
+     * of the <code>ProgressBar</code> class.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 定义进度条等控件增长方向的常量
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var Direction = (function () {
+        function Direction() {
         }
+        var d = __define,c=Direction;p=c.prototype;
         /**
-         * @private
-         * 数值缓动工具类
+         * @language en_US
+         * Specifies left-to-right direction.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
-        var Animation = (function () {
-            /**
-             * @private
-             */
-            function Animation(updateFunction, thisObject) {
-                /**
-                 * @private
-                 * 此动画的缓动行为。设置为null意味着不使用缓动，默认值为 sineInOut
-                 */
-                this.easerFunction = sineInOut;
-                /**
-                 * @private
-                 * 是否正在播放动画，不包括延迟等待和暂停的阶段
-                 */
-                this.isPlaying = false;
-                /**
-                 * @private
-                 * 动画持续时间,单位毫秒，默认值500
-                 */
-                this.duration = 500;
-                /**
-                 * @private
-                 * 动画到当前时间对应的值。
-                 */
-                this.currentValue = 0;
-                /**
-                 * @private
-                 * 起始值
-                 */
-                this.from = 0;
-                /**
-                 * @private
-                 * 终点值。
-                 */
-                this.to = 0;
-                /**
-                 * @private
-                 * 动画启动时刻
-                 */
-                this.startTime = 0;
-                /**
-                 * @private
-                 * 动画播放结束时的回调函数
-                 */
-                this.endFunction = null;
-                this.updateFunction = updateFunction;
-                this.thisObject = thisObject;
-            }
-            var d = __define,c=Animation;p=c.prototype;
-            /**
-             * @private
-             * 开始正向播放动画,无论何时调用都重新从零时刻开始，若设置了延迟会首先进行等待。
-             */
-            p.play = function () {
-                this.stop();
-                this.start();
-            };
-            /**
-             * @private
-             * 开始播放动画
-             */
-            p.start = function () {
-                this.isPlaying = false;
-                this.currentValue = 0;
-                this.startTime = lark.getTimer();
-                this.doInterval(this.startTime);
-                lark.startTick(this.doInterval, this);
-            };
-            /**
-             * @private
-             * 停止播放动画
-             */
-            p.stop = function () {
-                this.isPlaying = false;
-                this.startTime = 0;
-                lark.stopTick(this.doInterval, this);
-            };
-            /**
-             * @private
-             * 计算当前值并返回动画是否结束
-             */
-            p.doInterval = function (currentTime) {
-                var runningTime = currentTime - this.startTime;
-                if (!this.isPlaying) {
-                    this.isPlaying = true;
-                }
-                var duration = this.duration;
-                var fraction = duration == 0 ? 1 : Math.min(runningTime, duration) / duration;
-                if (this.easerFunction) {
-                    fraction = this.easerFunction(fraction);
-                }
-                this.currentValue = this.from + (this.to - this.from) * fraction;
-                if (this.updateFunction)
-                    this.updateFunction.call(this.thisObject, this);
-                var isEnded = runningTime >= duration;
-                if (isEnded) {
-                    this.stop();
-                }
-                if (isEnded && this.endFunction) {
-                    this.endFunction.call(this.thisObject, this);
-                }
-                return true;
-            };
-            return Animation;
-        })();
-        sys.Animation = Animation;
-    })(sys = swan.sys || (swan.sys = {}));
+        /**
+         * @language zh_CN
+         * 水平从左到右增长
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        Direction.LTR = "ltr";
+        /**
+         * @language en_US
+         * Specifies right-to-left direction.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 水平从右到左增长
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        Direction.RTL = "rtl";
+        /**
+         * @language en_US
+         * Specifies top-to-bottom direction.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 竖直从上到下增长
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        Direction.TTB = "ttb";
+        /**
+         * @language en_US
+         * Specifies bottom-to-top direction.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 竖直从下到上增长
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        Direction.BTT = "btt";
+        return Direction;
+    })();
+    swan.Direction = Direction;
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1814,6 +1662,285 @@ var swan;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * The CollectionEventKind class contains constants for the valid values
+     * of the <code>CollectionEvent</code> class <code>kind</code> property.
+     * These constants indicate the kind of change that was made to the collection.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 定义 <code>CollectionEvent</code> 类 <code>kind</code> 属性的有效值的常量。
+     * 这些常量指示对集合进行的更改类型。
+
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var CollectionEventKind = (function () {
+        function CollectionEventKind() {
+        }
+        var d = __define,c=CollectionEventKind;p=c.prototype;
+        /**
+         * @language en_US
+         * Indicates that the collection added an item or items.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示集合添加了一个或多个项目。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        CollectionEventKind.ADD = "add";
+        /**
+         * @language en_US
+         * Indicates that the collection applied a sort, a filter, or both.
+         * This change can potentially be easier to handle than a RESET.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示集合应用了排序或/和筛选。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        CollectionEventKind.REFRESH = "refresh";
+        /**
+         * @language en_US
+         * Indicates that the collection removed an item or items.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示集合删除了一个或多个项目。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        CollectionEventKind.REMOVE = "remove";
+        /**
+         * @language en_US
+         * Indicates that the item at the position identified by the
+         * CollectionEvent <code>location</code> property has been replaced.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示已替换由 CollectionEvent.location 属性确定的位置处的项目。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        CollectionEventKind.REPLACE = "replace";
+        /**
+         * @language en_US
+         * Indicates that the collection has changed so drastically that
+         * a reset is required.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示集合已彻底更改，需要进行重置。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        CollectionEventKind.RESET = "reset";
+        /**
+         * @language en_US
+         * Indicates that one or more items were updated within the collection.
+         * The affected item(s)
+         * are stored in the <code>CollectionEvent.items</code> property.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示集合中一个或多个项目进行了更新。受影响的项目将存储在  CollectionEvent.items 属性中。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        CollectionEventKind.UPDATE = "update";
+        return CollectionEventKind;
+    })();
+    swan.CollectionEventKind = CollectionEventKind;
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * Register a property for a class definition in running,
+     * so that the Swan can get type of property accurate when parsing a EXML.
+     * This need not be called directly in most of time. Only when you have a custom UI
+     * component need to be described in EXML, you may invoke this method explicitly.
+     *
+     * Contains no following：
+     * When the property is the basic data type(boolean, number, string or Array), you only need set a correct initial value
+     * for he custom property then the EXML parser can get the correct property type in running.
+     *
+     * If you can not set the correct initial value (such as <code>null</code>), the EXML parser will treat this property as
+     * <code>string</code>. If there is no inital value, Swan will throw an error. But you can invoked this method to register
+     * a property in this case.
+     *
+     *
+     * @param classDefinition The class definition need to be registered.
+     * @param property The property need to be registered. Note that the property
+     * name cannot start with "_" or "$".
+     * @param type The type need to be registered,
+     * such as “boolean","number","string","Array","lark.Rectangle" and so on.
+     * @param asDefault Whether register this property as a default property of component.
+     * One component can register only on default property. And the default property can be spare in an EXML.
+     *
+     * @example：
+     * <code>
+     *      <s:Scroller>
+     *          <s:viewport>
+     *          <s:Group/>
+     *          </e:viewport>
+     *      </e:Scroller>
+     * <code/>
+     * Cuz <code>viewport</code> is the default property of Scroller. So you can write as follow:
+     * <code>
+     *      <s:Scroller>
+     *          <s:Group/>
+     *      </e:Scroller>
+     * <code/>
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 为一个类定义注册运行时属性类型，以便运行时的EXML文件解析过程能获取准确的属性类型。大多数情况下，您都不需要手动调用此方法显式注册属性类型。
+     * 仅当您有一个自定义的 UI 组件，需要在EXML中用标签描述时可能需要显式注册，但以下情况除外：
+     * 当属性类型为基本数据类型：boolean,number,string,Array这四种其中之一时，您只需要为自定义的属性赋值上正确的初始值，
+     * 运行时EXML解析器就能通过初始值自动分析出正确的属性类型。
+     * 若您无法为属性赋值上正确的初始值时(有初始值，比如null),运行时EXML解析器会把此属性当做string来处理，若完全没有初始值，将会报错找不到节点属性，
+     * 这种情况下可以手动调用此方法显式注册属性类型。
+     *
+     * @param classDefinition 要注册的类定义。
+     * @param property 要注册的属性,注意属性名不能以 _ 或 $ 符开头。
+     * @param type 要注册的类型,例如：“boolean","number","string","Array","lark.Rectangle"
+     * @param asDefault 是否将此属性注册为组件的默认属性,一个组件只可以设置一个默认属性。注册了组件默认属性后，在EXML中可以使用省略属性节点的写法，
+     * 例如：
+     *
+     * <s:Scroller>
+     *     <s:viewport>
+     *         <s:Group/>
+     *     </e:viewport>
+     * </e:Scroller>
+     *
+     * 因为 viewport 已经注册为 Scroller 的默认属性，上面的例子可以等效为：
+     *
+     * <s:Scroller>
+     *     <s:Group/>
+     * </e:Scroller>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    function registerProperty(classDefinition, property, type, asDefault) {
+        if (DEBUG) {
+            if (!classDefinition) {
+                lark.$error(1003, "classDefinition");
+            }
+            if (!classDefinition.prototype) {
+                lark.$error(1012, "classDefinition");
+            }
+            if (!property) {
+                lark.$error(1003, "property");
+            }
+            if (!type) {
+                lark.$error(1003, "type");
+            }
+        }
+        var prototype = classDefinition.prototype;
+        prototype.__meta__ = prototype.__meta__ || {};
+        prototype.__meta__[property] = type;
+        if (asDefault) {
+            prototype.__defaultProperty__ = property;
+        }
+    }
+    swan.registerProperty = registerProperty;
+})(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -2081,6 +2208,82 @@ var swan;
 //////////////////////////////////////////////////////////////////////////////////////
 var swan;
 (function (swan) {
+    var key = "__bindables__";
+    /**
+     * @language en_US
+     * Register a property of an instance is can be bound.
+     * This method is ususally invoked by Watcher class.
+     *
+     * @param instance the instance to be registered.
+     * @param property the property of specified instance to be registered.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 标记实例的一个属性是可绑定的,此方法通常由 Watcher 类调用。
+     *
+     * @param instance 要标记的实例
+     * @param property 可绑定的属性。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    function registerBindable(instance, property) {
+        if (DEBUG) {
+            if (!instance) {
+                lark.$error(1003, "instance");
+            }
+            if (!property) {
+                lark.$error(1003, "property");
+            }
+        }
+        if (instance.hasOwnProperty(key)) {
+            instance[key].push(property);
+        }
+        else {
+            var list = [property];
+            if (instance[key]) {
+                list = instance[key].concat(list);
+            }
+            instance[key] = list;
+        }
+    }
+    swan.registerBindable = registerBindable;
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
     var loaderPool = [];
     var callBackMap = {};
     var loaderMap = {};
@@ -2167,504 +2370,6 @@ var swan;
         return DefaultAssetAdapter;
     })();
     swan.DefaultAssetAdapter = DefaultAssetAdapter;
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    var key = "__bindables__";
-    /**
-     * @language en_US
-     * Register a property of an instance is can be bound.
-     * This method is ususally invoked by Watcher class.
-     *
-     * @param instance the instance to be registered.
-     * @param property the property of specified instance to be registered.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 标记实例的一个属性是可绑定的,此方法通常由 Watcher 类调用。
-     *
-     * @param instance 要标记的实例
-     * @param property 可绑定的属性。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    function registerBindable(instance, property) {
-        if (DEBUG) {
-            if (!instance) {
-                lark.$error(1003, "instance");
-            }
-            if (!property) {
-                lark.$error(1003, "property");
-            }
-        }
-        if (instance.hasOwnProperty(key)) {
-            instance[key].push(property);
-        }
-        else {
-            var list = [property];
-            if (instance[key]) {
-                list = instance[key].concat(list);
-            }
-            instance[key] = list;
-        }
-    }
-    swan.registerBindable = registerBindable;
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * Register a property for a class definition in running,
-     * so that the Swan can get type of property accurate when parsing a EXML.
-     * This need not be called directly in most of time. Only when you have a custom UI
-     * component need to be described in EXML, you may invoke this method explicitly.
-     *
-     * Contains no following：
-     * When the property is the basic data type(boolean, number, string or Array), you only need set a correct initial value
-     * for he custom property then the EXML parser can get the correct property type in running.
-     *
-     * If you can not set the correct initial value (such as <code>null</code>), the EXML parser will treat this property as
-     * <code>string</code>. If there is no inital value, Swan will throw an error. But you can invoked this method to register
-     * a property in this case.
-     *
-     *
-     * @param classDefinition The class definition need to be registered.
-     * @param property The property need to be registered. Note that the property
-     * name cannot start with "_" or "$".
-     * @param type The type need to be registered,
-     * such as “boolean","number","string","Array","lark.Rectangle" and so on.
-     * @param asDefault Whether register this property as a default property of component.
-     * One component can register only on default property. And the default property can be spare in an EXML.
-     *
-     * @example：
-     * <code>
-     *      <s:Scroller>
-     *          <s:viewport>
-     *          <s:Group/>
-     *          </e:viewport>
-     *      </e:Scroller>
-     * <code/>
-     * Cuz <code>viewport</code> is the default property of Scroller. So you can write as follow:
-     * <code>
-     *      <s:Scroller>
-     *          <s:Group/>
-     *      </e:Scroller>
-     * <code/>
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 为一个类定义注册运行时属性类型，以便运行时的EXML文件解析过程能获取准确的属性类型。大多数情况下，您都不需要手动调用此方法显式注册属性类型。
-     * 仅当您有一个自定义的 UI 组件，需要在EXML中用标签描述时可能需要显式注册，但以下情况除外：
-     * 当属性类型为基本数据类型：boolean,number,string,Array这四种其中之一时，您只需要为自定义的属性赋值上正确的初始值，
-     * 运行时EXML解析器就能通过初始值自动分析出正确的属性类型。
-     * 若您无法为属性赋值上正确的初始值时(有初始值，比如null),运行时EXML解析器会把此属性当做string来处理，若完全没有初始值，将会报错找不到节点属性，
-     * 这种情况下可以手动调用此方法显式注册属性类型。
-     *
-     * @param classDefinition 要注册的类定义。
-     * @param property 要注册的属性,注意属性名不能以 _ 或 $ 符开头。
-     * @param type 要注册的类型,例如：“boolean","number","string","Array","lark.Rectangle"
-     * @param asDefault 是否将此属性注册为组件的默认属性,一个组件只可以设置一个默认属性。注册了组件默认属性后，在EXML中可以使用省略属性节点的写法，
-     * 例如：
-     *
-     * <s:Scroller>
-     *     <s:viewport>
-     *         <s:Group/>
-     *     </e:viewport>
-     * </e:Scroller>
-     *
-     * 因为 viewport 已经注册为 Scroller 的默认属性，上面的例子可以等效为：
-     *
-     * <s:Scroller>
-     *     <s:Group/>
-     * </e:Scroller>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    function registerProperty(classDefinition, property, type, asDefault) {
-        if (DEBUG) {
-            if (!classDefinition) {
-                lark.$error(1003, "classDefinition");
-            }
-            if (!classDefinition.prototype) {
-                lark.$error(1012, "classDefinition");
-            }
-            if (!property) {
-                lark.$error(1003, "property");
-            }
-            if (!type) {
-                lark.$error(1003, "type");
-            }
-        }
-        var prototype = classDefinition.prototype;
-        prototype.__meta__ = prototype.__meta__ || {};
-        prototype.__meta__[property] = type;
-        if (asDefault) {
-            prototype.__defaultProperty__ = property;
-        }
-    }
-    swan.registerProperty = registerProperty;
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    var sys;
-    (function (sys) {
-        /**
-         * @private
-         * 需要记录的历史速度的最大次数。
-         */
-        var MAX_VELOCITY_COUNT = 4;
-        /**
-         * @private
-         * 记录的历史速度的权重列表。
-         */
-        var VELOCITY_WEIGHTS = [1, 1.33, 1.66, 2];
-        /**
-         * @private
-         * 当前速度所占的权重。
-         */
-        var CURRENT_VELOCITY_WEIGHT = 2.33;
-        /**
-         * @private
-         * 最小的改变速度，解决浮点数精度问题。
-         */
-        var MINIMUM_VELOCITY = 0.02;
-        /**
-         * @private
-         * 当容器自动滚动时要应用的摩擦系数
-         */
-        var FRICTION = 0.998;
-        /**
-         * @private
-         * 当容器自动滚动时并且滚动位置超出容器范围时要额外应用的摩擦系数
-         */
-        var EXTRA_FRICTION = 0.95;
-        /**
-         * @private
-         * 摩擦系数的自然对数
-         */
-        var FRICTION_LOG = Math.log(FRICTION);
-        /**
-         * @private
-         *
-         * @param ratio
-         * @returns
-         */
-        function easeOut(ratio) {
-            var invRatio = ratio - 1.0;
-            return invRatio * invRatio * invRatio + 1;
-        }
-        /**
-         * @private
-         * 一个工具类,用于容器的滚屏拖动操作，计算在一段时间持续滚动后释放，应该继续滚动到的值和缓动时间。
-         * 使用此工具类，您需要创建一个 ScrollThrown 实例,并在滚动发生时调用start()方法，然后在触摸移动过程中调用update()更新当前舞台坐标。
-         * 内部将会启动一个计时器定时根据当前位置计算出速度值，并缓存下来最后4个值。当停止滚动时，再调用finish()方法，
-         * 将立即停止记录位移，并将计算出的最终结果存储到 Thrown.scrollTo 和 Thrown.duration 属性上。
-         */
-        var TouchScroll = (function () {
-            /**
-             * @private
-             * 创建一个 TouchScroll 实例
-             * @param updateFunction 滚动位置更新回调函数
-             */
-            function TouchScroll(updateFunction, endFunction, target) {
-                /**
-                 * @private
-                 */
-                this.previousTime = 0;
-                /**
-                 * @private
-                 */
-                this.velocity = 0;
-                /**
-                 * @private
-                 */
-                this.previousVelocity = [];
-                /**
-                 * @private
-                 */
-                this.currentPosition = 0;
-                /**
-                 * @private
-                 */
-                this.previousPosition = 0;
-                /**
-                 * @private
-                 */
-                this.currentScrollPos = 0;
-                /**
-                 * @private
-                 */
-                this.maxScrollPos = 0;
-                /**
-                 * @private
-                 * 鼠标按下时的偏移量
-                 */
-                this.offsetPoint = 0;
-                if (DEBUG && !updateFunction) {
-                    lark.$error(1003, "updateFunction");
-                }
-                this.updateFunction = updateFunction;
-                this.endFunction = endFunction;
-                this.target = target;
-                this.animation = new sys.Animation(this.onScrollingUpdate, this);
-                this.animation.endFunction = this.finishScrolling;
-                this.animation.easerFunction = easeOut;
-            }
-            var d = __define,c=TouchScroll;p=c.prototype;
-            /**
-             * @private
-             * 正在播放缓动动画的标志。
-             */
-            p.isPlaying = function () {
-                return this.animation.isPlaying;
-            };
-            /**
-             * @private
-             * 如果正在执行缓动滚屏，停止缓动。
-             */
-            p.stop = function () {
-                this.animation.stop();
-                lark.stopTick(this.onTick, this);
-            };
-            /**
-             * @private
-             * 开始记录位移变化。注意：当使用完毕后，必须调用 finish() 方法结束记录，否则该对象将无法被回收。
-             * @param touchPoint 起始触摸位置，以像素为单位，通常是stageX或stageY。
-             */
-            p.start = function (touchPoint, scrollValue, maxScrollValue) {
-                this.velocity = 0;
-                this.previousVelocity.length = 0;
-                this.previousTime = lark.getTimer();
-                this.previousPosition = this.currentPosition = touchPoint;
-                this.offsetPoint = scrollValue + touchPoint;
-                lark.startTick(this.onTick, this);
-            };
-            /**
-             * @private
-             * 更新当前移动到的位置
-             * @param touchPoint 当前触摸位置，以像素为单位，通常是stageX或stageY。
-             */
-            p.update = function (touchPoint, maxScrollValue) {
-                this.currentPosition = touchPoint;
-                this.maxScrollPos = maxScrollValue;
-                var scrollPos = this.offsetPoint - touchPoint;
-                if (scrollPos < 0) {
-                    scrollPos *= 0.5;
-                }
-                if (scrollPos > maxScrollValue) {
-                    scrollPos = (scrollPos + maxScrollValue) * 0.5;
-                }
-                this.currentScrollPos = scrollPos;
-                this.updateFunction.call(this.target, scrollPos);
-            };
-            /**
-             * @private
-             * 停止记录位移变化，并计算出目标值和继续缓动的时间。
-             * @param currentScrollPos 容器当前的滚动值。
-             * @param maxScrollPos 容器可以滚动的最大值。当目标值不在 0~maxValue之间时，将会应用更大的摩擦力，从而影响缓动时间的长度。
-             */
-            p.finish = function (currentScrollPos, maxScrollPos) {
-                lark.stopTick(this.onTick, this);
-                var sum = this.velocity * CURRENT_VELOCITY_WEIGHT;
-                var previousVelocityX = this.previousVelocity;
-                var length = previousVelocityX.length;
-                var totalWeight = CURRENT_VELOCITY_WEIGHT;
-                for (var i = 0; i < length; i++) {
-                    var weight = VELOCITY_WEIGHTS[i];
-                    sum += previousVelocityX[0] * weight;
-                    totalWeight += weight;
-                }
-                var pixelsPerMS = sum / totalWeight;
-                var absPixelsPerMS = Math.abs(pixelsPerMS);
-                var duration = 0;
-                var posTo = 0;
-                if (absPixelsPerMS > MINIMUM_VELOCITY) {
-                    posTo = currentScrollPos + (pixelsPerMS - MINIMUM_VELOCITY) / FRICTION_LOG;
-                    if (posTo < 0 || posTo > maxScrollPos) {
-                        posTo = currentScrollPos;
-                        while (Math.abs(pixelsPerMS) > MINIMUM_VELOCITY) {
-                            posTo -= pixelsPerMS;
-                            if (posTo < 0 || posTo > maxScrollPos) {
-                                pixelsPerMS *= FRICTION * EXTRA_FRICTION;
-                            }
-                            else {
-                                pixelsPerMS *= FRICTION;
-                            }
-                            duration++;
-                        }
-                    }
-                    else {
-                        duration = Math.log(MINIMUM_VELOCITY / absPixelsPerMS) / FRICTION_LOG;
-                    }
-                }
-                if (duration > 0) {
-                    this.throwTo(posTo, duration);
-                }
-                else {
-                    this.finishScrolling();
-                }
-            };
-            /**
-             * @private
-             *
-             * @param timeStamp
-             * @returns
-             */
-            p.onTick = function (timeStamp) {
-                var timeOffset = timeStamp - this.previousTime;
-                if (timeOffset > 0) {
-                    var previousVelocity = this.previousVelocity;
-                    previousVelocity.push(this.velocity);
-                    if (previousVelocity.length > MAX_VELOCITY_COUNT) {
-                        previousVelocity.shift();
-                    }
-                    this.velocity = (this.currentPosition - this.previousPosition) / timeOffset;
-                    this.previousTime = timeStamp;
-                    this.previousPosition = this.currentPosition;
-                }
-                return true;
-            };
-            /**
-             * @private
-             *
-             * @param animation
-             */
-            p.finishScrolling = function (animation) {
-                var hsp = this.currentScrollPos;
-                var maxHsp = this.maxScrollPos;
-                var hspTo = hsp;
-                if (hsp < 0) {
-                    hspTo = 0;
-                }
-                if (hsp > maxHsp) {
-                    hspTo = maxHsp;
-                }
-                this.throwTo(hspTo, 300);
-            };
-            /**
-             * @private
-             * 缓动到水平滚动位置
-             */
-            p.throwTo = function (hspTo, duration) {
-                if (duration === void 0) { duration = 500; }
-                var hsp = this.currentScrollPos;
-                if (hsp == hspTo) {
-                    this.endFunction.call(this.target);
-                    return;
-                }
-                var animation = this.animation;
-                animation.duration = duration;
-                animation.from = hsp;
-                animation.to = hspTo;
-                animation.play();
-            };
-            /**
-             * @private
-             * 更新水平滚动位置
-             */
-            p.onScrollingUpdate = function (animation) {
-                this.currentScrollPos = animation.currentValue;
-                this.updateFunction.call(this.target, animation.currentValue);
-            };
-            return TouchScroll;
-        })();
-        sys.TouchScroll = TouchScroll;
-    })(sys = swan.sys || (swan.sys = {}));
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -3065,56 +2770,590 @@ var swan;
 //////////////////////////////////////////////////////////////////////////////////////
 var swan;
 (function (swan) {
+    var sys;
+    (function (sys) {
+        /**
+         * @private
+         * 需要记录的历史速度的最大次数。
+         */
+        var MAX_VELOCITY_COUNT = 4;
+        /**
+         * @private
+         * 记录的历史速度的权重列表。
+         */
+        var VELOCITY_WEIGHTS = [1, 1.33, 1.66, 2];
+        /**
+         * @private
+         * 当前速度所占的权重。
+         */
+        var CURRENT_VELOCITY_WEIGHT = 2.33;
+        /**
+         * @private
+         * 最小的改变速度，解决浮点数精度问题。
+         */
+        var MINIMUM_VELOCITY = 0.02;
+        /**
+         * @private
+         * 当容器自动滚动时要应用的摩擦系数
+         */
+        var FRICTION = 0.998;
+        /**
+         * @private
+         * 当容器自动滚动时并且滚动位置超出容器范围时要额外应用的摩擦系数
+         */
+        var EXTRA_FRICTION = 0.95;
+        /**
+         * @private
+         * 摩擦系数的自然对数
+         */
+        var FRICTION_LOG = Math.log(FRICTION);
+        /**
+         * @private
+         *
+         * @param ratio
+         * @returns
+         */
+        function easeOut(ratio) {
+            var invRatio = ratio - 1.0;
+            return invRatio * invRatio * invRatio + 1;
+        }
+        /**
+         * @private
+         * 一个工具类,用于容器的滚屏拖动操作，计算在一段时间持续滚动后释放，应该继续滚动到的值和缓动时间。
+         * 使用此工具类，您需要创建一个 ScrollThrown 实例,并在滚动发生时调用start()方法，然后在触摸移动过程中调用update()更新当前舞台坐标。
+         * 内部将会启动一个计时器定时根据当前位置计算出速度值，并缓存下来最后4个值。当停止滚动时，再调用finish()方法，
+         * 将立即停止记录位移，并将计算出的最终结果存储到 Thrown.scrollTo 和 Thrown.duration 属性上。
+         */
+        var TouchScroll = (function () {
+            /**
+             * @private
+             * 创建一个 TouchScroll 实例
+             * @param updateFunction 滚动位置更新回调函数
+             */
+            function TouchScroll(updateFunction, endFunction, target) {
+                /**
+                 * @private
+                 */
+                this.previousTime = 0;
+                /**
+                 * @private
+                 */
+                this.velocity = 0;
+                /**
+                 * @private
+                 */
+                this.previousVelocity = [];
+                /**
+                 * @private
+                 */
+                this.currentPosition = 0;
+                /**
+                 * @private
+                 */
+                this.previousPosition = 0;
+                /**
+                 * @private
+                 */
+                this.currentScrollPos = 0;
+                /**
+                 * @private
+                 */
+                this.maxScrollPos = 0;
+                /**
+                 * @private
+                 * 鼠标按下时的偏移量
+                 */
+                this.offsetPoint = 0;
+                if (DEBUG && !updateFunction) {
+                    lark.$error(1003, "updateFunction");
+                }
+                this.updateFunction = updateFunction;
+                this.endFunction = endFunction;
+                this.target = target;
+                this.animation = new sys.Animation(this.onScrollingUpdate, this);
+                this.animation.endFunction = this.finishScrolling;
+                this.animation.easerFunction = easeOut;
+            }
+            var d = __define,c=TouchScroll;p=c.prototype;
+            /**
+             * @private
+             * 正在播放缓动动画的标志。
+             */
+            p.isPlaying = function () {
+                return this.animation.isPlaying;
+            };
+            /**
+             * @private
+             * 如果正在执行缓动滚屏，停止缓动。
+             */
+            p.stop = function () {
+                this.animation.stop();
+                lark.stopTick(this.onTick, this);
+            };
+            /**
+             * @private
+             * 开始记录位移变化。注意：当使用完毕后，必须调用 finish() 方法结束记录，否则该对象将无法被回收。
+             * @param touchPoint 起始触摸位置，以像素为单位，通常是stageX或stageY。
+             */
+            p.start = function (touchPoint, scrollValue, maxScrollValue) {
+                this.velocity = 0;
+                this.previousVelocity.length = 0;
+                this.previousTime = lark.getTimer();
+                this.previousPosition = this.currentPosition = touchPoint;
+                this.offsetPoint = scrollValue + touchPoint;
+                lark.startTick(this.onTick, this);
+            };
+            /**
+             * @private
+             * 更新当前移动到的位置
+             * @param touchPoint 当前触摸位置，以像素为单位，通常是stageX或stageY。
+             */
+            p.update = function (touchPoint, maxScrollValue) {
+                this.currentPosition = touchPoint;
+                this.maxScrollPos = maxScrollValue;
+                var scrollPos = this.offsetPoint - touchPoint;
+                if (scrollPos < 0) {
+                    scrollPos *= 0.5;
+                }
+                if (scrollPos > maxScrollValue) {
+                    scrollPos = (scrollPos + maxScrollValue) * 0.5;
+                }
+                this.currentScrollPos = scrollPos;
+                this.updateFunction.call(this.target, scrollPos);
+            };
+            /**
+             * @private
+             * 停止记录位移变化，并计算出目标值和继续缓动的时间。
+             * @param currentScrollPos 容器当前的滚动值。
+             * @param maxScrollPos 容器可以滚动的最大值。当目标值不在 0~maxValue之间时，将会应用更大的摩擦力，从而影响缓动时间的长度。
+             */
+            p.finish = function (currentScrollPos, maxScrollPos) {
+                lark.stopTick(this.onTick, this);
+                var sum = this.velocity * CURRENT_VELOCITY_WEIGHT;
+                var previousVelocityX = this.previousVelocity;
+                var length = previousVelocityX.length;
+                var totalWeight = CURRENT_VELOCITY_WEIGHT;
+                for (var i = 0; i < length; i++) {
+                    var weight = VELOCITY_WEIGHTS[i];
+                    sum += previousVelocityX[0] * weight;
+                    totalWeight += weight;
+                }
+                var pixelsPerMS = sum / totalWeight;
+                var absPixelsPerMS = Math.abs(pixelsPerMS);
+                var duration = 0;
+                var posTo = 0;
+                if (absPixelsPerMS > MINIMUM_VELOCITY) {
+                    posTo = currentScrollPos + (pixelsPerMS - MINIMUM_VELOCITY) / FRICTION_LOG;
+                    if (posTo < 0 || posTo > maxScrollPos) {
+                        posTo = currentScrollPos;
+                        while (Math.abs(pixelsPerMS) > MINIMUM_VELOCITY) {
+                            posTo -= pixelsPerMS;
+                            if (posTo < 0 || posTo > maxScrollPos) {
+                                pixelsPerMS *= FRICTION * EXTRA_FRICTION;
+                            }
+                            else {
+                                pixelsPerMS *= FRICTION;
+                            }
+                            duration++;
+                        }
+                    }
+                    else {
+                        duration = Math.log(MINIMUM_VELOCITY / absPixelsPerMS) / FRICTION_LOG;
+                    }
+                }
+                if (duration > 0) {
+                    this.throwTo(posTo, duration);
+                }
+                else {
+                    this.finishScrolling();
+                }
+            };
+            /**
+             * @private
+             *
+             * @param timeStamp
+             * @returns
+             */
+            p.onTick = function (timeStamp) {
+                var timeOffset = timeStamp - this.previousTime;
+                if (timeOffset > 0) {
+                    var previousVelocity = this.previousVelocity;
+                    previousVelocity.push(this.velocity);
+                    if (previousVelocity.length > MAX_VELOCITY_COUNT) {
+                        previousVelocity.shift();
+                    }
+                    this.velocity = (this.currentPosition - this.previousPosition) / timeOffset;
+                    this.previousTime = timeStamp;
+                    this.previousPosition = this.currentPosition;
+                }
+                return true;
+            };
+            /**
+             * @private
+             *
+             * @param animation
+             */
+            p.finishScrolling = function (animation) {
+                var hsp = this.currentScrollPos;
+                var maxHsp = this.maxScrollPos;
+                var hspTo = hsp;
+                if (hsp < 0) {
+                    hspTo = 0;
+                }
+                if (hsp > maxHsp) {
+                    hspTo = maxHsp;
+                }
+                this.throwTo(hspTo, 300);
+            };
+            /**
+             * @private
+             * 缓动到水平滚动位置
+             */
+            p.throwTo = function (hspTo, duration) {
+                if (duration === void 0) { duration = 500; }
+                var hsp = this.currentScrollPos;
+                if (hsp == hspTo) {
+                    this.endFunction.call(this.target);
+                    return;
+                }
+                var animation = this.animation;
+                animation.duration = duration;
+                animation.from = hsp;
+                animation.to = hspTo;
+                animation.play();
+            };
+            /**
+             * @private
+             * 更新水平滚动位置
+             */
+            p.onScrollingUpdate = function (animation) {
+                this.currentScrollPos = animation.currentValue;
+                this.updateFunction.call(this.target, animation.currentValue);
+            };
+            return TouchScroll;
+        })();
+        sys.TouchScroll = TouchScroll;
+    })(sys = swan.sys || (swan.sys = {}));
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
     /**
      * @language en_US
-     * The SetProperty class specifies a property value that is in effect only
-     * during the parent view state.
-     * You use this class in the <code>overrides</code> property of the State class.
-     *
+     * Pay atention: The skin theme is the default value for once setting, and it can not be changed while running.
+     * You can change a skin of a component with <code>skinName</code> property.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * SetProperty 类指定只在父视图状态期间有效的属性值。可以在 State 类的 overrides 属性中使用该类。
-     *
+     * 皮肤主题。注意：皮肤主题是一次性设置的默认值,并不能运行时切换所有组件默认皮肤。切换单个皮肤您可以自行对Component.skinName赋值来修改。
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    var SetProperty = (function () {
+    var Theme = (function (_super) {
+        __extends(Theme, _super);
         /**
          * @language en_US
-         * Constructor.
-         *
-         * @param target The object whose property is being set.
-         * By default, Swan uses the immediate parent of the State object.
-         * @param name The property to set.
-         * @param value The value of the property in the view state.
-         *
+         * Create an instance of Theme
+         * @param configURL the external theme path. if <code>null</code>, you need to register the default skin name with
+         * <code>mapSkin()</code> manually.
+         * @param stage current stage. The theme will register to the stage with this parameter.
+         * If <code>null</code>, you need to register with <code>stage.registerImplementation("swan.Theme",theme)</code>
+         * manually.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 创建一个SetProperty实例。
-         *
-         * @param target 要设置其属性的对象。默认情况下，Swan 使用 State 对象的直接父级。
-         * @param name 要设置的属性。
-         * @param value 视图状态中的属性值。
-         *
+         * 创建一个主题实例
+         * @param configURL 要加载并解析的外部主题配置文件路径。若传入 <code>null</code>，将不进行配置文件加载，
+         * 之后需要在外部以代码方式手动调用 <code>mapSkin()</code> 方法完成每条默认皮肤名的注册。
+         * @param stage 当前舞台引用。传入此参数，主题会自动注册自身到舞台上。
+         * 若传入null，需要在外部手动调用 <code>stage.registerImplementation("swan.Theme",theme)</code> 来完成主题的注册。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        function SetProperty(target, name, value) {
-            this.target = target;
-            this.name = name;
-            this.value = value;
+        function Theme(configURL, stage) {
+            _super.call(this);
+            /**
+             * @private
+             */
+            this.delayList = [];
+            /**
+             * @private
+             */
+            this.skinMap = {};
+            /**
+             * @private
+             */
+            this.flagToClassName = {};
+            this.initialized = !configURL;
+            if (stage) {
+                stage.registerImplementation("swan.Theme", this);
+            }
+            this.load(configURL);
         }
-        var d = __define,c=SetProperty;p=c.prototype;
+        var d = __define,c=Theme;p=c.prototype;
+        /**
+         * @private
+         *
+         * @param url
+         */
+        p.load = function (url) {
+            var request = new lark.HttpRequest();
+            request.on(lark.Event.COMPLETE, this.onConfigLoaded, this);
+            request.on(lark.Event.IO_ERROR, this.onConfigLoaded, this);
+            request.open(url);
+            request.send();
+        };
+        /**
+         * @private
+         *
+         * @param event
+         */
+        p.onConfigLoaded = function (event) {
+            var request = event.target;
+            try {
+                var data = JSON.parse(request.response);
+            }
+            catch (e) {
+                if (DEBUG) {
+                    lark.error(e.message);
+                }
+            }
+            if (data && data.skins) {
+                var skinMap = this.skinMap;
+                var skins = data.skins;
+                var keys = Object.keys(skins);
+                var length = keys.length;
+                for (var i = 0; i < length; i++) {
+                    var key = keys[i];
+                    if (!skinMap[key]) {
+                        this.mapSkin(key, skins[key]);
+                    }
+                }
+            }
+            this.initialized = true;
+            this.hadleDelayList();
+        };
+        /**
+         * @private
+         *
+         */
+        p.hadleDelayList = function () {
+            var list = this.delayList;
+            var length = list.length;
+            for (var i = 0; i < length; i++) {
+                var client = list[i];
+                if (!client.$Component[5 /* skinNameExplicitlySet */]) {
+                    var skinName = this.getSkinName(client);
+                    if (skinName) {
+                        client.$Component[1 /* skinName */] = skinName;
+                        client.$parseSkinName();
+                    }
+                }
+            }
+            list.length = 0;
+        };
+        /**
+         * @language en_US
+         * According to the host component to get the default skin name.
+         * Search rules are as follows:
+         * <li>1. Use the <code>hostComponentKey</code> of client to search.</li>
+         * <li>2. Use the class name of client to search.</li>
+         * <li>3. Use the parent class name of client to search.</li>
+         * <li>4. Repeat step 3 until find the skin name or the parent is <code>swan.Component</code>.</li>
+         * @param client the component need to get the default skin.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 根据主机组件，获取对应的默认皮肤名。查询规则如下：
+         * <li>1.使用client的hostComponentKey作为键查询默认皮肤名。</li>
+         * <li>2.使用client的类名作为键查询默认皮肤名。</li>
+         * <li>3.使用client的父类名作为键查询默认皮肤名。</li>
+         * <li>4.不断重复3直到查询到皮肤名或父类为swan.Component时停止。</li>
+         * @param client 要获取默认皮肤的组件。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getSkinName = function (client) {
+            if (!this.initialized) {
+                if (this.delayList.indexOf(client) == -1) {
+                    this.delayList.push(client);
+                }
+                return;
+            }
+            var skinMap = this.skinMap;
+            var skinName = skinMap[client.hostComponentKey];
+            if (!skinName) {
+                skinName = this.findSkinName(client);
+            }
+            return skinName;
+        };
+        /**
+         * @private
+         *
+         * @param prototype
+         * @returns
+         */
+        p.findSkinName = function (prototype) {
+            if (!prototype) {
+                return "";
+            }
+            var flag = prototype["__classFlag__"];
+            if (flag === void 0) {
+                return "";
+            }
+            var key = this.flagToClassName[flag];
+            var skinName = this.skinMap[key];
+            if (skinName || flag === 1009 /* Component */) {
+                return skinName;
+            }
+            return this.findSkinName(Object.getPrototypeOf(prototype));
+        };
+        /**
+         * @language en_US
+         * Map a default skin for the specified host component.
+         * @param hostComponentKey the name of host component, such as "swan.Button".
+         * @param skinName the name of skin, such as "app.MyButtonSkin".
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 为指定的主机组件映射一个默认皮肤。
+         * @param hostComponentKey 主机组件名称，例如：“swan.Button”。
+         * @param skinName 皮肤名称 例如："app.MyButtonSkin"。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.mapSkin = function (hostComponentKey, skinName) {
+            if (DEBUG) {
+                if (!hostComponentKey) {
+                    lark.$error(1003, "hostComponentKey");
+                }
+                if (!skinName) {
+                    lark.$error(1003, "skinName");
+                }
+            }
+            this.skinMap[hostComponentKey] = skinName;
+            var clazz = lark.getDefinitionByName(hostComponentKey);
+            if (clazz && clazz.prototype) {
+                var flag = clazz.prototype.__classFlag__;
+                if (flag) {
+                    this.flagToClassName[flag] = hostComponentKey;
+                }
+            }
+        };
+        return Theme;
+    })(lark.EventEmitter);
+    swan.Theme = Theme;
+    lark.registerClass(Theme, 1013 /* Theme */);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * The operation of adding a state to view.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 视图添加状态显示元素操作
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var AddItems = (function () {
+        /**
+         * @language en_US
+         * Constructor.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个AddItems实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function AddItems(target, propertyName, position, relativeTo) {
+            this.target = target;
+            this.propertyName = propertyName;
+            this.position = position;
+            this.relativeTo = relativeTo;
+        }
+        var d = __define,c=AddItems;p=c.prototype;
         /**
          * @inheritDoc
          *
@@ -3123,11 +3362,29 @@ var swan;
          * @platform Web,Native
          */
         p.apply = function (host, parent) {
-            var obj = this.target ? host[this.target] : host;
-            if (!obj)
+            var index;
+            var relative = host[this.relativeTo];
+            var target = host[this.target];
+            var container = this.propertyName ? host[this.propertyName] : parent;
+            if (!target || !container)
                 return;
-            this.oldValue = obj[this.name];
-            this.setPropertyValue(obj, this.name, this.value, this.oldValue);
+            switch (this.position) {
+                case 0 /* FIRST */:
+                    index = 0;
+                    break;
+                case 1 /* LAST */:
+                    index = -1;
+                    break;
+                case 2 /* BEFORE */:
+                    index = container.getChildIndex(relative);
+                    break;
+                case 3 /* AFTER */:
+                    index = container.getChildIndex(relative) + 1;
+                    break;
+            }
+            if (index == -1)
+                index = container.numChildren;
+            container.addChildAt(target, index);
         };
         /**
          * @inheritDoc
@@ -3137,39 +3394,868 @@ var swan;
          * @platform Web,Native
          */
         p.remove = function (host, parent) {
-            var obj = this.target ? host[this.target] : host;
-            if (!obj)
+            var container = this.propertyName ? host[this.propertyName] : parent;
+            var target = host[this.target];
+            if (!target || !container)
                 return;
-            this.setPropertyValue(obj, this.name, this.oldValue, this.oldValue);
-            this.oldValue = null;
+            if (target.$parent === container) {
+                container.removeChild(target);
+            }
         };
-        /**
-         * @private
-         * 设置属性值
-         */
-        p.setPropertyValue = function (obj, name, value, valueForType) {
-            if (value === undefined || value === null)
-                obj[name] = value;
-            else if (typeof (valueForType) == "number")
-                obj[name] = +value;
-            else if (typeof (valueForType) == "boolean")
-                obj[name] = this.toBoolean(value);
-            else
-                obj[name] = value;
-        };
-        /**
-         * @private
-         * 转成Boolean值
-         */
-        p.toBoolean = function (value) {
-            if (typeof (value) == "string")
-                return value.toLowerCase() == "true";
-            return value != false;
-        };
-        return SetProperty;
+        return AddItems;
     })();
-    swan.SetProperty = SetProperty;
-    lark.registerClass(SetProperty, 1034 /* SetProperty */, [1032 /* IOverride */]);
+    swan.AddItems = AddItems;
+    lark.registerClass(AddItems, 1033 /* AddItems */, [1032 /* IOverride */]);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    var sys;
+    (function (sys) {
+        /**
+         * @private
+         * 失效验证管理器
+         */
+        var Validator = (function (_super) {
+            __extends(Validator, _super);
+            /**
+             * @private
+             * 创建一个Validator对象
+             */
+            function Validator() {
+                _super.call(this);
+                /**
+                 * @private
+                 */
+                this.targetLevel = Number.POSITIVE_INFINITY;
+                /**
+                 * @private
+                 */
+                this.invalidatePropertiesFlag = false;
+                /**
+                 * @private
+                 */
+                this.invalidateClientPropertiesFlag = false;
+                /**
+                 * @private
+                 */
+                this.invalidatePropertiesQueue = new DepthQueue();
+                /**
+                 * @private
+                 */
+                this.invalidateSizeFlag = false;
+                /**
+                 * @private
+                 */
+                this.invalidateClientSizeFlag = false;
+                /**
+                 * @private
+                 */
+                this.invalidateSizeQueue = new DepthQueue();
+                /**
+                 * @private
+                 */
+                this.invalidateDisplayListFlag = false;
+                /**
+                 * @private
+                 */
+                this.invalidateDisplayListQueue = new DepthQueue();
+                /**
+                 * @private
+                 */
+                this.eventDisplay = new lark.Bitmap();
+                /**
+                 * @private
+                 * 是否已经添加了事件监听
+                 */
+                this.listenersAttached = false;
+            }
+            var d = __define,c=Validator;p=c.prototype;
+            /**
+             * @private
+             * 标记组件属性失效
+             */
+            p.invalidateProperties = function (client) {
+                if (!this.invalidatePropertiesFlag) {
+                    this.invalidatePropertiesFlag = true;
+                    if (!this.listenersAttached)
+                        this.attachListeners();
+                }
+                if (this.targetLevel <= client.$nestLevel)
+                    this.invalidateClientPropertiesFlag = true;
+                this.invalidatePropertiesQueue.insert(client);
+            };
+            /**
+             * @private
+             * 验证失效的属性
+             */
+            p.validateProperties = function () {
+                var queue = this.invalidatePropertiesQueue;
+                var client = queue.shift();
+                while (client) {
+                    if (client.$stage) {
+                        client.validateProperties();
+                    }
+                    client = queue.shift();
+                }
+                if (queue.isEmpty())
+                    this.invalidatePropertiesFlag = false;
+            };
+            /**
+             * @private
+             * 标记需要重新测量尺寸
+             */
+            p.invalidateSize = function (client) {
+                if (!this.invalidateSizeFlag) {
+                    this.invalidateSizeFlag = true;
+                    if (!this.listenersAttached)
+                        this.attachListeners();
+                }
+                if (this.targetLevel <= client.$nestLevel)
+                    this.invalidateClientSizeFlag = true;
+                this.invalidateSizeQueue.insert(client);
+            };
+            /**
+             * @private
+             * 测量尺寸
+             */
+            p.validateSize = function () {
+                var queue = this.invalidateSizeQueue;
+                var client = queue.pop();
+                while (client) {
+                    if (client.$stage) {
+                        client.validateSize();
+                    }
+                    client = queue.pop();
+                }
+                if (queue.isEmpty())
+                    this.invalidateSizeFlag = false;
+            };
+            /**
+             * @private
+             * 标记需要重新布局
+             */
+            p.invalidateDisplayList = function (client) {
+                if (!this.invalidateDisplayListFlag) {
+                    this.invalidateDisplayListFlag = true;
+                    if (!this.listenersAttached)
+                        this.attachListeners();
+                }
+                this.invalidateDisplayListQueue.insert(client);
+            };
+            /**
+             * @private
+             * 重新布局
+             */
+            p.validateDisplayList = function () {
+                var queue = this.invalidateDisplayListQueue;
+                var client = queue.shift();
+                while (client) {
+                    if (client.$stage) {
+                        client.validateDisplayList();
+                    }
+                    client = queue.shift();
+                }
+                if (queue.isEmpty())
+                    this.invalidateDisplayListFlag = false;
+            };
+            /**
+             * @private
+             * 添加事件监听
+             */
+            p.attachListeners = function () {
+                this.eventDisplay.on(lark.Event.ENTER_FRAME, this.doPhasedInstantiationCallBack, this);
+                this.eventDisplay.on(lark.Event.RENDER, this.doPhasedInstantiationCallBack, this);
+                lark.sys.$invalidateRenderFlag = true;
+                this.listenersAttached = true;
+            };
+            /**
+             * @private
+             * 执行属性应用
+             */
+            p.doPhasedInstantiationCallBack = function (event) {
+                this.eventDisplay.removeListener(lark.Event.ENTER_FRAME, this.doPhasedInstantiationCallBack, this);
+                this.eventDisplay.removeListener(lark.Event.RENDER, this.doPhasedInstantiationCallBack, this);
+                this.doPhasedInstantiation();
+            };
+            /**
+             * @private
+             *
+             */
+            p.doPhasedInstantiation = function () {
+                if (this.invalidatePropertiesFlag) {
+                    this.validateProperties();
+                }
+                if (this.invalidateSizeFlag) {
+                    this.validateSize();
+                }
+                if (this.invalidateDisplayListFlag) {
+                    this.validateDisplayList();
+                }
+                if (this.invalidatePropertiesFlag || this.invalidateSizeFlag || this.invalidateDisplayListFlag) {
+                    this.attachListeners();
+                }
+                else {
+                    this.listenersAttached = false;
+                }
+            };
+            /**
+             * @private
+             * 使大于等于指定组件层级的元素立即应用属性
+             * @param target 要立即应用属性的组件
+             */
+            p.validateClient = function (target) {
+                var obj;
+                var done = false;
+                var oldTargetLevel = this.targetLevel;
+                if (this.targetLevel === Number.POSITIVE_INFINITY)
+                    this.targetLevel = target.$nestLevel;
+                var propertiesQueue = this.invalidatePropertiesQueue;
+                var sizeQueue = this.invalidateSizeQueue;
+                var displayListQueue = this.invalidateDisplayListQueue;
+                while (!done) {
+                    done = true;
+                    obj = propertiesQueue.removeSmallestChild(target);
+                    while (obj) {
+                        if (obj.$stage) {
+                            obj.validateProperties();
+                        }
+                        obj = propertiesQueue.removeSmallestChild(target);
+                    }
+                    if (propertiesQueue.isEmpty()) {
+                        this.invalidatePropertiesFlag = false;
+                    }
+                    this.invalidateClientPropertiesFlag = false;
+                    obj = sizeQueue.removeLargestChild(target);
+                    while (obj) {
+                        if (obj.$stage) {
+                            obj.validateSize();
+                        }
+                        if (this.invalidateClientPropertiesFlag) {
+                            obj = (propertiesQueue.removeSmallestChild(target));
+                            if (obj) {
+                                propertiesQueue.insert(obj);
+                                done = false;
+                                break;
+                            }
+                        }
+                        obj = sizeQueue.removeLargestChild(target);
+                    }
+                    if (sizeQueue.isEmpty()) {
+                        this.invalidateSizeFlag = false;
+                    }
+                    this.invalidateClientPropertiesFlag = false;
+                    this.invalidateClientSizeFlag = false;
+                    obj = displayListQueue.removeSmallestChild(target);
+                    while (obj) {
+                        if (obj.$stage) {
+                            obj.validateDisplayList();
+                        }
+                        if (this.invalidateClientPropertiesFlag) {
+                            obj = propertiesQueue.removeSmallestChild(target);
+                            if (obj) {
+                                propertiesQueue.insert(obj);
+                                done = false;
+                                break;
+                            }
+                        }
+                        if (this.invalidateClientSizeFlag) {
+                            obj = sizeQueue.removeLargestChild(target);
+                            if (obj) {
+                                sizeQueue.insert(obj);
+                                done = false;
+                                break;
+                            }
+                        }
+                        obj = displayListQueue.removeSmallestChild(target);
+                    }
+                    if (displayListQueue.isEmpty()) {
+                        this.invalidateDisplayListFlag = false;
+                    }
+                }
+                if (oldTargetLevel === Number.POSITIVE_INFINITY) {
+                    this.targetLevel = Number.POSITIVE_INFINITY;
+                }
+            };
+            return Validator;
+        })(lark.EventEmitter);
+        sys.Validator = Validator;
+        /**
+         * @private
+         * 显示列表嵌套深度排序队列
+         */
+        var DepthQueue = (function () {
+            function DepthQueue() {
+                /**
+                 * 深度队列
+                 */
+                this.depthBins = {};
+                /**
+                 * 最小深度
+                 */
+                this.minDepth = 0;
+                /**
+                 * 最大深度
+                 */
+                this.maxDepth = -1;
+            }
+            var d = __define,c=DepthQueue;p=c.prototype;
+            /**
+             * 插入一个元素
+             */
+            p.insert = function (client) {
+                var depth = client.$nestLevel;
+                if (this.maxDepth < this.minDepth) {
+                    this.minDepth = this.maxDepth = depth;
+                }
+                else {
+                    if (depth < this.minDepth)
+                        this.minDepth = depth;
+                    if (depth > this.maxDepth)
+                        this.maxDepth = depth;
+                }
+                var bin = this.depthBins[depth];
+                if (!bin) {
+                    bin = this.depthBins[depth] = new DepthBin();
+                }
+                bin.insert(client);
+            };
+            /**
+             * 从队列尾弹出深度最大的一个对象
+             */
+            p.pop = function () {
+                var client;
+                var minDepth = this.minDepth;
+                if (minDepth <= this.maxDepth) {
+                    var bin = this.depthBins[this.maxDepth];
+                    while (!bin || bin.length === 0) {
+                        this.maxDepth--;
+                        if (this.maxDepth < minDepth)
+                            return null;
+                        bin = this.depthBins[this.maxDepth];
+                    }
+                    client = bin.shift();
+                    while (!bin || bin.length == 0) {
+                        this.maxDepth--;
+                        if (this.maxDepth < minDepth)
+                            break;
+                        bin = this.depthBins[this.maxDepth];
+                    }
+                }
+                return client;
+            };
+            /**
+             * 从队列首弹出深度最小的一个对象
+             */
+            p.shift = function () {
+                var client;
+                var maxDepth = this.maxDepth;
+                if (this.minDepth <= maxDepth) {
+                    var bin = this.depthBins[this.minDepth];
+                    while (!bin || bin.length === 0) {
+                        this.minDepth++;
+                        if (this.minDepth > maxDepth)
+                            return null;
+                        bin = this.depthBins[this.minDepth];
+                    }
+                    client = bin.shift();
+                    while (!bin || bin.length == 0) {
+                        this.minDepth++;
+                        if (this.minDepth > maxDepth)
+                            break;
+                        bin = this.depthBins[this.minDepth];
+                    }
+                }
+                return client;
+            };
+            /**
+             * 移除大于等于指定组件层级的元素中最大的元素
+             */
+            p.removeLargestChild = function (client) {
+                var hashCode = client.$hashCode;
+                var nestLevel = client.$nestLevel;
+                var max = this.maxDepth;
+                var min = nestLevel;
+                while (min <= max) {
+                    var bin = this.depthBins[max];
+                    if (bin && bin.length > 0) {
+                        if (max === nestLevel) {
+                            if (bin.map[hashCode]) {
+                                bin.remove(client);
+                                return client;
+                            }
+                        }
+                        else if (lark.is(client, 4 /* DisplayObjectContainer */)) {
+                            var items = bin.items;
+                            var length = bin.length;
+                            for (var i = 0; i < length; i++) {
+                                var value = items[i];
+                                if (client.contains(value)) {
+                                    bin.remove(value);
+                                    return value;
+                                }
+                            }
+                        }
+                        else {
+                            break;
+                        }
+                        max--;
+                    }
+                    else {
+                        if (max == this.maxDepth) {
+                            this.maxDepth--;
+                        }
+                        max--;
+                        if (max < min)
+                            break;
+                    }
+                }
+                return null;
+            };
+            /**
+             * 移除大于等于指定组件层级的元素中最小的元素
+             */
+            p.removeSmallestChild = function (client) {
+                var nestLevel = client.$nestLevel;
+                var min = nestLevel;
+                var max = this.maxDepth;
+                var hashCode = client.$hashCode;
+                while (min <= max) {
+                    var bin = this.depthBins[min];
+                    if (bin && bin.length > 0) {
+                        if (min === nestLevel) {
+                            if (bin.map[hashCode]) {
+                                bin.remove(client);
+                                return client;
+                            }
+                        }
+                        else if (lark.is(client, 4 /* DisplayObjectContainer */)) {
+                            var items = bin.items;
+                            var length = bin.length;
+                            for (var i = 0; i < length; i++) {
+                                var value = items[i];
+                                if (client.contains(value)) {
+                                    bin.remove(value);
+                                    return value;
+                                }
+                            }
+                        }
+                        else {
+                            break;
+                        }
+                        min++;
+                    }
+                    else {
+                        if (min == this.minDepth)
+                            this.minDepth++;
+                        min++;
+                        if (min > max)
+                            break;
+                    }
+                }
+                return null;
+            };
+            /**
+             * 队列是否为空
+             */
+            p.isEmpty = function () {
+                return this.minDepth > this.maxDepth;
+            };
+            return DepthQueue;
+        })();
+        /**
+         * @private
+         * 列表项
+         */
+        var DepthBin = (function () {
+            function DepthBin() {
+                this.map = {};
+                this.items = [];
+                this.length = 0;
+            }
+            var d = __define,c=DepthBin;p=c.prototype;
+            p.insert = function (client) {
+                var hashCode = client.$hashCode;
+                if (this.map[hashCode]) {
+                    return;
+                }
+                this.map[hashCode] = true;
+                this.length++;
+                this.items.push(client);
+            };
+            p.shift = function () {
+                var client = this.items.shift();
+                if (client) {
+                    this.map[client.$hashCode] = false;
+                    this.length--;
+                }
+                return client;
+            };
+            p.remove = function (client) {
+                var index = this.items.indexOf(client);
+                if (index >= 0) {
+                    this.items.splice(index, 1);
+                    this.map[client.$hashCode] = false;
+                    this.length--;
+                }
+            };
+            return DepthBin;
+        })();
+    })(sys = swan.sys || (swan.sys = {}));
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @private
+     */
+    var bindables = "__bindables__";
+    /**
+     * @private
+     */
+    var bindableCount = 0;
+    /**
+     * @private
+     *
+     * @param host
+     * @param property
+     * @returns
+     */
+    function getPropertyDescriptor(host, property) {
+        var data = Object.getOwnPropertyDescriptor(host, property);
+        if (data) {
+            return data;
+        }
+        var prototype = Object.getPrototypeOf(host);
+        if (prototype) {
+            return getPropertyDescriptor(prototype, property);
+        }
+        return null;
+    }
+    /**
+     * @language en_US
+     * The Watcher class defines utility method that you can use with bindable properties.
+     * These methods let you define an event handler that is executed whenever a bindable property is updated.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Watcher 类能够监视可绑定属性的改变，您可以定义一个事件处理函数作为 Watcher 的回调方法，在每次可绑定属性的值改变时都执行此函数。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var Watcher = (function () {
+        /**
+         * @language en_US
+         * Constructor.
+         * Not for public use. This method is called only from the <code>watch()</code> method.
+         * See the <code>watch()</code> method for parameter usage.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数，非公开。只能从 watch() 方法中调用此方法。有关参数用法，请参阅 watch() 方法。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function Watcher(property, handler, thisObject, next) {
+            /**
+             * @private
+             */
+            this.isExecuting = false;
+            this.property = property;
+            this.handler = handler;
+            this.next = next;
+            this.thisObject = thisObject;
+        }
+        var d = __define,c=Watcher;p=c.prototype;
+        /**
+         * @language en_US
+         * Creates and starts a Watcher instance.
+         * The Watcher can only watch the property of a Object which host is instance of IEventEmitter.
+         * @param host The object that hosts the property or property chain to be watched.
+         * You can use the use the <code>reset()</code> method to change the value of the <code>host</code> argument
+         * after creating the Watcher instance.
+         * The <code>host</code> maintains a list of <code>handlers</code> to invoke when <code>prop</code> changes.
+         * @param chain A value specifying the property or chain to be watched.
+         * For example, to watch the property <code>host.a.b.c</code>,
+         * call the method as: <code>watch(host, ["a","b","c"], ...)</code>.
+         * @param handler  An event handler function called when the value of the watched property
+         * (or any property in a watched chain) is modified.
+         * @param thisObject <code>this</code> object of which binding with handler
+         * @returns he ChangeWatcher instance, if at least one property name has been specified to
+         * the <code>chain</code> argument; null otherwise.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建并启动 Watcher 实例。注意：Watcher 只能监视 host 为 IEventEmitter 对象的属性改变。若属性链中某个属性所对应的实例不是 IEventEmitter，
+         * 则属性链中在它之后的属性改变将无法检测到。
+         * @param host 用于承载要监视的属性或属性链的对象。
+         * 创建Watcher实例后，您可以利用<code>reset()</code>方法更改<code>host</code>参数的值。
+         * 当<code>prop</code>改变的时候，会使得host对应的一系列<code>handlers</code>被触发。
+         * @param chain 用于指定要监视的属性链的值。例如，要监视属性 host.a.b.c，需按以下形式调用此方法：watch¬(host, ["a","b","c"], ...)。
+         * @param handler 在监视的目标属性链中任何属性的值发生改变时调用的事件处理函数。
+         * @param thisObject handler 方法绑定的this对象
+         * @returns 如果已为 chain 参数至少指定了一个属性名称，则返回 Watcher 实例；否则返回 null。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        Watcher.watch = function (host, chain, handler, thisObject) {
+            if (DEBUG) {
+                if (!chain) {
+                    lark.$error(1003, "chain");
+                }
+            }
+            if (chain.length > 0) {
+                var property = chain.shift();
+                var next = Watcher.watch(null, chain, handler, thisObject);
+                var watcher = new Watcher(property, handler, thisObject, next);
+                watcher.reset(host);
+                return watcher;
+            }
+            else {
+                return null;
+            }
+        };
+        /**
+         * @private
+         * 检查属性是否可以绑定。若还未绑定，尝试添加绑定事件。若是只读或只写属性，返回false。
+         */
+        Watcher.checkBindable = function (host, property) {
+            var list = host[bindables];
+            if (list && list.indexOf(property) != -1) {
+                return true;
+            }
+            var data = getPropertyDescriptor(host, property);
+            if (data && data.set && data.get) {
+                var orgSet = data.set;
+                data.set = function (value) {
+                    if (this[property] != value) {
+                        orgSet.call(this, value);
+                        swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, property);
+                    }
+                };
+            }
+            else if (!data || (!data.get && !data.set)) {
+                bindableCount++;
+                var newProp = "_" + bindableCount + property;
+                host[newProp] = data ? data.value : null;
+                data = { enumerable: true, configurable: true };
+                data.get = function () {
+                    return this[newProp];
+                };
+                data.set = function (value) {
+                    if (this[newProp] != value) {
+                        this[newProp] = value;
+                        swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, property);
+                    }
+                };
+            }
+            else {
+                return false;
+            }
+            Object.defineProperty(host, property, data);
+            swan.registerBindable(host, property);
+        };
+        /**
+         * @language en_US
+         * Detaches this Watcher instance, and its handler function, from the current host.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从当前宿主中断开此 Watcher 实例及其处理函数。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.unwatch = function () {
+            this.reset(null);
+            this.handler = null;
+            if (this.next) {
+                this.next.handler = null;
+            }
+        };
+        /**
+         * @language en_US
+         * Retrieves the current value of the watched property or property chain, or null if the host object is null.
+         * @example
+         * <code>
+         * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
+         * </code>
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 检索观察的属性或属性链的当前值，当宿主对象为空时此值为空。
+         * @example
+         * <code>
+         * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
+         * </code>
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getValue = function () {
+            if (this.next) {
+                return this.next.getValue();
+            }
+            return this.getHostPropertyValue();
+        };
+        /**
+         * @language en_US
+         * Sets the handler function.s
+         * @param handler The handler function. This argument must not be null.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设置处理函数。
+         * @param handler 处理函数，此参数必须为非空。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.setHandler = function (handler, thisObject) {
+            this.handler = handler;
+            this.thisObject = thisObject;
+            if (this.next) {
+                this.next.setHandler(handler, thisObject);
+            }
+        };
+        /**
+         * @language en_US
+         * Resets this ChangeWatcher instance to use a new host object.
+         * You can call this method to reuse a watcher instance on a different host.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 重置此 Watcher 实例使用新的宿主对象。
+         * 您可以通过该方法实现一个Watcher实例用于不同的宿主。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.reset = function (newHost) {
+            if (lark.is(this.host, 1 /* IEventEmitter */)) {
+                this.host.removeListener(swan.PropertyEvent.PROPERTY_CHANGE, this.wrapHandler, this);
+            }
+            this.host = newHost;
+            if (lark.is(newHost, 1 /* IEventEmitter */)) {
+                Watcher.checkBindable(newHost, this.property);
+                newHost.on(swan.PropertyEvent.PROPERTY_CHANGE, this.wrapHandler, this, false, 100);
+            }
+            if (this.next)
+                this.next.reset(this.getHostPropertyValue());
+        };
+        /**
+         * @private
+         *
+         * @returns
+         */
+        p.getHostPropertyValue = function () {
+            return this.host ? this.host[this.property] : null;
+        };
+        /**
+         * @private
+         *
+         * @param event
+         */
+        p.wrapHandler = function (event) {
+            if (event.property == this.property && !this.isExecuting) {
+                try {
+                    this.isExecuting = true;
+                    if (this.next)
+                        this.next.reset(this.getHostPropertyValue());
+                    this.handler.call(this.thisObject, this.getValue());
+                }
+                finally {
+                    this.isExecuting = false;
+                }
+            }
+        };
+        return Watcher;
+    })();
+    swan.Watcher = Watcher;
+    /**
+     * @private
+     */
+    lark.registerClass(Watcher, 1035 /* Watcher */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -3551,6 +4637,1843 @@ var swan;
     if (DEBUG) {
         lark.$markReadOnly(ArrayCollection.prototype, "length");
     }
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * The LayoutBase class defines the base class for all Spark layouts.
+     * To create a custom layout that works with the Spark containers,
+     * you must extend <code>LayoutBase</code> or one of its subclasses.
+     *
+     * <p>Subclasses must implement the <code>updateDisplayList()</code>
+     * method, which positions and sizes the <code>target</code> GroupBase's elements, and
+     * the <code>measure()</code> method, which calculates the default
+     * size of the <code>target</code>.</p>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 容器布局基类。若要创建使用 Group 容器的自定义布局，必须扩展 <code>LayoutBase</code> 或其子类之一。
+     *
+     * <p>子类必须实现 <code>updateDisplayList()</code> 方法
+     * （定位 <code>target</code> Group 的子项并调整这些子项的大小）和 <code>measure()</code> 方法
+     * （计算 <code>target</code> 的默认大小）。</p>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var LayoutBase = (function (_super) {
+        __extends(LayoutBase, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function LayoutBase() {
+            _super.call(this);
+            /**
+             * @private
+             */
+            this.$target = null;
+            /**
+             * @private
+             */
+            this.$useVirtualLayout = false;
+            /**
+             * @private
+             */
+            this.$typicalWidth = 71;
+            /**
+             * @private
+             */
+            this.$typicalHeight = 22;
+        }
+        var d = __define,c=LayoutBase;p=c.prototype;
+        d(p, "target",
+            /**
+             * @language en_US
+             * The Group container whose elements are measured, sized and positioned
+             * by this layout.
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 此布局将测量其元素、调整其元素的大小并定位其元素的 Group 容器。
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$target;
+            },
+            function (value) {
+                if (this.$target === value)
+                    return;
+                this.$target = value;
+                this.clearVirtualLayoutCache();
+            }
+        );
+        d(p, "useVirtualLayout",
+            /**
+             * @language en_US
+             * To configure a container to use virtual layout, set the <code>useVirtualLayout</code> property
+             * to <code>true</code> for the layout associated with the container.
+             * Only DataGroup with layout set to VerticalLayout,
+             * HorizontalLayout, or TileLayout supports virtual layout.
+             * Layout subclasses that do not support virtualization must prevent changing
+             * this property.
+             *
+             * @default false
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 若要配置容器使用虚拟布局，请为与容器关联的布局的 <code>useVirtualLayout</code> 属性设置为 <code>true</code>。
+             * 只有布局设置为 VerticalLayout、HorizontalLayout 或 TileLayout 的 DataGroup 才支持虚拟布局。
+             * 不支持虚拟化的布局子类必须禁止更改此属性。
+             *
+             * @default false
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$useVirtualLayout;
+            },
+            function (value) {
+                value = !!value;
+                if (this.$useVirtualLayout == value)
+                    return;
+                this.$useVirtualLayout = value;
+                this.emitWith("useVirtualLayoutChanged");
+                if (this.$useVirtualLayout && !value)
+                    this.clearVirtualLayoutCache();
+                if (this.target)
+                    this.target.invalidateDisplayList();
+            }
+        );
+        /**
+         * @language en_US
+         * Set this size of a typical element
+         *
+         * @param width the height of element
+         * @param height the width of element
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设置一个典型元素的大小
+         *
+         * @param width 元素的宽
+         * @param height 元素的高
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.setTypicalSize = function (width, height) {
+            width = +width || 71;
+            height = +height || 22;
+            if (width !== this.$typicalWidth || height !== this.$typicalHeight) {
+                this.$typicalWidth = width;
+                this.$typicalHeight = height;
+                if (this.$target) {
+                    this.$target.invalidateSize();
+                }
+            }
+        };
+        /**
+         * @language en_US
+         * Called when the <code>verticalScrollPosition</code> or
+         * <code>horizontalScrollPosition</code> properties change.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * <code>verticalScrollPosition</code> 或 <code>horizontalScrollPosition</code>
+         * 属性更改时调用。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.scrollPositionChanged = function () {
+        };
+        /**
+         * @language en_US
+         * When <code>useVirtualLayout</code> is <code>true</code>,
+         * this method can be used by the layout target
+         * to clear cached layout information when the target changes.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果 <code>useVirtualLayout</code> 为 <code>true</code>，
+         * 则当布局目标改变时，布局目标可以使用此方法来清除已缓存布局信息。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.clearVirtualLayoutCache = function () {
+        };
+        /**
+         * @language en_US
+         * Called by the target after a layout element
+         * has been added and before the target's size and display list are
+         * validated.
+         * Layouts that cache per element state, like virtual layouts, can
+         * override this method to update their cache.
+         *
+         * @param index The index of the element that was added.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在已添加布局元素之后且在验证目标的大小和显示列表之前，由目标调用。
+         * 按元素状态缓存的布局（比如虚拟布局）可以覆盖此方法以更新其缓存。
+         *
+         * @param index 发生改变的子项索引
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.elementAdded = function (index) {
+        };
+        /**
+         * @language en_US
+         * This method must is called by the target after a layout element
+         * has been removed and before the target's size and display list are
+         * validated.
+         * Layouts that cache per element state, like virtual layouts, can
+         * override this method to update their cache.
+         *
+         * @param index The index of the element that was added.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * 必须在已删除布局元素之后且在验证目标的大小和显示列表之前，由目标调用此方法。
+         * 按元素状态缓存的布局（比如虚拟布局）可以覆盖此方法以更新其缓存。
+         *
+         * @param index 发生改变的子项索引
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.elementRemoved = function (index) {
+        };
+        /**
+         * @language en_US
+         * Return the indices of the element visible within this Group.
+         *
+         * @return The indices of the visible element.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回此 Group 中可见的元素的索引。
+         *
+         * @return 可见的元素的索引。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getElementIndicesInView = function () {
+            return null;
+        };
+        /**
+         * @language en_US
+         * Measures the target's default size based on its content.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 基于目标的内容测量其默认大小
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.measure = function () {
+        };
+        /**
+         * @language en_US
+         * Sizes and positions the target's elements.
+         *
+         * @param unscaledWidth Specifies the width of the target, in pixels,
+         * in the targets's coordinates.
+         *
+         * @param unscaledHeight Specifies the height of the component, in pixels,
+         * in the target's coordinates.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 调整目标的元素的大小并定位这些元素。
+         *
+         * @param unscaledWidth 指定目标在目标坐标中的宽度（以像素为单位）。
+         * @param unscaledHeight 指定组件在目标坐标中的高度（以像素为单位）。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.updateDisplayList = function (width, height) {
+        };
+        return LayoutBase;
+    })(lark.EventEmitter);
+    swan.LayoutBase = LayoutBase;
+    lark.registerClass(LayoutBase, 1019 /* LayoutBase */);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    var groupCount = 0;
+    /**
+     * @private
+     * 显示列表深度排序
+     */
+    function breadthOrderCompare(a, b) {
+        var aParent = a.parent;
+        var bParent = b.parent;
+        if (!aParent || !bParent)
+            return 0;
+        var aNestLevel = a.$nestLevel;
+        var bNestLevel = b.$nestLevel;
+        var aIndex = 0;
+        var bIndex = 0;
+        if (aParent == bParent) {
+            aIndex = aParent.getChildIndex(a);
+            bIndex = bParent.getChildIndex(b);
+        }
+        if (aNestLevel > bNestLevel || aIndex > bIndex)
+            return 1;
+        if (aNestLevel < bNestLevel || bIndex > aIndex)
+            return -1;
+        if (a == b)
+            return 0;
+        return breadthOrderCompare(aParent, bParent);
+    }
+    /**
+     * @language en_US
+     * The RadioButtonGroup component defines a group of RadioButton components
+     * that act as a single mutually exclusive component; therefore,
+     * a user can select only one RadioButton component at a time.
+     *
+     * @event lark.Event.CHANGE Emitted when the value of the selected RadioButton component in
+     * this group changes.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * RadioButtonGroup 组件定义一组 RadioButton 组件，这些组件相互排斥；因此，用户每次只能选择一个 RadioButton 组件
+     *
+     * @event lark.Event.CHANGE 此组中所选 RadioButton 组件的值更改时分派。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var RadioButtonGroup = (function (_super) {
+        __extends(RadioButtonGroup, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function RadioButtonGroup() {
+            _super.call(this);
+            /**
+             * @private
+             * 组名
+             */
+            this.$name = null;
+            /**
+             * @private
+             * 单选按钮列表
+             */
+            this.radioButtons = [];
+            /**
+             * @private
+             */
+            this.$enabled = true;
+            /**
+             * @private
+             */
+            this._selectedValue = null;
+            /**
+             * @private
+             */
+            this._selection = null;
+            this.$name = "_radioButtonGroup" + groupCount++;
+        }
+        var d = __define,c=RadioButtonGroup;p=c.prototype;
+        /**
+         * @language en_US
+         * Returns the RadioButton component at the specified index.
+         *
+         * @param index The 0-based index of the RadioButton in the
+         * RadioButtonGroup.
+         *
+         * @return The specified RadioButton component if index is between
+         * 0 and <code>numRadioButtons</code> - 1.  Returns
+         * <code>null</code> if the index is invalid.
+         *
+         * @see swan.RadioButtonGroup#numRadioButtons
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回指定索引处的 RadioButton 组件。
+         *
+         * @param index RadioButtonGroup 中的 RadioButton 的从零开始的索引。
+         *
+         * @return 当索引位于 0 和 <code>numRadioButtons</code> 之间时，指定的 RadioButton 组件为 1。
+         * 如果索引无效，则返回 <code>null</code>。
+         *
+         * @see swan.RadioButtonGroup#numRadioButtons
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getRadioButtonAt = function (index) {
+            return this.radioButtons[index];
+        };
+        d(p, "enabled",
+            /**
+             * @language en_US
+             * Determines whether selection is allowed.  Note that the value returned
+             * only reflects the value that was explicitly set on the
+             * <code>RadioButtonGroup</code> and does not reflect any values explicitly
+             * set on the individual RadioButtons.
+             *
+             * @default true
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 确定是否允许选择。请注意，返回的值仅反映对 <code>RadioButtonGroup</code> 显式设置的值，
+             * 而不反映对各个 RadioButton 显式设置的任何值。
+             *
+             * @default true
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$enabled;
+            },
+            function (value) {
+                value = !!value;
+                if (this.$enabled === value)
+                    return;
+                this.$enabled = value;
+                var buttons = this.radioButtons;
+                var length = buttons.length;
+                for (var i = 0; i < length; i++)
+                    buttons[i].invalidateState();
+            }
+        );
+        d(p, "numRadioButtons",
+            /**
+             * @language en_US
+             * The number of RadioButtons that belong to this RadioButtonGroup.
+             *
+             * @default 0
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * [只读] 属于此 RadioButtonGroup 的 RadioButton 数。
+             *
+             * @default 0
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.radioButtons.length;
+            },undefined
+        );
+        d(p, "selectedValue",
+            /**
+             * @language en_US
+             * The <code>value</code> property of the selected
+             * RadioButton component in the group, if it has been set,
+             * otherwise, the <code>label</code> property of the selected RadioButton.
+             * If no RadioButton is selected, this property is <code>null</code>.
+             *
+             * <p>If you set <code>selectedValue</code>, selects the
+             * first RadioButton component whose <code>value</code> or
+             * <code>label</code> property matches this value.</p>
+             *
+             * @default null
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 组中所选 RadioButton 组件的 <code>value</code> 属性（如果未设置），
+             * 否则为所选 RadioButton 组件的 <code>label</code> 属性。
+             * 如果未选择任何 RadioButton，则此属性为 <code>null</code>。
+             *
+             * <p>如果设置了 <code>selectedValue</code>，则会选择 <code>value</code> 或 <code>label</code> 属性
+             * 与此值匹配的第一个 RadioButton 组件。</p>
+             *
+             * @default null
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                if (this.selection) {
+                    return this.selection.value != null ? this.selection.value : this.selection.label;
+                }
+                return null;
+            },
+            function (value) {
+                this._selectedValue = value;
+                if (value == null) {
+                    this.$setSelection(null, false);
+                    return;
+                }
+                var n = this.numRadioButtons;
+                for (var i = 0; i < n; i++) {
+                    var radioButton = this.radioButtons[i];
+                    if (radioButton.value == value || radioButton.label == value) {
+                        this.changeSelection(i, false);
+                        this._selectedValue = null;
+                        swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selectedValue");
+                        break;
+                    }
+                }
+            }
+        );
+        d(p, "selection",
+            /**
+             * @language en_US
+             * Contains a reference to the currently selected
+             * RadioButton component in the group.This property is valid only
+             * when the target RadioButton is displayed on the display list
+             *
+             * @default null
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 当前被选中的单选按钮引用。此属性仅当目标RadioButton在显示列表时有效。
+             *
+             * @default null
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this._selection;
+            },
+            function (value) {
+                if (this._selection == value)
+                    return;
+                this.$setSelection(value, false);
+            }
+        );
+        /**
+         * @private
+         * 添加单选按钮到组内
+         */
+        p.$addInstance = function (instance) {
+            instance.on(lark.Event.REMOVED, this.removedHandler, this);
+            var buttons = this.radioButtons;
+            buttons.push(instance);
+            buttons.sort(breadthOrderCompare);
+            var length = buttons.length;
+            for (var i = 0; i < length; i++) {
+                buttons[i].$indexNumber = i;
+            }
+            if (this._selectedValue)
+                this.selectedValue = this._selectedValue;
+            if (instance.selected == true)
+                this.selection = instance;
+            instance.$radioButtonGroup = this;
+            instance.invalidateState();
+        };
+        /**
+         * @private
+         * 从组里移除单选按钮
+         */
+        p.$removeInstance = function (instance, addListener) {
+            if (instance) {
+                var foundInstance = false;
+                var buttons = this.radioButtons;
+                var length = buttons.length;
+                for (var i = 0; i < length; i++) {
+                    var rb = buttons[i];
+                    if (foundInstance) {
+                        rb.$indexNumber = rb.$indexNumber - 1;
+                    }
+                    else if (rb == instance) {
+                        if (addListener)
+                            instance.on(lark.Event.ADDED, this.addedHandler, this);
+                        if (instance == this._selection)
+                            this._selection = null;
+                        instance.$radioButtonGroup = null;
+                        instance.invalidateState();
+                        this.radioButtons.splice(i, 1);
+                        foundInstance = true;
+                        i--;
+                    }
+                }
+            }
+        };
+        /**
+         * @private
+         * 设置选中的单选按钮
+         */
+        p.$setSelection = function (value, fireChange) {
+            if (this._selection == value)
+                return;
+            if (!value) {
+                if (this._selection) {
+                    this._selection.selected = false;
+                    this._selection = null;
+                    if (fireChange)
+                        this.emitWith(lark.Event.CHANGE);
+                }
+            }
+            else {
+                var n = this.numRadioButtons;
+                for (var i = 0; i < n; i++) {
+                    if (value == this.getRadioButtonAt(i)) {
+                        this.changeSelection(i, fireChange);
+                        break;
+                    }
+                }
+            }
+            swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selectedValue");
+        };
+        /**
+         * @private
+         * 改变选中项
+         */
+        p.changeSelection = function (index, fireChange) {
+            var rb = this.getRadioButtonAt(index);
+            if (rb && rb != this._selection) {
+                if (this._selection)
+                    this._selection.selected = false;
+                this._selection = rb;
+                this._selection.selected = true;
+                if (fireChange)
+                    this.emitWith(lark.Event.CHANGE);
+            }
+        };
+        /**
+         * @private
+         * 单选按钮添加到显示列表
+         */
+        p.addedHandler = function (event) {
+            var rb = event.target;
+            if (rb) {
+                rb.removeListener(lark.Event.ADDED, this.addedHandler, this);
+                this.$addInstance(rb);
+            }
+        };
+        /**
+         * @private
+         * 单选按钮从显示列表移除
+         */
+        p.removedHandler = function (event) {
+            var rb = event.target;
+            if (rb) {
+                rb.removeListener(lark.Event.REMOVED, this.removedHandler, this);
+                this.$removeInstance(rb, true);
+            }
+        };
+        return RadioButtonGroup;
+    })(lark.EventEmitter);
+    swan.RadioButtonGroup = RadioButtonGroup;
+    swan.registerBindable(RadioButtonGroup.prototype, "selectedValue");
+    lark.registerClass(RadioButtonGroup, 1030 /* RadioButtonGroup */);
+    if (DEBUG) {
+        lark.$markReadOnly(RadioButtonGroup.prototype, "numRadioButtons");
+    }
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * The SetProperty class specifies a property value that is in effect only
+     * during the parent view state.
+     * You use this class in the <code>overrides</code> property of the State class.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * SetProperty 类指定只在父视图状态期间有效的属性值。可以在 State 类的 overrides 属性中使用该类。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var SetProperty = (function () {
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @param target The object whose property is being set.
+         * By default, Swan uses the immediate parent of the State object.
+         * @param name The property to set.
+         * @param value The value of the property in the view state.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个SetProperty实例。
+         *
+         * @param target 要设置其属性的对象。默认情况下，Swan 使用 State 对象的直接父级。
+         * @param name 要设置的属性。
+         * @param value 视图状态中的属性值。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function SetProperty(target, name, value) {
+            this.target = target;
+            this.name = name;
+            this.value = value;
+        }
+        var d = __define,c=SetProperty;p=c.prototype;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.apply = function (host, parent) {
+            var obj = this.target ? host[this.target] : host;
+            if (!obj)
+                return;
+            this.oldValue = obj[this.name];
+            this.setPropertyValue(obj, this.name, this.value, this.oldValue);
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.remove = function (host, parent) {
+            var obj = this.target ? host[this.target] : host;
+            if (!obj)
+                return;
+            this.setPropertyValue(obj, this.name, this.oldValue, this.oldValue);
+            this.oldValue = null;
+        };
+        /**
+         * @private
+         * 设置属性值
+         */
+        p.setPropertyValue = function (obj, name, value, valueForType) {
+            if (value === undefined || value === null)
+                obj[name] = value;
+            else if (typeof (valueForType) == "number")
+                obj[name] = +value;
+            else if (typeof (valueForType) == "boolean")
+                obj[name] = this.toBoolean(value);
+            else
+                obj[name] = value;
+        };
+        /**
+         * @private
+         * 转成Boolean值
+         */
+        p.toBoolean = function (value) {
+            if (typeof (value) == "string")
+                return value.toLowerCase() == "true";
+            return value != false;
+        };
+        return SetProperty;
+    })();
+    swan.SetProperty = SetProperty;
+    lark.registerClass(SetProperty, 1034 /* SetProperty */, [1032 /* IOverride */]);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * The State class defines a view state, a particular view of a component.
+     *
+     * For example, a product thumbnail could have two view states;
+     * a base view state with minimal information, and a rich view state with
+     * additional information.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * State 类定义视图状态，即组件的特定视图。
+     *
+     * 例如，产品缩略图可以有两个视图状态，包含最少信息的基本视图状态和包含附加信息的丰富视图状态。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var State = (function (_super) {
+        __extends(State, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @param name The name of the view state.
+         * State names must be unique for a given component.
+         * This property must be set.
+         * @param overrides The overrides for this view state, as an Array of objects that implement
+         * the IOverride interface. These overrides are applied in order when the
+         * state is entered, and removed in reverse order when the state is exited.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个State实例。
+         *
+         * @param name 视图状态的名称。给定组件的状态名称必须唯一。必须设置此属性。
+         * @param overrides 该视图状态的覆盖，表现为实现 IOverride 接口的对象的数组。
+         * 这些覆盖在进入状态时按顺序应用，在退出状态时按相反的顺序删除。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function State(name, overrides) {
+            _super.call(this);
+            this.name = name;
+            this.overrides = overrides;
+        }
+        var d = __define,c=State;p=c.prototype;
+        /**
+         * @language en_US
+         * Initialize this state and all of its overrides.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 初始化视图状态
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.initialize = function (host, stage) {
+            var overrides = this.overrides;
+            var length = overrides.length;
+            for (var i = 0; i < length; i++) {
+                var addItems = overrides[i];
+                if (lark.is(addItems, 1033 /* AddItems */)) {
+                    var target = host[addItems.target];
+                    if (lark.is(target, 1011 /* Image */) && !target.$parent) {
+                        stage.addChild(target);
+                        stage.removeChild(target);
+                    }
+                }
+            }
+        };
+        return State;
+    })(lark.LarkObject);
+    swan.State = State;
+    lark.registerClass(State, 1031 /* State */);
+})(swan || (swan = {}));
+var swan;
+(function (swan) {
+    var sys;
+    (function (sys) {
+        /**
+         * @private
+         */
+        var StateClient = (function () {
+            function StateClient() {
+            }
+            var d = __define,c=StateClient;p=c.prototype;
+            d(p, "states",
+                /**
+                 * @private
+                 * 为此组件定义的视图状态。
+                 */
+                function () {
+                    return this.$stateValues.states;
+                },
+                function (value) {
+                    if (!value)
+                        value = [];
+                    var values = this.$stateValues;
+                    values.states = value;
+                    var statesMap = {};
+                    var length = value.length;
+                    for (var i = 0; i < length; i++) {
+                        var state = value[i];
+                        statesMap[state.name] = state;
+                    }
+                    values.statesMap = statesMap;
+                    if (values.parent) {
+                        this.commitCurrentState();
+                    }
+                }
+            );
+            d(p, "currentState",
+                /**
+                 * @private
+                 * 组件的当前视图状态。将其设置为 "" 或 null 可将组件重置回其基本状态。
+                 */
+                function () {
+                    return this.$stateValues.currentState;
+                },
+                function (value) {
+                    var values = this.$stateValues;
+                    values.explicitState = value;
+                    values.currentState = value;
+                    this.commitCurrentState();
+                }
+            );
+            /**
+             * @private
+             * 应用当前的视图状态。子类覆盖此方法在视图状态发生改变时执行相应更新操作。
+             */
+            p.commitCurrentState = function () {
+                var values = this.$stateValues;
+                if (!values.parent) {
+                    return;
+                }
+                var destination = values.statesMap[values.currentState];
+                if (!destination) {
+                    if (values.states.length > 0) {
+                        values.currentState = values.states[0].name;
+                    }
+                    else {
+                        return;
+                    }
+                }
+                if (values.oldState == values.currentState) {
+                    return;
+                }
+                var parent = values.parent;
+                var state = values.statesMap[values.oldState];
+                if (state) {
+                    var overrides = state.overrides;
+                    var length = overrides.length;
+                    for (var i = 0; i < length; i++) {
+                        overrides[i].remove(this, parent);
+                    }
+                }
+                values.oldState = values.currentState;
+                state = values.statesMap[values.currentState];
+                if (state) {
+                    overrides = state.overrides;
+                    length = overrides.length;
+                    for (i = 0; i < length; i++) {
+                        overrides[i].apply(this, parent);
+                    }
+                }
+            };
+            /**
+             * @private
+             * 返回是否含有指定名称的视图状态
+             * @param stateName 要检查的视图状态名称
+             */
+            p.hasState = function (stateName) {
+                return !!this.$stateValues.statesMap[stateName];
+            };
+            /**
+             * @private
+             * 初始化所有视图状态
+             */
+            p.initializeStates = function (stage) {
+                this.$stateValues.intialized = true;
+                var states = this.states;
+                var length = states.length;
+                for (var i = 0; i < length; i++) {
+                    states[i].initialize(this, stage);
+                }
+            };
+            return StateClient;
+        })();
+        sys.StateClient = StateClient;
+        /**
+         * @private
+         */
+        var StateValues = (function () {
+            function StateValues() {
+                /**
+                 * @private
+                 */
+                this.intialized = false;
+                /**
+                 * @private
+                 */
+                this.statesMap = {};
+                /**
+                 * @private
+                 */
+                this.states = [];
+                /**
+                 * @private
+                 */
+                this.oldState = null;
+                /**
+                 * @private
+                 */
+                this.explicitState = null;
+                /**
+                 * @private
+                 */
+                this.currentState = null;
+                /**
+                 * @private
+                 */
+                this.parent = null;
+                /**
+                 * @private
+                 */
+                this.stateIsDirty = false;
+            }
+            var d = __define,c=StateValues;p=c.prototype;
+            return StateValues;
+        })();
+        sys.StateValues = StateValues;
+    })(sys = swan.sys || (swan.sys = {}));
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * The swan.CollectionEvent class represents an event that is
+     * dispatched when the associated collection changes.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 集合类型数据改变事件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var CollectionEvent = (function (_super) {
+        __extends(CollectionEvent, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @param type The event type; indicates the action that triggered the event.
+         * @param bubbles Specifies whether the event can bubble
+         * up the display list hierarchy.
+         * @param cancelable Specifies whether the behavior
+         * associated with the event can be prevented.
+         * @param kind Indicates the kind of event that occured.
+         * The parameter value can be one of the values in the CollectionEventKind
+         * class, or <code>null</code>, which indicates that the kind is unknown.
+         * @param location When the <code>kind</code> is
+         * <code>CollectionEventKind.ADD</code>,
+         * <code>CollectionEventKind.REMOVE</code>,
+         * <code>CollectionEventKind.REPLACE</code>,or
+         * <code>CollectionEventKind.UPDATE</code>
+         * this value indicates at what location the item(s) specified
+         * in the <code>items property</code> can be found
+         * within the target collection.
+         * @param oldLocation this value indicates
+         * the old location within the target collection
+         * of the item(s) specified in the <code>items</code> property.
+         * @param items Array of objects with information about the items
+         * affected by the event.
+         * @param oldItems When the <code>kine</code> is <code>CollectionEventKind.REPLACE</code> the value represents
+         * a list of items before replaced.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 CollectionEvent 实例
+         *
+         * @param type 事件类型；指示触发事件的动作。
+         * @param bubbles 指定该事件是否可以在显示列表层次结构得到冒泡处理。
+         * @param cancelable 指定是否可以防止与事件相关联的行为。
+         * @param kind 指示发生的事件类型。此属性值可以是 CollectionEventKind 类中的一个值，也可以是 null，用于指示类型未知。
+         * @param location 如果 kind 值为 <code>CollectionEventKind.ADD</code>,
+         * <code>CollectionEventKind.REMOVE</code>,
+         * <code>CollectionEventKind.REPLACE</code>,或
+         * <code>CollectionEventKind.UPDATE</code>
+         * 则此属性为 items 属性中指定的项目集合中零号元素的的索引。
+         * @param oldLocation 此值指示 <code>items</code> 属性中指定的项目在目标集合中的原位置。
+         * @param items 受事件影响的项目的列表。
+         * @param oldItems 仅当kind的值为CollectionEventKind.REPLACE时，表示替换前的项目列表。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function CollectionEvent(type, bubbles, cancelable, kind, location, oldLocation, items, oldItems) {
+            _super.call(this, type, bubbles, cancelable);
+            this.$setTo(kind, location, oldLocation, items, oldItems);
+        }
+        var d = __define,c=CollectionEvent;p=c.prototype;
+        /**
+         * @private
+         *
+         * @param kind
+         * @param location
+         * @param oldLocation
+         * @param items
+         * @param oldItems
+         */
+        p.$setTo = function (kind, location, oldLocation, items, oldItems) {
+            this.kind = kind;
+            this.location = +location | 0;
+            this.oldLocation = +oldLocation | 0;
+            this.items = items || [];
+            this.oldItems = oldItems || [];
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.clean = function () {
+            _super.prototype.clean.call(this);
+            this.items = this.oldItems = null;
+        };
+        /**
+         * @language en_US
+         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * for the next cycle of reuse.
+         *
+         * @param target the target of event emitter.
+         * @param eventType The event type; indicates the action that triggered the event.
+         * @param kind Indicates the kind of event that occured.
+         * The parameter value can be one of the values in the CollectionEventKind
+         * class, or <code>null</code>, which indicates that the kind is unknown.
+         * @param location When the <code>kind</code> is
+         * <code>CollectionEventKind.ADD</code>,
+         * <code>CollectionEventKind.REMOVE</code>,
+         * <code>CollectionEventKind.REPLACE</code>,or
+         * <code>CollectionEventKind.UPDATE</code>
+         * this value indicates at what location the item(s) specified
+         * in the <code>items property</code> can be found
+         * within the target collection.
+         * @param oldLocation this value indicates
+         * the old location within the target collection
+         * of the item(s) specified in the <code>items</code> property.
+         * @param items Array of objects with information about the items
+         * affected by the event.
+         * @param oldItems When the <code>kine</code> is <code>CollectionEventKind.REPLACE</code> the value represents
+         * a list of items before replaced.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         *
+         * @param target 事件派发目标。
+         * @param eventType 事件类型；指示触发事件的动作。
+         * @param kind 指示发生的事件类型。此属性值可以是 CollectionEventKind 类中的一个值，也可以是 null，用于指示类型未知。
+         * @param location 如果 kind 值为 <code>CollectionEventKind.ADD</code>,
+         * <code>CollectionEventKind.REMOVE</code>,
+         * <code>CollectionEventKind.REPLACE</code>,或
+         * <code>CollectionEventKind.UPDATE</code>
+         * 则此属性为 items 属性中指定的项目集合中零号元素的的索引。
+         * @param oldLocation 此值指示 <code>items</code> 属性中指定的项目在目标集合中的原位置。
+         * @param items 受事件影响的项目的列表。
+         * @param oldItems 仅当kind的值为CollectionEventKind.REPLACE时，表示替换前的项目列表。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        CollectionEvent.emitCollectionEvent = function (target, eventType, kind, location, oldLocation, items, oldItems) {
+            if (!target.hasListener(eventType)) {
+                return true;
+            }
+            var event = lark.Event.create(CollectionEvent, eventType);
+            event.$setTo(kind, location, oldLocation, items, oldItems);
+            var result = target.emit(event);
+            lark.Event.release(event);
+            return result;
+        };
+        /**
+         * @language en_US
+         * Emitted when a collection has changed.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 集合类数据发生改变
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        CollectionEvent.COLLECTION_CHANGE = "collectionChange";
+        return CollectionEvent;
+    })(lark.Event);
+    swan.CollectionEvent = CollectionEvent;
+    lark.registerClass(CollectionEvent, 1015 /* CollectionEvent */);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015; Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms; with or without
+//  modification; are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice; this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice; this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES; INCLUDING; BUT NOT LIMITED TO; THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT; INDIRECT;
+//  INCIDENTAL; SPECIAL; EXEMPLARY; OR CONSEQUENTIAL DAMAGES (INCLUDING; BUT NOT
+//  LIMITED TO; PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE; DATA;
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY; WHETHER IN CONTRACT; STRICT LIABILITY; OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE;
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    lark.$locale_strings = lark.$locale_strings || {};
+    lark.$locale_strings["en_US"] = lark.$locale_strings["en_US"] || {};
+    var locale_strings = lark.$locale_strings["en_US"];
+    locale_strings[2001] = "EXML parsing error {0}: EXML file can't be found ";
+    locale_strings[2002] = "EXML parsing error : invalid XML file:\n{0}";
+    locale_strings[2003] = "EXML parsing error {0}: the class definitions corresponding to nodes can't be found  \n {1}";
+    locale_strings[2004] = "EXML parsing error {0}: nodes cannot contain id property with the same name \n {1}";
+    locale_strings[2005] = "EXML parsing error {0}: property with the name of '{1}' does not exist on the node: \n {2}";
+    locale_strings[2006] = "EXML parsing error {0}: undefined view state name: '{1}' \n {2}";
+    locale_strings[2007] = "EXML parsing error {0}: only UIComponent objects within the container can use the includeIn and excludeFrom properties\n {1}";
+    locale_strings[2008] = "EXML parsing error {0}: fail to assign values of '{1}' class to property: '{2}' \n {3}";
+    locale_strings[2009] = "EXML parsing error {0}: only one ID can be referenced in the node property value '{}' label; and complex expression is not allowed to use \n {1}";
+    locale_strings[2010] = "EXML parsing error {0}: ID referenced by property: '{1}':  '{2}' does not exist \n {3}";
+    locale_strings[2011] = "EXML parsing error {0}: fail to assign more than one child nodes to the same property: '{1}' \n {2}";
+    locale_strings[2012] = "EXML parsing error {0}: no default property exists on the node; and you must explicitly declare the property name that the child node  is assigned to \n {1}";
+    locale_strings[2013] = "EXML parsing error {0}: view state grammar is not allowed to use on property nodes of Array class \n {1} ";
+    locale_strings[2014] = "EXML parsing error {0}: assigning the skin class itself to the node property is not allowed \n {1}";
+    locale_strings[2015] = "EXML parsing error {0}: class definition referenced by node: {1} does not exist \n {2}";
+    locale_strings[2016] = "EXML parsing error {0}: format error of 'scale9Grid' property value on the node: {1}";
+    locale_strings[2017] = "EXML parsing error {0}: namespace prefix missing on the node: {1}";
+    locale_strings[2018] = "EXML parsing error {0}: format error of 'skinName' property value on the node: {1}";
+    locale_strings[2019] = "EXML parsing error {0}: the container’s child item must be visible nodes: {1}";
+    locale_strings[2020] = "EXML parsing error {0}: for child nodes in w: Declarations, the includeIn and excludeFrom properties are not allowed to use \n {1}";
+    locale_strings[2101] = "EXML parsing warnning : fail to register the class property : {0},there is already a class with the same name in the global,please try to rename the class name for the exml. \n {1}";
+    locale_strings[2102] = "EXML parsing warnning {0}: no child node can be found on the property code \n {1}";
+    locale_strings[2103] = "EXML parsing warnning {0}: the same property '{1}' on the node is assigned multiple times \n {2}";
+    locale_strings[2104] = "Instantiate class {0} error，the parameters of its constructor method must be empty.";
+    locale_strings[2201] = "BasicLayout doesn't support virtualization.";
+    locale_strings[2202] = "parse skinName error，the parsing result of skinName must be a instance of swan.Skin.";
+    locale_strings[2301] = "parse source failed，could not find asset from URL：{0} .";
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * The UIEvent class represents the event object passed to
+     * the event listener for many UI events.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * UI事件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var UIEvent = (function (_super) {
+        __extends(UIEvent, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @param type The event type; indicates the action that triggered the event.
+         * @param bubbles Specifies whether the event can bubble
+         * up the display list hierarchy.
+         * @param cancelable Specifies whether the behavior
+         * associated with the event can be prevented.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 UIEvent 实例
+         *
+         * @param type 事件类型；指示触发事件的动作。
+         * @param bubbles 指定该事件是否可以在显示列表层次结构得到冒泡处理。
+         * @param cancelable 指定是否可以防止与事件相关联的行为。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function UIEvent(type, bubbles, cancelable) {
+            _super.call(this, type, bubbles, cancelable);
+        }
+        var d = __define,c=UIEvent;p=c.prototype;
+        /**
+         * @language en_US
+         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * for the next cycle of reuse.
+         *
+         * @param target the target of event emitter.
+         * @param eventType The event type; indicates the action that triggered the event.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         *
+         * @param target 事件派发目标。
+         * @param eventType 事件类型；指示触发事件的动作。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        UIEvent.emitUIEvent = function (target, eventType) {
+            if (!target.hasListener(eventType)) {
+                return true;
+            }
+            var event = lark.Event.create(UIEvent, eventType);
+            var result = target.emit(event);
+            lark.Event.release(event);
+            return result;
+        };
+        /**
+         * @language en_US
+         * creation complete of component.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 组件创建完成
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        UIEvent.CREATION_COMPLETE = "creationComplete";
+        /**
+         * @language en_US
+         * the ending of change.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 改变结束
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        UIEvent.CHANGE_END = "changeEnd";
+        /**
+         * @language en_US
+         * The begining of change.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 改变开始
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        UIEvent.CHANGE_START = "changeStart";
+        /**
+         * @language en_US
+         * Before close the panel.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 即将关闭面板事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        UIEvent.CLOSING = "close";
+        /**
+         * @language en_US
+         * The coordinates of the UI components changed in it's parent.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * UI组件在父级容器中的坐标发生改变事件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        UIEvent.MOVE = "move";
+        return UIEvent;
+    })(lark.Event);
+    swan.UIEvent = UIEvent;
+    lark.registerClass(UIEvent, 1014 /* UIEvent */);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * Represents events that are emitted when a item has been touched.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 列表项触碰事件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var ItemTapEvent = (function (_super) {
+        __extends(ItemTapEvent, _super);
+        function ItemTapEvent() {
+            _super.apply(this, arguments);
+            /**
+             * @language en_US
+             * The item in the data provider of the associated item.
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 触发触摸事件的项呈示器数据源项。
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.item = null;
+            /**
+             * @language en_US
+             * The item renderer in the list of the associated item.
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 触发触摸事件的项呈示器。
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.itemRenderer = null;
+            /**
+             * @language en_US
+             * The index of the associated navigation item.
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 触发触摸事件的项索引
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.itemIndex = -1;
+        }
+        var d = __define,c=ItemTapEvent;p=c.prototype;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.clean = function () {
+            _super.prototype.clean.call(this);
+            this.item = this.itemRenderer = null;
+        };
+        /**
+         * @language en_US
+         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * for the next cycle of reuse.
+         *
+         * @param target the target of event emitter.
+         * @param eventType The event type; indicates the action that triggered the event.
+         * @param itemRenderer The item renderer in the list of the associated item.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用指定的 EventEmitter 对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         *
+         * @param target 事件派发目标
+         * @param eventType 事件类型；指示触发事件的动作。
+         * @param itemRenderer 触发触摸事件的项呈示器。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        ItemTapEvent.emitItemTapEvent = function (target, eventType, itemRenderer) {
+            if (!target.hasListener(eventType)) {
+                return true;
+            }
+            var event = lark.Event.create(ItemTapEvent, eventType);
+            event.item = itemRenderer.data;
+            event.itemIndex = itemRenderer.itemIndex;
+            event.itemRenderer = itemRenderer;
+            var result = target.emit(event);
+            lark.Event.release(event);
+            return result;
+        };
+        /**
+         * @language en_US
+         * The type of the event object for an <code>itemTap</code> event.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * <code>itemTap</code> 事件的对象类型。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        ItemTapEvent.ITEM_TAP = "itemTap";
+        return ItemTapEvent;
+    })(lark.Event);
+    swan.ItemTapEvent = ItemTapEvent;
+    lark.registerClass(ItemTapEvent, 1017 /* ItemTapEvent */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -4934,2993 +7857,6 @@ var swan;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The swan.CollectionEvent class represents an event that is
-     * dispatched when the associated collection changes.
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 集合类型数据改变事件
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var CollectionEvent = (function (_super) {
-        __extends(CollectionEvent, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @param type The event type; indicates the action that triggered the event.
-         * @param bubbles Specifies whether the event can bubble
-         * up the display list hierarchy.
-         * @param cancelable Specifies whether the behavior
-         * associated with the event can be prevented.
-         * @param kind Indicates the kind of event that occured.
-         * The parameter value can be one of the values in the CollectionEventKind
-         * class, or <code>null</code>, which indicates that the kind is unknown.
-         * @param location When the <code>kind</code> is
-         * <code>CollectionEventKind.ADD</code>,
-         * <code>CollectionEventKind.REMOVE</code>,
-         * <code>CollectionEventKind.REPLACE</code>,or
-         * <code>CollectionEventKind.UPDATE</code>
-         * this value indicates at what location the item(s) specified
-         * in the <code>items property</code> can be found
-         * within the target collection.
-         * @param oldLocation this value indicates
-         * the old location within the target collection
-         * of the item(s) specified in the <code>items</code> property.
-         * @param items Array of objects with information about the items
-         * affected by the event.
-         * @param oldItems When the <code>kine</code> is <code>CollectionEventKind.REPLACE</code> the value represents
-         * a list of items before replaced.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个 CollectionEvent 实例
-         *
-         * @param type 事件类型；指示触发事件的动作。
-         * @param bubbles 指定该事件是否可以在显示列表层次结构得到冒泡处理。
-         * @param cancelable 指定是否可以防止与事件相关联的行为。
-         * @param kind 指示发生的事件类型。此属性值可以是 CollectionEventKind 类中的一个值，也可以是 null，用于指示类型未知。
-         * @param location 如果 kind 值为 <code>CollectionEventKind.ADD</code>,
-         * <code>CollectionEventKind.REMOVE</code>,
-         * <code>CollectionEventKind.REPLACE</code>,或
-         * <code>CollectionEventKind.UPDATE</code>
-         * 则此属性为 items 属性中指定的项目集合中零号元素的的索引。
-         * @param oldLocation 此值指示 <code>items</code> 属性中指定的项目在目标集合中的原位置。
-         * @param items 受事件影响的项目的列表。
-         * @param oldItems 仅当kind的值为CollectionEventKind.REPLACE时，表示替换前的项目列表。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function CollectionEvent(type, bubbles, cancelable, kind, location, oldLocation, items, oldItems) {
-            _super.call(this, type, bubbles, cancelable);
-            this.$setTo(kind, location, oldLocation, items, oldItems);
-        }
-        var d = __define,c=CollectionEvent;p=c.prototype;
-        /**
-         * @private
-         *
-         * @param kind
-         * @param location
-         * @param oldLocation
-         * @param items
-         * @param oldItems
-         */
-        p.$setTo = function (kind, location, oldLocation, items, oldItems) {
-            this.kind = kind;
-            this.location = +location | 0;
-            this.oldLocation = +oldLocation | 0;
-            this.items = items || [];
-            this.oldItems = oldItems || [];
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.clean = function () {
-            _super.prototype.clean.call(this);
-            this.items = this.oldItems = null;
-        };
-        /**
-         * @language en_US
-         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
-         * for the next cycle of reuse.
-         *
-         * @param target the target of event emitter.
-         * @param eventType The event type; indicates the action that triggered the event.
-         * @param kind Indicates the kind of event that occured.
-         * The parameter value can be one of the values in the CollectionEventKind
-         * class, or <code>null</code>, which indicates that the kind is unknown.
-         * @param location When the <code>kind</code> is
-         * <code>CollectionEventKind.ADD</code>,
-         * <code>CollectionEventKind.REMOVE</code>,
-         * <code>CollectionEventKind.REPLACE</code>,or
-         * <code>CollectionEventKind.UPDATE</code>
-         * this value indicates at what location the item(s) specified
-         * in the <code>items property</code> can be found
-         * within the target collection.
-         * @param oldLocation this value indicates
-         * the old location within the target collection
-         * of the item(s) specified in the <code>items</code> property.
-         * @param items Array of objects with information about the items
-         * affected by the event.
-         * @param oldItems When the <code>kine</code> is <code>CollectionEventKind.REPLACE</code> the value represents
-         * a list of items before replaced.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-         *
-         * @param target 事件派发目标。
-         * @param eventType 事件类型；指示触发事件的动作。
-         * @param kind 指示发生的事件类型。此属性值可以是 CollectionEventKind 类中的一个值，也可以是 null，用于指示类型未知。
-         * @param location 如果 kind 值为 <code>CollectionEventKind.ADD</code>,
-         * <code>CollectionEventKind.REMOVE</code>,
-         * <code>CollectionEventKind.REPLACE</code>,或
-         * <code>CollectionEventKind.UPDATE</code>
-         * 则此属性为 items 属性中指定的项目集合中零号元素的的索引。
-         * @param oldLocation 此值指示 <code>items</code> 属性中指定的项目在目标集合中的原位置。
-         * @param items 受事件影响的项目的列表。
-         * @param oldItems 仅当kind的值为CollectionEventKind.REPLACE时，表示替换前的项目列表。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        CollectionEvent.emitCollectionEvent = function (target, eventType, kind, location, oldLocation, items, oldItems) {
-            if (!target.hasListener(eventType)) {
-                return true;
-            }
-            var event = lark.Event.create(CollectionEvent, eventType);
-            event.$setTo(kind, location, oldLocation, items, oldItems);
-            var result = target.emit(event);
-            lark.Event.release(event);
-            return result;
-        };
-        /**
-         * @language en_US
-         * Emitted when a collection has changed.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 集合类数据发生改变
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        CollectionEvent.COLLECTION_CHANGE = "collectionChange";
-        return CollectionEvent;
-    })(lark.Event);
-    swan.CollectionEvent = CollectionEvent;
-    lark.registerClass(CollectionEvent, 1015 /* CollectionEvent */);
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    var sys;
-    (function (sys) {
-        /**
-         * @private
-         * 失效验证管理器
-         */
-        var Validator = (function (_super) {
-            __extends(Validator, _super);
-            /**
-             * @private
-             * 创建一个Validator对象
-             */
-            function Validator() {
-                _super.call(this);
-                /**
-                 * @private
-                 */
-                this.targetLevel = Number.POSITIVE_INFINITY;
-                /**
-                 * @private
-                 */
-                this.invalidatePropertiesFlag = false;
-                /**
-                 * @private
-                 */
-                this.invalidateClientPropertiesFlag = false;
-                /**
-                 * @private
-                 */
-                this.invalidatePropertiesQueue = new DepthQueue();
-                /**
-                 * @private
-                 */
-                this.invalidateSizeFlag = false;
-                /**
-                 * @private
-                 */
-                this.invalidateClientSizeFlag = false;
-                /**
-                 * @private
-                 */
-                this.invalidateSizeQueue = new DepthQueue();
-                /**
-                 * @private
-                 */
-                this.invalidateDisplayListFlag = false;
-                /**
-                 * @private
-                 */
-                this.invalidateDisplayListQueue = new DepthQueue();
-                /**
-                 * @private
-                 */
-                this.eventDisplay = new lark.Bitmap();
-                /**
-                 * @private
-                 * 是否已经添加了事件监听
-                 */
-                this.listenersAttached = false;
-            }
-            var d = __define,c=Validator;p=c.prototype;
-            /**
-             * @private
-             * 标记组件属性失效
-             */
-            p.invalidateProperties = function (client) {
-                if (!this.invalidatePropertiesFlag) {
-                    this.invalidatePropertiesFlag = true;
-                    if (!this.listenersAttached)
-                        this.attachListeners();
-                }
-                if (this.targetLevel <= client.$nestLevel)
-                    this.invalidateClientPropertiesFlag = true;
-                this.invalidatePropertiesQueue.insert(client);
-            };
-            /**
-             * @private
-             * 验证失效的属性
-             */
-            p.validateProperties = function () {
-                var queue = this.invalidatePropertiesQueue;
-                var client = queue.shift();
-                while (client) {
-                    if (client.$stage) {
-                        client.validateProperties();
-                    }
-                    client = queue.shift();
-                }
-                if (queue.isEmpty())
-                    this.invalidatePropertiesFlag = false;
-            };
-            /**
-             * @private
-             * 标记需要重新测量尺寸
-             */
-            p.invalidateSize = function (client) {
-                if (!this.invalidateSizeFlag) {
-                    this.invalidateSizeFlag = true;
-                    if (!this.listenersAttached)
-                        this.attachListeners();
-                }
-                if (this.targetLevel <= client.$nestLevel)
-                    this.invalidateClientSizeFlag = true;
-                this.invalidateSizeQueue.insert(client);
-            };
-            /**
-             * @private
-             * 测量尺寸
-             */
-            p.validateSize = function () {
-                var queue = this.invalidateSizeQueue;
-                var client = queue.pop();
-                while (client) {
-                    if (client.$stage) {
-                        client.validateSize();
-                    }
-                    client = queue.pop();
-                }
-                if (queue.isEmpty())
-                    this.invalidateSizeFlag = false;
-            };
-            /**
-             * @private
-             * 标记需要重新布局
-             */
-            p.invalidateDisplayList = function (client) {
-                if (!this.invalidateDisplayListFlag) {
-                    this.invalidateDisplayListFlag = true;
-                    if (!this.listenersAttached)
-                        this.attachListeners();
-                }
-                this.invalidateDisplayListQueue.insert(client);
-            };
-            /**
-             * @private
-             * 重新布局
-             */
-            p.validateDisplayList = function () {
-                var queue = this.invalidateDisplayListQueue;
-                var client = queue.shift();
-                while (client) {
-                    if (client.$stage) {
-                        client.validateDisplayList();
-                    }
-                    client = queue.shift();
-                }
-                if (queue.isEmpty())
-                    this.invalidateDisplayListFlag = false;
-            };
-            /**
-             * @private
-             * 添加事件监听
-             */
-            p.attachListeners = function () {
-                this.eventDisplay.on(lark.Event.ENTER_FRAME, this.doPhasedInstantiationCallBack, this);
-                this.eventDisplay.on(lark.Event.RENDER, this.doPhasedInstantiationCallBack, this);
-                lark.sys.$invalidateRenderFlag = true;
-                this.listenersAttached = true;
-            };
-            /**
-             * @private
-             * 执行属性应用
-             */
-            p.doPhasedInstantiationCallBack = function (event) {
-                this.eventDisplay.removeListener(lark.Event.ENTER_FRAME, this.doPhasedInstantiationCallBack, this);
-                this.eventDisplay.removeListener(lark.Event.RENDER, this.doPhasedInstantiationCallBack, this);
-                this.doPhasedInstantiation();
-            };
-            /**
-             * @private
-             *
-             */
-            p.doPhasedInstantiation = function () {
-                if (this.invalidatePropertiesFlag) {
-                    this.validateProperties();
-                }
-                if (this.invalidateSizeFlag) {
-                    this.validateSize();
-                }
-                if (this.invalidateDisplayListFlag) {
-                    this.validateDisplayList();
-                }
-                if (this.invalidatePropertiesFlag || this.invalidateSizeFlag || this.invalidateDisplayListFlag) {
-                    this.attachListeners();
-                }
-                else {
-                    this.listenersAttached = false;
-                }
-            };
-            /**
-             * @private
-             * 使大于等于指定组件层级的元素立即应用属性
-             * @param target 要立即应用属性的组件
-             */
-            p.validateClient = function (target) {
-                var obj;
-                var done = false;
-                var oldTargetLevel = this.targetLevel;
-                if (this.targetLevel === Number.POSITIVE_INFINITY)
-                    this.targetLevel = target.$nestLevel;
-                var propertiesQueue = this.invalidatePropertiesQueue;
-                var sizeQueue = this.invalidateSizeQueue;
-                var displayListQueue = this.invalidateDisplayListQueue;
-                while (!done) {
-                    done = true;
-                    obj = propertiesQueue.removeSmallestChild(target);
-                    while (obj) {
-                        if (obj.$stage) {
-                            obj.validateProperties();
-                        }
-                        obj = propertiesQueue.removeSmallestChild(target);
-                    }
-                    if (propertiesQueue.isEmpty()) {
-                        this.invalidatePropertiesFlag = false;
-                    }
-                    this.invalidateClientPropertiesFlag = false;
-                    obj = sizeQueue.removeLargestChild(target);
-                    while (obj) {
-                        if (obj.$stage) {
-                            obj.validateSize();
-                        }
-                        if (this.invalidateClientPropertiesFlag) {
-                            obj = (propertiesQueue.removeSmallestChild(target));
-                            if (obj) {
-                                propertiesQueue.insert(obj);
-                                done = false;
-                                break;
-                            }
-                        }
-                        obj = sizeQueue.removeLargestChild(target);
-                    }
-                    if (sizeQueue.isEmpty()) {
-                        this.invalidateSizeFlag = false;
-                    }
-                    this.invalidateClientPropertiesFlag = false;
-                    this.invalidateClientSizeFlag = false;
-                    obj = displayListQueue.removeSmallestChild(target);
-                    while (obj) {
-                        if (obj.$stage) {
-                            obj.validateDisplayList();
-                        }
-                        if (this.invalidateClientPropertiesFlag) {
-                            obj = propertiesQueue.removeSmallestChild(target);
-                            if (obj) {
-                                propertiesQueue.insert(obj);
-                                done = false;
-                                break;
-                            }
-                        }
-                        if (this.invalidateClientSizeFlag) {
-                            obj = sizeQueue.removeLargestChild(target);
-                            if (obj) {
-                                sizeQueue.insert(obj);
-                                done = false;
-                                break;
-                            }
-                        }
-                        obj = displayListQueue.removeSmallestChild(target);
-                    }
-                    if (displayListQueue.isEmpty()) {
-                        this.invalidateDisplayListFlag = false;
-                    }
-                }
-                if (oldTargetLevel === Number.POSITIVE_INFINITY) {
-                    this.targetLevel = Number.POSITIVE_INFINITY;
-                }
-            };
-            return Validator;
-        })(lark.EventEmitter);
-        sys.Validator = Validator;
-        /**
-         * @private
-         * 显示列表嵌套深度排序队列
-         */
-        var DepthQueue = (function () {
-            function DepthQueue() {
-                /**
-                 * 深度队列
-                 */
-                this.depthBins = {};
-                /**
-                 * 最小深度
-                 */
-                this.minDepth = 0;
-                /**
-                 * 最大深度
-                 */
-                this.maxDepth = -1;
-            }
-            var d = __define,c=DepthQueue;p=c.prototype;
-            /**
-             * 插入一个元素
-             */
-            p.insert = function (client) {
-                var depth = client.$nestLevel;
-                if (this.maxDepth < this.minDepth) {
-                    this.minDepth = this.maxDepth = depth;
-                }
-                else {
-                    if (depth < this.minDepth)
-                        this.minDepth = depth;
-                    if (depth > this.maxDepth)
-                        this.maxDepth = depth;
-                }
-                var bin = this.depthBins[depth];
-                if (!bin) {
-                    bin = this.depthBins[depth] = new DepthBin();
-                }
-                bin.insert(client);
-            };
-            /**
-             * 从队列尾弹出深度最大的一个对象
-             */
-            p.pop = function () {
-                var client;
-                var minDepth = this.minDepth;
-                if (minDepth <= this.maxDepth) {
-                    var bin = this.depthBins[this.maxDepth];
-                    while (!bin || bin.length === 0) {
-                        this.maxDepth--;
-                        if (this.maxDepth < minDepth)
-                            return null;
-                        bin = this.depthBins[this.maxDepth];
-                    }
-                    client = bin.shift();
-                    while (!bin || bin.length == 0) {
-                        this.maxDepth--;
-                        if (this.maxDepth < minDepth)
-                            break;
-                        bin = this.depthBins[this.maxDepth];
-                    }
-                }
-                return client;
-            };
-            /**
-             * 从队列首弹出深度最小的一个对象
-             */
-            p.shift = function () {
-                var client;
-                var maxDepth = this.maxDepth;
-                if (this.minDepth <= maxDepth) {
-                    var bin = this.depthBins[this.minDepth];
-                    while (!bin || bin.length === 0) {
-                        this.minDepth++;
-                        if (this.minDepth > maxDepth)
-                            return null;
-                        bin = this.depthBins[this.minDepth];
-                    }
-                    client = bin.shift();
-                    while (!bin || bin.length == 0) {
-                        this.minDepth++;
-                        if (this.minDepth > maxDepth)
-                            break;
-                        bin = this.depthBins[this.minDepth];
-                    }
-                }
-                return client;
-            };
-            /**
-             * 移除大于等于指定组件层级的元素中最大的元素
-             */
-            p.removeLargestChild = function (client) {
-                var hashCode = client.$hashCode;
-                var nestLevel = client.$nestLevel;
-                var max = this.maxDepth;
-                var min = nestLevel;
-                while (min <= max) {
-                    var bin = this.depthBins[max];
-                    if (bin && bin.length > 0) {
-                        if (max === nestLevel) {
-                            if (bin.map[hashCode]) {
-                                bin.remove(client);
-                                return client;
-                            }
-                        }
-                        else if (lark.is(client, 4 /* DisplayObjectContainer */)) {
-                            var items = bin.items;
-                            var length = bin.length;
-                            for (var i = 0; i < length; i++) {
-                                var value = items[i];
-                                if (client.contains(value)) {
-                                    bin.remove(value);
-                                    return value;
-                                }
-                            }
-                        }
-                        else {
-                            break;
-                        }
-                        max--;
-                    }
-                    else {
-                        if (max == this.maxDepth) {
-                            this.maxDepth--;
-                        }
-                        max--;
-                        if (max < min)
-                            break;
-                    }
-                }
-                return null;
-            };
-            /**
-             * 移除大于等于指定组件层级的元素中最小的元素
-             */
-            p.removeSmallestChild = function (client) {
-                var nestLevel = client.$nestLevel;
-                var min = nestLevel;
-                var max = this.maxDepth;
-                var hashCode = client.$hashCode;
-                while (min <= max) {
-                    var bin = this.depthBins[min];
-                    if (bin && bin.length > 0) {
-                        if (min === nestLevel) {
-                            if (bin.map[hashCode]) {
-                                bin.remove(client);
-                                return client;
-                            }
-                        }
-                        else if (lark.is(client, 4 /* DisplayObjectContainer */)) {
-                            var items = bin.items;
-                            var length = bin.length;
-                            for (var i = 0; i < length; i++) {
-                                var value = items[i];
-                                if (client.contains(value)) {
-                                    bin.remove(value);
-                                    return value;
-                                }
-                            }
-                        }
-                        else {
-                            break;
-                        }
-                        min++;
-                    }
-                    else {
-                        if (min == this.minDepth)
-                            this.minDepth++;
-                        min++;
-                        if (min > max)
-                            break;
-                    }
-                }
-                return null;
-            };
-            /**
-             * 队列是否为空
-             */
-            p.isEmpty = function () {
-                return this.minDepth > this.maxDepth;
-            };
-            return DepthQueue;
-        })();
-        /**
-         * @private
-         * 列表项
-         */
-        var DepthBin = (function () {
-            function DepthBin() {
-                this.map = {};
-                this.items = [];
-                this.length = 0;
-            }
-            var d = __define,c=DepthBin;p=c.prototype;
-            p.insert = function (client) {
-                var hashCode = client.$hashCode;
-                if (this.map[hashCode]) {
-                    return;
-                }
-                this.map[hashCode] = true;
-                this.length++;
-                this.items.push(client);
-            };
-            p.shift = function () {
-                var client = this.items.shift();
-                if (client) {
-                    this.map[client.$hashCode] = false;
-                    this.length--;
-                }
-                return client;
-            };
-            p.remove = function (client) {
-                var index = this.items.indexOf(client);
-                if (index >= 0) {
-                    this.items.splice(index, 1);
-                    this.map[client.$hashCode] = false;
-                    this.length--;
-                }
-            };
-            return DepthBin;
-        })();
-    })(sys = swan.sys || (swan.sys = {}));
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    var groupCount = 0;
-    /**
-     * @private
-     * 显示列表深度排序
-     */
-    function breadthOrderCompare(a, b) {
-        var aParent = a.parent;
-        var bParent = b.parent;
-        if (!aParent || !bParent)
-            return 0;
-        var aNestLevel = a.$nestLevel;
-        var bNestLevel = b.$nestLevel;
-        var aIndex = 0;
-        var bIndex = 0;
-        if (aParent == bParent) {
-            aIndex = aParent.getChildIndex(a);
-            bIndex = bParent.getChildIndex(b);
-        }
-        if (aNestLevel > bNestLevel || aIndex > bIndex)
-            return 1;
-        if (aNestLevel < bNestLevel || bIndex > aIndex)
-            return -1;
-        if (a == b)
-            return 0;
-        return breadthOrderCompare(aParent, bParent);
-    }
-    /**
-     * @language en_US
-     * The RadioButtonGroup component defines a group of RadioButton components
-     * that act as a single mutually exclusive component; therefore,
-     * a user can select only one RadioButton component at a time.
-     *
-     * @event lark.Event.CHANGE Emitted when the value of the selected RadioButton component in
-     * this group changes.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * RadioButtonGroup 组件定义一组 RadioButton 组件，这些组件相互排斥；因此，用户每次只能选择一个 RadioButton 组件
-     *
-     * @event lark.Event.CHANGE 此组中所选 RadioButton 组件的值更改时分派。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var RadioButtonGroup = (function (_super) {
-        __extends(RadioButtonGroup, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function RadioButtonGroup() {
-            _super.call(this);
-            /**
-             * @private
-             * 组名
-             */
-            this.$name = null;
-            /**
-             * @private
-             * 单选按钮列表
-             */
-            this.radioButtons = [];
-            /**
-             * @private
-             */
-            this.$enabled = true;
-            /**
-             * @private
-             */
-            this._selectedValue = null;
-            /**
-             * @private
-             */
-            this._selection = null;
-            this.$name = "_radioButtonGroup" + groupCount++;
-        }
-        var d = __define,c=RadioButtonGroup;p=c.prototype;
-        /**
-         * @language en_US
-         * Returns the RadioButton component at the specified index.
-         *
-         * @param index The 0-based index of the RadioButton in the
-         * RadioButtonGroup.
-         *
-         * @return The specified RadioButton component if index is between
-         * 0 and <code>numRadioButtons</code> - 1.  Returns
-         * <code>null</code> if the index is invalid.
-         *
-         * @see swan.RadioButtonGroup#numRadioButtons
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回指定索引处的 RadioButton 组件。
-         *
-         * @param index RadioButtonGroup 中的 RadioButton 的从零开始的索引。
-         *
-         * @return 当索引位于 0 和 <code>numRadioButtons</code> 之间时，指定的 RadioButton 组件为 1。
-         * 如果索引无效，则返回 <code>null</code>。
-         *
-         * @see swan.RadioButtonGroup#numRadioButtons
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getRadioButtonAt = function (index) {
-            return this.radioButtons[index];
-        };
-        d(p, "enabled",
-            /**
-             * @language en_US
-             * Determines whether selection is allowed.  Note that the value returned
-             * only reflects the value that was explicitly set on the
-             * <code>RadioButtonGroup</code> and does not reflect any values explicitly
-             * set on the individual RadioButtons.
-             *
-             * @default true
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 确定是否允许选择。请注意，返回的值仅反映对 <code>RadioButtonGroup</code> 显式设置的值，
-             * 而不反映对各个 RadioButton 显式设置的任何值。
-             *
-             * @default true
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$enabled;
-            },
-            function (value) {
-                value = !!value;
-                if (this.$enabled === value)
-                    return;
-                this.$enabled = value;
-                var buttons = this.radioButtons;
-                var length = buttons.length;
-                for (var i = 0; i < length; i++)
-                    buttons[i].invalidateState();
-            }
-        );
-        d(p, "numRadioButtons",
-            /**
-             * @language en_US
-             * The number of RadioButtons that belong to this RadioButtonGroup.
-             *
-             * @default 0
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * [只读] 属于此 RadioButtonGroup 的 RadioButton 数。
-             *
-             * @default 0
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.radioButtons.length;
-            },undefined
-        );
-        d(p, "selectedValue",
-            /**
-             * @language en_US
-             * The <code>value</code> property of the selected
-             * RadioButton component in the group, if it has been set,
-             * otherwise, the <code>label</code> property of the selected RadioButton.
-             * If no RadioButton is selected, this property is <code>null</code>.
-             *
-             * <p>If you set <code>selectedValue</code>, selects the
-             * first RadioButton component whose <code>value</code> or
-             * <code>label</code> property matches this value.</p>
-             *
-             * @default null
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 组中所选 RadioButton 组件的 <code>value</code> 属性（如果未设置），
-             * 否则为所选 RadioButton 组件的 <code>label</code> 属性。
-             * 如果未选择任何 RadioButton，则此属性为 <code>null</code>。
-             *
-             * <p>如果设置了 <code>selectedValue</code>，则会选择 <code>value</code> 或 <code>label</code> 属性
-             * 与此值匹配的第一个 RadioButton 组件。</p>
-             *
-             * @default null
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                if (this.selection) {
-                    return this.selection.value != null ? this.selection.value : this.selection.label;
-                }
-                return null;
-            },
-            function (value) {
-                this._selectedValue = value;
-                if (value == null) {
-                    this.$setSelection(null, false);
-                    return;
-                }
-                var n = this.numRadioButtons;
-                for (var i = 0; i < n; i++) {
-                    var radioButton = this.radioButtons[i];
-                    if (radioButton.value == value || radioButton.label == value) {
-                        this.changeSelection(i, false);
-                        this._selectedValue = null;
-                        swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selectedValue");
-                        break;
-                    }
-                }
-            }
-        );
-        d(p, "selection",
-            /**
-             * @language en_US
-             * Contains a reference to the currently selected
-             * RadioButton component in the group.This property is valid only
-             * when the target RadioButton is displayed on the display list
-             *
-             * @default null
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 当前被选中的单选按钮引用。此属性仅当目标RadioButton在显示列表时有效。
-             *
-             * @default null
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this._selection;
-            },
-            function (value) {
-                if (this._selection == value)
-                    return;
-                this.$setSelection(value, false);
-            }
-        );
-        /**
-         * @private
-         * 添加单选按钮到组内
-         */
-        p.$addInstance = function (instance) {
-            instance.on(lark.Event.REMOVED, this.removedHandler, this);
-            var buttons = this.radioButtons;
-            buttons.push(instance);
-            buttons.sort(breadthOrderCompare);
-            var length = buttons.length;
-            for (var i = 0; i < length; i++) {
-                buttons[i].$indexNumber = i;
-            }
-            if (this._selectedValue)
-                this.selectedValue = this._selectedValue;
-            if (instance.selected == true)
-                this.selection = instance;
-            instance.$radioButtonGroup = this;
-            instance.invalidateState();
-        };
-        /**
-         * @private
-         * 从组里移除单选按钮
-         */
-        p.$removeInstance = function (instance, addListener) {
-            if (instance) {
-                var foundInstance = false;
-                var buttons = this.radioButtons;
-                var length = buttons.length;
-                for (var i = 0; i < length; i++) {
-                    var rb = buttons[i];
-                    if (foundInstance) {
-                        rb.$indexNumber = rb.$indexNumber - 1;
-                    }
-                    else if (rb == instance) {
-                        if (addListener)
-                            instance.on(lark.Event.ADDED, this.addedHandler, this);
-                        if (instance == this._selection)
-                            this._selection = null;
-                        instance.$radioButtonGroup = null;
-                        instance.invalidateState();
-                        this.radioButtons.splice(i, 1);
-                        foundInstance = true;
-                        i--;
-                    }
-                }
-            }
-        };
-        /**
-         * @private
-         * 设置选中的单选按钮
-         */
-        p.$setSelection = function (value, fireChange) {
-            if (this._selection == value)
-                return;
-            if (!value) {
-                if (this._selection) {
-                    this._selection.selected = false;
-                    this._selection = null;
-                    if (fireChange)
-                        this.emitWith(lark.Event.CHANGE);
-                }
-            }
-            else {
-                var n = this.numRadioButtons;
-                for (var i = 0; i < n; i++) {
-                    if (value == this.getRadioButtonAt(i)) {
-                        this.changeSelection(i, fireChange);
-                        break;
-                    }
-                }
-            }
-            swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selectedValue");
-        };
-        /**
-         * @private
-         * 改变选中项
-         */
-        p.changeSelection = function (index, fireChange) {
-            var rb = this.getRadioButtonAt(index);
-            if (rb && rb != this._selection) {
-                if (this._selection)
-                    this._selection.selected = false;
-                this._selection = rb;
-                this._selection.selected = true;
-                if (fireChange)
-                    this.emitWith(lark.Event.CHANGE);
-            }
-        };
-        /**
-         * @private
-         * 单选按钮添加到显示列表
-         */
-        p.addedHandler = function (event) {
-            var rb = event.target;
-            if (rb) {
-                rb.removeListener(lark.Event.ADDED, this.addedHandler, this);
-                this.$addInstance(rb);
-            }
-        };
-        /**
-         * @private
-         * 单选按钮从显示列表移除
-         */
-        p.removedHandler = function (event) {
-            var rb = event.target;
-            if (rb) {
-                rb.removeListener(lark.Event.REMOVED, this.removedHandler, this);
-                this.$removeInstance(rb, true);
-            }
-        };
-        return RadioButtonGroup;
-    })(lark.EventEmitter);
-    swan.RadioButtonGroup = RadioButtonGroup;
-    swan.registerBindable(RadioButtonGroup.prototype, "selectedValue");
-    lark.registerClass(RadioButtonGroup, 1030 /* RadioButtonGroup */);
-    if (DEBUG) {
-        lark.$markReadOnly(RadioButtonGroup.prototype, "numRadioButtons");
-    }
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The State class defines a view state, a particular view of a component.
-     *
-     * For example, a product thumbnail could have two view states;
-     * a base view state with minimal information, and a rich view state with
-     * additional information.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * State 类定义视图状态，即组件的特定视图。
-     *
-     * 例如，产品缩略图可以有两个视图状态，包含最少信息的基本视图状态和包含附加信息的丰富视图状态。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var State = (function (_super) {
-        __extends(State, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @param name The name of the view state.
-         * State names must be unique for a given component.
-         * This property must be set.
-         * @param overrides The overrides for this view state, as an Array of objects that implement
-         * the IOverride interface. These overrides are applied in order when the
-         * state is entered, and removed in reverse order when the state is exited.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个State实例。
-         *
-         * @param name 视图状态的名称。给定组件的状态名称必须唯一。必须设置此属性。
-         * @param overrides 该视图状态的覆盖，表现为实现 IOverride 接口的对象的数组。
-         * 这些覆盖在进入状态时按顺序应用，在退出状态时按相反的顺序删除。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function State(name, overrides) {
-            _super.call(this);
-            this.name = name;
-            this.overrides = overrides;
-        }
-        var d = __define,c=State;p=c.prototype;
-        /**
-         * @language en_US
-         * Initialize this state and all of its overrides.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 初始化视图状态
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.initialize = function (host, stage) {
-            var overrides = this.overrides;
-            var length = overrides.length;
-            for (var i = 0; i < length; i++) {
-                var addItems = overrides[i];
-                if (lark.is(addItems, 1033 /* AddItems */)) {
-                    var target = host[addItems.target];
-                    if (lark.is(target, 1011 /* Image */) && !target.$parent) {
-                        stage.addChild(target);
-                        stage.removeChild(target);
-                    }
-                }
-            }
-        };
-        return State;
-    })(lark.LarkObject);
-    swan.State = State;
-    lark.registerClass(State, 1031 /* State */);
-})(swan || (swan = {}));
-var swan;
-(function (swan) {
-    var sys;
-    (function (sys) {
-        /**
-         * @private
-         */
-        var StateClient = (function () {
-            function StateClient() {
-            }
-            var d = __define,c=StateClient;p=c.prototype;
-            d(p, "states",
-                /**
-                 * @private
-                 * 为此组件定义的视图状态。
-                 */
-                function () {
-                    return this.$stateValues.states;
-                },
-                function (value) {
-                    if (!value)
-                        value = [];
-                    var values = this.$stateValues;
-                    values.states = value;
-                    var statesMap = {};
-                    var length = value.length;
-                    for (var i = 0; i < length; i++) {
-                        var state = value[i];
-                        statesMap[state.name] = state;
-                    }
-                    values.statesMap = statesMap;
-                    if (values.parent) {
-                        this.commitCurrentState();
-                    }
-                }
-            );
-            d(p, "currentState",
-                /**
-                 * @private
-                 * 组件的当前视图状态。将其设置为 "" 或 null 可将组件重置回其基本状态。
-                 */
-                function () {
-                    return this.$stateValues.currentState;
-                },
-                function (value) {
-                    var values = this.$stateValues;
-                    values.explicitState = value;
-                    values.currentState = value;
-                    this.commitCurrentState();
-                }
-            );
-            /**
-             * @private
-             * 应用当前的视图状态。子类覆盖此方法在视图状态发生改变时执行相应更新操作。
-             */
-            p.commitCurrentState = function () {
-                var values = this.$stateValues;
-                if (!values.parent) {
-                    return;
-                }
-                var destination = values.statesMap[values.currentState];
-                if (!destination) {
-                    if (values.states.length > 0) {
-                        values.currentState = values.states[0].name;
-                    }
-                    else {
-                        return;
-                    }
-                }
-                if (values.oldState == values.currentState) {
-                    return;
-                }
-                var parent = values.parent;
-                var state = values.statesMap[values.oldState];
-                if (state) {
-                    var overrides = state.overrides;
-                    var length = overrides.length;
-                    for (var i = 0; i < length; i++) {
-                        overrides[i].remove(this, parent);
-                    }
-                }
-                values.oldState = values.currentState;
-                state = values.statesMap[values.currentState];
-                if (state) {
-                    overrides = state.overrides;
-                    length = overrides.length;
-                    for (i = 0; i < length; i++) {
-                        overrides[i].apply(this, parent);
-                    }
-                }
-            };
-            /**
-             * @private
-             * 返回是否含有指定名称的视图状态
-             * @param stateName 要检查的视图状态名称
-             */
-            p.hasState = function (stateName) {
-                return !!this.$stateValues.statesMap[stateName];
-            };
-            /**
-             * @private
-             * 初始化所有视图状态
-             */
-            p.initializeStates = function (stage) {
-                this.$stateValues.intialized = true;
-                var states = this.states;
-                var length = states.length;
-                for (var i = 0; i < length; i++) {
-                    states[i].initialize(this, stage);
-                }
-            };
-            return StateClient;
-        })();
-        sys.StateClient = StateClient;
-        /**
-         * @private
-         */
-        var StateValues = (function () {
-            function StateValues() {
-                /**
-                 * @private
-                 */
-                this.intialized = false;
-                /**
-                 * @private
-                 */
-                this.statesMap = {};
-                /**
-                 * @private
-                 */
-                this.states = [];
-                /**
-                 * @private
-                 */
-                this.oldState = null;
-                /**
-                 * @private
-                 */
-                this.explicitState = null;
-                /**
-                 * @private
-                 */
-                this.currentState = null;
-                /**
-                 * @private
-                 */
-                this.parent = null;
-                /**
-                 * @private
-                 */
-                this.stateIsDirty = false;
-            }
-            var d = __define,c=StateValues;p=c.prototype;
-            return StateValues;
-        })();
-        sys.StateValues = StateValues;
-    })(sys = swan.sys || (swan.sys = {}));
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The operation of adding a state to view.
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 视图添加状态显示元素操作
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var AddItems = (function () {
-        /**
-         * @language en_US
-         * Constructor.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个AddItems实例
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function AddItems(target, propertyName, position, relativeTo) {
-            this.target = target;
-            this.propertyName = propertyName;
-            this.position = position;
-            this.relativeTo = relativeTo;
-        }
-        var d = __define,c=AddItems;p=c.prototype;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.apply = function (host, parent) {
-            var index;
-            var relative = host[this.relativeTo];
-            var target = host[this.target];
-            var container = this.propertyName ? host[this.propertyName] : parent;
-            if (!target || !container)
-                return;
-            switch (this.position) {
-                case 0 /* FIRST */:
-                    index = 0;
-                    break;
-                case 1 /* LAST */:
-                    index = -1;
-                    break;
-                case 2 /* BEFORE */:
-                    index = container.getChildIndex(relative);
-                    break;
-                case 3 /* AFTER */:
-                    index = container.getChildIndex(relative) + 1;
-                    break;
-            }
-            if (index == -1)
-                index = container.numChildren;
-            container.addChildAt(target, index);
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.remove = function (host, parent) {
-            var container = this.propertyName ? host[this.propertyName] : parent;
-            var target = host[this.target];
-            if (!target || !container)
-                return;
-            if (target.$parent === container) {
-                container.removeChild(target);
-            }
-        };
-        return AddItems;
-    })();
-    swan.AddItems = AddItems;
-    lark.registerClass(AddItems, 1033 /* AddItems */, [1032 /* IOverride */]);
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The LayoutBase class defines the base class for all Spark layouts.
-     * To create a custom layout that works with the Spark containers,
-     * you must extend <code>LayoutBase</code> or one of its subclasses.
-     *
-     * <p>Subclasses must implement the <code>updateDisplayList()</code>
-     * method, which positions and sizes the <code>target</code> GroupBase's elements, and
-     * the <code>measure()</code> method, which calculates the default
-     * size of the <code>target</code>.</p>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 容器布局基类。若要创建使用 Group 容器的自定义布局，必须扩展 <code>LayoutBase</code> 或其子类之一。
-     *
-     * <p>子类必须实现 <code>updateDisplayList()</code> 方法
-     * （定位 <code>target</code> Group 的子项并调整这些子项的大小）和 <code>measure()</code> 方法
-     * （计算 <code>target</code> 的默认大小）。</p>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var LayoutBase = (function (_super) {
-        __extends(LayoutBase, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function LayoutBase() {
-            _super.call(this);
-            /**
-             * @private
-             */
-            this.$target = null;
-            /**
-             * @private
-             */
-            this.$useVirtualLayout = false;
-            /**
-             * @private
-             */
-            this.$typicalWidth = 71;
-            /**
-             * @private
-             */
-            this.$typicalHeight = 22;
-        }
-        var d = __define,c=LayoutBase;p=c.prototype;
-        d(p, "target",
-            /**
-             * @language en_US
-             * The Group container whose elements are measured, sized and positioned
-             * by this layout.
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 此布局将测量其元素、调整其元素的大小并定位其元素的 Group 容器。
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$target;
-            },
-            function (value) {
-                if (this.$target === value)
-                    return;
-                this.$target = value;
-                this.clearVirtualLayoutCache();
-            }
-        );
-        d(p, "useVirtualLayout",
-            /**
-             * @language en_US
-             * To configure a container to use virtual layout, set the <code>useVirtualLayout</code> property
-             * to <code>true</code> for the layout associated with the container.
-             * Only DataGroup with layout set to VerticalLayout,
-             * HorizontalLayout, or TileLayout supports virtual layout.
-             * Layout subclasses that do not support virtualization must prevent changing
-             * this property.
-             *
-             * @default false
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 若要配置容器使用虚拟布局，请为与容器关联的布局的 <code>useVirtualLayout</code> 属性设置为 <code>true</code>。
-             * 只有布局设置为 VerticalLayout、HorizontalLayout 或 TileLayout 的 DataGroup 才支持虚拟布局。
-             * 不支持虚拟化的布局子类必须禁止更改此属性。
-             *
-             * @default false
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$useVirtualLayout;
-            },
-            function (value) {
-                value = !!value;
-                if (this.$useVirtualLayout == value)
-                    return;
-                this.$useVirtualLayout = value;
-                this.emitWith("useVirtualLayoutChanged");
-                if (this.$useVirtualLayout && !value)
-                    this.clearVirtualLayoutCache();
-                if (this.target)
-                    this.target.invalidateDisplayList();
-            }
-        );
-        /**
-         * @language en_US
-         * Set this size of a typical element
-         *
-         * @param width the height of element
-         * @param height the width of element
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 设置一个典型元素的大小
-         *
-         * @param width 元素的宽
-         * @param height 元素的高
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.setTypicalSize = function (width, height) {
-            width = +width || 71;
-            height = +height || 22;
-            if (width !== this.$typicalWidth || height !== this.$typicalHeight) {
-                this.$typicalWidth = width;
-                this.$typicalHeight = height;
-                if (this.$target) {
-                    this.$target.invalidateSize();
-                }
-            }
-        };
-        /**
-         * @language en_US
-         * Called when the <code>verticalScrollPosition</code> or
-         * <code>horizontalScrollPosition</code> properties change.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * <code>verticalScrollPosition</code> 或 <code>horizontalScrollPosition</code>
-         * 属性更改时调用。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.scrollPositionChanged = function () {
-        };
-        /**
-         * @language en_US
-         * When <code>useVirtualLayout</code> is <code>true</code>,
-         * this method can be used by the layout target
-         * to clear cached layout information when the target changes.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果 <code>useVirtualLayout</code> 为 <code>true</code>，
-         * 则当布局目标改变时，布局目标可以使用此方法来清除已缓存布局信息。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.clearVirtualLayoutCache = function () {
-        };
-        /**
-         * @language en_US
-         * Called by the target after a layout element
-         * has been added and before the target's size and display list are
-         * validated.
-         * Layouts that cache per element state, like virtual layouts, can
-         * override this method to update their cache.
-         *
-         * @param index The index of the element that was added.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在已添加布局元素之后且在验证目标的大小和显示列表之前，由目标调用。
-         * 按元素状态缓存的布局（比如虚拟布局）可以覆盖此方法以更新其缓存。
-         *
-         * @param index 发生改变的子项索引
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.elementAdded = function (index) {
-        };
-        /**
-         * @language en_US
-         * This method must is called by the target after a layout element
-         * has been removed and before the target's size and display list are
-         * validated.
-         * Layouts that cache per element state, like virtual layouts, can
-         * override this method to update their cache.
-         *
-         * @param index The index of the element that was added.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         *
-         * 必须在已删除布局元素之后且在验证目标的大小和显示列表之前，由目标调用此方法。
-         * 按元素状态缓存的布局（比如虚拟布局）可以覆盖此方法以更新其缓存。
-         *
-         * @param index 发生改变的子项索引
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.elementRemoved = function (index) {
-        };
-        /**
-         * @language en_US
-         * Return the indices of the element visible within this Group.
-         *
-         * @return The indices of the visible element.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回此 Group 中可见的元素的索引。
-         *
-         * @return 可见的元素的索引。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getElementIndicesInView = function () {
-            return null;
-        };
-        /**
-         * @language en_US
-         * Measures the target's default size based on its content.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 基于目标的内容测量其默认大小
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.measure = function () {
-        };
-        /**
-         * @language en_US
-         * Sizes and positions the target's elements.
-         *
-         * @param unscaledWidth Specifies the width of the target, in pixels,
-         * in the targets's coordinates.
-         *
-         * @param unscaledHeight Specifies the height of the component, in pixels,
-         * in the target's coordinates.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 调整目标的元素的大小并定位这些元素。
-         *
-         * @param unscaledWidth 指定目标在目标坐标中的宽度（以像素为单位）。
-         * @param unscaledHeight 指定组件在目标坐标中的高度（以像素为单位）。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.updateDisplayList = function (width, height) {
-        };
-        return LayoutBase;
-    })(lark.EventEmitter);
-    swan.LayoutBase = LayoutBase;
-    lark.registerClass(LayoutBase, 1019 /* LayoutBase */);
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @private
-     */
-    var bindables = "__bindables__";
-    /**
-     * @private
-     */
-    var bindableCount = 0;
-    /**
-     * @private
-     *
-     * @param host
-     * @param property
-     * @returns
-     */
-    function getPropertyDescriptor(host, property) {
-        var data = Object.getOwnPropertyDescriptor(host, property);
-        if (data) {
-            return data;
-        }
-        var prototype = Object.getPrototypeOf(host);
-        if (prototype) {
-            return getPropertyDescriptor(prototype, property);
-        }
-        return null;
-    }
-    /**
-     * @language en_US
-     * The Watcher class defines utility method that you can use with bindable properties.
-     * These methods let you define an event handler that is executed whenever a bindable property is updated.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * Watcher 类能够监视可绑定属性的改变，您可以定义一个事件处理函数作为 Watcher 的回调方法，在每次可绑定属性的值改变时都执行此函数。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var Watcher = (function () {
-        /**
-         * @language en_US
-         * Constructor.
-         * Not for public use. This method is called only from the <code>watch()</code> method.
-         * See the <code>watch()</code> method for parameter usage.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数，非公开。只能从 watch() 方法中调用此方法。有关参数用法，请参阅 watch() 方法。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function Watcher(property, handler, thisObject, next) {
-            /**
-             * @private
-             */
-            this.isExecuting = false;
-            this.property = property;
-            this.handler = handler;
-            this.next = next;
-            this.thisObject = thisObject;
-        }
-        var d = __define,c=Watcher;p=c.prototype;
-        /**
-         * @language en_US
-         * Creates and starts a Watcher instance.
-         * The Watcher can only watch the property of a Object which host is instance of IEventEmitter.
-         * @param host The object that hosts the property or property chain to be watched.
-         * You can use the use the <code>reset()</code> method to change the value of the <code>host</code> argument
-         * after creating the Watcher instance.
-         * The <code>host</code> maintains a list of <code>handlers</code> to invoke when <code>prop</code> changes.
-         * @param chain A value specifying the property or chain to be watched.
-         * For example, to watch the property <code>host.a.b.c</code>,
-         * call the method as: <code>watch(host, ["a","b","c"], ...)</code>.
-         * @param handler  An event handler function called when the value of the watched property
-         * (or any property in a watched chain) is modified.
-         * @param thisObject <code>this</code> object of which binding with handler
-         * @returns he ChangeWatcher instance, if at least one property name has been specified to
-         * the <code>chain</code> argument; null otherwise.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建并启动 Watcher 实例。注意：Watcher 只能监视 host 为 IEventEmitter 对象的属性改变。若属性链中某个属性所对应的实例不是 IEventEmitter，
-         * 则属性链中在它之后的属性改变将无法检测到。
-         * @param host 用于承载要监视的属性或属性链的对象。
-         * 创建Watcher实例后，您可以利用<code>reset()</code>方法更改<code>host</code>参数的值。
-         * 当<code>prop</code>改变的时候，会使得host对应的一系列<code>handlers</code>被触发。
-         * @param chain 用于指定要监视的属性链的值。例如，要监视属性 host.a.b.c，需按以下形式调用此方法：watch¬(host, ["a","b","c"], ...)。
-         * @param handler 在监视的目标属性链中任何属性的值发生改变时调用的事件处理函数。
-         * @param thisObject handler 方法绑定的this对象
-         * @returns 如果已为 chain 参数至少指定了一个属性名称，则返回 Watcher 实例；否则返回 null。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        Watcher.watch = function (host, chain, handler, thisObject) {
-            if (DEBUG) {
-                if (!chain) {
-                    lark.$error(1003, "chain");
-                }
-            }
-            if (chain.length > 0) {
-                var property = chain.shift();
-                var next = Watcher.watch(null, chain, handler, thisObject);
-                var watcher = new Watcher(property, handler, thisObject, next);
-                watcher.reset(host);
-                return watcher;
-            }
-            else {
-                return null;
-            }
-        };
-        /**
-         * @private
-         * 检查属性是否可以绑定。若还未绑定，尝试添加绑定事件。若是只读或只写属性，返回false。
-         */
-        Watcher.checkBindable = function (host, property) {
-            var list = host[bindables];
-            if (list && list.indexOf(property) != -1) {
-                return true;
-            }
-            var data = getPropertyDescriptor(host, property);
-            if (data && data.set && data.get) {
-                var orgSet = data.set;
-                data.set = function (value) {
-                    if (this[property] != value) {
-                        orgSet.call(this, value);
-                        swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, property);
-                    }
-                };
-            }
-            else if (!data || (!data.get && !data.set)) {
-                bindableCount++;
-                var newProp = "_" + bindableCount + property;
-                host[newProp] = data ? data.value : null;
-                data = { enumerable: true, configurable: true };
-                data.get = function () {
-                    return this[newProp];
-                };
-                data.set = function (value) {
-                    if (this[newProp] != value) {
-                        this[newProp] = value;
-                        swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, property);
-                    }
-                };
-            }
-            else {
-                return false;
-            }
-            Object.defineProperty(host, property, data);
-            swan.registerBindable(host, property);
-        };
-        /**
-         * @language en_US
-         * Detaches this Watcher instance, and its handler function, from the current host.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 从当前宿主中断开此 Watcher 实例及其处理函数。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.unwatch = function () {
-            this.reset(null);
-            this.handler = null;
-            if (this.next) {
-                this.next.handler = null;
-            }
-        };
-        /**
-         * @language en_US
-         * Retrieves the current value of the watched property or property chain, or null if the host object is null.
-         * @example
-         * <code>
-         * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
-         * </code>
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 检索观察的属性或属性链的当前值，当宿主对象为空时此值为空。
-         * @example
-         * <code>
-         * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
-         * </code>
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getValue = function () {
-            if (this.next) {
-                return this.next.getValue();
-            }
-            return this.getHostPropertyValue();
-        };
-        /**
-         * @language en_US
-         * Sets the handler function.s
-         * @param handler The handler function. This argument must not be null.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 设置处理函数。
-         * @param handler 处理函数，此参数必须为非空。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.setHandler = function (handler, thisObject) {
-            this.handler = handler;
-            this.thisObject = thisObject;
-            if (this.next) {
-                this.next.setHandler(handler, thisObject);
-            }
-        };
-        /**
-         * @language en_US
-         * Resets this ChangeWatcher instance to use a new host object.
-         * You can call this method to reuse a watcher instance on a different host.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 重置此 Watcher 实例使用新的宿主对象。
-         * 您可以通过该方法实现一个Watcher实例用于不同的宿主。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.reset = function (newHost) {
-            if (lark.is(this.host, 1 /* IEventEmitter */)) {
-                this.host.removeListener(swan.PropertyEvent.PROPERTY_CHANGE, this.wrapHandler, this);
-            }
-            this.host = newHost;
-            if (lark.is(newHost, 1 /* IEventEmitter */)) {
-                Watcher.checkBindable(newHost, this.property);
-                newHost.on(swan.PropertyEvent.PROPERTY_CHANGE, this.wrapHandler, this, false, 100);
-            }
-            if (this.next)
-                this.next.reset(this.getHostPropertyValue());
-        };
-        /**
-         * @private
-         *
-         * @returns
-         */
-        p.getHostPropertyValue = function () {
-            return this.host ? this.host[this.property] : null;
-        };
-        /**
-         * @private
-         *
-         * @param event
-         */
-        p.wrapHandler = function (event) {
-            if (event.property == this.property && !this.isExecuting) {
-                try {
-                    this.isExecuting = true;
-                    if (this.next)
-                        this.next.reset(this.getHostPropertyValue());
-                    this.handler.call(this.thisObject, this.getValue());
-                }
-                finally {
-                    this.isExecuting = false;
-                }
-            }
-        };
-        return Watcher;
-    })();
-    swan.Watcher = Watcher;
-    /**
-     * @private
-     */
-    lark.registerClass(Watcher, 1035 /* Watcher */);
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * Represents events that are emitted when a item has been touched.
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 列表项触碰事件
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var ItemTapEvent = (function (_super) {
-        __extends(ItemTapEvent, _super);
-        function ItemTapEvent() {
-            _super.apply(this, arguments);
-            /**
-             * @language en_US
-             * The item in the data provider of the associated item.
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 触发触摸事件的项呈示器数据源项。
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.item = null;
-            /**
-             * @language en_US
-             * The item renderer in the list of the associated item.
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 触发触摸事件的项呈示器。
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.itemRenderer = null;
-            /**
-             * @language en_US
-             * The index of the associated navigation item.
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 触发触摸事件的项索引
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.itemIndex = -1;
-        }
-        var d = __define,c=ItemTapEvent;p=c.prototype;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.clean = function () {
-            _super.prototype.clean.call(this);
-            this.item = this.itemRenderer = null;
-        };
-        /**
-         * @language en_US
-         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
-         * for the next cycle of reuse.
-         *
-         * @param target the target of event emitter.
-         * @param eventType The event type; indicates the action that triggered the event.
-         * @param itemRenderer The item renderer in the list of the associated item.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 使用指定的 EventEmitter 对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-         *
-         * @param target 事件派发目标
-         * @param eventType 事件类型；指示触发事件的动作。
-         * @param itemRenderer 触发触摸事件的项呈示器。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        ItemTapEvent.emitItemTapEvent = function (target, eventType, itemRenderer) {
-            if (!target.hasListener(eventType)) {
-                return true;
-            }
-            var event = lark.Event.create(ItemTapEvent, eventType);
-            event.item = itemRenderer.data;
-            event.itemIndex = itemRenderer.itemIndex;
-            event.itemRenderer = itemRenderer;
-            var result = target.emit(event);
-            lark.Event.release(event);
-            return result;
-        };
-        /**
-         * @language en_US
-         * The type of the event object for an <code>itemTap</code> event.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * <code>itemTap</code> 事件的对象类型。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        ItemTapEvent.ITEM_TAP = "itemTap";
-        return ItemTapEvent;
-    })(lark.Event);
-    swan.ItemTapEvent = ItemTapEvent;
-    lark.registerClass(ItemTapEvent, 1017 /* ItemTapEvent */);
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015; Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms; with or without
-//  modification; are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice; this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice; this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES; INCLUDING; BUT NOT LIMITED TO; THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT; INDIRECT;
-//  INCIDENTAL; SPECIAL; EXEMPLARY; OR CONSEQUENTIAL DAMAGES (INCLUDING; BUT NOT
-//  LIMITED TO; PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE; DATA;
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY; WHETHER IN CONTRACT; STRICT LIABILITY; OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE;
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    lark.$locale_strings = lark.$locale_strings || {};
-    lark.$locale_strings["en_US"] = lark.$locale_strings["en_US"] || {};
-    var locale_strings = lark.$locale_strings["en_US"];
-    locale_strings[2001] = "EXML parsing error {0}: EXML file can't be found ";
-    locale_strings[2002] = "EXML parsing error : invalid XML file:\n{0}";
-    locale_strings[2003] = "EXML parsing error {0}: the class definitions corresponding to nodes can't be found  \n {1}";
-    locale_strings[2004] = "EXML parsing error {0}: nodes cannot contain id property with the same name \n {1}";
-    locale_strings[2005] = "EXML parsing error {0}: property with the name of '{1}' does not exist on the node: \n {2}";
-    locale_strings[2006] = "EXML parsing error {0}: undefined view state name: '{1}' \n {2}";
-    locale_strings[2007] = "EXML parsing error {0}: only UIComponent objects within the container can use the includeIn and excludeFrom properties\n {1}";
-    locale_strings[2008] = "EXML parsing error {0}: fail to assign values of '{1}' class to property: '{2}' \n {3}";
-    locale_strings[2009] = "EXML parsing error {0}: only one ID can be referenced in the node property value '{}' label; and complex expression is not allowed to use \n {1}";
-    locale_strings[2010] = "EXML parsing error {0}: ID referenced by property: '{1}':  '{2}' does not exist \n {3}";
-    locale_strings[2011] = "EXML parsing error {0}: fail to assign more than one child nodes to the same property: '{1}' \n {2}";
-    locale_strings[2012] = "EXML parsing error {0}: no default property exists on the node; and you must explicitly declare the property name that the child node  is assigned to \n {1}";
-    locale_strings[2013] = "EXML parsing error {0}: view state grammar is not allowed to use on property nodes of Array class \n {1} ";
-    locale_strings[2014] = "EXML parsing error {0}: assigning the skin class itself to the node property is not allowed \n {1}";
-    locale_strings[2015] = "EXML parsing error {0}: class definition referenced by node: {1} does not exist \n {2}";
-    locale_strings[2016] = "EXML parsing error {0}: format error of 'scale9Grid' property value on the node: {1}";
-    locale_strings[2017] = "EXML parsing error {0}: namespace prefix missing on the node: {1}";
-    locale_strings[2018] = "EXML parsing error {0}: format error of 'skinName' property value on the node: {1}";
-    locale_strings[2019] = "EXML parsing error {0}: the container’s child item must be visible nodes: {1}";
-    locale_strings[2020] = "EXML parsing error {0}: for child nodes in w: Declarations, the includeIn and excludeFrom properties are not allowed to use \n {1}";
-    locale_strings[2101] = "EXML parsing warnning : fail to register the class property : {0},there is already a class with the same name in the global,please try to rename the class name for the exml. \n {1}";
-    locale_strings[2102] = "EXML parsing warnning {0}: no child node can be found on the property code \n {1}";
-    locale_strings[2103] = "EXML parsing warnning {0}: the same property '{1}' on the node is assigned multiple times \n {2}";
-    locale_strings[2104] = "Instantiate class {0} error，the parameters of its constructor method must be empty.";
-    locale_strings[2201] = "BasicLayout doesn't support virtualization.";
-    locale_strings[2202] = "parse skinName error，the parsing result of skinName must be a instance of swan.Skin.";
-    locale_strings[2301] = "parse source failed，could not find asset from URL：{0} .";
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The UIEvent class represents the event object passed to
-     * the event listener for many UI events.
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * UI事件
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var UIEvent = (function (_super) {
-        __extends(UIEvent, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @param type The event type; indicates the action that triggered the event.
-         * @param bubbles Specifies whether the event can bubble
-         * up the display list hierarchy.
-         * @param cancelable Specifies whether the behavior
-         * associated with the event can be prevented.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个 UIEvent 实例
-         *
-         * @param type 事件类型；指示触发事件的动作。
-         * @param bubbles 指定该事件是否可以在显示列表层次结构得到冒泡处理。
-         * @param cancelable 指定是否可以防止与事件相关联的行为。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function UIEvent(type, bubbles, cancelable) {
-            _super.call(this, type, bubbles, cancelable);
-        }
-        var d = __define,c=UIEvent;p=c.prototype;
-        /**
-         * @language en_US
-         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
-         * for the next cycle of reuse.
-         *
-         * @param target the target of event emitter.
-         * @param eventType The event type; indicates the action that triggered the event.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-         *
-         * @param target 事件派发目标。
-         * @param eventType 事件类型；指示触发事件的动作。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        UIEvent.emitUIEvent = function (target, eventType) {
-            if (!target.hasListener(eventType)) {
-                return true;
-            }
-            var event = lark.Event.create(UIEvent, eventType);
-            var result = target.emit(event);
-            lark.Event.release(event);
-            return result;
-        };
-        /**
-         * @language en_US
-         * creation complete of component.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 组件创建完成
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        UIEvent.CREATION_COMPLETE = "creationComplete";
-        /**
-         * @language en_US
-         * the ending of change.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 改变结束
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        UIEvent.CHANGE_END = "changeEnd";
-        /**
-         * @language en_US
-         * The begining of change.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 改变开始
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        UIEvent.CHANGE_START = "changeStart";
-        /**
-         * @language en_US
-         * Before close the panel.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 即将关闭面板事件
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        UIEvent.CLOSING = "close";
-        /**
-         * @language en_US
-         * The coordinates of the UI components changed in it's parent.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * UI组件在父级容器中的坐标发生改变事件
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        UIEvent.MOVE = "move";
-        return UIEvent;
-    })(lark.Event);
-    swan.UIEvent = UIEvent;
-    lark.registerClass(UIEvent, 1014 /* UIEvent */);
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * Pay atention: The skin theme is the default value for once setting, and it can not be changed while running.
-     * You can change a skin of a component with <code>skinName</code> property.
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 皮肤主题。注意：皮肤主题是一次性设置的默认值,并不能运行时切换所有组件默认皮肤。切换单个皮肤您可以自行对Component.skinName赋值来修改。
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var Theme = (function (_super) {
-        __extends(Theme, _super);
-        /**
-         * @language en_US
-         * Create an instance of Theme
-         * @param configURL the external theme path. if <code>null</code>, you need to register the default skin name with
-         * <code>mapSkin()</code> manually.
-         * @param stage current stage. The theme will register to the stage with this parameter.
-         * If <code>null</code>, you need to register with <code>stage.registerImplementation("swan.Theme",theme)</code>
-         * manually.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个主题实例
-         * @param configURL 要加载并解析的外部主题配置文件路径。若传入 <code>null</code>，将不进行配置文件加载，
-         * 之后需要在外部以代码方式手动调用 <code>mapSkin()</code> 方法完成每条默认皮肤名的注册。
-         * @param stage 当前舞台引用。传入此参数，主题会自动注册自身到舞台上。
-         * 若传入null，需要在外部手动调用 <code>stage.registerImplementation("swan.Theme",theme)</code> 来完成主题的注册。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function Theme(configURL, stage) {
-            _super.call(this);
-            /**
-             * @private
-             */
-            this.delayList = [];
-            /**
-             * @private
-             */
-            this.skinMap = {};
-            /**
-             * @private
-             */
-            this.flagToClassName = {};
-            this.initialized = !configURL;
-            if (stage) {
-                stage.registerImplementation("swan.Theme", this);
-            }
-            this.load(configURL);
-        }
-        var d = __define,c=Theme;p=c.prototype;
-        /**
-         * @private
-         *
-         * @param url
-         */
-        p.load = function (url) {
-            var request = new lark.HttpRequest();
-            request.on(lark.Event.COMPLETE, this.onConfigLoaded, this);
-            request.on(lark.Event.IO_ERROR, this.onConfigLoaded, this);
-            request.open(url);
-            request.send();
-        };
-        /**
-         * @private
-         *
-         * @param event
-         */
-        p.onConfigLoaded = function (event) {
-            var request = event.target;
-            try {
-                var data = JSON.parse(request.response);
-            }
-            catch (e) {
-                if (DEBUG) {
-                    lark.error(e.message);
-                }
-            }
-            if (data && data.skins) {
-                var skinMap = this.skinMap;
-                var skins = data.skins;
-                var keys = Object.keys(skins);
-                var length = keys.length;
-                for (var i = 0; i < length; i++) {
-                    var key = keys[i];
-                    if (!skinMap[key]) {
-                        this.mapSkin(key, skins[key]);
-                    }
-                }
-            }
-            this.initialized = true;
-            this.hadleDelayList();
-        };
-        /**
-         * @private
-         *
-         */
-        p.hadleDelayList = function () {
-            var list = this.delayList;
-            var length = list.length;
-            for (var i = 0; i < length; i++) {
-                var client = list[i];
-                if (!client.$Component[5 /* skinNameExplicitlySet */]) {
-                    var skinName = this.getSkinName(client);
-                    if (skinName) {
-                        client.$Component[1 /* skinName */] = skinName;
-                        client.$parseSkinName();
-                    }
-                }
-            }
-            list.length = 0;
-        };
-        /**
-         * @language en_US
-         * According to the host component to get the default skin name.
-         * Search rules are as follows:
-         * <li>1. Use the <code>hostComponentKey</code> of client to search.</li>
-         * <li>2. Use the class name of client to search.</li>
-         * <li>3. Use the parent class name of client to search.</li>
-         * <li>4. Repeat step 3 until find the skin name or the parent is <code>swan.Component</code>.</li>
-         * @param client the component need to get the default skin.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 根据主机组件，获取对应的默认皮肤名。查询规则如下：
-         * <li>1.使用client的hostComponentKey作为键查询默认皮肤名。</li>
-         * <li>2.使用client的类名作为键查询默认皮肤名。</li>
-         * <li>3.使用client的父类名作为键查询默认皮肤名。</li>
-         * <li>4.不断重复3直到查询到皮肤名或父类为swan.Component时停止。</li>
-         * @param client 要获取默认皮肤的组件。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getSkinName = function (client) {
-            if (!this.initialized) {
-                if (this.delayList.indexOf(client) == -1) {
-                    this.delayList.push(client);
-                }
-                return;
-            }
-            var skinMap = this.skinMap;
-            var skinName = skinMap[client.hostComponentKey];
-            if (!skinName) {
-                skinName = this.findSkinName(client);
-            }
-            return skinName;
-        };
-        /**
-         * @private
-         *
-         * @param prototype
-         * @returns
-         */
-        p.findSkinName = function (prototype) {
-            if (!prototype) {
-                return "";
-            }
-            var flag = prototype["__classFlag__"];
-            if (flag === void 0) {
-                return "";
-            }
-            var key = this.flagToClassName[flag];
-            var skinName = this.skinMap[key];
-            if (skinName || flag === 1009 /* Component */) {
-                return skinName;
-            }
-            return this.findSkinName(Object.getPrototypeOf(prototype));
-        };
-        /**
-         * @language en_US
-         * Map a default skin for the specified host component.
-         * @param hostComponentKey the name of host component, such as "swan.Button".
-         * @param skinName the name of skin, such as "app.MyButtonSkin".
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 为指定的主机组件映射一个默认皮肤。
-         * @param hostComponentKey 主机组件名称，例如：“swan.Button”。
-         * @param skinName 皮肤名称 例如："app.MyButtonSkin"。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.mapSkin = function (hostComponentKey, skinName) {
-            if (DEBUG) {
-                if (!hostComponentKey) {
-                    lark.$error(1003, "hostComponentKey");
-                }
-                if (!skinName) {
-                    lark.$error(1003, "skinName");
-                }
-            }
-            this.skinMap[hostComponentKey] = skinName;
-            var clazz = lark.getDefinitionByName(hostComponentKey);
-            if (clazz && clazz.prototype) {
-                var flag = clazz.prototype.__classFlag__;
-                if (flag) {
-                    this.flagToClassName[flag] = hostComponentKey;
-                }
-            }
-        };
-        return Theme;
-    })(lark.EventEmitter);
-    swan.Theme = Theme;
-    lark.registerClass(Theme, 1013 /* Theme */);
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015; Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms; with or without
-//  modification; are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice; this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice; this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES; INCLUDING; BUT NOT LIMITED TO; THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT; INDIRECT;
-//  INCIDENTAL; SPECIAL; EXEMPLARY; OR CONSEQUENTIAL DAMAGES (INCLUDING; BUT NOT
-//  LIMITED TO; PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE; DATA;
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY; WHETHER IN CONTRACT; STRICT LIABILITY; OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE;
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    lark.$locale_strings = lark.$locale_strings || {};
-    lark.$locale_strings["zh_CN"] = lark.$locale_strings["zh_CN"] || {};
-    var locale_strings = lark.$locale_strings["zh_CN"];
-    //EXML报错信息
-    locale_strings[2001] = "EXML解析错误 {0}: 找不到EXML文件";
-    locale_strings[2002] = "EXML解析错误: 不是有效的XML文件:\n{0}";
-    locale_strings[2003] = "EXML解析错误 {0}: 无法找到节点所对应的类定义\n{1}";
-    locale_strings[2004] = "EXML解析错误 {0}: 节点不能含有同名的id属性\n{1}";
-    locale_strings[2005] = "EXML解析错误 {0}: 节点上不存在名为'{1}'的属性:\n{2}";
-    locale_strings[2006] = "EXML解析错误 {0}: 未定义的视图状态名称:'{1}'\n{2}";
-    locale_strings[2007] = "EXML解析错误 {0}: 只有处于容器内的 UIComponent 对象可以使用includeIn和excludeFrom属性\n{1}";
-    locale_strings[2008] = "EXML解析错误 {0}: 无法将'{1}'类型的值赋给属性:'{2}'\n{3}";
-    locale_strings[2009] = "EXML解析错误 {0}: 在节点属性值的‘{}’标签内只能引用一个ID，不允许使用复杂表达式\n{1}";
-    locale_strings[2010] = "EXML解析错误 {0}: 属性:'{1}'所引用的ID: '{2}'不存在\n{3}";
-    locale_strings[2011] = "EXML解析错误 {0}: 无法将多个子节点赋值给同一个属性:'{1}'\n{2}";
-    locale_strings[2012] = "EXML解析错误 {0}: 节点上不存在默认属性，必须显式声明子节点要赋值到的属性名\n{1}";
-    locale_strings[2013] = "EXML解析错误 {0}: 类型为Array的属性节点上不允许使用视图状态语法\n{1}";
-    locale_strings[2014] = "EXML解析错误 {0}: 不允许将皮肤类自身赋值给节点属性\n{1}";
-    locale_strings[2015] = "EXML解析错误 {0}: 节点引用的类定义:{1}不存在\n{2}";
-    locale_strings[2016] = "EXML解析错误 {0}: 节点上'scale9Grid'属性值的格式错误:{1}";
-    locale_strings[2017] = "EXML解析错误 {0}: 节点上缺少命名空间前缀:{1}";
-    locale_strings[2018] = "EXML解析错误 {0}: 节点上'skinName'属性值的格式错误:{1}";
-    locale_strings[2019] = "EXML解析错误 {0}: 容器的子项必须是可视节点:{1}";
-    locale_strings[2020] = "EXML解析错误 {0}: 在w:Declarations内的子节点，不允许使用includeIn和excludeFrom属性\n{1}";
-    //EXML警告信息
-    locale_strings[2101] = "EXML解析警告: 在EXML根节点上声明的 class 属性: {0} 注册失败，所对应的类已经存在，请尝试重命名要注册的类名。\n{1}";
-    locale_strings[2102] = "EXML解析警告 {0}: 在属性节点上找不到任何子节点\n{1}";
-    locale_strings[2103] = "EXML解析警告 {0}: 节点上的同一个属性'{1}'被多次赋值\n{2}";
-    locale_strings[2104] = "无法实例化组件：{0} ，请检查该组件构造函数参数是否为空。";
-    //Swan 报错与警告信息
-    locale_strings[2201] = "BasicLayout 不支持虚拟化。";
-    locale_strings[2202] = "皮肤解析出错，属性 skinName 的值必须要能够解析为一个 swan.Skin 的实例。";
-    locale_strings[2301] = "素材解析失败，找不到URL：{0} 所对应的资源。";
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
 var EXML;
 (function (EXML) {
     var parser = new swan.sys.EXMLParser();
@@ -8158,6 +8094,70 @@ var swan;
         return Binding;
     })();
     swan.Binding = Binding;
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015; Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms; with or without
+//  modification; are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice; this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice; this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES; INCLUDING; BUT NOT LIMITED TO; THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT; INDIRECT;
+//  INCIDENTAL; SPECIAL; EXEMPLARY; OR CONSEQUENTIAL DAMAGES (INCLUDING; BUT NOT
+//  LIMITED TO; PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE; DATA;
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY; WHETHER IN CONTRACT; STRICT LIABILITY; OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE;
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    lark.$locale_strings = lark.$locale_strings || {};
+    lark.$locale_strings["zh_CN"] = lark.$locale_strings["zh_CN"] || {};
+    var locale_strings = lark.$locale_strings["zh_CN"];
+    //EXML报错信息
+    locale_strings[2001] = "EXML解析错误 {0}: 找不到EXML文件";
+    locale_strings[2002] = "EXML解析错误: 不是有效的XML文件:\n{0}";
+    locale_strings[2003] = "EXML解析错误 {0}: 无法找到节点所对应的类定义\n{1}";
+    locale_strings[2004] = "EXML解析错误 {0}: 节点不能含有同名的id属性\n{1}";
+    locale_strings[2005] = "EXML解析错误 {0}: 节点上不存在名为'{1}'的属性:\n{2}";
+    locale_strings[2006] = "EXML解析错误 {0}: 未定义的视图状态名称:'{1}'\n{2}";
+    locale_strings[2007] = "EXML解析错误 {0}: 只有处于容器内的 UIComponent 对象可以使用includeIn和excludeFrom属性\n{1}";
+    locale_strings[2008] = "EXML解析错误 {0}: 无法将'{1}'类型的值赋给属性:'{2}'\n{3}";
+    locale_strings[2009] = "EXML解析错误 {0}: 在节点属性值的‘{}’标签内只能引用一个ID，不允许使用复杂表达式\n{1}";
+    locale_strings[2010] = "EXML解析错误 {0}: 属性:'{1}'所引用的ID: '{2}'不存在\n{3}";
+    locale_strings[2011] = "EXML解析错误 {0}: 无法将多个子节点赋值给同一个属性:'{1}'\n{2}";
+    locale_strings[2012] = "EXML解析错误 {0}: 节点上不存在默认属性，必须显式声明子节点要赋值到的属性名\n{1}";
+    locale_strings[2013] = "EXML解析错误 {0}: 类型为Array的属性节点上不允许使用视图状态语法\n{1}";
+    locale_strings[2014] = "EXML解析错误 {0}: 不允许将皮肤类自身赋值给节点属性\n{1}";
+    locale_strings[2015] = "EXML解析错误 {0}: 节点引用的类定义:{1}不存在\n{2}";
+    locale_strings[2016] = "EXML解析错误 {0}: 节点上'scale9Grid'属性值的格式错误:{1}";
+    locale_strings[2017] = "EXML解析错误 {0}: 节点上缺少命名空间前缀:{1}";
+    locale_strings[2018] = "EXML解析错误 {0}: 节点上'skinName'属性值的格式错误:{1}";
+    locale_strings[2019] = "EXML解析错误 {0}: 容器的子项必须是可视节点:{1}";
+    locale_strings[2020] = "EXML解析错误 {0}: 在w:Declarations内的子节点，不允许使用includeIn和excludeFrom属性\n{1}";
+    //EXML警告信息
+    locale_strings[2101] = "EXML解析警告: 在EXML根节点上声明的 class 属性: {0} 注册失败，所对应的类已经存在，请尝试重命名要注册的类名。\n{1}";
+    locale_strings[2102] = "EXML解析警告 {0}: 在属性节点上找不到任何子节点\n{1}";
+    locale_strings[2103] = "EXML解析警告 {0}: 节点上的同一个属性'{1}'被多次赋值\n{2}";
+    locale_strings[2104] = "无法实例化组件：{0} ，请检查该组件构造函数参数是否为空。";
+    //Swan 报错与警告信息
+    locale_strings[2201] = "BasicLayout 不支持虚拟化。";
+    locale_strings[2202] = "皮肤解析出错，属性 skinName 的值必须要能够解析为一个 swan.Skin 的实例。";
+    locale_strings[2301] = "素材解析失败，找不到URL：{0} 所对应的资源。";
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -9044,7 +9044,7 @@ var swan;
          */
         function mixin(target, template) {
             for (var property in template) {
-                if (template.hasOwnProperty(property)) {
+                if (property != "prototype" && template.hasOwnProperty(property)) {
                     target[property] = template[property];
                 }
             }
@@ -9432,144 +9432,6 @@ var swan;
         }
         sys.updateDisplayList = updateDisplayList;
     })(sys = swan.sys || (swan.sys = {}));
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The PropertyChangeEvent class represents the event object
-     * passed to the event listener when one of the properties of
-     * an object has changed, and provides information about the change.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 对象的一个属性发生更改时传递到事件侦听器的事件。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var PropertyEvent = (function (_super) {
-        __extends(PropertyEvent, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @param type The event type; indicates the action that triggered the event.
-         * @param bubbles Specifies whether the event can bubble
-         * up the display list hierarchy.
-         * @param cancelable Specifies whether the behavior
-         * associated with the event can be prevented.
-         * @param property Name of the property that changed.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个属性改变事件。
-         *
-         * @param type 事件类型；指示触发事件的动作。
-         * @param bubbles 指定该事件是否可以在显示列表层次结构得到冒泡处理。
-         * @param cancelable 指定是否可以防止与事件相关联的行为。
-         * @param property 发生改变的属性名称。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function PropertyEvent(type, bubbles, cancelable, property) {
-            _super.call(this, type, bubbles, cancelable);
-            this.property = property;
-        }
-        var d = __define,c=PropertyEvent;p=c.prototype;
-        /**
-         * @language en_US
-         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
-         * for the next cycle of reuse.
-         *
-         * @param target the target of event emitter.
-         * @param eventType The event type; indicates the action that triggered the event.
-         * @param property Name of the property that changed.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 使用指定的 EventEmitter 对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-         *
-         * @param target 事件派发目标
-         * @param eventType 事件类型；指示触发事件的动作。
-         * @param property 发生改变的属性名称。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        PropertyEvent.emitPropertyEvent = function (target, eventType, property) {
-            if (!target.hasListener(eventType)) {
-                return true;
-            }
-            var event = lark.Event.create(PropertyEvent, eventType);
-            event.property = property;
-            var result = target.emit(event);
-            lark.Event.release(event);
-            return result;
-        };
-        /**
-         * @language en_US
-         * Emit when a property changed.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 属性改变。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        PropertyEvent.PROPERTY_CHANGE = "propertyChange";
-        return PropertyEvent;
-    })(lark.Event);
-    swan.PropertyEvent = PropertyEvent;
-    lark.registerClass(PropertyEvent, 1016 /* PropertyEvent */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -11600,6 +11462,144 @@ var swan;
 //////////////////////////////////////////////////////////////////////////////////////
 var swan;
 (function (swan) {
+    /**
+     * @language en_US
+     * The PropertyChangeEvent class represents the event object
+     * passed to the event listener when one of the properties of
+     * an object has changed, and provides information about the change.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 对象的一个属性发生更改时传递到事件侦听器的事件。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var PropertyEvent = (function (_super) {
+        __extends(PropertyEvent, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @param type The event type; indicates the action that triggered the event.
+         * @param bubbles Specifies whether the event can bubble
+         * up the display list hierarchy.
+         * @param cancelable Specifies whether the behavior
+         * associated with the event can be prevented.
+         * @param property Name of the property that changed.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个属性改变事件。
+         *
+         * @param type 事件类型；指示触发事件的动作。
+         * @param bubbles 指定该事件是否可以在显示列表层次结构得到冒泡处理。
+         * @param cancelable 指定是否可以防止与事件相关联的行为。
+         * @param property 发生改变的属性名称。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function PropertyEvent(type, bubbles, cancelable, property) {
+            _super.call(this, type, bubbles, cancelable);
+            this.property = property;
+        }
+        var d = __define,c=PropertyEvent;p=c.prototype;
+        /**
+         * @language en_US
+         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * for the next cycle of reuse.
+         *
+         * @param target the target of event emitter.
+         * @param eventType The event type; indicates the action that triggered the event.
+         * @param property Name of the property that changed.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用指定的 EventEmitter 对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         *
+         * @param target 事件派发目标
+         * @param eventType 事件类型；指示触发事件的动作。
+         * @param property 发生改变的属性名称。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        PropertyEvent.emitPropertyEvent = function (target, eventType, property) {
+            if (!target.hasListener(eventType)) {
+                return true;
+            }
+            var event = lark.Event.create(PropertyEvent, eventType);
+            event.property = property;
+            var result = target.emit(event);
+            lark.Event.release(event);
+            return result;
+        };
+        /**
+         * @language en_US
+         * Emit when a property changed.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 属性改变。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        PropertyEvent.PROPERTY_CHANGE = "propertyChange";
+        return PropertyEvent;
+    })(lark.Event);
+    swan.PropertyEvent = PropertyEvent;
+    lark.registerClass(PropertyEvent, 1016 /* PropertyEvent */);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
     var UIImpl = swan.sys.UIComponentImpl;
     /**
      * @language en_US
@@ -11908,251 +11908,551 @@ var swan;
 var swan;
 (function (swan) {
     /**
+     * @private
+     * 默认的皮肤适配器
+     */
+    var assetAdapter = new swan.DefaultAssetAdapter();
+    /**
      * @language en_US
-     * The Skin class defines the base class for all skins.
-     * You typically don't need to manually create the instance of this class.
-     * It can be created by resolving a EXML.<p/>
+     * The Image control lets you show JPEG, PNG, and GIF files
+     * at runtime. Image inherit Bitmap，so you can set the <code>bitmapData</code> property
+     * to show the data. you can also set the <code>source</code> property, Image will auto load
+     * and show the url image or the bitmapData.
      *
-     * @example You typically write the skin classes in EXML, as the followiong example shows:<p/>
-     * <code>
-     *      <?xml version="1.0" encoding="utf-8"?>
-     *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
-     *          <states>
-     *              <!-- Specify the states controlled by this skin. -->
-     *          </states>
-     *          <!-- Define skin. -->
-     *      </s:Skin>
-     * <code/>
-     *
+     * @event lark.Event.COMPLETE Emitted when the image loaded complete.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 皮肤基类。通常情况下，您不需要手动创建这个类的实例，而是通过解析EXML文件后自动生成。<p/>
+     * Image 控件允许您在运行时显示 JPEG、PNG 等图片文件文件。Image 继承至 Bitmap，因此您可以直接对其 bitmapData 属性，
+     * 赋值从外部加载得到的位图数据以显示对应图片。同时，Image 还提供了更加方便的 source 属性，source 属性可以接受一个网络图片url作为值，
+     * 赋值为url后，它内部会自动去加载并显示图片。并且您同样也可以直接把 BitmapData 对象赋值给 source 属性以显示图片。
      *
-     * @example 通常您可以按照如下方式写EXML代码：<p/>
-     * <code>
-     *      <?xml version="1.0" encoding="utf-8"?>
-     *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
-     *          <states>
-     *              <!-- Specify the states controlled by this skin. -->
-     *          </states>
-     *          <!-- Define skin. -->
-     *      </s:Skin>
-     * <code/>
-     *
+     * @event lark.Event.COMPLETE 当图片加载完成后调度
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    var Skin = (function (_super) {
-        __extends(Skin, _super);
-        function Skin() {
-            _super.apply(this, arguments);
-            /**
-             * @language en_US
-             * The maximum recommended width of the component to be considered.
-             * This property can only affect measure result of host component.
-             *
-             * @default 100000
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 皮肤的最大宽度。仅影响主机组件的测量结果。
-             *
-             * @default 100000
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.maxWidth = 100000;
-            /**
-             * @language en_US
-             * The minimum recommended width of the component to be considered.
-             * This property can only affect measure result of host component.
-             *
-             * @default 0
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 皮肤的最小宽度,此属性设置为大于maxWidth的值时无效。仅影响主机组件的测量结果。
-             *
-             * @default 0
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.minWidth = 0;
-            /**
-             * @language en_US
-             * The maximum recommended height of the component to be considered.
-             * This property can only affect measure result of host component.
-             *
-             * @default 100000
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 皮肤的最大高度。仅影响主机组件的测量结果。
-             *
-             * @default 100000
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.maxHeight = 100000;
-            /**
-             * @language en_US
-             * The minimum recommended height of the component to be considered.
-             * This property can only affect measure result of host component.
-             *
-             * @default 0
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 皮肤的最小高度,此属性设置为大于maxHeight的值时无效。仅影响主机组件的测量结果。
-             *
-             * @default 0
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.minHeight = 0;
-            /**
-             * @language en_US
-             * Number that specifies the explicit width of the skin.
-             * This property can only affect measure result of host component.
-             * @default lark.NONE
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 皮肤显式设置宽度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
-             *
-             * @default lark.NONE
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.width = lark.NONE;
-            /**
-             * @language en_US
-             * Number that specifies the explicit height of the skin.
-             * This property can only affect measure result of host component.
-             *
-             * @default lark.NONE
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 皮肤显式设置高度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
-             *
-             * @default lark.NONE
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.height = lark.NONE;
+    var Image = (function (_super) {
+        __extends(Image, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @param source The source used for the bitmap fill. the value can be
+         * a string or an instance of <code>BitmapData</code>
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @param source 用于位图填充的源。可以是一个字符串或者 <code>BitmapData</code> 对象
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function Image(source) {
+            _super.call(this);
             /**
              * @private
              */
-            this.$elementsContent = [];
+            this._scale9Grid = null;
             /**
              * @private
              */
-            this._hostComponent = null;
+            this._fillMode = "scale";
             /**
              * @private
              */
-            this.$stateValues = new swan.sys.StateValues();
-        }
-        var d = __define,c=Skin;p=c.prototype;
-        d(p, "elementsContent",undefined,
-            function (value) {
-                this.$elementsContent = value;
+            this.sourceChanged = false;
+            /**
+             * @private
+             */
+            this._source = null;
+            this.initializeUIValues();
+            if (source) {
+                this.source = source;
             }
-        );
-        d(p, "hostComponent",
+        }
+        var d = __define,c=Image;p=c.prototype;
+        d(p, "scale9Grid",
             /**
              * @language en_US
-             * The host component which the skin will be attached.
+             * Represent a Rectangle Area that the 9 scale area of Image.
+             * Notice: This property is valid only when <code>fillMode</code>
+             * is <code>BitmapFillMode.SCALE</code>.
+             *
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * 此皮肤附加到的主机组件
+             * 矩形区域，它定义素材对象的九个缩放区域。
+             * 注意:此属性仅在<code>fillMode</code>为<code>BitmapFillMode.SCALE</code>时有效。
+             *
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
             function () {
-                return this._hostComponent;
+                return this._scale9Grid;
             },
             function (value) {
-                if (this._hostComponent == value)
+                this._scale9Grid = value;
+                this.invalidateDisplayList();
+            }
+        );
+        d(p, "fillMode",
+            /**
+             * @language en_US
+             * Determines how the bitmap fills in the dimensions.
+             * <p>When set to <code>BitmapFillMode.CLIP</code>, the bitmap
+             * ends at the edge of the region.</p>
+             * <p>When set to <code>BitmapFillMode.REPEAT</code>, the bitmap
+             * repeats to fill the region.</p>
+             * <p>When set to <code>BitmapFillMode.SCALE</code>, the bitmap
+             * stretches to fill the region.</p>
+             *
+             * @default <code>BitmapFillMode.SCALE</code>
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 确定位图填充尺寸的方式。
+             * <p>设置为 <code>BitmapFillMode.CLIP</code>时，位图将在边缘处被截断。</p>
+             * <p>设置为 <code>BitmapFillMode.REPEAT</code>时，位图将重复以填充区域。</p>
+             * <p>设置为 <code>BitmapFillMode.SCALE</code>时，位图将拉伸以填充区域。</p>
+             *
+             * @default <code>BitmapFillMode.SCALE</code>
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this._fillMode;
+            },
+            function (value) {
+                if (value == this._fillMode) {
                     return;
-                this._hostComponent = value;
-                var values = this.$stateValues;
-                values.parent = value;
-                if (value) {
-                    this.commitCurrentState();
-                    if (!this.$stateValues.intialized) {
-                        if (value.$stage) {
-                            this.initializeStates(value.$stage);
-                        }
-                        else {
-                            value.once(lark.Event.ADDED_TO_STAGE, this.onAddedToStage, this);
-                        }
-                    }
                 }
+                this._fillMode = value;
+                this.invalidateDisplayList();
+            }
+        );
+        d(p, "source",
+            /**
+             * @language en_US
+             * The source used for the bitmap fill. the value can be
+             * a string or an instance of <code>BitmapData</code>
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 用于位图填充的源。可以是一个字符串或者 <code>BitmapData</code> 对象
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this._source;
+            },
+            function (value) {
+                if (value == this._source) {
+                    return;
+                }
+                this._source = value;
+                this.sourceChanged = true;
+                this.invalidateProperties();
             }
         );
         /**
          * @private
          *
-         * @param event
+         * @param value
          */
-        p.onAddedToStage = function (event) {
-            this.initializeStates(this._hostComponent.$stage);
+        p.$setBitmapData = function (value) {
+            if (value == this.$bitmapData) {
+                return;
+            }
+            _super.prototype.$setBitmapData.call(this, value);
+            this._source = value;
+            this.sourceChanged = false;
+            this.invalidateSize();
+            this.invalidateDisplayList();
         };
-        return Skin;
-    })(lark.LarkObject);
-    swan.Skin = Skin;
-    swan.sys.mixin(Skin, swan.sys.StateClient);
-    swan.registerProperty(Skin, "elementsContent", "Array", true);
-    swan.registerProperty(Skin, "states", "State[]");
-    lark.registerClass(Skin, 1012 /* Skin */);
+        /**
+         * @private
+         * 解析source
+         */
+        p.parseSource = function () {
+            this.sourceChanged = false;
+            var source = this._source;
+            if (source && typeof source == "string") {
+                var adapter = this.$stage.getImplementation("swan.IAssetAdapter");
+                if (!adapter) {
+                    adapter = assetAdapter;
+                }
+                adapter.getAsset(this._source, this.contentChanged, this);
+            }
+            else {
+                this.$setBitmapData(source);
+            }
+        };
+        /**
+         * @private
+         * 资源发生改变
+         */
+        p.contentChanged = function (data, source) {
+            if (source !== this._source)
+                return;
+            if (!lark.is(data, 7 /* BitmapData */)) {
+                return;
+            }
+            this.$setBitmapData(data);
+            if (data) {
+                this.emitWith(lark.Event.COMPLETE);
+            }
+            else if (DEBUG) {
+                lark.$warn(2301, source);
+            }
+        };
+        /**
+         * @private
+         *
+         * @param bounds
+         */
+        p.$measureContentBounds = function (bounds) {
+            var bitmapData = this.$bitmapData;
+            if (bitmapData) {
+                var values = this.$UIComponent;
+                var width = values[10 /* width */];
+                var height = values[11 /* height */];
+                if (lark.isNone(width) || lark.isNone(height)) {
+                    bounds.setEmpty();
+                    return;
+                }
+                if (this._fillMode == "clip") {
+                    if (width > bitmapData.width) {
+                        width = bitmapData.width;
+                    }
+                    if (height > bitmapData.height) {
+                        height = bitmapData.height;
+                    }
+                }
+                bounds.setTo(0, 0, width, height);
+            }
+            else {
+                bounds.setEmpty();
+            }
+        };
+        /**
+         * @private
+         *
+         * @param context
+         */
+        p.$render = function (context) {
+            var bitmapData = this.$bitmapData;
+            if (!bitmapData) {
+                return;
+            }
+            var values = this.$UIComponent;
+            var width = values[10 /* width */];
+            var height = values[11 /* height */];
+            if (width === 0 || height === 0) {
+                return;
+            }
+            switch (this._fillMode) {
+                case "clip":
+                    if (width > bitmapData.width) {
+                        width = bitmapData.width;
+                    }
+                    if (height > bitmapData.height) {
+                        height = bitmapData.height;
+                    }
+                    context.drawImage(bitmapData, 0, 0, width, height, 0, 0, width, height);
+                    break;
+                case "repeat":
+                    var pattern = context.createPattern(bitmapData, "repeat");
+                    context.beginPath();
+                    context.rect(0, 0, width, height);
+                    context.fillStyle = pattern;
+                    context.fill();
+                    break;
+                default:
+                    context.imageSmoothingEnabled = this.$smoothing;
+                    if (this._scale9Grid) {
+                        this.drawScale9GridImage(context, bitmapData, this._scale9Grid, width, height);
+                    }
+                    else {
+                        context.drawImage(bitmapData, 0, 0, width, height);
+                    }
+                    break;
+            }
+        };
+        /**
+         * @private
+         * 绘制九宫格位图
+         */
+        p.drawScale9GridImage = function (context, image, scale9Grid, surfaceWidth, surfaceHeight) {
+            var imageWidth = image.width;
+            var imageHeight = image.height;
+            var sourceW0 = scale9Grid.x;
+            var sourceH0 = scale9Grid.y;
+            var sourceW1 = scale9Grid.width;
+            var sourceH1 = scale9Grid.height;
+            //防止空心的情况出现。
+            if (sourceH1 == 0) {
+                sourceH1 = 1;
+                if (sourceH0 >= imageHeight) {
+                    sourceH0--;
+                }
+            }
+            if (sourceW1 == 0) {
+                sourceW1 = 1;
+                if (sourceW0 >= imageWidth) {
+                    sourceW0--;
+                }
+            }
+            var sourceX0 = 0;
+            var sourceX1 = sourceX0 + sourceW0;
+            var sourceX2 = sourceX1 + sourceW1;
+            var sourceW2 = imageWidth - sourceW0 - sourceW1;
+            var sourceY0 = 0;
+            var sourceY1 = sourceY0 + sourceH0;
+            var sourceY2 = sourceY1 + sourceH1;
+            var sourceH2 = imageHeight - sourceH0 - sourceH1;
+            if (sourceW0 + sourceW2 > surfaceWidth || sourceH0 + sourceH2 > surfaceHeight) {
+                context.drawImage(image, 0, 0, surfaceWidth, surfaceHeight);
+                return;
+            }
+            var targetX0 = 0;
+            var targetX1 = targetX0 + sourceW0;
+            var targetX2 = targetX0 + surfaceWidth - sourceW2;
+            var targetW1 = surfaceWidth - sourceW0 - sourceW2;
+            var targetY0 = 0;
+            var targetY1 = targetY0 + sourceH0;
+            var targetY2 = targetY0 + surfaceHeight - sourceH2;
+            var targetH1 = surfaceHeight - sourceH0 - sourceH2;
+            //
+            //             x0     x1     x2
+            //          y0 +------+------+------+
+            //             |      |      |      | h0
+            //             |      |      |      |
+            //          y1 +------+------+------+
+            //             |      |      |      | h1
+            //             |      |      |      |
+            //          y2 +------+------+------+
+            //             |      |      |      | h2
+            //             |      |      |      |
+            //             +------+------+------+
+            //                w0     w1     w2
+            //
+            context.drawImage(image, sourceX0, sourceY0, sourceW0, sourceH0, targetX0, targetY0, sourceW0, sourceH0);
+            context.drawImage(image, sourceX1, sourceY0, sourceW1, sourceH0, targetX1, targetY0, targetW1, sourceH0);
+            context.drawImage(image, sourceX2, sourceY0, sourceW2, sourceH0, targetX2, targetY0, sourceW2, sourceH0);
+            context.drawImage(image, sourceX0, sourceY1, sourceW0, sourceH1, targetX0, targetY1, sourceW0, targetH1);
+            context.drawImage(image, sourceX1, sourceY1, sourceW1, sourceH1, targetX1, targetY1, targetW1, targetH1);
+            context.drawImage(image, sourceX2, sourceY1, sourceW2, sourceH1, targetX2, targetY1, sourceW2, targetH1);
+            context.drawImage(image, sourceX0, sourceY2, sourceW0, sourceH2, targetX0, targetY2, sourceW0, sourceH2);
+            context.drawImage(image, sourceX1, sourceY2, sourceW1, sourceH2, targetX1, targetY2, targetW1, sourceH2);
+            context.drawImage(image, sourceX2, sourceY2, sourceW2, sourceH2, targetX2, targetY2, sourceW2, sourceH2);
+        };
+        /**
+         * @copy swan.UIComponent#createChildren
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.createChildren = function () {
+        };
+        /**
+         * @copy swan.UIComponent#childrenCreated
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.childrenCreated = function () {
+        };
+        /**
+         * @copy swan.UIComponent#commitProperties
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.commitProperties = function () {
+            swan.sys.UIComponentImpl.prototype["commitProperties"].call(this);
+            if (this.sourceChanged) {
+                this.parseSource();
+            }
+        };
+        /**
+         * @copy swan.UIComponent#measure
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.measure = function () {
+            var bitmapData = this.$bitmapData;
+            if (bitmapData) {
+                this.setMeasuredSize(bitmapData.width, bitmapData.height);
+            }
+            else {
+                this.setMeasuredSize(0, 0);
+            }
+        };
+        /**
+         * @copy swan.UIComponent#updateDisplayList
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
+            this.$invalidateContentBounds();
+        };
+        /**
+         * @copy swan.UIComponent#invalidateParentLayout
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.invalidateParentLayout = function () {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.setMeasuredSize = function (width, height) {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.invalidateProperties = function () {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.validateProperties = function () {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.invalidateSize = function () {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.validateSize = function (recursive) {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.invalidateDisplayList = function () {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.validateDisplayList = function () {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.validateNow = function () {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.setLayoutBoundsSize = function (layoutWidth, layoutHeight) {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.setLayoutBoundsPosition = function (x, y) {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getLayoutBounds = function (bounds) {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getPreferredBounds = function (bounds) {
+        };
+        return Image;
+    })(lark.Bitmap);
+    swan.Image = Image;
+    swan.sys.implementUIComponent(Image, lark.Bitmap);
+    lark.registerClass(Image, 1011 /* Image */, [1001 /* UIComponent */]);
+    swan.registerProperty(Image, "scale9Grid", "lark.Rectangle");
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -12491,6 +12791,661 @@ var swan;
     swan.sys.implementUIComponent(Label, lark.TextField);
     swan.registerBindable(Label.prototype, "text");
     lark.registerClass(Label, 1010 /* Label */, [1001 /* UIComponent */]);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * The Group class is defines the base class for layout component.
+     * If the contents of the sub items are too large to scroll to show, you can wrap a Scroller component outside the
+     * group (Give the instance of Group to <code>viewport</code> property of Scroller component).
+     * The scroller component can adds a scrolling touch operation for the Group.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Group 是自动布局的容器基类。如果包含的子项内容太大需要滚动显示，可以在在 Group 外部包裹一层 Scroller 组件
+     * (将 Group 实例赋值给 Scroller 组件的 viewport 属性)。Scroller 会为 Group 添加滚动的触摸操作功能，并显示垂直或水平的滚动条。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var Group = (function (_super) {
+        __extends(Group, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function Group() {
+            _super.call(this);
+            /**
+             * @private
+             */
+            this.$layout = null;
+            /**
+             * @private
+             */
+            this.$stateValues = new swan.sys.StateValues();
+            this.initializeUIValues();
+            this.$Group = {
+                0: 0,
+                1: 0,
+                2: 0,
+                3: 0,
+                4: false,
+                5: false,
+            };
+            this.$stateValues.parent = this;
+        }
+        var d = __define,c=Group;p=c.prototype;
+        d(p, "elementsContent",undefined,
+            /**
+             * @language en_US
+             * [write-only] This property is Usually invoked in resolving an EXML for adding multiple children quickly.
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * [只写] 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function (value) {
+                if (value) {
+                    var length = value.length;
+                    for (var i = 0; i < length; i++) {
+                        this.addChild(value[i]);
+                    }
+                }
+            }
+        );
+        d(p, "layout",
+            /**
+             * @language en_US
+             * The layout object for this container.
+             * This object is responsible for the measurement and layout of
+             * the UIcomponent in the container.
+             *
+             * @default swan.BasicLayout
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 此容器的布局对象。
+             *
+             * s@default swan.BasicLayout
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$layout;
+            },
+            function (value) {
+                this.$setLayout(value);
+            }
+        );
+        /**
+         * @private
+         *
+         * @param value
+         */
+        p.$setLayout = function (value) {
+            if (this.$layout == value)
+                return;
+            if (this.$layout) {
+                this.$layout.target = null;
+            }
+            this.$layout = value;
+            if (value) {
+                value.target = this;
+            }
+            this.invalidateSize();
+            this.invalidateDisplayList();
+        };
+        d(p, "contentWidth",
+            /**
+             * @copy swan.IViewport#contentWidth
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$Group[0 /* contentWidth */];
+            },undefined
+        );
+        d(p, "contentHeight",
+            /**
+             * @copy swan.IViewport#contentHeight
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$Group[1 /* contentHeight */];
+            },undefined
+        );
+        /**
+         * @language en_US
+         *
+         * Sets the <code>contentWidth</code> and <code>contentHeight</code>
+         * properties.
+         *
+         * This method is intended for layout class developers who should
+         * call it from <code>updateDisplayList()</code> methods.
+         *
+         * @param width The new value of <code>contentWidth</code>.
+         * @param height The new value of <code>contentHeight</code>.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         * 设置 <code>contentWidth</code> 和 <code>contentHeight</code> 属性。
+         * 此方法由布局来调用，开发者应该在布局类的 <code>updateDisplayList()</code> 方法中对其进行调用。
+         *
+         * @param width <code>contentWidth</code> 的新值。
+         * @param height <code>contentHeight</code> 的新值。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.setContentSize = function (width, height) {
+            width = Math.ceil(+width || 0);
+            height = Math.ceil(+height || 0);
+            var values = this.$Group;
+            var wChange = (values[0 /* contentWidth */] !== width);
+            var hChange = (values[1 /* contentHeight */] !== height);
+            if (!wChange && !hChange) {
+                return;
+            }
+            values[0 /* contentWidth */] = width;
+            values[1 /* contentHeight */] = height;
+            if (wChange) {
+                swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "contentWidth");
+            }
+            if (hChange) {
+                swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "contentHeight");
+            }
+        };
+        d(p, "scrollEnabled",
+            /**
+             * @copy swan.IViewport#scrollEnabled
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$Group[4 /* scrollEnabled */];
+            },
+            function (value) {
+                value = !!value;
+                var values = this.$Group;
+                if (value === values[4 /* scrollEnabled */])
+                    return;
+                values[4 /* scrollEnabled */] = value;
+                this.updateScrollRect();
+            }
+        );
+        d(p, "scrollH",
+            /**
+             * @copy swan.IViewport#scrollH
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$Group[2 /* scrollH */];
+            },
+            function (value) {
+                value = +value || 0;
+                var values = this.$Group;
+                if (value === values[2 /* scrollH */])
+                    return;
+                values[2 /* scrollH */] = value;
+                if (this.updateScrollRect() && this.$layout) {
+                    this.$layout.scrollPositionChanged();
+                }
+                swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "scrollH");
+            }
+        );
+        d(p, "scrollV",
+            /**
+             * @copy swan.IViewport#scrollV
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$Group[3 /* scrollV */];
+            },
+            function (value) {
+                value = +value || 0;
+                var values = this.$Group;
+                if (value == values[3 /* scrollV */])
+                    return;
+                values[3 /* scrollV */] = value;
+                if (this.updateScrollRect() && this.$layout) {
+                    this.$layout.scrollPositionChanged();
+                }
+                swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "scrollV");
+            }
+        );
+        /**
+         * @private
+         *
+         * @returns
+         */
+        p.updateScrollRect = function () {
+            var values = this.$Group;
+            var hasClip = values[4 /* scrollEnabled */];
+            if (hasClip) {
+                var uiValues = this.$UIComponent;
+                this.scrollRect = lark.$TempRectangle.setTo(values[2 /* scrollH */], values[3 /* scrollV */], uiValues[10 /* width */], uiValues[11 /* height */]);
+            }
+            else if (this.$scrollRect) {
+                this.scrollRect = null;
+            }
+            return hasClip;
+        };
+        d(p, "numElements",
+            /**
+             * @language en_US
+             * The number of layout element in this container.
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 布局元素子项的数量。
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$children.length;
+            },undefined
+        );
+        /**
+         * @language en_US
+         * Returns the layout element at the specified index.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取一个布局元素子项。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getElementAt = function (index) {
+            return this.$children[index];
+        };
+        /**
+         * @language en_US
+         * Set the index range of the sub Visual element in container which support virtual layout.
+         * This method is invalid in container which do not support virtual layout.
+         * This method is usually invoked before layout. Override this method to release the invisible elements.
+         *
+         * @param startIndex the start index of sub visual elements（include）
+         * @param endIndex the end index of sub visual elements（include）
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在支持虚拟布局的容器中，设置容器内可见的子元素索引范围。此方法在不支持虚拟布局的容器中无效。
+         * 通常在即将重新布局子项之前会被调用一次，容器覆盖此方法提前释放已经不可见的子元素。
+         *
+         * @param startIndex 可视元素起始索引（包括）
+         * @param endIndex 可视元素结束索引（包括）
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.setVirtualElementIndicesInView = function (startIndex, endIndex) {
+        };
+        d(p, "touchThrough",
+            /**
+             * @language en_US
+             * When <code>true</code>, this property
+             * ensures that the entire bounds of the Group respond to
+             * touch events such as begin.
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 触摸组件的背景透明区域是否可以穿透。设置为true表示可以穿透，反之透明区域也会响应触摸事件。默认 false。
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$Group[5 /* touchThrough */];
+            },
+            function (value) {
+                this.$Group[5 /* touchThrough */] = !!value;
+            }
+        );
+        /**
+         * @private
+         *
+         * @param stageX
+         * @param stageY
+         * @param shapeFlag
+         * @returns
+         */
+        p.$hitTest = function (stageX, stageY, shapeFlag) {
+            var target = _super.prototype.$hitTest.call(this, stageX, stageY, shapeFlag);
+            if (target || this.$Group[5 /* touchThrough */] || shapeFlag || this.$displayFlags & 1 /* PixelHitTest */) {
+                return target;
+            }
+            if (!this.$visible || !this.$hasFlags(1024 /* TouchEnabled */)) {
+                return null;
+            }
+            var point = this.globalToLocal(stageX, stageY, lark.$TempPoint);
+            var values = this.$UIComponent;
+            var bounds = lark.$TempRectangle.setTo(0, 0, values[10 /* width */], values[11 /* height */]);
+            if (bounds.contains(point.x, point.y)) {
+                return this;
+            }
+            return null;
+        };
+        /**
+         * @copy swan.Component#invalidateState()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.invalidateState = function () {
+            var values = this.$stateValues;
+            if (values.stateIsDirty) {
+                return;
+            }
+            values.stateIsDirty = true;
+            this.invalidateProperties();
+        };
+        /**
+         * @copy swan.Component#getCurrentState()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getCurrentState = function () {
+            return "";
+        };
+        /**
+         * @copy swan.Component#createChildren()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.createChildren = function () {
+            if (!this.$layout) {
+                this.$setLayout(new swan.BasicLayout());
+            }
+            this.initializeStates(this.$stage);
+        };
+        /**
+         * @copy swan.Component#childrenCreated()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.childrenCreated = function () {
+        };
+        /**
+         * @copy swan.Component#commitProperties()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.commitProperties = function () {
+            swan.sys.UIComponentImpl.prototype["commitProperties"].call(this);
+            var values = this.$stateValues;
+            if (values.stateIsDirty) {
+                values.stateIsDirty = false;
+                if (!values.explicitState) {
+                    values.currentState = this.getCurrentState();
+                    this.commitCurrentState();
+                }
+            }
+        };
+        /**
+         * @copy swan.Component#measure()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.measure = function () {
+            if (!this.$layout) {
+                this.setMeasuredSize(0, 0);
+                return;
+            }
+            this.$layout.measure();
+        };
+        /**
+         * @copy swan.Component#updateDisplayList()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
+            if (this.$layout) {
+                this.$layout.updateDisplayList(unscaledWidth, unscaledHeight);
+            }
+            this.updateScrollRect();
+        };
+        /**
+         * @copy swan.Component#invalidateParentLayout()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.invalidateParentLayout = function () {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.setMeasuredSize = function (width, height) {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.invalidateProperties = function () {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.validateProperties = function () {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.invalidateSize = function () {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.validateSize = function (recursive) {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.invalidateDisplayList = function () {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.validateDisplayList = function () {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.validateNow = function () {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.setLayoutBoundsSize = function (layoutWidth, layoutHeight) {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.setLayoutBoundsPosition = function (x, y) {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getLayoutBounds = function (bounds) {
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getPreferredBounds = function (bounds) {
+        };
+        return Group;
+    })(lark.Sprite);
+    swan.Group = Group;
+    swan.sys.implementUIComponent(Group, lark.Sprite, true);
+    swan.sys.mixin(Group, swan.sys.StateClient);
+    swan.registerProperty(Group, "elementsContent", "Array", true);
+    swan.registerProperty(Group, "states", "State[]");
+    lark.registerClass(Group, 1002 /* Group */, [1001 /* UIComponent */, 1045 /* IViewport */]);
+    if (DEBUG) {
+        lark.$markReadOnly(Group.prototype, "contentWidth");
+        lark.$markReadOnly(Group.prototype, "contentHeight");
+        lark.$markReadOnly(Group.prototype, "numElements");
+    }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -13320,10 +14275,20 @@ var swan;
 (function (swan) {
     /**
      * @language en_US
-     * The Group class is defines the base class for layout component.
-     * If the contents of the sub items are too large to scroll to show, you can wrap a Scroller component outside the
-     * group (Give the instance of Group to <code>viewport</code> property of Scroller component).
-     * The scroller component can adds a scrolling touch operation for the Group.
+     * The Skin class defines the base class for all skins.
+     * You typically don't need to manually create the instance of this class.
+     * It can be created by resolving a EXML.<p/>
+     *
+     * @example You typically write the skin classes in EXML, as the followiong example shows:<p/>
+     * <code>
+     *      <?xml version="1.0" encoding="utf-8"?>
+     *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
+     *          <states>
+     *              <!-- Specify the states controlled by this skin. -->
+     *          </states>
+     *          <!-- Define skin. -->
+     *      </s:Skin>
+     * <code/>
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -13331,1194 +14296,229 @@ var swan;
      */
     /**
      * @language zh_CN
-     * Group 是自动布局的容器基类。如果包含的子项内容太大需要滚动显示，可以在在 Group 外部包裹一层 Scroller 组件
-     * (将 Group 实例赋值给 Scroller 组件的 viewport 属性)。Scroller 会为 Group 添加滚动的触摸操作功能，并显示垂直或水平的滚动条。
+     * 皮肤基类。通常情况下，您不需要手动创建这个类的实例，而是通过解析EXML文件后自动生成。<p/>
+     *
+     * @example 通常您可以按照如下方式写EXML代码：<p/>
+     * <code>
+     *      <?xml version="1.0" encoding="utf-8"?>
+     *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
+     *          <states>
+     *              <!-- Specify the states controlled by this skin. -->
+     *          </states>
+     *          <!-- Define skin. -->
+     *      </s:Skin>
+     * <code/>
      *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    var Group = (function (_super) {
-        __extends(Group, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function Group() {
-            _super.call(this);
+    var Skin = (function (_super) {
+        __extends(Skin, _super);
+        function Skin() {
+            _super.apply(this, arguments);
+            /**
+             * @language en_US
+             * The maximum recommended width of the component to be considered.
+             * This property can only affect measure result of host component.
+             *
+             * @default 100000
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 皮肤的最大宽度。仅影响主机组件的测量结果。
+             *
+             * @default 100000
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.maxWidth = 100000;
+            /**
+             * @language en_US
+             * The minimum recommended width of the component to be considered.
+             * This property can only affect measure result of host component.
+             *
+             * @default 0
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 皮肤的最小宽度,此属性设置为大于maxWidth的值时无效。仅影响主机组件的测量结果。
+             *
+             * @default 0
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.minWidth = 0;
+            /**
+             * @language en_US
+             * The maximum recommended height of the component to be considered.
+             * This property can only affect measure result of host component.
+             *
+             * @default 100000
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 皮肤的最大高度。仅影响主机组件的测量结果。
+             *
+             * @default 100000
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.maxHeight = 100000;
+            /**
+             * @language en_US
+             * The minimum recommended height of the component to be considered.
+             * This property can only affect measure result of host component.
+             *
+             * @default 0
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 皮肤的最小高度,此属性设置为大于maxHeight的值时无效。仅影响主机组件的测量结果。
+             *
+             * @default 0
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.minHeight = 0;
+            /**
+             * @language en_US
+             * Number that specifies the explicit width of the skin.
+             * This property can only affect measure result of host component.
+             * @default lark.NONE
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 皮肤显式设置宽度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
+             *
+             * @default lark.NONE
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.width = lark.NONE;
+            /**
+             * @language en_US
+             * Number that specifies the explicit height of the skin.
+             * This property can only affect measure result of host component.
+             *
+             * @default lark.NONE
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 皮肤显式设置高度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
+             *
+             * @default lark.NONE
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.height = lark.NONE;
             /**
              * @private
              */
-            this.$layout = null;
+            this.$elementsContent = [];
+            /**
+             * @private
+             */
+            this._hostComponent = null;
             /**
              * @private
              */
             this.$stateValues = new swan.sys.StateValues();
-            this.initializeUIValues();
-            this.$Group = {
-                0: 0,
-                1: 0,
-                2: 0,
-                3: 0,
-                4: false,
-                5: false,
-            };
-            this.$stateValues.parent = this;
         }
-        var d = __define,c=Group;p=c.prototype;
+        var d = __define,c=Skin;p=c.prototype;
         d(p, "elementsContent",undefined,
+            function (value) {
+                this.$elementsContent = value;
+            }
+        );
+        d(p, "hostComponent",
             /**
              * @language en_US
-             * [write-only] This property is Usually invoked in resolving an EXML for adding multiple children quickly.
-             *
+             * The host component which the skin will be attached.
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * [只写] 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
+             * 此皮肤附加到的主机组件
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
+            function () {
+                return this._hostComponent;
+            },
             function (value) {
+                if (this._hostComponent == value)
+                    return;
+                this._hostComponent = value;
+                var values = this.$stateValues;
+                values.parent = value;
                 if (value) {
-                    var length = value.length;
-                    for (var i = 0; i < length; i++) {
-                        this.addChild(value[i]);
-                    }
-                }
-            }
-        );
-        d(p, "layout",
-            /**
-             * @language en_US
-             * The layout object for this container.
-             * This object is responsible for the measurement and layout of
-             * the UIcomponent in the container.
-             *
-             * @default swan.BasicLayout
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 此容器的布局对象。
-             *
-             * s@default swan.BasicLayout
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$layout;
-            },
-            function (value) {
-                this.$setLayout(value);
-            }
-        );
-        /**
-         * @private
-         *
-         * @param value
-         */
-        p.$setLayout = function (value) {
-            if (this.$layout == value)
-                return;
-            if (this.$layout) {
-                this.$layout.target = null;
-            }
-            this.$layout = value;
-            if (value) {
-                value.target = this;
-            }
-            this.invalidateSize();
-            this.invalidateDisplayList();
-        };
-        d(p, "contentWidth",
-            /**
-             * @copy swan.IViewport#contentWidth
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$Group[0 /* contentWidth */];
-            },undefined
-        );
-        d(p, "contentHeight",
-            /**
-             * @copy swan.IViewport#contentHeight
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$Group[1 /* contentHeight */];
-            },undefined
-        );
-        /**
-         * @language en_US
-         *
-         * Sets the <code>contentWidth</code> and <code>contentHeight</code>
-         * properties.
-         *
-         * This method is intended for layout class developers who should
-         * call it from <code>updateDisplayList()</code> methods.
-         *
-         * @param width The new value of <code>contentWidth</code>.
-         * @param height The new value of <code>contentHeight</code>.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         *
-         * 设置 <code>contentWidth</code> 和 <code>contentHeight</code> 属性。
-         * 此方法由布局来调用，开发者应该在布局类的 <code>updateDisplayList()</code> 方法中对其进行调用。
-         *
-         * @param width <code>contentWidth</code> 的新值。
-         * @param height <code>contentHeight</code> 的新值。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.setContentSize = function (width, height) {
-            width = Math.ceil(+width || 0);
-            height = Math.ceil(+height || 0);
-            var values = this.$Group;
-            var wChange = (values[0 /* contentWidth */] !== width);
-            var hChange = (values[1 /* contentHeight */] !== height);
-            if (!wChange && !hChange) {
-                return;
-            }
-            values[0 /* contentWidth */] = width;
-            values[1 /* contentHeight */] = height;
-            if (wChange) {
-                swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "contentWidth");
-            }
-            if (hChange) {
-                swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "contentHeight");
-            }
-        };
-        d(p, "scrollEnabled",
-            /**
-             * @copy swan.IViewport#scrollEnabled
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$Group[4 /* scrollEnabled */];
-            },
-            function (value) {
-                value = !!value;
-                var values = this.$Group;
-                if (value === values[4 /* scrollEnabled */])
-                    return;
-                values[4 /* scrollEnabled */] = value;
-                this.updateScrollRect();
-            }
-        );
-        d(p, "scrollH",
-            /**
-             * @copy swan.IViewport#scrollH
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$Group[2 /* scrollH */];
-            },
-            function (value) {
-                value = +value || 0;
-                var values = this.$Group;
-                if (value === values[2 /* scrollH */])
-                    return;
-                values[2 /* scrollH */] = value;
-                if (this.updateScrollRect() && this.$layout) {
-                    this.$layout.scrollPositionChanged();
-                }
-                swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "scrollH");
-            }
-        );
-        d(p, "scrollV",
-            /**
-             * @copy swan.IViewport#scrollV
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$Group[3 /* scrollV */];
-            },
-            function (value) {
-                value = +value || 0;
-                var values = this.$Group;
-                if (value == values[3 /* scrollV */])
-                    return;
-                values[3 /* scrollV */] = value;
-                if (this.updateScrollRect() && this.$layout) {
-                    this.$layout.scrollPositionChanged();
-                }
-                swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "scrollV");
-            }
-        );
-        /**
-         * @private
-         *
-         * @returns
-         */
-        p.updateScrollRect = function () {
-            var values = this.$Group;
-            var hasClip = values[4 /* scrollEnabled */];
-            if (hasClip) {
-                var uiValues = this.$UIComponent;
-                this.scrollRect = lark.$TempRectangle.setTo(values[2 /* scrollH */], values[3 /* scrollV */], uiValues[10 /* width */], uiValues[11 /* height */]);
-            }
-            else if (this.$scrollRect) {
-                this.scrollRect = null;
-            }
-            return hasClip;
-        };
-        d(p, "numElements",
-            /**
-             * @language en_US
-             * The number of layout element in this container.
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 布局元素子项的数量。
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$children.length;
-            },undefined
-        );
-        /**
-         * @language en_US
-         * Returns the layout element at the specified index.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取一个布局元素子项。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getElementAt = function (index) {
-            return this.$children[index];
-        };
-        /**
-         * @language en_US
-         * Set the index range of the sub Visual element in container which support virtual layout.
-         * This method is invalid in container which do not support virtual layout.
-         * This method is usually invoked before layout. Override this method to release the invisible elements.
-         *
-         * @param startIndex the start index of sub visual elements（include）
-         * @param endIndex the end index of sub visual elements（include）
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在支持虚拟布局的容器中，设置容器内可见的子元素索引范围。此方法在不支持虚拟布局的容器中无效。
-         * 通常在即将重新布局子项之前会被调用一次，容器覆盖此方法提前释放已经不可见的子元素。
-         *
-         * @param startIndex 可视元素起始索引（包括）
-         * @param endIndex 可视元素结束索引（包括）
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.setVirtualElementIndicesInView = function (startIndex, endIndex) {
-        };
-        d(p, "touchThrough",
-            /**
-             * @language en_US
-             * When <code>true</code>, this property
-             * ensures that the entire bounds of the Group respond to
-             * touch events such as begin.
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 触摸组件的背景透明区域是否可以穿透。设置为true表示可以穿透，反之透明区域也会响应触摸事件。默认 false。
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$Group[5 /* touchThrough */];
-            },
-            function (value) {
-                this.$Group[5 /* touchThrough */] = !!value;
-            }
-        );
-        /**
-         * @private
-         *
-         * @param stageX
-         * @param stageY
-         * @param shapeFlag
-         * @returns
-         */
-        p.$hitTest = function (stageX, stageY, shapeFlag) {
-            var target = _super.prototype.$hitTest.call(this, stageX, stageY, shapeFlag);
-            if (target || this.$Group[5 /* touchThrough */] || shapeFlag || this.$displayFlags & 1 /* PixelHitTest */) {
-                return target;
-            }
-            if (!this.$visible || !this.$hasFlags(1024 /* TouchEnabled */)) {
-                return null;
-            }
-            var point = this.globalToLocal(stageX, stageY, lark.$TempPoint);
-            var values = this.$UIComponent;
-            var bounds = lark.$TempRectangle.setTo(0, 0, values[10 /* width */], values[11 /* height */]);
-            if (bounds.contains(point.x, point.y)) {
-                return this;
-            }
-            return null;
-        };
-        /**
-         * @copy swan.Component#invalidateState()
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.invalidateState = function () {
-            var values = this.$stateValues;
-            if (values.stateIsDirty) {
-                return;
-            }
-            values.stateIsDirty = true;
-            this.invalidateProperties();
-        };
-        /**
-         * @copy swan.Component#getCurrentState()
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getCurrentState = function () {
-            return "";
-        };
-        /**
-         * @copy swan.Component#createChildren()
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.createChildren = function () {
-            if (!this.$layout) {
-                this.$setLayout(new swan.BasicLayout());
-            }
-            this.initializeStates(this.$stage);
-        };
-        /**
-         * @copy swan.Component#childrenCreated()
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.childrenCreated = function () {
-        };
-        /**
-         * @copy swan.Component#commitProperties()
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.commitProperties = function () {
-            swan.sys.UIComponentImpl.prototype["commitProperties"].call(this);
-            var values = this.$stateValues;
-            if (values.stateIsDirty) {
-                values.stateIsDirty = false;
-                if (!values.explicitState) {
-                    values.currentState = this.getCurrentState();
                     this.commitCurrentState();
+                    if (!this.$stateValues.intialized) {
+                        if (value.$stage) {
+                            this.initializeStates(value.$stage);
+                        }
+                        else {
+                            value.once(lark.Event.ADDED_TO_STAGE, this.onAddedToStage, this);
+                        }
+                    }
                 }
-            }
-        };
-        /**
-         * @copy swan.Component#measure()
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.measure = function () {
-            if (!this.$layout) {
-                this.setMeasuredSize(0, 0);
-                return;
-            }
-            this.$layout.measure();
-        };
-        /**
-         * @copy swan.Component#updateDisplayList()
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
-            if (this.$layout) {
-                this.$layout.updateDisplayList(unscaledWidth, unscaledHeight);
-            }
-            this.updateScrollRect();
-        };
-        /**
-         * @copy swan.Component#invalidateParentLayout()
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.invalidateParentLayout = function () {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.setMeasuredSize = function (width, height) {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.invalidateProperties = function () {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.validateProperties = function () {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.invalidateSize = function () {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.validateSize = function (recursive) {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.invalidateDisplayList = function () {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.validateDisplayList = function () {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.validateNow = function () {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.setLayoutBoundsSize = function (layoutWidth, layoutHeight) {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.setLayoutBoundsPosition = function (x, y) {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getLayoutBounds = function (bounds) {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getPreferredBounds = function (bounds) {
-        };
-        return Group;
-    })(lark.Sprite);
-    swan.Group = Group;
-    swan.sys.implementUIComponent(Group, lark.Sprite, true);
-    swan.sys.mixin(Group, swan.sys.StateClient);
-    swan.registerProperty(Group, "elementsContent", "Array", true);
-    swan.registerProperty(Group, "states", "State[]");
-    lark.registerClass(Group, 1002 /* Group */, [1001 /* UIComponent */, 1045 /* IViewport */]);
-    if (DEBUG) {
-        lark.$markReadOnly(Group.prototype, "contentWidth");
-        lark.$markReadOnly(Group.prototype, "contentHeight");
-        lark.$markReadOnly(Group.prototype, "numElements");
-    }
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @private
-     * 默认的皮肤适配器
-     */
-    var assetAdapter = new swan.DefaultAssetAdapter();
-    /**
-     * @language en_US
-     * The Image control lets you show JPEG, PNG, and GIF files
-     * at runtime. Image inherit Bitmap，so you can set the <code>bitmapData</code> property
-     * to show the data. you can also set the <code>source</code> property, Image will auto load
-     * and show the url image or the bitmapData.
-     *
-     * @event lark.Event.COMPLETE Emitted when the image loaded complete.
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * Image 控件允许您在运行时显示 JPEG、PNG 等图片文件文件。Image 继承至 Bitmap，因此您可以直接对其 bitmapData 属性，
-     * 赋值从外部加载得到的位图数据以显示对应图片。同时，Image 还提供了更加方便的 source 属性，source 属性可以接受一个网络图片url作为值，
-     * 赋值为url后，它内部会自动去加载并显示图片。并且您同样也可以直接把 BitmapData 对象赋值给 source 属性以显示图片。
-     *
-     * @event lark.Event.COMPLETE 当图片加载完成后调度
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var Image = (function (_super) {
-        __extends(Image, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @param source The source used for the bitmap fill. the value can be
-         * a string or an instance of <code>BitmapData</code>
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @param source 用于位图填充的源。可以是一个字符串或者 <code>BitmapData</code> 对象
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function Image(source) {
-            _super.call(this);
-            /**
-             * @private
-             */
-            this._scale9Grid = null;
-            /**
-             * @private
-             */
-            this._fillMode = "scale";
-            /**
-             * @private
-             */
-            this.sourceChanged = false;
-            /**
-             * @private
-             */
-            this._source = null;
-            this.initializeUIValues();
-            if (source) {
-                this.source = source;
-            }
-        }
-        var d = __define,c=Image;p=c.prototype;
-        d(p, "scale9Grid",
-            /**
-             * @language en_US
-             * Represent a Rectangle Area that the 9 scale area of Image.
-             * Notice: This property is valid only when <code>fillMode</code>
-             * is <code>BitmapFillMode.SCALE</code>.
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 矩形区域，它定义素材对象的九个缩放区域。
-             * 注意:此属性仅在<code>fillMode</code>为<code>BitmapFillMode.SCALE</code>时有效。
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this._scale9Grid;
-            },
-            function (value) {
-                this._scale9Grid = value;
-                this.invalidateDisplayList();
-            }
-        );
-        d(p, "fillMode",
-            /**
-             * @language en_US
-             * Determines how the bitmap fills in the dimensions.
-             * <p>When set to <code>BitmapFillMode.CLIP</code>, the bitmap
-             * ends at the edge of the region.</p>
-             * <p>When set to <code>BitmapFillMode.REPEAT</code>, the bitmap
-             * repeats to fill the region.</p>
-             * <p>When set to <code>BitmapFillMode.SCALE</code>, the bitmap
-             * stretches to fill the region.</p>
-             *
-             * @default <code>BitmapFillMode.SCALE</code>
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 确定位图填充尺寸的方式。
-             * <p>设置为 <code>BitmapFillMode.CLIP</code>时，位图将在边缘处被截断。</p>
-             * <p>设置为 <code>BitmapFillMode.REPEAT</code>时，位图将重复以填充区域。</p>
-             * <p>设置为 <code>BitmapFillMode.SCALE</code>时，位图将拉伸以填充区域。</p>
-             *
-             * @default <code>BitmapFillMode.SCALE</code>
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this._fillMode;
-            },
-            function (value) {
-                if (value == this._fillMode) {
-                    return;
-                }
-                this._fillMode = value;
-                this.invalidateDisplayList();
-            }
-        );
-        d(p, "source",
-            /**
-             * @language en_US
-             * The source used for the bitmap fill. the value can be
-             * a string or an instance of <code>BitmapData</code>
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 用于位图填充的源。可以是一个字符串或者 <code>BitmapData</code> 对象
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this._source;
-            },
-            function (value) {
-                if (value == this._source) {
-                    return;
-                }
-                this._source = value;
-                this.sourceChanged = true;
-                this.invalidateProperties();
             }
         );
         /**
          * @private
          *
-         * @param value
+         * @param event
          */
-        p.$setBitmapData = function (value) {
-            if (value == this.$bitmapData) {
-                return;
-            }
-            _super.prototype.$setBitmapData.call(this, value);
-            this._source = value;
-            this.sourceChanged = false;
-            this.invalidateSize();
-            this.invalidateDisplayList();
+        p.onAddedToStage = function (event) {
+            this.initializeStates(this._hostComponent.$stage);
         };
-        /**
-         * @private
-         * 解析source
-         */
-        p.parseSource = function () {
-            this.sourceChanged = false;
-            var source = this._source;
-            if (source && typeof source == "string") {
-                var adapter = this.$stage.getImplementation("swan.IAssetAdapter");
-                if (!adapter) {
-                    adapter = assetAdapter;
-                }
-                adapter.getAsset(this._source, this.contentChanged, this);
-            }
-            else {
-                this.$setBitmapData(source);
-            }
-        };
-        /**
-         * @private
-         * 资源发生改变
-         */
-        p.contentChanged = function (data, source) {
-            if (source !== this._source)
-                return;
-            if (!lark.is(data, 7 /* BitmapData */)) {
-                return;
-            }
-            this.$setBitmapData(data);
-            if (data) {
-                this.emitWith(lark.Event.COMPLETE);
-            }
-            else if (DEBUG) {
-                lark.$warn(2301, source);
-            }
-        };
-        /**
-         * @private
-         *
-         * @param bounds
-         */
-        p.$measureContentBounds = function (bounds) {
-            var bitmapData = this.$bitmapData;
-            if (bitmapData) {
-                var values = this.$UIComponent;
-                var width = values[10 /* width */];
-                var height = values[11 /* height */];
-                if (lark.isNone(width) || lark.isNone(height)) {
-                    bounds.setEmpty();
-                    return;
-                }
-                if (this._fillMode == "clip") {
-                    if (width > bitmapData.width) {
-                        width = bitmapData.width;
-                    }
-                    if (height > bitmapData.height) {
-                        height = bitmapData.height;
-                    }
-                }
-                bounds.setTo(0, 0, width, height);
-            }
-            else {
-                bounds.setEmpty();
-            }
-        };
-        /**
-         * @private
-         *
-         * @param context
-         */
-        p.$render = function (context) {
-            var bitmapData = this.$bitmapData;
-            if (!bitmapData) {
-                return;
-            }
-            var values = this.$UIComponent;
-            var width = values[10 /* width */];
-            var height = values[11 /* height */];
-            if (width === 0 || height === 0) {
-                return;
-            }
-            switch (this._fillMode) {
-                case "clip":
-                    if (width > bitmapData.width) {
-                        width = bitmapData.width;
-                    }
-                    if (height > bitmapData.height) {
-                        height = bitmapData.height;
-                    }
-                    context.drawImage(bitmapData, 0, 0, width, height, 0, 0, width, height);
-                    break;
-                case "repeat":
-                    var pattern = context.createPattern(bitmapData, "repeat");
-                    context.beginPath();
-                    context.rect(0, 0, width, height);
-                    context.fillStyle = pattern;
-                    context.fill();
-                    break;
-                default:
-                    context.imageSmoothingEnabled = this.$smoothing;
-                    if (this._scale9Grid) {
-                        this.drawScale9GridImage(context, bitmapData, this._scale9Grid, width, height);
-                    }
-                    else {
-                        context.drawImage(bitmapData, 0, 0, width, height);
-                    }
-                    break;
-            }
-        };
-        /**
-         * @private
-         * 绘制九宫格位图
-         */
-        p.drawScale9GridImage = function (context, image, scale9Grid, surfaceWidth, surfaceHeight) {
-            var imageWidth = image.width;
-            var imageHeight = image.height;
-            var sourceW0 = scale9Grid.x;
-            var sourceH0 = scale9Grid.y;
-            var sourceW1 = scale9Grid.width;
-            var sourceH1 = scale9Grid.height;
-            //防止空心的情况出现。
-            if (sourceH1 == 0) {
-                sourceH1 = 1;
-                if (sourceH0 >= imageHeight) {
-                    sourceH0--;
-                }
-            }
-            if (sourceW1 == 0) {
-                sourceW1 = 1;
-                if (sourceW0 >= imageWidth) {
-                    sourceW0--;
-                }
-            }
-            var sourceX0 = 0;
-            var sourceX1 = sourceX0 + sourceW0;
-            var sourceX2 = sourceX1 + sourceW1;
-            var sourceW2 = imageWidth - sourceW0 - sourceW1;
-            var sourceY0 = 0;
-            var sourceY1 = sourceY0 + sourceH0;
-            var sourceY2 = sourceY1 + sourceH1;
-            var sourceH2 = imageHeight - sourceH0 - sourceH1;
-            if (sourceW0 + sourceW2 > surfaceWidth || sourceH0 + sourceH2 > surfaceHeight) {
-                context.drawImage(image, 0, 0, surfaceWidth, surfaceHeight);
-                return;
-            }
-            var targetX0 = 0;
-            var targetX1 = targetX0 + sourceW0;
-            var targetX2 = targetX0 + surfaceWidth - sourceW2;
-            var targetW1 = surfaceWidth - sourceW0 - sourceW2;
-            var targetY0 = 0;
-            var targetY1 = targetY0 + sourceH0;
-            var targetY2 = targetY0 + surfaceHeight - sourceH2;
-            var targetH1 = surfaceHeight - sourceH0 - sourceH2;
-            //
-            //             x0     x1     x2
-            //          y0 +------+------+------+
-            //             |      |      |      | h0
-            //             |      |      |      |
-            //          y1 +------+------+------+
-            //             |      |      |      | h1
-            //             |      |      |      |
-            //          y2 +------+------+------+
-            //             |      |      |      | h2
-            //             |      |      |      |
-            //             +------+------+------+
-            //                w0     w1     w2
-            //
-            context.drawImage(image, sourceX0, sourceY0, sourceW0, sourceH0, targetX0, targetY0, sourceW0, sourceH0);
-            context.drawImage(image, sourceX1, sourceY0, sourceW1, sourceH0, targetX1, targetY0, targetW1, sourceH0);
-            context.drawImage(image, sourceX2, sourceY0, sourceW2, sourceH0, targetX2, targetY0, sourceW2, sourceH0);
-            context.drawImage(image, sourceX0, sourceY1, sourceW0, sourceH1, targetX0, targetY1, sourceW0, targetH1);
-            context.drawImage(image, sourceX1, sourceY1, sourceW1, sourceH1, targetX1, targetY1, targetW1, targetH1);
-            context.drawImage(image, sourceX2, sourceY1, sourceW2, sourceH1, targetX2, targetY1, sourceW2, targetH1);
-            context.drawImage(image, sourceX0, sourceY2, sourceW0, sourceH2, targetX0, targetY2, sourceW0, sourceH2);
-            context.drawImage(image, sourceX1, sourceY2, sourceW1, sourceH2, targetX1, targetY2, targetW1, sourceH2);
-            context.drawImage(image, sourceX2, sourceY2, sourceW2, sourceH2, targetX2, targetY2, sourceW2, sourceH2);
-        };
-        /**
-         * @copy swan.UIComponent#createChildren
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.createChildren = function () {
-        };
-        /**
-         * @copy swan.UIComponent#childrenCreated
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.childrenCreated = function () {
-        };
-        /**
-         * @copy swan.UIComponent#commitProperties
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.commitProperties = function () {
-            swan.sys.UIComponentImpl.prototype["commitProperties"].call(this);
-            if (this.sourceChanged) {
-                this.parseSource();
-            }
-        };
-        /**
-         * @copy swan.UIComponent#measure
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.measure = function () {
-            var bitmapData = this.$bitmapData;
-            if (bitmapData) {
-                this.setMeasuredSize(bitmapData.width, bitmapData.height);
-            }
-            else {
-                this.setMeasuredSize(0, 0);
-            }
-        };
-        /**
-         * @copy swan.UIComponent#updateDisplayList
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
-            this.$invalidateContentBounds();
-        };
-        /**
-         * @copy swan.UIComponent#invalidateParentLayout
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.invalidateParentLayout = function () {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.setMeasuredSize = function (width, height) {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.invalidateProperties = function () {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.validateProperties = function () {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.invalidateSize = function () {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.validateSize = function (recursive) {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.invalidateDisplayList = function () {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.validateDisplayList = function () {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.validateNow = function () {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.setLayoutBoundsSize = function (layoutWidth, layoutHeight) {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.setLayoutBoundsPosition = function (x, y) {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getLayoutBounds = function (bounds) {
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getPreferredBounds = function (bounds) {
-        };
-        return Image;
-    })(lark.Bitmap);
-    swan.Image = Image;
-    swan.sys.implementUIComponent(Image, lark.Bitmap);
-    lark.registerClass(Image, 1011 /* Image */, [1001 /* UIComponent */]);
-    swan.registerProperty(Image, "scale9Grid", "lark.Rectangle");
+        return Skin;
+    })(lark.LarkObject);
+    swan.Skin = Skin;
+    swan.sys.mixin(Skin, swan.sys.StateClient);
+    swan.registerProperty(Skin, "elementsContent", "Array", true);
+    swan.registerProperty(Skin, "states", "State[]");
+    lark.registerClass(Skin, 1012 /* Skin */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -15568,158 +15568,151 @@ var swan;
 (function (swan) {
     /**
      * @language en_US
-     * The ItemRenderer class is the base class for item renderers.
-     *
+     * The Button component is a commonly used rectangular button.
+     * The Button component looks like it can be pressed.
+     * The default skin has a text label and a icon display object.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * ItemRenderer 类是项呈示器的基类。
-     *
+     * Button 组件是常用的矩形按钮。Button 组件看起来可以按压。默认外观具有一个文本标签和图标显示对象。
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    var ItemRenderer = (function (_super) {
-        __extends(ItemRenderer, _super);
+    var Button = (function (_super) {
+        __extends(Button, _super);
         /**
          * @language en_US
          * Constructor.
-         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 构造函数。
-         *
+         * 创建一个按钮实例
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        function ItemRenderer() {
+        function Button() {
             _super.call(this);
             /**
-             * @private
-             */
-            this._data = null;
-            /**
-             * @private
-             */
-            this._selected = false;
-            /**
              * @language en_US
-             * The index of the item in the data provider
-             * of the host component of the item renderer.
-             *
+             * [SkinPart] A skin part that defines the label of the button.
+             * @skinPart
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * 项呈示器的数据提供程序中的项目索引。
-             *
+             * [SkinPart] 按钮上的文本标签。
+             * @skinPart
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
-            this.itemIndex = -1;
+            this.labelDisplay = null;
+            /**
+             * @private
+             */
+            this._label = "";
+            /**
+             * @language en_US
+             * [SkinPart] A skin part that defines an optional icon for the button.
+             * @skinPart
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * [SkinPart] 按钮上的图标显示对象。
+             * @skinPart
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.iconDisplay = null;
+            /**
+             * @private
+             */
+            this._icon = null;
             /**
              * @private
              * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，是否按下鼠标以及触摸点是否在按钮上。
              */
             this.touchCaptured = false;
+            this.touchChildren = false;
             this.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
-        var d = __define,c=ItemRenderer;p=c.prototype;
-        d(p, "data",
+        var d = __define,c=Button;p=c.prototype;
+        d(p, "label",
             /**
              * @language en_US
-             * The data to render or edit.
-             *
+             * Text to appear on the Button control.
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * 要呈示或编辑的数据。
-             *
+             * 要在按钮上显示的文本。
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
             function () {
-                return this._data;
+                return this._label;
             },
             function (value) {
-                this._data = value;
-                swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "data");
-                this.dataChanged();
+                this._label = value;
+                if (this.labelDisplay) {
+                    this.labelDisplay.text = value;
+                }
             }
         );
-        /**
-         * @language en_US
-         * Update the view when the <code>data</code> property changes.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 当数据改变时，更新视图。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.dataChanged = function () {
-        };
-        d(p, "selected",
+        d(p, "icon",
             /**
              * @language en_US
-             * Contains <code>true</code> if the item renderer
-             * can show itself as selected.
-             *
+             * Icon to appear on the Button control.
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * 如果项呈示器可以将其自身显示为已选中，则为 true。
-             *
+             * 要在按钮上显示的图标数据
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
             function () {
-                return this._selected;
+                return this._icon;
             },
             function (value) {
-                if (this._selected == value)
-                    return;
-                this._selected = value;
-                this.invalidateState();
+                this._icon = value;
+                if (this.iconDisplay) {
+                    this.iconDisplay.source = value;
+                }
             }
         );
         /**
          * @language en_US
-         * Handles <code>TouchEvent.TOUCH_BEGIN</code> events
-         *
+         * This method handles the touch events
+         * @param  The <code>lark.TouchEvent</code> object.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 触碰开始时触发事件
-         *
+         * 触碰事件处理。
+         * @param event 事件 <code>lark.TouchEvent</code> 的对象。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -15737,6 +15730,9 @@ var swan;
         p.onStageTouchEnd = function (event) {
             var stage = event.$currentTarget;
             stage.removeListener(lark.TouchEvent.TOUCH_END, this.onStageTouchEnd, this);
+            if (this.contains(event.target)) {
+                this.buttonReleased();
+            }
             this.touchCaptured = false;
             this.invalidateState();
         };
@@ -15748,15 +15744,50 @@ var swan;
          * @platform Web,Native
          */
         p.getCurrentState = function () {
-            if (this._selected || this.touchCaptured)
+            if (!this.enabled)
+                return "disabled";
+            if (this.touchCaptured)
                 return "down";
             return "up";
         };
-        return ItemRenderer;
-    })(swan.Group);
-    swan.ItemRenderer = ItemRenderer;
-    swan.registerBindable(ItemRenderer.prototype, "data");
-    lark.registerClass(ItemRenderer, 1008 /* ItemRenderer */, [1007 /* IItemRenderer */]);
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.partAdded = function (partName, instance) {
+            if (instance === this.labelDisplay) {
+                this.labelDisplay.text = this._label;
+            }
+            else if (instance == this.iconDisplay) {
+                this.iconDisplay.source = this._icon;
+            }
+        };
+        /**
+         * @language en_US
+         * This method is called when handling a <code>lark.TouchEvent.TOUCH_END</code> event
+         * when the user touches on the button. It is only called when the button
+         * is the target and when <code>touchCaptured</code> is <code>true</code>.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当在用户单击按钮之后处理 <code>lark.TouchEvent.TOUCH_END</code> 事件时，将调用此方法。
+         * 仅当以按钮为目标，并且 <code>touchCaptured</code> 为 <code>true</code> 时，才会调用此方法。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.buttonReleased = function () {
+        };
+        return Button;
+    })(swan.Component);
+    swan.Button = Button;
+    lark.registerClass(Button, 1025 /* Button */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -15985,22 +16016,39 @@ var swan;
 (function (swan) {
     /**
      * @language en_US
-     * The Button component is a commonly used rectangular button.
-     * The Button component looks like it can be pressed.
-     * The default skin has a text label and a icon display object.
+     * The Range class holds a value and an allowed range for that
+     * value, defined by <code>minimum</code> and <code>maximum</code> properties.
+     *
+     * The <code>value</code> property
+     * is always constrained to be between the current <code>minimum</code> and
+     * <code>maximum</code>, and the <code>minimum</code>,
+     * and <code>maximum</code> are always constrained
+     * to be in the proper numerical order, such that
+     * <code>(minimum <= value <= maximum)</code> is <code>true</code>.
+     *
+     * If the value of the <code>snapInterval</code> property is not 0,
+     * then the <code>value</code> property is also constrained to be a multiple of
+     * <code>snapInterval</code>.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * Button 组件是常用的矩形按钮。Button 组件看起来可以按压。默认外观具有一个文本标签和图标显示对象。
+     * 范围选取组件,该组件包含一个值和这个值所允许的最大最小约束范围。
+     *
+     * <code>value</code>属性的值永远被限制于当前的<code>minimum</code>和
+     * <code>maximum</code>之间，并且<code>minimum</code>和 <code>maximum</code>永远按照固定的书序排列，
+     * 即<code>(minimum <= value <= maximum)</code> 为真。
+     *
+     * 如果<code>snapInterval</code>属性的值不是0，那么<code>value</code>的值也会被<code>snapInterval</code>所约束。
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    var Button = (function (_super) {
-        __extends(Button, _super);
+    var Range = (function (_super) {
+        __extends(Range, _super);
         /**
          * @language en_US
          * Constructor.
@@ -16010,148 +16058,641 @@ var swan;
          */
         /**
          * @language zh_CN
-         * 创建一个按钮实例
+         * 创建一个 Range 实例。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        function Button() {
+        function Range() {
             _super.call(this);
-            /**
-             * @language en_US
-             * [SkinPart] A skin part that defines the label of the button.
-             * @skinPart
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * [SkinPart] 按钮上的文本标签。
-             * @skinPart
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.labelDisplay = null;
-            /**
-             * @private
-             */
-            this._label = "";
-            /**
-             * @language en_US
-             * [SkinPart] A skin part that defines an optional icon for the button.
-             * @skinPart
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * [SkinPart] 按钮上的图标显示对象。
-             * @skinPart
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.iconDisplay = null;
-            /**
-             * @private
-             */
-            this._icon = null;
-            /**
-             * @private
-             * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，是否按下鼠标以及触摸点是否在按钮上。
-             */
-            this.touchCaptured = false;
-            this.touchChildren = false;
-            this.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+            this.$Range = {
+                0: 100,
+                1: false,
+                2: 0,
+                3: false,
+                4: 0,
+                5: 0,
+                6: false,
+                7: 1,
+                8: false,
+                9: false,
+            };
         }
-        var d = __define,c=Button;p=c.prototype;
-        d(p, "label",
+        var d = __define,c=Range;p=c.prototype;
+        d(p, "maximum",
             /**
              * @language en_US
-             * Text to appear on the Button control.
+             * The maximum valid <code>value</code>.<p/>
+             *
+             * Changes to the value property are constrained
+             * by <code>commitProperties()</code> to be less than or equal to
+             * maximum with the <code>nearestValidValue()</code> method.
+             *
+             * @default 100
+             * @see #nearestValidValue()
+             *
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * 要在按钮上显示的文本。
+             * 最大有效值。<p/>
+             *
+             * 规定<code>value<code/>属性的值不能够超过的最大值。该修正过程
+             * 将在<code>nearestValidValue()</code>方法中进行。
+             *
+             * @default 100
+             * @see #nearestValidValue()
+             *
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
             function () {
-                return this._label;
+                return this.$Range[0 /* maximum */];
             },
             function (value) {
-                this._label = value;
-                if (this.labelDisplay) {
-                    this.labelDisplay.text = value;
-                }
+                value = +value || 0;
+                var values = this.$Range;
+                if (value === values[0 /* maximum */])
+                    return;
+                values[0 /* maximum */] = value;
+                values[1 /* maxChanged */] = true;
+                this.invalidateProperties();
+                this.invalidateDisplayList();
             }
         );
-        d(p, "icon",
+        d(p, "minimum",
             /**
              * @language en_US
-             * Icon to appear on the Button control.
+             * The minimum valid <code>value</code>.<p/>
+             *
+             * Changes to the value property are constrained
+             * by <code>commitProperties()</code> to be greater than or equal to
+             * minimum with the <code>nearestValidValue()</code> method.
+             *
+             * @default 0
+             * @see #nearestValidValue()
+             *
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * 要在按钮上显示的图标数据
+             * 最小有效值<p/>
+             *
+             * 规定<code>value<code/>属性的值不能够低于的最小值。该修正过程
+             * 将在<code>nearestValidValue()</code>方法中进行。
+             *
+             * @default 0
+             * @see #nearestValidValue()
+             *
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
             function () {
-                return this._icon;
+                return this.$Range[2 /* minimum */];
             },
             function (value) {
-                this._icon = value;
-                if (this.iconDisplay) {
-                    this.iconDisplay.source = value;
+                value = +value || 0;
+                var values = this.$Range;
+                if (value === values[2 /* minimum */])
+                    return;
+                values[2 /* minimum */] = value;
+                values[3 /* minChanged */] = true;
+                this.invalidateProperties();
+                this.invalidateDisplayList();
+            }
+        );
+        d(p, "value",
+            /**
+             * @language en_US
+             * The current value for this range.<p/>
+             *
+             * Changes to the value property are constrained
+             * by <code>commitProperties()</code> to be greater than or equal to
+             * the <code>minimum</code> property, less than or equal to the <code>maximum</code> property, and a
+             * multiple of <code>snapInterval</code> with the <code>nearestValidValue()</code>
+             * method.
+             *
+             * @default 0
+             * @see #setValue()
+             * @see #nearestValidValue()
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 此范围的当前值。<p/>
+             *
+             * 改变的<code>value</code>属性将在<code>commitProperties()</code>方法中被<code>minimum</code>属性
+             * 和<code>minimum</code>属性所限制。此修正过程将在<code>nearestValidValue()</code>方法中进行。
+             *
+             * @default 0
+             * @see #setValue()
+             * @see #nearestValidValue()
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                var values = this.$Range;
+                return values[6 /* valueChanged */] ? values[5 /* changedValue */] : values[4 /* value */];
+            },
+            function (newValue) {
+                newValue = +newValue || 0;
+                this.$setValue(newValue);
+            }
+        );
+        /**
+         * @private
+         *
+         * @param newValue
+         */
+        p.$setValue = function (newValue) {
+            if (newValue === this.value)
+                return;
+            var values = this.$Range;
+            values[5 /* changedValue */] = newValue;
+            values[6 /* valueChanged */] = true;
+            this.invalidateProperties();
+        };
+        d(p, "snapInterval",
+            /**
+             * @language en_US
+             * The snapInterval property controls the valid values of the <code>value</code> property.
+             *
+             * If nonzero, valid values are the sum of the <code>minimum</code> and integer multiples
+             * of this property, for all sums that are less than or equal to the <code>maximum</code>.<p/>
+             *
+             * For example, if <code>minimum</code> is 10, <code>maximum</code> is 20, and this property is 3, then the
+             * valid values of this Range are 10, 13, 16, 19, and 20.<p/>
+             *
+             * If the value of this property is zero, then valid values are only constrained
+             * to be between minimum and maximum inclusive.
+             *
+             * @default 1
+             * @see #nearestValidValue()
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * snapInterval 属性定义 value 属性的有效值。
+             * 如果为非零，则有效值为 minimum 与此属性的整数倍数之和，且小于或等于 maximum。</p>
+             *
+             * 例如，如果 minimum 为 10，maximum 为 20，而此属性为 3，则可能的有效值为 10、13、16、19 和 20.</p>
+             *
+             * 如果此属性的值为零，则仅会将有效值约束到介于 minimum 和 maximum 之间（包括两者）。
+             *
+             * @default 1
+             * @see #nearestValidValue()
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$Range[7 /* snapInterval */];
+            },
+            function (value) {
+                var values = this.$Range;
+                values[9 /* explicitSnapInterval */] = true;
+                value = +value || 0;
+                if (value === values[7 /* snapInterval */])
+                    return;
+                if (lark.isNone(value)) {
+                    values[7 /* snapInterval */] = 1;
+                    values[9 /* explicitSnapInterval */] = false;
                 }
+                else {
+                    values[7 /* snapInterval */] = value;
+                }
+                values[8 /* snapIntervalChanged */] = true;
+                this.invalidateProperties();
             }
         );
         /**
          * @language en_US
-         * This method handles the touch events
-         * @param  The <code>lark.TouchEvent</code> object.
+         * Processes the properties set on the component.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 触碰事件处理。
-         * @param event 事件 <code>lark.TouchEvent</code> 的对象。
+         * 处理对组件设置的属性
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        p.onTouchBegin = function (event) {
-            this.$stage.on(lark.TouchEvent.TOUCH_END, this.onStageTouchEnd, this);
-            this.touchCaptured = true;
-            this.invalidateState();
-            event.updateAfterEvent();
+        p.commitProperties = function () {
+            _super.prototype.commitProperties.call(this);
+            var values = this.$Range;
+            if (values[2 /* minimum */] > values[0 /* maximum */]) {
+                if (!values[1 /* maxChanged */])
+                    values[2 /* minimum */] = values[0 /* maximum */];
+                else
+                    values[0 /* maximum */] = values[2 /* minimum */];
+            }
+            if (values[6 /* valueChanged */] || values[1 /* maxChanged */] || values[3 /* minChanged */] || values[8 /* snapIntervalChanged */]) {
+                var currentValue = values[6 /* valueChanged */] ? values[5 /* changedValue */] : values[4 /* value */];
+                values[6 /* valueChanged */] = false;
+                values[1 /* maxChanged */] = false;
+                values[3 /* minChanged */] = false;
+                values[8 /* snapIntervalChanged */] = false;
+                this.setValue(this.nearestValidValue(currentValue, values[7 /* snapInterval */]));
+            }
         };
         /**
          * @private
-         * 舞台上触摸弹起事件
+         * 修正size到最接近snapInterval的整数倍
          */
-        p.onStageTouchEnd = function (event) {
-            var stage = event.$currentTarget;
-            stage.removeListener(lark.TouchEvent.TOUCH_END, this.onStageTouchEnd, this);
-            if (this.contains(event.target)) {
-                this.buttonReleased();
+        p.nearestValidSize = function (size) {
+            var interval = this.snapInterval;
+            if (interval == 0)
+                return size;
+            var validSize = Math.round(size / interval) * interval;
+            return (Math.abs(validSize) < interval) ? interval : validSize;
+        };
+        /**
+         * @language en_US
+         * Returns the sum of the minimum with an integer multiple of <code>interval</code> that's
+         * closest to <code>value</code>, unless <code>value</code> is closer to the maximum limit,
+         * in which case the maximum is returned.<p/>
+         *
+         * If <code>interval</code> is equal to 0, the value is clipped to the minimum and maximum
+         * limits.<p/>
+         *
+         * The valid values for a range are defined by the sum of the <code>minimum</code> property
+         * with multiples of the <code>interval</code> and also defined to be less than or equal to the
+         * <code>maximum</code> property.
+         * The maximum need not be a multiple of <code>snapInterval</code>.<p/>
+         *
+         * For example, if <code>minimum</code> is equal to 1, <code>maximum</code> is equal to 6,
+         * and <code>snapInterval</code> is equal to 2, the valid
+         * values for the Range are 1, 3, 5, 6.
+         *
+         * Similarly, if <code>minimum</code> is equal to 2, <code>maximum</code> is equal to 9,
+         * and <code>snapInterval</code> is equal to 1.5, the valid
+         * values for the Range are 2, 3.5, 5, 6.5, 8, and 9.
+         *
+         * @param value The input value.
+         * @param interval The value of snapInterval or an integer multiple of snapInterval.
+         * @return The valid value that's closest to the input.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回 <code>minimum</code> 与最接近 <code>value</code> 的 <code>interval</code> 的整数倍数之和，
+         * 除非 <code>value</code> 接近最大值限制的时候会返回 maximum。<p/>
+         *
+         * 如果 <code>interval</code> 等于 0，则会将该值剪裁到限制的最小值和最大值。<p/>
+         *
+         * 范围的有效值由 <code>minimum</code> 属性与 <code>interval</code> 的倍数之和决定，
+         * 与此同时也要小于等于 <code>maximum</code> 属性。
+         * 最大值不能是 <code>snapInterval</code> 属性的倍数。<p/>
+         *
+         * 例如，如果 <code>minimum</code> 等于 1，<code>maximum</code> 等于 6，且 <code>snapInterval</code> 等于 3，
+         * 则 Range 的有效值有 1、2、5、6。
+         *
+         * 类似地，如果 <code>minimum</code> 等于 2，<code>maximum</code> 等于 9，
+         * 且 <code>snapInterval</code> 等于 1.5，则 Range 的有效值有 2、3.5、5、6.5、8 和 9。
+         *
+         *
+         * @param value 输入值。
+         * @param interval snapInterval 的值，或 snapInterval 的整数倍数。
+         * @return 最近接输入值的有效值。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.nearestValidValue = function (value, interval) {
+            var values = this.$Range;
+            if (interval == 0)
+                return Math.max(values[2 /* minimum */], Math.min(values[0 /* maximum */], value));
+            var maxValue = values[0 /* maximum */] - values[2 /* minimum */];
+            var scale = 1;
+            value -= values[2 /* minimum */];
+            if (interval != Math.round(interval)) {
+                var parts = ((1 + interval).toString()).split(".");
+                scale = Math.pow(10, parts[1].length);
+                maxValue *= scale;
+                value = Math.round(value * scale);
+                interval = Math.round(interval * scale);
             }
-            this.touchCaptured = false;
-            this.invalidateState();
+            var lower = Math.max(0, Math.floor(value / interval) * interval);
+            var upper = Math.min(maxValue, Math.floor((value + interval) / interval) * interval);
+            var validValue = ((value - lower) >= ((upper - lower) / 2)) ? upper : lower;
+            return (validValue / scale) + values[2 /* minimum */];
+        };
+        /**
+         * @language en_US
+         * Sets the current value for the <code>value</code> property.<p/>
+         *
+         * This method assumes that the caller has already used the <code>nearestValidValue()</code> method
+         * to constrain the value parameter
+         *
+         * @param value The new value of the <code>value</code> property.
+         * @see #nearestValidValue()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设置当前值。<p/>
+         *
+         * 此方法假定调用者已经使用了 nearestValidValue() 方法来约束 value 参数。
+         *
+         * @param value value属性的新值
+         * @see #nearestValidValue()
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.setValue = function (value) {
+            var values = this.$Range;
+            if (values[4 /* value */] === value)
+                return;
+            if (values[0 /* maximum */] > values[2 /* minimum */])
+                values[4 /* value */] = Math.min(values[0 /* maximum */], Math.max(values[2 /* minimum */], value));
+            else
+                values[4 /* value */] = value;
+            values[6 /* valueChanged */] = false;
+            this.invalidateDisplayList();
+            swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "value");
+        };
+        /**
+         * @language en_US
+         * Draws the object and/or sizes and positions its children.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 绘制对象和/或设置其子项的大小和位置
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.updateDisplayList = function (w, h) {
+            _super.prototype.updateDisplayList.call(this, w, h);
+            this.updateSkinDisplayList();
+        };
+        /**
+         * @language en_US
+         * Update size and visible of skin parts.<p/>
+         * Subclasses override this method to update skin parts display based on <code>minimum</code>, <code>maximum</code>
+         * and <code>value</code> properties.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 更新皮肤部件（通常为滑块）的大小和可见性。<p/>
+         * 子类覆盖此方法以基于 minimum、maximum 和 value 属性更新滑块的大小、位置和可见性。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.updateSkinDisplayList = function () {
+        };
+        return Range;
+    })(swan.Component);
+    swan.Range = Range;
+    /**
+     * @private
+     */
+    swan.registerBindable(Range.prototype, "value");
+    /**
+     * @private
+     */
+    lark.registerClass(Range, 1041 /* Range */);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * The Panel class defines a container that includes a title bar,
+     * a closeButton, a moveArea, and a content area for its children.
+     *
+     * @event swan.UIEvent.CLOSING Dispatched when the close button is taped
+     * you can use <code>event.preventDefault()</code> to prevent close.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Panel 类定义一个容器，该容器为其子代提供标题栏、关闭按钮、可移动区域和内容区域。
+     *
+     * @event swan.UIEvent.CLOSING 面板即将关闭事件，在关闭按钮被点击后抛出，
+     * 监听此事件并调用<code>event.preventDefault()</code>能够阻止面板被关闭。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var Panel = (function (_super) {
+        __extends(Panel, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function Panel() {
+            _super.call(this);
+            /**
+             * @language en_US
+             * The skin part that defines the appearance of the close button.
+             * When taped, the close button dispatches a <code>closing</code> event.
+             *
+             * @skinPart
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 关闭按钮
+             *
+             * @skinPart
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.closeButton = null;
+            /**
+             * @language en_US
+             * The area where the user must drag to move the window.
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 可移动区域
+             *
+             * @skinPart
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.moveArea = null;
+            /**
+             * @language en_US
+             * The skin part that defines the appearance of the
+             * title text in the container.
+             *
+             * @skinPart
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 标题显示对象
+             *
+             * @skinPart
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.titleDisplay = null;
+            /**
+             * @private
+             */
+            this._title = "";
+            /**
+             * @private
+             * 鼠标按下时的偏移量
+             */
+            this.offsetPointX = 0;
+            /**
+             * @private
+             */
+            this.offsetPointY = 0;
+            this.on(lark.TouchEvent.TOUCH_BEGIN, this.onWindowTouchBegin, this, false, 100);
+        }
+        var d = __define,c=Panel;p=c.prototype;
+        /**
+         * @private
+         * 在窗体上按下时前置窗口
+         */
+        p.onWindowTouchBegin = function (event) {
+            this.$parent.addChild(this);
+        };
+        d(p, "title",
+            /**
+             * @language en_US
+             * Title or caption displayed in the title bar.
+             *
+             * @default ""
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 标题栏中显示的标题。
+             *
+             * @default ""
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this._title;
+            },
+            function (value) {
+                this._title = value;
+                if (this.titleDisplay)
+                    this.titleDisplay.text = this.title;
+            }
+        );
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.partAdded = function (partName, instance) {
+            _super.prototype.partAdded.call(this, partName, instance);
+            if (instance == this.titleDisplay) {
+                this.titleDisplay.text = this._title;
+            }
+            else if (instance == this.moveArea) {
+                this.moveArea.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+            }
+            else if (instance == this.closeButton) {
+                this.closeButton.on(lark.TouchEvent.TOUCH_TAP, this.onCloseButtonClick, this);
+            }
         };
         /**
          * @inheritDoc
@@ -16160,12 +16701,733 @@ var swan;
          * @version Swan 1.0
          * @platform Web,Native
          */
-        p.getCurrentState = function () {
-            if (!this.enabled)
-                return "disabled";
-            if (this.touchCaptured)
-                return "down";
-            return "up";
+        p.partRemoved = function (partName, instance) {
+            _super.prototype.partRemoved.call(this, partName, instance);
+            if (instance == this.moveArea) {
+                this.moveArea.removeListener(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+            }
+            else if (instance == this.closeButton) {
+                this.closeButton.removeListener(lark.TouchEvent.TOUCH_TAP, this.onCloseButtonClick, this);
+            }
+        };
+        /**
+         * @language en_US
+         * Emites the "closing" event when the closeButton is clicked.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当 closeButton 被点击时派发 “closing” 事件
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.onCloseButtonClick = function (event) {
+            if (swan.UIEvent.emitUIEvent(this, swan.UIEvent.CLOSING)) {
+                this.close();
+            }
+        };
+        /**
+         * @language en_US
+         * Close the panel and remove from the parent container.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 关闭面板，从父级容器移除自身。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.close = function () {
+            if (!this.$parent) {
+                return;
+            }
+            this.$parent.removeChild(this);
+        };
+        /**
+         * @language en_US
+         * Called when the user starts dragging a Panel.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在可移动区域按下
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.onTouchBegin = function (event) {
+            this.$includeInLayout = false;
+            this.offsetPointX = this.x - event.$stageX;
+            this.offsetPointY = this.y - event.$stageY;
+            this.$stage.on(lark.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            this.$stage.on(lark.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+        };
+        /**
+         * @language en_US
+         * Called when the user drags a Panel.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 触摸拖拽时的移动事件
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.onTouchMove = function (event) {
+            this.x = event.$stageX + this.offsetPointX;
+            this.y = event.$stageY + this.offsetPointY;
+        };
+        /**
+         * @language en_US
+         * Called when the user releases the Panel.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在舞台上弹起事件
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.onTouchEnd = function (event) {
+            this.$stage.removeListener(lark.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            this.$stage.removeListener(lark.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+        };
+        return Panel;
+    })(swan.Component);
+    swan.Panel = Panel;
+    lark.registerClass(Panel, 1024 /* Panel */);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * The Scroller component displays a single scrollable component,
+     * called a viewport, and horizontal and vertical scroll bars.
+     * The viewport must implement the IViewport interface.
+     * <p>The Group components implement the IViewport interface
+     * and can be used as the children of the Scroller control,
+     * as the following example shows:</p>
+     * <code>
+     *       <s:Scroller width="100" height="100">
+     *           <s:Group>
+     *               <s:Image width="300" height="400" source="assets/logo.jpg"/>
+     *           </s:Group>
+     *       </s:Scroller>
+     * </code>
+     * <p>The size of the Image control is set larger than that of its parent Group container.
+     * By default, the child extends past the boundaries of the parent container.
+     * Rather than allow the child to extend past the boundaries of the parent container,
+     * the Scroller specifies to clip the child to the boundaries and display scroll bars.</p>
+     *
+     * @event swan.UIEvent.CHANGE_START Emitted when the scroll position is going to change
+     * @event swan.UIEvent.CHANGE_END Emitted when the scroll position changed complete
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Scroller 组件显示一个称为视域的单个可滚动组件，以及水平滚动条和垂直滚动条。该视域必须实现 IViewport 接口。
+     * <p>Group 组件实现 IViewport 接口，且可以用作 Scroller 控件的子代，如下例所示：</p>
+     * <code>
+     *       <s:Scroller width="100" height="100">
+     *           <s:Group>
+     *               <s:Image width="300" height="400" source="assets/logo.jpg"/>
+     *           </s:Group>
+     *       </s:Scroller>
+     * </code>
+     * Image 控件的大小比其父 Group 容器设置得大。默认情况下，子代超过父容器的边界。
+     * Scroller 会指定将子代剪切到边界并显示滚动条，而不是让子代超过父容器的边界。
+     *
+     * @event swan.UIEvent.CHANGE_START 滚动位置改变开始
+     * @event swan.UIEvent.CHANGE_END 滚动位置改变结束
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var Scroller = (function (_super) {
+        __extends(Scroller, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function Scroller() {
+            _super.call(this);
+            /**
+             * @language en_US
+             * the horizontal scroll bar
+             *
+             * @skinPart
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 水平滚动条
+             *
+             * @skinPart
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.horizontalScrollBar = null;
+            /**
+             * @language en_US
+             * the vertical scroll bar
+             *
+             * @skinPart
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 垂直滚动条
+             *
+             * @skinPart
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.verticalScrollBar = null;
+            var touchScrollH = new swan.sys.TouchScroll(this.horizontalUpdateHandler, this.horizontalEndHandler, this);
+            var touchScrollV = new swan.sys.TouchScroll(this.verticalUpdateHandler, this.verticalEndHanlder, this);
+            this.$Scroller = {
+                0: "auto",
+                1: "auto",
+                2: null,
+                3: 0,
+                4: 0,
+                5: false,
+                6: false,
+                7: false,
+                8: touchScrollH,
+                9: touchScrollV,
+                10: null,
+                11: null,
+                12: null,
+            };
+        }
+        var d = __define,c=Scroller;p=c.prototype;
+        d(p, "scrollPolicyV",
+            /**
+             * @language en_US
+             * Indicates under what conditions the vertical scroll bar is displayed.
+             * <p><code>ScrollPolicy.ON</code> - the scroll bar is always displayed.</p>
+             * <p><code>ScrollPolicy.OFF</code> - the scroll bar is never displayed.</p>
+             * <p><code>ScrollPolicy.AUTO</code> - the scroll bar is displayed when
+             *  the viewport's contentHeight is larger than its height.
+             *
+             * @default ScrollPolicy.AUTO
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 指示在哪些条件下会显示垂直滑动条。
+             * <p><code>ScrollPolicy.ON</code> - 始终显示滚动条。</p>
+             * <p><code>ScrollPolicy.OFF</code> - 从不显示滚动条。</p>
+             * <p><code>ScrollPolicy.AUTO</code> - 当视域的 contentHeight 大于其自身的高度时显示滚动条。</p>
+             *
+             * @default ScrollPolicy.AUTO
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$Scroller[0 /* scrollPolicyV */];
+            },
+            function (value) {
+                this.$Scroller[0 /* scrollPolicyV */] = value;
+            }
+        );
+        d(p, "scrollPolicyH",
+            /**
+             * @language en_US
+             * Indicates under what conditions the horizontal scroll bar is displayed.
+             * <p><code>ScrollPolicy.ON</code> - the scroll bar is always displayed.</p>
+             * <p><code>ScrollPolicy.OFF</code> - the scroll bar is never displayed.</p>
+             * <p><code>ScrollPolicy.AUTO</code> - the scroll bar is displayed when
+             *  the viewport's contentWidth is larger than its width.
+             *
+             * @default ScrollPolicy.AUTO
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 指示在哪些条件下会显示水平滑动条。
+             * <p><code>ScrollPolicy.ON</code> - 始终显示滚动条。</p>
+             * <p><code>ScrollPolicy.OFF</code> - 从不显示滚动条。</p>
+             * <p><code>ScrollPolicy.AUTO</code> - 当视域的 contentWidth 大于其自身的宽度时显示滚动条。</p>
+             *
+             * @default ScrollPolicy.AUTO
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$Scroller[1 /* scrollPolicyH */];
+            },
+            function (value) {
+                this.$Scroller[1 /* scrollPolicyH */] = value;
+            }
+        );
+        d(p, "viewport",
+            /**
+             * @language en_US
+             * The viewport component to be scrolled.
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 要滚动的视域组件。
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$Scroller[12 /* viewport */];
+            },
+            function (value) {
+                var values = this.$Scroller;
+                if (value == values[12 /* viewport */])
+                    return;
+                this.uninstallViewport();
+                values[12 /* viewport */] = value;
+                this.installViewport();
+            }
+        );
+        /**
+         * @private
+         * 安装并初始化视域组件
+         */
+        p.installViewport = function () {
+            var viewport = this.viewport;
+            if (viewport) {
+                viewport.scrollEnabled = true;
+                viewport.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
+                viewport.on(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
+                this.addChildAt(viewport, 0);
+            }
+            if (this.horizontalScrollBar) {
+                this.horizontalScrollBar.viewport = viewport;
+            }
+            if (this.verticalScrollBar) {
+                this.verticalScrollBar.viewport = viewport;
+            }
+        };
+        /**
+         * @private
+         * 卸载视域组件
+         */
+        p.uninstallViewport = function () {
+            if (this.horizontalScrollBar) {
+                this.horizontalScrollBar.viewport = null;
+            }
+            if (this.verticalScrollBar) {
+                this.verticalScrollBar.viewport = null;
+            }
+            var viewport = this.viewport;
+            if (viewport) {
+                viewport.scrollEnabled = false;
+                viewport.removeListener(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
+                viewport.removeListener(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
+                this.removeChild(viewport);
+            }
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.setSkin = function (skin) {
+            _super.prototype.setSkin.call(this, skin);
+            var viewport = this.viewport;
+            if (viewport) {
+                this.addChildAt(viewport, 0);
+            }
+        };
+        /**
+         * @private
+         *
+         * @param event
+         */
+        p.onTouchEndCapture = function (event) {
+            if (this.$Scroller[11 /* delayTouchEvent */]) {
+                this.delayEmitEvent(event);
+            }
+        };
+        /**
+         * @private
+         * 若这个Scroller可以滚动，阻止当前事件，延迟100ms再抛出。
+         */
+        p.onTouchBeginCapture = function (event) {
+            var canScroll = this.checkScrollPolicy();
+            if (!canScroll) {
+                return;
+            }
+            var target = event.target;
+            while (target != this) {
+                if (target instanceof Scroller) {
+                    canScroll = target.checkScrollPolicy();
+                    if (canScroll) {
+                        return;
+                    }
+                }
+                target = target.$parent;
+            }
+            this.delayEmitEvent(event);
+            this.onTouchBegin(event);
+        };
+        /**
+         * @private
+         *
+         * @param event
+         */
+        p.delayEmitEvent = function (event) {
+            var values = this.$Scroller;
+            if (values[11 /* delayTouchEvent */]) {
+                this.onDelayTouchEventTimer();
+            }
+            event.stopPropagation();
+            var touchEvent = lark.Event.create(lark.TouchEvent, event.$type, event.$bubbles, event.$cancelable);
+            touchEvent.$setTo(event.$stageX, event.$stageY, event.touchPointID);
+            touchEvent.$target = event.$target;
+            values[11 /* delayTouchEvent */] = touchEvent;
+            if (!values[10 /* delayTouchTimer */]) {
+                values[10 /* delayTouchTimer */] = new lark.Timer(100, 1);
+                values[10 /* delayTouchTimer */].on(lark.TimerEvent.TIMER_COMPLETE, this.onDelayTouchEventTimer, this);
+            }
+            values[10 /* delayTouchTimer */].start();
+        };
+        /**
+         * @private
+         *
+         * @param e
+         */
+        p.onDelayTouchEventTimer = function (e) {
+            var values = this.$Scroller;
+            values[10 /* delayTouchTimer */].stop();
+            var event = values[11 /* delayTouchEvent */];
+            values[11 /* delayTouchEvent */] = null;
+            var viewport = values[12 /* viewport */];
+            if (!viewport) {
+                return;
+            }
+            var target = event.$target;
+            var list = this.$getPropagationList(target);
+            var length = list.length;
+            var targetIndex = list.length * 0.5;
+            var startIndex = -1;
+            for (var i = 0; i < length; i++) {
+                if (list[i] === viewport) {
+                    startIndex = i;
+                    break;
+                }
+            }
+            list.splice(0, startIndex + 1);
+            targetIndex -= startIndex + 1;
+            this.$emitPropagationEvent(event, list, targetIndex);
+            lark.Event.release(event);
+        };
+        /**
+         * @private
+         * 检查当前滚动策略，若有一个方向可以滚动，返回true。
+         */
+        p.checkScrollPolicy = function () {
+            var values = this.$Scroller;
+            var viewport = values[12 /* viewport */];
+            var hCanScroll;
+            var uiValues = viewport.$UIComponent;
+            switch (values[1 /* scrollPolicyH */]) {
+                case "auto":
+                    if (viewport.contentWidth > uiValues[10 /* width */]) {
+                        hCanScroll = true;
+                    }
+                    else {
+                        hCanScroll = false;
+                    }
+                    break;
+                case "on":
+                    hCanScroll = true;
+                    break;
+                case "off":
+                    hCanScroll = false;
+                    break;
+            }
+            values[6 /* horizontalCanScroll */] = hCanScroll;
+            var vCanScroll;
+            switch (values[0 /* scrollPolicyV */]) {
+                case "auto":
+                    if (viewport.contentHeight > uiValues[11 /* height */]) {
+                        vCanScroll = true;
+                    }
+                    else {
+                        vCanScroll = false;
+                    }
+                    break;
+                case "on":
+                    vCanScroll = true;
+                    break;
+                case "off":
+                    vCanScroll = false;
+                    break;
+            }
+            values[7 /* verticalCanScroll */] = vCanScroll;
+            return hCanScroll || vCanScroll;
+        };
+        /**
+         * @private
+         *
+         * @param event
+         */
+        p.onTouchBegin = function (event) {
+            if (event.isDefaultPrevented()) {
+                return;
+            }
+            if (!this.checkScrollPolicy()) {
+                return;
+            }
+            var values = this.$Scroller;
+            values[9 /* touchScrollV */].stop();
+            values[8 /* touchScrollH */].stop();
+            var viewport = values[12 /* viewport */];
+            values[3 /* touchStartX */] = event.$stageX;
+            values[4 /* touchStartY */] = event.$stageY;
+            var uiValues = viewport.$UIComponent;
+            if (values[6 /* horizontalCanScroll */]) {
+                values[8 /* touchScrollH */].start(event.$stageX, viewport.scrollH, viewport.contentWidth - uiValues[10 /* width */]);
+            }
+            if (values[7 /* verticalCanScroll */]) {
+                values[9 /* touchScrollV */].start(event.$stageY, viewport.scrollV, viewport.contentHeight - uiValues[11 /* height */]);
+            }
+            var stage = this.$stage;
+            stage.on(lark.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            stage.on(lark.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+            event.preventDefault();
+        };
+        /**
+         * @private
+         *
+         * @param event
+         */
+        p.onTouchMove = function (event) {
+            var values = this.$Scroller;
+            if (!values[5 /* touchMoved */]) {
+                if (Math.abs(values[3 /* touchStartX */] - event.$stageX) < Scroller.scrollThreshold && Math.abs(values[4 /* touchStartY */] - event.$stageY) < Scroller.scrollThreshold) {
+                    return;
+                }
+                values[5 /* touchMoved */] = true;
+                var horizontalBar = this.horizontalScrollBar;
+                var verticalBar = this.verticalScrollBar;
+                if (horizontalBar && values[6 /* horizontalCanScroll */]) {
+                    horizontalBar.visible = true;
+                }
+                if (verticalBar && values[7 /* verticalCanScroll */]) {
+                    verticalBar.visible = true;
+                }
+                if (values[2 /* autoHideTimer */]) {
+                    values[2 /* autoHideTimer */].reset();
+                }
+            }
+            swan.UIEvent.emitUIEvent(this, swan.UIEvent.CHANGE_START);
+            if (values[11 /* delayTouchEvent */]) {
+                values[11 /* delayTouchEvent */] = null;
+                values[10 /* delayTouchTimer */].stop();
+            }
+            var viewport = values[12 /* viewport */];
+            var uiValues = viewport.$UIComponent;
+            if (values[6 /* horizontalCanScroll */]) {
+                values[8 /* touchScrollH */].update(event.$stageX, viewport.contentWidth - uiValues[10 /* width */]);
+            }
+            if (values[7 /* verticalCanScroll */]) {
+                values[9 /* touchScrollV */].update(event.$stageY, viewport.contentHeight - uiValues[11 /* height */]);
+            }
+        };
+        /**
+         * @private
+         *
+         * @param event
+         */
+        p.onTouchEnd = function (event) {
+            var values = this.$Scroller;
+            values[5 /* touchMoved */] = false;
+            var stage = event.$currentTarget;
+            stage.removeListener(lark.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            stage.removeListener(lark.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+            var viewport = values[12 /* viewport */];
+            var uiValues = viewport.$UIComponent;
+            if (values[6 /* horizontalCanScroll */]) {
+                values[8 /* touchScrollH */].finish(viewport.scrollH, viewport.contentWidth - uiValues[10 /* width */]);
+            }
+            if (values[7 /* verticalCanScroll */]) {
+                values[9 /* touchScrollV */].finish(viewport.scrollV, viewport.contentHeight - uiValues[11 /* height */]);
+            }
+        };
+        /**
+         * @private
+         *
+         * @param scrollPos
+         */
+        p.horizontalUpdateHandler = function (scrollPos) {
+            this.$Scroller[12 /* viewport */].scrollH = scrollPos;
+        };
+        /**
+         * @private
+         *
+         * @param scrollPos
+         */
+        p.verticalUpdateHandler = function (scrollPos) {
+            this.$Scroller[12 /* viewport */].scrollV = scrollPos;
+        };
+        /**
+         * @private
+         *
+         */
+        p.horizontalEndHandler = function () {
+            if (!this.$Scroller[9 /* touchScrollV */].isPlaying()) {
+                this.onChangeEnd();
+            }
+        };
+        /**
+         * @private
+         *
+         */
+        p.verticalEndHanlder = function () {
+            if (!this.$Scroller[8 /* touchScrollH */].isPlaying()) {
+                this.onChangeEnd();
+            }
+        };
+        /**
+         * @private
+         *
+         */
+        p.onChangeEnd = function () {
+            var values = this.$Scroller;
+            var horizontalBar = this.horizontalScrollBar;
+            var verticalBar = this.verticalScrollBar;
+            if (horizontalBar && horizontalBar.visible || verticalBar && verticalBar.visible) {
+                if (!values[2 /* autoHideTimer */]) {
+                    values[2 /* autoHideTimer */] = new lark.Timer(200, 1);
+                    values[2 /* autoHideTimer */].on(lark.TimerEvent.TIMER_COMPLETE, this.onAutoHideTimer, this);
+                }
+                values[2 /* autoHideTimer */].reset();
+                values[2 /* autoHideTimer */].start();
+            }
+            swan.UIEvent.emitUIEvent(this, swan.UIEvent.CHANGE_END);
+        };
+        /**
+         * @private
+         *
+         * @param event
+         */
+        p.onAutoHideTimer = function (event) {
+            var horizontalBar = this.horizontalScrollBar;
+            var verticalBar = this.verticalScrollBar;
+            if (horizontalBar) {
+                horizontalBar.visible = false;
+            }
+            if (verticalBar) {
+                verticalBar.visible = false;
+            }
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
+            _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
+            var viewport = this.viewport;
+            if (viewport) {
+                viewport.setLayoutBoundsPosition(0, 0);
+                viewport.setLayoutBoundsSize(unscaledWidth, unscaledHeight);
+            }
         };
         /**
          * @inheritDoc
@@ -16175,36 +17437,388 @@ var swan;
          * @platform Web,Native
          */
         p.partAdded = function (partName, instance) {
-            if (instance === this.labelDisplay) {
-                this.labelDisplay.text = this._label;
+            _super.prototype.partAdded.call(this, partName, instance);
+            if (instance == this.horizontalScrollBar) {
+                this.horizontalScrollBar.touchChildren = false;
+                this.horizontalScrollBar.touchEnabled = false;
+                this.horizontalScrollBar.viewport = this.viewport;
+                this.horizontalScrollBar.visible = false;
             }
-            else if (instance == this.iconDisplay) {
-                this.iconDisplay.source = this._icon;
+            else if (instance == this.verticalScrollBar) {
+                this.verticalScrollBar.touchChildren = false;
+                this.verticalScrollBar.touchEnabled = false;
+                this.verticalScrollBar.viewport = this.viewport;
+                this.verticalScrollBar.visible = false;
             }
         };
         /**
          * @language en_US
-         * This method is called when handling a <code>lark.TouchEvent.TOUCH_END</code> event
-         * when the user touches on the button. It is only called when the button
-         * is the target and when <code>touchCaptured</code> is <code>true</code>.
+         * The threshold value(in pixels) trigger the rolling.
+         * when the touch points deviate from the initial touch point than this value will trigger the rolling.
+         *
+         * @default 5
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 当在用户单击按钮之后处理 <code>lark.TouchEvent.TOUCH_END</code> 事件时，将调用此方法。
-         * 仅当以按钮为目标，并且 <code>touchCaptured</code> 为 <code>true</code> 时，才会调用此方法。
+         * 开始触发滚动的阈值（以像素为单位），当触摸点偏离初始触摸点的距离超过这个值时才会触发滚动。
+         *
+         * @default 5
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        p.buttonReleased = function () {
-        };
-        return Button;
+        Scroller.scrollThreshold = 5;
+        return Scroller;
     })(swan.Component);
-    swan.Button = Button;
-    lark.registerClass(Button, 1025 /* Button */);
+    swan.Scroller = Scroller;
+    swan.registerProperty(Scroller, "viewport", "swan.IViewport", true);
+    lark.registerClass(Scroller, 1037 /* Scroller */);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * An ViewStack navigator container consists of a collection of child
+     * containers stacked on top of each other, where only one child
+     * at a time is visible.
+     * When a different child container is selected, it seems to replace
+     * the old one because it appears in the same location.
+     * However, the old child container still exists; it is just invisible.
+     *
+     * @event swan.CollectionEvent.COLLECTION_CHANGE Emitted when the ICollection has been updated in some way.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * ViewStack 导航器容器由一组彼此上下堆叠的子容器组成，其中一次只可以显示一个子容器。
+     * 选择另一个子容器后，它将显示在原来子容器的位置处，所以看起来好像此子容器替换了原来的子容器。
+     * 但是，原来的子容器仍然存在，只不过它现在处于不可见状态。
+     *
+     * @event swan.CollectionEvent.COLLECTION_CHANGE 以某种方式更新 ICollection 后分派。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var ViewStack = (function (_super) {
+        __extends(ViewStack, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function ViewStack() {
+            _super.call(this);
+            /**
+             * @private
+             */
+            this._selectedChild = null;
+            /**
+             * @private
+             * 在属性提交前缓存选中项索引
+             */
+            this.proposedSelectedIndex = swan.ListBase.NO_PROPOSED_SELECTION;
+            /**
+             * @private
+             */
+            this._selectedIndex = -1;
+        }
+        var d = __define,c=ViewStack;p=c.prototype;
+        d(p, "layout",
+            /**
+             * @language en_US
+             * [read-only]The layout object for this container.
+             * This object is responsible for the measurement and layout of
+             * the visual elements in the container.
+             *
+             * @default swan.BasicLayout
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * [只读]此容器的 layout 对象。此对象负责容器中可视元素的测量和布局。
+             *
+             * @default swan.BasicLayout
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$layout;
+            },undefined
+        );
+        d(p, "selectedChild",
+            /**
+             * @language en_US
+             * A reference to the currently visible child container.
+             * The default is a reference to the first child.
+             * If there are no children, this property is <code>null</code>.
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 对当前可见子容器的引用。默认设置为对第一个子容器的引用。如果没有子项，则此属性为 <code>null</code>。
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                var index = this.selectedIndex;
+                if (index >= 0 && index < this.numChildren)
+                    return this.getChildAt(index);
+                return null;
+            },
+            function (value) {
+                var index = this.getChildIndex(value);
+                if (index >= 0 && index < this.numChildren)
+                    this.setSelectedIndex(index);
+            }
+        );
+        d(p, "selectedIndex",
+            /**
+             * @language en_US
+             * The zero-based index of the currently visible child container.
+             * Child indexes are in the range 0, 1, 2, ..., n - 1,
+             * where <code>n</code> is the number of children.
+             * The default value is 0, corresponding to the first child.
+             * If there are no children, the value of this property is <code>-1</code>.
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 当前可见子容器的从零开始的索引。子索引的范围是 0、1、2、...、n - 1，其中 <code>n</code> 是子项的数目。
+             * 默认值是 0，对应于第一个子项。如果不存在子容器，则此属性的值为 -1。
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.proposedSelectedIndex != swan.ListBase.NO_PROPOSED_SELECTION ? this.proposedSelectedIndex : this._selectedIndex;
+            },
+            function (value) {
+                value = +value | 0;
+                this.setSelectedIndex(value);
+            }
+        );
+        /**
+         * @private
+         * 设置选中项索引
+         */
+        p.setSelectedIndex = function (value) {
+            if (value == this.selectedIndex) {
+                return;
+            }
+            this.proposedSelectedIndex = value;
+            this.invalidateProperties();
+            swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selectedIndex");
+        };
+        /**
+         * @private
+         * 一个子项被添加到容器内，此方法不仅在操作addChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
+         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
+         */
+        p.$childAdded = function (child, index) {
+            _super.prototype.$childAdded.call(this, child, index);
+            this.showOrHide(child, false);
+            var selectedIndex = this.selectedIndex;
+            if (selectedIndex == -1) {
+                this.setSelectedIndex(index);
+            }
+            else if (index <= this.selectedIndex && this.$stage) {
+                this.setSelectedIndex(selectedIndex + 1);
+            }
+            swan.CollectionEvent.emitCollectionEvent(this, swan.CollectionEvent.COLLECTION_CHANGE, swan.CollectionEventKind.ADD, index, -1, [child.name]);
+        };
+        /**
+         * @private
+         * 一个子项从容器内移除，此方法不仅在操作removeChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
+         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
+         */
+        p.$childRemoved = function (child, index) {
+            _super.prototype.$childRemoved.call(this, child, index);
+            this.showOrHide(child, true);
+            var selectedIndex = this.selectedIndex;
+            if (index == selectedIndex) {
+                if (this.numChildren > 0) {
+                    if (index == 0) {
+                        this.proposedSelectedIndex = 0;
+                        this.invalidateProperties();
+                    }
+                    else
+                        this.setSelectedIndex(0);
+                }
+                else
+                    this.setSelectedIndex(-1);
+            }
+            else if (index < selectedIndex) {
+                this.setSelectedIndex(selectedIndex - 1);
+            }
+            swan.CollectionEvent.emitCollectionEvent(this, swan.CollectionEvent.COLLECTION_CHANGE, swan.CollectionEventKind.REMOVE, index, -1, [child.name]);
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.commitProperties = function () {
+            _super.prototype.commitProperties.call(this);
+            if (this.proposedSelectedIndex != swan.ListBase.NO_PROPOSED_SELECTION) {
+                this.commitSelection(this.proposedSelectedIndex);
+                this.proposedSelectedIndex = swan.ListBase.NO_PROPOSED_SELECTION;
+            }
+        };
+        /**
+         * @private
+         *
+         * @param newIndex
+         */
+        p.commitSelection = function (newIndex) {
+            if (newIndex >= 0 && newIndex < this.numChildren) {
+                this._selectedIndex = newIndex;
+                if (this._selectedChild) {
+                    this.showOrHide(this._selectedChild, false);
+                }
+                this._selectedChild = this.getElementAt(this._selectedIndex);
+                this.showOrHide(this._selectedChild, true);
+            }
+            else {
+                this._selectedChild = null;
+                this._selectedIndex = -1;
+            }
+            this.invalidateSize();
+            this.invalidateDisplayList();
+        };
+        /**
+         * @private
+         *
+         * @param child
+         * @param visible
+         */
+        p.showOrHide = function (child, visible) {
+            if (lark.is(child, 1001 /* UIComponent */)) {
+                child.includeInLayout = visible;
+            }
+            child.visible = visible;
+        };
+        d(p, "length",
+            /**
+             * @language en_US
+             * number of children
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 子项数量
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$children.length;
+            },undefined
+        );
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getItemAt = function (index) {
+            var element = this.$children[index];
+            return element ? element.name : "";
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getItemIndex = function (item) {
+            var list = this.$children;
+            var length = list.length;
+            for (var i = 0; i < length; i++) {
+                if (list[i].name == item) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+        return ViewStack;
+    })(swan.Group);
+    swan.ViewStack = ViewStack;
+    swan.registerBindable(ViewStack.prototype, "selectedIndex");
+    lark.registerClass(ViewStack, 1036 /* ViewStack */);
+    if (DEBUG) {
+        lark.$markReadOnly(ViewStack.prototype, "length");
+        lark.$markReadOnly(ViewStack.prototype, "layout");
+    }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -17205,11 +18819,7 @@ var swan;
 (function (swan) {
     /**
      * @language en_US
-     * The Panel class defines a container that includes a title bar,
-     * a closeButton, a moveArea, and a content area for its children.
-     *
-     * @event swan.UIEvent.CLOSING Dispatched when the close button is taped
-     * you can use <code>event.preventDefault()</code> to prevent close.
+     * The ItemRenderer class is the base class for item renderers.
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -17217,17 +18827,14 @@ var swan;
      */
     /**
      * @language zh_CN
-     * Panel 类定义一个容器，该容器为其子代提供标题栏、关闭按钮、可移动区域和内容区域。
-     *
-     * @event swan.UIEvent.CLOSING 面板即将关闭事件，在关闭按钮被点击后抛出，
-     * 监听此事件并调用<code>event.preventDefault()</code>能够阻止面板被关闭。
+     * ItemRenderer 类是项呈示器的基类。
      *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    var Panel = (function (_super) {
-        __extends(Panel, _super);
+    var ItemRenderer = (function (_super) {
+        __extends(ItemRenderer, _super);
         /**
          * @language en_US
          * Constructor.
@@ -17244,14 +18851,20 @@ var swan;
          * @version Swan 1.0
          * @platform Web,Native
          */
-        function Panel() {
+        function ItemRenderer() {
             _super.call(this);
             /**
+             * @private
+             */
+            this._data = null;
+            /**
+             * @private
+             */
+            this._selected = false;
+            /**
              * @language en_US
-             * The skin part that defines the appearance of the close button.
-             * When taped, the close button dispatches a <code>closing</code> event.
-             *
-             * @skinPart
+             * The index of the item in the data provider
+             * of the host component of the item renderer.
              *
              * @version Lark 1.0
              * @version Swan 1.0
@@ -17259,85 +18872,25 @@ var swan;
              */
             /**
              * @language zh_CN
-             * 关闭按钮
-             *
-             * @skinPart
+             * 项呈示器的数据提供程序中的项目索引。
              *
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
-            this.closeButton = null;
-            /**
-             * @language en_US
-             * The area where the user must drag to move the window.
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 可移动区域
-             *
-             * @skinPart
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.moveArea = null;
-            /**
-             * @language en_US
-             * The skin part that defines the appearance of the
-             * title text in the container.
-             *
-             * @skinPart
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 标题显示对象
-             *
-             * @skinPart
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.titleDisplay = null;
+            this.itemIndex = -1;
             /**
              * @private
+             * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，是否按下鼠标以及触摸点是否在按钮上。
              */
-            this._title = "";
-            /**
-             * @private
-             * 鼠标按下时的偏移量
-             */
-            this.offsetPointX = 0;
-            /**
-             * @private
-             */
-            this.offsetPointY = 0;
-            this.on(lark.TouchEvent.TOUCH_BEGIN, this.onWindowTouchBegin, this, false, 100);
+            this.touchCaptured = false;
+            this.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
-        var d = __define,c=Panel;p=c.prototype;
-        /**
-         * @private
-         * 在窗体上按下时前置窗口
-         */
-        p.onWindowTouchBegin = function (event) {
-            this.$parent.addChild(this);
-        };
-        d(p, "title",
+        var d = __define,c=ItemRenderer;p=c.prototype;
+        d(p, "data",
             /**
              * @language en_US
-             * Title or caption displayed in the title bar.
-             *
-             * @default ""
+             * The data to render or edit.
              *
              * @version Lark 1.0
              * @version Swan 1.0
@@ -17345,61 +18898,24 @@ var swan;
              */
             /**
              * @language zh_CN
-             * 标题栏中显示的标题。
-             *
-             * @default ""
+             * 要呈示或编辑的数据。
              *
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
             function () {
-                return this._title;
+                return this._data;
             },
             function (value) {
-                this._title = value;
-                if (this.titleDisplay)
-                    this.titleDisplay.text = this.title;
+                this._data = value;
+                swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "data");
+                this.dataChanged();
             }
         );
         /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.partAdded = function (partName, instance) {
-            _super.prototype.partAdded.call(this, partName, instance);
-            if (instance == this.titleDisplay) {
-                this.titleDisplay.text = this._title;
-            }
-            else if (instance == this.moveArea) {
-                this.moveArea.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
-            }
-            else if (instance == this.closeButton) {
-                this.closeButton.on(lark.TouchEvent.TOUCH_TAP, this.onCloseButtonClick, this);
-            }
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.partRemoved = function (partName, instance) {
-            _super.prototype.partRemoved.call(this, partName, instance);
-            if (instance == this.moveArea) {
-                this.moveArea.removeListener(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
-            }
-            else if (instance == this.closeButton) {
-                this.closeButton.removeListener(lark.TouchEvent.TOUCH_TAP, this.onCloseButtonClick, this);
-            }
-        };
-        /**
          * @language en_US
-         * Emites the "closing" event when the closeButton is clicked.
+         * Update the view when the <code>data</code> property changes.
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -17407,20 +18923,45 @@ var swan;
          */
         /**
          * @language zh_CN
-         * 当 closeButton 被点击时派发 “closing” 事件
+         * 当数据改变时，更新视图。
          *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        p.onCloseButtonClick = function (event) {
-            if (swan.UIEvent.emitUIEvent(this, swan.UIEvent.CLOSING)) {
-                this.close();
-            }
+        p.dataChanged = function () {
         };
+        d(p, "selected",
+            /**
+             * @language en_US
+             * Contains <code>true</code> if the item renderer
+             * can show itself as selected.
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 如果项呈示器可以将其自身显示为已选中，则为 true。
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this._selected;
+            },
+            function (value) {
+                if (this._selected == value)
+                    return;
+                this._selected = value;
+                this.invalidateState();
+            }
+        );
         /**
          * @language en_US
-         * Close the panel and remove from the parent container.
+         * Handles <code>TouchEvent.TOUCH_BEGIN</code> events
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -17428,822 +18969,27 @@ var swan;
          */
         /**
          * @language zh_CN
-         * 关闭面板，从父级容器移除自身。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.close = function () {
-            if (!this.$parent) {
-                return;
-            }
-            this.$parent.removeChild(this);
-        };
-        /**
-         * @language en_US
-         * Called when the user starts dragging a Panel.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在可移动区域按下
+         * 触碰开始时触发事件
          *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         p.onTouchBegin = function (event) {
-            this.$includeInLayout = false;
-            this.offsetPointX = this.x - event.$stageX;
-            this.offsetPointY = this.y - event.$stageY;
-            this.$stage.on(lark.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
-            this.$stage.on(lark.TouchEvent.TOUCH_END, this.onTouchEnd, this);
-        };
-        /**
-         * @language en_US
-         * Called when the user drags a Panel.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 触摸拖拽时的移动事件
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.onTouchMove = function (event) {
-            this.x = event.$stageX + this.offsetPointX;
-            this.y = event.$stageY + this.offsetPointY;
-        };
-        /**
-         * @language en_US
-         * Called when the user releases the Panel.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在舞台上弹起事件
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.onTouchEnd = function (event) {
-            this.$stage.removeListener(lark.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
-            this.$stage.removeListener(lark.TouchEvent.TOUCH_END, this.onTouchEnd, this);
-        };
-        return Panel;
-    })(swan.Component);
-    swan.Panel = Panel;
-    lark.registerClass(Panel, 1024 /* Panel */);
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The Range class holds a value and an allowed range for that
-     * value, defined by <code>minimum</code> and <code>maximum</code> properties.
-     *
-     * The <code>value</code> property
-     * is always constrained to be between the current <code>minimum</code> and
-     * <code>maximum</code>, and the <code>minimum</code>,
-     * and <code>maximum</code> are always constrained
-     * to be in the proper numerical order, such that
-     * <code>(minimum <= value <= maximum)</code> is <code>true</code>.
-     *
-     * If the value of the <code>snapInterval</code> property is not 0,
-     * then the <code>value</code> property is also constrained to be a multiple of
-     * <code>snapInterval</code>.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 范围选取组件,该组件包含一个值和这个值所允许的最大最小约束范围。
-     *
-     * <code>value</code>属性的值永远被限制于当前的<code>minimum</code>和
-     * <code>maximum</code>之间，并且<code>minimum</code>和 <code>maximum</code>永远按照固定的书序排列，
-     * 即<code>(minimum <= value <= maximum)</code> 为真。
-     *
-     * 如果<code>snapInterval</code>属性的值不是0，那么<code>value</code>的值也会被<code>snapInterval</code>所约束。
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var Range = (function (_super) {
-        __extends(Range, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个 Range 实例。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function Range() {
-            _super.call(this);
-            this.$Range = {
-                0: 100,
-                1: false,
-                2: 0,
-                3: false,
-                4: 0,
-                5: 0,
-                6: false,
-                7: 1,
-                8: false,
-                9: false,
-            };
-        }
-        var d = __define,c=Range;p=c.prototype;
-        d(p, "maximum",
-            /**
-             * @language en_US
-             * The maximum valid <code>value</code>.<p/>
-             *
-             * Changes to the value property are constrained
-             * by <code>commitProperties()</code> to be less than or equal to
-             * maximum with the <code>nearestValidValue()</code> method.
-             *
-             * @default 100
-             * @see #nearestValidValue()
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 最大有效值。<p/>
-             *
-             * 规定<code>value<code/>属性的值不能够超过的最大值。该修正过程
-             * 将在<code>nearestValidValue()</code>方法中进行。
-             *
-             * @default 100
-             * @see #nearestValidValue()
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$Range[0 /* maximum */];
-            },
-            function (value) {
-                value = +value || 0;
-                var values = this.$Range;
-                if (value === values[0 /* maximum */])
-                    return;
-                values[0 /* maximum */] = value;
-                values[1 /* maxChanged */] = true;
-                this.invalidateProperties();
-                this.invalidateDisplayList();
-            }
-        );
-        d(p, "minimum",
-            /**
-             * @language en_US
-             * The minimum valid <code>value</code>.<p/>
-             *
-             * Changes to the value property are constrained
-             * by <code>commitProperties()</code> to be greater than or equal to
-             * minimum with the <code>nearestValidValue()</code> method.
-             *
-             * @default 0
-             * @see #nearestValidValue()
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 最小有效值<p/>
-             *
-             * 规定<code>value<code/>属性的值不能够低于的最小值。该修正过程
-             * 将在<code>nearestValidValue()</code>方法中进行。
-             *
-             * @default 0
-             * @see #nearestValidValue()
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$Range[2 /* minimum */];
-            },
-            function (value) {
-                value = +value || 0;
-                var values = this.$Range;
-                if (value === values[2 /* minimum */])
-                    return;
-                values[2 /* minimum */] = value;
-                values[3 /* minChanged */] = true;
-                this.invalidateProperties();
-                this.invalidateDisplayList();
-            }
-        );
-        d(p, "value",
-            /**
-             * @language en_US
-             * The current value for this range.<p/>
-             *
-             * Changes to the value property are constrained
-             * by <code>commitProperties()</code> to be greater than or equal to
-             * the <code>minimum</code> property, less than or equal to the <code>maximum</code> property, and a
-             * multiple of <code>snapInterval</code> with the <code>nearestValidValue()</code>
-             * method.
-             *
-             * @default 0
-             * @see #setValue()
-             * @see #nearestValidValue()
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 此范围的当前值。<p/>
-             *
-             * 改变的<code>value</code>属性将在<code>commitProperties()</code>方法中被<code>minimum</code>属性
-             * 和<code>minimum</code>属性所限制。此修正过程将在<code>nearestValidValue()</code>方法中进行。
-             *
-             * @default 0
-             * @see #setValue()
-             * @see #nearestValidValue()
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                var values = this.$Range;
-                return values[6 /* valueChanged */] ? values[5 /* changedValue */] : values[4 /* value */];
-            },
-            function (newValue) {
-                newValue = +newValue || 0;
-                this.$setValue(newValue);
-            }
-        );
-        /**
-         * @private
-         *
-         * @param newValue
-         */
-        p.$setValue = function (newValue) {
-            if (newValue === this.value)
-                return;
-            var values = this.$Range;
-            values[5 /* changedValue */] = newValue;
-            values[6 /* valueChanged */] = true;
-            this.invalidateProperties();
-        };
-        d(p, "snapInterval",
-            /**
-             * @language en_US
-             * The snapInterval property controls the valid values of the <code>value</code> property.
-             *
-             * If nonzero, valid values are the sum of the <code>minimum</code> and integer multiples
-             * of this property, for all sums that are less than or equal to the <code>maximum</code>.<p/>
-             *
-             * For example, if <code>minimum</code> is 10, <code>maximum</code> is 20, and this property is 3, then the
-             * valid values of this Range are 10, 13, 16, 19, and 20.<p/>
-             *
-             * If the value of this property is zero, then valid values are only constrained
-             * to be between minimum and maximum inclusive.
-             *
-             * @default 1
-             * @see #nearestValidValue()
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * snapInterval 属性定义 value 属性的有效值。
-             * 如果为非零，则有效值为 minimum 与此属性的整数倍数之和，且小于或等于 maximum。</p>
-             *
-             * 例如，如果 minimum 为 10，maximum 为 20，而此属性为 3，则可能的有效值为 10、13、16、19 和 20.</p>
-             *
-             * 如果此属性的值为零，则仅会将有效值约束到介于 minimum 和 maximum 之间（包括两者）。
-             *
-             * @default 1
-             * @see #nearestValidValue()
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$Range[7 /* snapInterval */];
-            },
-            function (value) {
-                var values = this.$Range;
-                values[9 /* explicitSnapInterval */] = true;
-                value = +value || 0;
-                if (value === values[7 /* snapInterval */])
-                    return;
-                if (lark.isNone(value)) {
-                    values[7 /* snapInterval */] = 1;
-                    values[9 /* explicitSnapInterval */] = false;
-                }
-                else {
-                    values[7 /* snapInterval */] = value;
-                }
-                values[8 /* snapIntervalChanged */] = true;
-                this.invalidateProperties();
-            }
-        );
-        /**
-         * @language en_US
-         * Processes the properties set on the component.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 处理对组件设置的属性
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.commitProperties = function () {
-            _super.prototype.commitProperties.call(this);
-            var values = this.$Range;
-            if (values[2 /* minimum */] > values[0 /* maximum */]) {
-                if (!values[1 /* maxChanged */])
-                    values[2 /* minimum */] = values[0 /* maximum */];
-                else
-                    values[0 /* maximum */] = values[2 /* minimum */];
-            }
-            if (values[6 /* valueChanged */] || values[1 /* maxChanged */] || values[3 /* minChanged */] || values[8 /* snapIntervalChanged */]) {
-                var currentValue = values[6 /* valueChanged */] ? values[5 /* changedValue */] : values[4 /* value */];
-                values[6 /* valueChanged */] = false;
-                values[1 /* maxChanged */] = false;
-                values[3 /* minChanged */] = false;
-                values[8 /* snapIntervalChanged */] = false;
-                this.setValue(this.nearestValidValue(currentValue, values[7 /* snapInterval */]));
-            }
+            this.$stage.on(lark.TouchEvent.TOUCH_END, this.onStageTouchEnd, this);
+            this.touchCaptured = true;
+            this.invalidateState();
+            event.updateAfterEvent();
         };
         /**
          * @private
-         * 修正size到最接近snapInterval的整数倍
+         * 舞台上触摸弹起事件
          */
-        p.nearestValidSize = function (size) {
-            var interval = this.snapInterval;
-            if (interval == 0)
-                return size;
-            var validSize = Math.round(size / interval) * interval;
-            return (Math.abs(validSize) < interval) ? interval : validSize;
-        };
-        /**
-         * @language en_US
-         * Returns the sum of the minimum with an integer multiple of <code>interval</code> that's
-         * closest to <code>value</code>, unless <code>value</code> is closer to the maximum limit,
-         * in which case the maximum is returned.<p/>
-         *
-         * If <code>interval</code> is equal to 0, the value is clipped to the minimum and maximum
-         * limits.<p/>
-         *
-         * The valid values for a range are defined by the sum of the <code>minimum</code> property
-         * with multiples of the <code>interval</code> and also defined to be less than or equal to the
-         * <code>maximum</code> property.
-         * The maximum need not be a multiple of <code>snapInterval</code>.<p/>
-         *
-         * For example, if <code>minimum</code> is equal to 1, <code>maximum</code> is equal to 6,
-         * and <code>snapInterval</code> is equal to 2, the valid
-         * values for the Range are 1, 3, 5, 6.
-         *
-         * Similarly, if <code>minimum</code> is equal to 2, <code>maximum</code> is equal to 9,
-         * and <code>snapInterval</code> is equal to 1.5, the valid
-         * values for the Range are 2, 3.5, 5, 6.5, 8, and 9.
-         *
-         * @param value The input value.
-         * @param interval The value of snapInterval or an integer multiple of snapInterval.
-         * @return The valid value that's closest to the input.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回 <code>minimum</code> 与最接近 <code>value</code> 的 <code>interval</code> 的整数倍数之和，
-         * 除非 <code>value</code> 接近最大值限制的时候会返回 maximum。<p/>
-         *
-         * 如果 <code>interval</code> 等于 0，则会将该值剪裁到限制的最小值和最大值。<p/>
-         *
-         * 范围的有效值由 <code>minimum</code> 属性与 <code>interval</code> 的倍数之和决定，
-         * 与此同时也要小于等于 <code>maximum</code> 属性。
-         * 最大值不能是 <code>snapInterval</code> 属性的倍数。<p/>
-         *
-         * 例如，如果 <code>minimum</code> 等于 1，<code>maximum</code> 等于 6，且 <code>snapInterval</code> 等于 3，
-         * 则 Range 的有效值有 1、2、5、6。
-         *
-         * 类似地，如果 <code>minimum</code> 等于 2，<code>maximum</code> 等于 9，
-         * 且 <code>snapInterval</code> 等于 1.5，则 Range 的有效值有 2、3.5、5、6.5、8 和 9。
-         *
-         *
-         * @param value 输入值。
-         * @param interval snapInterval 的值，或 snapInterval 的整数倍数。
-         * @return 最近接输入值的有效值。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.nearestValidValue = function (value, interval) {
-            var values = this.$Range;
-            if (interval == 0)
-                return Math.max(values[2 /* minimum */], Math.min(values[0 /* maximum */], value));
-            var maxValue = values[0 /* maximum */] - values[2 /* minimum */];
-            var scale = 1;
-            value -= values[2 /* minimum */];
-            if (interval != Math.round(interval)) {
-                var parts = ((1 + interval).toString()).split(".");
-                scale = Math.pow(10, parts[1].length);
-                maxValue *= scale;
-                value = Math.round(value * scale);
-                interval = Math.round(interval * scale);
-            }
-            var lower = Math.max(0, Math.floor(value / interval) * interval);
-            var upper = Math.min(maxValue, Math.floor((value + interval) / interval) * interval);
-            var validValue = ((value - lower) >= ((upper - lower) / 2)) ? upper : lower;
-            return (validValue / scale) + values[2 /* minimum */];
-        };
-        /**
-         * @language en_US
-         * Sets the current value for the <code>value</code> property.<p/>
-         *
-         * This method assumes that the caller has already used the <code>nearestValidValue()</code> method
-         * to constrain the value parameter
-         *
-         * @param value The new value of the <code>value</code> property.
-         * @see #nearestValidValue()
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 设置当前值。<p/>
-         *
-         * 此方法假定调用者已经使用了 nearestValidValue() 方法来约束 value 参数。
-         *
-         * @param value value属性的新值
-         * @see #nearestValidValue()
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.setValue = function (value) {
-            var values = this.$Range;
-            if (values[4 /* value */] === value)
-                return;
-            if (values[0 /* maximum */] > values[2 /* minimum */])
-                values[4 /* value */] = Math.min(values[0 /* maximum */], Math.max(values[2 /* minimum */], value));
-            else
-                values[4 /* value */] = value;
-            values[6 /* valueChanged */] = false;
-            this.invalidateDisplayList();
-            swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "value");
-        };
-        /**
-         * @language en_US
-         * Draws the object and/or sizes and positions its children.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 绘制对象和/或设置其子项的大小和位置
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.updateDisplayList = function (w, h) {
-            _super.prototype.updateDisplayList.call(this, w, h);
-            this.updateSkinDisplayList();
-        };
-        /**
-         * @language en_US
-         * Update size and visible of skin parts.<p/>
-         * Subclasses override this method to update skin parts display based on <code>minimum</code>, <code>maximum</code>
-         * and <code>value</code> properties.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 更新皮肤部件（通常为滑块）的大小和可见性。<p/>
-         * 子类覆盖此方法以基于 minimum、maximum 和 value 属性更新滑块的大小、位置和可见性。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.updateSkinDisplayList = function () {
-        };
-        return Range;
-    })(swan.Component);
-    swan.Range = Range;
-    /**
-     * @private
-     */
-    swan.registerBindable(Range.prototype, "value");
-    /**
-     * @private
-     */
-    lark.registerClass(Range, 1041 /* Range */);
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * An ViewStack navigator container consists of a collection of child
-     * containers stacked on top of each other, where only one child
-     * at a time is visible.
-     * When a different child container is selected, it seems to replace
-     * the old one because it appears in the same location.
-     * However, the old child container still exists; it is just invisible.
-     *
-     * @event swan.CollectionEvent.COLLECTION_CHANGE Emitted when the ICollection has been updated in some way.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * ViewStack 导航器容器由一组彼此上下堆叠的子容器组成，其中一次只可以显示一个子容器。
-     * 选择另一个子容器后，它将显示在原来子容器的位置处，所以看起来好像此子容器替换了原来的子容器。
-     * 但是，原来的子容器仍然存在，只不过它现在处于不可见状态。
-     *
-     * @event swan.CollectionEvent.COLLECTION_CHANGE 以某种方式更新 ICollection 后分派。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var ViewStack = (function (_super) {
-        __extends(ViewStack, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function ViewStack() {
-            _super.call(this);
-            /**
-             * @private
-             */
-            this._selectedChild = null;
-            /**
-             * @private
-             * 在属性提交前缓存选中项索引
-             */
-            this.proposedSelectedIndex = swan.ListBase.NO_PROPOSED_SELECTION;
-            /**
-             * @private
-             */
-            this._selectedIndex = -1;
-        }
-        var d = __define,c=ViewStack;p=c.prototype;
-        d(p, "layout",
-            /**
-             * @language en_US
-             * [read-only]The layout object for this container.
-             * This object is responsible for the measurement and layout of
-             * the visual elements in the container.
-             *
-             * @default swan.BasicLayout
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * [只读]此容器的 layout 对象。此对象负责容器中可视元素的测量和布局。
-             *
-             * @default swan.BasicLayout
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$layout;
-            },undefined
-        );
-        d(p, "selectedChild",
-            /**
-             * @language en_US
-             * A reference to the currently visible child container.
-             * The default is a reference to the first child.
-             * If there are no children, this property is <code>null</code>.
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 对当前可见子容器的引用。默认设置为对第一个子容器的引用。如果没有子项，则此属性为 <code>null</code>。
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                var index = this.selectedIndex;
-                if (index >= 0 && index < this.numChildren)
-                    return this.getChildAt(index);
-                return null;
-            },
-            function (value) {
-                var index = this.getChildIndex(value);
-                if (index >= 0 && index < this.numChildren)
-                    this.setSelectedIndex(index);
-            }
-        );
-        d(p, "selectedIndex",
-            /**
-             * @language en_US
-             * The zero-based index of the currently visible child container.
-             * Child indexes are in the range 0, 1, 2, ..., n - 1,
-             * where <code>n</code> is the number of children.
-             * The default value is 0, corresponding to the first child.
-             * If there are no children, the value of this property is <code>-1</code>.
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 当前可见子容器的从零开始的索引。子索引的范围是 0、1、2、...、n - 1，其中 <code>n</code> 是子项的数目。
-             * 默认值是 0，对应于第一个子项。如果不存在子容器，则此属性的值为 -1。
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.proposedSelectedIndex != swan.ListBase.NO_PROPOSED_SELECTION ? this.proposedSelectedIndex : this._selectedIndex;
-            },
-            function (value) {
-                value = +value | 0;
-                this.setSelectedIndex(value);
-            }
-        );
-        /**
-         * @private
-         * 设置选中项索引
-         */
-        p.setSelectedIndex = function (value) {
-            if (value == this.selectedIndex) {
-                return;
-            }
-            this.proposedSelectedIndex = value;
-            this.invalidateProperties();
-            swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selectedIndex");
-        };
-        /**
-         * @private
-         * 一个子项被添加到容器内，此方法不仅在操作addChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
-         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
-         */
-        p.$childAdded = function (child, index) {
-            _super.prototype.$childAdded.call(this, child, index);
-            this.showOrHide(child, false);
-            var selectedIndex = this.selectedIndex;
-            if (selectedIndex == -1) {
-                this.setSelectedIndex(index);
-            }
-            else if (index <= this.selectedIndex && this.$stage) {
-                this.setSelectedIndex(selectedIndex + 1);
-            }
-            swan.CollectionEvent.emitCollectionEvent(this, swan.CollectionEvent.COLLECTION_CHANGE, swan.CollectionEventKind.ADD, index, -1, [child.name]);
-        };
-        /**
-         * @private
-         * 一个子项从容器内移除，此方法不仅在操作removeChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
-         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
-         */
-        p.$childRemoved = function (child, index) {
-            _super.prototype.$childRemoved.call(this, child, index);
-            this.showOrHide(child, true);
-            var selectedIndex = this.selectedIndex;
-            if (index == selectedIndex) {
-                if (this.numChildren > 0) {
-                    if (index == 0) {
-                        this.proposedSelectedIndex = 0;
-                        this.invalidateProperties();
-                    }
-                    else
-                        this.setSelectedIndex(0);
-                }
-                else
-                    this.setSelectedIndex(-1);
-            }
-            else if (index < selectedIndex) {
-                this.setSelectedIndex(selectedIndex - 1);
-            }
-            swan.CollectionEvent.emitCollectionEvent(this, swan.CollectionEvent.COLLECTION_CHANGE, swan.CollectionEventKind.REMOVE, index, -1, [child.name]);
+        p.onStageTouchEnd = function (event) {
+            var stage = event.$currentTarget;
+            stage.removeListener(lark.TouchEvent.TOUCH_END, this.onStageTouchEnd, this);
+            this.touchCaptured = false;
+            this.invalidateState();
         };
         /**
          * @inheritDoc
@@ -18252,398 +18998,151 @@ var swan;
          * @version Swan 1.0
          * @platform Web,Native
          */
-        p.commitProperties = function () {
-            _super.prototype.commitProperties.call(this);
-            if (this.proposedSelectedIndex != swan.ListBase.NO_PROPOSED_SELECTION) {
-                this.commitSelection(this.proposedSelectedIndex);
-                this.proposedSelectedIndex = swan.ListBase.NO_PROPOSED_SELECTION;
-            }
+        p.getCurrentState = function () {
+            if (this._selected || this.touchCaptured)
+                return "down";
+            return "up";
         };
+        return ItemRenderer;
+    })(swan.Group);
+    swan.ItemRenderer = ItemRenderer;
+    swan.registerBindable(ItemRenderer.prototype, "data");
+    lark.registerClass(ItemRenderer, 1008 /* ItemRenderer */, [1007 /* IItemRenderer */]);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * The ToggleButton component defines a toggle button.
+     * Clicking the button toggles it between the up and an down states.
+     * If you click the button while it is in the up state,
+     * it toggles to the down state. You must click the button again
+     * to toggle it back to the up state.
+     * <p>You can get or set this state programmatically
+     * by using the <code>selected</code> property.</p>
+     *
+     * @event lark.Event.CHANGE Emitted when the <code>selected</code> property
+     * changes for the ToggleButton control.
+     * This event is emitted only when the
+     * user interacts with the control by touching.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * ToggleButton 组件定义切换按钮。单击该按钮会在弹起状态和按下状态之间进行切换。
+     * 如果在按钮处于弹起状态时单击该按钮，则它会切换到按下状态。必须再次单击该按钮才可将其切换回弹起状态。
+     * <p>可以使用 <code>selected</code> 属性以编程方式获取或设置此状态。</p>
+     *
+     * @event lark.Event.CHANGE ToggleButtonBase 控件的 <code>selected</code> 属性更改时分派。
+     * 仅当用户使用鼠标与控件交互时，才分派此事件。
+
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var ToggleButton = (function (_super) {
+        __extends(ToggleButton, _super);
+        function ToggleButton() {
+            _super.apply(this, arguments);
+            /**
+             * @private
+             */
+            this.$selected = false;
+            /**
+             * @private
+             * 是否根据鼠标事件自动变换选中状态,默认true。仅框架内使用。
+             */
+            this.$autoSelected = true;
+        }
+        var d = __define,c=ToggleButton;p=c.prototype;
+        d(p, "selected",
+            /**
+             * @language en_US
+             * Contains <code>true</code> if the button is in the down state,
+             * and <code>false</code> if it is in the up state.
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 按钮处于按下状态时为 <code>true</code>，而按钮处于弹起状态时为 <code>false</code>。
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$selected;
+            },
+            function (value) {
+                this.$setSelected(value);
+            }
+        );
         /**
          * @private
          *
-         * @param newIndex
+         * @param value
          */
-        p.commitSelection = function (newIndex) {
-            if (newIndex >= 0 && newIndex < this.numChildren) {
-                this._selectedIndex = newIndex;
-                if (this._selectedChild) {
-                    this.showOrHide(this._selectedChild, false);
-                }
-                this._selectedChild = this.getElementAt(this._selectedIndex);
-                this.showOrHide(this._selectedChild, true);
+        p.$setSelected = function (value) {
+            value = !!value;
+            if (value === this.$selected)
+                return;
+            this.$selected = value;
+            this.invalidateState();
+            swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selected");
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getCurrentState = function () {
+            var state = _super.prototype.getCurrentState.call(this);
+            if (!this.$selected) {
+                return state;
             }
             else {
-                this._selectedChild = null;
-                this._selectedIndex = -1;
-            }
-            this.invalidateSize();
-            this.invalidateDisplayList();
-        };
-        /**
-         * @private
-         *
-         * @param child
-         * @param visible
-         */
-        p.showOrHide = function (child, visible) {
-            if (lark.is(child, 1001 /* UIComponent */)) {
-                child.includeInLayout = visible;
-            }
-            child.visible = visible;
-        };
-        d(p, "length",
-            /**
-             * @language en_US
-             * number of children
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 子项数量
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$children.length;
-            },undefined
-        );
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getItemAt = function (index) {
-            var element = this.$children[index];
-            return element ? element.name : "";
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getItemIndex = function (item) {
-            var list = this.$children;
-            var length = list.length;
-            for (var i = 0; i < length; i++) {
-                if (list[i].name == item) {
-                    return i;
+                var selectedState = state + "AndSelected";
+                var skin = this.skin;
+                if (skin && skin.hasState(selectedState)) {
+                    return selectedState;
                 }
-            }
-            return -1;
-        };
-        return ViewStack;
-    })(swan.Group);
-    swan.ViewStack = ViewStack;
-    swan.registerBindable(ViewStack.prototype, "selectedIndex");
-    lark.registerClass(ViewStack, 1036 /* ViewStack */);
-    if (DEBUG) {
-        lark.$markReadOnly(ViewStack.prototype, "length");
-        lark.$markReadOnly(ViewStack.prototype, "layout");
-    }
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The Scroller component displays a single scrollable component,
-     * called a viewport, and horizontal and vertical scroll bars.
-     * The viewport must implement the IViewport interface.
-     * <p>The Group components implement the IViewport interface
-     * and can be used as the children of the Scroller control,
-     * as the following example shows:</p>
-     * <code>
-     *       <s:Scroller width="100" height="100">
-     *           <s:Group>
-     *               <s:Image width="300" height="400" source="assets/logo.jpg"/>
-     *           </s:Group>
-     *       </s:Scroller>
-     * </code>
-     * <p>The size of the Image control is set larger than that of its parent Group container.
-     * By default, the child extends past the boundaries of the parent container.
-     * Rather than allow the child to extend past the boundaries of the parent container,
-     * the Scroller specifies to clip the child to the boundaries and display scroll bars.</p>
-     *
-     * @event swan.UIEvent.CHANGE_START Emitted when the scroll position is going to change
-     * @event swan.UIEvent.CHANGE_END Emitted when the scroll position changed complete
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * Scroller 组件显示一个称为视域的单个可滚动组件，以及水平滚动条和垂直滚动条。该视域必须实现 IViewport 接口。
-     * <p>Group 组件实现 IViewport 接口，且可以用作 Scroller 控件的子代，如下例所示：</p>
-     * <code>
-     *       <s:Scroller width="100" height="100">
-     *           <s:Group>
-     *               <s:Image width="300" height="400" source="assets/logo.jpg"/>
-     *           </s:Group>
-     *       </s:Scroller>
-     * </code>
-     * Image 控件的大小比其父 Group 容器设置得大。默认情况下，子代超过父容器的边界。
-     * Scroller 会指定将子代剪切到边界并显示滚动条，而不是让子代超过父容器的边界。
-     *
-     * @event swan.UIEvent.CHANGE_START 滚动位置改变开始
-     * @event swan.UIEvent.CHANGE_END 滚动位置改变结束
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var Scroller = (function (_super) {
-        __extends(Scroller, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function Scroller() {
-            _super.call(this);
-            /**
-             * @language en_US
-             * the horizontal scroll bar
-             *
-             * @skinPart
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 水平滚动条
-             *
-             * @skinPart
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.horizontalScrollBar = null;
-            /**
-             * @language en_US
-             * the vertical scroll bar
-             *
-             * @skinPart
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 垂直滚动条
-             *
-             * @skinPart
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.verticalScrollBar = null;
-            var touchScrollH = new swan.sys.TouchScroll(this.horizontalUpdateHandler, this.horizontalEndHandler, this);
-            var touchScrollV = new swan.sys.TouchScroll(this.verticalUpdateHandler, this.verticalEndHanlder, this);
-            this.$Scroller = {
-                0: "auto",
-                1: "auto",
-                2: null,
-                3: 0,
-                4: 0,
-                5: false,
-                6: false,
-                7: false,
-                8: touchScrollH,
-                9: touchScrollV,
-                10: null,
-                11: null,
-                12: null,
-            };
-        }
-        var d = __define,c=Scroller;p=c.prototype;
-        d(p, "scrollPolicyV",
-            /**
-             * @language en_US
-             * Indicates under what conditions the vertical scroll bar is displayed.
-             * <p><code>ScrollPolicy.ON</code> - the scroll bar is always displayed.</p>
-             * <p><code>ScrollPolicy.OFF</code> - the scroll bar is never displayed.</p>
-             * <p><code>ScrollPolicy.AUTO</code> - the scroll bar is displayed when
-             *  the viewport's contentHeight is larger than its height.
-             *
-             * @default ScrollPolicy.AUTO
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 指示在哪些条件下会显示垂直滑动条。
-             * <p><code>ScrollPolicy.ON</code> - 始终显示滚动条。</p>
-             * <p><code>ScrollPolicy.OFF</code> - 从不显示滚动条。</p>
-             * <p><code>ScrollPolicy.AUTO</code> - 当视域的 contentHeight 大于其自身的高度时显示滚动条。</p>
-             *
-             * @default ScrollPolicy.AUTO
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$Scroller[0 /* scrollPolicyV */];
-            },
-            function (value) {
-                this.$Scroller[0 /* scrollPolicyV */] = value;
-            }
-        );
-        d(p, "scrollPolicyH",
-            /**
-             * @language en_US
-             * Indicates under what conditions the horizontal scroll bar is displayed.
-             * <p><code>ScrollPolicy.ON</code> - the scroll bar is always displayed.</p>
-             * <p><code>ScrollPolicy.OFF</code> - the scroll bar is never displayed.</p>
-             * <p><code>ScrollPolicy.AUTO</code> - the scroll bar is displayed when
-             *  the viewport's contentWidth is larger than its width.
-             *
-             * @default ScrollPolicy.AUTO
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 指示在哪些条件下会显示水平滑动条。
-             * <p><code>ScrollPolicy.ON</code> - 始终显示滚动条。</p>
-             * <p><code>ScrollPolicy.OFF</code> - 从不显示滚动条。</p>
-             * <p><code>ScrollPolicy.AUTO</code> - 当视域的 contentWidth 大于其自身的宽度时显示滚动条。</p>
-             *
-             * @default ScrollPolicy.AUTO
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$Scroller[1 /* scrollPolicyH */];
-            },
-            function (value) {
-                this.$Scroller[1 /* scrollPolicyH */] = value;
-            }
-        );
-        d(p, "viewport",
-            /**
-             * @language en_US
-             * The viewport component to be scrolled.
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 要滚动的视域组件。
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$Scroller[12 /* viewport */];
-            },
-            function (value) {
-                var values = this.$Scroller;
-                if (value == values[12 /* viewport */])
-                    return;
-                this.uninstallViewport();
-                values[12 /* viewport */] = value;
-                this.installViewport();
-            }
-        );
-        /**
-         * @private
-         * 安装并初始化视域组件
-         */
-        p.installViewport = function () {
-            var viewport = this.viewport;
-            if (viewport) {
-                viewport.scrollEnabled = true;
-                viewport.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
-                viewport.on(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
-                this.addChildAt(viewport, 0);
-            }
-            if (this.horizontalScrollBar) {
-                this.horizontalScrollBar.viewport = viewport;
-            }
-            if (this.verticalScrollBar) {
-                this.verticalScrollBar.viewport = viewport;
-            }
-        };
-        /**
-         * @private
-         * 卸载视域组件
-         */
-        p.uninstallViewport = function () {
-            if (this.horizontalScrollBar) {
-                this.horizontalScrollBar.viewport = null;
-            }
-            if (this.verticalScrollBar) {
-                this.verticalScrollBar.viewport = null;
-            }
-            var viewport = this.viewport;
-            if (viewport) {
-                viewport.scrollEnabled = false;
-                viewport.removeListener(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
-                viewport.removeListener(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
-                this.removeChild(viewport);
+                return state == "disabled" ? "disabled" : "down";
             }
         };
         /**
@@ -18653,361 +19152,17 @@ var swan;
          * @version Swan 1.0
          * @platform Web,Native
          */
-        p.setSkin = function (skin) {
-            _super.prototype.setSkin.call(this, skin);
-            var viewport = this.viewport;
-            if (viewport) {
-                this.addChildAt(viewport, 0);
-            }
-        };
-        /**
-         * @private
-         *
-         * @param event
-         */
-        p.onTouchEndCapture = function (event) {
-            if (this.$Scroller[11 /* delayTouchEvent */]) {
-                this.delayEmitEvent(event);
-            }
-        };
-        /**
-         * @private
-         * 若这个Scroller可以滚动，阻止当前事件，延迟100ms再抛出。
-         */
-        p.onTouchBeginCapture = function (event) {
-            var canScroll = this.checkScrollPolicy();
-            if (!canScroll) {
+        p.buttonReleased = function () {
+            if (!this.$autoSelected)
                 return;
-            }
-            var target = event.target;
-            while (target != this) {
-                if (target instanceof Scroller) {
-                    canScroll = target.checkScrollPolicy();
-                    if (canScroll) {
-                        return;
-                    }
-                }
-                target = target.$parent;
-            }
-            this.delayEmitEvent(event);
-            this.onTouchBegin(event);
+            this.selected = !this.$selected;
+            this.emitWith(lark.Event.CHANGE);
         };
-        /**
-         * @private
-         *
-         * @param event
-         */
-        p.delayEmitEvent = function (event) {
-            var values = this.$Scroller;
-            if (values[11 /* delayTouchEvent */]) {
-                this.onDelayTouchEventTimer();
-            }
-            event.stopPropagation();
-            var touchEvent = lark.Event.create(lark.TouchEvent, event.$type, event.$bubbles, event.$cancelable);
-            touchEvent.$setTo(event.$stageX, event.$stageY, event.touchPointID);
-            touchEvent.$target = event.$target;
-            values[11 /* delayTouchEvent */] = touchEvent;
-            if (!values[10 /* delayTouchTimer */]) {
-                values[10 /* delayTouchTimer */] = new lark.Timer(100, 1);
-                values[10 /* delayTouchTimer */].on(lark.TimerEvent.TIMER_COMPLETE, this.onDelayTouchEventTimer, this);
-            }
-            values[10 /* delayTouchTimer */].start();
-        };
-        /**
-         * @private
-         *
-         * @param e
-         */
-        p.onDelayTouchEventTimer = function (e) {
-            var values = this.$Scroller;
-            values[10 /* delayTouchTimer */].stop();
-            var event = values[11 /* delayTouchEvent */];
-            values[11 /* delayTouchEvent */] = null;
-            var viewport = values[12 /* viewport */];
-            if (!viewport) {
-                return;
-            }
-            var target = event.$target;
-            var list = this.$getPropagationList(target);
-            var length = list.length;
-            var targetIndex = list.length * 0.5;
-            var startIndex = -1;
-            for (var i = 0; i < length; i++) {
-                if (list[i] === viewport) {
-                    startIndex = i;
-                    break;
-                }
-            }
-            list.splice(0, startIndex + 1);
-            targetIndex -= startIndex + 1;
-            this.$emitPropagationEvent(event, list, targetIndex);
-            lark.Event.release(event);
-        };
-        /**
-         * @private
-         * 检查当前滚动策略，若有一个方向可以滚动，返回true。
-         */
-        p.checkScrollPolicy = function () {
-            var values = this.$Scroller;
-            var viewport = values[12 /* viewport */];
-            var hCanScroll;
-            var uiValues = viewport.$UIComponent;
-            switch (values[1 /* scrollPolicyH */]) {
-                case "auto":
-                    if (viewport.contentWidth > uiValues[10 /* width */]) {
-                        hCanScroll = true;
-                    }
-                    else {
-                        hCanScroll = false;
-                    }
-                    break;
-                case "on":
-                    hCanScroll = true;
-                    break;
-                case "off":
-                    hCanScroll = false;
-                    break;
-            }
-            values[6 /* horizontalCanScroll */] = hCanScroll;
-            var vCanScroll;
-            switch (values[0 /* scrollPolicyV */]) {
-                case "auto":
-                    if (viewport.contentHeight > uiValues[11 /* height */]) {
-                        vCanScroll = true;
-                    }
-                    else {
-                        vCanScroll = false;
-                    }
-                    break;
-                case "on":
-                    vCanScroll = true;
-                    break;
-                case "off":
-                    vCanScroll = false;
-                    break;
-            }
-            values[7 /* verticalCanScroll */] = vCanScroll;
-            return hCanScroll || vCanScroll;
-        };
-        /**
-         * @private
-         *
-         * @param event
-         */
-        p.onTouchBegin = function (event) {
-            if (event.isDefaultPrevented()) {
-                return;
-            }
-            if (!this.checkScrollPolicy()) {
-                return;
-            }
-            var values = this.$Scroller;
-            values[9 /* touchScrollV */].stop();
-            values[8 /* touchScrollH */].stop();
-            var viewport = values[12 /* viewport */];
-            values[3 /* touchStartX */] = event.$stageX;
-            values[4 /* touchStartY */] = event.$stageY;
-            var uiValues = viewport.$UIComponent;
-            if (values[6 /* horizontalCanScroll */]) {
-                values[8 /* touchScrollH */].start(event.$stageX, viewport.scrollH, viewport.contentWidth - uiValues[10 /* width */]);
-            }
-            if (values[7 /* verticalCanScroll */]) {
-                values[9 /* touchScrollV */].start(event.$stageY, viewport.scrollV, viewport.contentHeight - uiValues[11 /* height */]);
-            }
-            var stage = this.$stage;
-            stage.on(lark.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
-            stage.on(lark.TouchEvent.TOUCH_END, this.onTouchEnd, this);
-            event.preventDefault();
-        };
-        /**
-         * @private
-         *
-         * @param event
-         */
-        p.onTouchMove = function (event) {
-            var values = this.$Scroller;
-            if (!values[5 /* touchMoved */]) {
-                if (Math.abs(values[3 /* touchStartX */] - event.$stageX) < Scroller.scrollThreshold && Math.abs(values[4 /* touchStartY */] - event.$stageY) < Scroller.scrollThreshold) {
-                    return;
-                }
-                values[5 /* touchMoved */] = true;
-                var horizontalBar = this.horizontalScrollBar;
-                var verticalBar = this.verticalScrollBar;
-                if (horizontalBar && values[6 /* horizontalCanScroll */]) {
-                    horizontalBar.visible = true;
-                }
-                if (verticalBar && values[7 /* verticalCanScroll */]) {
-                    verticalBar.visible = true;
-                }
-                if (values[2 /* autoHideTimer */]) {
-                    values[2 /* autoHideTimer */].reset();
-                }
-            }
-            swan.UIEvent.emitUIEvent(this, swan.UIEvent.CHANGE_START);
-            if (values[11 /* delayTouchEvent */]) {
-                values[11 /* delayTouchEvent */] = null;
-                values[10 /* delayTouchTimer */].stop();
-            }
-            var viewport = values[12 /* viewport */];
-            var uiValues = viewport.$UIComponent;
-            if (values[6 /* horizontalCanScroll */]) {
-                values[8 /* touchScrollH */].update(event.$stageX, viewport.contentWidth - uiValues[10 /* width */]);
-            }
-            if (values[7 /* verticalCanScroll */]) {
-                values[9 /* touchScrollV */].update(event.$stageY, viewport.contentHeight - uiValues[11 /* height */]);
-            }
-        };
-        /**
-         * @private
-         *
-         * @param event
-         */
-        p.onTouchEnd = function (event) {
-            var values = this.$Scroller;
-            values[5 /* touchMoved */] = false;
-            var stage = event.$currentTarget;
-            stage.removeListener(lark.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
-            stage.removeListener(lark.TouchEvent.TOUCH_END, this.onTouchEnd, this);
-            var viewport = values[12 /* viewport */];
-            var uiValues = viewport.$UIComponent;
-            if (values[6 /* horizontalCanScroll */]) {
-                values[8 /* touchScrollH */].finish(viewport.scrollH, viewport.contentWidth - uiValues[10 /* width */]);
-            }
-            if (values[7 /* verticalCanScroll */]) {
-                values[9 /* touchScrollV */].finish(viewport.scrollV, viewport.contentHeight - uiValues[11 /* height */]);
-            }
-        };
-        /**
-         * @private
-         *
-         * @param scrollPos
-         */
-        p.horizontalUpdateHandler = function (scrollPos) {
-            this.$Scroller[12 /* viewport */].scrollH = scrollPos;
-        };
-        /**
-         * @private
-         *
-         * @param scrollPos
-         */
-        p.verticalUpdateHandler = function (scrollPos) {
-            this.$Scroller[12 /* viewport */].scrollV = scrollPos;
-        };
-        /**
-         * @private
-         *
-         */
-        p.horizontalEndHandler = function () {
-            if (!this.$Scroller[9 /* touchScrollV */].isPlaying()) {
-                this.onChangeEnd();
-            }
-        };
-        /**
-         * @private
-         *
-         */
-        p.verticalEndHanlder = function () {
-            if (!this.$Scroller[8 /* touchScrollH */].isPlaying()) {
-                this.onChangeEnd();
-            }
-        };
-        /**
-         * @private
-         *
-         */
-        p.onChangeEnd = function () {
-            var values = this.$Scroller;
-            var horizontalBar = this.horizontalScrollBar;
-            var verticalBar = this.verticalScrollBar;
-            if (horizontalBar && horizontalBar.visible || verticalBar && verticalBar.visible) {
-                if (!values[2 /* autoHideTimer */]) {
-                    values[2 /* autoHideTimer */] = new lark.Timer(200, 1);
-                    values[2 /* autoHideTimer */].on(lark.TimerEvent.TIMER_COMPLETE, this.onAutoHideTimer, this);
-                }
-                values[2 /* autoHideTimer */].reset();
-                values[2 /* autoHideTimer */].start();
-            }
-            swan.UIEvent.emitUIEvent(this, swan.UIEvent.CHANGE_END);
-        };
-        /**
-         * @private
-         *
-         * @param event
-         */
-        p.onAutoHideTimer = function (event) {
-            var horizontalBar = this.horizontalScrollBar;
-            var verticalBar = this.verticalScrollBar;
-            if (horizontalBar) {
-                horizontalBar.visible = false;
-            }
-            if (verticalBar) {
-                verticalBar.visible = false;
-            }
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
-            _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
-            var viewport = this.viewport;
-            if (viewport) {
-                viewport.setLayoutBoundsPosition(0, 0);
-                viewport.setLayoutBoundsSize(unscaledWidth, unscaledHeight);
-            }
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.partAdded = function (partName, instance) {
-            _super.prototype.partAdded.call(this, partName, instance);
-            if (instance == this.horizontalScrollBar) {
-                this.horizontalScrollBar.touchChildren = false;
-                this.horizontalScrollBar.touchEnabled = false;
-                this.horizontalScrollBar.viewport = this.viewport;
-                this.horizontalScrollBar.visible = false;
-            }
-            else if (instance == this.verticalScrollBar) {
-                this.verticalScrollBar.touchChildren = false;
-                this.verticalScrollBar.touchEnabled = false;
-                this.verticalScrollBar.viewport = this.viewport;
-                this.verticalScrollBar.visible = false;
-            }
-        };
-        /**
-         * @language en_US
-         * The threshold value(in pixels) trigger the rolling.
-         * when the touch points deviate from the initial touch point than this value will trigger the rolling.
-         *
-         * @default 5
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 开始触发滚动的阈值（以像素为单位），当触摸点偏离初始触摸点的距离超过这个值时才会触发滚动。
-         *
-         * @default 5
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        Scroller.scrollThreshold = 5;
-        return Scroller;
-    })(swan.Component);
-    swan.Scroller = Scroller;
-    swan.registerProperty(Scroller, "viewport", "swan.IViewport", true);
-    lark.registerClass(Scroller, 1037 /* Scroller */);
+        return ToggleButton;
+    })(swan.Button);
+    swan.ToggleButton = ToggleButton;
+    swan.registerBindable(ToggleButton.prototype, "selected");
+    lark.registerClass(ToggleButton, 1026 /* ToggleButton */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -19400,279 +19555,6 @@ var swan;
         return ProgressBar;
     })(swan.Range);
     swan.ProgressBar = ProgressBar;
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The VScrollBar (vertical scrollbar) control lets you control
-     * the portion of data that is displayed when there is too much data
-     * to fit vertically in a display area.
-     *
-     * <p>Although you can use the VScrollBar control as a stand-alone control,
-     * you usually combine it as part of another group of components to
-     * provide scrolling functionality.</p>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * VScrollBar（垂直 ScrollBar）控件可以在因数据太多而不能在显示区域中以垂直方向完全显示时控制显示的数据部分。
-     * <p>虽然 VScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。</p>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var VScrollBar = (function (_super) {
-        __extends(VScrollBar, _super);
-        function VScrollBar() {
-            _super.apply(this, arguments);
-        }
-        var d = __define,c=VScrollBar;p=c.prototype;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
-            _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
-            var thumb = this.thumb;
-            var viewport = this.$viewport;
-            if (!thumb || !viewport) {
-                return;
-            }
-            var bounds = lark.$TempRectangle;
-            thumb.getPreferredBounds(bounds);
-            var thumbHeight = bounds.height;
-            var thumbX = bounds.x;
-            var vsp = viewport.scrollV;
-            var contentHeight = viewport.contentHeight;
-            var height = viewport.height;
-            if (vsp <= 0) {
-                var scaleHeight = thumbHeight * (1 - (-vsp) / (height * 0.5));
-                scaleHeight = Math.max(5, Math.round(scaleHeight));
-                thumb.setLayoutBoundsSize(lark.NONE, scaleHeight);
-                thumb.setLayoutBoundsPosition(thumbX, 0);
-            }
-            else if (vsp >= contentHeight - height) {
-                scaleHeight = thumbHeight * (1 - (vsp - contentHeight + height) / (height * 0.5));
-                scaleHeight = Math.max(5, Math.round(scaleHeight));
-                thumb.setLayoutBoundsSize(lark.NONE, scaleHeight);
-                thumb.setLayoutBoundsPosition(thumbX, unscaledHeight - scaleHeight);
-            }
-            else {
-                var thumbY = (unscaledHeight - thumbHeight) * vsp / (contentHeight - height);
-                thumb.setLayoutBoundsSize(lark.NONE, lark.NONE);
-                thumb.setLayoutBoundsPosition(thumbX, thumbY);
-            }
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.onPropertyChanged = function (event) {
-            switch (event.property) {
-                case "scrollV":
-                case "contentHeight":
-                    this.invalidateDisplayList();
-                    break;
-            }
-        };
-        return VScrollBar;
-    })(swan.ScrollBarBase);
-    swan.VScrollBar = VScrollBar;
-    lark.registerClass(VScrollBar, 1039 /* VScrollBar */);
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The ToggleButton component defines a toggle button.
-     * Clicking the button toggles it between the up and an down states.
-     * If you click the button while it is in the up state,
-     * it toggles to the down state. You must click the button again
-     * to toggle it back to the up state.
-     * <p>You can get or set this state programmatically
-     * by using the <code>selected</code> property.</p>
-     *
-     * @event lark.Event.CHANGE Emitted when the <code>selected</code> property
-     * changes for the ToggleButton control.
-     * This event is emitted only when the
-     * user interacts with the control by touching.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * ToggleButton 组件定义切换按钮。单击该按钮会在弹起状态和按下状态之间进行切换。
-     * 如果在按钮处于弹起状态时单击该按钮，则它会切换到按下状态。必须再次单击该按钮才可将其切换回弹起状态。
-     * <p>可以使用 <code>selected</code> 属性以编程方式获取或设置此状态。</p>
-     *
-     * @event lark.Event.CHANGE ToggleButtonBase 控件的 <code>selected</code> 属性更改时分派。
-     * 仅当用户使用鼠标与控件交互时，才分派此事件。
-
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var ToggleButton = (function (_super) {
-        __extends(ToggleButton, _super);
-        function ToggleButton() {
-            _super.apply(this, arguments);
-            /**
-             * @private
-             */
-            this.$selected = false;
-            /**
-             * @private
-             * 是否根据鼠标事件自动变换选中状态,默认true。仅框架内使用。
-             */
-            this.$autoSelected = true;
-        }
-        var d = __define,c=ToggleButton;p=c.prototype;
-        d(p, "selected",
-            /**
-             * @language en_US
-             * Contains <code>true</code> if the button is in the down state,
-             * and <code>false</code> if it is in the up state.
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 按钮处于按下状态时为 <code>true</code>，而按钮处于弹起状态时为 <code>false</code>。
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$selected;
-            },
-            function (value) {
-                this.$setSelected(value);
-            }
-        );
-        /**
-         * @private
-         *
-         * @param value
-         */
-        p.$setSelected = function (value) {
-            value = !!value;
-            if (value === this.$selected)
-                return;
-            this.$selected = value;
-            this.invalidateState();
-            swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selected");
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getCurrentState = function () {
-            var state = _super.prototype.getCurrentState.call(this);
-            if (!this.$selected) {
-                return state;
-            }
-            else {
-                var selectedState = state + "AndSelected";
-                var skin = this.skin;
-                if (skin && skin.hasState(selectedState)) {
-                    return selectedState;
-                }
-                return state == "disabled" ? "disabled" : "down";
-            }
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.buttonReleased = function () {
-            if (!this.$autoSelected)
-                return;
-            this.selected = !this.$selected;
-            this.emitWith(lark.Event.CHANGE);
-        };
-        return ToggleButton;
-    })(swan.Button);
-    swan.ToggleButton = ToggleButton;
-    swan.registerBindable(ToggleButton.prototype, "selected");
-    lark.registerClass(ToggleButton, 1026 /* ToggleButton */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -20216,6 +20098,242 @@ var swan;
      * @private
      */
     lark.registerClass(SliderBase, 1042 /* SliderBase */);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * The VScrollBar (vertical scrollbar) control lets you control
+     * the portion of data that is displayed when there is too much data
+     * to fit vertically in a display area.
+     *
+     * <p>Although you can use the VScrollBar control as a stand-alone control,
+     * you usually combine it as part of another group of components to
+     * provide scrolling functionality.</p>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * VScrollBar（垂直 ScrollBar）控件可以在因数据太多而不能在显示区域中以垂直方向完全显示时控制显示的数据部分。
+     * <p>虽然 VScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。</p>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var VScrollBar = (function (_super) {
+        __extends(VScrollBar, _super);
+        function VScrollBar() {
+            _super.apply(this, arguments);
+        }
+        var d = __define,c=VScrollBar;p=c.prototype;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
+            _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
+            var thumb = this.thumb;
+            var viewport = this.$viewport;
+            if (!thumb || !viewport) {
+                return;
+            }
+            var bounds = lark.$TempRectangle;
+            thumb.getPreferredBounds(bounds);
+            var thumbHeight = bounds.height;
+            var thumbX = bounds.x;
+            var vsp = viewport.scrollV;
+            var contentHeight = viewport.contentHeight;
+            var height = viewport.height;
+            if (vsp <= 0) {
+                var scaleHeight = thumbHeight * (1 - (-vsp) / (height * 0.5));
+                scaleHeight = Math.max(5, Math.round(scaleHeight));
+                thumb.setLayoutBoundsSize(lark.NONE, scaleHeight);
+                thumb.setLayoutBoundsPosition(thumbX, 0);
+            }
+            else if (vsp >= contentHeight - height) {
+                scaleHeight = thumbHeight * (1 - (vsp - contentHeight + height) / (height * 0.5));
+                scaleHeight = Math.max(5, Math.round(scaleHeight));
+                thumb.setLayoutBoundsSize(lark.NONE, scaleHeight);
+                thumb.setLayoutBoundsPosition(thumbX, unscaledHeight - scaleHeight);
+            }
+            else {
+                var thumbY = (unscaledHeight - thumbHeight) * vsp / (contentHeight - height);
+                thumb.setLayoutBoundsSize(lark.NONE, lark.NONE);
+                thumb.setLayoutBoundsPosition(thumbX, thumbY);
+            }
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.onPropertyChanged = function (event) {
+            switch (event.property) {
+                case "scrollV":
+                case "contentHeight":
+                    this.invalidateDisplayList();
+                    break;
+            }
+        };
+        return VScrollBar;
+    })(swan.ScrollBarBase);
+    swan.VScrollBar = VScrollBar;
+    lark.registerClass(VScrollBar, 1039 /* VScrollBar */);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * The HScrollBar (horizontal scrollbar) control lets you control
+     * the portion of data that is displayed when there is too much data
+     * to fit horizontally in a display area.
+     *
+     * <p>Although you can use the HScrollBar control as a stand-alone control,
+     * you usually combine it as part of another group of components to
+     * provide scrolling functionality.</p>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * HScrollBar（水平 ScrollBar）控件可以在因数据太多而不能在显示区域中以水平方向完全显示时控制显示的数据部分。
+     * <p>虽然 HScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。</p>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var HScrollBar = (function (_super) {
+        __extends(HScrollBar, _super);
+        function HScrollBar() {
+            _super.apply(this, arguments);
+        }
+        var d = __define,c=HScrollBar;p=c.prototype;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
+            _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
+            var thumb = this.thumb;
+            var viewport = this.$viewport;
+            if (!thumb || !viewport) {
+                return;
+            }
+            var bounds = lark.$TempRectangle;
+            thumb.getPreferredBounds(bounds);
+            var thumbWidth = bounds.width;
+            var thumbY = bounds.y;
+            var hsp = viewport.scrollH;
+            var contentWidth = viewport.contentWidth;
+            var width = viewport.width;
+            if (hsp <= 0) {
+                var scaleWidth = thumbWidth * (1 - (-hsp) / (width * 0.5));
+                scaleWidth = Math.max(5, Math.round(scaleWidth));
+                thumb.setLayoutBoundsSize(scaleWidth, lark.NONE);
+                thumb.setLayoutBoundsPosition(0, thumbY);
+            }
+            else if (hsp >= contentWidth - width) {
+                scaleWidth = thumbWidth * (1 - (hsp - contentWidth + width) / (width * 0.5));
+                scaleWidth = Math.max(5, Math.round(scaleWidth));
+                thumb.setLayoutBoundsSize(scaleWidth, lark.NONE);
+                thumb.setLayoutBoundsPosition(unscaledWidth - scaleWidth, thumbY);
+            }
+            else {
+                var thumbX = (unscaledWidth - thumbWidth) * hsp / (contentWidth - width);
+                thumb.setLayoutBoundsSize(lark.NONE, lark.NONE);
+                thumb.setLayoutBoundsPosition(thumbX, thumbY);
+            }
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.onPropertyChanged = function (event) {
+            switch (event.property) {
+                case "scrollH":
+                case "contentWidth":
+                    this.invalidateDisplayList();
+                    break;
+            }
+        };
+        return HScrollBar;
+    })(swan.ScrollBarBase);
+    swan.HScrollBar = HScrollBar;
+    lark.registerClass(HScrollBar, 1040 /* HScrollBar */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -21035,124 +21153,6 @@ var swan;
 (function (swan) {
     /**
      * @language en_US
-     * The HScrollBar (horizontal scrollbar) control lets you control
-     * the portion of data that is displayed when there is too much data
-     * to fit horizontally in a display area.
-     *
-     * <p>Although you can use the HScrollBar control as a stand-alone control,
-     * you usually combine it as part of another group of components to
-     * provide scrolling functionality.</p>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * HScrollBar（水平 ScrollBar）控件可以在因数据太多而不能在显示区域中以水平方向完全显示时控制显示的数据部分。
-     * <p>虽然 HScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。</p>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var HScrollBar = (function (_super) {
-        __extends(HScrollBar, _super);
-        function HScrollBar() {
-            _super.apply(this, arguments);
-        }
-        var d = __define,c=HScrollBar;p=c.prototype;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
-            _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
-            var thumb = this.thumb;
-            var viewport = this.$viewport;
-            if (!thumb || !viewport) {
-                return;
-            }
-            var bounds = lark.$TempRectangle;
-            thumb.getPreferredBounds(bounds);
-            var thumbWidth = bounds.width;
-            var thumbY = bounds.y;
-            var hsp = viewport.scrollH;
-            var contentWidth = viewport.contentWidth;
-            var width = viewport.width;
-            if (hsp <= 0) {
-                var scaleWidth = thumbWidth * (1 - (-hsp) / (width * 0.5));
-                scaleWidth = Math.max(5, Math.round(scaleWidth));
-                thumb.setLayoutBoundsSize(scaleWidth, lark.NONE);
-                thumb.setLayoutBoundsPosition(0, thumbY);
-            }
-            else if (hsp >= contentWidth - width) {
-                scaleWidth = thumbWidth * (1 - (hsp - contentWidth + width) / (width * 0.5));
-                scaleWidth = Math.max(5, Math.round(scaleWidth));
-                thumb.setLayoutBoundsSize(scaleWidth, lark.NONE);
-                thumb.setLayoutBoundsPosition(unscaledWidth - scaleWidth, thumbY);
-            }
-            else {
-                var thumbX = (unscaledWidth - thumbWidth) * hsp / (contentWidth - width);
-                thumb.setLayoutBoundsSize(lark.NONE, lark.NONE);
-                thumb.setLayoutBoundsPosition(thumbX, thumbY);
-            }
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.onPropertyChanged = function (event) {
-            switch (event.property) {
-                case "scrollH":
-                case "contentWidth":
-                    this.invalidateDisplayList();
-                    break;
-            }
-        };
-        return HScrollBar;
-    })(swan.ScrollBarBase);
-    swan.HScrollBar = HScrollBar;
-    lark.registerClass(HScrollBar, 1040 /* HScrollBar */);
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
      * The CheckBox component consists of an optional label and a small box
      * that can contain a check mark or not.<p/>
      *
@@ -21269,6 +21269,589 @@ var swan;
     })(swan.ToggleButton);
     swan.ToggleSwitch = ToggleSwitch;
     lark.registerClass(ToggleSwitch, 1028 /* ToggleSwitch */);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @private
+     * 存储根据groupName自动创建的RadioButtonGroup列表
+     */
+    var automaticRadioButtonGroups = {};
+    /**
+     * @language en_US
+     * The RadioButton component allows the user make a single choice
+     * within a set of mutually exclusive choices.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * RadioButton 组件使用户可在一组互相排斥的选择中做出一种选择
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var RadioButton = (function (_super) {
+        __extends(RadioButton, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function RadioButton() {
+            _super.call(this);
+            /**
+             * @private
+             * 在RadioButtonGroup中的索引
+             */
+            this.$indexNumber = 0;
+            /**
+             * @private
+             * 所属的RadioButtonGroup
+             */
+            this.$radioButtonGroup = null;
+            /**
+             * @private
+             */
+            this._group = null;
+            /**
+             * @private
+             */
+            this.groupChanged = false;
+            /**
+             * @private
+             */
+            this._groupName = "radioGroup";
+            /**
+             * @private
+             */
+            this._value = null;
+            this.groupName = "radioGroup";
+        }
+        var d = __define,c=RadioButton;p=c.prototype;
+        d(p, "enabled",
+            /**
+             * @language en_US
+             * The RadioButton component is enabled if the
+             * RadioButtonGroup is enabled and the RadioButton itself is enabled.
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 如果 RadioButtonGroup 启用且 RadioButton 本身也启用，则 RadioButton 组件启用。
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                if (!this.$Component[3 /* enabled */]) {
+                    return false;
+                }
+                return !this.$radioButtonGroup || this.$radioButtonGroup.$enabled;
+            },
+            function (value) {
+                this.$setEnabled(value);
+            }
+        );
+        d(p, "group",
+            /**
+             * @language en_US
+             * The RadioButtonGroup component to which this RadioButton belongs.
+             * If this property is not set,
+             * a unique RadioButtonGroup is created automatically based on the groupName property.
+             *
+             * @see swan.RadioButton#groupName
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 此 RadioButton 所属的 RadioButtonGroup 组件。
+             * 若不设置此属性，则根据groupName属性自动创建一个唯一的RadioButtonGroup。
+             *
+             * @see swan.RadioButton#groupName
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                if (!this._group && this._groupName) {
+                    var g = automaticRadioButtonGroups[this._groupName];
+                    if (!g) {
+                        g = new swan.RadioButtonGroup();
+                        g.$name = this._groupName;
+                        automaticRadioButtonGroups[this._groupName] = g;
+                    }
+                    this._group = g;
+                }
+                return this._group;
+            },
+            function (value) {
+                if (this._group == value)
+                    return;
+                if (this.$radioButtonGroup)
+                    this.$radioButtonGroup.$removeInstance(this, false);
+                this._group = value;
+                this._groupName = value ? this.group.$name : "radioGroup";
+                this.groupChanged = true;
+                this.invalidateProperties();
+                this.invalidateDisplayList();
+            }
+        );
+        d(p, "groupName",
+            /**
+             * @language en_US
+             * Specifies the name of the group to which this RadioButton component belongs
+             *
+             * @default “radioGroup”
+             *
+             * @see swan.RadioButton#group
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * RadioButton 组件所属的组的名称
+             *
+             * @default “radioGroup”
+             *
+             * @see swan.RadioButton#group
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this._groupName;
+            },
+            function (value) {
+                if (!value || value == "")
+                    return;
+                this._groupName = value;
+                if (this.$radioButtonGroup)
+                    this.$radioButtonGroup.$removeInstance(this, false);
+                this._group = null;
+                this.groupChanged = true;
+                this.invalidateProperties();
+                this.invalidateDisplayList();
+            }
+        );
+        /**
+         * @private
+         *
+         * @param value
+         */
+        p.$setSelected = function (value) {
+            _super.prototype.$setSelected.call(this, value);
+            this.invalidateDisplayList();
+        };
+        d(p, "value",
+            /**
+             * @language en_US
+             * Optional user-defined value
+             * that is associated with a RadioButton component.
+             *
+             * @default null
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 与 RadioButton 组件关联的可选用户定义值。
+             *
+             * @default null
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this._value;
+            },
+            function (value) {
+                if (this._value == value)
+                    return;
+                this._value = value;
+                if (this.$selected && this.group) {
+                    swan.PropertyEvent.emitPropertyEvent(this.group, swan.PropertyEvent.PROPERTY_CHANGE, "selectedValue");
+                }
+            }
+        );
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.commitProperties = function () {
+            if (this.groupChanged) {
+                this.addToGroup();
+                this.groupChanged = false;
+            }
+            _super.prototype.commitProperties.call(this);
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
+            _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
+            if (this.group) {
+                if (this.$selected)
+                    this._group.$setSelection(this, false);
+                else if (this.group.selection == this)
+                    this._group.$setSelection(null, false);
+            }
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.buttonReleased = function () {
+            if (!this.enabled || this.selected)
+                return;
+            if (!this.$radioButtonGroup)
+                this.addToGroup();
+            _super.prototype.buttonReleased.call(this);
+            this.group.$setSelection(this, true);
+        };
+        /**
+         * @private
+         * 添此单选按钮加到组
+         */
+        p.addToGroup = function () {
+            var g = this.group;
+            if (g)
+                g.$addInstance(this);
+            return g;
+        };
+        return RadioButton;
+    })(swan.ToggleButton);
+    swan.RadioButton = RadioButton;
+    lark.registerClass(RadioButton, 1029 /* RadioButton */);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * The HSlider (horizontal slider) control lets users select a value
+     * by moving a slider thumb between the end points of the slider track.
+     * The current value of the slider is determined by the relative location of the thumb between
+     * the end points of the slider, corresponding to the slider's minimum and maximum values.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 使用 HSlider（水平滑块）控件，用户可通过在滑块轨道的端点之间移动滑块来选择值。
+     * 滑块的当前值由滑块端点（对应于滑块的最小值和最大值）之间滑块的相对位置确定。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var HSlider = (function (_super) {
+        __extends(HSlider, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function HSlider() {
+            _super.call(this);
+        }
+        var d = __define,c=HSlider;p=c.prototype;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.pointToValue = function (x, y) {
+            if (!this.thumb || !this.track)
+                return 0;
+            var values = this.$Range;
+            var range = values[0 /* maximum */] - values[2 /* minimum */];
+            var thumbRange = this.getThumbRange();
+            return values[2 /* minimum */] + (thumbRange != 0 ? (x / thumbRange) * range : 0);
+        };
+        /**
+         * @private
+         *
+         * @returns
+         */
+        p.getThumbRange = function () {
+            var bounds = lark.$TempRectangle;
+            this.track.getLayoutBounds(bounds);
+            var thumbRange = bounds.width;
+            this.thumb.getLayoutBounds(bounds);
+            return thumbRange - bounds.width;
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.updateSkinDisplayList = function () {
+            if (!this.thumb || !this.track)
+                return;
+            var values = this.$Range;
+            var thumbRange = this.getThumbRange();
+            var range = values[0 /* maximum */] - values[2 /* minimum */];
+            var thumbPosTrackX = (range > 0) ? ((this.pendingValue - values[2 /* minimum */]) / range) * thumbRange : 0;
+            var thumbPos = this.track.localToGlobal(thumbPosTrackX, 0, lark.$TempPoint);
+            var thumbPosX = thumbPos.x;
+            var thumbPosY = thumbPos.y;
+            var thumbPosParentX = this.thumb.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).x;
+            var bounds = lark.$TempRectangle;
+            this.thumb.getLayoutBounds(bounds);
+            this.thumb.setLayoutBoundsPosition(Math.round(thumbPosParentX), bounds.y);
+            if (this.trackHighlight && this.trackHighlight.$parent) {
+                var trackHighlightX = this.trackHighlight.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).x - thumbPosTrackX;
+                this.trackHighlight.x = Math.round(trackHighlightX);
+                this.trackHighlight.width = Math.round(thumbPosTrackX);
+            }
+        };
+        return HSlider;
+    })(swan.SliderBase);
+    swan.HSlider = HSlider;
+    lark.registerClass(HSlider, 1043 /* HSlider */);
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * The VSlider (vertical slider) control lets users select a value
+     * by moving a slider thumb between the end points of the slider track.
+     * The current value of the slider is determined by the relative location of the thumb between
+     * the end points of the slider, corresponding to the slider's minimum and maximum values.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 使用 VSlider（垂直滑块）控件，用户可通过在滑块轨道的端点之间移动滑块来选择值。
+     * 滑块的当前值由滑块端点（对应于滑块的最小值和最大值）之间滑块的相对位置确定。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var VSlider = (function (_super) {
+        __extends(VSlider, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function VSlider() {
+            _super.call(this);
+        }
+        var d = __define,c=VSlider;p=c.prototype;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.pointToValue = function (x, y) {
+            if (!this.thumb || !this.track)
+                return 0;
+            var values = this.$Range;
+            var range = values[0 /* maximum */] - values[2 /* minimum */];
+            var thumbRange = this.getThumbRange();
+            return values[2 /* minimum */] + ((thumbRange != 0) ? ((thumbRange - y) / thumbRange) * range : 0);
+        };
+        /**
+         * @private
+         *
+         * @returns
+         */
+        p.getThumbRange = function () {
+            var bounds = lark.$TempRectangle;
+            this.track.getLayoutBounds(bounds);
+            var thumbRange = bounds.height;
+            this.thumb.getLayoutBounds(bounds);
+            return thumbRange - bounds.height;
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.updateSkinDisplayList = function () {
+            if (!this.thumb || !this.track)
+                return;
+            var values = this.$Range;
+            var thumbRange = this.getThumbRange();
+            var range = values[0 /* maximum */] - values[2 /* minimum */];
+            var thumbPosTrackY = (range > 0) ? thumbRange - (((this.pendingValue - values[2 /* minimum */]) / range) * thumbRange) : 0;
+            var thumbPos = this.track.localToGlobal(0, thumbPosTrackY, lark.$TempPoint);
+            var thumbPosX = thumbPos.x;
+            var thumbPosY = thumbPos.y;
+            var thumbPosParentY = this.thumb.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).y;
+            var bounds = lark.$TempRectangle;
+            var thumbHeight = bounds.height;
+            this.thumb.getLayoutBounds(bounds);
+            this.thumb.setLayoutBoundsPosition(bounds.x, Math.round(thumbPosParentY));
+            if (this.trackHighlight) {
+                var trackHighlightY = this.trackHighlight.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).y;
+                this.trackHighlight.y = Math.round(trackHighlightY + thumbHeight);
+                this.trackHighlight.height = Math.round(thumbRange - trackHighlightY);
+            }
+        };
+        return VSlider;
+    })(swan.SliderBase);
+    swan.VSlider = VSlider;
+    lark.registerClass(VSlider, 1044 /* VSlider */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -21701,589 +22284,6 @@ var swan;
     })(swan.ListBase);
     swan.List = List;
     lark.registerClass(List, 1006 /* List */);
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The HSlider (horizontal slider) control lets users select a value
-     * by moving a slider thumb between the end points of the slider track.
-     * The current value of the slider is determined by the relative location of the thumb between
-     * the end points of the slider, corresponding to the slider's minimum and maximum values.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 使用 HSlider（水平滑块）控件，用户可通过在滑块轨道的端点之间移动滑块来选择值。
-     * 滑块的当前值由滑块端点（对应于滑块的最小值和最大值）之间滑块的相对位置确定。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var HSlider = (function (_super) {
-        __extends(HSlider, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function HSlider() {
-            _super.call(this);
-        }
-        var d = __define,c=HSlider;p=c.prototype;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.pointToValue = function (x, y) {
-            if (!this.thumb || !this.track)
-                return 0;
-            var values = this.$Range;
-            var range = values[0 /* maximum */] - values[2 /* minimum */];
-            var thumbRange = this.getThumbRange();
-            return values[2 /* minimum */] + (thumbRange != 0 ? (x / thumbRange) * range : 0);
-        };
-        /**
-         * @private
-         *
-         * @returns
-         */
-        p.getThumbRange = function () {
-            var bounds = lark.$TempRectangle;
-            this.track.getLayoutBounds(bounds);
-            var thumbRange = bounds.width;
-            this.thumb.getLayoutBounds(bounds);
-            return thumbRange - bounds.width;
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.updateSkinDisplayList = function () {
-            if (!this.thumb || !this.track)
-                return;
-            var values = this.$Range;
-            var thumbRange = this.getThumbRange();
-            var range = values[0 /* maximum */] - values[2 /* minimum */];
-            var thumbPosTrackX = (range > 0) ? ((this.pendingValue - values[2 /* minimum */]) / range) * thumbRange : 0;
-            var thumbPos = this.track.localToGlobal(thumbPosTrackX, 0, lark.$TempPoint);
-            var thumbPosX = thumbPos.x;
-            var thumbPosY = thumbPos.y;
-            var thumbPosParentX = this.thumb.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).x;
-            var bounds = lark.$TempRectangle;
-            this.thumb.getLayoutBounds(bounds);
-            this.thumb.setLayoutBoundsPosition(Math.round(thumbPosParentX), bounds.y);
-            if (this.trackHighlight && this.trackHighlight.$parent) {
-                var trackHighlightX = this.trackHighlight.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).x - thumbPosTrackX;
-                this.trackHighlight.x = Math.round(trackHighlightX);
-                this.trackHighlight.width = Math.round(thumbPosTrackX);
-            }
-        };
-        return HSlider;
-    })(swan.SliderBase);
-    swan.HSlider = HSlider;
-    lark.registerClass(HSlider, 1043 /* HSlider */);
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @private
-     * 存储根据groupName自动创建的RadioButtonGroup列表
-     */
-    var automaticRadioButtonGroups = {};
-    /**
-     * @language en_US
-     * The RadioButton component allows the user make a single choice
-     * within a set of mutually exclusive choices.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * RadioButton 组件使用户可在一组互相排斥的选择中做出一种选择
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var RadioButton = (function (_super) {
-        __extends(RadioButton, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function RadioButton() {
-            _super.call(this);
-            /**
-             * @private
-             * 在RadioButtonGroup中的索引
-             */
-            this.$indexNumber = 0;
-            /**
-             * @private
-             * 所属的RadioButtonGroup
-             */
-            this.$radioButtonGroup = null;
-            /**
-             * @private
-             */
-            this._group = null;
-            /**
-             * @private
-             */
-            this.groupChanged = false;
-            /**
-             * @private
-             */
-            this._groupName = "radioGroup";
-            /**
-             * @private
-             */
-            this._value = null;
-            this.groupName = "radioGroup";
-        }
-        var d = __define,c=RadioButton;p=c.prototype;
-        d(p, "enabled",
-            /**
-             * @language en_US
-             * The RadioButton component is enabled if the
-             * RadioButtonGroup is enabled and the RadioButton itself is enabled.
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 如果 RadioButtonGroup 启用且 RadioButton 本身也启用，则 RadioButton 组件启用。
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                if (!this.$Component[3 /* enabled */]) {
-                    return false;
-                }
-                return !this.$radioButtonGroup || this.$radioButtonGroup.$enabled;
-            },
-            function (value) {
-                this.$setEnabled(value);
-            }
-        );
-        d(p, "group",
-            /**
-             * @language en_US
-             * The RadioButtonGroup component to which this RadioButton belongs.
-             * If this property is not set,
-             * a unique RadioButtonGroup is created automatically based on the groupName property.
-             *
-             * @see swan.RadioButton#groupName
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 此 RadioButton 所属的 RadioButtonGroup 组件。
-             * 若不设置此属性，则根据groupName属性自动创建一个唯一的RadioButtonGroup。
-             *
-             * @see swan.RadioButton#groupName
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                if (!this._group && this._groupName) {
-                    var g = automaticRadioButtonGroups[this._groupName];
-                    if (!g) {
-                        g = new swan.RadioButtonGroup();
-                        g.$name = this._groupName;
-                        automaticRadioButtonGroups[this._groupName] = g;
-                    }
-                    this._group = g;
-                }
-                return this._group;
-            },
-            function (value) {
-                if (this._group == value)
-                    return;
-                if (this.$radioButtonGroup)
-                    this.$radioButtonGroup.$removeInstance(this, false);
-                this._group = value;
-                this._groupName = value ? this.group.$name : "radioGroup";
-                this.groupChanged = true;
-                this.invalidateProperties();
-                this.invalidateDisplayList();
-            }
-        );
-        d(p, "groupName",
-            /**
-             * @language en_US
-             * Specifies the name of the group to which this RadioButton component belongs
-             *
-             * @default “radioGroup”
-             *
-             * @see swan.RadioButton#group
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * RadioButton 组件所属的组的名称
-             *
-             * @default “radioGroup”
-             *
-             * @see swan.RadioButton#group
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this._groupName;
-            },
-            function (value) {
-                if (!value || value == "")
-                    return;
-                this._groupName = value;
-                if (this.$radioButtonGroup)
-                    this.$radioButtonGroup.$removeInstance(this, false);
-                this._group = null;
-                this.groupChanged = true;
-                this.invalidateProperties();
-                this.invalidateDisplayList();
-            }
-        );
-        /**
-         * @private
-         *
-         * @param value
-         */
-        p.$setSelected = function (value) {
-            _super.prototype.$setSelected.call(this, value);
-            this.invalidateDisplayList();
-        };
-        d(p, "value",
-            /**
-             * @language en_US
-             * Optional user-defined value
-             * that is associated with a RadioButton component.
-             *
-             * @default null
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 与 RadioButton 组件关联的可选用户定义值。
-             *
-             * @default null
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this._value;
-            },
-            function (value) {
-                if (this._value == value)
-                    return;
-                this._value = value;
-                if (this.$selected && this.group) {
-                    swan.PropertyEvent.emitPropertyEvent(this.group, swan.PropertyEvent.PROPERTY_CHANGE, "selectedValue");
-                }
-            }
-        );
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.commitProperties = function () {
-            if (this.groupChanged) {
-                this.addToGroup();
-                this.groupChanged = false;
-            }
-            _super.prototype.commitProperties.call(this);
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
-            _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
-            if (this.group) {
-                if (this.$selected)
-                    this._group.$setSelection(this, false);
-                else if (this.group.selection == this)
-                    this._group.$setSelection(null, false);
-            }
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.buttonReleased = function () {
-            if (!this.enabled || this.selected)
-                return;
-            if (!this.$radioButtonGroup)
-                this.addToGroup();
-            _super.prototype.buttonReleased.call(this);
-            this.group.$setSelection(this, true);
-        };
-        /**
-         * @private
-         * 添此单选按钮加到组
-         */
-        p.addToGroup = function () {
-            var g = this.group;
-            if (g)
-                g.$addInstance(this);
-            return g;
-        };
-        return RadioButton;
-    })(swan.ToggleButton);
-    swan.RadioButton = RadioButton;
-    lark.registerClass(RadioButton, 1029 /* RadioButton */);
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The VSlider (vertical slider) control lets users select a value
-     * by moving a slider thumb between the end points of the slider track.
-     * The current value of the slider is determined by the relative location of the thumb between
-     * the end points of the slider, corresponding to the slider's minimum and maximum values.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 使用 VSlider（垂直滑块）控件，用户可通过在滑块轨道的端点之间移动滑块来选择值。
-     * 滑块的当前值由滑块端点（对应于滑块的最小值和最大值）之间滑块的相对位置确定。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var VSlider = (function (_super) {
-        __extends(VSlider, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function VSlider() {
-            _super.call(this);
-        }
-        var d = __define,c=VSlider;p=c.prototype;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.pointToValue = function (x, y) {
-            if (!this.thumb || !this.track)
-                return 0;
-            var values = this.$Range;
-            var range = values[0 /* maximum */] - values[2 /* minimum */];
-            var thumbRange = this.getThumbRange();
-            return values[2 /* minimum */] + ((thumbRange != 0) ? ((thumbRange - y) / thumbRange) * range : 0);
-        };
-        /**
-         * @private
-         *
-         * @returns
-         */
-        p.getThumbRange = function () {
-            var bounds = lark.$TempRectangle;
-            this.track.getLayoutBounds(bounds);
-            var thumbRange = bounds.height;
-            this.thumb.getLayoutBounds(bounds);
-            return thumbRange - bounds.height;
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.updateSkinDisplayList = function () {
-            if (!this.thumb || !this.track)
-                return;
-            var values = this.$Range;
-            var thumbRange = this.getThumbRange();
-            var range = values[0 /* maximum */] - values[2 /* minimum */];
-            var thumbPosTrackY = (range > 0) ? thumbRange - (((this.pendingValue - values[2 /* minimum */]) / range) * thumbRange) : 0;
-            var thumbPos = this.track.localToGlobal(0, thumbPosTrackY, lark.$TempPoint);
-            var thumbPosX = thumbPos.x;
-            var thumbPosY = thumbPos.y;
-            var thumbPosParentY = this.thumb.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).y;
-            var bounds = lark.$TempRectangle;
-            var thumbHeight = bounds.height;
-            this.thumb.getLayoutBounds(bounds);
-            this.thumb.setLayoutBoundsPosition(bounds.x, Math.round(thumbPosParentY));
-            if (this.trackHighlight) {
-                var trackHighlightY = this.trackHighlight.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).y;
-                this.trackHighlight.y = Math.round(trackHighlightY + thumbHeight);
-                this.trackHighlight.height = Math.round(thumbRange - trackHighlightY);
-            }
-        };
-        return VSlider;
-    })(swan.SliderBase);
-    swan.VSlider = VSlider;
-    lark.registerClass(VSlider, 1044 /* VSlider */);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //

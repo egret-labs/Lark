@@ -26,8 +26,6 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-var HTMLVideoElement = HTMLVideoElement || HTMLDivElement;
-
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -256,7 +254,13 @@ var lark;
                  * 本次请求返回的数据，数据类型根据responseType设置的值确定。
                  */
                 function () {
-                    return this._xhr.response;
+                    if (this._xhr.response)
+                        return this._xhr.response;
+                    if (this._xhr.responseXML)
+                        return this._xhr.responseXML;
+                    if (this._xhr.responseText)
+                        return this._xhr.responseText;
+                    return null;
                 },undefined
             );
             d(p, "responseType",
@@ -471,6 +475,7 @@ var lark;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
+var HTMLVideoElement = HTMLVideoElement || HTMLDivElement;
 var lark;
 (function (lark) {
     var web;
@@ -763,7 +768,7 @@ var lark;
                             break;
                         }
                     }
-                    try{
+                    try {
                         Object.defineProperty(context, "imageSmoothingEnabled", {
                             get: function () {
                                 return this[key];
@@ -773,7 +778,7 @@ var lark;
                             }
                         });
                     }
-                    catch(e){
+                    catch (e) {
                         context["imageSmoothingEnabled"] = context[key];
                     }
                 }
@@ -1557,24 +1562,16 @@ var lark;
                 requestAnimationFrame.call(window, onTick);
             }
         }
-
-        function toArray(argument){
+        function toArray(argument) {
             var args = [];
-            for(var i=0;i<argument.length;i++){
+            for (var i = 0; i < argument.length; i++) {
                 args.push(argument[i]);
             }
             return args;
         }
-
-        lark.assert = function(){
-            console.log.apply(console,toArray(arguments));
-        };
-        lark.warn = function(){
-            console.warn.apply(console,toArray(arguments));
-        };
-        lark.error = function(){
-            console.error.apply(console,toArray(arguments));
-        };
+        lark.warn = function () { return console.warn.apply(console, toArray(arguments)); };
+        lark.error = function () { return console.error.apply(console, toArray(arguments)); };
+        lark.assert = function () { return console.assert.apply(console, toArray(arguments)); };
         if (DEBUG) {
             lark.log = function () {
                 if (DEBUG) {
@@ -1585,13 +1582,11 @@ var lark;
                     }
                     lark.sys.$logToFPS(info);
                 }
-                console.log.apply(console,toArray(arguments));
+                console.log.apply(console, toArray(arguments));
             };
         }
         else {
-            lark.log = function(){
-                console.log.apply(console,toArray(arguments));
-            }
+            lark.log = function () { return console.log.apply(console, toArray(arguments)); };
         }
         window.addEventListener("load", runLark);
         window.addEventListener("resize", updateScreenSize);

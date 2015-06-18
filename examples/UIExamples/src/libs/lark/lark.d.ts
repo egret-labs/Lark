@@ -668,7 +668,7 @@ declare module lark.sys {
 declare module lark {
     /**
      * @language en_US
-     * The CanvasGradient interface represents an opaque object describing a gradient. It is returned by the static methods
+     * The GraphicsGradient interface represents an opaque object describing a gradient. It is returned by the static methods
      * Graphics.createLinearGradient() or Graphics.createRadialGradient().
      * @see lark.Graphics#createLinearGradient()
      * @see lark.Graphics#createRadialGradient()
@@ -709,7 +709,7 @@ declare module lark {
 declare module lark {
     /**
      * @language en_US
-     * The CanvasPattern interface represents an opaque object describing a pattern, based on a BitmapData,
+     * The GraphicsPattern interface represents an opaque object describing a pattern, based on a BitmapData,
      * created by the Graphics.createPattern() method.
      * @see lark.Graphics#createPattern()
      * @version Lark 1.0
@@ -811,161 +811,303 @@ declare module lark.sys {
     interface RenderContext {
         /**
          * @private
+         * 与绘图上线文关联的画布实例
          */
         surface: Surface;
         /**
          * @private
+         * 设置新图像如何绘制到已有的图像上的规制
          */
         globalCompositeOperation: string;
         /**
          * @private
+         * 设置接下来绘图填充的整体透明度
          */
         globalAlpha: number;
         /**
          * @private
+         * 用于表示剪切斜接的极限值的数字。
+         * @default 10
          */
         miterLimit: number;
         /**
          * @private
+         * 指定如何绘制每一条线段末端的属性。有3个可能的值，分别是：<br/>
+         * <ul>
+         * <li>"butt": 线段末端以方形结束。</li>
+         * <li>"round": 线段末端以圆形结束。</li>
+         * <li>"square": 线段末端以方形结束，但是增加了一个宽度和线段相同，高度是线段厚度一半的矩形区域。</li>
+         * </ul>
+         * @default "butt"
          */
         lineCap: string;
         /**
          * @private
+         * 指定用于拐角的连接外观的类型,有3个可能的值，分别是：<br/>
+         * <ul>
+         * <li>"round": 圆角连接</li>
+         * <li>"bevel": 斜角连接。</li>
+         * <li>"miter": 尖角连接。当使用尖角模式时，还可以同时使用 miterLimit 参数限制尖角的长度。</li>
+         * </ul>
+         * @default "miter"
          */
         lineJoin: string;
         /**
          * @private
+         * 设置线条粗细，以像素为单位。设置为0，负数，Infinity 或 NaN 将会被忽略。
+         * @default 1
          */
         lineWidth: number;
         /**
          * @private
+         * 设置要在图形边线填充的颜色或样式
+         * @default "#000000"
          */
         strokeStyle: any;
         /**
          * @private
+         * 设置要在图形内部填充的颜色或样式
+         * @default "#000000"
          */
         fillStyle: any;
         /**
          * @private
+         * 控制在缩放时是否对位图进行平滑处理。
+         * @default true
          */
         imageSmoothingEnabled: boolean;
         /**
          * @private
+         * 文本的对齐方式的属性,有5个可能的值，分别是：<br/>
+         * <ul>
+         * <li>"left" 文本左对齐。</li>
+         * <li>"right" 文本右对齐。</li>
+         * <li>"center" 文本居中对齐。</li>
+         * <li>"start" 文本对齐界线开始的地方 （对于从左向右阅读的语言使用左对齐，对从右向左的阅读的语言使用右对齐）。</li>
+         * <li>"end" 文本对齐界线结束的地方 （对于从左向右阅读的语言使用右对齐，对从右向左的阅读的语言使用左对齐）。</li>
+         * </ul>
+         * @default "start"
          */
         textAlign: string;
         /**
          * @private
+         * 决定文字垂直方向的对齐方式。有6个可能的值，分别是：<br/>
+         * <ul>
+         * <li>"top" 文本基线在文本块的顶部。</li>
+         * <li>"hanging" 文本基线是悬挂基线。</li>
+         * <li>"middle" 文本基线在文本块的中间。</li>
+         * <li>"alphabetic" 文本基线是标准的字母基线。</li>
+         * <li>"ideographic" 文字基线是表意字基线；如果字符本身超出了alphabetic 基线，那么ideograhpic基线位置在字符本身的底部。</li>
+         * <li>"bottom" 文本基线在文本块的底部。 与 ideographic 基线的区别在于 ideographic 基线不需要考虑下行字母。</li>
+         * </ul>
+         * @default "alphabetic"
          */
         textBaseline: string;
         /**
          * @private
+         * 当前的字体样式
          */
         font: string;
         /**
          * @private
+         * 绘制一段圆弧路径。圆弧路径的圆心在 (x, y) 位置，半径为 r ，根据anticlockwise （默认为顺时针）指定的方向从 startAngle 开始绘制，到 endAngle 结束。
+         * @param x 圆弧中心（圆心）的 x 轴坐标。
+         * @param y 圆弧中心（圆心）的 y 轴坐标。
+         * @param radius 圆弧的半径。
+         * @param startAngle 圆弧的起始点， x轴方向开始计算，单位以弧度表示。
+         * @param endAngle 圆弧的重点， 单位以弧度表示。
+         * @param anticlockwise 如果为 true，逆时针绘制圆弧，反之，顺时针绘制。
          */
         arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void;
         /**
          * @private
+         * 绘制一段二次贝塞尔曲线路径。它需要2个点。 第一个点是控制点，第二个点是终点。 起始点是当前路径最新的点，当创建二次贝赛尔曲线之前，可以使用 moveTo() 方法进行改变。
+         * @param cpx 控制点的 x 轴坐标。
+         * @param cpy 控制点的 y 轴坐标。
+         * @param x 终点的 x 轴坐标。
+         * @param y 终点的 y 轴坐标。
          */
         quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void;
         /**
          * @private
+         * 使用直线连接子路径的终点到x，y坐标。
+         * @param x 直线终点的 x 轴坐标。
+         * @param y 直线终点的 y 轴坐标。
          */
         lineTo(x: number, y: number): void;
         /**
          * @private
+         * 根据当前的填充样式，填充当前或已存在的路径的方法。采取非零环绕或者奇偶环绕规则。
+         * @param fillRule 一种算法，决定点是在路径内还是在路径外。允许的值：
+         * "nonzero": 非零环绕规则， 默认的规则。
+         * "evenodd": 奇偶环绕规则。
          */
         fill(fillRule?: string): void;
         /**
          * @private
+         * 使笔点返回到当前子路径的起始点。它尝试从当前点到起始点绘制一条直线。如果图形已经是封闭的或者只有一个点，那么此方法不会做任何操作。
          */
         closePath(): void;
         /**
          * @private
+         * 创建一段矩形路径，矩形的起点位置是 (x, y) ，尺寸为 width 和 height。矩形的4个点通过直线连接，子路径做为闭合的标记，所以你可以填充或者描边矩形。
+         * @param x 矩形起点的 x 轴坐标。
+         * @param y 矩形起点的 y 轴坐标。
+         * @param width 矩形的宽度。
+         * @param height 矩形的高度。
          */
         rect(x: number, y: number, w: number, h: number): void;
         /**
          * @private
+         * 将一个新的子路径的起始点移动到(x，y)坐标
+         * @param x 点的 x 轴
+         * @param y 点的 y 轴
          */
         moveTo(x: number, y: number): void;
         /**
          * @private
+         * 绘制一个填充矩形。矩形的起点在 (x, y) 位置，矩形的尺寸是 width 和 height ，fillStyle 属性决定矩形的样式。
+         * @param x 矩形起始点的 x 轴坐标。
+         * @param y 矩形起始点的 y 轴坐标。
+         * @param width 矩形的宽度。
+         * @param height 矩形的高度。
          */
         fillRect(x: number, y: number, w: number, h: number): void;
         /**
          * @private
+         * 绘制一段三次贝赛尔曲线路径。该方法需要三个点。 第一、第二个点是控制点，第三个点是结束点。起始点是当前路径的最后一个点，
+         * 绘制贝赛尔曲线前，可以通过调用 moveTo() 进行修改。
+         * @param cp1x 第一个控制点的 x 轴坐标。
+         * @param cp1y 第一个控制点的 y 轴坐标。
+         * @param cp2x 第二个控制点的 x 轴坐标。
+         * @param cp2y 第二个控制点的 y 轴坐标。
+         * @param x 结束点的 x 轴坐标。
+         * @param y 结束点的 y 轴坐标。
          */
         bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void;
         /**
          * @private
-         *
-         * @returns
+         * 根据当前的画线样式，绘制当前或已经存在的路径的方法。
          */
         stroke(): void;
         /**
          * @private
+         * 使用当前的绘画样式，描绘一个起点在 (x, y) 、宽度为 w 、高度为 h 的矩形的方法。
+         * @param x 矩形起点的 x 轴坐标。
+         * @param y 矩形起点的 y 轴坐标。
+         * @param width 矩形的宽度。
+         * @param height 矩形的高度。
          */
         strokeRect(x: number, y: number, w: number, h: number): void;
         /**
          * @private
+         * 清空子路径列表开始一个新路径。 当你想创建一个新的路径时，调用此方法。
          */
         beginPath(): void;
         /**
          * @private
-         * @returns
+         * 根据控制点和半径绘制一段圆弧路径，使用直线连接前一个点。
+         * @param x1 第一个控制点的 x 轴坐标。
+         * @param y1 第一个控制点的 y 轴坐标。
+         * @param x2 第二个控制点的 x 轴坐标。
+         * @param y2 第二个控制点的 y 轴坐标。
+         * @param radius 圆弧的半径。
          */
         arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void;
         /**
          * @private
+         * 使用方法参数描述的矩阵多次叠加当前的变换矩阵。
+         * @param a 水平缩放。
+         * @param b 水平倾斜。
+         * @param c 垂直倾斜。
+         * @param d 垂直缩放。
+         * @param tx 水平移动。
+         * @param ty 垂直移动。
          */
-        transform(m11: number, m12: number, m21: number, m22: number, dx: number, dy: number): void;
+        transform(a: number, b: number, c: number, d: number, tx: number, ty: number): void;
         /**
          * @private
+         * 通过在网格中移动 surface 和 surface 原点 x 水平方向、原点 y 垂直方向，添加平移变换
+         * @param x 水平移动。
+         * @param y 垂直移动。
          */
         translate(x: number, y: number): void;
         /**
          * @private
+         * 根据 x 水平方向和 y 垂直方向，为 surface 单位添加缩放变换。
+         * @param x 水平方向的缩放因子。
+         * @param y 垂直方向的缩放因子。
          */
         scale(x: number, y: number): void;
         /**
          * @private
+         * 在变换矩阵中增加旋转，角度变量表示一个顺时针旋转角度并且用弧度表示。
+         * @param angle 顺时针旋转的弧度。
          */
         rotate(angle: number): void;
         /**
          * @private
+         * 恢复到最近的绘制样式状态，此状态是通过 save() 保存到”状态栈“中最新的元素。
          */
         restore(): void;
         /**
          * @private
+         * 使用栈保存当前的绘画样式状态，你可以使用 restore() 恢复任何改变。
          */
         save(): void;
         /**
          * @private
+         * 从当前路径创建一个剪切路径。在  clip() 调用之后，绘制的所有信息只会出现在剪切路径内部。
          */
         clip(fillRule?: string): void;
         /**
          * @private
+         * 设置指定矩形区域内（以 点 (x, y) 为起点，范围是(width, height) ）所有像素变成透明，并擦除之前绘制的所有内容。
+         * @param x 矩形起点的 x 轴坐标。
+         * @param y 矩形起点的 y 轴坐标。
+         * @param width 矩形的宽度。
+         * @param height 矩形的高度。
          */
-        clearRect(x: number, y: number, w: number, h: number): void;
+        clearRect(x: number, y: number, width: number, height: number): void;
         /**
          * @private
+         * 重新设置当前的变换为单位矩阵，并使用同样的变量调用 transform() 方法。
+         * @param a 水平缩放。
+         * @param b 水平倾斜。
+         * @param c 垂直倾斜。
+         * @param d 垂直缩放。
+         * @param tx 水平移动。
+         * @param ty 垂直移动。
          */
-        setTransform(m11: number, m12: number, m21: number, m22: number, dx: number, dy: number): void;
+        setTransform(a: number, b: number, c: number, d: number, tx: number, ty: number): void;
         /**
          * @private
+         * 创建一个沿参数坐标指定的直线的渐变。该方法返回一个线性的 GraphicsGradient 对象。
+         * @param x0 起点的 x 轴坐标。
+         * @param y0 起点的 y 轴坐标。
+         * @param x1 终点的 x 轴坐标。
+         * @param y1 终点的 y 轴坐标。
          */
         createLinearGradient(x0: number, y0: number, x1: number, y1: number): GraphicsGradient;
         /**
          * @private
+         * 根据参数确定的两个圆的坐标，创建一个放射性渐变。该方法返回一个放射性的 GraphicsGradient。
+         * @param x0 开始圆形的 x 轴坐标。
+         * @param y0 开始圆形的 y 轴坐标。
+         * @param r0 开始圆形的半径。
+         * @param x1 结束圆形的 x 轴坐标。
+         * @param y1 结束圆形的 y 轴坐标。
+         * @param r1 结束圆形的半径。
          */
         createRadialGradient(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): GraphicsGradient;
         /**
          * @private
+         * 在(x,y)位置绘制（填充）文本。
          */
         fillText(text: string, x: number, y: number, maxWidth?: number): void;
         /**
          * @private
+         * 测量指定文本宽度，返回 TextMetrics 对象。
          */
         measureText(text: string): TextMetrics;
         /**
@@ -976,10 +1118,15 @@ declare module lark.sys {
         drawImage(image: BitmapData, offsetX: number, offsetY: number, width?: number, height?: number, surfaceOffsetX?: number, surfaceOffsetY?: number, surfaceImageWidth?: number, surfaceImageHeight?: number): void;
         /**
          * @private
+         * 基于指定的源图象(BitmapData)创建一个模板，通过repetition参数指定源图像在什么方向上进行重复，返回一个GraphicsPattern对象。
+         * @param bitmapData 做为重复图像源的 BitmapData 对象。
+         * @param repetition 指定如何重复图像。
+         * 可能的值有："repeat" (两个方向重复),"repeat-x" (仅水平方向重复),"repeat-y" (仅垂直方向重复),"no-repeat" (不重复).
          */
         createPattern(image: BitmapData, repetition: string): GraphicsPattern;
         /**
          * @private
+         * 返回一个 ImageData 对象，用来描述canvas区域隐含的像素数据，这个区域通过矩形表示，起始点为(sx, sy)、宽为sw、高为sh。
          */
         getImageData(sx: number, sy: number, sw: number, sh: number): ImageData;
     }
@@ -2136,7 +2283,7 @@ declare module lark.sys {
         /**
          * @private
          */
-        updateRegion(bounds: Rectangle, matrix: Matrix): void;
+        updateRegion(bounds: Rectangle, matrix: Matrix, clipRect: Rectangle): void;
     }
 }
 declare module lark {
@@ -2577,13 +2724,25 @@ declare module lark {
          * @language en_US
          * creates a radial gradient given by the coordinates of the two circles represented by the parameters.
          * This method returns a radial GraphicsGradient.
+         * @param x0 The x axis of the coordinate of the start circle.
+         * @param y0 The y axis of the coordinate of the start circle.
+         * @param r0 The radius of the start circle.
+         * @param x1 The x axis of the coordinate of the end circle.
+         * @param y1 The y axis of the coordinate of the end circle.
+         * @param r1 The radius of the end circle.
          * @see lark.GraphicsGradient
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 根据参数确定的两个圆的坐标，创建一个放射性渐变。该方法返回一个放射性的 CanvasGradient。
+         * 根据参数确定的两个圆的坐标，创建一个放射性渐变。该方法返回一个放射性的 GraphicsGradient。
+         * @param x0 开始圆形的 x 轴坐标。
+         * @param y0 开始圆形的 y 轴坐标。
+         * @param r0 开始圆形的半径。
+         * @param x1 结束圆形的 x 轴坐标。
+         * @param y1 结束圆形的 y 轴坐标。
+         * @param r1 结束圆形的半径。
          * @see lark.GraphicsGradient
          * @version Lark 1.0
          * @platform Web,Native
@@ -2593,12 +2752,20 @@ declare module lark {
          * @language en_US
          * reates a gradient along the line given by the coordinates represented by the parameters.This method returns a linear GraphicsGradient.
          * @see lark.GraphicsGradient
+         * @param x0 The x axis of the coordinate of the start point.
+         * @param y0 The y axis of the coordinate of the start point.
+         * @param x1 The x axis of the coordinate of the end point.
+         * @param y1 The y axis of the coordinate of the end point.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 创建一个沿参数坐标指定的直线的渐变。该方法返回一个线性的 GraphicsGradient 对象。
+         * @param x0 起点的 x 轴坐标。
+         * @param y0 起点的 y 轴坐标。
+         * @param x1 终点的 x 轴坐标。
+         * @param y1 终点的 y 轴坐标。
          * @see lark.GraphicsGradient
          * @version Lark 1.0
          * @platform Web,Native
@@ -2980,7 +3147,8 @@ declare module lark {
         stroke(): void;
         /**
          * @language en_US
-         * paints a rectangle which has a starting point at (x, y) and has a w width and an h height onto the canvas, using the current stroke style.
+         * paints a rectangle which has a starting point at (x, y) and has a w width and an h height onto the surface,
+         * using the current stroke style.
          * @param x The x axis of the coordinate for the rectangle starting point.
          * @param y The y axis of the coordinate for the rectangle starting point.
          * @param w The rectangle's width.
@@ -3985,127 +4153,6 @@ declare module lark {
         static release(event: Event): void;
     }
 }
-declare module lark.sys {
-    /**
-     * @private
-     * 显示列表
-     */
-    class DisplayList extends LarkObject implements Renderable {
-        /**
-         * @private
-         * 释放一个DisplayList实例到对象池
-         */
-        static release(displayList: DisplayList): void;
-        /**
-         * @private
-         * 从对象池中取出或创建一个新的DisplayList对象。
-         */
-        static create(target: DisplayObject): DisplayList;
-        /**
-         * @private
-         * 创建一个DisplayList对象
-         */
-        constructor(root: DisplayObject);
-        /**
-         * @private
-         * 呈现绘制结果的目标画布
-         */
-        surface: Surface;
-        /**
-         * @private
-         */
-        offsetX: number;
-        /**
-         * @private
-         */
-        offsetY: number;
-        /**
-         * @private
-         * 显示列表根节点
-         */
-        root: DisplayObject;
-        /**
-         * @private
-         */
-        needRedraw: boolean;
-        /**
-         * @private
-         */
-        private drawToStage;
-        /**
-         * @private
-         * 绘图上下文
-         */
-        renderContext: RenderContext;
-        /**
-         * @private
-         * 设置剪裁边界，不再绘制完整目标对象，画布尺寸由外部决定，超过边界的节点将跳过绘制。
-         */
-        setClipRect(width: number, height: number): void;
-        /**
-         * @private
-         * 显示对象的渲染节点发生改变时，把自身的IRenderable对象注册到此列表上。
-         */
-        private dirtyNodes;
-        /**
-         * @private
-         */
-        private dirtyNodeList;
-        /**
-         * @private
-         * 标记一个节点需要重新渲染
-         */
-        markDirty(node: Renderable): void;
-        /**
-         * @private
-         */
-        private dirtyList;
-        /**
-         * @private
-         */
-        private dirtyRegion;
-        /**
-         * @private
-         * 更新节点属性并返回脏矩形列表。
-         */
-        updateDirtyRegions(): Region[];
-        /**
-         * @private
-         * 绘制根节点显示对象到目标画布，返回draw的次数。
-         */
-        drawToSurface(): number;
-        /**
-         * @private
-         * 绘制一个显示对象
-         */
-        private drawDisplayObject(displayObject, context, dirtyList, drawToStage, displayList, clipRegion);
-        /**
-         * @private
-         */
-        private drawWidthBlendMode(displayObject, context, dirtyList, drawToStage, clipRegion);
-        /**
-         * @private
-         */
-        private drawWidthClip(displayObject, context, dirtyList, drawToStage, clipRegion);
-        /**
-         * @private
-         */
-        private createRenderContext(width, height);
-        /**
-         * @private
-         */
-        private drawWidthSurface(context, surface, drawToStage, offsetX, offsetY);
-        /**
-         * @private
-         */
-        private sizeChanged;
-        /**
-         * @private
-         * 改变画布的尺寸，由于画布尺寸修改会清空原始画布。所以这里将原始画布绘制到一个新画布上，再与原始画布交换。
-         */
-        changeSurfaceSize(): void;
-    }
-}
 declare module lark {
     /**
      * @language en_US
@@ -4755,6 +4802,343 @@ declare module lark {
          */
         private lastCount;
     }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * A Rectangle object is an area defined by its position, as indicated by its top-left corner point (x, y) and by its
+     * width and its height.<br/>
+     * The x, y, width, and height properties of the Rectangle class are independent of each other; changing the value of
+     * one property has no effect on the others. However, the right and bottom properties are integrally related to those
+     * four properties. For example, if you change the value of the right property, the value of the width property changes;
+     * if you change the bottom property, the value of the height property changes.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Rectangle 对象是按其位置（由它左上角的点 (x, y) 确定）以及宽度和高度定义的区域。<br/>
+     * Rectangle 类的 x、y、width 和 height 属性相互独立；更改一个属性的值不会影响其他属性。
+     * 但是，right 和 bottom 属性与这四个属性是整体相关的。例如，如果更改 right 属性的值，则 width
+     * 属性的值将发生变化；如果更改 bottom 属性，则 height 属性的值将发生变化。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class Rectangle extends LarkObject {
+        /**
+         * @language en_US
+         * Releases a rectangle instance to the object pool.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 释放一个Rectangle实例到对象池
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static release(rect: Rectangle): void;
+        /**
+         * @language en_US
+         * get a rectangle instance from the object pool or create a new one.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从对象池中取出或创建一个新的Rectangle对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static create(): Rectangle;
+        /**
+         * @language en_US
+         * Creates a new Rectangle object with the top-left corner specified by the x and y parameters and with the specified
+         * width and height parameters.
+         * @param x The x coordinate of the top-left corner of the rectangle.
+         * @param y The y coordinate of the top-left corner of the rectangle.
+         * @param width The width of the rectangle, in pixels.
+         * @param height The height of the rectangle, in pixels.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个新 Rectangle 对象，其左上角由 x 和 y 参数指定，并具有指定的 width 和 height 参数。
+         * @param x 矩形左上角的 x 坐标。
+         * @param y 矩形左上角的 y 坐标。
+         * @param width 矩形的宽度（以像素为单位）。
+         * @param height 矩形的高度（以像素为单位）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        constructor(x?: number, y?: number, width?: number, height?: number);
+        /**
+         * @language en_US
+         * The x coordinate of the top-left corner of the rectangle.
+         * @default 0
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 矩形左上角的 x 坐标。
+         * @default 0
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        x: number;
+        /**
+         * @language en_US
+         * The y coordinate of the top-left corner of the rectangle.
+         * @default 0
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 矩形左上角的 y 坐标。
+         * @default 0
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        y: number;
+        /**
+         * @language en_US
+         * The width of the rectangle, in pixels.
+         * @default 0
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 矩形的宽度（以像素为单位）。
+         * @default 0
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        width: number;
+        /**
+         * @language en_US
+         * 矩形的高度（以像素为单位）。
+         * @default 0
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * The height of the rectangle, in pixels.
+         * @default 0
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        height: number;
+        /**
+         * @language en_US
+         * The sum of the x and width properties.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 和 width 属性的和。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        right: number;
+        /**
+         * @language en_US
+         * The sum of the y and height properties.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * y 和 height 属性的和。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        bottom: number;
+        /**
+         * @language en_US
+         * The x coordinate of the top-left corner of the rectangle. Changing the left property of a Rectangle object has
+         * no effect on the y and height properties. However it does affect the width property, whereas changing the x value
+         * does not affect the width property.
+         * The value of the left property is equal to the value of the x property.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 矩形左上角的 x 坐标。更改 Rectangle 对象的 left 属性对 y 和 height 属性没有影响。但是，它会影响 width 属性，而更改 x 值不会影响 width 属性。
+         * left 属性的值等于 x 属性的值。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        left: number;
+        /**
+         * @language en_US
+         * The y coordinate of the top-left corner of the rectangle. Changing the top property of a Rectangle object has
+         * no effect on the x and width properties. However it does affect the height property, whereas changing the y
+         * value does not affect the height property.<br/>
+         * The value of the top property is equal to the value of the y property.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 矩形左上角的 y 坐标。更改 Rectangle 对象的 top 属性对 x 和 width 属性没有影响。但是，它会影响 height 属性，而更改 y 值不会影响 height 属性。<br/>
+         * top 属性的值等于 y 属性的值。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        top: number;
+        /**
+         * @language en_US
+         * Copies all of rectangle data from the source Rectangle object into the calling Rectangle object.
+         * @param sourceRect The Rectangle object from which to copy the data.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将源 Rectangle 对象中的所有矩形数据复制到调用方 Rectangle 对象中。
+         * @param sourceRect 要从中复制数据的 Rectangle 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        copyFrom(sourceRect: Rectangle): Rectangle;
+        /**
+         * @language en_US
+         * Sets the members of Rectangle to the specified values
+         * @param x The x coordinate of the top-left corner of the rectangle.
+         * @param y The y coordinate of the top-left corner of the rectangle.
+         * @param width The width of the rectangle, in pixels.
+         * @param height The height of the rectangle, in pixels.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将 Rectangle 的成员设置为指定值
+         * @param x 矩形左上角的 x 坐标。
+         * @param y 矩形左上角的 y 坐标。
+         * @param width 矩形的宽度（以像素为单位）。
+         * @param height 矩形的高度（以像素为单位）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        setTo(x: number, y: number, width: number, height: number): Rectangle;
+        /**
+         * @language en_US
+         * Determines whether the specified point is contained within the rectangular region defined by this Rectangle object.
+         * @param x The x coordinate (horizontal position) of the point.
+         * @param y The y coordinate (vertical position) of the point.
+         * @returns A value of true if the Rectangle object contains the specified point; otherwise false.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 确定由此 Rectangle 对象定义的矩形区域内是否包含指定的点。
+         * @param x 检测点的x轴
+         * @param y 检测点的y轴
+         * @returns 如果检测点位于矩形内，返回true，否则，返回false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        contains(x: number, y: number): boolean;
+        /**
+         * @language en_US
+         * If the Rectangle object specified in the toIntersect parameter intersects with this Rectangle object, returns
+         * the area of intersection as a Rectangle object. If the rectangles do not intersect, this method returns an empty
+         * Rectangle object with its properties set to 0.
+         * @param toIntersect The Rectangle object to compare against to see if it intersects with this Rectangle object.
+         * @returns A Rectangle object that equals the area of intersection. If the rectangles do not intersect, this method
+         * returns an empty Rectangle object; that is, a rectangle with its x, y, width, and height properties set to 0.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果在 toIntersect 参数中指定的 Rectangle 对象与此 Rectangle 对象相交，则返回交集区域作为 Rectangle 对象。如果矩形不相交，
+         * 则此方法返回一个空的 Rectangle 对象，其属性设置为 0。
+         * @param toIntersect 要对照比较以查看其是否与此 Rectangle 对象相交的 Rectangle 对象。
+         * @returns 等于交集区域的 Rectangle 对象。如果该矩形不相交，则此方法返回一个空的 Rectangle 对象；即，其 x、y、width 和
+         * height 属性均设置为 0 的矩形。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        intersection(toIntersect: Rectangle): Rectangle;
+        /**
+         * @language en_US
+         * Determines whether the object specified in the toIntersect parameter intersects with this Rectangle object.
+         * This method checks the x, y, width, and height properties of the specified Rectangle object to see if it
+         * intersects with this Rectangle object.
+         * @param toIntersect The Rectangle object to compare against this Rectangle object.
+         * @returns A value of true if the specified object intersects with this Rectangle object; otherwise false.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 确定在 toIntersect 参数中指定的对象是否与此 Rectangle 对象相交。此方法检查指定的 Rectangle
+         * 对象的 x、y、width 和 height 属性，以查看它是否与此 Rectangle 对象相交。
+         * @param toIntersect 要与此 Rectangle 对象比较的 Rectangle 对象。
+         * @returns 如果两个矩形相交，返回true，否则返回false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        intersects(toIntersect: Rectangle): boolean;
+        /**
+         * @language en_US
+         * Determines whether or not this Rectangle object is empty.
+         * @returns A value of true if the Rectangle object's width or height is less than or equal to 0; otherwise false.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 确定此 Rectangle 对象是否为空。
+         * @returns 如果 Rectangle 对象的宽度或高度小于等于 0，则返回 true 值，否则返回 false。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        isEmpty(): boolean;
+        /**
+         * @language en_US
+         * Sets all of the Rectangle object's properties to 0. A Rectangle object is empty if its width or height is less than or equal to 0.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将 Rectangle 对象的所有属性设置为 0。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        setEmpty(): void;
+        /**
+         * @language en_US
+         * Returns a new Rectangle object with the same values for the x, y, width, and height properties as the original Rectangle object.
+         * @returns A new Rectangle object with the same values for the x, y, width, and height properties as the original Rectangle object.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回一个新的 Rectangle 对象，其 x、y、width 和 height 属性的值与原始 Rectangle 对象的对应值相同。
+         * @returns 新的 Rectangle 对象，其 x、y、width 和 height 属性的值与原始 Rectangle 对象的对应值相同。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        clone(): Rectangle;
+    }
+    /**
+     * @private
+     * 仅供框架内复用，要防止暴露引用到外部。
+     */
+    var $TempRectangle: Rectangle;
 }
 declare module lark {
     /**
@@ -5740,321 +6124,6 @@ declare module lark {
 declare module lark {
     /**
      * @language en_US
-     * A Rectangle object is an area defined by its position, as indicated by its top-left corner point (x, y) and by its
-     * width and its height.<br/>
-     * The x, y, width, and height properties of the Rectangle class are independent of each other; changing the value of
-     * one property has no effect on the others. However, the right and bottom properties are integrally related to those
-     * four properties. For example, if you change the value of the right property, the value of the width property changes;
-     * if you change the bottom property, the value of the height property changes.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * Rectangle 对象是按其位置（由它左上角的点 (x, y) 确定）以及宽度和高度定义的区域。<br/>
-     * Rectangle 类的 x、y、width 和 height 属性相互独立；更改一个属性的值不会影响其他属性。
-     * 但是，right 和 bottom 属性与这四个属性是整体相关的。例如，如果更改 right 属性的值，则 width
-     * 属性的值将发生变化；如果更改 bottom 属性，则 height 属性的值将发生变化。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    class Rectangle extends LarkObject {
-        /**
-         * @language en_US
-         * Releases a rectangle instance to the object pool.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 释放一个Rectangle实例到对象池
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static release(rect: Rectangle): void;
-        /**
-         * @language en_US
-         * get a rectangle instance from the object pool or create a new one.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 从对象池中取出或创建一个新的Rectangle对象。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static create(): Rectangle;
-        /**
-         * @language en_US
-         * Creates a new Rectangle object with the top-left corner specified by the x and y parameters and with the specified
-         * width and height parameters.
-         * @param x The x coordinate of the top-left corner of the rectangle.
-         * @param y The y coordinate of the top-left corner of the rectangle.
-         * @param width The width of the rectangle, in pixels.
-         * @param height The height of the rectangle, in pixels.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个新 Rectangle 对象，其左上角由 x 和 y 参数指定，并具有指定的 width 和 height 参数。
-         * @param x 矩形左上角的 x 坐标。
-         * @param y 矩形左上角的 y 坐标。
-         * @param width 矩形的宽度（以像素为单位）。
-         * @param height 矩形的高度（以像素为单位）。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        constructor(x?: number, y?: number, width?: number, height?: number);
-        /**
-         * @language en_US
-         * The x coordinate of the top-left corner of the rectangle.
-         * @default 0
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 矩形左上角的 x 坐标。
-         * @default 0
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        x: number;
-        /**
-         * @language en_US
-         * The y coordinate of the top-left corner of the rectangle.
-         * @default 0
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 矩形左上角的 y 坐标。
-         * @default 0
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        y: number;
-        /**
-         * @language en_US
-         * The width of the rectangle, in pixels.
-         * @default 0
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 矩形的宽度（以像素为单位）。
-         * @default 0
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        width: number;
-        /**
-         * @language en_US
-         * 矩形的高度（以像素为单位）。
-         * @default 0
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * The height of the rectangle, in pixels.
-         * @default 0
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        height: number;
-        /**
-         * @language en_US
-         * The sum of the x and width properties.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * x 和 width 属性的和。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        right: number;
-        /**
-         * @language en_US
-         * The sum of the y and height properties.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * y 和 height 属性的和。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        bottom: number;
-        /**
-         * @language en_US
-         * The x coordinate of the top-left corner of the rectangle. Changing the left property of a Rectangle object has
-         * no effect on the y and height properties. However it does affect the width property, whereas changing the x value
-         * does not affect the width property.
-         * The value of the left property is equal to the value of the x property.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 矩形左上角的 x 坐标。更改 Rectangle 对象的 left 属性对 y 和 height 属性没有影响。但是，它会影响 width 属性，而更改 x 值不会影响 width 属性。
-         * left 属性的值等于 x 属性的值。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        left: number;
-        /**
-         * @language en_US
-         * The y coordinate of the top-left corner of the rectangle. Changing the top property of a Rectangle object has
-         * no effect on the x and width properties. However it does affect the height property, whereas changing the y
-         * value does not affect the height property.<br/>
-         * The value of the top property is equal to the value of the y property.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 矩形左上角的 y 坐标。更改 Rectangle 对象的 top 属性对 x 和 width 属性没有影响。但是，它会影响 height 属性，而更改 y 值不会影响 height 属性。<br/>
-         * top 属性的值等于 y 属性的值。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        top: number;
-        /**
-         * @language en_US
-         * Copies all of rectangle data from the source Rectangle object into the calling Rectangle object.
-         * @param sourceRect The Rectangle object from which to copy the data.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将源 Rectangle 对象中的所有矩形数据复制到调用方 Rectangle 对象中。
-         * @param sourceRect 要从中复制数据的 Rectangle 对象。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        copyFrom(sourceRect: Rectangle): Rectangle;
-        /**
-         * @language en_US
-         * Sets the members of Rectangle to the specified values
-         * @param x The x coordinate of the top-left corner of the rectangle.
-         * @param y The y coordinate of the top-left corner of the rectangle.
-         * @param width The width of the rectangle, in pixels.
-         * @param height The height of the rectangle, in pixels.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将 Rectangle 的成员设置为指定值
-         * @param x 矩形左上角的 x 坐标。
-         * @param y 矩形左上角的 y 坐标。
-         * @param width 矩形的宽度（以像素为单位）。
-         * @param height 矩形的高度（以像素为单位）。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        setTo(x: number, y: number, width: number, height: number): Rectangle;
-        /**
-         * @language en_US
-         * Determines whether the specified point is contained within the rectangular region defined by this Rectangle object.
-         * @param x The x coordinate (horizontal position) of the point.
-         * @param y The y coordinate (vertical position) of the point.
-         * @returns A value of true if the Rectangle object contains the specified point; otherwise false.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 确定由此 Rectangle 对象定义的矩形区域内是否包含指定的点。
-         * @param x 检测点的x轴
-         * @param y 检测点的y轴
-         * @returns 如果检测点位于矩形内，返回true，否则，返回false
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        contains(x: number, y: number): boolean;
-        /**
-         * @language en_US
-         * Determines whether the object specified in the toIntersect parameter intersects with this Rectangle object.
-         * This method checks the x, y, width, and height properties of the specified Rectangle object to see if it
-         * intersects with this Rectangle object.
-         * @param toIntersect The Rectangle object to compare against this Rectangle object.
-         * @returns A value of true if the specified object intersects with this Rectangle object; otherwise false.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 确定在 toIntersect 参数中指定的对象是否与此 Rectangle 对象相交。此方法检查指定的 Rectangle
-         * 对象的 x、y、width 和 height 属性，以查看它是否与此 Rectangle 对象相交。
-         * @param toIntersect 要与此 Rectangle 对象比较的 Rectangle 对象。
-         * @returns 如果两个矩形相交，返回true，否则返回false
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        intersects(toIntersect: Rectangle): boolean;
-        /**
-         * @language en_US
-         * Determines whether or not this Rectangle object is empty.
-         * @returns A value of true if the Rectangle object's width or height is less than or equal to 0; otherwise false.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 确定此 Rectangle 对象是否为空。
-         * @returns 如果 Rectangle 对象的宽度或高度小于等于 0，则返回 true 值，否则返回 false。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        isEmpty(): boolean;
-        /**
-         * @language en_US
-         * Sets all of the Rectangle object's properties to 0. A Rectangle object is empty if its width or height is less than or equal to 0.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将 Rectangle 对象的所有属性设置为 0。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        setEmpty(): void;
-        /**
-         * @language en_US
-         * Returns a new Rectangle object with the same values for the x, y, width, and height properties as the original Rectangle object.
-         * @returns A new Rectangle object with the same values for the x, y, width, and height properties as the original Rectangle object.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回一个新的 Rectangle 对象，其 x、y、width 和 height 属性的值与原始 Rectangle 对象的对应值相同。
-         * @returns 新的 Rectangle 对象，其 x、y、width 和 height 属性的值与原始 Rectangle 对象的对应值相同。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        clone(): Rectangle;
-    }
-    /**
-     * @private
-     * 仅供框架内复用，要防止暴露引用到外部。
-     */
-    var $TempRectangle: Rectangle;
-}
-declare module lark {
-    /**
-     * @language en_US
      * The Bitmap class represents display objects that represent bitmap images.
      * The Bitmap() constructor allows you to create a Bitmap object that contains a reference to a BitmapData object.
      * After you create a Bitmap object, use the addChild() or addChildAt() method of the parent DisplayObjectContainer
@@ -6632,6 +6701,10 @@ declare module lark {
          * @private
          */
         private assignParentDisplayList(child, parentCache, newParent);
+        /**
+         * @private
+         */
+        private assignParentClipRect(child, parentClipRect);
     }
 }
 declare module lark {
@@ -6734,6 +6807,127 @@ declare module lark.sys {
          * 获取舞台坐标下的触摸对象
          */
         private findTarget(stageX, stageY);
+    }
+}
+declare module lark.sys {
+    /**
+     * @private
+     * 显示列表
+     */
+    class DisplayList extends LarkObject implements Renderable {
+        /**
+         * @private
+         * 释放一个DisplayList实例到对象池
+         */
+        static release(displayList: DisplayList): void;
+        /**
+         * @private
+         * 从对象池中取出或创建一个新的DisplayList对象。
+         */
+        static create(target: DisplayObject): DisplayList;
+        /**
+         * @private
+         * 创建一个DisplayList对象
+         */
+        constructor(root: DisplayObject);
+        /**
+         * @private
+         * 呈现绘制结果的目标画布
+         */
+        surface: Surface;
+        /**
+         * @private
+         */
+        offsetX: number;
+        /**
+         * @private
+         */
+        offsetY: number;
+        /**
+         * @private
+         * 显示列表根节点
+         */
+        root: DisplayObject;
+        /**
+         * @private
+         */
+        needRedraw: boolean;
+        /**
+         * @private
+         */
+        private rootMatrix;
+        /**
+         * @private
+         * 绘图上下文
+         */
+        renderContext: RenderContext;
+        /**
+         * @private
+         * 设置剪裁边界，不再绘制完整目标对象，画布尺寸由外部决定，超过边界的节点将跳过绘制。
+         */
+        setClipRect(width: number, height: number): void;
+        /**
+         * @private
+         * 显示对象的渲染节点发生改变时，把自身的IRenderable对象注册到此列表上。
+         */
+        private dirtyNodes;
+        /**
+         * @private
+         */
+        private dirtyNodeList;
+        /**
+         * @private
+         * 标记一个节点需要重新渲染
+         */
+        markDirty(node: Renderable): void;
+        /**
+         * @private
+         */
+        private dirtyList;
+        /**
+         * @private
+         */
+        private dirtyRegion;
+        /**
+         * @private
+         * 更新节点属性并返回脏矩形列表。
+         */
+        updateDirtyRegions(): Region[];
+        /**
+         * @private
+         * 绘制根节点显示对象到目标画布，返回draw的次数。
+         */
+        drawToSurface(): number;
+        /**
+         * @private
+         * 绘制一个显示对象
+         */
+        private drawDisplayObject(displayObject, context, dirtyList, rootMatrix, displayList, clipRegion);
+        /**
+         * @private
+         */
+        private drawWidthBlendMode(displayObject, context, dirtyList, rootMatrix, clipRegion);
+        /**
+         * @private
+         */
+        private drawWidthClip(displayObject, context, dirtyList, rootMatrix, clipRegion);
+        /**
+         * @private
+         */
+        private createRenderContext(width, height);
+        /**
+         * @private
+         */
+        private drawWidthSurface(context, surface, rootMatrix, offsetX, offsetY);
+        /**
+         * @private
+         */
+        private sizeChanged;
+        /**
+         * @private
+         * 改变画布的尺寸，由于画布尺寸修改会清空原始画布。所以这里将原始画布绘制到一个新画布上，再与原始画布交换。
+         */
+        changeSurfaceSize(): void;
     }
 }
 declare module lark {

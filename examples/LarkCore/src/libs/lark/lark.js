@@ -1846,7 +1846,7 @@ var lark;
             /**
              * @private
              */
-            p.updateRegion = function (bounds, matrix) {
+            p.updateRegion = function (bounds, matrix, clipRect) {
                 var m = matrix;
                 var a = m.a;
                 var b = m.b;
@@ -1858,12 +1858,13 @@ var lark;
                 var y = bounds.y;
                 var xMax = x + bounds.width;
                 var yMax = y + bounds.height;
+                var minX, minY, maxX, maxY;
                 //优化，通常情况下不缩放旋转的对象占多数，直接加上偏移量即可。
                 if (a === 1.0 && b === 0.0 && c === 0.0 && d === 1.0) {
-                    this.minX = Math.floor(x + tx) - 1;
-                    this.minY = Math.floor(y + ty) - 1;
-                    this.maxX = Math.ceil(xMax + tx) + 1;
-                    this.maxY = Math.ceil(yMax + ty) + 1;
+                    minX = Math.floor(x + tx) - 1;
+                    minY = Math.floor(y + ty) - 1;
+                    maxX = Math.ceil(xMax + tx) + 1;
+                    maxY = Math.ceil(yMax + ty) + 1;
                 }
                 else {
                     var x0 = a * x + c * y + tx;
@@ -1885,8 +1886,8 @@ var lark;
                         x2 = x3;
                         x3 = tmp;
                     }
-                    this.minX = Math.floor(x0 < x2 ? x0 : x2) - 1;
-                    this.maxX = Math.ceil(x1 > x3 ? x1 : x3) + 1;
+                    minX = Math.floor(x0 < x2 ? x0 : x2) - 1;
+                    maxX = Math.ceil(x1 > x3 ? x1 : x3) + 1;
                     if (y0 > y1) {
                         tmp = y0;
                         y0 = y1;
@@ -1897,10 +1898,37 @@ var lark;
                         y2 = y3;
                         y3 = tmp;
                     }
-                    this.minY = Math.floor(y0 < y2 ? y0 : y2) - 1;
-                    this.maxY = Math.ceil(y1 > y3 ? y1 : y3) + 1;
+                    minY = Math.floor(y0 < y2 ? y0 : y2) - 1;
+                    maxY = Math.ceil(y1 > y3 ? y1 : y3) + 1;
                 }
-                this.updateArea();
+                if (clipRect) {
+                    var clipMinX = clipRect.x;
+                    var clipMaxX = clipMinX + clipRect.width;
+                    var clipMinY = clipRect.y;
+                    var clipMaxY = clipMinY + clipRect.height;
+                    if (minX < clipMinX) {
+                        minX = clipMinX;
+                    }
+                    if (minY < clipMinY) {
+                        minY = clipMinY;
+                    }
+                    if (maxX > clipMaxX) {
+                        maxX = clipMaxX;
+                    }
+                    if (maxY > clipMaxY) {
+                        maxY = clipMaxY;
+                    }
+                    if (minX >= maxX || minY >= maxY) {
+                        minX = minY = maxX = maxY = 0;
+                    }
+                }
+                this.minX = minX;
+                this.minY = minY;
+                this.maxX = maxX;
+                this.maxY = maxY;
+                this.width = maxX - minX;
+                this.height = maxY - minY;
+                this.area = this.width * this.height;
             };
             return Region;
         })();
@@ -2602,6 +2630,9 @@ var lark;
              * 添加一个脏矩形区域，返回是否添加成功，当矩形为空或者在屏幕之外时返回false。
              */
             p.addRegion = function (target) {
+                if (this.clipRectChanged) {
+                    return true;
+                }
                 var minX = target.minX, minY = target.minY, maxX = target.maxX, maxY = target.maxY;
                 if (DEBUG) {
                     if (isF(minX) || isF(minY) || isF(maxX) || isF(maxY)) {
@@ -2624,9 +2655,6 @@ var lark;
                 }
                 if (minX >= maxX || minY >= maxY) {
                     return false;
-                }
-                if (this.clipRectChanged) {
-                    return true;
                 }
                 var dirtyList = this.dirtyList;
                 var region = sys.Region.create();
@@ -3100,13 +3128,25 @@ var lark;
          * @language en_US
          * creates a radial gradient given by the coordinates of the two circles represented by the parameters.
          * This method returns a radial GraphicsGradient.
+         * @param x0 The x axis of the coordinate of the start circle.
+         * @param y0 The y axis of the coordinate of the start circle.
+         * @param r0 The radius of the start circle.
+         * @param x1 The x axis of the coordinate of the end circle.
+         * @param y1 The y axis of the coordinate of the end circle.
+         * @param r1 The radius of the end circle.
          * @see lark.GraphicsGradient
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 根据参数确定的两个圆的坐标，创建一个放射性渐变。该方法返回一个放射性的 CanvasGradient。
+         * 根据参数确定的两个圆的坐标，创建一个放射性渐变。该方法返回一个放射性的 GraphicsGradient。
+         * @param x0 开始圆形的 x 轴坐标。
+         * @param y0 开始圆形的 y 轴坐标。
+         * @param r0 开始圆形的半径。
+         * @param x1 结束圆形的 x 轴坐标。
+         * @param y1 结束圆形的 y 轴坐标。
+         * @param r1 结束圆形的半径。
          * @see lark.GraphicsGradient
          * @version Lark 1.0
          * @platform Web,Native
@@ -3118,12 +3158,20 @@ var lark;
          * @language en_US
          * reates a gradient along the line given by the coordinates represented by the parameters.This method returns a linear GraphicsGradient.
          * @see lark.GraphicsGradient
+         * @param x0 The x axis of the coordinate of the start point.
+         * @param y0 The y axis of the coordinate of the start point.
+         * @param x1 The x axis of the coordinate of the end point.
+         * @param y1 The y axis of the coordinate of the end point.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 创建一个沿参数坐标指定的直线的渐变。该方法返回一个线性的 GraphicsGradient 对象。
+         * @param x0 起点的 x 轴坐标。
+         * @param y0 起点的 y 轴坐标。
+         * @param x1 终点的 x 轴坐标。
+         * @param y1 终点的 y 轴坐标。
          * @see lark.GraphicsGradient
          * @version Lark 1.0
          * @platform Web,Native
@@ -3612,7 +3660,8 @@ var lark;
         };
         /**
          * @language en_US
-         * paints a rectangle which has a starting point at (x, y) and has a w width and an h height onto the canvas, using the current stroke style.
+         * paints a rectangle which has a starting point at (x, y) and has a w width and an h height onto the surface,
+         * using the current stroke style.
          * @param x The x axis of the coordinate for the rectangle starting point.
          * @param y The y axis of the coordinate for the rectangle starting point.
          * @param w The rectangle's width.
@@ -5019,543 +5068,6 @@ var lark;
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
-    var sys;
-    (function (sys) {
-        var displayListPool = [];
-        var blendModes = ["source-over", "lighter", "destination-out"];
-        /**
-         * @private
-         * 显示列表
-         */
-        var DisplayList = (function (_super) {
-            __extends(DisplayList, _super);
-            /**
-             * @private
-             * 创建一个DisplayList对象
-             */
-            function DisplayList(root) {
-                _super.call(this);
-                /**
-                 * @private
-                 * 是否需要重绘
-                 */
-                this.$isDirty = false;
-                /**
-                 * @private
-                 * 在舞台上的透明度
-                 */
-                this.$renderAlpha = 1;
-                /**
-                 * @private
-                 * 在舞台上的显示区域
-                 */
-                this.$renderRegion = new sys.Region();
-                /**
-                 * @private
-                 * 呈现绘制结果的目标画布
-                 */
-                this.surface = null;
-                /**
-                 * @private
-                 */
-                this.offsetX = 0;
-                /**
-                 * @private
-                 */
-                this.offsetY = 0;
-                /**
-                 * @private
-                 */
-                this.needRedraw = false;
-                /**
-                 * @private
-                 */
-                this.drawToStage = false;
-                /**
-                 * @private
-                 * 显示对象的渲染节点发生改变时，把自身的IRenderable对象注册到此列表上。
-                 */
-                this.dirtyNodes = {};
-                /**
-                 * @private
-                 */
-                this.dirtyNodeList = [];
-                /**
-                 * @private
-                 */
-                this.dirtyList = null;
-                /**
-                 * @private
-                 */
-                this.dirtyRegion = new sys.DirtyRegion();
-                /**
-                 * @private
-                 */
-                this.sizeChanged = false;
-                this.root = root;
-            }
-            var d = __define,c=DisplayList;p=c.prototype;
-            /**
-             * @private
-             * 释放一个DisplayList实例到对象池
-             */
-            DisplayList.release = function (displayList) {
-                sys.surfaceFactory.release(displayList.surface);
-                displayList.surface = null;
-                displayList.renderContext = null;
-                displayList.root = null;
-                displayList.$renderMatrix = null;
-                displayList.needRedraw = false;
-                displayList.$isDirty = false;
-                displayListPool.push(displayList);
-            };
-            /**
-             * @private
-             * 从对象池中取出或创建一个新的DisplayList对象。
-             */
-            DisplayList.create = function (target) {
-                var displayList = displayListPool.pop();
-                if (!displayList) {
-                    displayList = new lark.sys.DisplayList(target);
-                }
-                var surface = sys.surfaceFactory.create();
-                if (!surface) {
-                    return null;
-                }
-                displayList.surface = surface;
-                displayList.renderContext = surface.renderContext;
-                return displayList;
-            };
-            /**
-             * @private
-             * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
-             */
-            p.$update = function () {
-                var target = this.root;
-                target.$removeFlagsUp(768 /* Dirty */);
-                this.$renderAlpha = target.$getConcatenatedAlpha();
-                this.$renderMatrix = target.$getConcatenatedMatrix();
-                var bounds = target.$getOriginalBounds();
-                if (this.needRedraw) {
-                    this.updateDirtyRegions();
-                }
-                if (!target.$stage) {
-                    return false;
-                }
-                var region = this.$renderRegion;
-                if (!region.moved) {
-                    return false;
-                }
-                region.moved = false;
-                region.updateRegion(bounds, this.$renderMatrix);
-                return true;
-            };
-            /**
-             * @private
-             *
-             * @param context
-             */
-            p.$render = function (context) {
-                var data = this.surface;
-                if (data) {
-                    context.drawImage(data, this.offsetX, this.offsetY);
-                }
-            };
-            /**
-             * @private
-             * 设置剪裁边界，不再绘制完整目标对象，画布尺寸由外部决定，超过边界的节点将跳过绘制。
-             */
-            p.setClipRect = function (width, height) {
-                this.dirtyRegion.setClipRect(width, height);
-                this.drawToStage = true; //只有舞台画布才能设置ClipRect
-                var surface = this.renderContext.surface;
-                surface.width = width;
-                surface.height = height;
-                this.surface = surface;
-            };
-            /**
-             * @private
-             * 标记一个节点需要重新渲染
-             */
-            p.markDirty = function (node) {
-                var key = node.$hashCode;
-                if (this.dirtyNodes[key]) {
-                    return;
-                }
-                this.dirtyNodes[key] = true;
-                this.dirtyNodeList.push(node);
-                if (!this.needRedraw) {
-                    this.needRedraw = true;
-                    var parentCache = this.root.$parentDisplayList;
-                    if (parentCache) {
-                        parentCache.markDirty(this);
-                    }
-                }
-            };
-            /**
-             * @private
-             * 更新节点属性并返回脏矩形列表。
-             */
-            p.updateDirtyRegions = function () {
-                var nodeList = this.dirtyNodeList;
-                this.dirtyNodeList = [];
-                this.dirtyNodes = {};
-                var dirtyRegion = this.dirtyRegion;
-                var length = nodeList.length;
-                for (var i = 0; i < length; i++) {
-                    var node = nodeList[i];
-                    var region = node.$renderRegion;
-                    if (node.$renderAlpha > 0) {
-                        if (dirtyRegion.addRegion(region)) {
-                            node.$isDirty = true;
-                        }
-                    }
-                    var moved = node.$update();
-                    if (node.$renderAlpha > 0 && (moved || !node.$isDirty)) {
-                        if (dirtyRegion.addRegion(region)) {
-                            node.$isDirty = true;
-                        }
-                    }
-                }
-                this.dirtyList = dirtyRegion.getDirtyRegions();
-                return this.dirtyList;
-            };
-            /**
-             * @private
-             * 绘制根节点显示对象到目标画布，返回draw的次数。
-             */
-            p.drawToSurface = function () {
-                if (!this.drawToStage) {
-                    this.changeSurfaceSize();
-                }
-                var context = this.renderContext;
-                //绘制脏矩形区域
-                context.save();
-                context.beginPath();
-                var dirtyList = this.dirtyList;
-                this.dirtyList = null;
-                var length = dirtyList.length;
-                for (var i = 0; i < length; i++) {
-                    var region = dirtyList[i];
-                    context.clearRect(region.minX, region.minY, region.width, region.height);
-                    context.rect(region.minX, region.minY, region.width, region.height);
-                }
-                context.clip();
-                //绘制显示对象
-                var drawCalls = this.drawDisplayObject(this.root, context, dirtyList, this.drawToStage, null, null);
-                //清除脏矩形区域
-                context.restore();
-                this.dirtyRegion.clear();
-                this.needRedraw = false;
-                return drawCalls;
-            };
-            /**
-             * @private
-             * 绘制一个显示对象
-             */
-            p.drawDisplayObject = function (displayObject, context, dirtyList, drawToStage, displayList, clipRegion) {
-                var drawCalls = 0;
-                var node;
-                var globalAlpha;
-                if (displayList) {
-                    if (displayList.needRedraw) {
-                        drawCalls += displayList.drawToSurface();
-                    }
-                    node = displayList;
-                    globalAlpha = 1; //这里不用读取displayList.$renderAlpha,因为它已经绘制到了displayList.surface的内部。
-                }
-                else if (displayObject.$renderRegion) {
-                    node = displayObject;
-                    globalAlpha = displayObject.$renderAlpha;
-                }
-                if (node) {
-                    var renderRegion = node.$renderRegion;
-                    if (clipRegion && !clipRegion.intersects(renderRegion)) {
-                        node.$isDirty = false;
-                    }
-                    else if (!node.$isDirty) {
-                        var l = dirtyList.length;
-                        for (var j = 0; j < l; j++) {
-                            if (renderRegion.intersects(dirtyList[j])) {
-                                node.$isDirty = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (node.$isDirty) {
-                        drawCalls++;
-                        context.globalAlpha = globalAlpha;
-                        var m = node.$renderMatrix;
-                        if (drawToStage) {
-                            context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
-                            node.$render(context);
-                        }
-                        else {
-                            context.save();
-                            context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
-                            node.$render(context);
-                            context.restore();
-                        }
-                        node.$isDirty = false;
-                    }
-                }
-                if (displayList) {
-                    return drawCalls;
-                }
-                var children = displayObject.$children;
-                if (children) {
-                    var length = children.length;
-                    for (var i = 0; i < length; i++) {
-                        var child = children[i];
-                        if (!child.$visible || child.$alpha <= 0 || child.$maskedObject) {
-                            continue;
-                        }
-                        if (child.$scrollRect || child.$mask) {
-                            drawCalls += this.drawWidthClip(child, context, dirtyList, drawToStage, clipRegion);
-                        }
-                        else if (child.$blendMode !== 0) {
-                            drawCalls += this.drawWidthBlendMode(child, context, dirtyList, drawToStage, clipRegion);
-                        }
-                        else {
-                            if (DEBUG && child["isFPS"]) {
-                                this.drawDisplayObject(child, context, dirtyList, drawToStage, child.$displayList, clipRegion);
-                            }
-                            else {
-                                drawCalls += this.drawDisplayObject(child, context, dirtyList, drawToStage, child.$displayList, clipRegion);
-                            }
-                        }
-                    }
-                }
-                return drawCalls;
-            };
-            /**
-             * @private
-             */
-            p.drawWidthBlendMode = function (displayObject, context, dirtyList, drawToStage, clipRegion) {
-                var drawCalls = 0;
-                var region;
-                var bounds = displayObject.$getOriginalBounds();
-                if (!bounds.isEmpty()) {
-                    region = sys.Region.create();
-                    region.updateRegion(bounds, displayObject.$getConcatenatedMatrix());
-                }
-                if (!region || (clipRegion && !clipRegion.intersects(region))) {
-                    return drawCalls;
-                }
-                var displayContext = this.createRenderContext(region.width, region.height);
-                if (!displayContext) {
-                    drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, drawToStage, displayObject.$displayList, clipRegion);
-                    sys.Region.release(region);
-                    return drawCalls;
-                }
-                displayContext.setTransform(1, 0, 0, 1, -region.minX, -region.minY);
-                drawCalls += this.drawDisplayObject(displayObject, displayContext, dirtyList, false, displayObject.$displayList, region);
-                if (drawCalls > 0) {
-                    drawCalls++;
-                    var defaultCompositeOp = "source-over";
-                    var compositeOp = blendModes[displayObject.$blendMode];
-                    if (!compositeOp) {
-                        compositeOp = defaultCompositeOp;
-                    }
-                    context.globalCompositeOperation = compositeOp;
-                    this.drawWidthSurface(context, displayContext.surface, drawToStage, region.minX, region.minY);
-                    context.globalCompositeOperation = defaultCompositeOp;
-                }
-                sys.surfaceFactory.release(displayContext.surface);
-                sys.Region.release(region);
-                return drawCalls;
-            };
-            /**
-             * @private
-             */
-            p.drawWidthClip = function (displayObject, context, dirtyList, drawToStage, clipRegion) {
-                var drawCalls = 0;
-                var scrollRect = displayObject.$scrollRect;
-                var mask = displayObject.$mask;
-                //计算scrollRect和mask的clip区域是否需要绘制，不需要就直接返回，跳过所有子项的遍历。
-                var maskRegion;
-                var displayMatrix = displayObject.$getConcatenatedMatrix();
-                if (mask) {
-                    var bounds = mask.$getOriginalBounds();
-                    if (!bounds.isEmpty()) {
-                        maskRegion = sys.Region.create();
-                        maskRegion.updateRegion(bounds, mask.$getConcatenatedMatrix());
-                    }
-                }
-                var region;
-                if (scrollRect && !scrollRect.isEmpty()) {
-                    region = sys.Region.create();
-                    region.updateRegion(scrollRect, displayMatrix);
-                }
-                if (!region && !maskRegion) {
-                    return drawCalls;
-                }
-                if (region && maskRegion) {
-                    region.intersect(maskRegion);
-                    sys.Region.release(maskRegion);
-                }
-                else if (!region) {
-                    region = maskRegion;
-                }
-                if (region.isEmpty() || (clipRegion && !clipRegion.intersects(region))) {
-                    sys.Region.release(region);
-                    return drawCalls;
-                }
-                var found = false;
-                var l = dirtyList.length;
-                for (var j = 0; j < l; j++) {
-                    if (region.intersects(dirtyList[j])) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    sys.Region.release(region);
-                    return drawCalls;
-                }
-                //绘制显示对象自身，若有scrollRect，应用clip
-                var displayContext = this.createRenderContext(region.width, region.height);
-                if (!displayContext) {
-                    drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, drawToStage, displayObject.$displayList, clipRegion);
-                    sys.Region.release(region);
-                    return drawCalls;
-                }
-                if (scrollRect) {
-                    var m = displayMatrix;
-                    displayContext.setTransform(m.a, m.b, m.c, m.d, m.tx - region.minX, m.ty - region.minY);
-                    displayContext.beginPath();
-                    displayContext.rect(scrollRect.x, scrollRect.y, scrollRect.width, scrollRect.height);
-                    displayContext.clip();
-                }
-                displayContext.setTransform(1, 0, 0, 1, -region.minX, -region.minY);
-                drawCalls += this.drawDisplayObject(displayObject, displayContext, dirtyList, false, displayObject.$displayList, region);
-                //绘制遮罩
-                if (mask) {
-                    var maskContext = this.createRenderContext(region.width, region.height);
-                    if (!maskContext) {
-                        drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, drawToStage, displayObject.$displayList, clipRegion);
-                        sys.surfaceFactory.release(displayContext.surface);
-                        sys.Region.release(region);
-                        return drawCalls;
-                    }
-                    maskContext.setTransform(1, 0, 0, 1, -region.minX, -region.minY);
-                    var calls = this.drawDisplayObject(mask, maskContext, dirtyList, false, mask.$displayList, region);
-                    if (calls > 0) {
-                        drawCalls += calls;
-                        displayContext.globalCompositeOperation = "destination-in";
-                        displayContext.setTransform(1, 0, 0, 1, 0, 0);
-                        displayContext.globalAlpha = 1;
-                        displayContext.drawImage(maskContext.surface, 0, 0);
-                    }
-                    sys.surfaceFactory.release(maskContext.surface);
-                }
-                //绘制结果到屏幕
-                if (drawCalls > 0) {
-                    drawCalls++;
-                    this.drawWidthSurface(context, displayContext.surface, drawToStage, region.minX, region.minY);
-                }
-                sys.surfaceFactory.release(displayContext.surface);
-                sys.Region.release(region);
-                return drawCalls;
-            };
-            /**
-             * @private
-             */
-            p.createRenderContext = function (width, height) {
-                var surface = sys.surfaceFactory.create(true);
-                if (!surface) {
-                    return null;
-                }
-                surface.width = Math.max(257, width);
-                surface.height = Math.max(257, height);
-                return surface.renderContext;
-            };
-            /**
-             * @private
-             */
-            p.drawWidthSurface = function (context, surface, drawToStage, offsetX, offsetY) {
-                if (drawToStage) {
-                    context.setTransform(1, 0, 0, 1, offsetX, offsetY);
-                    context.drawImage(surface, 0, 0);
-                }
-                else {
-                    context.save();
-                    context.translate(offsetX, offsetY);
-                    context.drawImage(surface, 0, 0);
-                    context.restore();
-                }
-            };
-            /**
-             * @private
-             * 改变画布的尺寸，由于画布尺寸修改会清空原始画布。所以这里将原始画布绘制到一个新画布上，再与原始画布交换。
-             */
-            p.changeSurfaceSize = function () {
-                var root = this.root;
-                var oldOffsetX = this.offsetX;
-                var oldOffsetY = this.offsetY;
-                var bounds = this.root.$getOriginalBounds();
-                this.offsetX = bounds.x;
-                this.offsetY = bounds.y;
-                var oldContext = this.renderContext;
-                var oldSurface = oldContext.surface;
-                if (!this.sizeChanged) {
-                    this.sizeChanged = true;
-                    oldSurface.width = bounds.width;
-                    oldSurface.height = bounds.height;
-                }
-                else if (bounds.width !== oldSurface.width || bounds.height !== oldSurface.height) {
-                    var newContext = sys.sharedRenderContext;
-                    var newSurface = newContext.surface;
-                    sys.sharedRenderContext = oldContext;
-                    this.renderContext = newContext;
-                    this.surface = newSurface;
-                    newSurface.width = bounds.width;
-                    newSurface.height = bounds.height;
-                    if (oldSurface.width !== 0 && oldSurface.height !== 0) {
-                        newContext.setTransform(1, 0, 0, 1, 0, 0);
-                        newContext.drawImage(oldSurface, oldOffsetX - bounds.x, oldOffsetY - bounds.y);
-                    }
-                    oldSurface.height = 1;
-                    oldSurface.width = 1;
-                }
-                var m = root.$getInvertedConcatenatedMatrix();
-                this.renderContext.setTransform(m.a, m.b, m.c, m.d, m.tx - bounds.x, m.ty - bounds.y);
-            };
-            return DisplayList;
-        })(lark.LarkObject);
-        sys.DisplayList = DisplayList;
-    })(sys = lark.sys || (lark.sys = {}));
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
     /**
      * @language en_US
      * The TouchEvent class lets you handle events on devices that detect user contact with the device (such as a finger
@@ -6442,6 +5954,433 @@ var lark;
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
+    var rectanglePool = [];
+    /**
+     * @language en_US
+     * A Rectangle object is an area defined by its position, as indicated by its top-left corner point (x, y) and by its
+     * width and its height.<br/>
+     * The x, y, width, and height properties of the Rectangle class are independent of each other; changing the value of
+     * one property has no effect on the others. However, the right and bottom properties are integrally related to those
+     * four properties. For example, if you change the value of the right property, the value of the width property changes;
+     * if you change the bottom property, the value of the height property changes.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Rectangle 对象是按其位置（由它左上角的点 (x, y) 确定）以及宽度和高度定义的区域。<br/>
+     * Rectangle 类的 x、y、width 和 height 属性相互独立；更改一个属性的值不会影响其他属性。
+     * 但是，right 和 bottom 属性与这四个属性是整体相关的。例如，如果更改 right 属性的值，则 width
+     * 属性的值将发生变化；如果更改 bottom 属性，则 height 属性的值将发生变化。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var Rectangle = (function (_super) {
+        __extends(Rectangle, _super);
+        /**
+         * @language en_US
+         * Creates a new Rectangle object with the top-left corner specified by the x and y parameters and with the specified
+         * width and height parameters.
+         * @param x The x coordinate of the top-left corner of the rectangle.
+         * @param y The y coordinate of the top-left corner of the rectangle.
+         * @param width The width of the rectangle, in pixels.
+         * @param height The height of the rectangle, in pixels.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个新 Rectangle 对象，其左上角由 x 和 y 参数指定，并具有指定的 width 和 height 参数。
+         * @param x 矩形左上角的 x 坐标。
+         * @param y 矩形左上角的 y 坐标。
+         * @param width 矩形的宽度（以像素为单位）。
+         * @param height 矩形的高度（以像素为单位）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function Rectangle(x, y, width, height) {
+            if (x === void 0) { x = 0; }
+            if (y === void 0) { y = 0; }
+            if (width === void 0) { width = 0; }
+            if (height === void 0) { height = 0; }
+            _super.call(this);
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+        var d = __define,c=Rectangle;p=c.prototype;
+        /**
+         * @language en_US
+         * Releases a rectangle instance to the object pool.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 释放一个Rectangle实例到对象池
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Rectangle.release = function (rect) {
+            if (!rect) {
+                return;
+            }
+            rectanglePool.push(rect);
+        };
+        /**
+         * @language en_US
+         * get a rectangle instance from the object pool or create a new one.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从对象池中取出或创建一个新的Rectangle对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Rectangle.create = function () {
+            var rect = rectanglePool.pop();
+            if (!rect) {
+                rect = new Rectangle();
+            }
+            return rect;
+        };
+        d(p, "right",
+            /**
+             * @language en_US
+             * The sum of the x and width properties.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * x 和 width 属性的和。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.x + this.width;
+            },
+            function (value) {
+                this.width = value - this.x;
+            }
+        );
+        d(p, "bottom",
+            /**
+             * @language en_US
+             * The sum of the y and height properties.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * y 和 height 属性的和。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.y + this.height;
+            },
+            function (value) {
+                this.height = value - this.y;
+            }
+        );
+        d(p, "left",
+            /**
+             * @language en_US
+             * The x coordinate of the top-left corner of the rectangle. Changing the left property of a Rectangle object has
+             * no effect on the y and height properties. However it does affect the width property, whereas changing the x value
+             * does not affect the width property.
+             * The value of the left property is equal to the value of the x property.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 矩形左上角的 x 坐标。更改 Rectangle 对象的 left 属性对 y 和 height 属性没有影响。但是，它会影响 width 属性，而更改 x 值不会影响 width 属性。
+             * left 属性的值等于 x 属性的值。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.x;
+            },
+            function (value) {
+                this.width += this.x - value;
+                this.x = value;
+            }
+        );
+        d(p, "top",
+            /**
+             * @language en_US
+             * The y coordinate of the top-left corner of the rectangle. Changing the top property of a Rectangle object has
+             * no effect on the x and width properties. However it does affect the height property, whereas changing the y
+             * value does not affect the height property.<br/>
+             * The value of the top property is equal to the value of the y property.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 矩形左上角的 y 坐标。更改 Rectangle 对象的 top 属性对 x 和 width 属性没有影响。但是，它会影响 height 属性，而更改 y 值不会影响 height 属性。<br/>
+             * top 属性的值等于 y 属性的值。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.y;
+            },
+            function (value) {
+                this.height += this.y - value;
+                this.y = value;
+            }
+        );
+        /**
+         * @language en_US
+         * Copies all of rectangle data from the source Rectangle object into the calling Rectangle object.
+         * @param sourceRect The Rectangle object from which to copy the data.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将源 Rectangle 对象中的所有矩形数据复制到调用方 Rectangle 对象中。
+         * @param sourceRect 要从中复制数据的 Rectangle 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.copyFrom = function (sourceRect) {
+            this.x = sourceRect.x;
+            this.y = sourceRect.y;
+            this.width = sourceRect.width;
+            this.height = sourceRect.height;
+            return this;
+        };
+        /**
+         * @language en_US
+         * Sets the members of Rectangle to the specified values
+         * @param x The x coordinate of the top-left corner of the rectangle.
+         * @param y The y coordinate of the top-left corner of the rectangle.
+         * @param width The width of the rectangle, in pixels.
+         * @param height The height of the rectangle, in pixels.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将 Rectangle 的成员设置为指定值
+         * @param x 矩形左上角的 x 坐标。
+         * @param y 矩形左上角的 y 坐标。
+         * @param width 矩形的宽度（以像素为单位）。
+         * @param height 矩形的高度（以像素为单位）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.setTo = function (x, y, width, height) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            return this;
+        };
+        /**
+         * @language en_US
+         * Determines whether the specified point is contained within the rectangular region defined by this Rectangle object.
+         * @param x The x coordinate (horizontal position) of the point.
+         * @param y The y coordinate (vertical position) of the point.
+         * @returns A value of true if the Rectangle object contains the specified point; otherwise false.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 确定由此 Rectangle 对象定义的矩形区域内是否包含指定的点。
+         * @param x 检测点的x轴
+         * @param y 检测点的y轴
+         * @returns 如果检测点位于矩形内，返回true，否则，返回false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.contains = function (x, y) {
+            return this.x <= x && this.x + this.width >= x && this.y <= y && this.y + this.height >= y;
+        };
+        /**
+         * @language en_US
+         * If the Rectangle object specified in the toIntersect parameter intersects with this Rectangle object, returns
+         * the area of intersection as a Rectangle object. If the rectangles do not intersect, this method returns an empty
+         * Rectangle object with its properties set to 0.
+         * @param toIntersect The Rectangle object to compare against to see if it intersects with this Rectangle object.
+         * @returns A Rectangle object that equals the area of intersection. If the rectangles do not intersect, this method
+         * returns an empty Rectangle object; that is, a rectangle with its x, y, width, and height properties set to 0.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果在 toIntersect 参数中指定的 Rectangle 对象与此 Rectangle 对象相交，则返回交集区域作为 Rectangle 对象。如果矩形不相交，
+         * 则此方法返回一个空的 Rectangle 对象，其属性设置为 0。
+         * @param toIntersect 要对照比较以查看其是否与此 Rectangle 对象相交的 Rectangle 对象。
+         * @returns 等于交集区域的 Rectangle 对象。如果该矩形不相交，则此方法返回一个空的 Rectangle 对象；即，其 x、y、width 和
+         * height 属性均设置为 0 的矩形。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.intersection = function (toIntersect) {
+            return this.clone().$intersectInPlace(toIntersect);
+        };
+        /**
+         * @private
+         */
+        p.$intersectInPlace = function (clipRect) {
+            var x0 = this.x;
+            var y0 = this.y;
+            var x1 = clipRect.x;
+            var y1 = clipRect.y;
+            var l = Math.max(x0, x1);
+            var r = Math.min(x0 + this.width, x1 + clipRect.width);
+            if (l <= r) {
+                var t = Math.max(y0, y1);
+                var b = Math.min(y0 + this.height, y1 + clipRect.height);
+                if (t <= b) {
+                    this.setTo(l, t, r - l, b - t);
+                    return this;
+                }
+            }
+            this.setEmpty();
+            return this;
+        };
+        /**
+         * @language en_US
+         * Determines whether the object specified in the toIntersect parameter intersects with this Rectangle object.
+         * This method checks the x, y, width, and height properties of the specified Rectangle object to see if it
+         * intersects with this Rectangle object.
+         * @param toIntersect The Rectangle object to compare against this Rectangle object.
+         * @returns A value of true if the specified object intersects with this Rectangle object; otherwise false.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 确定在 toIntersect 参数中指定的对象是否与此 Rectangle 对象相交。此方法检查指定的 Rectangle
+         * 对象的 x、y、width 和 height 属性，以查看它是否与此 Rectangle 对象相交。
+         * @param toIntersect 要与此 Rectangle 对象比较的 Rectangle 对象。
+         * @returns 如果两个矩形相交，返回true，否则返回false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.intersects = function (toIntersect) {
+            return Math.max(this.x, toIntersect.x) <= Math.min(this.right, toIntersect.right) && Math.max(this.y, toIntersect.y) <= Math.min(this.bottom, toIntersect.bottom);
+        };
+        /**
+         * @language en_US
+         * Determines whether or not this Rectangle object is empty.
+         * @returns A value of true if the Rectangle object's width or height is less than or equal to 0; otherwise false.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 确定此 Rectangle 对象是否为空。
+         * @returns 如果 Rectangle 对象的宽度或高度小于等于 0，则返回 true 值，否则返回 false。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.isEmpty = function () {
+            return this.width <= 0 || this.height <= 0;
+        };
+        /**
+         * @language en_US
+         * Sets all of the Rectangle object's properties to 0. A Rectangle object is empty if its width or height is less than or equal to 0.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将 Rectangle 对象的所有属性设置为 0。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.setEmpty = function () {
+            this.x = 0;
+            this.y = 0;
+            this.width = 0;
+            this.height = 0;
+        };
+        /**
+         * @language en_US
+         * Returns a new Rectangle object with the same values for the x, y, width, and height properties as the original Rectangle object.
+         * @returns A new Rectangle object with the same values for the x, y, width, and height properties as the original Rectangle object.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回一个新的 Rectangle 对象，其 x、y、width 和 height 属性的值与原始 Rectangle 对象的对应值相同。
+         * @returns 新的 Rectangle 对象，其 x、y、width 和 height 属性的值与原始 Rectangle 对象的对应值相同。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.clone = function () {
+            return new Rectangle(this.x, this.y, this.width, this.height);
+        };
+        /**
+         * @private
+         */
+        p.$getBaseWidth = function (angle) {
+            var u = Math.abs(Math.cos(angle));
+            var v = Math.abs(Math.sin(angle));
+            return u * this.width + v * this.height;
+        };
+        /**
+         * @private
+         */
+        p.$getBaseHeight = function (angle) {
+            var u = Math.abs(Math.cos(angle));
+            var v = Math.abs(Math.sin(angle));
+            return v * this.width + u * this.height;
+        };
+        return Rectangle;
+    })(lark.LarkObject);
+    lark.Rectangle = Rectangle;
+    lark.registerClass(Rectangle, 17 /* Rectangle */);
+    /**
+     * @private
+     * 仅供框架内复用，要防止暴露引用到外部。
+     */
+    lark.$TempRectangle = new Rectangle();
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
     var PI = Math.PI;
     var HalfPI = PI / 2;
     var PacPI = PI + HalfPI;
@@ -7180,6 +7119,16 @@ var lark;
             this.$scrollRect = null;
             /**
              * @private
+             * 自身在舞台上的裁剪区域
+             */
+            this.$clipRect = null;
+            /**
+             * @private
+             * 父级容器在舞台上的裁剪区域
+             */
+            this.$parentClipRect = null;
+            /**
+             * @private
              */
             this.$blendMode = 0;
             /**
@@ -7484,16 +7433,24 @@ var lark;
          * 获得这个显示对象以及它所有父级对象的连接矩阵。
          */
         p.$getConcatenatedMatrix = function () {
+            var renderMatrix = this.$renderMatrix;
             if (this.$hasFlags(16 /* InvalidConcatenatedMatrix */)) {
                 if (this.$parent) {
-                    this.$parent.$getConcatenatedMatrix().$preMultiplyInto(this.$getMatrix(), this.$renderMatrix);
+                    this.$parent.$getConcatenatedMatrix().$preMultiplyInto(this.$getMatrix(), renderMatrix);
                     var rect = this.$scrollRect;
                     if (rect) {
-                        this.$renderMatrix.$preMultiplyInto(lark.$TempMatrix.setTo(1, 0, 0, 1, -rect.x, -rect.y), this.$renderMatrix);
+                        var clipRect = this.$clipRect;
+                        clipRect.setTo(0, 0, rect.width, rect.height);
+                        renderMatrix.$transformBounds(clipRect);
+                        var parentClipRect = this.$parentClipRect;
+                        if (parentClipRect) {
+                            clipRect.$intersectInPlace(parentClipRect);
+                        }
+                        renderMatrix.$preMultiplyInto(lark.$TempMatrix.setTo(1, 0, 0, 1, -rect.x, -rect.y), renderMatrix);
                     }
                 }
                 else {
-                    this.$renderMatrix.copyFrom(this.$getMatrix());
+                    renderMatrix.copyFrom(this.$getMatrix());
                 }
                 if (this.$displayList) {
                     this.$displayList.$renderRegion.moved = true;
@@ -7503,7 +7460,7 @@ var lark;
                 }
                 this.$removeFlags(16 /* InvalidConcatenatedMatrix */);
             }
-            return this.$renderMatrix;
+            return renderMatrix;
         };
         /**
          * @private
@@ -8071,18 +8028,28 @@ var lark;
                 if (!value && !this.$scrollRect) {
                     return;
                 }
+                var changed = false;
                 if (value) {
                     if (!this.$scrollRect) {
+                        changed = true;
+                        this.$clipRect = new lark.Rectangle();
                         this.$scrollRect = new lark.Rectangle();
                     }
                     this.$scrollRect.copyFrom(value);
                 }
                 else {
+                    changed = true;
+                    this.$clipRect = null;
                     this.$scrollRect = null;
+                }
+                if (changed) {
+                    this.$scrollRectChanged();
                 }
                 this.invalidatePosition();
             }
         );
+        p.$scrollRectChanged = function () {
+        };
         d(p, "blendMode",
             /**
              * @language en_US
@@ -8352,7 +8319,8 @@ var lark;
                 return false;
             }
             region.moved = false;
-            region.updateRegion(bounds, matrix);
+            var clipRect = this.$clipRect || this.$parentClipRect;
+            region.updateRegion(bounds, matrix, clipRect);
             return true;
         };
         /**
@@ -8535,388 +8503,6 @@ var lark;
         lark.$markReadOnly(DisplayObject.prototype, "parent");
         lark.$markReadOnly(DisplayObject.prototype, "stage");
     }
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    var rectanglePool = [];
-    /**
-     * @language en_US
-     * A Rectangle object is an area defined by its position, as indicated by its top-left corner point (x, y) and by its
-     * width and its height.<br/>
-     * The x, y, width, and height properties of the Rectangle class are independent of each other; changing the value of
-     * one property has no effect on the others. However, the right and bottom properties are integrally related to those
-     * four properties. For example, if you change the value of the right property, the value of the width property changes;
-     * if you change the bottom property, the value of the height property changes.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * Rectangle 对象是按其位置（由它左上角的点 (x, y) 确定）以及宽度和高度定义的区域。<br/>
-     * Rectangle 类的 x、y、width 和 height 属性相互独立；更改一个属性的值不会影响其他属性。
-     * 但是，right 和 bottom 属性与这四个属性是整体相关的。例如，如果更改 right 属性的值，则 width
-     * 属性的值将发生变化；如果更改 bottom 属性，则 height 属性的值将发生变化。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var Rectangle = (function (_super) {
-        __extends(Rectangle, _super);
-        /**
-         * @language en_US
-         * Creates a new Rectangle object with the top-left corner specified by the x and y parameters and with the specified
-         * width and height parameters.
-         * @param x The x coordinate of the top-left corner of the rectangle.
-         * @param y The y coordinate of the top-left corner of the rectangle.
-         * @param width The width of the rectangle, in pixels.
-         * @param height The height of the rectangle, in pixels.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个新 Rectangle 对象，其左上角由 x 和 y 参数指定，并具有指定的 width 和 height 参数。
-         * @param x 矩形左上角的 x 坐标。
-         * @param y 矩形左上角的 y 坐标。
-         * @param width 矩形的宽度（以像素为单位）。
-         * @param height 矩形的高度（以像素为单位）。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        function Rectangle(x, y, width, height) {
-            if (x === void 0) { x = 0; }
-            if (y === void 0) { y = 0; }
-            if (width === void 0) { width = 0; }
-            if (height === void 0) { height = 0; }
-            _super.call(this);
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-        }
-        var d = __define,c=Rectangle;p=c.prototype;
-        /**
-         * @language en_US
-         * Releases a rectangle instance to the object pool.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 释放一个Rectangle实例到对象池
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Rectangle.release = function (rect) {
-            if (!rect) {
-                return;
-            }
-            rectanglePool.push(rect);
-        };
-        /**
-         * @language en_US
-         * get a rectangle instance from the object pool or create a new one.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 从对象池中取出或创建一个新的Rectangle对象。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Rectangle.create = function () {
-            var rect = rectanglePool.pop();
-            if (!rect) {
-                rect = new Rectangle();
-            }
-            return rect;
-        };
-        d(p, "right",
-            /**
-             * @language en_US
-             * The sum of the x and width properties.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * x 和 width 属性的和。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.x + this.width;
-            },
-            function (value) {
-                this.width = value - this.x;
-            }
-        );
-        d(p, "bottom",
-            /**
-             * @language en_US
-             * The sum of the y and height properties.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * y 和 height 属性的和。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.y + this.height;
-            },
-            function (value) {
-                this.height = value - this.y;
-            }
-        );
-        d(p, "left",
-            /**
-             * @language en_US
-             * The x coordinate of the top-left corner of the rectangle. Changing the left property of a Rectangle object has
-             * no effect on the y and height properties. However it does affect the width property, whereas changing the x value
-             * does not affect the width property.
-             * The value of the left property is equal to the value of the x property.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 矩形左上角的 x 坐标。更改 Rectangle 对象的 left 属性对 y 和 height 属性没有影响。但是，它会影响 width 属性，而更改 x 值不会影响 width 属性。
-             * left 属性的值等于 x 属性的值。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.x;
-            },
-            function (value) {
-                this.width += this.x - value;
-                this.x = value;
-            }
-        );
-        d(p, "top",
-            /**
-             * @language en_US
-             * The y coordinate of the top-left corner of the rectangle. Changing the top property of a Rectangle object has
-             * no effect on the x and width properties. However it does affect the height property, whereas changing the y
-             * value does not affect the height property.<br/>
-             * The value of the top property is equal to the value of the y property.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 矩形左上角的 y 坐标。更改 Rectangle 对象的 top 属性对 x 和 width 属性没有影响。但是，它会影响 height 属性，而更改 y 值不会影响 height 属性。<br/>
-             * top 属性的值等于 y 属性的值。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.y;
-            },
-            function (value) {
-                this.height += this.y - value;
-                this.y = value;
-            }
-        );
-        /**
-         * @language en_US
-         * Copies all of rectangle data from the source Rectangle object into the calling Rectangle object.
-         * @param sourceRect The Rectangle object from which to copy the data.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将源 Rectangle 对象中的所有矩形数据复制到调用方 Rectangle 对象中。
-         * @param sourceRect 要从中复制数据的 Rectangle 对象。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.copyFrom = function (sourceRect) {
-            this.x = sourceRect.x;
-            this.y = sourceRect.y;
-            this.width = sourceRect.width;
-            this.height = sourceRect.height;
-            return this;
-        };
-        /**
-         * @language en_US
-         * Sets the members of Rectangle to the specified values
-         * @param x The x coordinate of the top-left corner of the rectangle.
-         * @param y The y coordinate of the top-left corner of the rectangle.
-         * @param width The width of the rectangle, in pixels.
-         * @param height The height of the rectangle, in pixels.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将 Rectangle 的成员设置为指定值
-         * @param x 矩形左上角的 x 坐标。
-         * @param y 矩形左上角的 y 坐标。
-         * @param width 矩形的宽度（以像素为单位）。
-         * @param height 矩形的高度（以像素为单位）。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.setTo = function (x, y, width, height) {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-            return this;
-        };
-        /**
-         * @language en_US
-         * Determines whether the specified point is contained within the rectangular region defined by this Rectangle object.
-         * @param x The x coordinate (horizontal position) of the point.
-         * @param y The y coordinate (vertical position) of the point.
-         * @returns A value of true if the Rectangle object contains the specified point; otherwise false.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 确定由此 Rectangle 对象定义的矩形区域内是否包含指定的点。
-         * @param x 检测点的x轴
-         * @param y 检测点的y轴
-         * @returns 如果检测点位于矩形内，返回true，否则，返回false
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.contains = function (x, y) {
-            return this.x <= x && this.x + this.width >= x && this.y <= y && this.y + this.height >= y;
-        };
-        /**
-         * @language en_US
-         * Determines whether the object specified in the toIntersect parameter intersects with this Rectangle object.
-         * This method checks the x, y, width, and height properties of the specified Rectangle object to see if it
-         * intersects with this Rectangle object.
-         * @param toIntersect The Rectangle object to compare against this Rectangle object.
-         * @returns A value of true if the specified object intersects with this Rectangle object; otherwise false.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 确定在 toIntersect 参数中指定的对象是否与此 Rectangle 对象相交。此方法检查指定的 Rectangle
-         * 对象的 x、y、width 和 height 属性，以查看它是否与此 Rectangle 对象相交。
-         * @param toIntersect 要与此 Rectangle 对象比较的 Rectangle 对象。
-         * @returns 如果两个矩形相交，返回true，否则返回false
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.intersects = function (toIntersect) {
-            return Math.max(this.x, toIntersect.x) <= Math.min(this.right, toIntersect.right) && Math.max(this.y, toIntersect.y) <= Math.min(this.bottom, toIntersect.bottom);
-        };
-        /**
-         * @language en_US
-         * Determines whether or not this Rectangle object is empty.
-         * @returns A value of true if the Rectangle object's width or height is less than or equal to 0; otherwise false.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 确定此 Rectangle 对象是否为空。
-         * @returns 如果 Rectangle 对象的宽度或高度小于等于 0，则返回 true 值，否则返回 false。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.isEmpty = function () {
-            return this.width <= 0 || this.height <= 0;
-        };
-        /**
-         * @language en_US
-         * Sets all of the Rectangle object's properties to 0. A Rectangle object is empty if its width or height is less than or equal to 0.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将 Rectangle 对象的所有属性设置为 0。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.setEmpty = function () {
-            this.x = 0;
-            this.y = 0;
-            this.width = 0;
-            this.height = 0;
-        };
-        /**
-         * @language en_US
-         * Returns a new Rectangle object with the same values for the x, y, width, and height properties as the original Rectangle object.
-         * @returns A new Rectangle object with the same values for the x, y, width, and height properties as the original Rectangle object.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回一个新的 Rectangle 对象，其 x、y、width 和 height 属性的值与原始 Rectangle 对象的对应值相同。
-         * @returns 新的 Rectangle 对象，其 x、y、width 和 height 属性的值与原始 Rectangle 对象的对应值相同。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.clone = function () {
-            return new Rectangle(this.x, this.y, this.width, this.height);
-        };
-        /**
-         * @private
-         */
-        p.$getBaseWidth = function (angle) {
-            var u = Math.abs(Math.cos(angle));
-            var v = Math.abs(Math.sin(angle));
-            return u * this.width + v * this.height;
-        };
-        /**
-         * @private
-         */
-        p.$getBaseHeight = function (angle) {
-            var u = Math.abs(Math.cos(angle));
-            var v = Math.abs(Math.sin(angle));
-            return v * this.width + u * this.height;
-        };
-        return Rectangle;
-    })(lark.LarkObject);
-    lark.Rectangle = Rectangle;
-    lark.registerClass(Rectangle, 17 /* Rectangle */);
-    /**
-     * @private
-     * 仅供框架内复用，要防止暴露引用到外部。
-     */
-    lark.$TempRectangle = new Rectangle();
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -10013,6 +9599,8 @@ var lark;
             }
             var displayList = this.$displayList || this.$parentDisplayList;
             this.assignParentDisplayList(child, displayList, displayList);
+            var clipRect = this.$clipRect || this.$parentClipRect;
+            this.assignParentClipRect(child, clipRect);
             child.$propagateFlagsDown(624 /* DownOnAddedOrRemoved */);
             this.$propagateFlagsUp(4 /* InvalidBounds */);
             this.$childAdded(child, index);
@@ -10122,6 +9710,7 @@ var lark;
             }
             var displayList = this.$displayList || this.$parentDisplayList;
             this.assignParentDisplayList(child, displayList, null);
+            this.assignParentClipRect(child, null);
             child.$propagateFlagsDown(624 /* DownOnAddedOrRemoved */);
             child.$setParent(null);
             children.splice(index, 1);
@@ -10393,6 +9982,31 @@ var lark;
             if (children) {
                 for (var i = children.length - 1; i >= 0; i--) {
                     this.assignParentDisplayList(children[i], parentCache, newParent);
+                }
+            }
+        };
+        /**
+         * @private
+         */
+        p.$scrollRectChanged = function () {
+            var clipRect = this.$clipRect || this.$parentClipRect;
+            var children = this.$children;
+            for (var i = children.length - 1; i >= 0; i--) {
+                this.assignParentClipRect(children[i], clipRect);
+            }
+        };
+        /**
+         * @private
+         */
+        p.assignParentClipRect = function (child, parentClipRect) {
+            child.$parentClipRect = parentClipRect;
+            if (child.$clipRect) {
+                return;
+            }
+            var children = child.$children;
+            if (children) {
+                for (var i = children.length - 1; i >= 0; i--) {
+                    this.assignParentClipRect(children[i], parentClipRect);
                 }
             }
         };
@@ -10695,6 +10309,549 @@ var lark;
             return TouchHandler;
         })(lark.LarkObject);
         sys.TouchHandler = TouchHandler;
+    })(sys = lark.sys || (lark.sys = {}));
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    var sys;
+    (function (sys) {
+        var displayListPool = [];
+        var blendModes = ["source-over", "lighter", "destination-out"];
+        /**
+         * @private
+         * 显示列表
+         */
+        var DisplayList = (function (_super) {
+            __extends(DisplayList, _super);
+            /**
+             * @private
+             * 创建一个DisplayList对象
+             */
+            function DisplayList(root) {
+                _super.call(this);
+                /**
+                 * @private
+                 * 是否需要重绘
+                 */
+                this.$isDirty = false;
+                /**
+                 * @private
+                 * 在舞台上的透明度
+                 */
+                this.$renderAlpha = 1;
+                /**
+                 * @private
+                 * 在舞台上的显示区域
+                 */
+                this.$renderRegion = new sys.Region();
+                /**
+                 * @private
+                 * 呈现绘制结果的目标画布
+                 */
+                this.surface = null;
+                /**
+                 * @private
+                 */
+                this.offsetX = 0;
+                /**
+                 * @private
+                 */
+                this.offsetY = 0;
+                /**
+                 * @private
+                 */
+                this.needRedraw = false;
+                /**
+                 * @private
+                 */
+                this.rootMatrix = new lark.Matrix();
+                /**
+                 * @private
+                 * 显示对象的渲染节点发生改变时，把自身的IRenderable对象注册到此列表上。
+                 */
+                this.dirtyNodes = {};
+                /**
+                 * @private
+                 */
+                this.dirtyNodeList = [];
+                /**
+                 * @private
+                 */
+                this.dirtyList = null;
+                /**
+                 * @private
+                 */
+                this.dirtyRegion = new sys.DirtyRegion();
+                /**
+                 * @private
+                 */
+                this.sizeChanged = false;
+                this.root = root;
+            }
+            var d = __define,c=DisplayList;p=c.prototype;
+            /**
+             * @private
+             * 释放一个DisplayList实例到对象池
+             */
+            DisplayList.release = function (displayList) {
+                sys.surfaceFactory.release(displayList.surface);
+                displayList.surface = null;
+                displayList.renderContext = null;
+                displayList.root = null;
+                displayList.$renderMatrix = null;
+                displayList.needRedraw = false;
+                displayList.$isDirty = false;
+                displayListPool.push(displayList);
+            };
+            /**
+             * @private
+             * 从对象池中取出或创建一个新的DisplayList对象。
+             */
+            DisplayList.create = function (target) {
+                var displayList = displayListPool.pop();
+                if (!displayList) {
+                    displayList = new lark.sys.DisplayList(target);
+                }
+                var surface = sys.surfaceFactory.create();
+                if (!surface) {
+                    return null;
+                }
+                displayList.surface = surface;
+                displayList.renderContext = surface.renderContext;
+                return displayList;
+            };
+            /**
+             * @private
+             * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
+             */
+            p.$update = function () {
+                var target = this.root;
+                target.$removeFlagsUp(768 /* Dirty */);
+                this.$renderAlpha = target.$getConcatenatedAlpha();
+                this.$renderMatrix = target.$getConcatenatedMatrix();
+                var bounds = target.$getOriginalBounds();
+                if (this.needRedraw) {
+                    this.updateDirtyRegions();
+                }
+                if (!target.$stage) {
+                    return false;
+                }
+                var region = this.$renderRegion;
+                if (!region.moved) {
+                    return false;
+                }
+                region.moved = false;
+                var clipRect = target.$clipRect || target.$parentClipRect;
+                region.updateRegion(bounds, this.$renderMatrix, clipRect);
+                return true;
+            };
+            /**
+             * @private
+             *
+             * @param context
+             */
+            p.$render = function (context) {
+                var data = this.surface;
+                if (data) {
+                    context.drawImage(data, this.offsetX, this.offsetY);
+                }
+            };
+            /**
+             * @private
+             * 设置剪裁边界，不再绘制完整目标对象，画布尺寸由外部决定，超过边界的节点将跳过绘制。
+             */
+            p.setClipRect = function (width, height) {
+                this.dirtyRegion.setClipRect(width, height);
+                this.rootMatrix = null; //只有舞台画布才能设置ClipRect
+                var surface = this.renderContext.surface;
+                surface.width = width;
+                surface.height = height;
+                this.surface = surface;
+            };
+            /**
+             * @private
+             * 标记一个节点需要重新渲染
+             */
+            p.markDirty = function (node) {
+                var key = node.$hashCode;
+                if (this.dirtyNodes[key]) {
+                    return;
+                }
+                this.dirtyNodes[key] = true;
+                this.dirtyNodeList.push(node);
+                if (!this.needRedraw) {
+                    this.needRedraw = true;
+                    var parentCache = this.root.$parentDisplayList;
+                    if (parentCache) {
+                        parentCache.markDirty(this);
+                    }
+                }
+            };
+            /**
+             * @private
+             * 更新节点属性并返回脏矩形列表。
+             */
+            p.updateDirtyRegions = function () {
+                var nodeList = this.dirtyNodeList;
+                this.dirtyNodeList = [];
+                this.dirtyNodes = {};
+                var dirtyRegion = this.dirtyRegion;
+                var length = nodeList.length;
+                for (var i = 0; i < length; i++) {
+                    var node = nodeList[i];
+                    var region = node.$renderRegion;
+                    if (node.$renderAlpha > 0) {
+                        if (dirtyRegion.addRegion(region)) {
+                            node.$isDirty = true;
+                        }
+                    }
+                    var moved = node.$update();
+                    if (node.$renderAlpha > 0 && (moved || !node.$isDirty)) {
+                        if (dirtyRegion.addRegion(region)) {
+                            node.$isDirty = true;
+                        }
+                    }
+                }
+                this.dirtyList = dirtyRegion.getDirtyRegions();
+                return this.dirtyList;
+            };
+            /**
+             * @private
+             * 绘制根节点显示对象到目标画布，返回draw的次数。
+             */
+            p.drawToSurface = function () {
+                if (this.rootMatrix) {
+                    this.changeSurfaceSize();
+                }
+                var context = this.renderContext;
+                //绘制脏矩形区域
+                context.save();
+                context.beginPath();
+                var dirtyList = this.dirtyList;
+                this.dirtyList = null;
+                var length = dirtyList.length;
+                for (var i = 0; i < length; i++) {
+                    var region = dirtyList[i];
+                    context.clearRect(region.minX, region.minY, region.width, region.height);
+                    context.rect(region.minX, region.minY, region.width, region.height);
+                }
+                context.clip();
+                //绘制显示对象
+                var drawCalls = this.drawDisplayObject(this.root, context, dirtyList, this.rootMatrix, null, null);
+                //清除脏矩形区域
+                context.restore();
+                this.dirtyRegion.clear();
+                this.needRedraw = false;
+                return drawCalls;
+            };
+            /**
+             * @private
+             * 绘制一个显示对象
+             */
+            p.drawDisplayObject = function (displayObject, context, dirtyList, rootMatrix, displayList, clipRegion) {
+                var drawCalls = 0;
+                var node;
+                var globalAlpha;
+                if (displayList) {
+                    if (displayList.needRedraw) {
+                        drawCalls += displayList.drawToSurface();
+                    }
+                    node = displayList;
+                    globalAlpha = 1; //这里不用读取displayList.$renderAlpha,因为它已经绘制到了displayList.surface的内部。
+                }
+                else if (displayObject.$renderRegion) {
+                    node = displayObject;
+                    globalAlpha = displayObject.$renderAlpha;
+                }
+                if (node) {
+                    var renderRegion = node.$renderRegion;
+                    if (clipRegion && !clipRegion.intersects(renderRegion)) {
+                        node.$isDirty = false;
+                    }
+                    else if (!node.$isDirty) {
+                        var l = dirtyList.length;
+                        for (var j = 0; j < l; j++) {
+                            if (renderRegion.intersects(dirtyList[j])) {
+                                node.$isDirty = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (node.$isDirty) {
+                        drawCalls++;
+                        context.globalAlpha = globalAlpha;
+                        var m = node.$renderMatrix;
+                        if (rootMatrix) {
+                            context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+                            node.$render(context);
+                            context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx, rootMatrix.ty);
+                        }
+                        else {
+                            context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+                            node.$render(context);
+                        }
+                        node.$isDirty = false;
+                    }
+                }
+                if (displayList) {
+                    return drawCalls;
+                }
+                var children = displayObject.$children;
+                if (children) {
+                    var length = children.length;
+                    for (var i = 0; i < length; i++) {
+                        var child = children[i];
+                        if (!child.$visible || child.$alpha <= 0 || child.$maskedObject) {
+                            continue;
+                        }
+                        if (child.$scrollRect || child.$mask) {
+                            drawCalls += this.drawWidthClip(child, context, dirtyList, rootMatrix, clipRegion);
+                        }
+                        else if (child.$blendMode !== 0) {
+                            drawCalls += this.drawWidthBlendMode(child, context, dirtyList, rootMatrix, clipRegion);
+                        }
+                        else {
+                            if (DEBUG && child["isFPS"]) {
+                                this.drawDisplayObject(child, context, dirtyList, rootMatrix, child.$displayList, clipRegion);
+                            }
+                            else {
+                                drawCalls += this.drawDisplayObject(child, context, dirtyList, rootMatrix, child.$displayList, clipRegion);
+                            }
+                        }
+                    }
+                }
+                return drawCalls;
+            };
+            /**
+             * @private
+             */
+            p.drawWidthBlendMode = function (displayObject, context, dirtyList, rootMatrix, clipRegion) {
+                var drawCalls = 0;
+                var region;
+                var bounds = displayObject.$getOriginalBounds();
+                if (!bounds.isEmpty()) {
+                    region = sys.Region.create();
+                    region.updateRegion(bounds, displayObject.$getConcatenatedMatrix(), null);
+                }
+                if (!region || (clipRegion && !clipRegion.intersects(region))) {
+                    return drawCalls;
+                }
+                var displayContext = this.createRenderContext(region.width, region.height);
+                if (!displayContext) {
+                    drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, rootMatrix, displayObject.$displayList, clipRegion);
+                    sys.Region.release(region);
+                    return drawCalls;
+                }
+                displayContext.setTransform(1, 0, 0, 1, -region.minX, -region.minY);
+                var rootM = lark.Matrix.create().setTo(1, 0, 0, 1, -region.minX, -region.minY);
+                drawCalls += this.drawDisplayObject(displayObject, displayContext, dirtyList, rootM, displayObject.$displayList, region);
+                lark.Matrix.release(rootM);
+                if (drawCalls > 0) {
+                    drawCalls++;
+                    var defaultCompositeOp = "source-over";
+                    var compositeOp = blendModes[displayObject.$blendMode];
+                    if (!compositeOp) {
+                        compositeOp = defaultCompositeOp;
+                    }
+                    context.globalCompositeOperation = compositeOp;
+                    this.drawWidthSurface(context, displayContext.surface, rootMatrix, region.minX, region.minY);
+                    context.globalCompositeOperation = defaultCompositeOp;
+                }
+                sys.surfaceFactory.release(displayContext.surface);
+                sys.Region.release(region);
+                return drawCalls;
+            };
+            /**
+             * @private
+             */
+            p.drawWidthClip = function (displayObject, context, dirtyList, rootMatrix, clipRegion) {
+                var drawCalls = 0;
+                var scrollRect = displayObject.$scrollRect;
+                var mask = displayObject.$mask;
+                //计算scrollRect和mask的clip区域是否需要绘制，不需要就直接返回，跳过所有子项的遍历。
+                var maskRegion;
+                var displayMatrix = displayObject.$getConcatenatedMatrix();
+                if (mask) {
+                    var bounds = mask.$getOriginalBounds();
+                    if (!bounds.isEmpty()) {
+                        maskRegion = sys.Region.create();
+                        maskRegion.updateRegion(bounds, mask.$getConcatenatedMatrix(), null);
+                    }
+                }
+                var region;
+                if (scrollRect && !scrollRect.isEmpty()) {
+                    region = sys.Region.create();
+                    region.updateRegion(scrollRect, displayMatrix, null);
+                }
+                if (!region && !maskRegion) {
+                    return drawCalls;
+                }
+                if (region && maskRegion) {
+                    region.intersect(maskRegion);
+                    sys.Region.release(maskRegion);
+                }
+                else if (!region) {
+                    region = maskRegion;
+                }
+                if (region.isEmpty() || (clipRegion && !clipRegion.intersects(region))) {
+                    sys.Region.release(region);
+                    return drawCalls;
+                }
+                var found = false;
+                var l = dirtyList.length;
+                for (var j = 0; j < l; j++) {
+                    if (region.intersects(dirtyList[j])) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    sys.Region.release(region);
+                    return drawCalls;
+                }
+                //绘制显示对象自身，若有scrollRect，应用clip
+                var displayContext = this.createRenderContext(region.width, region.height);
+                if (!displayContext) {
+                    drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, rootMatrix, displayObject.$displayList, clipRegion);
+                    sys.Region.release(region);
+                    return drawCalls;
+                }
+                if (scrollRect) {
+                    var m = displayMatrix;
+                    displayContext.setTransform(m.a, m.b, m.c, m.d, m.tx - region.minX, m.ty - region.minY);
+                    displayContext.beginPath();
+                    displayContext.rect(scrollRect.x, scrollRect.y, scrollRect.width, scrollRect.height);
+                    displayContext.clip();
+                }
+                displayContext.setTransform(1, 0, 0, 1, -region.minX, -region.minY);
+                var rootM = lark.Matrix.create().setTo(1, 0, 0, 1, -region.minX, -region.minY);
+                drawCalls += this.drawDisplayObject(displayObject, displayContext, dirtyList, rootM, displayObject.$displayList, region);
+                lark.Matrix.release(rootM);
+                //绘制遮罩
+                if (mask) {
+                    var maskContext = this.createRenderContext(region.width, region.height);
+                    if (!maskContext) {
+                        drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, rootMatrix, displayObject.$displayList, clipRegion);
+                        sys.surfaceFactory.release(displayContext.surface);
+                        sys.Region.release(region);
+                        return drawCalls;
+                    }
+                    maskContext.setTransform(1, 0, 0, 1, -region.minX, -region.minY);
+                    rootM = lark.Matrix.create().setTo(1, 0, 0, 1, -region.minX, -region.minY);
+                    var calls = this.drawDisplayObject(mask, maskContext, dirtyList, rootM, mask.$displayList, region);
+                    lark.Matrix.release(rootM);
+                    if (calls > 0) {
+                        drawCalls += calls;
+                        displayContext.globalCompositeOperation = "destination-in";
+                        displayContext.setTransform(1, 0, 0, 1, 0, 0);
+                        displayContext.globalAlpha = 1;
+                        displayContext.drawImage(maskContext.surface, 0, 0);
+                    }
+                    sys.surfaceFactory.release(maskContext.surface);
+                }
+                //绘制结果到屏幕
+                if (drawCalls > 0) {
+                    drawCalls++;
+                    this.drawWidthSurface(context, displayContext.surface, rootMatrix, region.minX, region.minY);
+                }
+                sys.surfaceFactory.release(displayContext.surface);
+                sys.Region.release(region);
+                return drawCalls;
+            };
+            /**
+             * @private
+             */
+            p.createRenderContext = function (width, height) {
+                var surface = sys.surfaceFactory.create(true);
+                if (!surface) {
+                    return null;
+                }
+                surface.width = Math.max(257, width);
+                surface.height = Math.max(257, height);
+                return surface.renderContext;
+            };
+            /**
+             * @private
+             */
+            p.drawWidthSurface = function (context, surface, rootMatrix, offsetX, offsetY) {
+                if (rootMatrix) {
+                    context.translate(offsetX, offsetY);
+                    context.drawImage(surface, 0, 0);
+                    context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx, rootMatrix.ty);
+                }
+                else {
+                    context.setTransform(1, 0, 0, 1, offsetX, offsetY);
+                    context.drawImage(surface, 0, 0);
+                }
+            };
+            /**
+             * @private
+             * 改变画布的尺寸，由于画布尺寸修改会清空原始画布。所以这里将原始画布绘制到一个新画布上，再与原始画布交换。
+             */
+            p.changeSurfaceSize = function () {
+                var root = this.root;
+                var oldOffsetX = this.offsetX;
+                var oldOffsetY = this.offsetY;
+                var bounds = this.root.$getOriginalBounds();
+                this.offsetX = bounds.x;
+                this.offsetY = bounds.y;
+                var oldContext = this.renderContext;
+                var oldSurface = oldContext.surface;
+                if (!this.sizeChanged) {
+                    this.sizeChanged = true;
+                    oldSurface.width = bounds.width;
+                    oldSurface.height = bounds.height;
+                }
+                else if (bounds.width !== oldSurface.width || bounds.height !== oldSurface.height) {
+                    var newContext = sys.sharedRenderContext;
+                    var newSurface = newContext.surface;
+                    sys.sharedRenderContext = oldContext;
+                    this.renderContext = newContext;
+                    this.surface = newSurface;
+                    newSurface.width = bounds.width;
+                    newSurface.height = bounds.height;
+                    if (oldSurface.width !== 0 && oldSurface.height !== 0) {
+                        newContext.setTransform(1, 0, 0, 1, 0, 0);
+                        newContext.drawImage(oldSurface, oldOffsetX - bounds.x, oldOffsetY - bounds.y);
+                    }
+                    oldSurface.height = 1;
+                    oldSurface.width = 1;
+                }
+                var m = root.$getInvertedConcatenatedMatrix();
+                this.rootMatrix.setTo(m.a, m.b, m.c, m.d, m.tx - bounds.x, m.ty - bounds.y);
+                this.renderContext.setTransform(m.a, m.b, m.c, m.d, m.tx - bounds.x, m.ty - bounds.y);
+            };
+            return DisplayList;
+        })(lark.LarkObject);
+        sys.DisplayList = DisplayList;
     })(sys = lark.sys || (lark.sys = {}));
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
