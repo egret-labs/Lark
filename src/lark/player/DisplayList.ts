@@ -558,21 +558,6 @@ module lark.sys {
         /**
          * @private
          */
-        private drawWithSurface(context:RenderContext, surface:Surface, rootMatrix:Matrix, offsetX:number, offsetY:number):void {
-            if (rootMatrix) {
-                context.translate(offsetX, offsetY)
-                context.drawImage(surface, 0, 0);
-                context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx, rootMatrix.ty);
-            }
-            else {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
-                context.setTransform(1, 0, 0, 1, offsetX, offsetY);
-                context.drawImage(surface, 0, 0);
-            }
-        }
-
-        /**
-         * @private
-         */
         private sizeChanged:boolean = false;
 
         /**
