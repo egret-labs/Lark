@@ -30,8 +30,8 @@
 module lark.sys {
 
     var displayListPool:DisplayList[] = [];
-
     var blendModes = ["source-over", "lighter", "destination-out"];
+    var defaultCompositeOp = "source-over";
 
     /**
      * @private
@@ -351,11 +351,11 @@ module lark.sys {
                     if (!child.$visible || child.$alpha <= 0 || child.$maskedObject) {
                         continue;
                     }
-                    if (child.$scrollRect || child.$mask) {
-                        drawCalls += this.drawWidthClip(child, context, dirtyList, rootMatrix, clipRegion);
+                    if (child.$blendMode !== 0 || child.$mask) {
+                        drawCalls += this.drawWithClip(child, context, dirtyList, rootMatrix, clipRegion);
                     }
-                    else if (child.$blendMode !== 0) {
-                        drawCalls += this.drawWidthBlendMode(child, context, dirtyList, rootMatrix, clipRegion);
+                    else if (child.$scrollRect) {
+                        drawCalls += this.drawWithScrollRect(child, context, dirtyList, rootMatrix, clipRegion);
                     }
                     else {
                         if (DEBUG && child["isFPS"]) {
@@ -373,50 +373,17 @@ module lark.sys {
         /**
          * @private
          */
-        private drawWidthBlendMode(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.sys.Region[],
-                                   rootMatrix:Matrix, clipRegion:Region):number {
+        private drawWithClip(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.sys.Region[],
+                             rootMatrix:Matrix, clipRegion:Region):number {
             var drawCalls = 0;
-            var region:Region;
-            var bounds = displayObject.$getOriginalBounds();
-            if (!bounds.isEmpty()) {
-                region = Region.create();
-                region.updateRegion(bounds, displayObject.$getConcatenatedMatrix(), null);
-            }
-            if (!region || (clipRegion && !clipRegion.intersects(region))) {
-                return drawCalls;
-            }
-            var displayContext = this.createRenderContext(region.width, region.height);
-            if (!displayContext) {//RenderContext创建失败，放弃绘制遮罩。
-                drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, rootMatrix, displayObject.$displayList, clipRegion);
-                Region.release(region);
-                return drawCalls;
-            }
-            displayContext.setTransform(1, 0, 0, 1, -region.minX, -region.minY);
-            var rootM = Matrix.create().setTo(1, 0, 0, 1, -region.minX, -region.minY);
-            drawCalls += this.drawDisplayObject(displayObject, displayContext, dirtyList, rootM, displayObject.$displayList, region);
-            Matrix.release(rootM);
-            if (drawCalls > 0) {
-                drawCalls++;
-                var defaultCompositeOp = "source-over";
+            var hasBlendMode = (displayObject.$blendMode !== 0);
+            if (hasBlendMode) {
                 var compositeOp = blendModes[displayObject.$blendMode];
                 if (!compositeOp) {
                     compositeOp = defaultCompositeOp;
                 }
-                context.globalCompositeOperation = compositeOp;
-                this.drawWidthSurface(context, displayContext.surface, rootMatrix, region.minX, region.minY);
-                context.globalCompositeOperation = defaultCompositeOp;
             }
-            surfaceFactory.release(displayContext.surface);
-            Region.release(region);
-            return drawCalls;
-        }
 
-        /**
-         * @private
-         */
-        private drawWidthClip(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.sys.Region[],
-                              rootMatrix:Matrix, clipRegion:Region):number {
-            var drawCalls = 0;
             var scrollRect = displayObject.$scrollRect;
             var mask = displayObject.$mask;
 
@@ -425,30 +392,31 @@ module lark.sys {
             var displayMatrix = displayObject.$getConcatenatedMatrix();
             if (mask) {
                 var bounds = mask.$getOriginalBounds();
-                if (!bounds.isEmpty()) {
-                    maskRegion = Region.create();
-                    maskRegion.updateRegion(bounds, mask.$getConcatenatedMatrix(), null);
-                }
+                maskRegion = Region.create();
+                maskRegion.updateRegion(bounds, mask.$getConcatenatedMatrix(), null);
             }
             var region:Region;
-            if (scrollRect && !scrollRect.isEmpty()) {
+            if (scrollRect) {
                 region = Region.create();
                 region.updateRegion(scrollRect, displayMatrix, null);
-            }
-            if (!region && !maskRegion) {
-                return drawCalls;
             }
             if (region && maskRegion) {
                 region.intersect(maskRegion);
                 Region.release(maskRegion);
             }
-            else if (!region) {
+            else if (!region && maskRegion) {
                 region = maskRegion;
             }
-
-            if (region.isEmpty() || (clipRegion && !clipRegion.intersects(region))) {
-                Region.release(region);
-                return drawCalls;
+            if (region) {
+                if(region.isEmpty() || (clipRegion && !clipRegion.intersects(region))){
+                    Region.release(region);
+                    return drawCalls;
+                }
+            }
+            else{
+                region = Region.create();
+                bounds = displayObject.$getOriginalBounds();
+                region.updateRegion(bounds, displayObject.$getConcatenatedMatrix(), null);
             }
             var found = false;
             var l = dirtyList.length;
@@ -508,9 +476,68 @@ module lark.sys {
             //绘制结果到屏幕
             if (drawCalls > 0) {
                 drawCalls++;
-                this.drawWidthSurface(context, displayContext.surface, rootMatrix, region.minX, region.minY);
+                if (hasBlendMode) {
+                    context.globalCompositeOperation = compositeOp;
+                }
+
+                if (rootMatrix) {
+                    context.translate(region.minX, region.minY)
+                    context.drawImage(displayContext.surface, 0, 0);
+                    context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx, rootMatrix.ty);
+                }
+                else {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
+                    context.setTransform(1, 0, 0, 1, region.minX, region.minY);
+                    context.drawImage(displayContext.surface, 0, 0);
+                }
+
+                if (hasBlendMode) {
+                    context.globalCompositeOperation = defaultCompositeOp;
+                }
             }
             surfaceFactory.release(displayContext.surface);
+            Region.release(region);
+            return drawCalls;
+        }
+
+        /**
+         * @private
+         */
+        private drawWithScrollRect(displayObject:DisplayObject, context:RenderContext, dirtyList:lark.sys.Region[],
+                                   rootMatrix:Matrix, clipRegion:Region):number {
+            var drawCalls = 0;
+            var scrollRect = displayObject.$scrollRect;
+
+            var m = displayObject.$getConcatenatedMatrix();
+            var region:Region = Region.create();
+            if (!scrollRect.isEmpty()) {
+                region.updateRegion(scrollRect, m, null);
+            }
+            if (region.isEmpty() || (clipRegion && !clipRegion.intersects(region))) {
+                Region.release(region);
+                return drawCalls;
+            }
+            var found = false;
+            var l = dirtyList.length;
+            for (var j = 0; j < l; j++) {
+                if (region.intersects(dirtyList[j])) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                Region.release(region);
+                return drawCalls;
+            }
+
+            //绘制显示对象自身
+            context.save();
+            context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+            context.beginPath();
+            context.rect(scrollRect.x, scrollRect.y, scrollRect.width, scrollRect.height);
+            context.clip();
+            drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, rootMatrix, displayObject.$displayList, region);
+            context.restore();
+
             Region.release(region);
             return drawCalls;
         }
@@ -526,21 +553,6 @@ module lark.sys {
             surface.width = Math.max(257, width);
             surface.height = Math.max(257, height);
             return surface.renderContext;
-        }
-
-        /**
-         * @private
-         */
-        private drawWidthSurface(context:RenderContext, surface:Surface, rootMatrix:Matrix, offsetX:number, offsetY:number):void {
-            if (rootMatrix) {
-                context.translate(offsetX, offsetY)
-                context.drawImage(surface, 0, 0);
-                context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx, rootMatrix.ty);
-            }
-            else {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
-                context.setTransform(1, 0, 0, 1, offsetX, offsetY);
-                context.drawImage(surface, 0, 0);
-            }
         }
 
         /**

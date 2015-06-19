@@ -596,7 +596,7 @@ module lark {
          */
         private assignParentClipRect(child:DisplayObject, parentClipRect:Rectangle):void {
             child.$parentClipRect = parentClipRect;
-            if(child.$clipRect){
+            if(child.$clipRect||child.$displayList){
                 return;
             }
             var children = child.$children;

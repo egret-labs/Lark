@@ -78,7 +78,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static get language():string{
+        public static get language():string {
             return Capabilities.$language;
         }
 
@@ -99,7 +99,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static get isMobile():boolean{
+        public static get isMobile():boolean {
             return Capabilities.$isMobile;
         }
 
@@ -136,7 +136,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static get os():string{
+        public static get os():string {
             return Capabilities.$os;
         }
 
@@ -144,7 +144,7 @@ module lark {
         /**
          * @private
          */
-        static $hasGeolocation: boolean;
+        static $hasGeolocation:boolean;
 
         /**
          * @language en_US
@@ -158,7 +158,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static get hasGeolocation(): boolean {
+        public static get hasGeolocation():boolean {
             return Capabilities.$hasGeolocation;
         }
 
@@ -166,7 +166,7 @@ module lark {
         /**
          * @private
          */
-        static $hasOrientation: boolean;
+        static $hasOrientation:boolean;
 
         /**
          * @language en_US
@@ -180,7 +180,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static get hasOrientation(): boolean {
+        public static get hasOrientation():boolean {
             return Capabilities.$hasOrientation;
         }
 
@@ -188,7 +188,7 @@ module lark {
         /**
          * @private
          */
-        static $hasMotion: boolean;
+        static $hasMotion:boolean;
 
         /**
          * @language en_US
@@ -202,18 +202,18 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static get hasMotion(): boolean {
+        public static get hasMotion():boolean {
             return Capabilities.$hasMotion;
         }
     }
 
-    if(DEBUG){
-        lark.$markReadOnly(Capabilities,"language");
-        lark.$markReadOnly(Capabilities,"isMobile");
-        lark.$markReadOnly(Capabilities,"hasOrientation");
-        lark.$markReadOnly(Capabilities,"hasMotion");
-        lark.$markReadOnly(Capabilities,"hasGeolocation");
-        lark.$markReadOnly(Capabilities,"os");
+    if (DEBUG) {
+        lark.$markReadOnly(Capabilities, "language");
+        lark.$markReadOnly(Capabilities, "isMobile");
+        lark.$markReadOnly(Capabilities, "hasOrientation");
+        lark.$markReadOnly(Capabilities, "hasMotion");
+        lark.$markReadOnly(Capabilities, "hasGeolocation");
+        lark.$markReadOnly(Capabilities, "os");
     }
 
 }

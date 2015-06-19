@@ -33,7 +33,7 @@ module lark {
     /**
      * @private
      */
-    var $getDefinitionByNameCache:any = {};
+    var getDefinitionByNameCache = {};
 
     /**
      * @language en_US
@@ -52,7 +52,7 @@ module lark {
     export function getDefinitionByName(name:string):any {
         if (!name)
             return null;
-        var definition = $getDefinitionByNameCache[name];
+        var definition = getDefinitionByNameCache[name];
         if (definition) {
             return definition;
         }
@@ -66,7 +66,7 @@ module lark {
                 return null;
             }
         }
-        $getDefinitionByNameCache[name] = definition;
+        getDefinitionByNameCache[name] = definition;
         return definition;
     }
 }
