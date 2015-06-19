@@ -75,7 +75,7 @@ module lark.web {
                 lark.$error(3002);
             }
             var audio = new Audio(url);
-            audio.addEventListener("canplaythrough",()=>this.onAudioLoaded());
+            audio.addEventListener("canplaythrough",this.onAudioLoaded);
             audio.addEventListener("error",()=>this.onAudioError());
             audio.load();
             this.originAudio = audio;
@@ -138,8 +138,9 @@ module lark.web {
          * @private
          * 
          */
-        private onAudioLoaded(){
+        private onAudioLoaded = () => {
             this.loaded = true;
+            this.originAudio.removeEventListener("canplaythrough", this.onAudioLoaded);
             this.emitWith(lark.Event.COMPLETE);
         }
 
