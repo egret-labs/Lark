@@ -102,7 +102,7 @@ function getLarkRoot() {
         }
         larkRoot = url;
     }
-    return larkRoot;
+    return file.escapePath(file.joinPath(larkRoot, '/'));
 }
 exports.getLarkRoot = getLarkRoot;
 function open(target, appName, callback) {

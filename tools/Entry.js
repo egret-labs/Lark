@@ -81,8 +81,9 @@ var Entry = (function () {
                 var build = new Make();
                 build.execute();
                 break;
-            case "shutdown":
-                exitCode = new Shutdown().execute();
+            case "quit":
+                new Shutdown().execute();
+                exitCode = DontExitCode;
                 break;
             case "service":
                 service.run();

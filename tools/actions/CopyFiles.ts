@@ -21,7 +21,9 @@ class CopyFiles {
         var options = lark.options;
         var moduleBin = FileUtil.joinPath(options.larkRoot,"build");
         var targetFile = FileUtil.joinPath(options.srcDir, '/libs/');
-        FileUtil.copy(moduleBin, targetFile);
+        console.log(options.projectDir, options.larkRoot);
+        if (options.projectDir.toLowerCase() != options.larkRoot.toLowerCase())
+            FileUtil.copy(moduleBin, targetFile);
         return 0;
     }
 

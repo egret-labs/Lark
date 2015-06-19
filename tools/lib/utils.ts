@@ -100,7 +100,7 @@ export function getLarkRoot() {
 
         larkRoot = url;
     }
-    return larkRoot;
+    return file.escapePath(file.joinPath(larkRoot, '/'));
 }
 
 
