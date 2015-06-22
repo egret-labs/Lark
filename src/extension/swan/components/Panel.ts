@@ -84,6 +84,31 @@ module swan {
             this.$parent.addChild(this);
         }
 
+
+        /**
+         * @language en_US
+         * [write-only] This property is Usually invoked in resolving an EXML for adding multiple children quickly.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [只写] 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        public set elementsContent(value:lark.DisplayObject[]) {
+            if (value) {
+                var length = value.length;
+                for (var i = 0; i < length; i++) {
+                    this.addChild(value[i]);
+                }
+            }
+        }
+
         /**
          * @language en_US
          * The skin part that defines the appearance of the close button.
@@ -345,4 +370,5 @@ module swan {
     }
 
     lark.registerClass(Panel, Types.Panel);
+    registerProperty(Panel, "elementsContent", "Array", true);
 }
