@@ -135,7 +135,7 @@ module swan {
         private indexBeingUpdated:boolean = false;
         /**
          * @private
-         * 鼠标点击的选中项改变
+         * 触摸点击的选中项改变
          */
         private onIndexChanged(event:lark.Event):void{
             this.indexBeingUpdated = true;

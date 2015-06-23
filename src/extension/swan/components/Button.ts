@@ -162,7 +162,7 @@ module swan {
 
         /**
          * @private
-         * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，是否按下鼠标以及触摸点是否在按钮上。
+         * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，触摸点是否在按钮上。
          */
         private touchCaptured:boolean = false;
 

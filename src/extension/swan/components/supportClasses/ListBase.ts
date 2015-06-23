@@ -124,7 +124,7 @@ module swan {
                 4: false,       //emitChangeAfterSelection
                 5: undefined,   //pendingSelectedItem
                 6: false,       //selectedIndexAdjusted
-                7: null,        //mouseDownItemRenderer
+                7: null,        //touchDownItemRenderer
             };
         }
 
@@ -834,7 +834,7 @@ module swan {
          */
         /**
          * @language zh_CN
-         * 鼠标在项呈示器上弹起，抛出<code>ItemTapEvent.ITEM_TAP</code>事件。
+         * 触摸在项呈示器上结束，抛出<code>ItemTapEvent.ITEM_TAP</code>事件。
          * @param event 事件<code>lark.TouchEvent</code>的对象。
          * @version Lark 1.0
          * @version Swan 1.0
@@ -851,7 +851,7 @@ module swan {
 
         /**
          * @private
-         * 鼠标在舞台上弹起
+         * 触摸在舞台上结束
          */
         private stage_touchEndHandler(event:lark.Event):void {
             var stage = <lark.Stage>event.$currentTarget;

@@ -144,7 +144,7 @@ module swan.sys {
         private maxScrollPos:number = 0;
         /**
          * @private
-         * 鼠标按下时的偏移量
+         * 触摸按下时的偏移量
          */
         private offsetPoint:number = 0;
         /**

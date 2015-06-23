@@ -56,7 +56,7 @@ module swan {
 	 * <p>可以使用 <code>selected</code> 属性以编程方式获取或设置此状态。</p>
 	 *
 	 * @event lark.Event.CHANGE ToggleButtonBase 控件的 <code>selected</code> 属性更改时分派。
-	 * 仅当用户使用鼠标与控件交互时，才分派此事件。
+	 * 仅当用户通过触摸与控件交互时，才分派此事件。
 
 	 * @version Lark 1.0
 	 * @version Swan 1.0
@@ -130,7 +130,7 @@ module swan {
 		}
 		/**
 		 * @private
-		 * 是否根据鼠标事件自动变换选中状态,默认true。仅框架内使用。
+		 * 是否根据触摸事件自动变换选中状态,默认true。仅框架内使用。
 		 */
 		$autoSelected:boolean = true;
 

@@ -267,7 +267,7 @@ module swan {
          * @language zh_CN
          * 触摸结束时滑块将具有的值。
          * 无论 liveDragging 是否为 true，在滑块拖动期间始终更新此属性。
-         * 而 value 属性在当 liveDragging 为 false 时，只在鼠标释放时更新一次。
+         * 而 value 属性在当 liveDragging 为 false 时，只在触摸释放时更新一次。
          *
          * @default 0
          *

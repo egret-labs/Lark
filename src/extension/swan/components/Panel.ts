@@ -294,7 +294,7 @@ module swan {
 
         /**
          * @private
-         * 鼠标按下时的偏移量
+         * 触摸按下时的偏移量
          */
         private offsetPointX:number = 0;
         /**
