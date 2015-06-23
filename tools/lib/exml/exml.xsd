@@ -46,6 +46,7 @@
     <xs:attribute name="alpha" type="xs:decimal"/>
     <xs:attribute name="blendMode" type="lark.BlendMode"/>
     <xs:attribute name="cacheAsBitmap" type="xs:boolean"/>
+    <xs:attribute name="class" type="xs:string"/>
     <xs:attribute name="excludeFrom" type="xs:string"/>
     <xs:attribute name="height" type="xs:string"/>
     <xs:attribute name="includeIn" type="xs:string"/>
@@ -143,6 +144,7 @@
       <xs:element name="alpha" type="number"/>
       <xs:element name="blendMode" type="string"/>
       <xs:element name="cacheAsBitmap" type="boolean"/>
+      <xs:element name="class" type="string"/>
       <xs:element name="excludeFrom" type="string"/>
       <xs:element name="height" type="number"/>
       <xs:element name="includeIn" type="string"/>
@@ -576,26 +578,21 @@
     <xs:attributeGroup ref="lark.EventEmitter"/>
     <xs:attribute name="source" type="xs:string"/>
   </xs:attributeGroup>
-  <xs:group name="Array">
-    <xs:choice>
-      <xs:element ref="Array"/>
-    </xs:choice>
-  </xs:group>
-  <xs:complexType name="Array">
-    <xs:group ref="Array"/>
+  <xs:complexType name="Array_any">
+    <xs:group ref="any"/>
   </xs:complexType>
   <xs:group name="ArrayCollection_attributeElement">
     <xs:choice>
       <xs:group ref="EventEmitter_attributeElement"/>
-      <xs:element name="source" type="Array"/>
+      <xs:element name="source" type="Array_any"/>
     </xs:choice>
   </xs:group>
-  <xs:element name="ArrayCollection" m:defaultProp="source" m:defaultPropType="Array">
+  <xs:element name="ArrayCollection" m:defaultProp="source" m:defaultPropType="Array_any">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:any namespace="##other"/>
         <xs:group ref="ArrayCollection_attributeElement"/>
-        <xs:group ref="Array"/>
+        <xs:group ref="any"/>
       </xs:choice>
       <xs:attributeGroup ref="swan.ArrayCollection"/>
     </xs:complexType>
@@ -684,10 +681,10 @@
   <xs:group name="CollectionEvent_attributeElement">
     <xs:choice>
       <xs:group ref="Event_attributeElement"/>
-      <xs:element name="items" type="Array"/>
+      <xs:element name="items" type="Array_any"/>
       <xs:element name="kind" type="string"/>
       <xs:element name="location" type="number"/>
-      <xs:element name="oldItems" type="Array"/>
+      <xs:element name="oldItems" type="Array_any"/>
       <xs:element name="oldLocation" type="number"/>
     </xs:choice>
   </xs:group>
@@ -1242,8 +1239,8 @@
     <xs:choice>
       <xs:group ref="ListBase_attributeElement"/>
       <xs:element name="allowMultipleSelection" type="boolean"/>
-      <xs:element name="selectedIndices" type="Array"/>
-      <xs:element name="selectedItems" type="Array"/>
+      <xs:element name="selectedIndices" type="Array_any"/>
+      <xs:element name="selectedItems" type="Array_any"/>
     </xs:choice>
   </xs:group>
   <xs:element name="List" m:defaultProp="dataProvider" m:defaultPropType="swan.ICollection">
@@ -1283,6 +1280,7 @@
   <xs:attributeGroup name="swan.Panel">
     <xs:attributeGroup ref="swan.Component"/>
     <xs:attribute name="closeButton" type="xs:string"/>
+    <xs:attribute name="elementsContent" type="xs:string"/>
     <xs:attribute name="moveArea" type="xs:string"/>
     <xs:attribute name="title" type="xs:string"/>
     <xs:attribute name="titleDisplay" type="xs:string"/>
@@ -1303,16 +1301,18 @@
     <xs:choice>
       <xs:group ref="Component_attributeElement"/>
       <xs:element name="closeButton" type="swan.Button"/>
+      <xs:element name="elementsContent" type="Array_lark.DisplayObject"/>
       <xs:element name="moveArea" type="lark.DisplayObject"/>
       <xs:element name="title" type="string"/>
       <xs:element name="titleDisplay" type="swan.IDisplayText"/>
     </xs:choice>
   </xs:group>
-  <xs:element name="Panel">
+  <xs:element name="Panel" m:defaultProp="elementsContent" m:defaultPropType="Array_lark.DisplayObject">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:any namespace="##other"/>
         <xs:group ref="Panel_attributeElement"/>
+        <xs:group ref="lark.DisplayObject"/>
       </xs:choice>
       <xs:attributeGroup ref="swan.Panel"/>
     </xs:complexType>
@@ -1601,6 +1601,7 @@
   </xs:element>
   <xs:attributeGroup name="swan.Skin">
     <xs:attributeGroup ref="lark.LarkObject"/>
+    <xs:attribute name="class" type="xs:string"/>
     <xs:attribute name="currentState" type="xs:string"/>
     <xs:attribute name="elementsContent" type="xs:string"/>
     <xs:attribute name="height" type="xs:string"/>
@@ -1639,6 +1640,7 @@
   <xs:group name="Skin_attributeElement">
     <xs:choice>
       <xs:group ref="LarkObject_attributeElement"/>
+      <xs:element name="class" type="string"/>
       <xs:element name="currentState" type="string"/>
       <xs:element name="elementsContent" type="Array_lark.DisplayObject"/>
       <xs:element name="height" type="number"/>
@@ -1647,7 +1649,7 @@
       <xs:element name="maxWidth" type="number"/>
       <xs:element name="minHeight" type="number"/>
       <xs:element name="minWidth" type="number"/>
-      <xs:element name="skinParts" type="Array"/>
+      <xs:element name="skinParts" type="Array_any"/>
       <xs:element name="states" type="Array_swan.State"/>
       <xs:element name="width" type="number"/>
     </xs:choice>
@@ -1701,16 +1703,16 @@
     <xs:choice>
       <xs:group ref="LarkObject_attributeElement"/>
       <xs:element name="name" type="string"/>
-      <xs:element name="overrides" type="Array"/>
-      <xs:element name="stateGroups" type="Array"/>
+      <xs:element name="overrides" type="Array_any"/>
+      <xs:element name="stateGroups" type="Array_any"/>
     </xs:choice>
   </xs:group>
-  <xs:element name="State" m:defaultProp="overrides" m:defaultPropType="Array">
+  <xs:element name="State" m:defaultProp="overrides" m:defaultPropType="Array_any">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:any namespace="##other"/>
         <xs:group ref="State_attributeElement"/>
-        <xs:group ref="Array"/>
+        <xs:group ref="any"/>
       </xs:choice>
       <xs:attributeGroup ref="swan.State"/>
     </xs:complexType>
