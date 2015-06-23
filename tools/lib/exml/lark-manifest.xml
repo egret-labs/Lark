@@ -17,7 +17,7 @@
   <component id="List" super="swan.ListBase" show="true" module="swan"/>
   <component id="ListBase" super="swan.DataGroup" show="false" module="swan"/>
   <component id="Matrix" super="lark.LarkObject" show="false" module="lark"/>
-  <component id="Panel" super="swan.Component" show="true" module="swan"/>
+  <component id="Panel" default="elementsContent" super="swan.Component" show="true" module="swan"/>
   <component id="Point" super="lark.LarkObject" show="false" module="lark"/>
   <component id="ProgressBar" super="swan.Range" show="true" module="swan"/>
   <component id="RadioButton" super="swan.ToggleButton" show="true" module="swan"/>
