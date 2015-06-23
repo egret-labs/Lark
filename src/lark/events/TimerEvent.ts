@@ -113,7 +113,7 @@ module lark {
          *    }
          *
          *    var moveTimer:Timer=new Timer(50,250);
-         *    moveTimer.addEventListener(TimerEvent.TIMER,onTimer);
+         *    moveTimer.on(TimerEvent.TIMER,onTimer);
          *    moveTimer.start();
          * </code>
          * @version Lark 1.0
@@ -134,7 +134,7 @@ module lark {
          *    }
          *
          *    var moveTimer:Timer=new Timer(50,250);
-         *    moveTimer.addEventListener(TimerEvent.TIMER,onTimer);
+         *    moveTimer.on(TimerEvent.TIMER,onTimer);
          *    moveTimer.start();
          * </code>
          * @version Lark 1.0

@@ -35,7 +35,7 @@ module swan {
      * The Panel class defines a container that includes a title bar,
      * a closeButton, a moveArea, and a content area for its children.
      *
-     * @event swan.UIEvent.CLOSING Dispatched when the close button is taped
+     * @event swan.UIEvent.CLOSING Emitted when the close button is taped
      * you can use <code>event.preventDefault()</code> to prevent close.
      *
      * @version Lark 1.0
@@ -112,7 +112,7 @@ module swan {
         /**
          * @language en_US
          * The skin part that defines the appearance of the close button.
-         * When taped, the close button dispatches a <code>closing</code> event.
+         * When taped, the close button emits a <code>closing</code> event.
          *
          * @skinPart
          *
