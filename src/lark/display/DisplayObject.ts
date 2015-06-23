@@ -1423,6 +1423,7 @@ module lark {
         /**
          * @private
          * 测量子项占用的矩形区域
+         * 注意：此方法在渲染过程中调用，整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
          * @param bounds 测量结果存储在这个矩形对象内
          */
         $measureChildBounds(bounds:Rectangle):void {
@@ -1447,6 +1448,7 @@ module lark {
         /**
          * @private
          * 测量自身占用的矩形区域，注意：此测量结果并不包括子项占据的区域。
+         * 注意：此方法在渲染过程中调用，整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
          * @param bounds 测量结果存储在这个矩形对象内
          */
         $measureContentBounds(bounds:Rectangle):void {
@@ -1514,6 +1516,7 @@ module lark {
         /**
          * @private
          * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
+         * 注意：此方法在渲染过程中调用，整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
          */
         $update():boolean {
             this.$removeFlagsUp(sys.DisplayObjectFlags.Dirty);
@@ -1536,7 +1539,8 @@ module lark {
 
         /**
          * @private
-         * 执行渲染,绘制自身到屏幕
+         * 执行渲染,绘制自身到屏幕。
+         * 注意：此方法在渲染过程中调用，整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
          */
         $render(context:sys.RenderContext):void {
 

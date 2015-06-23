@@ -159,7 +159,8 @@ module lark.sys {
 
         /**
          * @private
-         * 渲染屏幕
+         * 渲染屏幕。
+         * 注意：整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
          */
         $render(triggerByFrame:boolean):void {
             if (DEBUG && (this.showFPS || this.showLog)) {
