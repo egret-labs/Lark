@@ -82,7 +82,7 @@ module lark {
          * @language en_US
          * create an instance of the EventEmitter class.
          * @param target The target object for events emitted to the EventEmitter object. This parameter is used when
-         * the EventEmitter instance is aggregated by a class that implements IEventDispatcher; it is necessary so that the
+         * the EventEmitter instance is aggregated by a class that implements IEventEmitter it is necessary so that the
          * containing object can be the target for events. Do not use this parameter in simple cases in which a class extends EventEmitter.
          * @version Lark 1.0
          * @platform Web,Native
@@ -90,7 +90,7 @@ module lark {
         /**
          * @language zh_CN
          * 创建一个 EventEmitter 类的实例
-         * @param target 此 EventEmitter 所抛出事件对象的 target 指向。此参数主要用于一个实现了 IEventDispatcher 接口的自定义类，
+         * @param target 此 EventEmitter 所抛出事件对象的 target 指向。此参数主要用于一个实现了 IEventEmitter 接口的自定义类，
          * 以便抛出的事件对象的 target 属性可以指向自定义类自身。请勿在直接继承 EventEmitter 的情况下使用此参数。
          * @version Lark 1.0
          * @platform Web,Native

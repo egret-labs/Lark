@@ -34,7 +34,7 @@ module lark {
      * XML, or other information to be used in a dynamic, data-driven application. A HttpRequest object downloads all
      * of the data from a URL before making it available to code in the applications. It sends out notifications about
      * the progress of the download, which you can monitor through the bytesLoaded and bytesTotal properties,
-     * as well as through dispatched events.
+     * as well as through emitted events.
      * @event lark.Event.COMPLETE Emitted when the net request is complete.
      * @event lark.Event.IO_ERROR Emitted when the net request is failed.
      * @event lark.ProgressEvent.PROGRESS Emitted when data is received as the download operation progresses.

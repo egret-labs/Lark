@@ -39,7 +39,7 @@ module lark {
      * the event types defined in this class.
      * Note: When objects are nested on the display list, touch events target the deepest possible nested object that is
      * visible in the display list. This object is called the target node. To have a target node's ancestor (an object
-     * containing the target node in the display list) receive notification of a touch event, use EventDispatcher.addEventListener()
+     * containing the target node in the display list) receive notification of a touch event, use EventEmitter.on()
      * on the ancestor node with the type parameter set to the specific touch event you want to detect.
      *
      * @version Lark 1.0
@@ -61,7 +61,7 @@ module lark {
 
         /**
          * @language en_US
-         * Emitted when the user touches the device, and is continuously dispatched until the point of contact is removed.
+         * Emitted when the user touches the device, and is continuously emitted until the point of contact is removed.
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */

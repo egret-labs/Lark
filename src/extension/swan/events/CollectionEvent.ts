@@ -33,7 +33,7 @@ module swan {
     /**
      * @language en_US
      * The swan.CollectionEvent class represents an event that is
-     * dispatched when the associated collection changes.
+     * emitted when the associated collection changes.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -245,7 +245,7 @@ module swan {
 
         /**
          * @language en_US
-         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * Emit an event with specified EventEmitter. The emitted event will be cached in the object pool,
          * for the next cycle of reuse.
          *
          * @param target the target of event emitter.

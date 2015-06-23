@@ -122,7 +122,7 @@ module swan {
 
         /**
          * @language en_US
-         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * Emit an event with specified EventEmitter. The emitted event will be cached in the object pool,
          * for the next cycle of reuse.
          *
          * @param target the target of event emitter.

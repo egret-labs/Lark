@@ -415,6 +415,7 @@
 	"swan.Panel":
 	{
 		"closeButton":"swan.Button",
+		"elementsContent":"Array",
 		"moveArea":"lark.DisplayObject",
 		"super":"swan.Component",
 		"title":"string",
