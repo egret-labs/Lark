@@ -10,7 +10,7 @@ Lark 是一套由 Egret 团队制作的基于HTML5技术构建跨平台移动Web
 * **硬件访问** Lark 提供丰富的硬件访问扩展，充分发挥 HTML5 能力。
   借助 App 打包方案能够获得更加丰富的系统 API （即将到来）。
 
-
+想要了解更多 Lark 产品细节，请访问 [http://www.egret.com/products-lark](http://www.egret.com/products-lark)
 
 
 ##Hello Lark
