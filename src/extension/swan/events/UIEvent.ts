@@ -138,7 +138,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        public static CLOSING:string = "close";
+        public static CLOSING:string = "closing";
 
         /**
          * @language en_US
