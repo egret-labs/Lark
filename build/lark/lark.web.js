@@ -855,7 +855,6 @@ var lark;
             p.attachCanvas = function (container, canvas) {
                 var style = canvas.style;
                 style.cursor = "default";
-                style.margin = "0 auto";
                 style.position = "absolute";
                 style.top = "0";
                 style.bottom = "0";
@@ -888,10 +887,12 @@ var lark;
                 }
                 canvas.style.width = displayWidth + "px";
                 canvas.style.height = displayHeight + "px";
+                canvas.style.top = (screenRect.height - displayHeight) / 2 + "px";
+                canvas.style.left = (screenRect.width - displayWidth) / 2 + "px";
                 player.updateStageSize(stageWidth, stageHeight);
                 var scalex = displayWidth / stageWidth, scaley = displayHeight / stageHeight;
                 webTouch.updateScaleMode(scalex, scaley);
-                webText.updateScaleMode(scalex, scaley, (screenRect.width - displayWidth) / 2, 0);
+                webText.updateScaleMode(scalex, scaley, (screenRect.width - displayWidth) / 2, (screenRect.height - displayHeight) / 2);
             };
             return WebScreen;
         })(lark.LarkObject);
