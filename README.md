@@ -82,6 +82,10 @@ NPM 是 Node.js 的包管理工具，默认配置下会随 Node.js 一起安装�
 
 更多命令行使用说明请参考 [Lark 命令行工具手册](https://github.com/egret-labs/Lark/blob/master/docs/cmd-tools.md)
 
+##升级 Lark
+当 Lark 发布新版本或您自己修改了 Lark 源代码时，需要重新执行安装 Lark，在 Lark 的根目录执行 `npm install -g` 重新安装 Lark 命令行工具。
+然后在您项目根目录中执行 `lark clean`， 命令行工具会更新项目中的 Lark 框架为最新版本。
+
 ##更多示例
 在 [examples](https://github.com/egret-labs/Lark/tree/master/examples) 目录中有更多的示例项目。
 * **LarkCore** :  Lark 核心 API 相关示例，包括位图、文本、矢量图绘制、音频视频和设备传感器访问等。
