@@ -828,7 +828,7 @@ declare module lark {
      * XML, or other information to be used in a dynamic, data-driven application. A HttpRequest object downloads all
      * of the data from a URL before making it available to code in the applications. It sends out notifications about
      * the progress of the download, which you can monitor through the bytesLoaded and bytesTotal properties,
-     * as well as through dispatched events.
+     * as well as through emitted events.
      * @event lark.Event.COMPLETE Emitted when the net request is complete.
      * @event lark.Event.IO_ERROR Emitted when the net request is failed.
      * @event lark.ProgressEvent.PROGRESS Emitted when data is received as the download operation progresses.
@@ -3512,7 +3512,7 @@ declare module lark {
     /**
      * @language zh_CN
      * EventEmitter 是 Lark 的事件派发器类，负责进行事件的发送和侦听。
-     * 事件目标是事件如何通过显示列表层次结构这一问题的焦点。当发生鼠标单击、触摸或按键等事件时，
+     * 事件目标是事件如何通过显示列表层次结构这一问题的焦点。当发生触摸或按键等事件时，
      * 框架会将事件对象调度到从显示列表根开始的事件流中。然后该事件对象在显示列表中前进，直到到达事件目标，
      * 然后从这一点开始其在显示列表中的回程。在概念上，到事件目标的此往返行程被划分为三个阶段：
      * 捕获阶段包括从根到事件目标节点之前的最后一个节点的行程，目标阶段仅包括事件目标节点，冒泡阶段包括回程上遇到的任何后续节点到显示列表的根。
@@ -3527,7 +3527,7 @@ declare module lark {
          * @language en_US
          * create an instance of the EventEmitter class.
          * @param target The target object for events emitted to the EventEmitter object. This parameter is used when
-         * the EventEmitter instance is aggregated by a class that implements IEventDispatcher; it is necessary so that the
+         * the EventEmitter instance is aggregated by a class that implements IEventEmitter it is necessary so that the
          * containing object can be the target for events. Do not use this parameter in simple cases in which a class extends EventEmitter.
          * @version Lark 1.0
          * @platform Web,Native
@@ -3535,7 +3535,7 @@ declare module lark {
         /**
          * @language zh_CN
          * 创建一个 EventEmitter 类的实例
-         * @param target 此 EventEmitter 所抛出事件对象的 target 指向。此参数主要用于一个实现了 IEventDispatcher 接口的自定义类，
+         * @param target 此 EventEmitter 所抛出事件对象的 target 指向。此参数主要用于一个实现了 IEventEmitter 接口的自定义类，
          * 以便抛出的事件对象的 target 属性可以指向自定义类自身。请勿在直接继承 EventEmitter 的情况下使用此参数。
          * @version Lark 1.0
          * @platform Web,Native
@@ -4231,7 +4231,7 @@ declare module lark {
          *    }
          *
          *    var moveTimer:Timer=new Timer(50,250);
-         *    moveTimer.addEventListener(TimerEvent.TIMER,onTimer);
+         *    moveTimer.on(TimerEvent.TIMER,onTimer);
          *    moveTimer.start();
          * </code>
          * @version Lark 1.0
@@ -4252,7 +4252,7 @@ declare module lark {
          *    }
          *
          *    var moveTimer:Timer=new Timer(50,250);
-         *    moveTimer.addEventListener(TimerEvent.TIMER,onTimer);
+         *    moveTimer.on(TimerEvent.TIMER,onTimer);
          *    moveTimer.start();
          * </code>
          * @version Lark 1.0
@@ -4299,7 +4299,7 @@ declare module lark {
      * the event types defined in this class.
      * Note: When objects are nested on the display list, touch events target the deepest possible nested object that is
      * visible in the display list. This object is called the target node. To have a target node's ancestor (an object
-     * containing the target node in the display list) receive notification of a touch event, use EventDispatcher.addEventListener()
+     * containing the target node in the display list) receive notification of a touch event, use EventEmitter.on()
      * on the ancestor node with the type parameter set to the specific touch event you want to detect.
      *
      * @version Lark 1.0
@@ -4320,7 +4320,7 @@ declare module lark {
     class TouchEvent extends Event {
         /**
          * @language en_US
-         * Emitted when the user touches the device, and is continuously dispatched until the point of contact is removed.
+         * Emitted when the user touches the device, and is continuously emitted until the point of contact is removed.
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
@@ -6906,19 +6906,15 @@ declare module lark.sys {
         /**
          * @private
          */
-        private drawWidthBlendMode(displayObject, context, dirtyList, rootMatrix, clipRegion);
+        private drawWithClip(displayObject, context, dirtyList, rootMatrix, clipRegion);
         /**
          * @private
          */
-        private drawWidthClip(displayObject, context, dirtyList, rootMatrix, clipRegion);
+        private drawWithScrollRect(displayObject, context, dirtyList, rootMatrix, clipRegion);
         /**
          * @private
          */
         private createRenderContext(width, height);
-        /**
-         * @private
-         */
-        private drawWidthSurface(context, surface, rootMatrix, offsetX, offsetY);
         /**
          * @private
          */

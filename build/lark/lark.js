@@ -4188,7 +4188,7 @@ var lark;
     /**
      * @language zh_CN
      * EventEmitter 是 Lark 的事件派发器类，负责进行事件的发送和侦听。
-     * 事件目标是事件如何通过显示列表层次结构这一问题的焦点。当发生鼠标单击、触摸或按键等事件时，
+     * 事件目标是事件如何通过显示列表层次结构这一问题的焦点。当发生触摸或按键等事件时，
      * 框架会将事件对象调度到从显示列表根开始的事件流中。然后该事件对象在显示列表中前进，直到到达事件目标，
      * 然后从这一点开始其在显示列表中的回程。在概念上，到事件目标的此往返行程被划分为三个阶段：
      * 捕获阶段包括从根到事件目标节点之前的最后一个节点的行程，目标阶段仅包括事件目标节点，冒泡阶段包括回程上遇到的任何后续节点到显示列表的根。
@@ -4204,7 +4204,7 @@ var lark;
          * @language en_US
          * create an instance of the EventEmitter class.
          * @param target The target object for events emitted to the EventEmitter object. This parameter is used when
-         * the EventEmitter instance is aggregated by a class that implements IEventDispatcher; it is necessary so that the
+         * the EventEmitter instance is aggregated by a class that implements IEventEmitter it is necessary so that the
          * containing object can be the target for events. Do not use this parameter in simple cases in which a class extends EventEmitter.
          * @version Lark 1.0
          * @platform Web,Native
@@ -4212,7 +4212,7 @@ var lark;
         /**
          * @language zh_CN
          * 创建一个 EventEmitter 类的实例
-         * @param target 此 EventEmitter 所抛出事件对象的 target 指向。此参数主要用于一个实现了 IEventDispatcher 接口的自定义类，
+         * @param target 此 EventEmitter 所抛出事件对象的 target 指向。此参数主要用于一个实现了 IEventEmitter 接口的自定义类，
          * 以便抛出的事件对象的 target 属性可以指向自定义类自身。请勿在直接继承 EventEmitter 的情况下使用此参数。
          * @version Lark 1.0
          * @platform Web,Native
@@ -4339,14 +4339,14 @@ var lark;
          */
         p.emit = function (event) {
             event.$target = event.$currentTarget = this.$EventEmitter[0 /* eventTarget */];
-            return this.$notifyListener(event);
+            return this.$notifyListener(event, false);
         };
         /**
          * @private
          */
-        p.$notifyListener = function (event) {
+        p.$notifyListener = function (event, capturePhase) {
             var values = this.$EventEmitter;
-            var eventMap = event.$eventPhase == 1 /* CAPTURING_PHASE */ ? values[2 /* captureEventsMap */] : values[1 /* eventsMap */];
+            var eventMap = capturePhase ? values[2 /* captureEventsMap */] : values[1 /* eventsMap */];
             var list = eventMap[event.$type];
             if (!list) {
                 return true;
@@ -4796,7 +4796,7 @@ var lark;
                 event.$isDefaultPrevented = false;
                 event.$isPropagationStopped = false;
                 event.$isPropagationImmediateStopped = false;
-                event.$eventPhase = 2;
+                event.$eventPhase = 2 /* AT_TARGET */;
                 return event;
             }
             return new EventClass(type, bubbles, cancelable);
@@ -5126,7 +5126,7 @@ var lark;
          *    }
          *
          *    var moveTimer:Timer=new Timer(50,250);
-         *    moveTimer.addEventListener(TimerEvent.TIMER,onTimer);
+         *    moveTimer.on(TimerEvent.TIMER,onTimer);
          *    moveTimer.start();
          * </code>
          * @version Lark 1.0
@@ -5147,7 +5147,7 @@ var lark;
          *    }
          *
          *    var moveTimer:Timer=new Timer(50,250);
-         *    moveTimer.addEventListener(TimerEvent.TIMER,onTimer);
+         *    moveTimer.on(TimerEvent.TIMER,onTimer);
          *    moveTimer.start();
          * </code>
          * @version Lark 1.0
@@ -5259,7 +5259,7 @@ var lark;
      * the event types defined in this class.
      * Note: When objects are nested on the display list, touch events target the deepest possible nested object that is
      * visible in the display list. This object is called the target node. To have a target node's ancestor (an object
-     * containing the target node in the display list) receive notification of a touch event, use EventDispatcher.addEventListener()
+     * containing the target node in the display list) receive notification of a touch event, use EventEmitter.on()
      * on the ancestor node with the type parameter set to the specific touch event you want to detect.
      *
      * @version Lark 1.0
@@ -5457,7 +5457,7 @@ var lark;
         };
         /**
          * @language en_US
-         * Emitted when the user touches the device, and is continuously dispatched until the point of contact is removed.
+         * Emitted when the user touches the device, and is continuously emitted until the point of contact is removed.
          * @version Lark 1.0
          * @platform Web,Runtime,Native
          */
@@ -7621,6 +7621,7 @@ var lark;
         /**
          * @private
          * 测量子项占用的矩形区域
+         * 注意：此方法在渲染过程中调用，整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
          * @param bounds 测量结果存储在这个矩形对象内
          */
         p.$measureChildBounds = function (bounds) {
@@ -7642,6 +7643,7 @@ var lark;
         /**
          * @private
          * 测量自身占用的矩形区域，注意：此测量结果并不包括子项占据的区域。
+         * 注意：此方法在渲染过程中调用，整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
          * @param bounds 测量结果存储在这个矩形对象内
          */
         p.$measureContentBounds = function (bounds) {
@@ -7679,6 +7681,7 @@ var lark;
         /**
          * @private
          * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
+         * 注意：此方法在渲染过程中调用，整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
          */
         p.$update = function () {
             this.$removeFlagsUp(768 /* Dirty */);
@@ -7700,7 +7703,8 @@ var lark;
         };
         /**
          * @private
-         * 执行渲染,绘制自身到屏幕
+         * 执行渲染,绘制自身到屏幕。
+         * 注意：此方法在渲染过程中调用，整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
          */
         p.$render = function (context) {
         };
@@ -7842,7 +7846,7 @@ var lark;
                     event.$eventPhase = 2 /* AT_TARGET */;
                 else
                     event.$eventPhase = 3 /* BUBBLING_PHASE */;
-                currentTarget.$notifyListener(event);
+                currentTarget.$notifyListener(event, i < targetIndex);
                 if (event.$isPropagationStopped || event.$isPropagationImmediateStopped) {
                     return;
                 }
@@ -10348,6 +10352,7 @@ var lark;
     (function (sys) {
         var displayListPool = [];
         var blendModes = ["source-over", "lighter", "destination-out"];
+        var defaultCompositeOp = "source-over";
         /**
          * @private
          * 显示列表
@@ -10635,11 +10640,11 @@ var lark;
                         if (!child.$visible || child.$alpha <= 0 || child.$maskedObject) {
                             continue;
                         }
-                        if (child.$scrollRect || child.$mask) {
-                            drawCalls += this.drawWidthClip(child, context, dirtyList, rootMatrix, clipRegion);
+                        if (child.$blendMode !== 0 || child.$mask) {
+                            drawCalls += this.drawWithClip(child, context, dirtyList, rootMatrix, clipRegion);
                         }
-                        else if (child.$blendMode !== 0) {
-                            drawCalls += this.drawWidthBlendMode(child, context, dirtyList, rootMatrix, clipRegion);
+                        else if (child.$scrollRect) {
+                            drawCalls += this.drawWithScrollRect(child, context, dirtyList, rootMatrix, clipRegion);
                         }
                         else {
                             if (DEBUG && child["isFPS"]) {
@@ -10656,47 +10661,15 @@ var lark;
             /**
              * @private
              */
-            p.drawWidthBlendMode = function (displayObject, context, dirtyList, rootMatrix, clipRegion) {
+            p.drawWithClip = function (displayObject, context, dirtyList, rootMatrix, clipRegion) {
                 var drawCalls = 0;
-                var region;
-                var bounds = displayObject.$getOriginalBounds();
-                if (!bounds.isEmpty()) {
-                    region = sys.Region.create();
-                    region.updateRegion(bounds, displayObject.$getConcatenatedMatrix(), null);
-                }
-                if (!region || (clipRegion && !clipRegion.intersects(region))) {
-                    return drawCalls;
-                }
-                var displayContext = this.createRenderContext(region.width, region.height);
-                if (!displayContext) {
-                    drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, rootMatrix, displayObject.$displayList, clipRegion);
-                    sys.Region.release(region);
-                    return drawCalls;
-                }
-                displayContext.setTransform(1, 0, 0, 1, -region.minX, -region.minY);
-                var rootM = lark.Matrix.create().setTo(1, 0, 0, 1, -region.minX, -region.minY);
-                drawCalls += this.drawDisplayObject(displayObject, displayContext, dirtyList, rootM, displayObject.$displayList, region);
-                lark.Matrix.release(rootM);
-                if (drawCalls > 0) {
-                    drawCalls++;
-                    var defaultCompositeOp = "source-over";
+                var hasBlendMode = (displayObject.$blendMode !== 0);
+                if (hasBlendMode) {
                     var compositeOp = blendModes[displayObject.$blendMode];
                     if (!compositeOp) {
                         compositeOp = defaultCompositeOp;
                     }
-                    context.globalCompositeOperation = compositeOp;
-                    this.drawWidthSurface(context, displayContext.surface, rootMatrix, region.minX, region.minY);
-                    context.globalCompositeOperation = defaultCompositeOp;
                 }
-                sys.surfaceFactory.release(displayContext.surface);
-                sys.Region.release(region);
-                return drawCalls;
-            };
-            /**
-             * @private
-             */
-            p.drawWidthClip = function (displayObject, context, dirtyList, rootMatrix, clipRegion) {
-                var drawCalls = 0;
                 var scrollRect = displayObject.$scrollRect;
                 var mask = displayObject.$mask;
                 //计算scrollRect和mask的clip区域是否需要绘制，不需要就直接返回，跳过所有子项的遍历。
@@ -10704,29 +10677,31 @@ var lark;
                 var displayMatrix = displayObject.$getConcatenatedMatrix();
                 if (mask) {
                     var bounds = mask.$getOriginalBounds();
-                    if (!bounds.isEmpty()) {
-                        maskRegion = sys.Region.create();
-                        maskRegion.updateRegion(bounds, mask.$getConcatenatedMatrix(), null);
-                    }
+                    maskRegion = sys.Region.create();
+                    maskRegion.updateRegion(bounds, mask.$getConcatenatedMatrix(), null);
                 }
                 var region;
-                if (scrollRect && !scrollRect.isEmpty()) {
+                if (scrollRect) {
                     region = sys.Region.create();
                     region.updateRegion(scrollRect, displayMatrix, null);
-                }
-                if (!region && !maskRegion) {
-                    return drawCalls;
                 }
                 if (region && maskRegion) {
                     region.intersect(maskRegion);
                     sys.Region.release(maskRegion);
                 }
-                else if (!region) {
+                else if (!region && maskRegion) {
                     region = maskRegion;
                 }
-                if (region.isEmpty() || (clipRegion && !clipRegion.intersects(region))) {
-                    sys.Region.release(region);
-                    return drawCalls;
+                if (region) {
+                    if (region.isEmpty() || (clipRegion && !clipRegion.intersects(region))) {
+                        sys.Region.release(region);
+                        return drawCalls;
+                    }
+                }
+                else {
+                    region = sys.Region.create();
+                    bounds = displayObject.$getOriginalBounds();
+                    region.updateRegion(bounds, displayObject.$getConcatenatedMatrix(), null);
                 }
                 var found = false;
                 var l = dirtyList.length;
@@ -10783,9 +10758,61 @@ var lark;
                 //绘制结果到屏幕
                 if (drawCalls > 0) {
                     drawCalls++;
-                    this.drawWidthSurface(context, displayContext.surface, rootMatrix, region.minX, region.minY);
+                    if (hasBlendMode) {
+                        context.globalCompositeOperation = compositeOp;
+                    }
+                    if (rootMatrix) {
+                        context.translate(region.minX, region.minY);
+                        context.drawImage(displayContext.surface, 0, 0);
+                        context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx, rootMatrix.ty);
+                    }
+                    else {
+                        context.setTransform(1, 0, 0, 1, region.minX, region.minY);
+                        context.drawImage(displayContext.surface, 0, 0);
+                    }
+                    if (hasBlendMode) {
+                        context.globalCompositeOperation = defaultCompositeOp;
+                    }
                 }
                 sys.surfaceFactory.release(displayContext.surface);
+                sys.Region.release(region);
+                return drawCalls;
+            };
+            /**
+             * @private
+             */
+            p.drawWithScrollRect = function (displayObject, context, dirtyList, rootMatrix, clipRegion) {
+                var drawCalls = 0;
+                var scrollRect = displayObject.$scrollRect;
+                var m = displayObject.$getConcatenatedMatrix();
+                var region = sys.Region.create();
+                if (!scrollRect.isEmpty()) {
+                    region.updateRegion(scrollRect, m, null);
+                }
+                if (region.isEmpty() || (clipRegion && !clipRegion.intersects(region))) {
+                    sys.Region.release(region);
+                    return drawCalls;
+                }
+                var found = false;
+                var l = dirtyList.length;
+                for (var j = 0; j < l; j++) {
+                    if (region.intersects(dirtyList[j])) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    sys.Region.release(region);
+                    return drawCalls;
+                }
+                //绘制显示对象自身
+                context.save();
+                context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+                context.beginPath();
+                context.rect(scrollRect.x, scrollRect.y, scrollRect.width, scrollRect.height);
+                context.clip();
+                drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, rootMatrix, displayObject.$displayList, region);
+                context.restore();
                 sys.Region.release(region);
                 return drawCalls;
             };
@@ -10800,20 +10827,6 @@ var lark;
                 surface.width = Math.max(257, width);
                 surface.height = Math.max(257, height);
                 return surface.renderContext;
-            };
-            /**
-             * @private
-             */
-            p.drawWidthSurface = function (context, surface, rootMatrix, offsetX, offsetY) {
-                if (rootMatrix) {
-                    context.translate(offsetX, offsetY);
-                    context.drawImage(surface, 0, 0);
-                    context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx, rootMatrix.ty);
-                }
-                else {
-                    context.setTransform(1, 0, 0, 1, offsetX, offsetY);
-                    context.drawImage(surface, 0, 0);
-                }
             };
             /**
              * @private
@@ -11659,7 +11672,8 @@ var lark;
             };
             /**
              * @private
-             * 渲染屏幕
+             * 渲染屏幕。
+             * 注意：整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
              */
             p.$render = function (triggerByFrame) {
                 if (DEBUG && (this.showFPS || this.showLog)) {

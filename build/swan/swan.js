@@ -2492,7 +2492,7 @@ var swan;
                 this.maxScrollPos = 0;
                 /**
                  * @private
-                 * 鼠标按下时的偏移量
+                 * 触摸按下时的偏移量
                  */
                 this.offsetPoint = 0;
                 if (DEBUG && !updateFunction) {
@@ -4939,7 +4939,7 @@ var swan;
     /**
      * @language en_US
      * The swan.CollectionEvent class represents an event that is
-     * dispatched when the associated collection changes.
+     * emitted when the associated collection changes.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -5040,7 +5040,7 @@ var swan;
         };
         /**
          * @language en_US
-         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * Emit an event with specified EventEmitter. The emitted event will be cached in the object pool,
          * for the next cycle of reuse.
          *
          * @param target the target of event emitter.
@@ -7271,7 +7271,7 @@ var swan;
         };
         /**
          * @language en_US
-         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * Emit an event with specified EventEmitter. The emitted event will be cached in the object pool,
          * for the next cycle of reuse.
          *
          * @param target the target of event emitter.
@@ -7466,7 +7466,7 @@ var swan;
         var d = __define,c=UIEvent;p=c.prototype;
         /**
          * @language en_US
-         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * Emit an event with specified EventEmitter. The emitted event will be cached in the object pool,
          * for the next cycle of reuse.
          *
          * @param target the target of event emitter.
@@ -7555,7 +7555,7 @@ var swan;
          * @version Swan 1.0
          * @platform Web,Native
          */
-        UIEvent.CLOSING = "close";
+        UIEvent.CLOSING = "closing";
         /**
          * @language en_US
          * The coordinates of the UI components changed in it's parent.
@@ -9518,7 +9518,7 @@ var swan;
         var d = __define,c=PropertyEvent;p=c.prototype;
         /**
          * @language en_US
-         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * Emit an event with specified EventEmitter. The emitted event will be cached in the object pool,
          * for the next cycle of reuse.
          *
          * @param target the target of event emitter.
@@ -15630,7 +15630,7 @@ var swan;
             this.itemIndex = -1;
             /**
              * @private
-             * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，是否按下鼠标以及触摸点是否在按钮上。
+             * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，触摸点是否在按钮上。
              */
             this.touchCaptured = false;
             this.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
@@ -16061,7 +16061,7 @@ var swan;
             this._icon = null;
             /**
              * @private
-             * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，是否按下鼠标以及触摸点是否在按钮上。
+             * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，触摸点是否在按钮上。
              */
             this.touchCaptured = false;
             this.touchChildren = false;
@@ -17208,7 +17208,7 @@ var swan;
      * The Panel class defines a container that includes a title bar,
      * a closeButton, a moveArea, and a content area for its children.
      *
-     * @event swan.UIEvent.CLOSING Dispatched when the close button is taped
+     * @event swan.UIEvent.CLOSING Emitted when the close button is taped
      * you can use <code>event.preventDefault()</code> to prevent close.
      *
      * @version Lark 1.0
@@ -17249,7 +17249,7 @@ var swan;
             /**
              * @language en_US
              * The skin part that defines the appearance of the close button.
-             * When taped, the close button dispatches a <code>closing</code> event.
+             * When taped, the close button emits a <code>closing</code> event.
              *
              * @skinPart
              *
@@ -17315,7 +17315,7 @@ var swan;
             this._title = "";
             /**
              * @private
-             * 鼠标按下时的偏移量
+             * 触摸按下时的偏移量
              */
             this.offsetPointX = 0;
             /**
@@ -17332,6 +17332,31 @@ var swan;
         p.onWindowTouchBegin = function (event) {
             this.$parent.addChild(this);
         };
+        d(p, "elementsContent",undefined,
+            /**
+             * @language en_US
+             * [write-only] This property is Usually invoked in resolving an EXML for adding multiple children quickly.
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * [只写] 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            function (value) {
+                if (value) {
+                    var length = value.length;
+                    for (var i = 0; i < length; i++) {
+                        this.addChild(value[i]);
+                    }
+                }
+            }
+        );
         d(p, "title",
             /**
              * @language en_US
@@ -17507,6 +17532,7 @@ var swan;
     })(swan.Component);
     swan.Panel = Panel;
     lark.registerClass(Panel, 1024 /* Panel */);
+    swan.registerProperty(Panel, "elementsContent", "Array", true);
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -19575,7 +19601,7 @@ var swan;
      * <p>可以使用 <code>selected</code> 属性以编程方式获取或设置此状态。</p>
      *
      * @event lark.Event.CHANGE ToggleButtonBase 控件的 <code>selected</code> 属性更改时分派。
-     * 仅当用户使用鼠标与控件交互时，才分派此事件。
+     * 仅当用户通过触摸与控件交互时，才分派此事件。
 
      * @version Lark 1.0
      * @version Swan 1.0
@@ -19591,7 +19617,7 @@ var swan;
             this.$selected = false;
             /**
              * @private
-             * 是否根据鼠标事件自动变换选中状态,默认true。仅框架内使用。
+             * 是否根据触摸事件自动变换选中状态,默认true。仅框架内使用。
              */
             this.$autoSelected = true;
         }
@@ -19922,7 +19948,7 @@ var swan;
              * @language zh_CN
              * 触摸结束时滑块将具有的值。
              * 无论 liveDragging 是否为 true，在滑块拖动期间始终更新此属性。
-             * 而 value 属性在当 liveDragging 为 false 时，只在鼠标释放时更新一次。
+             * 而 value 属性在当 liveDragging 为 false 时，只在触摸释放时更新一次。
              *
              * @default 0
              *
@@ -20934,7 +20960,7 @@ var swan;
          */
         /**
          * @language zh_CN
-         * 鼠标在项呈示器上弹起，抛出<code>ItemTapEvent.ITEM_TAP</code>事件。
+         * 触摸在项呈示器上结束，抛出<code>ItemTapEvent.ITEM_TAP</code>事件。
          * @param event 事件<code>lark.TouchEvent</code>的对象。
          * @version Lark 1.0
          * @version Swan 1.0
@@ -20950,7 +20976,7 @@ var swan;
         };
         /**
          * @private
-         * 鼠标在舞台上弹起
+         * 触摸在舞台上结束
          */
         p.stage_touchEndHandler = function (event) {
             var stage = event.$currentTarget;
@@ -22418,7 +22444,7 @@ var swan;
         };
         /**
          * @private
-         * 鼠标点击的选中项改变
+         * 触摸点击的选中项改变
          */
         p.onIndexChanged = function (event) {
             this.indexBeingUpdated = true;

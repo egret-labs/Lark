@@ -49,6 +49,7 @@ var lark;
              * @inheritDoc
              */
             function HtmlSound(url) {
+                var _this = this;
                 _super.call(this);
                 /**
                  * @private
@@ -62,6 +63,15 @@ var lark;
                  * @private
                  */
                 this.closed = false;
+                /**
+                 * @private
+                 *
+                 */
+                this.onAudioLoaded = function () {
+                    _this.loaded = true;
+                    _this.originAudio.removeEventListener("canplaythrough", _this.onAudioLoaded);
+                    _this.emitWith(lark.Event.COMPLETE);
+                };
                 this.url = url;
             }
             var d = __define,c=HtmlSound;p=c.prototype;
@@ -76,7 +86,7 @@ var lark;
                     lark.$error(3002);
                 }
                 var audio = new Audio(url);
-                audio.addEventListener("canplaythrough", function () { return _this.onAudioLoaded(); });
+                audio.addEventListener("canplaythrough", this.onAudioLoaded);
                 audio.addEventListener("error", function () { return _this.onAudioError(); });
                 audio.load();
                 this.originAudio = audio;
@@ -130,14 +140,6 @@ var lark;
                 if (this.closed)
                     return;
                 this.audios.push(audio);
-            };
-            /**
-             * @private
-             *
-             */
-            p.onAudioLoaded = function () {
-                this.loaded = true;
-                this.emitWith(lark.Event.COMPLETE);
             };
             /**
              * @private

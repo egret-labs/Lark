@@ -1736,7 +1736,7 @@ declare module swan.sys {
         private maxScrollPos;
         /**
          * @private
-         * 鼠标按下时的偏移量
+         * 触摸按下时的偏移量
          */
         private offsetPoint;
         /**
@@ -2444,7 +2444,7 @@ declare module swan {
     /**
      * @language en_US
      * The swan.CollectionEvent class represents an event that is
-     * dispatched when the associated collection changes.
+     * emitted when the associated collection changes.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -2627,7 +2627,7 @@ declare module swan {
         protected clean(): void;
         /**
          * @language en_US
-         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * Emit an event with specified EventEmitter. The emitted event will be cached in the object pool,
          * for the next cycle of reuse.
          *
          * @param target the target of event emitter.
@@ -3866,7 +3866,7 @@ declare module swan {
         protected clean(): void;
         /**
          * @language en_US
-         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * Emit an event with specified EventEmitter. The emitted event will be cached in the object pool,
          * for the next cycle of reuse.
          *
          * @param target the target of event emitter.
@@ -4015,7 +4015,7 @@ declare module swan {
         static MOVE: string;
         /**
          * @language en_US
-         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * Emit an event with specified EventEmitter. The emitted event will be cached in the object pool,
          * for the next cycle of reuse.
          *
          * @param target the target of event emitter.
@@ -5441,7 +5441,7 @@ declare module swan {
         property: string;
         /**
          * @language en_US
-         * Emit a event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * Emit an event with specified EventEmitter. The emitted event will be cached in the object pool,
          * for the next cycle of reuse.
          *
          * @param target the target of event emitter.
@@ -9420,7 +9420,7 @@ declare module swan {
         itemIndex: number;
         /**
          * @private
-         * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，是否按下鼠标以及触摸点是否在按钮上。
+         * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，触摸点是否在按钮上。
          */
         private touchCaptured;
         /**
@@ -9691,7 +9691,7 @@ declare module swan {
         icon: string | lark.BitmapData;
         /**
          * @private
-         * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，是否按下鼠标以及触摸点是否在按钮上。
+         * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，触摸点是否在按钮上。
          */
         private touchCaptured;
         /**
@@ -10197,7 +10197,7 @@ declare module swan {
      * The Panel class defines a container that includes a title bar,
      * a closeButton, a moveArea, and a content area for its children.
      *
-     * @event swan.UIEvent.CLOSING Dispatched when the close button is taped
+     * @event swan.UIEvent.CLOSING Emitted when the close button is taped
      * you can use <code>event.preventDefault()</code> to prevent close.
      *
      * @version Lark 1.0
@@ -10240,8 +10240,24 @@ declare module swan {
         private onWindowTouchBegin(event);
         /**
          * @language en_US
+         * [write-only] This property is Usually invoked in resolving an EXML for adding multiple children quickly.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [只写] 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        elementsContent: lark.DisplayObject[];
+        /**
+         * @language en_US
          * The skin part that defines the appearance of the close button.
-         * When taped, the close button dispatches a <code>closing</code> event.
+         * When taped, the close button emits a <code>closing</code> event.
          *
          * @skinPart
          *
@@ -10378,7 +10394,7 @@ declare module swan {
         close(): void;
         /**
          * @private
-         * 鼠标按下时的偏移量
+         * 触摸按下时的偏移量
          */
         private offsetPointX;
         /**
@@ -11574,7 +11590,7 @@ declare module swan {
      * <p>可以使用 <code>selected</code> 属性以编程方式获取或设置此状态。</p>
      *
      * @event lark.Event.CHANGE ToggleButtonBase 控件的 <code>selected</code> 属性更改时分派。
-     * 仅当用户使用鼠标与控件交互时，才分派此事件。
+     * 仅当用户通过触摸与控件交互时，才分派此事件。
 
      * @version Lark 1.0
      * @version Swan 1.0
@@ -11813,7 +11829,7 @@ declare module swan {
          * @language zh_CN
          * 触摸结束时滑块将具有的值。
          * 无论 liveDragging 是否为 true，在滑块拖动期间始终更新此属性。
-         * 而 value 属性在当 liveDragging 为 false 时，只在鼠标释放时更新一次。
+         * 而 value 属性在当 liveDragging 为 false 时，只在触摸释放时更新一次。
          *
          * @default 0
          *
@@ -12482,7 +12498,7 @@ declare module swan {
          */
         /**
          * @language zh_CN
-         * 鼠标在项呈示器上弹起，抛出<code>ItemTapEvent.ITEM_TAP</code>事件。
+         * 触摸在项呈示器上结束，抛出<code>ItemTapEvent.ITEM_TAP</code>事件。
          * @param event 事件<code>lark.TouchEvent</code>的对象。
          * @version Lark 1.0
          * @version Swan 1.0
@@ -12491,7 +12507,7 @@ declare module swan {
         protected onRendererTouchEnd(event: lark.TouchEvent): void;
         /**
          * @private
-         * 鼠标在舞台上弹起
+         * 触摸在舞台上结束
          */
         private stage_touchEndHandler(event);
     }
@@ -13173,7 +13189,7 @@ declare module swan {
         private indexBeingUpdated;
         /**
          * @private
-         * 鼠标点击的选中项改变
+         * 触摸点击的选中项改变
          */
         private onIndexChanged(event);
         /**
