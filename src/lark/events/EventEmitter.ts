@@ -223,15 +223,15 @@ module lark {
          */
         public emit(event:Event):boolean {
             event.$target = event.$currentTarget = this.$EventEmitter[Keys.eventTarget];
-            return this.$notifyListener(event);
+            return this.$notifyListener(event,false);
         }
 
         /**
          * @private
          */
-        $notifyListener(event:Event):boolean {
+        $notifyListener(event:Event,capturePhase:boolean):boolean {
             var values = this.$EventEmitter;
-            var eventMap:Object = event.$eventPhase == EventPhase.CAPTURING_PHASE ? values[Keys.captureEventsMap] : values[Keys.eventsMap];
+            var eventMap:Object = capturePhase ? values[Keys.captureEventsMap] : values[Keys.eventsMap];
             var list:lark.sys.EventBin[] = eventMap[event.$type];
             if (!list) {
                 return true;

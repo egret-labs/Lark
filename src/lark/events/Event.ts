@@ -623,7 +623,7 @@ module lark {
                 event.$isDefaultPrevented = false;
                 event.$isPropagationStopped = false;
                 event.$isPropagationImmediateStopped = false;
-                event.$eventPhase = 2;
+                event.$eventPhase = EventPhase.AT_TARGET;
                 return event;
             }
             return new EventClass(type, bubbles, cancelable);
