@@ -283,9 +283,8 @@ module swan {
                 }
                 children = skin.$elementsContent;
                 if (children) {
-                    length = children.length;
-                    for (i = 0; i < length; i++) {
-                        this.addChild(children[i]);
+                    for (i = children.length-1; i >= 0; i--) {
+                        this.addChildAt(children[i],0);
                     }
                 }
                 skin.hostComponent = this;
