@@ -31,10 +31,15 @@
 module lark.sys {
     /**
      * @private
-     * RotationMode 类为舞台初始旋转模式提供值。
+     * OrientationMode 类为舞台初始旋转模式提供值。
      */
-    export class RotationMode {
+    export class OrientationMode {
 
+        /**
+         * @private
+         * 适配屏幕
+         */
+        public static NOT_SET = "notSet";
         /**
          * @private
          * 默认竖屏

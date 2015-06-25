@@ -164,9 +164,23 @@ module lark.web {
          */
         private getLocation(event: MouseEvent):Point {
             event.identifier = +event.identifier || 0;
-            var x = (event.offsetX) / this.scaleX;
-            var y = (event.offsetY) / this.scaleY;
-            return $TempPoint.setTo(Math.round(x), Math.round(y));
+            var doc = document.documentElement;
+            var box = this.canvas.getBoundingClientRect();
+            var left = box.left + window.pageXOffset - doc.clientLeft;
+            var top = box.top + window.pageYOffset - doc.clientTop;
+            var x = event.pageX - left, newx = x;
+            var y = event.pageY - top, newy = y;
+            if (this.rotation == 90) {
+                newx = y;
+                newy = box.width - x;
+            }
+            else if (this.rotation == -90) {
+                newx = box.height - y;
+                newy = x;
+            }
+            newx = newx / this.scaleX;
+            newy = newy / this.scaleY;
+            return $TempPoint.setTo(Math.round(newx), Math.round(newy));
         }
 
         /**
@@ -177,6 +191,10 @@ module lark.web {
          * @private
          */
         private scaleY:number = 1;
+        /**
+         * @private
+         */
+        private rotation:number = 0;
 
         /**
          * @private
@@ -184,9 +202,10 @@ module lark.web {
          * @param scaleX 水平方向的缩放比例。
          * @param scaleY 垂直方向的缩放比例。
          */
-        public updateScaleMode(scaleX:number, scaleY:number):void {
+        public updateScaleMode(scaleX:number, scaleY:number, rotation:number):void {
             this.scaleX = scaleX;
             this.scaleY = scaleY;
+            this.rotation = rotation;
         }
     }
 }

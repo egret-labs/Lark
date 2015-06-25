@@ -79,10 +79,10 @@ module lark.web {
         var contentWidth = +container.getAttribute("data-content-width")||480;
         var contentHeight = +container.getAttribute("data-content-height") || 800;
         var scaleMode = container.getAttribute("data-scale-mode");
-        var rotation = container.getAttribute("data-rotation") || lark.sys.RotationMode.PORTRAIT;
+        var orientation = container.getAttribute("data-orientation") || lark.sys.OrientationMode.NOT_SET;
         var surface = lark.sys.surfaceFactory.create();
         var canvas = <HTMLCanvasElement><any>surface;
-        var webScreen = new WebScreen(container, canvas, scaleMode, contentWidth, contentHeight, rotation);
+        var webScreen = new WebScreen(container, canvas, scaleMode, contentWidth, contentHeight, orientation);
         var stage = new lark.Stage();
         var touch = new lark.sys.TouchHandler(stage);
         var webTouch = new WebTouchHandler(touch, canvas);
