@@ -26,7 +26,6 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-
 module lark.web {
 
     /**
@@ -163,14 +162,10 @@ module lark.web {
         /**
          * @private
          */
-        private getLocation(event:any):Point {
+        private getLocation(event: MouseEvent):Point {
             event.identifier = +event.identifier || 0;
-            var doc = document.documentElement;
-            var box = this.canvas.getBoundingClientRect();
-            var left = box.left + window.pageXOffset - doc.clientLeft;
-            var top = box.top + window.pageYOffset - doc.clientTop;
-            var x = (event.pageX - left) / this.scaleX;
-            var y = (event.pageY - top) / this.scaleY;
+            var x = (event.offsetX) / this.scaleX;
+            var y = (event.offsetY) / this.scaleY;
             return $TempPoint.setTo(Math.round(x), Math.round(y));
         }
 
@@ -194,4 +189,7 @@ module lark.web {
             this.scaleY = scaleY;
         }
     }
+}
+interface MouseEvent {
+    identifier: number;
 }

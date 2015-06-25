@@ -77,11 +77,12 @@ module lark.web {
         containerList.push(container);
         var entryClassName = container.getAttribute("data-entry-class");
         var contentWidth = +container.getAttribute("data-content-width")||480;
-        var contentHeight = +container.getAttribute("data-content-height")||800;
+        var contentHeight = +container.getAttribute("data-content-height") || 800;
         var scaleMode = container.getAttribute("data-scale-mode");
+        var rotation = container.getAttribute("data-rotation") || lark.sys.RotationMode.PORTRAIT;
         var surface = lark.sys.surfaceFactory.create();
         var canvas = <HTMLCanvasElement><any>surface;
-        var webScreen = new WebScreen(container,canvas,scaleMode,contentWidth,contentHeight);
+        var webScreen = new WebScreen(container, canvas, scaleMode, contentWidth, contentHeight, rotation);
         var stage = new lark.Stage();
         var touch = new lark.sys.TouchHandler(stage);
         var webTouch = new WebTouchHandler(touch, canvas);
@@ -143,9 +144,9 @@ module lark.web {
         return args;
     }
 
-    lark.warn = () => console.warn.apply(console,toArray(arguments));
-    lark.error = () => console.error.apply(console,toArray(arguments));
-    lark.assert = () => console.assert.apply(console,toArray(arguments));
+    lark.warn = function () { console.warn.apply(console, toArray(arguments)) };
+    lark.error = function () { console.error.apply(console, toArray(arguments)) };
+    lark.assert = function () { console.assert.apply(console, toArray(arguments)) };
     if(DEBUG){
         lark.log = function(){
             if(DEBUG){
@@ -160,7 +161,7 @@ module lark.web {
         }
     }
     else{
-        lark.log = ()=>console.log.apply(console,toArray(arguments));
+        lark.log = function () { console.log.apply(console, toArray(arguments)) };
     }
     window.addEventListener("load", runLark);
     window.addEventListener("resize",updateScreenSize);
