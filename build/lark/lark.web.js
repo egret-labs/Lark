@@ -838,13 +838,14 @@ var lark;
              * @param contentWidth 初始化内容宽度
              * @param contentHeight 初始化内容高度
              */
-            function WebScreen(container, canvas, scaleMode, contentWidth, contentHeight) {
+            function WebScreen(container, canvas, scaleMode, contentWidth, contentHeight, orientation) {
                 _super.call(this);
                 this.container = container;
                 this.canvas = canvas;
                 this.scaleMode = scaleMode;
                 this.contentWidth = contentWidth;
                 this.contentHeight = contentHeight;
+                this.orientation = orientation;
                 this.attachCanvas(container, canvas);
             }
             var d = __define,c=WebScreen;p=c.prototype;
@@ -874,7 +875,13 @@ var lark;
                 if (canvas['userTyping'])
                     return;
                 var screenRect = this.container.getBoundingClientRect();
-                var stageSize = lark.sys.screenAdapter.calculateStageSize(this.scaleMode, screenRect.width, screenRect.height, this.contentWidth, this.contentHeight);
+                var shouldRotate = false;
+                if (this.orientation != lark.sys.OrientationMode.NOT_SET) {
+                    shouldRotate = this.orientation != lark.sys.OrientationMode.PORTRAIT && screenRect.height > screenRect.width || this.orientation == lark.sys.OrientationMode.PORTRAIT && screenRect.width > screenRect.height;
+                }
+                var screenWidth = shouldRotate ? screenRect.height : screenRect.width;
+                var screenHeight = shouldRotate ? screenRect.width : screenRect.height;
+                var stageSize = lark.sys.screenAdapter.calculateStageSize(this.scaleMode, screenWidth, screenHeight, this.contentWidth, this.contentHeight);
                 var stageWidth = stageSize.stageWidth;
                 var stageHeight = stageSize.stageHeight;
                 var displayWidth = stageSize.displayWidth;
@@ -889,10 +896,20 @@ var lark;
                 canvas.style.height = displayHeight + "px";
                 canvas.style.top = (screenRect.height - displayHeight) / 2 + "px";
                 canvas.style.left = (screenRect.width - displayWidth) / 2 + "px";
+                var rotation = 0;
+                if (shouldRotate) {
+                    if (this.orientation == lark.sys.OrientationMode.LANDSCAPE)
+                        rotation = 90;
+                    else
+                        rotation = -90;
+                }
+                var transform = "rotate(" + rotation + "deg)";
+                canvas.style['webkitTransform'] = transform;
+                canvas.style.transform = transform;
                 player.updateStageSize(stageWidth, stageHeight);
                 var scalex = displayWidth / stageWidth, scaley = displayHeight / stageHeight;
-                webTouch.updateScaleMode(scalex, scaley);
-                webText.updateScaleMode(scalex, scaley, (screenRect.width - displayWidth) / 2, (screenRect.height - displayHeight) / 2);
+                webTouch.updateScaleMode(scalex, scaley, rotation);
+                webText.updateScaleMode(scalex, scaley, (screenRect.width - displayWidth) / 2, (screenRect.height - displayHeight) / 2, displayWidth / 2, displayHeight / 2, rotation);
             };
             return WebScreen;
         })(lark.LarkObject);
@@ -971,6 +988,10 @@ var lark;
                  * @private
                  */
                 this.scaleY = 1;
+                /**
+                 * @private
+                 */
+                this.rotation = 0;
                 this.canvas = canvas;
                 this.touch = touch;
                 this.addListeners();
@@ -1065,9 +1086,19 @@ var lark;
                 var box = this.canvas.getBoundingClientRect();
                 var left = box.left + window.pageXOffset - doc.clientLeft;
                 var top = box.top + window.pageYOffset - doc.clientTop;
-                var x = (event.pageX - left) / this.scaleX;
-                var y = (event.pageY - top) / this.scaleY;
-                return lark.$TempPoint.setTo(Math.round(x), Math.round(y));
+                var x = event.pageX - left, newx = x;
+                var y = event.pageY - top, newy = y;
+                if (this.rotation == 90) {
+                    newx = y;
+                    newy = box.width - x;
+                }
+                else if (this.rotation == -90) {
+                    newx = box.height - y;
+                    newy = x;
+                }
+                newx = newx / this.scaleX;
+                newy = newy / this.scaleY;
+                return lark.$TempPoint.setTo(Math.round(newx), Math.round(newy));
             };
             /**
              * @private
@@ -1075,9 +1106,10 @@ var lark;
              * @param scaleX 水平方向的缩放比例。
              * @param scaleY 垂直方向的缩放比例。
              */
-            p.updateScaleMode = function (scaleX, scaleY) {
+            p.updateScaleMode = function (scaleX, scaleY, rotation) {
                 this.scaleX = scaleX;
                 this.scaleY = scaleY;
+                this.rotation = rotation;
             };
             return WebTouchHandler;
         })(lark.LarkObject);
@@ -1145,6 +1177,18 @@ var lark;
                  * @private
                  */
                 this.offsetY = 1;
+                /**
+                 * @private
+                 */
+                this.anchorX = 0;
+                /**
+                 * @private
+                 */
+                this.anchorY = 0;
+                /**
+                 * @private
+                 */
+                this.rotation = 0;
                 /**
                  * @private
                  */
@@ -1272,11 +1316,15 @@ var lark;
              * @param offsetX canvas 相对 container 的横向偏移位置
              * @param offsetY canvas 相对 container 的纵向偏移位置
              */
-            p.updateScaleMode = function (scaleX, scaleY, offsetX, offsetY) {
+            p.updateScaleMode = function (scaleX, scaleY, offsetX, offsetY, anchorX, anchorY, rotaion) {
+                if (rotaion === void 0) { rotaion = 0; }
                 this.scaleX = scaleX;
                 this.scaleY = scaleY;
                 this.offsetX = offsetX;
                 this.offsetY = offsetY;
+                this.anchorX = anchorX;
+                this.anchorY = anchorY;
+                this.rotation = rotaion;
             };
             /**
              * @private
@@ -1355,14 +1403,17 @@ var lark;
                 var matrix = textInput.$getConcatenatedMatrix().clone();
                 matrix.scale(scaleX, scaleY);
                 var p = textInput.localToGlobal(0, 0, tempPoint);
-                this.textContainer.style.left = this.offsetX + p.x * scaleX + "px";
-                this.textContainer.style.top = this.offsetY + p.y * scaleY + "px";
+                var containerX = this.offsetX + p.x * scaleX, containerY = this.offsetY + p.y * scaleY;
+                this.textContainer.style.left = containerX + "px";
+                this.textContainer.style.top = containerY + "px";
                 scaleX = matrix.$getScaleX();
                 scaleY = matrix.$getScaleY();
-                var width = textInput.width * scaleX + "px";
-                var height = textInput.height * scaleY + "px";
-                this.textContainer.style.width = width;
-                this.textContainer.style.height = height;
+                var width = textInput.width * scaleX;
+                var height = textInput.height * scaleY;
+                this.textContainer.style.width = width + "px";
+                this.textContainer.style.height = height + "px";
+                this.textContainer.style[getPrefixStyleName("transformOrigin")] = "" + (this.anchorX + this.offsetX - containerX) + "px " + (this.anchorY + this.offsetY - containerY) + "px";
+                this.textContainer.style[getPrefixStyleName("transform")] = "rotate(" + this.rotation + "deg)";
                 var setElementStyle = this.setElementStyle.bind(this);
                 setElementStyle("fontFamily", textInput.fontFamily);
                 setElementStyle("fontStyle", textInput.italic ? "italic" : "normal");
@@ -1520,9 +1571,10 @@ var lark;
             var contentWidth = +container.getAttribute("data-content-width") || 480;
             var contentHeight = +container.getAttribute("data-content-height") || 800;
             var scaleMode = container.getAttribute("data-scale-mode");
+            var orientation = container.getAttribute("data-orientation") || lark.sys.OrientationMode.NOT_SET;
             var surface = lark.sys.surfaceFactory.create();
             var canvas = surface;
-            var webScreen = new web.WebScreen(container, canvas, scaleMode, contentWidth, contentHeight);
+            var webScreen = new web.WebScreen(container, canvas, scaleMode, contentWidth, contentHeight, orientation);
             var stage = new lark.Stage();
             var touch = new lark.sys.TouchHandler(stage);
             var webTouch = new web.WebTouchHandler(touch, canvas);
@@ -1573,9 +1625,15 @@ var lark;
             }
             return args;
         }
-        lark.warn = function () { return console.warn.apply(console, toArray(arguments)); };
-        lark.error = function () { return console.error.apply(console, toArray(arguments)); };
-        lark.assert = function () { return console.assert.apply(console, toArray(arguments)); };
+        lark.warn = function () {
+            console.warn.apply(console, toArray(arguments));
+        };
+        lark.error = function () {
+            console.error.apply(console, toArray(arguments));
+        };
+        lark.assert = function () {
+            console.assert.apply(console, toArray(arguments));
+        };
         if (DEBUG) {
             lark.log = function () {
                 if (DEBUG) {
@@ -1590,7 +1648,9 @@ var lark;
             };
         }
         else {
-            lark.log = function () { return console.log.apply(console, toArray(arguments)); };
+            lark.log = function () {
+                console.log.apply(console, toArray(arguments));
+            };
         }
         window.addEventListener("load", runLark);
         window.addEventListener("resize", updateScreenSize);

@@ -3,6 +3,7 @@
 
 import utils = require('../lib/utils');
 import watch = require("../lib/watch");
+import Build = require('./BuildCommand');
 import server = require('../server/server');
 import FileUtil = require('../lib/FileUtil');
 import service = require('../service/index');
@@ -12,12 +13,16 @@ import CompileTemplate = require('../actions/CompileTemplate');
 
 class RunCommand implements lark.Command {
 	
-    execute():number {
+    execute(): number {
+        var build = new Build();
+        build.execute(this.onBuildFinish);
+        return 0;
+    }
 
-        var options = lark.options;
-        if (FileUtil.exists(options.srcDir) == false ||
-            FileUtil.exists(options.templateDir) == false) {
-            utils.exit(10015, options.projectDir);
+    private onBuildFinish = (exitCode: number) => {
+
+        if (exitCode != 0) {
+            process.exit(exitCode);
         }
 
         if (lark.options.autoCompile) {
@@ -29,16 +34,10 @@ class RunCommand implements lark.Command {
             console.log(utils.tr(10012));
         }
 
-
-        var compileProject = new CompileProject();
-        var result = compileProject.compileProject(lark.options);
-        CopyFiles.copyProjectFiles();
-        CompileTemplate.compileTemplates(lark.options, result.files);
-
         server.startServer(lark.options, lark.options.startUrl);
         console.log(utils.tr(10013, lark.options.startUrl));
-        return 0;
     }
+
     private watchFiles(dir:string) {
 
         watch.createMonitor(dir, { persistent: true, interval: 2007 }, m=> {

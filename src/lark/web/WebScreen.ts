@@ -43,13 +43,14 @@ module lark.web {
          * @param contentWidth 初始化内容宽度
          * @param contentHeight 初始化内容高度
          */
-        public constructor(container:HTMLElement, canvas:HTMLCanvasElement, scaleMode:string, contentWidth:number, contentHeight:number) {
+        public constructor(container:HTMLElement, canvas:HTMLCanvasElement, scaleMode:string, contentWidth:number, contentHeight:number, orientation:string) {
             super();
             this.container = container;
             this.canvas = canvas;
             this.scaleMode = scaleMode;
             this.contentWidth = contentWidth;
             this.contentHeight = contentHeight;
+            this.orientation = orientation;
             this.attachCanvas(container,canvas);
         }
 
@@ -79,7 +80,12 @@ module lark.web {
          * @private
          * 初始化内容高度
          */
-        private contentHeight:number;
+        private contentHeight: number;
+        /**
+         * @private
+         * 初始化屏幕方向
+         */
+        private orientation: string;
 
         /**
          * @private
@@ -109,8 +115,15 @@ module lark.web {
             if(canvas['userTyping'])
                 return;
             var screenRect = this.container.getBoundingClientRect();
+            var shouldRotate = false;
+            if (this.orientation != sys.OrientationMode.NOT_SET) {
+                shouldRotate = this.orientation != sys.OrientationMode.PORTRAIT && screenRect.height > screenRect.width
+                    || this.orientation == sys.OrientationMode.PORTRAIT && screenRect.width > screenRect.height;
+            }
+            var screenWidth = shouldRotate ? screenRect.height : screenRect.width;
+            var screenHeight = shouldRotate ? screenRect.width : screenRect.height; 
             var stageSize = lark.sys.screenAdapter.calculateStageSize(this.scaleMode,
-                screenRect.width, screenRect.height, this.contentWidth, this.contentHeight);
+                screenWidth, screenHeight, this.contentWidth, this.contentHeight);
             var stageWidth = stageSize.stageWidth;
             var stageHeight = stageSize.stageHeight;
             var displayWidth = stageSize.displayWidth;
@@ -125,11 +138,22 @@ module lark.web {
             canvas.style.height = displayHeight + "px";
             canvas.style.top = (screenRect.height - displayHeight) / 2 + "px";
             canvas.style.left = (screenRect.width - displayWidth) / 2 + "px";
+            var rotation = 0;
+            if (shouldRotate) {
+                if (this.orientation == sys.OrientationMode.LANDSCAPE)
+                    rotation = 90;
+                else
+                    rotation = -90;
+            }
+            var transform = `rotate(${ rotation }deg)`;
+            canvas.style['webkitTransform'] = transform;
+            canvas.style.transform = transform;
             player.updateStageSize(stageWidth, stageHeight);
             var scalex = displayWidth / stageWidth,
                 scaley = displayHeight / stageHeight;
-            webTouch.updateScaleMode(scalex, scaley);
-            webText.updateScaleMode(scalex, scaley, (screenRect.width - displayWidth) / 2, (screenRect.height - displayHeight) / 2);
+            webTouch.updateScaleMode(scalex, scaley,rotation);
+            webText.updateScaleMode(scalex, scaley, (screenRect.width - displayWidth) / 2, (screenRect.height - displayHeight) / 2, displayWidth / 2, displayHeight / 2, rotation);
         }
+
     }
 }

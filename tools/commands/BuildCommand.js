@@ -6,7 +6,7 @@ var CopyFiles = require('../actions/CopyFiles');
 var BuildCommand = (function () {
     function BuildCommand() {
     }
-    BuildCommand.prototype.execute = function () {
+    BuildCommand.prototype.execute = function (callback) {
         var options = lark.options;
         if (FileUtil.exists(options.srcDir) == false ||
             FileUtil.exists(options.templateDir) == false) {
@@ -15,15 +15,17 @@ var BuildCommand = (function () {
         if (FileUtil.exists(FileUtil.joinPath(options.srcDir, 'libs/lark/lark.js')) == false) {
             CopyFiles.copyLark();
         }
-        service.execCommand({ path: lark.options.projectDir, command: "build" }, gotCommandResult, true);
+        service.execCommand({ path: lark.options.projectDir, command: "build" }, function (cmd) {
+            if (cmd.messages) {
+                cmd.messages.forEach(function (m) { return console.log(m); });
+            }
+            if (callback)
+                callback(cmd.exitCode || 0);
+            else
+                process.exit(cmd.exitCode || 0);
+        }, true);
         return 0;
     };
     return BuildCommand;
 })();
-function gotCommandResult(cmd) {
-    if (cmd.messages) {
-        cmd.messages.forEach(function (m) { return console.log(m); });
-    }
-    process.exit(cmd.exitCode || 0);
-}
 module.exports = BuildCommand;

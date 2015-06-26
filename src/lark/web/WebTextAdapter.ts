@@ -78,7 +78,19 @@ module lark.web {
         /**
          * @private
          */
-        private offsetY:number = 1;
+        private offsetY: number = 1;
+        /**
+         * @private
+         */
+        private anchorX: number = 0;
+        /**
+         * @private
+         */
+        private anchorY: number = 0;
+        /**
+         * @private
+         */
+        private rotation: number = 0;
         /**
          * @private
          */
@@ -174,11 +186,14 @@ module lark.web {
          * @param offsetX canvas 相对 container 的横向偏移位置
          * @param offsetY canvas 相对 container 的纵向偏移位置
          */
-        public updateScaleMode(scaleX:number, scaleY:number, offsetX:number, offsetY:number):void {
+        public updateScaleMode(scaleX: number, scaleY: number, offsetX: number, offsetY: number, anchorX: number, anchorY: number,rotaion:number=0):void {
             this.scaleX = scaleX;
             this.scaleY = scaleY;
             this.offsetX = offsetX;
             this.offsetY = offsetY;
+            this.anchorX = anchorX;
+            this.anchorY = anchorY;
+            this.rotation = rotaion;
         }
 
         /**
@@ -310,15 +325,20 @@ module lark.web {
             matrix.scale(scaleX, scaleY);
 
             var p = textInput.localToGlobal(0, 0, tempPoint);
-            this.textContainer.style.left = this.offsetX + p.x * scaleX + "px";
-            this.textContainer.style.top = this.offsetY + p.y * scaleY + "px";
+            var containerX = this.offsetX + p.x * scaleX,
+                containerY = this.offsetY + p.y * scaleY;
+            this.textContainer.style.left = containerX + "px";
+            this.textContainer.style.top = containerY + "px";
+
 
             scaleX = matrix.$getScaleX();
             scaleY = matrix.$getScaleY();
-            var width = textInput.width * scaleX + "px";
-            var height = textInput.height * scaleY + "px";
-            this.textContainer.style.width = width;
-            this.textContainer.style.height = height;
+            var width = textInput.width * scaleX ;
+            var height = textInput.height * scaleY;
+            this.textContainer.style.width = width + "px";
+            this.textContainer.style.height = height + "px";
+            this.textContainer.style[getPrefixStyleName("transformOrigin")] = `${ this.anchorX + this.offsetX - containerX}px ${this.anchorY + this.offsetY - containerY}px`;
+            this.textContainer.style[getPrefixStyleName("transform")] = `rotate(${ this.rotation }deg)`;
 
 
             var setElementStyle = this.setElementStyle.bind(this);
