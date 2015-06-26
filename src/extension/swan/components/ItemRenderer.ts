@@ -94,7 +94,7 @@ module swan {
 
         public set data(value:any) {
             this._data = value;
-            PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"data");
+            PropertyEvent.emitPropertyEvent(this, PropertyEvent.PROPERTY_CHANGE, "data");
             this.dataChanged();
         }
 
@@ -217,13 +217,18 @@ module swan {
          * @platform Web,Native
          */
         protected getCurrentState():string {
-            if (this._selected||this.touchCaptured)
-                return "down";
-
-            return "up";
+            var state = "up";
+            if (this._selected || this.touchCaptured) {
+                state = "down";
+            }
+            var selectedState = state + "AndSelected";
+            if (this.hasState(selectedState)) {
+                return selectedState;
+            }
+            return state;
         }
     }
 
-    registerBindable(ItemRenderer.prototype,"data");
+    registerBindable(ItemRenderer.prototype, "data");
     lark.registerClass(ItemRenderer, Types.ItemRenderer, [Types.IItemRenderer])
 }
