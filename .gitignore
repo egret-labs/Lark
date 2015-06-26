@@ -17,3 +17,5 @@ tmp
 *.iml
 /template
 /src/tests
+examples/LarkCore/src/libs
+examples/UIExamples/src/libs
