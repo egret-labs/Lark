@@ -443,6 +443,11 @@ module swan {
             var point = this.globalToLocal(stageX, stageY, lark.$TempPoint);
             var values = this.$UIComponent;
             var bounds = lark.$TempRectangle.setTo(0, 0, values[sys.UIKeys.width], values[sys.UIKeys.height]);
+            var scrollRect = this.$scrollRect;
+            if(scrollRect){
+                bounds.x = scrollRect.x;
+                bounds.y = scrollRect.y;
+            }
             if (bounds.contains(point.x, point.y)) {
                 return this;
             }

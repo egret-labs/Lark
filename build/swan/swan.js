@@ -12759,9 +12759,8 @@ var swan;
                 }
                 children = skin.$elementsContent;
                 if (children) {
-                    length = children.length;
-                    for (i = 0; i < length; i++) {
-                        this.addChild(children[i]);
+                    for (i = children.length - 1; i >= 0; i--) {
+                        this.addChildAt(children[i], 0);
                     }
                 }
                 skin.hostComponent = this;
@@ -13715,6 +13714,11 @@ var swan;
             var point = this.globalToLocal(stageX, stageY, lark.$TempPoint);
             var values = this.$UIComponent;
             var bounds = lark.$TempRectangle.setTo(0, 0, values[10 /* width */], values[11 /* height */]);
+            var scrollRect = this.$scrollRect;
+            if (scrollRect) {
+                bounds.x = scrollRect.x;
+                bounds.y = scrollRect.y;
+            }
             if (bounds.contains(point.x, point.y)) {
                 return this;
             }

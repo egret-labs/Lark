@@ -621,9 +621,6 @@ module lark {
             if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
                 return null;
             }
-            if (!this.$getOriginalBounds().contains(localX, localY)) {
-                return null;
-            }
             if (this.$mask && !this.$mask.$hitTest(stageX, stageY, true)) {
                 return null
             }
