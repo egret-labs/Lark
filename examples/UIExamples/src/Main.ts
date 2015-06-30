@@ -74,11 +74,13 @@ class Main extends swan.Group {
                 "components/"+name+"/ListGroup.exml",
                 "components/"+name+"/TabBar.exml",
                 "components/CloseButton.exml",
-                "components/CancelButton.exml",
-                "components/MainGroup.exml"
+                "components/CancelButton.exml"
             ];
 
-            Loader.load(skins, () => this.loaded());
+
+            Loader.load(skins, () => {
+                Loader.load(["components/MainGroup.exml"], () => this.loaded());
+            });
         }
     }
 
