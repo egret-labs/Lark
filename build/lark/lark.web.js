@@ -1618,6 +1618,11 @@ var lark;
                 requestAnimationFrame.call(window, onTick);
             }
         }
+        //覆盖原生的isNaN()方法实现，在不同浏览器上有2~10倍性能提升。
+        window["isNaN"] = function (value) {
+            value = +value;
+            return value !== value;
+        };
         function toArray(argument) {
             var args = [];
             for (var i = 0; i < argument.length; i++) {
