@@ -83,9 +83,15 @@ class CompileOptions implements lark.LarkToolArgs {
     esTarget: string = 'ES5';
     serverOnly: boolean;
     autoCompile: boolean;
-    fileName:string;
-
-    project: lark.ILarkProject;
+    fileName: string;
+    modules: string[];
+    platforms: string[];
+    contentHeight: number;
+    contentWidth: number;
+    template: string;
+    scaleMode: string;
+    orientation: string;
+    background: string;
 
     private _tmpDir = null;
     private _tmpProj: lark.ILarkProject;
@@ -102,11 +108,21 @@ class CompileOptions implements lark.LarkToolArgs {
         return this._tmpDir;
     }
 
-    getProject() {
+    getProject(empty = false):lark.ILarkProject {
         if (this._tmpProj == null) {
             var tmpFile = FileUtil.joinPath(this.getTmpDir(), "proj.json");
-            if (!FileUtil.exists(tmpFile))
-                this._tmpProj = { port: 3000 };
+            if (empty || !FileUtil.exists(tmpFile))
+                this._tmpProj = {
+                    port: this._port || 3000,
+                    template: this.template,
+                    platforms: (this.platforms || []).map(p=> { return { name: p } }),
+                    modules: (this.modules || []).map(m=> { return { name: m } }),
+                    contentHeight: this.contentHeight,
+                    contentWidth: this.contentWidth,
+                    scaleMode: this.scaleMode,
+                    orientation: this.orientation,
+                    background: this.background
+                };
             else {
                 var content = FileUtil.read(tmpFile);
                 this._tmpProj = JSON.parse(content);

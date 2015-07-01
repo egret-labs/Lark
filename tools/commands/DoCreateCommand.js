@@ -46,7 +46,9 @@ function copyTemplate(project) {
     var scripts = larkFiles.map(function (f) { return utils.format('<script src="{0}.js" src-release="{0}.min.js"></script>', f); }).join('\r\n    ');
     content = content.replace('<script id="lark"></script>', scripts);
     content = content.replace(/\$entry\-class\$/ig, "Main");
-    content = content.replace(/\$scale\-mode\$/ig, project.scaleMode);
+    content = content.replace(/\$background\$/ig, project.background || "#888888");
+    content = content.replace(/\$scale\-mode\$/ig, project.scaleMode || "noScale");
+    content = content.replace(/\$orientation\$/ig, project.orientation || "notSet");
     content = content.replace(/\$content\-width\$/ig, project.contentWidth.toString());
     content = content.replace(/\$content\-height\$/ig, project.contentHeight.toString());
     content = content.replace(/\$show\-paint\-rects\$/ig, 'false');

@@ -29,10 +29,34 @@ export var optionDeclarations: lark.CommandLineOption[] = [
     }, {
         name: 'fileName',
         type: 'string',
-        shortName:'f'
+        shortName: 'f'
     }, {
         name: 'port',
         type: 'number'
+    }, {
+        name: 'template',
+        type: 'string'
+    }, {
+        name: 'contentWidth',
+        type: 'number'
+    }, {
+        name: 'contentHeight',
+        type: 'number'
+    }, {
+        name: 'scaleMode',
+        type: 'string'
+    }, {
+        name: 'modules',
+        type: 'array'
+    }, {
+        name: 'platforms',
+        type: 'array'
+    }, {
+        name: 'background',
+        type: 'string'
+    }, {
+        name: 'orientation',
+        type: 'string'
     }
 ];
 
@@ -94,6 +118,8 @@ export function parseCommandLine(commandLine: string[]) {
                         case "string":
                             options[opt.name] = args[i++] || "";
                             break;
+                        case "array":
+                            options[opt.name] = (args[i++] || "").split(',');
                     }
                 }
                 else

@@ -41,7 +41,7 @@ var Create = require("./commands/CreateCommand");
 var Publish = require("./commands/PublishCommand");
 var service = require("./service/index");
 global.lark = global.lark || {};
-var DontExitCode = -0xF000;
+exports.DontExitCode = -0xF000;
 function executeCommandLine(args) {
     var options = Parser.parseCommandLine(args);
     lark.options = options;
@@ -65,17 +65,16 @@ var Entry = (function () {
                 break;
             case "create":
                 var create = new Create();
-                create.execute();
-                exitCode = DontExitCode;
+                exitCode = create.execute();
                 break;
             case "help":
                 new Help().execute();
-                exitCode = DontExitCode;
+                exitCode = exports.DontExitCode;
                 break;
             case "run":
                 var run = new Run();
                 run.execute();
-                exitCode = DontExitCode;
+                exitCode = exports.DontExitCode;
                 break;
             case "make":
                 var build = new Make();
@@ -83,23 +82,23 @@ var Entry = (function () {
                 break;
             case "quit":
                 new Shutdown().execute();
-                exitCode = DontExitCode;
+                exitCode = exports.DontExitCode;
                 break;
             case "service":
                 service.run();
-                exitCode = DontExitCode;
+                exitCode = exports.DontExitCode;
                 break;
             case "autocompile":
                 new AutoCompile().execute();
-                exitCode = DontExitCode;
+                exitCode = exports.DontExitCode;
                 break;
             case "clean":
                 new Clean().execute();
-                exitCode = DontExitCode;
+                exitCode = exports.DontExitCode;
                 break;
             case "build":
                 new Build().execute();
-                exitCode = DontExitCode;
+                exitCode = exports.DontExitCode;
                 break;
             case "info":
             default:
@@ -109,7 +108,7 @@ var Entry = (function () {
         return exitCode;
     };
     Entry.prototype.exit = function (exitCode) {
-        if (DontExitCode == exitCode)
+        if (exports.DontExitCode == exitCode)
             return;
         process.exit(exitCode);
     };

@@ -51,7 +51,7 @@ import childProcess = require('child_process');
 
 global.lark = global.lark || {};
 
-var DontExitCode = -0xF000;
+export var DontExitCode = -0xF000;
 
 
 export function executeCommandLine(args: string[]): void {
@@ -77,8 +77,7 @@ class Entry {
                 break;
             case "create":
                 var create = new Create();
-                create.execute();
-                exitCode = DontExitCode;
+                exitCode = create.execute();
                 break;
             case "help":
                 new Help().execute();

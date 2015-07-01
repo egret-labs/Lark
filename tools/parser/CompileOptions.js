@@ -124,11 +124,22 @@ var CompileOptions = (function () {
         }
         return this._tmpDir;
     };
-    CompileOptions.prototype.getProject = function () {
+    CompileOptions.prototype.getProject = function (empty) {
+        if (empty === void 0) { empty = false; }
         if (this._tmpProj == null) {
             var tmpFile = FileUtil.joinPath(this.getTmpDir(), "proj.json");
-            if (!FileUtil.exists(tmpFile))
-                this._tmpProj = { port: 3000 };
+            if (empty || !FileUtil.exists(tmpFile))
+                this._tmpProj = {
+                    port: this._port || 3000,
+                    template: this.template,
+                    platforms: (this.platforms || []).map(function (p) { return { name: p }; }),
+                    modules: (this.modules || []).map(function (m) { return { name: m }; }),
+                    contentHeight: this.contentHeight,
+                    contentWidth: this.contentWidth,
+                    scaleMode: this.scaleMode,
+                    orientation: this.orientation,
+                    background: this.background
+                };
             else {
                 var content = FileUtil.read(tmpFile);
                 this._tmpProj = JSON.parse(content);

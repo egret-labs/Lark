@@ -58,10 +58,9 @@ declare module lark {
         declaration?: boolean;
         autoCompile?: boolean;
         fileName?:string;
-        project: ILarkProject;
 
         toJSON: () => any;
-
+        getProject(empty?:boolean): lark.ILarkProject;
         //工具用
     }
 
@@ -75,6 +74,8 @@ declare module lark {
         template?: string;
         toJSON?(): ILarkProject;
         save?(path?: string);
+        orientation?: string;
+        background?: string;
     }
 
     export interface CommandLineOption {
