@@ -35,6 +35,7 @@ import Make = require("./commands/MakeCommand");
 import Build = require("./commands/BuildCommand");
 import Clean = require("./commands/CleanCommand");
 import Shutdown = require("./commands/ShutdownCommand");
+import DesignService = require("./commands/DesignService");
 import AutoCompile = require("./commands/AutoCompileCommand");
 import Parser = require("./parser/Parser");
 import Info = require("./commands/InfoCommand");
@@ -111,6 +112,9 @@ class Entry {
             case "build":
                 new Build().execute();
                 exitCode = DontExitCode;
+                break;
+            case "designservice":
+                exitCode = new DesignService().execute();
                 break;
             case "info":
             default:

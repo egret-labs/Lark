@@ -33,6 +33,7 @@ var Make = require("./commands/MakeCommand");
 var Build = require("./commands/BuildCommand");
 var Clean = require("./commands/CleanCommand");
 var Shutdown = require("./commands/ShutdownCommand");
+var DesignService = require("./commands/DesignService");
 var AutoCompile = require("./commands/AutoCompileCommand");
 var Parser = require("./parser/Parser");
 var Info = require("./commands/InfoCommand");
@@ -99,6 +100,9 @@ var Entry = (function () {
             case "build":
                 new Build().execute();
                 exitCode = exports.DontExitCode;
+                break;
+            case "designservice":
+                exitCode = new DesignService().execute();
                 break;
             case "info":
             default:
