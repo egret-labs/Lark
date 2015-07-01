@@ -269,7 +269,7 @@ module swan {
                 var values = this.$UIComponent;
                 var width = values[sys.UIKeys.width];
                 var height = values[sys.UIKeys.height];
-                if (lark.isNone(width) || lark.isNone(height)) {
+                if (isNaN(width) || isNaN(height)) {
                     bounds.setEmpty();
                     return;
                 }

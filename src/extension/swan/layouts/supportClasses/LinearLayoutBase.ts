@@ -837,18 +837,18 @@ module swan.sys {
         /**
          * @private
          */
-        public percent:number = lark.NONE;
+        public percent:number = NaN;
 
 
         /**
          * @private
          */
-        public min:number = lark.NONE;
+        public min:number = NaN;
 
 
         /**
          * @private
          */
-        public max:number = lark.NONE;
+        public max:number = NaN;
     }
 }

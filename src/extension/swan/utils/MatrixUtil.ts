@@ -45,7 +45,7 @@ module swan.sys {
                                 preferredWidth:number, preferredHeight:number,
                                 minWidth:number, minHeight:number,
                                 maxWidth:number, maxHeight:number):lark.Point {
-            if (lark.isNone(width) && lark.isNone(height))
+            if (isNaN(width) && isNaN(height))
                 return lark.Point.create(preferredWidth, preferredHeight);
 
             var newMinWidth = (minWidth < MIN_MAX_TOLERANCE) ? 0 : minWidth - MIN_MAX_TOLERANCE;
@@ -55,7 +55,7 @@ module swan.sys {
 
             var actualSize:lark.Point;
 
-            if (!lark.isNone(width) && !lark.isNone(height)) {
+            if (!isNaN(width) && !isNaN(height)) {
                 actualSize = calcUBoundsToFitTBounds(width, height, matrix,
                     newMinWidth, newMinHeight,
                     newMaxWidth, newMaxHeight);
@@ -107,7 +107,7 @@ module swan.sys {
                 }
                 return actualSize;
             }
-            else if (!lark.isNone(width)) {
+            else if (!isNaN(width)) {
                 return fitTBoundsWidth(width, matrix,
                     explicitWidth, explicitHeight,
                     preferredWidth, preferredHeight,
@@ -134,7 +134,7 @@ module swan.sys {
                              maxWidth:number, maxHeight:number):lark.Point {
         var actualSize:lark.Point;
 
-        if (!lark.isNone(explicitWidth) && lark.isNone(explicitHeight)) {
+        if (!isNaN(explicitWidth) && isNaN(explicitHeight)) {
             actualSize = calcUBoundsToFitTBoundsWidth(width, matrix,
                 explicitWidth, preferredHeight,
                 explicitWidth, minHeight,
@@ -143,7 +143,7 @@ module swan.sys {
             if (actualSize)
                 return actualSize;
         }
-        else if (lark.isNone(explicitWidth) && !lark.isNone(explicitHeight)) {
+        else if (isNaN(explicitWidth) && !isNaN(explicitHeight)) {
             actualSize = calcUBoundsToFitTBoundsWidth(width, matrix,
                 preferredWidth, explicitHeight,
                 minWidth, explicitHeight,
@@ -170,7 +170,7 @@ module swan.sys {
                               maxWidth:number, maxHeight:number):lark.Point {
         var actualSize:lark.Point;
 
-        if (!lark.isNone(explicitWidth) && lark.isNone(explicitHeight)) {
+        if (!isNaN(explicitWidth) && isNaN(explicitHeight)) {
             actualSize = calcUBoundsToFitTBoundsHeight(height, matrix,
                 explicitWidth, preferredHeight,
                 explicitWidth, minHeight,
@@ -179,7 +179,7 @@ module swan.sys {
             if (actualSize)
                 return actualSize;
         }
-        else if (lark.isNone(explicitWidth) && !lark.isNone(explicitHeight)) {
+        else if (isNaN(explicitWidth) && !isNaN(explicitHeight)) {
             actualSize = calcUBoundsToFitTBoundsHeight(height, matrix,
                 preferredWidth, explicitHeight,
                 minWidth, explicitHeight,

@@ -4370,7 +4370,7 @@ declare module swan {
          * The horizontal distance in pixels from the left edge of the component to the
          * anchor target's left edge.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4380,7 +4380,7 @@ declare module swan {
          * @language zh_CN
          * 距父级容器离左边距离。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4392,7 +4392,7 @@ declare module swan {
          * The horizontal distance in pixels from the right edge of the component to the
          * anchor target's right edge.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4402,7 +4402,7 @@ declare module swan {
          * @language zh_CN
          * 距父级容器右边距离。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4414,7 +4414,7 @@ declare module swan {
          * The vertical distance in pixels from the top edge of the component to the
          * anchor target's top edge.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4424,7 +4424,7 @@ declare module swan {
          * @language zh_CN
          * 距父级容器顶部距离。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4436,7 +4436,7 @@ declare module swan {
          * The vertical distance in pixels from the bottom edge of the component to the
          * anchor target's bottom edge.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4446,7 +4446,7 @@ declare module swan {
          * @language zh_CN
          * 距父级容器底部距离。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4458,7 +4458,7 @@ declare module swan {
          * The horizontal distance in pixels from the center of the component to the
          * center of the anchor target's content area.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4468,7 +4468,7 @@ declare module swan {
          * @language zh_CN
          * 在父级容器中距水平中心位置的距离。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4480,7 +4480,7 @@ declare module swan {
          * The vertical distance in pixels from the center of the component to the
          *  center of the anchor target's content area.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4490,7 +4490,7 @@ declare module swan {
          * @language zh_CN
          * 在父级容器中距竖直中心位置的距离。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4502,9 +4502,9 @@ declare module swan {
          * Specifies the width of a component as a percentage
          * of its parent's size. Allowed values are 0-100.
          * Setting the <code>width</code> or <code>explicitWidth</code> properties
-         * resets this property to lark.NONE.
+         * resets this property to NaN.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4514,7 +4514,7 @@ declare module swan {
          * @language zh_CN
          * 相对父级容器宽度的百分比。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4526,9 +4526,9 @@ declare module swan {
          * Specifies the height of a component as a percentage
          * of its parent's size. Allowed values are 0-100.
          * Setting the <code>height</code> or <code>explicitHeight</code> properties
-         * resets this property to lark.NONE.
+         * resets this property to NaN.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4538,7 +4538,7 @@ declare module swan {
          * @language zh_CN
          * 相对父级容器高度的百分比。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4873,7 +4873,7 @@ declare module swan {
          * Sets the layout size of the element.
          * This is the size that the element uses to draw on screen.<p/>
          *
-         * If the <code>width</code> and/or <code>height</code> parameters are left unspecified (lark.NONE),
+         * If the <code>width</code> and/or <code>height</code> parameters are left unspecified (NaN),
          * Swan sets the element's layout size to its preferred width and/or preferred height.<p/>
          *
          * Note that calls to the <code>setLayoutBoundSize()</code> method can affect the layout position, so
@@ -4890,7 +4890,7 @@ declare module swan {
          * @language zh_CN
          * 设置元素的布局大小。这是元素在屏幕上进行绘制时所用的大小。<p/>
          *
-         * 如果 width 和/或 height 参数尚未指定 (lark.NONE))，则 Swan 会将该元素的布局大小设置为首选宽度和/或首选高度。<p/>
+         * 如果 width 和/或 height 参数尚未指定 (NaN))，则 Swan 会将该元素的布局大小设置为首选宽度和/或首选高度。<p/>
          *
          * 请注意，调用 setLayoutBoundSize() 方法会影响布局位置，因此请在调用 setLayoutBoundSize()
          * 之后再调用 setLayoutBoundPosition()。
@@ -5694,7 +5694,7 @@ declare module swan {
          * <p>If not explicitly set, the column width is
          * determined from the width of the widest element. </p>
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -5705,7 +5705,7 @@ declare module swan {
          * 包含实际列宽（以像素为单位）。
          * <p>若未显式设置，则从根据最宽的元素的宽度确定列宽度。</p>
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -5727,7 +5727,7 @@ declare module swan {
          * <p>If not explicitly set, the row height is
          * determined from the maximum of elements' height.</p>
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -5738,7 +5738,7 @@ declare module swan {
          * 行高（以像素为单位）。
          * <p>如果未显式设置，则从元素的高度的最大值确定行高度。<p>
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -7073,7 +7073,7 @@ declare module swan {
          * @language en_US
          * Number that specifies the explicit width of the skin.
          * This property can only affect measure result of host component.
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -7081,9 +7081,9 @@ declare module swan {
          */
         /**
          * @language zh_CN
-         * 皮肤显式设置宽度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
+         * 皮肤显式设置宽度,设置为 NaN 表示不显式设置。仅影响主机组件的测量结果。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -7095,7 +7095,7 @@ declare module swan {
          * Number that specifies the explicit height of the skin.
          * This property can only affect measure result of host component.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -7103,9 +7103,9 @@ declare module swan {
          */
         /**
          * @language zh_CN
-         * 皮肤显式设置高度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
+         * 皮肤显式设置高度,设置为 NaN 表示不显式设置。仅影响主机组件的测量结果。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0

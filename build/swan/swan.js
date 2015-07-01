@@ -2711,14 +2711,14 @@ var swan;
              * @private
              */
             MatrixUtil.fitBounds = function (width, height, matrix, explicitWidth, explicitHeight, preferredWidth, preferredHeight, minWidth, minHeight, maxWidth, maxHeight) {
-                if (lark.isNone(width) && lark.isNone(height))
+                if (isNaN(width) && isNaN(height))
                     return lark.Point.create(preferredWidth, preferredHeight);
                 var newMinWidth = (minWidth < MIN_MAX_TOLERANCE) ? 0 : minWidth - MIN_MAX_TOLERANCE;
                 var newMinHeight = (minHeight < MIN_MAX_TOLERANCE) ? 0 : minHeight - MIN_MAX_TOLERANCE;
                 var newMaxWidth = maxWidth + MIN_MAX_TOLERANCE;
                 var newMaxHeight = maxHeight + MIN_MAX_TOLERANCE;
                 var actualSize;
-                if (!lark.isNone(width) && !lark.isNone(height)) {
+                if (!isNaN(width) && !isNaN(height)) {
                     actualSize = calcUBoundsToFitTBounds(width, height, matrix, newMinWidth, newMinHeight, newMaxWidth, newMaxHeight);
                     if (!actualSize) {
                         var actualSize1;
@@ -2753,7 +2753,7 @@ var swan;
                     }
                     return actualSize;
                 }
-                else if (!lark.isNone(width)) {
+                else if (!isNaN(width)) {
                     return fitTBoundsWidth(width, matrix, explicitWidth, explicitHeight, preferredWidth, preferredHeight, newMinWidth, newMinHeight, newMaxWidth, newMaxHeight);
                 }
                 else {
@@ -2768,12 +2768,12 @@ var swan;
          */
         function fitTBoundsWidth(width, matrix, explicitWidth, explicitHeight, preferredWidth, preferredHeight, minWidth, minHeight, maxWidth, maxHeight) {
             var actualSize;
-            if (!lark.isNone(explicitWidth) && lark.isNone(explicitHeight)) {
+            if (!isNaN(explicitWidth) && isNaN(explicitHeight)) {
                 actualSize = calcUBoundsToFitTBoundsWidth(width, matrix, explicitWidth, preferredHeight, explicitWidth, minHeight, explicitWidth, maxHeight);
                 if (actualSize)
                     return actualSize;
             }
-            else if (lark.isNone(explicitWidth) && !lark.isNone(explicitHeight)) {
+            else if (isNaN(explicitWidth) && !isNaN(explicitHeight)) {
                 actualSize = calcUBoundsToFitTBoundsWidth(width, matrix, preferredWidth, explicitHeight, minWidth, explicitHeight, maxWidth, explicitHeight);
                 if (actualSize)
                     return actualSize;
@@ -2786,12 +2786,12 @@ var swan;
          */
         function fitTBoundsHeight(height, matrix, explicitWidth, explicitHeight, preferredWidth, preferredHeight, minWidth, minHeight, maxWidth, maxHeight) {
             var actualSize;
-            if (!lark.isNone(explicitWidth) && lark.isNone(explicitHeight)) {
+            if (!isNaN(explicitWidth) && isNaN(explicitHeight)) {
                 actualSize = calcUBoundsToFitTBoundsHeight(height, matrix, explicitWidth, preferredHeight, explicitWidth, minHeight, explicitWidth, maxHeight);
                 if (actualSize)
                     return actualSize;
             }
-            else if (lark.isNone(explicitWidth) && !lark.isNone(explicitHeight)) {
+            else if (isNaN(explicitWidth) && !isNaN(explicitHeight)) {
                 actualSize = calcUBoundsToFitTBoundsHeight(height, matrix, preferredWidth, explicitHeight, minWidth, explicitHeight, maxWidth, explicitHeight);
                 if (actualSize)
                     return actualSize;
@@ -8217,16 +8217,16 @@ var swan;
              */
             p.initializeUIValues = function () {
                 this.$UIComponent = {
-                    0: lark.NONE,
-                    1: lark.NONE,
-                    2: lark.NONE,
-                    3: lark.NONE,
-                    4: lark.NONE,
-                    5: lark.NONE,
-                    6: lark.NONE,
-                    7: lark.NONE,
-                    8: lark.NONE,
-                    9: lark.NONE,
+                    0: NaN,
+                    1: NaN,
+                    2: NaN,
+                    3: NaN,
+                    4: NaN,
+                    5: NaN,
+                    6: NaN,
+                    7: NaN,
+                    8: NaN,
+                    9: NaN,
                     10: 0,
                     11: 0,
                     12: 0,
@@ -8235,8 +8235,8 @@ var swan;
                     15: 100000,
                     16: 0,
                     17: 0,
-                    18: lark.NONE,
-                    19: lark.NONE,
+                    18: NaN,
+                    19: NaN,
                     20: 0,
                     21: 0,
                     22: 0,
@@ -8348,7 +8348,7 @@ var swan;
                     return this.$UIComponent[0 /* left */];
                 },
                 function (value) {
-                    value = +value || 0;
+                    value = +value;
                     var values = this.$UIComponent;
                     if (values[0 /* left */] === value)
                         return;
@@ -8365,7 +8365,7 @@ var swan;
                     return this.$UIComponent[1 /* right */];
                 },
                 function (value) {
-                    value = +value || 0;
+                    value = +value;
                     var values = this.$UIComponent;
                     if (values[1 /* right */] === value)
                         return;
@@ -8382,7 +8382,7 @@ var swan;
                     return this.$UIComponent[2 /* top */];
                 },
                 function (value) {
-                    value = +value || 0;
+                    value = +value;
                     var values = this.$UIComponent;
                     if (values[2 /* top */] === value)
                         return;
@@ -8399,7 +8399,7 @@ var swan;
                     return this.$UIComponent[3 /* bottom */];
                 },
                 function (value) {
-                    value = +value || 0;
+                    value = +value;
                     var values = this.$UIComponent;
                     if (values[3 /* bottom */] == value)
                         return;
@@ -8416,7 +8416,7 @@ var swan;
                     return this.$UIComponent[4 /* horizontalCenter */];
                 },
                 function (value) {
-                    value = +value || 0;
+                    value = +value;
                     var values = this.$UIComponent;
                     if (values[4 /* horizontalCenter */] === value)
                         return;
@@ -8433,7 +8433,7 @@ var swan;
                     return this.$UIComponent[5 /* verticalCenter */];
                 },
                 function (value) {
-                    value = +value || 0;
+                    value = +value;
                     var values = this.$UIComponent;
                     if (values[5 /* verticalCenter */] === value)
                         return;
@@ -8450,7 +8450,7 @@ var swan;
                     return this.$UIComponent[6 /* percentWidth */];
                 },
                 function (value) {
-                    value = +value || 0;
+                    value = +value;
                     var values = this.$UIComponent;
                     if (values[6 /* percentWidth */] === value)
                         return;
@@ -8467,7 +8467,7 @@ var swan;
                     return this.$UIComponent[7 /* percentHeight */];
                 },
                 function (value) {
-                    value = +value || 0;
+                    value = +value;
                     var values = this.$UIComponent;
                     if (values[7 /* percentHeight */] === value)
                         return;
@@ -8495,7 +8495,7 @@ var swan;
             );
             /**
              * @private
-             * 组件宽度,默认值为lark.lark.NONE,设置为lark.NONE将使用组件的measure()方法自动计算尺寸
+             * 组件宽度,默认值为lark.NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
              */
             p.$getWidth = function () {
                 this.validateSizeNow();
@@ -8507,13 +8507,13 @@ var swan;
              * @param value
              */
             p.$setWidth = function (value) {
-                value = +value || 0;
+                value = +value;
                 var values = this.$UIComponent;
                 if (value < 0 || values[10 /* width */] === value && values[8 /* explicitWidth */] === value)
                     return;
                 values[10 /* width */] = value;
                 values[8 /* explicitWidth */] = value;
-                if (lark.isNone(value))
+                if (isNaN(value))
                     this.invalidateSize();
                 this.invalidateProperties();
                 this.invalidateDisplayList();
@@ -8541,13 +8541,13 @@ var swan;
              * @param value
              */
             p.$setHeight = function (value) {
-                value = +value || 0;
+                value = +value;
                 var values = this.$UIComponent;
                 if (value < 0 || values[11 /* height */] === value && values[9 /* explicitHeight */] === value)
                     return;
                 values[11 /* height */] = value;
                 values[9 /* explicitHeight */] = value;
-                if (lark.isNone(value))
+                if (isNaN(value))
                     this.invalidateSize();
                 this.invalidateProperties();
                 this.invalidateDisplayList();
@@ -8786,7 +8786,7 @@ var swan;
                 var values = this.$UIComponent;
                 if (!values[25 /* invalidateSizeFlag */])
                     return changed;
-                if (lark.isNone(values[8 /* explicitWidth */]) || lark.isNone(values[9 /* explicitHeight */])) {
+                if (isNaN(values[8 /* explicitWidth */]) || isNaN(values[9 /* explicitHeight */])) {
                     this.measure();
                     if (values[16 /* measuredWidth */] < values[12 /* minWidth */]) {
                         values[16 /* measuredWidth */] = values[12 /* minWidth */];
@@ -8845,7 +8845,7 @@ var swan;
                 if (values[27 /* layoutWidthExplicitlySet */]) {
                     unscaledWidth = values[10 /* width */];
                 }
-                else if (!lark.isNone(values[8 /* explicitWidth */])) {
+                else if (!isNaN(values[8 /* explicitWidth */])) {
                     unscaledWidth = values[8 /* explicitWidth */];
                 }
                 else {
@@ -8854,7 +8854,7 @@ var swan;
                 if (values[28 /* layoutHeightExplicitlySet */]) {
                     unscaledHeight = values[11 /* height */];
                 }
-                else if (!lark.isNone(values[9 /* explicitHeight */])) {
+                else if (!isNaN(values[9 /* explicitHeight */])) {
                     unscaledHeight = values[9 /* explicitHeight */];
                 }
                 else {
@@ -8886,8 +8886,8 @@ var swan;
              * 设置组件的布局宽高
              */
             p.setLayoutBoundsSize = function (layoutWidth, layoutHeight) {
-                layoutHeight = +layoutHeight || 0;
-                layoutWidth = +layoutWidth || 0;
+                layoutHeight = +layoutHeight;
+                layoutWidth = +layoutWidth;
                 if (layoutHeight < 0 || layoutWidth < 0) {
                     return;
                 }
@@ -8898,7 +8898,7 @@ var swan;
                 var minHeight = Math.min(values[14 /* minHeight */], maxHeight);
                 var width;
                 var height;
-                if (lark.isNone(layoutWidth)) {
+                if (isNaN(layoutWidth)) {
                     values[27 /* layoutWidthExplicitlySet */] = false;
                     width = this.getPreferredUWidth();
                 }
@@ -8906,7 +8906,7 @@ var swan;
                     values[27 /* layoutWidthExplicitlySet */] = true;
                     width = Math.max(minWidth, Math.min(maxWidth, layoutWidth));
                 }
-                if (lark.isNone(layoutHeight)) {
+                if (isNaN(layoutHeight)) {
                     values[28 /* layoutHeightExplicitlySet */] = false;
                     height = this.getPreferredUHeight();
                 }
@@ -8955,7 +8955,7 @@ var swan;
                 if (values[27 /* layoutWidthExplicitlySet */]) {
                     w = values[10 /* width */];
                 }
-                else if (!lark.isNone(values[8 /* explicitWidth */])) {
+                else if (!isNaN(values[8 /* explicitWidth */])) {
                     w = values[8 /* explicitWidth */];
                 }
                 else {
@@ -8965,7 +8965,7 @@ var swan;
                 if (values[28 /* layoutHeightExplicitlySet */]) {
                     h = values[11 /* height */];
                 }
-                else if (!lark.isNone(values[9 /* explicitHeight */])) {
+                else if (!isNaN(values[9 /* explicitHeight */])) {
                     h = values[9 /* explicitHeight */];
                 }
                 else {
@@ -8980,7 +8980,7 @@ var swan;
              */
             p.getPreferredUWidth = function () {
                 var values = this.$UIComponent;
-                return lark.isNone(values[8 /* explicitWidth */]) ? values[16 /* measuredWidth */] : values[8 /* explicitWidth */];
+                return isNaN(values[8 /* explicitWidth */]) ? values[16 /* measuredWidth */] : values[8 /* explicitWidth */];
             };
             /**
              * @private
@@ -8989,7 +8989,7 @@ var swan;
              */
             p.getPreferredUHeight = function () {
                 var values = this.$UIComponent;
-                return lark.isNone(values[9 /* explicitHeight */]) ? values[17 /* measuredHeight */] : values[9 /* explicitHeight */];
+                return isNaN(values[9 /* explicitHeight */]) ? values[17 /* measuredHeight */] : values[9 /* explicitHeight */];
             };
             /**
              * @private
@@ -9177,6 +9177,41 @@ var swan;
                     enumerable: true,
                     configurable: true
                 });
+                Object.defineProperty(prototype, "layoutWidthExplicitlySet", {
+                    get: function () {
+                        return this.$UIComponent[27 /* layoutWidthExplicitlySet */];
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(prototype, "layoutHeightExplicitlySet", {
+                    get: function () {
+                        return this.$UIComponent[28 /* layoutHeightExplicitlySet */];
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(prototype, "invalidatePropertiesFlag", {
+                    get: function () {
+                        return this.$UIComponent[24 /* invalidatePropertiesFlag */];
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(prototype, "invalidateSizeFlag", {
+                    get: function () {
+                        return this.$UIComponent[25 /* invalidateSizeFlag */];
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(prototype, "invalidateDisplayListFlag", {
+                    get: function () {
+                        return this.$UIComponent[26 /* invalidateDisplayListFlag */];
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
             }
         }
         sys.implementUIComponent = implementUIComponent;
@@ -9329,28 +9364,28 @@ var swan;
                 var extX;
                 var extY;
                 layoutElement.getPreferredBounds(bounds);
-                if (!lark.isNone(left) && !lark.isNone(right)) {
+                if (!isNaN(left) && !isNaN(right)) {
                     extX = left + right;
                 }
-                else if (!lark.isNone(hCenter)) {
+                else if (!isNaN(hCenter)) {
                     extX = Math.abs(hCenter) * 2;
                 }
-                else if (!lark.isNone(left) || !lark.isNone(right)) {
-                    extX = lark.isNone(left) ? 0 : left;
-                    extX += lark.isNone(right) ? 0 : right;
+                else if (!isNaN(left) || !isNaN(right)) {
+                    extX = isNaN(left) ? 0 : left;
+                    extX += isNaN(right) ? 0 : right;
                 }
                 else {
                     extX = bounds.x;
                 }
-                if (!lark.isNone(top) && !lark.isNone(bottom)) {
+                if (!isNaN(top) && !isNaN(bottom)) {
                     extY = top + bottom;
                 }
-                else if (!lark.isNone(vCenter)) {
+                else if (!isNaN(vCenter)) {
                     extY = Math.abs(vCenter) * 2;
                 }
-                else if (!lark.isNone(top) || !lark.isNone(bottom)) {
-                    extY = lark.isNone(top) ? 0 : top;
-                    extY += lark.isNone(bottom) ? 0 : bottom;
+                else if (!isNaN(top) || !isNaN(bottom)) {
+                    extY = isNaN(top) ? 0 : top;
+                    extY += isNaN(bottom) ? 0 : bottom;
                 }
                 else {
                     extY = bounds.y;
@@ -9388,39 +9423,39 @@ var swan;
                 var bottom = values[3 /* bottom */];
                 var percentWidth = values[6 /* percentWidth */];
                 var percentHeight = values[7 /* percentHeight */];
-                var childWidth = lark.NONE;
-                var childHeight = lark.NONE;
-                if (!lark.isNone(left) && !lark.isNone(right)) {
+                var childWidth = NaN;
+                var childHeight = NaN;
+                if (!isNaN(left) && !isNaN(right)) {
                     childWidth = unscaledWidth - right - left;
                 }
-                else if (!lark.isNone(percentWidth)) {
+                else if (!isNaN(percentWidth)) {
                     childWidth = Math.round(unscaledWidth * Math.min(percentWidth * 0.01, 1));
                 }
-                if (!lark.isNone(top) && !lark.isNone(bottom)) {
+                if (!isNaN(top) && !isNaN(bottom)) {
                     childHeight = unscaledHeight - bottom - top;
                 }
-                else if (!lark.isNone(percentHeight)) {
+                else if (!isNaN(percentHeight)) {
                     childHeight = Math.round(unscaledHeight * Math.min(percentHeight * 0.01, 1));
                 }
                 layoutElement.setLayoutBoundsSize(childWidth, childHeight);
                 layoutElement.getLayoutBounds(bounds);
                 var elementWidth = bounds.width;
                 var elementHeight = bounds.height;
-                var childX = lark.NONE;
-                var childY = lark.NONE;
-                if (!lark.isNone(hCenter))
+                var childX = NaN;
+                var childY = NaN;
+                if (!isNaN(hCenter))
                     childX = Math.round((unscaledWidth - elementWidth) / 2 + hCenter);
-                else if (!lark.isNone(left))
+                else if (!isNaN(left))
                     childX = left;
-                else if (!lark.isNone(right))
+                else if (!isNaN(right))
                     childX = unscaledWidth - elementWidth - right;
                 else
                     childX = bounds.x;
-                if (!lark.isNone(vCenter))
+                if (!isNaN(vCenter))
                     childY = Math.round((unscaledHeight - elementHeight) / 2 + vCenter);
-                else if (!lark.isNone(top))
+                else if (!isNaN(top))
                     childY = top;
-                else if (!lark.isNone(bottom))
+                else if (!isNaN(bottom))
                     childY = unscaledHeight - elementHeight - bottom;
                 else
                     childY = bounds.y;
@@ -9644,7 +9679,7 @@ var swan;
              * @private
              * 标记horizontalGap被显式指定过
              */
-            this.explicitHorizontalGap = lark.NONE;
+            this.explicitHorizontalGap = NaN;
             /**
              * @private
              */
@@ -9653,7 +9688,7 @@ var swan;
              * @private
              * 标记verticalGap被显式指定过
              */
-            this.explicitVerticalGap = lark.NONE;
+            this.explicitVerticalGap = NaN;
             /**
              * @private
              */
@@ -9678,20 +9713,20 @@ var swan;
              * @private
              * 外部显式指定的列宽
              */
-            this.explicitColumnWidth = lark.NONE;
+            this.explicitColumnWidth = NaN;
             /**
              * @private
              */
-            this._columnWidth = lark.NONE;
+            this._columnWidth = NaN;
             /**
              * @private
              * 外部显式指定的行高
              */
-            this.explicitRowHeight = lark.NONE;
+            this.explicitRowHeight = NaN;
             /**
              * @private
              */
-            this._rowHeight = lark.NONE;
+            this._rowHeight = NaN;
             /**
              * @private
              */
@@ -9780,7 +9815,7 @@ var swan;
                 return this._horizontalGap;
             },
             function (value) {
-                value = +value || 0;
+                value = +value;
                 if (value === this._horizontalGap)
                     return;
                 this.explicitHorizontalGap = value;
@@ -9813,7 +9848,7 @@ var swan;
                 return this._verticalGap;
             },
             function (value) {
-                value = +value || 0;
+                value = +value;
                 if (value === this._verticalGap)
                     return;
                 this.explicitVerticalGap = value;
@@ -9958,7 +9993,7 @@ var swan;
              * <p>If not explicitly set, the column width is
              * determined from the width of the widest element. </p>
              *
-             * @default lark.NONE
+             * @default NaN
              *
              * @version Lark 1.0
              * @version Swan 1.0
@@ -9969,7 +10004,7 @@ var swan;
              * 包含实际列宽（以像素为单位）。
              * <p>若未显式设置，则从根据最宽的元素的宽度确定列宽度。</p>
              *
-             * @default lark.NONE
+             * @default NaN
              *
              * @version Lark 1.0
              * @version Swan 1.0
@@ -9979,7 +10014,7 @@ var swan;
                 return this._columnWidth;
             },
             function (value) {
-                value = +value || 0;
+                value = +value;
                 if (value === this._columnWidth)
                     return;
                 this.explicitColumnWidth = value;
@@ -9994,7 +10029,7 @@ var swan;
              * <p>If not explicitly set, the row height is
              * determined from the maximum of elements' height.</p>
              *
-             * @default lark.NONE
+             * @default NaN
              *
              * @version Lark 1.0
              * @version Swan 1.0
@@ -10005,7 +10040,7 @@ var swan;
              * 行高（以像素为单位）。
              * <p>如果未显式设置，则从元素的高度的最大值确定行高度。<p>
              *
-             * @default lark.NONE
+             * @default NaN
              *
              * @version Lark 1.0
              * @version Swan 1.0
@@ -10015,7 +10050,7 @@ var swan;
                 return this._rowHeight;
             },
             function (value) {
-                value = +value || 0;
+                value = +value;
                 if (value === this._rowHeight)
                     return;
                 this.explicitRowHeight = value;
@@ -10363,8 +10398,8 @@ var swan;
             this.calculateRowAndColumn(values[8 /* explicitWidth */], values[9 /* explicitHeight */]);
             var columnCount = this._requestedColumnCount > 0 ? this._requestedColumnCount : this._columnCount;
             var rowCount = this._requestedRowCount > 0 ? this._requestedRowCount : this._rowCount;
-            var horizontalGap = lark.isNone(this._horizontalGap) ? 0 : this._horizontalGap;
-            var verticalGap = lark.isNone(this._verticalGap) ? 0 : this._verticalGap;
+            var horizontalGap = isNaN(this._horizontalGap) ? 0 : this._horizontalGap;
+            var verticalGap = isNaN(this._verticalGap) ? 0 : this._verticalGap;
             if (columnCount > 0) {
                 measuredWidth = columnCount * (this._columnWidth + horizontalGap) - horizontalGap;
             }
@@ -10385,8 +10420,8 @@ var swan;
          */
         p.calculateRowAndColumn = function (explicitWidth, explicitHeight) {
             var target = this.$target;
-            var horizontalGap = lark.isNone(this._horizontalGap) ? 0 : this._horizontalGap;
-            var verticalGap = lark.isNone(this._verticalGap) ? 0 : this._verticalGap;
+            var horizontalGap = isNaN(this._horizontalGap) ? 0 : this._horizontalGap;
+            var verticalGap = isNaN(this._verticalGap) ? 0 : this._verticalGap;
             this._rowCount = this._columnCount = -1;
             var numElements = target.numElements;
             var count = numElements;
@@ -10401,15 +10436,15 @@ var swan;
                 this._rowCount = this._columnCount = 0;
                 return;
             }
-            if (lark.isNone(this.explicitColumnWidth) || lark.isNone(this.explicitRowHeight))
+            if (isNaN(this.explicitColumnWidth) || isNaN(this.explicitRowHeight))
                 this.updateMaxElementSize();
-            if (lark.isNone(this.explicitColumnWidth)) {
+            if (isNaN(this.explicitColumnWidth)) {
                 this._columnWidth = this.maxElementWidth;
             }
             else {
                 this._columnWidth = this.explicitColumnWidth;
             }
-            if (lark.isNone(this.explicitRowHeight)) {
+            if (isNaN(this.explicitRowHeight)) {
                 this._rowHeight = this.maxElementHeight;
             }
             else {
@@ -10423,8 +10458,8 @@ var swan;
             if (itemHeight <= 0)
                 itemHeight = 1;
             var orientedByColumns = (this._orientation == swan.TileOrientation.COLUMNS);
-            var widthHasSet = !lark.isNone(explicitWidth);
-            var heightHasSet = !lark.isNone(explicitHeight);
+            var widthHasSet = !isNaN(explicitWidth);
+            var heightHasSet = !isNaN(explicitHeight);
             var paddingL = this._paddingLeft;
             var paddingR = this._paddingRight;
             var paddingT = this._paddingTop;
@@ -10557,8 +10592,8 @@ var swan;
             var oldEndIndex = this.endIndex;
             var paddingL = this._paddingLeft;
             var paddingT = this._paddingTop;
-            var horizontalGap = lark.isNone(this._horizontalGap) ? 0 : this._horizontalGap;
-            var verticalGap = lark.isNone(this._verticalGap) ? 0 : this._verticalGap;
+            var horizontalGap = isNaN(this._horizontalGap) ? 0 : this._horizontalGap;
+            var verticalGap = isNaN(this._verticalGap) ? 0 : this._verticalGap;
             if (this._orientation == swan.TileOrientation.COLUMNS) {
                 var itemWidth = this._columnWidth + horizontalGap;
                 if (itemWidth <= 0) {
@@ -10642,8 +10677,8 @@ var swan;
             var rowIndex;
             var orientedByColumns = (this._orientation == swan.TileOrientation.COLUMNS);
             var index = this.startIndex;
-            var horizontalGap = lark.isNone(this._horizontalGap) ? 0 : this._horizontalGap;
-            var verticalGap = lark.isNone(this._verticalGap) ? 0 : this._verticalGap;
+            var horizontalGap = isNaN(this._horizontalGap) ? 0 : this._horizontalGap;
+            var verticalGap = isNaN(this._verticalGap) ? 0 : this._verticalGap;
             var rowCount = this._rowCount;
             var columnCount = this._columnCount;
             var columnWidth = this._columnWidth;
@@ -10682,16 +10717,16 @@ var swan;
          * 为单个元素布局
          */
         p.sizeAndPositionElement = function (element, cellX, cellY, cellWidth, cellHeight) {
-            var elementWidth = lark.NONE;
-            var elementHeight = lark.NONE;
+            var elementWidth = NaN;
+            var elementHeight = NaN;
             var values = element.$UIComponent;
             if (this._horizontalAlign == swan.JustifyAlign.JUSTIFY)
                 elementWidth = cellWidth;
-            else if (!lark.isNone(values[6 /* percentWidth */]))
+            else if (!isNaN(values[6 /* percentWidth */]))
                 elementWidth = cellWidth * values[6 /* percentWidth */] * 0.01;
             if (this._verticalAlign == swan.JustifyAlign.JUSTIFY)
                 elementHeight = cellHeight;
-            else if (!lark.isNone(values[7 /* percentHeight */]))
+            else if (!isNaN(values[7 /* percentHeight */]))
                 elementHeight = cellHeight * values[7 /* percentHeight */] * 0.01;
             element.setLayoutBoundsSize(Math.round(elementWidth), Math.round(elementHeight));
             var x = cellX;
@@ -10727,12 +10762,12 @@ var swan;
             var paddingB = this._paddingBottom;
             var targetWidth = Math.max(0, width - paddingL - paddingR);
             var targetHeight = Math.max(0, height - paddingT - paddingB);
-            if (!lark.isNone(this.explicitVerticalGap))
+            if (!isNaN(this.explicitVerticalGap))
                 this._verticalGap = this.explicitVerticalGap;
-            if (!lark.isNone(this.explicitHorizontalGap))
+            if (!isNaN(this.explicitHorizontalGap))
                 this._horizontalGap = this.explicitHorizontalGap;
-            this._verticalGap = lark.isNone(this._verticalGap) ? 0 : this._verticalGap;
-            this._horizontalGap = lark.isNone(this._horizontalGap) ? 0 : this._horizontalGap;
+            this._verticalGap = isNaN(this._verticalGap) ? 0 : this._verticalGap;
+            this._horizontalGap = isNaN(this._horizontalGap) ? 0 : this._horizontalGap;
             var offsetY = targetHeight - this._rowHeight * this._rowCount;
             var offsetX = targetWidth - this._columnWidth * this._columnCount;
             var gapCount;
@@ -11554,15 +11589,15 @@ var swan;
                 /**
                  * @private
                  */
-                this.percent = lark.NONE;
+                this.percent = NaN;
                 /**
                  * @private
                  */
-                this.min = lark.NONE;
+                this.min = NaN;
                 /**
                  * @private
                  */
-                this.max = lark.NONE;
+                this.max = NaN;
             }
             var d = __define,c=ChildInfo;p=c.prototype;
             return ChildInfo;
@@ -11637,7 +11672,7 @@ var swan;
             /**
              * @private
              */
-            this._widthConstraint = lark.NONE;
+            this._widthConstraint = NaN;
             this.initializeUIValues();
         }
         var d = __define,c=EditableText;p=c.prototype;
@@ -11714,12 +11749,12 @@ var swan;
             var values = this.$UIComponent;
             var textValues = this.$TextField;
             var oldWidth = textValues[3 /* textFieldWidth */];
-            var availableWidth = lark.NONE;
-            if (!lark.isNone(this._widthConstraint)) {
+            var availableWidth = NaN;
+            if (!isNaN(this._widthConstraint)) {
                 availableWidth = this._widthConstraint;
-                this._widthConstraint = lark.NONE;
+                this._widthConstraint = NaN;
             }
-            else if (!lark.isNone(values[8 /* explicitWidth */])) {
+            else if (!isNaN(values[8 /* explicitWidth */])) {
                 availableWidth = values[8 /* explicitWidth */];
             }
             else if (values[13 /* maxWidth */] != 100000) {
@@ -11830,11 +11865,11 @@ var swan;
          */
         p.setLayoutBoundsSize = function (layoutWidth, layoutHeight) {
             UIImpl.prototype.setLayoutBoundsSize.call(this, layoutWidth, layoutHeight);
-            if (lark.isNone(layoutWidth) || layoutWidth === this._widthConstraint || layoutWidth == 0) {
+            if (isNaN(layoutWidth) || layoutWidth === this._widthConstraint || layoutWidth == 0) {
                 return;
             }
             var values = this.$UIComponent;
-            if (!lark.isNone(values[9 /* explicitHeight */])) {
+            if (!isNaN(values[9 /* explicitHeight */])) {
                 return;
             }
             if (layoutWidth == values[16 /* measuredWidth */]) {
@@ -12043,7 +12078,7 @@ var swan;
              * @language en_US
              * Number that specifies the explicit width of the skin.
              * This property can only affect measure result of host component.
-             * @default lark.NONE
+             * @default NaN
              *
              * @version Lark 1.0
              * @version Swan 1.0
@@ -12051,21 +12086,21 @@ var swan;
              */
             /**
              * @language zh_CN
-             * 皮肤显式设置宽度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
+             * 皮肤显式设置宽度,设置为 NaN 表示不显式设置。仅影响主机组件的测量结果。
              *
-             * @default lark.NONE
+             * @default NaN
              *
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
-            this.width = lark.NONE;
+            this.width = NaN;
             /**
              * @language en_US
              * Number that specifies the explicit height of the skin.
              * This property can only affect measure result of host component.
              *
-             * @default lark.NONE
+             * @default NaN
              *
              * @version Lark 1.0
              * @version Swan 1.0
@@ -12073,15 +12108,15 @@ var swan;
              */
             /**
              * @language zh_CN
-             * 皮肤显式设置高度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
+             * 皮肤显式设置高度,设置为 NaN 表示不显式设置。仅影响主机组件的测量结果。
              *
-             * @default lark.NONE
+             * @default NaN
              *
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
-            this.height = lark.NONE;
+            this.height = NaN;
             /**
              * @private
              */
@@ -12252,7 +12287,7 @@ var swan;
             /**
              * @private
              */
-            this._widthConstraint = lark.NONE;
+            this._widthConstraint = NaN;
             this.initializeUIValues();
         }
         var d = __define,c=Label;p=c.prototype;
@@ -12329,12 +12364,12 @@ var swan;
             var values = this.$UIComponent;
             var textValues = this.$TextField;
             var oldWidth = textValues[3 /* textFieldWidth */];
-            var availableWidth = lark.NONE;
-            if (!lark.isNone(this._widthConstraint)) {
+            var availableWidth = NaN;
+            if (!isNaN(this._widthConstraint)) {
                 availableWidth = this._widthConstraint;
-                this._widthConstraint = lark.NONE;
+                this._widthConstraint = NaN;
             }
-            else if (!lark.isNone(values[8 /* explicitWidth */])) {
+            else if (!isNaN(values[8 /* explicitWidth */])) {
                 availableWidth = values[8 /* explicitWidth */];
             }
             else if (values[13 /* maxWidth */] != 100000) {
@@ -12445,11 +12480,11 @@ var swan;
          */
         p.setLayoutBoundsSize = function (layoutWidth, layoutHeight) {
             UIImpl.prototype.setLayoutBoundsSize.call(this, layoutWidth, layoutHeight);
-            if (lark.isNone(layoutWidth) || layoutWidth === this._widthConstraint || layoutWidth == 0) {
+            if (isNaN(layoutWidth) || layoutWidth === this._widthConstraint || layoutWidth == 0) {
                 return;
             }
             var values = this.$UIComponent;
-            if (!lark.isNone(values[9 /* explicitHeight */])) {
+            if (!isNaN(values[9 /* explicitHeight */])) {
                 return;
             }
             if (layoutWidth == values[16 /* measuredWidth */]) {
@@ -13112,7 +13147,7 @@ var swan;
                 return;
             }
             var values = this.$UIComponent;
-            if (!lark.isNone(skin.width)) {
+            if (!isNaN(skin.width)) {
                 values[16 /* measuredWidth */] = skin.width;
             }
             else {
@@ -13123,7 +13158,7 @@ var swan;
                     values[16 /* measuredWidth */] = skin.maxWidth;
                 }
             }
-            if (!lark.isNone(skin.height)) {
+            if (!isNaN(skin.height)) {
                 values[17 /* measuredHeight */] = skin.height;
             }
             else {
@@ -14213,7 +14248,7 @@ var swan;
                 var values = this.$UIComponent;
                 var width = values[10 /* width */];
                 var height = values[11 /* height */];
-                if (lark.isNone(width) || lark.isNone(height)) {
+                if (isNaN(width) || isNaN(height)) {
                     bounds.setEmpty();
                     return;
                 }
@@ -14689,7 +14724,7 @@ var swan;
                 }
                 else {
                     var values = layoutElement.$UIComponent;
-                    if (!lark.isNone(values[6 /* percentWidth */])) {
+                    if (!isNaN(values[6 /* percentWidth */])) {
                         totalPercentWidth += values[6 /* percentWidth */];
                         childInfo = new swan.sys.ChildInfo();
                         childInfo.layoutElement = layoutElement;
@@ -14765,22 +14800,22 @@ var swan;
                     continue;
                 }
                 layoutElement.getPreferredBounds(bounds);
-                layoutElementWidth = lark.NONE;
+                layoutElementWidth = NaN;
                 if (hJustify) {
-                    childWidth = lark.NONE;
+                    childWidth = NaN;
                     if (excessSpace > 0) {
                         childWidth = widthToDistribute * bounds.width / totalPreferredWidth;
                     }
                     else if (excessSpace < 0 && bounds.width > averageWidth) {
                         childWidth = widthToDistribute / largeChildrenCount;
                     }
-                    if (!lark.isNone(childWidth)) {
+                    if (!isNaN(childWidth)) {
                         layoutElementWidth = Math.round(childWidth + roundOff);
                         roundOff += childWidth - layoutElementWidth;
                     }
                 }
                 else {
-                    layoutElementWidth = widthDic[layoutElement.$hashCode] || lark.NONE;
+                    layoutElementWidth = widthDic[layoutElement.$hashCode] || NaN;
                 }
                 if (vJustify) {
                     y = paddingT;
@@ -14788,9 +14823,9 @@ var swan;
                     layoutElement.getLayoutBounds(bounds);
                 }
                 else {
-                    var layoutElementHeight = lark.NONE;
+                    var layoutElementHeight = NaN;
                     var values = layoutElement.$UIComponent;
-                    if (!lark.isNone(layoutElement.percentHeight)) {
+                    if (!isNaN(layoutElement.percentHeight)) {
                         var percent = Math.min(100, values[7 /* percentHeight */]);
                         layoutElementHeight = Math.round(targetHeight * percent * 0.01);
                     }
@@ -14885,7 +14920,7 @@ var swan;
                 }
                 if (justify) {
                     y = paddingT;
-                    layoutElement.setLayoutBoundsSize(lark.NONE, justifyHeight);
+                    layoutElement.setLayoutBoundsSize(NaN, justifyHeight);
                     layoutElement.getLayoutBounds(bounds);
                 }
                 else {
@@ -15197,7 +15232,7 @@ var swan;
                 }
                 else {
                     var values = layoutElement.$UIComponent;
-                    if (!lark.isNone(values[7 /* percentHeight */])) {
+                    if (!isNaN(values[7 /* percentHeight */])) {
                         totalPercentHeight += values[7 /* percentHeight */];
                         childInfo = new swan.sys.ChildInfo();
                         childInfo.layoutElement = layoutElement;
@@ -15273,22 +15308,22 @@ var swan;
                     continue;
                 }
                 layoutElement.getPreferredBounds(bounds);
-                layoutElementHeight = lark.NONE;
+                layoutElementHeight = NaN;
                 if (vJustify) {
-                    childHeight = lark.NONE;
+                    childHeight = NaN;
                     if (excessSpace > 0) {
                         childHeight = heightToDistribute * bounds.height / totalPreferredHeight;
                     }
                     else if (excessSpace < 0 && bounds.height > averageHeight) {
                         childHeight = heightToDistribute / largeChildrenCount;
                     }
-                    if (!lark.isNone(childHeight)) {
+                    if (!isNaN(childHeight)) {
                         layoutElementHeight = Math.round(childHeight + roundOff);
                         roundOff += childHeight - layoutElementHeight;
                     }
                 }
                 else {
-                    layoutElementHeight = heightDic[layoutElement.$hashCode] || lark.NONE;
+                    layoutElementHeight = heightDic[layoutElement.$hashCode] || NaN;
                 }
                 if (hJustify) {
                     x = paddingL;
@@ -15296,9 +15331,9 @@ var swan;
                     layoutElement.getLayoutBounds(bounds);
                 }
                 else {
-                    var layoutElementWidth = lark.NONE;
+                    var layoutElementWidth = NaN;
                     var values = layoutElement.$UIComponent;
-                    if (!lark.isNone(values[6 /* percentWidth */])) {
+                    if (!isNaN(values[6 /* percentWidth */])) {
                         var percent = Math.min(100, values[6 /* percentWidth */]);
                         layoutElementWidth = Math.round(targetWidth * percent * 0.01);
                     }
@@ -15393,7 +15428,7 @@ var swan;
                 }
                 if (justify) {
                     x = paddingL;
-                    layoutElement.setLayoutBoundsSize(justifyWidth, lark.NONE);
+                    layoutElement.setLayoutBoundsSize(justifyWidth, NaN);
                     layoutElement.getLayoutBounds(bounds);
                 }
                 else {
@@ -15752,9 +15787,15 @@ var swan;
          * @platform Web,Native
          */
         p.getCurrentState = function () {
-            if (this._selected || this.touchCaptured)
-                return "down";
-            return "up";
+            var state = "up";
+            if (this._selected || this.touchCaptured) {
+                state = "down";
+            }
+            var selectedState = state + "AndSelected";
+            if (this.hasState(selectedState)) {
+                return selectedState;
+            }
+            return state;
         };
         return ItemRenderer;
     })(swan.Group);
@@ -17823,7 +17864,7 @@ var swan;
                 value = +value || 0;
                 if (value === values[7 /* snapInterval */])
                     return;
-                if (lark.isNone(value)) {
+                if (isNaN(value)) {
                     values[7 /* snapInterval */] = 1;
                     values[9 /* explicitSnapInterval */] = false;
                 }
@@ -19514,18 +19555,18 @@ var swan;
             if (vsp <= 0) {
                 var scaleHeight = thumbHeight * (1 - (-vsp) / (height * 0.5));
                 scaleHeight = Math.max(5, Math.round(scaleHeight));
-                thumb.setLayoutBoundsSize(lark.NONE, scaleHeight);
+                thumb.setLayoutBoundsSize(NaN, scaleHeight);
                 thumb.setLayoutBoundsPosition(thumbX, 0);
             }
             else if (vsp >= contentHeight - height) {
                 scaleHeight = thumbHeight * (1 - (vsp - contentHeight + height) / (height * 0.5));
                 scaleHeight = Math.max(5, Math.round(scaleHeight));
-                thumb.setLayoutBoundsSize(lark.NONE, scaleHeight);
+                thumb.setLayoutBoundsSize(NaN, scaleHeight);
                 thumb.setLayoutBoundsPosition(thumbX, unscaledHeight - scaleHeight);
             }
             else {
                 var thumbY = (unscaledHeight - thumbHeight) * vsp / (contentHeight - height);
-                thumb.setLayoutBoundsSize(lark.NONE, lark.NONE);
+                thumb.setLayoutBoundsSize(NaN, NaN);
                 thumb.setLayoutBoundsPosition(thumbX, thumbY);
             }
         };
@@ -21116,18 +21157,18 @@ var swan;
             if (hsp <= 0) {
                 var scaleWidth = thumbWidth * (1 - (-hsp) / (width * 0.5));
                 scaleWidth = Math.max(5, Math.round(scaleWidth));
-                thumb.setLayoutBoundsSize(scaleWidth, lark.NONE);
+                thumb.setLayoutBoundsSize(scaleWidth, NaN);
                 thumb.setLayoutBoundsPosition(0, thumbY);
             }
             else if (hsp >= contentWidth - width) {
                 scaleWidth = thumbWidth * (1 - (hsp - contentWidth + width) / (width * 0.5));
                 scaleWidth = Math.max(5, Math.round(scaleWidth));
-                thumb.setLayoutBoundsSize(scaleWidth, lark.NONE);
+                thumb.setLayoutBoundsSize(scaleWidth, NaN);
                 thumb.setLayoutBoundsPosition(unscaledWidth - scaleWidth, thumbY);
             }
             else {
                 var thumbX = (unscaledWidth - thumbWidth) * hsp / (contentWidth - width);
-                thumb.setLayoutBoundsSize(lark.NONE, lark.NONE);
+                thumb.setLayoutBoundsSize(NaN, NaN);
                 thumb.setLayoutBoundsPosition(thumbX, thumbY);
             }
         };

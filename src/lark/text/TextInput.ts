@@ -60,8 +60,8 @@ module lark {
         constructor() {
             super();
             this.$TextField[sys.TextKeys.wordWrap] = false;
-            this.$TextField[sys.TextKeys.selectionActivePosition] = lark.NONE;
-            this.$TextField[sys.TextKeys.selectionAnchorPosition] = lark.NONE;
+            this.$TextField[sys.TextKeys.selectionActivePosition] = NaN;
+            this.$TextField[sys.TextKeys.selectionAnchorPosition] = NaN;
             this.on(TouchEvent.TOUCH_BEGIN, this.handleTouchBegin, this);
 
         }
@@ -149,7 +149,7 @@ module lark {
          */
         public get selectionActivePosition(): number {
             var begin = this.$TextField[sys.TextKeys.selectionActivePosition];
-            if (isNone(begin))
+            if (isNaN(begin))
                 begin = this.text.length;
             return begin;
         }
@@ -178,7 +178,7 @@ module lark {
          */
         public get selectionAnchorPosition(): number {
             var end = this.$TextField[sys.TextKeys.selectionAnchorPosition];
-            if (isNone(end))
+            if (isNaN(end))
                 end = this.text.length;
             return end;
         }

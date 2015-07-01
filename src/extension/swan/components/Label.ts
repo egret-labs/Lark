@@ -139,7 +139,7 @@ module swan {
         /**
          * @private
          */
-        private _widthConstraint:number = lark.NONE;
+        private _widthConstraint:number = NaN;
 
 
         //=======================UIComponent接口实现===========================
@@ -192,12 +192,12 @@ module swan {
             var values = this.$UIComponent;
             var textValues = this.$TextField;
             var oldWidth = textValues[lark.sys.TextKeys.textFieldWidth];
-            var availableWidth = lark.NONE;
-            if (!lark.isNone(this._widthConstraint)) {
+            var availableWidth = NaN;
+            if (!isNaN(this._widthConstraint)) {
                 availableWidth = this._widthConstraint;
-                this._widthConstraint = lark.NONE;
+                this._widthConstraint = NaN;
             }
-            else if (!lark.isNone(values[sys.UIKeys.explicitWidth])) {
+            else if (!isNaN(values[sys.UIKeys.explicitWidth])) {
                 availableWidth = values[sys.UIKeys.explicitWidth];
             }
             else if (values[sys.UIKeys.maxWidth] != 100000) {
@@ -463,11 +463,11 @@ module swan {
          */
         public setLayoutBoundsSize(layoutWidth:number, layoutHeight:number):void {
             UIImpl.prototype.setLayoutBoundsSize.call(this, layoutWidth, layoutHeight);
-            if(lark.isNone(layoutWidth)||layoutWidth===this._widthConstraint||layoutWidth == 0){
+            if(isNaN(layoutWidth)||layoutWidth===this._widthConstraint||layoutWidth == 0){
                 return;
             }
             var values = this.$UIComponent;
-            if(!lark.isNone(values[sys.UIKeys.explicitHeight])){
+            if(!isNaN(values[sys.UIKeys.explicitHeight])){
                 return;
             }
             if (layoutWidth == values[sys.UIKeys.measuredWidth]) {

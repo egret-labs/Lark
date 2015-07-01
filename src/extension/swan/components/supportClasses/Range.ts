@@ -306,7 +306,7 @@ module swan {
             value = +value || 0;
             if (value === values[sys.RangeKeys.snapInterval])
                 return;
-            if (lark.isNone(value)) {
+            if (isNaN(value)) {
                 values[sys.RangeKeys.snapInterval] = 1;
                 values[sys.RangeKeys.explicitSnapInterval] = false;
             }

@@ -136,6 +136,12 @@ module lark.web {
         }
     }
 
+    //覆盖原生的isNaN()方法实现，在不同浏览器上有2~10倍性能提升。
+    window["isNaN"] = function(value:number):boolean{
+        value = +value;
+        return value !== value;
+    };
+
     function toArray(argument){
         var args = [];
         for(var i=0;i<argument.length;i++){
@@ -163,6 +169,8 @@ module lark.web {
     else{
         lark.log = function () { console.log.apply(console, toArray(arguments)) };
     }
+
+
     window.addEventListener("load", runLark);
     window.addEventListener("resize",updateScreenSize);
 }

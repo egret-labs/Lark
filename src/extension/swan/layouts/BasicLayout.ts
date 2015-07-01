@@ -169,29 +169,29 @@ module swan.sys {
 
             layoutElement.getPreferredBounds(bounds);
 
-            if (!lark.isNone(left) && !lark.isNone(right)) {
+            if (!isNaN(left) && !isNaN(right)) {
                 extX = left + right;
             }
-            else if (!lark.isNone(hCenter)) {
+            else if (!isNaN(hCenter)) {
                 extX = Math.abs(hCenter) * 2;
             }
-            else if (!lark.isNone(left) || !lark.isNone(right)) {
-                extX = lark.isNone(left) ? 0 : left;
-                extX += lark.isNone(right) ? 0 : right;
+            else if (!isNaN(left) || !isNaN(right)) {
+                extX = isNaN(left) ? 0 : left;
+                extX += isNaN(right) ? 0 : right;
             }
             else {
                 extX = bounds.x;
             }
 
-            if (!lark.isNone(top) && !lark.isNone(bottom)) {
+            if (!isNaN(top) && !isNaN(bottom)) {
                 extY = top + bottom;
             }
-            else if (!lark.isNone(vCenter)) {
+            else if (!isNaN(vCenter)) {
                 extY = Math.abs(vCenter) * 2;
             }
-            else if (!lark.isNone(top) || !lark.isNone(bottom)) {
-                extY = lark.isNone(top) ? 0 : top;
-                extY += lark.isNone(bottom) ? 0 : bottom;
+            else if (!isNaN(top) || !isNaN(bottom)) {
+                extY = isNaN(top) ? 0 : top;
+                extY += isNaN(bottom) ? 0 : bottom;
             }
             else {
                 extY = bounds.y;
@@ -236,20 +236,20 @@ module swan.sys {
             var percentWidth = values[sys.UIKeys.percentWidth];
             var percentHeight = values[sys.UIKeys.percentHeight];
 
-            var childWidth = lark.NONE;
-            var childHeight = lark.NONE;
+            var childWidth = NaN;
+            var childHeight = NaN;
 
-            if (!lark.isNone(left) && !lark.isNone(right)) {
+            if (!isNaN(left) && !isNaN(right)) {
                 childWidth = unscaledWidth - right - left;
             }
-            else if (!lark.isNone(percentWidth)) {
+            else if (!isNaN(percentWidth)) {
                 childWidth = Math.round(unscaledWidth * Math.min(percentWidth * 0.01, 1));
             }
 
-            if (!lark.isNone(top) && !lark.isNone(bottom)) {
+            if (!isNaN(top) && !isNaN(bottom)) {
                 childHeight = unscaledHeight - bottom - top;
             }
-            else if (!lark.isNone(percentHeight)) {
+            else if (!isNaN(percentHeight)) {
                 childHeight = Math.round(unscaledHeight * Math.min(percentHeight * 0.01, 1));
             }
 
@@ -259,23 +259,23 @@ module swan.sys {
             var elementHeight = bounds.height;
 
 
-            var childX = lark.NONE;
-            var childY = lark.NONE;
+            var childX = NaN;
+            var childY = NaN;
 
-            if (!lark.isNone(hCenter))
+            if (!isNaN(hCenter))
                 childX = Math.round((unscaledWidth - elementWidth) / 2 + hCenter);
-            else if (!lark.isNone(left))
+            else if (!isNaN(left))
                 childX = left;
-            else if (!lark.isNone(right))
+            else if (!isNaN(right))
                 childX = unscaledWidth - elementWidth - right;
             else
                 childX = bounds.x;
 
-            if (!lark.isNone(vCenter))
+            if (!isNaN(vCenter))
                 childY = Math.round((unscaledHeight - elementHeight) / 2 + vCenter);
-            else if (!lark.isNone(top))
+            else if (!isNaN(top))
                 childY = top;
-            else if (!lark.isNone(bottom))
+            else if (!isNaN(bottom))
                 childY = unscaledHeight - elementHeight - bottom;
             else
                 childY = bounds.y;

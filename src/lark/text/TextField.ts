@@ -180,8 +180,8 @@ module lark {
                 0: 30,             //fontSize
                 1: 0,              //lineSpacing
                 2: 0x000000,       //textColor
-                3: NONE,           //textFieldWidth
-                4: NONE,           //textFieldHeight
+                3: NaN,           //textFieldWidth
+                4: NaN,           //textFieldHeight
                 5: 0,              //textWidth
                 6: 0,              //textHeight
                 7: 0,              //textDrawWidth
@@ -579,14 +579,14 @@ module lark {
          */
         $getWidth():number {
             var w = this.$TextField[sys.TextKeys.textFieldWidth];
-            return isNone(w) ? this.$getContentBounds().width : w;
+            return isNaN(w) ? this.$getContentBounds().width : w;
         }
 
         /**
          * @private
          */
         $setWidth(value:number) {
-            value = +value || 0;
+            value = +value;
             var values = this.$TextField;
             if (value < 0 || value === values[sys.TextKeys.textFieldWidth]) {
                 return;
@@ -600,14 +600,14 @@ module lark {
          */
         $getHeight():number {
             var h = this.$TextField[sys.TextKeys.textFieldHeight];
-            return isNone(h) ? this.$getContentBounds().height : h;
+            return isNaN(h) ? this.$getContentBounds().height : h;
         }
 
         /**
          * @private
          */
         $setHeight(value:number) {
-            value = +value || 0;
+            value = +value;
             var values = this.$TextField;
             if (value < 0 || value === values[sys.TextKeys.textFieldHeight]) {
                 return;
@@ -631,7 +631,7 @@ module lark {
             this.updateTextLines();
             var values = this.$TextField;
             var height:number;
-            if (isNone(values[sys.TextKeys.textFieldHeight])) {
+            if (isNaN(values[sys.TextKeys.textFieldHeight])) {
                 height = values[sys.TextKeys.textHeight];
             }
             else {
@@ -641,7 +641,7 @@ module lark {
                     height = lineHeight;
                 }
             }
-            var width = isNone(values[sys.TextKeys.textFieldWidth]) ?
+            var width = isNaN(values[sys.TextKeys.textFieldWidth]) ?
                 values[sys.TextKeys.textWidth] : values[sys.TextKeys.textFieldWidth];
             if (width < values[sys.TextKeys.textDrawWidth]) {
                 width = values[sys.TextKeys.textDrawWidth];
@@ -669,7 +669,7 @@ module lark {
             var vGap = lineHeight + values[sys.TextKeys.lineSpacing];
 
             var textHeight = values[sys.TextKeys.textHeight];
-            var hasHeightSet = !isNone(values[sys.TextKeys.textFieldHeight]);
+            var hasHeightSet = !isNaN(values[sys.TextKeys.textFieldHeight]);
             var explicitHeight = hasHeightSet ? values[sys.TextKeys.textFieldHeight] : Number.POSITIVE_INFINITY;
             if (hasHeightSet && textHeight < explicitHeight) {
                 var vAlign = 0;
@@ -689,7 +689,7 @@ module lark {
             }
             var measuredWidths = values[sys.TextKeys.measuredWidths];
             var maxWidth:number;
-            if (isNone(values[sys.TextKeys.textFieldWidth])) {
+            if (isNaN(values[sys.TextKeys.textFieldWidth])) {
                 maxWidth = values[sys.TextKeys.textWidth];
             }
             else {
@@ -742,7 +742,7 @@ module lark {
                 text = asterisks;
             }
 
-            var hasWidthSet = !isNone(textFieldWidth);
+            var hasWidthSet = !isNaN(textFieldWidth);
             var font = this.getFontString();
             var lines = text.split(/(?:\r\n|\r|\n)/);
             var length = lines.length;

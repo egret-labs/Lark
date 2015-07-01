@@ -474,7 +474,7 @@ module lark.sys {
                 if (info) {
                     lines.push(info);
                 }
-                this.infoText.width = lark.NONE;
+                this.infoText.width = NaN;
                 this.infoText.text = lines.join("\n");
                 if (this._stage.stageHeight > 0) {
                     if (this.infoText.textWidth > this._stage.stageWidth - 20) {
