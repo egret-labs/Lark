@@ -137,7 +137,7 @@ module swan {
          * The horizontal distance in pixels from the left edge of the component to the
          * anchor target's left edge.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -147,7 +147,7 @@ module swan {
          * @language zh_CN
          * 距父级容器离左边距离。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -160,7 +160,7 @@ module swan {
          * The horizontal distance in pixels from the right edge of the component to the
          * anchor target's right edge.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -170,7 +170,7 @@ module swan {
          * @language zh_CN
          * 距父级容器右边距离。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -183,7 +183,7 @@ module swan {
          * The vertical distance in pixels from the top edge of the component to the
          * anchor target's top edge.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -193,7 +193,7 @@ module swan {
          * @language zh_CN
          * 距父级容器顶部距离。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -206,7 +206,7 @@ module swan {
          * The vertical distance in pixels from the bottom edge of the component to the
          * anchor target's bottom edge.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -216,7 +216,7 @@ module swan {
          * @language zh_CN
          * 距父级容器底部距离。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -229,7 +229,7 @@ module swan {
          * The horizontal distance in pixels from the center of the component to the
          * center of the anchor target's content area.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -239,7 +239,7 @@ module swan {
          * @language zh_CN
          * 在父级容器中距水平中心位置的距离。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -252,7 +252,7 @@ module swan {
          * The vertical distance in pixels from the center of the component to the
          *  center of the anchor target's content area.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -262,7 +262,7 @@ module swan {
          * @language zh_CN
          * 在父级容器中距竖直中心位置的距离。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -275,9 +275,9 @@ module swan {
          * Specifies the width of a component as a percentage
          * of its parent's size. Allowed values are 0-100.
          * Setting the <code>width</code> or <code>explicitWidth</code> properties
-         * resets this property to lark.NONE.
+         * resets this property to NaN.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -287,7 +287,7 @@ module swan {
          * @language zh_CN
          * 相对父级容器宽度的百分比。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -300,9 +300,9 @@ module swan {
          * Specifies the height of a component as a percentage
          * of its parent's size. Allowed values are 0-100.
          * Setting the <code>height</code> or <code>explicitHeight</code> properties
-         * resets this property to lark.NONE.
+         * resets this property to NaN.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -312,7 +312,7 @@ module swan {
          * @language zh_CN
          * 相对父级容器高度的百分比。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -661,7 +661,7 @@ module swan {
          * Sets the layout size of the element.
          * This is the size that the element uses to draw on screen.<p/>
          *
-         * If the <code>width</code> and/or <code>height</code> parameters are left unspecified (lark.NONE),
+         * If the <code>width</code> and/or <code>height</code> parameters are left unspecified (NaN),
          * Swan sets the element's layout size to its preferred width and/or preferred height.<p/>
          *
          * Note that calls to the <code>setLayoutBoundSize()</code> method can affect the layout position, so
@@ -678,7 +678,7 @@ module swan {
          * @language zh_CN
          * 设置元素的布局大小。这是元素在屏幕上进行绘制时所用的大小。<p/>
          *
-         * 如果 width 和/或 height 参数尚未指定 (lark.NONE))，则 Swan 会将该元素的布局大小设置为首选宽度和/或首选高度。<p/>
+         * 如果 width 和/或 height 参数尚未指定 (NaN))，则 Swan 会将该元素的布局大小设置为首选宽度和/或首选高度。<p/>
          *
          * 请注意，调用 setLayoutBoundSize() 方法会影响布局位置，因此请在调用 setLayoutBoundSize()
          * 之后再调用 setLayoutBoundPosition()。
@@ -841,16 +841,16 @@ module swan.sys {
          */
         private initializeUIValues():void {
             this.$UIComponent = {
-                0: lark.NONE,       //left
-                1: lark.NONE,       //right
-                2: lark.NONE,       //top
-                3: lark.NONE,       //bottom
-                4: lark.NONE,       //horizontalCenter
-                5: lark.NONE,       //verticalCenter
-                6: lark.NONE,       //percentWidth
-                7: lark.NONE,       //percentHeight
-                8: lark.NONE,       //explicitWidth
-                9: lark.NONE,       //explicitHeight
+                0: NaN,       //left
+                1: NaN,       //right
+                2: NaN,       //top
+                3: NaN,       //bottom
+                4: NaN,       //horizontalCenter
+                5: NaN,       //verticalCenter
+                6: NaN,       //percentWidth
+                7: NaN,       //percentHeight
+                8: NaN,       //explicitWidth
+                9: NaN,       //explicitHeight
                 10: 0,              //width
                 11: 0,              //height
                 12: 0,              //minWidth
@@ -859,8 +859,8 @@ module swan.sys {
                 15: 100000,         //maxHeight
                 16: 0,              //measuredWidth
                 17: 0,              //measuredHeight
-                18: lark.NONE,      //oldPreferWidth
-                19: lark.NONE,      //oldPreferHeight
+                18: NaN,      //oldPreferWidth
+                19: NaN,      //oldPreferHeight
                 20: 0,              //oldX
                 21: 0,              //oldY
                 22: 0,              //oldWidth
@@ -990,7 +990,7 @@ module swan.sys {
         }
 
         public set left(value:number) {
-            value = +value || 0;
+            value = +value;
             var values = this.$UIComponent;
             if (values[UIKeys.left] === value)
                 return;
@@ -1007,7 +1007,7 @@ module swan.sys {
         }
 
         public set right(value:number) {
-            value = +value || 0;
+            value = +value;
             var values = this.$UIComponent;
             if (values[UIKeys.right] === value)
                 return;
@@ -1024,7 +1024,7 @@ module swan.sys {
         }
 
         public set top(value:number) {
-            value = +value || 0;
+            value = +value;
             var values = this.$UIComponent;
             if (values[UIKeys.top] === value)
                 return;
@@ -1041,7 +1041,7 @@ module swan.sys {
         }
 
         public set bottom(value:number) {
-            value = +value || 0;
+            value = +value;
             var values = this.$UIComponent;
             if (values[UIKeys.bottom] == value)
                 return;
@@ -1059,7 +1059,7 @@ module swan.sys {
         }
 
         public set horizontalCenter(value:number) {
-            value = +value || 0;
+            value = +value;
             var values = this.$UIComponent;
             if (values[UIKeys.horizontalCenter] === value)
                 return;
@@ -1076,7 +1076,7 @@ module swan.sys {
         }
 
         public set verticalCenter(value:number) {
-            value = +value || 0;
+            value = +value;
             var values = this.$UIComponent;
             if (values[UIKeys.verticalCenter] === value)
                 return;
@@ -1094,7 +1094,7 @@ module swan.sys {
         }
 
         public set percentWidth(value:number) {
-            value = +value || 0;
+            value = +value;
             var values = this.$UIComponent;
             if (values[UIKeys.percentWidth] === value)
                 return;
@@ -1111,7 +1111,7 @@ module swan.sys {
         }
 
         public set percentHeight(value:number) {
-            value = +value || 0;
+            value = +value;
             var values = this.$UIComponent;
             if (values[UIKeys.percentHeight] === value)
                 return;
@@ -1137,7 +1137,7 @@ module swan.sys {
 
         /**
          * @private
-         * 组件宽度,默认值为lark.lark.NONE,设置为lark.NONE将使用组件的measure()方法自动计算尺寸
+         * 组件宽度,默认值为lark.NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
          */
         $getWidth():number {
             this.validateSizeNow();
@@ -1150,13 +1150,13 @@ module swan.sys {
          * @param value 
          */
         $setWidth(value:number) {
-            value = +value || 0;
+            value = +value;
             var values = this.$UIComponent;
             if (value < 0 || values[UIKeys.width] === value && values[UIKeys.explicitWidth] === value)
                 return;
             values[UIKeys.width] = value;
             values[UIKeys.explicitWidth] = value;
-            if (lark.isNone(value))
+            if (isNaN(value))
                 this.invalidateSize();
             this.invalidateProperties();
             this.invalidateDisplayList();
@@ -1187,13 +1187,13 @@ module swan.sys {
          * @param value 
          */
         $setHeight(value:number) {
-            value = +value || 0;
+            value = +value;
             var values = this.$UIComponent;
             if (value < 0 || values[UIKeys.height] === value && values[UIKeys.explicitHeight] === value)
                 return;
             values[UIKeys.height] = value;
             values[UIKeys.explicitHeight] = value;
-            if (lark.isNone(value))
+            if (isNaN(value))
                 this.invalidateSize();
             this.invalidateProperties();
             this.invalidateDisplayList();
@@ -1447,7 +1447,7 @@ module swan.sys {
             if (!values[sys.UIKeys.invalidateSizeFlag])
                 return changed;
 
-            if (lark.isNone(values[UIKeys.explicitWidth]) || lark.isNone(values[UIKeys.explicitHeight])) {
+            if (isNaN(values[UIKeys.explicitWidth]) || isNaN(values[UIKeys.explicitHeight])) {
                 this.measure();
                 if (values[UIKeys.measuredWidth] < values[UIKeys.minWidth]) {
                     values[UIKeys.measuredWidth] = values[UIKeys.minWidth];
@@ -1510,7 +1510,7 @@ module swan.sys {
             if (values[sys.UIKeys.layoutWidthExplicitlySet]) {
                 unscaledWidth = values[UIKeys.width];
             }
-            else if (!lark.isNone(values[UIKeys.explicitWidth])) {
+            else if (!isNaN(values[UIKeys.explicitWidth])) {
                 unscaledWidth = values[UIKeys.explicitWidth];
             }
             else {
@@ -1519,7 +1519,7 @@ module swan.sys {
             if (values[sys.UIKeys.layoutHeightExplicitlySet]) {
                 unscaledHeight = values[UIKeys.height];
             }
-            else if (!lark.isNone(values[UIKeys.explicitHeight])) {
+            else if (!isNaN(values[UIKeys.explicitHeight])) {
                 unscaledHeight = values[UIKeys.explicitHeight];
             }
             else {
@@ -1554,8 +1554,8 @@ module swan.sys {
          * 设置组件的布局宽高
          */
         public setLayoutBoundsSize(layoutWidth:number, layoutHeight:number):void {
-            layoutHeight = +layoutHeight || 0;
-            layoutWidth = +layoutWidth || 0;
+            layoutHeight = +layoutHeight;
+            layoutWidth = +layoutWidth;
             if(layoutHeight<0||layoutWidth<0){
                 return;
             }
@@ -1566,7 +1566,7 @@ module swan.sys {
             var minHeight = Math.min(values[UIKeys.minHeight], maxHeight);
             var width:number;
             var height:number;
-            if (lark.isNone(layoutWidth)) {
+            if (isNaN(layoutWidth)) {
                 values[sys.UIKeys.layoutWidthExplicitlySet] = false;
                 width = this.getPreferredUWidth();
             }
@@ -1574,7 +1574,7 @@ module swan.sys {
                 values[sys.UIKeys.layoutWidthExplicitlySet] = true;
                 width = Math.max(minWidth, Math.min(maxWidth, layoutWidth));
             }
-            if (lark.isNone(layoutHeight)) {
+            if (isNaN(layoutHeight)) {
                 values[sys.UIKeys.layoutHeightExplicitlySet] = false;
                 height = this.getPreferredUHeight();
             }
@@ -1629,7 +1629,7 @@ module swan.sys {
             if (values[sys.UIKeys.layoutWidthExplicitlySet]) {
                 w = values[UIKeys.width];
             }
-            else if (!lark.isNone(values[UIKeys.explicitWidth])) {
+            else if (!isNaN(values[UIKeys.explicitWidth])) {
                 w = values[UIKeys.explicitWidth];
             }
             else {
@@ -1639,7 +1639,7 @@ module swan.sys {
             if (values[sys.UIKeys.layoutHeightExplicitlySet]) {
                 h = values[UIKeys.height];
             }
-            else if (!lark.isNone(values[UIKeys.explicitHeight])) {
+            else if (!isNaN(values[UIKeys.explicitHeight])) {
                 h = values[UIKeys.explicitHeight];
             }
             else {
@@ -1656,7 +1656,7 @@ module swan.sys {
          */
         private getPreferredUWidth():number {
             var values = this.$UIComponent;
-            return lark.isNone(values[UIKeys.explicitWidth]) ?
+            return isNaN(values[UIKeys.explicitWidth]) ?
                 values[UIKeys.measuredWidth] : values[UIKeys.explicitWidth];
         }
 
@@ -1667,7 +1667,7 @@ module swan.sys {
          */
         private getPreferredUHeight():number {
             var values = this.$UIComponent;
-            return lark.isNone(values[UIKeys.explicitHeight]) ?
+            return isNaN(values[UIKeys.explicitHeight]) ?
                 values[UIKeys.measuredHeight] : values[UIKeys.explicitHeight];
         }
 
@@ -1858,6 +1858,41 @@ module swan.sys {
             Object.defineProperty(prototype, "measuredHeight", {
                 get: function () {
                     return this.$UIComponent[UIKeys.measuredHeight];
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(prototype, "layoutWidthExplicitlySet", {
+                get: function () {
+                    return this.$UIComponent[UIKeys.layoutWidthExplicitlySet];
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(prototype, "layoutHeightExplicitlySet", {
+                get: function () {
+                    return this.$UIComponent[UIKeys.layoutHeightExplicitlySet];
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(prototype, "invalidatePropertiesFlag", {
+                get: function () {
+                    return this.$UIComponent[UIKeys.invalidatePropertiesFlag];
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(prototype, "invalidateSizeFlag", {
+                get: function () {
+                    return this.$UIComponent[UIKeys.invalidateSizeFlag];
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(prototype, "invalidateDisplayListFlag", {
+                get: function () {
+                    return this.$UIComponent[UIKeys.invalidateDisplayListFlag];
                 },
                 enumerable: true,
                 configurable: true

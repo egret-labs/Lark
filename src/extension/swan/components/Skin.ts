@@ -179,7 +179,7 @@ module swan {
          * @language en_US
          * Number that specifies the explicit width of the skin.
          * This property can only affect measure result of host component.
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -187,21 +187,21 @@ module swan {
          */
         /**
          * @language zh_CN
-         * 皮肤显式设置宽度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
+         * 皮肤显式设置宽度,设置为 NaN 表示不显式设置。仅影响主机组件的测量结果。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        public width:number = lark.NONE;
+        public width:number = NaN;
         /**
          * @language en_US
          * Number that specifies the explicit height of the skin.
          * This property can only affect measure result of host component.
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -209,15 +209,15 @@ module swan {
          */
         /**
          * @language zh_CN
-         * 皮肤显式设置高度,设置为NONE表示不显式设置。仅影响主机组件的测量结果。
+         * 皮肤显式设置高度,设置为 NaN 表示不显式设置。仅影响主机组件的测量结果。
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        public height:number = lark.NONE;
+        public height:number = NaN;
 
         /**
          * @private

@@ -78,18 +78,18 @@ module swan {
             if (vsp <= 0) {
                 var scaleHeight = thumbHeight * (1-(-vsp) / (height * 0.5));
                 scaleHeight = Math.max(5,Math.round(scaleHeight));
-                thumb.setLayoutBoundsSize(lark.NONE, scaleHeight);
+                thumb.setLayoutBoundsSize(NaN, scaleHeight);
                 thumb.setLayoutBoundsPosition(thumbX, 0);
             }
             else if (vsp >= contentHeight - height) {
                 scaleHeight = thumbHeight * (1-(vsp - contentHeight + height) / (height * 0.5));
                 scaleHeight = Math.max(5,Math.round(scaleHeight));
-                thumb.setLayoutBoundsSize(lark.NONE, scaleHeight);
+                thumb.setLayoutBoundsSize(NaN, scaleHeight);
                 thumb.setLayoutBoundsPosition(thumbX, unscaledHeight - scaleHeight);
             }
             else {
                 var thumbY = (unscaledHeight - thumbHeight) * vsp / (contentHeight - height);
-                thumb.setLayoutBoundsSize(lark.NONE, lark.NONE);
+                thumb.setLayoutBoundsSize(NaN, NaN);
                 thumb.setLayoutBoundsPosition(thumbX, thumbY);
             }
         }

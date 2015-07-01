@@ -666,7 +666,7 @@ module swan {
                 return;
             }
             var values = this.$UIComponent;
-            if (!lark.isNone(skin.width)) {
+            if (!isNaN(skin.width)) {
                 values[sys.UIKeys.measuredWidth] = skin.width;
             }
             else {
@@ -678,7 +678,7 @@ module swan {
                 }
             }
 
-            if (!lark.isNone(skin.height)) {
+            if (!isNaN(skin.height)) {
                 values[sys.UIKeys.measuredHeight] = skin.height;
             }
             else {

@@ -165,7 +165,7 @@ module swan {
                 }
                 else {
                     var values = layoutElement.$UIComponent;
-                    if (!lark.isNone(values[sys.UIKeys.percentHeight])) {
+                    if (!isNaN(values[sys.UIKeys.percentHeight])) {
                         totalPercentHeight += values[sys.UIKeys.percentHeight];
 
                         childInfo = new sys.ChildInfo();
@@ -249,22 +249,22 @@ module swan {
                     continue;
                 }
                 layoutElement.getPreferredBounds(bounds);
-                layoutElementHeight = lark.NONE;
+                layoutElementHeight = NaN;
                 if (vJustify) {
-                    childHeight = lark.NONE;
+                    childHeight = NaN;
                     if (excessSpace > 0) {
                         childHeight = heightToDistribute * bounds.height / totalPreferredHeight;
                     }
                     else if (excessSpace < 0 && bounds.height > averageHeight) {
                         childHeight = heightToDistribute / largeChildrenCount
                     }
-                    if (!lark.isNone(childHeight)) {
+                    if (!isNaN(childHeight)) {
                         layoutElementHeight = Math.round(childHeight + roundOff);
                         roundOff += childHeight - layoutElementHeight;
                     }
                 }
                 else {
-                    layoutElementHeight = heightDic[layoutElement.$hashCode] || lark.NONE;
+                    layoutElementHeight = heightDic[layoutElement.$hashCode] || NaN;
                 }
                 if (hJustify) {
                     x = paddingL;
@@ -272,9 +272,9 @@ module swan {
                     layoutElement.getLayoutBounds(bounds);
                 }
                 else {
-                    var layoutElementWidth = lark.NONE;
+                    var layoutElementWidth = NaN;
                     var values = layoutElement.$UIComponent;
-                    if (!lark.isNone(values[sys.UIKeys.percentWidth])) {
+                    if (!isNaN(values[sys.UIKeys.percentWidth])) {
                         var percent = Math.min(100, values[sys.UIKeys.percentWidth]);
                         layoutElementWidth = Math.round(targetWidth * percent * 0.01);
                     }
@@ -374,7 +374,7 @@ module swan {
                 }
                 if (justify) {
                     x = paddingL;
-                    layoutElement.setLayoutBoundsSize(justifyWidth, lark.NONE);
+                    layoutElement.setLayoutBoundsSize(justifyWidth, NaN);
                     layoutElement.getLayoutBounds(bounds);
                 }
                 else {

@@ -75,7 +75,7 @@ module swan {
          * @private
          * 标记horizontalGap被显式指定过
          */
-        private explicitHorizontalGap:number = lark.NONE;
+        private explicitHorizontalGap:number = NaN;
 
         /**
          * @private
@@ -106,7 +106,7 @@ module swan {
         }
 
         public set horizontalGap(value:number) {
-            value = +value || 0;
+            value = +value;
             if (value === this._horizontalGap)
                 return;
             this.explicitHorizontalGap = value;
@@ -119,7 +119,7 @@ module swan {
          * @private
          * 标记verticalGap被显式指定过
          */
-        private explicitVerticalGap:number = lark.NONE;
+        private explicitVerticalGap:number = NaN;
 
         /**
          * @private
@@ -151,7 +151,7 @@ module swan {
         }
 
         public set verticalGap(value:number) {
-            value = +value || 0;
+            value = +value;
             if (value === this._verticalGap)
                 return;
             this.explicitVerticalGap = value;
@@ -310,19 +310,19 @@ module swan {
          * @private
          * 外部显式指定的列宽
          */
-        private explicitColumnWidth:number = lark.NONE;
+        private explicitColumnWidth:number = NaN;
 
         /**
          * @private
          */
-        private _columnWidth:number = lark.NONE;
+        private _columnWidth:number = NaN;
         /**
          * @language en_US
          * Contain the actual column width, in pixels.
          * <p>If not explicitly set, the column width is
          * determined from the width of the widest element. </p>
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -333,7 +333,7 @@ module swan {
          * 包含实际列宽（以像素为单位）。
          * <p>若未显式设置，则从根据最宽的元素的宽度确定列宽度。</p>
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -344,7 +344,7 @@ module swan {
         }
 
         public set columnWidth(value:number) {
-            value = +value || 0;
+            value = +value;
             if (value === this._columnWidth)
                 return;
             this.explicitColumnWidth = value;
@@ -356,19 +356,19 @@ module swan {
          * @private
          * 外部显式指定的行高
          */
-        private explicitRowHeight:number = lark.NONE;
+        private explicitRowHeight:number = NaN;
 
         /**
          * @private
          */
-        private _rowHeight:number = lark.NONE;
+        private _rowHeight:number = NaN;
         /**
          * @language en_US
          * The row height, in pixels.
          * <p>If not explicitly set, the row height is
          * determined from the maximum of elements' height.</p>
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -379,7 +379,7 @@ module swan {
          * 行高（以像素为单位）。
          * <p>如果未显式设置，则从元素的高度的最大值确定行高度。<p>
          *
-         * @default lark.NONE
+         * @default NaN
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -390,7 +390,7 @@ module swan {
         }
 
         public set rowHeight(value:number) {
-            value = +value || 0;
+            value = +value;
             if (value === this._rowHeight)
                 return;
             this.explicitRowHeight = value;
@@ -789,8 +789,8 @@ module swan {
             this.calculateRowAndColumn(values[sys.UIKeys.explicitWidth], values[sys.UIKeys.explicitHeight]);
             var columnCount = this._requestedColumnCount > 0 ? this._requestedColumnCount : this._columnCount;
             var rowCount = this._requestedRowCount > 0 ? this._requestedRowCount : this._rowCount;
-            var horizontalGap = lark.isNone(this._horizontalGap) ? 0 : this._horizontalGap;
-            var verticalGap = lark.isNone(this._verticalGap) ? 0 : this._verticalGap;
+            var horizontalGap = isNaN(this._horizontalGap) ? 0 : this._horizontalGap;
+            var verticalGap = isNaN(this._verticalGap) ? 0 : this._verticalGap;
             if (columnCount > 0) {
                 measuredWidth = columnCount * (this._columnWidth + horizontalGap) - horizontalGap;
             }
@@ -816,8 +816,8 @@ module swan {
          */
         private calculateRowAndColumn(explicitWidth:number, explicitHeight:number):void {
             var target = this.$target;
-            var horizontalGap = lark.isNone(this._horizontalGap) ? 0 : this._horizontalGap;
-            var verticalGap = lark.isNone(this._verticalGap) ? 0 : this._verticalGap;
+            var horizontalGap = isNaN(this._horizontalGap) ? 0 : this._horizontalGap;
+            var verticalGap = isNaN(this._verticalGap) ? 0 : this._verticalGap;
             this._rowCount = this._columnCount = -1;
             var numElements = target.numElements;
             var count = numElements;
@@ -833,16 +833,16 @@ module swan {
                 return;
             }
 
-            if (lark.isNone(this.explicitColumnWidth) || lark.isNone(this.explicitRowHeight))
+            if (isNaN(this.explicitColumnWidth) || isNaN(this.explicitRowHeight))
                 this.updateMaxElementSize();
 
-            if (lark.isNone(this.explicitColumnWidth)) {
+            if (isNaN(this.explicitColumnWidth)) {
                 this._columnWidth = this.maxElementWidth;
             }
             else {
                 this._columnWidth = this.explicitColumnWidth;
             }
-            if (lark.isNone(this.explicitRowHeight)) {
+            if (isNaN(this.explicitRowHeight)) {
                 this._rowHeight = this.maxElementHeight;
             }
             else {
@@ -858,8 +858,8 @@ module swan {
                 itemHeight = 1;
 
             var orientedByColumns = (this._orientation == TileOrientation.COLUMNS);
-            var widthHasSet = !lark.isNone(explicitWidth);
-            var heightHasSet = !lark.isNone(explicitHeight);
+            var widthHasSet = !isNaN(explicitWidth);
+            var heightHasSet = !isNaN(explicitHeight);
 
             var paddingL = this._paddingLeft;
             var paddingR = this._paddingRight;
@@ -1033,8 +1033,8 @@ module swan {
             var oldEndIndex = this.endIndex;
             var paddingL = this._paddingLeft;
             var paddingT = this._paddingTop;
-            var horizontalGap = lark.isNone(this._horizontalGap) ? 0 : this._horizontalGap;
-            var verticalGap = lark.isNone(this._verticalGap) ? 0 : this._verticalGap;
+            var horizontalGap = isNaN(this._horizontalGap) ? 0 : this._horizontalGap;
+            var verticalGap = isNaN(this._verticalGap) ? 0 : this._verticalGap;
             if (this._orientation == TileOrientation.COLUMNS) {
                 var itemWidth = this._columnWidth + horizontalGap;
                 if (itemWidth <= 0) {
@@ -1121,8 +1121,8 @@ module swan {
             var rowIndex:number;
             var orientedByColumns = (this._orientation == TileOrientation.COLUMNS);
             var index = this.startIndex;
-            var horizontalGap = lark.isNone(this._horizontalGap) ? 0 : this._horizontalGap;
-            var verticalGap = lark.isNone(this._verticalGap) ? 0 : this._verticalGap;
+            var horizontalGap = isNaN(this._horizontalGap) ? 0 : this._horizontalGap;
+            var verticalGap = isNaN(this._verticalGap) ? 0 : this._verticalGap;
             var rowCount = this._rowCount;
             var columnCount = this._columnCount;
             var columnWidth = this._columnWidth;
@@ -1165,17 +1165,17 @@ module swan {
          */
         private sizeAndPositionElement(element:UIComponent, cellX:number, cellY:number,
                                        cellWidth:number, cellHeight:number):void {
-            var elementWidth = lark.NONE;
-            var elementHeight = lark.NONE;
+            var elementWidth = NaN;
+            var elementHeight = NaN;
             var values = element.$UIComponent;
             if (this._horizontalAlign == JustifyAlign.JUSTIFY)
                 elementWidth = cellWidth;
-            else if (!lark.isNone(values[sys.UIKeys.percentWidth]))
+            else if (!isNaN(values[sys.UIKeys.percentWidth]))
                 elementWidth = cellWidth * values[sys.UIKeys.percentWidth] * 0.01;
 
             if (this._verticalAlign == JustifyAlign.JUSTIFY)
                 elementHeight = cellHeight;
-            else if (!lark.isNone(values[sys.UIKeys.percentHeight]))
+            else if (!isNaN(values[sys.UIKeys.percentHeight]))
                 elementHeight = cellHeight * values[sys.UIKeys.percentHeight] * 0.01;
 
 
@@ -1218,12 +1218,12 @@ module swan {
 
             var targetWidth = Math.max(0, width - paddingL - paddingR);
             var targetHeight = Math.max(0, height - paddingT - paddingB);
-            if (!lark.isNone(this.explicitVerticalGap))
+            if (!isNaN(this.explicitVerticalGap))
                 this._verticalGap = this.explicitVerticalGap;
-            if (!lark.isNone(this.explicitHorizontalGap))
+            if (!isNaN(this.explicitHorizontalGap))
                 this._horizontalGap = this.explicitHorizontalGap;
-            this._verticalGap = lark.isNone(this._verticalGap) ? 0 : this._verticalGap;
-            this._horizontalGap = lark.isNone(this._horizontalGap) ? 0 : this._horizontalGap;
+            this._verticalGap = isNaN(this._verticalGap) ? 0 : this._verticalGap;
+            this._horizontalGap = isNaN(this._horizontalGap) ? 0 : this._horizontalGap;
 
             var offsetY = targetHeight - this._rowHeight * this._rowCount;
             var offsetX = targetWidth - this._columnWidth * this._columnCount;
