@@ -15,7 +15,7 @@
 	* [事件监听器]()
 	* [事件对象池优化]()
 	* [事件示例]()
-5. [显示编程]()
+5. [显示编程](5-1-display.md)
 	* [显示编程的基础知识](5-1-display-about.md)(editing)
 	* [核心显示类](5-2-display-class.md)(editing)
 	* [显示列表方法的优点]()(editing)
