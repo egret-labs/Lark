@@ -18,7 +18,7 @@
 5. [显示编程](5-0-display.md)
 	* [显示编程的基础知识](5-1-display-about.md)(done)
 	* [核心显示类](5-2-display-class.md)(done)
-	* [显示列表方法的优点]()(editing)
+	* [显示列表方法的优点](5-3-displaylist.md)(done)
 	* [显示对象示例]()(editing)
 6. [使用显示对象]()
 	* [DisplayObject类的属性和方法]()
