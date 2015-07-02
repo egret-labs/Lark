@@ -42,11 +42,11 @@ class ShortTimer extends Sprite {
 
     public onTick(event:TimerEvent):void {
         // 输出当前的触发次数，event的target属性就是计时器本身
-        trace("tick " + event.target.currentCount);
+        lark.log("tick " + event.target.currentCount);
     }
 
     public onTimerComplete(event:TimerEvent):void {
-        trace("Time's Up!");
+        lark.log("Time's Up!");
     }
 } 
 ```
@@ -66,14 +66,3 @@ tick 4
 tick 5 
 Time's Up!
 ```
-其他计时函数
--------------------
-| 函数              | 描述                                   |
-| -----------------|-------------------------------------- |
-| lark.getTimer()  | 返回自 Lark 框架初始化以来经过的毫秒数      |
-| lark.startTick() | 以每秒60次的固定频率运行函数。             |
-| lark.stopTick()  | 取消指定的 lark.startTick() 调用。       |
-| setInterval()    | 以指定的间隔（以毫秒为单位）运行函数。       |
-| clearInterval()  | 取消指定的 setInterval() 调用。          |
-| setTimeout()     | 在指定的延迟（以毫秒为单位）后运行指定的函数。|
-| clearTimeout()   | 取消指定的 setTimeout() 调用。           |
