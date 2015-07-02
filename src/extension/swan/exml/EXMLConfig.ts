@@ -169,10 +169,11 @@ module swan.sys {
         public getDefaultPropById(id:string, ns:string):string {
             var className:string = this.getClassNameById(id, ns);
             var prototype = getPrototypeOf(className);
-            if (!prototype) {
-                name = "";
+            var property:string;
+            if (prototype) {
+                property = prototype.__defaultProperty__;
             }
-            return prototype.__defaultProperty__;
+            return property?property:"";
         }
 
         /**

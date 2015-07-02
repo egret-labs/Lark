@@ -1976,10 +1976,11 @@ var swan;
             p.getDefaultPropById = function (id, ns) {
                 var className = this.getClassNameById(id, ns);
                 var prototype = getPrototypeOf(className);
-                if (!prototype) {
-                    name = "";
+                var property;
+                if (prototype) {
+                    property = prototype.__defaultProperty__;
                 }
-                return prototype.__defaultProperty__;
+                return property ? property : "";
             };
             /**
              * @private
