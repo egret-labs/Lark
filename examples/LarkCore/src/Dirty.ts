@@ -9,14 +9,14 @@ class Dirty extends lark.Sprite {
         imageLoader.once(lark.Event.COMPLETE,e=>this.onLoaded(imageLoader.images),this);
         imageLoader.loadImages([
             "resources/lark.png",
-            "resources/products.png"
+            "resources/blendModeBG.jpg"
         ]);
     }
 
     private onLoaded(images:any){
 
         var larkBitmapData = images["resources/lark.png"];
-        var productsBitmapData = images["resources/products.png"];
+        var productsBitmapData = images["resources/blendModeBG.jpg"];
 
         var productBmp = new lark.Bitmap(productsBitmapData);
         this.addChild(productBmp);
@@ -25,7 +25,9 @@ class Dirty extends lark.Sprite {
 
             var bmp = new lark.Bitmap(larkBitmapData);
             bmp.y = 200;
-            bmp.x = 150 + 300*i;
+            bmp.x = 200 + 200*i;
+            bmp.height = 100;
+            bmp.width = 100;
             bmp.rotation = 120*i;
             this.addChild(bmp);
             this.icons.push(bmp);
