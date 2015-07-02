@@ -71,6 +71,8 @@ Time's Up!
 | 函数              | 描述                                   |
 | -----------------|-------------------------------------- |
 | lark.getTimer()  | 返回自 Lark 框架初始化以来经过的毫秒数      |
+| lark.startTick() | 以每秒60次的固定频率运行函数。             |
+| lark.stopTick()  | 取消指定的 lark.startTick() 调用。       |
 | setInterval()    | 以指定的间隔（以毫秒为单位）运行函数。       |
 | clearInterval()  | 取消指定的 setInterval() 调用。          |
 | setTimeout()     | 在指定的延迟（以毫秒为单位）后运行指定的函数。|
