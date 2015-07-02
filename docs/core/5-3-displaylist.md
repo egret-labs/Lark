@@ -49,6 +49,20 @@ class Circle extends lark.Shape {
 }
 ```
 
+`Main.ts`中代码如下：
+
+```
+class Main extends lark.Sprite {
+    constructor() {
+        super();
+        var cir = new Circle();
+        cir.x = 150;
+        cir.y = 150;
+        this.addChild(cir);
+    }   
+}
+```
+
 运行后效果如图：
 
 ![Circle class](image/5-3-1.png)
