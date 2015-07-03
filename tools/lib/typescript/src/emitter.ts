@@ -3,7 +3,7 @@
 /// <reference path="scanner.ts"/>
 /// <reference path="parser.ts"/>
 /// <reference path="binder.ts"/>
-
+declare var global: any;
 module ts {
     interface EmitTextWriter {
         write(s: string): void;
@@ -3141,9 +3141,50 @@ module ts {
                     emitEnd(node);
                     write(";");
                 }
+
+                var checker = program.getTypeChecker(true);
+                var fullName = checker.getFullyQualifiedName(node.symbol);
+                var interfaces: any = {};
+                getImplementedInterfaces(node, interfaces, true);
+                //lark.registerClass(DisplayObject, "lark.DisplayObject", ["lark.IEventEmitter", "lark.sys.Renderable"]);
+                writeLine();
+                write('lark.registerClass(');
+                emit(node.name);
+                write(',"' + fullName + '",');
+                write(JSON.stringify(Object.keys(interfaces)));
+                write(');');
+
                 writeLine();
                 emitTrailingComments(node);
 
+                function getImplementedInterfaces(node: Node, names: any, isClass = true) {
+                    var superInterfaces: Array<TypeReferenceNode> = null;
+                    if (isClass) {
+                        superInterfaces = ts.getClassImplementedTypeNodes(<ClassDeclaration>node);
+                        var superClass = ts.getClassBaseTypeNode(<ClassDeclaration>node);
+                        if (superClass) {
+                            if (superInterfaces) {
+                                superInterfaces = superInterfaces.concat(superClass);
+                            }
+                            else
+                                superInterfaces = [superClass];
+                        }
+                    }
+                    else
+                        superInterfaces = ts.getInterfaceBaseTypeNodes(<InterfaceDeclaration>node);
+                    if (superInterfaces) {
+                        superInterfaces.forEach(sp=> {
+                            var interfaceType = checker.getTypeAtLocation(sp)
+                            if (interfaceType.flags & TypeFlags.Interface) {
+                                var fullname = checker.getFullyQualifiedName(interfaceType.symbol);
+                                names[fullname] = true;
+                            }
+                            if (interfaceType.symbol.declarations) {
+                                interfaceType.symbol.declarations.forEach(d=> getImplementedInterfaces(d, names, !!(interfaceType.flags & TypeFlags.Class)));
+                            }
+                        });
+                    }
+                }
                 function emitConstructorOfClass() {
                     // Emit the constructor overload pinned comments
                     forEach(node.members, member => {
