@@ -46,15 +46,12 @@ module swan.sys {
 
     var hashCount = 0;
 
+    var properties: any = {};
+
     /**
      * @private
      */
     export class EXMLConfig {
-
-        /**
-         * @private
-         */
-        private properties:any = {};
 
         /**
          * @private
@@ -73,7 +70,7 @@ module swan.sys {
             var info:any;
             if(prototype.hasOwnProperty("__hashCode__")){
 
-                info = this.properties[prototype.__hashCode__];
+                info = properties[prototype.__hashCode__];
                 if(info){
                     return info;
                 }
@@ -126,7 +123,7 @@ module swan.sys {
                 info[key] = resultType;
             }
             prototype.__hashCode__ = hashCount++;
-            this.properties[prototype.__hashCode__] = info;
+            properties[prototype.__hashCode__] = info;
             return info;
         }
 
@@ -200,7 +197,7 @@ module swan.sys {
                     }
                     this.describe(instance);
                 }
-                var info = this.properties[prototype.__hashCode__];
+                var info = properties[prototype.__hashCode__];
                 if (info) {
                     resultType = info[property];
                 }
