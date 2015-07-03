@@ -138,7 +138,8 @@ module EXML {
         var length = list.length;
         for (var i = 0; i < length; i++) {
             var arr = list[i];
-            arr[0].call(arr[1],clazz,url);
+            if (arr[0] && arr[1])
+                arr[0].call(arr[1], clazz, url);
         }
     }
 
