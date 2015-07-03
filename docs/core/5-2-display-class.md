@@ -1,7 +1,7 @@
 #Lark Core 编程指南 - 核心显示类
 
 
-Lark中一共封装了8个显示相关的核心类，具体继承结构如下：
+Lark中一共封装了7个显示相关的核心类，一个接口，具体继承结构如下：
 
 ![display class](image/5-2-1.png)
 
@@ -10,7 +10,7 @@ Lark中一共封装了8个显示相关的核心类，具体继承结构如下：
 | DisplayObject          | 显示对象基类，所有显示对象均继承自此类        |
 | Bitmap                 | 位图，用来显示图片                         |
 | Shape                  | 用来显示矢量图，可以使用其中的方法绘制矢量图形 |
-| DisplayObjectContainer | 显示对象容器类基类，所有显示对象容器均继承此类 |
+| DisplayObjectContainer | 显示对象容器接口，所有显示对象容器均继承此类   |
 | Sprite                 | 轻量级显示容器                             |
 | Stage                  | 舞台类                                    |
 | TextField              | 文本类                                    |
