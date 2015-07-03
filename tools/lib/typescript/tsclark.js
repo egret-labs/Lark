@@ -21048,7 +21048,16 @@ var ts;
                 bottomTypes.forEach(function (t) { return t.setOrder(t.order); });
                 fileNodesList.sort(function (a, b) { return compareFileNode(a, b); });
             }
-            orderedFileList = fileNodesList.map(function (f) { return f.name; });
+            orderedFileList = [];
+            for (var i = 0, length = fileNodesList.length, registerClassAdded = false; i < length; i++) {
+                var name = fileNodesList[i].name;
+                if (registerClassAdded == false && name.indexOf('registerClass') > 0) {
+                    orderedFileList.unshift(name);
+                    registerClassAdded = true;
+                }
+                else
+                    orderedFileList.push(name);
+            }
         };
         return TreeGenerator;
     })();
