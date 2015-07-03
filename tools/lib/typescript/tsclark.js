@@ -11096,8 +11096,48 @@ var ts;
                     emitEnd(node);
                     write(";");
                 }
+                var checker = program.getTypeChecker(true);
+                var fullName = checker.getFullyQualifiedName(node.symbol);
+                var interfaces = {};
+                getImplementedInterfaces(node, interfaces, true);
+                //lark.registerClass(DisplayObject, "lark.DisplayObject", ["lark.IEventEmitter", "lark.sys.Renderable"]);
+                writeLine();
+                write('lark.registerClass(');
+                emit(node.name);
+                write(',"' + fullName + '",');
+                write(JSON.stringify(Object.keys(interfaces)));
+                write(');');
                 writeLine();
                 emitTrailingComments(node);
+                function getImplementedInterfaces(node, names, isClass) {
+                    if (isClass === void 0) { isClass = true; }
+                    var superInterfaces = null;
+                    if (isClass) {
+                        superInterfaces = ts.getClassImplementedTypeNodes(node);
+                        var superClass = ts.getClassBaseTypeNode(node);
+                        if (superClass) {
+                            if (superInterfaces) {
+                                superInterfaces = superInterfaces.concat(superClass);
+                            }
+                            else
+                                superInterfaces = [superClass];
+                        }
+                    }
+                    else
+                        superInterfaces = ts.getInterfaceBaseTypeNodes(node);
+                    if (superInterfaces) {
+                        superInterfaces.forEach(function (sp) {
+                            var interfaceType = checker.getTypeAtLocation(sp);
+                            if (interfaceType.flags & 2048 /* Interface */) {
+                                var fullname = checker.getFullyQualifiedName(interfaceType.symbol);
+                                names[fullname] = true;
+                            }
+                            if (interfaceType.symbol.declarations) {
+                                interfaceType.symbol.declarations.forEach(function (d) { return getImplementedInterfaces(d, names, !!(interfaceType.flags & 1024 /* Class */)); });
+                            }
+                        });
+                    }
+                }
                 function emitConstructorOfClass() {
                     // Emit the constructor overload pinned comments
                     ts.forEach(node.members, function (member) {
