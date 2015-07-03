@@ -43,7 +43,7 @@ module lark {
      * on the ancestor node with the type parameter set to the specific touch event you want to detect.
      *
      * @version Lark 1.0
-     * @platform Web,Runtime,Native
+     * @platform Web,Native
      */
     /**
      * @language zh_CN
@@ -55,7 +55,7 @@ module lark {
      * 接收触摸事件的通知，请对祖代节点使用 EventEmitter.on() 并将 type 参数设置为要检测的特定触摸事件。
      *
      * @version Lark 1.0
-     * @platform Web,Runtime,Native
+     * @platform Web,Native
      */
     export class TouchEvent extends Event {
 
@@ -63,13 +63,13 @@ module lark {
          * @language en_US
          * Emitted when the user touches the device, and is continuously emitted until the point of contact is removed.
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 当用户触碰设备时进行调度，而且会连续调度，直到接触点被删除。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         public static TOUCH_MOVE:string = "touchMove";
 
@@ -77,13 +77,13 @@ module lark {
          * @language en_US
          * Emitted when the user first contacts a touch-enabled device (such as touches a finger to a mobile phone or tablet with a touch screen).
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 当用户第一次触摸启用触摸的设备时（例如，用手指触摸配有触摸屏的移动电话或平板电脑）调度。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         public static TOUCH_BEGIN:string = "touchBegin";
 
@@ -92,13 +92,13 @@ module lark {
          * Emitted when the user removes contact with a touch-enabled device (such as lifts a finger off a mobile phone
          * or tablet with a touch screen).
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 当用户移除与启用触摸的设备的接触时（例如，将手指从配有触摸屏的移动电话或平板电脑上抬起）调度。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         public static TOUCH_END:string = "touchEnd";
 
@@ -107,13 +107,13 @@ module lark {
          * Emitted when the user lifts the point of contact over the same DisplayObject instance on which the contact
          * was initiated on a touch-enabled device.
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 当用户在触摸设备上与开始触摸的同一 DisplayObject 实例上抬起接触点时调度。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         public static TOUCH_TAP:string = "touchTap";
         /**
@@ -122,13 +122,13 @@ module lark {
          * was initiated on a touch-enabled device (such as presses and releases a finger from a single point over a display
          * object on a mobile phone or tablet with a touch screen).
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 当用户在触摸设备上与开始触摸的不同 DisplayObject 实例上抬起接触点时调度。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         public static TOUCH_RELEASE_OUTSIDE:string = "touchReleaseOutside";
 
@@ -142,7 +142,7 @@ module lark {
          * @param stageY The vertical coordinate at which the event occurred in global Stage coordinates.
          * @param touchPointID A unique identification number assigned to the touch point.
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
@@ -154,7 +154,7 @@ module lark {
          * @param stageY 事件发生点在全局舞台坐标系中的垂直坐标
          * @param touchPointID 分配给触摸点的唯一标识号
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         public constructor(type:string, bubbles?:boolean, cancelable?:boolean, stageX?:number,
                            stageY?:number, touchPointID?:number) {
@@ -180,13 +180,13 @@ module lark {
          * @language en_US
          * The horizontal coordinate at which the event occurred in global Stage coordinates.
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 事件发生点在全局舞台坐标中的水平坐标。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         public get stageX():number {
             return this.$stageX;
@@ -201,13 +201,13 @@ module lark {
          * @language en_US
          * The vertical coordinate at which the event occurred in global Stage coordinates.
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 事件发生点在全局舞台坐标中的垂直坐标。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         public get stageY():number {
             return this.$stageY;
@@ -234,13 +234,13 @@ module lark {
          * @language en_US
          * The horizontal coordinate at which the event occurred relative to the display object.
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 事件发生点相对于所属显示对象的水平坐标。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         public get localX():number {
             return this.getLocalXY().x;
@@ -250,13 +250,13 @@ module lark {
          * @language en_US
          * The vertical coordinate at which the event occurred relative to the display object.
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 事件发生点相对于所属显示对象的垂直坐标。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         public get localY():number {
             return this.getLocalXY().y;
@@ -266,13 +266,13 @@ module lark {
          * @language en_US
          * A unique identification number assigned to the touch point.
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 分配给触摸点的唯一标识号
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         public touchPointID:number;
 
@@ -308,7 +308,7 @@ module lark {
          * @see lark.Event.release()
          *
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
@@ -325,7 +325,7 @@ module lark {
          * @see lark.Event.release()
          *
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         public static emitTouchEvent(target:IEventEmitter, type:string, bubbles?:boolean, cancelable?:boolean,
                                      stageX?:number, stageY?:number, touchPointID?:number):boolean {
