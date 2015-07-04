@@ -15,54 +15,18 @@
 
 在 Lark 事件模型中，事件侦听器和侦听器函数之间没有区别。Lark 没有 EventListener 接口，侦听器函数可以在类外部定义，也可以定义为类的一部分。此外，无需将侦听器函数命名为 handleEvent() ─ 可以将它们命名为任何有效的标识符。在 Lark 中，您注册的是实际侦听器函数的名称。
 
-在类外部定义的侦听器函数
-以下代码创建一个显示红色正方形的简单 Lark 应用。名为 touchHandler() 的侦听器函数（不是类的一部分）侦听红色正方形上的鼠标单击事件。
-
-package example {
-    public class ClickExample extends lark.Sprite {
-        public function ClickExample() {
-            var child:ChildSprite = new ChildSprite();
-            addChild(child);
-        }
-    }
-}
-
-class ChildSprite extends Sprite{
-    public function ChildSprite() {
-        this.graphics.beginFill(0xFF0000);
-        this.graphics.drawRect(0,0,100,100);
-        this.graphics.endFill();
-        on(TouchEvent.TOUCH_TAP, touchHandler);
-    }
-}
-
-function touchHandler(event:TouchEvent):void{
-    trace("touchHandler detected an event of type: " + event.type);
-    trace("the this keyword refers to: " + this);
-}
-
-
-当用户通过单击正方形与生成的 Lark应用交互时，Lark 生成以下跟踪输出：
-
-touchHandler detected an event of type: click
-the this keyword refers to: [object global]
-
-
-请注意，事件对象作为参数传递到 touchHandler()。这就允许您的侦听器函数检查事件对象。在该示例中，使用事件对象的 type 属性来确定该事件是否为单击事件。
-
-该示例还检查 this 关键字的值。在本例中，this 表示全局对象，这是因为函数是在任何自定义类或对象外部定义的。
-
 ##### 定义为类方法的侦听器函数
 下面的示例与前面定义 ClickExample 类的示例相同，只是将 touchHandler() 函数定义为 ChildSprite 类的方法： 
 
-
+```
 public class ClickExample extends Sprite {
      public function ClickExample() {
          var child:ChildSprite = new ChildSprite();
          addChild(child);
      }
 }
-
+```
+```
 class ChildSprite extends Sprite{
     public function ChildSprite() {
         this.graphics.beginFill(0xFF0000);
@@ -75,7 +39,7 @@ class ChildSprite extends Sprite{
         trace("the this keyword refers to: " + this);
     }
 }
-
+```
 
 当用户通过单击红色正方形与生成的 Lark应用交互时，Lark 生成以下跟踪输出：
 
@@ -89,7 +53,7 @@ the this keyword refers to: [object ChildSprite]
 
 #### 管理事件侦听器
 使用 IEventEmitter 接口的方法来管理侦听器函数。IEventEmitter 接口是 ActionScript 3.0 版本的 DOM 事件模型的 EventTarget 接口。虽然名称 IEventEmitter 似乎暗示着其主要用途是发送（调度）事件对象，但该类的方法实际上更多用于注册、检查和删除事件侦听器。IEventEmitter 接口定义五个方法，如以下代码中所示：
-
+```
 module lark {
     export interface IEventEmitter extends LarkObject{
     
@@ -110,7 +74,7 @@ module lark {
         willTrigger(type:string):boolean;
     }
 }
-
+```
 
 Lark API 使用 EventDispatcher 类来实现 IEventEmitter 接口，该类用作可以是事件目标或事件流一部分的所有类的基类。例如，DisplayObject 类继承自 EventDispatcher 类。这意味着，显示列表中的所有对象都可以访问 IEventEmitter 接口的方法。
 
