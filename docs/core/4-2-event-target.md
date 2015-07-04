@@ -11,7 +11,7 @@
 
 [了解 Event 类属性](#event-props)
 [了解 Event 类方法](#event-methods)
-[Event 类的子类](#event-subclass)
+[Event 类的子类](#event-subclass)   
 
 <a name="event-props"/>
 
@@ -23,9 +23,9 @@ Event 类定义许多只读属性和常数，以提供有关事件对象的重�
 * 事件流信息包含在其余属性中。
 
 ##### 事件对象类型
-每个事件对象都有关联的事件类型。数据类型以字符串值的形式存储在 Event.type 属性中。知道事件对象的类型是非常有用的，这样您的代码就可以区分不同类型的事件。例如，下面的代码指定 clickHandler() 侦听器函数应响应传递给 myDisplayObject 的任何鼠标单击事件对象。
+每个事件对象都有关联的事件类型。数据类型以字符串值的形式存储在 Event.type 属性中。知道事件对象的类型是非常有用的，这样您的代码就可以区分不同类型的事件。例如，下面的代码指定 clickHandler() 侦听器函数应响应传递给 myDisplayObject 的任何轻触事件对象。
 ```
-myDisplayObject.addEventListener(MouseEvent.CLICK, clickHandler);
+myDisplayObject.addEventListener(TouchEvent.TouchTap tapHandler);
 ```
 
 大约有 20 多种事件类型与 Event 类自身关联并由 Event 类常数表示，其中某些数据类型显示在摘自 Event 类定义的以下代码中：
@@ -67,11 +67,11 @@ myDisplayObject.addEventListener("click", clickHandler);
 ##### eventPhase 属性
 您可以通过调查任何事件对象的 eventPhase 属性来确定事件阶段。eventPhase 属性包含一个无符号整数值，该值代表三个事件流阶段中的一个阶段。Flash Player API 定义了单独的 EventPhase 类，该类包含三个对应于三个无符号整数值的常量，如以下摘录代码中所示：
 ```
-package flash.events{
-    public final class EventPhase{
-        public static const CAPTURING_PHASE:uint = 1;
-        public static const AT_TARGET:uint       = 2;
-        public static const BUBBLING_PHASE:uint  = 3;
+module lark{
+    export const enum EventPhase{
+        CAPTURING_PHASE = 1;
+        AT_TARGET = 2;
+        BUBBLING_PHASE = 3;
     }
 }
 ```
