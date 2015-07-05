@@ -5,7 +5,7 @@
 在Lark中需要派发事件时，可以非常方便地使用Event.create()和Event.release() 这一对方法来创建和释放事件对象， 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。   
  注意：若使用此方法来创建自定义事件的实例，自定义的构造函数参数列表必须跟Event类一致。      
  事件派发的过程通常如下：   
- ```
+ ``` TypeScript
  var event = Event.create(Event,type, bubbles);
  event.data = data;  //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
  this.emit(event);

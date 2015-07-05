@@ -18,7 +18,7 @@
 ##### 定义为类方法的侦听器函数
 下面的示例与前面定义 ClickExample 类的示例相同，只是将 touchHandler() 函数定义为 ChildSprite 类的方法： 
 
-```
+``` TypeScript
 public class ClickExample extends Sprite {
      public function ClickExample() {
          var child:ChildSprite = new ChildSprite();
@@ -26,7 +26,7 @@ public class ClickExample extends Sprite {
      }
 }
 ```
-```
+``` TypeScript
 class ChildSprite extends Sprite{
     public function ChildSprite() {
         this.graphics.beginFill(0xFF0000);
@@ -53,7 +53,7 @@ the this keyword refers to: [object ChildSprite]
 
 #### 管理事件侦听器
 使用 IEventEmitter 接口的方法来管理侦听器函数。IEventEmitter 接口是 ActionScript 3.0 版本的 DOM 事件模型的 EventTarget 接口。虽然名称 IEventEmitter 似乎暗示着其主要用途是发送（调度）事件对象，但该类的方法实际上更多用于注册、检查和删除事件侦听器。IEventEmitter 接口定义五个方法，如以下代码中所示：
-```
+``` TypeScript
 module lark {
     export interface IEventEmitter extends LarkObject{
     
