@@ -11112,17 +11112,8 @@ var ts;
                 function getImplementedInterfaces(node, names, isClass) {
                     if (isClass === void 0) { isClass = true; }
                     var superInterfaces = null;
-                    if (isClass) {
+                    if (isClass)
                         superInterfaces = ts.getClassImplementedTypeNodes(node);
-                        var superClass = ts.getClassBaseTypeNode(node);
-                        if (superClass) {
-                            if (superInterfaces) {
-                                superInterfaces = superInterfaces.concat(superClass);
-                            }
-                            else
-                                superInterfaces = [superClass];
-                        }
-                    }
                     else
                         superInterfaces = ts.getInterfaceBaseTypeNodes(node);
                     if (superInterfaces) {
@@ -11131,9 +11122,9 @@ var ts;
                             if (interfaceType.flags & 2048 /* Interface */) {
                                 var fullname = checker.getFullyQualifiedName(interfaceType.symbol);
                                 names[fullname] = true;
-                            }
-                            if (interfaceType.symbol.declarations) {
-                                interfaceType.symbol.declarations.forEach(function (d) { return getImplementedInterfaces(d, names, !!(interfaceType.flags & 1024 /* Class */)); });
+                                if (interfaceType.symbol.declarations) {
+                                    interfaceType.symbol.declarations.forEach(function (d) { return getImplementedInterfaces(d, names, !!(interfaceType.flags & 1024 /* Class */)); });
+                                }
                             }
                         });
                     }
