@@ -11104,8 +11104,12 @@ var ts;
                 writeLine();
                 write('lark.registerClass(');
                 emit(node.name);
-                write(',"' + fullName + '",');
-                write(JSON.stringify(Object.keys(interfaces)));
+                write(',"' + fullName + '"');
+                var interfacesArray = Object.keys(interfaces);
+                if (interfacesArray.length > 0) {
+                    write(',');
+                    write(JSON.stringify(interfacesArray));
+                }
                 write(');');
                 writeLine();
                 emitTrailingComments(node);
@@ -21048,6 +21052,13 @@ var ts;
                 }
                 else
                     orderedFileList.push(name);
+            }
+            for (var i = 0, length = orderedFileList.length; i < length; i++) {
+                var name = orderedFileList[i];
+                if (name.indexOf('Defines.debug.ts') > 0) {
+                    orderedFileList.splice(i, 1);
+                    orderedFileList.unshift(name);
+                }
             }
         };
         return TreeGenerator;

@@ -3150,8 +3150,12 @@ module ts {
                 writeLine();
                 write('lark.registerClass(');
                 emit(node.name);
-                write(',"' + fullName + '",');
-                write(JSON.stringify(Object.keys(interfaces)));
+                write(',"' + fullName + '"');
+                var interfacesArray = Object.keys(interfaces);
+                if (interfacesArray.length > 0) {
+                    write(',');
+                    write(JSON.stringify(interfacesArray));
+                }
                 write(');');
 
                 writeLine();
