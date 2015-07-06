@@ -80,7 +80,7 @@ module swan {
 
         /**
          * @language en_US
-         * [read-only]The layout object for this container.
+         * The layout object for this container.
          * This object is responsible for the measurement and layout of
          * the visual elements in the container.
          *
@@ -92,7 +92,7 @@ module swan {
          */
         /**
          * @language zh_CN
-         * [只读]此容器的 layout 对象。此对象负责容器中可视元素的测量和布局。
+         * 此容器的 layout 对象。此对象负责容器中可视元素的测量和布局。
          *
          * @default swan.BasicLayout
          *

@@ -212,14 +212,14 @@ module swan {
 
         /**
          * @language en_US
-         * [read-only] The instance of the skin class for this component instance.
+         * The instance of the skin class for this component instance.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [只读]皮肤对象实例。
+         * 皮肤对象实例。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native

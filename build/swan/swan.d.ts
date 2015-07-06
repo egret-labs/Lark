@@ -357,7 +357,7 @@ declare module swan {
     interface ICollection extends lark.IEventEmitter {
         /**
          * @language en_US
-         * [read-only] The number of items in this view.
+         * The number of items in this view.
          * 0 means no items, while -1 means that the length is unknown.
          * @version Lark 1.0
          * @version Swan 1.0
@@ -365,7 +365,7 @@ declare module swan {
          */
         /**
          * @language zh_CN
-         * [只读] 此集合中的项目数。0 表示不包含项目。
+         *  此集合中的项目数。0 表示不包含项目。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -3301,7 +3301,7 @@ declare module swan {
          */
         /**
          * @language zh_CN
-         * [只读] 属于此 RadioButtonGroup 的 RadioButton 数。
+         *  属于此 RadioButtonGroup 的 RadioButton 数。
          *
          * @default 0
          *
@@ -4530,7 +4530,7 @@ declare module swan {
         private _columnCount;
         /**
          * @language en_US
-         * [read-only]Contain the actual column count.
+         * Contain the actual column count.
          *
          * @default -1
          *
@@ -4540,7 +4540,7 @@ declare module swan {
          */
         /**
          * @language zh_CN
-         * [只读] 实际列计数。
+         *  实际列计数。
          *
          * @default -1
          *
@@ -4589,7 +4589,7 @@ declare module swan {
         private _rowCount;
         /**
          * @language en_US
-         * [read-only] The row count.
+         * The row count.
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4597,7 +4597,7 @@ declare module swan {
          */
         /**
          * @language zh_CN
-         * [只读] 行计数。
+         *  行计数。
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -8039,14 +8039,14 @@ declare module swan {
         private onExmlLoaded(clazz, url);
         /**
          * @language en_US
-         * [read-only] The instance of the skin class for this component instance.
+         * The instance of the skin class for this component instance.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [只读]皮肤对象实例。
+         * 皮肤对象实例。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -10705,7 +10705,7 @@ declare module swan {
         constructor();
         /**
          * @language en_US
-         * [read-only]The layout object for this container.
+         * The layout object for this container.
          * This object is responsible for the measurement and layout of
          * the visual elements in the container.
          *
@@ -10717,7 +10717,7 @@ declare module swan {
          */
         /**
          * @language zh_CN
-         * [只读]此容器的 layout 对象。此对象负责容器中可视元素的测量和布局。
+         * 此容器的 layout 对象。此对象负责容器中可视元素的测量和布局。
          *
          * @default swan.BasicLayout
          *

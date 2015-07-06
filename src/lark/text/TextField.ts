@@ -525,14 +525,14 @@ module lark {
         private textLines:string[] = [];
         /**
          * @language en_US
-         * [read-only] Defines the number of text lines in a multiline text field. If wordWrap property is set to true, the number of
+         * Defines the number of text lines in a multiline text field. If wordWrap property is set to true, the number of
          * lines increases when text wraps.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [只读] 定义多行文本字段中的文本行数。如果 wordWrap 属性设置为 true，则在文本自动换行时会增加行数。
+         *  定义多行文本字段中的文本行数。如果 wordWrap 属性设置为 true，则在文本自动换行时会增加行数。
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -542,13 +542,13 @@ module lark {
 
         /**
          * @language en_US
-         * [read-only] The width of the text in pixels.
+         * The width of the text in pixels.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [只读] 文本内容宽度
+         *  文本内容宽度
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -559,13 +559,13 @@ module lark {
 
         /**
          * @language en_US
-         * [read-only] The height of the text in pixels.
+         * The height of the text in pixels.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [只读] 文本内容高度
+         *  文本内容高度
          * @version Lark 1.0
          * @platform Web,Native
          */

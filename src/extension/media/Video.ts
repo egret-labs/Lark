@@ -145,7 +145,7 @@ module lark {
 
         /**
          * @language en_US
-         * [read-only]Get bitmapData of the video file, you can use the video as bitmapData on the stage.
+         * Get bitmapData of the video file, you can use the video as bitmapData on the stage.
          * Note: On most mobile device, the video is playback in the full screen mode.
          * So you can just use the play() method instead of draw it on the Stage
          * @version Lark 1.0
@@ -153,7 +153,7 @@ module lark {
          */
         /**
          * @language zh_CN
-         * [只读] 获取视频的 bitmapData, 你可以将视频绘制到舞台上。
+         *  获取视频的 bitmapData, 你可以将视频绘制到舞台上。
          * 注意： 在大多数移动设备中，视频是全屏播放的，所以你可以直接调用 play() 方法全屏播放视频，不用将它绘制在Stage中。
          * @version Lark 1.0
          * @platform Web,Native

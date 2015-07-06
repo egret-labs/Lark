@@ -168,7 +168,7 @@ module swan {
         private _columnCount:number = -1;
         /**
          * @language en_US
-         * [read-only]Contain the actual column count.
+         * Contain the actual column count.
          *
          * @default -1
          *
@@ -178,7 +178,7 @@ module swan {
          */
         /**
          * @language zh_CN
-         * [只读] 实际列计数。
+         *  实际列计数。
          *
          * @default -1
          *
@@ -243,7 +243,7 @@ module swan {
         private _rowCount:number = -1;
         /**
          * @language en_US
-         * [read-only] The row count.
+         * The row count.
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -251,7 +251,7 @@ module swan {
          */
         /**
          * @language zh_CN
-         * [只读] 行计数。
+         *  行计数。
          *
          * @version Lark 1.0
          * @version Swan 1.0

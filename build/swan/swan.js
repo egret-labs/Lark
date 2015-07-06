@@ -4617,7 +4617,7 @@ var swan;
              */
             /**
              * @language zh_CN
-             * [只读] 属于此 RadioButtonGroup 的 RadioButton 数。
+             *  属于此 RadioButtonGroup 的 RadioButton 数。
              *
              * @default 0
              *
@@ -8662,7 +8662,7 @@ var swan;
         d(p, "columnCount",
             /**
              * @language en_US
-             * [read-only]Contain the actual column count.
+             * Contain the actual column count.
              *
              * @default -1
              *
@@ -8672,7 +8672,7 @@ var swan;
              */
             /**
              * @language zh_CN
-             * [只读] 实际列计数。
+             *  实际列计数。
              *
              * @default -1
              *
@@ -8729,7 +8729,7 @@ var swan;
         d(p, "rowCount",
             /**
              * @language en_US
-             * [read-only] The row count.
+             * The row count.
              *
              * @version Lark 1.0
              * @version Swan 1.0
@@ -8737,7 +8737,7 @@ var swan;
              */
             /**
              * @language zh_CN
-             * [只读] 行计数。
+             *  行计数。
              *
              * @version Lark 1.0
              * @version Swan 1.0
@@ -13306,14 +13306,14 @@ var swan;
         d(p, "skin",
             /**
              * @language en_US
-             * [read-only] The instance of the skin class for this component instance.
+             * The instance of the skin class for this component instance.
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * [只读]皮肤对象实例。
+             * 皮肤对象实例。
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
@@ -17866,7 +17866,7 @@ var swan;
         d(p, "layout",
             /**
              * @language en_US
-             * [read-only]The layout object for this container.
+             * The layout object for this container.
              * This object is responsible for the measurement and layout of
              * the visual elements in the container.
              *
@@ -17878,7 +17878,7 @@ var swan;
              */
             /**
              * @language zh_CN
-             * [只读]此容器的 layout 对象。此对象负责容器中可视元素的测量和布局。
+             * 此容器的 layout 对象。此对象负责容器中可视元素的测量和布局。
              *
              * @default swan.BasicLayout
              *

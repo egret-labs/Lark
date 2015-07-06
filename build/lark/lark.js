@@ -3164,13 +3164,13 @@ var lark;
         d(p, "length",
             /**
              * @language en_US
-             * [read-only] The length of the line segment from (0,0) to this point.
+             * The length of the line segment from (0,0) to this point.
              * @version Lark 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * [只读] 从 (0,0) 到此点的线段长度。
+             *  从 (0,0) 到此点的线段长度。
              * @version Lark 1.0
              * @platform Web,Native
              */
@@ -4272,13 +4272,13 @@ var lark;
         d(p, "type",
             /**
              * @language en_US
-             * [read-only] The type of event. The type is case-sensitive.
+             * The type of event. The type is case-sensitive.
              * @version Lark 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * [只读] 事件的类型。类型区分大小写。
+             *  事件的类型。类型区分大小写。
              * @version Lark 1.0
              * @platform Web,Native
              */
@@ -4289,13 +4289,13 @@ var lark;
         d(p, "bubbles",
             /**
              * @language en_US
-             * [read-only] Indicates whether an event is a bubbling event.
+             * Indicates whether an event is a bubbling event.
              * @version Lark 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * [只读] 表示事件是否为冒泡事件。如果事件可以冒泡，则此值为 true；否则为 false。
+             *  表示事件是否为冒泡事件。如果事件可以冒泡，则此值为 true；否则为 false。
              * @version Lark 1.0
              * @platform Web,Native
              */
@@ -4306,7 +4306,7 @@ var lark;
         d(p, "cancelable",
             /**
              * @language en_US
-             * [read-only] Indicates whether the behavior associated with the event can be prevented. If the behavior can be
+             * Indicates whether the behavior associated with the event can be prevented. If the behavior can be
              * canceled, this value is true; otherwise it is false.
              * @see #preventDefault()
              * @version Lark 1.0
@@ -4314,7 +4314,7 @@ var lark;
              */
             /**
              * @language zh_CN
-             * [只读] 表示是否可以阻止与事件相关联的行为。如果可以取消该行为，则此值为 true；否则为 false。
+             *  表示是否可以阻止与事件相关联的行为。如果可以取消该行为，则此值为 true；否则为 false。
              * @see #preventDefault()
              * @version Lark 1.0
              * @platform Web,Native
@@ -4326,7 +4326,7 @@ var lark;
         d(p, "eventPhase",
             /**
              * @language en_US
-             * [read-only] The current phase in the event flow. This property can contain the following numeric values:
+             * The current phase in the event flow. This property can contain the following numeric values:
              * The capture phase (EventPhase.CAPTURING_PHASE).
              * The target phase (EventPhase.AT_TARGET)
              * The bubbling phase (EventPhase.BUBBLING_PHASE).
@@ -4336,7 +4336,7 @@ var lark;
              */
             /**
              * @language zh_CN
-             * [只读] 事件流中的当前阶段。此属性可以包含以下数值：
+             *  事件流中的当前阶段。此属性可以包含以下数值：
              * 捕获阶段 (EventPhase.CAPTURING_PHASE)。
              * 目标阶段 (EventPhase.AT_TARGET)。
              * 冒泡阶段 (EventPhase.BUBBLING_PHASE)。
@@ -4351,7 +4351,7 @@ var lark;
         d(p, "currentTarget",
             /**
              * @language en_US
-             * [read-only] The object that is actively processing the Event object with an event listener. For example, if a
+             * The object that is actively processing the Event object with an event listener. For example, if a
              * user clicks an OK button, the current target could be the node containing that button or one of its ancestors
              * that has registered an event listener for that event.
              * @version Lark 1.0
@@ -4359,7 +4359,7 @@ var lark;
              */
             /**
              * @language zh_CN
-             * [只读] 当前正在使用某个事件侦听器处理 Event 对象的对象。例如，如果用户单击“确定”按钮，
+             *  当前正在使用某个事件侦听器处理 Event 对象的对象。例如，如果用户单击“确定”按钮，
              * 则当前目标可以是包含该按钮的节点，也可以是它的已为该事件注册了事件侦听器的始祖之一。
              * @version Lark 1.0
              * @platform Web,Native
@@ -4371,14 +4371,14 @@ var lark;
         d(p, "target",
             /**
              * @language en_US
-             * [read-only] The event target. This property contains the target node. For example, if a user clicks an OK button,
+             * The event target. This property contains the target node. For example, if a user clicks an OK button,
              * the target node is the display list node containing that button.
              * @version Lark 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * [只读] 事件目标。此属性包含目标节点。例如，如果用户单击“确定”按钮，则目标节点就是包含该按钮的显示列表节点。
+             *  事件目标。此属性包含目标节点。例如，如果用户单击“确定”按钮，则目标节点就是包含该按钮的显示列表节点。
              * @version Lark 1.0
              * @platform Web,Native
              */
@@ -8600,13 +8600,13 @@ var lark;
         d(p, "graphics",
             /**
              * @language en_US
-             * [read-only] Specifies the Graphics object belonging to this Shape object, where vector drawing commands can occur.
+             * Specifies the Graphics object belonging to this Shape object, where vector drawing commands can occur.
              * @version Lark 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * [只读] 获取 Shape 中的 Graphics 对象。可通过此对象执行矢量绘图命令。
+             *  获取 Shape 中的 Graphics 对象。可通过此对象执行矢量绘图命令。
              * @version Lark 1.0
              * @platform Web,Native
              */
@@ -9836,14 +9836,14 @@ var lark;
         d(p, "numLines",
             /**
              * @language en_US
-             * [read-only] Defines the number of text lines in a multiline text field. If wordWrap property is set to true, the number of
+             * Defines the number of text lines in a multiline text field. If wordWrap property is set to true, the number of
              * lines increases when text wraps.
              * @version Lark 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * [只读] 定义多行文本字段中的文本行数。如果 wordWrap 属性设置为 true，则在文本自动换行时会增加行数。
+             *  定义多行文本字段中的文本行数。如果 wordWrap 属性设置为 true，则在文本自动换行时会增加行数。
              * @version Lark 1.0
              * @platform Web,Native
              */
@@ -9854,13 +9854,13 @@ var lark;
         d(p, "textWidth",
             /**
              * @language en_US
-             * [read-only] The width of the text in pixels.
+             * The width of the text in pixels.
              * @version Lark 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * [只读] 文本内容宽度
+             *  文本内容宽度
              * @version Lark 1.0
              * @platform Web,Native
              */
@@ -9872,13 +9872,13 @@ var lark;
         d(p, "textHeight",
             /**
              * @language en_US
-             * [read-only] The height of the text in pixels.
+             * The height of the text in pixels.
              * @version Lark 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * [只读] 文本内容高度
+             *  文本内容高度
              * @version Lark 1.0
              * @platform Web,Native
              */
