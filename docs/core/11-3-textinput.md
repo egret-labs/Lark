@@ -14,6 +14,14 @@ this.addChild( txt );
 
 运行后效果如图：
 
-![textField](image/11-3-1.png)
+PC端
+
+![textField](image/11-4-1.png)
+
+移动端
+
+![textField](image/11-4-2.jpg)
+
+`lark.TextField` 实例在接受用户点击或者用户触摸时，会自动切换到输入状态。
 
 由于输入文本涉及到用户输入操作，所以在 `lark.TextInput` 中还封装了几个实用的方法用来处理文本的选择操作，请参考下一小结。
