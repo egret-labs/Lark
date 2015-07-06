@@ -3159,17 +3159,8 @@ module ts {
 
                 function getImplementedInterfaces(node: Node, names: any, isClass = true) {
                     var superInterfaces: Array<TypeReferenceNode> = null;
-                    if (isClass) {
+                    if (isClass)
                         superInterfaces = ts.getClassImplementedTypeNodes(<ClassDeclaration>node);
-                        var superClass = ts.getClassBaseTypeNode(<ClassDeclaration>node);
-                        if (superClass) {
-                            if (superInterfaces) {
-                                superInterfaces = superInterfaces.concat(superClass);
-                            }
-                            else
-                                superInterfaces = [superClass];
-                        }
-                    }
                     else
                         superInterfaces = ts.getInterfaceBaseTypeNodes(<InterfaceDeclaration>node);
                     if (superInterfaces) {
@@ -3178,9 +3169,9 @@ module ts {
                             if (interfaceType.flags & TypeFlags.Interface) {
                                 var fullname = checker.getFullyQualifiedName(interfaceType.symbol);
                                 names[fullname] = true;
-                            }
-                            if (interfaceType.symbol.declarations) {
-                                interfaceType.symbol.declarations.forEach(d=> getImplementedInterfaces(d, names, !!(interfaceType.flags & TypeFlags.Class)));
+                                if (interfaceType.symbol.declarations) {
+                                    interfaceType.symbol.declarations.forEach(d=> getImplementedInterfaces(d, names, !!(interfaceType.flags & TypeFlags.Class)));
+                                }
                             }
                         });
                     }
