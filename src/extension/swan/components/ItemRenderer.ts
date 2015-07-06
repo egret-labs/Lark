@@ -230,5 +230,4 @@ module swan {
     }
 
     registerBindable(ItemRenderer.prototype, "data");
-    lark.registerClass(ItemRenderer, Types.ItemRenderer, [Types.IItemRenderer])
 }

@@ -112,5 +112,4 @@ module swan {
         }
     }
 
-    lark.registerClass(VScrollBar, Types.VScrollBar);
 }

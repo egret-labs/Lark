@@ -967,8 +967,6 @@ module lark {
         }
     }
 
-    registerClass(Graphics, Types.Graphics);
-
     function mapGraphicsFunction(context:sys.RenderContext):any {
         var map = context["graphicsMap"] = {};
         map[sys.GraphicsCommandType.arc] = context.arc;

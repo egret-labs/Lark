@@ -510,5 +510,4 @@ module swan {
 
     sys.implementUIComponent(Label, lark.TextField);
     registerBindable(Label.prototype,"text");
-    lark.registerClass(Label, Types.Label, [Types.UIComponent]);
 }

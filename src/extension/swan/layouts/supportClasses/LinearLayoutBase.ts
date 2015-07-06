@@ -811,7 +811,6 @@ module swan {
         }
     }
 
-    lark.registerClass(LinearLayoutBase,Types.LinearLayoutBase);
 }
 
 module swan.sys {

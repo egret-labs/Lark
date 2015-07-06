@@ -236,8 +236,6 @@ module lark {
 
     }
 
-    registerClass(Point,Types.Point);
-
     if(DEBUG){
         $markReadOnly(Point.prototype,"length")
     }

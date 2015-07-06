@@ -530,12 +530,5 @@ module swan {
         }
     }
 
-    /**
-     * @private
-     */
     registerBindable(Range.prototype,"value");
-    /**
-     * @private
-     */
-    lark.registerClass(Range,Types.Range);
 }

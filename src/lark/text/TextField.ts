@@ -862,7 +862,6 @@ module lark {
         return index == 0 ? 1 : index;
     }
 
-    registerClass(TextField, Types.TextField);
 }
 
 

@@ -105,6 +105,7 @@ var lark;
         return GeolocationEvent;
     })(lark.Event);
     lark.GeolocationEvent = GeolocationEvent;
+    lark.registerClass(GeolocationEvent,"lark.GeolocationEvent");
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -161,6 +162,7 @@ var lark;
         return MotionEvent;
     })(lark.Event);
     lark.MotionEvent = MotionEvent;
+    lark.registerClass(MotionEvent,"lark.MotionEvent");
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -217,6 +219,7 @@ var lark;
         return OrientationEvent;
     })(lark.Event);
     lark.OrientationEvent = OrientationEvent;
+    lark.registerClass(OrientationEvent,"lark.OrientationEvent");
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //

@@ -30,6 +30,8 @@
 
 module swan {
 
+    var UIComponentClass = "swan.UIComponent";
+    
     /**
      * @language en_US
      * The TileLayout class arranges layout elements in columns and rows
@@ -823,7 +825,7 @@ module swan {
             var count = numElements;
             for (var index = 0; index < count; index++) {
                 var layoutElement = <UIComponent> (target.getElementAt(index));
-                if (!lark.is(layoutElement, Types.UIComponent) || !layoutElement.$includeInLayout) {
+                if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
                     numElements--;
                     continue;
                 }
@@ -946,7 +948,7 @@ module swan {
             if ((startIndex != -1) && (endIndex != -1)) {
                 for (var index = startIndex; index <= endIndex; index++) {
                     var elt = <UIComponent> target.getElementAt(index);
-                    if (!lark.is(elt, Types.UIComponent) || !elt.$includeInLayout) {
+                    if (!lark.is(elt, UIComponentClass) || !elt.$includeInLayout) {
                         continue;
                     }
                     elt.getPreferredBounds(bounds);
@@ -1130,7 +1132,7 @@ module swan {
             for (var i = this.startIndex; i <= endIndex; i++) {
                 if (this.$useVirtualLayout)
                     elt = <UIComponent> target.getElementAt(i);
-                if (!lark.is(elt, Types.UIComponent) || !elt.$includeInLayout) {
+                if (!lark.is(elt, UIComponentClass) || !elt.$includeInLayout) {
                     continue;
                 }
 
@@ -1252,8 +1254,6 @@ module swan {
             }
         }
     }
-
-    lark.registerClass(TileLayout,Types.TileLayout);
 
 
     if(DEBUG){

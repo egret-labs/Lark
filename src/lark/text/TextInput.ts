@@ -346,5 +346,4 @@ module lark {
         }
     }
 
-    registerClass(TextInput, Types.TextInput);
 }

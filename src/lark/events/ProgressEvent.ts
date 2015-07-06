@@ -149,5 +149,4 @@ module lark {
         }
     }
 
-    registerClass(ProgressEvent, Types.ProgressEvent);
 }

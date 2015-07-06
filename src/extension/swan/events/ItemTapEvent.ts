@@ -159,5 +159,4 @@ module swan {
         }
     }
 
-    lark.registerClass(ItemTapEvent, Types.ItemTapEvent);
 }

@@ -169,5 +169,4 @@ module lark {
         }
     }
 
-    registerClass(Bitmap,Types.Bitmap);
 }

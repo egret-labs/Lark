@@ -671,8 +671,6 @@ module lark {
 
     }
 
-    registerClass(Event, Types.Event);
-
     if (DEBUG) {
         lark.$markReadOnly(Event.prototype, "type");
         lark.$markReadOnly(Event.prototype, "bubbles");

@@ -243,7 +243,7 @@ module swan {
          * @platform Web,Native
          */
         protected setSkin(skin:Skin):void {
-            if (!lark.is(skin, Types.Skin)) {
+            if (skin&&!(skin instanceof swan.Skin)) {
                 skin = null;
                 DEBUG && lark.$error(2202);
             }
@@ -993,7 +993,6 @@ module swan {
     }
     registerProperty(Component, "skinName", "Class");
     sys.implementUIComponent(Component, lark.Sprite, true);
-    lark.registerClass(Component, Types.Component, [Types.UIComponent]);
     if(DEBUG){
         lark.$markReadOnly(Component.prototype,"skin");
     }

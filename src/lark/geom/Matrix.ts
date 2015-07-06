@@ -744,7 +744,6 @@ module lark {
         }
 
     }
-    registerClass(Matrix,Types.Matrix);
 
     /**
      * @private

@@ -492,7 +492,6 @@ module lark {
         }
     }
 
-    registerClass(Rectangle, Types.Rectangle);
     /**
      * @private
      * 仅供框架内复用，要防止暴露引用到外部。

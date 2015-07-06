@@ -133,5 +133,4 @@ module swan {
         }
     }
 
-    lark.registerClass(VSlider,Types.VSlider);
 }

@@ -283,7 +283,7 @@ module swan {
          * @param visible 
          */
         private showOrHide(child:lark.DisplayObject, visible:boolean):void {
-            if (lark.is(child, swan.Types.UIComponent)) {
+            if (lark.is(child, "swan.UIComponent")) {
                 (<swan.UIComponent><any>child).includeInLayout = visible;
             }
             child.visible = visible;
@@ -339,8 +339,8 @@ module swan {
             return -1;
         }
     }
+
     registerBindable(ViewStack.prototype,"selectedIndex");
-    lark.registerClass(ViewStack,Types.ViewStack);
 
     if(DEBUG){
         lark.$markReadOnly(ViewStack.prototype,"length");

@@ -860,16 +860,7 @@ module swan {
         }
     }
 
-    /**
-     * @private
-     */
     registerBindable(ListBase.prototype,"selectedIndex");
-    /**
-     * @private
-     */
+
     registerBindable(ListBase.prototype,"selectedItem");
-    /**
-     * @private
-     */
-    lark.registerClass(ListBase, Types.ListBase);
 }

@@ -1,3 +1,53 @@
+declare var DEBUG: boolean;
+declare var RELEASE: boolean;
+declare module lark {
+}
+declare module lark {
+    /**
+     * @language en_US
+     * Registers the runtime class information for a class.This method adds some strings which represent the class name or
+     * some interface names to the class definition. After the registration,you can use lark.is() method to do the type checking
+     * for the instance of this class.<br/>
+     * Note:If you use the TypeScript programming language, the lark command line tool will automatically generate the registration code line.
+     * You don't need to manually call this method.
+     *
+     * @example the following code shows how to register the runtime class information for the EventEmitter class and do the type checking:
+     * <code>
+     *      lark.registerClass(lark.EventEmitter,"lark.EventEmitter",["lark.IEventEmitter"]);
+     *      var emitter = new lark.EventEmitter();
+     *      lark.log(lark.is(emitter, "lark.IEventEmitter"));  //true。
+     *      lark.log(lark.is(emitter, "lark.EventEmitter"));   //true。
+     *      lark.log(lark.is(emitter, "lark.Bitmap"));   //false。
+     * </code>
+     * @param classDefinition the class definition to be registered.
+     * @param className  a unique identification string of the specific class
+     * @param interfaceNames a list of unique identification string of the specific interfaces.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 为一个类定义注册运行时类信息,用此方法往类定义上注册它自身以及所有接口对应的字符串。
+     * 在运行时，这个类的实例将可以使用 lark.is() 方法传入一个字符串来判断实例类型。
+     * @example 以下代码演示了如何为EventEmitter类注册运行时类信息并判断类型：
+     * <code>
+     *      //为lark.EventEmitter类注册运行时类信息，由于它实现了IEventEmitter接口，这里应同时传入接口名对应的字符串。
+     *      lark.registerClass(lark.EventEmitter,"lark.EventEmitter",["lark.IEventEmitter"]);
+     *      var emitter = new lark.EventEmitter();
+     *      lark.log(lark.is(emitter, "lark.IEventEmitter"));  //true。
+     *      lark.log(lark.is(emitter, "lark.EventEmitter"));   //true。
+     *      lark.log(lark.is(emitter, "lark.Bitmap"));   //false。
+     * </code>
+     * 注意：若您使用 TypeScript 来编写程序，lark 命令行会自动帮您生成类信息注册代码行到最终的 Javascript 文件中。因此您不需要手动调用此方法。
+     *
+     * @param classDefinition 要注册的类定义。
+     * @param className 要注册的类名。
+     * @param interfaceNames 要注册的类所实现的接口名列表。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function registerClass(classDefinition: any, className: string, interfaceNames?: string[]): void;
+}
 declare module lark {
     /**
      * @language en_US
@@ -20,55 +70,77 @@ declare module lark {
      */
     function stopTick(callBack: (timeStamp: number) => boolean, thisObject: any): void;
 }
-declare module lark.sys {
+declare module lark {
     /**
-     * @private
-     * 平台实现输入文本的接口
+     * @language en_US
+     * Writes an error message to the console if the assertion is false. If the assertion is true, nothing will happen.
+     * @param assertion Any boolean expression. If the assertion is false, the message will get written to the console.
+     * @param message the message written to the console
+     * @param optionalParams the extra messages written to the console
+     * @version Lark 1.0
+     * @platform Web,Native
      */
-    interface ITextAdapter {
-    }
-}
-declare module lark.sys {
     /**
-     * @private
-     * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
+     * @language zh_CN
+     * 判断参数assertion是否为true，若为false则抛出异常并且在console输出相应信息，反之什么也不做。
+     * @param assertion 一个 boolean 表达式，若结果为false，则抛出错误并输出信息。
+     * @param message 要输出到控制台的信息
+     * @param optionalParams 要输出到控制台的额外可选信息
+     * @version Lark 1.0
+     * @platform Web,Native
      */
-    var sharedRenderContext: sys.RenderContext;
+    function assert(assertion?: boolean, message?: string, ...optionalParams: any[]): void;
     /**
-     * @private
-     * surfaceFactory实例
+     * @language en_US
+     * Writes a warning message to the console.
+     * @param message the message written to the console
+     * @param optionalParams the extra messages written to the console
+     * @version Lark 1.0
+     * @platform Web,Native
      */
-    var surfaceFactory: SurfaceFactory;
     /**
-     * @private
+     * @language zh_CN
+     * 输出一个警告信息到控制台。
+     * @param message 要输出到控制台的信息
+     * @param optionalParams 要输出到控制台的额外信息
+     * @version Lark 1.0
+     * @platform Web,Native
      */
-    interface SurfaceFactory {
-        /**
-         * @private
-         * 从对象池取出或创建一个新的Surface实例
-         * @param useOnce 表示对取出实例的使用是一次性的，用完后立即会释放。
-         */
-        create(useOnce?: boolean): Surface;
-        /**
-         * @private
-         * 释放一个Surface实例
-         * @param surface 要释放的Surface实例
-         */
-        release(surface: Surface): void;
-    }
-}
-declare module lark.sys {
+    function warn(message?: any, ...optionalParams: any[]): void;
     /**
-     * @private
-     * 呈现最终绘图结果的画布
+     * @language en_US
+     * Writes an error message to the console.
+     * @param message the message written to the console
+     * @param optionalParams the extra messages written to the console
+     * @version Lark 1.0
+     * @platform Web,Native
      */
-    interface Surface extends BitmapData {
-        /**
-         * @private
-         * 绘图上下文
-         */
-        renderContext: RenderContext;
-    }
+    /**
+     * @language zh_CN
+     * 输出一个错误信息到控制台。
+     * @param message 要输出到控制台的信息
+     * @param optionalParams 要输出到控制台的额外信息
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function error(message?: any, ...optionalParams: any[]): void;
+    /**
+     * @language en_US
+     * Writes an message to the console.
+     * @param message the message written to the console
+     * @param optionalParams the extra messages written to the console
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 输出一个日志信息到控制台。
+     * @param message 要输出到控制台的信息
+     * @param optionalParams 要输出到控制台的额外信息
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function log(message?: any, ...optionalParams: any[]): void;
 }
 declare module lark {
     /**
@@ -94,8 +166,529 @@ declare module lark {
 declare module lark.sys {
     /**
      * @private
+     * 平台实现输入文本的接口
+     */
+    interface ITextAdapter {
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The DisplayObjectContainer class is the base class for all objects that can serve as display object containers on
+     * the display list. The display list manages all objects displayed in the runtime. Use the DisplayObjectContainer
+     * class to arrange the display objects in the display list. Each DisplayObjectContainer object has its own child list
+     * for organizing the z-order of the objects. The z-order is the front-to-back order that determines which object is
+     * drawn in front, which is behind, and so on.
+     * @see lark.DisplayObject
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * DisplayObjectContainer 接口定义显示列表中的显示对象容器。该显示列表管理运行时中显示的所有对象。使用 DisplayObjectContainer
+     * 排列显示列表中的显示对象。每个 DisplayObjectContainer 对象都有自己的子级列表，用于组织对象的 Z 轴顺序。Z 轴顺序是由前至后的顺序，
+     * 可确定哪个对象绘制在前，哪个对象绘制在后等。
+     * @see lark.DisplayObject
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    interface DisplayObjectContainer extends DisplayObject {
+        /**
+         * @language en_US
+         * [read-only] Returns the number of children of this object.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [只读] 返回此对象的子项数目。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        numChildren: number;
+        /**
+         * @language en_US
+         * Adds a child DisplayObject instance to this DisplayObjectContainer instance. The child is added to the front
+         * (top) of all other children in this DisplayObjectContainer instance. (To add a child to a specific index position,
+         * use the addChildAt() method.)If you add a child object that already has a different display object container
+         * as a parent, the object is removed from the child list of the other display object container.
+         * @param child The DisplayObject instance to add as a child of this DisplayObjectContainer instance.
+         * @returns 在 child The DisplayObject instance that you pass in the child parameter.
+         * @see #addChildAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他
+         * 所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
+         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @see #addChildAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        addChild(child: DisplayObject): DisplayObject;
+        /**
+         * @language en_US
+         * Adds a child DisplayObject instance to this DisplayObjectContainer instance. The child is added at the index position
+         * specified. An index of 0 represents the back (bottom) of the display list for this DisplayObjectContainer object.
+         * If you add a child object that already has a different display object container as a parent, the object is removed
+         * from the child list of the other display object container.
+         * @param child The DisplayObject instance to add as a child of this DisplayObjectContainer instance.
+         * @param index The index position to which the child is added. If you specify a currently occupied index position,
+         * the child object that exists at that position and all higher positions are moved up one position in the child list.
+         * @returns The DisplayObject instance that you pass in the child parameter.
+         * @see #addChild()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。索引为 0 表示该
+         * DisplayObjectContainer 对象的显示列表的后（底）部。如果添加一个已将其它显示对象容器作为父项的子对象，则会从其它显示对象容器的子列表中删除该对象。
+         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
+         * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @see #addChild()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        addChildAt(child: DisplayObject, index: number): DisplayObject;
+        /**
+         * @language en_US
+         * Determines whether the specified display object is a child of the DisplayObjectContainer instance or the instance
+         * itself. The search includes the entire display list including this DisplayObjectContainer instance. Grandchildren,
+         * great-grandchildren, and so on each return true.
+         * @param child The child object to test.
+         * @returns true if the child object is a child of the DisplayObjectContainer or the container itself; otherwise false.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。
+         * 孙项、曾孙项等，每项都返回 true。
+         * @param child 要测试的子对象。
+         * @returns 如果指定的显示对象为 DisplayObjectContainer 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        contains(child: DisplayObject): boolean;
+        /**
+         * @language en_US
+         * Returns the child display object instance that exists at the specified index.
+         * @param index The index position of the child object.
+         * @returns The child display object at the specified index position.
+         * @see #getChildByName()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回位于指定索引处的子显示对象实例。
+         * @param index 子对象的索引位置。
+         * @returns 位于指定索引位置处的子显示对象。
+         * @see #getChildByName()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        getChildAt(index: number): DisplayObject;
+        /**
+         * @language en_US
+         * Returns the index position of a child DisplayObject instance.
+         * @param child The DisplayObject instance to identify.
+         * @returns The index position of the child display object to identify.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回 DisplayObject 的 child 实例的索引位置。
+         * @returns 要查找的子显示对象的索引位置。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        getChildIndex(child: DisplayObject): number;
+        /**
+         * @language en_US
+         * Returns the child display object that exists with the specified name. If more that one child display object has
+         * the specified name, the method returns the first object in the child list.The getChildAt() method is faster than
+         * the getChildByName() method. The getChildAt() method accesses a child from a cached array, whereas the getChildByName()
+         * method has to traverse a linked list to access a child.
+         * @param name The name of the child to return.
+         * @returns The child display object with the specified name.
+         * @see #getChildAt()
+         * @see lark.DisplayObject#name
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回具有指定名称的子显示对象。如果多个子显示对象具有指定名称，则该方法会返回子级列表中的第一个对象。
+         * getChildAt() 方法比 getChildByName() 方法快。getChildAt() 方法从缓存数组中访问子项，而 getChildByName() 方法则必须遍历链接的列表来访问子项。
+         * @param name 要返回的子项的名称。
+         * @returns 具有指定名称的子显示对象。
+         * @see #getChildAt()
+         * @see lark.DisplayObject#name
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        getChildByName(name: string): DisplayObject;
+        /**
+         * @language en_US
+         * Removes the specified child DisplayObject instance from the child list of the DisplayObjectContainer instance.
+         * The parent property of the removed child is set to null , and the object is garbage collected if no other references
+         * to the child exist. The index positions of any display objects above the child in the DisplayObjectContainer are
+         * decreased by 1.
+         * @param child The DisplayObject instance to remove.
+         * @returns The DisplayObject instance that you pass in the child parameter.
+         * @see #removeChildAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从 DisplayObjectContainer 实例的子列表中删除指定的 child DisplayObject 实例。将已删除子项的 parent 属性设置为 null；
+         * 如果不存在对该子项的任何其它引用，则将该对象作为垃圾回收。DisplayObjectContainer 中该子项之上的任何显示对象的索引位置都减去 1。
+         * @param child 要删除的 DisplayObject 实例。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @see #removeChildAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        removeChild(child: DisplayObject): DisplayObject;
+        /**
+         * @language en_US
+         * Removes a child DisplayObject from the specified index position in the child list of the DisplayObjectContainer.
+         * The parent property of the removed child is set to null, and the object is garbage collected if no other references
+         * to the child exist. The index positions of any display objects above the child in the DisplayObjectContainer are decreased by 1.
+         * @param index The child index of the DisplayObject to remove.
+         * @returns The DisplayObject instance that was removed.
+         * @see #removeChild()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject。将已删除子项的 parent 属性设置为 null；
+         * 如果没有对该子项的任何其他引用，则将该对象作为垃圾回收。DisplayObjectContainer 中该子项之上的任何显示对象的索引位置都减去 1。
+         * @param index 要删除的 DisplayObject 的子索引。
+         * @returns 已删除的 DisplayObject 实例。
+         * @see #removeChild()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        removeChildAt(index: number): DisplayObject;
+        /**
+         * @language en_US
+         * Changes the position of an existing child in the display object container. This affects the layering of child objects.
+         * @param child The child DisplayObject instance for which you want to change the index number.
+         * @param index The resulting index number for the child display object.
+         * @see #addChildAt()
+         * @see #getChildAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 更改现有子项在显示对象容器中的位置。这会影响子对象的分层。
+         * @param child 要为其更改索引编号的 DisplayObject 子实例。
+         * @param index 生成的 child 显示对象的索引编号。当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
+         * @see #addChildAt()
+         * @see #getChildAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        setChildIndex(child: DisplayObject, index: number): void;
+        /**
+         * @language en_US
+         * Swaps the z-order (front-to-back order) of the child objects at the two specified index positions in the child
+         * list. All other child objects in the display object container remain in the same index positions.
+         * @param index1 The index position of the first child object.
+         * @param index2 The index position of the second child object.
+         * @see #swapChildren()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在子级列表中两个指定的索引位置，交换子对象的 Z 轴顺序（前后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
+         * @param index1 第一个子对象的索引位置。
+         * @param index2 第二个子对象的索引位置。
+         * @see #swapChildren()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        swapChildrenAt(index1: number, index2: number): void;
+        /**
+         * @language en_US
+         * Swaps the z-order (front-to-back order) of the two specified child objects. All other child objects in the
+         * display object container remain in the same index positions.
+         * @param child1 The first child object.
+         * @param child2 The second child object.
+         * @see #swapChildrenAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 交换两个指定子对象的 Z 轴顺序（从前到后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
+         * @param child1 第一个子对象。
+         * @param child2 第二个子对象。
+         * @see #swapChildrenAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        swapChildren(child1: DisplayObject, child2: DisplayObject): void;
+        /**
+         * @language en_US
+         * Removes all child DisplayObject instances from the child list of the DisplayObjectContainer instance. The parent
+         * property of the removed children is set to null , and the objects are garbage collected if no other references to the children exist.
+         * @see #removeChild()
+         * @see #removeChildAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从 DisplayObjectContainer 实例的子级列表中删除所有 child DisplayObject 实例。
+         * @see #removeChild()
+         * @see #removeChildAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        removeChildren(): void;
+        /**
+         * @language en_US
+         * Determines whether or not the children of the object are touch, or user input device, enabled. If an object is
+         * enabled, a user can interact with it by using a touch or user input device.
+         * @default true
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 确定对象的子级是否支持触摸或用户输入设备。如果对象支持触摸或用户输入设备，用户可以通过使用触摸或用户输入设备与之交互。
+         * @default true
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        touchChildren: boolean;
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The HorizontalAlign class defines the possible values for the horizontal alignment.
+     * @see lark.TextField#textAlign
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * HorizontalAlign 类为水平对齐方式定义可能的值。
+     * @see lark.TextField#textAlign
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class HorizontalAlign {
+        /**
+         * @language en_US
+         * Horizontally align content to the left of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将内容与容器的左侧对齐。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static LEFT: string;
+        /**
+         * @language en_US
+         * Horizontally align content to the right of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将内容与容器的右侧对齐。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static RIGHT: string;
+        /**
+         * @language en_US
+         * Horizontally align content in the center of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在容器的水平中心对齐内容。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static CENTER: string;
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The GraphicsGradient interface represents an opaque object describing a gradient. It is returned by the static methods
+     * Graphics.createLinearGradient() or Graphics.createRadialGradient().
+     * @see lark.Graphics#createLinearGradient()
+     * @see lark.Graphics#createRadialGradient()
+     * @see lark.Shape
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * GraphicsGradient 接口表示描述渐变的不透明对象。通过 Graphics.createLinearGradient() 或 Graphics.createRadialGradient() 等静态方法的返回值得到.
+     * @see lark.Graphics#createLinearGradient()
+     * @see lark.Graphics#createRadialGradient()
+     * @see lark.Shape
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    interface GraphicsGradient {
+        /**
+         * @language en_US
+         * Adds a new stop, defined by an offset and a color, to the gradient. If the offset is not between 0 and 1 an
+         * error is thrown, if the color can't be parsed as a color, an error is thrown.
+         * @param offset the value between 0 and 1.
+         * @param color the color to add.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 添加一个由偏移值和颜色值指定的断点到渐变。如果偏移值不在0到1之间，将抛出错误，如果 color 不能被解析为有效的颜色值，也将抛出错误。
+         * @param offset 0到1之间的值
+         * @param color 要设置颜色值。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        addColorStop(offset: number, color: string): void;
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The GraphicsPattern interface represents an opaque object describing a pattern, based on a BitmapData,
+     * created by the Graphics.createPattern() method.
+     * @see lark.Graphics#createPattern()
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * GraphicsPattern 接口表示描述一个模板（基于BitmapData）的不透明对象，通过 Graphics.createPattern() 静态方法创建.
+     * @see lark.Graphics#createPattern()
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    interface GraphicsPattern {
+    }
+}
+declare module lark.sys {
+    /**
+     * @private
+     * 呈现最终绘图结果的画布
+     */
+    interface Surface extends BitmapData {
+        /**
+         * @private
+         * 绘图上下文
+         */
+        renderContext: RenderContext;
+    }
+}
+declare module lark.sys {
+    /**
+     * @private
+     * StageScaleMode 类为舞台缩放模式提供值。
+     */
+    class ScaleMode {
+        /**
+         * @private
+         * 不缩放应用程序内容。即使在更改播放器视口大小时，它仍然保持不变。如果播放器视口比内容小，则可能进行一些裁切。
+         * 在此模式下，舞台尺寸（Stage.stageWidth,Stage.stageHeight）始终跟播放器视口大小保持一致。
+         */
+        static NO_SCALE: string;
+        /**
+         * @private
+         * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容的较宽方向填满播放器视口，另一个方向的两侧可能会不够宽而留有黑边。
+         * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
+         */
+        static SHOW_ALL: string;
+        /**
+         * @private
+         * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容的较窄方向填满播放器视口，另一个方向的两侧可能会超出播放器视口而被裁切。
+         * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
+         */
+        static NO_BORDER: string;
+        /**
+         * @private
+         * 不保持原始宽高比缩放应用程序内容，缩放后应用程序内容正好填满播放器视口。
+         * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
+         */
+        static EXACT_FIT: string;
+        /**
+         * @private
+         * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容在水平和垂直方向都填满播放器视口，但只保持应用程序内容的原始宽度不变，高度可能会改变。
+         * 在此模式下，舞台宽度(Stage.stageWidth)始终等于初始化时外部传入的应用程序内容宽度。舞台高度(Stage.stageHeight)由当前的缩放比例与播放器视口高度决定。
+         */
+        static FIXED_WIDTH: string;
+        /**
+         * @private
+         * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容在水平和垂直方向都填满播放器视口，但只保持应用程序内容的原始高度不变，宽度可能会改变。
+         * 在此模式下，舞台高度(Stage.stageHeight)始终等于初始化时外部传入的应用程序内容高度。舞台宽度(Stage.stageWidth)由当前的缩放比例与播放器视口宽度决定。
+         */
+        static FIXED_HEIGHT: string;
+    }
+}
+declare module lark.sys {
+    /**
+     * @private
      */
     interface Renderable extends LarkObject {
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * Helper class to measure the width of text.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 用于文本宽度测量的辅助类
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class TextMeasurer {
+        /**
+         * @language en_US
+         * Returns the width of the text with some specific styles.
+         * @param text the text to be measured.
+         * @param font text font style of the given text.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 测量文本在指定样式下的宽度。
+         * @param text 要测量的文本内容。
+         * @param font 文本的样式值。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static measureText(text: string, font: string): number;
     }
 }
 declare module lark.sys {
@@ -452,604 +1045,6 @@ declare module lark.sys {
         height: number;
     }
 }
-declare module lark.sys {
-    /**
-     * @private
-     * OrientationMode 类为舞台初始旋转模式提供值。
-     */
-    class OrientationMode {
-        /**
-         * @private
-         * 适配屏幕
-         */
-        static NOT_SET: string;
-        /**
-         * @private
-         * 默认竖屏
-         */
-        static PORTRAIT: string;
-        /**
-         * @private
-         * 默认横屏，舞台顺时针旋转90度
-         */
-        static LANDSCAPE: string;
-        /**
-         * @private
-         * 默认横屏，舞台逆时针旋转90度
-         */
-        static LANDSCAPE_FLIPPED: string;
-    }
-}
-declare module lark.sys {
-    /**
-     * @private
-     * 屏幕适配器接口，当播放器视口尺寸改变时，屏幕适配器将被用于计算当前对应的舞台显示尺寸。
-     */
-    interface IScreenAdapter {
-        /**
-         * @private
-         * 计算舞台显示尺寸
-         * @param scaleMode 当前的缩放模式
-         * @param screenWidth 播放器视口宽度
-         * @param screenHeight 播放器视口高度
-         * @param contentWidth 初始化内容宽度
-         * @param contentHeight 初始化内容高度
-         */
-        calculateStageSize(scaleMode: string, screenWidth: number, screenHeight: number, contentWidth: number, contentHeight: number): StageDisplaySize;
-    }
-    /**
-     * @private
-     * 舞台显示尺寸数据
-     */
-    interface StageDisplaySize {
-        /**
-         * @private
-         * 舞台宽度
-         */
-        stageWidth: number;
-        /**
-         * @private
-         * 舞台高度
-         */
-        stageHeight: number;
-        /**
-         * @private
-         * 显示宽度，若跟舞台宽度不同，将会产生缩放。
-         */
-        displayWidth: number;
-        /**
-         * @private
-         * 显示高度，若跟舞台高度不同，将会产生缩放。
-         */
-        displayHeight: number;
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * The Loader class is used to load image (JPG, PNG, or GIF) files. Use the load() method to initiate loading.
-     * The loaded image data is in the data property of ImageLoader.
-     * @event lark.Event.COMPLETE Emitted when the net request is complete.
-     * @event lark.Event.IO_ERROR Emitted when the net request is failed.
-     * @see lark.HttpRequest
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
-     * @event lark.Event.COMPLETE 加载完成
-     * @event lark.Event.IO_ERROR 加载失败
-     * @see lark.HttpRequest
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    interface ImageLoader extends EventEmitter {
-        /**
-         * @language en_US
-         * The data received from the load operation.
-         * @default null
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 使用 load() 方法加载成功的 BitmapData 图像数据。
-         * @default null
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        data: BitmapData;
-        /**
-         * @language en_US
-         * Specifies whether or not cross-site Access-Control requests should be made when loading a image from foreign origins.<br/>
-         * possible values are:"anonymous","use-credentials" or null.
-         * @default null
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 当从其他站点加载一个图片时，指定是否启用跨域资源共享(CORS)，默认值为null。<br/>
-         * 可以设置为"anonymous","use-credentials"或null,设置为其他值将等同于"anonymous"。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        crossOrigin: string;
-        /**
-         * @language en_US
-         * start a load operation。<br/>
-         * Note: Calling this method for an already active request (one for which load() has already been
-         * called) will abort the last load operation immediately.
-         * @param url 要加载的图像文件的地址。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 启动一次图像加载。<br/>
-         * 注意：若之前已经调用过加载请求，重新调用 load() 将终止先前的请求，并开始新的加载。
-         * @param url 要加载的图像文件的地址。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        load(url: string): void;
-    }
-    /**
-     * @language en_US
-     * Creates a ImageLoader object
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 创建一个 ImageLoader 实例
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var ImageLoader: {
-        new (): ImageLoader;
-    };
-}
-declare module lark {
-    /**
-     * @language en_US
-     * Writes an error message to the console if the assertion is false. If the assertion is true, nothing will happen.
-     * @param assertion Any boolean expression. If the assertion is false, the message will get written to the console.
-     * @param message the message written to the console
-     * @param optionalParams the extra messages written to the console
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 判断参数assertion是否为true，若为false则抛出异常并且在console输出相应信息，反之什么也不做。
-     * @param assertion 一个 boolean 表达式，若结果为false，则抛出错误并输出信息。
-     * @param message 要输出到控制台的信息
-     * @param optionalParams 要输出到控制台的额外可选信息
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function assert(assertion?: boolean, message?: string, ...optionalParams: any[]): void;
-    /**
-     * @language en_US
-     * Writes a warning message to the console.
-     * @param message the message written to the console
-     * @param optionalParams the extra messages written to the console
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 输出一个警告信息到控制台。
-     * @param message 要输出到控制台的信息
-     * @param optionalParams 要输出到控制台的额外信息
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function warn(message?: any, ...optionalParams: any[]): void;
-    /**
-     * @language en_US
-     * Writes an error message to the console.
-     * @param message the message written to the console
-     * @param optionalParams the extra messages written to the console
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 输出一个错误信息到控制台。
-     * @param message 要输出到控制台的信息
-     * @param optionalParams 要输出到控制台的额外信息
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function error(message?: any, ...optionalParams: any[]): void;
-    /**
-     * @language en_US
-     * Writes an message to the console.
-     * @param message the message written to the console
-     * @param optionalParams the extra messages written to the console
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 输出一个日志信息到控制台。
-     * @param message 要输出到控制台的信息
-     * @param optionalParams 要输出到控制台的额外信息
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function log(message?: any, ...optionalParams: any[]): void;
-}
-declare module lark {
-    /**
-     * @language en_US
-     * The HttpResponseType class provides values that specify how downloaded data is received.
-     * @see lark.HttpRequest
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * URLLoaderDataFormat 类提供了一些用于指定如何接收已下载数据的值。
-     * @see lark.HttpRequest
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    class HttpResponseType {
-        /**
-         * @language en_US
-         * Specifies that downloaded data is received as text. This is the default value of HttpRequest.responseType
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回字符串。HttpRequest.responseType属性的默认值。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static TEXT: string;
-        /**
-         * @language en_US
-         * Specifies that downloaded data is received as raw binary data.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回二进制的ArrayBuffer对象。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static ARRAY_BUFFER: string;
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * The HorizontalAlign class defines the possible values for the horizontal alignment.
-     * @see lark.TextField#textAlign
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * HorizontalAlign 类为水平对齐方式定义可能的值。
-     * @see lark.TextField#textAlign
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    class HorizontalAlign {
-        /**
-         * @language en_US
-         * Horizontally align content to the left of the container.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将内容与容器的左侧对齐。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static LEFT: string;
-        /**
-         * @language en_US
-         * Horizontally align content to the right of the container.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将内容与容器的右侧对齐。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static RIGHT: string;
-        /**
-         * @language en_US
-         * Horizontally align content in the center of the container.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在容器的水平中心对齐内容。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static CENTER: string;
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * The HttpRequest class downloads data from a URL as text or binary data. It is useful for downloading text files,
-     * XML, or other information to be used in a dynamic, data-driven application. A HttpRequest object downloads all
-     * of the data from a URL before making it available to code in the applications. It sends out notifications about
-     * the progress of the download, which you can monitor through the bytesLoaded and bytesTotal properties,
-     * as well as through emitted events.
-     * @event lark.Event.COMPLETE Emitted when the net request is complete.
-     * @event lark.Event.IO_ERROR Emitted when the net request is failed.
-     * @event lark.ProgressEvent.PROGRESS Emitted when data is received as the download operation progresses.
-     * @see lark.HttpMethod
-     * @see lark.HttpResponseType
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * HttpRequest 类以文本或二进制数据的形式从 URL 下载数据。
-     * HttpRequest 对象会先从 URL 中下载所有数据，然后才将数据用于应用程序中的代码。它会发出有关下载进度的通知，
-     * 通过 bytesLoaded 和 bytesTotal 属性以及已调度的事件，可以监视下载进度。
-     * @event lark.Event.COMPLETE 加载完成
-     * @event lark.Event.IO_ERROR 加载失败
-     * @event lark.ProgressEvent.PROGRESS 加载进度，可通过event.bytesLoaded和event.bytesTotal统计进度信息。
-     * @see lark.HttpMethod
-     * @see lark.HttpResponseType
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    interface HttpRequest extends EventEmitter {
-        /**
-         * @language en_US
-         * The data received from the load operation.  The format of the data depends on the setting of the responseType property.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 本次请求返回的数据，数据类型根据 responseType 设置的值确定。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        response: any;
-        /**
-         * @language en_US
-         * Controls whether the downloaded data is received as text (HttpResponseType.TEXT) or raw binary data (HttpResponseType.ArrayBuffer)<br/>
-         * Note:If you attempt to set this property to an invalid value, Lark runtime set the value to HttpResponseType.TEXT.
-         * @default lark.HttpResponseType.TEXT
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 设置返回的数据格式为文本（HttpResponseType.TEXT）还是二进制数据（HttpResponseType.ArrayBuffer）<br/>
-         * 注意：若尝试设置此属性为一个非法的值，运行时将使用HttpResponseType.TEXT。
-         * @default lark.HttpResponseType.TEXT
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        responseType: string;
-        /**
-         * @language en_US
-         * indicates whether or not cross-site Access-Control requests should be made using credentials such as cookies
-         * or authorization headers. (This never affects same-site requests.)
-         * @default false
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 表明在进行跨站(cross-site)的访问控制(Access-Control)请求时，是否使用认证信息(例如cookie或授权的header)。(这个标志不会影响同站的请求)
-         * @default false
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        withCredentials: boolean;
-        /**
-         * @language en_US
-         * Initializes a request.<br/>
-         * Note: Calling this method for an already active request (one for which open() or openRequest() has already been
-         * called) is the equivalent of calling abort().
-         * @param url The URL to send the request to.
-         * @param method The HTTP method to use, please use the const value in the HttpMethod class.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 初始化一个请求.<br/>
-         * 注意: 若在已经发出请求的对象上调用此方法，相当于立即调用abort().
-         * @param url 该请求所要访问的URL该请求所要访问的URL
-         * @param method 请求所使用的HTTP方法， 请使用 HttpMethod 定义的枚举值.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        open(url: string, method?: string): void;
-        /**
-         * @language en_US
-         * Sends the request.
-         * @param data the data to send.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 发送请求.
-         * @param data 需要发送的数据
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        send(data?: any): void;
-        /**
-         * @language en_US
-         * Aborts the request if it has already been sent.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果请求已经被发送,则立刻中止请求.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        abort(): void;
-        /**
-         * @language en_US
-         * Returns all the response headers as a string, or null if no response has been received.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回所有响应头信息(响应头名和值), 如果响应头还没接受,则返回"".
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        getAllResponseHeaders(): string;
-        /**
-         * @language en_US
-         * Sets the value of an HTTP request header. You must call setRequestHeader() after open().
-         * @param header The name of the header whose value is to be set.
-         * @param value The value to set as the body of the header.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 给指定的HTTP请求头赋值.在这之前,您必须确认已经调用 open() 方法打开了一个url.
-         * @param header 将要被赋值的请求头名称.
-         * @param value 给指定的请求头赋的值.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        setRequestHeader(header: string, value: string): void;
-        /**
-         * @language en_US
-         * Returns the string containing the text of the specified header, or null if either the response has not yet been
-         * received or the header doesn't exist in the response.
-         * @param header The name of the header whose value is to be get.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回指定的响应头的值, 如果响应头还没被接受,或该响应头不存在,则返回"".
-         * @param header 要返回的响应头名称
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        getResponseHeader(header: string): string;
-    }
-    /**
-     * @language en_US
-     * Creates a HttpRequest object.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 创建一个 HttpRequest 实例。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var HttpRequest: {
-        new (): HttpRequest;
-    };
-}
-declare module lark {
-    /**
-     * @language en_US
-     * Helper class to measure the width of text.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 用于文本宽度测量的辅助类
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    class TextMeasurer {
-        /**
-         * @language en_US
-         * Returns the width of the text with some specific styles.
-         * @param text the text to be measured.
-         * @param font text font style of the given text.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 测量文本在指定样式下的宽度。
-         * @param text 要测量的文本内容。
-         * @param font 文本的样式值。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static measureText(text: string, font: string): number;
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * The HttpMethod class provides values that specify whether the HttpRequest object should use the POST method
-     * or the GET method when sending data to a server.
-     * @see lark.HttpRequest
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * HttpRequestMethod 类提供了一些值，这些值可指定在将数据发送到服务器时，
-     * HttpRequest 对象应使用 POST 方法还是 GET 方法。
-     * @see lark.HttpRequest
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    class HttpMethod {
-        /**
-         * @language en_US
-         * Specifies that the HttpRequest object is a GET.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 表示 HttpRequest 对象是一个 GET。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static GET: string;
-        /**
-         * @language en_US
-         * Specifies that the HttpRequest object is a POST.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 表示 HttpRequest 对象是一个 POST。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static POST: string;
-    }
-}
 declare module lark {
     /**
      * @language en_US
@@ -1165,196 +1160,6 @@ declare module lark {
 declare module lark {
     /**
      * @language en_US
-     * The XMLNode class is the base class for all xml node.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * XML节点基类
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    interface XMLNode {
-        /**
-         * @language en_US
-         * a integer representing the type of the node, 1：XML，2：XMLAttribute，3：XMLText
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 节点类型，1：XML，2：XMLAttribute，3：XMLText
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        nodeType: number;
-        /**
-         * @language en_US
-         * the parent node of this xml node.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 节点所属的父级节点
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        parent: XML;
-    }
-    /**
-     * @language en_US
-     * The XML class contains properties for working with XML objects.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * XML 类包含用于处理 XML 对象的属性。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    interface XML extends XMLNode {
-        /**
-         * @language en_US
-         * the attributes of this xml node.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 当前节点上的属性列表
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        attributes: any;
-        /**
-         * @language en_US
-         * the children of the xml node.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 当前节点的子节点列表
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        children: XMLNode[];
-        /**
-         * @language en_US
-         * the full name of this xml node. For example,the name of <s:Button/> is "s:Button".
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 节点完整名称。例如节点 <s:Button/> 的 name 为："s:Button"
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        name: string;
-        /**
-         * @language en_US
-         * thie namesapce prefix of this xml node.For example,the prefix of <s:Button/> is "s".
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 节点的命名空间前缀。例如节点 <s:Button/> 的 prefix 为：s
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        prefix: string;
-        /**
-         * @language en_US
-         * the local name of this xml node. For example,the local name of <s:Button/> is "Button".
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 节点的本地名称。例如节点 <s:Button/> 的 localName 为：Button
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        localName: string;
-        /**
-         * @language en_US
-         * the namesapce uri of this xml node.For example,the namespace uri of <s:Skin xmlns:s="http://ns.egret.com/swan"/> is "http://ns.egret.com/swan".
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 节点的命名空间地址。例如节点 <s:Skin xmlns:s="http://ns.egret.com/swan"/> 的 namespace 为： http://ns.egret.com/swan
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        namespace: string;
-    }
-    /**
-     * @language en_US
-     * The XMLText class represents a string node in the XML.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * XMLText 类表示在XML中的文本节点
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    interface XMLText extends XMLNode {
-        /**
-         * @language en_US
-         * the text content
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 文本内容
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        text: string;
-    }
-    /**
-     * @language en_US
-     * The XML class contains properties for working with XML objects.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * XML 类包含用于处理 XML 对象的属性。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var XML: {
-        /**
-         * @language en_US
-         * parses a text to XML instance.
-         * @param text the text to be parsed.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 解析字符串为XML对象
-         * @param text 要解析的XML对象。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        parse(text: string): XML;
-    };
-}
-declare module lark {
-    /**
-     * @language en_US
      * A BitmapData object contains an array of pixel data. This data can represent either a fully opaque bitmap or a
      * transparent bitmap that contains alpha channel data. Either type of BitmapData object is stored as a buffer of 32-bit
      * integers. Each 32-bit integer determines the properties of a single pixel in the bitmap.<br/>
@@ -1402,495 +1207,6 @@ declare module lark {
          * @platform Web,Native
          */
         height: number;
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * Returns a reference to the class object of the class specified by the name parameter.
-     * @param name The name of a class.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 返回 name 参数指定的类的类对象引用。
-     * @param name 类的名称。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function getDefinitionByName(name: string): any;
-}
-declare var __global: any;
-declare module lark {
-    /**
-     * @language en_US
-     * The GraphicsPattern interface represents an opaque object describing a pattern, based on a BitmapData,
-     * created by the Graphics.createPattern() method.
-     * @see lark.Graphics#createPattern()
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * GraphicsPattern 接口表示描述一个模板（基于BitmapData）的不透明对象，通过 Graphics.createPattern() 静态方法创建.
-     * @see lark.Graphics#createPattern()
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    interface GraphicsPattern {
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * Indicates whether an object is a instance of the class or interface specified as the parameter.This method has better performance
-     * compared width the instanceOf operator,and it can indicate whether an object is a instance of the specific interface.
-     * @param instance the instance to be checked.
-     * @param typeFlag the enum value representing a specific class or interface.
-     * @returns A value of true if the object is a instance of the class or interface specified as the parameter.
-     * @example
-     * <code>
-     *     var instance = new lark.Sprite();
-     *     lark.log(lark.is(instance,lark.Types.Sprite))  //true
-     *     lark.log(lark.is(instance,lark.Types.DisplayObjectContainer))  //true
-     *     lark.log(lark.is(instance,lark.Types.Bitmap))  //false
-     * </code>
-     * @see lark.registerClass()
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字相比具有更高的性能，并且能判断接口的实现。
-     * @param instance 要判断的实例。
-     * @param typeFlag 类或接口的枚举值.
-     * @returns 返回true表示当前对象是指定类或接口的实例。
-     * @example
-     * <code>
-     *     var instance = new lark.Sprite();
-     *     lark.log(lark.is(instance,lark.Types.Sprite))  //true
-     *     lark.log(lark.is(instance,lark.Types.DisplayObjectContainer))  //true
-     *     lark.log(lark.is(instance,lark.Types.Bitmap))  //false
-     * </code>
-     * @see lark.registerClass()
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function is(instance: any, typeFlag: number): boolean;
-}
-declare module lark {
-    /**
-     * @language en_US
-     * The GraphicsGradient interface represents an opaque object describing a gradient. It is returned by the static methods
-     * Graphics.createLinearGradient() or Graphics.createRadialGradient().
-     * @see lark.Graphics#createLinearGradient()
-     * @see lark.Graphics#createRadialGradient()
-     * @see lark.Shape
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * GraphicsGradient 接口表示描述渐变的不透明对象。通过 Graphics.createLinearGradient() 或 Graphics.createRadialGradient() 等静态方法的返回值得到.
-     * @see lark.Graphics#createLinearGradient()
-     * @see lark.Graphics#createRadialGradient()
-     * @see lark.Shape
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    interface GraphicsGradient {
-        /**
-         * @language en_US
-         * Adds a new stop, defined by an offset and a color, to the gradient. If the offset is not between 0 and 1 an
-         * error is thrown, if the color can't be parsed as a color, an error is thrown.
-         * @param offset the value between 0 and 1.
-         * @param color the color to add.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 添加一个由偏移值和颜色值指定的断点到渐变。如果偏移值不在0到1之间，将抛出错误，如果 color 不能被解析为有效的颜色值，也将抛出错误。
-         * @param offset 0到1之间的值
-         * @param color 要设置颜色值。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        addColorStop(offset: number, color: string): void;
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * Register and start a timer,which will notify the callback method at a rate of 60 FPS ,and pass the current time stamp as parameters.<br/>
-     * Note: After the registration,it will notify the callback method continuously,you can call the stopTick () method to stop it.
-     * @param callBack the call back method. the timeStamp parameter of this method represents the number of milliseconds
-     * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
-     * to render after processing of this method completes.
-     * @param thisObject the call back method's "this"
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 注册并启动一个计时器，通常会以60FPS的速率触发回调方法，并传入当前时间戳。注意：注册后将会持续触发回调方法，若要停止回调，需要手动调用stopTick()方法。
-     * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
-     * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
-     * @param thisObject 回调方法的this对象引用。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function startTick(callBack: (timeStamp: number) => boolean, thisObject: any): void;
-}
-declare module lark {
-    /**
-     * @language en_US
-     * The DisplayObjectContainer class is the base class for all objects that can serve as display object containers on
-     * the display list. The display list manages all objects displayed in the runtime. Use the DisplayObjectContainer
-     * class to arrange the display objects in the display list. Each DisplayObjectContainer object has its own child list
-     * for organizing the z-order of the objects. The z-order is the front-to-back order that determines which object is
-     * drawn in front, which is behind, and so on.
-     * @see lark.DisplayObject
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * DisplayObjectContainer 接口定义显示列表中的显示对象容器。该显示列表管理运行时中显示的所有对象。使用 DisplayObjectContainer
-     * 排列显示列表中的显示对象。每个 DisplayObjectContainer 对象都有自己的子级列表，用于组织对象的 Z 轴顺序。Z 轴顺序是由前至后的顺序，
-     * 可确定哪个对象绘制在前，哪个对象绘制在后等。
-     * @see lark.DisplayObject
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    interface DisplayObjectContainer extends DisplayObject {
-        /**
-         * @language en_US
-         * [read-only] Returns the number of children of this object.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * [只读] 返回此对象的子项数目。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        numChildren: number;
-        /**
-         * @language en_US
-         * Adds a child DisplayObject instance to this DisplayObjectContainer instance. The child is added to the front
-         * (top) of all other children in this DisplayObjectContainer instance. (To add a child to a specific index position,
-         * use the addChildAt() method.)If you add a child object that already has a different display object container
-         * as a parent, the object is removed from the child list of the other display object container.
-         * @param child The DisplayObject instance to add as a child of this DisplayObjectContainer instance.
-         * @returns 在 child The DisplayObject instance that you pass in the child parameter.
-         * @see #addChildAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他
-         * 所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
-         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
-         * @returns 在 child 参数中传递的 DisplayObject 实例。
-         * @see #addChildAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        addChild(child: DisplayObject): DisplayObject;
-        /**
-         * @language en_US
-         * Adds a child DisplayObject instance to this DisplayObjectContainer instance. The child is added at the index position
-         * specified. An index of 0 represents the back (bottom) of the display list for this DisplayObjectContainer object.
-         * If you add a child object that already has a different display object container as a parent, the object is removed
-         * from the child list of the other display object container.
-         * @param child The DisplayObject instance to add as a child of this DisplayObjectContainer instance.
-         * @param index The index position to which the child is added. If you specify a currently occupied index position,
-         * the child object that exists at that position and all higher positions are moved up one position in the child list.
-         * @returns The DisplayObject instance that you pass in the child parameter.
-         * @see #addChild()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。索引为 0 表示该
-         * DisplayObjectContainer 对象的显示列表的后（底）部。如果添加一个已将其它显示对象容器作为父项的子对象，则会从其它显示对象容器的子列表中删除该对象。
-         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
-         * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
-         * @returns 在 child 参数中传递的 DisplayObject 实例。
-         * @see #addChild()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        addChildAt(child: DisplayObject, index: number): DisplayObject;
-        /**
-         * @language en_US
-         * Determines whether the specified display object is a child of the DisplayObjectContainer instance or the instance
-         * itself. The search includes the entire display list including this DisplayObjectContainer instance. Grandchildren,
-         * great-grandchildren, and so on each return true.
-         * @param child The child object to test.
-         * @returns true if the child object is a child of the DisplayObjectContainer or the container itself; otherwise false.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。
-         * 孙项、曾孙项等，每项都返回 true。
-         * @param child 要测试的子对象。
-         * @returns 如果指定的显示对象为 DisplayObjectContainer 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        contains(child: DisplayObject): boolean;
-        /**
-         * @language en_US
-         * Returns the child display object instance that exists at the specified index.
-         * @param index The index position of the child object.
-         * @returns The child display object at the specified index position.
-         * @see #getChildByName()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回位于指定索引处的子显示对象实例。
-         * @param index 子对象的索引位置。
-         * @returns 位于指定索引位置处的子显示对象。
-         * @see #getChildByName()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        getChildAt(index: number): DisplayObject;
-        /**
-         * @language en_US
-         * Returns the index position of a child DisplayObject instance.
-         * @param child The DisplayObject instance to identify.
-         * @returns The index position of the child display object to identify.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回 DisplayObject 的 child 实例的索引位置。
-         * @returns 要查找的子显示对象的索引位置。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        getChildIndex(child: DisplayObject): number;
-        /**
-         * @language en_US
-         * Returns the child display object that exists with the specified name. If more that one child display object has
-         * the specified name, the method returns the first object in the child list.The getChildAt() method is faster than
-         * the getChildByName() method. The getChildAt() method accesses a child from a cached array, whereas the getChildByName()
-         * method has to traverse a linked list to access a child.
-         * @param name The name of the child to return.
-         * @returns The child display object with the specified name.
-         * @see #getChildAt()
-         * @see lark.DisplayObject#name
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回具有指定名称的子显示对象。如果多个子显示对象具有指定名称，则该方法会返回子级列表中的第一个对象。
-         * getChildAt() 方法比 getChildByName() 方法快。getChildAt() 方法从缓存数组中访问子项，而 getChildByName() 方法则必须遍历链接的列表来访问子项。
-         * @param name 要返回的子项的名称。
-         * @returns 具有指定名称的子显示对象。
-         * @see #getChildAt()
-         * @see lark.DisplayObject#name
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        getChildByName(name: string): DisplayObject;
-        /**
-         * @language en_US
-         * Removes the specified child DisplayObject instance from the child list of the DisplayObjectContainer instance.
-         * The parent property of the removed child is set to null , and the object is garbage collected if no other references
-         * to the child exist. The index positions of any display objects above the child in the DisplayObjectContainer are
-         * decreased by 1.
-         * @param child The DisplayObject instance to remove.
-         * @returns The DisplayObject instance that you pass in the child parameter.
-         * @see #removeChildAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 从 DisplayObjectContainer 实例的子列表中删除指定的 child DisplayObject 实例。将已删除子项的 parent 属性设置为 null；
-         * 如果不存在对该子项的任何其它引用，则将该对象作为垃圾回收。DisplayObjectContainer 中该子项之上的任何显示对象的索引位置都减去 1。
-         * @param child 要删除的 DisplayObject 实例。
-         * @returns 在 child 参数中传递的 DisplayObject 实例。
-         * @see #removeChildAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        removeChild(child: DisplayObject): DisplayObject;
-        /**
-         * @language en_US
-         * Removes a child DisplayObject from the specified index position in the child list of the DisplayObjectContainer.
-         * The parent property of the removed child is set to null, and the object is garbage collected if no other references
-         * to the child exist. The index positions of any display objects above the child in the DisplayObjectContainer are decreased by 1.
-         * @param index The child index of the DisplayObject to remove.
-         * @returns The DisplayObject instance that was removed.
-         * @see #removeChild()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject。将已删除子项的 parent 属性设置为 null；
-         * 如果没有对该子项的任何其他引用，则将该对象作为垃圾回收。DisplayObjectContainer 中该子项之上的任何显示对象的索引位置都减去 1。
-         * @param index 要删除的 DisplayObject 的子索引。
-         * @returns 已删除的 DisplayObject 实例。
-         * @see #removeChild()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        removeChildAt(index: number): DisplayObject;
-        /**
-         * @language en_US
-         * Changes the position of an existing child in the display object container. This affects the layering of child objects.
-         * @param child The child DisplayObject instance for which you want to change the index number.
-         * @param index The resulting index number for the child display object.
-         * @see #addChildAt()
-         * @see #getChildAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 更改现有子项在显示对象容器中的位置。这会影响子对象的分层。
-         * @param child 要为其更改索引编号的 DisplayObject 子实例。
-         * @param index 生成的 child 显示对象的索引编号。当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
-         * @see #addChildAt()
-         * @see #getChildAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        setChildIndex(child: DisplayObject, index: number): void;
-        /**
-         * @language en_US
-         * Swaps the z-order (front-to-back order) of the child objects at the two specified index positions in the child
-         * list. All other child objects in the display object container remain in the same index positions.
-         * @param index1 The index position of the first child object.
-         * @param index2 The index position of the second child object.
-         * @see #swapChildren()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在子级列表中两个指定的索引位置，交换子对象的 Z 轴顺序（前后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
-         * @param index1 第一个子对象的索引位置。
-         * @param index2 第二个子对象的索引位置。
-         * @see #swapChildren()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        swapChildrenAt(index1: number, index2: number): void;
-        /**
-         * @language en_US
-         * Swaps the z-order (front-to-back order) of the two specified child objects. All other child objects in the
-         * display object container remain in the same index positions.
-         * @param child1 The first child object.
-         * @param child2 The second child object.
-         * @see #swapChildrenAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 交换两个指定子对象的 Z 轴顺序（从前到后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
-         * @param child1 第一个子对象。
-         * @param child2 第二个子对象。
-         * @see #swapChildrenAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        swapChildren(child1: DisplayObject, child2: DisplayObject): void;
-        /**
-         * @language en_US
-         * Removes all child DisplayObject instances from the child list of the DisplayObjectContainer instance. The parent
-         * property of the removed children is set to null , and the objects are garbage collected if no other references to the children exist.
-         * @see #removeChild()
-         * @see #removeChildAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 从 DisplayObjectContainer 实例的子级列表中删除所有 child DisplayObject 实例。
-         * @see #removeChild()
-         * @see #removeChildAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        removeChildren(): void;
-        /**
-         * @language en_US
-         * Determines whether or not the children of the object are touch, or user input device, enabled. If an object is
-         * enabled, a user can interact with it by using a touch or user input device.
-         * @default true
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 确定对象的子级是否支持触摸或用户输入设备。如果对象支持触摸或用户输入设备，用户可以通过使用触摸或用户输入设备与之交互。
-         * @default true
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        touchChildren: boolean;
-    }
-}
-declare module lark.sys {
-    /**
-     * @private
-     * StageScaleMode 类为舞台缩放模式提供值。
-     */
-    class ScaleMode {
-        /**
-         * @private
-         * 不缩放应用程序内容。即使在更改播放器视口大小时，它仍然保持不变。如果播放器视口比内容小，则可能进行一些裁切。
-         * 在此模式下，舞台尺寸（Stage.stageWidth,Stage.stageHeight）始终跟播放器视口大小保持一致。
-         */
-        static NO_SCALE: string;
-        /**
-         * @private
-         * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容的较宽方向填满播放器视口，另一个方向的两侧可能会不够宽而留有黑边。
-         * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
-         */
-        static SHOW_ALL: string;
-        /**
-         * @private
-         * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容的较窄方向填满播放器视口，另一个方向的两侧可能会超出播放器视口而被裁切。
-         * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
-         */
-        static NO_BORDER: string;
-        /**
-         * @private
-         * 不保持原始宽高比缩放应用程序内容，缩放后应用程序内容正好填满播放器视口。
-         * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
-         */
-        static EXACT_FIT: string;
-        /**
-         * @private
-         * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容在水平和垂直方向都填满播放器视口，但只保持应用程序内容的原始宽度不变，高度可能会改变。
-         * 在此模式下，舞台宽度(Stage.stageWidth)始终等于初始化时外部传入的应用程序内容宽度。舞台高度(Stage.stageHeight)由当前的缩放比例与播放器视口高度决定。
-         */
-        static FIXED_WIDTH: string;
-        /**
-         * @private
-         * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容在水平和垂直方向都填满播放器视口，但只保持应用程序内容的原始高度不变，宽度可能会改变。
-         * 在此模式下，舞台高度(Stage.stageHeight)始终等于初始化时外部传入的应用程序内容高度。舞台宽度(Stage.stageWidth)由当前的缩放比例与播放器视口宽度决定。
-         */
-        static FIXED_HEIGHT: string;
     }
 }
 declare module lark {
@@ -2121,55 +1437,740 @@ declare module lark {
         willTrigger(type: string): boolean;
     }
 }
-declare var DEBUG: boolean;
-declare var RELEASE: boolean;
-declare module lark {
-}
 declare module lark {
     /**
      * @language en_US
-     * Registers the class information at runtime for a class.This method will add some flags of class and interface to
-     * the class definition. After the registration,you can use lark.is() method to do the type checking for the instance
-     * of this class.<br/>
-     * Note: The value of the custom class flag or interface Flag must not in the type range of Lark framework (from 1 to 2000)
-     * or a third party library referenced to your project,it might result in a type check failure.
-     * @example the following code shows how to register the class flag for the EventEmitter class:
-     * <code>
-     *      lark.registerClass(lark.EventEmitter,lark.Types.EventEmitter,[lark.Types.IEventEmitter]);
-     *      var emitter = new lark.EventEmitter();
-     *      lark.log(lark.is(emitter, lark.Types.IEventEmitter));  //true。
-     *      lark.log(lark.is(emitter, lark.Types.EventEmitter));   //true。
-     *      lark.log(lark.is(emitter, lark.Types.Bitmap));   //false。
-     * </code>
-     * @param classDefinition the class definition to be registered.
-     * @param classFlag  a unique identification number of the specific class
-     * @param interfaceFlags a list of unique identification numbers of the specific interfaces.
+     * The XMLNode class is the base class for all xml node.
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 为一个类定义注册运行时类信息,用此方法往类定义上注册它自身以及所有接口对应的枚举值。
-     * 在运行时，这个类的实例将可以使用 lark.is() 方法传入一个枚举值来判断实例类型。
-     * @example 以下代码演示了如何为EventEmitter类注册运行时类信息：
-     * <code>
-     *      //为lark.EventEmitter类注册运行时类信息，由于它实现了IEventEmitter接口，这里应同时传入两个枚举值。
-     *      lark.registerClass(lark.EventEmitter,lark.Types.EventEmitter,[lark.Types.IEventEmitter]);
-     *      var emitter = new lark.EventEmitter();
-     *      lark.log(lark.is(emitter, lark.Types.IEventEmitter));  //true。
-     *      lark.log(lark.is(emitter, lark.Types.EventEmitter));   //true。
-     *      lark.log(lark.is(emitter, lark.Types.Bitmap));   //false。
-     * </code>
-     * 注意：传入的自定义枚举数值范围要避免与Lark框架(1~2000的数值)或其他第三方库的数值范围重合,
-     * 否则有可能会导致运行时 lark.is() 方法类型判断错误。
-     *
-     * @param classDefinition 要注册的类定义。
-     * @param classFlag 要注册的类对应的枚举值。
-     * @param interfaceFlags 要注册的类所实现的接口的枚举值列表。
+     * XML节点基类
      * @version Lark 1.0
      * @platform Web,Native
      */
-    function registerClass(classDefinition: any, classFlag: number, interfaceFlags?: number[]): void;
+    interface XMLNode {
+        /**
+         * @language en_US
+         * a integer representing the type of the node, 1：XML，2：XMLAttribute，3：XMLText
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点类型，1：XML，2：XMLAttribute，3：XMLText
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        nodeType: number;
+        /**
+         * @language en_US
+         * the parent node of this xml node.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点所属的父级节点
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        parent: XML;
+    }
+    /**
+     * @language en_US
+     * The XML class contains properties for working with XML objects.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * XML 类包含用于处理 XML 对象的属性。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    interface XML extends XMLNode {
+        /**
+         * @language en_US
+         * the attributes of this xml node.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当前节点上的属性列表
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        attributes: any;
+        /**
+         * @language en_US
+         * the children of the xml node.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当前节点的子节点列表
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        children: XMLNode[];
+        /**
+         * @language en_US
+         * the full name of this xml node. For example,the name of <s:Button/> is "s:Button".
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点完整名称。例如节点 <s:Button/> 的 name 为："s:Button"
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        name: string;
+        /**
+         * @language en_US
+         * thie namesapce prefix of this xml node.For example,the prefix of <s:Button/> is "s".
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点的命名空间前缀。例如节点 <s:Button/> 的 prefix 为：s
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        prefix: string;
+        /**
+         * @language en_US
+         * the local name of this xml node. For example,the local name of <s:Button/> is "Button".
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点的本地名称。例如节点 <s:Button/> 的 localName 为：Button
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        localName: string;
+        /**
+         * @language en_US
+         * the namesapce uri of this xml node.For example,the namespace uri of <s:Skin xmlns:s="http://ns.egret.com/swan"/> is "http://ns.egret.com/swan".
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点的命名空间地址。例如节点 <s:Skin xmlns:s="http://ns.egret.com/swan"/> 的 namespace 为： http://ns.egret.com/swan
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        namespace: string;
+    }
+    /**
+     * @language en_US
+     * The XMLText class represents a string node in the XML.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * XMLText 类表示在XML中的文本节点
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    interface XMLText extends XMLNode {
+        /**
+         * @language en_US
+         * the text content
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 文本内容
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        text: string;
+    }
+    /**
+     * @language en_US
+     * The XML class contains properties for working with XML objects.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * XML 类包含用于处理 XML 对象的属性。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var XML: {
+        /**
+         * @language en_US
+         * parses a text to XML instance.
+         * @param text the text to be parsed.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 解析字符串为XML对象
+         * @param text 要解析的XML对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        parse(text: string): XML;
+    };
+}
+declare module lark.sys {
+    /**
+     * @private
+     * OrientationMode 类为舞台初始旋转模式提供值。
+     */
+    class OrientationMode {
+        /**
+         * @private
+         * 适配屏幕
+         */
+        static NOT_SET: string;
+        /**
+         * @private
+         * 默认竖屏
+         */
+        static PORTRAIT: string;
+        /**
+         * @private
+         * 默认横屏，舞台顺时针旋转90度
+         */
+        static LANDSCAPE: string;
+        /**
+         * @private
+         * 默认横屏，舞台逆时针旋转90度
+         */
+        static LANDSCAPE_FLIPPED: string;
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * Returns a reference to the class object of the class specified by the name parameter.
+     * @param name The name of a class.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 返回 name 参数指定的类的类对象引用。
+     * @param name 类的名称。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function getDefinitionByName(name: string): any;
+}
+declare var __global: any;
+declare module lark.sys {
+    /**
+     * @private
+     * 屏幕适配器接口，当播放器视口尺寸改变时，屏幕适配器将被用于计算当前对应的舞台显示尺寸。
+     */
+    interface IScreenAdapter {
+        /**
+         * @private
+         * 计算舞台显示尺寸
+         * @param scaleMode 当前的缩放模式
+         * @param screenWidth 播放器视口宽度
+         * @param screenHeight 播放器视口高度
+         * @param contentWidth 初始化内容宽度
+         * @param contentHeight 初始化内容高度
+         */
+        calculateStageSize(scaleMode: string, screenWidth: number, screenHeight: number, contentWidth: number, contentHeight: number): StageDisplaySize;
+    }
+    /**
+     * @private
+     * 舞台显示尺寸数据
+     */
+    interface StageDisplaySize {
+        /**
+         * @private
+         * 舞台宽度
+         */
+        stageWidth: number;
+        /**
+         * @private
+         * 舞台高度
+         */
+        stageHeight: number;
+        /**
+         * @private
+         * 显示宽度，若跟舞台宽度不同，将会产生缩放。
+         */
+        displayWidth: number;
+        /**
+         * @private
+         * 显示高度，若跟舞台高度不同，将会产生缩放。
+         */
+        displayHeight: number;
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * Indicates whether an object is a instance of the class or interface specified as the parameter.This method is similar
+     * to the instanceOf operator which indicate whether an object is a instance of the specific class,besides, it can indicate
+     * whether an object is a instance of the specific interface.
+     * @param instance the instance to be checked.
+     * @param typeName the string value representing a specific class or interface.
+     * @returns A value of true if the object is a instance of the class or interface specified as the parameter.
+     * @example
+     * <code>
+     *     var instance = new lark.Sprite();
+     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
+     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
+     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
+     * </code>
+     * @see lark.registerClass()
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字作用类似，但除了判断类定义也能判断接口的实现。
+     * @param instance 要判断的实例。
+     * @param typeName 类或接口的完全名称.
+     * @returns 返回true表示当前对象是指定类或接口的实例。
+     * @example
+     * <code>
+     *     var instance = new lark.Sprite();
+     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
+     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
+     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
+     * </code>
+     * @see lark.registerClass()
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function is(instance: any, typeName: string): boolean;
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The Loader class is used to load image (JPG, PNG, or GIF) files. Use the load() method to initiate loading.
+     * The loaded image data is in the data property of ImageLoader.
+     * @event lark.Event.COMPLETE Emitted when the net request is complete.
+     * @event lark.Event.IO_ERROR Emitted when the net request is failed.
+     * @see lark.HttpRequest
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
+     * @event lark.Event.COMPLETE 加载完成
+     * @event lark.Event.IO_ERROR 加载失败
+     * @see lark.HttpRequest
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    interface ImageLoader extends EventEmitter {
+        /**
+         * @language en_US
+         * The data received from the load operation.
+         * @default null
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用 load() 方法加载成功的 BitmapData 图像数据。
+         * @default null
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        data: BitmapData;
+        /**
+         * @language en_US
+         * Specifies whether or not cross-site Access-Control requests should be made when loading a image from foreign origins.<br/>
+         * possible values are:"anonymous","use-credentials" or null.
+         * @default null
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当从其他站点加载一个图片时，指定是否启用跨域资源共享(CORS)，默认值为null。<br/>
+         * 可以设置为"anonymous","use-credentials"或null,设置为其他值将等同于"anonymous"。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        crossOrigin: string;
+        /**
+         * @language en_US
+         * start a load operation。<br/>
+         * Note: Calling this method for an already active request (one for which load() has already been
+         * called) will abort the last load operation immediately.
+         * @param url 要加载的图像文件的地址。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 启动一次图像加载。<br/>
+         * 注意：若之前已经调用过加载请求，重新调用 load() 将终止先前的请求，并开始新的加载。
+         * @param url 要加载的图像文件的地址。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        load(url: string): void;
+    }
+    /**
+     * @language en_US
+     * Creates a ImageLoader object
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 创建一个 ImageLoader 实例
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var ImageLoader: {
+        new (): ImageLoader;
+    };
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The HttpRequest class downloads data from a URL as text or binary data. It is useful for downloading text files,
+     * XML, or other information to be used in a dynamic, data-driven application. A HttpRequest object downloads all
+     * of the data from a URL before making it available to code in the applications. It sends out notifications about
+     * the progress of the download, which you can monitor through the bytesLoaded and bytesTotal properties,
+     * as well as through emitted events.
+     * @event lark.Event.COMPLETE Emitted when the net request is complete.
+     * @event lark.Event.IO_ERROR Emitted when the net request is failed.
+     * @event lark.ProgressEvent.PROGRESS Emitted when data is received as the download operation progresses.
+     * @see lark.HttpMethod
+     * @see lark.HttpResponseType
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * HttpRequest 类以文本或二进制数据的形式从 URL 下载数据。
+     * HttpRequest 对象会先从 URL 中下载所有数据，然后才将数据用于应用程序中的代码。它会发出有关下载进度的通知，
+     * 通过 bytesLoaded 和 bytesTotal 属性以及已调度的事件，可以监视下载进度。
+     * @event lark.Event.COMPLETE 加载完成
+     * @event lark.Event.IO_ERROR 加载失败
+     * @event lark.ProgressEvent.PROGRESS 加载进度，可通过event.bytesLoaded和event.bytesTotal统计进度信息。
+     * @see lark.HttpMethod
+     * @see lark.HttpResponseType
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    interface HttpRequest extends EventEmitter {
+        /**
+         * @language en_US
+         * The data received from the load operation.  The format of the data depends on the setting of the responseType property.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 本次请求返回的数据，数据类型根据 responseType 设置的值确定。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        response: any;
+        /**
+         * @language en_US
+         * Controls whether the downloaded data is received as text (HttpResponseType.TEXT) or raw binary data (HttpResponseType.ArrayBuffer)<br/>
+         * Note:If you attempt to set this property to an invalid value, Lark runtime set the value to HttpResponseType.TEXT.
+         * @default lark.HttpResponseType.TEXT
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设置返回的数据格式为文本（HttpResponseType.TEXT）还是二进制数据（HttpResponseType.ArrayBuffer）<br/>
+         * 注意：若尝试设置此属性为一个非法的值，运行时将使用HttpResponseType.TEXT。
+         * @default lark.HttpResponseType.TEXT
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        responseType: string;
+        /**
+         * @language en_US
+         * indicates whether or not cross-site Access-Control requests should be made using credentials such as cookies
+         * or authorization headers. (This never affects same-site requests.)
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 表明在进行跨站(cross-site)的访问控制(Access-Control)请求时，是否使用认证信息(例如cookie或授权的header)。(这个标志不会影响同站的请求)
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        withCredentials: boolean;
+        /**
+         * @language en_US
+         * Initializes a request.<br/>
+         * Note: Calling this method for an already active request (one for which open() or openRequest() has already been
+         * called) is the equivalent of calling abort().
+         * @param url The URL to send the request to.
+         * @param method The HTTP method to use, please use the const value in the HttpMethod class.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 初始化一个请求.<br/>
+         * 注意: 若在已经发出请求的对象上调用此方法，相当于立即调用abort().
+         * @param url 该请求所要访问的URL该请求所要访问的URL
+         * @param method 请求所使用的HTTP方法， 请使用 HttpMethod 定义的枚举值.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        open(url: string, method?: string): void;
+        /**
+         * @language en_US
+         * Sends the request.
+         * @param data the data to send.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 发送请求.
+         * @param data 需要发送的数据
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        send(data?: any): void;
+        /**
+         * @language en_US
+         * Aborts the request if it has already been sent.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果请求已经被发送,则立刻中止请求.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        abort(): void;
+        /**
+         * @language en_US
+         * Returns all the response headers as a string, or null if no response has been received.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回所有响应头信息(响应头名和值), 如果响应头还没接受,则返回"".
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        getAllResponseHeaders(): string;
+        /**
+         * @language en_US
+         * Sets the value of an HTTP request header. You must call setRequestHeader() after open().
+         * @param header The name of the header whose value is to be set.
+         * @param value The value to set as the body of the header.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 给指定的HTTP请求头赋值.在这之前,您必须确认已经调用 open() 方法打开了一个url.
+         * @param header 将要被赋值的请求头名称.
+         * @param value 给指定的请求头赋的值.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        setRequestHeader(header: string, value: string): void;
+        /**
+         * @language en_US
+         * Returns the string containing the text of the specified header, or null if either the response has not yet been
+         * received or the header doesn't exist in the response.
+         * @param header The name of the header whose value is to be get.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回指定的响应头的值, 如果响应头还没被接受,或该响应头不存在,则返回"".
+         * @param header 要返回的响应头名称
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        getResponseHeader(header: string): string;
+    }
+    /**
+     * @language en_US
+     * Creates a HttpRequest object.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 创建一个 HttpRequest 实例。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var HttpRequest: {
+        new (): HttpRequest;
+    };
+}
+declare module lark {
+    /**
+     * @language en_US
+     * Register and start a timer,which will notify the callback method at a rate of 60 FPS ,and pass the current time stamp as parameters.<br/>
+     * Note: After the registration,it will notify the callback method continuously,you can call the stopTick () method to stop it.
+     * @param callBack the call back method. the timeStamp parameter of this method represents the number of milliseconds
+     * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
+     * to render after processing of this method completes.
+     * @param thisObject the call back method's "this"
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 注册并启动一个计时器，通常会以60FPS的速率触发回调方法，并传入当前时间戳。注意：注册后将会持续触发回调方法，若要停止回调，需要手动调用stopTick()方法。
+     * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
+     * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
+     * @param thisObject 回调方法的this对象引用。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function startTick(callBack: (timeStamp: number) => boolean, thisObject: any): void;
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The HttpMethod class provides values that specify whether the HttpRequest object should use the POST method
+     * or the GET method when sending data to a server.
+     * @see lark.HttpRequest
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * HttpRequestMethod 类提供了一些值，这些值可指定在将数据发送到服务器时，
+     * HttpRequest 对象应使用 POST 方法还是 GET 方法。
+     * @see lark.HttpRequest
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class HttpMethod {
+        /**
+         * @language en_US
+         * Specifies that the HttpRequest object is a GET.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 表示 HttpRequest 对象是一个 GET。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static GET: string;
+        /**
+         * @language en_US
+         * Specifies that the HttpRequest object is a POST.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 表示 HttpRequest 对象是一个 POST。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static POST: string;
+    }
+}
+declare module lark.sys {
+    /**
+     * @private
+     * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
+     */
+    var sharedRenderContext: sys.RenderContext;
+    /**
+     * @private
+     * surfaceFactory实例
+     */
+    var surfaceFactory: SurfaceFactory;
+    /**
+     * @private
+     */
+    interface SurfaceFactory {
+        /**
+         * @private
+         * 从对象池取出或创建一个新的Surface实例
+         * @param useOnce 表示对取出实例的使用是一次性的，用完后立即会释放。
+         */
+        create(useOnce?: boolean): Surface;
+        /**
+         * @private
+         * 释放一个Surface实例
+         * @param surface 要释放的Surface实例
+         */
+        release(surface: Surface): void;
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The HttpResponseType class provides values that specify how downloaded data is received.
+     * @see lark.HttpRequest
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * URLLoaderDataFormat 类提供了一些用于指定如何接收已下载数据的值。
+     * @see lark.HttpRequest
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class HttpResponseType {
+        /**
+         * @language en_US
+         * Specifies that downloaded data is received as text. This is the default value of HttpRequest.responseType
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回字符串。HttpRequest.responseType属性的默认值。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static TEXT: string;
+        /**
+         * @language en_US
+         * Specifies that downloaded data is received as raw binary data.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回二进制的ArrayBuffer对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static ARRAY_BUFFER: string;
+    }
 }
 declare module lark {
     /**
@@ -2279,6 +2280,83 @@ declare module lark.sys {
          */
         updateRegion(bounds: Rectangle, matrix: Matrix, clipRect: Rectangle): void;
     }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * A class that provides constant values for visual blend mode effects. These constants are used in the blendMode
+     * property of the DisplayObject class.
+     * @see lark.DisplayObject#blendMode
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 提供混合模式可视效果的常量值的类,通常用于 DisplayObject 的 blendMode 属性上。
+     * @see lark.DisplayObject#blendMode
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class BlendMode {
+        /**
+         * @language en_US
+         * The display object appears in front of the background. Pixel values of the display object override the pixel
+         * values of the background. Where the display object is transparent, the background is visible.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 该显示对象出现在背景前面。显示对象的像素值会覆盖背景的像素值。在显示对象为透明的区域，背景是可见的。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static NORMAL: string;
+        /**
+         * @language en_US
+         * Adds the values of the constituent colors of the display object to the colors of its background, applying a
+         * ceiling of 0xFF. This setting is commonly used for animating a lightening dissolve between two objects.<br/>
+         * For example, if the display object has a pixel with an RGB value of 0xAAA633, and the background pixel has an
+         * RGB value of 0xDD2200, the resulting RGB value for the displayed pixel is 0xFFC833 (because 0xAA + 0xDD > 0xFF,
+         * 0xA6 + 0x22 = 0xC8, and 0x33 + 0x00 = 0x33).
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将显示对象的原色值添加到它的背景颜色中，上限值为 0xFF。此设置通常用于使两个对象间的加亮溶解产生动画效果。<br/>
+         * 例如，如果显示对象的某个像素的 RGB 值为 0xAAA633，背景像素的 RGB 值为 0xDD2200，则显示像素的结果 RGB 值为 0xFFC833
+         * （因为 0xAA + 0xDD > 0xFF，0xA6 + 0x22 = 0xC8，且 0x33 + 0x00 = 0x33）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static ADD: string;
+        /**
+         * @language en_US
+         * Erases the background based on the alpha value of the display object.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 根据显示对象的 Alpha 值擦除背景。Alpha 值不为0的区域将被擦除。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static ERASE: string;
+    }
+}
+declare module lark.sys {
+    /**
+     * @private
+     * 转换 blendMode 字符串为数字。
+     */
+    function blendModeToNumber(blendMode: string): number;
+    /**
+     * @private
+     * 转换数字为 blendMode 字符串。
+     */
+    function numberToBlendMode(blendMode: number): string;
 }
 declare module lark {
     /**
@@ -2485,131 +2563,6 @@ declare module lark.sys {
         private broadcastRender();
     }
 }
-declare module lark {
-    /**
-     * @language en_US
-     * A class that provides constant values for visual blend mode effects. These constants are used in the blendMode
-     * property of the DisplayObject class.
-     * @see lark.DisplayObject#blendMode
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 提供混合模式可视效果的常量值的类,通常用于 DisplayObject 的 blendMode 属性上。
-     * @see lark.DisplayObject#blendMode
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    class BlendMode {
-        /**
-         * @language en_US
-         * The display object appears in front of the background. Pixel values of the display object override the pixel
-         * values of the background. Where the display object is transparent, the background is visible.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 该显示对象出现在背景前面。显示对象的像素值会覆盖背景的像素值。在显示对象为透明的区域，背景是可见的。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static NORMAL: string;
-        /**
-         * @language en_US
-         * Adds the values of the constituent colors of the display object to the colors of its background, applying a
-         * ceiling of 0xFF. This setting is commonly used for animating a lightening dissolve between two objects.<br/>
-         * For example, if the display object has a pixel with an RGB value of 0xAAA633, and the background pixel has an
-         * RGB value of 0xDD2200, the resulting RGB value for the displayed pixel is 0xFFC833 (because 0xAA + 0xDD > 0xFF,
-         * 0xA6 + 0x22 = 0xC8, and 0x33 + 0x00 = 0x33).
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将显示对象的原色值添加到它的背景颜色中，上限值为 0xFF。此设置通常用于使两个对象间的加亮溶解产生动画效果。<br/>
-         * 例如，如果显示对象的某个像素的 RGB 值为 0xAAA633，背景像素的 RGB 值为 0xDD2200，则显示像素的结果 RGB 值为 0xFFC833
-         * （因为 0xAA + 0xDD > 0xFF，0xA6 + 0x22 = 0xC8，且 0x33 + 0x00 = 0x33）。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static ADD: string;
-        /**
-         * @language en_US
-         * Erases the background based on the alpha value of the display object.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 根据显示对象的 Alpha 值擦除背景。Alpha 值不为0的区域将被擦除。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static ERASE: string;
-    }
-}
-declare module lark.sys {
-    /**
-     * @private
-     * 转换 blendMode 字符串为数字。
-     */
-    function blendModeToNumber(blendMode: string): number;
-    /**
-     * @private
-     * 转换数字为 blendMode 字符串。
-     */
-    function numberToBlendMode(blendMode: number): string;
-}
-declare module lark {
-    /**
-     * @private
-     * 哈希计数
-     */
-    var $hashCount: number;
-    /**
-     * @language en_US
-     * The LarkObject class is the base class for all objects in the Lark framework.The LarkObject
-     * class includes a hashCode property, which is a unique identification number of the instance.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * Lark顶级对象。框架内所有对象的基类，为对象实例提供唯一的hashCode值。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    class LarkObject {
-        /**
-         * @language en_US
-         * Initializes a LarkObject
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个 LarkObject 对象
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        constructor();
-        /**
-         * @language en_US
-         * a unique identification number assigned to this instance.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回此对象唯一的哈希值,用于唯一确定一个对象。hashCode为大于等于1的整数。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        hashCode: number;
-    }
-}
 declare module lark.sys {
     /**
      * @private
@@ -2669,6 +2622,54 @@ declare module lark.sys {
 declare module lark {
 }
 declare module lark {
+    /**
+     * @private
+     * 哈希计数
+     */
+    var $hashCount: number;
+    /**
+     * @language en_US
+     * The LarkObject class is the base class for all objects in the Lark framework.The LarkObject
+     * class includes a hashCode property, which is a unique identification number of the instance.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Lark顶级对象。框架内所有对象的基类，为对象实例提供唯一的hashCode值。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class LarkObject {
+        /**
+         * @language en_US
+         * Initializes a LarkObject
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 LarkObject 对象
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        constructor();
+        /**
+         * @language en_US
+         * a unique identification number assigned to this instance.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回此对象唯一的哈希值,用于唯一确定一个对象。hashCode为大于等于1的整数。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        hashCode: number;
+    }
+}
+declare module lark {
 }
 declare module lark.sys {
     /**
@@ -2695,671 +2696,6 @@ declare module lark.sys {
          * @param contentHeight 初始化内容高度
          */
         calculateStageSize(scaleMode: string, screenWidth: number, screenHeight: number, contentWidth: number, contentHeight: number): StageDisplaySize;
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * The Event class is used as the base class for the creation of Event objects, which are passed as parameters to event
-     * listeners when an event occurs.The properties of the Event class carry basic information about an event, such as
-     * the event's type or whether the event's default behavior can be canceled. For many events, such as the events represented
-     * by the Event class constants, this basic information is sufficient. Other events, however, may require more detailed
-     * information. Events associated with a touch tap, for example, need to include additional information about the
-     * location of the touch event. You can pass such additional information to event listeners by extending the Event class,
-     * which is what the TouchEvent class does. Lark API defines several Event subclasses for common events that require
-     * additional information. Events associated with each of the Event subclasses are described in the documentation for
-     * each class.The methods of the Event class can be used in event listener functions to affect the behavior of the event
-     * object. Some events have an associated default behavior. Your event listener can cancel this behavior by calling the
-     * preventDefault() method. You can also make the current event listener the last one to process an event by calling
-     * the stopPropagation() or stopImmediatePropagation() method.
-     * @see lark.EventEmitter
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * Event 类作为创建事件实例的基类，当发生事件时，Event 实例将作为参数传递给事件侦听器。Event 类的属性包含有关事件的基本信息，例如事件
-     * 的类型或者是否可以取消事件的默认行为。对于许多事件（如由 Event 类常量表示的事件），此基本信息就足够了。但其他事件可能需要更详细的信息。
-     * 例如，与触摸关联的事件需要包括有关触摸事件的位置信息。您可以通过扩展 Event 类（TouchEvent 类执行的操作）将此类其他信息传递给事件侦听器。
-     * Lark API 为需要其他信息的常见事件定义多个 Event 子类。与每个 Event 子类关联的事件将在每个类的文档中加以介绍。Event 类的方法可以在
-     * 事件侦听器函数中使用以影响事件对象的行为。某些事件有关联的默认行为，通过调用 preventDefault() 方法，您的事件侦听器可以取消此行为。
-     * 可以通过调用 stopPropagation() 或 stopImmediatePropagation() 方法，将当前事件侦听器作为处理事件的最后一个事件侦听器。
-     * @see lark.EventEmitter
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    class Event extends LarkObject {
-        /**
-         * @language en_US
-         * Emitted when a display object is added to the on stage display list, either directly or through the addition
-         * of a sub tree in which the display object is contained.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在将显示对象直接添加到舞台显示列表或将包含显示对象的子树添加至舞台显示列表中时调度。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static ADDED_TO_STAGE: string;
-        /**
-         * @language en_US
-         * Emitted when a display object is about to be removed from the display list, either directly or through the removal
-         * of a sub tree in which the display object is contained.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在从显示列表中直接删除显示对象或删除包含显示对象的子树时调度。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static REMOVED_FROM_STAGE: string;
-        /**
-         * @language en_US
-         * Emitted when a display object is added to the display list.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将显示对象添加到显示列表中时调度。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static ADDED: string;
-        /**
-         * @language en_US
-         * Emitted when a display object is about to be removed from the display list.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将要从显示列表中删除显示对象时调度。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static REMOVED: string;
-        /**
-         * @language en_US
-         * [broadcast event] Emitted when the playhead is entering a new frame.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * [广播事件] 进入新的一帧,监听此事件将会在下一帧开始时触发一次回调。这是一个广播事件，可以在任何一个显示对象上监听，无论它是否在显示列表中。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static ENTER_FRAME: string;
-        /**
-         * @language en_US
-         * Emitted when the display list is about to be updated and rendered.
-         * Note: Every time you want to receive a render event,you must call the stage.invalidate() method.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 渲染事件，监听此事件将会在本帧末即将开始渲染的前一刻触发回调，这是一个广播事件，可以在任何一个显示对象上监听，无论它是否在显示列表中。
-         * 注意：每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 stage.invalidate() 方法，由于每帧只会触发一次屏幕刷新，
-         * 若在 Event.RENDER 回调函数执行期间再次调用stage.invalidate()，将会被忽略。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static RENDER: string;
-        /**
-         * @language en_US
-         * Emitted when the size of stage or UIComponent is changed.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 舞台尺寸或UI组件尺寸发生改变
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static RESIZE: string;
-        /**
-         * @language en_US
-         * Emitted when the value or selection of a property is chaned.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 属性值或状态发生改变。通常是按钮的选中状态，或者列表的选中项索引改变。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static CHANGE: string;
-        /**
-         * @language en_US
-         * Emitted when the value or selection of a property is going to change.you can cancel this by calling the
-         * preventDefault() method.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 属性值或状态即将发生改变,通常是按钮的选中状态，或者列表的选中项索引改变。可以通过调用 preventDefault() 方法阻止索引发生更改。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static CHANGING: string;
-        /**
-         * @language en_US
-         * Emitted when the net request is complete.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 网络请求加载完成
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static COMPLETE: string;
-        /**
-         * @language en_US
-         * Emitted when the net request is failed.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 网络请求加载失败
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static IO_ERROR: string;
-        /**
-         * @language en_US
-         * Emitted when the TextInput instance gets focus.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * TextInput实例获得焦点
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static FOCUS_IN: string;
-        /**
-         * @language en_US
-         * Emitted when the TextInput instance loses focus.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * TextInput实例失去焦点
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static FOCUS_OUT: string;
-        /**
-         * @language en_US
-         * Emitted when the playback is ended.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 动画声音等播放完成
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static ENDED: string;
-        /**
-         * @language en_US
-         * Creates an Event object to pass as a parameter to event listeners.
-         * @param type  The type of the event, accessible as Event.type.
-         * @param bubbles  Determines whether the Event object participates in the bubbling stage of the event flow. The default value is false.
-         * @param cancelable Determines whether the Event object can be canceled. The default values is false.
-         * @param data the optional data associated with this event
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个作为参数传递给事件侦听器的 Event 对象。
-         * @param type  事件的类型，可以作为 Event.type 访问。
-         * @param bubbles  确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
-         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
-         * @param data 与此事件对象关联的可选数据。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        constructor(type: string, bubbles?: boolean, cancelable?: boolean, data?: any);
-        /**
-         * @language en_US
-         * the optional data associated with this event
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 与此事件对象关联的可选数据。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        data: any;
-        /**
-         * @language en_US
-         * [read-only] The type of event. The type is case-sensitive.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * [只读] 事件的类型。类型区分大小写。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        type: string;
-        /**
-         * @language en_US
-         * [read-only] Indicates whether an event is a bubbling event.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * [只读] 表示事件是否为冒泡事件。如果事件可以冒泡，则此值为 true；否则为 false。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        bubbles: boolean;
-        /**
-         * @language en_US
-         * [read-only] Indicates whether the behavior associated with the event can be prevented. If the behavior can be
-         * canceled, this value is true; otherwise it is false.
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * [只读] 表示是否可以阻止与事件相关联的行为。如果可以取消该行为，则此值为 true；否则为 false。
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        cancelable: boolean;
-        /**
-         * @language en_US
-         * [read-only] The current phase in the event flow. This property can contain the following numeric values:
-         * The capture phase (EventPhase.CAPTURING_PHASE).
-         * The target phase (EventPhase.AT_TARGET)
-         * The bubbling phase (EventPhase.BUBBLING_PHASE).
-         * @see lark.EventPhase
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * [只读] 事件流中的当前阶段。此属性可以包含以下数值：
-         * 捕获阶段 (EventPhase.CAPTURING_PHASE)。
-         * 目标阶段 (EventPhase.AT_TARGET)。
-         * 冒泡阶段 (EventPhase.BUBBLING_PHASE)。
-         * @see lark.EventPhase
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        eventPhase: number;
-        /**
-         * @language en_US
-         * [read-only] The object that is actively processing the Event object with an event listener. For example, if a
-         * user clicks an OK button, the current target could be the node containing that button or one of its ancestors
-         * that has registered an event listener for that event.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * [只读] 当前正在使用某个事件侦听器处理 Event 对象的对象。例如，如果用户单击“确定”按钮，
-         * 则当前目标可以是包含该按钮的节点，也可以是它的已为该事件注册了事件侦听器的始祖之一。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        currentTarget: any;
-        /**
-         * @language en_US
-         * [read-only] The event target. This property contains the target node. For example, if a user clicks an OK button,
-         * the target node is the display list node containing that button.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * [只读] 事件目标。此属性包含目标节点。例如，如果用户单击“确定”按钮，则目标节点就是包含该按钮的显示列表节点。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        target: any;
-        /**
-         * @language en_US
-         * Checks whether the preventDefault() method has been called on the event. If the preventDefault() method has been
-         * called, returns true; otherwise, returns false.
-         * @returns If preventDefault() has been called, returns true; otherwise, returns false.
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 检查是否已对事件调用 preventDefault() 方法。
-         * @returns 如果已调用 preventDefault() 方法，则返回 true；否则返回 false。
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        isDefaultPrevented(): boolean;
-        /**
-         * @language en_US
-         * Cancels an event's default behavior if that behavior can be canceled.Many events have associated behaviors that
-         * are carried out by default. For example, if a user types a character into a text input, the default behavior
-         * is that the character is displayed in the text input. Because the TextEvent.TEXT_INPUT event's default behavior
-         * can be canceled, you can use the preventDefault() method to prevent the character from appearing.
-         * You can use the Event.cancelable property to check whether you can prevent the default behavior associated with
-         * a particular event. If the value of Event.cancelable is true, then preventDefault() can be used to cancel the event;
-         * otherwise, preventDefault() has no effect.
-         * @see #cancelable
-         * @see #isDefaultPrevented
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果可以取消事件的默认行为，则取消该行为。
-         * 许多事件都有默认执行的关联行为。例如，如果用户在文本字段中键入一个字符，则默认行为就是在文本字段中显示该字符。
-         * 由于可以取消 TextEvent.TEXT_INPUT 事件的默认行为，因此您可以使用 preventDefault() 方法来防止显示该字符。
-         * 您可以使用 Event.cancelable 属性来检查是否可以防止与特定事件关联的默认行为。如果 Event.cancelable 的值为 true，
-         * 则可以使用 preventDefault() 来取消事件；否则，preventDefault() 无效。
-         * @see #cancelable
-         * @see #isDefaultPrevented
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        preventDefault(): void;
-        /**
-         * @language en_US
-         * Prevents processing of any event listeners in nodes subsequent to the current node in the event flow. This method
-         * does not affect any event listeners in the current node (currentTarget). In contrast, the stopImmediatePropagation()
-         * method prevents processing of event listeners in both the current node and subsequent nodes. Additional calls to this
-         * method have no effect. This method can be called in any phase of the event flow.<br/>
-         * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
-         * @see #stopImmediatePropagation()
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 防止对事件流中当前节点的后续节点中的所有事件侦听器进行处理。此方法不会影响当前节点 currentTarget 中的任何事件侦听器。
-         * 相比之下，stopImmediatePropagation() 方法可以防止对当前节点中和后续节点中的事件侦听器进行处理。
-         * 对此方法的其它调用没有任何效果。可以在事件流的任何阶段中调用此方法。<br/>
-         * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
-         * @see #stopImmediatePropagation()
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        stopPropagation(): void;
-        /**
-         * @language en_US
-         * Prevents processing of any event listeners in the current node and any subsequent nodes in the event flow.
-         * This method takes effect immediately, and it affects event listeners in the current node. In contrast, the
-         * stopPropagation() method doesn't take effect until all the event listeners in the current node finish processing.<br/>
-         * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
-         * @see #stopPropagation()
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 防止对事件流中当前节点中和所有后续节点中的事件侦听器进行处理。此方法会立即生效，并且会影响当前节点中的事件侦听器。
-         * 相比之下，在当前节点中的所有事件侦听器都完成处理之前，stopPropagation() 方法不会生效。<br/>
-         * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
-         * @see #stopPropagation()
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        stopImmediatePropagation(): void;
-        /**
-         * @language en_US
-         * This method will be called automatically when you pass the event object as the parameters to the Event.release() method.
-         * If your custom event is designed for reusable,you should override this method to make sure all the references to external
-         * objects are cleaned. if not,it may cause memory leaking.
-         * @see lark.Event.create()
-         * @see lark.Event.release()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 当事件实例传递给Event.release()静态方法时，实例上的clean()方法将会被自动调用。
-         * 若此自定义事件的实例设计为可以循环复用的，为了避免引起内存泄露，自定义事件需要覆盖此方法来确保实例被缓存前断开对外部对象的一切引用。
-         * @see lark.Event.create()
-         * @see lark.Event.release()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        protected clean(): void;
-        /**
-         * @language en_US
-         * Gets one event instance from the object pool or create a new one. We highly recommend using the Event.create()
-         * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
-         * which allows you to get better code execution performance.<br/>
-         * Note: If you want to use this method to initialize your custom event object,you must make sure the constructor
-         * of your custom event is the same as the constructor of lark.Event.
-         * @example
-         * <code>
-         *    var event = Event.create(Event,type, bubbles);
-         *    event.data = data;    //optional,initializes custom data here
-         *    this.emit(event);
-         *    Event.release(event);
-         * </code>
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 从对象池中取出或创建一个新的事件实例。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
-         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。<br/>
-         * 注意：若使用此方法来创建自定义事件的实例，自定义的构造函数参数列表必须跟Event类一致。
-         * @example
-         * <code>
-         *    var event = Event.create(Event,type, bubbles);
-         *    event.data = data;  //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
-         *    this.emit(event);
-         *    Event.release(event);
-         * </code>
-         * @see #clean()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static create<T extends Event>(EventClass: {
-            new (type: string, bubbles?: boolean, cancelable?: boolean): T;
-            eventPool?: Event[];
-        }, type: string, bubbles?: boolean, cancelable?: boolean): T;
-        /**
-         * @language en_US
-         * Releases an event object and cache it into the object pool.We highly recommend using the Event.create()
-         * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
-         * which allows you to get better code execution performance.<br/>
-         * Note: The parameters of this method only accepts an instance created by the Event.create() method.
-         * if not,it may throw an error.
-         * @example
-         * <code>
-         *    var event = Event.create(Event,type, bubbles);
-         *    event.data = data; //optional,initializes custom data here
-         *    this.emit(event);
-         *    Event.release(event);
-         * </code>
-         * @see #clean()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 释放一个事件对象，并缓存到对象池。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
-         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。<br/>
-         * 注意：此方法只能传入由Event.create()创建的事件实例，传入非法对象实例可能会导致报错。
-         * @example
-         * <code>
-         *    var event = Event.create(Event,type, bubbles);
-         *    event.data = data;   //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
-         *    this.emit(event);
-         *    Event.release(event);
-         * </code>
-         * @see #clean()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static release(event: Event): void;
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * The EventEmitter class is the base class for all classes that emit events. The EventEmitter class implements
-     * the IEventEmitter interface and is the base class for the DisplayObject class. The EventEmitter class allows
-     * any object on the display list to be an event target and as such, to use the methods of the IEventEmitter interface.
-     * Event targets are an important part of the Lark event model. The event target serves as the focal point for how events
-     * flow through the display list hierarchy. When an event such as a touch tap, Lark emits an event object into the
-     * event flow from the root of the display list. The event object then makes its way through the display list until it
-     * reaches the event target, at which point it begins its return trip through the display list. This round-trip journey
-     * to the event target is conceptually divided into three phases: <br/>
-     * the capture phase comprises the journey from the root to the last node before the event target's node, the target
-     * phase comprises only the event target node, and the bubbling phase comprises any subsequent nodes encountered on
-     * the return trip to the root of the display list. In general, the easiest way for a user-defined class to gain event
-     * emitting capabilities is to extend EventEmitter. If this is impossible (that is, if the class is already extending
-     * another class), you can instead implement the IEventEmitter interface, create an EventEmitter member, and write simple
-     * hooks to route calls into the aggregated EventEmitter.
-     * @see lark.IEventEmitter
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * EventEmitter 是 Lark 的事件派发器类，负责进行事件的发送和侦听。
-     * 事件目标是事件如何通过显示列表层次结构这一问题的焦点。当发生触摸或按键等事件时，
-     * 框架会将事件对象调度到从显示列表根开始的事件流中。然后该事件对象在显示列表中前进，直到到达事件目标，
-     * 然后从这一点开始其在显示列表中的回程。在概念上，到事件目标的此往返行程被划分为三个阶段：
-     * 捕获阶段包括从根到事件目标节点之前的最后一个节点的行程，目标阶段仅包括事件目标节点，冒泡阶段包括回程上遇到的任何后续节点到显示列表的根。
-     * 通常，使用户定义的类能够调度事件的最简单方法是扩展 EventEmitter。如果无法扩展（即，如果该类已经扩展了另一个类），则可以实现
-     * IEventEmitter 接口，创建 EventEmitter 成员，并编写一些简单的映射，将调用连接到聚合的 EventEmitter 中。
-     * @see lark.IEventEmitter
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    class EventEmitter extends LarkObject implements IEventEmitter {
-        /**
-         * @language en_US
-         * create an instance of the EventEmitter class.
-         * @param target The target object for events emitted to the EventEmitter object. This parameter is used when
-         * the EventEmitter instance is aggregated by a class that implements IEventEmitter it is necessary so that the
-         * containing object can be the target for events. Do not use this parameter in simple cases in which a class extends EventEmitter.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个 EventEmitter 类的实例
-         * @param target 此 EventEmitter 所抛出事件对象的 target 指向。此参数主要用于一个实现了 IEventEmitter 接口的自定义类，
-         * 以便抛出的事件对象的 target 属性可以指向自定义类自身。请勿在直接继承 EventEmitter 的情况下使用此参数。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        constructor(target?: IEventEmitter);
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        once(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        removeListener(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean): void;
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        hasListener(type: string): boolean;
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        willTrigger(type: string): boolean;
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        emit(event: Event): boolean;
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        emitWith(type: string, bubbles?: boolean, cancelable?: boolean, data?: any): boolean;
-    }
-}
-declare module lark.sys {
-    /**
-     * @private
-     * 事件信息对象
-     */
-    interface EventBin {
-        /**
-         * @private
-         */
-        type: string;
-        /**
-         * @private
-         */
-        listener: (event: Event) => void;
-        /**
-         * @private
-         */
-        thisObject: any;
-        /**
-         * @private
-         */
-        priority: number;
-        /**
-         * @private
-         */
-        target: IEventEmitter;
-        /**
-         * @private
-         */
-        useCapture: boolean;
-        /**
-         * @private
-         */
-        emitOnce: boolean;
     }
 }
 declare module lark {
@@ -4150,6 +3486,671 @@ declare module lark.sys {
 declare module lark {
     /**
      * @language en_US
+     * The Event class is used as the base class for the creation of Event objects, which are passed as parameters to event
+     * listeners when an event occurs.The properties of the Event class carry basic information about an event, such as
+     * the event's type or whether the event's default behavior can be canceled. For many events, such as the events represented
+     * by the Event class constants, this basic information is sufficient. Other events, however, may require more detailed
+     * information. Events associated with a touch tap, for example, need to include additional information about the
+     * location of the touch event. You can pass such additional information to event listeners by extending the Event class,
+     * which is what the TouchEvent class does. Lark API defines several Event subclasses for common events that require
+     * additional information. Events associated with each of the Event subclasses are described in the documentation for
+     * each class.The methods of the Event class can be used in event listener functions to affect the behavior of the event
+     * object. Some events have an associated default behavior. Your event listener can cancel this behavior by calling the
+     * preventDefault() method. You can also make the current event listener the last one to process an event by calling
+     * the stopPropagation() or stopImmediatePropagation() method.
+     * @see lark.EventEmitter
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Event 类作为创建事件实例的基类，当发生事件时，Event 实例将作为参数传递给事件侦听器。Event 类的属性包含有关事件的基本信息，例如事件
+     * 的类型或者是否可以取消事件的默认行为。对于许多事件（如由 Event 类常量表示的事件），此基本信息就足够了。但其他事件可能需要更详细的信息。
+     * 例如，与触摸关联的事件需要包括有关触摸事件的位置信息。您可以通过扩展 Event 类（TouchEvent 类执行的操作）将此类其他信息传递给事件侦听器。
+     * Lark API 为需要其他信息的常见事件定义多个 Event 子类。与每个 Event 子类关联的事件将在每个类的文档中加以介绍。Event 类的方法可以在
+     * 事件侦听器函数中使用以影响事件对象的行为。某些事件有关联的默认行为，通过调用 preventDefault() 方法，您的事件侦听器可以取消此行为。
+     * 可以通过调用 stopPropagation() 或 stopImmediatePropagation() 方法，将当前事件侦听器作为处理事件的最后一个事件侦听器。
+     * @see lark.EventEmitter
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class Event extends LarkObject {
+        /**
+         * @language en_US
+         * Emitted when a display object is added to the on stage display list, either directly or through the addition
+         * of a sub tree in which the display object is contained.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在将显示对象直接添加到舞台显示列表或将包含显示对象的子树添加至舞台显示列表中时调度。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static ADDED_TO_STAGE: string;
+        /**
+         * @language en_US
+         * Emitted when a display object is about to be removed from the display list, either directly or through the removal
+         * of a sub tree in which the display object is contained.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在从显示列表中直接删除显示对象或删除包含显示对象的子树时调度。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static REMOVED_FROM_STAGE: string;
+        /**
+         * @language en_US
+         * Emitted when a display object is added to the display list.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将显示对象添加到显示列表中时调度。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static ADDED: string;
+        /**
+         * @language en_US
+         * Emitted when a display object is about to be removed from the display list.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将要从显示列表中删除显示对象时调度。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static REMOVED: string;
+        /**
+         * @language en_US
+         * [broadcast event] Emitted when the playhead is entering a new frame.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [广播事件] 进入新的一帧,监听此事件将会在下一帧开始时触发一次回调。这是一个广播事件，可以在任何一个显示对象上监听，无论它是否在显示列表中。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static ENTER_FRAME: string;
+        /**
+         * @language en_US
+         * Emitted when the display list is about to be updated and rendered.
+         * Note: Every time you want to receive a render event,you must call the stage.invalidate() method.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 渲染事件，监听此事件将会在本帧末即将开始渲染的前一刻触发回调，这是一个广播事件，可以在任何一个显示对象上监听，无论它是否在显示列表中。
+         * 注意：每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 stage.invalidate() 方法，由于每帧只会触发一次屏幕刷新，
+         * 若在 Event.RENDER 回调函数执行期间再次调用stage.invalidate()，将会被忽略。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static RENDER: string;
+        /**
+         * @language en_US
+         * Emitted when the size of stage or UIComponent is changed.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 舞台尺寸或UI组件尺寸发生改变
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static RESIZE: string;
+        /**
+         * @language en_US
+         * Emitted when the value or selection of a property is chaned.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 属性值或状态发生改变。通常是按钮的选中状态，或者列表的选中项索引改变。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static CHANGE: string;
+        /**
+         * @language en_US
+         * Emitted when the value or selection of a property is going to change.you can cancel this by calling the
+         * preventDefault() method.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 属性值或状态即将发生改变,通常是按钮的选中状态，或者列表的选中项索引改变。可以通过调用 preventDefault() 方法阻止索引发生更改。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static CHANGING: string;
+        /**
+         * @language en_US
+         * Emitted when the net request is complete.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 网络请求加载完成
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static COMPLETE: string;
+        /**
+         * @language en_US
+         * Emitted when the net request is failed.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 网络请求加载失败
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static IO_ERROR: string;
+        /**
+         * @language en_US
+         * Emitted when the TextInput instance gets focus.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * TextInput实例获得焦点
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static FOCUS_IN: string;
+        /**
+         * @language en_US
+         * Emitted when the TextInput instance loses focus.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * TextInput实例失去焦点
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static FOCUS_OUT: string;
+        /**
+         * @language en_US
+         * Emitted when the playback is ended.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 动画声音等播放完成
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static ENDED: string;
+        /**
+         * @language en_US
+         * Creates an Event object to pass as a parameter to event listeners.
+         * @param type  The type of the event, accessible as Event.type.
+         * @param bubbles  Determines whether the Event object participates in the bubbling stage of the event flow. The default value is false.
+         * @param cancelable Determines whether the Event object can be canceled. The default values is false.
+         * @param data the optional data associated with this event
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个作为参数传递给事件侦听器的 Event 对象。
+         * @param type  事件的类型，可以作为 Event.type 访问。
+         * @param bubbles  确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
+         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
+         * @param data 与此事件对象关联的可选数据。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        constructor(type: string, bubbles?: boolean, cancelable?: boolean, data?: any);
+        /**
+         * @language en_US
+         * the optional data associated with this event
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 与此事件对象关联的可选数据。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        data: any;
+        /**
+         * @language en_US
+         * [read-only] The type of event. The type is case-sensitive.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [只读] 事件的类型。类型区分大小写。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        type: string;
+        /**
+         * @language en_US
+         * [read-only] Indicates whether an event is a bubbling event.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [只读] 表示事件是否为冒泡事件。如果事件可以冒泡，则此值为 true；否则为 false。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        bubbles: boolean;
+        /**
+         * @language en_US
+         * [read-only] Indicates whether the behavior associated with the event can be prevented. If the behavior can be
+         * canceled, this value is true; otherwise it is false.
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [只读] 表示是否可以阻止与事件相关联的行为。如果可以取消该行为，则此值为 true；否则为 false。
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        cancelable: boolean;
+        /**
+         * @language en_US
+         * [read-only] The current phase in the event flow. This property can contain the following numeric values:
+         * The capture phase (EventPhase.CAPTURING_PHASE).
+         * The target phase (EventPhase.AT_TARGET)
+         * The bubbling phase (EventPhase.BUBBLING_PHASE).
+         * @see lark.EventPhase
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [只读] 事件流中的当前阶段。此属性可以包含以下数值：
+         * 捕获阶段 (EventPhase.CAPTURING_PHASE)。
+         * 目标阶段 (EventPhase.AT_TARGET)。
+         * 冒泡阶段 (EventPhase.BUBBLING_PHASE)。
+         * @see lark.EventPhase
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        eventPhase: number;
+        /**
+         * @language en_US
+         * [read-only] The object that is actively processing the Event object with an event listener. For example, if a
+         * user clicks an OK button, the current target could be the node containing that button or one of its ancestors
+         * that has registered an event listener for that event.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [只读] 当前正在使用某个事件侦听器处理 Event 对象的对象。例如，如果用户单击“确定”按钮，
+         * 则当前目标可以是包含该按钮的节点，也可以是它的已为该事件注册了事件侦听器的始祖之一。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        currentTarget: any;
+        /**
+         * @language en_US
+         * [read-only] The event target. This property contains the target node. For example, if a user clicks an OK button,
+         * the target node is the display list node containing that button.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [只读] 事件目标。此属性包含目标节点。例如，如果用户单击“确定”按钮，则目标节点就是包含该按钮的显示列表节点。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        target: any;
+        /**
+         * @language en_US
+         * Checks whether the preventDefault() method has been called on the event. If the preventDefault() method has been
+         * called, returns true; otherwise, returns false.
+         * @returns If preventDefault() has been called, returns true; otherwise, returns false.
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 检查是否已对事件调用 preventDefault() 方法。
+         * @returns 如果已调用 preventDefault() 方法，则返回 true；否则返回 false。
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        isDefaultPrevented(): boolean;
+        /**
+         * @language en_US
+         * Cancels an event's default behavior if that behavior can be canceled.Many events have associated behaviors that
+         * are carried out by default. For example, if a user types a character into a text input, the default behavior
+         * is that the character is displayed in the text input. Because the TextEvent.TEXT_INPUT event's default behavior
+         * can be canceled, you can use the preventDefault() method to prevent the character from appearing.
+         * You can use the Event.cancelable property to check whether you can prevent the default behavior associated with
+         * a particular event. If the value of Event.cancelable is true, then preventDefault() can be used to cancel the event;
+         * otherwise, preventDefault() has no effect.
+         * @see #cancelable
+         * @see #isDefaultPrevented
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果可以取消事件的默认行为，则取消该行为。
+         * 许多事件都有默认执行的关联行为。例如，如果用户在文本字段中键入一个字符，则默认行为就是在文本字段中显示该字符。
+         * 由于可以取消 TextEvent.TEXT_INPUT 事件的默认行为，因此您可以使用 preventDefault() 方法来防止显示该字符。
+         * 您可以使用 Event.cancelable 属性来检查是否可以防止与特定事件关联的默认行为。如果 Event.cancelable 的值为 true，
+         * 则可以使用 preventDefault() 来取消事件；否则，preventDefault() 无效。
+         * @see #cancelable
+         * @see #isDefaultPrevented
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        preventDefault(): void;
+        /**
+         * @language en_US
+         * Prevents processing of any event listeners in nodes subsequent to the current node in the event flow. This method
+         * does not affect any event listeners in the current node (currentTarget). In contrast, the stopImmediatePropagation()
+         * method prevents processing of event listeners in both the current node and subsequent nodes. Additional calls to this
+         * method have no effect. This method can be called in any phase of the event flow.<br/>
+         * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
+         * @see #stopImmediatePropagation()
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 防止对事件流中当前节点的后续节点中的所有事件侦听器进行处理。此方法不会影响当前节点 currentTarget 中的任何事件侦听器。
+         * 相比之下，stopImmediatePropagation() 方法可以防止对当前节点中和后续节点中的事件侦听器进行处理。
+         * 对此方法的其它调用没有任何效果。可以在事件流的任何阶段中调用此方法。<br/>
+         * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
+         * @see #stopImmediatePropagation()
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        stopPropagation(): void;
+        /**
+         * @language en_US
+         * Prevents processing of any event listeners in the current node and any subsequent nodes in the event flow.
+         * This method takes effect immediately, and it affects event listeners in the current node. In contrast, the
+         * stopPropagation() method doesn't take effect until all the event listeners in the current node finish processing.<br/>
+         * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
+         * @see #stopPropagation()
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 防止对事件流中当前节点中和所有后续节点中的事件侦听器进行处理。此方法会立即生效，并且会影响当前节点中的事件侦听器。
+         * 相比之下，在当前节点中的所有事件侦听器都完成处理之前，stopPropagation() 方法不会生效。<br/>
+         * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
+         * @see #stopPropagation()
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        stopImmediatePropagation(): void;
+        /**
+         * @language en_US
+         * This method will be called automatically when you pass the event object as the parameters to the Event.release() method.
+         * If your custom event is designed for reusable,you should override this method to make sure all the references to external
+         * objects are cleaned. if not,it may cause memory leaking.
+         * @see lark.Event.create()
+         * @see lark.Event.release()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当事件实例传递给Event.release()静态方法时，实例上的clean()方法将会被自动调用。
+         * 若此自定义事件的实例设计为可以循环复用的，为了避免引起内存泄露，自定义事件需要覆盖此方法来确保实例被缓存前断开对外部对象的一切引用。
+         * @see lark.Event.create()
+         * @see lark.Event.release()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        protected clean(): void;
+        /**
+         * @language en_US
+         * Gets one event instance from the object pool or create a new one. We highly recommend using the Event.create()
+         * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
+         * which allows you to get better code execution performance.<br/>
+         * Note: If you want to use this method to initialize your custom event object,you must make sure the constructor
+         * of your custom event is the same as the constructor of lark.Event.
+         * @example
+         * <code>
+         *    var event = Event.create(Event,type, bubbles);
+         *    event.data = data;    //optional,initializes custom data here
+         *    this.emit(event);
+         *    Event.release(event);
+         * </code>
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从对象池中取出或创建一个新的事件实例。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
+         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。<br/>
+         * 注意：若使用此方法来创建自定义事件的实例，自定义的构造函数参数列表必须跟Event类一致。
+         * @example
+         * <code>
+         *    var event = Event.create(Event,type, bubbles);
+         *    event.data = data;  //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
+         *    this.emit(event);
+         *    Event.release(event);
+         * </code>
+         * @see #clean()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static create<T extends Event>(EventClass: {
+            new (type: string, bubbles?: boolean, cancelable?: boolean): T;
+            eventPool?: Event[];
+        }, type: string, bubbles?: boolean, cancelable?: boolean): T;
+        /**
+         * @language en_US
+         * Releases an event object and cache it into the object pool.We highly recommend using the Event.create()
+         * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
+         * which allows you to get better code execution performance.<br/>
+         * Note: The parameters of this method only accepts an instance created by the Event.create() method.
+         * if not,it may throw an error.
+         * @example
+         * <code>
+         *    var event = Event.create(Event,type, bubbles);
+         *    event.data = data; //optional,initializes custom data here
+         *    this.emit(event);
+         *    Event.release(event);
+         * </code>
+         * @see #clean()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 释放一个事件对象，并缓存到对象池。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
+         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。<br/>
+         * 注意：此方法只能传入由Event.create()创建的事件实例，传入非法对象实例可能会导致报错。
+         * @example
+         * <code>
+         *    var event = Event.create(Event,type, bubbles);
+         *    event.data = data;   //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
+         *    this.emit(event);
+         *    Event.release(event);
+         * </code>
+         * @see #clean()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static release(event: Event): void;
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The EventEmitter class is the base class for all classes that emit events. The EventEmitter class implements
+     * the IEventEmitter interface and is the base class for the DisplayObject class. The EventEmitter class allows
+     * any object on the display list to be an event target and as such, to use the methods of the IEventEmitter interface.
+     * Event targets are an important part of the Lark event model. The event target serves as the focal point for how events
+     * flow through the display list hierarchy. When an event such as a touch tap, Lark emits an event object into the
+     * event flow from the root of the display list. The event object then makes its way through the display list until it
+     * reaches the event target, at which point it begins its return trip through the display list. This round-trip journey
+     * to the event target is conceptually divided into three phases: <br/>
+     * the capture phase comprises the journey from the root to the last node before the event target's node, the target
+     * phase comprises only the event target node, and the bubbling phase comprises any subsequent nodes encountered on
+     * the return trip to the root of the display list. In general, the easiest way for a user-defined class to gain event
+     * emitting capabilities is to extend EventEmitter. If this is impossible (that is, if the class is already extending
+     * another class), you can instead implement the IEventEmitter interface, create an EventEmitter member, and write simple
+     * hooks to route calls into the aggregated EventEmitter.
+     * @see lark.IEventEmitter
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * EventEmitter 是 Lark 的事件派发器类，负责进行事件的发送和侦听。
+     * 事件目标是事件如何通过显示列表层次结构这一问题的焦点。当发生触摸或按键等事件时，
+     * 框架会将事件对象调度到从显示列表根开始的事件流中。然后该事件对象在显示列表中前进，直到到达事件目标，
+     * 然后从这一点开始其在显示列表中的回程。在概念上，到事件目标的此往返行程被划分为三个阶段：
+     * 捕获阶段包括从根到事件目标节点之前的最后一个节点的行程，目标阶段仅包括事件目标节点，冒泡阶段包括回程上遇到的任何后续节点到显示列表的根。
+     * 通常，使用户定义的类能够调度事件的最简单方法是扩展 EventEmitter。如果无法扩展（即，如果该类已经扩展了另一个类），则可以实现
+     * IEventEmitter 接口，创建 EventEmitter 成员，并编写一些简单的映射，将调用连接到聚合的 EventEmitter 中。
+     * @see lark.IEventEmitter
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class EventEmitter extends LarkObject implements IEventEmitter {
+        /**
+         * @language en_US
+         * create an instance of the EventEmitter class.
+         * @param target The target object for events emitted to the EventEmitter object. This parameter is used when
+         * the EventEmitter instance is aggregated by a class that implements IEventEmitter it is necessary so that the
+         * containing object can be the target for events. Do not use this parameter in simple cases in which a class extends EventEmitter.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 EventEmitter 类的实例
+         * @param target 此 EventEmitter 所抛出事件对象的 target 指向。此参数主要用于一个实现了 IEventEmitter 接口的自定义类，
+         * 以便抛出的事件对象的 target 属性可以指向自定义类自身。请勿在直接继承 EventEmitter 的情况下使用此参数。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        constructor(target?: IEventEmitter);
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        once(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        removeListener(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean): void;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        hasListener(type: string): boolean;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        willTrigger(type: string): boolean;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        emit(event: Event): boolean;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        emitWith(type: string, bubbles?: boolean, cancelable?: boolean, data?: any): boolean;
+    }
+}
+declare module lark.sys {
+    /**
+     * @private
+     * 事件信息对象
+     */
+    interface EventBin {
+        /**
+         * @private
+         */
+        type: string;
+        /**
+         * @private
+         */
+        listener: (event: Event) => void;
+        /**
+         * @private
+         */
+        thisObject: any;
+        /**
+         * @private
+         */
+        priority: number;
+        /**
+         * @private
+         */
+        target: IEventEmitter;
+        /**
+         * @private
+         */
+        useCapture: boolean;
+        /**
+         * @private
+         */
+        emitOnce: boolean;
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
      * The TouchEvent class lets you handle events on devices that detect user contact with the device (such as a finger
      * on a touch screen).When a user interacts with a device such as a mobile phone or tablet with a touch screen, the
      * user typically touches the screen with his or her fingers or a pointing device. You can develop applications that
@@ -4161,7 +4162,7 @@ declare module lark {
      * on the ancestor node with the type parameter set to the specific touch event you want to detect.
      *
      * @version Lark 1.0
-     * @platform Web,Runtime,Native
+     * @platform Web,Native
      */
     /**
      * @language zh_CN
@@ -4173,33 +4174,33 @@ declare module lark {
      * 接收触摸事件的通知，请对祖代节点使用 EventEmitter.on() 并将 type 参数设置为要检测的特定触摸事件。
      *
      * @version Lark 1.0
-     * @platform Web,Runtime,Native
+     * @platform Web,Native
      */
     class TouchEvent extends Event {
         /**
          * @language en_US
          * Emitted when the user touches the device, and is continuously emitted until the point of contact is removed.
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 当用户触碰设备时进行调度，而且会连续调度，直到接触点被删除。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         static TOUCH_MOVE: string;
         /**
          * @language en_US
          * Emitted when the user first contacts a touch-enabled device (such as touches a finger to a mobile phone or tablet with a touch screen).
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 当用户第一次触摸启用触摸的设备时（例如，用手指触摸配有触摸屏的移动电话或平板电脑）调度。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         static TOUCH_BEGIN: string;
         /**
@@ -4207,13 +4208,13 @@ declare module lark {
          * Emitted when the user removes contact with a touch-enabled device (such as lifts a finger off a mobile phone
          * or tablet with a touch screen).
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 当用户移除与启用触摸的设备的接触时（例如，将手指从配有触摸屏的移动电话或平板电脑上抬起）调度。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         static TOUCH_END: string;
         /**
@@ -4221,13 +4222,13 @@ declare module lark {
          * Emitted when the user lifts the point of contact over the same DisplayObject instance on which the contact
          * was initiated on a touch-enabled device.
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 当用户在触摸设备上与开始触摸的同一 DisplayObject 实例上抬起接触点时调度。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         static TOUCH_TAP: string;
         /**
@@ -4236,13 +4237,13 @@ declare module lark {
          * was initiated on a touch-enabled device (such as presses and releases a finger from a single point over a display
          * object on a mobile phone or tablet with a touch screen).
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 当用户在触摸设备上与开始触摸的不同 DisplayObject 实例上抬起接触点时调度。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         static TOUCH_RELEASE_OUTSIDE: string;
         /**
@@ -4255,7 +4256,7 @@ declare module lark {
          * @param stageY The vertical coordinate at which the event occurred in global Stage coordinates.
          * @param touchPointID A unique identification number assigned to the touch point.
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
@@ -4267,33 +4268,33 @@ declare module lark {
          * @param stageY 事件发生点在全局舞台坐标系中的垂直坐标
          * @param touchPointID 分配给触摸点的唯一标识号
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         constructor(type: string, bubbles?: boolean, cancelable?: boolean, stageX?: number, stageY?: number, touchPointID?: number);
         /**
          * @language en_US
          * The horizontal coordinate at which the event occurred in global Stage coordinates.
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 事件发生点在全局舞台坐标中的水平坐标。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         stageX: number;
         /**
          * @language en_US
          * The vertical coordinate at which the event occurred in global Stage coordinates.
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 事件发生点在全局舞台坐标中的垂直坐标。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         stageY: number;
         /**
@@ -4308,39 +4309,39 @@ declare module lark {
          * @language en_US
          * The horizontal coordinate at which the event occurred relative to the display object.
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 事件发生点相对于所属显示对象的水平坐标。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         localX: number;
         /**
          * @language en_US
          * The vertical coordinate at which the event occurred relative to the display object.
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 事件发生点相对于所属显示对象的垂直坐标。
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         localY: number;
         /**
          * @language en_US
          * A unique identification number assigned to the touch point.
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 分配给触摸点的唯一标识号
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         touchPointID: number;
         /**
@@ -4372,7 +4373,7 @@ declare module lark {
          * @see lark.Event.release()
          *
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         /**
          * @language zh_CN
@@ -4389,114 +4390,9 @@ declare module lark {
          * @see lark.Event.release()
          *
          * @version Lark 1.0
-         * @platform Web,Runtime,Native
+         * @platform Web,Native
          */
         static emitTouchEvent(target: IEventEmitter, type: string, bubbles?: boolean, cancelable?: boolean, stageX?: number, stageY?: number, touchPointID?: number): boolean;
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * A ProgressEvent object is emitted when a load operation has begun. These events are usually generated when data are
-     * loaded into an application.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 当加载操作已开始,将调度 ProgressEvent 事件。这些事件通常在数据加载到应用程序中时生成。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    class ProgressEvent extends Event {
-        /**
-         * @language en_US
-         * Emitted when data is received as the download operation progresses.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在下载操作过程中收到数据时调度。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static PROGRESS: string;
-        /**
-         * @language en_US
-         * The number of items or bytes loaded when the listener processes the event.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在侦听器处理事件时加载的项数或字节数。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        bytesLoaded: number;
-        /**
-         * @language en_US
-         * The total number of items or bytes that will be loaded if the loading process succeeds.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果加载过程成功，将加载的总项数或总字节数。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        bytesTotal: number;
-        /**
-         * @language en_US
-         * Creates an Event object that contains information about progress events.
-         * @param type The type of the event. Event listeners can access this information through the inherited type property.
-         * @param bubbles Determines whether the Event object bubbles. Event listeners can access this information through the inherited bubbles property.
-         * @param cancelable Determines whether the Event object can be canceled. Event listeners can access this information through the inherited cancelable property.
-         * @param bytesLoaded The number of items or bytes loaded when the listener processes the event.
-         * @param bytesTotal The total number of items or bytes that will be loaded if the loading process succeeds.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个 ProgressEvent 对象
-         * @param type  事件的类型，可以作为 Event.type 访问。
-         * @param bubbles  确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
-         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
-         * @param bytesLoaded 加载的项数或字节数
-         * @param bytesTotal 加载的总项数或总字节数
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        constructor(type: string, bubbles?: boolean, cancelable?: boolean, bytesLoaded?: number, bytesTotal?: number);
-        /**
-         * @language en_US
-         * uses a specified target to emit an event. Using this method can reduce the number of
-         * reallocate event objects, which allows you to get better code execution performance.
-         * @param target the event target
-         * @param type the type of event
-         * @param bytesLoaded The number of items or bytes loaded when the listener processes the event.
-         * @param bytesTotal The total number of items or bytes that will be loaded if the loading process succeeds.
-         * @see lark.Event.create()
-         * @see lark.Event.release()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 使用指定的EventEmitter对象来抛出事件对象。使用此方法能够减少事件对象创建的数量，从而获得更高的代码运行性能。
-         * @param target 派发事件目标
-         * @param type 事件类型
-         * @param bytesLoaded 加载的项数或字节数
-         * @param bytesTotal 加载的总项数或总字节数
-         * @see lark.Event.create()
-         * @see lark.Event.release()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static emitProgressEvent(target: IEventEmitter, type: string, bytesLoaded?: number, bytesTotal?: number): boolean;
     }
 }
 declare module lark {
@@ -4638,163 +4534,106 @@ declare module lark {
 declare module lark {
     /**
      * @language en_US
-     * The Timer class is the interface to timers, which let you run code on a specified time sequence. Use the start()
-     * method to start a timer. Add an event listener for the timer event to set up code to be run on the timer interval.<br/>
-     * You can create Timer objects to run once or repeat at specified intervals to execute code on a schedule. Depending
-     * on the framerate or the runtime environment (available memory and other factors), the runtime may emit events at
-     * slightly offset intervals.
-     * @see lark.TimerEvent
+     * A ProgressEvent object is emitted when a load operation has begun. These events are usually generated when data are
+     * loaded into an application.
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * Timer 类是计时器的接口，它使您能按指定的时间序列运行代码。
-     * 使用 start() 方法来启动计时器。为 timer 事件添加事件侦听器，以便将代码设置为按计时器间隔运行。
-     * 可以创建 Timer 对象以运行一次或按指定间隔重复运行，从而按计划执行代码。
-     * 根据 Lark 的帧速率或运行时环境（可用内存和其他因素），运行时调度事件的间隔可能稍有不同。
-     * @see lark.TimerEvent
+     * 当加载操作已开始,将调度 ProgressEvent 事件。这些事件通常在数据加载到应用程序中时生成。
      * @version Lark 1.0
      * @platform Web,Native
      */
-    class Timer extends EventEmitter {
+    class ProgressEvent extends Event {
         /**
          * @language en_US
-         * Constructs a new Timer object with the specified delay and repeatCount states.
-         * @param delay The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.
-         * Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
-         * @param repeatCount Specifies the number of repetitions. If zero, the timer repeats indefinitely.If nonzero,
-         * the timer runs the specified number of times and then stops.
+         * Emitted when data is received as the download operation progresses.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 使用指定的 delay 和 repeatCount 状态构造新的 Timer 对象。
-         * @param delay 计时器事件间的延迟（以毫秒为单位）。建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
-         * @param repeatCount 指定重复次数。如果为零，则计时器将持续不断重复运行。如果不为 0，则将运行计时器，运行次数为指定的次数，然后停止。
+         * 在下载操作过程中收到数据时调度。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        constructor(delay: number, repeatCount?: number);
-        /**
-         * @private
-         */
-        private _delay;
+        static PROGRESS: string;
         /**
          * @language en_US
-         * The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.<br/>
-         * Note: Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
+         * The number of items or bytes loaded when the listener processes the event.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 计时器事件间的延迟（以毫秒为单位）。如果在计时器正在运行时设置延迟间隔，则计时器将按相同的 repeatCount 迭代重新启动。<br/>
-         * 注意：建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
+         * 在侦听器处理事件时加载的项数或字节数。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        delay: number;
+        bytesLoaded: number;
         /**
          * @language en_US
-         * The total number of times the timer is set to run. If the repeat count is set to 0, the timer continues indefinitely,
-         * until the stop() method is invoked or the program stops. If the repeat count is nonzero, the timer runs the specified
-         * number of times. If repeatCount is set to a total that is the same or less then currentCount the timer stops and will not fire again.
+         * The total number of items or bytes that will be loaded if the loading process succeeds.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 设置的计时器运行总次数。如果重复计数设置为 0，则计时器将持续不断运行，或直至调用了 stop() 方法或节目停止。
-         * 如果重复计数不为 0，则将运行计时器，运行次数为指定的次数。如果设置的 repeatCount 总数等于或小于 currentCount，则计时器将停止并且不会再次触发。
+         * 如果加载过程成功，将加载的总项数或总字节数。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        repeatCount: number;
-        /**
-         * @private
-         */
-        private _currentCount;
+        bytesTotal: number;
         /**
          * @language en_US
-         * The total number of times the timer has fired since it started at zero. If the timer has been reset, only the fires since the reset are counted.
+         * Creates an Event object that contains information about progress events.
+         * @param type The type of the event. Event listeners can access this information through the inherited type property.
+         * @param bubbles Determines whether the Event object bubbles. Event listeners can access this information through the inherited bubbles property.
+         * @param cancelable Determines whether the Event object can be canceled. Event listeners can access this information through the inherited cancelable property.
+         * @param bytesLoaded The number of items or bytes loaded when the listener processes the event.
+         * @param bytesTotal The total number of items or bytes that will be loaded if the loading process succeeds.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 计时器从 0 开始后触发的总次数。如果已重置了计时器，则只会计入重置后的触发次数。
+         * 创建一个 ProgressEvent 对象
+         * @param type  事件的类型，可以作为 Event.type 访问。
+         * @param bubbles  确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
+         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
+         * @param bytesLoaded 加载的项数或字节数
+         * @param bytesTotal 加载的总项数或总字节数
          * @version Lark 1.0
          * @platform Web,Native
          */
-        currentCount: number;
-        /**
-         * @private
-         */
-        private _running;
+        constructor(type: string, bubbles?: boolean, cancelable?: boolean, bytesLoaded?: number, bytesTotal?: number);
         /**
          * @language en_US
-         * The timer's current state; true if the timer is running, otherwise false.
+         * uses a specified target to emit an event. Using this method can reduce the number of
+         * reallocate event objects, which allows you to get better code execution performance.
+         * @param target the event target
+         * @param type the type of event
+         * @param bytesLoaded The number of items or bytes loaded when the listener processes the event.
+         * @param bytesTotal The total number of items or bytes that will be loaded if the loading process succeeds.
+         * @see lark.Event.create()
+         * @see lark.Event.release()
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 计时器的当前状态；如果计时器正在运行，则为 true，否则为 false。
+         * 使用指定的EventEmitter对象来抛出事件对象。使用此方法能够减少事件对象创建的数量，从而获得更高的代码运行性能。
+         * @param target 派发事件目标
+         * @param type 事件类型
+         * @param bytesLoaded 加载的项数或字节数
+         * @param bytesTotal 加载的总项数或总字节数
+         * @see lark.Event.create()
+         * @see lark.Event.release()
          * @version Lark 1.0
          * @platform Web,Native
          */
-        running: boolean;
-        /**
-         * @language en_US
-         * Stops the timer, if it is running, and sets the currentCount property back to 0, like the reset button of a stopwatch.
-         * Then, when start() is called, the timer instance runs for the specified number of repetitions, as set by the repeatCount value.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果计时器正在运行，则停止计时器，并将 currentCount 属性设回为 0，这类似于秒表的重置按钮。然后，在调用 start() 后，将运行计时器实例，运行次数为指定的重复次数（由 repeatCount 值设置）。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        reset(): void;
-        /**
-         * @language en_US
-         * Starts the timer, if it is not already running.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果计时器尚未运行，则启动计时器。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        start(): void;
-        /**
-         * @language en_US
-         * Stops the timer. When start() is called after stop(), the timer instance runs for the remaining number of
-         * repetitions, as set by the repeatCount property.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 停止计时器。如果在调用 stop() 后调用 start()，则将继续运行计时器实例，运行次数为剩余的 重复次数（由 repeatCount 属性设置）。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        stop(): void;
-        /**
-         * @private
-         */
-        private updateInterval;
-        /**
-         * @private
-         */
-        private lastCount;
+        static emitProgressEvent(target: IEventEmitter, type: string, bytesLoaded?: number, bytesTotal?: number): boolean;
     }
 }
 declare module lark {
@@ -5133,6 +4972,168 @@ declare module lark {
      * 仅供框架内复用，要防止暴露引用到外部。
      */
     var $TempRectangle: Rectangle;
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The Timer class is the interface to timers, which let you run code on a specified time sequence. Use the start()
+     * method to start a timer. Add an event listener for the timer event to set up code to be run on the timer interval.<br/>
+     * You can create Timer objects to run once or repeat at specified intervals to execute code on a schedule. Depending
+     * on the framerate or the runtime environment (available memory and other factors), the runtime may emit events at
+     * slightly offset intervals.
+     * @see lark.TimerEvent
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Timer 类是计时器的接口，它使您能按指定的时间序列运行代码。
+     * 使用 start() 方法来启动计时器。为 timer 事件添加事件侦听器，以便将代码设置为按计时器间隔运行。
+     * 可以创建 Timer 对象以运行一次或按指定间隔重复运行，从而按计划执行代码。
+     * 根据 Lark 的帧速率或运行时环境（可用内存和其他因素），运行时调度事件的间隔可能稍有不同。
+     * @see lark.TimerEvent
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class Timer extends EventEmitter {
+        /**
+         * @language en_US
+         * Constructs a new Timer object with the specified delay and repeatCount states.
+         * @param delay The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.
+         * Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
+         * @param repeatCount Specifies the number of repetitions. If zero, the timer repeats indefinitely.If nonzero,
+         * the timer runs the specified number of times and then stops.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用指定的 delay 和 repeatCount 状态构造新的 Timer 对象。
+         * @param delay 计时器事件间的延迟（以毫秒为单位）。建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
+         * @param repeatCount 指定重复次数。如果为零，则计时器将持续不断重复运行。如果不为 0，则将运行计时器，运行次数为指定的次数，然后停止。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        constructor(delay: number, repeatCount?: number);
+        /**
+         * @private
+         */
+        private _delay;
+        /**
+         * @language en_US
+         * The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.<br/>
+         * Note: Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 计时器事件间的延迟（以毫秒为单位）。如果在计时器正在运行时设置延迟间隔，则计时器将按相同的 repeatCount 迭代重新启动。<br/>
+         * 注意：建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        delay: number;
+        /**
+         * @language en_US
+         * The total number of times the timer is set to run. If the repeat count is set to 0, the timer continues indefinitely,
+         * until the stop() method is invoked or the program stops. If the repeat count is nonzero, the timer runs the specified
+         * number of times. If repeatCount is set to a total that is the same or less then currentCount the timer stops and will not fire again.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设置的计时器运行总次数。如果重复计数设置为 0，则计时器将持续不断运行，或直至调用了 stop() 方法或节目停止。
+         * 如果重复计数不为 0，则将运行计时器，运行次数为指定的次数。如果设置的 repeatCount 总数等于或小于 currentCount，则计时器将停止并且不会再次触发。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        repeatCount: number;
+        /**
+         * @private
+         */
+        private _currentCount;
+        /**
+         * @language en_US
+         * The total number of times the timer has fired since it started at zero. If the timer has been reset, only the fires since the reset are counted.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 计时器从 0 开始后触发的总次数。如果已重置了计时器，则只会计入重置后的触发次数。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        currentCount: number;
+        /**
+         * @private
+         */
+        private _running;
+        /**
+         * @language en_US
+         * The timer's current state; true if the timer is running, otherwise false.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 计时器的当前状态；如果计时器正在运行，则为 true，否则为 false。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        running: boolean;
+        /**
+         * @language en_US
+         * Stops the timer, if it is running, and sets the currentCount property back to 0, like the reset button of a stopwatch.
+         * Then, when start() is called, the timer instance runs for the specified number of repetitions, as set by the repeatCount value.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果计时器正在运行，则停止计时器，并将 currentCount 属性设回为 0，这类似于秒表的重置按钮。然后，在调用 start() 后，将运行计时器实例，运行次数为指定的重复次数（由 repeatCount 值设置）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        reset(): void;
+        /**
+         * @language en_US
+         * Starts the timer, if it is not already running.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果计时器尚未运行，则启动计时器。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        start(): void;
+        /**
+         * @language en_US
+         * Stops the timer. When start() is called after stop(), the timer instance runs for the remaining number of
+         * repetitions, as set by the repeatCount property.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 停止计时器。如果在调用 stop() 后调用 start()，则将继续运行计时器实例，运行次数为剩余的 重复次数（由 repeatCount 属性设置）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        stop(): void;
+        /**
+         * @private
+         */
+        private updateInterval;
+        /**
+         * @private
+         */
+        private lastCount;
+    }
 }
 declare module lark.sys {
     /**
@@ -6118,6 +6119,51 @@ declare module lark {
 declare module lark {
     /**
      * @language en_US
+     * This class is used to create lightweight shapes using the drawing application program interface (API). The Shape
+     * class includes a graphics property, which lets you access methods from the Graphics class.
+     * @see lark.Graphics
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 此类用于使用绘图应用程序编程接口 (API) 创建简单形状。Shape 类含有 graphics 属性，通过该属性您可以访问各种矢量绘图方法。
+     * @see lark.Graphics
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class Shape extends DisplayObject {
+        /**
+         * @language en_US
+         * Creates a new Shape object.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 Shape 对象
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        constructor();
+        /**
+         * @language en_US
+         * [read-only] Specifies the Graphics object belonging to this Shape object, where vector drawing commands can occur.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [只读] 获取 Shape 中的 Graphics 对象。可通过此对象执行矢量绘图命令。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        graphics: Graphics;
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
      * The Bitmap class represents display objects that represent bitmap images.
      * The Bitmap() constructor allows you to create a Bitmap object that contains a reference to a BitmapData object.
      * After you create a Bitmap object, use the addChild() or addChildAt() method of the parent DisplayObjectContainer
@@ -6328,51 +6374,6 @@ declare module lark {
          * @private
          */
         private assignParentClipRect(child, parentClipRect);
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * This class is used to create lightweight shapes using the drawing application program interface (API). The Shape
-     * class includes a graphics property, which lets you access methods from the Graphics class.
-     * @see lark.Graphics
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 此类用于使用绘图应用程序编程接口 (API) 创建简单形状。Shape 类含有 graphics 属性，通过该属性您可以访问各种矢量绘图方法。
-     * @see lark.Graphics
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    class Shape extends DisplayObject {
-        /**
-         * @language en_US
-         * Creates a new Shape object.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个 Shape 对象
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        constructor();
-        /**
-         * @language en_US
-         * [read-only] Specifies the Graphics object belonging to this Shape object, where vector drawing commands can occur.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * [只读] 获取 Shape 中的 Graphics 对象。可通过此对象执行矢量绘图命令。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        graphics: Graphics;
     }
 }
 declare module lark.sys {
@@ -6749,63 +6750,6 @@ declare module lark.sys {
 declare module lark.sys {
     /**
      * @private
-     * 用户交互操作管理器
-     */
-    class TouchHandler extends LarkObject {
-        /**
-         * @private
-         */
-        constructor(stage: Stage);
-        /**
-         * @private
-         */
-        private stage;
-        /**
-         * @private
-         */
-        private touchDownTarget;
-        /**
-         * @private
-         * 触摸开始（按下）
-         * @param x 事件发生处相对于舞台的坐标x
-         * @param y 事件发生处相对于舞台的坐标y
-         * @param touchPointID 分配给触摸点的唯一标识号
-         */
-        onTouchBegin(x: number, y: number, touchPointID: number): void;
-        /**
-         * @private
-         */
-        private lastTouchX;
-        /**
-         * @private
-         */
-        private lastTouchY;
-        /**
-         * @private
-         * 触摸移动
-         * @param x 事件发生处相对于舞台的坐标x
-         * @param y 事件发生处相对于舞台的坐标y
-         * @param touchPointID 分配给触摸点的唯一标识号
-         */
-        onTouchMove(x: number, y: number, touchPointID: number): void;
-        /**
-         * @private
-         * 触摸结束（弹起）
-         * @param x 事件发生处相对于舞台的坐标x
-         * @param y 事件发生处相对于舞台的坐标y
-         * @param touchPointID 分配给触摸点的唯一标识号
-         */
-        onTouchEnd(x: number, y: number, touchPointID: number): void;
-        /**
-         * @private
-         * 获取舞台坐标下的触摸对象
-         */
-        private findTarget(stageX, stageY);
-    }
-}
-declare module lark.sys {
-    /**
-     * @private
      * 显示列表
      */
     class DisplayList extends LarkObject implements Renderable {
@@ -6920,132 +6864,61 @@ declare module lark.sys {
         changeSurfaceSize(): void;
     }
 }
-declare module lark {
+declare module lark.sys {
     /**
-     * @language en_US
-     * The Stage class represents the main drawing area.The Stage object is not globally accessible. You need to access
-     * it through the stage property of a DisplayObject instance.<br/>
-     * The Stage class has several ancestor classes — Sprite, DisplayObject, and EventEmitter — from which it inherits
-     * properties and methods. Many of these properties and methods are inapplicable to Stage objects.
-     * @event lark.Event.RESIZE Emitted when the stageWidth or stageHeight property of the Stage object is changed.
-     * @version Lark 1.0
-     * @platform Web,Native
+     * @private
+     * 用户交互操作管理器
      */
-    /**
-     * @language zh_CN
-     * Stage 类代表主绘图区。
-     * 可以利用 DisplayObject 实例的 stage 属性进行访问。<br/>
-     * Stage 类具有多个祖代类: Sprite、DisplayObject 和 EventEmitter，属性和方法便是从这些类继承而来的。
-     * 从这些继承的许多属性和方法不适用于 Stage 对象。
-     * @event lark.Event.RESIZE 当stageWidth或stageHeight属性发生改变时调度
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    class Stage extends Sprite {
-        /**
-         * @private
-         * Stage不许允许自行实例化
-         */
-        constructor();
-        /**
-         * @language en_US
-         * Gets and sets the frame rate of the stage. The frame rate is defined as frames per second. Valid range for the
-         * frame rate is from 0.01 to 1000 frames per second.<br/>
-         * Note: setting the frameRate property of one Stage object changes the frame rate for all Stage objects
-         * @default 30
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取并设置舞台的帧速率。帧速率是指每秒显示的帧数。帧速率的有效范围为每秒 0.01 到 60 个帧。<br/>
-         * 注意: 修改任何一个Stage的frameRate属性都会同步修改其他Stage的帧率。
-         * @default 30
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        frameRate: number;
-        /**
-         * @language en_US
-         * Indicates the width of the stage, in pixels.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 舞台的当前宽度（以像素为单位）。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        stageWidth: number;
-        /**
-         * @language en_US
-         * Indicates the height of the stage, in pixels.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 舞台的当前高度（以像素为单位）。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        stageHeight: number;
-        /**
-         * @language en_US
-         * After you call the invalidate() method, when the display list is next rendered, the Lark runtime sends a render
-         * event to each display object that has registered to listen for the render event. You must call the invalidate()
-         * method each time you want the Lark runtime to send render events.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 调用 invalidate() 方法后，在显示列表下次呈现时，Lark 会向每个已注册侦听 Event.RENDER 事件的显示对象发送一个 Event.RENDER 事件。
-         * 每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 invalidate() 方法。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        invalidate(): void;
+    class TouchHandler extends LarkObject {
         /**
          * @private
          */
-        private implMap;
+        constructor(stage: Stage);
         /**
-         * @language en_US
-         * Adds an interface-name-to-implementation-class mapping to the registry.
-         * @param interfaceName the interface name to register. For example："swan.IAssetAdapter","swan.Theme"
-         * @param instance the instance to register.
-         * @version Lark 1.0
-         * @platform Web,Native
+         * @private
          */
+        private stage;
         /**
-         * @language zh_CN
-         * 注册一个接口实现。
-         * @param interfaceName 注入的接口名称。例如："swan.IAssetAdapter","swan.Theme"
-         * @param instance 实现此接口的实例。
-         * @version Lark 1.0
-         * @platform Web,Native
+         * @private
          */
-        registerImplementation(interfaceName: string, instance: any): void;
+        private touchDownTarget;
         /**
-         * @language en_US
-         * Returns the singleton instance of the implementation class that was registered for the specified interface.
-         * This method is usually called by lark framework.
-         * @param interfaceName The interface name to identify. For example："swan.IAssetAdapter","swan.Theme"
-         * @returns the singleton instance of the implementation class
-         * @version Lark 1.0
-         * @platform Web,Native
+         * @private
+         * 触摸开始（按下）
+         * @param x 事件发生处相对于舞台的坐标x
+         * @param y 事件发生处相对于舞台的坐标y
+         * @param touchPointID 分配给触摸点的唯一标识号
          */
+        onTouchBegin(x: number, y: number, touchPointID: number): void;
         /**
-         * @language zh_CN
-         * 获取一个接口实现。此方法通常由框架内部调用。获取项目注入的自定义实现实例。
-         * @param interfaceName 要获取的接口名称。例如："swan.IAssetAdapter","swan.Theme"
-         * @returns 返回实现此接口的实例。
-         * @version Lark 1.0
-         * @platform Web,Native
+         * @private
          */
-        getImplementation(interfaceName: string): any;
+        private lastTouchX;
+        /**
+         * @private
+         */
+        private lastTouchY;
+        /**
+         * @private
+         * 触摸移动
+         * @param x 事件发生处相对于舞台的坐标x
+         * @param y 事件发生处相对于舞台的坐标y
+         * @param touchPointID 分配给触摸点的唯一标识号
+         */
+        onTouchMove(x: number, y: number, touchPointID: number): void;
+        /**
+         * @private
+         * 触摸结束（弹起）
+         * @param x 事件发生处相对于舞台的坐标x
+         * @param y 事件发生处相对于舞台的坐标y
+         * @param touchPointID 分配给触摸点的唯一标识号
+         */
+        onTouchEnd(x: number, y: number, touchPointID: number): void;
+        /**
+         * @private
+         * 获取舞台坐标下的触摸对象
+         */
+        private findTarget(stageX, stageY);
     }
 }
 declare module lark {
@@ -7209,6 +7082,134 @@ declare module lark {
         private updateTextAdapter();
     }
 }
+declare module lark {
+    /**
+     * @language en_US
+     * The Stage class represents the main drawing area.The Stage object is not globally accessible. You need to access
+     * it through the stage property of a DisplayObject instance.<br/>
+     * The Stage class has several ancestor classes — Sprite, DisplayObject, and EventEmitter — from which it inherits
+     * properties and methods. Many of these properties and methods are inapplicable to Stage objects.
+     * @event lark.Event.RESIZE Emitted when the stageWidth or stageHeight property of the Stage object is changed.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Stage 类代表主绘图区。
+     * 可以利用 DisplayObject 实例的 stage 属性进行访问。<br/>
+     * Stage 类具有多个祖代类: Sprite、DisplayObject 和 EventEmitter，属性和方法便是从这些类继承而来的。
+     * 从这些继承的许多属性和方法不适用于 Stage 对象。
+     * @event lark.Event.RESIZE 当stageWidth或stageHeight属性发生改变时调度
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class Stage extends Sprite {
+        /**
+         * @private
+         * Stage不许允许自行实例化
+         */
+        constructor();
+        /**
+         * @language en_US
+         * Gets and sets the frame rate of the stage. The frame rate is defined as frames per second. Valid range for the
+         * frame rate is from 0.01 to 1000 frames per second.<br/>
+         * Note: setting the frameRate property of one Stage object changes the frame rate for all Stage objects
+         * @default 30
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取并设置舞台的帧速率。帧速率是指每秒显示的帧数。帧速率的有效范围为每秒 0.01 到 60 个帧。<br/>
+         * 注意: 修改任何一个Stage的frameRate属性都会同步修改其他Stage的帧率。
+         * @default 30
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        frameRate: number;
+        /**
+         * @language en_US
+         * Indicates the width of the stage, in pixels.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 舞台的当前宽度（以像素为单位）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        stageWidth: number;
+        /**
+         * @language en_US
+         * Indicates the height of the stage, in pixels.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 舞台的当前高度（以像素为单位）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        stageHeight: number;
+        /**
+         * @language en_US
+         * After you call the invalidate() method, when the display list is next rendered, the Lark runtime sends a render
+         * event to each display object that has registered to listen for the render event. You must call the invalidate()
+         * method each time you want the Lark runtime to send render events.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 调用 invalidate() 方法后，在显示列表下次呈现时，Lark 会向每个已注册侦听 Event.RENDER 事件的显示对象发送一个 Event.RENDER 事件。
+         * 每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 invalidate() 方法。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        invalidate(): void;
+        /**
+         * @private
+         */
+        private implMap;
+        /**
+         * @language en_US
+         * Adds an interface-name-to-implementation-class mapping to the registry.
+         * @param interfaceName the interface name to register. For example："swan.IAssetAdapter","swan.Theme"
+         * @param instance the instance to register.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 注册一个接口实现。
+         * @param interfaceName 注入的接口名称。例如："swan.IAssetAdapter","swan.Theme"
+         * @param instance 实现此接口的实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        registerImplementation(interfaceName: string, instance: any): void;
+        /**
+         * @language en_US
+         * Returns the singleton instance of the implementation class that was registered for the specified interface.
+         * This method is usually called by lark framework.
+         * @param interfaceName The interface name to identify. For example："swan.IAssetAdapter","swan.Theme"
+         * @returns the singleton instance of the implementation class
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取一个接口实现。此方法通常由框架内部调用。获取项目注入的自定义实现实例。
+         * @param interfaceName 要获取的接口名称。例如："swan.IAssetAdapter","swan.Theme"
+         * @returns 返回实现此接口的实例。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        getImplementation(interfaceName: string): any;
+    }
+}
 declare module lark.sys {
     /**
      * @private
@@ -7321,148 +7322,4 @@ declare module lark.sys {
      * @private
      */
     var $logToFPS: (info: string) => void;
-}
-declare module lark {
-    /**
-     * @language en_US
-     * Provides constant enum values for type checking in the module of Lark. It is usually passed as the parameters of the lark.is() method.
-     * @see lark.is()
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 为Lark框架内的类或接口定义的枚举值。通常作为实例检查类型 lark.is() 方法的参数。
-     * @see lark.is()
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    const enum Types {
-        /**
-         * @copy lark.IEventEmitter
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        IEventEmitter = 1,
-        /**
-         * @copy lark.EventEmitter
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        EventEmitter = 2,
-        /**
-         * @copy lark.DisplayObject
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        DisplayObject = 3,
-        /**
-         * @copy lark.DisplayObjectContainer
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        DisplayObjectContainer = 4,
-        /**
-         * @copy lark.Sprite
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Sprite = 5,
-        /**
-         * @copy lark.Bitmap
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Bitmap = 6,
-        /**
-         * @copy lark.BitmapData
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        BitmapData = 7,
-        /**
-         * @copy lark.Graphics
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Graphics = 8,
-        /**
-         * @copy lark.Shape
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Shape = 9,
-        /**
-         * @copy lark.Stage
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Stage = 10,
-        /**
-         * @copy lark.Event
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event = 11,
-        /**
-         * @copy lark.TimerEvent
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        TimerEvent = 12,
-        /**
-         * @copy lark.TouchEvent
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        TouchEvent = 13,
-        /**
-         * @copy lark.ProgressEvent
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        ProgressEvent = 14,
-        /**
-         * @copy lark.Matrix
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Matrix = 15,
-        /**
-         * @copy lark.Point
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Point = 16,
-        /**
-         * @copy lark.Rectangle
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Rectangle = 17,
-        /**
-         * @copy lark.TextField
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        TextField = 18,
-        /**
-         * @copy lark.HttpRequest
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        HttpRequest = 19,
-        /**
-         * @copy lark.ImageLoader
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        ImageLoader = 20,
-        /**
-         * @copy lark.TextInput
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        TextInput = 21,
-    }
 }

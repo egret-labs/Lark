@@ -30,17 +30,18 @@
 module lark {
     /**
      * @language en_US
-     * Indicates whether an object is a instance of the class or interface specified as the parameter.This method has better performance
-     * compared width the instanceOf operator,and it can indicate whether an object is a instance of the specific interface.
+     * Indicates whether an object is a instance of the class or interface specified as the parameter.This method is similar
+     * to the instanceOf operator which indicate whether an object is a instance of the specific class,besides, it can indicate
+     * whether an object is a instance of the specific interface.
      * @param instance the instance to be checked.
-     * @param typeFlag the enum value representing a specific class or interface.
+     * @param typeName the string value representing a specific class or interface.
      * @returns A value of true if the object is a instance of the class or interface specified as the parameter.
      * @example
      * <code>
      *     var instance = new lark.Sprite();
-     *     lark.log(lark.is(instance,lark.Types.Sprite))  //true
-     *     lark.log(lark.is(instance,lark.Types.DisplayObjectContainer))  //true
-     *     lark.log(lark.is(instance,lark.Types.Bitmap))  //false
+     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
+     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
+     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
      * </code>
      * @see lark.registerClass()
      * @version Lark 1.0
@@ -48,30 +49,30 @@ module lark {
      */
     /**
      * @language zh_CN
-     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字相比具有更高的性能，并且能判断接口的实现。
+     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字作用类似，但除了判断类定义也能判断接口的实现。
      * @param instance 要判断的实例。
-     * @param typeFlag 类或接口的枚举值.
+     * @param typeName 类或接口的完全名称.
      * @returns 返回true表示当前对象是指定类或接口的实例。
      * @example
      * <code>
      *     var instance = new lark.Sprite();
-     *     lark.log(lark.is(instance,lark.Types.Sprite))  //true
-     *     lark.log(lark.is(instance,lark.Types.DisplayObjectContainer))  //true
-     *     lark.log(lark.is(instance,lark.Types.Bitmap))  //false
+     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
+     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
+     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
      * </code>
      * @see lark.registerClass()
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export function is(instance:any, typeFlag:number):boolean {
+    export function is(instance:any, typeName:string):boolean {
         if (!instance || typeof instance != "object") {
             return false;
         }
         var prototype:any = Object.getPrototypeOf(instance);
-        var flags = prototype ? prototype.__typeFlags__ : null;
-        if (!flags) {
+        var types = prototype ? prototype.__types__ : null;
+        if (!types) {
             return false;
         }
-        return (flags.indexOf(typeFlag) !== -1);
+        return (types.indexOf(typeName) !== -1);
     }
 }

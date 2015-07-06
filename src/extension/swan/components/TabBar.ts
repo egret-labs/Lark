@@ -117,12 +117,13 @@ module swan {
          * @param value 
          */
         $setDataProvider(value:ICollection){
-            if(lark.is(this.$dataProvider, swan.Types.ViewStack)){
-                this.$dataProvider.removeListener(PropertyEvent.PROPERTY_CHANGE,this.onViewStackIndexChange,this);
+            var dp = this.$dataProvider;
+            if(dp&&dp instanceof swan.ViewStack){
+                dp.removeListener(PropertyEvent.PROPERTY_CHANGE,this.onViewStackIndexChange,this);
                 this.removeListener(lark.Event.CHANGE,this.onIndexChanged,this);
             }
 
-            if(lark.is(value, swan.Types.ViewStack)){
+            if(value&&value instanceof swan.ViewStack){
                 value.on(PropertyEvent.PROPERTY_CHANGE,this.onViewStackIndexChange,this);
                 this.on(lark.Event.CHANGE,this.onIndexChanged,this);
             }
@@ -154,5 +155,4 @@ module swan {
         }
     }
 
-    lark.registerClass(TabBar,Types.TabBar);
 }

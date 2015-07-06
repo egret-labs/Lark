@@ -189,5 +189,4 @@ module swan {
             return result;
         }
     }
-    lark.registerClass(UIEvent,Types.UIEvent);
 }
