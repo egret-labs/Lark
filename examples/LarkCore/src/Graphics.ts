@@ -6,8 +6,15 @@ class Graphics extends lark.Sprite {
         var shape = new lark.Shape();
         var graphics = shape.graphics;
         graphics.lineWidth = 10;
+
+        graphics.strokeStyle="#990000";
+        graphics.beginPath();
+        graphics.moveTo( 200, 200 );
+        graphics.bezierCurveTo( 175, 125, 325, 275 , 300, 200 );
+        graphics.stroke();
         
-        
+        this.addChild( shape );
+        return;
         
         graphics.beginPath();
         graphics.moveTo(50,y);
