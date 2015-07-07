@@ -20,5 +20,4 @@ graphics.fillStyle = "#00FF00";
 graphics.fillRect( 200, 0, squareSize, squareSize ); 
 graphics.fillStyle = "#0000FF"; 
 graphics.fillRect( 400, 0, squareSize, squareSize ); 
-
 ```

@@ -14,7 +14,7 @@ Lark力求内核精简，直接暴露Canvas的标准绘图API。使得开发者�
 所以，我们也需要对Lark中的绘图环境与H5中Canvas的绘图环境的对应关系有清楚的了解。
 
 常规的H5开发通过从DOM中Canvas对象取得绘图环境(context)，如果'canvas'为H5中的Canvas对象，则用如下代码取得绘图环境：
-```
+``` JavaScript
 var context = canvas.getContext("2d");
 ```
 在H5中，在这段代码获得的context上调用各种绘图API进行绘制操作。
