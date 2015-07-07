@@ -166,7 +166,7 @@ module lark.sys {
         /**
          * @private
          */
-        private frameInterval:number = 1;
+        private frameInterval:number = 2000;
 
         /**
          * @private
@@ -191,7 +191,7 @@ module lark.sys {
         /**
          * @private
          */
-        private lastCount:number = 1000;
+        private lastCount:number = 2000;
 
         /**
          * @private
