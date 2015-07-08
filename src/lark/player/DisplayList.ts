@@ -557,8 +557,9 @@ module lark.sys {
 
         /**
          * @private
+         * 表示目标Surface首次被使用。
          */
-        private sizeChanged:boolean = false;
+        private sizeChanged:boolean = true;
 
         /**
          * @private
@@ -573,12 +574,12 @@ module lark.sys {
             this.offsetY = bounds.y;
             var oldContext = this.renderContext;
             var oldSurface = oldContext.surface;
-            if (!this.sizeChanged) {
-                this.sizeChanged = true;
+            if (this.sizeChanged) {
+                this.sizeChanged = false;
                 oldSurface.width = bounds.width;
                 oldSurface.height = bounds.height;
             }
-            else if (bounds.width !== oldSurface.width || bounds.height !== oldSurface.height) {
+            else {
                 var newContext = sys.sharedRenderContext;
                 var newSurface = newContext.surface;
                 sys.sharedRenderContext = oldContext;
