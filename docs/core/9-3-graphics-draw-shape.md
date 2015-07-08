@@ -6,19 +6,19 @@
 var shape = new lark.Shape();
 this.addChild( shape );
 var graphics = shape.graphics;
-graphics.lineWidth = 2;
-graphics.strokeStyle="#990000";
 ```
 
 以下示例重新创建绘制红色、绿色以及蓝色正方形的示例，其宽度和高度均为 100 个像素。以下代码使用 drawRect() 方法：
 ``` TypeScript
-var squareSize:number = 100; 
- 
+var squareSize:number = 100;
+
 graphics.beginPath();
-graphics.fillStyle = "#FF0000"; 
-graphics.fillRect( 0, 0, squareSize, squareSize ); 
-graphics.fillStyle = "#00FF00"; 
-graphics.fillRect( 200, 0, squareSize, squareSize ); 
-graphics.fillStyle = "#0000FF"; 
-graphics.fillRect( 400, 0, squareSize, squareSize ); 
+graphics.fillStyle = "#FF0000";
+graphics.fillRect( 10, 10, squareSize, squareSize );
+graphics.fillStyle = "#00FF00";
+graphics.fillRect( 120, 10, squareSize, squareSize );
+graphics.fillStyle = "#0000FF";
+graphics.fillRect( 230, 10, squareSize, squareSize ); 
 ```
+运行结果如图：   
+![](image/9-3-graphics-draw-shape.jpg)
