@@ -128,8 +128,9 @@ var lark;
     lark.$locale_strings = lark.$locale_strings || {};
     lark.$locale_strings["en_US"] = lark.$locale_strings["en_US"] || {};
     var locale_strings = lark.$locale_strings["en_US"];
-    locale_strings[3001] = "Please call the play method when the audio is loaded";
-    locale_strings[3002] = "Please pass the URL of audio you want to load";
+    locale_strings[3001] = "Please call the play method when the media is loaded";
+    locale_strings[3002] = "Please pass the URL of media you want to load";
+    locale_strings[3003] = "When you want to play video in fullscreen mode, please call the play method when the media is loaded";
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -166,4 +167,5 @@ var lark;
     var locale_strings = lark.$locale_strings["zh_CN"];
     locale_strings[3001] = "请等待媒体加载完成后再调用 play 方法";
     locale_strings[3002] = "请指定要加载的媒体的URL";
+    locale_strings[3003] = "全屏幕播放视频时，请先调用 load 方法，等待媒体加载完成后再调用 play 方法";
 })(lark || (lark = {}));
