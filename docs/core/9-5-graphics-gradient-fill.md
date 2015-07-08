@@ -36,6 +36,7 @@ createLinearGradient() 方法设定渐变区域，该区域与显示区域没有
 ``` TypeScript
 var grd:lark.GraphicsGradient = lark.Graphics.createRadialGradient( 238, 50, 10, 238, 50, 300 );
 ```
+createRadialGradient() 方法设定的渐变区域是一个环形，由两个同心圆组成。参数一个六个，分为两组，每组对应一个圆，每组的三个参数分别是所对应圆形的x、y坐标和圆半径。
 
 运行效果如图：   
 ![](image/9-5-graphics-radius-gradient-fill.jpg)   
