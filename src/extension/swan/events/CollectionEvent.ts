@@ -306,5 +306,4 @@ module swan {
         }
     }
 
-    lark.registerClass(CollectionEvent, Types.CollectionEvent);
 }

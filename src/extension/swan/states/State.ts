@@ -160,9 +160,9 @@ module swan {
             var length = overrides.length;
             for (var i = 0; i < length; i++) {
                 var addItems:AddItems = <AddItems>overrides[i];
-                if (lark.is(addItems, Types.AddItems)) {
+                if (addItems instanceof swan.AddItems) {
                     var target:lark.DisplayObject = host[addItems.target];
-                    if (lark.is(target, Types.Image)&&!target.$parent) {
+                    if (target&&target instanceof swan.Image&&!target.$parent) {
                         stage.addChild(target);
                         stage.removeChild(target);
                     }
@@ -171,7 +171,6 @@ module swan {
         }
     }
 
-    lark.registerClass(State, Types.State);
 }
 
 module swan.sys {

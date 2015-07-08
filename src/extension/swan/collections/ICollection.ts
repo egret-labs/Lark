@@ -48,7 +48,7 @@ module swan {
 	export interface ICollection extends lark.IEventEmitter{
 		/**
 		 * @language en_US
-		 * [read-only] The number of items in this view.
+		 * The number of items in this view.
 		 * 0 means no items, while -1 means that the length is unknown.
 		 * @version Lark 1.0
 		 * @version Swan 1.0
@@ -56,7 +56,7 @@ module swan {
 		 */
 		/**
 		 * @language zh_CN
-		 * [只读] 此集合中的项目数。0 表示不包含项目。
+		 *  此集合中的项目数。0 表示不包含项目。
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native

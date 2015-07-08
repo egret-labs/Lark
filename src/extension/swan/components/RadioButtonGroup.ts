@@ -213,7 +213,7 @@ module swan {
          */
         /**
          * @language zh_CN
-         * [只读] 属于此 RadioButtonGroup 的 RadioButton 数。
+         *  属于此 RadioButtonGroup 的 RadioButton 数。
          *
          * @default 0
          *
@@ -447,7 +447,6 @@ module swan {
         }
     }
     registerBindable(RadioButtonGroup.prototype,"selectedValue");
-    lark.registerClass(RadioButtonGroup,Types.RadioButtonGroup);
 
     if(DEBUG){
         lark.$markReadOnly(RadioButtonGroup.prototype,"numRadioButtons");

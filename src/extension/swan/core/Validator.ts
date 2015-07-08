@@ -456,7 +456,7 @@ module swan.sys {
                             return client;
                         }
                     }
-                    else if(lark.is(client,lark.Types.DisplayObjectContainer)){
+                    else if(lark.is(client,"lark.DisplayObjectContainer")){
 
                         var items = bin.items;
                         var length = bin.length;
@@ -503,7 +503,7 @@ module swan.sys {
                             return client;
                         }
                     }
-                    else if(lark.is(client,lark.Types.DisplayObjectContainer)){
+                    else if(lark.is(client,"lark.DisplayObjectContainer")){
                         var items = bin.items;
                         var length = bin.length;
                         for (var i = 0; i < length; i++) {

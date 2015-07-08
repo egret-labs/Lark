@@ -330,5 +330,4 @@ module swan {
         }
     }
 
-    lark.registerClass(RadioButton,Types.RadioButton);
 }

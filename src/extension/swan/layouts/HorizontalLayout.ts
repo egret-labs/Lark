@@ -29,6 +29,8 @@
 
 module swan {
 
+    var UIComponentClass = "swan.UIComponent";
+
     /**
      * @language en_US
      * The HorizontalLayout class arranges the layout elements in a horizontal sequence,
@@ -65,7 +67,7 @@ module swan {
             var bounds = lark.$TempRectangle;
             for (var i = 0; i < count; i++) {
                 var layoutElement = <UIComponent> (target.getElementAt(i));
-                if (!lark.is(layoutElement, Types.UIComponent) || !layoutElement.$includeInLayout) {
+                if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
                     numElements--;
                     continue;
                 }
@@ -96,7 +98,7 @@ module swan {
             var elementSizeTable = this.elementSizeTable;
             for (var index = this.startIndex; index < endIndex; index++) {
                 var layoutElement = <UIComponent> (target.getElementAt(index));
-                if (!lark.is(layoutElement, Types.UIComponent) || !layoutElement.$includeInLayout) {
+                if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
                     continue;
                 }
                 layoutElement.getPreferredBounds(bounds);
@@ -154,7 +156,7 @@ module swan {
             var bounds = lark.$TempRectangle;
             for (i = 0; i < count; i++) {
                 var layoutElement = <UIComponent> (target.getElementAt(i));
-                if (!lark.is(layoutElement, Types.UIComponent) || !layoutElement.$includeInLayout) {
+                if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
                     numElements--;
                     continue;
                 }
@@ -193,7 +195,7 @@ module swan {
                     averageWidth = widthToDistribute / numElements;
                     for (i = 0; i < count; i++) {
                         layoutElement = <UIComponent> (target.getElementAt(i));
-                        if (!lark.is(layoutElement, Types.UIComponent) || !layoutElement.$includeInLayout) {
+                        if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
                             continue;
                         }
 
@@ -245,7 +247,7 @@ module swan {
             for (i = 0; i < count; i++) {
                 var exceesHeight = 0;
                 layoutElement = <UIComponent> (target.getElementAt(i));
-                if (!lark.is(layoutElement, Types.UIComponent) || !layoutElement.$includeInLayout) {
+                if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
                     continue;
                 }
                 layoutElement.getPreferredBounds(bounds);
@@ -346,7 +348,7 @@ module swan {
             if (contentJustify) {
                 for (var index = this.startIndex; index <= endIndex; index++) {
                     layoutElement = <UIComponent> (target.getElementAt(index));
-                    if (!lark.is(layoutElement, Types.UIComponent) || !layoutElement.$includeInLayout) {
+                    if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
                         continue;
                     }
                     layoutElement.getPreferredBounds(bounds);
@@ -365,7 +367,7 @@ module swan {
             for (var i = this.startIndex; i <= endIndex; i++) {
                 var exceesHeight = 0;
                 layoutElement = <UIComponent> (target.getElementAt(i));
-                if (!lark.is(layoutElement, Types.UIComponent) || !layoutElement.$includeInLayout) {
+                if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
                     continue;
                 }
                 layoutElement.getPreferredBounds(bounds);
@@ -532,5 +534,4 @@ module swan {
 
     }
 
-    lark.registerClass(HorizontalLayout,Types.HorizontalLayout);
 }

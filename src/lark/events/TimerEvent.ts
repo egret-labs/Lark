@@ -179,6 +179,4 @@ module lark {
         }
     }
 
-    registerClass(TimerEvent,Types.TimerEvent);
-
 }

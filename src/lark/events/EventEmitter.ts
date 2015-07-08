@@ -203,7 +203,7 @@ module lark {
          */
         public hasListener(type:string):boolean {
             var values = this.$EventEmitter;
-            return (values[Keys.eventsMap][type] || values[Keys.captureEventsMap][type]);
+            return !!(values[Keys.eventsMap][type] || values[Keys.captureEventsMap][type]);
         }
 
         /**
@@ -278,7 +278,6 @@ module lark {
         }
     }
 
-    registerClass(EventEmitter, Types.EventEmitter, [Types.IEventEmitter]);
 }
 
 module lark.sys {

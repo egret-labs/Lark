@@ -209,7 +209,5 @@ module swan {
         }
     }
 
-    lark.registerClass(AddItems,Types.AddItems,[Types.IOverride]);
-
 }
 

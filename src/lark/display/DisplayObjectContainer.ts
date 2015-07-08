@@ -52,13 +52,13 @@ module lark {
 
         /**
          * @language en_US
-         * [read-only] Returns the number of children of this object.
+         * Returns the number of children of this object.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [只读] 返回此对象的子项数目。
+         *  返回此对象的子项数目。
          * @version Lark 1.0
          * @platform Web,Native
          */

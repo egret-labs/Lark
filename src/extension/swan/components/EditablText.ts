@@ -482,5 +482,4 @@ module swan {
 
     sys.implementUIComponent(EditableText, lark.TextInput);
     registerBindable(EditableText.prototype,"text");
-    lark.registerClass(EditableText, Types.EditableText, [Types.UIComponent]);
 }

@@ -54,26 +54,26 @@ module lark {
     export interface BitmapData extends LarkObject{
         /**
          * @language en_US
-         * [read-only] The width of the bitmap image in pixels.
+         * The width of the bitmap image in pixels.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [只读] 位图图像的宽度，以像素为单位。
+         *  位图图像的宽度，以像素为单位。
          * @version Lark 1.0
          * @platform Web,Native
          */
         width: number;
         /**
          * @language en_US
-         * [read-only] The height of the bitmap image in pixels.
+         * The height of the bitmap image in pixels.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [只读] 位图图像的高度，以像素为单位。
+         *  位图图像的高度，以像素为单位。
          * @version Lark 1.0
          * @platform Web,Native
          */

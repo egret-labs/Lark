@@ -73,13 +73,13 @@ module lark {
         $graphics:Graphics;
         /**
          * @language en_US
-         * [read-only] Specifies the Graphics object belonging to this Shape object, where vector drawing commands can occur.
+         * Specifies the Graphics object belonging to this Shape object, where vector drawing commands can occur.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [只读] 获取 Shape 中的 Graphics 对象。可通过此对象执行矢量绘图命令。
+         *  获取 Shape 中的 Graphics 对象。可通过此对象执行矢量绘图命令。
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -101,8 +101,6 @@ module lark {
             this.$graphics.$render(context);
         }
     }
-
-    registerClass(Shape, Types.Shape);
 
     if (DEBUG) {
         lark.$markReadOnly(Shape.prototype, "graphics");

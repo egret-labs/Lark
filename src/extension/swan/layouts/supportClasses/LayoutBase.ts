@@ -375,5 +375,4 @@ module swan {
         }
     }
 
-    lark.registerClass(LayoutBase, Types.LayoutBase);
 }

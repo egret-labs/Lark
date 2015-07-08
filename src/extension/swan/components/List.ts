@@ -454,5 +454,4 @@ module swan {
         }
     }
 
-    lark.registerClass(List, Types.List);
 }

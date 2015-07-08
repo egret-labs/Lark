@@ -246,7 +246,7 @@ module swan {
         private contentChanged(data:any, source:any):void {
             if (source !== this._source)
                 return;
-            if (!lark.is(data, lark.Types.BitmapData)) {
+            if (!lark.is(data, "lark.BitmapData")) {
                 return;
             }
             this.$setBitmapData(data);
@@ -761,6 +761,5 @@ module swan {
     }
 
     sys.implementUIComponent(Image, lark.Bitmap);
-    lark.registerClass(Image, Types.Image, [Types.UIComponent]);
     registerProperty(Image, "scale9Grid", "lark.Rectangle");
 }

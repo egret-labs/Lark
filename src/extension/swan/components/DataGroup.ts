@@ -287,7 +287,7 @@ module swan {
         private createOneRenderer(rendererClass:any):IItemRenderer {
             var renderer = <IItemRenderer> (new rendererClass());
             this.$DataGroup[Keys.rendererToClassMap][renderer.$hashCode] = rendererClass;
-            if (!lark.is(renderer, Types.IItemRenderer)) {
+            if (!lark.is(renderer, "swan.IItemRenderer")) {
                 return null;
             }
             this.addChild(renderer);
@@ -1031,7 +1031,6 @@ module swan {
 
     registerProperty(DataGroup, "itemRenderer", "Class");
     registerProperty(DataGroup, "dataProvider", "swan.ICollection", true);
-    lark.registerClass(DataGroup, Types.DataGroup);
     if(DEBUG){
         lark.$markReadOnly(DataGroup.prototype,"numElements");
     }

@@ -167,7 +167,7 @@ var lark;
             return WebImageLoader;
         })(lark.EventEmitter);
         web.WebImageLoader = WebImageLoader;
-        lark.registerClass(WebImageLoader, 20 /* ImageLoader */);
+        lark.registerClass(WebImageLoader,"lark.web.WebImageLoader",["lark.ImageLoader"]);
         lark.ImageLoader = WebImageLoader;
     })(web = lark.web || (lark.web = {}));
 })(lark || (lark = {}));
@@ -342,7 +342,7 @@ var lark;
             return WebHttpRequest;
         })(lark.EventEmitter);
         web.WebHttpRequest = WebHttpRequest;
-        lark.registerClass(WebHttpRequest, 19 /* HttpRequest */);
+        lark.registerClass(WebHttpRequest,"lark.web.WebHttpRequest",["lark.HttpRequest"]);
         lark.HttpRequest = WebHttpRequest;
         if (DEBUG) {
             lark.$markReadOnly(WebHttpRequest.prototype, "response");
@@ -444,6 +444,7 @@ var lark;
             return WebCapability;
         })();
         web.WebCapability = WebCapability;
+        lark.registerClass(WebCapability,"lark.web.WebCapability");
         WebCapability.detect();
     })(web = lark.web || (lark.web = {}));
 })(lark || (lark = {}));
@@ -483,9 +484,10 @@ var lark;
 (function (lark) {
     var web;
     (function (web) {
-        lark.registerClass(HTMLImageElement, 7 /* BitmapData */);
-        lark.registerClass(HTMLCanvasElement, 7 /* BitmapData */);
-        lark.registerClass(HTMLVideoElement, 7 /* BitmapData */);
+        var className = "lark.BitmapData";
+        lark.registerClass(HTMLImageElement, className);
+        lark.registerClass(HTMLCanvasElement, className);
+        lark.registerClass(HTMLVideoElement, className);
         /**
          * @private
          * 转换 Image，Canvas，Video 为 Lark 框架内使用的 BitmapData 对象。
@@ -545,6 +547,7 @@ var lark;
             return XMLNode;
         })();
         web.XMLNode = XMLNode;
+        lark.registerClass(XMLNode,"lark.web.XMLNode");
         /**
          * @private
          * XML节点对象
@@ -575,6 +578,7 @@ var lark;
             return XML;
         })(XMLNode);
         web.XML = XML;
+        lark.registerClass(XML,"lark.web.XML");
         /**
          * @private
          * XML文本节点
@@ -592,6 +596,7 @@ var lark;
             return XMLText;
         })(XMLNode);
         web.XMLText = XMLText;
+        lark.registerClass(XMLText,"lark.web.XMLText");
         var parser = new DOMParser();
         /**
          * @private
@@ -790,6 +795,7 @@ var lark;
             return CanvasFactory;
         })();
         web.CanvasFactory = CanvasFactory;
+        lark.registerClass(CanvasFactory,"lark.web.CanvasFactory",["lark.sys.SurfaceFactory"]);
     })(web = lark.web || (lark.web = {}));
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -914,6 +920,7 @@ var lark;
             return WebScreen;
         })(lark.LarkObject);
         web.WebScreen = WebScreen;
+        lark.registerClass(WebScreen,"lark.web.WebScreen");
     })(web = lark.web || (lark.web = {}));
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -1114,6 +1121,7 @@ var lark;
             return WebTouchHandler;
         })(lark.LarkObject);
         web.WebTouchHandler = WebTouchHandler;
+        lark.registerClass(WebTouchHandler,"lark.web.WebTouchHandler");
     })(web = lark.web || (lark.web = {}));
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -1463,6 +1471,7 @@ var lark;
             return WebTextAdapter;
         })(lark.LarkObject);
         web.WebTextAdapter = WebTextAdapter;
+        lark.registerClass(WebTextAdapter,"lark.web.WebTextAdapter",["lark.sys.ITextAdapter"]);
         /**
          * @private
          */

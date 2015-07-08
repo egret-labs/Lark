@@ -149,5 +149,4 @@ module swan {
 		}
 	}
 	registerBindable(ToggleButton.prototype,"selected");
-	lark.registerClass(ToggleButton, Types.ToggleButton);
 }

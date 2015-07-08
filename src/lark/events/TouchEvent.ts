@@ -340,8 +340,6 @@ module lark {
         }
     }
 
-    registerClass(TouchEvent, Types.TouchEvent);
-
     if(DEBUG){
         lark.$markReadOnly(TouchEvent.prototype,"stageX");
         lark.$markReadOnly(TouchEvent.prototype,"stageY");

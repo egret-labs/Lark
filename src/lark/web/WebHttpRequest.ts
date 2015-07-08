@@ -177,7 +177,6 @@ module lark.web {
         }
 
     }
-    registerClass(WebHttpRequest,Types.HttpRequest);
     HttpRequest = WebHttpRequest;
 
     if(DEBUG){
