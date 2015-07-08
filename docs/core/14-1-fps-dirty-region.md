@@ -20,6 +20,7 @@
 * `data-show-fps`
 	* `data-show-fps="true/false"` 设置是否显示帧频信息，当这个值为 `true` 时
 		Lark 会在舞台的左上角显示 FPS 和 其他性能指标
+
 		```
 		FPS:  60           - 帧频
 		Draw: 4,12%        - 每帧 draw 方法调用的平均次数，脏区域占舞台的百分比
