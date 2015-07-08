@@ -542,13 +542,6 @@ module lark {
                         renderMatrix);
                     var rect = this.$scrollRect;
                     if (rect) {
-                        var clipRect = this.$clipRect;
-                        clipRect.setTo(0, 0, rect.width, rect.height);
-                        renderMatrix.$transformBounds(clipRect);
-                        var parentClipRect = this.$parentClipRect;
-                        if (parentClipRect) {
-                            clipRect.$intersectInPlace(parentClipRect);
-                        }
                         renderMatrix.$preMultiplyInto($TempMatrix.setTo(1, 0, 0, 1, -rect.x, -rect.y), renderMatrix);
 
                     }
@@ -1168,39 +1161,16 @@ module lark {
             if (!value && !this.$scrollRect) {
                 return;
             }
-            var changed = false;
             if (value) {
                 if (!this.$scrollRect) {
-                    changed = true;
-                    this.$clipRect = new lark.Rectangle();
                     this.$scrollRect = new lark.Rectangle();
                 }
                 this.$scrollRect.copyFrom(value);
             }
             else {
-                changed = true;
-                this.$clipRect = null;
                 this.$scrollRect = null;
             }
-            if (changed) {
-                this.$scrollRectChanged();
-            }
             this.invalidatePosition();
-        }
-
-        /**
-         * @private
-         * 自身在舞台上的裁剪区域
-         */
-        $clipRect:Rectangle = null;
-        /**
-         * @private
-         * 父级容器在舞台上的裁剪区域
-         */
-        $parentClipRect:Rectangle = null;
-
-        $scrollRectChanged():void {
-
         }
 
         /**
@@ -1529,8 +1499,7 @@ module lark {
                 return false;
             }
             region.moved = false;
-            var clipRect = this.$clipRect || this.$parentClipRect;
-            region.updateRegion(bounds, matrix, clipRect);
+            region.updateRegion(bounds, matrix);
             return true;
         }
 

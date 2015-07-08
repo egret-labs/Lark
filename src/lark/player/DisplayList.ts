@@ -124,8 +124,7 @@ module lark.sys {
                 return false;
             }
             region.moved = false;
-            var clipRect = target.$clipRect || target.$parentClipRect
-            region.updateRegion(bounds, this.$renderMatrix, clipRect);
+            region.updateRegion(bounds, this.$renderMatrix);
             return true;
         }
 
@@ -393,12 +392,12 @@ module lark.sys {
             if (mask) {
                 var bounds = mask.$getOriginalBounds();
                 maskRegion = Region.create();
-                maskRegion.updateRegion(bounds, mask.$getConcatenatedMatrix(), null);
+                maskRegion.updateRegion(bounds, mask.$getConcatenatedMatrix());
             }
             var region:Region;
             if (scrollRect) {
                 region = Region.create();
-                region.updateRegion(scrollRect, displayMatrix, null);
+                region.updateRegion(scrollRect, displayMatrix);
             }
             if (region && maskRegion) {
                 region.intersect(maskRegion);
@@ -416,7 +415,7 @@ module lark.sys {
             else{
                 region = Region.create();
                 bounds = displayObject.$getOriginalBounds();
-                region.updateRegion(bounds, displayObject.$getConcatenatedMatrix(), null);
+                region.updateRegion(bounds, displayObject.$getConcatenatedMatrix());
             }
             var found = false;
             var l = dirtyList.length;
@@ -510,7 +509,7 @@ module lark.sys {
             var m = displayObject.$getConcatenatedMatrix();
             var region:Region = Region.create();
             if (!scrollRect.isEmpty()) {
-                region.updateRegion(scrollRect, m, null);
+                region.updateRegion(scrollRect, m);
             }
             if (region.isEmpty() || (clipRegion && !clipRegion.intersects(region))) {
                 Region.release(region);
