@@ -45,7 +45,7 @@
 	* [绘制直线和曲线](9-2-graphics-line-curve.md)(done)
 	* [使用内置方法绘制形状](9-3-graphics-draw-shape.md)(done)
 	* [绘制路径](9-4-graphics-draw-path.md)(done)
-	* [创建渐变和重复填充](9-5-graphics-gradient-repeat.md)(doing)	
+	* [创建渐变和重复填充](9-5-graphics-gradient-fill.md)(done)	
 10. [处理几何结构](10-0-gemo.md)(done)
     * [几何学基础知识](10-1-gemo-about.md)(done)
     * [使用Point对象](10-2-point.md)(done)
