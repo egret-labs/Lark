@@ -11,10 +11,10 @@ Lark 事件处理系统与显示列表密切交互。
 您可以使用事件侦听器 “ 侦听 ” 代码中的事件对象。 “ 事件侦听器 ” 是您编写的用于响应特定事件的函数或方法。若要确保您的程序响应事件，必须将事件侦听器添加到事件目标，或添加到作为事件对象事件流的一部分的任何显示列表对象。    
 无论何时编写事件侦听器代码，该代码都会采用以下基本结构 （以粗体显示的元素是占位符，您将针对具体情况对其进行填写）：    
 ```  TypeScript
- function eventResponse(eventObject:EventType):void { 
+ function eventHandler( eventObject:EventType ):void { 
   // Actions performed in response to the event go here. 
  }
- eventTarget.addEventListener(EventType.EVENT_NAME, eventResponse); 
+ eventTarget.on( EventType.EVENT_NAME, eventHandler ); 
  ```
 此代码完成两项任务。    
 首先，它定义一个函数，这是指定为响应事件而执行的动作的方法。接下来，调用源对象的addEventListener() 方法，实际上就是为指定事件 “ 订阅 ” 该函数，以便当该事件发生时，执行该函数的操作。当事件实际发生时，事件目标将检查其注册为事件侦听器的所有函数和方法的列表。    

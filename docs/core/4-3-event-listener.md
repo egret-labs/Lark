@@ -7,7 +7,6 @@
 [管理事件侦听器](#event-manage)   
 [没有侦听器的错误事件](#event-unhandled)   
 
-
 <a name="event-listener"/>
 
 ##### 创建侦听器函数
@@ -19,33 +18,33 @@
 下面的示例与前面定义 ClickExample 类的示例相同，只是将 touchHandler() 函数定义为 ChildSprite 类的方法： 
 
 ``` TypeScript
-public class ClickExample extends Sprite {
-     public function ClickExample() {
+public class ClickExample extends lark.Sprite {
+     public ClickExample() {
          var child:ChildSprite = new ChildSprite();
          addChild(child);
      }
 }
 ```
 ``` TypeScript
-class ChildSprite extends Sprite{
-    public function ChildSprite() {
+class ChildSprite extends lark.Sprite{
+    public ChildSprite() {
         this.graphics.beginFill(0xFF0000);
         this.graphics.drawRect(0,0,100,100);
         this.graphics.endFill();
-        on(TouchEvent.TOUCH_TAP, touchHandler);
+        on( TouchEvent.TOUCH_TAP, touchHandler );
     }
-    private function touchHandler(event:TouchEvent):void{
-        trace("touchHandler detected an event of type: " + event.type);
-        trace("the this keyword refers to: " + this);
+    private touchHandler( event:TouchEvent ):void{
+        trace( "touchHandler detected an event of type: " + event.type );
+        trace( "the this keyword refers to: " + this );
     }
 }
 ```
 
 当用户通过单击红色正方形与生成的 Lark应用交互时，Lark 生成以下跟踪输出：
-
+```
 touchHandler detected an event of type: click
 the this keyword refers to: [object ChildSprite]
-
+```
 
 请注意，this 关键字引用名为 child 的 ChildSprite 实例。 Lark 在调用 on() 时会创建一个绑定方法。这样，this 关键字引用名为 child 的 ChildSprite 实例，且程序员可以访问 ChildSprite 类的其它方法和属性。
 
@@ -76,23 +75,26 @@ module lark {
 }
 ```
 
-Lark API 使用 EventDispatcher 类来实现 IEventEmitter 接口，该类用作可以是事件目标或事件流一部分的所有类的基类。例如，DisplayObject 类继承自 EventDispatcher 类。这意味着，显示列表中的所有对象都可以访问 IEventEmitter 接口的方法。
+Lark API 使用 EventEmitter 类来实现 IEventEmitter 接口，该类用作可以是事件目标或事件流一部分的所有类的基类。例如，DisplayObject 类继承自 EventEmitter 类。这意味着，显示列表中的所有对象都可以访问 IEventEmitter 接口的方法。
 
 ##### 添加事件侦听器
 on() 方法是 IEventEmitter 接口的主要函数。使用它来注册侦听器函数。两个必需的参数是 type 和 listener。type 参数用于指定事件的类型。listener 参数用于指定发生事件时将执行的侦听器函数。listener 参数可以是对函数或类方法的引用。
 
-注意
- 
- 指定 listener 参数时，不要使用括号。例如，在下面的 on() 方法调用中，指定 touchHandler() 函数时没有使用括号：
-on(TouchEvent.TOUCH_TAP, touchHandler)。 
- 
+注意   
+指定 listener 参数时，不要使用括号。例如，在下面的 on() 方法调用中，指定 touchHandler() 函数时没有使用括号：
+ ```
+on( TouchEvent.TOUCH_TAP, touchHandler )。 
+ ```
 
 通过使用 on() 方法的 useCapture 参数，可以控制侦听器将处于活动状态的事件流阶段。如果 useCapture 设置为 true，侦听器将在事件流的捕获阶段成为活动状态。如果 useCapture 设置为 false，侦听器将在事件流的目标阶段和冒泡阶段处于活动状态。要在事件流的所有阶段侦听某一事件，您必须调用 on() 两次，第一次调用时将 useCapture 设置为 true，第二次调用时将 useCapture 设置为 false。
 
 on() 方法的 priority 参数并不是 DOM Level 3 事件模型的正式部分。ActionScript 3.0 中包括它是为了在组织事件侦听器时提供更大的灵活性。调用 on() 时，可以将一个整数值作为 priority 参数传递，以设置该事件侦听器的优先级。默认值为 0，但您可以将它设置为负整数值或正整数值。将优先执行此数字较大的事件侦听器。对于具有相同优先级的事件侦听器，则按它们的添加顺序执行，因此将优先执行较早添加的侦听器。 
 
 ##### 删除事件侦听器
-可以使用 removeEventListener() 方法删除不再需要的事件侦听器。删除将不再使用的所有侦听器是个好办法。必需的参数包括 eventName 和 listener 参数，这与 on() 方法所需的参数相同。回想一下，您可以通过调用 on() 两次（第一次调用时将 useCapture 设置为 true，第二次调用时将其设置为 false），在所有事件阶段侦听事件。要删除这两个事件侦听器，您需要调用 removeEventListener() 两次，第一次调用时将 useCapture 设置为 true，第二次调用时将其设置为 false。
+可以使用 removeListener() 方法删除不再需要的事件侦听器。删除将不再使用的所有侦听器是个好办法。必需的参数包括 eventName 和 listener 参数，这与 on() 方法所需的参数相同。回想一下，您可以通过调用 on() 两次（第一次调用时将 useCapture 设置为 true，第二次调用时将其设置为 false），在所有事件阶段侦听事件。要删除这两个事件侦听器，您需要调用 removeListener() 两次，第一次调用时将 useCapture 设置为 true，第二次调用时将其设置为 false。
+   
+当事件侦听器只需要使用一次，比如某个加载特定的资源，常规的做法是在处理函数中进行移除。   
+不过Lark充分考虑了这种情况，提供了便捷的 once() 方法注册事件侦听器。这样注册侦听器在产生回调之后会自动删除侦听器。在处理这种仅需一次的事件建议尽量使用 once() ，简化了对事件侦听的管理，也可以避免遗漏删除侦听器的情况。
 
 ##### 调度事件
 高级程序员可以使用 emit() 方法将自定义事件对象调度到事件流。该方法唯一接受的参数是对事件对象的引用，此事件对象必须是 Event 类的实例或子类。调度后，事件对象的 target 属性将设置为对其调用了 emit() 的对象。
@@ -103,11 +105,7 @@ IEventEmitter 接口的最后两个方法提供有关是否存在事件侦听器
 <a name="event-unhandled"/>
 
 #### 没有侦听器的错误事件
-ActionScript 3.0 中处理错误的主要机制是异常而不是事件，但对于异步操作（例如加载文件），异常处理不起作用。如果在这样的异步操作中发生错误，Lark 会调度一个错误事件对象。如果不为错误事件创建侦听器，Lark 的调试器版本将打开一个对话框，其中包含有关该错误的信息。例如，如果加载文件时使用无效 URL，将在 Lark 的调试器版本中生成此对话框：
-
-Lark 错误对话框的屏幕快照。该框显示"发生 ActionScript 错误"并将此错误标识为具有特定 URL 的流错误。两个按钮显示为"全部去除"和"继续"。
-
-大多数错误事件基于 ErrorEvent 类，而且同样具有一个名为 text 的属性，它用于存储 Lark 显示的错误消息。两个异常是 StatusEvent 和 NetStatusEvent 类。这两个类都具有一个 level 属性（StatusEvent.level 和 NetStatusEvent.info.level）。当 level 属性的值为"error"时，这些事件类型被视为错误事件。
+Lark 中处理错误的主要机制是异常而不是事件，这与JavaScript是一致的，但对于异步操作（例如加载文件），异常处理不起作用。如果在这样的异步操作中发生错误，Lark 会调度一个错误事件对象。
 
 错误事件将不会导致 Lark 应用停止运行。它仅在浏览器调试工具的console中显示。
 
