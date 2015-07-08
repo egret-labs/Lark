@@ -94,12 +94,12 @@ module lark.sys {
         $renderAlpha:number = 1;
         /**
          * @private
-         * 在舞台上的矩阵对象
+         * 相对于显示列表根节点或位图缓存根节点的矩阵对象
          */
-        $renderMatrix:Matrix;
+        $renderMatrix:Matrix = new Matrix();
         /**
          * @private
-         * 在舞台上的显示区域
+         * 在显示列表根节点或位图缓存根节点上的显示区域
          */
         $renderRegion:Region = new Region();
 
@@ -111,20 +111,31 @@ module lark.sys {
             var target = this.root;
             target.$removeFlagsUp(DisplayObjectFlags.Dirty);
             this.$renderAlpha = target.$getConcatenatedAlpha();
-            this.$renderMatrix = target.$getConcatenatedMatrix();
+            //必须在访问moved属性前调用以下两个方法，因为moved属性在以下两个方法内重置。
+            var concatenatedMatrix = target.$getConcatenatedMatrix();
             var bounds = target.$getOriginalBounds();
+            var displayList = target.$parentDisplayList;
+            var region = this.$renderRegion;
             if (this.needRedraw) {
                 this.updateDirtyRegions();
             }
-            if (!target.$stage) {
+            if(!displayList){
+                region.setTo(0,0,0,0);
+                region.moved = false;
                 return false;
             }
-            var region = this.$renderRegion;
+
             if (!region.moved) {
                 return false;
             }
             region.moved = false;
-            region.updateRegion(bounds, this.$renderMatrix);
+            var matrix = this.$renderMatrix;
+            matrix.copyFrom(concatenatedMatrix);
+            var root = displayList.root;
+            if(root!==target.$stage){
+                root.$getInvertedConcatenatedMatrix().$preMultiplyInto(matrix, matrix);
+            }
+            region.updateRegion(bounds, matrix);
             return true;
         }
 
@@ -264,13 +275,17 @@ module lark.sys {
          * 绘制根节点显示对象到目标画布，返回draw的次数。
          */
         public drawToSurface():number {
-            if (this.rootMatrix) {//对非舞台画布要根据目标显示对象尺寸改变而改变。
+            var m = this.rootMatrix;
+            if (m) {//对非舞台画布要根据目标显示对象尺寸改变而改变。
                 this.changeSurfaceSize();
             }
             var context = this.renderContext;
             //绘制脏矩形区域
             context.save();
             context.beginPath();
+            if(m){
+                context.setTransform(1,0,0,1,-this.offsetX,-this.offsetY);
+            }
             var dirtyList = this.dirtyList;
             this.dirtyList = null;
             var length = dirtyList.length;
@@ -280,8 +295,11 @@ module lark.sys {
                 context.rect(region.minX, region.minY, region.width, region.height);
             }
             context.clip();
+            if(m){
+                context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+            }
             //绘制显示对象
-            var drawCalls = this.drawDisplayObject(this.root, context, dirtyList, this.rootMatrix, null, null);
+            var drawCalls = this.drawDisplayObject(this.root, context, dirtyList, m, null, null);
             //清除脏矩形区域
             context.restore();
             this.dirtyRegion.clear();
@@ -506,13 +524,20 @@ module lark.sys {
             var drawCalls = 0;
             var scrollRect = displayObject.$scrollRect;
 
-            var m = displayObject.$getConcatenatedMatrix();
+            var m = Matrix.create();
+            m.copyFrom(displayObject.$getConcatenatedMatrix());
+            var displayList = displayObject.$parentDisplayList;
+            var root = displayList.root;
+            if(root!==displayObject.$stage){
+                root.$getInvertedConcatenatedMatrix().$preMultiplyInto(m,m)
+            }
             var region:Region = Region.create();
             if (!scrollRect.isEmpty()) {
                 region.updateRegion(scrollRect, m);
             }
             if (region.isEmpty() || (clipRegion && !clipRegion.intersects(region))) {
                 Region.release(region);
+                Matrix.release(m);
                 return drawCalls;
             }
             var found = false;
@@ -525,19 +550,24 @@ module lark.sys {
             }
             if (!found) {
                 Region.release(region);
+                Matrix.release(m);
                 return drawCalls;
             }
 
             //绘制显示对象自身
             context.save();
-            context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+            context.setTransform(m.a, m.b, m.c, m.d, m.tx-this.offsetX, m.ty-this.offsetY);
             context.beginPath();
             context.rect(scrollRect.x, scrollRect.y, scrollRect.width, scrollRect.height);
             context.clip();
+            if(rootMatrix){
+                context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx, rootMatrix.ty);
+            }
             drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, rootMatrix, displayObject.$displayList, region);
             context.restore();
 
             Region.release(region);
+            Matrix.release(m);
             return drawCalls;
         }
 
@@ -593,9 +623,8 @@ module lark.sys {
                 oldSurface.height = 1;
                 oldSurface.width = 1;
             }
-            var m = root.$getInvertedConcatenatedMatrix();
-            this.rootMatrix.setTo(m.a, m.b, m.c, m.d, m.tx - bounds.x, m.ty - bounds.y);
-            this.renderContext.setTransform(m.a, m.b, m.c, m.d, m.tx - bounds.x, m.ty - bounds.y);
+            this.rootMatrix.setTo(1, 0, 0, 1, - bounds.x, - bounds.y);
+            this.renderContext.setTransform(1, 0, 0, 1, - bounds.x, - bounds.y);
         }
 
     }

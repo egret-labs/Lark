@@ -158,6 +158,7 @@ module lark {
         rotation,
         name,
         matrix,
+        concatenatedMatrix,
         invertedConcatenatedMatrix,
         bounds,
         contentBounds
@@ -231,9 +232,10 @@ module lark {
                 4: 0,                //rotation
                 5: "",               //name
                 6: new Matrix(),     //matrix,
-                7: new Matrix(),     //invertedConcatenatedMatrix,
-                8: new Rectangle(),  //bounds,
-                9: new Rectangle(),  //contentBounds
+                7: new Matrix(),     //concatenatedMatrix,
+                8: new Matrix(),     //invertedConcatenatedMatrix,
+                9: new Rectangle(),  //bounds,
+                10: new Rectangle(),  //contentBounds
             };
         }
 
@@ -535,18 +537,18 @@ module lark {
          * 获得这个显示对象以及它所有父级对象的连接矩阵。
          */
         $getConcatenatedMatrix():Matrix {
-            var renderMatrix = this.$renderMatrix;
+            var matrix = this.$DisplayObject[Keys.concatenatedMatrix];
             if (this.$hasFlags(sys.DisplayObjectFlags.InvalidConcatenatedMatrix)) {
                 if (this.$parent) {
                     this.$parent.$getConcatenatedMatrix().$preMultiplyInto(this.$getMatrix(),
-                        renderMatrix);
+                        matrix);
                     var rect = this.$scrollRect;
                     if (rect) {
-                        renderMatrix.$preMultiplyInto($TempMatrix.setTo(1, 0, 0, 1, -rect.x, -rect.y), renderMatrix);
+                        matrix.$preMultiplyInto($TempMatrix.setTo(1, 0, 0, 1, -rect.x, -rect.y), matrix);
 
                     }
                 } else {
-                    renderMatrix.copyFrom(this.$getMatrix());
+                    matrix.copyFrom(this.$getMatrix());
                 }
                 if (this.$displayList) {
                     this.$displayList.$renderRegion.moved = true;
@@ -556,7 +558,7 @@ module lark {
                 }
                 this.$removeFlags(sys.DisplayObjectFlags.InvalidConcatenatedMatrix);
             }
-            return renderMatrix;
+            return matrix;
         }
 
         /**
@@ -1471,12 +1473,12 @@ module lark {
         $renderAlpha:number = 1;
         /**
          * @private
-         * 在舞台上的矩阵对象
+         * 相对于显示列表根节点或位图缓存根节点上的矩阵对象
          */
         $renderMatrix:Matrix = new lark.Matrix();
         /**
          * @private
-         * 此显示对象自身（不包括子项）在屏幕上的显示尺寸。
+         * 此显示对象自身（不包括子项）在显示列表根节点或位图缓存根节点上的显示尺寸。
          */
         $renderRegion:sys.Region = null;
 
@@ -1488,17 +1490,26 @@ module lark {
         $update():boolean {
             this.$removeFlagsUp(sys.DisplayObjectFlags.Dirty);
             this.$getConcatenatedAlpha();
-            var matrix = this.$getConcatenatedMatrix();
+            //必须在访问moved属性前调用以下两个方法，因为moved属性在以下两个方法内重置。
+            var concatenatedMatrix = this.$getConcatenatedMatrix();
             var bounds = this.$getContentBounds();
-            var stage = this.$stage;
-            if (!stage) {
+            var displayList = this.$displayList||this.$parentDisplayList;
+            var region = this.$renderRegion;
+            if(!displayList){
+                region.setTo(0,0,0,0);
+                region.moved = false;
                 return false;
             }
-            var region = this.$renderRegion;
             if (!region.moved) {
                 return false;
             }
             region.moved = false;
+            var matrix = this.$renderMatrix;
+            matrix.copyFrom(concatenatedMatrix);
+            var root = displayList.root;
+            if(root!==this.$stage){
+                root.$getInvertedConcatenatedMatrix().$preMultiplyInto(matrix, matrix);
+            }
             region.updateRegion(bounds, matrix);
             return true;
         }
