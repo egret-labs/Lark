@@ -18,7 +18,13 @@
                 { "path": "web/WebScreen.ts", "platform": "web" },
                 { "path": "web/WebTextAdapter.ts", "platform": "web" },
                 { "path": "web/WebTouchHandler.ts", "platform": "web" },
-                { "path": "web/WebXML.ts", "platform": "web" }
+                { "path": "web/WebXML.ts", "platform": "web" },
+                { "path": "web/HtmlSound.ts", "platform": "web" },
+                { "path": "web/HtmlSoundChannel.ts", "platform": "web" },
+                { "path": "web/WebVideo.ts", "platform": "web" },
+                { "path": "web/WebGeolocation.ts", "platform": "web" },
+                { "path": "web/WebMotion.ts", "platform": "web" },
+                { "path": "web/WebOrientation.ts", "platform": "web" }
             ],
             "root": "src/lark",
             "dependencies": [ ]
@@ -31,32 +37,6 @@
                 { "path": "i18n/zh_CN.ts", "debug": true }
             ],
             "root": "src/extension/swan",
-            "dependencies": [ "lark" ]
-        },
-        {
-            "name": "media",
-            "description": "音频，视频支持",
-            "files": [
-                { "path": "i18n/en_US.ts", "debug": true },
-                { "path": "i18n/zh_CN.ts", "debug": true },
-                { "path": "web/HtmlSound.ts", "platform": "web" },
-                { "path": "web/HtmlSoundChannel.ts", "platform": "web" },
-                { "path": "web/WebVideo.ts", "platform": "web" }
-            ],
-            "root": "src/extension/media",
-            "dependencies": [ "lark" ]
-        },
-        {
-            "name": "sensor",
-            "description": "Geolocation 定位服务,运动传感器,方向传感器",
-            "files": [
-                { "path": "i18n/en_US.ts", "debug": true },
-                { "path": "i18n/zh_CN.ts", "debug": true },
-                { "path": "web/WebGeolocation.ts", "platform": "web" },
-                { "path": "web/WebMotion.ts", "platform": "web" },
-                { "path": "web/WebOrientation.ts", "platform": "web" }
-            ],
-            "root": "src/extension/sensor",
             "dependencies": [ "lark" ]
         }
     ],

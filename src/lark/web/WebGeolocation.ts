@@ -33,7 +33,7 @@ module lark.web {
             else
                 this.onError({
                     code: 2,
-                    message: lark.sys.tr(3101),
+                    message: lark.sys.tr(3004),
                     PERMISSION_DENIED: 1,
                     POSITION_UNAVAILABLE:2
                 });

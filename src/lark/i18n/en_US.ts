@@ -45,4 +45,9 @@ module lark {
     locale_strings[1011] = "Stream Error. URL: {0}";
     locale_strings[1012] = "The type of parameter {0} must be Class.";
 
+    locale_strings[3001] = "Please call the play method when the media is loaded";
+    locale_strings[3002] = "Please pass the URL of media you want to load";
+    locale_strings[3003] = "When you want to play video in fullscreen mode, please call the play method when the media is loaded";
+    locale_strings[3004] = "There is no location service on this device";
+
 }

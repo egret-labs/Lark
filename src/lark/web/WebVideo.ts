@@ -87,6 +87,8 @@ module lark.web {
             if (DEBUG && !url) {
                 lark.$error(3002);
             }
+            if (this.video && this.video.src == url)
+                return;
             var video = document.createElement("video");
             video.src = url;
             video.setAttribute("webkit-playsinline", "webkit-playsinline");
@@ -260,14 +262,15 @@ module lark.web {
                 return;
             var imageLoader = new lark.ImageLoader();
             imageLoader.once(lark.Event.COMPLETE, e=> {
+                var posterData = <HTMLImageElement><any>imageLoader.data;
                 this.posterData = imageLoader.data;
-                if (this.video) {
-                    this.posterData.width = this.video.videoWidth;
-                    this.posterData.height = this.video.videoHeight;
+                if (this.video && this.loaded) {
+                    posterData.width = this.video.videoWidth;
+                    posterData.height = this.video.videoHeight;
                 }
                 else {
-                    this.posterData.width = isNaN(this.widthSet) ? this.posterData.width : this.widthSet;
-                    this.posterData.height = isNaN(this.heightSet) ? this.posterData.height : this.heightSet;
+                    posterData.width = isNaN(this.widthSet) ? posterData.width : this.widthSet;
+                    posterData.height = isNaN(this.heightSet) ? posterData.height : this.heightSet;
                 }
                 this.$invalidateContentBounds();
             }, this);
@@ -280,17 +283,20 @@ module lark.web {
          */
         private onVideoLoaded = () => {
             this.video.removeEventListener("canplay", this.onVideoLoaded);
+            var video = this.video;
             var width = this.width;
             var height = this.height;
             this.loaded = true;
-            this.video.pause();
+            video.pause();
             if (this.posterData) {
-                this.posterData.width = this.video.videoWidth;
-                this.posterData.height = this.video.videoHeight;
+                this.posterData.width = video.videoWidth;
+                this.posterData.height = video.videoHeight;
             }
+            video.width = video.videoWidth;
+            video.height = video.videoHeight;
             this.$invalidateContentBounds();
-            this.width = isNaN(this.widthSet) ? this.video.videoWidth : this.widthSet;
-            this.height = isNaN(this.heightSet) ? this.video.videoHeight : this.heightSet;
+            this.width = isNaN(this.widthSet) ? video.videoWidth : this.widthSet;
+            this.height = isNaN(this.heightSet) ? video.videoHeight : this.heightSet;
             this.emitWith(lark.Event.COMPLETE);
 
         }

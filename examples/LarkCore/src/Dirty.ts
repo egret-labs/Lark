@@ -25,9 +25,9 @@ class Dirty extends lark.Sprite {
 
             var bmp = new lark.Bitmap(larkBitmapData);
             bmp.y = 200;
-            bmp.x = 200 + 200*i;
-            bmp.height = 100;
-            bmp.width = 100;
+            bmp.x = 100 + 100*i;
+            bmp.height = 50;
+            bmp.width = 50;
             bmp.rotation = 120*i;
             this.addChild(bmp);
             this.icons.push(bmp);
@@ -37,6 +37,6 @@ class Dirty extends lark.Sprite {
     }
 
     private annimate(){
-        this.icons.forEach(icon=>icon.rotation++);
+        this.icons.forEach(icon=>icon.rotation+=2);
     }
 }
