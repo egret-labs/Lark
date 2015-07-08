@@ -318,10 +318,10 @@ var lark;
         var WebVideo = (function (_super) {
             __extends(WebVideo, _super);
             /**
-             * @private
              * @inheritDoc
              */
             function WebVideo(url) {
+                var _this = this;
                 _super.call(this);
                 /**
                  * @private
@@ -331,68 +331,142 @@ var lark;
                  * @private
                  */
                 this.closed = false;
-                this.url = url;
+                /**
+                 * @private
+                 */
+                this.heightSet = NaN;
+                /**
+                 * @private
+                 */
+                this.widthSet = NaN;
+                this._fullscreen = true;
+                /**
+                 * @private
+                 *
+                 */
+                this.onVideoLoaded = function () {
+                    _this.video.removeEventListener("canplay", _this.onVideoLoaded);
+                    var width = _this.width;
+                    var height = _this.height;
+                    _this.loaded = true;
+                    _this.video.pause();
+                    if (_this.posterData) {
+                        _this.posterData.width = _this.video.videoWidth;
+                        _this.posterData.height = _this.video.videoHeight;
+                    }
+                    _this.$invalidateContentBounds();
+                    _this.width = isNaN(_this.widthSet) ? _this.video.videoWidth : _this.widthSet;
+                    _this.height = isNaN(_this.heightSet) ? _this.video.videoHeight : _this.heightSet;
+                    _this.emitWith(lark.Event.COMPLETE);
+                };
+                this.$renderRegion = new lark.sys.Region();
+                this.src = url;
+                this.once(lark.Event.ADDED_TO_STAGE, this.loadPoster, this);
             }
             var d = __define,c=WebVideo;p=c.prototype;
             /**
-             * @private
              * @inheritDoc
              */
             p.load = function (url) {
                 var _this = this;
-                url = url || this.url;
+                url = url || this.src;
                 if (DEBUG && !url) {
                     lark.$error(3002);
                 }
                 var video = document.createElement("video");
                 video.src = url;
-                video.addEventListener("canplay", function () { return _this.onVideoLoaded(); });
+                video.setAttribute("webkit-playsinline", "webkit-playsinline");
+                video.addEventListener("canplay", this.onVideoLoaded);
                 video.addEventListener("error", function () { return _this.onVideoError(); });
                 video.addEventListener("ended", function () { return _this.onVideoEnded(); });
                 video.load();
+                video.play();
+                setTimeout(function () { return video.pause(); }, 16);
                 this.video = video;
             };
             /**
-             * @private
              * @inheritDoc
              */
             p.play = function (startTime, loop) {
-                if (startTime === void 0) { startTime = 0; }
+                var _this = this;
                 if (loop === void 0) { loop = false; }
-                if (DEBUG && this.loaded == false) {
-                    lark.$error(3001);
+                if (this.loaded == false) {
+                    this.load();
+                    this.once(lark.Event.COMPLETE, function (e) { return _this.play(startTime, loop); }, this);
+                    return;
                 }
                 var video = this.video;
-                video.currentTime = startTime;
+                if (startTime != undefined)
+                    video.currentTime = +startTime || 0;
                 video.loop = !!loop;
                 video.play();
+                video.style.position = "absolute";
+                video.style.top = "0px";
+                video.style.left = "0px";
+                video.style.height = "0";
+                video.style.width = "0";
+                document.body.appendChild(video);
+                var fullscreen = false;
+                if (this._fullscreen) {
+                    fullscreen = this.goFullscreen();
+                }
+                if (fullscreen == false) {
+                    video.setAttribute("webkit-playsinline", "webkit-playsinline");
+                    lark.startTick(this.markDirty, this);
+                }
+            };
+            p.goFullscreen = function () {
+                var _this = this;
+                var video = this.video;
+                if (video['webkitRequestFullscreen'])
+                    video['webkitRequestFullscreen']();
+                else if (video['webkitRequestFullScreen'])
+                    video['webkitRequestFullScreen']();
+                else if (video['msRequestFullscreen'])
+                    video['msRequestFullscreen']();
+                else if (video['requestFullscreen'])
+                    video['requestFullscreen']();
+                else
+                    return false;
+                video.removeAttribute("webkit-playsinline");
+                video['onwebkitfullscreenchange'] = function (e) {
+                    var isfullscreen = !!video['webkitDisplayingFullscreen'];
+                    if (!isfullscreen) {
+                        _this.pause();
+                    }
+                };
+                video['onwebkitfullscreenerror'] = function (e) {
+                    lark.$error(3003);
+                };
+                return true;
             };
             /**
-             * @private
              * @inheritDoc
              */
             p.close = function () {
-                this.stop();
+                this.pause();
                 if (this.loaded == false && this.video)
                     this.video.src = "";
-                if (this.video)
+                if (this.video) {
+                    if (this.video['remove'])
+                        this.video['remove']();
                     this.video = null;
+                }
                 this.closed = true;
                 this.loaded = false;
             };
             /**
-             * @private
              * @inheritDoc
              */
-            p.stop = function () {
+            p.pause = function () {
                 if (this.video) {
                     this.video.pause();
                     this.onVideoEnded();
                 }
+                lark.stopTick(this.markDirty, this);
             };
             d(p, "volume",
                 /**
-                 * @private
                  * @inheritDoc
                  */
                 function () {
@@ -411,7 +485,6 @@ var lark;
             );
             d(p, "position",
                 /**
-                 * @private
                  * @inheritDoc
                  */
                 function () {
@@ -420,7 +493,6 @@ var lark;
                     return this.video.currentTime;
                 },
                 /**
-                 * @private
                  * @inheritDoc
                  */
                 function (value) {
@@ -429,13 +501,29 @@ var lark;
                     this.video.currentTime = value;
                 }
             );
-            d(p, "bitmapData",
+            d(p, "fullscreen",
                 /**
-                 * @private
                  * @inheritDoc
                  */
                 function () {
-                    if (!this.video)
+                    return this._fullscreen;
+                },
+                /**
+                 * @inheritDoc
+                 */
+                function (value) {
+                    this._fullscreen = !!value;
+                    if (this.video && this.video.paused == false) {
+                        this.goFullscreen();
+                    }
+                }
+            );
+            d(p, "bitmapData",
+                /**
+                 * @inheritDoc
+                 */
+                function () {
+                    if (!this.video || !this.loaded)
                         return null;
                     if (!this._bitmapData) {
                         this.video.width = this.video.videoWidth;
@@ -445,13 +533,25 @@ var lark;
                     return this._bitmapData;
                 },undefined
             );
-            /**
-             * @private
-             *
-             */
-            p.onVideoLoaded = function () {
-                this.loaded = true;
-                this.emitWith(lark.Event.COMPLETE);
+            p.loadPoster = function () {
+                var _this = this;
+                var poster = this.poster;
+                if (!poster)
+                    return;
+                var imageLoader = new lark.ImageLoader();
+                imageLoader.once(lark.Event.COMPLETE, function (e) {
+                    _this.posterData = imageLoader.data;
+                    if (_this.video) {
+                        _this.posterData.width = _this.video.videoWidth;
+                        _this.posterData.height = _this.video.videoHeight;
+                    }
+                    else {
+                        _this.posterData.width = isNaN(_this.widthSet) ? _this.posterData.width : _this.widthSet;
+                        _this.posterData.height = isNaN(_this.heightSet) ? _this.posterData.height : _this.heightSet;
+                    }
+                    _this.$invalidateContentBounds();
+                }, this);
+                imageLoader.load(poster);
             };
             /**
              * @private
@@ -459,6 +559,7 @@ var lark;
              */
             p.onVideoEnded = function () {
                 this.emitWith(lark.Event.ENDED);
+                this.$invalidateContentBounds();
             };
             /**
              * @private
@@ -467,10 +568,60 @@ var lark;
             p.onVideoError = function () {
                 this.emitWith(lark.Event.IO_ERROR);
             };
+            /**
+             * @private
+             */
+            p.$measureContentBounds = function (bounds) {
+                var bitmapData = this.bitmapData;
+                var posterData = this.posterData;
+                if (bitmapData) {
+                    bounds.setTo(0, 0, bitmapData.width, bitmapData.height);
+                }
+                else if (posterData) {
+                    bounds.setTo(0, 0, posterData.width, posterData.height);
+                }
+                else {
+                    bounds.setEmpty();
+                }
+            };
+            /**
+             * @private
+             */
+            p.$render = function (context) {
+                var bitmapData = this.bitmapData;
+                var posterData = this.posterData;
+                if ((!bitmapData || this.video && this.video.paused) && posterData) {
+                    context.drawImage(posterData, 0, 0, posterData.width, posterData.height);
+                }
+                if (bitmapData) {
+                    context.imageSmoothingEnabled = true;
+                    context.drawImage(bitmapData, 0, 0, bitmapData.width, bitmapData.height);
+                }
+            };
+            p.markDirty = function (time) {
+                this.$invalidate();
+                return true;
+            };
+            /**
+             * @private
+             * 设置显示高度
+             */
+            p.$setHeight = function (value) {
+                _super.prototype.$setHeight.call(this, value);
+                this.heightSet = +value || 0;
+            };
+            /**
+             * @private
+             * 设置显示宽度
+             */
+            p.$setWidth = function (value) {
+                _super.prototype.$setWidth.call(this, value);
+                this.widthSet = +value || 0;
+            };
             return WebVideo;
-        })(lark.EventEmitter);
+        })(lark.DisplayObject);
         web.WebVideo = WebVideo;
-        lark.registerClass(WebVideo,"lark.web.WebVideo",["lark.Video","lark.IEventEmitter"]);
+        lark.registerClass(WebVideo,"lark.web.WebVideo",["lark.Video"]);
         lark.Video = WebVideo;
     })(web = lark.web || (lark.web = {}));
 })(lark || (lark = {}));
