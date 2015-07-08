@@ -13,6 +13,7 @@ Lark 绘制：
 在本节的示例代码，均假设有一个现成的Graphics实例graphics：
 ```
 var shape = new lark.Shape();
+this.addChild( shape );
 var graphics = shape.graphics;
 ```
 要创建纯色线条，请设置 strokeStyle 属性：

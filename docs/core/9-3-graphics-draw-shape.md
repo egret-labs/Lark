@@ -4,6 +4,7 @@
 它们是 Graphics 类的 fillRect()、 arc() 方法。但要注意，在调用这些方法之前，您仍需指定线条和填充样式。
 ``` TypeScript
 var shape = new lark.Shape();
+this.addChild( shape );
 var graphics = shape.graphics;
 graphics.lineWidth = 2;
 graphics.strokeStyle="#990000";
