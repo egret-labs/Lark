@@ -35,4 +35,5 @@ module lark {
 
     locale_strings[3001] = "请等待媒体加载完成后再调用 play 方法";
     locale_strings[3002] = "请指定要加载的媒体的URL";
+    locale_strings[3003] = "全屏幕播放视频时，请先调用 load 方法，等待媒体加载完成后再调用 play 方法";
 }

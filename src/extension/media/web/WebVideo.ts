@@ -33,12 +33,21 @@ module lark.web {
      * @private
      * @inheritDoc
      */
-    export class WebVideo extends lark.EventEmitter implements lark.Video {
+    export class WebVideo extends lark.DisplayObject implements lark.Video {
 
+        /**
+         * @inheritDoc
+         */
+        public src: string;
+        /**
+         * @inheritDoc
+         */
+        public poster: string;
+        
         /**
          * @private
          */
-        private url: string;
+        private posterData: BitmapData;
         /**
          * @private
          */
@@ -51,78 +60,131 @@ module lark.web {
          * @private
          */
         private closed: boolean = false;
-
         /**
          * @private
+         */
+        private heightSet: number = NaN;
+        /**
+         * @private
+         */
+        private widthSet: number = NaN;
+
+        /**
          * @inheritDoc
          */
         constructor(url?: string) {
             super();
-            this.url = url;
+            this.$renderRegion = new sys.Region();
+            this.src = url;
+            this.once(lark.Event.ADDED_TO_STAGE, this.loadPoster, this);
         }
 
         /**
-         * @private
          * @inheritDoc
          */
         load(url?: string) {
-            url = url || this.url;
+            url = url || this.src;
             if (DEBUG && !url) {
                 lark.$error(3002);
             }
             var video = document.createElement("video");
             video.src = url;
-            video.addEventListener("canplay", () => this.onVideoLoaded());
+            video.setAttribute("webkit-playsinline", "webkit-playsinline");
+            video.addEventListener("canplay", this.onVideoLoaded);
             video.addEventListener("error", () => this.onVideoError());
             video.addEventListener("ended", () => this.onVideoEnded());
             video.load();
+            video.play();
+            setTimeout(() => video.pause(), 16);
             this.video = video;
         }
 
         /**
-         * @private
          * @inheritDoc
          */
-        play(startTime: number = 0, loop = false) {
-            if (DEBUG && this.loaded == false) {
-                lark.$error(3001);
+        play(startTime?: number, loop = false) {
+            if (this.loaded == false) {
+                this.load();
+                this.once(lark.Event.COMPLETE, e=> this.play(startTime, loop), this);
+                return;
             }
 
             var video = this.video;
-            video.currentTime = startTime;
+            if (startTime != undefined)
+                video.currentTime = +startTime||0;
             video.loop = !!loop;
             video.play();
+            video.style.position = "absolute";
+            video.style.top = "0px";
+            video.style.left = "0px";
+            video.style.height = "0";
+            video.style.width = "0";
+            document.body.appendChild(video);
+            var fullscreen = false;
+            if (this._fullscreen) {
+                fullscreen = this.goFullscreen();
+            }
+            if (fullscreen == false) {
+                video.setAttribute("webkit-playsinline", "webkit-playsinline");
+                lark.startTick(this.markDirty, this);
+            }
+        }
+
+        private goFullscreen():boolean {
+            var video = this.video;
+            if (video['webkitRequestFullscreen'])
+                video['webkitRequestFullscreen']();
+            else if (video['webkitRequestFullScreen'])
+                video['webkitRequestFullScreen']();
+            else if (video['msRequestFullscreen'])
+                video['msRequestFullscreen']();
+            else if (video['requestFullscreen'])
+                video['requestFullscreen']();
+            else
+                return false;
+            video.removeAttribute("webkit-playsinline");
+            video['onwebkitfullscreenchange'] = (e:any) => {
+                var isfullscreen = !!video['webkitDisplayingFullscreen'];
+                if (!isfullscreen) {
+                    this.pause();
+                }
+            };
+            video['onwebkitfullscreenerror'] = (e: any) => {
+                lark.$error(3003);
+            };
+            return true;
         }
         
         /**
-         * @private
          * @inheritDoc
          */
         close() {
-            this.stop();
+            this.pause();
             if (this.loaded == false && this.video)
                 this.video.src = "";
-            if (this.video)
+            if (this.video) {
+                if (this.video['remove'])
+                    this.video['remove']();
                 this.video = null;
+            }
             this.closed = true;
             this.loaded = false;
         }
 
 
         /**
-         * @private
          * @inheritDoc
          */
-        stop() {
+        pause() {
             if (this.video) {
                 this.video.pause();
                 this.onVideoEnded();
             }
+            lark.stopTick(this.markDirty, this);
         }
 
 
         /**
-         * @private
          * @inheritDoc
          */
         public get volume(): number {
@@ -141,7 +203,6 @@ module lark.web {
         }
 
         /**
-         * @private
          * @inheritDoc
          */
         public get position(): number {
@@ -151,7 +212,6 @@ module lark.web {
         }
 
         /**
-         * @private
          * @inheritDoc
          */
         public set position(value: number) {
@@ -160,14 +220,31 @@ module lark.web {
             this.video.currentTime = value;
         }
 
+        private _fullscreen = true;
+        /**
+         * @inheritDoc
+         */
+        public get fullscreen(): boolean {
+            return this._fullscreen;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public set fullscreen(value: boolean) {
+            this._fullscreen = !!value;
+            if (this.video && this.video.paused == false) {
+                this.goFullscreen();
+            }
+        }
+
         private _bitmapData: BitmapData;
 
         /**
-         * @private
          * @inheritDoc
          */
         public get bitmapData(): BitmapData {
-            if (!this.video)
+            if (!this.video || !this.loaded)
                 return null;
             if (!this._bitmapData) {
                 this.video.width = this.video.videoWidth;
@@ -177,13 +254,45 @@ module lark.web {
             return this._bitmapData;
         }
 
+        private loadPoster() {
+            var poster = this.poster;
+            if (!poster)
+                return;
+            var imageLoader = new lark.ImageLoader();
+            imageLoader.once(lark.Event.COMPLETE, e=> {
+                this.posterData = imageLoader.data;
+                if (this.video) {
+                    this.posterData.width = this.video.videoWidth;
+                    this.posterData.height = this.video.videoHeight;
+                }
+                else {
+                    this.posterData.width = isNaN(this.widthSet) ? this.posterData.width : this.widthSet;
+                    this.posterData.height = isNaN(this.heightSet) ? this.posterData.height : this.heightSet;
+                }
+                this.$invalidateContentBounds();
+            }, this);
+            imageLoader.load(poster);
+        }
+
         /**
          * @private
          * 
          */
-        private onVideoLoaded() {
+        private onVideoLoaded = () => {
+            this.video.removeEventListener("canplay", this.onVideoLoaded);
+            var width = this.width;
+            var height = this.height;
             this.loaded = true;
+            this.video.pause();
+            if (this.posterData) {
+                this.posterData.width = this.video.videoWidth;
+                this.posterData.height = this.video.videoHeight;
+            }
+            this.$invalidateContentBounds();
+            this.width = isNaN(this.widthSet) ? this.video.videoWidth : this.widthSet;
+            this.height = isNaN(this.heightSet) ? this.video.videoHeight : this.heightSet;
             this.emitWith(lark.Event.COMPLETE);
+
         }
 
         /**
@@ -192,6 +301,7 @@ module lark.web {
          */
         private onVideoEnded() {
             this.emitWith(lark.Event.ENDED);
+            this.$invalidateContentBounds();
         }
 
         /**
@@ -200,6 +310,61 @@ module lark.web {
          */
         private onVideoError() {
             this.emitWith(lark.Event.IO_ERROR);
+        }
+
+        /**
+         * @private
+         */
+        $measureContentBounds(bounds: Rectangle): void {
+            var bitmapData = this.bitmapData;
+            var posterData = this.posterData;
+            if (bitmapData) {
+                bounds.setTo(0, 0, bitmapData.width, bitmapData.height);
+            }
+            else if (posterData) {
+                bounds.setTo(0, 0, posterData.width, posterData.height);
+            }
+            else {
+                bounds.setEmpty();
+            }
+        }
+
+        /**
+         * @private
+         */
+        $render(context: sys.RenderContext): void {
+            var bitmapData = this.bitmapData;
+            var posterData = this.posterData;
+            if ((!bitmapData || this.video && this.video.paused) && posterData) {
+                context.drawImage(posterData, 0, 0, posterData.width, posterData.height);
+            }
+            if (bitmapData) {
+                context.imageSmoothingEnabled = true;
+                context.drawImage(bitmapData, 0, 0, bitmapData.width, bitmapData.height);
+            }
+        }
+
+        private markDirty(time):boolean {
+            this.$invalidate();
+            return true;
+        }
+
+        /**
+         * @private
+         * 设置显示高度
+         */
+        $setHeight(value: number) {
+            super.$setHeight(value);
+            this.heightSet = +value || 0;
+        }
+
+        /**
+         * @private
+         * 设置显示宽度
+         */
+        $setWidth(value: number) {
+            super.$setWidth(value);
+            this.widthSet = +value || 0;
         }
     }
 

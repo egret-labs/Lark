@@ -50,7 +50,7 @@ module lark {
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export interface Video extends IEventEmitter {
+    export interface Video extends DisplayObject {
 
         /**
          * @language en_US
@@ -73,14 +73,16 @@ module lark {
          * Play back the video.
          * @param startTime The initial position in seconds at which playback should start, (default = 0)
          * @param loop Defines should play the video again when the video is ended. (default = false)
+         * @param fullscreen Defines should play the video in fullscreen mode. (default = false)
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 播放该视频
-         * @param startTime 应开始播放的初始位置（以秒为单位），默认值是 0
+         * @param startTime 应开始播放的初始位置（以秒为单位），默认值是视频上次结束的位置
          * @param loop 是否需要循环播放，默认值是 false
+         * @param fullscreen 是否需要全屏播放，默认值是 false
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -99,7 +101,48 @@ module lark {
          * @platform Web,Native
          */
         close(): void;
+        
+        /**
+         * @language en_US
+         * The URL of the video you want to play.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 想要播放的视频的URL
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        src: string;
+        
+        /**
+         * @language en_US
+         * The URL of an image you want to display before the video is loaded or video cannot been draw on the canvas on some mobile device.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 视频加载前，或者在不支持将 video 画在 canvas 的设备上，想要显示的视频截图地址。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        poster: string;
 
+        /**
+         * @language en_US
+         * Should play the video in fullscreen mode (default = true).
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 是否全屏播放这个视频（默认值是 true）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        fullscreen: boolean;
         /**
          * @language en_US
          * The volume, ranging from 0 (silent) to 1 (full volume).
@@ -131,17 +174,17 @@ module lark {
 
         /**
          * @language en_US
-         * Stop the video playing.
+         * Pause the video playing.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 停止播放。
+         * 暂停播放。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        stop(): void;
+        pause(): void;
 
         /**
          * @language en_US
