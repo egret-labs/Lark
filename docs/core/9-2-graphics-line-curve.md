@@ -20,8 +20,8 @@ var graphics = shape.graphics;
 
 调用此方法时，您指定的最常用的值是前三个参数：线条粗细、颜色。例如，该行代码指示graphics 对象绘制 2 个像素粗、红色(#990000) ：
 ``` TypeScript
-graphics.lineWidth = 2;
-graphics.strokeStyle="#990000";
+graphics.lineWidth = 5;
+graphics.strokeStyle="#00ff00";
 ```
 
 #### 绘制直线
@@ -35,6 +35,8 @@ graphics.moveTo( 100, 100);
 graphics.lineTo( 200, 200 );
 graphics.stroke();
 ```
+效果如图：  
+![](image/9-2-graphics-line.jpg)
 
 当进行一系列的绘制，线条终点与起点闭合时，可对包含区域进行填充。填充前通过 fillStyle 来设置填充颜色。然后简单的调用 fill() 进行填充。
 以下示例绘制红色三角形，其高度为 100 个像素：
@@ -50,6 +52,8 @@ graphics.lineTo( hTriangle / 2, 0 );
 graphics.fillStyle = "#FF0000" ;
 graphics.fill();
 ```
+效果如图：  
+![](image/9-2-graphics-triangle.jpg)
 
 #### 绘制曲线
 bezierCurveTo() 方法可以绘制二次贝塞尔曲线。这将绘制一个连接两个点（称为锚点）的弧，同时向第三个点 （称为控制点）弯曲。 Graphics 对象使用当前绘制位置作为第一个锚点。调用 bezierCurveTo() 方法时，将传递以下六个参数：控制点1的 x 和 y 坐标，控制点2的 x 和 y 坐标，最后两个参数是第二个锚点的 x 和 y 坐标。
@@ -61,6 +65,8 @@ graphics.moveTo( 200, 200 );
 graphics.bezierCurveTo( 175, 125, 280, 200 , 300, 200 );
 graphics.stroke();
 ```
+效果如图：  
+![](image/9-2-graphics-curve.jpg)
 
 
 
