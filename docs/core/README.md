@@ -66,10 +66,10 @@
 	* [加载文本和二进制文件]()
 	* [发送HTTP请求]()
 	* [加载位图文件]()
-14. [调试功能](14-0-debugging.md)(zc)
-	* [显示脏矩形和帧频信息](14-1-fps-dirty-region.md)
-	* [使用内置日志输出面板]()
-	* [使用DEBUG编译参数]()
+14. [调试功能](14-0-debugging.md)(done)
+	* [显示脏矩形和帧频信息](14-1-fps-dirty-region.md)(done)
+	* [使用内置日志输出面板](14-2-log.md)(done)
+	* [使用DEBUG编译参数](14-3-debug.md)(done)
 	
 
 	
