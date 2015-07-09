@@ -9,6 +9,7 @@ scrollRect 属性是 Rectangle 类的实例，Rectangle 类包括将矩形区域
 var bigText: lark.TextField = new lark.TextField();
 bigText.text = "平移和滚动显示对象,平移和滚动显示对象";
 bigText.scrollRect = new lark.Rectangle(0, 0, 200, 50);
+bigText.cacheAsBitmap = true;
 this.addChild(bigText);
 
 //创建一个按钮,点击后控制文本内容向左移动
@@ -41,3 +42,4 @@ function onScroll(e: lark.TouchEvent): void {
   bigText.scrollRect = rect;
 }
  ```
+ 正如此示例所示，使用显示对象的 scrollRect 属性时，最好使用 cacheAsBitmap 属性将显示对象的内容缓存为位图。这样，每次滚动显示对象时，就不必重绘显示对象的整个内容，而只需改用缓存的位图即可将所需部分直接呈示到屏幕上。有关详细信息，请参阅[缓存显示对象](7-4-cacheAsBitmap.md)。
