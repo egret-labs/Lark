@@ -14,7 +14,7 @@
 	* [事件对象](4-3-event-target.md)(review)
 	* [事件监听器](4-4-event-listener.md)(review)
 	* [事件对象池优化](4-5-event-pool.md)(review)
-	* [事件示例](4-6-event-ex.md)(done)
+	* [事件示例](4-6-event-ex.md)(review)
 5. [显示编程](5-0-display.md)(review)
 	* [显示编程的基础知识](5-1-display-about.md)(review)
 	* [核心显示类](5-2-display-class.md)(review)
