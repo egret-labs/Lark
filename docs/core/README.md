@@ -10,7 +10,7 @@
 	* [使用计时函数](3-2-time-functions.md)(review)
 4. [处理事件](4-0-event.md)(review)
 	* [事件处理基础知识](4-1-event-basic.md)(review)
-	* [事件流](4-2-event-stream.md)(done)
+	* [事件流](4-2-event-stream.md)(review)
 	* [事件对象](4-3-event-target.md)(done)
 	* [事件监听器](4-4-event-listener.md)(done)
 	* [事件对象池优化](4-5-event-pool.md)(done)
