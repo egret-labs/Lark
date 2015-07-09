@@ -31,8 +31,8 @@ module swan {
 
     /**
      * @language en_US
-     * Pay atention: The skin theme is the default value for once setting, and it can not be changed while running.
-     * You can change a skin of a component with <code>skinName</code> property.
+     * Note: The skin name values in the skin theme are used as default values,which can not be changed while running.
+     * You can change the skin of a component with the skinName property.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -49,10 +49,10 @@ module swan {
         /**
          * @language en_US
          * Create an instance of Theme
-         * @param configURL the external theme path. if <code>null</code>, you need to register the default skin name with
-         * <code>mapSkin()</code> manually.
+         * @param configURL the external theme path. if null, you need to register the default skin name with
+         * mapSkin() manually.
          * @param stage current stage. The theme will register to the stage with this parameter.
-         * If <code>null</code>, you need to register with <code>stage.registerImplementation("swan.Theme",theme)</code>
+         * If null, you need to register with stage.registerImplementation("swan.Theme",theme)
          * manually.
          * @version Lark 1.0
          * @version Swan 1.0
@@ -61,10 +61,10 @@ module swan {
         /**
          * @language zh_CN
          * 创建一个主题实例
-         * @param configURL 要加载并解析的外部主题配置文件路径。若传入 <code>null</code>，将不进行配置文件加载，
-         * 之后需要在外部以代码方式手动调用 <code>mapSkin()</code> 方法完成每条默认皮肤名的注册。
+         * @param configURL 要加载并解析的外部主题配置文件路径。若传入 null，将不进行配置文件加载，
+         * 之后需要在外部以代码方式手动调用 mapSkin() 方法完成每条默认皮肤名的注册。
          * @param stage 当前舞台引用。传入此参数，主题会自动注册自身到舞台上。
-         * 若传入null，需要在外部手动调用 <code>stage.registerImplementation("swan.Theme",theme)</code> 来完成主题的注册。
+         * 若传入null，需要在外部手动调用 stage.registerImplementation("swan.Theme",theme) 来完成主题的注册。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -125,7 +125,7 @@ module swan {
                 }
             }
             this.initialized = true;
-            this.hadleDelayList();
+            this.handleDelayList();
         }
 
         /**
@@ -137,7 +137,7 @@ module swan {
          * @private
          * 
          */
-        private hadleDelayList():void {
+        private handleDelayList():void {
             var list = this.delayList;
             var length = list.length;
             for (var i = 0; i < length; i++) {
@@ -157,10 +157,6 @@ module swan {
          * @private
          */
         private skinMap:{[key:string]:string} = {};
-        /**
-         * @private
-         */
-        private flagToClassName:{[key:number]:string} = {};
 
 
         /**
@@ -205,21 +201,17 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param prototype 
-         * @returns 
          */
         private findSkinName(prototype:any):string {
             if (!prototype) {
                 return "";
             }
-            var flag = prototype["__classFlag__"];
-            if (flag === void 0) {
+            var key = prototype["__class__"];
+            if (key === void 0) {
                 return "";
             }
-            var key = this.flagToClassName[flag];
             var skinName = this.skinMap[key];
-            if (skinName || flag === Types.Component) {
+            if (skinName || key == "swan.Component") {
                 return skinName;
             }
             return this.findSkinName(Object.getPrototypeOf(prototype));
@@ -253,15 +245,7 @@ module swan {
                 }
             }
             this.skinMap[hostComponentKey] = skinName;
-            var clazz = lark.getDefinitionByName(hostComponentKey);
-            if (clazz && clazz.prototype) {
-                var flag = clazz.prototype.__classFlag__;
-                if (flag) {
-                    this.flagToClassName[flag] = hostComponentKey;
-                }
-            }
         }
     }
 
-    lark.registerClass(Theme, Types.Theme);
 }

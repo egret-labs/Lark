@@ -379,18 +379,8 @@ module swan {
         }
     }
 
-    /**
-     * @private
-     */
-    registerProperty(ArrayCollection,"source","Array",true)
-    /**
-     * @private
-     */
-    lark.registerClass(ArrayCollection,Types.ArrayCollection);
+    registerProperty(ArrayCollection,"source","Array",true);
 
-    /**
-     * @private
-     */
     if(DEBUG){
         lark.$markReadOnly(ArrayCollection.prototype,"length");
     }

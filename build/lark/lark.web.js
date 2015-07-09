@@ -1,3 +1,147 @@
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var __define = this.__define || function (o, p, g, s) { 
+  Object.defineProperty(o, p, { configurable:true, enumerable:true, get:g,set:s }) };
+var lark;
+(function (lark) {
+    var web;
+    (function (web) {
+        /**
+         * @private
+         */
+        var WebMotion = (function (_super) {
+            __extends(WebMotion, _super);
+            function WebMotion() {
+                var _this = this;
+                _super.apply(this, arguments);
+                /**
+                 * @private
+                 */
+                this.onChange = function (e) {
+                    var event = new lark.MotionEvent(lark.Event.CHANGE);
+                    var acceleration = {
+                        x: e.acceleration.x,
+                        y: e.acceleration.y,
+                        z: e.acceleration.z
+                    };
+                    var accelerationIncludingGravity = {
+                        x: e.accelerationIncludingGravity.x,
+                        y: e.accelerationIncludingGravity.y,
+                        z: e.accelerationIncludingGravity.z
+                    };
+                    var rotation = {
+                        alpha: e.rotationRate.alpha,
+                        beta: e.rotationRate.beta,
+                        gamma: e.rotationRate.gamma
+                    };
+                    event.acceleration = acceleration;
+                    event.accelerationIncludingGravity = accelerationIncludingGravity;
+                    event.rotationRate = rotation;
+                    _this.emit(event);
+                };
+            }
+            var d = __define,c=WebMotion;p=c.prototype;
+            /**
+             * @private
+             *
+             */
+            p.start = function () {
+                window.addEventListener("devicemotion", this.onChange);
+            };
+            /**
+             * @private
+             *
+             */
+            p.stop = function () {
+                window.removeEventListener("devicemotion", this.onChange);
+            };
+            return WebMotion;
+        })(lark.EventEmitter);
+        web.WebMotion = WebMotion;
+        lark.registerClass(WebMotion,"lark.web.WebMotion",["lark.Motion","lark.IEventEmitter"]);
+        lark.Motion = lark.web.WebMotion;
+    })(web = lark.web || (lark.web = {}));
+})(lark || (lark = {}));
+var lark;
+(function (lark) {
+    var web;
+    (function (web) {
+        /**
+         * @private
+         */
+        var WebGeolocation = (function (_super) {
+            __extends(WebGeolocation, _super);
+            /**
+             * @private
+             */
+            function WebGeolocation(option) {
+                var _this = this;
+                _super.call(this);
+                /**
+                 * @private
+                 */
+                this.onUpdate = function (position) {
+                    var event = new lark.GeolocationEvent(lark.Event.CHANGE);
+                    var coords = position.coords;
+                    event.altitude = coords.altitude;
+                    event.heading = coords.heading;
+                    event.accuracy = coords.accuracy;
+                    event.latitude = coords.latitude;
+                    event.longitude = coords.longitude;
+                    event.speed = coords.speed;
+                    event.altitudeAccuracy = coords.altitudeAccuracy;
+                    _this.emit(event);
+                };
+                /**
+                 * @private
+                 */
+                this.onError = function (error) {
+                    var errorType = lark.GeolocationEvent.UNAVAILABLE;
+                    if (error.code == error.PERMISSION_DENIED)
+                        errorType = lark.GeolocationEvent.PERMISSION_DENIED;
+                    var event = new lark.GeolocationEvent(lark.Event.IO_ERROR);
+                    event.errorType = errorType;
+                    event.errorMessage = error.message;
+                    _this.emit(event);
+                };
+                this.geolocation = navigator.geolocation;
+            }
+            var d = __define,c=WebGeolocation;p=c.prototype;
+            /**
+             * @private
+             *
+             */
+            p.start = function () {
+                var geo = this.geolocation;
+                if (geo)
+                    this.watchId = geo.watchPosition(this.onUpdate, this.onError);
+                else
+                    this.onError({
+                        code: 2,
+                        message: lark.sys.tr(3004),
+                        PERMISSION_DENIED: 1,
+                        POSITION_UNAVAILABLE: 2
+                    });
+            };
+            /**
+             * @private
+             *
+             */
+            p.stop = function () {
+                var geo = this.geolocation;
+                geo.clearWatch(this.watchId);
+            };
+            return WebGeolocation;
+        })(lark.EventEmitter);
+        web.WebGeolocation = WebGeolocation;
+        lark.registerClass(WebGeolocation,"lark.web.WebGeolocation",["lark.Geolocation","lark.IEventEmitter"]);
+        lark.Geolocation = lark.web.WebGeolocation;
+    })(web = lark.web || (lark.web = {}));
+})(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -26,14 +170,657 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
-var __define = this.__define || function (o, p, g, s) { 
-  Object.defineProperty(o, p, { configurable:true, enumerable:true, get:g,set:s }) };
+var lark;
+(function (lark) {
+    var web;
+    (function (web) {
+        /**
+         * @private
+         * @inheritDoc
+         */
+        var WebVideo = (function (_super) {
+            __extends(WebVideo, _super);
+            /**
+             * @inheritDoc
+             */
+            function WebVideo(url) {
+                var _this = this;
+                _super.call(this);
+                /**
+                 * @private
+                 */
+                this.loaded = false;
+                /**
+                 * @private
+                 */
+                this.closed = false;
+                /**
+                 * @private
+                 */
+                this.heightSet = NaN;
+                /**
+                 * @private
+                 */
+                this.widthSet = NaN;
+                this._fullscreen = true;
+                /**
+                 * @private
+                 *
+                 */
+                this.onVideoLoaded = function () {
+                    _this.video.removeEventListener("canplay", _this.onVideoLoaded);
+                    var video = _this.video;
+                    var width = _this.width;
+                    var height = _this.height;
+                    _this.loaded = true;
+                    video.pause();
+                    if (_this.posterData) {
+                        _this.posterData.width = video.videoWidth;
+                        _this.posterData.height = video.videoHeight;
+                    }
+                    video.width = video.videoWidth;
+                    video.height = video.videoHeight;
+                    _this.$invalidateContentBounds();
+                    _this.width = isNaN(_this.widthSet) ? video.videoWidth : _this.widthSet;
+                    _this.height = isNaN(_this.heightSet) ? video.videoHeight : _this.heightSet;
+                    _this.emitWith(lark.Event.COMPLETE);
+                };
+                this.$renderRegion = new lark.sys.Region();
+                this.src = url;
+                this.once(lark.Event.ADDED_TO_STAGE, this.loadPoster, this);
+            }
+            var d = __define,c=WebVideo;p=c.prototype;
+            /**
+             * @inheritDoc
+             */
+            p.load = function (url) {
+                var _this = this;
+                url = url || this.src;
+                if (DEBUG && !url) {
+                    lark.$error(3002);
+                }
+                if (this.video && this.video.src == url)
+                    return;
+                var video = document.createElement("video");
+                video.src = url;
+                video.setAttribute("webkit-playsinline", "webkit-playsinline");
+                video.addEventListener("canplay", this.onVideoLoaded);
+                video.addEventListener("error", function () { return _this.onVideoError(); });
+                video.addEventListener("ended", function () { return _this.onVideoEnded(); });
+                video.load();
+                video.play();
+                setTimeout(function () { return video.pause(); }, 16);
+                this.video = video;
+            };
+            /**
+             * @inheritDoc
+             */
+            p.play = function (startTime, loop) {
+                var _this = this;
+                if (loop === void 0) { loop = false; }
+                if (this.loaded == false) {
+                    this.load();
+                    this.once(lark.Event.COMPLETE, function (e) { return _this.play(startTime, loop); }, this);
+                    return;
+                }
+                var video = this.video;
+                if (startTime != undefined)
+                    video.currentTime = +startTime || 0;
+                video.loop = !!loop;
+                video.play();
+                video.style.position = "absolute";
+                video.style.top = "0px";
+                video.style.left = "0px";
+                video.style.height = "0";
+                video.style.width = "0";
+                document.body.appendChild(video);
+                var fullscreen = false;
+                if (this._fullscreen) {
+                    fullscreen = this.goFullscreen();
+                }
+                if (fullscreen == false) {
+                    video.setAttribute("webkit-playsinline", "webkit-playsinline");
+                    lark.startTick(this.markDirty, this);
+                }
+            };
+            p.goFullscreen = function () {
+                var _this = this;
+                var video = this.video;
+                if (video['webkitRequestFullscreen'])
+                    video['webkitRequestFullscreen']();
+                else if (video['webkitRequestFullScreen'])
+                    video['webkitRequestFullScreen']();
+                else if (video['msRequestFullscreen'])
+                    video['msRequestFullscreen']();
+                else if (video['requestFullscreen'])
+                    video['requestFullscreen']();
+                else
+                    return false;
+                video.removeAttribute("webkit-playsinline");
+                video['onwebkitfullscreenchange'] = function (e) {
+                    var isfullscreen = !!video['webkitDisplayingFullscreen'];
+                    if (!isfullscreen) {
+                        _this.pause();
+                    }
+                };
+                video['onwebkitfullscreenerror'] = function (e) {
+                    lark.$error(3003);
+                };
+                return true;
+            };
+            /**
+             * @inheritDoc
+             */
+            p.close = function () {
+                this.pause();
+                if (this.loaded == false && this.video)
+                    this.video.src = "";
+                if (this.video) {
+                    if (this.video['remove'])
+                        this.video['remove']();
+                    this.video = null;
+                }
+                this.closed = true;
+                this.loaded = false;
+            };
+            /**
+             * @inheritDoc
+             */
+            p.pause = function () {
+                if (this.video) {
+                    this.video.pause();
+                    this.onVideoEnded();
+                }
+                lark.stopTick(this.markDirty, this);
+            };
+            d(p, "volume",
+                /**
+                 * @inheritDoc
+                 */
+                function () {
+                    if (!this.video)
+                        return 1;
+                    return this.video.volume;
+                },
+                /**
+                 * @inheritDoc
+                 */
+                function (value) {
+                    if (!this.video)
+                        return;
+                    this.video.volume = value;
+                }
+            );
+            d(p, "position",
+                /**
+                 * @inheritDoc
+                 */
+                function () {
+                    if (!this.video)
+                        return 0;
+                    return this.video.currentTime;
+                },
+                /**
+                 * @inheritDoc
+                 */
+                function (value) {
+                    if (!this.video)
+                        return;
+                    this.video.currentTime = value;
+                }
+            );
+            d(p, "fullscreen",
+                /**
+                 * @inheritDoc
+                 */
+                function () {
+                    return this._fullscreen;
+                },
+                /**
+                 * @inheritDoc
+                 */
+                function (value) {
+                    this._fullscreen = !!value;
+                    if (this.video && this.video.paused == false) {
+                        this.goFullscreen();
+                    }
+                }
+            );
+            d(p, "bitmapData",
+                /**
+                 * @inheritDoc
+                 */
+                function () {
+                    if (!this.video || !this.loaded)
+                        return null;
+                    if (!this._bitmapData) {
+                        this.video.width = this.video.videoWidth;
+                        this.video.height = this.video.videoHeight;
+                        this._bitmapData = lark.web['toBitmapData'](this.video);
+                    }
+                    return this._bitmapData;
+                },undefined
+            );
+            p.loadPoster = function () {
+                var _this = this;
+                var poster = this.poster;
+                if (!poster)
+                    return;
+                var imageLoader = new lark.ImageLoader();
+                imageLoader.once(lark.Event.COMPLETE, function (e) {
+                    var posterData = imageLoader.data;
+                    _this.posterData = imageLoader.data;
+                    if (_this.video && _this.loaded) {
+                        posterData.width = _this.video.videoWidth;
+                        posterData.height = _this.video.videoHeight;
+                    }
+                    else {
+                        posterData.width = isNaN(_this.widthSet) ? posterData.width : _this.widthSet;
+                        posterData.height = isNaN(_this.heightSet) ? posterData.height : _this.heightSet;
+                    }
+                    _this.$invalidateContentBounds();
+                }, this);
+                imageLoader.load(poster);
+            };
+            /**
+             * @private
+             *
+             */
+            p.onVideoEnded = function () {
+                this.emitWith(lark.Event.ENDED);
+                this.$invalidateContentBounds();
+            };
+            /**
+             * @private
+             *
+             */
+            p.onVideoError = function () {
+                this.emitWith(lark.Event.IO_ERROR);
+            };
+            /**
+             * @private
+             */
+            p.$measureContentBounds = function (bounds) {
+                var bitmapData = this.bitmapData;
+                var posterData = this.posterData;
+                if (bitmapData) {
+                    bounds.setTo(0, 0, bitmapData.width, bitmapData.height);
+                }
+                else if (posterData) {
+                    bounds.setTo(0, 0, posterData.width, posterData.height);
+                }
+                else {
+                    bounds.setEmpty();
+                }
+            };
+            /**
+             * @private
+             */
+            p.$render = function (context) {
+                var bitmapData = this.bitmapData;
+                var posterData = this.posterData;
+                if ((!bitmapData || this.video && this.video.paused) && posterData) {
+                    context.drawImage(posterData, 0, 0, posterData.width, posterData.height);
+                }
+                if (bitmapData) {
+                    context.imageSmoothingEnabled = true;
+                    context.drawImage(bitmapData, 0, 0, bitmapData.width, bitmapData.height);
+                }
+            };
+            p.markDirty = function (time) {
+                this.$invalidate();
+                return true;
+            };
+            /**
+             * @private
+             * 设置显示高度
+             */
+            p.$setHeight = function (value) {
+                _super.prototype.$setHeight.call(this, value);
+                this.heightSet = +value || 0;
+            };
+            /**
+             * @private
+             * 设置显示宽度
+             */
+            p.$setWidth = function (value) {
+                _super.prototype.$setWidth.call(this, value);
+                this.widthSet = +value || 0;
+            };
+            return WebVideo;
+        })(lark.DisplayObject);
+        web.WebVideo = WebVideo;
+        lark.registerClass(WebVideo,"lark.web.WebVideo",["lark.Video"]);
+        lark.Video = WebVideo;
+    })(web = lark.web || (lark.web = {}));
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+// There is no HTMLDivElement in webkit for air
+if (window['HTMLVideoElement'] == undefined) {
+    window['HTMLVideoElement'] = HTMLDivElement;
+}
+var lark;
+(function (lark) {
+    var web;
+    (function (web) {
+        var className = "lark.BitmapData";
+        lark.registerClass(HTMLImageElement, className);
+        lark.registerClass(HTMLCanvasElement, className);
+        lark.registerClass(HTMLVideoElement, className);
+        /**
+         * @private
+         * 转换 Image，Canvas，Video 为 Lark 框架内使用的 BitmapData 对象。
+         */
+        function toBitmapData(data) {
+            data["hashCode"] = data["$hashCode"] = lark.$hashCount++;
+            return data;
+        }
+        web.toBitmapData = toBitmapData;
+    })(web = lark.web || (lark.web = {}));
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    var web;
+    (function (web) {
+        /**
+         * @private
+         */
+        var WebCapability = (function () {
+            function WebCapability() {
+            }
+            var d = __define,c=WebCapability;p=c.prototype;
+            /**
+             * @private
+             * 检测系统属性
+             */
+            WebCapability.detect = function () {
+                var capabilities = lark.Capabilities;
+                var ua = navigator.userAgent.toLowerCase();
+                capabilities.$isMobile = (ua.indexOf('mobile') != -1 || ua.indexOf('android') != -1);
+                if (capabilities.$isMobile) {
+                    if (ua.indexOf("windows") < 0 && (ua.indexOf("iphone") != -1 || ua.indexOf("ipad") != -1 || ua.indexOf("ipod") != -1)) {
+                        capabilities.$os = "iOS";
+                    }
+                    else if (ua.indexOf("android") != -1 && ua.indexOf("linux") != -1) {
+                        capabilities.$os = "Android";
+                    }
+                    else if (ua.indexOf("windows") != -1) {
+                        capabilities.$os = "Windows Phone";
+                    }
+                }
+                else {
+                    if (ua.indexOf("windows nt") != -1) {
+                        capabilities.$os = "Windows PC";
+                    }
+                    else if (ua.indexOf("mac os") != -1) {
+                        capabilities.$os = "Mac OS";
+                    }
+                }
+                var h5 = WebCapability.checkHtml5Support();
+                capabilities.$hasGeolocation = h5.geo;
+                capabilities.$hasMotion = h5.m;
+                capabilities.$hasOrientation = h5.ortt;
+                var language = (navigator.language || navigator.browserLanguage).toLowerCase();
+                var strings = language.split("-");
+                if (strings.length > 1) {
+                    strings[1] = strings[1].toUpperCase();
+                }
+                capabilities.$language = strings.join("-");
+            };
+            /**
+             * @private
+             *
+             */
+            WebCapability.checkHtml5Support = function () {
+                var webaudio = ('webkitAudioContext' in window) || ('AudioContext' in window);
+                var geolocation = 'geolocation' in navigator;
+                var orientation = 'DeviceOrientationEvent' in window;
+                var motion = 'DeviceMotionEvent' in window;
+                return {
+                    geo: geolocation,
+                    ortt: orientation,
+                    m: motion
+                };
+            };
+            return WebCapability;
+        })();
+        web.WebCapability = WebCapability;
+        lark.registerClass(WebCapability,"lark.web.WebCapability");
+        WebCapability.detect();
+    })(web = lark.web || (lark.web = {}));
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    var web;
+    (function (web) {
+        /**
+         * @private
+         * @inheritDoc
+         */
+        var HtmlSound = (function (_super) {
+            __extends(HtmlSound, _super);
+            /**
+             * @private
+             * @inheritDoc
+             */
+            function HtmlSound(url) {
+                var _this = this;
+                _super.call(this);
+                /**
+                 * @private
+                 */
+                this.audios = [];
+                /**
+                 * @private
+                 */
+                this.loaded = false;
+                /**
+                 * @private
+                 */
+                this.closed = false;
+                /**
+                 * @private
+                 *
+                 */
+                this.onAudioLoaded = function () {
+                    _this.loaded = true;
+                    _this.originAudio.removeEventListener("canplaythrough", _this.onAudioLoaded);
+                    _this.emitWith(lark.Event.COMPLETE);
+                };
+                this.url = url;
+            }
+            var d = __define,c=HtmlSound;p=c.prototype;
+            /**
+             * @private
+             * @inheritDoc
+             */
+            p.load = function (url) {
+                var _this = this;
+                url = url || this.url;
+                if (DEBUG && !url) {
+                    lark.$error(3002);
+                }
+                var audio = new Audio(url);
+                audio.addEventListener("canplaythrough", this.onAudioLoaded);
+                audio.addEventListener("error", function () { return _this.onAudioError(); });
+                audio.load();
+                this.originAudio = audio;
+                this.audios.push(audio);
+            };
+            /**
+             * @private
+             * @inheritDoc
+             */
+            p.play = function (startTime, loop) {
+                if (startTime === void 0) { startTime = 0; }
+                if (loop === void 0) { loop = false; }
+                if (DEBUG && this.loaded == false) {
+                    lark.$error(3001);
+                }
+                var audio = this.audios.pop();
+                if (audio == undefined) {
+                    audio = this.originAudio.cloneNode();
+                    audio.addEventListener("canplaythrough", function () { return audio.currentTime = startTime; });
+                }
+                else {
+                    audio.currentTime = startTime;
+                }
+                audio.loop = !!loop;
+                var channel = new web.HtmlSoundChannel(audio);
+                channel.$sound = this;
+                channel.$loop = loop;
+                channel.$startTime = startTime;
+                audio.play();
+                return channel;
+            };
+            /**
+             * @private
+             * @inheritDoc
+             */
+            p.close = function () {
+                if (this.loaded == false && this.originAudio)
+                    this.originAudio.src = "";
+                if (this.originAudio)
+                    this.originAudio = null;
+                if (this.audios)
+                    this.audios.length = 0;
+                this.closed = true;
+            };
+            /**
+             * @private
+             *
+             * @param audio
+             */
+            p.$recycle = function (audio) {
+                if (this.closed)
+                    return;
+                this.audios.push(audio);
+            };
+            /**
+             * @private
+             *
+             */
+            p.onAudioError = function () {
+                this.emitWith(lark.Event.IO_ERROR);
+            };
+            return HtmlSound;
+        })(lark.EventEmitter);
+        web.HtmlSound = HtmlSound;
+        lark.registerClass(HtmlSound,"lark.web.HtmlSound",["lark.Sound","lark.IEventEmitter"]);
+        lark.Sound = HtmlSound;
+    })(web = lark.web || (lark.web = {}));
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
     var web;
@@ -167,10 +954,339 @@ var lark;
             return WebImageLoader;
         })(lark.EventEmitter);
         web.WebImageLoader = WebImageLoader;
-        lark.registerClass(WebImageLoader, 20 /* ImageLoader */);
+        lark.registerClass(WebImageLoader,"lark.web.WebImageLoader",["lark.ImageLoader"]);
         lark.ImageLoader = WebImageLoader;
     })(web = lark.web || (lark.web = {}));
 })(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    var web;
+    (function (web) {
+        /**
+         * @private
+         * XML节点基类
+         */
+        var XMLNode = (function () {
+            /**
+             * @private
+             */
+            function XMLNode(nodeType, parent) {
+                this.nodeType = nodeType;
+                this.parent = parent;
+            }
+            var d = __define,c=XMLNode;p=c.prototype;
+            return XMLNode;
+        })();
+        web.XMLNode = XMLNode;
+        lark.registerClass(XMLNode,"lark.web.XMLNode");
+        /**
+         * @private
+         * XML节点对象
+         */
+        var XML = (function (_super) {
+            __extends(XML, _super);
+            /**
+             * @private
+             */
+            function XML(localName, parent, prefix, namespace, name) {
+                _super.call(this, 1, parent);
+                /**
+                 * @private
+                 * 当前节点上的属性列表
+                 */
+                this.attributes = {};
+                /**
+                 * @private
+                 * 当前节点的子节点列表
+                 */
+                this.children = [];
+                this.localName = localName;
+                this.prefix = prefix;
+                this.namespace = namespace;
+                this.name = name;
+            }
+            var d = __define,c=XML;p=c.prototype;
+            return XML;
+        })(XMLNode);
+        web.XML = XML;
+        lark.registerClass(XML,"lark.web.XML");
+        /**
+         * @private
+         * XML文本节点
+         */
+        var XMLText = (function (_super) {
+            __extends(XMLText, _super);
+            /**
+             * @private
+             */
+            function XMLText(text, parent) {
+                _super.call(this, 3, parent);
+                this.text = text;
+            }
+            var d = __define,c=XMLText;p=c.prototype;
+            return XMLText;
+        })(XMLNode);
+        web.XMLText = XMLText;
+        lark.registerClass(XMLText,"lark.web.XMLText");
+        var parser = new DOMParser();
+        /**
+         * @private
+         * 解析字符串为XML对象
+         * @param text 要解析的字符串
+         */
+        function parse(text) {
+            var xmlDoc = parser.parseFromString(text, "text/xml");
+            var length = xmlDoc.childNodes.length;
+            for (var i = 0; i < length; i++) {
+                var node = xmlDoc.childNodes[i];
+                if (node.nodeType === 1) {
+                    return parseNode(node, null);
+                }
+            }
+            return null;
+        }
+        /**
+         * @private
+         * 解析一个节点
+         */
+        function parseNode(node, parent) {
+            if (node.localName == "parsererror") {
+                throw new Error(node.textContent);
+            }
+            var xml = new XML(node.localName, parent, node.prefix, node.namespaceURI, node.nodeName);
+            var nodeAttributes = node.attributes;
+            var attributes = xml.attributes;
+            var length = nodeAttributes.length;
+            for (var i = 0; i < length; i++) {
+                var attributeNode = nodeAttributes[i];
+                var name = attributeNode.name;
+                if (name.indexOf("xmlns:") === 0) {
+                    continue;
+                }
+                attributes[name] = attributeNode.value;
+            }
+            var childNodes = node.childNodes;
+            length = childNodes.length;
+            var children = xml.children;
+            for (i = 0; i < length; i++) {
+                var childNode = childNodes[i];
+                var nodeType = childNode.nodeType;
+                var childXML = null;
+                if (nodeType === 1) {
+                    childXML = parseNode(childNode, xml);
+                }
+                else if (nodeType === 3) {
+                    var text = childNode.textContent.trim();
+                    if (text) {
+                        childXML = new XMLText(text, xml);
+                    }
+                }
+                if (childXML) {
+                    children.push(childXML);
+                }
+            }
+            return xml;
+        }
+        lark.XML = { parse: parse };
+    })(web = lark.web || (lark.web = {}));
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    var web;
+    (function (web) {
+        /**
+         * @private
+         * @inheritDoc
+         */
+        var HtmlSoundChannel = (function (_super) {
+            __extends(HtmlSoundChannel, _super);
+            /**
+             * @private
+             */
+            function HtmlSoundChannel(audio) {
+                var _this = this;
+                _super.call(this);
+                /**
+                 * @private
+                 */
+                this.$loop = false;
+                /**
+                 * @private
+                 */
+                this.$startTime = 0;
+                /**
+                 * @private
+                 */
+                this.audio = null;
+                /**
+                 * @private
+                 */
+                this.onPlayEnd = function () {
+                    if (_this.$loop == false) {
+                        _this.stop();
+                        return;
+                    }
+                    _this.audio.load();
+                    _this.audio.currentTime = _this.$startTime;
+                    _this.audio.play();
+                };
+                audio.addEventListener("ended", this.onPlayEnd);
+                this.audio = audio;
+            }
+            var d = __define,c=HtmlSoundChannel;p=c.prototype;
+            /**
+             * @private
+             * @inheritDoc
+             */
+            p.stop = function () {
+                if (!this.audio)
+                    return;
+                var audio = this.audio;
+                audio.pause();
+                audio.removeEventListener("ended", this.onPlayEnd);
+                audio['$channel'] = null;
+                this.audio = null;
+                this.emitWith(lark.Event.ENDED);
+                this.$sound.$recycle(audio);
+                this.$sound = null;
+            };
+            d(p, "volume",
+                /**
+                 * @private
+                 * @inheritDoc
+                 */
+                function () {
+                    if (!this.audio)
+                        return 1;
+                    return this.audio.volume;
+                },
+                /**
+                 * @inheritDoc
+                 */
+                function (value) {
+                    if (!this.audio)
+                        return;
+                    this.audio.volume = value;
+                }
+            );
+            d(p, "position",
+                /**
+                 * @private
+                 * @inheritDoc
+                 */
+                function () {
+                    if (!this.audio)
+                        return 0;
+                    return this.audio.currentTime;
+                },undefined
+            );
+            return HtmlSoundChannel;
+        })(lark.EventEmitter);
+        web.HtmlSoundChannel = HtmlSoundChannel;
+        lark.registerClass(HtmlSoundChannel,"lark.web.HtmlSoundChannel",["lark.SoundChannel","lark.IEventEmitter"]);
+    })(web = lark.web || (lark.web = {}));
+})(lark || (lark = {}));
+var lark;
+(function (lark) {
+    var web;
+    (function (web) {
+        /**
+         * @private
+         */
+        var WebOrientation = (function (_super) {
+            __extends(WebOrientation, _super);
+            function WebOrientation() {
+                var _this = this;
+                _super.apply(this, arguments);
+                /**
+                 * @private
+                 */
+                this.onChange = function (e) {
+                    var event = new lark.OrientationEvent(lark.Event.CHANGE);
+                    event.beta = e.beta;
+                    event.gamma = e.gamma;
+                    event.alpha = e.alpha;
+                    _this.emit(event);
+                };
+            }
+            var d = __define,c=WebOrientation;p=c.prototype;
+            /**
+             * @private
+             *
+             */
+            p.start = function () {
+                window.addEventListener("deviceorientation", this.onChange);
+            };
+            /**
+             * @private
+             *
+             */
+            p.stop = function () {
+                window.removeEventListener("deviceorientation", this.onChange);
+            };
+            return WebOrientation;
+        })(lark.EventEmitter);
+        web.WebOrientation = WebOrientation;
+        lark.registerClass(WebOrientation,"lark.web.WebOrientation",["lark.Orientation","lark.IEventEmitter"]);
+    })(web = lark.web || (lark.web = {}));
+})(lark || (lark = {}));
+lark.Orientation = lark.web.WebOrientation;
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -342,316 +1458,11 @@ var lark;
             return WebHttpRequest;
         })(lark.EventEmitter);
         web.WebHttpRequest = WebHttpRequest;
-        lark.registerClass(WebHttpRequest, 19 /* HttpRequest */);
+        lark.registerClass(WebHttpRequest,"lark.web.WebHttpRequest",["lark.HttpRequest"]);
         lark.HttpRequest = WebHttpRequest;
         if (DEBUG) {
             lark.$markReadOnly(WebHttpRequest.prototype, "response");
         }
-    })(web = lark.web || (lark.web = {}));
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    var web;
-    (function (web) {
-        /**
-         * @private
-         */
-        var WebCapability = (function () {
-            function WebCapability() {
-            }
-            var d = __define,c=WebCapability;p=c.prototype;
-            /**
-             * @private
-             * 检测系统属性
-             */
-            WebCapability.detect = function () {
-                var capabilities = lark.Capabilities;
-                var ua = navigator.userAgent.toLowerCase();
-                capabilities.$isMobile = (ua.indexOf('mobile') != -1 || ua.indexOf('android') != -1);
-                if (capabilities.$isMobile) {
-                    if (ua.indexOf("windows") < 0 && (ua.indexOf("iphone") != -1 || ua.indexOf("ipad") != -1 || ua.indexOf("ipod") != -1)) {
-                        capabilities.$os = "iOS";
-                    }
-                    else if (ua.indexOf("android") != -1 && ua.indexOf("linux") != -1) {
-                        capabilities.$os = "Android";
-                    }
-                    else if (ua.indexOf("windows") != -1) {
-                        capabilities.$os = "Windows Phone";
-                    }
-                }
-                else {
-                    if (ua.indexOf("windows nt") != -1) {
-                        capabilities.$os = "Windows PC";
-                    }
-                    else if (ua.indexOf("mac os") != -1) {
-                        capabilities.$os = "Mac OS";
-                    }
-                }
-                var h5 = WebCapability.checkHtml5Support();
-                capabilities.$hasGeolocation = h5.geo;
-                capabilities.$hasMotion = h5.m;
-                capabilities.$hasOrientation = h5.ortt;
-                var language = (navigator.language || navigator.browserLanguage).toLowerCase();
-                var strings = language.split("-");
-                if (strings.length > 1) {
-                    strings[1] = strings[1].toUpperCase();
-                }
-                capabilities.$language = strings.join("-");
-            };
-            /**
-             * @private
-             *
-             */
-            WebCapability.checkHtml5Support = function () {
-                var webaudio = ('webkitAudioContext' in window) || ('AudioContext' in window);
-                var geolocation = 'geolocation' in navigator;
-                var orientation = 'DeviceOrientationEvent' in window;
-                var motion = 'DeviceMotionEvent' in window;
-                return {
-                    geo: geolocation,
-                    ortt: orientation,
-                    m: motion
-                };
-            };
-            return WebCapability;
-        })();
-        web.WebCapability = WebCapability;
-        WebCapability.detect();
-    })(web = lark.web || (lark.web = {}));
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-// There is no HTMLDivElement in webkit for air
-if (window['HTMLVideoElement'] == undefined) {
-    window['HTMLVideoElement'] = HTMLDivElement;
-}
-var lark;
-(function (lark) {
-    var web;
-    (function (web) {
-        lark.registerClass(HTMLImageElement, 7 /* BitmapData */);
-        lark.registerClass(HTMLCanvasElement, 7 /* BitmapData */);
-        lark.registerClass(HTMLVideoElement, 7 /* BitmapData */);
-        /**
-         * @private
-         * 转换 Image，Canvas，Video 为 Lark 框架内使用的 BitmapData 对象。
-         */
-        function toBitmapData(data) {
-            data["hashCode"] = data["$hashCode"] = lark.$hashCount++;
-            return data;
-        }
-        web.toBitmapData = toBitmapData;
-    })(web = lark.web || (lark.web = {}));
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    var web;
-    (function (web) {
-        /**
-         * @private
-         * XML节点基类
-         */
-        var XMLNode = (function () {
-            /**
-             * @private
-             */
-            function XMLNode(nodeType, parent) {
-                this.nodeType = nodeType;
-                this.parent = parent;
-            }
-            var d = __define,c=XMLNode;p=c.prototype;
-            return XMLNode;
-        })();
-        web.XMLNode = XMLNode;
-        /**
-         * @private
-         * XML节点对象
-         */
-        var XML = (function (_super) {
-            __extends(XML, _super);
-            /**
-             * @private
-             */
-            function XML(localName, parent, prefix, namespace, name) {
-                _super.call(this, 1, parent);
-                /**
-                 * @private
-                 * 当前节点上的属性列表
-                 */
-                this.attributes = {};
-                /**
-                 * @private
-                 * 当前节点的子节点列表
-                 */
-                this.children = [];
-                this.localName = localName;
-                this.prefix = prefix;
-                this.namespace = namespace;
-                this.name = name;
-            }
-            var d = __define,c=XML;p=c.prototype;
-            return XML;
-        })(XMLNode);
-        web.XML = XML;
-        /**
-         * @private
-         * XML文本节点
-         */
-        var XMLText = (function (_super) {
-            __extends(XMLText, _super);
-            /**
-             * @private
-             */
-            function XMLText(text, parent) {
-                _super.call(this, 3, parent);
-                this.text = text;
-            }
-            var d = __define,c=XMLText;p=c.prototype;
-            return XMLText;
-        })(XMLNode);
-        web.XMLText = XMLText;
-        var parser = new DOMParser();
-        /**
-         * @private
-         * 解析字符串为XML对象
-         * @param text 要解析的字符串
-         */
-        function parse(text) {
-            var xmlDoc = parser.parseFromString(text, "text/xml");
-            var length = xmlDoc.childNodes.length;
-            for (var i = 0; i < length; i++) {
-                var node = xmlDoc.childNodes[i];
-                if (node.nodeType === 1) {
-                    return parseNode(node, null);
-                }
-            }
-            return null;
-        }
-        /**
-         * @private
-         * 解析一个节点
-         */
-        function parseNode(node, parent) {
-            if (node.localName == "parsererror") {
-                throw new Error(node.textContent);
-            }
-            var xml = new XML(node.localName, parent, node.prefix, node.namespaceURI, node.nodeName);
-            var nodeAttributes = node.attributes;
-            var attributes = xml.attributes;
-            var length = nodeAttributes.length;
-            for (var i = 0; i < length; i++) {
-                var attributeNode = nodeAttributes[i];
-                var name = attributeNode.name;
-                if (name.indexOf("xmlns:") === 0) {
-                    continue;
-                }
-                attributes[name] = attributeNode.value;
-            }
-            var childNodes = node.childNodes;
-            length = childNodes.length;
-            var children = xml.children;
-            for (i = 0; i < length; i++) {
-                var childNode = childNodes[i];
-                var nodeType = childNode.nodeType;
-                var childXML = null;
-                if (nodeType === 1) {
-                    childXML = parseNode(childNode, xml);
-                }
-                else if (nodeType === 3) {
-                    var text = childNode.textContent.trim();
-                    if (text) {
-                        childXML = new XMLText(text, xml);
-                    }
-                }
-                if (childXML) {
-                    children.push(childXML);
-                }
-            }
-            return xml;
-        }
-        lark.XML = { parse: parse };
     })(web = lark.web || (lark.web = {}));
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -790,330 +1601,7 @@ var lark;
             return CanvasFactory;
         })();
         web.CanvasFactory = CanvasFactory;
-    })(web = lark.web || (lark.web = {}));
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    var web;
-    (function (web) {
-        /**
-         * @private
-         * Canvas屏幕适配器
-         */
-        var WebScreen = (function (_super) {
-            __extends(WebScreen, _super);
-            /**
-             * @private
-             * 创建一个WebScreen实例
-             * @param container 播放器外层容器
-             * @param scaleMode 舞台缩放模式
-             * @param contentWidth 初始化内容宽度
-             * @param contentHeight 初始化内容高度
-             */
-            function WebScreen(container, canvas, scaleMode, contentWidth, contentHeight, orientation) {
-                _super.call(this);
-                this.container = container;
-                this.canvas = canvas;
-                this.scaleMode = scaleMode;
-                this.contentWidth = contentWidth;
-                this.contentHeight = contentHeight;
-                this.orientation = orientation;
-                this.attachCanvas(container, canvas);
-            }
-            var d = __define,c=WebScreen;p=c.prototype;
-            /**
-             * @private
-             * 添加canvas到container。
-             */
-            p.attachCanvas = function (container, canvas) {
-                var style = canvas.style;
-                style.cursor = "default";
-                style.position = "absolute";
-                style.top = "0";
-                style.bottom = "0";
-                style.left = "0";
-                style.right = "0";
-                container.appendChild(canvas);
-                style = container.style;
-                style.overflow = "hidden";
-                style.position = "relative";
-            };
-            /**
-             * @private
-             * 更新播放器视口尺寸
-             */
-            p.updateScreenSize = function (player, webTouch, webText) {
-                var canvas = this.canvas;
-                if (canvas['userTyping'])
-                    return;
-                var screenRect = this.container.getBoundingClientRect();
-                var shouldRotate = false;
-                if (this.orientation != lark.sys.OrientationMode.NOT_SET) {
-                    shouldRotate = this.orientation != lark.sys.OrientationMode.PORTRAIT && screenRect.height > screenRect.width || this.orientation == lark.sys.OrientationMode.PORTRAIT && screenRect.width > screenRect.height;
-                }
-                var screenWidth = shouldRotate ? screenRect.height : screenRect.width;
-                var screenHeight = shouldRotate ? screenRect.width : screenRect.height;
-                var stageSize = lark.sys.screenAdapter.calculateStageSize(this.scaleMode, screenWidth, screenHeight, this.contentWidth, this.contentHeight);
-                var stageWidth = stageSize.stageWidth;
-                var stageHeight = stageSize.stageHeight;
-                var displayWidth = stageSize.displayWidth;
-                var displayHeight = stageSize.displayHeight;
-                if (canvas.width !== stageWidth) {
-                    canvas.width = stageWidth;
-                }
-                if (canvas.height !== stageHeight) {
-                    canvas.height = stageHeight;
-                }
-                canvas.style.width = displayWidth + "px";
-                canvas.style.height = displayHeight + "px";
-                canvas.style.top = (screenRect.height - displayHeight) / 2 + "px";
-                canvas.style.left = (screenRect.width - displayWidth) / 2 + "px";
-                var rotation = 0;
-                if (shouldRotate) {
-                    if (this.orientation == lark.sys.OrientationMode.LANDSCAPE)
-                        rotation = 90;
-                    else
-                        rotation = -90;
-                }
-                var transform = "rotate(" + rotation + "deg)";
-                canvas.style['webkitTransform'] = transform;
-                canvas.style.transform = transform;
-                player.updateStageSize(stageWidth, stageHeight);
-                var scalex = displayWidth / stageWidth, scaley = displayHeight / stageHeight;
-                webTouch.updateScaleMode(scalex, scaley, rotation);
-                webText.updateScaleMode(scalex, scaley, (screenRect.width - displayWidth) / 2, (screenRect.height - displayHeight) / 2, displayWidth / 2, displayHeight / 2, rotation);
-            };
-            return WebScreen;
-        })(lark.LarkObject);
-        web.WebScreen = WebScreen;
-    })(web = lark.web || (lark.web = {}));
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided this the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    var web;
-    (function (web) {
-        /**
-         * @private
-         */
-        var WebTouchHandler = (function (_super) {
-            __extends(WebTouchHandler, _super);
-            /**
-             * @private
-             */
-            function WebTouchHandler(touch, canvas) {
-                var _this = this;
-                _super.call(this);
-                /**
-                 * @private
-                 */
-                this.onTouchBegin = function (event) {
-                    var location = _this.getLocation(event);
-                    _this.touch.onTouchBegin(location.x, location.y, event.identifier);
-                };
-                /**
-                 * @private
-                 */
-                this.onTouchMove = function (event) {
-                    var location = _this.getLocation(event);
-                    _this.touch.onTouchMove(location.x, location.y, event.identifier);
-                };
-                /**
-                 * @private
-                 */
-                this.onTouchEnd = function (event) {
-                    var location = _this.getLocation(event);
-                    _this.touch.onTouchEnd(location.x, location.y, event.identifier);
-                };
-                /**
-                 * @private
-                 */
-                this.scaleX = 1;
-                /**
-                 * @private
-                 */
-                this.scaleY = 1;
-                /**
-                 * @private
-                 */
-                this.rotation = 0;
-                this.canvas = canvas;
-                this.touch = touch;
-                this.addListeners();
-            }
-            var d = __define,c=WebTouchHandler;p=c.prototype;
-            /**
-             * @private
-             * 添加事件监听
-             */
-            p.addListeners = function () {
-                var _this = this;
-                if (window.navigator.msPointerEnabled) {
-                    this.canvas.addEventListener("MSPointerDown", function (event) {
-                        _this.onTouchBegin(event);
-                        _this.prevent(event);
-                    }, false);
-                    this.canvas.addEventListener("MSPointerMove", function (event) {
-                        _this.onTouchMove(event);
-                        _this.prevent(event);
-                    }, false);
-                    this.canvas.addEventListener("MSPointerUp", function (event) {
-                        _this.onTouchEnd(event);
-                        _this.prevent(event);
-                    }, false);
-                }
-                else {
-                    if (!lark.Capabilities.$isMobile) {
-                        this.addMouseListener();
-                    }
-                    this.addTouchListener();
-                }
-            };
-            /**
-             * @private
-             *
-             */
-            p.addMouseListener = function () {
-                this.canvas.addEventListener("mousedown", this.onTouchBegin);
-                this.canvas.addEventListener("mousemove", this.onTouchMove);
-                window.addEventListener("mouseup", this.onTouchEnd);
-            };
-            /**
-             * @private
-             *
-             */
-            p.addTouchListener = function () {
-                var _this = this;
-                this.canvas.addEventListener("touchstart", function (event) {
-                    var l = event.changedTouches.length;
-                    for (var i = 0; i < l; i++) {
-                        _this.onTouchBegin(event.changedTouches[i]);
-                    }
-                    _this.prevent(event);
-                }, false);
-                this.canvas.addEventListener("touchmove", function (event) {
-                    var l = event.changedTouches.length;
-                    for (var i = 0; i < l; i++) {
-                        _this.onTouchMove(event.changedTouches[i]);
-                    }
-                    _this.prevent(event);
-                }, false);
-                this.canvas.addEventListener("touchend", function (event) {
-                    var l = event.changedTouches.length;
-                    for (var i = 0; i < l; i++) {
-                        _this.onTouchEnd(event.changedTouches[i]);
-                    }
-                    _this.prevent(event);
-                }, false);
-                this.canvas.addEventListener("touchcancel", function (event) {
-                    var l = event.changedTouches.length;
-                    for (var i = 0; i < l; i++) {
-                        _this.onTouchEnd(event.changedTouches[i]);
-                    }
-                    _this.prevent(event);
-                }, false);
-            };
-            /**
-             * @private
-             */
-            p.prevent = function (event) {
-                event.stopPropagation();
-                if (event["isScroll"] != true && !this.canvas['userTyping']) {
-                    event.preventDefault();
-                }
-            };
-            /**
-             * @private
-             */
-            p.getLocation = function (event) {
-                event.identifier = +event.identifier || 0;
-                var doc = document.documentElement;
-                var box = this.canvas.getBoundingClientRect();
-                var left = box.left + window.pageXOffset - doc.clientLeft;
-                var top = box.top + window.pageYOffset - doc.clientTop;
-                var x = event.pageX - left, newx = x;
-                var y = event.pageY - top, newy = y;
-                if (this.rotation == 90) {
-                    newx = y;
-                    newy = box.width - x;
-                }
-                else if (this.rotation == -90) {
-                    newx = box.height - y;
-                    newy = x;
-                }
-                newx = newx / this.scaleX;
-                newy = newy / this.scaleY;
-                return lark.$TempPoint.setTo(Math.round(newx), Math.round(newy));
-            };
-            /**
-             * @private
-             * 更新屏幕当前的缩放比例，用于计算准确的点击位置。
-             * @param scaleX 水平方向的缩放比例。
-             * @param scaleY 垂直方向的缩放比例。
-             */
-            p.updateScaleMode = function (scaleX, scaleY, rotation) {
-                this.scaleX = scaleX;
-                this.scaleY = scaleY;
-                this.rotation = rotation;
-            };
-            return WebTouchHandler;
-        })(lark.LarkObject);
-        web.WebTouchHandler = WebTouchHandler;
+        lark.registerClass(CanvasFactory,"lark.web.CanvasFactory",["lark.sys.SurfaceFactory"]);
     })(web = lark.web || (lark.web = {}));
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -1463,6 +1951,7 @@ var lark;
             return WebTextAdapter;
         })(lark.LarkObject);
         web.WebTextAdapter = WebTextAdapter;
+        lark.registerClass(WebTextAdapter,"lark.web.WebTextAdapter",["lark.sys.ITextAdapter"]);
         /**
          * @private
          */
@@ -1490,6 +1979,332 @@ var lark;
             }
             return prefix.substr(0, prefix.length - 1);
         }
+    })(web = lark.web || (lark.web = {}));
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    var web;
+    (function (web) {
+        /**
+         * @private
+         * Canvas屏幕适配器
+         */
+        var WebScreen = (function (_super) {
+            __extends(WebScreen, _super);
+            /**
+             * @private
+             * 创建一个WebScreen实例
+             * @param container 播放器外层容器
+             * @param scaleMode 舞台缩放模式
+             * @param contentWidth 初始化内容宽度
+             * @param contentHeight 初始化内容高度
+             */
+            function WebScreen(container, canvas, scaleMode, contentWidth, contentHeight, orientation) {
+                _super.call(this);
+                this.container = container;
+                this.canvas = canvas;
+                this.scaleMode = scaleMode;
+                this.contentWidth = contentWidth;
+                this.contentHeight = contentHeight;
+                this.orientation = orientation;
+                this.attachCanvas(container, canvas);
+            }
+            var d = __define,c=WebScreen;p=c.prototype;
+            /**
+             * @private
+             * 添加canvas到container。
+             */
+            p.attachCanvas = function (container, canvas) {
+                var style = canvas.style;
+                style.cursor = "default";
+                style.position = "absolute";
+                style.top = "0";
+                style.bottom = "0";
+                style.left = "0";
+                style.right = "0";
+                container.appendChild(canvas);
+                style = container.style;
+                style.overflow = "hidden";
+                style.position = "relative";
+            };
+            /**
+             * @private
+             * 更新播放器视口尺寸
+             */
+            p.updateScreenSize = function (player, webTouch, webText) {
+                var canvas = this.canvas;
+                if (canvas['userTyping'])
+                    return;
+                var screenRect = this.container.getBoundingClientRect();
+                var shouldRotate = false;
+                if (this.orientation != lark.sys.OrientationMode.NOT_SET) {
+                    shouldRotate = this.orientation != lark.sys.OrientationMode.PORTRAIT && screenRect.height > screenRect.width || this.orientation == lark.sys.OrientationMode.PORTRAIT && screenRect.width > screenRect.height;
+                }
+                var screenWidth = shouldRotate ? screenRect.height : screenRect.width;
+                var screenHeight = shouldRotate ? screenRect.width : screenRect.height;
+                var stageSize = lark.sys.screenAdapter.calculateStageSize(this.scaleMode, screenWidth, screenHeight, this.contentWidth, this.contentHeight);
+                var stageWidth = stageSize.stageWidth;
+                var stageHeight = stageSize.stageHeight;
+                var displayWidth = stageSize.displayWidth;
+                var displayHeight = stageSize.displayHeight;
+                if (canvas.width !== stageWidth) {
+                    canvas.width = stageWidth;
+                }
+                if (canvas.height !== stageHeight) {
+                    canvas.height = stageHeight;
+                }
+                canvas.style.width = displayWidth + "px";
+                canvas.style.height = displayHeight + "px";
+                canvas.style.top = (screenRect.height - displayHeight) / 2 + "px";
+                canvas.style.left = (screenRect.width - displayWidth) / 2 + "px";
+                var rotation = 0;
+                if (shouldRotate) {
+                    if (this.orientation == lark.sys.OrientationMode.LANDSCAPE)
+                        rotation = 90;
+                    else
+                        rotation = -90;
+                }
+                var transform = "rotate(" + rotation + "deg)";
+                canvas.style['webkitTransform'] = transform;
+                canvas.style.transform = transform;
+                player.updateStageSize(stageWidth, stageHeight);
+                var scalex = displayWidth / stageWidth, scaley = displayHeight / stageHeight;
+                webTouch.updateScaleMode(scalex, scaley, rotation);
+                webText.updateScaleMode(scalex, scaley, (screenRect.width - displayWidth) / 2, (screenRect.height - displayHeight) / 2, displayWidth / 2, displayHeight / 2, rotation);
+            };
+            return WebScreen;
+        })(lark.LarkObject);
+        web.WebScreen = WebScreen;
+        lark.registerClass(WebScreen,"lark.web.WebScreen");
+    })(web = lark.web || (lark.web = {}));
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided this the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    var web;
+    (function (web) {
+        /**
+         * @private
+         */
+        var WebTouchHandler = (function (_super) {
+            __extends(WebTouchHandler, _super);
+            /**
+             * @private
+             */
+            function WebTouchHandler(touch, canvas) {
+                var _this = this;
+                _super.call(this);
+                /**
+                 * @private
+                 */
+                this.onTouchBegin = function (event) {
+                    var location = _this.getLocation(event);
+                    _this.touch.onTouchBegin(location.x, location.y, event.identifier);
+                };
+                /**
+                 * @private
+                 */
+                this.onTouchMove = function (event) {
+                    var location = _this.getLocation(event);
+                    _this.touch.onTouchMove(location.x, location.y, event.identifier);
+                };
+                /**
+                 * @private
+                 */
+                this.onTouchEnd = function (event) {
+                    var location = _this.getLocation(event);
+                    _this.touch.onTouchEnd(location.x, location.y, event.identifier);
+                };
+                /**
+                 * @private
+                 */
+                this.scaleX = 1;
+                /**
+                 * @private
+                 */
+                this.scaleY = 1;
+                /**
+                 * @private
+                 */
+                this.rotation = 0;
+                this.canvas = canvas;
+                this.touch = touch;
+                this.addListeners();
+            }
+            var d = __define,c=WebTouchHandler;p=c.prototype;
+            /**
+             * @private
+             * 添加事件监听
+             */
+            p.addListeners = function () {
+                var _this = this;
+                if (window.navigator.msPointerEnabled) {
+                    this.canvas.addEventListener("MSPointerDown", function (event) {
+                        _this.onTouchBegin(event);
+                        _this.prevent(event);
+                    }, false);
+                    this.canvas.addEventListener("MSPointerMove", function (event) {
+                        _this.onTouchMove(event);
+                        _this.prevent(event);
+                    }, false);
+                    this.canvas.addEventListener("MSPointerUp", function (event) {
+                        _this.onTouchEnd(event);
+                        _this.prevent(event);
+                    }, false);
+                }
+                else {
+                    if (!lark.Capabilities.$isMobile) {
+                        this.addMouseListener();
+                    }
+                    this.addTouchListener();
+                }
+            };
+            /**
+             * @private
+             *
+             */
+            p.addMouseListener = function () {
+                this.canvas.addEventListener("mousedown", this.onTouchBegin);
+                this.canvas.addEventListener("mousemove", this.onTouchMove);
+                window.addEventListener("mouseup", this.onTouchEnd);
+            };
+            /**
+             * @private
+             *
+             */
+            p.addTouchListener = function () {
+                var _this = this;
+                this.canvas.addEventListener("touchstart", function (event) {
+                    var l = event.changedTouches.length;
+                    for (var i = 0; i < l; i++) {
+                        _this.onTouchBegin(event.changedTouches[i]);
+                    }
+                    _this.prevent(event);
+                }, false);
+                this.canvas.addEventListener("touchmove", function (event) {
+                    var l = event.changedTouches.length;
+                    for (var i = 0; i < l; i++) {
+                        _this.onTouchMove(event.changedTouches[i]);
+                    }
+                    _this.prevent(event);
+                }, false);
+                this.canvas.addEventListener("touchend", function (event) {
+                    var l = event.changedTouches.length;
+                    for (var i = 0; i < l; i++) {
+                        _this.onTouchEnd(event.changedTouches[i]);
+                    }
+                    _this.prevent(event);
+                }, false);
+                this.canvas.addEventListener("touchcancel", function (event) {
+                    var l = event.changedTouches.length;
+                    for (var i = 0; i < l; i++) {
+                        _this.onTouchEnd(event.changedTouches[i]);
+                    }
+                    _this.prevent(event);
+                }, false);
+            };
+            /**
+             * @private
+             */
+            p.prevent = function (event) {
+                event.stopPropagation();
+                if (event["isScroll"] != true && !this.canvas['userTyping']) {
+                    event.preventDefault();
+                }
+            };
+            /**
+             * @private
+             */
+            p.getLocation = function (event) {
+                event.identifier = +event.identifier || 0;
+                var doc = document.documentElement;
+                var box = this.canvas.getBoundingClientRect();
+                var left = box.left + window.pageXOffset - doc.clientLeft;
+                var top = box.top + window.pageYOffset - doc.clientTop;
+                var x = event.pageX - left, newx = x;
+                var y = event.pageY - top, newy = y;
+                if (this.rotation == 90) {
+                    newx = y;
+                    newy = box.width - x;
+                }
+                else if (this.rotation == -90) {
+                    newx = box.height - y;
+                    newy = x;
+                }
+                newx = newx / this.scaleX;
+                newy = newy / this.scaleY;
+                return lark.$TempPoint.setTo(Math.round(newx), Math.round(newy));
+            };
+            /**
+             * @private
+             * 更新屏幕当前的缩放比例，用于计算准确的点击位置。
+             * @param scaleX 水平方向的缩放比例。
+             * @param scaleY 垂直方向的缩放比例。
+             */
+            p.updateScaleMode = function (scaleX, scaleY, rotation) {
+                this.scaleX = scaleX;
+                this.scaleY = scaleY;
+                this.rotation = rotation;
+            };
+            return WebTouchHandler;
+        })(lark.LarkObject);
+        web.WebTouchHandler = WebTouchHandler;
+        lark.registerClass(WebTouchHandler,"lark.web.WebTouchHandler");
     })(web = lark.web || (lark.web = {}));
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////

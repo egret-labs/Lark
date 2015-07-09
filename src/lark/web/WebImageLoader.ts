@@ -168,6 +168,5 @@ module lark.web {
 
     }
 
-    registerClass(WebImageLoader, Types.ImageLoader);
     ImageLoader = WebImageLoader;
 }

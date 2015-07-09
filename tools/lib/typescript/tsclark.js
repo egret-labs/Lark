@@ -11096,8 +11096,43 @@ var ts;
                     emitEnd(node);
                     write(";");
                 }
+                var checker = program.getTypeChecker(true);
+                var fullName = checker.getFullyQualifiedName(node.symbol);
+                var interfaces = {};
+                getImplementedInterfaces(node, interfaces, true);
+                //lark.registerClass(DisplayObject, "lark.DisplayObject", ["lark.IEventEmitter", "lark.sys.Renderable"]);
+                writeLine();
+                write('lark.registerClass(');
+                emit(node.name);
+                write(',"' + fullName + '"');
+                var interfacesArray = Object.keys(interfaces);
+                if (interfacesArray.length > 0) {
+                    write(',');
+                    write(JSON.stringify(interfacesArray));
+                }
+                write(');');
                 writeLine();
                 emitTrailingComments(node);
+                function getImplementedInterfaces(node, names, isClass) {
+                    if (isClass === void 0) { isClass = true; }
+                    var superInterfaces = null;
+                    if (isClass)
+                        superInterfaces = ts.getClassImplementedTypeNodes(node);
+                    else
+                        superInterfaces = ts.getInterfaceBaseTypeNodes(node);
+                    if (superInterfaces) {
+                        superInterfaces.forEach(function (sp) {
+                            var interfaceType = checker.getTypeAtLocation(sp);
+                            if (interfaceType.flags & 2048 /* Interface */) {
+                                var fullname = checker.getFullyQualifiedName(interfaceType.symbol);
+                                names[fullname] = true;
+                                if (interfaceType.symbol.declarations) {
+                                    interfaceType.symbol.declarations.forEach(function (d) { return getImplementedInterfaces(d, names, !!(interfaceType.flags & 1024 /* Class */)); });
+                                }
+                            }
+                        });
+                    }
+                }
                 function emitConstructorOfClass() {
                     // Emit the constructor overload pinned comments
                     ts.forEach(node.members, function (member) {
@@ -21008,7 +21043,23 @@ var ts;
                 bottomTypes.forEach(function (t) { return t.setOrder(t.order); });
                 fileNodesList.sort(function (a, b) { return compareFileNode(a, b); });
             }
-            orderedFileList = fileNodesList.map(function (f) { return f.name; });
+            orderedFileList = [];
+            for (var i = 0, length = fileNodesList.length, registerClassAdded = false; i < length; i++) {
+                var name = fileNodesList[i].name;
+                if (registerClassAdded == false && name.indexOf('registerClass') > 0) {
+                    orderedFileList.unshift(name);
+                    registerClassAdded = true;
+                }
+                else
+                    orderedFileList.push(name);
+            }
+            for (var i = 0, length = orderedFileList.length; i < length; i++) {
+                var name = orderedFileList[i];
+                if (name.indexOf('Defines.debug.ts') > 0) {
+                    orderedFileList.splice(i, 1);
+                    orderedFileList.unshift(name);
+                }
+            }
         };
         return TreeGenerator;
     })();

@@ -130,7 +130,7 @@ module lark {
                 if (child == this) {
                     $error(1005);
                 }
-                else if (is(child, Types.DisplayObjectContainer) && (<DisplayObjectContainer>child).contains(this)) {
+                else if (is(child, "lark.DisplayObjectContainer") && (<DisplayObjectContainer>child).contains(this)) {
                     $error(1004);
                 }
             }
@@ -655,8 +655,6 @@ module lark {
         }
 
     }
-
-    registerClass(Sprite, Types.Sprite, [Types.DisplayObjectContainer]);
 
     if(DEBUG){
         lark.$markReadOnly(Sprite.prototype,"numChildren");

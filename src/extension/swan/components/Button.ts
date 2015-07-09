@@ -257,5 +257,4 @@ module swan {
         }
     }
 
-    lark.registerClass(Button, Types.Button);
 }

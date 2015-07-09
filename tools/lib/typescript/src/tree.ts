@@ -364,6 +364,13 @@ module ts {
                 else
                     orderedFileList.push(name);
             }
+            for (var i = 0, length = orderedFileList.length; i < length; i++) {
+                var name = orderedFileList[i];
+                if (name.indexOf('Defines.debug.ts') > 0) {
+                    orderedFileList.splice(i, 1);
+                    orderedFileList.unshift(name);
+                }
+            }
         }
 
     }

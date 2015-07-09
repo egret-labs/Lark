@@ -151,5 +151,4 @@ module swan {
         }
     }
 
-    lark.registerClass(PropertyEvent, Types.PropertyEvent);
 }

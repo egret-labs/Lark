@@ -29,8 +29,6 @@
 
 module swan {
 
-
-
     /**
      * @language en_US
      * The Component class defines the base class for skinnable components.
@@ -814,6 +812,8 @@ module swan.sys {
         initialized
     }
 
+    var UIComponentClass = "swan.UIComponent";
+
     function isDeltaIdentity(m:lark.Matrix):boolean {
         return (m.a === 1 && m.b === 0 && m.c === 0 && m.d === 1);
     }
@@ -1420,7 +1420,7 @@ module swan.sys {
                     var length = children.length;
                     for (var i = 0; i < length; i++) {
                         var child = children[i];
-                        if (lark.is(child, swan.Types.UIComponent)) {
+                        if (lark.is(child, UIComponentClass)) {
                             (<swan.UIComponent>child).validateSize(true);
                         }
                     }
@@ -1543,7 +1543,7 @@ module swan.sys {
          */
         protected invalidateParentLayout():void {
             var parent = this.$parent;
-            if (!parent || !this.$includeInLayout || !lark.is(parent, swan.Types.UIComponent))
+            if (!parent || !this.$includeInLayout || !lark.is(parent, UIComponentClass))
                 return;
             (<swan.UIComponent><any>parent).invalidateSize();
             (<swan.UIComponent><any>parent).invalidateDisplayList();

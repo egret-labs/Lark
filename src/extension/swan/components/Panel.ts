@@ -369,6 +369,5 @@ module swan {
         }
     }
 
-    lark.registerClass(Panel, Types.Panel);
     registerProperty(Panel, "elementsContent", "Array", true);
 }

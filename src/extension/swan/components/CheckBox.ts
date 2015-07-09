@@ -71,6 +71,4 @@ module swan {
 		}
 	}
 
-	lark.registerClass(CheckBox,Types.CheckBox);
-	
 }

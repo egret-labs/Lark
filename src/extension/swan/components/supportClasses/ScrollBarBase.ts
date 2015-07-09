@@ -194,8 +194,4 @@ module swan {
         }
     }
 
-    /**
-     * @private
-     */
-    lark.registerClass(ScrollBarBase,Types.ScrollBarBase);
 }

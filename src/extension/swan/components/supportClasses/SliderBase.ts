@@ -321,7 +321,7 @@ module swan {
             }
             else if (instance === this.trackHighlight) {
                 this.trackHighlight.touchEnabled = false;
-                if (lark.is(this.trackHighlight, lark.Types.DisplayObjectContainer)) {
+                if (lark.is(this.trackHighlight, "lark.DisplayObjectContainer")) {
                     (<lark.DisplayObjectContainer> this.trackHighlight).touchChildren = false;
                 }
             }
@@ -582,10 +582,5 @@ module swan {
         }
 
     }
-
-    /**
-     * @private
-     */
-    lark.registerClass(SliderBase,Types.SliderBase);
 
 }

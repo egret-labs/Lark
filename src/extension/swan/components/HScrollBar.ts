@@ -111,5 +111,4 @@ module swan {
         }
     }
 
-    lark.registerClass(HScrollBar, Types.HScrollBar);
 }

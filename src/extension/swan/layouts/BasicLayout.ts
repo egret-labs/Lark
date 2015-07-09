@@ -133,10 +133,11 @@ module swan {
             configurable: true
         });
     }
-    lark.registerClass(BasicLayout, Types.BasicLayout);
 }
 
 module swan.sys {
+
+    var UIComponentClass = "swan.UIComponent";
 
     /**
      * @private
@@ -152,7 +153,7 @@ module swan.sys {
         var count = target.numChildren;
         for (var i = 0; i < count; i++) {
             var layoutElement = <swan.UIComponent> (target.getChildAt(i));
-            if (!lark.is(layoutElement,swan.Types.UIComponent) || !layoutElement.$includeInLayout) {
+            if (!lark.is(layoutElement,UIComponentClass) || !layoutElement.$includeInLayout) {
                 continue;
             }
 
@@ -222,7 +223,7 @@ module swan.sys {
         var bounds = lark.$TempRectangle;
         for (var i = 0; i < count; i++) {
             var layoutElement = <swan.UIComponent> (target.getChildAt(i));
-            if (!lark.is(layoutElement,swan.Types.UIComponent) || !layoutElement.$includeInLayout) {
+            if (!lark.is(layoutElement,UIComponentClass) || !layoutElement.$includeInLayout) {
                 continue;
             }
 

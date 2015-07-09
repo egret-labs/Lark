@@ -209,5 +209,4 @@ module swan {
         }
     }
 
-    lark.registerClass(SetProperty,Types.SetProperty,[Types.IOverride]);
 }

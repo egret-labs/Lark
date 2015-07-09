@@ -36,13 +36,14 @@ class Mask extends lark.Sprite {
         this.mask = mask;
         this.productBmp = productBmp;
         this.annimate();
+        this.stage.frameRate = 60;
     }
 
     private annimate(){
 
         Tween.get(this.mask)
-            .to({rotation:360,x:600,y:300},2000,lark.Ease.cubicInOut)
-            .to({rotation:360,x:150,y:200},2000,lark.Ease.cubicInOut)
+            .to({rotation:360,x:300,y:150},2000,lark.Ease.cubicInOut)
+            .to({rotation:360,x:75,y:100},2000,lark.Ease.cubicInOut)
             .call(()=>this.annimate());
     }
 }

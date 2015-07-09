@@ -709,5 +709,4 @@ module swan {
     }
 
     registerProperty(Scroller, "viewport", "swan.IViewport", true);
-    lark.registerClass(Scroller, Types.Scroller);
 }

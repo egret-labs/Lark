@@ -316,13 +316,13 @@ module swan {
          * @platform Web,Native
          */
         public reset(newHost:lark.IEventEmitter):void {
-            if (lark.is(this.host,lark.Types.IEventEmitter)) {
+            if (lark.is(this.host,"lark.IEventEmitter")) {
                 this.host.removeListener(PropertyEvent.PROPERTY_CHANGE, this.wrapHandler, this);
             }
 
             this.host = newHost;
 
-            if (lark.is(newHost,lark.Types.IEventEmitter)) {
+            if (lark.is(newHost,"lark.IEventEmitter")) {
                 Watcher.checkBindable(newHost, this.property)
                 newHost.on(PropertyEvent.PROPERTY_CHANGE, this.wrapHandler, this, false, 100);
             }
@@ -361,8 +361,4 @@ module swan {
         }
     }
 
-    /**
-     * @private
-     */
-    lark.registerClass(Watcher, Types.Watcher);
 }

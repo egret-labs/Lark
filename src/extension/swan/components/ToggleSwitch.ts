@@ -69,5 +69,4 @@ module swan {
         }
     }
 
-    lark.registerClass(ToggleSwitch, Types.ToggleSwitch);
 }

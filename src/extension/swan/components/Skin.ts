@@ -352,5 +352,4 @@ module swan {
     sys.mixin(Skin, sys.StateClient);
     registerProperty(Skin, "elementsContent", "Array", true);
     registerProperty(Skin, "states", "State[]");
-    lark.registerClass(Skin, Types.Skin);
 }

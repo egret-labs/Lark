@@ -1,67 +1,477 @@
 declare module swan {
     /**
      * @language en_US
-     * The IItemRenderer interface defines the basic set of APIs
-     * that used for List class.
+     * Defines values for setting the <code>direction</code> property
+     * of the <code>ProgressBar</code> class.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 列表类组件的项呈示器接口。
+     * 定义进度条等控件增长方向的常量
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    interface IItemRenderer extends UIComponent {
+    class Direction {
         /**
          * @language en_US
-         * The data to render or edit.
+         * Specifies left-to-right direction.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 要呈示或编辑的数据。
+         * 水平从左到右增长
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        data: any;
+        static LTR: string;
         /**
          * @language en_US
-         * Contains <code>true</code> if the item renderer
-         * can show itself as selected.
+         * Specifies right-to-left direction.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 如果项呈示器可以将其自身显示为已选中，则为 true。
+         * 水平从右到左增长
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        selected: boolean;
+        static RTL: string;
         /**
          * @language en_US
-         * The index of the item in the data provider
-         * of the host component of the item renderer.
+         * Specifies top-to-bottom direction.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 项呈示器的数据提供程序中的项目索引。
+         * 竖直从上到下增长
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        itemIndex: number;
+        static TTB: string;
+        /**
+         * @language en_US
+         * Specifies bottom-to-top direction.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 竖直从下到上增长
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static BTT: string;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The IOverride interface is used for view state overrides.
+     * All entries in the State class <code>overrides</code>
+     * property array must implement this interface.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * IOverride 接口定义视图状态的覆盖操作。State 类 overrides 属性数组中的所有条目均必须实现此接口。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    interface IOverride {
+        /**
+         * @language en_US
+         * Applies the override. Retains the original value, so that it can
+         * restore the value later in the <code>remove()</code> method.<p/>
+         *
+         * This method is called automatically when the state is entered.
+         * It should not be called directly.
+         *
+         * @param host A component that contains view states.
+         * @param parent The parent that a sub element be added.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 应用覆盖。将保留原始值，以便以后可以在 remove() 方法中恢复该值。<p/>
+         *
+         * 该方法是当进入状态的时候自动调用的，请不要直接调用此方法。
+         * @param host 含有视图状态的组件。
+         * @param parent 子项添加到的父级容器。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        apply(host: any, parent: lark.DisplayObjectContainer): void;
+        /**
+         * @language en_US
+         * Removes the override. The value remembered in the <code>apply()</code>
+         * method is restored. </p>
+         *
+         * This method is called automatically when the state is entered.
+         * It should not be called directly.
+         * @param host A component that contains view states.
+         * @param parent The parent that a sub element be added.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 删除覆盖。在 apply() 方法中记住的值将被恢复。
+         * @param host 含有视图状态的组件。
+         * @param parent 子项添加到的父级容器。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        remove(host: any, parent: lark.DisplayObjectContainer): void;
+    }
+}
+declare module swan.sys {
+    /**
+     * @private
+     */
+    const enum AddPosition {
+        /**
+         * @private
+         * 添加父级容器的底层
+         */
+        FIRST = 0,
+        /**
+         * @private
+         * 添加在父级容器的顶层
+         */
+        LAST = 1,
+        /**
+         * @private
+         * 添加在相对对象之前
+         */
+        BEFORE = 2,
+        /**
+         * @private
+         * 添加在相对对象之后
+         */
+        AFTER = 3,
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The operation of adding a state to view.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 视图添加状态显示元素操作
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class AddItems implements IOverride {
+        /**
+         * @language en_US
+         * Constructor.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个AddItems实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        constructor(target: string, propertyName: string, position: number, relativeTo: string);
+        /**
+         * @language en_US
+         * The name of the property that is being added.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要添加到的属性
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        propertyName: string;
+        /**
+         * @language en_US
+         * The position to be added. Valid values: "first","last","before","after"
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 添加的位置，有效值为: "first","last","before","after"
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        position: number;
+        /**
+         * @language en_US
+         * an instance name of relative visual element.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 相对的显示元素的实例名
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        relativeTo: string;
+        /**
+         * @language en_US
+         * The target instance name.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 目标实例名
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        target: string;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        apply(host: any, parent: lark.DisplayObjectContainer): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        remove(host: any, parent: lark.DisplayObjectContainer): void;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The TileOrientation class defines the possible values for the
+     * <code>orientation</code> property of the TileLayout class.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * TileOrientation 类为 TileLayout 类的 <code>orientation</code> 属性定义可能的值。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class TileOrientation {
+        /**
+         * @language en_US
+         * Arranges elements row by row.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 逐行排列元素。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static ROWS: string;
+        /**
+         * @language en_US
+         * Arranges elements column by column.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 逐列排列元素。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static COLUMNS: string;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * An <code>ICollectionView</code> is a view onto a collection of data.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     *
+     * <code>ICollection</code>是一个列表的集合类数据源对象的查看接口。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    interface ICollection extends lark.IEventEmitter {
+        /**
+         * @language en_US
+         * The number of items in this view.
+         * 0 means no items, while -1 means that the length is unknown.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *  此集合中的项目数。0 表示不包含项目。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        length: number;
+        /**
+         * @language en_US
+         * Gets the item at the specified index.
+         * @param index The index in the list from which to retrieve the item.
+         * @return The item at that index, or <code>null</code> if there is none.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取指定索引处的项目。
+         * @param index 要得到的项的指定位置。
+         * @return 在索引位置的项，如果没有该项则返回null。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        getItemAt(index: number): any;
+        /**
+         * @language en_US
+         * Returns the index of the item if it is in the list。-1 otherwise.
+         * @param item The item to find.
+         * @return The index of the item, or -1 if the item is not in the list.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果项目位于列表中,返回该项目的索引。否则返回-1。
+         * @param item 要查找的项。
+         * @return 项的索引，如果该项没有在列表中将返回-1.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        getItemIndex(item: any): number;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The JustifyAlign class defines the possible values for the
+     * <code>horizontalAlign</code> 和 <code>verticalAlign</code> property of
+     * Layout class.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * JustifyAlign 定义布局类中 horizontalAlign 与 verticalAlign 属性需要的两端对齐常量值。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class JustifyAlign {
+        /**
+         * @language en_US
+         * Justify the children with respect to the container.
+         * This uniformly sizes all children to be the same size as the
+         * container.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 相对于容器对齐子代。这会将所有子代的大小统一调整为与容器相同的尺寸。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static JUSTIFY: string;
+        /**
+         * @language en_US
+         * Content justify the children width/height respect to the container.
+         * This uniformly sizes all children to be the content width/height of the container.
+         * The content width/height of the container is the size of the largest child.
+         * If all children are smaller than the width/height of the container, then
+         * all the children will be sized to the width/height of the container.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 相对于容器对子代进行内容对齐。这会将所有子代的大小统一调整为容器的内容宽度/高度。
+         * 容器的内容宽度/高度是最大子代的大小。如果所有子代都小于容器的宽度/高度，则会将所有子代的大小调整为容器的宽度/高度。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static CONTENT_JUSTIFY: string;
     }
 }
 declare module swan {
@@ -134,6 +544,40 @@ declare module swan {
          * @platform Web,Native
          */
         static JUSTIFY_USING_WIDTH: string;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The IDisplayText interface defines the properties
+     * for simple text display.。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * IDisplayText 接口定义简单文本显示的属性.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    interface IDisplayText {
+        /**
+         * @language en_US
+         * The text displayed by this text component.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 此文本组件所显示的文本。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        text: string;
     }
 }
 declare module swan.sys {
@@ -502,353 +946,67 @@ declare module swan.sys {
 declare module swan {
     /**
      * @language en_US
-     * The CollectionEventKind class contains constants for the valid values
-     * of the <code>CollectionEvent</code> class <code>kind</code> property.
-     * These constants indicate the kind of change that was made to the collection.
-     *
+     * The IItemRenderer interface defines the basic set of APIs
+     * that used for List class.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 定义 <code>CollectionEvent</code> 类 <code>kind</code> 属性的有效值的常量。
-     * 这些常量指示对集合进行的更改类型。
-
+     * 列表类组件的项呈示器接口。
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    class CollectionEventKind {
+    interface IItemRenderer extends UIComponent {
         /**
          * @language en_US
-         * Indicates that the collection added an item or items.
+         * The data to render or edit.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 指示集合添加了一个或多个项目。
+         * 要呈示或编辑的数据。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        static ADD: string;
+        data: any;
         /**
          * @language en_US
-         * Indicates that the collection applied a sort, a filter, or both.
-         * This change can potentially be easier to handle than a RESET.
+         * Contains <code>true</code> if the item renderer
+         * can show itself as selected.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 指示集合应用了排序或/和筛选。
+         * 如果项呈示器可以将其自身显示为已选中，则为 true。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        static REFRESH: string;
+        selected: boolean;
         /**
          * @language en_US
-         * Indicates that the collection removed an item or items.
+         * The index of the item in the data provider
+         * of the host component of the item renderer.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 指示集合删除了一个或多个项目。
+         * 项呈示器的数据提供程序中的项目索引。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        static REMOVE: string;
-        /**
-         * @language en_US
-         * Indicates that the item at the position identified by the
-         * CollectionEvent <code>location</code> property has been replaced.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 指示已替换由 CollectionEvent.location 属性确定的位置处的项目。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static REPLACE: string;
-        /**
-         * @language en_US
-         * Indicates that the collection has changed so drastically that
-         * a reset is required.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 指示集合已彻底更改，需要进行重置。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static RESET: string;
-        /**
-         * @language en_US
-         * Indicates that one or more items were updated within the collection.
-         * The affected item(s)
-         * are stored in the <code>CollectionEvent.items</code> property.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 指示集合中一个或多个项目进行了更新。受影响的项目将存储在  CollectionEvent.items 属性中。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static UPDATE: string;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * Values for the <code>horizontalCanScroll</code> and
-     * <code>verticalCanScroll</code> properties of the Scroller classes.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 滚动条显示策略常量。
-     * Scroller 类的 <code>horizontalCanScroll</code> 和 <code>verticalCanScroll</code> 属性的值。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class ScrollPolicy {
-        /**
-         * @language en_US
-         * Show the scrollbar if the children exceed the owner's dimension.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果子项超出父级的尺寸，则允许滚动，反之不允许滚动。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static AUTO: string;
-        /**
-         * @language en_US
-         * Never show the scrollbar.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 从不允许滚动。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static OFF: string;
-        /**
-         * @language en_US
-         * Always show the scrollbar.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 总是允许滚动。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static ON: string;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The JustifyAlign class defines the possible values for the
-     * <code>horizontalAlign</code> 和 <code>verticalAlign</code> property of
-     * Layout class.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * JustifyAlign 定义布局类中 horizontalAlign 与 verticalAlign 属性需要的两端对齐常量值。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class JustifyAlign {
-        /**
-         * @language en_US
-         * Justify the children with respect to the container.
-         * This uniformly sizes all children to be the same size as the
-         * container.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 相对于容器对齐子代。这会将所有子代的大小统一调整为与容器相同的尺寸。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static JUSTIFY: string;
-        /**
-         * @language en_US
-         * Content justify the children width/height respect to the container.
-         * This uniformly sizes all children to be the content width/height of the container.
-         * The content width/height of the container is the size of the largest child.
-         * If all children are smaller than the width/height of the container, then
-         * all the children will be sized to the width/height of the container.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 相对于容器对子代进行内容对齐。这会将所有子代的大小统一调整为容器的内容宽度/高度。
-         * 容器的内容宽度/高度是最大子代的大小。如果所有子代都小于容器的宽度/高度，则会将所有子代的大小调整为容器的宽度/高度。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static CONTENT_JUSTIFY: string;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The IOverride interface is used for view state overrides.
-     * All entries in the State class <code>overrides</code>
-     * property array must implement this interface.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * IOverride 接口定义视图状态的覆盖操作。State 类 overrides 属性数组中的所有条目均必须实现此接口。
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    interface IOverride {
-        /**
-         * @language en_US
-         * Applies the override. Retains the original value, so that it can
-         * restore the value later in the <code>remove()</code> method.<p/>
-         *
-         * This method is called automatically when the state is entered.
-         * It should not be called directly.
-         *
-         * @param host A component that contains view states.
-         * @param parent The parent that a sub element be added.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 应用覆盖。将保留原始值，以便以后可以在 remove() 方法中恢复该值。<p/>
-         *
-         * 该方法是当进入状态的时候自动调用的，请不要直接调用此方法。
-         * @param host 含有视图状态的组件。
-         * @param parent 子项添加到的父级容器。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        apply(host: any, parent: lark.DisplayObjectContainer): void;
-        /**
-         * @language en_US
-         * Removes the override. The value remembered in the <code>apply()</code>
-         * method is restored. </p>
-         *
-         * This method is called automatically when the state is entered.
-         * It should not be called directly.
-         * @param host A component that contains view states.
-         * @param parent The parent that a sub element be added.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 删除覆盖。在 apply() 方法中记住的值将被恢复。
-         * @param host 含有视图状态的组件。
-         * @param parent 子项添加到的父级容器。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        remove(host: any, parent: lark.DisplayObjectContainer): void;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The IDisplayText interface defines the properties
-     * for simple text display.。
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * IDisplayText 接口定义简单文本显示的属性.
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    interface IDisplayText {
-        /**
-         * @language en_US
-         * The text displayed by this text component.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 此文本组件所显示的文本。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        text: string;
+        itemIndex: number;
     }
 }
 declare module swan {
@@ -901,437 +1059,6 @@ declare module swan {
          * @platform Web,Native
          */
         getAsset(source: string, callBack: (content: any, source: string) => void, thisObject: any): void;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The BitmapFillMode class defines an enumeration of the resize modes that
-     * determine how a Bitmap fills in the dimensions specified by the layout system.
-     *
-     * @see swan.Image#fillMode
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * BitmapFillMode 类定义 Image 控件的图像填充方式。
-     * BitmapFillMode 类定义了调整大小模式的一个枚举，这些模式确定 Bitmap 如何填充由布局系统指定的尺寸。
-     *
-     * @see swan.Image#fillMode
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class BitmapFillMode {
-        /**
-         * @language en_US
-         * The bitmap ends at the edge of the region.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在区域的边缘处截断不显示位图。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static CLIP: string;
-        /**
-         * @language en_US
-         * The bitmap is repeated to fill the region.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 重复位图以填充区域。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static REPEAT: string;
-        /**
-         * @language en_US
-         * The bitmap fill stretches to fill the region.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 拉伸位图以填充区域。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static SCALE: string;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * An <code>ICollectionView</code> is a view onto a collection of data.
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     *
-     * <code>ICollection</code>是一个列表的集合类数据源对象的查看接口。
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    interface ICollection extends lark.IEventEmitter {
-        /**
-         * @language en_US
-         * [read-only] The number of items in this view.
-         * 0 means no items, while -1 means that the length is unknown.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * [只读] 此集合中的项目数。0 表示不包含项目。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        length: number;
-        /**
-         * @language en_US
-         * Gets the item at the specified index.
-         * @param index The index in the list from which to retrieve the item.
-         * @return The item at that index, or <code>null</code> if there is none.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取指定索引处的项目。
-         * @param index 要得到的项的指定位置。
-         * @return 在索引位置的项，如果没有该项则返回null。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        getItemAt(index: number): any;
-        /**
-         * @language en_US
-         * Returns the index of the item if it is in the list。-1 otherwise.
-         * @param item The item to find.
-         * @return The index of the item, or -1 if the item is not in the list.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果项目位于列表中,返回该项目的索引。否则返回-1。
-         * @param item 要查找的项。
-         * @return 项的索引，如果该项没有在列表中将返回-1.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        getItemIndex(item: any): number;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The RowAlign class defines the possible values for the
-     * <code>rowAlign</code> property of the TileLayout class.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * RowAlign 类为 TileLayout 类的 <code>rowAlign</code> 属性定义可能的值。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class RowAlign {
-        /**
-         * @language en_US
-         * Do not justify the rows.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 不进行两端对齐。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static TOP: string;
-        /**
-         * @language en_US
-         * Justify the rows by increasing the vertical gap.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 通过增大垂直间隙将行两端对齐。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static JUSTIFY_USING_GAP: string;
-        /**
-         * @language en_US
-         * Justify the rows by increasing the row height.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 通过增大行高度将行两端对齐。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static JUSTIFY_USING_HEIGHT: string;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * Defines values for setting the <code>direction</code> property
-     * of the <code>ProgressBar</code> class.
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 定义进度条等控件增长方向的常量
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class Direction {
-        /**
-         * @language en_US
-         * Specifies left-to-right direction.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 水平从左到右增长
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static LTR: string;
-        /**
-         * @language en_US
-         * Specifies right-to-left direction.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 水平从右到左增长
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static RTL: string;
-        /**
-         * @language en_US
-         * Specifies top-to-bottom direction.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 竖直从上到下增长
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static TTB: string;
-        /**
-         * @language en_US
-         * Specifies bottom-to-top direction.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 竖直从下到上增长
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static BTT: string;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The TileOrientation class defines the possible values for the
-     * <code>orientation</code> property of the TileLayout class.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * TileOrientation 类为 TileLayout 类的 <code>orientation</code> 属性定义可能的值。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class TileOrientation {
-        /**
-         * @language en_US
-         * Arranges elements row by row.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 逐行排列元素。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static ROWS: string;
-        /**
-         * @language en_US
-         * Arranges elements column by column.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 逐列排列元素。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static COLUMNS: string;
-    }
-}
-declare module swan.sys {
-    /**
-     * @private
-     * 数值缓动工具类
-     */
-    class Animation {
-        /**
-         * @private
-         */
-        constructor(updateFunction: (animation: Animation) => void, thisObject: any);
-        /**
-         * @private
-         * 此动画的缓动行为。设置为null意味着不使用缓动，默认值为 sineInOut
-         */
-        easerFunction: (fraction: number) => number;
-        /**
-         * @private
-         */
-        private thisObject;
-        /**
-         * @private
-         * 是否正在播放动画，不包括延迟等待和暂停的阶段
-         */
-        isPlaying: boolean;
-        /**
-         * @private
-         * 动画持续时间,单位毫秒，默认值500
-         */
-        duration: number;
-        /**
-         * @private
-         * 动画到当前时间对应的值。
-         */
-        currentValue: number;
-        /**
-         * @private
-         * 起始值
-         */
-        from: number;
-        /**
-         * @private
-         * 终点值。
-         */
-        to: number;
-        /**
-         * @private
-         * 动画启动时刻
-         */
-        private startTime;
-        /**
-         * @private
-         * 动画播放结束时的回调函数
-         */
-        endFunction: (animation: Animation) => void;
-        /**
-         * @private
-         * 动画更新时的回调函数
-         */
-        updateFunction: Function;
-        /**
-         * @private
-         * 开始正向播放动画,无论何时调用都重新从零时刻开始，若设置了延迟会首先进行等待。
-         */
-        play(): void;
-        /**
-         * @private
-         * 开始播放动画
-         */
-        private start();
-        /**
-         * @private
-         * 停止播放动画
-         */
-        stop(): void;
-        /**
-         * @private
-         * 计算当前值并返回动画是否结束
-         */
-        private doInterval(currentTime);
     }
 }
 declare module swan {
@@ -1481,110 +1208,82 @@ declare module swan {
         scrollEnabled: boolean;
     }
 }
-declare module swan.sys {
-    /**
-     * @private
-     * Swan 命名空间
-     */
-    var NS_S: string;
-    /**
-     * @private
-     * Wing命名空间
-     */
-    var NS_W: string;
-    /**
-     * @private
-     */
-    class EXMLConfig {
-        /**
-         * @private
-         */
-        private properties;
-        /**
-         * @private
-         *
-         * @param instance
-         * @returns
-         */
-        private describe(instance);
-        /**
-         * @private
-         * 根据类的短名ID和命名空间获取完整类名(以"."分隔)
-         * @param id 类的短名ID
-         * @param ns 命名空间
-         */
-        getClassNameById(id: string, ns: string): string;
-        /**
-         * @private
-         * 根据ID获取对应的默认属性
-         * @param id 类的短名ID
-         * @param ns 命名空间
-         * @return 默认属性名
-         */
-        getDefaultPropById(id: string, ns: string): string;
-        /**
-         * @private
-         * 获取指定属性的类型,返回基本数据类型："boolean","string","number","any"。
-         * @param property 属性名
-         * @param className 要查询的完整类名
-         */
-        getPropertyType(property: string, className: string): string;
-    }
-}
 declare module swan {
     /**
      * @language en_US
-     * Default instance of interface <code>IAssetAdapter</code>.
+     * The BitmapFillMode class defines an enumeration of the resize modes that
+     * determine how a Bitmap fills in the dimensions specified by the layout system.
+     *
+     * @see swan.Image#fillMode
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 默认的IAssetAdapter接口实现。
+     * BitmapFillMode 类定义 Image 控件的图像填充方式。
+     * BitmapFillMode 类定义了调整大小模式的一个枚举，这些模式确定 Bitmap 如何填充由布局系统指定的尺寸。
+     *
+     * @see swan.Image#fillMode
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    class DefaultAssetAdapter implements IAssetAdapter {
+    class BitmapFillMode {
         /**
          * @language en_US
-         * resolve asset.
-         * @param source the identifier of new asset need to be resolved
-         * @param callBack callback function when resolving complete
-         * example：callBack(content:any,source:string):void;
-         * @param thisObject <code>this</code> object of callback method
+         * The bitmap ends at the edge of the region.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 解析素材
-         * @param source 待解析的新素材标识符
-         * @param callBack 解析完成回调函数，示例：callBack(content:any,source:string):void;
-         * @param thisObject callBack的 this 引用
+         * 在区域的边缘处截断不显示位图。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        getAsset(source: string, callBack: (data: any, source: string) => void, thisObject: any): void;
+        static CLIP: string;
         /**
-         * @private
-         *
-         * @param event
+         * @language en_US
+         * The bitmap is repeated to fill the region.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
-        private onLoadFinish(event);
+        /**
+         * @language zh_CN
+         * 重复位图以填充区域。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static REPEAT: string;
+        /**
+         * @language en_US
+         * The bitmap fill stretches to fill the region.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 拉伸位图以填充区域。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static SCALE: string;
     }
 }
 declare module swan {
     /**
      * @language en_US
-     * Register a property of an instance is can be bound.
-     * This method is ususally invoked by Watcher class.
-     *
-     * @param instance the instance to be registered.
-     * @param property the property of specified instance to be registered.
+     * Values for the <code>horizontalCanScroll</code> and
+     * <code>verticalCanScroll</code> properties of the Scroller classes.
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -1592,221 +1291,330 @@ declare module swan {
      */
     /**
      * @language zh_CN
-     * 标记实例的一个属性是可绑定的,此方法通常由 Watcher 类调用。
-     *
-     * @param instance 要标记的实例
-     * @param property 可绑定的属性。
+     * 滚动条显示策略常量。
+     * Scroller 类的 <code>horizontalCanScroll</code> 和 <code>verticalCanScroll</code> 属性的值。
      *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    function registerBindable(instance: any, property: string): void;
-}
-declare module swan {
-    /**
-     * @language en_US
-     * Register a property for a class definition in running,
-     * so that the Swan can get type of property accurate when parsing a EXML.
-     * This need not be called directly in most of time. Only when you have a custom UI
-     * component need to be described in EXML, you may invoke this method explicitly.
-     *
-     * Contains no following：
-     * When the property is the basic data type(boolean, number, string or Array), you only need set a correct initial value
-     * for he custom property then the EXML parser can get the correct property type in running.
-     *
-     * If you can not set the correct initial value (such as <code>null</code>), the EXML parser will treat this property as
-     * <code>string</code>. If there is no inital value, Swan will throw an error. But you can invoked this method to register
-     * a property in this case.
-     *
-     *
-     * @param classDefinition The class definition need to be registered.
-     * @param property The property need to be registered. Note that the property
-     * name cannot start with "_" or "$".
-     * @param type The type need to be registered,
-     * such as “boolean","number","string","Array","lark.Rectangle" and so on.
-     * @param asDefault Whether register this property as a default property of component.
-     * One component can register only on default property. And the default property can be spare in an EXML.
-     *
-     * @example：
-     * <code>
-     *      <s:Scroller>
-     *          <s:viewport>
-     *          <s:Group/>
-     *          </e:viewport>
-     *      </e:Scroller>
-     * <code/>
-     * Cuz <code>viewport</code> is the default property of Scroller. So you can write as follow:
-     * <code>
-     *      <s:Scroller>
-     *          <s:Group/>
-     *      </e:Scroller>
-     * <code/>
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 为一个类定义注册运行时属性类型，以便运行时的EXML文件解析过程能获取准确的属性类型。大多数情况下，您都不需要手动调用此方法显式注册属性类型。
-     * 仅当您有一个自定义的 UI 组件，需要在EXML中用标签描述时可能需要显式注册，但以下情况除外：
-     * 当属性类型为基本数据类型：boolean,number,string,Array这四种其中之一时，您只需要为自定义的属性赋值上正确的初始值，
-     * 运行时EXML解析器就能通过初始值自动分析出正确的属性类型。
-     * 若您无法为属性赋值上正确的初始值时(有初始值，比如null),运行时EXML解析器会把此属性当做string来处理，若完全没有初始值，将会报错找不到节点属性，
-     * 这种情况下可以手动调用此方法显式注册属性类型。
-     *
-     * @param classDefinition 要注册的类定义。
-     * @param property 要注册的属性,注意属性名不能以 _ 或 $ 符开头。
-     * @param type 要注册的类型,例如：“boolean","number","string","Array","lark.Rectangle"
-     * @param asDefault 是否将此属性注册为组件的默认属性,一个组件只可以设置一个默认属性。注册了组件默认属性后，在EXML中可以使用省略属性节点的写法，
-     * 例如：
-     *
-     * <s:Scroller>
-     *     <s:viewport>
-     *         <s:Group/>
-     *     </e:viewport>
-     * </e:Scroller>
-     *
-     * 因为 viewport 已经注册为 Scroller 的默认属性，上面的例子可以等效为：
-     *
-     * <s:Scroller>
-     *     <s:Group/>
-     * </e:Scroller>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    function registerProperty(classDefinition: any, property: string, type: string, asDefault?: boolean): void;
+    class ScrollPolicy {
+        /**
+         * @language en_US
+         * Show the scrollbar if the children exceed the owner's dimension.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果子项超出父级的尺寸，则允许滚动，反之不允许滚动。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static AUTO: string;
+        /**
+         * @language en_US
+         * Never show the scrollbar.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从不允许滚动。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static OFF: string;
+        /**
+         * @language en_US
+         * Always show the scrollbar.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 总是允许滚动。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static ON: string;
+    }
 }
 declare module swan.sys {
     /**
      * @private
-     * 一个工具类,用于容器的滚屏拖动操作，计算在一段时间持续滚动后释放，应该继续滚动到的值和缓动时间。
-     * 使用此工具类，您需要创建一个 ScrollThrown 实例,并在滚动发生时调用start()方法，然后在触摸移动过程中调用update()更新当前舞台坐标。
-     * 内部将会启动一个计时器定时根据当前位置计算出速度值，并缓存下来最后4个值。当停止滚动时，再调用finish()方法，
-     * 将立即停止记录位移，并将计算出的最终结果存储到 Thrown.scrollTo 和 Thrown.duration 属性上。
+     * 数值缓动工具类
      */
-    class TouchScroll {
-        /**
-         * @private
-         * 创建一个 TouchScroll 实例
-         * @param updateFunction 滚动位置更新回调函数
-         */
-        constructor(updateFunction: (scrollPos: number) => void, endFunction: () => void, target: lark.IEventEmitter);
+    class Animation {
         /**
          * @private
          */
-        private target;
+        constructor(updateFunction: (animation: Animation) => void, thisObject: any);
+        /**
+         * @private
+         * 此动画的缓动行为。设置为null意味着不使用缓动，默认值为 sineInOut
+         */
+        easerFunction: (fraction: number) => number;
         /**
          * @private
          */
-        private updateFunction;
+        private thisObject;
         /**
          * @private
+         * 是否正在播放动画，不包括延迟等待和暂停的阶段
          */
-        private endFunction;
+        isPlaying: boolean;
         /**
          * @private
+         * 动画持续时间,单位毫秒，默认值500
          */
-        private previousTime;
+        duration: number;
         /**
          * @private
+         * 动画到当前时间对应的值。
          */
-        private velocity;
+        currentValue: number;
         /**
          * @private
+         * 起始值
          */
-        private previousVelocity;
+        from: number;
         /**
          * @private
+         * 终点值。
          */
-        private currentPosition;
+        to: number;
         /**
          * @private
+         * 动画启动时刻
          */
-        private previousPosition;
+        private startTime;
         /**
          * @private
+         * 动画播放结束时的回调函数
          */
-        private currentScrollPos;
+        endFunction: (animation: Animation) => void;
         /**
          * @private
+         * 动画更新时的回调函数
          */
-        private maxScrollPos;
+        updateFunction: Function;
         /**
          * @private
-         * 触摸按下时的偏移量
+         * 开始正向播放动画,无论何时调用都重新从零时刻开始，若设置了延迟会首先进行等待。
          */
-        private offsetPoint;
+        play(): void;
         /**
          * @private
-         * 停止触摸时继续滚动的动画实例
+         * 开始播放动画
          */
-        private animation;
+        private start();
         /**
          * @private
-         * 正在播放缓动动画的标志。
-         */
-        isPlaying(): boolean;
-        /**
-         * @private
-         * 如果正在执行缓动滚屏，停止缓动。
+         * 停止播放动画
          */
         stop(): void;
         /**
          * @private
-         * 开始记录位移变化。注意：当使用完毕后，必须调用 finish() 方法结束记录，否则该对象将无法被回收。
-         * @param touchPoint 起始触摸位置，以像素为单位，通常是stageX或stageY。
+         * 计算当前值并返回动画是否结束
          */
-        start(touchPoint: number, scrollValue: number, maxScrollValue: number): void;
-        /**
-         * @private
-         * 更新当前移动到的位置
-         * @param touchPoint 当前触摸位置，以像素为单位，通常是stageX或stageY。
-         */
-        update(touchPoint: number, maxScrollValue: number): void;
-        /**
-         * @private
-         * 停止记录位移变化，并计算出目标值和继续缓动的时间。
-         * @param currentScrollPos 容器当前的滚动值。
-         * @param maxScrollPos 容器可以滚动的最大值。当目标值不在 0~maxValue之间时，将会应用更大的摩擦力，从而影响缓动时间的长度。
-         */
-        finish(currentScrollPos: number, maxScrollPos: number): void;
-        /**
-         * @private
-         *
-         * @param timeStamp
-         * @returns
-         */
-        private onTick(timeStamp);
-        /**
-         * @private
-         *
-         * @param animation
-         */
-        private finishScrolling(animation?);
-        /**
-         * @private
-         * 缓动到水平滚动位置
-         */
-        private throwTo(hspTo, duration?);
-        /**
-         * @private
-         * 更新水平滚动位置
-         */
-        private onScrollingUpdate(animation);
+        private doInterval(currentTime);
     }
 }
-declare module swan.sys {
+declare module swan {
     /**
-     * @private
+     * @language en_US
+     * The CollectionEventKind class contains constants for the valid values
+     * of the <code>CollectionEvent</code> class <code>kind</code> property.
+     * These constants indicate the kind of change that was made to the collection.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
-    class MatrixUtil {
+    /**
+     * @language zh_CN
+     * 定义 <code>CollectionEvent</code> 类 <code>kind</code> 属性的有效值的常量。
+     * 这些常量指示对集合进行的更改类型。
+
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class CollectionEventKind {
         /**
-         * @private
+         * @language en_US
+         * Indicates that the collection added an item or items.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
-        static fitBounds(width: number, height: number, matrix: lark.Matrix, explicitWidth: number, explicitHeight: number, preferredWidth: number, preferredHeight: number, minWidth: number, minHeight: number, maxWidth: number, maxHeight: number): lark.Point;
+        /**
+         * @language zh_CN
+         * 指示集合添加了一个或多个项目。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static ADD: string;
+        /**
+         * @language en_US
+         * Indicates that the collection applied a sort, a filter, or both.
+         * This change can potentially be easier to handle than a RESET.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示集合应用了排序或/和筛选。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static REFRESH: string;
+        /**
+         * @language en_US
+         * Indicates that the collection removed an item or items.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示集合删除了一个或多个项目。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static REMOVE: string;
+        /**
+         * @language en_US
+         * Indicates that the item at the position identified by the
+         * CollectionEvent <code>location</code> property has been replaced.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示已替换由 CollectionEvent.location 属性确定的位置处的项目。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static REPLACE: string;
+        /**
+         * @language en_US
+         * Indicates that the collection has changed so drastically that
+         * a reset is required.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示集合已彻底更改，需要进行重置。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static RESET: string;
+        /**
+         * @language en_US
+         * Indicates that one or more items were updated within the collection.
+         * The affected item(s)
+         * are stored in the <code>CollectionEvent.items</code> property.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示集合中一个或多个项目进行了更新。受影响的项目将存储在  CollectionEvent.items 属性中。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static UPDATE: string;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The RowAlign class defines the possible values for the
+     * <code>rowAlign</code> property of the TileLayout class.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * RowAlign 类为 TileLayout 类的 <code>rowAlign</code> 属性定义可能的值。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class RowAlign {
+        /**
+         * @language en_US
+         * Do not justify the rows.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 不进行两端对齐。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static TOP: string;
+        /**
+         * @language en_US
+         * Justify the rows by increasing the vertical gap.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 通过增大垂直间隙将行两端对齐。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static JUSTIFY_USING_GAP: string;
+        /**
+         * @language en_US
+         * Justify the rows by increasing the row height.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 通过增大行高度将行两端对齐。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static JUSTIFY_USING_HEIGHT: string;
     }
 }
 declare module swan {
@@ -1947,6 +1755,933 @@ declare module swan {
          * 转成Boolean值
          */
         private toBoolean(value);
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * Register a property of an instance is can be bound.
+     * This method is ususally invoked by Watcher class.
+     *
+     * @param instance the instance to be registered.
+     * @param property the property of specified instance to be registered.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 标记实例的一个属性是可绑定的,此方法通常由 Watcher 类调用。
+     *
+     * @param instance 要标记的实例
+     * @param property 可绑定的属性。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    function registerBindable(instance: any, property: string): void;
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The Watcher class defines utility method that you can use with bindable properties.
+     * These methods let you define an event handler that is executed whenever a bindable property is updated.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Watcher 类能够监视可绑定属性的改变，您可以定义一个事件处理函数作为 Watcher 的回调方法，在每次可绑定属性的值改变时都执行此函数。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class Watcher {
+        /**
+         * @language en_US
+         * Creates and starts a Watcher instance.
+         * The Watcher can only watch the property of a Object which host is instance of IEventEmitter.
+         * @param host The object that hosts the property or property chain to be watched.
+         * You can use the use the <code>reset()</code> method to change the value of the <code>host</code> argument
+         * after creating the Watcher instance.
+         * The <code>host</code> maintains a list of <code>handlers</code> to invoke when <code>prop</code> changes.
+         * @param chain A value specifying the property or chain to be watched.
+         * For example, to watch the property <code>host.a.b.c</code>,
+         * call the method as: <code>watch(host, ["a","b","c"], ...)</code>.
+         * @param handler  An event handler function called when the value of the watched property
+         * (or any property in a watched chain) is modified.
+         * @param thisObject <code>this</code> object of which binding with handler
+         * @returns he ChangeWatcher instance, if at least one property name has been specified to
+         * the <code>chain</code> argument; null otherwise.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建并启动 Watcher 实例。注意：Watcher 只能监视 host 为 IEventEmitter 对象的属性改变。若属性链中某个属性所对应的实例不是 IEventEmitter，
+         * 则属性链中在它之后的属性改变将无法检测到。
+         * @param host 用于承载要监视的属性或属性链的对象。
+         * 创建Watcher实例后，您可以利用<code>reset()</code>方法更改<code>host</code>参数的值。
+         * 当<code>prop</code>改变的时候，会使得host对应的一系列<code>handlers</code>被触发。
+         * @param chain 用于指定要监视的属性链的值。例如，要监视属性 host.a.b.c，需按以下形式调用此方法：watch¬(host, ["a","b","c"], ...)。
+         * @param handler 在监视的目标属性链中任何属性的值发生改变时调用的事件处理函数。
+         * @param thisObject handler 方法绑定的this对象
+         * @returns 如果已为 chain 参数至少指定了一个属性名称，则返回 Watcher 实例；否则返回 null。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static watch(host: any, chain: string[], handler: (value: any) => void, thisObject: any): Watcher;
+        /**
+         * @private
+         * 检查属性是否可以绑定。若还未绑定，尝试添加绑定事件。若是只读或只写属性，返回false。
+         */
+        private static checkBindable(host, property);
+        /**
+         * @language en_US
+         * Constructor.
+         * Not for public use. This method is called only from the <code>watch()</code> method.
+         * See the <code>watch()</code> method for parameter usage.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数，非公开。只能从 watch() 方法中调用此方法。有关参数用法，请参阅 watch() 方法。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        constructor(property: string, handler: (value: any) => void, thisObject: any, next?: Watcher);
+        /**
+         * @private
+         */
+        private host;
+        /**
+         * @private
+         */
+        private property;
+        /**
+         * @private
+         */
+        private handler;
+        /**
+         * @private
+         */
+        private thisObject;
+        /**
+         * @private
+         */
+        private next;
+        /**
+         * @private
+         */
+        private isExecuting;
+        /**
+         * @language en_US
+         * Detaches this Watcher instance, and its handler function, from the current host.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从当前宿主中断开此 Watcher 实例及其处理函数。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        unwatch(): void;
+        /**
+         * @language en_US
+         * Retrieves the current value of the watched property or property chain, or null if the host object is null.
+         * @example
+         * <code>
+         * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
+         * </code>
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 检索观察的属性或属性链的当前值，当宿主对象为空时此值为空。
+         * @example
+         * <code>
+         * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
+         * </code>
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        getValue(): any;
+        /**
+         * @language en_US
+         * Sets the handler function.s
+         * @param handler The handler function. This argument must not be null.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设置处理函数。
+         * @param handler 处理函数，此参数必须为非空。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        setHandler(handler: (value: any) => void, thisObject: any): void;
+        /**
+         * @language en_US
+         * Resets this ChangeWatcher instance to use a new host object.
+         * You can call this method to reuse a watcher instance on a different host.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 重置此 Watcher 实例使用新的宿主对象。
+         * 您可以通过该方法实现一个Watcher实例用于不同的宿主。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        reset(newHost: lark.IEventEmitter): void;
+        /**
+         * @private
+         *
+         * @returns
+         */
+        private getHostPropertyValue();
+        /**
+         * @private
+         *
+         * @param event
+         */
+        private wrapHandler(event);
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * Register a property for a class definition in running,
+     * so that the Swan can get type of property accurate when parsing a EXML.
+     * This need not be called directly in most of time. Only when you have a custom UI
+     * component need to be described in EXML, you may invoke this method explicitly.
+     *
+     * Contains no following：
+     * When the property is the basic data type(boolean, number, string or Array), you only need set a correct initial value
+     * for he custom property then the EXML parser can get the correct property type in running.
+     *
+     * If you can not set the correct initial value (such as <code>null</code>), the EXML parser will treat this property as
+     * <code>string</code>. If there is no inital value, Swan will throw an error. But you can invoked this method to register
+     * a property in this case.
+     *
+     *
+     * @param classDefinition The class definition need to be registered.
+     * @param property The property need to be registered. Note that the property
+     * name cannot start with "_" or "$".
+     * @param type The type need to be registered,
+     * such as “boolean","number","string","Array","lark.Rectangle" and so on.
+     * @param asDefault Whether register this property as a default property of component.
+     * One component can register only on default property. And the default property can be spare in an EXML.
+     *
+     * @example：
+     * <code>
+     *      <s:Scroller>
+     *          <s:viewport>
+     *          <s:Group/>
+     *          </e:viewport>
+     *      </e:Scroller>
+     * <code/>
+     * Cuz <code>viewport</code> is the default property of Scroller. So you can write as follow:
+     * <code>
+     *      <s:Scroller>
+     *          <s:Group/>
+     *      </e:Scroller>
+     * <code/>
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 为一个类定义注册运行时属性类型，以便运行时的EXML文件解析过程能获取准确的属性类型。大多数情况下，您都不需要手动调用此方法显式注册属性类型。
+     * 仅当您有一个自定义的 UI 组件，需要在EXML中用标签描述时可能需要显式注册，但以下情况除外：
+     * 当属性类型为基本数据类型：boolean,number,string,Array这四种其中之一时，您只需要为自定义的属性赋值上正确的初始值，
+     * 运行时EXML解析器就能通过初始值自动分析出正确的属性类型。
+     * 若您无法为属性赋值上正确的初始值时(有初始值，比如null),运行时EXML解析器会把此属性当做string来处理，若完全没有初始值，将会报错找不到节点属性，
+     * 这种情况下可以手动调用此方法显式注册属性类型。
+     *
+     * @param classDefinition 要注册的类定义。
+     * @param property 要注册的属性,注意属性名不能以 _ 或 $ 符开头。
+     * @param type 要注册的类型,例如：“boolean","number","string","Array","lark.Rectangle"
+     * @param asDefault 是否将此属性注册为组件的默认属性,一个组件只可以设置一个默认属性。注册了组件默认属性后，在EXML中可以使用省略属性节点的写法，
+     * 例如：
+     *
+     * <s:Scroller>
+     *     <s:viewport>
+     *         <s:Group/>
+     *     </e:viewport>
+     * </e:Scroller>
+     *
+     * 因为 viewport 已经注册为 Scroller 的默认属性，上面的例子可以等效为：
+     *
+     * <s:Scroller>
+     *     <s:Group/>
+     * </e:Scroller>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    function registerProperty(classDefinition: any, property: string, type: string, asDefault?: boolean): void;
+}
+declare module swan {
+    /**
+     * @language en_US
+     * Default instance of interface <code>IAssetAdapter</code>.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 默认的IAssetAdapter接口实现。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class DefaultAssetAdapter implements IAssetAdapter {
+        /**
+         * @language en_US
+         * resolve asset.
+         * @param source the identifier of new asset need to be resolved
+         * @param callBack callback function when resolving complete
+         * example：callBack(content:any,source:string):void;
+         * @param thisObject <code>this</code> object of callback method
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 解析素材
+         * @param source 待解析的新素材标识符
+         * @param callBack 解析完成回调函数，示例：callBack(content:any,source:string):void;
+         * @param thisObject callBack的 this 引用
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        getAsset(source: string, callBack: (data: any, source: string) => void, thisObject: any): void;
+        /**
+         * @private
+         *
+         * @param event
+         */
+        private onLoadFinish(event);
+    }
+}
+declare module swan.sys {
+    /**
+     * @private
+     * Swan 命名空间
+     */
+    var NS_S: string;
+    /**
+     * @private
+     * Wing命名空间
+     */
+    var NS_W: string;
+    /**
+     * @private
+     */
+    class EXMLConfig {
+        /**
+         * @private
+         *
+         * @param instance
+         * @returns
+         */
+        private describe(instance);
+        /**
+         * @private
+         * 根据类的短名ID和命名空间获取完整类名(以"."分隔)
+         * @param id 类的短名ID
+         * @param ns 命名空间
+         */
+        getClassNameById(id: string, ns: string): string;
+        /**
+         * @private
+         * 根据ID获取对应的默认属性
+         * @param id 类的短名ID
+         * @param ns 命名空间
+         * @return 默认属性名
+         */
+        getDefaultPropById(id: string, ns: string): string;
+        /**
+         * @private
+         * 获取指定属性的类型,返回基本数据类型："boolean","string","number","any"。
+         * @param property 属性名
+         * @param className 要查询的完整类名
+         */
+        getPropertyType(property: string, className: string): string;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * Represents events that are emitted when a item has been touched.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 列表项触碰事件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class ItemTapEvent extends lark.Event {
+        /**
+         * @language en_US
+         * The type of the event object for an <code>itemTap</code> event.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * <code>itemTap</code> 事件的对象类型。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static ITEM_TAP: string;
+        /**
+         * @language en_US
+         * The item in the data provider of the associated item.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 触发触摸事件的项呈示器数据源项。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        item: any;
+        /**
+         * @language en_US
+         * The item renderer in the list of the associated item.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 触发触摸事件的项呈示器。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        itemRenderer: IItemRenderer;
+        /**
+         * @language en_US
+         * The index of the associated navigation item.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 触发触摸事件的项索引
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        itemIndex: number;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected clean(): void;
+        /**
+         * @language en_US
+         * Emit an event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * for the next cycle of reuse.
+         *
+         * @param target the target of event emitter.
+         * @param eventType The event type; indicates the action that triggered the event.
+         * @param itemRenderer The item renderer in the list of the associated item.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用指定的 EventEmitter 对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         *
+         * @param target 事件派发目标
+         * @param eventType 事件类型；指示触发事件的动作。
+         * @param itemRenderer 触发触摸事件的项呈示器。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static emitItemTapEvent(target: lark.IEventEmitter, eventType: string, itemRenderer?: IItemRenderer): boolean;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The Binding class defines utility methods for performing data binding.
+     * You can use the methods defined in this class to configure data bindings.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 绑定工具类，用于执行数据绑定用的方法集。您可以使用此类中定义的方法来配置数据绑定。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class Binding {
+        /**
+         * @language en_US
+         * Binds a property, <prop>prop</code> on the <code>target</code> Object, to a bindable property or peoperty chain.
+         * @param host The object that hosts the property or property chain to be watched.
+         * The <code>host</code> maintains a list of <code>targets</code> to update theirs <code>prop</code> when <code>chain</code> changes.
+         * @param chain A value specifying the property or chain to be watched. For example, when watch the property <code>host.a.b.c</code>,
+         * you need call the method like this: <code>indProperty(host, ["a","b","c"], ...)</code>
+         * @param target The Object defining the property to be bound to <code>chain</code>.
+         * @param prop The name of the public property defined in the <code>site</code> Object to be bound.
+         * @returns A ChangeWatcher instance, if at least one property name has been specified
+         * to the <code>chain</code> argument; null otherwise.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 绑定一个对象的属性值到要监视的对象属性上。
+         * @param host 用于承载要监视的属性或属性链的对象。
+         * 当 <code>host</code>上<code>chain</code>所对应的值发生改变时，<code>target</code>上的<code>prop</code>属性将被自动更新。
+         * @param chain 用于指定要监视的属性链的值。例如，要监视属性 <code>host.a.b.c</code>，需按以下形式调用此方法：<code>bindProperty(host, ["a","b","c"], ...)。</code>
+         * @param target 本次绑定要更新的目标对象。
+         * @param prop 本次绑定要更新的目标属性名称。
+         * @returns 如果已为 chain 参数至少指定了一个属性名称，则返回 Watcher 实例；否则返回 null。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static bindProperty(host: any, chain: string[], target: any, prop: string): Watcher;
+        /**
+         * @language en_US
+         * Binds a callback, <prop>handler</code> on the <code>target</code> Object, to a bindable property or peoperty chain.
+         * Callback method to invoke with an argument of the current value of <code>chain</code> when that value changes.
+         * @param host The object that hosts the property or property chain to be watched.
+         * @param chain A value specifying the property or chain to be watched. For example, when watch the property <code>host.a.b.c</code>,
+         * you need call the method like this: <code>indProperty(host, ["a","b","c"], ...)</code>
+         * @param handler method to invoke with an argument of the current value of <code>chain</code> when that value changes.
+         * @param thisObject <code>this</code> object of binding method
+         * @returns A ChangeWatcher instance, if at least one property name has been  specified to the <code>chain</code> argument; null otherwise.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 绑定一个回调函数到要监视的对象属性上。当 host上 chain 所对应的值发生改变时，handler 方法将被自动调用。
+         * @param host 用于承载要监视的属性或属性链的对象。
+         * @param chain 用于指定要监视的属性链的值。例如，要监视属性 host.a.b.c，需按以下形式调用此方法：bindSetter(host, ["a","b","c"], ...)。
+         * @param handler 在监视的目标属性链中任何属性的值发生改变时调用的事件处理函数。
+         * @param thisObject handler 方法绑定的this对象
+         * @returns 如果已为 chain 参数至少指定了一个属性名称，则返回 Watcher 实例；否则返回 null。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static bindHandler(host: any, chain: string[], handler: (value: any) => void, thisObject: any): Watcher;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * Note: The skin name values in the skin theme are used as default values,which can not be changed while running.
+     * You can change the skin of a component with the skinName property.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 皮肤主题。注意：皮肤主题是一次性设置的默认值,并不能运行时切换所有组件默认皮肤。切换单个皮肤您可以自行对Component.skinName赋值来修改。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class Theme extends lark.EventEmitter {
+        /**
+         * @language en_US
+         * Create an instance of Theme
+         * @param configURL the external theme path. if null, you need to register the default skin name with
+         * mapSkin() manually.
+         * @param stage current stage. The theme will register to the stage with this parameter.
+         * If null, you need to register with stage.registerImplementation("swan.Theme",theme)
+         * manually.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个主题实例
+         * @param configURL 要加载并解析的外部主题配置文件路径。若传入 null，将不进行配置文件加载，
+         * 之后需要在外部以代码方式手动调用 mapSkin() 方法完成每条默认皮肤名的注册。
+         * @param stage 当前舞台引用。传入此参数，主题会自动注册自身到舞台上。
+         * 若传入null，需要在外部手动调用 stage.registerImplementation("swan.Theme",theme) 来完成主题的注册。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        constructor(configURL: string, stage: lark.Stage);
+        /**
+         * @private
+         */
+        private initialized;
+        /**
+         * @private
+         *
+         * @param url
+         */
+        private load(url);
+        /**
+         * @private
+         *
+         * @param event
+         */
+        private onConfigLoaded(event);
+        /**
+         * @private
+         */
+        private delayList;
+        /**
+         * @private
+         *
+         */
+        private handleDelayList();
+        /**
+         * @private
+         */
+        private skinMap;
+        /**
+         * @language en_US
+         * According to the host component to get the default skin name.
+         * Search rules are as follows:
+         * <li>1. Use the <code>hostComponentKey</code> of client to search.</li>
+         * <li>2. Use the class name of client to search.</li>
+         * <li>3. Use the parent class name of client to search.</li>
+         * <li>4. Repeat step 3 until find the skin name or the parent is <code>swan.Component</code>.</li>
+         * @param client the component need to get the default skin.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 根据主机组件，获取对应的默认皮肤名。查询规则如下：
+         * <li>1.使用client的hostComponentKey作为键查询默认皮肤名。</li>
+         * <li>2.使用client的类名作为键查询默认皮肤名。</li>
+         * <li>3.使用client的父类名作为键查询默认皮肤名。</li>
+         * <li>4.不断重复3直到查询到皮肤名或父类为swan.Component时停止。</li>
+         * @param client 要获取默认皮肤的组件。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        getSkinName(client: Component): string;
+        /**
+         * @private
+         */
+        private findSkinName(prototype);
+        /**
+         * @language en_US
+         * Map a default skin for the specified host component.
+         * @param hostComponentKey the name of host component, such as "swan.Button".
+         * @param skinName the name of skin, such as "app.MyButtonSkin".
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 为指定的主机组件映射一个默认皮肤。
+         * @param hostComponentKey 主机组件名称，例如：“swan.Button”。
+         * @param skinName 皮肤名称 例如："app.MyButtonSkin"。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        mapSkin(hostComponentKey: string, skinName: string): void;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The swan.CollectionEvent class represents an event that is
+     * emitted when the associated collection changes.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 集合类型数据改变事件
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class CollectionEvent extends lark.Event {
+        /**
+         * @language en_US
+         * Emitted when a collection has changed.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 集合类数据发生改变
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static COLLECTION_CHANGE: string;
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @param type The event type; indicates the action that triggered the event.
+         * @param bubbles Specifies whether the event can bubble
+         * up the display list hierarchy.
+         * @param cancelable Specifies whether the behavior
+         * associated with the event can be prevented.
+         * @param kind Indicates the kind of event that occured.
+         * The parameter value can be one of the values in the CollectionEventKind
+         * class, or <code>null</code>, which indicates that the kind is unknown.
+         * @param location When the <code>kind</code> is
+         * <code>CollectionEventKind.ADD</code>,
+         * <code>CollectionEventKind.REMOVE</code>,
+         * <code>CollectionEventKind.REPLACE</code>,or
+         * <code>CollectionEventKind.UPDATE</code>
+         * this value indicates at what location the item(s) specified
+         * in the <code>items property</code> can be found
+         * within the target collection.
+         * @param oldLocation this value indicates
+         * the old location within the target collection
+         * of the item(s) specified in the <code>items</code> property.
+         * @param items Array of objects with information about the items
+         * affected by the event.
+         * @param oldItems When the <code>kine</code> is <code>CollectionEventKind.REPLACE</code> the value represents
+         * a list of items before replaced.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 CollectionEvent 实例
+         *
+         * @param type 事件类型；指示触发事件的动作。
+         * @param bubbles 指定该事件是否可以在显示列表层次结构得到冒泡处理。
+         * @param cancelable 指定是否可以防止与事件相关联的行为。
+         * @param kind 指示发生的事件类型。此属性值可以是 CollectionEventKind 类中的一个值，也可以是 null，用于指示类型未知。
+         * @param location 如果 kind 值为 <code>CollectionEventKind.ADD</code>,
+         * <code>CollectionEventKind.REMOVE</code>,
+         * <code>CollectionEventKind.REPLACE</code>,或
+         * <code>CollectionEventKind.UPDATE</code>
+         * 则此属性为 items 属性中指定的项目集合中零号元素的的索引。
+         * @param oldLocation 此值指示 <code>items</code> 属性中指定的项目在目标集合中的原位置。
+         * @param items 受事件影响的项目的列表。
+         * @param oldItems 仅当kind的值为CollectionEventKind.REPLACE时，表示替换前的项目列表。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        constructor(type: string, bubbles?: boolean, cancelable?: boolean, kind?: string, location?: number, oldLocation?: number, items?: any[], oldItems?: any[]);
+        /**
+         * @language en_US
+         * Indicates the kind of event that occured.
+         * The parameter value can be one of the values in the CollectionEventKind
+         * class, or <code>null</code>, which indicates that the kind is unknown.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示发生的事件类型。此属性值可以是 CollectionEventKind 类中的一个值，也可以是 null，用于指示类型未知。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        kind: string;
+        /**
+         * @language en_US
+         * Array of objects with information about the items.
+         * affected by the event.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 受事件影响的项目的列表。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        items: any[];
+        /**
+         * @language en_US
+         * When the <code>kine</code> is <code>CollectionEventKind.REPLACE</code> the value represents
+         * a list of items before replaced.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 仅当kind的值为CollectionEventKind.REPLACE时，表示替换前的项目列表。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        oldItems: any[];
+        /**
+         * @language en_US
+         * When the <code>kind</code> is
+         * <code>CollectionEventKind.ADD</code>,
+         * <code>CollectionEventKind.REMOVE</code>,
+         * <code>CollectionEventKind.REPLACE</code>,or
+         * <code>CollectionEventKind.UPDATE</code>
+         * this value indicates at what location the item(s) specified
+         * in the <code>items property</code> can be found
+         * within the target collection.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果 kind 值为 CollectionEventKind.ADD、
+         * CollectionEventKind.REMOVE 或 CollectionEventKind.REPLACE，
+         * CollectionEventKind.UPDATE
+         * 则此属性为 items 属性中指定的项目集合中零号元素的的索引。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        location: number;
+        /**
+         * @language en_US
+         * this value indicates
+         * the old location within the target collection
+         * of the item(s) specified in the <code>items</code> property.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 此属性为 items 属性中指定的项目在目标集合中原来位置的从零开始的索引。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        oldLocation: number;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected clean(): void;
+        /**
+         * @language en_US
+         * Emit an event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * for the next cycle of reuse.
+         *
+         * @param target the target of event emitter.
+         * @param eventType The event type; indicates the action that triggered the event.
+         * @param kind Indicates the kind of event that occured.
+         * The parameter value can be one of the values in the CollectionEventKind
+         * class, or <code>null</code>, which indicates that the kind is unknown.
+         * @param location When the <code>kind</code> is
+         * <code>CollectionEventKind.ADD</code>,
+         * <code>CollectionEventKind.REMOVE</code>,
+         * <code>CollectionEventKind.REPLACE</code>,or
+         * <code>CollectionEventKind.UPDATE</code>
+         * this value indicates at what location the item(s) specified
+         * in the <code>items property</code> can be found
+         * within the target collection.
+         * @param oldLocation this value indicates
+         * the old location within the target collection
+         * of the item(s) specified in the <code>items</code> property.
+         * @param items Array of objects with information about the items
+         * affected by the event.
+         * @param oldItems When the <code>kine</code> is <code>CollectionEventKind.REPLACE</code> the value represents
+         * a list of items before replaced.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         *
+         * @param target 事件派发目标。
+         * @param eventType 事件类型；指示触发事件的动作。
+         * @param kind 指示发生的事件类型。此属性值可以是 CollectionEventKind 类中的一个值，也可以是 null，用于指示类型未知。
+         * @param location 如果 kind 值为 <code>CollectionEventKind.ADD</code>,
+         * <code>CollectionEventKind.REMOVE</code>,
+         * <code>CollectionEventKind.REPLACE</code>,或
+         * <code>CollectionEventKind.UPDATE</code>
+         * 则此属性为 items 属性中指定的项目集合中零号元素的的索引。
+         * @param oldLocation 此值指示 <code>items</code> 属性中指定的项目在目标集合中的原位置。
+         * @param items 受事件影响的项目的列表。
+         * @param oldItems 仅当kind的值为CollectionEventKind.REPLACE时，表示替换前的项目列表。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static emitCollectionEvent(target: lark.IEventEmitter, eventType: string, kind?: string, location?: number, oldLocation?: number, items?: any[], oldItems?: any[]): boolean;
     }
 }
 declare module swan {
@@ -2197,281 +2932,23 @@ declare module swan {
         private emitCoEvent(kind, location?, oldLocation?, items?, oldItems?);
     }
 }
-declare module swan.sys {
-    /**
-     * @private
-     * EXML配置管理器实例
-     */
-    var exmlConfig: EXMLConfig;
-    /**
-     * @private
-     */
-    class EXMLParser {
-        /**
-         * @private
-         */
-        constructor();
-        /**
-         * @private
-         * 获取重复的ID名
-         */
-        getRepeatedIds: (xml: lark.XML) => string[];
-        /**
-         * @private
-         */
-        private getIds;
-        /**
-         * @private
-         */
-        private repeatedIdMap;
-        /**
-         * @private
-         */
-        private checkDeclarations;
-        /**
-         * @private
-         * 当前类
-         */
-        private currentClass;
-        /**
-         * @private
-         * 当前编译的类名
-         */
-        private currentClassName;
-        /**
-         * @private
-         * 当前要编译的EXML文件
-         */
-        private currentXML;
-        /**
-         * @private
-         * id缓存字典
-         */
-        private idDic;
-        /**
-         * @private
-         * 状态代码列表
-         */
-        private stateCode;
-        /**
-         * @private
-         */
-        private stateNames;
-        /**
-         * @private
-         * 需要单独创建的实例id列表
-         */
-        private stateIds;
-        /**
-         * @private
-         */
-        private idToNode;
-        /**
-         * @private
-         */
-        private skinParts;
-        /**
-         * @private
-         */
-        private bindings;
-        /**
-         * @private
-         */
-        private declarations;
-        /**
-         * @private
-         * 延迟赋值字典
-         */
-        private delayAssignmentDic;
-        /**
-         * @private
-         * 编译指定的XML对象为JavaScript代码。
-         * @param xmlData 要编译的EXML文件内容
-         * @param className 要编译成的完整类名，包括模块名。
-         */
-        parse(text: string): {
-            new (): any;
-        };
-        /**
-         * @private
-         * 编译指定的XML对象为CpClass对象。
-         */
-        private parseClass(xmlData, className);
-        /**
-         * @private
-         * 开始编译
-         */
-        private startCompile();
-        /**
-         * @private
-         * 添加必须的id
-         */
-        private addIds(items);
-        /**
-         * @private
-         * 是否为内部类。
-         */
-        private isInnerClass(node);
-        /**
-         * @private
-         * 检测指定节点的属性是否含有视图状态
-         */
-        private containsState(node);
-        /**
-         * @private
-         * 为指定节点创建id属性
-         */
-        private createIdForNode(node);
-        /**
-         * @private
-         * 获取节点ID
-         */
-        private getNodeId(node);
-        /**
-         * @private
-         * 为指定节点创建变量
-         */
-        private createVarForNode(node);
-        /**
-         * @private
-         * 为指定节点创建初始化函数,返回函数名引用
-         */
-        private createFuncForNode(node);
-        /**
-         * @private
-         * 检查目标类名是否是基本数据类型
-         */
-        private isBasicTypeData(className);
-        /**
-         * @private
-         * 为指定基本数据类型节点实例化,返回实例化后的值。
-         */
-        private createBasicTypeForNode(node);
-        /**
-         * @private
-         * 将节点属性赋值语句添加到代码块
-         */
-        private addAttributesToCodeBlock(cb, varName, node);
-        /**
-         * @private
-         * 初始化子项
-         */
-        private initlizeChildNode(node, cb, varName);
-        /**
-         * @private
-         * 解析内部类节点，并返回类名。
-         */
-        private parseInnerClass(node);
-        /**
-         * @private
-         * 添加多个子节点到指定的属性
-         */
-        private addChildrenToProp(children, type, prop, cb, varName, errorInfo, propList, node);
-        /**
-         * @private
-         * 指定节点是否是属性节点
-         */
-        private isProperty(node);
-        /**
-         * @private
-         * 是否是普通赋值的key
-         */
-        private isNormalKey(key);
-        /**
-         * @private
-         * 格式化key
-         */
-        private formatKey(key, value);
-        /**
-         * @private
-         * 格式化值
-         */
-        private formatValue(key, value, node);
-        /**
-         * @private
-         * 格式化字符串
-         */
-        private formatString(value);
-        /**
-         * @private
-         /**
-         * 转换HTML实体字符为普通字符
-         */
-        private unescapeHTMLEntity(str);
-        /**
-         * @private
-         * 创建构造函数
-         */
-        private createConstructFunc();
-        /**
-         * @private
-         * 是否含有includeIn和excludeFrom属性
-         */
-        private isStateNode(node);
-        /**
-         * @private
-         * 获取视图状态名称列表
-         */
-        private getStateNames();
-        /**
-         * @private
-         * 解析视图状态代码
-         */
-        private createStates(parentNode);
-        /**
-         * @private
-         * 检查指定的ID是否创建了类成员变量，若没创建则为其创建。
-         */
-        private checkIdForState(node);
-        /**
-         * @private
-         * 通过视图状态名称获取对应的视图状态
-         */
-        private getStateByName(name, node);
-        /**
-         * @private
-         * 寻找节点的临近节点ID和位置
-         */
-        private findNearNodeId(node);
-        /**
-         * @private
-         * 获取节点的完整类名，包括模块名
-         */
-        private getClassNameOfNode(node);
-    }
-}
 declare module swan {
     /**
      * @language en_US
-     * The swan.CollectionEvent class represents an event that is
-     * emitted when the associated collection changes.
+     * The UIEvent class represents the event object passed to
+     * the event listener for many UI events.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 集合类型数据改变事件
+     * UI事件
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    class CollectionEvent extends lark.Event {
-        /**
-         * @language en_US
-         * Emitted when a collection has changed.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 集合类数据发生改变
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static COLLECTION_CHANGE: string;
+    class UIEvent extends lark.Event {
         /**
          * @language en_US
          * Constructor.
@@ -2481,24 +2958,6 @@ declare module swan {
          * up the display list hierarchy.
          * @param cancelable Specifies whether the behavior
          * associated with the event can be prevented.
-         * @param kind Indicates the kind of event that occured.
-         * The parameter value can be one of the values in the CollectionEventKind
-         * class, or <code>null</code>, which indicates that the kind is unknown.
-         * @param location When the <code>kind</code> is
-         * <code>CollectionEventKind.ADD</code>,
-         * <code>CollectionEventKind.REMOVE</code>,
-         * <code>CollectionEventKind.REPLACE</code>,or
-         * <code>CollectionEventKind.UPDATE</code>
-         * this value indicates at what location the item(s) specified
-         * in the <code>items property</code> can be found
-         * within the target collection.
-         * @param oldLocation this value indicates
-         * the old location within the target collection
-         * of the item(s) specified in the <code>items</code> property.
-         * @param items Array of objects with information about the items
-         * affected by the event.
-         * @param oldItems When the <code>kine</code> is <code>CollectionEventKind.REPLACE</code> the value represents
-         * a list of items before replaced.
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -2506,125 +2965,92 @@ declare module swan {
          */
         /**
          * @language zh_CN
-         * 创建一个 CollectionEvent 实例
+         * 创建一个 UIEvent 实例
          *
          * @param type 事件类型；指示触发事件的动作。
          * @param bubbles 指定该事件是否可以在显示列表层次结构得到冒泡处理。
          * @param cancelable 指定是否可以防止与事件相关联的行为。
-         * @param kind 指示发生的事件类型。此属性值可以是 CollectionEventKind 类中的一个值，也可以是 null，用于指示类型未知。
-         * @param location 如果 kind 值为 <code>CollectionEventKind.ADD</code>,
-         * <code>CollectionEventKind.REMOVE</code>,
-         * <code>CollectionEventKind.REPLACE</code>,或
-         * <code>CollectionEventKind.UPDATE</code>
-         * 则此属性为 items 属性中指定的项目集合中零号元素的的索引。
-         * @param oldLocation 此值指示 <code>items</code> 属性中指定的项目在目标集合中的原位置。
-         * @param items 受事件影响的项目的列表。
-         * @param oldItems 仅当kind的值为CollectionEventKind.REPLACE时，表示替换前的项目列表。
          *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        constructor(type: string, bubbles?: boolean, cancelable?: boolean, kind?: string, location?: number, oldLocation?: number, items?: any[], oldItems?: any[]);
+        constructor(type: string, bubbles?: boolean, cancelable?: boolean);
         /**
          * @language en_US
-         * Indicates the kind of event that occured.
-         * The parameter value can be one of the values in the CollectionEventKind
-         * class, or <code>null</code>, which indicates that the kind is unknown.
+         * creation complete of component.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 指示发生的事件类型。此属性值可以是 CollectionEventKind 类中的一个值，也可以是 null，用于指示类型未知。
+         * 组件创建完成
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        kind: string;
+        static CREATION_COMPLETE: string;
         /**
          * @language en_US
-         * Array of objects with information about the items.
-         * affected by the event.
+         * the ending of change.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 受事件影响的项目的列表。
+         * 改变结束
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        items: any[];
+        static CHANGE_END: string;
         /**
          * @language en_US
-         * When the <code>kine</code> is <code>CollectionEventKind.REPLACE</code> the value represents
-         * a list of items before replaced.
+         * The begining of change.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 仅当kind的值为CollectionEventKind.REPLACE时，表示替换前的项目列表。
+         * 改变开始
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        oldItems: any[];
+        static CHANGE_START: string;
         /**
          * @language en_US
-         * When the <code>kind</code> is
-         * <code>CollectionEventKind.ADD</code>,
-         * <code>CollectionEventKind.REMOVE</code>,
-         * <code>CollectionEventKind.REPLACE</code>,or
-         * <code>CollectionEventKind.UPDATE</code>
-         * this value indicates at what location the item(s) specified
-         * in the <code>items property</code> can be found
-         * within the target collection.
+         * Before close the panel.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 如果 kind 值为 CollectionEventKind.ADD、
-         * CollectionEventKind.REMOVE 或 CollectionEventKind.REPLACE，
-         * CollectionEventKind.UPDATE
-         * 则此属性为 items 属性中指定的项目集合中零号元素的的索引。
+         * 即将关闭面板事件
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        location: number;
+        static CLOSING: string;
         /**
          * @language en_US
-         * this value indicates
-         * the old location within the target collection
-         * of the item(s) specified in the <code>items</code> property.
+         * The coordinates of the UI components changed in it's parent.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 此属性为 items 属性中指定的项目在目标集合中原来位置的从零开始的索引。
+         * UI组件在父级容器中的坐标发生改变事件
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        oldLocation: number;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected clean(): void;
+        static MOVE: string;
         /**
          * @language en_US
          * Emit an event with specified EventEmitter. The emitted event will be cached in the object pool,
@@ -2632,24 +3058,6 @@ declare module swan {
          *
          * @param target the target of event emitter.
          * @param eventType The event type; indicates the action that triggered the event.
-         * @param kind Indicates the kind of event that occured.
-         * The parameter value can be one of the values in the CollectionEventKind
-         * class, or <code>null</code>, which indicates that the kind is unknown.
-         * @param location When the <code>kind</code> is
-         * <code>CollectionEventKind.ADD</code>,
-         * <code>CollectionEventKind.REMOVE</code>,
-         * <code>CollectionEventKind.REPLACE</code>,or
-         * <code>CollectionEventKind.UPDATE</code>
-         * this value indicates at what location the item(s) specified
-         * in the <code>items property</code> can be found
-         * within the target collection.
-         * @param oldLocation this value indicates
-         * the old location within the target collection
-         * of the item(s) specified in the <code>items</code> property.
-         * @param items Array of objects with information about the items
-         * affected by the event.
-         * @param oldItems When the <code>kine</code> is <code>CollectionEventKind.REPLACE</code> the value represents
-         * a list of items before replaced.
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -2661,130 +3069,119 @@ declare module swan {
          *
          * @param target 事件派发目标。
          * @param eventType 事件类型；指示触发事件的动作。
-         * @param kind 指示发生的事件类型。此属性值可以是 CollectionEventKind 类中的一个值，也可以是 null，用于指示类型未知。
-         * @param location 如果 kind 值为 <code>CollectionEventKind.ADD</code>,
-         * <code>CollectionEventKind.REMOVE</code>,
-         * <code>CollectionEventKind.REPLACE</code>,或
-         * <code>CollectionEventKind.UPDATE</code>
-         * 则此属性为 items 属性中指定的项目集合中零号元素的的索引。
-         * @param oldLocation 此值指示 <code>items</code> 属性中指定的项目在目标集合中的原位置。
-         * @param items 受事件影响的项目的列表。
-         * @param oldItems 仅当kind的值为CollectionEventKind.REPLACE时，表示替换前的项目列表。
          *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        static emitCollectionEvent(target: lark.IEventEmitter, eventType: string, kind?: string, location?: number, oldLocation?: number, items?: any[], oldItems?: any[]): boolean;
+        static emitUIEvent(target: lark.IEventEmitter, eventType: string): boolean;
     }
 }
-declare module swan.sys {
+declare module swan {
     /**
-     * @private
-     * 失效验证管理器
+     * @language en_US
+     * The PropertyChangeEvent class represents the event object
+     * passed to the event listener when one of the properties of
+     * an object has changed, and provides information about the change.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
      */
-    class Validator extends lark.EventEmitter {
+    /**
+     * @language zh_CN
+     * 对象的一个属性发生更改时传递到事件侦听器的事件。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class PropertyEvent extends lark.Event {
         /**
-         * @private
-         * 创建一个Validator对象
+         * @language en_US
+         * Emit when a property changed.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
-        constructor();
         /**
-         * @private
+         * @language zh_CN
+         * 属性改变。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
-        private targetLevel;
+        static PROPERTY_CHANGE: string;
         /**
-         * @private
-         */
-        private invalidatePropertiesFlag;
-        /**
-         * @private
-         */
-        private invalidateClientPropertiesFlag;
-        /**
-         * @private
-         */
-        private invalidatePropertiesQueue;
-        /**
-         * @private
-         * 标记组件属性失效
-         */
-        invalidateProperties(client: UIComponent): void;
-        /**
-         * @private
-         * 验证失效的属性
-         */
-        private validateProperties();
-        /**
-         * @private
-         */
-        private invalidateSizeFlag;
-        /**
-         * @private
-         */
-        private invalidateClientSizeFlag;
-        /**
-         * @private
-         */
-        private invalidateSizeQueue;
-        /**
-         * @private
-         * 标记需要重新测量尺寸
-         */
-        invalidateSize(client: UIComponent): void;
-        /**
-         * @private
-         * 测量尺寸
-         */
-        private validateSize();
-        /**
-         * @private
-         */
-        private invalidateDisplayListFlag;
-        /**
-         * @private
-         */
-        private invalidateDisplayListQueue;
-        /**
-         * @private
-         * 标记需要重新布局
-         */
-        invalidateDisplayList(client: UIComponent): void;
-        /**
-         * @private
-         * 重新布局
-         */
-        private validateDisplayList();
-        /**
-         * @private
-         */
-        private eventDisplay;
-        /**
-         * @private
-         * 是否已经添加了事件监听
-         */
-        private listenersAttached;
-        /**
-         * @private
-         * 添加事件监听
-         */
-        private attachListeners();
-        /**
-         * @private
-         * 执行属性应用
-         */
-        private doPhasedInstantiationCallBack(event?);
-        /**
-         * @private
+         * @language en_US
+         * Constructor.
          *
+         * @param type The event type; indicates the action that triggered the event.
+         * @param bubbles Specifies whether the event can bubble
+         * up the display list hierarchy.
+         * @param cancelable Specifies whether the behavior
+         * associated with the event can be prevented.
+         * @param property Name of the property that changed.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
-        private doPhasedInstantiation();
         /**
-         * @private
-         * 使大于等于指定组件层级的元素立即应用属性
-         * @param target 要立即应用属性的组件
+         * @language zh_CN
+         * 创建一个属性改变事件。
+         *
+         * @param type 事件类型；指示触发事件的动作。
+         * @param bubbles 指定该事件是否可以在显示列表层次结构得到冒泡处理。
+         * @param cancelable 指定是否可以防止与事件相关联的行为。
+         * @param property 发生改变的属性名称。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
-        validateClient(target: UIComponent): void;
+        constructor(type: string, bubbles?: boolean, cancelable?: boolean, property?: string);
+        /**
+         * @language en_US
+         * Name of the property that changed.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 发生改变的属性名称。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        property: string;
+        /**
+         * @language en_US
+         * Emit an event with specified EventEmitter. The emitted event will be cached in the object pool,
+         * for the next cycle of reuse.
+         *
+         * @param target the target of event emitter.
+         * @param eventType The event type; indicates the action that triggered the event.
+         * @param property Name of the property that changed.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用指定的 EventEmitter 对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         *
+         * @param target 事件派发目标
+         * @param eventType 事件类型；指示触发事件的动作。
+         * @param property 发生改变的属性名称。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        static emitPropertyEvent(target: lark.IEventEmitter, eventType: string, property?: string): boolean;
     }
 }
 declare module swan {
@@ -2904,7 +3301,7 @@ declare module swan {
          */
         /**
          * @language zh_CN
-         * [只读] 属于此 RadioButtonGroup 的 RadioButton 数。
+         *  属于此 RadioButtonGroup 的 RadioButton 数。
          *
          * @default 0
          *
@@ -3190,136 +3587,482 @@ declare module swan.sys {
     /**
      * @private
      */
-    const enum AddPosition {
+    class MatrixUtil {
         /**
          * @private
-         * 添加父级容器的底层
          */
-        FIRST = 0,
-        /**
-         * @private
-         * 添加在父级容器的顶层
-         */
-        LAST = 1,
-        /**
-         * @private
-         * 添加在相对对象之前
-         */
-        BEFORE = 2,
-        /**
-         * @private
-         * 添加在相对对象之后
-         */
-        AFTER = 3,
+        static fitBounds(width: number, height: number, matrix: lark.Matrix, explicitWidth: number, explicitHeight: number, preferredWidth: number, preferredHeight: number, minWidth: number, minHeight: number, maxWidth: number, maxHeight: number): lark.Point;
     }
 }
-declare module swan {
+declare module swan.sys {
     /**
-     * @language en_US
-     * The operation of adding a state to view.
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
+     * @private
+     * 一个工具类,用于容器的滚屏拖动操作，计算在一段时间持续滚动后释放，应该继续滚动到的值和缓动时间。
+     * 使用此工具类，您需要创建一个 ScrollThrown 实例,并在滚动发生时调用start()方法，然后在触摸移动过程中调用update()更新当前舞台坐标。
+     * 内部将会启动一个计时器定时根据当前位置计算出速度值，并缓存下来最后4个值。当停止滚动时，再调用finish()方法，
+     * 将立即停止记录位移，并将计算出的最终结果存储到 Thrown.scrollTo 和 Thrown.duration 属性上。
      */
+    class TouchScroll {
+        /**
+         * @private
+         * 创建一个 TouchScroll 实例
+         * @param updateFunction 滚动位置更新回调函数
+         */
+        constructor(updateFunction: (scrollPos: number) => void, endFunction: () => void, target: lark.IEventEmitter);
+        /**
+         * @private
+         */
+        private target;
+        /**
+         * @private
+         */
+        private updateFunction;
+        /**
+         * @private
+         */
+        private endFunction;
+        /**
+         * @private
+         */
+        private previousTime;
+        /**
+         * @private
+         */
+        private velocity;
+        /**
+         * @private
+         */
+        private previousVelocity;
+        /**
+         * @private
+         */
+        private currentPosition;
+        /**
+         * @private
+         */
+        private previousPosition;
+        /**
+         * @private
+         */
+        private currentScrollPos;
+        /**
+         * @private
+         */
+        private maxScrollPos;
+        /**
+         * @private
+         * 触摸按下时的偏移量
+         */
+        private offsetPoint;
+        /**
+         * @private
+         * 停止触摸时继续滚动的动画实例
+         */
+        private animation;
+        /**
+         * @private
+         * 正在播放缓动动画的标志。
+         */
+        isPlaying(): boolean;
+        /**
+         * @private
+         * 如果正在执行缓动滚屏，停止缓动。
+         */
+        stop(): void;
+        /**
+         * @private
+         * 开始记录位移变化。注意：当使用完毕后，必须调用 finish() 方法结束记录，否则该对象将无法被回收。
+         * @param touchPoint 起始触摸位置，以像素为单位，通常是stageX或stageY。
+         */
+        start(touchPoint: number, scrollValue: number, maxScrollValue: number): void;
+        /**
+         * @private
+         * 更新当前移动到的位置
+         * @param touchPoint 当前触摸位置，以像素为单位，通常是stageX或stageY。
+         */
+        update(touchPoint: number, maxScrollValue: number): void;
+        /**
+         * @private
+         * 停止记录位移变化，并计算出目标值和继续缓动的时间。
+         * @param currentScrollPos 容器当前的滚动值。
+         * @param maxScrollPos 容器可以滚动的最大值。当目标值不在 0~maxValue之间时，将会应用更大的摩擦力，从而影响缓动时间的长度。
+         */
+        finish(currentScrollPos: number, maxScrollPos: number): void;
+        /**
+         * @private
+         *
+         * @param timeStamp
+         * @returns
+         */
+        private onTick(timeStamp);
+        /**
+         * @private
+         *
+         * @param animation
+         */
+        private finishScrolling(animation?);
+        /**
+         * @private
+         * 缓动到水平滚动位置
+         */
+        private throwTo(hspTo, duration?);
+        /**
+         * @private
+         * 更新水平滚动位置
+         */
+        private onScrollingUpdate(animation);
+    }
+}
+declare module swan.sys {
     /**
-     * @language zh_CN
-     * 视图添加状态显示元素操作
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
+     * @private
+     * EXML配置管理器实例
      */
-    class AddItems implements IOverride {
+    var exmlConfig: EXMLConfig;
+    /**
+     * @private
+     */
+    class EXMLParser {
         /**
-         * @language en_US
-         * Constructor.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @private
          */
+        constructor();
         /**
-         * @language zh_CN
-         * 创建一个AddItems实例
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @private
+         * 获取重复的ID名
          */
-        constructor(target: string, propertyName: string, position: number, relativeTo: string);
+        getRepeatedIds: (xml: lark.XML) => string[];
         /**
-         * @language en_US
-         * The name of the property that is being added.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @private
          */
+        private getIds;
         /**
-         * @language zh_CN
-         * 要添加到的属性
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @private
          */
-        propertyName: string;
+        private repeatedIdMap;
         /**
-         * @language en_US
-         * The position to be added. Valid values: "first","last","before","after"
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @private
          */
+        private checkDeclarations;
         /**
-         * @language zh_CN
-         * 添加的位置，有效值为: "first","last","before","after"
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @private
+         * 当前类
          */
-        position: number;
+        private currentClass;
         /**
-         * @language en_US
-         * an instance name of relative visual element.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @private
+         * 当前编译的类名
          */
+        private currentClassName;
         /**
-         * @language zh_CN
-         * 相对的显示元素的实例名
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @private
+         * 当前要编译的EXML文件
          */
-        relativeTo: string;
+        private currentXML;
         /**
-         * @language en_US
-         * The target instance name.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @private
+         * id缓存字典
          */
+        private idDic;
         /**
-         * @language zh_CN
-         * 目标实例名
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @private
+         * 状态代码列表
          */
-        target: string;
+        private stateCode;
         /**
-         * @inheritDoc
+         * @private
+         */
+        private stateNames;
+        /**
+         * @private
+         * 需要单独创建的实例id列表
+         */
+        private stateIds;
+        /**
+         * @private
+         */
+        private idToNode;
+        /**
+         * @private
+         */
+        private skinParts;
+        /**
+         * @private
+         */
+        private bindings;
+        /**
+         * @private
+         */
+        private declarations;
+        /**
+         * @private
+         * 延迟赋值字典
+         */
+        private delayAssignmentDic;
+        /**
+         * @private
+         * 编译指定的XML对象为JavaScript代码。
+         * @param xmlData 要编译的EXML文件内容
+         * @param className 要编译成的完整类名，包括模块名。
+         */
+        parse(text: string): {
+            new (): any;
+        };
+        /**
+         * @private
+         * 编译指定的XML对象为CpClass对象。
+         */
+        private parseClass(xmlData, className);
+        /**
+         * @private
+         * 开始编译
+         */
+        private startCompile();
+        /**
+         * @private
+         * 添加必须的id
+         */
+        private addIds(items);
+        /**
+         * @private
+         * 是否为内部类。
+         */
+        private isInnerClass(node);
+        /**
+         * @private
+         * 检测指定节点的属性是否含有视图状态
+         */
+        private containsState(node);
+        /**
+         * @private
+         * 为指定节点创建id属性
+         */
+        private createIdForNode(node);
+        /**
+         * @private
+         * 获取节点ID
+         */
+        private getNodeId(node);
+        /**
+         * @private
+         * 为指定节点创建变量
+         */
+        private createVarForNode(node);
+        /**
+         * @private
+         * 为指定节点创建初始化函数,返回函数名引用
+         */
+        private createFuncForNode(node);
+        /**
+         * @private
+         * 检查目标类名是否是基本数据类型
+         */
+        private isBasicTypeData(className);
+        /**
+         * @private
+         * 为指定基本数据类型节点实例化,返回实例化后的值。
+         */
+        private createBasicTypeForNode(node);
+        /**
+         * @private
+         * 将节点属性赋值语句添加到代码块
+         */
+        private addAttributesToCodeBlock(cb, varName, node);
+        /**
+         * @private
+         * 初始化子项
+         */
+        private initlizeChildNode(node, cb, varName);
+        /**
+         * @private
+         * 解析内部类节点，并返回类名。
+         */
+        private parseInnerClass(node);
+        /**
+         * @private
+         * 添加多个子节点到指定的属性
+         */
+        private addChildrenToProp(children, type, prop, cb, varName, errorInfo, propList, node);
+        /**
+         * @private
+         * 指定节点是否是属性节点
+         */
+        private isProperty(node);
+        /**
+         * @private
+         * 是否是普通赋值的key
+         */
+        private isNormalKey(key);
+        /**
+         * @private
+         * 格式化key
+         */
+        private formatKey(key, value);
+        /**
+         * @private
+         * 格式化值
+         */
+        private formatValue(key, value, node);
+        /**
+         * @private
+         * 格式化字符串
+         */
+        private formatString(value);
+        /**
+         * @private
+         /**
+         * 转换HTML实体字符为普通字符
+         */
+        private unescapeHTMLEntity(str);
+        /**
+         * @private
+         * 创建构造函数
+         */
+        private createConstructFunc();
+        /**
+         * @private
+         * 是否含有includeIn和excludeFrom属性
+         */
+        private isStateNode(node);
+        /**
+         * @private
+         * 获取视图状态名称列表
+         */
+        private getStateNames();
+        /**
+         * @private
+         * 解析视图状态代码
+         */
+        private createStates(parentNode);
+        /**
+         * @private
+         * 检查指定的ID是否创建了类成员变量，若没创建则为其创建。
+         */
+        private checkIdForState(node);
+        /**
+         * @private
+         * 通过视图状态名称获取对应的视图状态
+         */
+        private getStateByName(name, node);
+        /**
+         * @private
+         * 寻找节点的临近节点ID和位置
+         */
+        private findNearNodeId(node);
+        /**
+         * @private
+         * 获取节点的完整类名，包括模块名
+         */
+        private getClassNameOfNode(node);
+    }
+}
+declare module swan.sys {
+    /**
+     * @private
+     * 失效验证管理器
+     */
+    class Validator extends lark.EventEmitter {
+        /**
+         * @private
+         * 创建一个Validator对象
+         */
+        constructor();
+        /**
+         * @private
+         */
+        private targetLevel;
+        /**
+         * @private
+         */
+        private invalidatePropertiesFlag;
+        /**
+         * @private
+         */
+        private invalidateClientPropertiesFlag;
+        /**
+         * @private
+         */
+        private invalidatePropertiesQueue;
+        /**
+         * @private
+         * 标记组件属性失效
+         */
+        invalidateProperties(client: UIComponent): void;
+        /**
+         * @private
+         * 验证失效的属性
+         */
+        private validateProperties();
+        /**
+         * @private
+         */
+        private invalidateSizeFlag;
+        /**
+         * @private
+         */
+        private invalidateClientSizeFlag;
+        /**
+         * @private
+         */
+        private invalidateSizeQueue;
+        /**
+         * @private
+         * 标记需要重新测量尺寸
+         */
+        invalidateSize(client: UIComponent): void;
+        /**
+         * @private
+         * 测量尺寸
+         */
+        private validateSize();
+        /**
+         * @private
+         */
+        private invalidateDisplayListFlag;
+        /**
+         * @private
+         */
+        private invalidateDisplayListQueue;
+        /**
+         * @private
+         * 标记需要重新布局
+         */
+        invalidateDisplayList(client: UIComponent): void;
+        /**
+         * @private
+         * 重新布局
+         */
+        private validateDisplayList();
+        /**
+         * @private
+         */
+        private eventDisplay;
+        /**
+         * @private
+         * 是否已经添加了事件监听
+         */
+        private listenersAttached;
+        /**
+         * @private
+         * 添加事件监听
+         */
+        private attachListeners();
+        /**
+         * @private
+         * 执行属性应用
+         */
+        private doPhasedInstantiationCallBack(event?);
+        /**
+         * @private
          *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
          */
-        apply(host: any, parent: lark.DisplayObjectContainer): void;
+        private doPhasedInstantiation();
         /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @private
+         * 使大于等于指定组件层级的元素立即应用属性
+         * @param target 要立即应用属性的组件
          */
-        remove(host: any, parent: lark.DisplayObjectContainer): void;
+        validateClient(target: UIComponent): void;
     }
 }
 declare module swan {
@@ -3594,268 +4337,65 @@ declare module swan {
     }
 }
 declare module swan {
-    /**
-     * @language en_US
-     * The Watcher class defines utility method that you can use with bindable properties.
-     * These methods let you define an event handler that is executed whenever a bindable property is updated.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * Watcher 类能够监视可绑定属性的改变，您可以定义一个事件处理函数作为 Watcher 的回调方法，在每次可绑定属性的值改变时都执行此函数。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class Watcher {
-        /**
-         * @language en_US
-         * Creates and starts a Watcher instance.
-         * The Watcher can only watch the property of a Object which host is instance of IEventEmitter.
-         * @param host The object that hosts the property or property chain to be watched.
-         * You can use the use the <code>reset()</code> method to change the value of the <code>host</code> argument
-         * after creating the Watcher instance.
-         * The <code>host</code> maintains a list of <code>handlers</code> to invoke when <code>prop</code> changes.
-         * @param chain A value specifying the property or chain to be watched.
-         * For example, to watch the property <code>host.a.b.c</code>,
-         * call the method as: <code>watch(host, ["a","b","c"], ...)</code>.
-         * @param handler  An event handler function called when the value of the watched property
-         * (or any property in a watched chain) is modified.
-         * @param thisObject <code>this</code> object of which binding with handler
-         * @returns he ChangeWatcher instance, if at least one property name has been specified to
-         * the <code>chain</code> argument; null otherwise.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建并启动 Watcher 实例。注意：Watcher 只能监视 host 为 IEventEmitter 对象的属性改变。若属性链中某个属性所对应的实例不是 IEventEmitter，
-         * 则属性链中在它之后的属性改变将无法检测到。
-         * @param host 用于承载要监视的属性或属性链的对象。
-         * 创建Watcher实例后，您可以利用<code>reset()</code>方法更改<code>host</code>参数的值。
-         * 当<code>prop</code>改变的时候，会使得host对应的一系列<code>handlers</code>被触发。
-         * @param chain 用于指定要监视的属性链的值。例如，要监视属性 host.a.b.c，需按以下形式调用此方法：watch¬(host, ["a","b","c"], ...)。
-         * @param handler 在监视的目标属性链中任何属性的值发生改变时调用的事件处理函数。
-         * @param thisObject handler 方法绑定的this对象
-         * @returns 如果已为 chain 参数至少指定了一个属性名称，则返回 Watcher 实例；否则返回 null。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static watch(host: any, chain: string[], handler: (value: any) => void, thisObject: any): Watcher;
-        /**
-         * @private
-         * 检查属性是否可以绑定。若还未绑定，尝试添加绑定事件。若是只读或只写属性，返回false。
-         */
-        private static checkBindable(host, property);
-        /**
-         * @language en_US
-         * Constructor.
-         * Not for public use. This method is called only from the <code>watch()</code> method.
-         * See the <code>watch()</code> method for parameter usage.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数，非公开。只能从 watch() 方法中调用此方法。有关参数用法，请参阅 watch() 方法。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        constructor(property: string, handler: (value: any) => void, thisObject: any, next?: Watcher);
-        /**
-         * @private
-         */
-        private host;
-        /**
-         * @private
-         */
-        private property;
-        /**
-         * @private
-         */
-        private handler;
-        /**
-         * @private
-         */
-        private thisObject;
-        /**
-         * @private
-         */
-        private next;
-        /**
-         * @private
-         */
-        private isExecuting;
-        /**
-         * @language en_US
-         * Detaches this Watcher instance, and its handler function, from the current host.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 从当前宿主中断开此 Watcher 实例及其处理函数。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        unwatch(): void;
-        /**
-         * @language en_US
-         * Retrieves the current value of the watched property or property chain, or null if the host object is null.
-         * @example
-         * <code>
-         * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
-         * </code>
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 检索观察的属性或属性链的当前值，当宿主对象为空时此值为空。
-         * @example
-         * <code>
-         * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
-         * </code>
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        getValue(): any;
-        /**
-         * @language en_US
-         * Sets the handler function.s
-         * @param handler The handler function. This argument must not be null.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 设置处理函数。
-         * @param handler 处理函数，此参数必须为非空。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        setHandler(handler: (value: any) => void, thisObject: any): void;
-        /**
-         * @language en_US
-         * Resets this ChangeWatcher instance to use a new host object.
-         * You can call this method to reuse a watcher instance on a different host.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 重置此 Watcher 实例使用新的宿主对象。
-         * 您可以通过该方法实现一个Watcher实例用于不同的宿主。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        reset(newHost: lark.IEventEmitter): void;
-        /**
-         * @private
-         *
-         * @returns
-         */
-        private getHostPropertyValue();
-        /**
-         * @private
-         *
-         * @param event
-         */
-        private wrapHandler(event);
-    }
+}
+declare module swan {
 }
 declare module swan {
     /**
      * @language en_US
-     * Represents events that are emitted when a item has been touched.
+     * The BasicLayout class arranges the layout elements according to their individual settings,
+     * independent of each-other. BasicLayout, also called absolute layout, requires that you
+     * explicitly position each container child.
+     * You can use the <code>x</code> and <code>y</code> properties of the child,
+     * or constraints to position each child.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 列表项触碰事件
+     * BasicLayout 类根据其各个设置彼此独立地排列布局元素。
+     * BasicLayout（也称为绝对布局）要求显式定位每个容器子代。
+     * 可以使用子代的 <code>x</code> 和 <code>y</code> 属性，或使用约束来定位每个子代。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    class ItemTapEvent extends lark.Event {
+    class BasicLayout extends LayoutBase {
         /**
          * @language en_US
-         * The type of the event object for an <code>itemTap</code> event.
+         * Constructor.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * <code>itemTap</code> 事件的对象类型。
+         * 构造函数。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        static ITEM_TAP: string;
+        constructor();
         /**
          * @language en_US
-         * The item in the data provider of the associated item.
+         * BasicLayout does not support virtual layout, setting this property is invalid.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 触发触摸事件的项呈示器数据源项。
+         * BasicLayout不支持虚拟布局，设置这个属性无效。
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        item: any;
-        /**
-         * @language en_US
-         * The item renderer in the list of the associated item.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 触发触摸事件的项呈示器。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        itemRenderer: IItemRenderer;
-        /**
-         * @language en_US
-         * The index of the associated navigation item.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 触发触摸事件的项索引
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        itemIndex: number;
+        useVirtualLayout: boolean;
         /**
          * @inheritDoc
          *
@@ -3863,163 +4403,81 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        protected clean(): void;
+        measure(): void;
         /**
-         * @language en_US
-         * Emit an event with specified EventEmitter. The emitted event will be cached in the object pool,
-         * for the next cycle of reuse.
-         *
-         * @param target the target of event emitter.
-         * @param eventType The event type; indicates the action that triggered the event.
-         * @param itemRenderer The item renderer in the list of the associated item.
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        /**
-         * @language zh_CN
-         * 使用指定的 EventEmitter 对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-         *
-         * @param target 事件派发目标
-         * @param eventType 事件类型；指示触发事件的动作。
-         * @param itemRenderer 触发触摸事件的项呈示器。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static emitItemTapEvent(target: lark.IEventEmitter, eventType: string, itemRenderer?: IItemRenderer): boolean;
+        updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
     }
 }
-declare module swan {
+declare module swan.sys {
+    /**
+     * @private
+     * 一个工具方法，使用BasicLayout规则测量目标对象。
+     */
+    function measure(target: swan.Group | swan.Component): void;
+    /**
+     * @private
+     * 一个工具方法，使用BasicLayout规则布局目标对象。
+     */
+    function updateDisplayList(target: swan.Group | swan.Component, unscaledWidth: number, unscaledHeight: number): lark.Point;
 }
 declare module swan {
     /**
      * @language en_US
-     * The UIEvent class represents the event object passed to
-     * the event listener for many UI events.
+     * The TileLayout class arranges layout elements in columns and rows
+     * of equally-sized cells.
+     * The TileLayout class uses a number of properties that control orientation,
+     * count, size, gap and justification of the columns and the rows
+     * as well as element alignment within the cells.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * UI事件
+     * TileLayout 类在单元格大小相等的列和行中排列布局元素。
+     * TileLayout 类使用许多属性来控制列和行的方向、计数、大小、间隙和两端对齐以及单元格内的元素对齐。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    class UIEvent extends lark.Event {
+    class TileLayout extends LayoutBase {
         /**
          * @language en_US
          * Constructor.
-         *
-         * @param type The event type; indicates the action that triggered the event.
-         * @param bubbles Specifies whether the event can bubble
-         * up the display list hierarchy.
-         * @param cancelable Specifies whether the behavior
-         * associated with the event can be prevented.
-         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 创建一个 UIEvent 实例
-         *
-         * @param type 事件类型；指示触发事件的动作。
-         * @param bubbles 指定该事件是否可以在显示列表层次结构得到冒泡处理。
-         * @param cancelable 指定是否可以防止与事件相关联的行为。
-         *
+         * 构造函数。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        constructor(type: string, bubbles?: boolean, cancelable?: boolean);
+        constructor();
+        /**
+         * @private
+         * 标记horizontalGap被显式指定过
+         */
+        private explicitHorizontalGap;
+        /**
+         * @private
+         */
+        private _horizontalGap;
         /**
          * @language en_US
-         * creation complete of component.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 组件创建完成
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static CREATION_COMPLETE: string;
-        /**
-         * @language en_US
-         * the ending of change.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 改变结束
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static CHANGE_END: string;
-        /**
-         * @language en_US
-         * The begining of change.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 改变开始
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static CHANGE_START: string;
-        /**
-         * @language en_US
-         * Before close the panel.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 即将关闭面板事件
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static CLOSING: string;
-        /**
-         * @language en_US
-         * The coordinates of the UI components changed in it's parent.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * UI组件在父级容器中的坐标发生改变事件
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static MOVE: string;
-        /**
-         * @language en_US
-         * Emit an event with specified EventEmitter. The emitted event will be cached in the object pool,
-         * for the next cycle of reuse.
+         * Horizontal space between columns, in pixels.
          *
-         * @param target the target of event emitter.
-         * @param eventType The event type; indicates the action that triggered the event.
+         * @default 6
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -4027,147 +4485,568 @@ declare module swan {
          */
         /**
          * @language zh_CN
-         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         * 列之间的水平空间（以像素为单位）。
          *
-         * @param target 事件派发目标。
-         * @param eventType 事件类型；指示触发事件的动作。
+         * @default 6
          *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        static emitUIEvent(target: lark.IEventEmitter, eventType: string): boolean;
+        horizontalGap: number;
+        /**
+         * @private
+         * 标记verticalGap被显式指定过
+         */
+        private explicitVerticalGap;
+        /**
+         * @private
+         */
+        private _verticalGap;
+        /**
+         * @language en_US
+         * Vertical space between rows, in pixels.
+         *
+         * @default 6
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 行之间的垂直空间（以像素为单位）。
+         *
+         * @default 6
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        verticalGap: number;
+        /**
+         * @private
+         */
+        private _columnCount;
+        /**
+         * @language en_US
+         * Contain the actual column count.
+         *
+         * @default -1
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *  实际列计数。
+         *
+         * @default -1
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        columnCount: number;
+        /**
+         * @private
+         */
+        private _requestedColumnCount;
+        /**
+         * @language en_US
+         * Number of columns to be displayed.
+         * <p>Set to 0 to allow the TileLayout to determine
+         * the column count automatically.</p>
+         * <p>If the <code>orientation</code> property is set to <code>TileOrientation.ROWS</code>,
+         * then setting this property has no effect
+         * In this case, the <code>rowCount</code> is explicitly set, and the
+         * container width is explicitly set. </p>
+         *
+         * @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要显示的列数。
+         * <p>设置为 0 会允许 TileLayout 自动确定列计数。</p>
+         * <p>如果将 <code>orientation</code> 属性设置为 <code>TileOrientation.ROWS</code>，
+         * 则设置此属性不会产生任何效果。这种情况下，会显式设置 code>rowCount</code>，并显式设置容器宽度。</p>
+         *
+         * @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        requestedColumnCount: number;
+        /**
+         * @private
+         */
+        private _rowCount;
+        /**
+         * @language en_US
+         * The row count.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *  行计数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        rowCount: number;
+        /**
+         * @private
+         */
+        private _requestedRowCount;
+        /**
+         * @language en_US
+         * Number of rows to be displayed.
+         * <p>Set to 0 to remove explicit override and allow the TileLayout to determine
+         * the row count automatically.</p>
+         * <p>If the <code>orientation</code> property is set to
+         * <code>TileOrientation.COLUMNS</code>, setting this property has no effect.
+         * in this case, <code>columnCount</code> is explicitly set, and the
+         * container height is explicitly set.</p>
+         *
+         * @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要显示的行数。
+         * <code>设置为 -1 会删除显式覆盖并允许 TileLayout 自动确定行计数。</code>
+         * <code>如果将 <code>orientation</code> 属性设置为 <code>TileOrientation.COLUMNS</code>，
+         * 则设置此属性不会产生任何效果。这种情况下，会显式设置 <code>columnCount</code>，并显式设置容器高度。</code>
+         *
+         * @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        requestedRowCount: number;
+        /**
+         * @private
+         * 外部显式指定的列宽
+         */
+        private explicitColumnWidth;
+        /**
+         * @private
+         */
+        private _columnWidth;
+        /**
+         * @language en_US
+         * Contain the actual column width, in pixels.
+         * <p>If not explicitly set, the column width is
+         * determined from the width of the widest element. </p>
+         *
+         * @default NaN
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 包含实际列宽（以像素为单位）。
+         * <p>若未显式设置，则从根据最宽的元素的宽度确定列宽度。</p>
+         *
+         * @default NaN
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        columnWidth: number;
+        /**
+         * @private
+         * 外部显式指定的行高
+         */
+        private explicitRowHeight;
+        /**
+         * @private
+         */
+        private _rowHeight;
+        /**
+         * @language en_US
+         * The row height, in pixels.
+         * <p>If not explicitly set, the row height is
+         * determined from the maximum of elements' height.</p>
+         *
+         * @default NaN
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 行高（以像素为单位）。
+         * <p>如果未显式设置，则从元素的高度的最大值确定行高度。<p>
+         *
+         * @default NaN
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        rowHeight: number;
+        /**
+         * @private
+         */
+        private _paddingLeft;
+        /**
+         * @copy swan.LinearLayoutBase#paddingLeft
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        paddingLeft: number;
+        /**
+         * @private
+         */
+        private _paddingRight;
+        /**
+         * @copy swan.LinearLayoutBase#paddingRight
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        paddingRight: number;
+        /**
+         * @private
+         */
+        private _paddingTop;
+        /**
+         * @copy swan.LinearLayoutBase#paddingTop
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        paddingTop: number;
+        /**
+         * @private
+         */
+        private _paddingBottom;
+        /**
+         * @copy swan.LinearLayoutBase#paddingBottom
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        paddingBottom: number;
+        /**
+         * @private
+         */
+        private _horizontalAlign;
+        /**
+         * @language en_US
+         * Specifies how to align the elements within the cells in the horizontal direction.
+         * Supported values are
+         * HorizontalAlign.LEFT、HorizontalAlign.CENTER、
+         * HorizontalAlign.RIGHT、JustifyAlign.JUSTIFY。
+         *
+         * @default <code>JustifyAlign.JUSTIFY</code>
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指定如何在水平方向上对齐单元格内的元素。支持的值有
+         * HorizontalAlign.LEFT、HorizontalAlign.CENTER、
+         * HorizontalAlign.RIGHT、JustifyAlign.JUSTIFY。
+         *
+         * @default <code>JustifyAlign.JUSTIFY</code>
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        horizontalAlign: string;
+        /**
+         * @private
+         */
+        private _verticalAlign;
+        /**
+         * @language en_US
+         * 指定如何在垂直方向上对齐单元格内的元素。
+         * 支持的值有 VerticalAlign.TOP、VerticalAlign.MIDDLE、
+         * VerticalAlign.BOTTOM、JustifyAlign.JUSTIFY。
+         * 默认值：JustifyAlign.JUSTIFY。
+         *
+         * @default <code>swan.JustifyAlign.JUSTIFY</code>
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * Specifies how to align the elements within the cells in the vertical direction.
+         * Supported values are
+         * VerticalAlign.TOP、VerticalAlign.MIDDLE、
+         * VerticalAlign.BOTTOM、JustifyAlign.JUSTIFY。
+         *
+         * @default <code>swan.JustifyAlign.JUSTIFY</code>
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        verticalAlign: string;
+        /**
+         * @private
+         */
+        private _columnAlign;
+        /**
+         * @language en_US
+         * Specifies how to justify the fully visible columns to the container width.
+         *
+         * <p>When set to <code>ColumnAlign.LEFT</code> it turns column justification off.
+         *  There may be partially visible columns or whitespace between the last column and
+         *  the right edge of the container.  This is the default value.</p>
+         *
+         * <p>When set to <code>ColumnAlign.JUSTIFY_USING_GAP</code> the <code>horizontalGap</code>
+         * actual value increases so that
+         * the last fully visible column right edge aligns with the container's right edge.
+         * In case there is only a single fully visible column, the <code>horizontalGap</code> actual value
+         * increases so that it pushes any partially visible column beyond the right edge
+         * of the container.
+         * Note that explicitly setting the <code>horizontalGap</code> property does not turn off
+         * justification. It only determines the initial gap value.
+         * Justification may increases it.</p>
+         *
+         * <p>When set to <code>ColumnAlign.JUSTIFY_USING_WIDTH</code> the <code>columnWidth</code>
+         * actual value increases so that
+         * the last fully visible column right edge aligns with the container's right edge.
+         * Note that explicitly setting the <code>columnWidth</code> property does not turn off justification.
+         * It only determines the initial column width value.
+         * Justification may increases it.</p>
+         *
+         * @default ColumnAlign.LEFT
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指定如何将完全可见列与容器宽度对齐。
+         *
+         * <p>设置为 <code>ColumnAlign.LEFT</code> 时，它会关闭列两端对齐。
+         * 在容器的最后一列和右边缘之间可能存在部分可见的列或空白。这是默认值。</p>
+         *
+         * <p>设置为 <code>ColumnAlign.JUSTIFY_USING_GAP</code> 时，<code>horizontalGap</code> 的实际值将增大，
+         * 这样最后一个完全可见列右边缘会与容器的右边缘对齐。仅存在一个完全可见列时，
+         * <code>horizontalGap</code> 的实际值将增大，这样它会将任何部分可见列推到容器的右边缘之外。
+         * 请注意显式设置 <code>horizontalGap</code> 属性不会关闭两端对齐。它仅确定初始间隙值。两端对齐可能会增大它。</p>
+         *
+         * <p>设置为 <code>ColumnAlign.JUSTIFY_USING_WIDTH</code> 时，<code>columnWidth</code> 的实际值将增大，
+         * 这样最后一个完全可见列右边缘会与容器的右边缘对齐。请注意显式设置 <code>columnWidth</code> 属性不会关闭两端对齐。
+         * 它仅确定初始列宽度值。两端对齐可能会增大它。</p>
+         *
+         * @default ColumnAlign.LEFT
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        columnAlign: string;
+        /**
+         * @private
+         */
+        private _rowAlign;
+        /**
+         * @language en_US
+         * Specifies how to justify the fully visible rows to the container height.
+         *
+         * <p>When set to <code>RowAlign.TOP</code> it turns column justification off.
+         * There might be partially visible rows or whitespace between the last row and
+         * the bottom edge of the container.  This is the default value.</p>
+         *
+         * <p>When set to <code>RowAlign.JUSTIFY_USING_GAP</code> the <code>verticalGap</code>
+         * actual value increases so that
+         * the last fully visible row bottom edge aligns with the container's bottom edge.
+         * In case there is only a single fully visible row, the value of <code>verticalGap</code>
+         * increases so that it pushes any partially visible row beyond the bottom edge
+         * of the container.  Note that explicitly setting the <code>verticalGap</code> does not turn off
+         * justification, but just determines the initial gap value.
+         * Justification can then increases it.</p>
+         *
+         * <p>When set to <code>RowAlign.JUSTIFY_USING_HEIGHT</code> the <code>rowHeight</code>
+         * actual value increases so that
+         * the last fully visible row bottom edge aligns with the container's bottom edge.  Note that
+         * explicitly setting the <code>rowHeight</code> does not turn off justification, but
+         * determines the initial row height value.
+         * Justification can then increase it.</p>
+         *
+         * @default RowAlign.TOP
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指定如何将完全可见行与容器高度对齐。
+         *
+         * <p>设置为 <code>RowAlign.TOP</code> 时，它会关闭列两端对齐。
+         * 在容器的最后一行和底边缘之间可能存在部分可见的行或空白。这是默认值。</p>
+         *
+         * <p>设置为 <code>RowAlign.JUSTIFY_USING_GAP</code> 时，<code>verticalGap</code> 的实际值会增大，
+         * 这样最后一个完全可见行底边缘会与容器的底边缘对齐。仅存在一个完全可见行时，<code>verticalGap</code> 的值会增大，
+         * 这样它会将任何部分可见行推到容器的底边缘之外。请注意，显式设置 <code>verticalGap</code>
+         * 不会关闭两端对齐，而只是确定初始间隙值。两端对齐接着可以增大它。</p>
+         *
+         * <p>设置为 <code>RowAlign.JUSTIFY_USING_HEIGHT</code> 时，<code>rowHeight</code> 的实际值会增大，
+         * 这样最后一个完全可见行底边缘会与容器的底边缘对齐。请注意，显式设置 <code>rowHeight</code>
+         * 不会关闭两端对齐，而只是确定初始行高度值。两端对齐接着可以增大它。</p>
+         *
+         * @default RowAlign.TOP
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        rowAlign: string;
+        /**
+         * @private
+         */
+        private _orientation;
+        /**
+         * @language en_US
+         * Specifies whether elements are arranged row by row or
+         * column by column.
+         *
+         * @default TileOrientation.ROWS
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指定是逐行还是逐列排列元素。
+         *
+         * @default TileOrientation.ROWS
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        orientation: string;
+        /**
+         * @private
+         * 标记目标容器的尺寸和显示列表失效
+         */
+        private invalidateTargetLayout();
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        measure(): void;
+        /**
+         * @private
+         * 计算行和列的尺寸及数量
+         */
+        private calculateRowAndColumn(explicitWidth, explicitHeight);
+        /**
+         * @private
+         * 缓存的最大子对象宽度
+         */
+        private maxElementWidth;
+        /**
+         * @private
+         * 缓存的最大子对象高度
+         */
+        private maxElementHeight;
+        /**
+         * @private
+         * 更新最大子对象尺寸
+         */
+        private updateMaxElementSize();
+        /**
+         * @private
+         * 更新虚拟布局的最大子对象尺寸
+         */
+        private doUpdateMaxElementSize(startIndex, endIndex);
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        clearVirtualLayoutCache(): void;
+        /**
+         * @private
+         * 当前视图中的第一个元素索引
+         */
+        private startIndex;
+        /**
+         * @private
+         * 当前视图中的最后一个元素的索引
+         */
+        private endIndex;
+        /**
+         * @private
+         * 视图的第一个和最后一个元素的索引值已经计算好的标志
+         */
+        private indexInViewCalculated;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        scrollPositionChanged(): void;
+        /**
+         * @private
+         * 获取视图中第一个和最后一个元素的索引,返回是否发生改变
+         */
+        private getIndexInView();
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        updateDisplayList(width: number, height: number): void;
+        /**
+         * @private
+         * 为单个元素布局
+         */
+        private sizeAndPositionElement(element, cellX, cellY, cellWidth, cellHeight);
+        /**
+         * @private
+         * 为两端对齐调整间隔或格子尺寸
+         */
+        private adjustForJustify(width, height);
     }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * Pay atention: The skin theme is the default value for once setting, and it can not be changed while running.
-     * You can change a skin of a component with <code>skinName</code> property.
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 皮肤主题。注意：皮肤主题是一次性设置的默认值,并不能运行时切换所有组件默认皮肤。切换单个皮肤您可以自行对Component.skinName赋值来修改。
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class Theme extends lark.EventEmitter {
-        /**
-         * @language en_US
-         * Create an instance of Theme
-         * @param configURL the external theme path. if <code>null</code>, you need to register the default skin name with
-         * <code>mapSkin()</code> manually.
-         * @param stage current stage. The theme will register to the stage with this parameter.
-         * If <code>null</code>, you need to register with <code>stage.registerImplementation("swan.Theme",theme)</code>
-         * manually.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个主题实例
-         * @param configURL 要加载并解析的外部主题配置文件路径。若传入 <code>null</code>，将不进行配置文件加载，
-         * 之后需要在外部以代码方式手动调用 <code>mapSkin()</code> 方法完成每条默认皮肤名的注册。
-         * @param stage 当前舞台引用。传入此参数，主题会自动注册自身到舞台上。
-         * 若传入null，需要在外部手动调用 <code>stage.registerImplementation("swan.Theme",theme)</code> 来完成主题的注册。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        constructor(configURL: string, stage: lark.Stage);
-        /**
-         * @private
-         */
-        private initialized;
-        /**
-         * @private
-         *
-         * @param url
-         */
-        private load(url);
-        /**
-         * @private
-         *
-         * @param event
-         */
-        private onConfigLoaded(event);
-        /**
-         * @private
-         */
-        private delayList;
-        /**
-         * @private
-         *
-         */
-        private hadleDelayList();
-        /**
-         * @private
-         */
-        private skinMap;
-        /**
-         * @private
-         */
-        private flagToClassName;
-        /**
-         * @language en_US
-         * According to the host component to get the default skin name.
-         * Search rules are as follows:
-         * <li>1. Use the <code>hostComponentKey</code> of client to search.</li>
-         * <li>2. Use the class name of client to search.</li>
-         * <li>3. Use the parent class name of client to search.</li>
-         * <li>4. Repeat step 3 until find the skin name or the parent is <code>swan.Component</code>.</li>
-         * @param client the component need to get the default skin.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 根据主机组件，获取对应的默认皮肤名。查询规则如下：
-         * <li>1.使用client的hostComponentKey作为键查询默认皮肤名。</li>
-         * <li>2.使用client的类名作为键查询默认皮肤名。</li>
-         * <li>3.使用client的父类名作为键查询默认皮肤名。</li>
-         * <li>4.不断重复3直到查询到皮肤名或父类为swan.Component时停止。</li>
-         * @param client 要获取默认皮肤的组件。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        getSkinName(client: Component): string;
-        /**
-         * @private
-         *
-         * @param prototype
-         * @returns
-         */
-        private findSkinName(prototype);
-        /**
-         * @language en_US
-         * Map a default skin for the specified host component.
-         * @param hostComponentKey the name of host component, such as "swan.Button".
-         * @param skinName the name of skin, such as "app.MyButtonSkin".
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 为指定的主机组件映射一个默认皮肤。
-         * @param hostComponentKey 主机组件名称，例如：“swan.Button”。
-         * @param skinName 皮肤名称 例如："app.MyButtonSkin"。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        mapSkin(hostComponentKey: string, skinName: string): void;
-    }
-}
-declare module swan {
 }
 declare module EXML {
     /**
@@ -4233,76 +5112,529 @@ declare module EXML {
 declare module swan {
     /**
      * @language en_US
-     * The Binding class defines utility methods for performing data binding.
-     * You can use the methods defined in this class to configure data bindings.
+     * Linear layout base class, usually as the parent class of
+     * <code>HorizontalLayout</code> and <code>VerticalLayout</code>.
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 绑定工具类，用于执行数据绑定用的方法集。您可以使用此类中定义的方法来配置数据绑定。
+     * 线性布局基类，通常作为 <code>HorizontalLayout</code> 和 <code>VerticalLayout</code> 的父类。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    class Binding {
+    class LinearLayoutBase extends LayoutBase {
         /**
          * @language en_US
-         * Binds a property, <prop>prop</code> on the <code>target</code> Object, to a bindable property or peoperty chain.
-         * @param host The object that hosts the property or property chain to be watched.
-         * The <code>host</code> maintains a list of <code>targets</code> to update theirs <code>prop</code> when <code>chain</code> changes.
-         * @param chain A value specifying the property or chain to be watched. For example, when watch the property <code>host.a.b.c</code>,
-         * you need call the method like this: <code>indProperty(host, ["a","b","c"], ...)</code>
-         * @param target The Object defining the property to be bound to <code>chain</code>.
-         * @param prop The name of the public property defined in the <code>site</code> Object to be bound.
-         * @returns A ChangeWatcher instance, if at least one property name has been specified
-         * to the <code>chain</code> argument; null otherwise.
+         * The horizontal alignment of layout elements.
+         * <p>The <code>lark.HorizontalAlign</code> and <code>swan.JustifyAlign</code> class
+         * defines the possible values for this property.</p>
+         *
+         * @default "left"
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 绑定一个对象的属性值到要监视的对象属性上。
-         * @param host 用于承载要监视的属性或属性链的对象。
-         * 当 <code>host</code>上<code>chain</code>所对应的值发生改变时，<code>target</code>上的<code>prop</code>属性将被自动更新。
-         * @param chain 用于指定要监视的属性链的值。例如，要监视属性 <code>host.a.b.c</code>，需按以下形式调用此方法：<code>bindProperty(host, ["a","b","c"], ...)。</code>
-         * @param target 本次绑定要更新的目标对象。
-         * @param prop 本次绑定要更新的目标属性名称。
-         * @returns 如果已为 chain 参数至少指定了一个属性名称，则返回 Watcher 实例；否则返回 null。
+         * 布局元素的水平对齐策略。
+         * <p><code>lark.HorizontalAlign</code> 和
+         * <code>swan.JustifyAlign</code>类定义此属性的可能值。<p>
+         *
+         * @default "left"
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        static bindProperty(host: any, chain: string[], target: any, prop: string): Watcher;
+        horizontalAlign: string;
         /**
          * @language en_US
-         * Binds a callback, <prop>handler</code> on the <code>target</code> Object, to a bindable property or peoperty chain.
-         * Callback method to invoke with an argument of the current value of <code>chain</code> when that value changes.
-         * @param host The object that hosts the property or property chain to be watched.
-         * @param chain A value specifying the property or chain to be watched. For example, when watch the property <code>host.a.b.c</code>,
-         * you need call the method like this: <code>indProperty(host, ["a","b","c"], ...)</code>
-         * @param handler method to invoke with an argument of the current value of <code>chain</code> when that value changes.
-         * @param thisObject <code>this</code> object of binding method
-         * @returns A ChangeWatcher instance, if at least one property name has been  specified to the <code>chain</code> argument; null otherwise.
+         * The vertical alignment of layout elements.
+         * <p>The <code>lark.VerticalAlign</code> and <code>swan.JustifyAlign</code> class
+         * defines the possible values for this property.</p>
+         *
+         * @default "top"
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 绑定一个回调函数到要监视的对象属性上。当 host上 chain 所对应的值发生改变时，handler 方法将被自动调用。
-         * @param host 用于承载要监视的属性或属性链的对象。
-         * @param chain 用于指定要监视的属性链的值。例如，要监视属性 host.a.b.c，需按以下形式调用此方法：bindSetter(host, ["a","b","c"], ...)。
-         * @param handler 在监视的目标属性链中任何属性的值发生改变时调用的事件处理函数。
-         * @param thisObject handler 方法绑定的this对象
-         * @returns 如果已为 chain 参数至少指定了一个属性名称，则返回 Watcher 实例；否则返回 null。
+         * 布局元素的垂直对齐策略。请使用 VerticalAlign 定义的常量。
+         * <p><code>lark.VerticalAlign</code> 和
+         * <code>swan.JustifyAlign</code>类定义此属性的可能值。<p>
+         *
+         * @default "top"
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        static bindHandler(host: any, chain: string[], handler: (value: any) => void, thisObject: any): Watcher;
+        verticalAlign: string;
+        /**
+         * @language en_US
+         * The space between layout elements, in pixels.
+         *
+         * @default 6
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 布局元素之间的间隔（以像素为单位）。
+         *
+         * @default 6
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        gap: number;
+        /**
+         * @language en_US
+         * Number of pixels between the container's left edge
+         * and the left edge of the first layout element.
+         *
+         * @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 容器的左边缘与第一个布局元素的左边缘之间的像素数。
+         *
+         * @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        paddingLeft: number;
+        /**
+         * @language en_US
+         * Number of pixels between the container's right edge
+         * and the right edge of the last layout element.
+         *
+         *  @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 容器的右边缘与最后一个布局元素的右边缘之间的像素数。
+         *
+         * @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        paddingRight: number;
+        /**
+         * @language en_US
+         * The minimum number of pixels between the container's top edge and
+         * the top of all the container's layout elements.
+         *
+         * @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 容器的顶边缘与所有容器的布局元素的顶边缘之间的最少像素数。
+         *
+         * @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        paddingTop: number;
+        /**
+         * @language en_US
+         * The minimum number of pixels between the container's bottom edge and
+         * the bottom of all the container's layout elements.
+         *
+         * @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 容器的底边缘与所有容器的布局元素的底边缘之间的最少像素数。
+         *
+         * @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        paddingBottom: number;
+        /**
+         * @language en_US
+         * Convenience function for subclasses that invalidates the
+         * target's size and displayList so that both layout's <code>measure()</code>
+         * and <code>updateDisplayList</code> methods get called.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 失效目标容器的尺寸和显示列表的简便方法，调用目标容器的
+         * <code>measure()</code>和<code>updateDisplayList</code>方法
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected invalidateTargetLayout(): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        measure(): void;
+        /**
+         * @language en_US
+         * Compute exact values for measuredWidth and measuredHeight.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 计算目标容器 measuredWidth 和 measuredHeight 的精确值
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected measureReal(): void;
+        /**
+         * @language en_US
+         * Compute potentially approximate values for measuredWidth and measuredHeight.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 计算目标容器 measuredWidth 和 measuredHeight 的近似值
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected measureVirtual(): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        updateDisplayList(width: number, height: number): void;
+        /**
+         * @language en_US
+         * An Array of the virtual layout elements size cache.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 虚拟布局使用的尺寸缓存。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected elementSizeTable: number[];
+        /**
+         * @language en_US
+         * Gets the starting position of the specified index element
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取指定索引元素的起始位置
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected getStartPosition(index: number): number;
+        /**
+         * @language en_US
+         * Gets the size of the specified index element
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取指定索引元素的尺寸
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected getElementSize(index: number): number;
+        /**
+         * @language en_US
+         * Gets the sum of the size of cached elements
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取缓存的子对象尺寸总和
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected getElementTotalSize(): number;
+        /**
+         * @inheritDoc
+         *
+         * @param index
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        elementRemoved(index: number): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        clearVirtualLayoutCache(): void;
+        /**
+         * @language en_US
+         * The binary search to find the specified index position of the display object
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 折半查找法寻找指定位置的显示对象索引
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected findIndexAt(x: number, i0: number, i1: number): number;
+        /**
+         * @language en_US
+         * The first element index in the view of the virtual layout
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 虚拟布局使用的当前视图中的第一个元素索引
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected startIndex: number;
+        /**
+         * @language en_US
+         * The last element index in the view of the virtual layout
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 虚拟布局使用的当前视图中的最后一个元素的索引
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected endIndex: number;
+        /**
+         * @language en_US
+         * A Flag of the first element and the end element has been calculated.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 视图的第一个和最后一个元素的索引值已经计算好的标志
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected indexInViewCalculated: boolean;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        scrollPositionChanged(): void;
+        /**
+         * @language en_US
+         * Get the index of the first and last element in the view,
+         * and to return whether or not to change.
+         *
+         * @return has the index changed
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取视图中第一个和最后一个元素的索引,返回是否发生改变。
+         *
+         * @return 索引是否已改变
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected getIndexInView(): boolean;
+        /**
+         * @language en_US
+         * The maximum size of elements
+         *
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 子元素最大的尺寸
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected maxElementSize: number;
+        /**
+         * @language en_US
+         * Update the layout of the virtualized elements
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 更新虚拟布局的显示列表
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected updateDisplayListVirtual(width: number, height: number): void;
+        /**
+         * @language en_US
+         * Update the layout of the reality elements
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 更新真实布局的显示列表
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected updateDisplayListReal(width: number, height: number): void;
+        /**
+         * @language en_US
+         * Allocate blank area for each variable size element.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 为每个可变尺寸的子项分配空白区域。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected flexChildrenProportionally(spaceForChildren: number, spaceToDistribute: number, totalPercent: number, childInfoArray: Array<any>): void;
+    }
+}
+declare module swan.sys {
+    /**
+     * @private
+     */
+    class ChildInfo {
+        /**
+         * @private
+         */
+        layoutElement: swan.UIComponent;
+        /**
+         * @private
+         */
+        size: number;
+        /**
+         * @private
+         */
+        percent: number;
+        /**
+         * @private
+         */
+        min: number;
+        /**
+         * @private
+         */
+        max: number;
     }
 }
 declare module swan {
@@ -5277,11 +6609,27 @@ declare module swan.sys {
 declare module swan {
     /**
      * @language en_US
-     * The BasicLayout class arranges the layout elements according to their individual settings,
-     * independent of each-other. BasicLayout, also called absolute layout, requires that you
-     * explicitly position each container child.
-     * You can use the <code>x</code> and <code>y</code> properties of the child,
-     * or constraints to position each child.
+     * Label is an UIComponent that can render one or more lines of text.
+     * The text to be displayed is determined by the <code>text</code> property.
+     * The formatting of the text is specified by the styles，
+     * such as <code>fontFamily</code> and <code>fontSize</code>.
+     *
+     * <p>Because Label is fast and lightweight, it is especially suitable
+     * for use cases that involve rendering many small pieces of non-interactive
+     * text, such as item renderers and labels in Button skins.</p>
+     *
+     * <p>In Label, three character sequences are recognized
+     * as explicit line breaks: CR (<code>"\r"</code>), LF (<code>"\n"</code>),
+     * and CR+LF (<code>"\r\n"</code>).</p>
+     *
+     * <p>If you don't specify any kind of width for a Label,
+     * then the longest line, as determined by these explicit line breaks,
+     * determines the width of the Label.</p>
+     *
+     * <p>If you do specify some kind of width, then the specified text is
+     * word-wrapped at the right edge of the component's bounds.
+     * If the text extends below the bottom of the component,
+     * it is clipped.</p>
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -5289,18 +6637,23 @@ declare module swan {
      */
     /**
      * @language zh_CN
-     * BasicLayout 类根据其各个设置彼此独立地排列布局元素。
-     * BasicLayout（也称为绝对布局）要求显式定位每个容器子代。
-     * 可以使用子代的 <code>x</code> 和 <code>y</code> 属性，或使用约束来定位每个子代。
+     * Label 是可以呈示一行或多行统一格式文本的UI组件。要显示的文本由 text 属性确定。文本格式由样式属性指定，例如 fontFamily 和 fontSize。
+     * 因为 Label 运行速度快且占用内存少，所以它特别适合用于显示多个小型非交互式文本的情况，例如，项呈示器和 Button 外观中的标签。
+     * 在 Label 中，将以下三个字符序列识别为显式换行符：CR（“\r”）、LF（“\n”）和 CR+LF（“\r\n”）。
+     * 如果没有为 Label 指定宽度，则由这些显式换行符确定的最长行确定 Label 的宽度。
+     * 如果指定了宽度，则指定文本将在组件边界的右边缘换行，如果文本扩展到低于组件底部，则将被剪切。
      *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    class BasicLayout extends LayoutBase {
+    class Label extends lark.TextField implements UIComponent {
         /**
          * @language en_US
          * Constructor.
+         *
+         * @param text The text displayed by this text component.
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5308,28 +6661,191 @@ declare module swan {
         /**
          * @language zh_CN
          * 构造函数。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        constructor();
-        /**
-         * @language en_US
-         * BasicLayout does not support virtual layout, setting this property is invalid.
+         *
+         * @param text 此文本组件所显示的文本。
          *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
+        constructor(text?: string);
         /**
-         * @language zh_CN
-         * BasicLayout不支持虚拟布局，设置这个属性无效。
+         * @private
+         */
+        private _widthConstraint;
+        /**
+         * @private
+         * UIComponentImpl 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
+         */
+        private initializeUIValues;
+        /**
+         * @copy swan.UIComponent#createChildren
          *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        useVirtualLayout: boolean;
+        protected createChildren(): void;
+        /**
+         * @copy swan.UIComponent#childrenCreated
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected childrenCreated(): void;
+        /**
+         * @copy swan.UIComponent#commitProperties
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected commitProperties(): void;
+        /**
+         * @copy swan.UIComponent#measure
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected measure(): void;
+        /**
+         * @copy swan.UIComponent#updateDisplayList
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
+        /**
+         * @copy swan.UIComponent#invalidateParentLayout
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected invalidateParentLayout(): void;
+        /**
+         * @copy swan.UIComponent#includeInLayout
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        includeInLayout: boolean;
+        /**
+         * @copy swan.UIComponent#left
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        left: number;
+        /**
+         * @copy swan.UIComponent#right
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        right: number;
+        /**
+         * @copy swan.UIComponent#top
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        top: number;
+        /**
+         * @copy swan.UIComponent#bottom
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        bottom: number;
+        /**
+         * @copy swan.UIComponent#horizontalCenter
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        horizontalCenter: number;
+        /**
+         * @copy swan.UIComponent#verticalCenter
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        verticalCenter: number;
+        /**
+         * @copy swan.UIComponent#percentWidth
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        percentWidth: number;
+        /**
+         * @copy swan.UIComponent#percentHeight
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        percentHeight: number;
+        /**
+         * @copy swan.UIComponent#explicitWidth
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        explicitWidth: number;
+        /**
+         * @copy swan.UIComponent#explicitHeight
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        explicitHeight: number;
+        /**
+         * @copy swan.UIComponent#minWidth
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        minWidth: number;
+        /**
+         * @copy swan.UIComponent#maxWidth
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        maxWidth: number;
+        /**
+         * @copy swan.UIComponent#minHeight
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        minHeight: number;
+        /**
+         * @copy swan.UIComponent#maxHeight
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        maxHeight: number;
         /**
          * @inheritDoc
          *
@@ -5337,7 +6853,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        measure(): void;
+        setMeasuredSize(width: number, height: number): void;
         /**
          * @inheritDoc
          *
@@ -5345,661 +6861,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
-    }
-}
-declare module swan.sys {
-    /**
-     * @private
-     * 一个工具方法，使用BasicLayout规则测量目标对象。
-     */
-    function measure(target: swan.Group | swan.Component): void;
-    /**
-     * @private
-     * 一个工具方法，使用BasicLayout规则布局目标对象。
-     */
-    function updateDisplayList(target: swan.Group | swan.Component, unscaledWidth: number, unscaledHeight: number): lark.Point;
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The PropertyChangeEvent class represents the event object
-     * passed to the event listener when one of the properties of
-     * an object has changed, and provides information about the change.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 对象的一个属性发生更改时传递到事件侦听器的事件。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class PropertyEvent extends lark.Event {
-        /**
-         * @language en_US
-         * Emit when a property changed.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 属性改变。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static PROPERTY_CHANGE: string;
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @param type The event type; indicates the action that triggered the event.
-         * @param bubbles Specifies whether the event can bubble
-         * up the display list hierarchy.
-         * @param cancelable Specifies whether the behavior
-         * associated with the event can be prevented.
-         * @param property Name of the property that changed.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个属性改变事件。
-         *
-         * @param type 事件类型；指示触发事件的动作。
-         * @param bubbles 指定该事件是否可以在显示列表层次结构得到冒泡处理。
-         * @param cancelable 指定是否可以防止与事件相关联的行为。
-         * @param property 发生改变的属性名称。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        constructor(type: string, bubbles?: boolean, cancelable?: boolean, property?: string);
-        /**
-         * @language en_US
-         * Name of the property that changed.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 发生改变的属性名称。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        property: string;
-        /**
-         * @language en_US
-         * Emit an event with specified EventEmitter. The emitted event will be cached in the object pool,
-         * for the next cycle of reuse.
-         *
-         * @param target the target of event emitter.
-         * @param eventType The event type; indicates the action that triggered the event.
-         * @param property Name of the property that changed.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 使用指定的 EventEmitter 对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-         *
-         * @param target 事件派发目标
-         * @param eventType 事件类型；指示触发事件的动作。
-         * @param property 发生改变的属性名称。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static emitPropertyEvent(target: lark.IEventEmitter, eventType: string, property?: string): boolean;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The TileLayout class arranges layout elements in columns and rows
-     * of equally-sized cells.
-     * The TileLayout class uses a number of properties that control orientation,
-     * count, size, gap and justification of the columns and the rows
-     * as well as element alignment within the cells.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * TileLayout 类在单元格大小相等的列和行中排列布局元素。
-     * TileLayout 类使用许多属性来控制列和行的方向、计数、大小、间隙和两端对齐以及单元格内的元素对齐。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class TileLayout extends LayoutBase {
-        /**
-         * @language en_US
-         * Constructor.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        constructor();
-        /**
-         * @private
-         * 标记horizontalGap被显式指定过
-         */
-        private explicitHorizontalGap;
-        /**
-         * @private
-         */
-        private _horizontalGap;
-        /**
-         * @language en_US
-         * Horizontal space between columns, in pixels.
-         *
-         * @default 6
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 列之间的水平空间（以像素为单位）。
-         *
-         * @default 6
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        horizontalGap: number;
-        /**
-         * @private
-         * 标记verticalGap被显式指定过
-         */
-        private explicitVerticalGap;
-        /**
-         * @private
-         */
-        private _verticalGap;
-        /**
-         * @language en_US
-         * Vertical space between rows, in pixels.
-         *
-         * @default 6
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 行之间的垂直空间（以像素为单位）。
-         *
-         * @default 6
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        verticalGap: number;
-        /**
-         * @private
-         */
-        private _columnCount;
-        /**
-         * @language en_US
-         * [read-only]Contain the actual column count.
-         *
-         * @default -1
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * [只读] 实际列计数。
-         *
-         * @default -1
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        columnCount: number;
-        /**
-         * @private
-         */
-        private _requestedColumnCount;
-        /**
-         * @language en_US
-         * Number of columns to be displayed.
-         * <p>Set to 0 to allow the TileLayout to determine
-         * the column count automatically.</p>
-         * <p>If the <code>orientation</code> property is set to <code>TileOrientation.ROWS</code>,
-         * then setting this property has no effect
-         * In this case, the <code>rowCount</code> is explicitly set, and the
-         * container width is explicitly set. </p>
-         *
-         * @default 0
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 要显示的列数。
-         * <p>设置为 0 会允许 TileLayout 自动确定列计数。</p>
-         * <p>如果将 <code>orientation</code> 属性设置为 <code>TileOrientation.ROWS</code>，
-         * 则设置此属性不会产生任何效果。这种情况下，会显式设置 code>rowCount</code>，并显式设置容器宽度。</p>
-         *
-         * @default 0
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        requestedColumnCount: number;
-        /**
-         * @private
-         */
-        private _rowCount;
-        /**
-         * @language en_US
-         * [read-only] The row count.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * [只读] 行计数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        rowCount: number;
-        /**
-         * @private
-         */
-        private _requestedRowCount;
-        /**
-         * @language en_US
-         * Number of rows to be displayed.
-         * <p>Set to 0 to remove explicit override and allow the TileLayout to determine
-         * the row count automatically.</p>
-         * <p>If the <code>orientation</code> property is set to
-         * <code>TileOrientation.COLUMNS</code>, setting this property has no effect.
-         * in this case, <code>columnCount</code> is explicitly set, and the
-         * container height is explicitly set.</p>
-         *
-         * @default 0
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 要显示的行数。
-         * <code>设置为 -1 会删除显式覆盖并允许 TileLayout 自动确定行计数。</code>
-         * <code>如果将 <code>orientation</code> 属性设置为 <code>TileOrientation.COLUMNS</code>，
-         * 则设置此属性不会产生任何效果。这种情况下，会显式设置 <code>columnCount</code>，并显式设置容器高度。</code>
-         *
-         * @default 0
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        requestedRowCount: number;
-        /**
-         * @private
-         * 外部显式指定的列宽
-         */
-        private explicitColumnWidth;
-        /**
-         * @private
-         */
-        private _columnWidth;
-        /**
-         * @language en_US
-         * Contain the actual column width, in pixels.
-         * <p>If not explicitly set, the column width is
-         * determined from the width of the widest element. </p>
-         *
-         * @default NaN
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 包含实际列宽（以像素为单位）。
-         * <p>若未显式设置，则从根据最宽的元素的宽度确定列宽度。</p>
-         *
-         * @default NaN
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        columnWidth: number;
-        /**
-         * @private
-         * 外部显式指定的行高
-         */
-        private explicitRowHeight;
-        /**
-         * @private
-         */
-        private _rowHeight;
-        /**
-         * @language en_US
-         * The row height, in pixels.
-         * <p>If not explicitly set, the row height is
-         * determined from the maximum of elements' height.</p>
-         *
-         * @default NaN
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 行高（以像素为单位）。
-         * <p>如果未显式设置，则从元素的高度的最大值确定行高度。<p>
-         *
-         * @default NaN
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        rowHeight: number;
-        /**
-         * @private
-         */
-        private _paddingLeft;
-        /**
-         * @copy swan.LinearLayoutBase#paddingLeft
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        paddingLeft: number;
-        /**
-         * @private
-         */
-        private _paddingRight;
-        /**
-         * @copy swan.LinearLayoutBase#paddingRight
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        paddingRight: number;
-        /**
-         * @private
-         */
-        private _paddingTop;
-        /**
-         * @copy swan.LinearLayoutBase#paddingTop
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        paddingTop: number;
-        /**
-         * @private
-         */
-        private _paddingBottom;
-        /**
-         * @copy swan.LinearLayoutBase#paddingBottom
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        paddingBottom: number;
-        /**
-         * @private
-         */
-        private _horizontalAlign;
-        /**
-         * @language en_US
-         * Specifies how to align the elements within the cells in the horizontal direction.
-         * Supported values are
-         * HorizontalAlign.LEFT、HorizontalAlign.CENTER、
-         * HorizontalAlign.RIGHT、JustifyAlign.JUSTIFY。
-         *
-         * @default <code>JustifyAlign.JUSTIFY</code>
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 指定如何在水平方向上对齐单元格内的元素。支持的值有
-         * HorizontalAlign.LEFT、HorizontalAlign.CENTER、
-         * HorizontalAlign.RIGHT、JustifyAlign.JUSTIFY。
-         *
-         * @default <code>JustifyAlign.JUSTIFY</code>
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        horizontalAlign: string;
-        /**
-         * @private
-         */
-        private _verticalAlign;
-        /**
-         * @language en_US
-         * 指定如何在垂直方向上对齐单元格内的元素。
-         * 支持的值有 VerticalAlign.TOP、VerticalAlign.MIDDLE、
-         * VerticalAlign.BOTTOM、JustifyAlign.JUSTIFY。
-         * 默认值：JustifyAlign.JUSTIFY。
-         *
-         * @default <code>swan.JustifyAlign.JUSTIFY</code>
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * Specifies how to align the elements within the cells in the vertical direction.
-         * Supported values are
-         * VerticalAlign.TOP、VerticalAlign.MIDDLE、
-         * VerticalAlign.BOTTOM、JustifyAlign.JUSTIFY。
-         *
-         * @default <code>swan.JustifyAlign.JUSTIFY</code>
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        verticalAlign: string;
-        /**
-         * @private
-         */
-        private _columnAlign;
-        /**
-         * @language en_US
-         * Specifies how to justify the fully visible columns to the container width.
-         *
-         * <p>When set to <code>ColumnAlign.LEFT</code> it turns column justification off.
-         *  There may be partially visible columns or whitespace between the last column and
-         *  the right edge of the container.  This is the default value.</p>
-         *
-         * <p>When set to <code>ColumnAlign.JUSTIFY_USING_GAP</code> the <code>horizontalGap</code>
-         * actual value increases so that
-         * the last fully visible column right edge aligns with the container's right edge.
-         * In case there is only a single fully visible column, the <code>horizontalGap</code> actual value
-         * increases so that it pushes any partially visible column beyond the right edge
-         * of the container.
-         * Note that explicitly setting the <code>horizontalGap</code> property does not turn off
-         * justification. It only determines the initial gap value.
-         * Justification may increases it.</p>
-         *
-         * <p>When set to <code>ColumnAlign.JUSTIFY_USING_WIDTH</code> the <code>columnWidth</code>
-         * actual value increases so that
-         * the last fully visible column right edge aligns with the container's right edge.
-         * Note that explicitly setting the <code>columnWidth</code> property does not turn off justification.
-         * It only determines the initial column width value.
-         * Justification may increases it.</p>
-         *
-         * @default ColumnAlign.LEFT
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 指定如何将完全可见列与容器宽度对齐。
-         *
-         * <p>设置为 <code>ColumnAlign.LEFT</code> 时，它会关闭列两端对齐。
-         * 在容器的最后一列和右边缘之间可能存在部分可见的列或空白。这是默认值。</p>
-         *
-         * <p>设置为 <code>ColumnAlign.JUSTIFY_USING_GAP</code> 时，<code>horizontalGap</code> 的实际值将增大，
-         * 这样最后一个完全可见列右边缘会与容器的右边缘对齐。仅存在一个完全可见列时，
-         * <code>horizontalGap</code> 的实际值将增大，这样它会将任何部分可见列推到容器的右边缘之外。
-         * 请注意显式设置 <code>horizontalGap</code> 属性不会关闭两端对齐。它仅确定初始间隙值。两端对齐可能会增大它。</p>
-         *
-         * <p>设置为 <code>ColumnAlign.JUSTIFY_USING_WIDTH</code> 时，<code>columnWidth</code> 的实际值将增大，
-         * 这样最后一个完全可见列右边缘会与容器的右边缘对齐。请注意显式设置 <code>columnWidth</code> 属性不会关闭两端对齐。
-         * 它仅确定初始列宽度值。两端对齐可能会增大它。</p>
-         *
-         * @default ColumnAlign.LEFT
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        columnAlign: string;
-        /**
-         * @private
-         */
-        private _rowAlign;
-        /**
-         * @language en_US
-         * Specifies how to justify the fully visible rows to the container height.
-         *
-         * <p>When set to <code>RowAlign.TOP</code> it turns column justification off.
-         * There might be partially visible rows or whitespace between the last row and
-         * the bottom edge of the container.  This is the default value.</p>
-         *
-         * <p>When set to <code>RowAlign.JUSTIFY_USING_GAP</code> the <code>verticalGap</code>
-         * actual value increases so that
-         * the last fully visible row bottom edge aligns with the container's bottom edge.
-         * In case there is only a single fully visible row, the value of <code>verticalGap</code>
-         * increases so that it pushes any partially visible row beyond the bottom edge
-         * of the container.  Note that explicitly setting the <code>verticalGap</code> does not turn off
-         * justification, but just determines the initial gap value.
-         * Justification can then increases it.</p>
-         *
-         * <p>When set to <code>RowAlign.JUSTIFY_USING_HEIGHT</code> the <code>rowHeight</code>
-         * actual value increases so that
-         * the last fully visible row bottom edge aligns with the container's bottom edge.  Note that
-         * explicitly setting the <code>rowHeight</code> does not turn off justification, but
-         * determines the initial row height value.
-         * Justification can then increase it.</p>
-         *
-         * @default RowAlign.TOP
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 指定如何将完全可见行与容器高度对齐。
-         *
-         * <p>设置为 <code>RowAlign.TOP</code> 时，它会关闭列两端对齐。
-         * 在容器的最后一行和底边缘之间可能存在部分可见的行或空白。这是默认值。</p>
-         *
-         * <p>设置为 <code>RowAlign.JUSTIFY_USING_GAP</code> 时，<code>verticalGap</code> 的实际值会增大，
-         * 这样最后一个完全可见行底边缘会与容器的底边缘对齐。仅存在一个完全可见行时，<code>verticalGap</code> 的值会增大，
-         * 这样它会将任何部分可见行推到容器的底边缘之外。请注意，显式设置 <code>verticalGap</code>
-         * 不会关闭两端对齐，而只是确定初始间隙值。两端对齐接着可以增大它。</p>
-         *
-         * <p>设置为 <code>RowAlign.JUSTIFY_USING_HEIGHT</code> 时，<code>rowHeight</code> 的实际值会增大，
-         * 这样最后一个完全可见行底边缘会与容器的底边缘对齐。请注意，显式设置 <code>rowHeight</code>
-         * 不会关闭两端对齐，而只是确定初始行高度值。两端对齐接着可以增大它。</p>
-         *
-         * @default RowAlign.TOP
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        rowAlign: string;
-        /**
-         * @private
-         */
-        private _orientation;
-        /**
-         * @language en_US
-         * Specifies whether elements are arranged row by row or
-         * column by column.
-         *
-         * @default TileOrientation.ROWS
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 指定是逐行还是逐列排列元素。
-         *
-         * @default TileOrientation.ROWS
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        orientation: string;
-        /**
-         * @private
-         * 标记目标容器的尺寸和显示列表失效
-         */
-        private invalidateTargetLayout();
+        invalidateProperties(): void;
         /**
          * @inheritDoc
          *
@@ -6007,32 +6869,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        measure(): void;
-        /**
-         * @private
-         * 计算行和列的尺寸及数量
-         */
-        private calculateRowAndColumn(explicitWidth, explicitHeight);
-        /**
-         * @private
-         * 缓存的最大子对象宽度
-         */
-        private maxElementWidth;
-        /**
-         * @private
-         * 缓存的最大子对象高度
-         */
-        private maxElementHeight;
-        /**
-         * @private
-         * 更新最大子对象尺寸
-         */
-        private updateMaxElementSize();
-        /**
-         * @private
-         * 更新虚拟布局的最大子对象尺寸
-         */
-        private doUpdateMaxElementSize(startIndex, endIndex);
+        validateProperties(): void;
         /**
          * @inheritDoc
          *
@@ -6040,22 +6877,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        clearVirtualLayoutCache(): void;
-        /**
-         * @private
-         * 当前视图中的第一个元素索引
-         */
-        private startIndex;
-        /**
-         * @private
-         * 当前视图中的最后一个元素的索引
-         */
-        private endIndex;
-        /**
-         * @private
-         * 视图的第一个和最后一个元素的索引值已经计算好的标志
-         */
-        private indexInViewCalculated;
+        invalidateSize(): void;
         /**
          * @inheritDoc
          *
@@ -6063,12 +6885,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        scrollPositionChanged(): void;
-        /**
-         * @private
-         * 获取视图中第一个和最后一个元素的索引,返回是否发生改变
-         */
-        private getIndexInView();
+        validateSize(recursive?: boolean): void;
         /**
          * @inheritDoc
          *
@@ -6076,217 +6893,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        updateDisplayList(width: number, height: number): void;
-        /**
-         * @private
-         * 为单个元素布局
-         */
-        private sizeAndPositionElement(element, cellX, cellY, cellWidth, cellHeight);
-        /**
-         * @private
-         * 为两端对齐调整间隔或格子尺寸
-         */
-        private adjustForJustify(width, height);
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * Linear layout base class, usually as the parent class of
-     * <code>HorizontalLayout</code> and <code>VerticalLayout</code>.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 线性布局基类，通常作为 <code>HorizontalLayout</code> 和 <code>VerticalLayout</code> 的父类。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class LinearLayoutBase extends LayoutBase {
-        /**
-         * @language en_US
-         * The horizontal alignment of layout elements.
-         * <p>The <code>lark.HorizontalAlign</code> and <code>swan.JustifyAlign</code> class
-         * defines the possible values for this property.</p>
-         *
-         * @default "left"
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 布局元素的水平对齐策略。
-         * <p><code>lark.HorizontalAlign</code> 和
-         * <code>swan.JustifyAlign</code>类定义此属性的可能值。<p>
-         *
-         * @default "left"
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        horizontalAlign: string;
-        /**
-         * @language en_US
-         * The vertical alignment of layout elements.
-         * <p>The <code>lark.VerticalAlign</code> and <code>swan.JustifyAlign</code> class
-         * defines the possible values for this property.</p>
-         *
-         * @default "top"
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 布局元素的垂直对齐策略。请使用 VerticalAlign 定义的常量。
-         * <p><code>lark.VerticalAlign</code> 和
-         * <code>swan.JustifyAlign</code>类定义此属性的可能值。<p>
-         *
-         * @default "top"
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        verticalAlign: string;
-        /**
-         * @language en_US
-         * The space between layout elements, in pixels.
-         *
-         * @default 6
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 布局元素之间的间隔（以像素为单位）。
-         *
-         * @default 6
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        gap: number;
-        /**
-         * @language en_US
-         * Number of pixels between the container's left edge
-         * and the left edge of the first layout element.
-         *
-         * @default 0
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 容器的左边缘与第一个布局元素的左边缘之间的像素数。
-         *
-         * @default 0
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        paddingLeft: number;
-        /**
-         * @language en_US
-         * Number of pixels between the container's right edge
-         * and the right edge of the last layout element.
-         *
-         *  @default 0
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 容器的右边缘与最后一个布局元素的右边缘之间的像素数。
-         *
-         * @default 0
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        paddingRight: number;
-        /**
-         * @language en_US
-         * The minimum number of pixels between the container's top edge and
-         * the top of all the container's layout elements.
-         *
-         * @default 0
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 容器的顶边缘与所有容器的布局元素的顶边缘之间的最少像素数。
-         *
-         * @default 0
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        paddingTop: number;
-        /**
-         * @language en_US
-         * The minimum number of pixels between the container's bottom edge and
-         * the bottom of all the container's layout elements.
-         *
-         * @default 0
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 容器的底边缘与所有容器的布局元素的底边缘之间的最少像素数。
-         *
-         * @default 0
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        paddingBottom: number;
-        /**
-         * @language en_US
-         * Convenience function for subclasses that invalidates the
-         * target's size and displayList so that both layout's <code>measure()</code>
-         * and <code>updateDisplayList</code> methods get called.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 失效目标容器的尺寸和显示列表的简便方法，调用目标容器的
-         * <code>measure()</code>和<code>updateDisplayList</code>方法
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected invalidateTargetLayout(): void;
+        invalidateDisplayList(): void;
         /**
          * @inheritDoc
          *
@@ -6294,40 +6901,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        measure(): void;
-        /**
-         * @language en_US
-         * Compute exact values for measuredWidth and measuredHeight.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 计算目标容器 measuredWidth 和 measuredHeight 的精确值
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected measureReal(): void;
-        /**
-         * @language en_US
-         * Compute potentially approximate values for measuredWidth and measuredHeight.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 计算目标容器 measuredWidth 和 measuredHeight 的近似值
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected measureVirtual(): void;
+        validateDisplayList(): void;
         /**
          * @inheritDoc
          *
@@ -6335,84 +6909,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        updateDisplayList(width: number, height: number): void;
-        /**
-         * @language en_US
-         * An Array of the virtual layout elements size cache.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 虚拟布局使用的尺寸缓存。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected elementSizeTable: number[];
-        /**
-         * @language en_US
-         * Gets the starting position of the specified index element
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取指定索引元素的起始位置
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected getStartPosition(index: number): number;
-        /**
-         * @language en_US
-         * Gets the size of the specified index element
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取指定索引元素的尺寸
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected getElementSize(index: number): number;
-        /**
-         * @language en_US
-         * Gets the sum of the size of cached elements
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取缓存的子对象尺寸总和
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected getElementTotalSize(): number;
-        /**
-         * @inheritDoc
-         *
-         * @param index
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        elementRemoved(index: number): void;
+        validateNow(): void;
         /**
          * @inheritDoc
          *
@@ -6420,75 +6917,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        clearVirtualLayoutCache(): void;
-        /**
-         * @language en_US
-         * The binary search to find the specified index position of the display object
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 折半查找法寻找指定位置的显示对象索引
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected findIndexAt(x: number, i0: number, i1: number): number;
-        /**
-         * @language en_US
-         * The first element index in the view of the virtual layout
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 虚拟布局使用的当前视图中的第一个元素索引
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected startIndex: number;
-        /**
-         * @language en_US
-         * The last element index in the view of the virtual layout
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 虚拟布局使用的当前视图中的最后一个元素的索引
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected endIndex: number;
-        /**
-         * @language en_US
-         * A Flag of the first element and the end element has been calculated.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 视图的第一个和最后一个元素的索引值已经计算好的标志
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected indexInViewCalculated: boolean;
+        setLayoutBoundsSize(layoutWidth: number, layoutHeight: number): void;
         /**
          * @inheritDoc
          *
@@ -6496,125 +6925,23 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        scrollPositionChanged(): void;
+        setLayoutBoundsPosition(x: number, y: number): void;
         /**
-         * @language en_US
-         * Get the index of the first and last element in the view,
-         * and to return whether or not to change.
-         *
-         * @return has the index changed
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
+        getLayoutBounds(bounds: lark.Rectangle): void;
         /**
-         * @language zh_CN
-         * 获取视图中第一个和最后一个元素的索引,返回是否发生改变。
-         *
-         * @return 索引是否已改变
+         * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        protected getIndexInView(): boolean;
-        /**
-         * @language en_US
-         * The maximum size of elements
-         *
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 子元素最大的尺寸
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected maxElementSize: number;
-        /**
-         * @language en_US
-         * Update the layout of the virtualized elements
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 更新虚拟布局的显示列表
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected updateDisplayListVirtual(width: number, height: number): void;
-        /**
-         * @language en_US
-         * Update the layout of the reality elements
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 更新真实布局的显示列表
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected updateDisplayListReal(width: number, height: number): void;
-        /**
-         * @language en_US
-         * Allocate blank area for each variable size element.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 为每个可变尺寸的子项分配空白区域。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected flexChildrenProportionally(spaceForChildren: number, spaceToDistribute: number, totalPercent: number, childInfoArray: Array<any>): void;
-    }
-}
-declare module swan.sys {
-    /**
-     * @private
-     */
-    class ChildInfo {
-        /**
-         * @private
-         */
-        layoutElement: swan.UIComponent;
-        /**
-         * @private
-         */
-        size: number;
-        /**
-         * @private
-         */
-        percent: number;
-        /**
-         * @private
-         */
-        min: number;
-        /**
-         * @private
-         */
-        max: number;
+        getPreferredBounds(bounds: lark.Rectangle): void;
     }
 }
 declare module swan {
@@ -6820,6 +7147,423 @@ declare module swan {
         minHeight: number;
         /**
          * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        maxHeight: number;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        setMeasuredSize(width: number, height: number): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        invalidateProperties(): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        validateProperties(): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        invalidateSize(): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        validateSize(recursive?: boolean): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        invalidateDisplayList(): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        validateDisplayList(): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        validateNow(): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        setLayoutBoundsSize(layoutWidth: number, layoutHeight: number): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        setLayoutBoundsPosition(x: number, y: number): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        getLayoutBounds(bounds: lark.Rectangle): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        getPreferredBounds(bounds: lark.Rectangle): void;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The Image control lets you show JPEG, PNG, and GIF files
+     * at runtime. Image inherit Bitmap，so you can set the <code>bitmapData</code> property
+     * to show the data. you can also set the <code>source</code> property, Image will auto load
+     * and show the url image or the bitmapData.
+     *
+     * @event lark.Event.COMPLETE Emitted when the image loaded complete.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Image 控件允许您在运行时显示 JPEG、PNG 等图片文件文件。Image 继承至 Bitmap，因此您可以直接对其 bitmapData 属性，
+     * 赋值从外部加载得到的位图数据以显示对应图片。同时，Image 还提供了更加方便的 source 属性，source 属性可以接受一个网络图片url作为值，
+     * 赋值为url后，它内部会自动去加载并显示图片。并且您同样也可以直接把 BitmapData 对象赋值给 source 属性以显示图片。
+     *
+     * @event lark.Event.COMPLETE 当图片加载完成后调度
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class Image extends lark.Bitmap implements UIComponent {
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @param source The source used for the bitmap fill. the value can be
+         * a string or an instance of <code>BitmapData</code>
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @param source 用于位图填充的源。可以是一个字符串或者 <code>BitmapData</code> 对象
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        constructor(source?: string | lark.BitmapData);
+        /**
+         * @private
+         */
+        private _scale9Grid;
+        /**
+         * @language en_US
+         * Represent a Rectangle Area that the 9 scale area of Image.
+         * Notice: This property is valid only when <code>fillMode</code>
+         * is <code>BitmapFillMode.SCALE</code>.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 矩形区域，它定义素材对象的九个缩放区域。
+         * 注意:此属性仅在<code>fillMode</code>为<code>BitmapFillMode.SCALE</code>时有效。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        scale9Grid: lark.Rectangle;
+        /**
+         * @private
+         */
+        private _fillMode;
+        /**
+         * @language en_US
+         * Determines how the bitmap fills in the dimensions.
+         * <p>When set to <code>BitmapFillMode.CLIP</code>, the bitmap
+         * ends at the edge of the region.</p>
+         * <p>When set to <code>BitmapFillMode.REPEAT</code>, the bitmap
+         * repeats to fill the region.</p>
+         * <p>When set to <code>BitmapFillMode.SCALE</code>, the bitmap
+         * stretches to fill the region.</p>
+         *
+         * @default <code>BitmapFillMode.SCALE</code>
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 确定位图填充尺寸的方式。
+         * <p>设置为 <code>BitmapFillMode.CLIP</code>时，位图将在边缘处被截断。</p>
+         * <p>设置为 <code>BitmapFillMode.REPEAT</code>时，位图将重复以填充区域。</p>
+         * <p>设置为 <code>BitmapFillMode.SCALE</code>时，位图将拉伸以填充区域。</p>
+         *
+         * @default <code>BitmapFillMode.SCALE</code>
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        fillMode: string;
+        /**
+         * @private
+         */
+        private sourceChanged;
+        /**
+         * @private
+         */
+        private _source;
+        /**
+         * @language en_US
+         * The source used for the bitmap fill. the value can be
+         * a string or an instance of <code>BitmapData</code>
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 用于位图填充的源。可以是一个字符串或者 <code>BitmapData</code> 对象
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        source: string | lark.BitmapData;
+        /**
+         * @private
+         * 解析source
+         */
+        private parseSource();
+        /**
+         * @private
+         * 资源发生改变
+         */
+        private contentChanged(data, source);
+        /**
+         * @private
+         * 绘制九宫格位图
+         */
+        private drawScale9GridImage(context, image, scale9Grid, surfaceWidth?, surfaceHeight?);
+        /**
+         * @private
+         * UIComponentImpl 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
+         */
+        private initializeUIValues;
+        /**
+         * @copy swan.UIComponent#createChildren
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected createChildren(): void;
+        /**
+         * @copy swan.UIComponent#childrenCreated
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected childrenCreated(): void;
+        /**
+         * @copy swan.UIComponent#commitProperties
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected commitProperties(): void;
+        /**
+         * @copy swan.UIComponent#measure
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected measure(): void;
+        /**
+         * @copy swan.UIComponent#updateDisplayList
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
+        /**
+         * @copy swan.UIComponent#invalidateParentLayout
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected invalidateParentLayout(): void;
+        /**
+         * @copy swan.UIComponent#includeInLayout
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        includeInLayout: boolean;
+        /**
+         * @copy swan.UIComponent#left
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        left: number;
+        /**
+         * @copy swan.UIComponent#right
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        right: number;
+        /**
+         * @copy swan.UIComponent#top
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        top: number;
+        /**
+         * @copy swan.UIComponent#bottom
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        bottom: number;
+        /**
+         * @copy swan.UIComponent#horizontalCenter
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        horizontalCenter: number;
+        /**
+         * @copy swan.UIComponent#verticalCenter
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        verticalCenter: number;
+        /**
+         * @copy swan.UIComponent#percentWidth
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        percentWidth: number;
+        /**
+         * @copy swan.UIComponent#percentHeight
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        percentHeight: number;
+        /**
+         * @copy swan.UIComponent#explicitWidth
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        explicitWidth: number;
+        /**
+         * @copy swan.UIComponent#explicitHeight
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        explicitHeight: number;
+        /**
+         * @copy swan.UIComponent#minWidth
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        minWidth: number;
+        /**
+         * @copy swan.UIComponent#maxWidth
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        maxWidth: number;
+        /**
+         * @copy swan.UIComponent#minHeight
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        minHeight: number;
+        /**
+         * @copy swan.UIComponent#maxHeight
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -7198,344 +7942,6 @@ declare module swan {
         private commitCurrentState;
     }
 }
-declare module swan {
-    /**
-     * @language en_US
-     * Label is an UIComponent that can render one or more lines of text.
-     * The text to be displayed is determined by the <code>text</code> property.
-     * The formatting of the text is specified by the styles，
-     * such as <code>fontFamily</code> and <code>fontSize</code>.
-     *
-     * <p>Because Label is fast and lightweight, it is especially suitable
-     * for use cases that involve rendering many small pieces of non-interactive
-     * text, such as item renderers and labels in Button skins.</p>
-     *
-     * <p>In Label, three character sequences are recognized
-     * as explicit line breaks: CR (<code>"\r"</code>), LF (<code>"\n"</code>),
-     * and CR+LF (<code>"\r\n"</code>).</p>
-     *
-     * <p>If you don't specify any kind of width for a Label,
-     * then the longest line, as determined by these explicit line breaks,
-     * determines the width of the Label.</p>
-     *
-     * <p>If you do specify some kind of width, then the specified text is
-     * word-wrapped at the right edge of the component's bounds.
-     * If the text extends below the bottom of the component,
-     * it is clipped.</p>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * Label 是可以呈示一行或多行统一格式文本的UI组件。要显示的文本由 text 属性确定。文本格式由样式属性指定，例如 fontFamily 和 fontSize。
-     * 因为 Label 运行速度快且占用内存少，所以它特别适合用于显示多个小型非交互式文本的情况，例如，项呈示器和 Button 外观中的标签。
-     * 在 Label 中，将以下三个字符序列识别为显式换行符：CR（“\r”）、LF（“\n”）和 CR+LF（“\r\n”）。
-     * 如果没有为 Label 指定宽度，则由这些显式换行符确定的最长行确定 Label 的宽度。
-     * 如果指定了宽度，则指定文本将在组件边界的右边缘换行，如果文本扩展到低于组件底部，则将被剪切。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class Label extends lark.TextField implements UIComponent {
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @param text The text displayed by this text component.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @param text 此文本组件所显示的文本。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        constructor(text?: string);
-        /**
-         * @private
-         */
-        private _widthConstraint;
-        /**
-         * @private
-         * UIComponentImpl 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
-         */
-        private initializeUIValues;
-        /**
-         * @copy swan.UIComponent#createChildren
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected createChildren(): void;
-        /**
-         * @copy swan.UIComponent#childrenCreated
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected childrenCreated(): void;
-        /**
-         * @copy swan.UIComponent#commitProperties
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected commitProperties(): void;
-        /**
-         * @copy swan.UIComponent#measure
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected measure(): void;
-        /**
-         * @copy swan.UIComponent#updateDisplayList
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
-        /**
-         * @copy swan.UIComponent#invalidateParentLayout
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected invalidateParentLayout(): void;
-        /**
-         * @copy swan.UIComponent#includeInLayout
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        includeInLayout: boolean;
-        /**
-         * @copy swan.UIComponent#left
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        left: number;
-        /**
-         * @copy swan.UIComponent#right
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        right: number;
-        /**
-         * @copy swan.UIComponent#top
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        top: number;
-        /**
-         * @copy swan.UIComponent#bottom
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        bottom: number;
-        /**
-         * @copy swan.UIComponent#horizontalCenter
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        horizontalCenter: number;
-        /**
-         * @copy swan.UIComponent#verticalCenter
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        verticalCenter: number;
-        /**
-         * @copy swan.UIComponent#percentWidth
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        percentWidth: number;
-        /**
-         * @copy swan.UIComponent#percentHeight
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        percentHeight: number;
-        /**
-         * @copy swan.UIComponent#explicitWidth
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        explicitWidth: number;
-        /**
-         * @copy swan.UIComponent#explicitHeight
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        explicitHeight: number;
-        /**
-         * @copy swan.UIComponent#minWidth
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        minWidth: number;
-        /**
-         * @copy swan.UIComponent#maxWidth
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        maxWidth: number;
-        /**
-         * @copy swan.UIComponent#minHeight
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        minHeight: number;
-        /**
-         * @copy swan.UIComponent#maxHeight
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        maxHeight: number;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        setMeasuredSize(width: number, height: number): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        invalidateProperties(): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        validateProperties(): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        invalidateSize(): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        validateSize(recursive?: boolean): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        invalidateDisplayList(): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        validateDisplayList(): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        validateNow(): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        setLayoutBoundsSize(layoutWidth: number, layoutHeight: number): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        setLayoutBoundsPosition(x: number, y: number): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        getLayoutBounds(bounds: lark.Rectangle): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        getPreferredBounds(bounds: lark.Rectangle): void;
-    }
-}
 declare module swan.sys {
     const enum ComponentKeys {
         hostComponentKey = 0,
@@ -7633,14 +8039,14 @@ declare module swan {
         private onExmlLoaded(clazz, url);
         /**
          * @language en_US
-         * [read-only] The instance of the skin class for this component instance.
+         * The instance of the skin class for this component instance.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [只读]皮肤对象实例。
+         * 皮肤对象实例。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -8703,322 +9109,23 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * The Image control lets you show JPEG, PNG, and GIF files
-     * at runtime. Image inherit Bitmap，so you can set the <code>bitmapData</code> property
-     * to show the data. you can also set the <code>source</code> property, Image will auto load
-     * and show the url image or the bitmapData.
+     * The VerticalLayout class arranges the layout elements in a vertical sequence,
+     * top to bottom, with optional gaps between the elements and optional padding
+     * around the sequence of elements.
      *
-     * @event lark.Event.COMPLETE Emitted when the image loaded complete.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * Image 控件允许您在运行时显示 JPEG、PNG 等图片文件文件。Image 继承至 Bitmap，因此您可以直接对其 bitmapData 属性，
-     * 赋值从外部加载得到的位图数据以显示对应图片。同时，Image 还提供了更加方便的 source 属性，source 属性可以接受一个网络图片url作为值，
-     * 赋值为url后，它内部会自动去加载并显示图片。并且您同样也可以直接把 BitmapData 对象赋值给 source 属性以显示图片。
+     * VerticalLayout 类按垂直顺序从上向下排列布局元素，在元素和围绕元素顺序的可选填充之间带有可选间隙。
      *
-     * @event lark.Event.COMPLETE 当图片加载完成后调度
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    class Image extends lark.Bitmap implements UIComponent {
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @param source The source used for the bitmap fill. the value can be
-         * a string or an instance of <code>BitmapData</code>
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @param source 用于位图填充的源。可以是一个字符串或者 <code>BitmapData</code> 对象
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        constructor(source?: string | lark.BitmapData);
-        /**
-         * @private
-         */
-        private _scale9Grid;
-        /**
-         * @language en_US
-         * Represent a Rectangle Area that the 9 scale area of Image.
-         * Notice: This property is valid only when <code>fillMode</code>
-         * is <code>BitmapFillMode.SCALE</code>.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 矩形区域，它定义素材对象的九个缩放区域。
-         * 注意:此属性仅在<code>fillMode</code>为<code>BitmapFillMode.SCALE</code>时有效。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        scale9Grid: lark.Rectangle;
-        /**
-         * @private
-         */
-        private _fillMode;
-        /**
-         * @language en_US
-         * Determines how the bitmap fills in the dimensions.
-         * <p>When set to <code>BitmapFillMode.CLIP</code>, the bitmap
-         * ends at the edge of the region.</p>
-         * <p>When set to <code>BitmapFillMode.REPEAT</code>, the bitmap
-         * repeats to fill the region.</p>
-         * <p>When set to <code>BitmapFillMode.SCALE</code>, the bitmap
-         * stretches to fill the region.</p>
-         *
-         * @default <code>BitmapFillMode.SCALE</code>
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 确定位图填充尺寸的方式。
-         * <p>设置为 <code>BitmapFillMode.CLIP</code>时，位图将在边缘处被截断。</p>
-         * <p>设置为 <code>BitmapFillMode.REPEAT</code>时，位图将重复以填充区域。</p>
-         * <p>设置为 <code>BitmapFillMode.SCALE</code>时，位图将拉伸以填充区域。</p>
-         *
-         * @default <code>BitmapFillMode.SCALE</code>
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        fillMode: string;
-        /**
-         * @private
-         */
-        private sourceChanged;
-        /**
-         * @private
-         */
-        private _source;
-        /**
-         * @language en_US
-         * The source used for the bitmap fill. the value can be
-         * a string or an instance of <code>BitmapData</code>
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 用于位图填充的源。可以是一个字符串或者 <code>BitmapData</code> 对象
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        source: string | lark.BitmapData;
-        /**
-         * @private
-         * 解析source
-         */
-        private parseSource();
-        /**
-         * @private
-         * 资源发生改变
-         */
-        private contentChanged(data, source);
-        /**
-         * @private
-         * 绘制九宫格位图
-         */
-        private drawScale9GridImage(context, image, scale9Grid, surfaceWidth?, surfaceHeight?);
-        /**
-         * @private
-         * UIComponentImpl 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
-         */
-        private initializeUIValues;
-        /**
-         * @copy swan.UIComponent#createChildren
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected createChildren(): void;
-        /**
-         * @copy swan.UIComponent#childrenCreated
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected childrenCreated(): void;
-        /**
-         * @copy swan.UIComponent#commitProperties
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected commitProperties(): void;
-        /**
-         * @copy swan.UIComponent#measure
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected measure(): void;
-        /**
-         * @copy swan.UIComponent#updateDisplayList
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
-        /**
-         * @copy swan.UIComponent#invalidateParentLayout
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected invalidateParentLayout(): void;
-        /**
-         * @copy swan.UIComponent#includeInLayout
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        includeInLayout: boolean;
-        /**
-         * @copy swan.UIComponent#left
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        left: number;
-        /**
-         * @copy swan.UIComponent#right
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        right: number;
-        /**
-         * @copy swan.UIComponent#top
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        top: number;
-        /**
-         * @copy swan.UIComponent#bottom
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        bottom: number;
-        /**
-         * @copy swan.UIComponent#horizontalCenter
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        horizontalCenter: number;
-        /**
-         * @copy swan.UIComponent#verticalCenter
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        verticalCenter: number;
-        /**
-         * @copy swan.UIComponent#percentWidth
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        percentWidth: number;
-        /**
-         * @copy swan.UIComponent#percentHeight
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        percentHeight: number;
-        /**
-         * @copy swan.UIComponent#explicitWidth
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        explicitWidth: number;
-        /**
-         * @copy swan.UIComponent#explicitHeight
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        explicitHeight: number;
-        /**
-         * @copy swan.UIComponent#minWidth
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        minWidth: number;
-        /**
-         * @copy swan.UIComponent#maxWidth
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        maxWidth: number;
-        /**
-         * @copy swan.UIComponent#minHeight
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        minHeight: number;
-        /**
-         * @copy swan.UIComponent#maxHeight
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        maxHeight: number;
+    class VerticalLayout extends LinearLayoutBase {
         /**
          * @inheritDoc
          *
@@ -9026,7 +9133,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        setMeasuredSize(width: number, height: number): void;
+        protected measureReal(): void;
         /**
          * @inheritDoc
          *
@@ -9034,7 +9141,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        invalidateProperties(): void;
+        protected measureVirtual(): void;
         /**
          * @inheritDoc
          *
@@ -9042,7 +9149,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        validateProperties(): void;
+        protected updateDisplayListReal(width: number, height: number): void;
         /**
          * @inheritDoc
          *
@@ -9050,7 +9157,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        invalidateSize(): void;
+        protected updateDisplayListVirtual(width: number, height: number): void;
         /**
          * @inheritDoc
          *
@@ -9058,7 +9165,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        validateSize(recursive?: boolean): void;
+        protected getStartPosition(index: number): number;
         /**
          * @inheritDoc
          *
@@ -9066,7 +9173,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        invalidateDisplayList(): void;
+        protected getElementSize(index: number): number;
         /**
          * @inheritDoc
          *
@@ -9074,7 +9181,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        validateDisplayList(): void;
+        protected getElementTotalSize(): number;
         /**
          * @inheritDoc
          *
@@ -9082,7 +9189,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        validateNow(): void;
+        elementAdded(index: number): void;
         /**
          * @inheritDoc
          *
@@ -9090,31 +9197,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        setLayoutBoundsSize(layoutWidth: number, layoutHeight: number): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        setLayoutBoundsPosition(x: number, y: number): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        getLayoutBounds(bounds: lark.Rectangle): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        getPreferredBounds(bounds: lark.Rectangle): void;
+        protected getIndexInView(): boolean;
     }
 }
 declare module swan {
@@ -9214,9 +9297,26 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * The VerticalLayout class arranges the layout elements in a vertical sequence,
-     * top to bottom, with optional gaps between the elements and optional padding
-     * around the sequence of elements.
+     * The Scroller component displays a single scrollable component,
+     * called a viewport, and horizontal and vertical scroll bars.
+     * The viewport must implement the IViewport interface.
+     * <p>The Group components implement the IViewport interface
+     * and can be used as the children of the Scroller control,
+     * as the following example shows:</p>
+     * <code>
+     *       <s:Scroller width="100" height="100">
+     *           <s:Group>
+     *               <s:Image width="300" height="400" source="assets/logo.jpg"/>
+     *           </s:Group>
+     *       </s:Scroller>
+     * </code>
+     * <p>The size of the Image control is set larger than that of its parent Group container.
+     * By default, the child extends past the boundaries of the parent container.
+     * Rather than allow the child to extend past the boundaries of the parent container,
+     * the Scroller specifies to clip the child to the boundaries and display scroll bars.</p>
+     *
+     * @event swan.UIEvent.CHANGE_START Emitted when the scroll position is going to change
+     * @event swan.UIEvent.CHANGE_END Emitted when the scroll position changed complete
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -9224,105 +9324,47 @@ declare module swan {
      */
     /**
      * @language zh_CN
-     * VerticalLayout 类按垂直顺序从上向下排列布局元素，在元素和围绕元素顺序的可选填充之间带有可选间隙。
+     * Scroller 组件显示一个称为视域的单个可滚动组件，以及水平滚动条和垂直滚动条。该视域必须实现 IViewport 接口。
+     * <p>Group 组件实现 IViewport 接口，且可以用作 Scroller 控件的子代，如下例所示：</p>
+     * <code>
+     *       <s:Scroller width="100" height="100">
+     *           <s:Group>
+     *               <s:Image width="300" height="400" source="assets/logo.jpg"/>
+     *           </s:Group>
+     *       </s:Scroller>
+     * </code>
+     * Image 控件的大小比其父 Group 容器设置得大。默认情况下，子代超过父容器的边界。
+     * Scroller 会指定将子代剪切到边界并显示滚动条，而不是让子代超过父容器的边界。
      *
+     * @event swan.UIEvent.CHANGE_START 滚动位置改变开始
+     * @event swan.UIEvent.CHANGE_END 滚动位置改变结束
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    class VerticalLayout extends LinearLayoutBase {
+    class Scroller extends Component {
         /**
-         * @inheritDoc
+         * @language en_US
+         * The threshold value(in pixels) trigger the rolling.
+         * when the touch points deviate from the initial touch point than this value will trigger the rolling.
+         *
+         * @default 5
          *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        protected measureReal(): void;
         /**
-         * @inheritDoc
+         * @language zh_CN
+         * 开始触发滚动的阈值（以像素为单位），当触摸点偏离初始触摸点的距离超过这个值时才会触发滚动。
+         *
+         * @default 5
          *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        protected measureVirtual(): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected updateDisplayListReal(width: number, height: number): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected updateDisplayListVirtual(width: number, height: number): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected getStartPosition(index: number): number;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected getElementSize(index: number): number;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected getElementTotalSize(): number;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        elementAdded(index: number): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected getIndexInView(): boolean;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The ItemRenderer class is the base class for item renderers.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * ItemRenderer 类是项呈示器的基类。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class ItemRenderer extends Group implements IItemRenderer {
+        static scrollThreshold: number;
         /**
          * @language en_US
          * Constructor.
@@ -9341,198 +9383,31 @@ declare module swan {
          */
         constructor();
         /**
-         * @private
-         */
-        private _data;
-        /**
          * @language en_US
-         * The data to render or edit.
+         * the horizontal scroll bar
          *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 要呈示或编辑的数据。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        data: any;
-        /**
-         * @language en_US
-         * Update the view when the <code>data</code> property changes.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 当数据改变时，更新视图。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected dataChanged(): void;
-        /**
-         * @private
-         */
-        private _selected;
-        /**
-         * @language en_US
-         * Contains <code>true</code> if the item renderer
-         * can show itself as selected.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果项呈示器可以将其自身显示为已选中，则为 true。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        selected: boolean;
-        /**
-         * @language en_US
-         * The index of the item in the data provider
-         * of the host component of the item renderer.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 项呈示器的数据提供程序中的项目索引。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        itemIndex: number;
-        /**
-         * @private
-         * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，触摸点是否在按钮上。
-         */
-        private touchCaptured;
-        /**
-         * @language en_US
-         * Handles <code>TouchEvent.TOUCH_BEGIN</code> events
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 触碰开始时触发事件
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected onTouchBegin(event: lark.TouchEvent): void;
-        /**
-         * @private
-         * 舞台上触摸弹起事件
-         */
-        private onStageTouchEnd(event);
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected getCurrentState(): string;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The ScrollBarBase class helps to position
-     * the portion of data that is displayed when there is too much data
-     * to fit in a display area.
-     * The ScrollBarBase class displays a pair of viewport and a thumb.
-     * viewport is a instance that implements IViewport.
-     *
-     * @see swan.IViewport
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * <code>ScrollBarBase</code> 滚动条基类，该类帮助在因数据太多而不能在显示区域完全显示时定位显示的数据部分。
-     * ScrollBarBase 类显示视区的一部分和一个指示滑块。
-     * 视区是一个IViewport接口实现的实例。
-     *
-     * @see swan.IViewport
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class ScrollBarBase extends Component {
-        /**
-         * @language en_US
-         * Constructor.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个ScrollBarBase实例。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        constructor();
-        /**
-         * @language en_US
-         * [SkinPart] Thumb display object.
          * @skinPart
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * [SkinPart]滑块显示对象。
+         * 水平滚动条
+         *
          * @skinPart
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        thumb: swan.UIComponent;
+        horizontalScrollBar: swan.HScrollBar;
         /**
          * @language en_US
-         * The viewport controlled by this scrollbar.
+         * the vertical scroll bar
          *
-         * If a viewport is specified, then changes to its actual size, content
-         * size, and scroll position cause the corresponding ScrollBarBase methods to
-         * run:
-         * <ul>
-         *     <li><code>onViewportResize()</code></li>
-         *     <li><code>onPropertyChanged()</code></li>
-         * </ul><p/>
-         *
-         * The VScrollBar and HScrollBar classes override these methods to keep their properties in
-         * sync with the viewport.
-         *
-         * @default null
-         * @see swan.VScrollBar
-         * @see swan.HScrollBar
+         * @skinPart
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -9540,19 +9415,82 @@ declare module swan {
          */
         /**
          * @language zh_CN
-         * 由该滚动条控制的视区。
+         * 垂直滚动条
          *
-         * 如果指定了视区，则对其实际大小、内容大小和滚动位置的更改会导致运行相对应的 ScrollBarBase 方法：
-         * <ul>
-         *     <li><code>onViewportResize()</code></li>
-         *     <li><code>onPropertyChanged()</code></li>
-         * </ul><p/>
+         * @skinPart
          *
-         * VScrollBar 和 HScrollBar 类需要重写这些方法以保证属性与视区的同步。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        verticalScrollBar: swan.VScrollBar;
+        /**
+         * @language en_US
+         * Indicates under what conditions the vertical scroll bar is displayed.
+         * <p><code>ScrollPolicy.ON</code> - the scroll bar is always displayed.</p>
+         * <p><code>ScrollPolicy.OFF</code> - the scroll bar is never displayed.</p>
+         * <p><code>ScrollPolicy.AUTO</code> - the scroll bar is displayed when
+         *  the viewport's contentHeight is larger than its height.
          *
-         * @default null
-         * @see swan.VScrollBar
-         * @see swan.HScrollBar
+         * @default ScrollPolicy.AUTO
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示在哪些条件下会显示垂直滑动条。
+         * <p><code>ScrollPolicy.ON</code> - 始终显示滚动条。</p>
+         * <p><code>ScrollPolicy.OFF</code> - 从不显示滚动条。</p>
+         * <p><code>ScrollPolicy.AUTO</code> - 当视域的 contentHeight 大于其自身的高度时显示滚动条。</p>
+         *
+         * @default ScrollPolicy.AUTO
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        scrollPolicyV: string;
+        /**
+         * @language en_US
+         * Indicates under what conditions the horizontal scroll bar is displayed.
+         * <p><code>ScrollPolicy.ON</code> - the scroll bar is always displayed.</p>
+         * <p><code>ScrollPolicy.OFF</code> - the scroll bar is never displayed.</p>
+         * <p><code>ScrollPolicy.AUTO</code> - the scroll bar is displayed when
+         *  the viewport's contentWidth is larger than its width.
+         *
+         * @default ScrollPolicy.AUTO
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指示在哪些条件下会显示水平滑动条。
+         * <p><code>ScrollPolicy.ON</code> - 始终显示滚动条。</p>
+         * <p><code>ScrollPolicy.OFF</code> - 从不显示滚动条。</p>
+         * <p><code>ScrollPolicy.AUTO</code> - 当视域的 contentWidth 大于其自身的宽度时显示滚动条。</p>
+         *
+         * @default ScrollPolicy.AUTO
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        scrollPolicyH: string;
+        /**
+         * @language en_US
+         * The viewport component to be scrolled.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要滚动的视域组件。
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -9561,501 +9499,101 @@ declare module swan {
         viewport: IViewport;
         /**
          * @private
+         * 安装并初始化视域组件
+         */
+        private installViewport();
+        /**
+         * @private
+         * 卸载视域组件
+         */
+        private uninstallViewport();
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected setSkin(skin: Skin): void;
+        /**
+         * @private
          *
          * @param event
          */
-        private onViewportResize(event?);
+        private onTouchEndCapture(event);
         /**
-         * @language en_US
-         * Properties of viewport changed.
+         * @private
+         * 若这个Scroller可以滚动，阻止当前事件，延迟100ms再抛出。
+         */
+        private onTouchBeginCapture(event);
+        /**
+         * @private
+         *
          * @param event
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
          */
+        private delayEmitEvent(event);
         /**
-         * @language zh_CN
-         * 视区属性发生改变。
+         * @private
+         *
+         * @param e
+         */
+        private onDelayTouchEventTimer(e?);
+        /**
+         * @private
+         * 检查当前滚动策略，若有一个方向可以滚动，返回true。
+         */
+        private checkScrollPolicy();
+        /**
+         * @private
+         *
          * @param event
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
          */
-        protected onPropertyChanged(event: swan.PropertyEvent): void;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The Button component is a commonly used rectangular button.
-     * The Button component looks like it can be pressed.
-     * The default skin has a text label and a icon display object.
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * Button 组件是常用的矩形按钮。Button 组件看起来可以按压。默认外观具有一个文本标签和图标显示对象。
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class Button extends Component {
-        /**
-         * @language en_US
-         * Constructor.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个按钮实例
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        constructor();
-        /**
-         * @language en_US
-         * [SkinPart] A skin part that defines the label of the button.
-         * @skinPart
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * [SkinPart] 按钮上的文本标签。
-         * @skinPart
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        labelDisplay: IDisplayText;
-        /**
-         * @private
-         */
-        private _label;
-        /**
-         * @language en_US
-         * Text to appear on the Button control.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 要在按钮上显示的文本。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        label: string;
-        /**
-         * @language en_US
-         * [SkinPart] A skin part that defines an optional icon for the button.
-         * @skinPart
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * [SkinPart] 按钮上的图标显示对象。
-         * @skinPart
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        iconDisplay: Image;
-        /**
-         * @private
-         */
-        private _icon;
-        /**
-         * @language en_US
-         * Icon to appear on the Button control.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 要在按钮上显示的图标数据
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        icon: string | lark.BitmapData;
-        /**
-         * @private
-         * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，触摸点是否在按钮上。
-         */
-        private touchCaptured;
-        /**
-         * @language en_US
-         * This method handles the touch events
-         * @param  The <code>lark.TouchEvent</code> object.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 触碰事件处理。
-         * @param event 事件 <code>lark.TouchEvent</code> 的对象。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected onTouchBegin(event: lark.TouchEvent): void;
-        /**
-         * @private
-         * 舞台上触摸弹起事件
-         */
-        private onStageTouchEnd(event);
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected getCurrentState(): string;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected partAdded(partName: string, instance: any): void;
-        /**
-         * @language en_US
-         * This method is called when handling a <code>lark.TouchEvent.TOUCH_END</code> event
-         * when the user touches on the button. It is only called when the button
-         * is the target and when <code>touchCaptured</code> is <code>true</code>.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 当在用户单击按钮之后处理 <code>lark.TouchEvent.TOUCH_END</code> 事件时，将调用此方法。
-         * 仅当以按钮为目标，并且 <code>touchCaptured</code> 为 <code>true</code> 时，才会调用此方法。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected buttonReleased(): void;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The DataGroup class is the base container class for data items.
-     * The DataGroup class converts data items to visual elements for display.
-     * While this container can hold visual elements, it is often used only
-     * to hold data items as children.
-     *
-     * @see swan.Group
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * DataGroup 类将数据项目转换为可视元素以进行显示。
-     * 尽管此容器可以包含可视元素，但它通常仅用于包含作为子项的数据项目。
-     *
-     * @see swan.Group
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class DataGroup extends Group {
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        constructor();
-        /**
-         * @copy swan.LayoutBase#useVirtualLayout
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        useVirtualLayout: boolean;
-        /**
-         * @private
-         * 是否使用虚拟布局标记改变
-         */
-        private onUseVirtualLayoutChanged(event?);
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        setVirtualElementIndicesInView(startIndex: number, endIndex: number): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        getElementAt(index: number): lark.DisplayObject;
-        /**
-         * @private
-         * 释放指定索引处的项呈示器
-         */
-        private freeRendererByIndex(index);
+        private onTouchBegin(event);
         /**
          * @private
          *
-         * @param renderer
+         * @param event
          */
-        private doFreeRenderer(renderer);
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        invalidateSize(): void;
+        private onTouchMove(event);
         /**
          * @private
-         * 为指定索引创建虚拟的项呈示器
+         *
+         * @param event
          */
-        private createVirtualRenderer(item);
+        private onTouchEnd(event);
         /**
          * @private
-         * 根据rendererClass创建一个Renderer,并添加到显示列表
+         *
+         * @param scrollPos
          */
-        private createOneRenderer(rendererClass);
-        /**
-         * @language en_US
-         * The data provider for this DataGroup.
-         * It must be an ICollection, such as ArrayCollection
-         *
-         * @see swan.ICollection
-         * @see swan.ArrayCollection
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 列表数据源，请使用实现了ICollection接口的数据类型，例如 ArrayCollection
-         *
-         * @see swan.ICollection
-         * @see swan.ArrayCollection
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        dataProvider: ICollection;
+        private horizontalUpdateHandler(scrollPos);
         /**
          * @private
-         * 移除数据源监听
+         *
+         * @param scrollPos
          */
-        private removeDataProviderListener();
-        /**
-         * @language en_US
-         * Called when contents within the dataProvider changes.  We will catch certain
-         * events and update our children based on that.
-         *
-         * @param event 事件<code>swan.CollectionEvent</code>的对象。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 数据源改变事件处理。
-         *
-         * @param event 事件<code>swan.CollectionEvent</code>的对象。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected onCollectionChange(event: CollectionEvent): void;
+        private verticalUpdateHandler(scrollPos);
         /**
          * @private
-         * 数据源添加项目事件处理
+         *
          */
-        private itemAddedHandler(items, index);
+        private horizontalEndHandler();
         /**
          * @private
-         * 数据源移除项目事件处理
+         *
          */
-        private itemRemovedHandler(items, location);
-        /**
-         * @language en_US
-         * Adds the item for the specified dataProvider item to this DataGroup.
-         *
-         * This method is called as needed by the DataGroup implementation,
-         * it should not be called directly.
-         *
-         * @param item The item that was added, the value of dataProvider[index].
-         * @param index The index where the dataProvider item was added.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 添加一个指定的数据到数据源。
-         *
-         * 这个方法不应该由开发者直接调用，而用于本类自动内调用。
-         *
-         * @param item 添加的数据项。
-         * @param index 被添加到的索引。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected itemAdded(item: any, index: number): void;
-        /**
-         * @language en_US
-         * Removes the itemRenderer for the specified dataProvider item from this DataGroup.
-         *
-         * This method is called as needed by the DataGroup implementation,
-         * it should not be called directly.
-         *
-         * @param item The item that is being removed.
-         * @param index The index of the item that is being removed.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 删除数据源中指定的项。
-         *
-         * 这个方法不应该由开发者直接调用，而用于本类自动内调用。
-         *
-         * @param item 移除的数据项。
-         * @param index 被移除的索引。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected itemRemoved(item: any, index: number): void;
+        private verticalEndHanlder();
         /**
          * @private
-         * 更新当前所有项的索引
+         *
          */
-        private resetRenderersIndices();
+        private onChangeEnd();
         /**
          * @private
-         * 数据源更新或替换项目事件处理
-         */
-        private itemUpdatedHandler(item, location);
-        /**
-         * @private
-         * 调整指定项呈示器的索引值
-         */
-        private resetRendererItemIndex(index);
-        /**
-         * @language en_US
-         * The item renderer to use for data items.
-         * The class must implement the IItemRenderer interface.
-         * If defined, the <code>itemRendererFunction</code> property
-         * takes precedence over this property.
          *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @param event
          */
-        /**
-         * @language zh_CN
-         * 用于数据项目的项呈示器。您应该直接为此属性赋值自定义类的类定义，而不是一个实例。注意：该类必须实现 IItemRenderer 接口。<br/>
-         * rendererClass获取顺序：itemRendererFunction > itemRenderer > 默认ItemRenerer。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        itemRenderer: any;
-        /**
-         * @language en_US
-         * Function that returns an item renderer for a
-         * specific item.
-         *
-         * If defined, this property
-         * takes precedence over the <code>itemRenderer</code> property.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 为某个特定数据项返回一个项呈示器类定义的函数。
-         * rendererClass获取顺序：itemRendererFunction > itemRenderer > 默认ItemRenerer。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        itemRendererFunction: (item: any) => any;
-        /**
-         * @private
-         * 为特定的数据项返回项呈示器的工厂实例
-         */
-        private itemToRendererClass(item);
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected createChildren(): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected commitProperties(): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected measure(): void;
+        private onAutoHideTimer(event);
         /**
          * @inheritDoc
          *
@@ -10065,130 +9603,13 @@ declare module swan {
          */
         protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
         /**
-         * @private
-         * 确保测量过默认条目大小。
-         */
-        private ensureTypicalLayoutElement();
-        /**
-         * @private
-         * 测量项呈示器默认尺寸
-         */
-        private measureRendererSize();
-        /**
-         * @private
-         * 设置项目默认大小
-         */
-        private setTypicalLayoutRect(rect);
-        /**
-         * @private
-         * 移除所有项呈示器
-         */
-        private removeAllRenderers();
-        /**
-         * @private
-         * 为数据项创建项呈示器
-         */
-        private createRenderers();
-        /**
-         * @language en_US
-         * Updates the renderer for reuse.
-         * This method first prepares the item
-         * renderer for reuse by cleaning out any stale properties
-         * as well as updating it with new properties.<p/>
-         *
-         * The last thing this method should do is set the <code>data</code> property
-         * of the item renderer.
-         *
-         * @param renderer The item renderer.
-         * @param itemIndex The index of the data in the data provider.
-         * @param data The data object this item renderer is representing.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 此方法首先会准备项呈示器以重用，方法是清除任何旧属性，同时使用新属性进行更新。<p/>
-         *
-         * 最后，此方法应对项呈示器设置 data 属性。
-         *
-         * @param renderer 项呈示器。
-         * @param itemIndex 数据提供程序中的数据索引。
-         * @param data 此项呈示器正在表示的数据对象。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        updateRenderer(renderer: IItemRenderer, itemIndex: number, data: any): IItemRenderer;
-        /**
          * @inheritDoc
          *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        numElements: number;
-        /**
-         * @language en_US
-         * Adds the itemRenderer for the specified dataProvider item to this DataGroup.
-         *
-         * This method is called as needed by the DataGroup implementation,
-         * it should not be called directly.
-         *
-         * @param renderer The renderer that was added.
-         * @param index The index where the dataProvider item was added.
-         * @param item The item that was added, the value of dataProvider[index].
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 项呈示器被添加.
-         *
-         * 这个方法不能直接调用，它是由该类自身自动调用的。
-         *
-         * @param renderer 添加的项呈示器
-         * @param index 项呈示器的索引
-         * @param item 项呈示器对应的数据
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected rendererAdded(renderer: IItemRenderer, index: number, item: any): void;
-        /**
-         * @language en_US
-         * Removes the itemRenderer for the specified dataProvider item from this DataGroup.
-         *
-         * This method is called as needed by the DataGroup implementation,
-         * it should not be called directly.
-         *
-         * @param renderer The renderer that is being removed.
-         * @param index The index of the item that is being removed.
-         * @param item The item that is being removed.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 项呈示器被移除。
-         * 这个方法不能直接调用，它是由该类自身自动调用的。
-         *
-         * @param renderer 移除的项呈示器
-         * @param index 项呈示器的索引
-         * @param item 项呈示器对应的数据
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected rendererRemoved(renderer: IItemRenderer, index: number, item: any): void;
+        protected partAdded(partName: string, instance: any): void;
     }
 }
 declare module swan {
@@ -10792,6 +10213,453 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
+     * The Button component is a commonly used rectangular button.
+     * The Button component looks like it can be pressed.
+     * The default skin has a text label and a icon display object.
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Button 组件是常用的矩形按钮。Button 组件看起来可以按压。默认外观具有一个文本标签和图标显示对象。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class Button extends Component {
+        /**
+         * @language en_US
+         * Constructor.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个按钮实例
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        constructor();
+        /**
+         * @language en_US
+         * [SkinPart] A skin part that defines the label of the button.
+         * @skinPart
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [SkinPart] 按钮上的文本标签。
+         * @skinPart
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        labelDisplay: IDisplayText;
+        /**
+         * @private
+         */
+        private _label;
+        /**
+         * @language en_US
+         * Text to appear on the Button control.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要在按钮上显示的文本。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        label: string;
+        /**
+         * @language en_US
+         * [SkinPart] A skin part that defines an optional icon for the button.
+         * @skinPart
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [SkinPart] 按钮上的图标显示对象。
+         * @skinPart
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        iconDisplay: Image;
+        /**
+         * @private
+         */
+        private _icon;
+        /**
+         * @language en_US
+         * Icon to appear on the Button control.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要在按钮上显示的图标数据
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        icon: string | lark.BitmapData;
+        /**
+         * @private
+         * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，触摸点是否在按钮上。
+         */
+        private touchCaptured;
+        /**
+         * @language en_US
+         * This method handles the touch events
+         * @param  The <code>lark.TouchEvent</code> object.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 触碰事件处理。
+         * @param event 事件 <code>lark.TouchEvent</code> 的对象。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected onTouchBegin(event: lark.TouchEvent): void;
+        /**
+         * @private
+         * 舞台上触摸弹起事件
+         */
+        private onStageTouchEnd(event);
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected getCurrentState(): string;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected partAdded(partName: string, instance: any): void;
+        /**
+         * @language en_US
+         * This method is called when handling a <code>lark.TouchEvent.TOUCH_END</code> event
+         * when the user touches on the button. It is only called when the button
+         * is the target and when <code>touchCaptured</code> is <code>true</code>.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当在用户单击按钮之后处理 <code>lark.TouchEvent.TOUCH_END</code> 事件时，将调用此方法。
+         * 仅当以按钮为目标，并且 <code>touchCaptured</code> 为 <code>true</code> 时，才会调用此方法。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected buttonReleased(): void;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The ScrollBarBase class helps to position
+     * the portion of data that is displayed when there is too much data
+     * to fit in a display area.
+     * The ScrollBarBase class displays a pair of viewport and a thumb.
+     * viewport is a instance that implements IViewport.
+     *
+     * @see swan.IViewport
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * <code>ScrollBarBase</code> 滚动条基类，该类帮助在因数据太多而不能在显示区域完全显示时定位显示的数据部分。
+     * ScrollBarBase 类显示视区的一部分和一个指示滑块。
+     * 视区是一个IViewport接口实现的实例。
+     *
+     * @see swan.IViewport
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class ScrollBarBase extends Component {
+        /**
+         * @language en_US
+         * Constructor.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个ScrollBarBase实例。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        constructor();
+        /**
+         * @language en_US
+         * [SkinPart] Thumb display object.
+         * @skinPart
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [SkinPart]滑块显示对象。
+         * @skinPart
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        thumb: swan.UIComponent;
+        /**
+         * @language en_US
+         * The viewport controlled by this scrollbar.
+         *
+         * If a viewport is specified, then changes to its actual size, content
+         * size, and scroll position cause the corresponding ScrollBarBase methods to
+         * run:
+         * <ul>
+         *     <li><code>onViewportResize()</code></li>
+         *     <li><code>onPropertyChanged()</code></li>
+         * </ul><p/>
+         *
+         * The VScrollBar and HScrollBar classes override these methods to keep their properties in
+         * sync with the viewport.
+         *
+         * @default null
+         * @see swan.VScrollBar
+         * @see swan.HScrollBar
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 由该滚动条控制的视区。
+         *
+         * 如果指定了视区，则对其实际大小、内容大小和滚动位置的更改会导致运行相对应的 ScrollBarBase 方法：
+         * <ul>
+         *     <li><code>onViewportResize()</code></li>
+         *     <li><code>onPropertyChanged()</code></li>
+         * </ul><p/>
+         *
+         * VScrollBar 和 HScrollBar 类需要重写这些方法以保证属性与视区的同步。
+         *
+         * @default null
+         * @see swan.VScrollBar
+         * @see swan.HScrollBar
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        viewport: IViewport;
+        /**
+         * @private
+         *
+         * @param event
+         */
+        private onViewportResize(event?);
+        /**
+         * @language en_US
+         * Properties of viewport changed.
+         * @param event
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 视区属性发生改变。
+         * @param event
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected onPropertyChanged(event: swan.PropertyEvent): void;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The ItemRenderer class is the base class for item renderers.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * ItemRenderer 类是项呈示器的基类。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class ItemRenderer extends Group implements IItemRenderer {
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        constructor();
+        /**
+         * @private
+         */
+        private _data;
+        /**
+         * @language en_US
+         * The data to render or edit.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要呈示或编辑的数据。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        data: any;
+        /**
+         * @language en_US
+         * Update the view when the <code>data</code> property changes.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当数据改变时，更新视图。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected dataChanged(): void;
+        /**
+         * @private
+         */
+        private _selected;
+        /**
+         * @language en_US
+         * Contains <code>true</code> if the item renderer
+         * can show itself as selected.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果项呈示器可以将其自身显示为已选中，则为 true。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        selected: boolean;
+        /**
+         * @language en_US
+         * The index of the item in the data provider
+         * of the host component of the item renderer.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 项呈示器的数据提供程序中的项目索引。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        itemIndex: number;
+        /**
+         * @private
+         * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，触摸点是否在按钮上。
+         */
+        private touchCaptured;
+        /**
+         * @language en_US
+         * Handles <code>TouchEvent.TOUCH_BEGIN</code> events
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 触碰开始时触发事件
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected onTouchBegin(event: lark.TouchEvent): void;
+        /**
+         * @private
+         * 舞台上触摸弹起事件
+         */
+        private onStageTouchEnd(event);
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected getCurrentState(): string;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
      * An ViewStack navigator container consists of a collection of child
      * containers stacked on top of each other, where only one child
      * at a time is visible.
@@ -10837,7 +10705,7 @@ declare module swan {
         constructor();
         /**
          * @language en_US
-         * [read-only]The layout object for this container.
+         * The layout object for this container.
          * This object is responsible for the measurement and layout of
          * the visual elements in the container.
          *
@@ -10849,7 +10717,7 @@ declare module swan {
          */
         /**
          * @language zh_CN
-         * [只读]此容器的 layout 对象。此对象负责容器中可视元素的测量和布局。
+         * 此容器的 layout 对象。此对象负责容器中可视元素的测量和布局。
          *
          * @default swan.BasicLayout
          *
@@ -10976,26 +10844,12 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * The Scroller component displays a single scrollable component,
-     * called a viewport, and horizontal and vertical scroll bars.
-     * The viewport must implement the IViewport interface.
-     * <p>The Group components implement the IViewport interface
-     * and can be used as the children of the Scroller control,
-     * as the following example shows:</p>
-     * <code>
-     *       <s:Scroller width="100" height="100">
-     *           <s:Group>
-     *               <s:Image width="300" height="400" source="assets/logo.jpg"/>
-     *           </s:Group>
-     *       </s:Scroller>
-     * </code>
-     * <p>The size of the Image control is set larger than that of its parent Group container.
-     * By default, the child extends past the boundaries of the parent container.
-     * Rather than allow the child to extend past the boundaries of the parent container,
-     * the Scroller specifies to clip the child to the boundaries and display scroll bars.</p>
+     * The DataGroup class is the base container class for data items.
+     * The DataGroup class converts data items to visual elements for display.
+     * While this container can hold visual elements, it is often used only
+     * to hold data items as children.
      *
-     * @event swan.UIEvent.CHANGE_START Emitted when the scroll position is going to change
-     * @event swan.UIEvent.CHANGE_END Emitted when the scroll position changed complete
+     * @see swan.Group
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -11003,47 +10857,16 @@ declare module swan {
      */
     /**
      * @language zh_CN
-     * Scroller 组件显示一个称为视域的单个可滚动组件，以及水平滚动条和垂直滚动条。该视域必须实现 IViewport 接口。
-     * <p>Group 组件实现 IViewport 接口，且可以用作 Scroller 控件的子代，如下例所示：</p>
-     * <code>
-     *       <s:Scroller width="100" height="100">
-     *           <s:Group>
-     *               <s:Image width="300" height="400" source="assets/logo.jpg"/>
-     *           </s:Group>
-     *       </s:Scroller>
-     * </code>
-     * Image 控件的大小比其父 Group 容器设置得大。默认情况下，子代超过父容器的边界。
-     * Scroller 会指定将子代剪切到边界并显示滚动条，而不是让子代超过父容器的边界。
+     * DataGroup 类将数据项目转换为可视元素以进行显示。
+     * 尽管此容器可以包含可视元素，但它通常仅用于包含作为子项的数据项目。
      *
-     * @event swan.UIEvent.CHANGE_START 滚动位置改变开始
-     * @event swan.UIEvent.CHANGE_END 滚动位置改变结束
+     * @see swan.Group
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    class Scroller extends Component {
-        /**
-         * @language en_US
-         * The threshold value(in pixels) trigger the rolling.
-         * when the touch points deviate from the initial touch point than this value will trigger the rolling.
-         *
-         * @default 5
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 开始触发滚动的阈值（以像素为单位），当触摸点偏离初始触摸点的距离超过这个值时才会触发滚动。
-         *
-         * @default 5
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        static scrollThreshold: number;
+    class DataGroup extends Group {
         /**
          * @language en_US
          * Constructor.
@@ -11062,130 +10885,18 @@ declare module swan {
          */
         constructor();
         /**
-         * @language en_US
-         * the horizontal scroll bar
-         *
-         * @skinPart
+         * @copy swan.LayoutBase#useVirtualLayout
          *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
-        /**
-         * @language zh_CN
-         * 水平滚动条
-         *
-         * @skinPart
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        horizontalScrollBar: swan.HScrollBar;
-        /**
-         * @language en_US
-         * the vertical scroll bar
-         *
-         * @skinPart
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 垂直滚动条
-         *
-         * @skinPart
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        verticalScrollBar: swan.VScrollBar;
-        /**
-         * @language en_US
-         * Indicates under what conditions the vertical scroll bar is displayed.
-         * <p><code>ScrollPolicy.ON</code> - the scroll bar is always displayed.</p>
-         * <p><code>ScrollPolicy.OFF</code> - the scroll bar is never displayed.</p>
-         * <p><code>ScrollPolicy.AUTO</code> - the scroll bar is displayed when
-         *  the viewport's contentHeight is larger than its height.
-         *
-         * @default ScrollPolicy.AUTO
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 指示在哪些条件下会显示垂直滑动条。
-         * <p><code>ScrollPolicy.ON</code> - 始终显示滚动条。</p>
-         * <p><code>ScrollPolicy.OFF</code> - 从不显示滚动条。</p>
-         * <p><code>ScrollPolicy.AUTO</code> - 当视域的 contentHeight 大于其自身的高度时显示滚动条。</p>
-         *
-         * @default ScrollPolicy.AUTO
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        scrollPolicyV: string;
-        /**
-         * @language en_US
-         * Indicates under what conditions the horizontal scroll bar is displayed.
-         * <p><code>ScrollPolicy.ON</code> - the scroll bar is always displayed.</p>
-         * <p><code>ScrollPolicy.OFF</code> - the scroll bar is never displayed.</p>
-         * <p><code>ScrollPolicy.AUTO</code> - the scroll bar is displayed when
-         *  the viewport's contentWidth is larger than its width.
-         *
-         * @default ScrollPolicy.AUTO
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 指示在哪些条件下会显示水平滑动条。
-         * <p><code>ScrollPolicy.ON</code> - 始终显示滚动条。</p>
-         * <p><code>ScrollPolicy.OFF</code> - 从不显示滚动条。</p>
-         * <p><code>ScrollPolicy.AUTO</code> - 当视域的 contentWidth 大于其自身的宽度时显示滚动条。</p>
-         *
-         * @default ScrollPolicy.AUTO
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        scrollPolicyH: string;
-        /**
-         * @language en_US
-         * The viewport component to be scrolled.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 要滚动的视域组件。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        viewport: IViewport;
+        useVirtualLayout: boolean;
         /**
          * @private
-         * 安装并初始化视域组件
+         * 是否使用虚拟布局标记改变
          */
-        private installViewport();
-        /**
-         * @private
-         * 卸载视域组件
-         */
-        private uninstallViewport();
+        private onUseVirtualLayoutChanged(event?);
         /**
          * @inheritDoc
          *
@@ -11193,86 +10904,407 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        protected setSkin(skin: Skin): void;
+        setVirtualElementIndicesInView(startIndex: number, endIndex: number): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        getElementAt(index: number): lark.DisplayObject;
+        /**
+         * @private
+         * 释放指定索引处的项呈示器
+         */
+        private freeRendererByIndex(index);
         /**
          * @private
          *
-         * @param event
+         * @param renderer
          */
-        private onTouchEndCapture(event);
+        private doFreeRenderer(renderer);
         /**
-         * @private
-         * 若这个Scroller可以滚动，阻止当前事件，延迟100ms再抛出。
-         */
-        private onTouchBeginCapture(event);
-        /**
-         * @private
+         * @inheritDoc
          *
-         * @param event
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
-        private delayEmitEvent(event);
+        invalidateSize(): void;
         /**
          * @private
+         * 为指定索引创建虚拟的项呈示器
+         */
+        private createVirtualRenderer(item);
+        /**
+         * @private
+         * 根据rendererClass创建一个Renderer,并添加到显示列表
+         */
+        private createOneRenderer(rendererClass);
+        /**
+         * @language en_US
+         * The data provider for this DataGroup.
+         * It must be an ICollection, such as ArrayCollection
          *
-         * @param e
-         */
-        private onDelayTouchEventTimer(e?);
-        /**
-         * @private
-         * 检查当前滚动策略，若有一个方向可以滚动，返回true。
-         */
-        private checkScrollPolicy();
-        /**
-         * @private
+         * @see swan.ICollection
+         * @see swan.ArrayCollection
          *
-         * @param event
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
          */
-        private onTouchBegin(event);
+        /**
+         * @language zh_CN
+         * 列表数据源，请使用实现了ICollection接口的数据类型，例如 ArrayCollection
+         *
+         * @see swan.ICollection
+         * @see swan.ArrayCollection
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        dataProvider: ICollection;
         /**
          * @private
-         *
-         * @param event
+         * 移除数据源监听
          */
-        private onTouchMove(event);
+        private removeDataProviderListener();
+        /**
+         * @language en_US
+         * Called when contents within the dataProvider changes.  We will catch certain
+         * events and update our children based on that.
+         *
+         * @param event 事件<code>swan.CollectionEvent</code>的对象。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 数据源改变事件处理。
+         *
+         * @param event 事件<code>swan.CollectionEvent</code>的对象。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected onCollectionChange(event: CollectionEvent): void;
         /**
          * @private
-         *
-         * @param event
+         * 数据源添加项目事件处理
          */
-        private onTouchEnd(event);
+        private itemAddedHandler(items, index);
         /**
          * @private
-         *
-         * @param scrollPos
+         * 数据源移除项目事件处理
          */
-        private horizontalUpdateHandler(scrollPos);
+        private itemRemovedHandler(items, location);
+        /**
+         * @language en_US
+         * Adds the item for the specified dataProvider item to this DataGroup.
+         *
+         * This method is called as needed by the DataGroup implementation,
+         * it should not be called directly.
+         *
+         * @param item The item that was added, the value of dataProvider[index].
+         * @param index The index where the dataProvider item was added.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 添加一个指定的数据到数据源。
+         *
+         * 这个方法不应该由开发者直接调用，而用于本类自动内调用。
+         *
+         * @param item 添加的数据项。
+         * @param index 被添加到的索引。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected itemAdded(item: any, index: number): void;
+        /**
+         * @language en_US
+         * Removes the itemRenderer for the specified dataProvider item from this DataGroup.
+         *
+         * This method is called as needed by the DataGroup implementation,
+         * it should not be called directly.
+         *
+         * @param item The item that is being removed.
+         * @param index The index of the item that is being removed.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 删除数据源中指定的项。
+         *
+         * 这个方法不应该由开发者直接调用，而用于本类自动内调用。
+         *
+         * @param item 移除的数据项。
+         * @param index 被移除的索引。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected itemRemoved(item: any, index: number): void;
         /**
          * @private
-         *
-         * @param scrollPos
+         * 更新当前所有项的索引
          */
-        private verticalUpdateHandler(scrollPos);
+        private resetRenderersIndices();
         /**
          * @private
-         *
+         * 数据源更新或替换项目事件处理
          */
-        private horizontalEndHandler();
+        private itemUpdatedHandler(item, location);
         /**
          * @private
-         *
+         * 调整指定项呈示器的索引值
          */
-        private verticalEndHanlder();
+        private resetRendererItemIndex(index);
+        /**
+         * @language en_US
+         * The item renderer to use for data items.
+         * The class must implement the IItemRenderer interface.
+         * If defined, the <code>itemRendererFunction</code> property
+         * takes precedence over this property.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 用于数据项目的项呈示器。您应该直接为此属性赋值自定义类的类定义，而不是一个实例。注意：该类必须实现 IItemRenderer 接口。<br/>
+         * rendererClass获取顺序：itemRendererFunction > itemRenderer > 默认ItemRenerer。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        itemRenderer: any;
+        /**
+         * @language en_US
+         * Function that returns an item renderer for a
+         * specific item.
+         *
+         * If defined, this property
+         * takes precedence over the <code>itemRenderer</code> property.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 为某个特定数据项返回一个项呈示器类定义的函数。
+         * rendererClass获取顺序：itemRendererFunction > itemRenderer > 默认ItemRenerer。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        itemRendererFunction: (item: any) => any;
         /**
          * @private
-         *
+         * 为特定的数据项返回项呈示器的工厂实例
          */
-        private onChangeEnd();
+        private itemToRendererClass(item);
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected createChildren(): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected commitProperties(): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected measure(): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
         /**
          * @private
-         *
-         * @param event
+         * 确保测量过默认条目大小。
          */
-        private onAutoHideTimer(event);
+        private ensureTypicalLayoutElement();
+        /**
+         * @private
+         * 测量项呈示器默认尺寸
+         */
+        private measureRendererSize();
+        /**
+         * @private
+         * 设置项目默认大小
+         */
+        private setTypicalLayoutRect(rect);
+        /**
+         * @private
+         * 移除所有项呈示器
+         */
+        private removeAllRenderers();
+        /**
+         * @private
+         * 为数据项创建项呈示器
+         */
+        private createRenderers();
+        /**
+         * @language en_US
+         * Updates the renderer for reuse.
+         * This method first prepares the item
+         * renderer for reuse by cleaning out any stale properties
+         * as well as updating it with new properties.<p/>
+         *
+         * The last thing this method should do is set the <code>data</code> property
+         * of the item renderer.
+         *
+         * @param renderer The item renderer.
+         * @param itemIndex The index of the data in the data provider.
+         * @param data The data object this item renderer is representing.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 此方法首先会准备项呈示器以重用，方法是清除任何旧属性，同时使用新属性进行更新。<p/>
+         *
+         * 最后，此方法应对项呈示器设置 data 属性。
+         *
+         * @param renderer 项呈示器。
+         * @param itemIndex 数据提供程序中的数据索引。
+         * @param data 此项呈示器正在表示的数据对象。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        updateRenderer(renderer: IItemRenderer, itemIndex: number, data: any): IItemRenderer;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        numElements: number;
+        /**
+         * @language en_US
+         * Adds the itemRenderer for the specified dataProvider item to this DataGroup.
+         *
+         * This method is called as needed by the DataGroup implementation,
+         * it should not be called directly.
+         *
+         * @param renderer The renderer that was added.
+         * @param index The index where the dataProvider item was added.
+         * @param item The item that was added, the value of dataProvider[index].
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 项呈示器被添加.
+         *
+         * 这个方法不能直接调用，它是由该类自身自动调用的。
+         *
+         * @param renderer 添加的项呈示器
+         * @param index 项呈示器的索引
+         * @param item 项呈示器对应的数据
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected rendererAdded(renderer: IItemRenderer, index: number, item: any): void;
+        /**
+         * @language en_US
+         * Removes the itemRenderer for the specified dataProvider item from this DataGroup.
+         *
+         * This method is called as needed by the DataGroup implementation,
+         * it should not be called directly.
+         *
+         * @param renderer The renderer that is being removed.
+         * @param index The index of the item that is being removed.
+         * @param item The item that is being removed.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 项呈示器被移除。
+         * 这个方法不能直接调用，它是由该类自身自动调用的。
+         *
+         * @param renderer 移除的项呈示器
+         * @param index 项呈示器的索引
+         * @param item 项呈示器对应的数据
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected rendererRemoved(renderer: IItemRenderer, index: number, item: any): void;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The HScrollBar (horizontal scrollbar) control lets you control
+     * the portion of data that is displayed when there is too much data
+     * to fit horizontally in a display area.
+     *
+     * <p>Although you can use the HScrollBar control as a stand-alone control,
+     * you usually combine it as part of another group of components to
+     * provide scrolling functionality.</p>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * HScrollBar（水平 ScrollBar）控件可以在因数据太多而不能在显示区域中以水平方向完全显示时控制显示的数据部分。
+     * <p>虽然 HScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。</p>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class HScrollBar extends ScrollBarBase {
         /**
          * @inheritDoc
          *
@@ -11288,7 +11320,50 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        protected partAdded(partName: string, instance: any): void;
+        protected onPropertyChanged(event: swan.PropertyEvent): void;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The VScrollBar (vertical scrollbar) control lets you control
+     * the portion of data that is displayed when there is too much data
+     * to fit vertically in a display area.
+     *
+     * <p>Although you can use the VScrollBar control as a stand-alone control,
+     * you usually combine it as part of another group of components to
+     * provide scrolling functionality.</p>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * VScrollBar（垂直 ScrollBar）控件可以在因数据太多而不能在显示区域中以垂直方向完全显示时控制显示的数据部分。
+     * <p>虽然 VScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。</p>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class VScrollBar extends ScrollBarBase {
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected onPropertyChanged(event: swan.PropertyEvent): void;
     }
 }
 declare module swan {
@@ -11518,119 +11593,6 @@ declare module swan {
          * @platform Web,Native
          */
         protected updateSkinDisplayList(): void;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The VScrollBar (vertical scrollbar) control lets you control
-     * the portion of data that is displayed when there is too much data
-     * to fit vertically in a display area.
-     *
-     * <p>Although you can use the VScrollBar control as a stand-alone control,
-     * you usually combine it as part of another group of components to
-     * provide scrolling functionality.</p>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * VScrollBar（垂直 ScrollBar）控件可以在因数据太多而不能在显示区域中以垂直方向完全显示时控制显示的数据部分。
-     * <p>虽然 VScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。</p>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class VScrollBar extends ScrollBarBase {
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected onPropertyChanged(event: swan.PropertyEvent): void;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The ToggleButton component defines a toggle button.
-     * Clicking the button toggles it between the up and an down states.
-     * If you click the button while it is in the up state,
-     * it toggles to the down state. You must click the button again
-     * to toggle it back to the up state.
-     * <p>You can get or set this state programmatically
-     * by using the <code>selected</code> property.</p>
-     *
-     * @event lark.Event.CHANGE Emitted when the <code>selected</code> property
-     * changes for the ToggleButton control.
-     * This event is emitted only when the
-     * user interacts with the control by touching.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * ToggleButton 组件定义切换按钮。单击该按钮会在弹起状态和按下状态之间进行切换。
-     * 如果在按钮处于弹起状态时单击该按钮，则它会切换到按下状态。必须再次单击该按钮才可将其切换回弹起状态。
-     * <p>可以使用 <code>selected</code> 属性以编程方式获取或设置此状态。</p>
-     *
-     * @event lark.Event.CHANGE ToggleButtonBase 控件的 <code>selected</code> 属性更改时分派。
-     * 仅当用户通过触摸与控件交互时，才分派此事件。
-
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class ToggleButton extends Button {
-        /**
-         * @language en_US
-         * Contains <code>true</code> if the button is in the down state,
-         * and <code>false</code> if it is in the up state.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 按钮处于按下状态时为 <code>true</code>，而按钮处于弹起状态时为 <code>false</code>。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        selected: boolean;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected getCurrentState(): string;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected buttonReleased(): void;
     }
 }
 declare module swan {
@@ -11973,6 +11935,76 @@ declare module swan {
          * @platform Web,Native
          */
         protected onTrackTouchBegin(event: lark.TouchEvent): void;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The ToggleButton component defines a toggle button.
+     * Clicking the button toggles it between the up and an down states.
+     * If you click the button while it is in the up state,
+     * it toggles to the down state. You must click the button again
+     * to toggle it back to the up state.
+     * <p>You can get or set this state programmatically
+     * by using the <code>selected</code> property.</p>
+     *
+     * @event lark.Event.CHANGE Emitted when the <code>selected</code> property
+     * changes for the ToggleButton control.
+     * This event is emitted only when the
+     * user interacts with the control by touching.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * ToggleButton 组件定义切换按钮。单击该按钮会在弹起状态和按下状态之间进行切换。
+     * 如果在按钮处于弹起状态时单击该按钮，则它会切换到按下状态。必须再次单击该按钮才可将其切换回弹起状态。
+     * <p>可以使用 <code>selected</code> 属性以编程方式获取或设置此状态。</p>
+     *
+     * @event lark.Event.CHANGE ToggleButtonBase 控件的 <code>selected</code> 属性更改时分派。
+     * 仅当用户通过触摸与控件交互时，才分派此事件。
+
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class ToggleButton extends Button {
+        /**
+         * @language en_US
+         * Contains <code>true</code> if the button is in the down state,
+         * and <code>false</code> if it is in the up state.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 按钮处于按下状态时为 <code>true</code>，而按钮处于弹起状态时为 <code>false</code>。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        selected: boolean;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected getCurrentState(): string;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected buttonReleased(): void;
     }
 }
 declare module swan.sys {
@@ -12515,13 +12547,10 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * The HScrollBar (horizontal scrollbar) control lets you control
-     * the portion of data that is displayed when there is too much data
-     * to fit horizontally in a display area.
-     *
-     * <p>Although you can use the HScrollBar control as a stand-alone control,
-     * you usually combine it as part of another group of components to
-     * provide scrolling functionality.</p>
+     * The HSlider (horizontal slider) control lets users select a value
+     * by moving a slider thumb between the end points of the slider track.
+     * The current value of the slider is determined by the relative location of the thumb between
+     * the end points of the slider, corresponding to the slider's minimum and maximum values.
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -12529,14 +12558,31 @@ declare module swan {
      */
     /**
      * @language zh_CN
-     * HScrollBar（水平 ScrollBar）控件可以在因数据太多而不能在显示区域中以水平方向完全显示时控制显示的数据部分。
-     * <p>虽然 HScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。</p>
+     * 使用 HSlider（水平滑块）控件，用户可通过在滑块轨道的端点之间移动滑块来选择值。
+     * 滑块的当前值由滑块端点（对应于滑块的最小值和最大值）之间滑块的相对位置确定。
      *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    class HScrollBar extends ScrollBarBase {
+    class HSlider extends SliderBase {
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        constructor();
         /**
          * @inheritDoc
          *
@@ -12544,7 +12590,13 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
+        protected pointToValue(x: number, y: number): number;
+        /**
+         * @private
+         *
+         * @returns
+         */
+        private getThumbRange();
         /**
          * @inheritDoc
          *
@@ -12552,7 +12604,7 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        protected onPropertyChanged(event: swan.PropertyEvent): void;
+        protected updateSkinDisplayList(): void;
     }
 }
 declare module swan {
@@ -12598,7 +12650,10 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * The ToggleSwitch control defines an on-off control.
+     * The VSlider (vertical slider) control lets users select a value
+     * by moving a slider thumb between the end points of the slider track.
+     * The current value of the slider is determined by the relative location of the thumb between
+     * the end points of the slider, corresponding to the slider's minimum and maximum values.
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -12606,13 +12661,14 @@ declare module swan {
      */
     /**
      * @language zh_CN
-     * ToggleSwitch 表示一个开关组件。
+     * 使用 VSlider（垂直滑块）控件，用户可通过在滑块轨道的端点之间移动滑块来选择值。
+     * 滑块的当前值由滑块端点（对应于滑块的最小值和最大值）之间滑块的相对位置确定。
      *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    class ToggleSwitch extends ToggleButton {
+    class VSlider extends SliderBase {
         /**
          * @language en_US
          * Constructor.
@@ -12630,6 +12686,28 @@ declare module swan {
          * @platform Web,Native
          */
         constructor();
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected pointToValue(x: number, y: number): number;
+        /**
+         * @private
+         *
+         * @returns
+         */
+        private getThumbRange();
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        updateSkinDisplayList(): void;
     }
 }
 declare module swan {
@@ -12821,10 +12899,7 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * The HSlider (horizontal slider) control lets users select a value
-     * by moving a slider thumb between the end points of the slider track.
-     * The current value of the slider is determined by the relative location of the thumb between
-     * the end points of the slider, corresponding to the slider's minimum and maximum values.
+     * The ToggleSwitch control defines an on-off control.
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -12832,14 +12907,74 @@ declare module swan {
      */
     /**
      * @language zh_CN
-     * 使用 HSlider（水平滑块）控件，用户可通过在滑块轨道的端点之间移动滑块来选择值。
-     * 滑块的当前值由滑块端点（对应于滑块的最小值和最大值）之间滑块的相对位置确定。
+     * ToggleSwitch 表示一个开关组件。
      *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    class HSlider extends SliderBase {
+    class ToggleSwitch extends ToggleButton {
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        constructor();
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The TabBar class displays a set of identical tabs.
+     * One tab can be selected at a time, and the first tab is selected by default.
+     * <p>The set of tabs is defined by the <code>dataProvider</code> property.
+     * The appearance of each tab is defined by the <code>ItemRenderer</code> class.</p>
+     * <p>You can use the TabBar control to set the active child of a ViewStack container,
+     * as the following example shows:</p>
+     * <code>
+     *       <s:TabBar dataProvider="{viewStack}"/>
+     *       <s:ViewStack id="viewStack">
+     *          <s:Group name="tab1"/>
+     *          <s:Group name="tab2"/>
+     *          <s:Group name="tab3"/>
+     *       </s:ViewStack>
+     * </code>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * TabBar 类显示一组相同的选项卡。一次可以选择一个选项卡，且默认情况下选择第一个选项卡。
+     * <p>该组选项卡由 <code>dataProvider</code> 属性定义。
+     * 每个选项卡的外观由 <code>ItemRenderer</code> 定义。</p>
+     * <p>可以使用 TabBar 控件设置 ViewStack 容器的活动子代，如下例所示：</p>
+     * <code>
+     *       <s:TabBar dataProvider="{viewStack}"/>
+     *       <s:ViewStack id="viewStack">
+     *          <s:Group name="tab1"/>
+     *          <s:Group name="tab2"/>
+     *          <s:Group name="tab3"/>
+     *       </s:ViewStack>
+     * </code>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class TabBar extends ListBase {
         /**
          * @language en_US
          * Constructor.
@@ -12864,21 +12999,21 @@ declare module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        protected pointToValue(x: number, y: number): number;
+        protected createChildren(): void;
         /**
          * @private
-         *
-         * @returns
          */
-        private getThumbRange();
+        private indexBeingUpdated;
         /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @private
+         * 触摸点击的选中项改变
          */
-        protected updateSkinDisplayList(): void;
+        private onIndexChanged(event);
+        /**
+         * @private
+         * ViewStack选中项发生改变
+         */
+        private onViewStackIndexChange(event);
     }
 }
 declare module swan {
@@ -13051,545 +13186,5 @@ declare module swan {
          * 添此单选按钮加到组
          */
         private addToGroup();
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The VSlider (vertical slider) control lets users select a value
-     * by moving a slider thumb between the end points of the slider track.
-     * The current value of the slider is determined by the relative location of the thumb between
-     * the end points of the slider, corresponding to the slider's minimum and maximum values.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 使用 VSlider（垂直滑块）控件，用户可通过在滑块轨道的端点之间移动滑块来选择值。
-     * 滑块的当前值由滑块端点（对应于滑块的最小值和最大值）之间滑块的相对位置确定。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class VSlider extends SliderBase {
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        constructor();
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected pointToValue(x: number, y: number): number;
-        /**
-         * @private
-         *
-         * @returns
-         */
-        private getThumbRange();
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        updateSkinDisplayList(): void;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The TabBar class displays a set of identical tabs.
-     * One tab can be selected at a time, and the first tab is selected by default.
-     * <p>The set of tabs is defined by the <code>dataProvider</code> property.
-     * The appearance of each tab is defined by the <code>ItemRenderer</code> class.</p>
-     * <p>You can use the TabBar control to set the active child of a ViewStack container,
-     * as the following example shows:</p>
-     * <code>
-     *       <s:TabBar dataProvider="{viewStack}"/>
-     *       <s:ViewStack id="viewStack">
-     *          <s:Group name="tab1"/>
-     *          <s:Group name="tab2"/>
-     *          <s:Group name="tab3"/>
-     *       </s:ViewStack>
-     * </code>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * TabBar 类显示一组相同的选项卡。一次可以选择一个选项卡，且默认情况下选择第一个选项卡。
-     * <p>该组选项卡由 <code>dataProvider</code> 属性定义。
-     * 每个选项卡的外观由 <code>ItemRenderer</code> 定义。</p>
-     * <p>可以使用 TabBar 控件设置 ViewStack 容器的活动子代，如下例所示：</p>
-     * <code>
-     *       <s:TabBar dataProvider="{viewStack}"/>
-     *       <s:ViewStack id="viewStack">
-     *          <s:Group name="tab1"/>
-     *          <s:Group name="tab2"/>
-     *          <s:Group name="tab3"/>
-     *       </s:ViewStack>
-     * </code>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class TabBar extends ListBase {
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        constructor();
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected createChildren(): void;
-        /**
-         * @private
-         */
-        private indexBeingUpdated;
-        /**
-         * @private
-         * 触摸点击的选中项改变
-         */
-        private onIndexChanged(event);
-        /**
-         * @private
-         * ViewStack选中项发生改变
-         */
-        private onViewStackIndexChange(event);
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * Provides constant enum values for type checking in the module of Swan. It is usually passed as the parameters of the lark.is() method.
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 为 Swan 内的类或接口定义的枚举值。通常作为实例检查类型 lark.is() 方法的参数。
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    const enum Types {
-        /**
-         * @copy swan.Component
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        UIComponent = 1001,
-        /**
-         * @copy swan.Group
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        Group = 1002,
-        /**
-         * @copy swan.DataGroup
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        DataGroup = 1003,
-        /**
-         * @copy swan.ListBase
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        ListBase = 1004,
-        /**
-         * @copy swan.TabBar
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        TabBar = 1005,
-        /**
-         * @copy swan.List
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        List = 1006,
-        /**
-         * @copy swan.IItemRenderer
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        IItemRenderer = 1007,
-        /**
-         * @copy swan.ItemRenderer
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        ItemRenderer = 1008,
-        /**
-         * @copy swan.Component
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        Component = 1009,
-        /**
-         * @copy swan.Label
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        Label = 1010,
-        /**
-         * @copy swan.Image
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        Image = 1011,
-        /**
-         * @copy swan.Skin
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        Skin = 1012,
-        /**
-         * @copy swan.Theme
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        Theme = 1013,
-        /**
-         * @copy swan.UIEvent
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        UIEvent = 1014,
-        /**
-         * @copy swan.CollectionEvent
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        CollectionEvent = 1015,
-        /**
-         * @copy swan.PropertyEvent
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        PropertyEvent = 1016,
-        /**
-         * @copy swan.ItemTapEvent
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        ItemTapEvent = 1017,
-        /**
-         * @copy swan.ArrayCollection
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        ArrayCollection = 1018,
-        /**
-         * @copy swan.LayoutBase
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        LayoutBase = 1019,
-        /**
-         * @copy swan.LinearLayoutBase
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        LinearLayoutBase = 1020,
-        /**
-         * @copy swan.BasicLayout
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        BasicLayout = 1021,
-        /**
-         * @copy swan.HorizontalLayout
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        HorizontalLayout = 1022,
-        /**
-         * @copy swan.VerticalLayout
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        VerticalLayout = 1023,
-        /**
-         * @copy swan.Panel
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        Panel = 1024,
-        /**
-         * @copy swan.Button
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        Button = 1025,
-        /**
-         * @copy swan.ToggleButton
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        ToggleButton = 1026,
-        /**
-         * @copy swan.CheckBox
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        CheckBox = 1027,
-        /**
-         * @copy swan.ToggleSwitch
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        ToggleSwitch = 1028,
-        /**
-         * @copy swan.RadioButton
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        RadioButton = 1029,
-        /**
-         * @copy swan.RadioButtonGroup
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        RadioButtonGroup = 1030,
-        /**
-         * @copy swan.State
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        State = 1031,
-        /**
-         * @copy swan.IOverride
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        IOverride = 1032,
-        /**
-         * @copy swan.AddItems
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        AddItems = 1033,
-        /**
-         * @copy swan.SetProperty
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        SetProperty = 1034,
-        /**
-         * @copy swan.Watcher
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        Watcher = 1035,
-        /**
-         * @copy swan.ViewStack
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        ViewStack = 1036,
-        /**
-         * @copy swan.Scroller
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        Scroller = 1037,
-        /**
-         * @copy swan.ScrollBarBase
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        ScrollBarBase = 1038,
-        /**
-         * @copy swan.VScrollBar
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        VScrollBar = 1039,
-        /**
-         * @copy swan.HScrollBar
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        HScrollBar = 1040,
-        /**
-         * @copy swan.Range
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        Range = 1041,
-        /**
-         * @copy swan.SliderBase
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        SliderBase = 1042,
-        /**
-         * @copy swan.HSlider
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        HSlider = 1043,
-        /**
-         * @copy swan.VSlider
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        VSlider = 1044,
-        /**
-         * @copy swan.IViewport
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        IViewport = 1045,
-        /**
-         * @copy swan.TileLayout
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        TileLayout = 1046,
-        /**
-         * @copy swan.EditableText
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        EditableText = 1047,
     }
 }

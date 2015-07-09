@@ -896,7 +896,6 @@ module swan {
     sys.mixin(Group, sys.StateClient);
     registerProperty(Group, "elementsContent", "Array", true);
     registerProperty(Group, "states", "State[]");
-    lark.registerClass(Group, Types.Group, [Types.UIComponent, Types.IViewport]);
 
     if(DEBUG){
         lark.$markReadOnly(Group.prototype,"contentWidth");
