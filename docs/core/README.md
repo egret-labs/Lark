@@ -47,7 +47,7 @@
 	* [创建渐变和填充](9-5-graphics-gradient-fill.md)(done)	
 10. [处理几何结构](10-0-gemo.md)(review)
     * [几何学基础知识](10-1-gemo-about.md)(review)
-    * [使用Point对象](10-2-point.md)(done)
+    * [使用Point对象](10-2-point.md)(review)
 	* [使用Rectangle对象](10-3-rectangle.md)(review)
 	* [使用Matrix对象](10-4-matrix.md)(review)
 	* [示例:对现实对象应用矩阵变换](10-5-matrix-demo.md)(review)		
