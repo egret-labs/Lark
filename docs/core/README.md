@@ -27,7 +27,7 @@
 	* [设置舞台属性](6-5-stage.md)(done)
 	* [处理显示对象事件](6-6-displayevent.md)(done)
 	* [选择DisplayObject子类](6-7-displayobjectclass.md)(done)
-7. [操作显示对象](7-0-display.md)(done)
+7. [操作显示对象](7-0-display.md)(review)
 	* [改变位置](7-1-position.md)(done)
 	* [平移和滚动显示对象](7-2-scrollRect.md)(done)
 	* [处理大小和缩放对象](7-3-scale.md)(done)
