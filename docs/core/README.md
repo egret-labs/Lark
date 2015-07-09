@@ -17,7 +17,7 @@
 	* [事件示例](4-5-event-ex.md)(done)
 5. [显示编程](5-0-display.md)(review)
 	* [显示编程的基础知识](5-1-display-about.md)(review)
-	* [核心显示类](5-2-display-class.md)(done)
+	* [核心显示类](5-2-display-class.md)(review)
 	* [显示列表方法的优点](5-3-displaylist.md)(done)
 	* [显示对象示例](5-4-display-demo.md)(done)
 6. [使用显示对象](6-0-display.md)(done)
