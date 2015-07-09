@@ -21,7 +21,7 @@ var imgLoader:lark.ImageLoader = new lark.ImageLoader;
 imgLoader.once( lark.Event.COMPLETE, this.imgLoadHandler, this ); 
 imgLoader.load( "resources/lark.png" );  
 ```
-则在所定义的回调时间中，可以这样来获取该图片对应的 BitmapData：
+则在所定义的回调事件中，可以这样来获取该图片对应的 BitmapData：
 ``` TypeScript
 imgLoadHandler( evt:lark.Event ):void{
     var loader:lark.ImageLoader = evt.currentTarget;
