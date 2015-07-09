@@ -69,6 +69,13 @@ module lark {
         getDefinitionByNameCache[name] = definition;
         return definition;
     }
+
+    if(DEBUG){
+        lark["cleanCache"] = function():void{
+            getDefinitionByNameCache = {};
+        }
+    }
+
 }
 
 var __global = __global || this;
