@@ -5,7 +5,7 @@
 * [改变位置](7-1-position.md)
 * [平移和滚动显示对象](7-2-scrollRect.md)
 * [处理大小和缩放对象](7-3-scale.md)
-* [缓存显示对象](7-4-cacheAsBitmap.md)
+* [使用位图缓存](7-4-cacheAsBitmap.md)
 * [应用混合模式](7-5-blendMode.md)
 * [旋转对象](7-6-rotation.md)
 * [遮罩显示对象](7-7-mask.md)
