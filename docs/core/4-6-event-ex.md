@@ -14,7 +14,7 @@ public var alarmTimer:Timer;
 // 实例化指定大小的新 Alarmer。
 public initClock( ):void{
     this.alarmTimer = new Timer(0, 1);
-    this.alarmTimer.on( TimerEvent.TIMER, alarmHandler );
+    this.alarmTimer.on( TimerEvent.TIMER, this.alarmHandler, this);
 }
 ```
 
@@ -41,11 +41,8 @@ public setAlarm( sec:number = 0 ):void{
 ``` TypeScript
  // 调度 timer 事件时调用。
 public  alarmHandler( event:TimerEvent ):void{
-    trace("Alarm!");
-    var event = Event.create( "alarm", false);
-    event.data = data;  //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
-    this.emit(event);
-    Event.release(event);
+    lark.log("Alarm!");
+    this.emitWidth(“alarm",false,false,data);//使用事件对象池工具方法快速抛出事件。
 }
 ```
 
