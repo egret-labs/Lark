@@ -52,17 +52,17 @@ container.addChild(ball_A);
 可以使用 getChildAt() 方法来验证显示对象的图层顺序。getChildAt() 方法根据您向容器传递的索引编号返回容器的子对象。例如，下面的代码显示 container DisplayObjectContainer 对象的子级列表中不同位置的显示对象的名称：
 
 ```
-console.log(container.getChildAt(0).name); // ball_A
-console.log(container.getChildAt(1).name); // ball_C
-console.log(container.getChildAt(2).name); // ball_B
+lark.log(container.getChildAt(0).name); // ball_A
+lark.log(container.getChildAt(1).name); // ball_C
+lark.log(container.getChildAt(2).name); // ball_B
 ```
 
 如果从父容器的子级列表中删除了一个显示对象，则列表中更高位置的每一个元素在子索引中会分别下移一个位置。例如，接着前面的代码，下面的代码显示如果删除子级列表中位置较低的一个显示对象，container DisplayObjectContainer 中位置 2 的显示对象如何移到位置 1：
 
 ```
 container.removeChild(ball_C);
-console.log(container.getChildAt(0).name); // ball_A
-console.log(container.getChildAt(1).name); // ball_B
+lark.log(container.getChildAt(0).name); // ball_A
+lark.log(container.getChildAt(1).name); // ball_B
 ```
 
 removeChild() 和 removeChildAt() 方法并不完全删除显示对象实例。这两种方法只是从容器的子级列表中删除显示对象实例。该实例仍可由另一个变量引用。
