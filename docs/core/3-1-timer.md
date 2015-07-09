@@ -30,7 +30,7 @@ Timer 对象在每次达到指定的间隔时都会调度 TimerEvent 对象。Ti
 class ShortTimer extends Sprite {
     public constructor() {
         // 创建一个时间间隔1秒持续5次的计时器
-        var minuteTimer:Timer = new Timer(1000, 5);
+        var minuteTimer:Timer = new lark.Timer(1000, 5);
 
         // 添加间隔触发和计时完成的事件监听
         minuteTimer.addEventListener(TimerEvent.TIMER, onTick);
