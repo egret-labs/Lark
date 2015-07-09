@@ -4,7 +4,7 @@ Lark中使用位图图像的主要类是 Bitmap 类和 BitmapData 类，前者�
 
 #### 了解 Bitmap 类
 
-作为 DisplayObject 类的子类， Bitmap 类是用于显示位图图像的主要 Lark 类。这些图像可能已通过 lark.ImageLoader 类加载或使用 Bitmap() 构造函数动态地创建。 从外部源加载图像时，Bitmap 对象只能使用 JPEG 或 PNG 格式的图像。实例化后，可将 Bitmap 实例视为需要呈示在舞台上的 BitmapData 对象的包装。由于 Bitmap 实例是一个显示对象，因此可以使用显示对象的所有特性和功能来操作 Bitmap 实例。
+作为 DisplayObject 类的子类， Bitmap 类是用于显示位图图像的主要 Lark 类。这些图像可通常通过 lark.ImageLoader 类加载获得 BitmapData 对象并使用 Bitmap() 构造函数动态地创建。 从外部源加载图像时，Bitmap 对象只能使用 JPEG 或 PNG 格式的图像。实例化后，可将 Bitmap 实例视为需要呈示在舞台上的 BitmapData 对象的包装。由于 Bitmap 实例是一个显示对象，因此可以使用显示对象的所有特性和功能来操作 Bitmap 实例。
 
 #### 像素平滑
 
