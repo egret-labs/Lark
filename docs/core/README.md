@@ -1,7 +1,7 @@
 #Lark Core 编程指南
 
 1. 概述
-2. [项目初始化](2-0-project.md)(done)
+2. [项目初始化](2-0-project.md)(review)
 	* [新建Lark工程](2-1-create.md)(done)
 	* [引用扩展库](2-2-import-libs.md)(done)
 	* [设置启动入口类](2-3-entry-class.md)(done)
