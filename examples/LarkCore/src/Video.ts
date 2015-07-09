@@ -1,53 +1,40 @@
 class Video extends lark.Sprite {
-
-    poster:lark.Bitmap;
-    video:lark.Video;
-    videoBitmap:lark.Video;
     constructor() {
-        super();
+            super();
+            
+            [0,1].forEach(i=>{
+                var video = new lark.Video("http://media.w3.org/2010/05/sintel/trailer.mp4")
+                video.x = 50;
+                video.y = i * 280 + 20;
+                video.width = 427;
+                video.height = 240;
+                video.fullscreen = i == 0;
+                video.poster = video.fullscreen ? "resources/posterfullscreen.jpg" : "resources/posterinline.jpg";
+                video.once(lark.TouchEvent.TOUCH_TAP, this.playVideo, this);
+                video.load();
+                this.addChild(video);
+                
+                var text = new lark.TextField('Loading');
+                text.x = 50;
+                text.y = (i+1)*280-20;
+                video.on(lark.Event.COMPLETE,e=>text.text="Loaded, click video to play",this);
+                this.addChild(text);
+            });
 
-        var imageLoader = new lark.ImageLoader();
-        imageLoader.once(lark.Event.COMPLETE,this.onLoaded,this);
-        imageLoader.load("resources/poster.png");
-        
-        var video = new lark.Video("http://media.w3.org/2010/05/sintel/trailer.mp4")
-        video.load();
-        this.video = video;
-    }
-
-    private onLoaded(e:lark.Event){
-        var loader:lark.ImageLoader = e.target;
-        var bitmapData = loader.data;
-
-        var bitmap = new lark.Bitmap(bitmapData);
-        bitmap.x = 50;
-        bitmap.y = 50;
-        this.addChild(bitmap);
-        this.poster = bitmap;
-        bitmap.once(lark.TouchEvent.TOUCH_TAP,this.playVideo,this);
-    }
-
-    private playVideo(e:lark.TouchEvent){
-        this.video.play();
-        e.stopImmediatePropagation();
-        this.poster.bitmapData = this.video.bitmapData;
-        if(!lark.Capabilities.isMobile){
-            this.on(lark.Event.ENTER_FRAME,this.drawVideo,this);
         }
-        this.poster.once(lark.TouchEvent.TOUCH_TAP,this.stopVideo,this);
-        this.video.once(lark.Event.ENDED,this.stopVideo,this);
-    }
-    
-    private stopVideo(e:lark.TouchEvent){
-        e.stopImmediatePropagation();
-        if(!lark.Capabilities.isMobile){
-            this.removeListener(lark.Event.ENTER_FRAME,this.drawVideo,this);
+
+        private playVideo(e: lark.TouchEvent) {
+            var video = <lark.Video>e.target;
+            video.play();
+            video.once(lark.TouchEvent.TOUCH_TAP, this.stopVideo, this);
+            video.once(lark.Event.ENDED, this.stopVideo, this);
         }
-        this.poster.once(lark.TouchEvent.TOUCH_TAP,this.playVideo,this);
-    }
-    
-    private drawVideo(){
-        this.poster.bitmapData = null;
-        this.poster.bitmapData = this.video.bitmapData;
-    }
+
+        private stopVideo(e: lark.TouchEvent) {
+            var video = <lark.Video>e.target;
+            video.removeListener(lark.Event.ENDED, this.stopVideo, this);
+            video.removeListener(lark.TouchEvent.TOUCH_TAP, this.stopVideo, this);
+            video.pause();
+            video.once(lark.TouchEvent.TOUCH_TAP, this.playVideo, this);
+        }
 }

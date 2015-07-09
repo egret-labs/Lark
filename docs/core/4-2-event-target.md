@@ -24,7 +24,7 @@ Event 类定义许多只读属性和常数，以提供有关事件对象的重�
 ##### 事件对象类型
 每个事件对象都有关联的事件类型。数据类型以字符串值的形式存储在 Event.type 属性中。知道事件对象的类型是非常有用的，这样您的代码就可以区分不同类型的事件。例如，下面的代码指定 tapHandler() 侦听器函数应响应传递给 myDisplayObject 的任何轻触事件对象。
 ``` TypeScript
-myDisplayObject.addEventListener(TouchEvent.TOUCH_TAP tapHandler);
+myDisplayObject.on( TouchEvent.TOUCH_TAP, tapHandler );
 ```
 
 大约有 20 多种事件类型与 Event 类自身关联并由 Event 类常数表示，其中某些数据类型显示在摘自 Event 类定义的以下代码中：
@@ -41,12 +41,12 @@ module lark{
 
 这些常数提供了引用特定事件类型的简便方法。您应使用这些常数而不是它们所代表的字符串。如果您的代码中拼错了某个常数名称，编译器将捕获到该错误，但如果您改为使用字符串，则编译时可能不会出现拼写错误，这可能导致难以调试的意外行为。例如，添加事件侦听器时，使用以下代码：
 ``` TypeScript
-myDisplayObject.addEventListener(TouchEvent.TOUCH_TAP, tapHandler);
+myDisplayObject.on( TouchEvent.TOUCH_TAP, tapHandler );
 ```
 
 而不是使用：
 ``` TypeScript
-myDisplayObject.addEventListener("touchTap", tapHandler);
+myDisplayObject.on( "touchTap", tapHandler );
 ```
 
 ##### 默认行为信息
@@ -77,15 +77,15 @@ module lark{
 
 这些常数对应于 eventPhase 属性的三个有效值。使用这些常数可以使您的代码可读性更好。例如，如果要确保仅当事件目标在目标阶段中时才调用名为 myFunc() 的函数，您可以使用以下代码来测试此条件：
 ``` TypeScript
-if (event.eventPhase == EventPhase.AT_TARGET){
+if ( event.eventPhase == EventPhase.AT_TARGET ){
     myFunc();
 }
 ```
 
 ##### target 属性
-target 属性包含对作为事件目标的对象的引用。在某些情况下，这很简单，例如当麦克风变为活动状态时，事件对象的目标是 Microphone 对象。但是，如果目标在显示列表中，则必须考虑显示列表层次结构。例如，如果用户在包括重叠的显示列表对象的某一点输入一个鼠标单击，则 Lark 始终会选择距离舞台层次最深的对象作为事件目标。
+target 属性包含对作为事件目标的对象的引用。在某些情况下，这很简单，例如当麦克风变为活动状态时，事件对象的目标是 Microphone 对象。但是，如果目标在显示列表中，则必须考虑显示列表层次结构。例如，如果用户在包括重叠的显示列表对象的某一点输入一个触摸，则 Lark 始终会选择距离舞台层次最深的对象作为事件目标。
 
-对于复杂的 SWF 文件，特别是那些通常使用更小的子对象来修饰按钮的 SWF 文件，target 属性可能并不常用，因为它通常指向按钮的子对象，而不是按钮。在这些情况下，常见的做法是将事件侦听器添加到按钮并使用 currentTarget 属性，因为该属性指向按钮，而 target 属性可能指向按钮的子对象。
+对于复杂的 Lark应用，特别是那些通常使用更小的子对象来修饰按钮的 Lark应用，target 属性可能并不常用，因为它通常指向按钮的子对象，而不是按钮。在这些情况下，常见的做法是将事件侦听器添加到按钮并使用 currentTarget 属性，因为该属性指向按钮，而 target 属性可能指向按钮的子对象。
 
 ##### currentTarget 属性
 currentTarget 属性包含对当前正在处理事件对象的对象的引用。您并不知道哪个节点当前正在处理您要检查的事件对象，虽然这似乎很奇怪，但请记住，您可以向该事件对象的事件流中的任何显示对象添加侦听器函数，并且可以将侦听器函数放在任何位置。而且，可以将相同的侦听器函数添加到不同的显示对象。随着项目大小和复杂性的增加，currentTarget 属性会变得越来越有用。
@@ -123,7 +123,7 @@ Event.stopImmediatePropogation() 方法也阻止事件对象移动到下一个�
 #### Event 类的子类
 对于很多事件，Event 类中定义的一组公共属性已经足够了。但是，Event 类中可用的属性无法捕获其它事件具有的独特的特性。Lark API 为这些事件定义了 Event 类的几个子类。
 
-每个子类提供了对于该事件类别来说唯一的附加属性和事件类型。例如，与触摸输入相关的事件具有若干独特的特性，无法被 Event 类中定义的属性捕获。TouchEvent 类添加了若干个属性，扩展了 Event 类。这些属性包含诸如鼠标事件的位置和在鼠标事件过程中是否按下了特定键等信息。
+每个子类提供了对于该事件类别来说唯一的附加属性和事件类型。例如，与触摸输入相关的事件具有若干独特的特性，无法被 Event 类中定义的属性捕获。TouchEvent 类添加了若干个属性，扩展了 Event 类。这些属性包含诸如触摸事件的位置和在触摸ID等信息。
 
 Event 子类还包含代表与子类关联的事件类型的常量。例如，TouchEvent 类定义几种触摸事件类型的内容，包括 touchTap、touchBegin 和 touchEnd 事件类型。
 <!--[?]创建 Event 子类时，您必须覆盖 clone() 和 toString() 方法才能提供子类所特有的功能。-->
