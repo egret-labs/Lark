@@ -16,7 +16,7 @@ private printDisplayList(container:lark.DisplayObjectContainer, indentString:Str
     for (var i:number=0; i < container.numChildren; i++)
     {
         child = container.getChildAt(i);
-        console.log(indentString, child, child.name);
+        lark.log(indentString, child, child.name);
     }
 }
 ```
