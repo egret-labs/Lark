@@ -57,7 +57,7 @@
 	* [捕获文本输入](11-3-textinput.md)(review)
 	* [处理文本选择](11-4-text-select.md)(review)
 	* [文本示例](11-5-text-demo.md)(review)
-12. [处理位图](12-0-bitmap.md)
+12. [处理位图](12-0-bitmap.md)(review)
 	* [处理位图的基本知识](12-1-bitmap-basic.md)(review)
 	* [Bitmap和BitmapData类](12-2-bitmap-classes.md)(review)
 	* [滚动位图](12-3-bitmap-scroll.md)(review)
