@@ -33,7 +33,7 @@
 	* [处理大小和缩放对象](7-3-scale.md)(review)
 	* [缓存显示对象](7-4-cacheAsBitmap.md)(review)
 	* [应用混合模式](7-5-blendMode.md)(review)
-	* [旋转对象](7-6-rotation.md)(done)
+	* [旋转对象](7-6-rotation.md)(review)
 	* [遮罩显示对象](7-7-mask.md)(done)
 8. [处理动画](8-0-display.md)(done)
 	* [动画基础知识](8-1-animation.md)(done)
