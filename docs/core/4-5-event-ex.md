@@ -5,7 +5,7 @@
 在发生事情时提供通知，是创建事件的目的。Alarmer 类公开 Alarm 事件，其它对象可侦听该事件以执行所需操作。此外，Alarmer 类使用 Timer 类的实例来确定何时触发闹铃。和 Alarmer 类一样，Timer 类提供一个事件，用于在经过特定时间时通知其它对象（在本例中为 Alarmer 实例）。就像大多数 ActionScript 应用程序一样，事件构成了 Alarm Clock 范例应用程序功能的重要部分。
 
 #### 触发闹铃
-如前所述，Alarmer 类实际提供的唯一功能与设置和触发闹铃有关。内置的 Timer 类 (flash.utils.Timer) 为开发人员提供了定义要在指定时间之后执行的代码的方法。Alarmer 类使用 Timer 实例来确定何时触发闹铃。
+如前所述，Alarmer 类实际提供的唯一功能与设置和触发闹铃有关。内置的 Timer 类 (lark.Timer) 为开发人员提供了定义要在指定时间之后执行的代码的方法。Alarmer 类使用 Timer 实例来确定何时触发闹铃。
 
 ``` TypeScript
 // 将用于闹铃的 Timer。
