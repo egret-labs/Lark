@@ -1,7 +1,7 @@
 #Lark Core 编程指南 - 显示对象示例
 
 
-我们来扩展一个自己的显示对象类，该类负责国际象棋游戏中的棋盘绘制。由于对功能进行分装，我们希望它能够更加灵活。但只负责棋盘在自身的绘制操作。
+我们来扩展一个自己的显示对象类，该类负责国际象棋游戏中的棋盘绘制。
 
 具体需求有如下几个：
 
@@ -16,15 +16,15 @@
 ```
 class Board extends lark.Sprite
 {
-    private $row:number = 0;       //行
-    private $coloumn:number = 0;   //列
-    private $side:number = 0;
+    private row:number = 0;       //行
+    private coloumn:number = 0;   //列
+    private side:number = 0;
 
     constructor(row:number, coloumn:number, side:number) {
         super();
-        this.$row = row;
-        this.$coloumn = coloumn;
-        this.$side = side;
+        this.row = row;
+        this.coloumn = coloumn;
+        this.side = side;
     }
 }
 ```
@@ -32,32 +32,32 @@ class Board extends lark.Sprite
 由于颜色涉及单数颜色和双数颜色，针对颜色值做封装处理。
 
 ```
-private $sigularColor:string = "#ffffff";
-private $dualColor:string = "#000000";
+private sigularColor:string = "#ffffff";
+private dualColor:string = "#000000";
 
 public get sigularColor():string
 {
-    return this.$sigularColor;
+    return this.sigularColor;
 }
 public set sigularColor(value:string)
 {
-    this.$sigularColor = value;
+    this.sigularColor = value;
 }
 
 public get dualColor():string
 {
-    return this.$dualColor;
+    return this.dualColor;
 }
 public set dualColor(value:string)
 {
-    this.$dualColor = value;
+    this.dualColor = value;
 }
 ```
 
 在`Board`类中，绘制对象为一个内部的Shape类型实例。
 
 ```
-private $shp:lark.Shape ;
+private shp:lark.Shape ;
 ```
 
 最后关于绘图操作封住四个方法：
@@ -72,24 +72,24 @@ private $shp:lark.Shape ;
 ```
 public onDraw()
 {
-    if( this.$shp==null )
+    if( this.shp==null )
     {
-        this.$shp = new lark.Shape();
+        this.shp = new lark.Shape();
         this.addChild( this.$shp );
     }
-    this.$shp.graphics.clear();
+    this.shp.graphics.clear();
     //执行绘图
-    for(var i:number=0; i<this.$coloumn; i++)
+    for(var i:number=0; i<this.coloumn; i++)
     {
-        for(var t:number=0; t<this.$row; t++)
+        for(var t:number=0; t<this.row; t++)
         {
             if((i+t)%2==0)
             {
-                this.drawSingularRect(this.$shp.graphics,t,i);
+                this.drawSingularRect(this.shp.graphics,t,i);
             }
             else
             {
-                this.drawDualRect(this.$shp.graphics,t,i);
+                this.drawDualRect(this.shp.graphics,t,i);
             }
         }
     }
@@ -97,19 +97,19 @@ public onDraw()
 
 private drawSingularRect(grap:lark.Graphics,_row:number,_col:number)
 {
-    this.drawRect(grap, this.$sigularColor, _row, _col);
+    this.drawRect(grap, this.sigularColor, _row, _col);
 }
 
 private drawDualRect(grap:lark.Graphics,_row:number,_col:number)
 {
-    this.drawRect(grap, this.$dualColor, _row, _col);
+    this.drawRect(grap, this.dualColor, _row, _col);
 }
 
 private drawRect(grap:lark.Graphics,color:string,_row:number,_col:number)
 {
     grap.beginPath();
     grap.fillStyle=color;
-    grap.fillRect(_row*this.$side, _col*this.$side, this.$side, this.$side);
+    grap.fillRect(_row*this.side, _col*this.$side, this.side, this.side);
 }
 ``` 
 
@@ -119,39 +119,39 @@ private drawRect(grap:lark.Graphics,color:string,_row:number,_col:number)
 ```
 class Board extends lark.Sprite
 {
-    private $row:number = 0;       //行
-    private $coloumn:number = 0;   //列
-    private $side:number = 0;
+    private row:number = 0;       //行
+    private coloumn:number = 0;   //列
+    private side:number = 0;
 
     constructor(row:number, coloumn:number, side:number) {
         super();
-        this.$row = row;
-        this.$coloumn = coloumn;
-        this.$side = side;
+        this.row = row;
+        this.coloumn = coloumn;
+        this.side = side;
     }
 
-    private $shp:lark.Shape ;
+    private shp:lark.Shape ;
 
     public onDraw()
     {
-        if( this.$shp==null )
+        if( this.shp==null )
         {
-            this.$shp = new lark.Shape();
-            this.addChild( this.$shp );
+            this.shp = new lark.Shape();
+            this.addChild( this.shp );
         }
         this.$shp.graphics.clear();
         //执行绘图
-        for(var i:number=0; i<this.$coloumn; i++)
+        for(var i:number=0; i<this.coloumn; i++)
         {
-            for(var t:number=0; t<this.$row; t++)
+            for(var t:number=0; t<this.row; t++)
             {
                 if((i+t)%2==0)
                 {
-                    this.drawSingularRect(this.$shp.graphics,t,i);
+                    this.drawSingularRect(this.shp.graphics,t,i);
                 }
                 else
                 {
-                    this.drawDualRect(this.$shp.graphics,t,i);
+                    this.drawDualRect(this.shp.graphics,t,i);
                 }
             }
         }
@@ -159,40 +159,40 @@ class Board extends lark.Sprite
 
     private drawSingularRect(grap:lark.Graphics,_row:number,_col:number)
     {
-        this.drawRect(grap, this.$sigularColor, _row, _col);
+        this.drawRect(grap, this.sigularColor, _row, _col);
     }
 
     private drawDualRect(grap:lark.Graphics,_row:number,_col:number)
     {
-        this.drawRect(grap, this.$dualColor, _row, _col);
+        this.drawRect(grap, this.dualColor, _row, _col);
     }
 
     private drawRect(grap:lark.Graphics,color:string,_row:number,_col:number)
     {
         grap.beginPath();
         grap.fillStyle=color;
-        grap.fillRect(_row*this.$side, _col*this.$side, this.$side, this.$side);
+        grap.fillRect(_row*this.$side, _col*this.side, this.side, this.side);
     }
 
-    private $sigularColor:string = "#ffffff";
-    private $dualColor:string = "#000000";
+    private sigularColor:string = "#ffffff";
+    private dualColor:string = "#000000";
 
     public get sigularColor():string
     {
-        return this.$sigularColor;
+        return this.sigularColor;
     }
     public set sigularColor(value:string)
     {
-        this.$sigularColor = value;
+        this.sigularColor = value;
     }
 
     public get dualColor():string
     {
-        return this.$dualColor;
+        return this.dualColor;
     }
     public set dualColor(value:string)
     {
-        this.$dualColor = value;
+        this.dualColor = value;
     }
 
 }
