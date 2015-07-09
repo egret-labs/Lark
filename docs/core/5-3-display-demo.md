@@ -16,15 +16,15 @@
 ```
 class Board extends lark.Sprite
 {
-    private row:number = 0;       //行
-    private coloumn:number = 0;   //列
-    private side:number = 0;
+    private _row:number = 0;       //行
+    private _coloumn:number = 0;   //列
+    private _side:number = 0;
 
     constructor(row:number, coloumn:number, side:number) {
         super();
-        this.row = row;
-        this.coloumn = coloumn;
-        this.side = side;
+        this._row = row;
+        this._coloumn = coloumn;
+        this._side = side;
     }
 }
 ```
@@ -32,32 +32,32 @@ class Board extends lark.Sprite
 由于颜色涉及单数颜色和双数颜色，针对颜色值做封装处理。
 
 ```
-private sigularColor:string = "#ffffff";
-private dualColor:string = "#000000";
+private _sigularColor:string = "#ffffff";
+private _dualColor:string = "#000000";
 
 public get sigularColor():string
 {
-    return this.sigularColor;
+    return this._sigularColor;
 }
 public set sigularColor(value:string)
 {
-    this.sigularColor = value;
+    this._sigularColor = value;
 }
 
 public get dualColor():string
 {
-    return this.dualColor;
+    return this._dualColor;
 }
 public set dualColor(value:string)
 {
-    this.dualColor = value;
+    this._dualColor = value;
 }
 ```
 
 在`Board`类中，绘制对象为一个内部的Shape类型实例。
 
 ```
-private shp:lark.Shape ;
+private _shp:lark.Shape ;
 ```
 
 最后关于绘图操作封住四个方法：
@@ -72,24 +72,24 @@ private shp:lark.Shape ;
 ```
 public onDraw()
 {
-    if( this.shp==null )
+    if( this._shp==null )
     {
-        this.shp = new lark.Shape();
-        this.addChild( this.$shp );
+        this._shp = new lark.Shape();
+        this.addChild( this._shp );
     }
-    this.shp.graphics.clear();
+    this._shp.graphics.clear();
     //执行绘图
-    for(var i:number=0; i<this.coloumn; i++)
+    for(var i:number=0; i<this._coloumn; i++)
     {
-        for(var t:number=0; t<this.row; t++)
+        for(var t:number=0; t<this._row; t++)
         {
             if((i+t)%2==0)
             {
-                this.drawSingularRect(this.shp.graphics,t,i);
+                this.drawSingularRect(this._shp.graphics,t,i);
             }
             else
             {
-                this.drawDualRect(this.shp.graphics,t,i);
+                this.drawDualRect(this._shp.graphics,t,i);
             }
         }
     }
@@ -97,19 +97,19 @@ public onDraw()
 
 private drawSingularRect(grap:lark.Graphics,_row:number,_col:number)
 {
-    this.drawRect(grap, this.sigularColor, _row, _col);
+    this.drawRect(grap, this._sigularColor, _row, _col);
 }
 
 private drawDualRect(grap:lark.Graphics,_row:number,_col:number)
 {
-    this.drawRect(grap, this.dualColor, _row, _col);
+    this.drawRect(grap, this._dualColor, _row, _col);
 }
 
 private drawRect(grap:lark.Graphics,color:string,_row:number,_col:number)
 {
     grap.beginPath();
     grap.fillStyle=color;
-    grap.fillRect(_row*this.side, _col*this.$side, this.side, this.side);
+    grap.fillRect(_row*this._side, _col*this._side, this._side, this._side);
 }
 ``` 
 
@@ -119,39 +119,39 @@ private drawRect(grap:lark.Graphics,color:string,_row:number,_col:number)
 ```
 class Board extends lark.Sprite
 {
-    private row:number = 0;       //行
-    private coloumn:number = 0;   //列
-    private side:number = 0;
+    private _row:number = 0;       //行
+    private _coloumn:number = 0;   //列
+    private _side:number = 0;
 
     constructor(row:number, coloumn:number, side:number) {
         super();
-        this.row = row;
-        this.coloumn = coloumn;
-        this.side = side;
+        this._row = row;
+        this._coloumn = coloumn;
+        this._side = side;
     }
 
-    private shp:lark.Shape ;
+    private _shp:lark.Shape ;
 
     public onDraw()
     {
-        if( this.shp==null )
+        if( this._shp==null )
         {
-            this.shp = new lark.Shape();
-            this.addChild( this.shp );
+            this._shp = new lark.Shape();
+            this.addChild( this._shp );
         }
-        this.$shp.graphics.clear();
+        this._shp.graphics.clear();
         //执行绘图
-        for(var i:number=0; i<this.coloumn; i++)
+        for(var i:number=0; i<this._coloumn; i++)
         {
-            for(var t:number=0; t<this.row; t++)
+            for(var t:number=0; t<this._row; t++)
             {
                 if((i+t)%2==0)
                 {
-                    this.drawSingularRect(this.shp.graphics,t,i);
+                    this.drawSingularRect(this._shp.graphics,t,i);
                 }
                 else
                 {
-                    this.drawDualRect(this.shp.graphics,t,i);
+                    this.drawDualRect(this._shp.graphics,t,i);
                 }
             }
         }
@@ -159,40 +159,40 @@ class Board extends lark.Sprite
 
     private drawSingularRect(grap:lark.Graphics,_row:number,_col:number)
     {
-        this.drawRect(grap, this.sigularColor, _row, _col);
+        this.drawRect(grap, this._sigularColor, _row, _col);
     }
 
     private drawDualRect(grap:lark.Graphics,_row:number,_col:number)
     {
-        this.drawRect(grap, this.dualColor, _row, _col);
+        this.drawRect(grap, this._dualColor, _row, _col);
     }
 
     private drawRect(grap:lark.Graphics,color:string,_row:number,_col:number)
     {
         grap.beginPath();
         grap.fillStyle=color;
-        grap.fillRect(_row*this.$side, _col*this.side, this.side, this.side);
+        grap.fillRect(_row*this._side, _col*this._side, this._side, this._side);
     }
 
-    private sigularColor:string = "#ffffff";
-    private dualColor:string = "#000000";
+    private _sigularColor:string = "#ffffff";
+    private _dualColor:string = "#000000";
 
     public get sigularColor():string
     {
-        return this.sigularColor;
+        return this._sigularColor;
     }
     public set sigularColor(value:string)
     {
-        this.sigularColor = value;
+        this._sigularColor = value;
     }
 
     public get dualColor():string
     {
-        return this.dualColor;
+        return this._dualColor;
     }
     public set dualColor(value:string)
     {
-        this.dualColor = value;
+        this._dualColor = value;
     }
 
 }
