@@ -37,7 +37,7 @@
 	* [遮罩显示对象](7-7-mask.md)(review)
 8. [处理动画](8-0-display.md)(done)
 	* [动画基础知识](8-1-animation.md)(done)
-	* [使用Tween](后续添加)
+	* 使用Tween(后续添加)
 9. [使用绘图API]()
 	* [绘图API基础知识](9-0-graphics-api-basic.md)(done)
 	* [了解Graphics类](9-1-graphics-class.md)(done)
