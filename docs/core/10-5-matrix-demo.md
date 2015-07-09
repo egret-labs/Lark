@@ -12,11 +12,11 @@ class Main extends lark.Sprite {
         imageLoader.once(lark.Event.COMPLETE,this.onLoaded,this);
         imageLoader.load( "resources/lark.png");
     }
-    private onLoaded(evt:lark.Event)
+    private onLoaded(event:lark.Event)
     {
-        var larkBitmapData = evt.target.data;
-        var img = new lark.Bitmap( larkBitmapData );
-        this.addChild( img );
+        var larkBitmapData = event.target.data;
+        var bitmap = new lark.Bitmap( larkBitmapData );
+        this.addChild( bitmap );
     }
 }
 ```
@@ -38,21 +38,22 @@ class Main extends lark.Sprite {
         imageLoader.once(lark.Event.COMPLETE,this.onLoaded,this);
         imageLoader.load( "resources/lark.png");
     }
-    private onLoaded(evt:lark.Event)
+    private onLoaded(event:lark.Event)
     {
-        var larkBitmapData = evt.target.data;
-        var img = new lark.Bitmap( larkBitmapData );
-        this.addChild( img );
+        var larkBitmapData = event.target.data;
+        var bitmap = new lark.Bitmap( larkBitmapData );
+        this.addChild( bitmap );
 
-        var mt = lark.Matrix.create();
-        mt.scale(0.5, 0.8);
-        mt.rotate( Math.PI * (-45 / 360) );
-        mt.translate( 45, 110 );
+        var matrix = lark.Matrix.create();
+        matrix.scale(0.5, 0.8);
+        matrix.rotate( Math.PI * (-45 / 360) );
+        matrix.translate( 45, 110 );
 
-        img.matrix = mt;
+        img.matrix = matrix;
     }
 }
 ```
+注意：直接获取DisplayObject.matrix引用并修改它是无效的，显示对象的matrix属性必须重新赋值才能生效。
 
 运行后效果如图：
 
