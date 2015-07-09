@@ -3,9 +3,9 @@
 Lark 事件处理系统与显示列表密切交互。
 若要对显示列表有基本的了解，请参考：[显示编程](5-0-display.md)。
 
-* [事件处理基础知识](4-0-event-basic.md)
-* [事件流](4-1-event-stream.md)
-* [事件对象](4-2-event-target.md)
-* [事件监听器](4-3-event-listener.md)
-* [事件对象池优化](4-4-event-pool.md)
-* [事件示例](4-5-event-ex.md)
+* [事件处理基础知识](4-1-event-basic.md)
+* [事件流](4-2-event-stream.md)
+* [事件对象](4-3-event-target.md)
+* [事件监听器](4-4-event-listener.md)
+* [事件对象池优化](4-5-event-pool.md)
+* [事件示例](4-6-event-ex.md)
