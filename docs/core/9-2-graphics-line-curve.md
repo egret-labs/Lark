@@ -8,7 +8,7 @@ Lark 绘制：
  -  如有必要，完成创建填充
  
 #### 定义线条和填充样式
-要使用 Shape 实例的 graphics 属性进行绘制，您必须先定义在绘制时使用的样式 （线条大小和颜色、填充颜色）。就像使用 Adobe® Flash® Professional 或其他绘图应用程序中的绘制工具一样，使用 Lark 进行绘制时，可以使用笔触进行绘制，也可以不使用笔触；可以使用填充颜色进行绘制，也可以不使用填充颜色。您可以使用 lineStyle() 或 lineGradientStyle() 方法来指定笔触的外观。   
+要使用 Shape 实例的 graphics 属性进行绘制，您必须先定义在绘制时使用的样式 （线条大小和颜色、填充颜色）。就像使用 Adobe Flash Professional 或其他绘图应用程序中的绘制工具一样，使用 Lark 进行绘制时，可以使用笔触进行绘制，也可以不使用笔触；可以使用填充颜色进行绘制，也可以不使用填充颜色。您可以使用 lineStyle() 或 lineGradientStyle() 方法来指定笔触的外观。   
 
 在本节的示例代码，均假设有一个现成的Graphics实例graphics：
 ```
