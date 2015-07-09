@@ -2,8 +2,7 @@
 
 Lark加载资源主要使用 lark.HttpRequest 类。该类封装了在异步加载资源和通讯方面作为 H5 标准的 XMLHttpRequest 对象。
 
-本节讲解的主要是加载静态文件，分为两种类型：文本和二进制数据。
-加载静态文件的特点是可以进行进度跟踪。
+本节讲解的主要是加载静态资源文件，分为两种类型：文本和二进制数据。
 
 #### 加载文本   
 
@@ -18,16 +17,16 @@ var respHandler = function( evt:lark.Event ):void{
    switch ( evt.type ){
        case lark.Event.COMPLETE:
            var request:lark.HttpRequest = evt.currentTarget;
-           console.log( "respHandler:\n", request.response );
+           lark.log( "respHandler:\n", request.response );
            break;
        case lark.Event.IO_ERROR:
-           console.log( "respHandler io error" );
+           lark.log( "respHandler io error" );
            break;
    }
 }
         
 var progressHandler = function( evt:lark.ProgressEvent ):void{
-   console.log( "progress:", evt.bytesLoaded, evt.bytesTotal );
+   lark.log( "progress:", evt.bytesLoaded, evt.bytesTotal );
 }
 
 request.once( lark.Event.COMPLETE, respHandler, null);
@@ -37,11 +36,11 @@ request.open( url, lark.HttpMethod.GET );
 request.send( );
 ```
 HttpRequest默认的加载类型是 TEXT ，因此不需要专门设定。
-需要侦听的主要事件是 COMPLETE ，从这里来获取数据。   
-当然也要考虑意外的情况，在 IO_ERROR 做这些情况的处理。
-加载进度事件是 ProgressEvent.PROGRESS , 这在加载size较大的资源时比较有用。
+需要侦听的主要事件是 lark.Event.COMPLETE ，从这里来获取数据。   
+当然也要考虑意外的情况，在 lark.Event.IO_ERROR 做这些情况的处理。
+加载进度事件是 lark.ProgressEvent.PROGRESS , 这在加载较大的资源时比较有用,能够实时统计加载的进度。
 
-#### 加载二进制   
+#### 加载二进制文件
 
 ``` TypeScript
 var url = "resources/lark.png";
@@ -53,10 +52,10 @@ var respHandler = function( evt:lark.Event ):void {
        case lark.Event.COMPLETE:
            var request:lark.HttpRequest = evt.currentTarget;
            var ab:ArrayBuffer = request.response;
-           console.log( "respHandler:\n", ab.byteLength );
+           lark.log( "respHandler:\n", ab.byteLength );
            break;
        case lark.Event.IO_ERROR:
-           console.log( "respHandler io error" );
+           lark.log( "respHandler io error" );
            break;
    }
 }
