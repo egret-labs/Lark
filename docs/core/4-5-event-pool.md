@@ -10,7 +10,7 @@
  this.emit(event);
  Event.release(event);
  ```
- 以上调用代码也可以封装为通用的工具方法。例如EventEmitter提供的emitWidth()方法就等价于以上代码。若自定义事件需要封装标准的对象池方法，也可以仿照TimerEvent.emitTimerEvent()方法的实现：
+ 以上调用代码也可以封装为通用的工具方法，之后通过工具方法快速调用抛出事件即可。例如EventEmitter提供的emitWidth()方法就等价于以上代码。若自定义事件需要封装标准的对象池方法，也可以仿照TimerEvent.emitTimerEvent()方法的实现：
 ```
 public static emitTimerEvent(target:IEventEmitter, type:string, bubbles?:boolean, cancelable?:boolean):boolean {
     var event = Event.create(TimerEvent, type, bubbles, cancelable);
