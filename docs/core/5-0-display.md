@@ -5,4 +5,4 @@
 
 * [显示编程的基础知识](5-1-display-about.md)
 * [核心显示类](5-2-display-class.md)
-* [显示列表方法的优点](5-3-displaylist.md)
+* [显示对象示例](5-3-display-demo.md)(done)

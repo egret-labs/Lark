@@ -218,4 +218,4 @@ class Main extends lark.Sprite {
 
 最终运行效果：
 
-![board](image/5-4-1.png)
+![board](image/5-3-1.png)
