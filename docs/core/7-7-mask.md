@@ -44,4 +44,4 @@ function onClick():void{
 ```  TypeScript
 mySprite.mask = null;
 ```
-不能使用一个遮罩对象来遮罩另一个遮罩对象。不能设置遮罩显示对象的 alpha 属性。
+不能使用一个遮罩对象来遮罩另一个遮罩对象。
