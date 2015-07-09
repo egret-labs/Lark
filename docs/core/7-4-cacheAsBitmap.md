@@ -7,7 +7,7 @@
 
 将显示对象的 cacheAsBitmap 属性设置为 true 就会把显示对象缓存成位图形式。如果更改显示对象的大小，则会重新创建一个位图而不是调整它的大小。
 
-DisplayObject 类的 scrollRect 属性与使用 cacheAsBitmap 属性的位图缓存有关。只有将 cacheAsBitmap 设置为 true 时，才能看到 scrollRect 属性带来的性能优势。有关滚动显示对象内容的详细信息，请参阅[平移和滚动显示对象]((7-4-7-2-scrollRect.md))。
+DisplayObject 类的 scrollRect 属性与使用 cacheAsBitmap 属性的位图缓存有关。只有将 cacheAsBitmap 设置为 true 时，才能看到 scrollRect 属性带来的性能优势。有关滚动显示对象内容的详细信息，请参阅[平移和滚动显示对象](7-2-scrollRect.md)。
 
 ##何时启用缓存
 对显示对象启用缓存可创建位图，位图具有助于更快地呈示复杂的矢量内容等优点。有几种情形需要启用缓存。可能您希望通过启用缓存来提高性能，但是，某些情况下启用缓存并不能提高性能，甚至还会降低性能。本部分介绍在哪些情况下应使用缓存，以及何时使用常规显示对象。
