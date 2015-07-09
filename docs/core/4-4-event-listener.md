@@ -21,7 +21,7 @@
 public class ClickExample extends lark.Sprite {
      public ClickExample() {
          var child:ChildSprite = new ChildSprite();
-         addChild(child);
+         this.addChild(child);
      }
 }
 ```
@@ -31,11 +31,11 @@ class ChildSprite extends lark.Sprite{
         this.graphics.beginFill(0xFF0000);
         this.graphics.drawRect(0,0,100,100);
         this.graphics.endFill();
-        on( TouchEvent.TOUCH_TAP, touchHandler );
+        this.on( TouchEvent.TOUCH_TAP, touchHandler );
     }
     private touchHandler( event:TouchEvent ):void{
-        trace( "touchHandler detected an event of type: " + event.type );
-        trace( "the this keyword refers to: " + this );
+        lark.log( "touchHandler detected an event of type: " + event.type );
+        lark.log( "the this keyword refers to: " + this );
     }
 }
 ```
@@ -51,7 +51,7 @@ the this keyword refers to: [object ChildSprite]
 <a name="event-manage"/>
 
 #### 管理事件侦听器
-使用 IEventEmitter 接口的方法来管理侦听器函数。IEventEmitter 接口是 ActionScript 3.0 版本的 DOM 事件模型的 EventTarget 接口。虽然名称 IEventEmitter 似乎暗示着其主要用途是发送（调度）事件对象，但该类的方法实际上更多用于注册、检查和删除事件侦听器。IEventEmitter 接口定义五个方法，如以下代码中所示：
+使用 IEventEmitter 接口的方法来管理侦听器函数。IEventEmitter 接口是 Lark 版本的 DOM 事件模型的 EventTarget 接口。虽然名称 IEventEmitter 似乎暗示着其主要用途是发送（调度）事件对象，但该类的方法实际上更多用于注册、检查和删除事件侦听器。IEventEmitter 接口定义五个方法，如以下代码中所示：
 ``` TypeScript
 module lark {
     export interface IEventEmitter extends LarkObject{
@@ -83,12 +83,12 @@ on() 方法是 IEventEmitter 接口的主要函数。使用它来注册侦听器
 注意   
 指定 listener 参数时，不要使用括号。例如，在下面的 on() 方法调用中，指定 touchHandler() 函数时没有使用括号：
  ```
-on( TouchEvent.TOUCH_TAP, touchHandler )。 
+this.on( TouchEvent.TOUCH_TAP, touchHandler,this)。 
  ```
 
-通过使用 on() 方法的 useCapture 参数，可以控制侦听器将处于活动状态的事件流阶段。如果 useCapture 设置为 true，侦听器将在事件流的捕获阶段成为活动状态。如果 useCapture 设置为 false，侦听器将在事件流的目标阶段和冒泡阶段处于活动状态。要在事件流的所有阶段侦听某一事件，您必须调用 on() 两次，第一次调用时将 useCapture 设置为 true，第二次调用时将 useCapture 设置为 false。
+通过使用 on() 方法的 useCapture 参数，可以控制侦听器将处于活动状态的事件流阶段。如果将 useCapture 设置为 true，则侦听器只在捕获阶段处理事件，而不在冒泡阶段处理事件。如果 useCapture 为 false，则侦听器只在冒泡阶段处理事件。要在两个阶段都侦听事件，请调用 on() 两次：一次将 useCapture 设置为 true，一次将 useCapture 设置为 false。
 
-on() 方法的 priority 参数并不是 DOM Level 3 事件模型的正式部分。ActionScript 3.0 中包括它是为了在组织事件侦听器时提供更大的灵活性。调用 on() 时，可以将一个整数值作为 priority 参数传递，以设置该事件侦听器的优先级。默认值为 0，但您可以将它设置为负整数值或正整数值。将优先执行此数字较大的事件侦听器。对于具有相同优先级的事件侦听器，则按它们的添加顺序执行，因此将优先执行较早添加的侦听器。 
+调用 on() 时，可以将一个整数值作为 priority 参数传递，以设置该事件侦听器的优先级。默认值为 0，但您可以将它设置为负整数值或正整数值。将优先执行此数字较大的事件侦听器。对于具有相同优先级的事件侦听器，则按它们的添加顺序执行，因此将优先执行较早添加的侦听器。 
 
 ##### 删除事件侦听器
 可以使用 removeListener() 方法删除不再需要的事件侦听器。删除将不再使用的所有侦听器是个好办法。必需的参数包括 eventName 和 listener 参数，这与 on() 方法所需的参数相同。回想一下，您可以通过调用 on() 两次（第一次调用时将 useCapture 设置为 true，第二次调用时将其设置为 false），在所有事件阶段侦听事件。要删除这两个事件侦听器，您需要调用 removeListener() 两次，第一次调用时将 useCapture 设置为 true，第二次调用时将其设置为 false。
@@ -100,12 +100,12 @@ on() 方法的 priority 参数并不是 DOM Level 3 事件模型的正式部分�
 高级程序员可以使用 emit() 方法将自定义事件对象调度到事件流。该方法唯一接受的参数是对事件对象的引用，此事件对象必须是 Event 类的实例或子类。调度后，事件对象的 target 属性将设置为对其调用了 emit() 的对象。
 
 ##### 检查现有的事件侦听器
-IEventEmitter 接口的最后两个方法提供有关是否存在事件侦听器的有用信息。如果在特定显示列表对象上发现特定事件类型的事件侦听器，hasEventListener() 方法将返回 true。如果发现特定显示列表对象的侦听器，willTrigger() 方法也会返回 true。但 willTrigger() 不但检查该显示对象上的侦听器，还会检查该显示列表对象在事件流所有阶段中的所有父级上的侦听器。 
+IEventEmitter 接口的最后两个方法提供有关是否存在事件侦听器的有用信息。如果在特定显示列表对象上发现特定事件类型的事件侦听器，hasListener() 方法将返回 true。如果发现特定显示列表对象的侦听器，willTrigger() 方法也会返回 true。但 willTrigger() 不但检查该显示对象上的侦听器，还会检查该显示列表对象在事件流所有阶段中的所有父级上的侦听器。 
 
 <a name="event-unhandled"/>
 
 #### 没有侦听器的错误事件
-Lark 中处理错误的主要机制是异常而不是事件，这与JavaScript是一致的，但对于异步操作（例如加载文件），异常处理不起作用。如果在这样的异步操作中发生错误，Lark 会调度一个错误事件对象。
+Lark 中处理错误的主要机制是异常而不是事件，但对于异步操作（例如加载文件），异常处理不起作用。如果在这样的异步操作中发生错误，Lark 会调度一个错误事件对象。
 
 错误事件将不会导致 Lark 应用停止运行。它仅在浏览器调试工具的console中显示。
 
