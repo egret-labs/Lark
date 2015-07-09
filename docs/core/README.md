@@ -21,7 +21,7 @@
 	* [显示对象示例](5-3-display-demo.md)(review)
 6. [使用显示对象](6-0-display.md)(review)
 	* [DisplayObject类的属性和方法](6-1-displayobject.md)(review)
-	* [在显示列表中添加显示对象](6-2-displaylist.md)(done)
+	* [在显示列表中添加显示对象](6-2-displaylist.md)(review)
 	* [使用显示对象容器](6-3-displayobjectcontainer.md)(done)
 	* [遍历显示列表](6-4-displaylistall.md)(done)
 	* [设置舞台属性](6-5-stage.md)(done)
