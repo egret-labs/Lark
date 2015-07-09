@@ -11,7 +11,7 @@
 4. [处理事件](4-0-event.md)(review)
 	* [事件处理基础知识](4-1-event-basic.md)(review)
 	* [事件流](4-2-event-stream.md)(review)
-	* [事件对象](4-3-event-target.md)(done)
+	* [事件对象](4-3-event-target.md)(review)
 	* [事件监听器](4-4-event-listener.md)(done)
 	* [事件对象池优化](4-5-event-pool.md)(done)
 	* [事件示例](4-6-event-ex.md)(done)
