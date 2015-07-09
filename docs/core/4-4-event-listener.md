@@ -31,7 +31,7 @@ class ChildSprite extends lark.Sprite{
         this.graphics.beginFill(0xFF0000);
         this.graphics.drawRect(0,0,100,100);
         this.graphics.endFill();
-        this.on( TouchEvent.TOUCH_TAP, touchHandler );
+        this.on( TouchEvent.TOUCH_TAP, this.touchHandler, this);
     }
     private touchHandler( event:TouchEvent ):void{
         lark.log( "touchHandler detected an event of type: " + event.type );
