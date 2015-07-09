@@ -1,6 +1,6 @@
 #Lark Core 编程指南
 
-1. [概述]()
+1. 概述
 2. [项目初始化](2-0-project.md)(done)
 	* [新建Lark工程](2-1-create.md)(done)
 	* [引用扩展库](2-2-import-libs.md)(done)
@@ -35,8 +35,8 @@
 	* [应用混合模式](7-5-blendMode.md)(review)
 	* [旋转对象](7-6-rotation.md)(review)
 	* [遮罩显示对象](7-7-mask.md)(review)
-8. [处理动画](8-0-display.md)(done)
-	* [动画基础知识](8-1-animation.md)(done)
+8. [处理动画](8-0-display.md)(review)
+	* [动画基础知识](8-1-animation.md)(review)
 	* 使用Tween(后续添加)
 9. [使用绘图API]()
 	* [绘图API基础知识](9-0-graphics-api-basic.md)(done)
