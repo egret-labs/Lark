@@ -5,5 +5,6 @@
         text.x = 120;
         text.y = 120;
         this.addChild(text);
+        //$scale-mode$
     }   
 }

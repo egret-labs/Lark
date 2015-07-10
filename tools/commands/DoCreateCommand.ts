@@ -31,9 +31,6 @@ class DoCreateCommand implements lark.Command {
 
 function copyTemplate(project:lark.ILarkProject) {
     var options = lark.options;
-    var templateFile = FileUtil.joinPath(options.templateDir, "index.html");
-    if (!FileUtil.exists(templateFile))
-        return;
     var larkFiles: string[] = [];
 
     var modules = project.modules;
@@ -42,24 +39,28 @@ function copyTemplate(project:lark.ILarkProject) {
         larkFiles.push(utils.format("libs/{0}/{0}", m.name));
         platforms.forEach(p=> {
             var scriptName = utils.format("libs/{0}/{0}.{1}", m.name, p.name);
-            if(FileUtil.exists(FileUtil.joinPath(options.srcDir,scriptName+".js")))
+            if (FileUtil.exists(FileUtil.joinPath(options.srcDir, scriptName + ".js")))
                 larkFiles.push(scriptName);
         });
     });
+    var scripts = larkFiles.map(f=> utils.format('<script src="{0}.js" src-release="{0}.min.js"></script>', f)).join('\r\n    ');
 
-    
-    var content = FileUtil.read(templateFile);
-    var scripts = larkFiles.map(f=> utils.format('<script src="{0}.js" src-release="{0}.min.js"></script>',f)).join('\r\n    ');
-    content = content.replace('<script id="lark"></script>', scripts);
-    content = content.replace(/\$entry\-class\$/ig, "Main");
-    content = content.replace(/\$background\$/ig, project.background || "#888888");
-    content = content.replace(/\$scale\-mode\$/ig, project.scaleMode || "noScale");
-    content = content.replace(/\$orientation\$/ig, project.orientation || "notSet");
-    content = content.replace(/\$content\-width\$/ig, project.contentWidth.toString());
-    content = content.replace(/\$content\-height\$/ig, project.contentHeight.toString());
-    content = content.replace(/\$show\-paint\-rects\$/ig, 'false');
+    var files = FileUtil.searchByFunction(options.projectDir, f=> true);
+    files.forEach(file=> {
 
-    FileUtil.save(templateFile, content);
+
+        var content = FileUtil.read(file);
+        content = content.replace('<script id="lark"></script>', scripts);
+        content = content.replace(/\$entry\-class\$/ig, "Main");
+        content = content.replace(/\$background\$/ig, project.background || "#888888");
+        content = content.replace(/\$scale\-mode\$/ig, project.scaleMode || "noScale");
+        content = content.replace(/\$orientation\$/ig, project.orientation || "auto");
+        content = content.replace(/\$content\-width\$/ig, project.contentWidth.toString());
+        content = content.replace(/\$content\-height\$/ig, project.contentHeight.toString());
+        content = content.replace(/\$show\-paint\-rects\$/ig, 'false');
+
+        FileUtil.save(file, content);
+    });
 }
 
 export = DoCreateCommand;
