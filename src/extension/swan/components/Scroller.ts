@@ -678,8 +678,9 @@ module swan {
             super.updateDisplayList(unscaledWidth, unscaledHeight);
             var viewport = this.viewport;
             if (viewport) {
-                viewport.setLayoutBoundsPosition(0, 0);
+                //必须先调用setLayoutBoundsSize()，因为尺寸改变会影响布局位置。
                 viewport.setLayoutBoundsSize(unscaledWidth, unscaledHeight);
+                viewport.setLayoutBoundsPosition(0, 0);
             }
 
         }
