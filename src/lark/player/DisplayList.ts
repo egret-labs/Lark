@@ -406,11 +406,25 @@ module lark.sys {
 
             //计算scrollRect和mask的clip区域是否需要绘制，不需要就直接返回，跳过所有子项的遍历。
             var maskRegion:Region;
-            var displayMatrix = displayObject.$getConcatenatedMatrix();
+            var displayMatrix = Matrix.create();
+            displayMatrix.copyFrom(displayObject.$getConcatenatedMatrix());
+            var root = displayObject.$parentDisplayList.root;
+            var invertedMatrix:Matrix;
+            if(root!==displayObject.$stage){
+                invertedMatrix = root.$getInvertedConcatenatedMatrix();
+                invertedMatrix.$preMultiplyInto(displayMatrix,displayMatrix);
+            }
+
             if (mask) {
                 var bounds = mask.$getOriginalBounds();
                 maskRegion = Region.create();
-                maskRegion.updateRegion(bounds, mask.$getConcatenatedMatrix());
+                var m = Matrix.create();
+                m.copyFrom(mask.$getConcatenatedMatrix());
+                if(invertedMatrix){
+                    invertedMatrix.$preMultiplyInto(m,m);
+                }
+                maskRegion.updateRegion(bounds, m);
+                Matrix.release(m);
             }
             var region:Region;
             if (scrollRect) {
@@ -427,13 +441,14 @@ module lark.sys {
             if (region) {
                 if(region.isEmpty() || (clipRegion && !clipRegion.intersects(region))){
                     Region.release(region);
+                    Matrix.release(displayMatrix);
                     return drawCalls;
                 }
             }
             else{
                 region = Region.create();
                 bounds = displayObject.$getOriginalBounds();
-                region.updateRegion(bounds, displayObject.$getConcatenatedMatrix());
+                region.updateRegion(bounds, displayMatrix);
             }
             var found = false;
             var l = dirtyList.length;
@@ -445,6 +460,7 @@ module lark.sys {
             }
             if (!found) {
                 Region.release(region);
+                Matrix.release(displayMatrix);
                 return drawCalls;
             }
 
@@ -453,6 +469,7 @@ module lark.sys {
             if (!displayContext) {//RenderContext创建失败，放弃绘制遮罩。
                 drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, rootMatrix, displayObject.$displayList, clipRegion);
                 Region.release(region);
+                Matrix.release(displayMatrix);
                 return drawCalls;
             }
             if (scrollRect) {
@@ -473,6 +490,7 @@ module lark.sys {
                     drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, rootMatrix, displayObject.$displayList, clipRegion);
                     surfaceFactory.release(displayContext.surface);
                     Region.release(region);
+                    Matrix.release(displayMatrix);
                     return drawCalls;
                 }
                 maskContext.setTransform(1, 0, 0, 1, -region.minX, -region.minY);
@@ -513,6 +531,7 @@ module lark.sys {
             }
             surfaceFactory.release(displayContext.surface);
             Region.release(region);
+            Matrix.release(displayMatrix);
             return drawCalls;
         }
 
@@ -526,8 +545,7 @@ module lark.sys {
 
             var m = Matrix.create();
             m.copyFrom(displayObject.$getConcatenatedMatrix());
-            var displayList = displayObject.$parentDisplayList;
-            var root = displayList.root;
+            var root = displayObject.$parentDisplayList.root;
             if(root!==displayObject.$stage){
                 root.$getInvertedConcatenatedMatrix().$preMultiplyInto(m,m)
             }
