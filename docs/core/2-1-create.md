@@ -21,8 +21,10 @@ NPM 是 Node.js 的包管理工具，默认配置下会随 Node.js 一起安装�
 
 ####安装命令行工具
 你可以从 github 克隆 Lark 的源代码，或者 [下载打包后的源代码](https://github.com/egret-labs/Lark/archive/master.zip)。
-然后在命令行工具中进入到 Lark 的根目录执行 `npm install -g` 安装 Lark 命令行工具。
-安装完成后执行 `lark` 能看到 Lark 输出的版本信息。
+然后在命令行工具中进入到 Lark 的根目录执行 `npm link` 安装 Lark 命令行工具（
+这里不使用 `install` 命令的原因是使用 `install` 安装后，每次从 github 更新后都需要重新安装，
+而 `link` 命令会把生成的 `lark` 命令链接到当前文件夹，更新后不需要再次安装）。
+安装完成后执行 `lark` 能看到 Lark 输出的版本和安装目录信息。
 
 ####创建项目
 进入您的工作目录，执行 `lark create HelloWorld`, Lark 会创建一个 HelloWorld 目录作为项目的根目录

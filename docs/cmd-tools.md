@@ -26,9 +26,14 @@ Lark 命令行工具采用增量编译机制，默认只编译上次编译之后
 压缩之后拷贝到 `bin-release` 目录，拷贝 `src` 和 `template` 中的其他文件到 `bin-release` 中。
 替换模板中的第三方库 Script 为 release 版本。
 
-##清理项目
-进入您的项目目录，执行 `lark clean`， Lark 会更新 `src/libs/` 中的 lark build 文件，
+##清理项目、升级项目
+进入您的项目目录，执行 `lark clean`， Lark 会更新 `src/libs/` 中的 lark 脚本文件，
 清空 `bin-debug` 中的内容，重新编译项目。
+
+当 Lark 发布新版本或您自己修改了 Lark 源代码时，也需要在您项目根目录中执行 `lark clean`， 命令行工具会更新项目中的 Lark 框架为最新版本。
+
+需要注意的是，`clean` 命令只会用 Lark 根目录中 build 文件夹下的文件，覆盖 libs 目录中的同名文件，
+其他第三方库不会被删除，当然也有可能 Lark 本身的扩展库在新版本中被删除，这种情况请手动删除旧版本的扩展库。
 
 ##输出 Lark 信息
 执行 `lark info`， Lark 会输出 Lark 安装目录和版本信息。
