@@ -41,7 +41,6 @@ var DirectoryState = (function () {
 exports.DirectoryState = DirectoryState;
 function updateMTime(filePath, states) {
     if (states === void 0) { states = {}; }
-    console.log(filePath);
     var files = FS.readdirSync(filePath);
     var length = files.length;
     for (var i = 0; i < length; i++) {

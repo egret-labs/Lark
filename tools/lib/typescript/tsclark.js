@@ -21356,7 +21356,7 @@ var ts;
                 }
                 return compilerHost.getSourceFile(fileName, languageVersion, onError);
             };
-            var result = compile(commandLine, newCompilerHost);
+            var result = compile(commandLine, newCompilerHost, Object.keys(changedFiles));
             program = result.program;
             result.compileWithChanges = compileWithChanges;
             return result;
@@ -21365,7 +21365,7 @@ var ts;
             return compilerHost.getCanonicalFileName(fileName);
         }
     }
-    function compile(commandLine, compilerHost) {
+    function compile(commandLine, compilerHost, changedFiles) {
         var parseStart = new Date().getTime();
         var compilerOptions = commandLine.options;
         var program = ts.createProgram(commandLine.filenames, compilerOptions, compilerHost);
@@ -21389,9 +21389,21 @@ var ts;
                 var tree = new ts.TreeGenerator();
                 tree.orderFiles(checker, program);
                 var emitStart = new Date().getTime();
-                var emitOutput = checker.emitFiles();
-                var emitErrors = emitOutput.diagnostics;
-                exitStatus = emitOutput.emitResultStatus;
+                var emitErrors;
+                if (!changedFiles) {
+                    var emitOutput = checker.emitFiles();
+                    emitErrors = emitOutput.diagnostics;
+                    exitStatus = emitOutput.emitResultStatus;
+                }
+                else {
+                    emitErrors = [];
+                    changedFiles.forEach(function (file) {
+                        var emitOutput = checker.emitFiles(program.getSourceFile(file));
+                        emitErrors = emitErrors.concat(emitOutput.diagnostics);
+                        if (emitOutput.emitResultStatus != ts.EmitReturnStatus.Succeeded)
+                            exitStatus = emitOutput.emitResultStatus;
+                    });
+                }
                 var reportStart = new Date().getTime();
                 errors = ts.concatenate(errors, emitErrors);
             }
@@ -21433,7 +21445,8 @@ var Compiler = (function () {
                 sourceMap: options.sourceMap,
                 target: targetEnum,
                 removeComments: options.removeComments,
-                declaration: options.declaration
+                declaration: options.declaration,
+                diagnostics: options.debug
             },
             errors: []
         };

@@ -56,6 +56,7 @@ var Project = (function () {
     };
     Project.prototype.buildWholeProject = function () {
         var _this = this;
+        console.log('buildWholeProject');
         this.shutdown(11);
         var larkPath = FileUtil.joinPath(utils.getLarkRoot(), 'tools/bin/lark');
         var build = cprocess.spawn(process.execPath, ['--expose-gc', larkPath, 'autocompile'], {
@@ -66,16 +67,17 @@ var Project = (function () {
         this.buildProcess = build;
     };
     Project.prototype.buildWithExistBuildService = function () {
-        console.log('buildWithExistBuildService');
-        if (!this.buildProcess) {
+        if (!lark.options.debug && !this.buildProcess) {
             this.buildWholeProject();
             return;
         }
+        console.log('buildWithExistBuildService');
         console.log(this.changes);
         this.sendCommand({
             command: "build",
             changes: this.changes.added.concat(this.changes.modified).concat(this.changes.removed)
         });
+        global.gc && global.gc();
     };
     Project.prototype.sendCommand = function (cmd) {
         //this.buildProcess.stdin.write(JSON.stringify(cmd), 'utf8');
@@ -86,7 +88,6 @@ var Project = (function () {
         var _this = this;
         if (retry === void 0) { retry = 0; }
         if (this.pendingRequest == null || retry >= 10) {
-            this.buildProcess = null;
             this.sendCommand({ command: 'shutdown' });
             if (this.buildProcess) {
                 this.buildProcess.removeAllListeners('exit');

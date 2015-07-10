@@ -83,6 +83,7 @@ class CompileOptions implements lark.LarkToolArgs {
     esTarget: string = 'ES5';
     serverOnly: boolean;
     autoCompile: boolean;
+    debug: boolean;
     fileName: string;
     modules: string[];
     platforms: string[];

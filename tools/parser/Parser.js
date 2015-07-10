@@ -51,6 +51,9 @@ exports.optionDeclarations = [
     }, {
         name: 'orientation',
         type: 'string'
+    }, {
+        name: 'debug',
+        type: 'boolean'
     }
 ];
 var shortOptionNames = {};

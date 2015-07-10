@@ -47,6 +47,7 @@ declare module lark {
         websocketUrl: string;
         manageUrl: string;
         startUrl: string;
+        debug?: boolean;
 
         publish?: boolean;
         includeLark?: boolean;

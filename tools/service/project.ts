@@ -66,6 +66,7 @@ class Project {
     }
 
     buildWholeProject() {
+        console.log('buildWholeProject');
         this.shutdown(11);
         var larkPath = FileUtil.joinPath(utils.getLarkRoot(), 'tools/bin/lark');
 
@@ -79,18 +80,20 @@ class Project {
     }
 
     buildWithExistBuildService() {
-        console.log('buildWithExistBuildService');
-        if (!this.buildProcess) {
+        if (!lark.options.debug && !this.buildProcess) {
             this.buildWholeProject();
             return;
         }
 
+        console.log('buildWithExistBuildService');
         console.log(this.changes);
 
         this.sendCommand({
             command: "build",
             changes: this.changes.added.concat(this.changes.modified).concat(this.changes.removed)
         });
+
+        global.gc && global.gc();
     }
 
     private sendCommand(cmd: lark.ServiceCommand) {
@@ -101,7 +104,6 @@ class Project {
 
     public shutdown(retry = 0) {
         if (this.pendingRequest == null || retry >= 10) {
-            this.buildProcess = null;
             this.sendCommand({ command: 'shutdown' });
             if (this.buildProcess) {
                 this.buildProcess.removeAllListeners('exit');

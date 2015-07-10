@@ -213,7 +213,7 @@ module ts {
                 return compilerHost.getSourceFile(fileName, languageVersion, onError);
             };
 
-            var result = compile(commandLine, newCompilerHost);
+            var result = compile(commandLine, newCompilerHost, Object.keys(changedFiles));
             program = result.program;
             result.compileWithChanges = compileWithChanges;
             return result;
@@ -232,7 +232,7 @@ module ts {
         messages?: string[];
     }
 
-    function compile(commandLine: ParsedCommandLine, compilerHost: CompilerHost): LarkCompileResult {
+    function compile(commandLine: ParsedCommandLine, compilerHost: CompilerHost, changedFiles?:string[]): LarkCompileResult {
         var parseStart = new Date().getTime();
         var compilerOptions = commandLine.options;
         var program = createProgram(commandLine.filenames, compilerOptions, compilerHost);
@@ -258,9 +258,21 @@ module ts {
                 var tree = new TreeGenerator();
                 tree.orderFiles(checker, program);
                 var emitStart = new Date().getTime();
-                var emitOutput = checker.emitFiles();
-                var emitErrors = emitOutput.diagnostics;
-                exitStatus = emitOutput.emitResultStatus;
+                var emitErrors: Diagnostic[];
+                if (!changedFiles) {
+                    var emitOutput = checker.emitFiles();
+                    emitErrors = emitOutput.diagnostics;
+                    exitStatus = emitOutput.emitResultStatus;
+                }
+                else {
+                    emitErrors = [];
+                    changedFiles.forEach(file=> {
+                        var emitOutput = checker.emitFiles(program.getSourceFile(file));
+                        emitErrors = emitErrors.concat(emitOutput.diagnostics);
+                        if (emitOutput.emitResultStatus != EmitReturnStatus.Succeeded)
+                            exitStatus = emitOutput.emitResultStatus;
+                    });
+                }
                 var reportStart = new Date().getTime();
                 errors = concatenate(errors, emitErrors);
                 
@@ -309,7 +321,8 @@ class Compiler {
                 sourceMap: options.sourceMap,
                 target: targetEnum,
                 removeComments: options.removeComments,
-                declaration: options.declaration
+                declaration: options.declaration,
+                diagnostics: options.debug
             },
             errors: []
         };

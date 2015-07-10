@@ -36,10 +36,12 @@ var AutoCompileCommand = (function () {
         var options = lark.options;
         utils.clean(options.debugDir);
         var compileProject = new CompileProject();
+        var _scripts = this._scripts || [];
         var result = compileProject.compileProject(options);
         this.compileProject = compileProject;
         CopyFiles.copyProjectFiles();
-        CompileTemplate.compileTemplates(options, result.files);
+        _scripts = result.files.length > 0 ? result.files : _scripts;
+        CompileTemplate.compileTemplates(options, _scripts);
         this._scripts = result.files;
         this._lastExitCode = result.exitStatus;
         this._lastMessages = result.messages;
@@ -62,6 +64,10 @@ var AutoCompileCommand = (function () {
         this.buildChangedRes(others);
         if (codes.length) {
             var result = this.buildChangedTS(codes);
+            if (result.files && result.files.length > 0 && this._scripts.length != result.files.length) {
+                this._scripts = result.files;
+                this.onTemplateIndexChanged();
+            }
             this._lastExitCode = result.exitStatus;
             this._lastMessages = result.messages;
         }
