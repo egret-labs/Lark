@@ -26,14 +26,14 @@ function install() {
 
 
 
-function addProject(req, res: Response) {
-    var uri = url.parse(req.url, true);
+function addProject() {
+    var uri = url.parse(this.req.url, true);
     projId++;
     var projKey = 'proj' + projId;
     projs[projKey] = {
         path: uri.query['path']
     };
-    res.send(200, tempUrlMark + projKey + "/");
+    this.res.send(200, tempUrlMark + projKey + "/");
 }
 
 function projectFiles(req, res, isValidation) {
@@ -56,11 +56,14 @@ function getUserProjectContentFullName(req) {
     var proj = paths.shift();
     var filepath = paths.join('/');
     var projectPath = projs[proj].path;
-    var fullpath = utils.combine('~', projectPath, filepath);
-    if(file.exists(fullpath))
-        return fullpath;
+
     var wingTempPath = utils.combine('~', exportObject.WingTempProjDir, filepath);
     if (file.exists(wingTempPath))
         return wingTempPath;
+
+    var fullpath = utils.combine('~', projectPath, filepath);
+    if(file.exists(fullpath))
+        return fullpath;
+
     return fullpath;
 }

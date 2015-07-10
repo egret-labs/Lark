@@ -13,7 +13,7 @@ function install() {
     framework.route(tempUrlMark + 'add/', addProject);
     framework.file('static files', projectFiles);
 }
-function addProject(req, res) {
+function addProject() {
     var uri = url.parse(this.req.url, true);
     projId++;
     var projKey = 'proj' + projId;
@@ -38,12 +38,12 @@ function getUserProjectContentFullName(req) {
     var proj = paths.shift();
     var filepath = paths.join('/');
     var projectPath = projs[proj].path;
-    var fullpath = utils.combine('~', projectPath, filepath);
-    if (file.exists(fullpath))
-        return fullpath;
     var wingTempPath = utils.combine('~', exportObject.WingTempProjDir, filepath);
     if (file.exists(wingTempPath))
         return wingTempPath;
+    var fullpath = utils.combine('~', projectPath, filepath);
+    if (file.exists(fullpath))
+        return fullpath;
     return fullpath;
 }
 module.exports = exportObject;
