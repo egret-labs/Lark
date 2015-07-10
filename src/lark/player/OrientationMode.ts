@@ -39,7 +39,7 @@ module lark.sys {
          * @private
          * 适配屏幕
          */
-        public static NOT_SET = "notSet";
+        public static AUTO = "auto";
         /**
          * @private
          * 默认竖屏

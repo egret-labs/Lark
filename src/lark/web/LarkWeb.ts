@@ -79,7 +79,7 @@ module lark.web {
         var contentWidth = +container.getAttribute("data-content-width")||480;
         var contentHeight = +container.getAttribute("data-content-height") || 800;
         var scaleMode = container.getAttribute("data-scale-mode");
-        var orientation = container.getAttribute("data-orientation") || lark.sys.OrientationMode.NOT_SET;
+        var orientation = container.getAttribute("data-orientation") || lark.sys.OrientationMode.AUTO;
         var surface = lark.sys.surfaceFactory.create();
         var canvas = <HTMLCanvasElement><any>surface;
         var webScreen = new WebScreen(container, canvas, scaleMode, contentWidth, contentHeight, orientation);
