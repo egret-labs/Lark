@@ -140,16 +140,10 @@ module lark.sys {
             {
                 var num = 0;
                 for(var key in this.touchDownTime)
-                {
-                    if(time - this.touchDownTime[key] > 5000)
-                    {
-                        num++;
-                    }
-                }
+                    if(time - this.touchDownTime[key] > 5000) num++;
                 if(num == 3)
                 {
                     var txt:lark.TextField = new lark.TextField("powered by lark");
-                    txt.textColor = 0;
                     this.stage.addChild(txt);
                     setTimeout(function():void{
                         if(txt.parent) txt.parent.removeChild(txt);
