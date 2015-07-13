@@ -72,6 +72,11 @@ module lark.sys {
 
         /**
          * @private
+         */
+        private touchDownTime:{[key:number]:number} = {};
+
+        /**
+         * @private
          * 触摸开始（按下）
          * @param x 事件发生处相对于舞台的坐标x
          * @param y 事件发生处相对于舞台的坐标y
@@ -80,6 +85,7 @@ module lark.sys {
         public onTouchBegin(x:number, y:number, touchPointID:number):void {
             var target = this.findTarget(x, y);
             this.touchDownTarget[touchPointID] = target.$hashCode;
+            this.touchDownTime[touchPointID] = lark.getTimer();
             TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_BEGIN, true, true, x, y, touchPointID);
         }
 
@@ -128,6 +134,32 @@ module lark.sys {
             else {
                 TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_RELEASE_OUTSIDE, true, true, x, y, touchPointID);
             }
+            //判断彩蛋
+            var time = lark.getTimer();
+            if(time - this.touchDownTime[touchPointID] > 10000)
+            {
+                var num = 0;
+                for(var key in this.touchDownTime)
+                {
+                    if(time - this.touchDownTime[key] > 10000)
+                    {
+                        num++;
+                    }
+                }
+                if(num == 3)
+                {
+                    var txt:lark.TextField = new lark.TextField("powered by lark");
+                    txt.textColor = 0;
+                    this.stage.addChild(txt);
+                    var timer:lark.Timer = new lark.Timer(2000,1);
+                    timer.on(lark.TimerEvent.TIMER_COMPLETE,function(e:lark.TimerEvent):void{
+                        if(txt.parent) txt.parent.removeChild(txt);
+                        timer.stop();
+                    },null);
+                    timer.start();
+                }
+            }
+            this.touchDownTime[touchPointID] = -1;
         }
 
         /**
