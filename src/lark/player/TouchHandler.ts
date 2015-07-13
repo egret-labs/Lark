@@ -125,7 +125,7 @@ module lark.sys {
         public onTouchEnd(x:number, y:number, touchPointID:number):void {
             var target = this.findTarget(x, y);
             var oldTargetCode = this.touchDownTarget[touchPointID];
-            this.touchDownTarget[touchPointID] = -1;
+            delete this.touchDownTarget[touchPointID];
             TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_END, true, true, x, y, touchPointID);
             target = this.findTarget(x, y);
             if (oldTargetCode === target.$hashCode) {
@@ -143,14 +143,17 @@ module lark.sys {
                     if(time - this.touchDownTime[key] > 5000) num++;
                 if(num == 3)
                 {
-                    var txt:lark.TextField = new lark.TextField("powered by lark");
-                    this.stage.addChild(txt);
+                    var textField = new lark.TextField("powered by lark");
+                    this.stage.addChild(textField);
                     setTimeout(function():void{
-                        if(txt.parent) txt.parent.removeChild(txt);
+                        if(textField.parent)
+                        {
+                            textField.parent.removeChild(textField);
+                        }
                     },2000);
                 }
             }
-            this.touchDownTime[touchPointID] = -1;
+            delete this.touchDownTime[touchPointID];
         }
 
         /**
