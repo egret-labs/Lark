@@ -36,10 +36,10 @@ module lark.web {
         /**
          * @private
          */
-        public constructor(touch:lark.sys.TouchHandler, canvas:HTMLCanvasElement) {
+        public constructor(stage:lark.Stage, canvas:HTMLCanvasElement) {
             super();
             this.canvas = canvas;
-            this.touch = touch;
+            this.touch =  new lark.sys.TouchHandler(stage);
             this.addListeners();
         }
 
