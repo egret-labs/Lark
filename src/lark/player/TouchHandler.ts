@@ -134,7 +134,7 @@ module lark.sys {
             else {
                 TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_RELEASE_OUTSIDE, true, true, x, y, touchPointID);
             }
-            
+
             var time = lark.getTimer();
             if(time - this.touchDownTime[touchPointID] > 5000)
             {
@@ -151,12 +151,9 @@ module lark.sys {
                     var txt:lark.TextField = new lark.TextField("powered by lark");
                     txt.textColor = 0;
                     this.stage.addChild(txt);
-                    var timer:lark.Timer = new lark.Timer(2000,1);
-                    timer.on(lark.TimerEvent.TIMER_COMPLETE,function(e:lark.TimerEvent):void{
+                    setTimeout(function():void{
                         if(txt.parent) txt.parent.removeChild(txt);
-                        timer.stop();
-                    },null);
-                    timer.start();
+                    },2000);
                 }
             }
             this.touchDownTime[touchPointID] = -1;
