@@ -45,6 +45,7 @@ module lark {
     locale_strings[1010] = "属性 {0} 是只读的";
     locale_strings[1011] = "流错误。URL: {0}";
     locale_strings[1012] = "参数 {0} 的类型必须为 Class。";
+    locale_strings[1013] = "没有找到对应的帧标签: {0}。";
 
     locale_strings[3001] = "请等待媒体加载完成后再调用 play 方法";
     locale_strings[3002] = "请指定要加载的媒体的URL";

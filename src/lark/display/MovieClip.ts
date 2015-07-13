@@ -109,6 +109,23 @@ module lark {
     }
 
     /**
+     * 文件解析完之后填充到每一个关键帧的内容
+     */
+    class FrameInfo extends LarkObject {
+        public constructor(frame:number,data:Object)
+        {
+            this.$frame = frame;
+        }
+
+        $frame:number;
+
+        public get frame():number
+        {
+            return this.$frame;
+        }
+    }
+
+    /**
      * @language en_US
      * The MovieClip object unlike the Sprite object, a MovieClip object has a timeline.
      * @version Lark 1.0
@@ -124,13 +141,13 @@ module lark {
 
         /**
          * @language en_US
-         * Constructor.
+         * Creates a new MovieClip instance. After creating the MovieClip, call the addChild() or addChildAt() method of a display object container that is onstage.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 构造函数。
+         * 创建新的 MovieClip 实例。创建 MovieClip 之后，调用舞台上的显示对象容器的 addChild() 或 addChildAt() 方法。
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -140,6 +157,7 @@ module lark {
             this.$isPlaying = false;
             this.$labels = [];
             this.$frames = [];
+            this.on(lark.Event.ENTER_FRAME, this.$onFrame, this);
         }
 
         /**
@@ -208,7 +226,7 @@ module lark {
         /**
          * @private
          */
-        $frames;
+        $frames:Array<FrameInfo>;
 
         /**
          * @private
@@ -227,7 +245,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public get labels():Array<FrameLabel>{
+        public get labels():Array<FrameLabel> {
             return this.$labels;
         }
 
@@ -255,7 +273,185 @@ module lark {
         /**
          * @private
          */
-        private playCurrentFrame() {
+        private $onFrame():void {
+            if (!this.$isPlaying) {
+                return;
+            }
+            this.$clearCurrentFrame();
+            this.$currentFrame++;
+            this.$currentFrame = this.$currentFrame % this.$frames.length;
+            this.$playCurrentFrame();
+        }
+
+        /**
+         * @private
+         * 清除当前帧的内容
+         */
+        private $clearCurrentFrame():void {
+            //todo 清除之前帧的内容，待mc文件格式完善后补充
+        }
+
+        /**
+         * @private
+         * 执行当前帧的逻辑
+         */
+        private $playCurrentFrame():void {
+            //todo 执行当前帧的逻辑，待mc文件格式完善后补充
+        }
+
+        /**
+         * @private
+         * 根据帧名称获取对应的帧数
+         */
+        private $getFrameNumberByLabel(name:string):number {
+            for (var i = this.$labels.length - 1; i >= 0; i--) {
+                if (this.$labels[i].frame <= this.$currentFrame) {
+                    return this.$labels[i].frame;
+                }
+            }
+            return 0;
+        }
+
+        /**
+         * @language en_US
+         * Starts playing the MovieClip at the specified frame.
+         * @param frame A number representing the frame number, or a string representing the label of the frame, to which the playhead is sent.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从指定帧开始播放 MovieClip 。
+         * @param frame 表示播放头转到的帧编号的数字，或者表示播放头转到的帧标签的字符串。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public gotoAndPlay(frame:any):void {
+            var num = 0;
+            if (typeof frame == "number") {
+                num = frame;
+            }
+            else {
+                num = this.$getFrameNumberByLabel(frame);
+                if (num == 0) {
+                    //todo 抛出参数错误
+                    return;
+                }
+            }
+            this.$isPlaying = true;
+            if (this.$currentFrame == num) {
+                return;
+            }
+            this.$clearCurrentFrame();
+            this.$currentFrame = num >= this.$frames.length ? this.$frames.length : num;
+            this.$playCurrentFrame();
+        }
+
+        /**
+         * @language en_US
+         * Brings the playhead to the specified frame of the movie clip and stops it there.
+         * @param frame A number representing the frame number, or a string representing the label of the frame, to which the playhead is sent.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将播放头移到影片剪辑的指定帧并停在那里。
+         * @param frame 表示播放头转到的帧编号的数字，或者表示播放头转到的帧标签的字符串。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public gotoAndStop(frame:any):void {
+            var num = 0;
+            if (typeof frame == "number") {
+                num = frame;
+            }
+            else {
+                num = this.$getFrameNumberByLabel(frame);
+                if (num == 0) {
+                    //todo 抛出参数错误
+                    return;
+                }
+            }
+            this.$isPlaying = false;
+            if (this.$currentFrame == num) {
+                return;
+            }
+            this.$clearCurrentFrame();
+            this.$currentFrame = num >= this.$frames.length ? this.$frames.length : num;
+            this.$playCurrentFrame();
+        }
+
+        /**
+         * @language en_US
+         * Sends the playhead to the next frame and stops it.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将播放头转到下一帧并停止。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public nextFrame():void {
+            this.$isPlaying = false;
+            if (this.$currentFrame == this.$frames.length) return;
+            this.$clearCurrentFrame();
+            this.$currentFrame++;
+            this.$playCurrentFrame();
+        }
+
+        /**
+         * @language en_US
+         * Moves the playhead in the timeline of the movie clip.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在影片剪辑的时间轴中移动播放头。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public play():void {
+            this.$isPlaying = true;
+        }
+
+        /**
+         * @language en_US
+         * Sends the playhead to the last frame and stops it.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将播放头转到前一帧并停止。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public prevFrame():void {
+            this.$isPlaying = false;
+            if (this.$currentFrame <= 1) return;
+            this.$clearCurrentFrame();
+            this.$currentFrame--;
+            this.$playCurrentFrame();
+        }
+
+        /**
+         * @language en_US
+         * Stops the playhead in the movie clip.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 停止影片剪辑中的播放头。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public stop():void {
+            this.$isPlaying = false;
         }
     }
 }
