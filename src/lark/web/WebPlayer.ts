@@ -114,7 +114,7 @@ module lark.web {
         private readOption(container:HTMLDivElement):PlayerOption {
             var option:PlayerOption = {};
             option.entryClassName = container.getAttribute("data-entry-class");
-            option.scaleMode = container.getAttribute("data-scale-mode");
+            option.scaleMode = container.getAttribute("data-scale-mode") || lark.StageScaleMode.NO_SCALE;
             option.frameRate = +container.getAttribute("data-frame-rate") || 30;
             option.contentWidth = +container.getAttribute("data-content-width") || 480;
             option.contentHeight = +container.getAttribute("data-content-height") || 800;

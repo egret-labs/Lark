@@ -134,7 +134,20 @@ module lark {
         $screen:lark.sys.Screen;
 
         $scaleMode:string = "noScale";
-
+        /**
+         * @language en_US
+         * A value from the StageScaleMode class that specifies which scale mode to use.
+         * @see lark.StageScaleMode
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 一个 StageScaleMode 类中的值，指定要使用哪种缩放模式。
+         * @see lark.StageScaleMode
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         public get scaleMode():string{
             return this.$scaleMode;
         }
