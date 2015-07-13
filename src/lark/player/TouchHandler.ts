@@ -41,10 +41,10 @@ module lark.sys {
         }
         return list;
     }
-	
-	/*
-	* @private git Test
-	*/
+
+    /*
+     * @private git Test
+     */
 
     /**
      * @private
@@ -136,21 +136,22 @@ module lark.sys {
             }
 
             var time = lark.getTimer();
-            if(time - this.touchDownTime[touchPointID] > 5000)
-            {
+            if (time - this.touchDownTime[touchPointID] > 5000) {
                 var num = 0;
-                for(var key in this.touchDownTime)
-                    if(time - this.touchDownTime[key] > 5000) num++;
-                if(num == 3)
-                {
+                for (var key in this.touchDownTime) {
+                    if (time - this.touchDownTime[key] > 5000) {
+                        num++;
+                    }
+                }
+
+                if (num == 3) {
                     var textField = new lark.TextField("powered by lark");
                     this.stage.addChild(textField);
-                    setTimeout(function():void{
-                        if(textField.parent)
-                        {
+                    setTimeout(function ():void {
+                        if (textField.parent) {
                             textField.parent.removeChild(textField);
                         }
-                    },2000);
+                    }, 2000);
                 }
             }
             delete this.touchDownTime[touchPointID];
