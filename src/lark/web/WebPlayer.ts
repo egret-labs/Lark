@@ -35,6 +35,14 @@ module lark.web {
          */
         entryClassName?:string;
         /**
+         * 默认帧率
+         */
+        frameRate?:number;
+        /**
+         * 屏幕适配模式
+         */
+        scaleMode?:string;
+        /**
          * 初始内容宽度
          */
         contentWidth?:number;
@@ -66,25 +74,27 @@ module lark.web {
 
     export class WebPlayer extends LarkObject implements lark.sys.Screen {
 
-        public constructor(container:HTMLDivElement){
+        public constructor(container:HTMLDivElement) {
             super();
             this.init(container);
         }
 
-        private init(container:HTMLDivElement):void{
+        private init(container:HTMLDivElement):void {
             var option = this.readOption(container);
             var stage = new lark.Stage();
             stage.$screen = this;
+            stage.$scaleMode = option.scaleMode;
+            stage.frameRate = option.frameRate;
             var surface = lark.sys.surfaceFactory.create();
             var canvas = <HTMLCanvasElement><any>surface;
-            this.attachCanvas(container,canvas);
+            this.attachCanvas(container, canvas);
             var webTouch = new WebTouchHandler(stage, canvas);
-            var webText = new WebTextAdapter(container,stage,canvas);
+            var webText = new WebTextAdapter(container, stage, canvas);
             var player = new lark.sys.Player(surface.renderContext, stage, option.entryClassName);
-            if(DEBUG){
+            if (DEBUG) {
                 player.showPaintRect(option.showPaintRect);
-                if(option.showFPS||option.showLog){
-                    player.displayFPS(option.showFPS,option.showLog,option.logFilter);
+                if (option.showFPS || option.showLog) {
+                    player.displayFPS(option.showFPS, option.showLog, option.logFilter);
                 }
             }
             this.playerOption = option;
@@ -101,16 +111,18 @@ module lark.web {
         /**
          * 读取初始化参数
          */
-        private readOption(container:HTMLDivElement):PlayerOption{
+        private readOption(container:HTMLDivElement):PlayerOption {
             var option:PlayerOption = {};
             option.entryClassName = container.getAttribute("data-entry-class");
+            option.scaleMode = container.getAttribute("data-scale-mode");
+            option.frameRate = +container.getAttribute("data-frame-rate") || 30;
             option.contentWidth = +container.getAttribute("data-content-width") || 480;
             option.contentHeight = +container.getAttribute("data-content-height") || 800;
             option.orientation = container.getAttribute("data-orientation") || lark.sys.OrientationMode.AUTO;
-            if(DEBUG){
-                option.showPaintRect = container.getAttribute("data-show-paint-rect")=="true";
-                option.showFPS = container.getAttribute("data-show-fps")=="true";
-                option.showLog = container.getAttribute("data-show-log")=="true";
+            if (DEBUG) {
+                option.showPaintRect = container.getAttribute("data-show-paint-rect") == "true";
+                option.showFPS = container.getAttribute("data-show-fps") == "true";
+                option.showLog = container.getAttribute("data-show-log") == "true";
                 option.logFilter = container.getAttribute("data-log-filter");
             }
             return option;
@@ -120,7 +132,7 @@ module lark.web {
          * @private
          * 添加canvas到container。
          */
-        private attachCanvas(container:HTMLElement,canvas:HTMLCanvasElement):void {
+        private attachCanvas(container:HTMLElement, canvas:HTMLCanvasElement):void {
 
             var style = canvas.style;
             style.cursor = "default";
@@ -164,7 +176,7 @@ module lark.web {
          */
         public updateScreenSize():void {
             var canvas = this.canvas;
-            if(canvas['userTyping'])
+            if (canvas['userTyping'])
                 return;
             var option = this.playerOption;
             var screenRect = this.container.getBoundingClientRect();
@@ -204,7 +216,7 @@ module lark.web {
             this.player.updateStageSize(stageWidth, stageHeight);
             var scaleX = displayWidth / stageWidth;
             var scaleY = displayHeight / stageHeight;
-            this.webTouchHandler.updateScaleMode(scaleX, scaleY,rotation);
+            this.webTouchHandler.updateScaleMode(scaleX, scaleY, rotation);
             this.webTextAdapter.updateScaleMode(scaleX, scaleY, (screenRect.width - displayWidth) / 2,
                 (screenRect.height - displayHeight) / 2, displayWidth / 2, displayHeight / 2, rotation);
         }
