@@ -2,6 +2,8 @@ bin-debug
 bin-release
 /vs-files
 *.njsproj
+*.csproj
+*.csproj.user
 /.ntvs_analysis.dat
 /bin
 /obj/Debug
@@ -9,6 +11,7 @@ bin-release
 *.dll
 /tools/obj/Debug
 /tools/.ntvs_analysis.dat
+.settings
 *.sln
 *.suo
 /tools/lib/typescript/src/*.js
@@ -19,3 +22,5 @@ tmp
 /src/tests
 examples/LarkCore/src/libs
 examples/UIExamples/src/libs
+web.config
+tsconfig.json

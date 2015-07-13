@@ -1522,6 +1522,7 @@ var lark;
                 var surface = (useOnce || surfacePool.length > 3) ? surfacePool.pop() : null;
                 if (!surface) {
                     var canvas = document.createElement("canvas");
+                    canvas.width = canvas.height = 1;
                     if (isQQBrowser && !this.testCanvasValid(canvas)) {
                         lark.warn("failed to create canvas!");
                         return null;
@@ -2065,7 +2066,7 @@ var lark;
                     return;
                 var screenRect = this.container.getBoundingClientRect();
                 var shouldRotate = false;
-                if (this.orientation != lark.sys.OrientationMode.NOT_SET) {
+                if (this.orientation != lark.sys.OrientationMode.AUTO) {
                     shouldRotate = this.orientation != lark.sys.OrientationMode.PORTRAIT && screenRect.height > screenRect.width || this.orientation == lark.sys.OrientationMode.PORTRAIT && screenRect.width > screenRect.height;
                 }
                 var screenWidth = shouldRotate ? screenRect.height : screenRect.width;
@@ -2386,7 +2387,7 @@ var lark;
             var contentWidth = +container.getAttribute("data-content-width") || 480;
             var contentHeight = +container.getAttribute("data-content-height") || 800;
             var scaleMode = container.getAttribute("data-scale-mode");
-            var orientation = container.getAttribute("data-orientation") || lark.sys.OrientationMode.NOT_SET;
+            var orientation = container.getAttribute("data-orientation") || lark.sys.OrientationMode.AUTO;
             var surface = lark.sys.surfaceFactory.create();
             var canvas = surface;
             var webScreen = new web.WebScreen(container, canvas, scaleMode, contentWidth, contentHeight, orientation);
