@@ -134,14 +134,14 @@ module lark.sys {
             else {
                 TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_RELEASE_OUTSIDE, true, true, x, y, touchPointID);
             }
-            //判断彩蛋
+            
             var time = lark.getTimer();
-            if(time - this.touchDownTime[touchPointID] > 10000)
+            if(time - this.touchDownTime[touchPointID] > 5000)
             {
                 var num = 0;
                 for(var key in this.touchDownTime)
                 {
-                    if(time - this.touchDownTime[key] > 10000)
+                    if(time - this.touchDownTime[key] > 5000)
                     {
                         num++;
                     }
