@@ -209,6 +209,9 @@ module lark {
         }
 
         public set fillStyle(value:any) {
+            if(typeof value == "number"){
+                value = sys.toColorString(value);
+            }
             this._fillStyle = value;
             this.pushCommand(sys.GraphicsCommandType.fillStyle, arguments);
         }
@@ -304,6 +307,9 @@ module lark {
         }
 
         public set strokeStyle(value:any) {
+            if(typeof value == "number"){
+                value = sys.toColorString(value);
+            }
             this._strokeStyle = value;
             this.pushCommand(sys.GraphicsCommandType.strokeStyle, arguments);
         }
