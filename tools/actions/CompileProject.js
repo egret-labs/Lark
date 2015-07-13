@@ -5,22 +5,24 @@ var CompileProject = (function () {
     function CompileProject() {
     }
     CompileProject.prototype.compileProject = function (option, files) {
+        var compileResult;
         if (files && this.recompile) {
             files = files.map(function (f) { return f.replace(option.projectDir, ""); });
-            var result = this.recompile(files);
-            return result;
+            compileResult = this.recompile(files);
         }
-        var compiler = new Compiler();
-        var tsList = FileUtil.search(option.srcDir, "ts");
-        var compileResult = compiler.compile({
-            args: option,
-            files: tsList,
-            out: option.out,
-            outDir: option.outDir
-        });
+        else {
+            var compiler = new Compiler();
+            var tsList = FileUtil.search(option.srcDir, "ts");
+            compileResult = compiler.compile({
+                args: option,
+                files: tsList,
+                out: option.out,
+                outDir: option.outDir
+            });
+            this.recompile = compileResult.compileWithChanges;
+        }
         var files = GetJavaScriptFileNames(compileResult.files, /^src\//);
         compileResult.files = files;
-        this.recompile = compileResult.compileWithChanges;
         return compileResult;
     };
     return CompileProject;
