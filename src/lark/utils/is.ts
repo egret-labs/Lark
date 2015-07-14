@@ -37,12 +37,12 @@ module lark {
      * @param typeName the string value representing a specific class or interface.
      * @returns A value of true if the object is a instance of the class or interface specified as the parameter.
      * @example
-     * <code>
+     * <pre>
      *     var instance = new lark.Sprite();
      *     lark.log(lark.is(instance,"lark.Sprite"))  //true
      *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
      *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
-     * </code>
+     * </pre>
      * @see lark.registerClass()
      * @version Lark 1.0
      * @platform Web,Native
@@ -54,12 +54,12 @@ module lark {
      * @param typeName 类或接口的完全名称.
      * @returns 返回true表示当前对象是指定类或接口的实例。
      * @example
-     * <code>
+     * <pre>
      *     var instance = new lark.Sprite();
      *     lark.log(lark.is(instance,"lark.Sprite"))  //true
      *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
      *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
-     * </code>
+     * </pre>
      * @see lark.registerClass()
      * @version Lark 1.0
      * @platform Web,Native

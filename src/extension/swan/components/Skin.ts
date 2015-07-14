@@ -36,7 +36,7 @@ module swan {
      * It can be created by resolving a EXML.<p/>
      *
      * @example You typically write the skin classes in EXML, as the followiong example shows:<p/>
-     * <code>
+     * <pre>
      *      <?xml version="1.0" encoding="utf-8"?>
      *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
      *          <states>
@@ -44,7 +44,7 @@ module swan {
      *          </states>
      *          <!-- Define skin. -->
      *      </s:Skin>
-     * </code>
+     * </pre>
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -55,7 +55,7 @@ module swan {
      * 皮肤基类。通常情况下，您不需要手动创建这个类的实例，而是通过解析EXML文件后自动生成。<p/>
      *
      * @example 通常您可以按照如下方式写EXML代码：<p/>
-     * <code>
+     * <pre>
      *      <?xml version="1.0" encoding="utf-8"?>
      *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
      *          <states>
@@ -63,7 +63,7 @@ module swan {
      *          </states>
      *          <!-- Define skin. -->
      *      </s:Skin>
-     * </code>
+     * </pre>
      *
      * @version Lark 1.0
      * @version Swan 1.0

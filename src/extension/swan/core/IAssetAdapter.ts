@@ -33,10 +33,10 @@ module swan {
      * Interface of asset adapter.
      * If your project need to custom the resource parsing rule, you need to implement the <code>IAssetAdapter</code>.
      * And use the following code to inject it to the system:
-     * <code>
+     * <pre>
      *      var assetAdapter = new YourAssetAdapter();
      *      Stage.registerImplementation("swan.IAssetAdapter",assetAdapter)
-     * </code>
+     * </pre>
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -47,10 +47,10 @@ module swan {
      * 素材适配器接口。
      * 若项目需要自定义 Image.source的解析规则，需要实现这个接口，
      * 然后调用如下代码注入自定义实现到框架即可：
-     * <code>
+     * <pre>
      *      var assetAdapter = new YourAssetAdapter();
      *      Stage.registerImplementation("swan.IAssetAdapter",assetAdapter)
-     * </code>
+     * </pre>
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
