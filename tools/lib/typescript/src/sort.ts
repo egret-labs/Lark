@@ -11,6 +11,7 @@
 module ts {
     var checker: TypeChecker = null;
     var program: Program = null;
+    var errors: Diagnostic[] = null;
 
     //parse
     var classNameToFileMap: Map<string | Map<boolean>> = {};
@@ -42,10 +43,14 @@ module ts {
         }
     }
 
-    export class TreeGenerator {
+    export class SortHelper {
 
         static getOrderedFiles() {
             return orderedFileList;
+        }
+
+        static getErrors(): Diagnostic[]{
+            return errors;
         }
 
         static getClassNameAndProps() {
@@ -65,6 +70,8 @@ module ts {
 
         classNameToFileMap = classNameToFileMap;
         public orderFiles(chk: TypeChecker, prog: Program) {
+
+            errors = [];
 
             classNameToFileMap = {};
             fileToClassNameMap = {};
@@ -347,7 +354,6 @@ module ts {
                     otherTypes.push(t);
             });
             if(hasRefCircle()){
-                
             }
             else{
                 topTypes.forEach(t=> t.setOrder(0));
@@ -461,19 +467,27 @@ module ts {
         
         checkCircle():boolean{
             var self = this;
-            var path = "";
+            var path = [];
             function getSupers(node:FileNode):boolean {
-                path += "=>" + node.name;
+                path.push(node.name);
                 var supers = node.depends.concat();
                 for(var i= supers.length-1;i>=0;i--){
                     var sup = supers[i];
-                    if(sup == self){
-                        console.log("Find Circle",node.name);
+                    if (sup == self) {
+                        path.push(sup.name);
+                        errors.push({
+                            code: 10018,
+                            category: DiagnosticCategory.Error,
+                            file: null,
+                            messageText: "Found circular dependency:" + path.join("=>"),
+                            start: 0,
+                            length: 0,
+                            isEarly:false
+                        });
                         return false;
                     }
-                    var c = getSupers(sup);
-                    if(false)
-                        return false;
+                    var ok = getSupers(sup);
+                    return ok;
                 }
             }
             return getSupers(this);

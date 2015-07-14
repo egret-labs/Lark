@@ -7,7 +7,7 @@
 /// <reference path="checker.ts"/>
 /// <reference path="emitter.ts"/>
 /// <reference path="commandLineParser.ts"/>
-/// <reference path="tree.ts" />
+/// <reference path="sort.ts" />
 /// <reference path="../../types.d.ts" />
 
 module ts {
@@ -255,8 +255,8 @@ module ts {
                 exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
             }
             else {
-                var tree = new TreeGenerator();
-                tree.orderFiles(checker, program);
+                var sortHelper = new SortHelper();
+                sortHelper.orderFiles(checker, program);
                 var emitStart = new Date().getTime();
                 var emitErrors: Diagnostic[];
                 if (!changedFiles) {
@@ -275,7 +275,6 @@ module ts {
                 }
                 var reportStart = new Date().getTime();
                 errors = concatenate(errors, emitErrors);
-                
             }
         }
 
@@ -298,7 +297,13 @@ module ts {
             reportTimeStatistic("Total time", reportStart - parseStart);
         }
 
-        var result = { program, exitStatus, files: ts.TreeGenerator.getOrderedFiles(), messages: formatedMessages.concat() };
+
+        var sortErrors = SortHelper.getErrors();
+        if (sortErrors && sortErrors.length > 0) {
+            exitStatus = sortErrors[0].code;
+            formatedMessages = formatedMessages.concat(sortErrors.map(e=> e.messageText));
+        }
+        var result = { program, exitStatus, files: ts.SortHelper.getOrderedFiles(), messages: formatedMessages.concat() };
         formatedMessages = [];
         return result;
     }

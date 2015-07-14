@@ -20744,6 +20744,7 @@ var ts;
 (function (ts) {
     var checker = null;
     var program = null;
+    var errors = null;
     //parse
     var classNameToFileMap = {};
     var classNames = {};
@@ -20770,8 +20771,8 @@ var ts;
             classNameToFileMap[name] = map;
         }
     }
-    var TreeGenerator = (function () {
-        function TreeGenerator() {
+    var SortHelper = (function () {
+        function SortHelper() {
             var _this = this;
             this.classNameToFileMap = classNameToFileMap;
             this.findUsedClasses = function (node, name, collection) {
@@ -20815,10 +20816,13 @@ var ts;
                 }
             };
         }
-        TreeGenerator.getOrderedFiles = function () {
+        SortHelper.getOrderedFiles = function () {
             return orderedFileList;
         };
-        TreeGenerator.getClassNameAndProps = function () {
+        SortHelper.getErrors = function () {
+            return errors;
+        };
+        SortHelper.getClassNameAndProps = function () {
             var names = {};
             var files = program.getSourceFiles().concat();
             files.forEach(function (f) {
@@ -20832,8 +20836,9 @@ var ts;
             });
             return names;
         };
-        TreeGenerator.prototype.orderFiles = function (chk, prog) {
+        SortHelper.prototype.orderFiles = function (chk, prog) {
             var _this = this;
+            errors = [];
             classNameToFileMap = {};
             fileToClassNameMap = {};
             classNameToBaseClassMap = {};
@@ -20862,7 +20867,7 @@ var ts;
                 }
             });
         };
-        TreeGenerator.prototype.symbolToFileMap = function (file, symbol) {
+        SortHelper.prototype.symbolToFileMap = function (file, symbol) {
             var _this = this;
             var classtype = checker.getDeclaredTypeOfSymbol(symbol.exportSymbol || symbol);
             if (symbol.flags & (1536 /* Module */))
@@ -20886,7 +20891,7 @@ var ts;
                 this.constructorToClassName(file, symbol.valueDeclaration);
             }
         };
-        TreeGenerator.prototype.symbolTabelToFileMap = function (file, symbolTable) {
+        SortHelper.prototype.symbolTabelToFileMap = function (file, symbolTable) {
             var _this = this;
             ts.forEachValue(symbolTable, function (symbol) {
                 symbol = symbol.exportSymbol || symbol;
@@ -20923,7 +20928,7 @@ var ts;
                 });
             }
         };
-        TreeGenerator.prototype.constructorToClassName = function (file, classNode) {
+        SortHelper.prototype.constructorToClassName = function (file, classNode) {
             var _this = this;
             if (!classNode || !classNode.symbol)
                 return;
@@ -20942,7 +20947,7 @@ var ts;
             }
             nodesToCheck.forEach(function (node) { return _this.findUsedClasses(node, className, constructorToClassMap); });
         };
-        TreeGenerator.prototype.staticMemberToClassName = function (file, symbol) {
+        SortHelper.prototype.staticMemberToClassName = function (file, symbol) {
             symbol = symbol.exportSymbol || symbol;
             var fullName = getFullyQualifiedName(symbol);
             var declarExp = symbol.valueDeclaration;
@@ -20954,9 +20959,9 @@ var ts;
                 staticToClassNameMap[fullName] = initializerClass;
             }
         };
-        TreeGenerator.prototype.addStaticDepend = function (staticMemberName, className) {
+        SortHelper.prototype.addStaticDepend = function (staticMemberName, className) {
         };
-        TreeGenerator.prototype.classNameToBaseClass = function (className, baseType) {
+        SortHelper.prototype.classNameToBaseClass = function (className, baseType) {
             var fullName = checker.getFullyQualifiedName(baseType.symbol);
             var bases = classNameToBaseClassMap[className] || [];
             if (bases.indexOf(fullName) < 0)
@@ -20964,7 +20969,7 @@ var ts;
             classNameToBaseClassMap[className] = bases;
         };
         //todo 
-        TreeGenerator.prototype.getFileNode = function (file) {
+        SortHelper.prototype.getFileNode = function (file) {
             if (file in fileNameToNodeMap)
                 return fileNameToNodeMap[file];
             var typeNode = new FileNode();
@@ -20980,7 +20985,7 @@ var ts;
             fileNameToNodeMap[file] = typeNode;
             return typeNode;
         };
-        TreeGenerator.prototype.sortFiles = function () {
+        SortHelper.prototype.sortFiles = function () {
             var _this = this;
             ts.forEachKey(classNameToFileMap, function (className) {
                 var file = classNameToFileMap[className];
@@ -21061,9 +21066,9 @@ var ts;
                 }
             }
         };
-        return TreeGenerator;
+        return SortHelper;
     })();
-    ts.TreeGenerator = TreeGenerator;
+    ts.SortHelper = SortHelper;
     var fileToFileMap = {};
     function hasRefCircle() {
         return fileNodesList.some(function (f) { return f.checkCircle() == false; });
@@ -21127,19 +21132,27 @@ var ts;
         };
         FileNode.prototype.checkCircle = function () {
             var self = this;
-            var path = "";
+            var path = [];
             function getSupers(node) {
-                path += "=>" + node.name;
+                path.push(node.name);
                 var supers = node.depends.concat();
                 for (var i = supers.length - 1; i >= 0; i--) {
                     var sup = supers[i];
                     if (sup == self) {
-                        console.log("Find Circle", node.name);
+                        path.push(sup.name);
+                        errors.push({
+                            code: 10018,
+                            category: ts.DiagnosticCategory.Error,
+                            file: null,
+                            messageText: "Found circular dependency:" + path.join("=>"),
+                            start: 0,
+                            length: 0,
+                            isEarly: false
+                        });
                         return false;
                     }
-                    var c = getSupers(sup);
-                    if (false)
-                        return false;
+                    var ok = getSupers(sup);
+                    return ok;
                 }
             }
             return getSupers(this);
@@ -21189,7 +21202,7 @@ var ts;
 /// <reference path="checker.ts"/>
 /// <reference path="emitter.ts"/>
 /// <reference path="commandLineParser.ts"/>
-/// <reference path="tree.ts" />
+/// <reference path="sort.ts" />
 /// <reference path="../../types.d.ts" />
 var ts;
 (function (ts) {
@@ -21386,8 +21399,8 @@ var ts;
                 exitStatus = ts.EmitReturnStatus.AllOutputGenerationSkipped;
             }
             else {
-                var tree = new ts.TreeGenerator();
-                tree.orderFiles(checker, program);
+                var sortHelper = new ts.SortHelper();
+                sortHelper.orderFiles(checker, program);
                 var emitStart = new Date().getTime();
                 var emitErrors;
                 if (!changedFiles) {
@@ -21426,7 +21439,12 @@ var ts;
             reportTimeStatistic("Emit time", reportStart - emitStart);
             reportTimeStatistic("Total time", reportStart - parseStart);
         }
-        var result = { program: program, exitStatus: exitStatus, files: ts.TreeGenerator.getOrderedFiles(), messages: formatedMessages.concat() };
+        var sortErrors = ts.SortHelper.getErrors();
+        if (sortErrors && sortErrors.length > 0) {
+            exitStatus = sortErrors[0].code;
+            formatedMessages = formatedMessages.concat(sortErrors.map(function (e) { return e.messageText; }));
+        }
+        var result = { program: program, exitStatus: exitStatus, files: ts.SortHelper.getOrderedFiles(), messages: formatedMessages.concat() };
         formatedMessages = [];
         return result;
     }
