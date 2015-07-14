@@ -112,15 +112,14 @@ module lark {
      * 文件解析完之后填充到每一个关键帧的内容
      */
     class FrameInfo extends LarkObject {
-        public constructor(frame:number,data:Object)
-        {
+        public constructor(frame:number, data:Object) {
+            super();
             this.$frame = frame;
         }
 
         $frame:number;
 
-        public get frame():number
-        {
+        public get frame():number {
             return this.$frame;
         }
     }
@@ -334,16 +333,17 @@ module lark {
             else {
                 num = this.$getFrameNumberByLabel(frame);
                 if (num == 0) {
-                    //todo 抛出参数错误
+                    throw lark.sys.tr(1013, frame);
                     return;
                 }
             }
             this.$isPlaying = true;
+            if (num >= this.$frames.length) num = this.$frames.length;
             if (this.$currentFrame == num) {
                 return;
             }
             this.$clearCurrentFrame();
-            this.$currentFrame = num >= this.$frames.length ? this.$frames.length : num;
+            this.$currentFrame = num;
             this.$playCurrentFrame();
         }
 
@@ -369,16 +369,17 @@ module lark {
             else {
                 num = this.$getFrameNumberByLabel(frame);
                 if (num == 0) {
-                    //todo 抛出参数错误
+                   throw lark.sys.tr(1013, frame);
                     return;
                 }
             }
             this.$isPlaying = false;
+            if (num >= this.$frames.length) num = this.$frames.length;
             if (this.$currentFrame == num) {
                 return;
             }
             this.$clearCurrentFrame();
-            this.$currentFrame = num >= this.$frames.length ? this.$frames.length : num;
+            this.$currentFrame = num;
             this.$playCurrentFrame();
         }
 
