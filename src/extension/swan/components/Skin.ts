@@ -44,7 +44,7 @@ module swan {
      *          </states>
      *          <!-- Define skin. -->
      *      </s:Skin>
-     * <code/>
+     * </code>
      *
      * @version Lark 1.0
      * @version Swan 1.0

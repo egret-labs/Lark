@@ -60,13 +60,13 @@ module swan {
      *          <s:Group/>
      *          </e:viewport>
      *      </e:Scroller>
-     * <code/>
+     * </code>
      * Cuz <code>viewport</code> is the default property of Scroller. So you can write as follow:
      * <code>
      *      <s:Scroller>
      *          <s:Group/>
      *      </e:Scroller>
-     * <code/>
+     * </code>
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
