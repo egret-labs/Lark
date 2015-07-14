@@ -33,8 +33,8 @@ class ShortTimer extends Sprite {
         var minuteTimer:Timer = new lark.Timer(1000, 5);
 
         // 添加间隔触发和计时完成的事件监听
-        minuteTimer.addEventListener(TimerEvent.TIMER, onTick);
-        minuteTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
+        minuteTimer.on(lark.TimerEvent.TIMER, this.onTick, this);
+        minuteTimer.on(lark.TimerEvent.TIMER_COMPLETE, this.onTimerComplete, this);
 
         // 启动计时器
         minuteTimer.start();

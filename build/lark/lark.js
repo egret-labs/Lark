@@ -4216,6 +4216,9 @@ var lark;
                 return this._fillStyle;
             },
             function (value) {
+                if(typeof value == "number"){
+                    value = lark.sys.toColorString(value);
+                }
                 this._fillStyle = value;
                 this.pushCommand(5 /* fillStyle */, arguments);
             }
@@ -4296,6 +4299,9 @@ var lark;
                 return this._strokeStyle;
             },
             function (value) {
+                if(typeof value == "number"){
+                    value = lark.sys.toColorString(value);
+                }
                 this._strokeStyle = value;
                 this.pushCommand(4 /* strokeStyle */, arguments);
             }

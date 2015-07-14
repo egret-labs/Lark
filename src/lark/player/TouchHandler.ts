@@ -29,23 +29,6 @@
 
 module lark.sys {
 
-    var ENTER_LIST:DisplayObject[] = [], LEAVE_LIST:DisplayObject[] = [];
-
-    /**
-     * @private
-     */
-    function getParentList(target:DisplayObject, list):DisplayObject[] {
-        while (target) {
-            list.push(target);
-            target = target.$parent;
-        }
-        return list;
-    }
-	
-	/*
-	* @private git Test
-	*/
-
     /**
      * @private
      * 用户交互操作管理器
@@ -72,6 +55,11 @@ module lark.sys {
 
         /**
          * @private
+         */
+        private touchDownTime:{[key:number]:number} = {};
+
+        /**
+         * @private
          * 触摸开始（按下）
          * @param x 事件发生处相对于舞台的坐标x
          * @param y 事件发生处相对于舞台的坐标y
@@ -80,6 +68,7 @@ module lark.sys {
         public onTouchBegin(x:number, y:number, touchPointID:number):void {
             var target = this.findTarget(x, y);
             this.touchDownTarget[touchPointID] = target.$hashCode;
+            this.touchDownTime[touchPointID] = lark.getTimer();
             TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_BEGIN, true, true, x, y, touchPointID);
         }
 
@@ -119,7 +108,7 @@ module lark.sys {
         public onTouchEnd(x:number, y:number, touchPointID:number):void {
             var target = this.findTarget(x, y);
             var oldTargetCode = this.touchDownTarget[touchPointID];
-            this.touchDownTarget[touchPointID] = -1;
+            delete this.touchDownTarget[touchPointID];
             TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_END, true, true, x, y, touchPointID);
             target = this.findTarget(x, y);
             if (oldTargetCode === target.$hashCode) {
@@ -128,6 +117,27 @@ module lark.sys {
             else {
                 TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_RELEASE_OUTSIDE, true, true, x, y, touchPointID);
             }
+
+            var time = lark.getTimer();
+            if (time - this.touchDownTime[touchPointID] > 5000) {
+                var num = 0;
+                for (var key in this.touchDownTime) {
+                    if (time - this.touchDownTime[key] > 5000) {
+                        num++;
+                    }
+                }
+
+                if (num == 3) {
+                    var textField = new lark.TextField("powered by lark");
+                    this.stage.addChild(textField);
+                    setTimeout(function ():void {
+                        if (textField.parent) {
+                            textField.parent.removeChild(textField);
+                        }
+                    }, 2000);
+                }
+            }
+            delete this.touchDownTime[touchPointID];
         }
 
         /**
