@@ -46,6 +46,8 @@ var lark;
     locale_strings[10015] = "\"{0}\" 不是一个有效的 Lark 项目目录";
     locale_strings[10016] = "如果浏览器没有启动，请手动打开URL: {0}";
     locale_strings[10017] = "项目创建成功，您可以执行 lark run 来运行刚刚创建的应用";
+    locale_strings[10018] = "试图进行文件加载顺序排序时发现循环依赖，比如类的 static 属性直接实例化了一个继承自当前类的类，"
+        + "或者当前文件中有立即执行的代码使用了依赖于当前文件的类。";
     locale_strings[12000] = "创建一个全新的 Lark 项目";
     locale_strings[12001] = "选择一个项目模板";
     locale_strings[12002] = "请输入默认的屏幕尺寸";

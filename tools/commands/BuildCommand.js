@@ -19,6 +19,9 @@ var BuildCommand = (function () {
             if (cmd.messages) {
                 cmd.messages.forEach(function (m) { return console.log(m); });
             }
+            if (cmd.exitCode > 10000) {
+                console.log(utils.tr(cmd.exitCode));
+            }
             if (callback)
                 callback(cmd.exitCode || 0);
             else

@@ -48,6 +48,9 @@ locale_strings[10014] = "Error occurred while compiling your code：";
 locale_strings[10015] = "\"{0}\" is not a valid Lark project folder";
 locale_strings[10016] = "Please visit {0} if no browser open it automatically";
 locale_strings[10017] = "Lark project is created, you can execute \"lark run\" to run the project";
+locale_strings[10018] = "Found circular dependency when try to sort the TypeScript files. "
+                      + "Maybe you are create an instance of a subclass and assign it to a static member, "
+                      + "or using a subclass in immediately executing codes";
 
 
 locale_strings[12000] = "Create Lark Project";
