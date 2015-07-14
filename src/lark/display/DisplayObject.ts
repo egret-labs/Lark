@@ -1156,7 +1156,7 @@ module lark {
          * @platform Web,Native
          */
         public get scrollRect():Rectangle {
-            return this.$scrollRect ? this.$scrollRect.clone() : null;
+            return this.$scrollRect;
         }
 
         public set scrollRect(value:Rectangle) {
