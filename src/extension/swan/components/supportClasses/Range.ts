@@ -177,7 +177,7 @@ module swan {
          * @language zh_CN
          * 最小有效值<p/>
          *
-         * 规定<code>value<code/>属性的值不能够低于的最小值。该修正过程
+         * 规定<code>value</code>属性的值不能够低于的最小值。该修正过程
          * 将在<code>nearestValidValue()</code>方法中进行。
          *
          * @default 0
