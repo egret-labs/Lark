@@ -30,91 +30,14 @@
 module lark {
 
     /**
-     * @language en_US
-     * The FrameLabel object contains properties that specify a frame number and the corresponding label name.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * FrameLabel 对象包含用来指定帧编号及相应标签名称的属性。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    export class FrameLabel extends LarkObject {
-
-        /**
-         * @language en_US
-         * Constructor.
-         * @param name The label name.
-         * @param frame The frame number associated with the label name.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         * @param name 标签名称。
-         * @param frame 与标签名称关联的帧编号。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public constructor(name:string, frame:number) {
-            super();
-            this.$name = name;
-            this.$frame = frame;
-        }
-
-        /**
-         * @private
-         */
-        $frame:number;
-
-        /**
-         * @language en_US
-         * The frame number containing the label.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 包含标签的帧编号。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public get frame():number {
-            return this.$frame;
-        }
-
-        /**
-         * @private
-         */
-        $name:string;
-
-        /**
-         * @language en_US
-         * The name of the label.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 标签的名称。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public get name():string {
-            return this.$name;
-        }
-    }
-
-    /**
+     * @private
      * @language en_US
      * The MovieClip object unlike the Sprite object, a MovieClip object has a timeline.
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
+     * @private
      * @language zh_CN
      * MovieClip 对象不同于 Sprite 对象，MovieClip 对象拥有一个时间轴。
      * @version Lark 1.0

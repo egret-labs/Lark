@@ -27,60 +27,23 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module lark {
-
-    /**
-     * @language en_US
-     * MovieClip support many kinds of animation, as sequence frame animation,ect。
-     * @see lark.MovieClip
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * MovieClip支持的动画类型有很多种，比如序列帧动画等等。
-     * @see lark.MovieClip
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    export class MovieClipType extends LarkObject {
-        /**
-         * @language en_US
-         * Sequence frame animation.At present this kind of animation support the format of Egret MovieClip created by Egret Texture Memger.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 序列帧动画。目前支持Egret Texture Memger工具导出的MovieClip文件格式。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public static SEQUENCE_FRAME:string = "frameByFrame";
-    }
-
+module larkAnimation {
     /**
      * @language en_US
      * The Loader class is used to load MovieClip config files. Use the load() method to initiate loading.
      * The loaded MovieClip object is in the data property of MovieClipLoader.
-     * @event lark.Event.COMPLETE Emitted when the net request is complete.
-     * @event lark.Event.IO_ERROR Emitted when the net request is failed.
      * @see lark.HttpRequest
-     * @see lark.MovieClipType
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
      * MovieClipLoader 类可用于加载MovieClip配置文件。使用 load() 方法来启动加载。被加载的MovieClip对象数据将存储在 MovieClipLoader.data 属性上 。
-     * @event lark.Event.COMPLETE 加载完成
-     * @event lark.Event.IO_ERROR 加载失败
      * @see lark.HttpRequest
-     * @see lark.MovieClipType
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export class MovieClipLoader extends EventEmitter {
+    export class BitmapArrayLoader extends lark.EventEmitter {
 
         /**
          * @private
@@ -114,7 +77,7 @@ module lark {
         /**
          * @private
          */
-        $data:MovieClip;
+        $data:BitmapArray;
 
         /**
          * @language en_US
@@ -130,7 +93,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public  get data():MovieClip {
+        public  get data():BitmapArray {
             return this.$data;
         }
 
@@ -155,8 +118,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public load(type:string, url:string):void {
-            this.$movieClipType = type;
+        public load(url:string):void {
             var request:lark.HttpRequest = new lark.HttpRequest();
             request.once(lark.Event.COMPLETE, this.onConfigLoad, this);
             request.once(lark.Event.IO_ERROR, this.onIOError, this);
@@ -169,47 +131,24 @@ module lark {
 
         /**
          * @private
-         */
-        $movieClipType;
-
-        /**
-         * @language en_US
-         * The type of the MovieClip.
-         * @see lark.MovieClipType
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 要加在的动画类型。
-         * @see lark.MovieClipType
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public get movieClipType():string {
-            return this.$movieClipType;
-        }
-
-        /**
-         * @private
          * 加载配置文件完毕
          */
         private onConfigLoad(event:lark.Event):void {
             var request:lark.HttpRequest = event.currentTarget;
             this.$config = request.response;
             this.$loadList = [];
-            if (this.$movieClipType == MovieClipType.SEQUENCE_FRAME) {
-                var arr = this.$currentURL.split("?");
-                var arr2 = arr[0].split("/");
-                arr2[arr2.length - 1] = arr2[arr2.length - 1].split(".")[0] + ".png";
-                var url = "";
-                for (var i = 0; i < arr2.length; i++) {
-                    url += arr2[i] + (i < arr2.length - 1 ? "/" : "");
-                }
-                if (arr.length == 2) url += arr[2];
 
-                this.$loadList.push({"url": url, "content": null});
+            var arr = this.$currentURL.split("?");
+            var arr2 = arr[0].split("/");
+            arr2[arr2.length - 1] = arr2[arr2.length - 1].split(".")[0] + ".png";
+            var url = "";
+            for (var i = 0; i < arr2.length; i++) {
+                url += arr2[i] + (i < arr2.length - 1 ? "/" : "");
             }
+            if (arr.length == 2) url += arr[2];
+
+            this.$loadList.push({"url": url, "content": null});
+
             this.startLoadList();
         }
 
@@ -246,15 +185,28 @@ module lark {
                     break;
                 }
             }
-            if (flag == false) //全部资源加载完毕
-            {
-                if (this.$movieClipType == MovieClipType.SEQUENCE_FRAME) {
-                    var frameMovieClip = new lark.FrameAnimation();
-                    frameMovieClip.decodeSpriteSheet(this.$config, this.$loadList[0].content);
-                    this.$data = frameMovieClip;
+            //全部资源加载完毕
+            if (flag == false) {
+
+                var info = JSON.parse(this.$config);
+                var list:Array<any>;
+                for (var key in info.mc) {
+                    list = info.mc[key].frames;
+                    break;
                 }
+                var len = list.length;
+                var res;
+                var frames:Array<BitmapArrayFrameData>;
+                for (var i = 0; i < len; i++) {
+                    res = info.res[list[i].res];
+                    frames.push(new BitmapArrayFrameData(this.$loadList[0].content, list[i].x, list[i].y, res.w, res.h, res.x, res.y));
+                }
+
+                var frameMovieClip = new larkAnimation.BitmapArray(frames);
+                this.$data = frameMovieClip;
+
                 this.$loadList = null;
-                this.emitWith(Event.COMPLETE);
+                this.emitWith(lark.Event.COMPLETE);
             }
             else {
                 this.startLoadList();
@@ -265,10 +217,10 @@ module lark {
          * @private
          */
         private onIOError(event:lark.Event):void {
-            if (DEBUG && !this.hasListener(Event.IO_ERROR)) {
-                $error(1011, this.$currentURL);
+            if (DEBUG && !this.hasListener(lark.Event.IO_ERROR)) {
+                lark.$error(1011, this.$currentURL);
             }
-            this.emitWith(Event.IO_ERROR);
+            this.emitWith(lark.Event.IO_ERROR);
         }
     }
 }
