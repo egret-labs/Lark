@@ -33,8 +33,7 @@ module lark {
      * @private
      * FrameAnimation中单帧的信息
      */
-    class FrameAnimationData
-    {
+    class FrameAnimationData {
         /**
          * @private
          * 在FrameAnimation中的位置x
@@ -83,8 +82,7 @@ module lark {
          */
         public sourceY:number;
 
-        public constructor(x:number,y:number,width:number,height:number,bitmapData:BitmapData,spriteSheetFlag:boolean,sourceX:number,sourceY:number)
-        {
+        public constructor(x:number, y:number, width:number, height:number, bitmapData:BitmapData, spriteSheetFlag:boolean, sourceX:number, sourceY:number) {
             this.x = x;
             this.y = y;
             this.sourceX = sourceX;
@@ -99,7 +97,7 @@ module lark {
     /**
      * @private
      * @language en_US
-     * Sequence frame animation is a simple MovieClip.It supports a MovieClip config which created by Egret Texture Memger.When you load a FrameAnimation by MovieClipLoader you should choose MovieClipType.SEQUENCE_FRAME type.
+     * Sequence frame animation is a simple MovieClip.It supports the config file which created by Egret Texture Memger.When you load a FrameAnimation by MovieClipLoader you should choose MovieClipType.SEQUENCE_FRAME type.
      * @see lark.MovieClipLoader
      * @see lark.MovieClipType
      * @version Lark 1.0
@@ -108,7 +106,7 @@ module lark {
     /**
      * @private
      * @language zh_CN
-     * 序列帧动画，是一种简单的MovieClip。它支持由Egret Texture Memger创建的MovieClip动画配置。用MovieClipLoader加载序列帧动画的时候选择MovieClipType.FRAME_BY_FRAME类型。
+     * 序列帧动画，是一种简单的MovieClip。它支持由Egret Texture Memger创建的MovieClip动画配置文件。用MovieClipLoader加载序列帧动画的时候请选择MovieClipType.FRAME_BY_FRAME类型。
      * @see lark.MovieClipLoader
      * @see lark.MovieClipType
      * @version Lark 1.0
@@ -150,7 +148,7 @@ module lark {
          * @platform Web,Native
          */
         public get currentFrame():number {
-            if(this.$totalFrames == 0) return 0;
+            if (this.$totalFrames == 0) return 0;
             return this.$currentFrame + 1;
         }
 
@@ -188,21 +186,18 @@ module lark {
          * @param config 配置文件
          * @param bitmapData 资源合集
          */
-        public decodeSpriteSheet(config:string, bitmapData:BitmapData):void
-        {
+        public decodeSpriteSheet(config:string, bitmapData:BitmapData):void {
             var info = JSON.parse(config);
             var list:Array<any>;
-            for(var key in info.mc)
-            {
+            for (var key in info.mc) {
                 list = info.mc[key].frames;
                 break;
             }
             var len = list.length;
             var res;
-            for(var i = 0; i < len; i++)
-            {
+            for (var i = 0; i < len; i++) {
                 res = info.res[list[i].res];
-                this.$frames.push(new FrameAnimationData(list[i].x,list[i].y,res.w,res.h,bitmapData,true,res.x,res.y));
+                this.$frames.push(new FrameAnimationData(list[i].x, list[i].y, res.w, res.h, bitmapData, true, res.x, res.y));
             }
             this.$totalFrames = len;
             this.$isPlaying = true;
@@ -259,17 +254,15 @@ module lark {
          */
         $measureContentBounds(bounds:Rectangle):void {
             var frameInfo = this.$frames[this.$currentFrame];
-            if(frameInfo && frameInfo.bitmapData){
-                if(frameInfo.spriteSheetFlag)
-                {
-                    bounds.setTo(frameInfo.x,frameInfo.y,frameInfo.width,frameInfo.height);
+            if (frameInfo && frameInfo.bitmapData) {
+                if (frameInfo.spriteSheetFlag) {
+                    bounds.setTo(frameInfo.x, frameInfo.y, frameInfo.width, frameInfo.height);
                 }
-                else
-                {
-                    bounds.setTo(0,0,frameInfo.bitmapData.width,frameInfo.bitmapData.height);
+                else {
+                    bounds.setTo(0, 0, frameInfo.bitmapData.width, frameInfo.bitmapData.height);
                 }
             }
-            else{
+            else {
                 bounds.setEmpty();
             }
         }
@@ -277,16 +270,14 @@ module lark {
         /**
          * @private
          */
-        $render(context:sys.RenderContext):void{
+        $render(context:sys.RenderContext):void {
             var frameInfo = this.$frames[this.$currentFrame];
-            if(frameInfo && frameInfo.bitmapData){
-                if(frameInfo.spriteSheetFlag)
-                {
-                    context.drawImage(frameInfo.bitmapData,frameInfo.sourceX,frameInfo.sourceY,frameInfo.width,frameInfo.height,frameInfo.x,frameInfo.y,frameInfo.width,frameInfo.height);
+            if (frameInfo && frameInfo.bitmapData) {
+                if (frameInfo.spriteSheetFlag) {
+                    context.drawImage(frameInfo.bitmapData, frameInfo.sourceX, frameInfo.sourceY, frameInfo.width, frameInfo.height, frameInfo.x, frameInfo.y, frameInfo.width, frameInfo.height);
                 }
-                else
-                {
-                    context.drawImage(frameInfo.bitmapData,0,0);
+                else {
+                    context.drawImage(frameInfo.bitmapData, 0, 0);
                 }
             }
         }
@@ -412,8 +403,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public get totalFrames():number
-        {
+        public get totalFrames():number {
             return this.$totalFrames;
         }
     }

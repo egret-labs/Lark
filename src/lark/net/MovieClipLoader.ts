@@ -198,19 +198,17 @@ module lark {
             var request:lark.HttpRequest = event.currentTarget;
             this.$config = request.response;
             this.$loadList = [];
-            if(this.$movieClipType == MovieClipType.SEQUENCE_FRAME)
-            {
+            if (this.$movieClipType == MovieClipType.SEQUENCE_FRAME) {
                 var arr = this.$currentURL.split("?");
                 var arr2 = arr[0].split("/");
-                arr2[arr2.length-1] = arr2[arr2.length-1].split(".")[0] + ".png";
+                arr2[arr2.length - 1] = arr2[arr2.length - 1].split(".")[0] + ".png";
                 var url = "";
-                for(var i = 0; i < arr2.length; i++)
-                {
-                    url += arr2[i] + (i<arr2.length-1?"/":"");
+                for (var i = 0; i < arr2.length; i++) {
+                    url += arr2[i] + (i < arr2.length - 1 ? "/" : "");
                 }
-                if(arr.length == 2) url += arr[2];
+                if (arr.length == 2) url += arr[2];
 
-                this.$loadList.push({"url":url,"content":null});
+                this.$loadList.push({"url": url, "content": null});
             }
             this.startLoadList();
         }
@@ -219,14 +217,11 @@ module lark {
          * @private
          * 加载资源列表
          */
-        private startLoadList():void
-        {
+        private startLoadList():void {
             var url:string;
             var len = this.$loadList.length;
-            for(var i = 0; i < len; i++)
-            {
-                if(this.$loadList[i].content == null)
-                {
+            for (var i = 0; i < len; i++) {
+                if (this.$loadList[i].content == null) {
                     url = this.$loadList[i].url;
                     break;
                 }
@@ -241,32 +236,27 @@ module lark {
          * 加载资源完毕
          * @param event
          */
-        private onLoadList(event:lark.Event):void
-        {
+        private onLoadList(event:lark.Event):void {
             var flag = true;
             var len:number = this.$loadList.length;
-            for(var i:number = 0; i < len; i++)
-            {
-                if(this.$loadList[i].content == null)
-                {
+            for (var i:number = 0; i < len; i++) {
+                if (this.$loadList[i].content == null) {
                     this.$loadList[i].content = event.currentTarget.data;
-                    if(i == len - 1) flag = false;
+                    if (i == len - 1) flag = false;
                     break;
                 }
             }
-            if(flag == false) //全部资源加载完毕
+            if (flag == false) //全部资源加载完毕
             {
-                if(this.$movieClipType == MovieClipType.SEQUENCE_FRAME)
-                {
+                if (this.$movieClipType == MovieClipType.SEQUENCE_FRAME) {
                     var frameMovieClip = new lark.FrameAnimation();
-                    frameMovieClip.decodeSpriteSheet(this.$config,this.$loadList[0].content);
+                    frameMovieClip.decodeSpriteSheet(this.$config, this.$loadList[0].content);
                     this.$data = frameMovieClip;
                 }
                 this.$loadList = null;
                 this.emitWith(Event.COMPLETE);
             }
-            else
-            {
+            else {
                 this.startLoadList();
             }
         }
