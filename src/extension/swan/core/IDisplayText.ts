@@ -50,6 +50,7 @@ module swan {
         /**
          * @language en_US
          * The text displayed by this text component.
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -57,6 +58,7 @@ module swan {
         /**
          * @language zh_CN
          * 此文本组件所显示的文本。
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
