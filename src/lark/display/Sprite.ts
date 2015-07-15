@@ -626,6 +626,6 @@ module lark {
     }
 
     if(DEBUG){
-        lark.$markReadOnly(Sprite.prototype,"numChildren");
+        lark.$markReadOnly(Sprite,"numChildren");
     }
 }

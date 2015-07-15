@@ -1702,7 +1702,7 @@ module lark {
     }
 
     if (DEBUG) {
-        lark.$markReadOnly(DisplayObject.prototype, "parent");
-        lark.$markReadOnly(DisplayObject.prototype, "stage");
+        lark.$markReadOnly(DisplayObject, "parent");
+        lark.$markReadOnly(DisplayObject, "stage");
     }
 }

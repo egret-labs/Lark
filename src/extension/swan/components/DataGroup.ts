@@ -1032,6 +1032,6 @@ module swan {
     registerProperty(DataGroup, "itemRenderer", "Class");
     registerProperty(DataGroup, "dataProvider", "swan.ICollection", true);
     if(DEBUG){
-        lark.$markReadOnly(DataGroup.prototype,"numElements");
+        lark.$markReadOnly(DataGroup,"numElements");
     }
 }

@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module lark {
-	/**
+    /**
      * @language en_US
      * The Timer class is the interface to timers, which let you run code on a specified time sequence. Use the start()
      * method to start a timer. Add an event listener for the timer event to set up code to be run on the timer interval.<br/>
@@ -38,7 +38,7 @@ module lark {
      * @see lark.TimerEvent
      * @version Lark 1.0
      * @platform Web,Native
-	 */
+     */
     /**
      * @language zh_CN
      * Timer 类是计时器的接口，它使您能按指定的时间序列运行代码。
@@ -48,7 +48,7 @@ module lark {
      * @see lark.TimerEvent
      * @version Lark 1.0
      * @platform Web,Native
-	 */
+     */
     export class Timer extends EventEmitter {
 
         /**
@@ -72,57 +72,58 @@ module lark {
         public constructor(delay:number, repeatCount:number = 0) {
             super();
             this.delay = delay;
-            this.repeatCount = +repeatCount|0;
+            this.repeatCount = +repeatCount | 0;
         }
 
         /**
          * @private
          */
         private _delay:number = 0;
-		/**
+        /**
          * @language en_US
          * The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.<br/>
          * Note: Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
          * @version Lark 1.0
          * @platform Web,Native
-		 */
+         */
         /**
          * @language zh_CN
          * 计时器事件间的延迟（以毫秒为单位）。如果在计时器正在运行时设置延迟间隔，则计时器将按相同的 repeatCount 迭代重新启动。<br/>
          * 注意：建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
          * @version Lark 1.0
          * @platform Web,Native
-		 */
-        public get delay():number{
+         */
+        public get delay():number {
             return this._delay;
         }
-        public set delay(value:number){
-            value = +value||0;
-            if(value<1){
+
+        public set delay(value:number) {
+            value = +value || 0;
+            if (value < 1) {
                 value = 1;
             }
-            if(this._delay===value){
+            if (this._delay === value) {
                 return;
             }
             this._delay = value;
-            this.lastCount = this.updateInterval = Math.round(60*value);
+            this.lastCount = this.updateInterval = Math.round(60 * value);
         }
 
-		/**
+        /**
          * @language en_US
          * The total number of times the timer is set to run. If the repeat count is set to 0, the timer continues indefinitely,
          * until the stop() method is invoked or the program stops. If the repeat count is nonzero, the timer runs the specified
          * number of times. If repeatCount is set to a total that is the same or less then currentCount the timer stops and will not fire again.
          * @version Lark 1.0
          * @platform Web,Native
-		 */
+         */
         /**
          * @language zh_CN
          * 设置的计时器运行总次数。如果重复计数设置为 0，则计时器将持续不断运行，或直至调用了 stop() 方法或节目停止。
          * 如果重复计数不为 0，则将运行计时器，运行次数为指定的次数。如果设置的 repeatCount 总数等于或小于 currentCount，则计时器将停止并且不会再次触发。
          * @version Lark 1.0
          * @platform Web,Native
-		 */
+         */
         public repeatCount:number;
 
         /**
@@ -130,18 +131,18 @@ module lark {
          */
         private _currentCount:number = 0;
 
-		/**
+        /**
          * @language en_US
          * The total number of times the timer has fired since it started at zero. If the timer has been reset, only the fires since the reset are counted.
          * @version Lark 1.0
          * @platform Web,Native
-		 */
+         */
         /**
          * @language zh_CN
          * 计时器从 0 开始后触发的总次数。如果已重置了计时器，则只会计入重置后的触发次数。
          * @version Lark 1.0
          * @platform Web,Native
-		 */
+         */
         public get currentCount():number {
             return this._currentCount;
         }
@@ -151,76 +152,76 @@ module lark {
          */
         private _running:boolean = false;
 
-		/**
+        /**
          * @language en_US
          * The timer's current state; true if the timer is running, otherwise false.
          * @version Lark 1.0
          * @platform Web,Native
-		 */
+         */
         /**
          * @language zh_CN
          * 计时器的当前状态；如果计时器正在运行，则为 true，否则为 false。
          * @version Lark 1.0
          * @platform Web,Native
-		 */
-        public get running():boolean{
+         */
+        public get running():boolean {
             return this._running;
         }
 
-		/**
+        /**
          * @language en_US
          * Stops the timer, if it is running, and sets the currentCount property back to 0, like the reset button of a stopwatch.
          * Then, when start() is called, the timer instance runs for the specified number of repetitions, as set by the repeatCount value.
          * @version Lark 1.0
          * @platform Web,Native
-		 */
+         */
         /**
          * @language zh_CN
          * 如果计时器正在运行，则停止计时器，并将 currentCount 属性设回为 0，这类似于秒表的重置按钮。然后，在调用 start() 后，将运行计时器实例，运行次数为指定的重复次数（由 repeatCount 值设置）。
          * @version Lark 1.0
          * @platform Web,Native
-		 */
-        public reset():void{
+         */
+        public reset():void {
             this.stop();
             this._currentCount = 0;
         }
 
-		/**
+        /**
          * @language en_US
          * Starts the timer, if it is not already running.
          * @version Lark 1.0
          * @platform Web,Native
-		 */
+         */
         /**
          * @language zh_CN
          * 如果计时器尚未运行，则启动计时器。
          * @version Lark 1.0
          * @platform Web,Native
-		 */
+         */
         public start() {
-            if(this._running)
+            if (this._running)
                 return;
-            startTick(this.$update,this);
+            startTick(this.$update, this);
             this._running = true;
         }
 
-		/**
+        /**
          * @language en_US
          * Stops the timer. When start() is called after stop(), the timer instance runs for the remaining number of
          * repetitions, as set by the repeatCount property.
          * @version Lark 1.0
          * @platform Web,Native
-		 */
+         */
         /**
          * @language zh_CN
          * 停止计时器。如果在调用 stop() 后调用 start()，则将继续运行计时器实例，运行次数为剩余的 重复次数（由 repeatCount 属性设置）。
          * @version Lark 1.0
          * @platform Web,Native
-		 */
+         */
         public stop() {
-            if(!this._running)
+            if (!this._running)
                 return;
-            stopTick(this.$update,this);
+            stopTick(this.$update, this);
             this._running = false;
         }
 
@@ -239,22 +240,22 @@ module lark {
          */
         $update(timeStamp:number):boolean {
             this.lastCount -= 1000;
-            if(this.lastCount>0){
+            if (this.lastCount > 0) {
                 return;
             }
             this.lastCount += this.updateInterval;
             this._currentCount++;
             var complete = (this.repeatCount > 0 && this._currentCount >= this.repeatCount);
-            TimerEvent.emitTimerEvent(this,TimerEvent.TIMER);
+            TimerEvent.emitTimerEvent(this, TimerEvent.TIMER);
             if (complete) {
                 this.stop();
-                TimerEvent.emitTimerEvent(this,TimerEvent.TIMER_COMPLETE);
+                TimerEvent.emitTimerEvent(this, TimerEvent.TIMER_COMPLETE);
             }
         }
     }
 
-    if(DEBUG){
-        lark.$markReadOnly(Timer.prototype,"currentCount");
-        lark.$markReadOnly(Timer.prototype,"running");
+    if (DEBUG) {
+        lark.$markReadOnly(Timer, "currentCount");
+        lark.$markReadOnly(Timer, "running");
     }
 }

@@ -672,11 +672,11 @@ module lark {
     }
 
     if (DEBUG) {
-        lark.$markReadOnly(Event.prototype, "type");
-        lark.$markReadOnly(Event.prototype, "bubbles");
-        lark.$markReadOnly(Event.prototype, "cancelable");
-        lark.$markReadOnly(Event.prototype, "eventPhase");
-        lark.$markReadOnly(Event.prototype, "currentTarget");
-        lark.$markReadOnly(Event.prototype, "target");
+        lark.$markReadOnly(Event, "type");
+        lark.$markReadOnly(Event, "bubbles");
+        lark.$markReadOnly(Event, "cancelable");
+        lark.$markReadOnly(Event, "eventPhase");
+        lark.$markReadOnly(Event, "currentTarget");
+        lark.$markReadOnly(Event, "target");
     }
 }

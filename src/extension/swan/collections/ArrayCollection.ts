@@ -382,6 +382,6 @@ module swan {
     registerProperty(ArrayCollection,"source","Array",true);
 
     if(DEBUG){
-        lark.$markReadOnly(ArrayCollection.prototype,"length");
+        lark.$markReadOnly(ArrayCollection,"length");
     }
 }

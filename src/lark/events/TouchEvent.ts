@@ -341,9 +341,9 @@ module lark {
     }
 
     if(DEBUG){
-        lark.$markReadOnly(TouchEvent.prototype,"stageX");
-        lark.$markReadOnly(TouchEvent.prototype,"stageY");
-        lark.$markReadOnly(TouchEvent.prototype,"localX");
-        lark.$markReadOnly(TouchEvent.prototype,"localY");
+        lark.$markReadOnly(TouchEvent,"stageX");
+        lark.$markReadOnly(TouchEvent,"stageY");
+        lark.$markReadOnly(TouchEvent,"localX");
+        lark.$markReadOnly(TouchEvent,"localY");
     }
 }

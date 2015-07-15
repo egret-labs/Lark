@@ -103,6 +103,6 @@ module lark {
     }
 
     if (DEBUG) {
-        lark.$markReadOnly(Shape.prototype, "graphics");
+        lark.$markReadOnly(Shape, "graphics");
     }
 }

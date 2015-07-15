@@ -27,67 +27,49 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-
 module lark {
-    /**
-     * @private
-     * 哈希计数
-     */
-    export var $hashCount:number = 1;
 
     /**
      * @language en_US
-     * The LarkObject class is the base class for all objects in the Lark framework.The LarkObject
-     * class includes a hashCode property, which is a unique identification number of the instance.
+     * Return the fully qualified class name of an object
+     * @param value The object for which a fully qualified class name is desired. Any JavaScript value may be passed to
+     * this method including all available JavaScript types, object instances, primitive types such as number, and class objects.
+     * @example
+     * <pre>
+     *  lark.getQualifiedClassName(lark.DisplayObject) //return "lark.DisplayObject"
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * Lark顶级对象。框架内所有对象的基类，为对象实例提供唯一的hashCode值。
+     * 返回对象的完全限定类名。
+     * @param value 需要完全限定类名称的对象，可以将任何 JavaScript 值传递给此方法，包括所有可用的 JavaScript 类型、对象实例、原始类型
+     * （如number)和类对象
+     * @example
+     * <pre>
+     *  lark.getQualifiedClassName(lark.DisplayObject) //返回 "lark.DisplayObject"
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export class LarkObject {
-
-        /**
-         * @language en_US
-         * Initializes a LarkObject
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个 LarkObject 对象
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public constructor() {
-            this.$hashCode = $hashCount++;
+    export function getQualifiedClassName(value:any):string {
+        var type = typeof value;
+        if (!value || type != "object") {
+            return type;
         }
-
-        /**
-         * @private
-         */
-        $hashCode:number;
-        /**
-         * @language en_US
-         * a unique identification number assigned to this instance.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回此对象唯一的哈希值,用于唯一确定一个对象。hashCode为大于等于1的整数。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public get hashCode():number {
-            return this.$hashCode;
+        var prototype:any = value.prototype ? value.prototype : Object.getPrototypeOf(value);
+        if (prototype.hasOwnProperty("__class__")) {
+            return prototype["__class__"];
         }
-    }
-
-    if (DEBUG) {
-        lark.$markReadOnly(LarkObject, "hashCode");
+        var constructorString:string = prototype.constructor.toString();
+        var index:number = constructorString.indexOf("(");
+        var className:string = constructorString.substring(9, index);
+        Object.defineProperty(prototype, "__class__", {
+            value: className,
+            enumerable: false,
+            writable: true
+        });
+        return className;
     }
 }
