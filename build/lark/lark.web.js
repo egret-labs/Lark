@@ -1482,7 +1482,7 @@ var lark;
         lark.registerClass(WebHttpRequest,"lark.web.WebHttpRequest",["lark.HttpRequest"]);
         lark.HttpRequest = WebHttpRequest;
         if (DEBUG) {
-            lark.$markReadOnly(WebHttpRequest.prototype, "response");
+            lark.$markReadOnly(WebHttpRequest, "response");
         }
     })(web = lark.web || (lark.web = {}));
 })(lark || (lark = {}));
