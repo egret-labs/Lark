@@ -1566,10 +1566,6 @@ module lark {
          * @private
          */
         private hitTestPixel(localX:number, localY:number):DisplayObject {
-            var alpha = this.$getConcatenatedAlpha();
-            if (alpha === 0) {
-                return null;
-            }
             var context:sys.RenderContext;
             var data:Uint8Array;
             var displayList = this.$displayList;
