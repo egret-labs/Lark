@@ -109,22 +109,6 @@ module lark {
     }
 
     /**
-     * 文件解析完之后填充到每一个关键帧的内容
-     */
-    class FrameInfo extends LarkObject {
-        public constructor(frame:number, data:Object) {
-            super();
-            this.$frame = frame;
-        }
-
-        $frame:number;
-
-        public get frame():number {
-            return this.$frame;
-        }
-    }
-
-    /**
      * @language en_US
      * The MovieClip object unlike the Sprite object, a MovieClip object has a timeline.
      * @version Lark 1.0
@@ -136,180 +120,103 @@ module lark {
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export class MovieClip extends Sprite {
-
-        /**
-         * @language en_US
-         * Creates a new MovieClip instance. After creating the MovieClip, call the addChild() or addChildAt() method of a display object container that is onstage.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建新的 MovieClip 实例。创建 MovieClip 之后，调用舞台上的显示对象容器的 addChild() 或 addChildAt() 方法。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public constructor() {
-            super();
-            this.$currentFrame = 0;
-            this.$isPlaying = false;
-            this.$labels = [];
-            this.$frames = [];
-            this.on(lark.Event.ENTER_FRAME, this.$onFrame, this);
-        }
-
-        /**
-         * @private
-         */
-        $currentFrame:number;
+    export interface MovieClip extends DisplayObject {
 
         /**
          * @language en_US
          * Specifies the number of the frame in which the playhead is located in the timeline of the MovieClip instance. If the movie clip has multiple scenes, this value is the frame number in the current scene.
+         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 指定播放头在 MovieClip 实例的时间轴中所处的帧的编号。如果影片剪辑有多个场景，该值是当前场景中的帧编号。
+         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public get currentFrame():number {
-            return this.$currentFrame;
-        }
+        currentFrame:number;
 
         /**
          * @language en_US
          * The label at the current frame in the timeline of the MovieClip instance. If the current frame has no label, currentLabel is null.
+         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * MovieClip 实例的时间轴中当前帧上的标签。如果当前帧没有标签，则 currentLabel 为 null。
+         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public get currentFrameLabel():string {
-            for (var i = this.$labels.length - 1; i >= 0; i--) {
-                if (this.$labels[i].frame == this.$currentFrame) {
-                    return this.$labels[i].name;
-                }
-            }
-            return null;
-        }
+        currentFrameLabel:string;
 
         /**
          * @language en_US
          * The current label in which the playhead is located in the timeline of the MovieClip instance. If the current frame has no label, currentLabel is set to the name of the previous frame that includes a label. If the current frame and previous frames do not include a label, currentLabel returns null.
+         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 在 MovieClip 实例的时间轴中播放头所在的当前标签。如果当前帧没有标签，currentLabel 将被设置为包含标签的先前帧的名称。如果当前帧和先前帧都不包含标签，currentLabel 返回 null。
+         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public get currentLabel():string {
-            for (var i = this.$labels.length - 1; i >= 0; i--) {
-                if (this.$labels[i].frame <= this.$currentFrame) {
-                    return this.$labels[i].name;
-                }
-            }
-            return null;
-        }
-
-        /**
-         * @private
-         */
-        $frames:Array<FrameInfo>;
-
-        /**
-         * @private
-         */
-        $labels:Array<FrameLabel>;
+        currentLabel:string;
 
         /**
          * @language en_US
          * Returns an array of FrameLabel objects. The array includes all frame labels from the entire MovieClip instance.
+         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 返回由 FrameLabel 对象组成的数组。数组会包括整个 MovieClip 实例的所有帧标签。
+         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public get labels():Array<FrameLabel> {
-            return this.$labels;
-        }
-
-        /**
-         * @private
-         */
-        $isPlaying:boolean;
+        labels:Array<FrameLabel>;
 
         /**
          * @language en_US
          * A movie clip is playing or not.
+         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          *  MovieClip 实例当前是否正在播放。
+         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public get isPlaying():boolean {
-            return this.$isPlaying;
-        }
+        isPlaying:boolean;
 
         /**
-         * @private
+         * @language en_US
+         * The totalFrames property returns the total number of frames in the movie clip.
+         * @readOnly
+         * @version Lark 1.0
+         * @platform Web,Native
          */
-        private $onFrame():void {
-            if (!this.$isPlaying) {
-                return;
-            }
-            this.$clearCurrentFrame();
-            this.$currentFrame++;
-            this.$currentFrame = this.$currentFrame % this.$frames.length;
-            this.$playCurrentFrame();
-        }
-
         /**
-         * @private
-         * 清除当前帧的内容
+         * @language zh_CN
+         * totalFrames 属性会返回影片剪辑中帧的总数。
+         * @readOnly
+         * @version Lark 1.0
+         * @platform Web,Native
          */
-        private $clearCurrentFrame():void {
-            //todo 清除之前帧的内容，待mc文件格式完善后补充
-        }
-
-        /**
-         * @private
-         * 执行当前帧的逻辑
-         */
-        private $playCurrentFrame():void {
-            //todo 执行当前帧的逻辑，待mc文件格式完善后补充
-        }
-
-        /**
-         * @private
-         * 根据帧名称获取对应的帧数
-         */
-        private $getFrameNumberByLabel(name:string):number {
-            for (var i = this.$labels.length - 1; i >= 0; i--) {
-                if (this.$labels[i].frame <= this.$currentFrame) {
-                    return this.$labels[i].frame;
-                }
-            }
-            return 0;
-        }
+        totalFrames:number;
 
         /**
          * @language en_US
@@ -325,27 +232,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public gotoAndPlay(frame:any):void {
-            var num = 0;
-            if (typeof frame == "number") {
-                num = frame;
-            }
-            else {
-                num = this.$getFrameNumberByLabel(frame);
-                if (num == 0) {
-                    throw lark.sys.tr(1013, frame);
-                    return;
-                }
-            }
-            this.$isPlaying = true;
-            if (num >= this.$frames.length) num = this.$frames.length;
-            if (this.$currentFrame == num) {
-                return;
-            }
-            this.$clearCurrentFrame();
-            this.$currentFrame = num;
-            this.$playCurrentFrame();
-        }
+        gotoAndPlay(frame:any):void;
 
         /**
          * @language en_US
@@ -361,27 +248,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public gotoAndStop(frame:any):void {
-            var num = 0;
-            if (typeof frame == "number") {
-                num = frame;
-            }
-            else {
-                num = this.$getFrameNumberByLabel(frame);
-                if (num == 0) {
-                   throw lark.sys.tr(1013, frame);
-                    return;
-                }
-            }
-            this.$isPlaying = false;
-            if (num >= this.$frames.length) num = this.$frames.length;
-            if (this.$currentFrame == num) {
-                return;
-            }
-            this.$clearCurrentFrame();
-            this.$currentFrame = num;
-            this.$playCurrentFrame();
-        }
+        gotoAndStop(frame:any):void;
 
         /**
          * @language en_US
@@ -395,13 +262,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public nextFrame():void {
-            this.$isPlaying = false;
-            if (this.$currentFrame == this.$frames.length) return;
-            this.$clearCurrentFrame();
-            this.$currentFrame++;
-            this.$playCurrentFrame();
-        }
+        nextFrame():void;
 
         /**
          * @language en_US
@@ -415,9 +276,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public play():void {
-            this.$isPlaying = true;
-        }
+        play():void;
 
         /**
          * @language en_US
@@ -431,13 +290,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public prevFrame():void {
-            this.$isPlaying = false;
-            if (this.$currentFrame <= 1) return;
-            this.$clearCurrentFrame();
-            this.$currentFrame--;
-            this.$playCurrentFrame();
-        }
+        prevFrame():void;
 
         /**
          * @language en_US
@@ -451,8 +304,6 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public stop():void {
-            this.$isPlaying = false;
-        }
+        stop():void;
     }
 }
