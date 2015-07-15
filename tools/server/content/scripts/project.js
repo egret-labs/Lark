@@ -11,9 +11,11 @@ var lark;
                 var _this = this;
                 this.larkManifest = lark.manifest;
                 this.scaleModes = lark.manifest.scaleModes;
+                this.orientationModes = lark.manifest.orientationModes;
                 this.modules = [];
                 this.platforms = [];
                 this.scaleMode = 'noScale';
+                this.orientationMode = 'auto';
                 this.contentWidth = 480;
                 this.contentHeight = 800;
                 this.showPaintRects = false;
@@ -23,6 +25,8 @@ var lark;
                 this.isConfirmed = true;
                 this.isLoadingShow = false;
                 this.isCreated = false;
+                this.background = "#888888";
+                this.frameRate = 30;
                 this.larkManifest.modules.forEach(function (lm) {
                     if (lm.name == 'lark')
                         lm.checked = true;
@@ -53,6 +57,8 @@ var lark;
                 this.larkManifest = undefined;
                 var modes = this.scaleModes;
                 this.scaleModes = undefined;
+                var omodes = this.orientationModes;
+                this.orientationModes = undefined;
                 var json = JSON.stringify(this);
                 console.log(json);
                 $.get('', { proj: json }, function () {
@@ -63,6 +69,7 @@ var lark;
                     $("#loading").remove();
                 });
                 this.scaleModes = modes;
+                this.orientationModes = omodes;
                 this.larkManifest = manifest;
                 this.isLoadingShow = true;
                 showLoading();
@@ -73,6 +80,11 @@ var lark;
             };
             Project.prototype.close = function () {
                 window.close();
+            };
+            Project.prototype.switchSize = function () {
+                var n = this.contentHeight;
+                this.contentHeight = this.contentWidth;
+                this.contentWidth = n;
             };
             return Project;
         })();

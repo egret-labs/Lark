@@ -12,7 +12,7 @@
     <style>
         html, body {
             -ms-touch-action: none;
-            background: $background$;
+            background: ${background};
             padding: 0;
             border: 0;
             margin: 0;
@@ -29,11 +29,11 @@
 
     <div id="lark-sample" style="margin: auto;width: 100%;height: 100%;" class="lark-player"
          data-entry-class="Main"
-         data-orientation="$orientation$"
-         data-scale-mode="$scale-mode$"
-         data-frame-rate="$frame-rate$"
-         data-content-width="$content-width$"
-         data-content-height="$content-height$"
+         data-orientation="${orientationMode}"
+         data-scale-mode="${scaleMode}"
+         data-frame-rate="${frameRate}"
+         data-content-width="${contentWidth}"
+         data-content-height="${contentHeight}"
          data-show-paint-rect="false"
          data-show-fps="false" data-show-log="false" data-log-filter="">
     </div>

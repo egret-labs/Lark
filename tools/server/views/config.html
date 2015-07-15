@@ -1,5 +1,5 @@
 ﻿
-<section>
+<section class="half">
 
     <div ng-hide="model.isConfig">
         <h2>选择一个项目模板</h2>
@@ -10,34 +10,6 @@
             {{template.name}}
         </div>
     </div>
-    <h2>请输入默认的屏幕尺寸</h2>
-    <div>
-        <input type="number" name="contentWidth" ng-model="model.contentWidth" required />
-        <span class="error" ng-show="createForm.contentWidth.$error.required">
-            请输入屏幕宽度
-        </span>
-        <span class="error" ng-show="createForm.contentWidth.$error.number">
-            请输入数字
-        </span>
-        x <input type="number" name="contentHeight" ng-model="model.contentHeight" required />
-        <span class="error" ng-show="createForm.contentHeight.$error.required">
-            请输入屏幕高度
-        </span>
-        <span class="error" ng-show="createForm.contentHeight.$error.number">
-            请输入数字
-        </span>
-    </div>
-    <h2>选择屏幕缩放模式</h2>
-    <div class="scaleModes">
-        <img class="scaleModeSample" src="/$/content/images/config/sample.png" />
-        <!--<input type="radio" ng-value="mode.name" ng-model="model.scaleMode" /> {{mode.description}}-->
-        <div class="scaleMode" ng-repeat="mode in model.scaleModes"
-             ng-click="model.scaleMode = mode.name"
-             ng-class="mode.name==model.scaleMode?'active':''">
-            <img ng-src="/$/content/images/config/{{mode.name}}.png" title="{{mode.description}}" />
-            <span>{{mode.name}}</span>
-        </div>
-    </div>
 </section>
 <section>
     <h2>选择扩展模块</h2>
@@ -46,6 +18,64 @@
             <input type="checkbox" name="modules" ng-checked="ext.checked" ng-model="ext.checked" /> {{ext.description}}
         </label>
     </div>
+</section>
+<section class="half clear">
+    <h2>请输入舞台尺寸和帧率</h2>
+    <div>
+        宽高： <input type="number" name="contentWidth" ng-model="model.contentWidth" required />
+        <span class="error" ng-show="createForm.contentWidth.$error.required">
+            请输入屏幕宽度
+        </span>
+        <span class="error" ng-show="createForm.contentWidth.$error.number">
+            请输入数字
+        </span>
+
+        <button ng-click="model.switchSize()"> ⇄ </button>
+
+        <input type="number" name="contentHeight" ng-model="model.contentHeight" required />
+        <span class="error" ng-show="createForm.contentHeight.$error.required">
+            请输入屏幕高度
+        </span>
+        <span class="error" ng-show="createForm.contentHeight.$error.number">
+            请输入数字
+        </span>
+        FPS：<input type="number" name="frameRate" ng-model="model.frameRate" required /> 
+        <span class="error" ng-show="createForm.frameRate.$error.required">
+            请输入帧率
+        </span>
+        <span class="error" ng-show="createForm.frameRate.$error.number">
+            请输入数字
+        </span>
+    </div>
+</section>
+<section>
+    <h2>选择舞台背景颜色</h2>
+    <div>
+        <input type="text" name="background" ng-model="model.background" value="#888888" class="color" />
+    </div>
+</section>
+<section>
+    <h2>选择屏幕缩放模式</h2>
+    <div class="scaleModes">
+        <img class="scaleModeSample" src="/$/content/images/config/sample.png" />
+        <div class="scaleMode mode" ng-repeat="mode in model.scaleModes"
+             ng-click="model.scaleMode = mode.name"
+             ng-class="mode.name==model.scaleMode?'active':''">
+            <img ng-src="/$/content/images/config/{{mode.name}}.png" title="{{mode.description}}" />
+            <span>{{mode.name}}</span>
+        </div>
+    </div>
+    <h2>选择屏幕方向</h2>
+    <div class="orientationModes">
+        <div class="orientationMode mode" ng-repeat="mode in model.orientationModes"
+             ng-click="model.orientationMode = mode.name"
+             ng-class="mode.name==model.orientationMode?'active':''">
+            <img ng-src="/$/content/images/config/{{mode.name}}.png" title="{{mode.description}}" />
+            <span>{{mode.name}}</span>
+        </div>
+    </div>
+</section>
+<section>
     <h2>请选择希望发布的平台</h2>
     <div>
         <label ng-repeat="platform in model.larkManifest.platforms" ng-hide="platform.hidden">
