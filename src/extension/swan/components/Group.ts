@@ -898,8 +898,8 @@ module swan {
     registerProperty(Group, "states", "State[]");
 
     if(DEBUG){
-        lark.$markReadOnly(Group.prototype,"contentWidth");
-        lark.$markReadOnly(Group.prototype,"contentHeight");
-        lark.$markReadOnly(Group.prototype,"numElements");
+        lark.$markReadOnly(Group,"contentWidth");
+        lark.$markReadOnly(Group,"contentHeight");
+        lark.$markReadOnly(Group,"numElements");
     }
 }

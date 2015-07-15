@@ -321,7 +321,7 @@ module lark {
 
         /**
          * @private
-         * 
+         *
          */
         private invalidateFontString():void {
             this.$TextField[sys.TextKeys.fontStringChanged] = true;
@@ -477,7 +477,7 @@ module lark {
             if (value === values[sys.TextKeys.wordWrap]) {
                 return;
             }
-            if(values[sys.TextKeys.displayAsPassword]){
+            if (values[sys.TextKeys.displayAsPassword]) {
                 return;
             }
             values[sys.TextKeys.wordWrap] = value;
@@ -501,7 +501,7 @@ module lark {
         }
 
         public set text(value:string) {
-            if(value===null||value===undefined){
+            if (value === null || value === undefined) {
                 value = "";
             }
             value = value + "";
@@ -511,7 +511,7 @@ module lark {
         /**
          * @private
          */
-        $setText(value:string):void{
+        $setText(value:string):void {
             var values = this.$TextField;
             if (value == values[sys.TextKeys.text])
                 return;
@@ -733,11 +733,11 @@ module lark {
             }
 
             var displayAsPassword = values[sys.TextKeys.displayAsPassword];
-            if(displayAsPassword){
+            if (displayAsPassword) {
                 var textLength = text.length;
                 var asterisks = "";
-                for(var i=0;i<textLength;i++){
-                    asterisks+="•";
+                for (var i = 0; i < textLength; i++) {
+                    asterisks += "•";
                 }
                 text = asterisks;
             }
@@ -898,9 +898,9 @@ module lark.sys {
         return "#" + color;
     }
 
-    if(DEBUG){
-        lark.$markReadOnly(TextField.prototype,"numLines");
-        lark.$markReadOnly(TextField.prototype,"textWidth");
-        lark.$markReadOnly(TextField.prototype,"textHeight");
+    if (DEBUG) {
+        lark.$markReadOnly(TextField, "numLines");
+        lark.$markReadOnly(TextField, "textWidth");
+        lark.$markReadOnly(TextField, "textHeight");
     }
 }

@@ -60,12 +60,14 @@ module lark {
         /**
          * @language en_US
          * The data received from the load operation.  The format of the data depends on the setting of the responseType property.
+         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 本次请求返回的数据，数据类型根据 responseType 设置的值确定。
+         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */

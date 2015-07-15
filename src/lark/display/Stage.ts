@@ -372,7 +372,7 @@ module lark {
         });
     }
     if(DEBUG){
-        lark.$markReadOnly(Stage.prototype,"stageWidth");
-        lark.$markReadOnly(Stage.prototype,"stageHeight");
+        lark.$markReadOnly(Stage,"stageWidth");
+        lark.$markReadOnly(Stage,"stageHeight");
     }
 }

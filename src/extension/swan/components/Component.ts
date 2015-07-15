@@ -994,6 +994,6 @@ module swan {
     registerProperty(Component, "skinName", "Class");
     sys.implementUIComponent(Component, lark.Sprite, true);
     if(DEBUG){
-        lark.$markReadOnly(Component.prototype,"skin");
+        lark.$markReadOnly(Component,"skin");
     }
 }

@@ -54,11 +54,11 @@ module lark.web {
          * 本次请求返回的数据，数据类型根据responseType设置的值确定。
          */
         public get response():any {
-            if(this._xhr.response)
+            if (this._xhr.response)
                 return this._xhr.response;
-            if(this._xhr.responseXML)
+            if (this._xhr.responseXML)
                 return this._xhr.responseXML;
-            if(this._xhr.responseText)
+            if (this._xhr.responseText)
                 return this._xhr.responseText;
             return null;
         }
@@ -79,11 +79,11 @@ module lark.web {
          * @private
          * 表明在进行跨站(cross-site)的访问控制(Access-Control)请求时，是否使用认证信息(例如cookie或授权的header)。 默认为 false。(这个标志不会影响同站的请求)
          */
-        public get withCredentials(): boolean{
+        public get withCredentials():boolean {
             return this._xhr.withCredentials;
         }
 
-        public set withCredentials(value:boolean){
+        public set withCredentials(value:boolean) {
             this._xhr.withCredentials = !!value;
         }
 
@@ -98,7 +98,7 @@ module lark.web {
          * @param url 该请求所要访问的URL该请求所要访问的URL
          * @param method 请求所使用的HTTP方法， 请使用 HttpMethod 定义的枚举值.
          */
-        public open(url:string, method:string="GET"):void {
+        public open(url:string, method:string = "GET"):void {
             this._url = url;
             this._xhr.open(method, url, true);
         }
@@ -172,14 +172,14 @@ module lark.web {
          */
         private updateProgress = (event):void=> {
             if (event.lengthComputable) {
-                ProgressEvent.emitProgressEvent(this,ProgressEvent.PROGRESS,event.loaded,event.total);
+                ProgressEvent.emitProgressEvent(this, ProgressEvent.PROGRESS, event.loaded, event.total);
             }
         }
 
     }
     HttpRequest = WebHttpRequest;
 
-    if(DEBUG){
-        lark.$markReadOnly(WebHttpRequest.prototype,"response");
+    if (DEBUG) {
+        lark.$markReadOnly(WebHttpRequest, "response");
     }
 }

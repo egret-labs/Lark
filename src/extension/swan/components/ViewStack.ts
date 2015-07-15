@@ -343,7 +343,7 @@ module swan {
     registerBindable(ViewStack.prototype,"selectedIndex");
 
     if(DEBUG){
-        lark.$markReadOnly(ViewStack.prototype,"length");
-        lark.$markReadOnly(ViewStack.prototype,"layout");
+        lark.$markReadOnly(ViewStack,"length");
+        lark.$markReadOnly(ViewStack,"layout");
     }
 }

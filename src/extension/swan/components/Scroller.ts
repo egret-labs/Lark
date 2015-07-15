@@ -56,13 +56,13 @@ module swan {
      * <p>The Group components implement the IViewport interface
      * and can be used as the children of the Scroller control,
      * as the following example shows:</p>
-     * <code>
+     * <pre>
      *       <s:Scroller width="100" height="100">
      *           <s:Group>
      *               <s:Image width="300" height="400" source="assets/logo.jpg"/>
      *           </s:Group>
      *       </s:Scroller>
-     * </code>
+     * </pre>
      * <p>The size of the Image control is set larger than that of its parent Group container.
      * By default, the child extends past the boundaries of the parent container.
      * Rather than allow the child to extend past the boundaries of the parent container,
@@ -79,13 +79,13 @@ module swan {
      * @language zh_CN
      * Scroller 组件显示一个称为视域的单个可滚动组件，以及水平滚动条和垂直滚动条。该视域必须实现 IViewport 接口。
      * <p>Group 组件实现 IViewport 接口，且可以用作 Scroller 控件的子代，如下例所示：</p>
-     * <code>
+     * <pre>
      *       <s:Scroller width="100" height="100">
      *           <s:Group>
      *               <s:Image width="300" height="400" source="assets/logo.jpg"/>
      *           </s:Group>
      *       </s:Scroller>
-     * </code>
+     * </pre>
      * Image 控件的大小比其父 Group 容器设置得大。默认情况下，子代超过父容器的边界。
      * Scroller 会指定将子代剪切到边界并显示滚动条，而不是让子代超过父容器的边界。
      *

@@ -249,9 +249,9 @@ module swan {
          * @language en_US
          * Retrieves the current value of the watched property or property chain, or null if the host object is null.
          * @example
-         * <code>
+         * <pre>
          * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
-         * </code>
+         * </pre>
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -260,9 +260,9 @@ module swan {
          * @language zh_CN
          * 检索观察的属性或属性链的当前值，当宿主对象为空时此值为空。
          * @example
-         * <code>
+         * <pre>
          * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
-         * </code>
+         * </pre>
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native

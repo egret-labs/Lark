@@ -468,11 +468,11 @@ module lark {
          * Note: to change the value of a display object's matrix, you must make a copy of the entire matrix object, then copy
          * the new object into the matrix property of the display object.
          * @example the following code increases the tx value of a display object's matrix
-         * <code>
+         * <pre>
          *     var myMatrix:Matrix = myDisplayObject.matrix;
          *     myMatrix.tx += 10;
          *     myDisplayObject.matrix = myMatrix;
-         * </code>
+         * </pre>
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -481,11 +481,11 @@ module lark {
          * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。<br/>
          * 注意：要改变一个显示对象矩阵的值，您必引用整个矩阵对象，然后将它重新赋值给显示对象的 matrix 属性。
          * @example 以下代码改变了显示对象矩阵的tx属性值：
-         * <code>
+         * <pre>
          *     var myMatrix:Matrix = myDisplayObject.matrix;
          *     myMatrix.tx += 10;
          *     myDisplayObject.matrix = myMatrix;
-         * </code>
+         * </pre>
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -1131,11 +1131,11 @@ module lark {
          * Note: to change the value of a display object's scrollRect, you must make a copy of the entire scrollRect object, then copy
          * the new object into the scrollRect property of the display object.
          * @example the following code increases the x value of a display object's scrollRect
-         * <code>
+         * <pre>
          *     var myRectangle:Rectangle = myDisplayObject.scrollRect;
          *     myRectangle.x += 10;
          *     myDisplayObject.scrollRect = myRectangle;
-         * </code>
+         * </pre>
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -1147,16 +1147,16 @@ module lark {
          *
          * 注意：要改变一个显示对象 scrollRect 属性的值，您必引用整个 scrollRect 对象，然后将它重新赋值给显示对象的 scrollRect 属性。
          * @example 以下代码改变了显示对象 scrollRect 的 x 属性值：
-         * <code>
+         * <pre>
          *     var myRectangle:Rectangle = myDisplayObject.scrollRect;
          *     myRectangle.x += 10;
          *     myDisplayObject.scrollRect = myRectangle;
-         * </code>
+         * </pre>
          * @version Lark 1.0
          * @platform Web,Native
          */
         public get scrollRect():Rectangle {
-            return this.$scrollRect ? this.$scrollRect.clone() : null;
+            return this.$scrollRect;
         }
 
         public set scrollRect(value:Rectangle) {
@@ -1702,7 +1702,7 @@ module lark {
     }
 
     if (DEBUG) {
-        lark.$markReadOnly(DisplayObject.prototype, "parent");
-        lark.$markReadOnly(DisplayObject.prototype, "stage");
+        lark.$markReadOnly(DisplayObject, "parent");
+        lark.$markReadOnly(DisplayObject, "stage");
     }
 }
