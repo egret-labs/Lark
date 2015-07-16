@@ -23,6 +23,11 @@ class BuildCommand implements lark.Command {
             if (cmd.messages) {
                 cmd.messages.forEach(m=> console.log(m));
             }
+
+            if (cmd.exitCode > 10000) {
+                console.log(utils.tr(cmd.exitCode));
+            }
+
             if(callback)
                 callback(cmd.exitCode||0);
             else

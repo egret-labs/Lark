@@ -137,7 +137,7 @@ var CompileOptions = (function () {
                     contentHeight: this.contentHeight,
                     contentWidth: this.contentWidth,
                     scaleMode: this.scaleMode,
-                    orientation: this.orientation,
+                    orientationMode: this.orientation,
                     background: this.background
                 };
             else {

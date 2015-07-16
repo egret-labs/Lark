@@ -339,6 +339,7 @@ module swan {
          * @language en_US
          * Number that specifies the explicit height of the component,
          * in pixels, in the component's coordinates.
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -346,6 +347,7 @@ module swan {
         /**
          * @language zh_CN
          * 外部显式指定的高度。
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -358,6 +360,7 @@ module swan {
          * by the parent during layout. This value is in the
          * component's coordinates, in pixels. The default value depends on
          * the component's implementation.
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -365,6 +368,7 @@ module swan {
         /**
          * @language zh_CN
          * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1773,8 +1777,8 @@ module swan.sys {
         }
 
         if (DEBUG) {//用于调试时查看布局尺寸的便利属性，发行版时移除。
-            lark.$markReadOnly(prototype,"explicitWidth");
-            lark.$markReadOnly(prototype,"explicitHeight");
+            lark.$markReadOnly(descendant,"explicitWidth");
+            lark.$markReadOnly(descendant,"explicitHeight");
 
             Object.defineProperty(prototype, "preferredWidth", {
                 get: function () {

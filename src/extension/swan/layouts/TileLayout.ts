@@ -1257,7 +1257,7 @@ module swan {
 
 
     if(DEBUG){
-        lark.$markReadOnly(TileLayout.prototype,"columnCount");
-        lark.$markReadOnly(TileLayout.prototype,"rowCount");
+        lark.$markReadOnly(TileLayout,"columnCount");
+        lark.$markReadOnly(TileLayout,"rowCount");
     }
 }

@@ -237,7 +237,7 @@ module lark {
     }
 
     if(DEBUG){
-        $markReadOnly(Point.prototype,"length")
+        $markReadOnly(Point,"length")
     }
     /**
      * @private

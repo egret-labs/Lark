@@ -50,32 +50,36 @@ this["DEBUG"] = true;
 this["RELEASE"] = false;
 
 module lark {
-    export declare function $error(code:number,...params:any[]):void;
-    export declare function $warn(code:number,...params:any[]):void;
-    export declare function $markReadOnly(instance:any,property:string):void;
+    export declare function $error(code:number, ...params:any[]):void;
 
-    function _error(code:number,...params:any[]):void{
-        var text:string = lark.sys.tr.apply(null,arguments);
-        if(DEBUG){
-            lark.sys.$logToFPS("Error #"+code+": "+text)
-        }
-        throw new Error("#"+code+": "+text);//使用这种方式报错能够终止后续代码继续运行
+    export declare function $warn(code:number, ...params:any[]):void;
+
+    export declare function $markReadOnly(instance:any, property:string, isStatic?:boolean):void;
+
+    function _error(code:number, ...params:any[]):void {
+        var text:string = lark.sys.tr.apply(null, arguments);
+        lark.sys.$logToFPS("Error #" + code + ": " + text);
+        throw new Error("#" + code + ": " + text);//使用这种方式报错能够终止后续代码继续运行
     }
+
     lark.$error = _error;
 
-    function _warn (code:number,...params:any[]):void{
-        var text:string = lark.sys.tr.apply(null,arguments);
-        if(DEBUG){
-            lark.sys.$logToFPS("Warning #"+code+": "+text)
-        }
-        lark.warn("Warning #"+code+": "+text);
+    function _warn(code:number, ...params:any[]):void {
+        var text:string = lark.sys.tr.apply(null, arguments);
+        lark.sys.$logToFPS("Warning #" + code + ": " + text);
+        lark.warn("Warning #" + code + ": " + text);
     }
+
     lark.$warn = _warn;
 
-    function _markReadOnly(instance:any,property:string):void{
+    function _markReadOnly(instance:any, property:string, isStatic?:boolean):void {
+        if (!isStatic) {
+            instance = instance.prototype;
+        }
+        var className = getQualifiedClassName(instance);
         var data:PropertyDescriptor = Object.getOwnPropertyDescriptor(instance, property);
-        data.set = function(value:any){
-            lark.$warn(1010,property);
+        data.set = function (value:any) {
+            lark.$warn(1010, className, property);
         };
         Object.defineProperty(instance, property, data);
     }

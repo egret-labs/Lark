@@ -208,12 +208,12 @@ module lark {
     }
 
     if (DEBUG) {
-        lark.$markReadOnly(Capabilities, "language");
-        lark.$markReadOnly(Capabilities, "isMobile");
-        lark.$markReadOnly(Capabilities, "hasOrientation");
-        lark.$markReadOnly(Capabilities, "hasMotion");
-        lark.$markReadOnly(Capabilities, "hasGeolocation");
-        lark.$markReadOnly(Capabilities, "os");
+        lark.$markReadOnly(Capabilities, "language", true);
+        lark.$markReadOnly(Capabilities, "isMobile", true);
+        lark.$markReadOnly(Capabilities, "hasOrientation", true);
+        lark.$markReadOnly(Capabilities, "hasMotion", true);
+        lark.$markReadOnly(Capabilities, "hasGeolocation", true);
+        lark.$markReadOnly(Capabilities, "os", true);
     }
 
 }

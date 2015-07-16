@@ -75,7 +75,8 @@ declare module lark {
         template?: string;
         toJSON?(): ILarkProject;
         save?(path?: string);
-        orientation?: string;
+        orientationMode?: string;
+        frameRate?: number;
         background?: string;
     }
 
@@ -123,9 +124,14 @@ declare module lark {
         platforms: LarkPlatform[];
         configurations: CompileConfiguration[];
         scaleModes: LarkScaleMode[];
+        orientationModes: LarkOrientationMode[];
     }
 
     export interface LarkScaleMode {
+        name: string;
+        description: string;
+    }
+    export interface LarkOrientationMode {
         name: string;
         description: string;
     }

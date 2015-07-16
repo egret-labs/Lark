@@ -29,23 +29,6 @@
 
 module lark.sys {
 
-    var ENTER_LIST:DisplayObject[] = [], LEAVE_LIST:DisplayObject[] = [];
-
-    /**
-     * @private
-     */
-    function getParentList(target:DisplayObject, list):DisplayObject[] {
-        while (target) {
-            list.push(target);
-            target = target.$parent;
-        }
-        return list;
-    }
-	
-	/*
-	* @private git Test
-	*/
-
     /**
      * @private
      * 用户交互操作管理器
@@ -125,7 +108,7 @@ module lark.sys {
         public onTouchEnd(x:number, y:number, touchPointID:number):void {
             var target = this.findTarget(x, y);
             var oldTargetCode = this.touchDownTarget[touchPointID];
-            this.touchDownTarget[touchPointID] = -1;
+            delete this.touchDownTarget[touchPointID];
             TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_END, true, true, x, y, touchPointID);
             target = this.findTarget(x, y);
             if (oldTargetCode === target.$hashCode) {
@@ -134,32 +117,27 @@ module lark.sys {
             else {
                 TouchEvent.emitTouchEvent(target, TouchEvent.TOUCH_RELEASE_OUTSIDE, true, true, x, y, touchPointID);
             }
-            //判断彩蛋
+
             var time = lark.getTimer();
-            if(time - this.touchDownTime[touchPointID] > 10000)
-            {
+            if (time - this.touchDownTime[touchPointID] > 5000) {
                 var num = 0;
-                for(var key in this.touchDownTime)
-                {
-                    if(time - this.touchDownTime[key] > 10000)
-                    {
+                for (var key in this.touchDownTime) {
+                    if (time - this.touchDownTime[key] > 5000) {
                         num++;
                     }
                 }
-                if(num == 3)
-                {
-                    var txt:lark.TextField = new lark.TextField("powered by lark");
-                    txt.textColor = 0;
-                    this.stage.addChild(txt);
-                    var timer:lark.Timer = new lark.Timer(2000,1);
-                    timer.on(lark.TimerEvent.TIMER_COMPLETE,function(e:lark.TimerEvent):void{
-                        if(txt.parent) txt.parent.removeChild(txt);
-                        timer.stop();
-                    },null);
-                    timer.start();
+
+                if (num == 3) {
+                    var textField = new lark.TextField("powered by lark");
+                    this.stage.addChild(textField);
+                    setTimeout(function ():void {
+                        if (textField.parent) {
+                            textField.parent.removeChild(textField);
+                        }
+                    }, 2000);
                 }
             }
-            this.touchDownTime[touchPointID] = -1;
+            delete this.touchDownTime[touchPointID];
         }
 
         /**

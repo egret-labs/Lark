@@ -209,6 +209,9 @@ module lark {
         }
 
         public set fillStyle(value:any) {
+            if (typeof value == "number") {
+                value = sys.toColorString(value);
+            }
             this._fillStyle = value;
             this.pushCommand(sys.GraphicsCommandType.fillStyle, arguments);
         }
@@ -304,6 +307,9 @@ module lark {
         }
 
         public set strokeStyle(value:any) {
+            if (typeof value == "number") {
+                value = sys.toColorString(value);
+            }
             this._strokeStyle = value;
             this.pushCommand(sys.GraphicsCommandType.strokeStyle, arguments);
         }
@@ -926,6 +932,25 @@ module lark {
         /**
          * @private
          */
+        $hitTest(stageX:number, stageY:number):DisplayObject {
+            var target = this.$targetDisplay;
+            var m = target.$getInvertedConcatenatedMatrix();
+            var localX = m.a * stageX + m.c * stageY + m.tx;
+            var localY = m.b * stageX + m.d * stageY + m.ty;
+            var context = sys.sharedRenderContext;
+            context.surface.width = context.surface.height = 3;
+            context.translate(1 - localX, 1 - localY);
+            this.$render(context, true);
+            var data:Uint8Array = context.getImageData(1, 1, 1, 1).data;
+            if (data[3] === 0) {
+                return null;
+            }
+            return target;
+        }
+
+        /**
+         * @private
+         */
         $measureContentBounds(bounds:Rectangle):void {
             if (!this.hasFill && !this.hasStroke) {
                 bounds.setEmpty();
@@ -944,7 +969,7 @@ module lark {
         /**
          * @private
          */
-        $render(context:sys.RenderContext):void {
+        $render(context:sys.RenderContext, forHitTest?:boolean):void {
             context.save();
             context.fillStyle = "#000000";
             context.lineCap = "butt";
@@ -959,9 +984,23 @@ module lark {
             }
             var commands = this.$commands;
             var length = commands.length;
-            for (var i = 0; i < length; i++) {
-                var command = commands[i];
-                map[command.type].apply(context, command.arguments);
+            if (forHitTest) {
+                for (var i = 0; i < length; i++) {
+                    var command = commands[i];
+                    var type = command.type;
+                    //过滤透明填充的样式
+                    if (type === sys.GraphicsCommandType.fillStyle ||
+                        type == sys.GraphicsCommandType.strokeStyle) {
+                        continue;
+                    }
+                    map[command.type].apply(context, command.arguments);
+                }
+            }
+            else {
+                for (var i = 0; i < length; i++) {
+                    var command = commands[i];
+                    map[command.type].apply(context, command.arguments);
+                }
             }
             context.restore();
         }

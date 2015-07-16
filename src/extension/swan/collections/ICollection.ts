@@ -50,13 +50,15 @@ module swan {
 		 * @language en_US
 		 * The number of items in this view.
 		 * 0 means no items, while -1 means that the length is unknown.
+         * @readOnly
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native
 		 */
 		/**
 		 * @language zh_CN
-		 *  此集合中的项目数。0 表示不包含项目。
+		 * 此集合中的项目数。0 表示不包含项目。
+         * @readOnly
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native
@@ -101,4 +103,12 @@ module swan {
 		 */
 		getItemIndex(item:any):number;
 	}
+}
+
+interface ICollection extends lark.IEventEmitter {
+	/**
+	 *  此集合中的项目数。0 表示不包含项目。
+	 *  @readOnly
+	 */
+	length:number;
 }

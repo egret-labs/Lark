@@ -425,19 +425,13 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param stageX 
-         * @param stageY 
-         * @param shapeFlag 
-         * @returns 
          */
-        $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):lark.DisplayObject {
-            var target = super.$hitTest(stageX, stageY, shapeFlag);
-            if (target || this.$Group[Keys.touchThrough] || shapeFlag ||
-                this.$displayFlags & lark.sys.DisplayObjectFlags.PixelHitTest) {
+        $hitTest(stageX:number, stageY:number):lark.DisplayObject {
+            var target = super.$hitTest(stageX, stageY);
+            if (target || this.$Group[Keys.touchThrough]) {
                 return target;
             }
-            if (!this.$visible || !this.$hasFlags(lark.sys.DisplayObjectFlags.TouchEnabled)) {
+            if (!this.$visible || !this.touchEnabled) {
                 return null;
             }
             var point = this.globalToLocal(stageX, stageY, lark.$TempPoint);
@@ -898,8 +892,8 @@ module swan {
     registerProperty(Group, "states", "State[]");
 
     if(DEBUG){
-        lark.$markReadOnly(Group.prototype,"contentWidth");
-        lark.$markReadOnly(Group.prototype,"contentHeight");
-        lark.$markReadOnly(Group.prototype,"numElements");
+        lark.$markReadOnly(Group,"contentWidth");
+        lark.$markReadOnly(Group,"contentHeight");
+        lark.$markReadOnly(Group,"numElements");
     }
 }

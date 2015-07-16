@@ -128,6 +128,39 @@ module lark {
         }
 
         /**
+         * @private
+         * 设备屏幕引用
+         */
+        $screen:lark.sys.Screen;
+
+        $scaleMode:string = "noScale";
+        /**
+         * @language en_US
+         * A value from the StageScaleMode class that specifies which scale mode to use.
+         * @see lark.StageScaleMode
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 一个 StageScaleMode 类中的值，指定要使用哪种缩放模式。
+         * @see lark.StageScaleMode
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public get scaleMode():string{
+            return this.$scaleMode;
+        }
+
+        public set scaleMode(value:string){
+            if(this.$scaleMode==value){
+                return;
+            }
+            this.$scaleMode = value;
+            this.$screen.updateScreenSize();
+        }
+
+        /**
          * @language en_US
          * After you call the invalidate() method, when the display list is next rendered, the Lark runtime sends a render
          * event to each display object that has registered to listen for the render event. You must call the invalidate()
@@ -339,7 +372,7 @@ module lark {
         });
     }
     if(DEBUG){
-        lark.$markReadOnly(Stage.prototype,"stageWidth");
-        lark.$markReadOnly(Stage.prototype,"stageHeight");
+        lark.$markReadOnly(Stage,"stageWidth");
+        lark.$markReadOnly(Stage,"stageHeight");
     }
 }

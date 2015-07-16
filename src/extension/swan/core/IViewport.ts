@@ -73,6 +73,7 @@ module swan {
 		 * <code>scrollH</code> between 0 and
 		 * <code>contentWidth - width</code>.
 		 *
+		 * @readOnly
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native
@@ -86,6 +87,7 @@ module swan {
 		 *
 		 * 要在内容中水平滚动， 请在 0 和 contentWidth - width 之间更改 <code>scrollH</code> 。
 		 *
+		 * @readOnly
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native
@@ -104,6 +106,7 @@ module swan {
 		 * <code>scrollV</code> between 0 and
 		 * <code>contentHeight - height</code>.
 		 *
+		 * @readOnly
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native
@@ -116,6 +119,7 @@ module swan {
 		 * 且视域的实际高度定义可见的内容量。要在内容中垂直滚动，请在 0 和 contentHeight - height
 		 * 之间更改 <code>scrollV</code>。
 		 *
+		 * @readOnly
 		 * @version Lark 1.0
 		 * @version Swan 1.0
 		 * @platform Web,Native

@@ -359,13 +359,15 @@ declare module swan {
          * @language en_US
          * The number of items in this view.
          * 0 means no items, while -1 means that the length is unknown.
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         *  此集合中的项目数。0 表示不包含项目。
+         * 此集合中的项目数。0 表示不包含项目。
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -410,6 +412,13 @@ declare module swan {
          */
         getItemIndex(item: any): number;
     }
+}
+interface ICollection extends lark.IEventEmitter {
+    /**
+     *  此集合中的项目数。0 表示不包含项目。
+     *  @readOnly
+     */
+    length: number;
 }
 declare module swan {
     /**
@@ -566,6 +575,7 @@ declare module swan {
         /**
          * @language en_US
          * The text displayed by this text component.
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -573,6 +583,7 @@ declare module swan {
         /**
          * @language zh_CN
          * 此文本组件所显示的文本。
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1015,10 +1026,10 @@ declare module swan {
      * Interface of asset adapter.
      * If your project need to custom the resource parsing rule, you need to implement the <code>IAssetAdapter</code>.
      * And use the following code to inject it to the system:
-     * <code>
+     * <pre>
      *      var assetAdapter = new YourAssetAdapter();
      *      Stage.registerImplementation("swan.IAssetAdapter",assetAdapter)
-     * </code>
+     * </pre>
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -1029,10 +1040,10 @@ declare module swan {
      * 素材适配器接口。
      * 若项目需要自定义 Image.source的解析规则，需要实现这个接口，
      * 然后调用如下代码注入自定义实现到框架即可：
-     * <code>
+     * <pre>
      *      var assetAdapter = new YourAssetAdapter();
      *      Stage.registerImplementation("swan.IAssetAdapter",assetAdapter)
-     * </code>
+     * </pre>
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -1105,6 +1116,7 @@ declare module swan {
          * <code>scrollH</code> between 0 and
          * <code>contentWidth - width</code>.
          *
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1118,6 +1130,7 @@ declare module swan {
          *
          * 要在内容中水平滚动， 请在 0 和 contentWidth - width 之间更改 <code>scrollH</code> 。
          *
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1135,6 +1148,7 @@ declare module swan {
          * <code>scrollV</code> between 0 and
          * <code>contentHeight - height</code>.
          *
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1147,6 +1161,7 @@ declare module swan {
          * 且视域的实际高度定义可见的内容量。要在内容中垂直滚动，请在 0 和 contentHeight - height
          * 之间更改 <code>scrollV</code>。
          *
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1903,9 +1918,9 @@ declare module swan {
          * @language en_US
          * Retrieves the current value of the watched property or property chain, or null if the host object is null.
          * @example
-         * <code>
+         * <pre>
          * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
-         * </code>
+         * </pre>
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1914,9 +1929,9 @@ declare module swan {
          * @language zh_CN
          * 检索观察的属性或属性链的当前值，当宿主对象为空时此值为空。
          * @example
-         * <code>
+         * <pre>
          * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
-         * </code>
+         * </pre>
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -1996,19 +2011,19 @@ declare module swan {
      * One component can register only on default property. And the default property can be spare in an EXML.
      *
      * @example：
-     * <code>
+     * <pre>
      *      <s:Scroller>
      *          <s:viewport>
      *          <s:Group/>
      *          </e:viewport>
      *      </e:Scroller>
-     * <code/>
+     * </pre>
      * Cuz <code>viewport</code> is the default property of Scroller. So you can write as follow:
-     * <code>
+     * <pre>
      *      <s:Scroller>
      *          <s:Group/>
      *      </e:Scroller>
-     * <code/>
+     * </pre>
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -2026,20 +2041,20 @@ declare module swan {
      * @param property 要注册的属性,注意属性名不能以 _ 或 $ 符开头。
      * @param type 要注册的类型,例如：“boolean","number","string","Array","lark.Rectangle"
      * @param asDefault 是否将此属性注册为组件的默认属性,一个组件只可以设置一个默认属性。注册了组件默认属性后，在EXML中可以使用省略属性节点的写法，
-     * 例如：
-     *
+     * @example：
+     * <pre>
      * <s:Scroller>
      *     <s:viewport>
      *         <s:Group/>
      *     </e:viewport>
      * </e:Scroller>
-     *
+     * </pre>
      * 因为 viewport 已经注册为 Scroller 的默认属性，上面的例子可以等效为：
-     *
+     * <pre>
      * <s:Scroller>
      *     <s:Group/>
      * </e:Scroller>
-     *
+     * </pre>
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -3669,6 +3684,12 @@ declare module swan.sys {
          * 如果正在执行缓动滚屏，停止缓动。
          */
         stop(): void;
+        private started;
+        /**
+         * @private
+         * true表示已经调用过start方法。
+         */
+        isStarted(): boolean;
         /**
          * @private
          * 开始记录位移变化。注意：当使用完毕后，必须调用 finish() 方法结束记录，否则该对象将无法被回收。
@@ -5897,6 +5918,7 @@ declare module swan {
          * @language en_US
          * Number that specifies the explicit height of the component,
          * in pixels, in the component's coordinates.
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5904,6 +5926,7 @@ declare module swan {
         /**
          * @language zh_CN
          * 外部显式指定的高度。
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5915,6 +5938,7 @@ declare module swan {
          * by the parent during layout. This value is in the
          * component's coordinates, in pixels. The default value depends on
          * the component's implementation.
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -5922,6 +5946,7 @@ declare module swan {
         /**
          * @language zh_CN
          * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
+         * @readOnly
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -7676,7 +7701,7 @@ declare module swan {
      * It can be created by resolving a EXML.<p/>
      *
      * @example You typically write the skin classes in EXML, as the followiong example shows:<p/>
-     * <code>
+     * <pre>
      *      <?xml version="1.0" encoding="utf-8"?>
      *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
      *          <states>
@@ -7684,7 +7709,7 @@ declare module swan {
      *          </states>
      *          <!-- Define skin. -->
      *      </s:Skin>
-     * <code/>
+     * </pre>
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -7695,7 +7720,7 @@ declare module swan {
      * 皮肤基类。通常情况下，您不需要手动创建这个类的实例，而是通过解析EXML文件后自动生成。<p/>
      *
      * @example 通常您可以按照如下方式写EXML代码：<p/>
-     * <code>
+     * <pre>
      *      <?xml version="1.0" encoding="utf-8"?>
      *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
      *          <states>
@@ -7703,7 +7728,7 @@ declare module swan {
      *          </states>
      *          <!-- Define skin. -->
      *      </s:Skin>
-     * <code/>
+     * </pre>
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -9303,13 +9328,13 @@ declare module swan {
      * <p>The Group components implement the IViewport interface
      * and can be used as the children of the Scroller control,
      * as the following example shows:</p>
-     * <code>
+     * <pre>
      *       <s:Scroller width="100" height="100">
      *           <s:Group>
      *               <s:Image width="300" height="400" source="assets/logo.jpg"/>
      *           </s:Group>
      *       </s:Scroller>
-     * </code>
+     * </pre>
      * <p>The size of the Image control is set larger than that of its parent Group container.
      * By default, the child extends past the boundaries of the parent container.
      * Rather than allow the child to extend past the boundaries of the parent container,
@@ -9326,13 +9351,13 @@ declare module swan {
      * @language zh_CN
      * Scroller 组件显示一个称为视域的单个可滚动组件，以及水平滚动条和垂直滚动条。该视域必须实现 IViewport 接口。
      * <p>Group 组件实现 IViewport 接口，且可以用作 Scroller 控件的子代，如下例所示：</p>
-     * <code>
+     * <pre>
      *       <s:Scroller width="100" height="100">
      *           <s:Group>
      *               <s:Image width="300" height="400" source="assets/logo.jpg"/>
      *           </s:Group>
      *       </s:Scroller>
-     * </code>
+     * </pre>
      * Image 控件的大小比其父 Group 容器设置得大。默认情况下，子代超过父容器的边界。
      * Scroller 会指定将子代剪切到边界并显示滚动条，而不是让子代超过父容器的边界。
      *
@@ -9958,7 +9983,7 @@ declare module swan {
          * @language zh_CN
          * 最大有效值。<p/>
          *
-         * 规定<code>value<code/>属性的值不能够超过的最大值。该修正过程
+         * 规定<code>value</code>属性的值不能够超过的最大值。该修正过程
          * 将在<code>nearestValidValue()</code>方法中进行。
          *
          * @default 100
@@ -9988,7 +10013,7 @@ declare module swan {
          * @language zh_CN
          * 最小有效值<p/>
          *
-         * 规定<code>value<code/>属性的值不能够低于的最小值。该修正过程
+         * 规定<code>value</code>属性的值不能够低于的最小值。该修正过程
          * 将在<code>nearestValidValue()</code>方法中进行。
          *
          * @default 0
@@ -12610,6 +12635,46 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
+     * The CheckBox component consists of an optional label and a small box
+     * that can contain a check mark or not.<p/>
+     *
+     * When a user clicks a CheckBox component or its associated text,
+     * the CheckBox component sets its <code>selected</code> property
+     * to <code>true</code> for checked, and to <code>false</code> for unchecked.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * CheckBox 组件包含一个可选标签和一个小方框，该方框内可以包含/不包含复选标记。<p/>
+     * 用户单击 CheckBox 组件或其关联文本时，CheckBox 组件会将其 selected 属性设置为 true（表示选中）或 false（表示取消选中）。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class CheckBox extends ToggleButton {
+        /**
+         * @language en_US
+         * Constructor.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个CheckBox
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        constructor();
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
      * The VSlider (vertical slider) control lets users select a value
      * by moving a slider thumb between the end points of the slider track.
      * The current value of the slider is determined by the relative location of the thumb between
@@ -12668,46 +12733,6 @@ declare module swan {
          * @platform Web,Native
          */
         updateSkinDisplayList(): void;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The CheckBox component consists of an optional label and a small box
-     * that can contain a check mark or not.<p/>
-     *
-     * When a user clicks a CheckBox component or its associated text,
-     * the CheckBox component sets its <code>selected</code> property
-     * to <code>true</code> for checked, and to <code>false</code> for unchecked.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * CheckBox 组件包含一个可选标签和一个小方框，该方框内可以包含/不包含复选标记。<p/>
-     * 用户单击 CheckBox 组件或其关联文本时，CheckBox 组件会将其 selected 属性设置为 true（表示选中）或 false（表示取消选中）。
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class CheckBox extends ToggleButton {
-        /**
-         * @language en_US
-         * Constructor.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个CheckBox
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        constructor();
     }
 }
 declare module swan {
@@ -12942,14 +12967,14 @@ declare module swan {
      * The appearance of each tab is defined by the <code>ItemRenderer</code> class.</p>
      * <p>You can use the TabBar control to set the active child of a ViewStack container,
      * as the following example shows:</p>
-     * <code>
+     * <pre>
      *       <s:TabBar dataProvider="{viewStack}"/>
      *       <s:ViewStack id="viewStack">
      *          <s:Group name="tab1"/>
      *          <s:Group name="tab2"/>
      *          <s:Group name="tab3"/>
      *       </s:ViewStack>
-     * </code>
+     * </pre>
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -12961,14 +12986,14 @@ declare module swan {
      * <p>该组选项卡由 <code>dataProvider</code> 属性定义。
      * 每个选项卡的外观由 <code>ItemRenderer</code> 定义。</p>
      * <p>可以使用 TabBar 控件设置 ViewStack 容器的活动子代，如下例所示：</p>
-     * <code>
+     * <pre>
      *       <s:TabBar dataProvider="{viewStack}"/>
      *       <s:ViewStack id="viewStack">
      *          <s:Group name="tab1"/>
      *          <s:Group name="tab2"/>
      *          <s:Group name="tab3"/>
      *       </s:ViewStack>
-     * </code>
+     * </pre>
      *
      * @version Lark 1.0
      * @version Swan 1.0

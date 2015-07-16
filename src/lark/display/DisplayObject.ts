@@ -39,11 +39,6 @@ module lark.sys {
 
         /**
          * @private
-         * 显示对象是否开启像素级精确碰撞，开启后显示对象的透明区域将可以穿透，Graphics默认开启此功能，。
-         */
-        PixelHitTest = 0x0001,
-        /**
-         * @private
          * 显示对象自身的绘制区域尺寸失效
          */
         InvalidContentBounds = 0x0002,
@@ -77,12 +72,6 @@ module lark.sys {
          * 显示对象祖代的透明度属性失效。
          */
         InvalidConcatenatedAlpha = 0x0040,
-        /**
-         * @private
-         * 显示对象应该被缓存成位图的标志，即使没有设置这个标志，也有可能被缓存成位图，例如含有滤镜的情况。
-         * 而当设置了这个标志，如果内存不足，也会放弃缓存。
-         */
-        CacheAsBitmap = 0x0080,
 
         /**
          * @private
@@ -94,16 +83,6 @@ module lark.sys {
          * 子项中已经全部含有DirtyRender标志，无需继续遍历。
          */
         DirtyChildren = 0x200,
-        /**
-         * @private
-         * 对象自身在舞台上的显示尺寸发生改变。
-         */
-        TouchEnabled = 0x400,
-        /**
-         * @private
-         * 对象自身以及子项在舞台上显示尺寸发生改变。
-         */
-        TouchChildren = 0x800,
         /**
          * @private
          * DirtyRender|DirtyChildren
@@ -121,8 +100,7 @@ module lark.sys {
          * @private
          * 显示对象初始化时的标志量
          */
-        InitFlags = DisplayObjectFlags.TouchEnabled |
-            DisplayObjectFlags.TouchChildren |
+        InitFlags =
             DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
             DisplayObjectFlags.InvalidConcatenatedAlpha |
@@ -130,6 +108,7 @@ module lark.sys {
 
     }
 }
+
 
 module lark {
 
@@ -161,7 +140,8 @@ module lark {
         concatenatedMatrix,
         invertedConcatenatedMatrix,
         bounds,
-        contentBounds
+        contentBounds,
+        cacheAsBitmap
     }
 
     /**
@@ -185,6 +165,11 @@ module lark {
      * @event lark.Event.REMOVED_FROM_STAGE Emitted when a display object is about to be removed from the display list, either directly or through the removal of a sub tree in which the display object is contained.
      * @event lark.Event.ENTER_FRAME [broadcast event] Emitted when the playhead is entering a new frame.
      * @event lark.Event.RENDER [broadcast event] Emitted when the display list is about to be updated and rendered.
+     * @event lark.TouchEvent.TOUCH_MOVE Emitted when the user touches the device, and is continuously dispatched until the point of contact is removed.
+     * @event lark.TouchEvent.TOUCH_BEGIN Emitted when the user first contacts a touch-enabled device (such as touches a finger to a mobile phone or tablet with a touch screen).
+     * @event lark.TouchEvent.TOUCH_END Emitted when the user removes contact with a touch-enabled device (such as lifts a finger off a mobile phone or tablet with a touch screen).
+     * @event lark.TouchEvent.TOUCH_TAP Emitted when the user lifts the point of contact over the same DisplayObject instance on which the contact was initiated on a touch-enabled device (such as presses and releases a finger from a single point over a display object on a mobile phone or tablet with a touch screen).
+     * @event lark.TouchEvent.TOUCH_RELEASE_OUTSIDE Emitted when the user lifts the point of contact over the different DisplayObject instance on which the contact was initiated on a touch-enabled device (such as presses and releases a finger from a single point over a display object on a mobile phone or tablet with a touch screen).
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -204,6 +189,11 @@ module lark {
      * @event lark.Event.REMOVED_FROM_STAGE 在从显示列表中直接删除显示对象或删除包含显示对象的子树时调度。
      * @event lark.Event.ENTER_FRAME [广播事件] 播放头进入新帧时调度。
      * @event lark.Event.RENDER [广播事件] 将要更新和呈现显示列表时调度。
+     * @event lark.TouchEvent.TOUCH_MOVE 当用户触碰设备时进行调度，而且会连续调度，直到接触点被删除。
+     * @event lark.TouchEvent.TOUCH_BEGIN 当用户第一次触摸启用触摸的设备时（例如，用手指触摸配有触摸屏的移动电话或平板电脑）调度。
+     * @event lark.TouchEvent.TOUCH_END 当用户移除与启用触摸的设备的接触时（例如，将手指从配有触摸屏的移动电话或平板电脑上抬起）调度。
+     * @event lark.TouchEvent.TOUCH_TAP 当用户在启用触摸设备上的已启动接触的同一 DisplayObject 实例上抬起接触点时（例如，在配有触摸屏的移动电话或平板电脑的显示对象上的某一点处按下并释放手指）调度。
+     * @event lark.TouchEvent.TOUCH_RELEASE_OUTSIDE 当用户在启用触摸设备上的已启动接触的不同 DisplayObject 实例上抬起接触点时（例如，在配有触摸屏的移动电话或平板电脑的显示对象上的某一点处按下并释放手指）调度。
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -235,7 +225,8 @@ module lark {
                 7: new Matrix(),     //concatenatedMatrix,
                 8: new Matrix(),     //invertedConcatenatedMatrix,
                 9: new Rectangle(),  //bounds,
-                10: new Rectangle(),  //contentBounds
+                10: new Rectangle(), //contentBounds
+                11: false,           //cacheAsBitmap
             };
         }
 
@@ -255,18 +246,6 @@ module lark {
          */
         $setFlags(flags:number):void {
             this.$displayFlags |= flags;
-        }
-
-        /**
-         * @private
-         * 开启或关闭一个标志量
-         */
-        $toggleFlags(flags:number, on:boolean):void {
-            if (on) {
-                this.$displayFlags |= flags;
-            } else {
-                this.$displayFlags &= ~flags;
-            }
         }
 
         /**
@@ -468,11 +447,11 @@ module lark {
          * Note: to change the value of a display object's matrix, you must make a copy of the entire matrix object, then copy
          * the new object into the matrix property of the display object.
          * @example the following code increases the tx value of a display object's matrix
-         * <code>
+         * <pre>
          *     var myMatrix:Matrix = myDisplayObject.matrix;
          *     myMatrix.tx += 10;
          *     myDisplayObject.matrix = myMatrix;
-         * </code>
+         * </pre>
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -481,11 +460,11 @@ module lark {
          * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。<br/>
          * 注意：要改变一个显示对象矩阵的值，您必引用整个矩阵对象，然后将它重新赋值给显示对象的 matrix 属性。
          * @example 以下代码改变了显示对象矩阵的tx属性值：
-         * <code>
+         * <pre>
          *     var myMatrix:Matrix = myDisplayObject.matrix;
          *     myMatrix.tx += 10;
          *     myDisplayObject.matrix = myMatrix;
-         * </code>
+         * </pre>
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -962,12 +941,12 @@ module lark {
          * @platform Web,Native
          */
         public get cacheAsBitmap():boolean {
-            return this.$hasFlags(sys.DisplayObjectFlags.CacheAsBitmap);
+            return this.$DisplayObject[Keys.cacheAsBitmap];
         }
 
         public set cacheAsBitmap(value:boolean) {
             value = !!value;
-            this.$toggleFlags(sys.DisplayObjectFlags.CacheAsBitmap, value);
+            this.$DisplayObject[Keys.cacheAsBitmap] = value;
             var hasDisplayList = !!this.$displayList;
             if (hasDisplayList === value) {
                 return;
@@ -1053,6 +1032,7 @@ module lark {
             return this.$renderAlpha;
         }
 
+        $touchEnabled:boolean = true;
         /**
          * @language en_US
          * Specifies whether this object receives touch or other user input. The default value is true, which means that
@@ -1076,42 +1056,18 @@ module lark {
          * @platform Web,Native
          */
         public get touchEnabled():boolean {
-            return this.$hasFlags(sys.DisplayObjectFlags.TouchEnabled);
+            return this.$touchEnabled;
         }
 
         public set touchEnabled(value:boolean) {
-            this.$setTouchEnabled(value);
+            this.$setTouchEnabled(!!value);
         }
 
         /**
          * @private
          */
         $setTouchEnabled(value:boolean):void {
-            this.$toggleFlags(sys.DisplayObjectFlags.TouchEnabled, !!value);
-        }
-
-        /**
-         * @language en_US
-         * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
-         * is set to true,the transparent area of the display object will be touched through.<br/>
-         * Enabling this property will cause certain mount of performance loss. This property is set to true in the Shape class,
-         * while the other is set to false by default.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，<br/>
-         * 开启此属性将会有一定量的额外性能损耗，Shape等含有矢量图的类默认开启此属性，其他类默认关闭。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public get pixelHitTest():boolean {
-            return this.$hasFlags(sys.DisplayObjectFlags.PixelHitTest);
-        }
-
-        public set pixelHitTest(value:boolean) {
-            this.$toggleFlags(sys.DisplayObjectFlags.PixelHitTest, !!value);
+            this.$touchEnabled = value;
         }
 
         /**
@@ -1131,11 +1087,11 @@ module lark {
          * Note: to change the value of a display object's scrollRect, you must make a copy of the entire scrollRect object, then copy
          * the new object into the scrollRect property of the display object.
          * @example the following code increases the x value of a display object's scrollRect
-         * <code>
+         * <pre>
          *     var myRectangle:Rectangle = myDisplayObject.scrollRect;
          *     myRectangle.x += 10;
          *     myDisplayObject.scrollRect = myRectangle;
-         * </code>
+         * </pre>
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -1147,16 +1103,16 @@ module lark {
          *
          * 注意：要改变一个显示对象 scrollRect 属性的值，您必引用整个 scrollRect 对象，然后将它重新赋值给显示对象的 scrollRect 属性。
          * @example 以下代码改变了显示对象 scrollRect 的 x 属性值：
-         * <code>
+         * <pre>
          *     var myRectangle:Rectangle = myDisplayObject.scrollRect;
          *     myRectangle.x += 10;
          *     myDisplayObject.scrollRect = myRectangle;
-         * </code>
+         * </pre>
          * @version Lark 1.0
          * @platform Web,Native
          */
         public get scrollRect():Rectangle {
-            return this.$scrollRect ? this.$scrollRect.clone() : null;
+            return this.$scrollRect;
         }
 
         public set scrollRect(value:Rectangle) {
@@ -1493,10 +1449,10 @@ module lark {
             //必须在访问moved属性前调用以下两个方法，因为moved属性在以下两个方法内重置。
             var concatenatedMatrix = this.$getConcatenatedMatrix();
             var bounds = this.$getContentBounds();
-            var displayList = this.$displayList||this.$parentDisplayList;
+            var displayList = this.$displayList || this.$parentDisplayList;
             var region = this.$renderRegion;
-            if(!displayList){
-                region.setTo(0,0,0,0);
+            if (!displayList) {
+                region.setTo(0, 0, 0, 0);
                 region.moved = false;
                 return false;
             }
@@ -1507,7 +1463,7 @@ module lark {
             var matrix = this.$renderMatrix;
             matrix.copyFrom(concatenatedMatrix);
             var root = displayList.root;
-            if(root!==this.$stage){
+            if (root !== this.$stage) {
                 root.$getInvertedConcatenatedMatrix().$preMultiplyInto(matrix, matrix);
             }
             region.updateRegion(bounds, matrix);
@@ -1526,7 +1482,7 @@ module lark {
         /**
          * @private
          */
-        $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):DisplayObject {
+        $hitTest(stageX:number, stageY:number):DisplayObject {
             if (!this.$renderRegion || !this.$visible) {
                 return null;
             }
@@ -1539,44 +1495,13 @@ module lark {
                     if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
                         return null;
                     }
-                    if (this.$mask && !this.$mask.$hitTest(stageX, stageY, true)) {
+                    if (this.$mask && !this.$mask.$hitTest(stageX, stageY)) {
                         return null;
                     }
-                }
-                if (shapeFlag || this.$displayFlags & sys.DisplayObjectFlags.PixelHitTest) {
-                    return this.hitTestPixel(localX, localY);
                 }
                 return this;
             }
             return null;
-        }
-
-        /**
-         * @private
-         */
-        private hitTestPixel(localX:number, localY:number):DisplayObject {
-            var alpha = this.$getConcatenatedAlpha();
-            if (alpha === 0) {
-                return null;
-            }
-            var context:sys.RenderContext;
-            var data:Uint8Array;
-            var displayList = this.$displayList;
-            if (displayList) {
-                context = displayList.renderContext;
-                data = context.getImageData(localX - displayList.offsetX, localY - displayList.offsetY, 1, 1).data;
-            }
-            else {
-                context = sys.sharedRenderContext;
-                context.surface.width = context.surface.height = 3;
-                context.translate(1 - localX, 1 - localY);
-                this.$render(context);
-                data = context.getImageData(1, 1, 1, 1).data;
-            }
-            if (data[3] === 0) {
-                return null;
-            }
-            return this;
         }
 
         /**
@@ -1702,7 +1627,7 @@ module lark {
     }
 
     if (DEBUG) {
-        lark.$markReadOnly(DisplayObject.prototype, "parent");
-        lark.$markReadOnly(DisplayObject.prototype, "stage");
+        lark.$markReadOnly(DisplayObject, "parent");
+        lark.$markReadOnly(DisplayObject, "stage");
     }
 }

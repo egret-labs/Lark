@@ -18,9 +18,11 @@ module lark.portal {
     export class Project {
         larkManifest = lark.manifest;
         scaleModes = lark.manifest.scaleModes;
+        orientationModes = lark.manifest.orientationModes;
         modules: lark.LarkModule[] = [];
         platforms: { name: string }[] = [];
         scaleMode: string = 'noScale'; 
+        orientationMode: string = 'auto'; 
         contentWidth: number = 480;
         contentHeight: number = 800;
         showPaintRects: boolean = false;
@@ -30,6 +32,8 @@ module lark.portal {
         isConfirmed = true;
         isLoadingShow = false;
         isCreated = false;
+        background = "#888888";
+        frameRate = 30;
 
         constructor() {
             this.larkManifest.modules.forEach(lm=> {
@@ -62,6 +66,8 @@ module lark.portal {
             this.larkManifest = undefined;
             var modes = this.scaleModes;
             this.scaleModes = undefined;
+            var omodes = this.orientationModes;
+            this.orientationModes = undefined;
             var json = JSON.stringify(this);
             console.log(json);
 
@@ -73,6 +79,7 @@ module lark.portal {
                 $("#loading").remove();
             });
             this.scaleModes = modes;
+            this.orientationModes = omodes;
 
             this.larkManifest = manifest;
             this.isLoadingShow = true;
@@ -85,6 +92,12 @@ module lark.portal {
 
         close() {
             window.close();
+        }
+
+        switchSize() {
+            var n = this.contentHeight;
+            this.contentHeight = this.contentWidth;
+            this.contentWidth = n;
         }
     }
 }

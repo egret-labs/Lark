@@ -27,43 +27,16 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-
-module swan {
-
+module lark.sys {
     /**
-     * @language en_US
-     * The IDisplayText interface defines the properties
-     * for simple text display.。
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
+     * @private
+     * 设备屏幕
      */
-    /**
-     * @language zh_CN
-     * IDisplayText 接口定义简单文本显示的属性.
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    export interface IDisplayText
-    {
+    export interface Screen {
         /**
-         * @language en_US
-         * The text displayed by this text component.
-         * @readOnly
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
+         * @private
+         * 更新屏幕视口尺寸
          */
-        /**
-         * @language zh_CN
-         * 此文本组件所显示的文本。
-         * @readOnly
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        text:string;
+        updateScreenSize();
     }
-
 }

@@ -9,6 +9,7 @@ var DoCreateCommand = (function () {
     }
     DoCreateCommand.prototype.execute = function () {
         var proj = this.project;
+        console.log(proj);
         var options = lark.options;
         var template = FileUtil.joinPath(options.larkRoot, "tools/templates/" + proj.template);
         FileUtil.copy(template, options.projectDir);
@@ -44,13 +45,14 @@ function copyTemplate(project) {
     files.forEach(function (file) {
         var content = FileUtil.read(file);
         content = content.replace('<script id="lark"></script>', scripts);
-        content = content.replace(/\$entry\-class\$/ig, "Main");
-        content = content.replace(/\$background\$/ig, project.background || "#888888");
-        content = content.replace(/\$scale\-mode\$/ig, project.scaleMode || "noScale");
-        content = content.replace(/\$orientation\$/ig, project.orientation || "auto");
-        content = content.replace(/\$content\-width\$/ig, project.contentWidth.toString());
-        content = content.replace(/\$content\-height\$/ig, project.contentHeight.toString());
-        content = content.replace(/\$show\-paint\-rects\$/ig, 'false');
+        content = content.replace(/\$\{entryClass\}/ig, "Main");
+        content = content.replace(/\$\{background\}/ig, project.background || "#888888");
+        content = content.replace(/\$\{scaleMode\}/ig, project.scaleMode || "noScale");
+        content = content.replace(/\$\{orientationMode\}/ig, project.orientationMode || "auto");
+        content = content.replace(/\$\{frameRate\}/ig, (project.frameRate || 30).toString());
+        content = content.replace(/\$\{contentWidth\}/ig, project.contentWidth.toString());
+        content = content.replace(/\$\{contentHeight\}/ig, project.contentHeight.toString());
+        content = content.replace(/\$\{showPaintRects\}/ig, 'false');
         FileUtil.save(file, content);
     });
 }

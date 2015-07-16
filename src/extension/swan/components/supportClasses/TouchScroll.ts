@@ -66,9 +66,9 @@ module swan.sys {
 
     /**
      * @private
-     * 
-     * @param ratio 
-     * @returns 
+     *
+     * @param ratio
+     * @returns
      */
     function easeOut(ratio:number):number {
         var invRatio:number = ratio - 1.0;
@@ -89,7 +89,7 @@ module swan.sys {
          * 创建一个 TouchScroll 实例
          * @param updateFunction 滚动位置更新回调函数
          */
-        public constructor(updateFunction:(scrollPos:number)=>void,endFunction:()=>void,target:lark.IEventEmitter){
+        public constructor(updateFunction:(scrollPos:number)=>void, endFunction:()=>void, target:lark.IEventEmitter) {
             if (DEBUG && !updateFunction) {
                 lark.$error(1003, "updateFunction");
             }
@@ -157,7 +157,7 @@ module swan.sys {
          * @private
          * 正在播放缓动动画的标志。
          */
-        public isPlaying():boolean{
+        public isPlaying():boolean {
             return this.animation.isPlaying;
         }
 
@@ -165,9 +165,20 @@ module swan.sys {
          * @private
          * 如果正在执行缓动滚屏，停止缓动。
          */
-        public stop():void{
+        public stop():void {
             this.animation.stop();
             lark.stopTick(this.onTick, this);
+            this.started = false;
+        }
+
+        private started:boolean = true;
+
+        /**
+         * @private
+         * true表示已经调用过start方法。
+         */
+        public isStarted():boolean {
+            return this.started;
         }
 
         /**
@@ -175,7 +186,8 @@ module swan.sys {
          * 开始记录位移变化。注意：当使用完毕后，必须调用 finish() 方法结束记录，否则该对象将无法被回收。
          * @param touchPoint 起始触摸位置，以像素为单位，通常是stageX或stageY。
          */
-        public start(touchPoint:number,scrollValue:number,maxScrollValue:number):void {
+        public start(touchPoint:number, scrollValue:number, maxScrollValue:number):void {
+            this.started = true;
             this.velocity = 0;
             this.previousVelocity.length = 0;
             this.previousTime = lark.getTimer();
@@ -189,7 +201,7 @@ module swan.sys {
          * 更新当前移动到的位置
          * @param touchPoint 当前触摸位置，以像素为单位，通常是stageX或stageY。
          */
-        public update(touchPoint:number,maxScrollValue:number):void {
+        public update(touchPoint:number, maxScrollValue:number):void {
             this.currentPosition = touchPoint;
             this.maxScrollPos = maxScrollValue;
             var scrollPos = this.offsetPoint - touchPoint;
@@ -200,7 +212,7 @@ module swan.sys {
                 scrollPos = (scrollPos + maxScrollValue) * 0.5
             }
             this.currentScrollPos = scrollPos;
-            this.updateFunction.call(this.target,scrollPos);
+            this.updateFunction.call(this.target, scrollPos);
         }
 
         /**
@@ -211,6 +223,7 @@ module swan.sys {
          */
         public finish(currentScrollPos:number, maxScrollPos:number):void {
             lark.stopTick(this.onTick, this);
+            this.started = false;
             var sum = this.velocity * CURRENT_VELOCITY_WEIGHT;
             var previousVelocityX = this.previousVelocity;
             var length = previousVelocityX.length;
@@ -245,7 +258,7 @@ module swan.sys {
                 }
             }
             if (duration > 0) {
-                this.throwTo(posTo,duration);
+                this.throwTo(posTo, duration);
             }
             else {
                 this.finishScrolling();
@@ -254,9 +267,9 @@ module swan.sys {
 
         /**
          * @private
-         * 
-         * @param timeStamp 
-         * @returns 
+         *
+         * @param timeStamp
+         * @returns
          */
         private onTick(timeStamp:number):boolean {
             var timeOffset = timeStamp - this.previousTime;
@@ -275,8 +288,8 @@ module swan.sys {
 
         /**
          * @private
-         * 
-         * @param animation 
+         *
+         * @param animation
          */
         private finishScrolling(animation?:Animation):void {
             var hsp = this.currentScrollPos;
@@ -314,7 +327,7 @@ module swan.sys {
          */
         private onScrollingUpdate(animation:Animation):void {
             this.currentScrollPos = animation.currentValue;
-            this.updateFunction.call(this.target,animation.currentValue);
+            this.updateFunction.call(this.target, animation.currentValue);
         }
     }
 }

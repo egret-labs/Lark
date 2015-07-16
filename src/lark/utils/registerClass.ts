@@ -37,13 +37,13 @@ module lark {
      * You don't need to manually call this method.
      *
      * @example the following code shows how to register the runtime class information for the EventEmitter class and do the type checking:
-     * <code>
+     * <pre>
      *      lark.registerClass(lark.EventEmitter,"lark.EventEmitter",["lark.IEventEmitter"]);
      *      var emitter = new lark.EventEmitter();
      *      lark.log(lark.is(emitter, "lark.IEventEmitter"));  //true。
      *      lark.log(lark.is(emitter, "lark.EventEmitter"));   //true。
      *      lark.log(lark.is(emitter, "lark.Bitmap"));   //false。
-     * </code>
+     * </pre>
      * @param classDefinition the class definition to be registered.
      * @param className  a unique identification string of the specific class
      * @param interfaceNames a list of unique identification string of the specific interfaces.
@@ -55,14 +55,14 @@ module lark {
      * 为一个类定义注册运行时类信息,用此方法往类定义上注册它自身以及所有接口对应的字符串。
      * 在运行时，这个类的实例将可以使用 lark.is() 方法传入一个字符串来判断实例类型。
      * @example 以下代码演示了如何为EventEmitter类注册运行时类信息并判断类型：
-     * <code>
+     * <pre>
      *      //为lark.EventEmitter类注册运行时类信息，由于它实现了IEventEmitter接口，这里应同时传入接口名对应的字符串。
      *      lark.registerClass(lark.EventEmitter,"lark.EventEmitter",["lark.IEventEmitter"]);
      *      var emitter = new lark.EventEmitter();
      *      lark.log(lark.is(emitter, "lark.IEventEmitter"));  //true。
      *      lark.log(lark.is(emitter, "lark.EventEmitter"));   //true。
      *      lark.log(lark.is(emitter, "lark.Bitmap"));   //false。
-     * </code>
+     * </pre>
      * 注意：若您使用 TypeScript 来编写程序，lark 命令行会自动帮您生成类信息注册代码行到最终的 Javascript 文件中。因此您不需要手动调用此方法。
      *
      * @param classDefinition 要注册的类定义。
