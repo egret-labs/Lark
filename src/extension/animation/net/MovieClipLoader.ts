@@ -187,7 +187,6 @@ module larkAnimation {
             }
             //全部资源加载完毕
             if (flag == false) {
-
                 var info = JSON.parse(this.$config);
                 var list:Array<any>;
                 for (var key in info.mc) {
@@ -196,15 +195,14 @@ module larkAnimation {
                 }
                 var len = list.length;
                 var res;
-                var frames:Array<BitmapArrayFrameData>;
+                var frames:Array<BitmapArrayFrameData> = [];
                 for (var i = 0; i < len; i++) {
                     res = info.res[list[i].res];
                     frames.push(new BitmapArrayFrameData(this.$loadList[0].content, list[i].x, list[i].y, res.w, res.h, res.x, res.y));
                 }
-
-                var frameMovieClip = new larkAnimation.BitmapArray(frames);
+                var frameMovieClip = new larkAnimation.BitmapArray();
+                frameMovieClip.$setFrames(frames);
                 this.$data = frameMovieClip;
-
                 this.$loadList = null;
                 this.emitWith(lark.Event.COMPLETE);
             }

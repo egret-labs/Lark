@@ -47,7 +47,7 @@ module larkAnimation {
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export class BitmapArray extends lark.DisplayObject {
+    export  class BitmapArray extends lark.DisplayObject {
 
         /**
          * @language en_US
@@ -61,53 +61,103 @@ module larkAnimation {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public constructor(frames:Array<BitmapArrayFrameData>) {
+        public constructor() {
             super();
             this.$renderRegion = new lark.sys.Region();
-            this.$totalFrames = frames.length;
-            this.$currentFrame = this.$totalFrames==0?0:1;
-            this.$frames = [];
+            this.on(lark.Event.ENTER_FRAME, this.$onFrame, this);
         }
 
         /**
          * @private
          */
-        $currentFrame:number;
+        private $currentFrame:number = 0;
 
         /**
-         * @private
-         * 每一帧的数据
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
          */
-        $frames:Array<BitmapArrayFrameData>;
+        public get currentFrame():number {
+            if (this.$totalFrames == 0) return 0;
+            return this.$currentFrame + 1;
+        }
 
         /**
          * @language en_US
-         * Creates a new MovieClip instance. After creating the MovieClip, call the addChild() or addChildAt() method of a display object container that is onstage.
+         * Clone a BitmapArray object.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 创建新的 MovieClip 实例。创建 MovieClip 之后，调用舞台上的显示对象容器的 addChild() 或 addChildAt() 方法。
+         * 复制一个BitmapArray对象。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public get frames():Array<BitmapArrayFrameData>
+        public clone():BitmapArray
         {
-            return this.$frames;
+            var mc = new BitmapArray();
+            mc.$setFrames(this.$frames);
+            return mc;
         }
 
         /**
          * @private
          */
-        private $loops:number;
+        private $frames:Array<BitmapArrayFrameData>;
+
+        /**
+         * @private
+         */
+        $setFrames(value:Array<BitmapArrayFrameData>) {
+            if(value == null)
+            {
+                this.$totalFrames = 0;
+                this.$currentFrame = 0;
+                this.$isPlaying = false;
+            }
+            else
+            {
+                this.$totalFrames = value.length;
+                this.$currentFrame = 0;
+                this.$isPlaying = this.$totalFrames == 0 ? false : true;
+            }
+            this.$frames = value;
+            this.$invalidateContentBounds();
+        }
+
+        /**
+         * @private
+         */
+        private $isPlaying:boolean = false;
+
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public get isPlaying():boolean {
+            return this.$isPlaying;
+        }
+
+        /**
+         * @private
+         */
+        private $onFrame():void {
+            if (!this.$isPlaying) {
+                return;
+            }
+            this.$currentFrame++;
+            this.$currentFrame = this.$currentFrame % this.$totalFrames;
+            this.$invalidateContentBounds();
+        }
 
         /**
          * @private
          */
         $measureContentBounds(bounds:lark.Rectangle):void {
-            var frameInfo = this.$frames[this.$currentFrame];
-            if (frameInfo) {
+            if (this.$frames) {
+                var frameInfo = this.$frames[this.$currentFrame];
                 bounds.setTo(frameInfo.x, frameInfo.y, frameInfo.width, frameInfo.height);
             }
             else {
@@ -118,47 +168,97 @@ module larkAnimation {
         /**
          * @private
          */
-        private $onFrame():void {
-            this.$currentFrame++;
-            if(this.$currentFrame == this.$totalFrames - 1)
-            {
-                this.$loops--;
-                this.removeListener(lark.Event.ENTER_FRAME, this.$onFrame,this);
+        $render(context:lark.sys.RenderContext):void {
+            if (this.$frames) {
+                var frameInfo = this.$frames[this.$currentFrame];
+                context.drawImage(frameInfo.bitmapData, frameInfo.sourceX, frameInfo.sourceY, frameInfo.width, frameInfo.height, frameInfo.x, frameInfo.y, frameInfo.width, frameInfo.height);
             }
-            this.$invalidateContentBounds();
-
-        }
-
-        public play(startFrame:number = 1, loops:number = 1):void
-        {
-            this.$currentFrame = ((startFrame<0?0:startFrame-1)&~0)%this.$totalFrames;
-            this.$loops = (loops<0?0:loops)&~0;
-            this.on(lark.Event.ENTER_FRAME, this.$onFrame, this);
-            this.$invalidateContentBounds();
-        }
-
-        public stop():void
-        {
-            this.$currentFrame = 0;
-            this.removeListener(lark.Event.ENTER_FRAME, this.$onFrame,this);
-            this.$invalidateContentBounds();
         }
 
         /**
-         * @private
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
          */
-        $render(context:lark.sys.RenderContext):void {
-            var frameInfo = this.$frames[this.$currentFrame];
-            if (frameInfo) {
-                context.drawImage(frameInfo.bitmapData, frameInfo.sourceX, frameInfo.sourceY, frameInfo.width, frameInfo.height, frameInfo.x, frameInfo.y, frameInfo.width, frameInfo.height);
+        public gotoAndPlay(frame:number):void {
+            this.$isPlaying = true;
+            if (frame >= this.$totalFrames) frame = this.$totalFrames;
+            if (this.$currentFrame == frame) {
+                return;
             }
+            this.$currentFrame = frame;
+        }
+
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public gotoAndStop(frame:number):void {
+            this.$isPlaying = false;
+            if (frame >= this.$totalFrames) frame = this.$totalFrames;
+            if (this.$currentFrame == frame) {
+                return;
+            }
+            this.$currentFrame = frame;
+        }
+
+        /**
+         * @language en_US
+         * Sends the playhead to the next frame and stops it.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将播放头转到下一帧并停止。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public nextFrame():void {
+            this.$isPlaying = false;
+            if (this.$currentFrame >= this.$totalFrames - 1) {
+                return;
+            }
+            this.$currentFrame++;
+        }
+
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public play():void {
+            this.$isPlaying = true;
+        }
+
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public prevFrame():void {
+            this.$isPlaying = false;
+            if (this.$currentFrame == 0) {
+                return;
+            }
+            this.$currentFrame--;
+        }
+
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public stop():void {
+            this.$isPlaying = false;
         }
 
         /**
          * @private
          * 影片的总长度
          */
-        private $totalFrames:number;
+        private $totalFrames:number = 0;
 
         /**
          * @inheritDoc
