@@ -473,24 +473,25 @@ module lark {
             bounds.setTo(xMin, yMin, xMax - xMin, yMax - yMin);
         }
 
+        $touchChildren:boolean = true;
         /**
          * @inheritDoc
          * @version Lark 1.0
          * @platform Web,Native
          */
         public get touchChildren():boolean {
-            return this.$hasFlags(sys.DisplayObjectFlags.TouchChildren);
+            return this.$touchChildren;
         }
 
         public set touchChildren(value:boolean) {
-            this.$setTouchChildren(value);
+            this.$setTouchChildren(!!value);
         }
 
         /**
          * @private
          */
         $setTouchChildren(value:boolean):void {
-            this.$toggleFlags(sys.DisplayObjectFlags.TouchChildren, !!value);
+            this.$touchChildren = value;
         }
 
         /**
@@ -603,7 +604,7 @@ module lark {
                 var target = child.$hitTest(stageX, stageY);
                 if (target) {
                     found = true;
-                    if(target.$hasFlags(sys.DisplayObjectFlags.TouchEnabled)){
+                    if(target.$touchEnabled){
                         break;
                     }
                     else{
@@ -612,7 +613,7 @@ module lark {
                 }
             }
             if (target) {
-                if (this.$hasFlags(sys.DisplayObjectFlags.TouchChildren)) {
+                if (this.$touchChildren) {
                     return target;
                 }
                 return this;

@@ -431,7 +431,7 @@ module swan {
             if (target || this.$Group[Keys.touchThrough]) {
                 return target;
             }
-            if (!this.$visible || !this.$hasFlags(lark.sys.DisplayObjectFlags.TouchEnabled)) {
+            if (!this.$visible || !this.touchEnabled) {
                 return null;
             }
             var point = this.globalToLocal(stageX, stageY, lark.$TempPoint);

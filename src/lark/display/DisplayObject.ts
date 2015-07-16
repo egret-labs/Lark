@@ -72,12 +72,6 @@ module lark.sys {
          * 显示对象祖代的透明度属性失效。
          */
         InvalidConcatenatedAlpha = 0x0040,
-        /**
-         * @private
-         * 显示对象应该被缓存成位图的标志，即使没有设置这个标志，也有可能被缓存成位图，例如含有滤镜的情况。
-         * 而当设置了这个标志，如果内存不足，也会放弃缓存。
-         */
-        CacheAsBitmap = 0x0080,
 
         /**
          * @private
@@ -89,16 +83,6 @@ module lark.sys {
          * 子项中已经全部含有DirtyRender标志，无需继续遍历。
          */
         DirtyChildren = 0x200,
-        /**
-         * @private
-         * 对象自身在舞台上的显示尺寸发生改变。
-         */
-        TouchEnabled = 0x400,
-        /**
-         * @private
-         * 对象自身以及子项在舞台上显示尺寸发生改变。
-         */
-        TouchChildren = 0x800,
         /**
          * @private
          * DirtyRender|DirtyChildren
@@ -116,8 +100,7 @@ module lark.sys {
          * @private
          * 显示对象初始化时的标志量
          */
-        InitFlags = DisplayObjectFlags.TouchEnabled |
-            DisplayObjectFlags.TouchChildren |
+        InitFlags =
             DisplayObjectFlags.InvalidConcatenatedMatrix |
             DisplayObjectFlags.InvalidInvertedConcatenatedMatrix |
             DisplayObjectFlags.InvalidConcatenatedAlpha |
@@ -157,7 +140,8 @@ module lark {
         concatenatedMatrix,
         invertedConcatenatedMatrix,
         bounds,
-        contentBounds
+        contentBounds,
+        cacheAsBitmap
     }
 
     /**
@@ -241,7 +225,8 @@ module lark {
                 7: new Matrix(),     //concatenatedMatrix,
                 8: new Matrix(),     //invertedConcatenatedMatrix,
                 9: new Rectangle(),  //bounds,
-                10: new Rectangle(),  //contentBounds
+                10: new Rectangle(), //contentBounds
+                11: false,           //cacheAsBitmap
             };
         }
 
@@ -261,18 +246,6 @@ module lark {
          */
         $setFlags(flags:number):void {
             this.$displayFlags |= flags;
-        }
-
-        /**
-         * @private
-         * 开启或关闭一个标志量
-         */
-        $toggleFlags(flags:number, on:boolean):void {
-            if (on) {
-                this.$displayFlags |= flags;
-            } else {
-                this.$displayFlags &= ~flags;
-            }
         }
 
         /**
@@ -968,12 +941,12 @@ module lark {
          * @platform Web,Native
          */
         public get cacheAsBitmap():boolean {
-            return this.$hasFlags(sys.DisplayObjectFlags.CacheAsBitmap);
+            return this.$DisplayObject[Keys.cacheAsBitmap];
         }
 
         public set cacheAsBitmap(value:boolean) {
             value = !!value;
-            this.$toggleFlags(sys.DisplayObjectFlags.CacheAsBitmap, value);
+            this.$DisplayObject[Keys.cacheAsBitmap] = value;
             var hasDisplayList = !!this.$displayList;
             if (hasDisplayList === value) {
                 return;
@@ -1059,6 +1032,7 @@ module lark {
             return this.$renderAlpha;
         }
 
+        $touchEnabled:boolean = true;
         /**
          * @language en_US
          * Specifies whether this object receives touch or other user input. The default value is true, which means that
@@ -1082,18 +1056,18 @@ module lark {
          * @platform Web,Native
          */
         public get touchEnabled():boolean {
-            return this.$hasFlags(sys.DisplayObjectFlags.TouchEnabled);
+            return this.$touchEnabled;
         }
 
         public set touchEnabled(value:boolean) {
-            this.$setTouchEnabled(value);
+            this.$setTouchEnabled(!!value);
         }
 
         /**
          * @private
          */
         $setTouchEnabled(value:boolean):void {
-            this.$toggleFlags(sys.DisplayObjectFlags.TouchEnabled, !!value);
+            this.$touchEnabled = value;
         }
 
         /**
