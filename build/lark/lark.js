@@ -4585,6 +4585,24 @@ var lark;
         /**
          * @private
          */
+        p.$hitTest = function (stageX, stageY) {
+            var target = this.$targetDisplay;
+            var m = target.$getInvertedConcatenatedMatrix();
+            var localX = m.a * stageX + m.c * stageY + m.tx;
+            var localY = m.b * stageX + m.d * stageY + m.ty;
+            var context = lark.sys.sharedRenderContext;
+            context.surface.width = context.surface.height = 3;
+            context.translate(1 - localX, 1 - localY);
+            this.$render(context, true);
+            var data = context.getImageData(1, 1, 1, 1).data;
+            if (data[3] === 0) {
+                return null;
+            }
+            return target;
+        };
+        /**
+         * @private
+         */
         p.$measureContentBounds = function (bounds) {
             if (!this.hasFill && !this.hasStroke) {
                 bounds.setEmpty();
@@ -4602,7 +4620,7 @@ var lark;
         /**
          * @private
          */
-        p.$render = function (context) {
+        p.$render = function (context, forHitTest) {
             context.save();
             context.fillStyle = "#000000";
             context.lineCap = "butt";
@@ -4617,9 +4635,22 @@ var lark;
             }
             var commands = this.$commands;
             var length = commands.length;
-            for (var i = 0; i < length; i++) {
-                var command = commands[i];
-                map[command.type].apply(context, command.arguments);
+            if (forHitTest) {
+                for (var i = 0; i < length; i++) {
+                    var command = commands[i];
+                    var type = command.type;
+                    //过滤透明填充的样式
+                    if (type === 5 /* fillStyle */ || type == 4 /* strokeStyle */) {
+                        continue;
+                    }
+                    map[command.type].apply(context, command.arguments);
+                }
+            }
+            else {
+                for (var i = 0; i < length; i++) {
+                    var command = commands[i];
+                    map[command.type].apply(context, command.arguments);
+                }
             }
             context.restore();
         };
@@ -7850,6 +7881,7 @@ var lark;
              * @private
              */
             this.$alpha = 1;
+            this.$touchEnabled = true;
             /**
              * @private
              */
@@ -7891,7 +7923,7 @@ var lark;
              * 此显示对象自身（不包括子项）在显示列表根节点或位图缓存根节点上的显示尺寸。
              */
             this.$renderRegion = null;
-            this.$displayFlags = 3952 /* InitFlags */;
+            this.$displayFlags = 880 /* InitFlags */;
             this.$DisplayObject = {
                 0: 1,
                 1: 1,
@@ -7904,6 +7936,7 @@ var lark;
                 8: new lark.Matrix(),
                 9: new lark.Rectangle(),
                 10: new lark.Rectangle(),
+                11: false,
             };
         }
         var d = __define,c=DisplayObject;p=c.prototype;
@@ -7913,18 +7946,6 @@ var lark;
          */
         p.$setFlags = function (flags) {
             this.$displayFlags |= flags;
-        };
-        /**
-         * @private
-         * 开启或关闭一个标志量
-         */
-        p.$toggleFlags = function (flags, on) {
-            if (on) {
-                this.$displayFlags |= flags;
-            }
-            else {
-                this.$displayFlags &= ~flags;
-            }
         };
         /**
          * @private
@@ -8559,11 +8580,11 @@ var lark;
              * @platform Web,Native
              */
             function () {
-                return this.$hasFlags(128 /* CacheAsBitmap */);
+                return this.$DisplayObject[11 /* cacheAsBitmap */];
             },
             function (value) {
                 value = !!value;
-                this.$toggleFlags(128 /* CacheAsBitmap */, value);
+                this.$DisplayObject[11 /* cacheAsBitmap */] = value;
                 var hasDisplayList = !!this.$displayList;
                 if (hasDisplayList === value) {
                     return;
@@ -8666,42 +8687,18 @@ var lark;
              * @platform Web,Native
              */
             function () {
-                return this.$hasFlags(1024 /* TouchEnabled */);
+                return this.$touchEnabled;
             },
             function (value) {
-                this.$setTouchEnabled(value);
+                this.$setTouchEnabled(!!value);
             }
         );
         /**
          * @private
          */
         p.$setTouchEnabled = function (value) {
-            this.$toggleFlags(1024 /* TouchEnabled */, !!value);
+            this.$touchEnabled = value;
         };
-        d(p, "pixelHitTest",
-            /**
-             * @language en_US
-             * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
-             * is set to true,the transparent area of the display object will be touched through.<br/>
-             * Enabling this property will cause certain mount of performance loss. This property is set to true in the Shape class,
-             * while the other is set to false by default.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，<br/>
-             * 开启此属性将会有一定量的额外性能损耗，Shape等含有矢量图的类默认开启此属性，其他类默认关闭。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$hasFlags(1 /* PixelHitTest */);
-            },
-            function (value) {
-                this.$toggleFlags(1 /* PixelHitTest */, !!value);
-            }
-        );
         d(p, "scrollRect",
             /**
              * @language en_US
@@ -9052,7 +9049,7 @@ var lark;
         /**
          * @private
          */
-        p.$hitTest = function (stageX, stageY, shapeFlag) {
+        p.$hitTest = function (stageX, stageY) {
             if (!this.$renderRegion || !this.$visible) {
                 return null;
             }
@@ -9065,39 +9062,13 @@ var lark;
                     if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
                         return null;
                     }
-                    if (this.$mask && !this.$mask.$hitTest(stageX, stageY, true)) {
+                    if (this.$mask && !this.$mask.$hitTest(stageX, stageY)) {
                         return null;
                     }
-                }
-                if (shapeFlag || this.$displayFlags & 1 /* PixelHitTest */) {
-                    return this.hitTestPixel(localX, localY);
                 }
                 return this;
             }
             return null;
-        };
-        /**
-         * @private
-         */
-        p.hitTestPixel = function (localX, localY) {
-            var context;
-            var data;
-            var displayList = this.$displayList;
-            if (displayList) {
-                context = displayList.renderContext;
-                data = context.getImageData(localX - displayList.offsetX, localY - displayList.offsetY, 1, 1).data;
-            }
-            else {
-                context = lark.sys.sharedRenderContext;
-                context.surface.width = context.surface.height = 3;
-                context.translate(1 - localX, 1 - localY);
-                this.$render(context);
-                data = context.getImageData(1, 1, 1, 1).data;
-            }
-            if (data[3] === 0) {
-                return null;
-            }
-            return this;
         };
         /**
          * @private
@@ -9299,6 +9270,7 @@ var lark;
              * @private
              */
             this.$smoothing = true;
+            this._pixelHitTest = false;
             this.$renderRegion = new lark.sys.Region();
             this.bitmapData = bitmapData;
         }
@@ -9360,6 +9332,62 @@ var lark;
                 this.$invalidate();
             }
         );
+        d(p, "pixelHitTest",
+            /**
+             * @language en_US
+             * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
+             * is set to true,the transparent area of the bitmap will be touched through.
+             * @default false
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透。
+             * @default false
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this._pixelHitTest;
+            },
+            function (value) {
+                this._pixelHitTest = !!value;
+            }
+        );
+        p.$hitTest = function (stageX, stageY) {
+            var target = _super.prototype.$hitTest.call(this, stageX, stageY);
+            if (target && this._pixelHitTest) {
+                target = this.hitTestPixel(stageX, stageY);
+            }
+            return target;
+        };
+        /**
+         * @private
+         */
+        p.hitTestPixel = function (stageX, stageY) {
+            var m = this.$getInvertedConcatenatedMatrix();
+            var localX = m.a * stageX + m.c * stageY + m.tx;
+            var localY = m.b * stageX + m.d * stageY + m.ty;
+            var context;
+            var data;
+            var displayList = this.$displayList;
+            if (displayList) {
+                context = displayList.renderContext;
+                data = context.getImageData(localX - displayList.offsetX, localY - displayList.offsetY, 1, 1).data;
+            }
+            else {
+                context = lark.sys.sharedRenderContext;
+                context.surface.width = context.surface.height = 3;
+                context.translate(1 - localX, 1 - localY);
+                this.$render(context);
+                data = context.getImageData(1, 1, 1, 1).data;
+            }
+            if (data[3] === 0) {
+                return null;
+            }
+            return this;
+        };
         /**
          * @private
          */
@@ -9451,7 +9479,6 @@ var lark;
             this.$graphics = new lark.Graphics();
             this.$graphics.$targetDisplay = this;
             this.$renderRegion = new lark.sys.Region();
-            this.pixelHitTest = true;
         }
         var d = __define,c=Shape;p=c.prototype;
         d(p, "graphics",
@@ -9471,6 +9498,13 @@ var lark;
                 return this.$graphics;
             },undefined
         );
+        p.$hitTest = function (stageX, stageY) {
+            var target = _super.prototype.$hitTest.call(this, stageX, stageY);
+            if (target) {
+                target = this.$graphics.$hitTest(stageX, stageY);
+            }
+            return target;
+        };
         /**
          * @private
          */
@@ -9481,7 +9515,7 @@ var lark;
          * @private
          */
         p.$render = function (context) {
-            this.$graphics.$render(context);
+            this.$graphics.$render(context, false);
         };
         return Shape;
     })(lark.DisplayObject);
@@ -9549,6 +9583,7 @@ var lark;
          */
         function Sprite() {
             _super.call(this);
+            this.$touchChildren = true;
             this.$children = [];
         }
         var d = __define,c=Sprite;p=c.prototype;
@@ -9931,17 +9966,17 @@ var lark;
              * @platform Web,Native
              */
             function () {
-                return this.$hasFlags(2048 /* TouchChildren */);
+                return this.$touchChildren;
             },
             function (value) {
-                this.$setTouchChildren(value);
+                this.$setTouchChildren(!!value);
             }
         );
         /**
          * @private
          */
         p.$setTouchChildren = function (value) {
-            this.$toggleFlags(2048 /* TouchChildren */, !!value);
+            this.$touchChildren = value;
         };
         /**
          * @private
@@ -10025,7 +10060,7 @@ var lark;
         /**
          * @private
          */
-        p.$hitTest = function (stageX, stageY, shapeFlag) {
+        p.$hitTest = function (stageX, stageY) {
             if (!this.$visible) {
                 return null;
             }
@@ -10035,7 +10070,7 @@ var lark;
             if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
                 return null;
             }
-            if (this.$mask && !this.$mask.$hitTest(stageX, stageY, true)) {
+            if (this.$mask && !this.$mask.$hitTest(stageX, stageY)) {
                 return null;
             }
             var children = this.$children;
@@ -10045,10 +10080,10 @@ var lark;
                 if (child.$maskedObject) {
                     continue;
                 }
-                var target = child.$hitTest(stageX, stageY, shapeFlag);
+                var target = child.$hitTest(stageX, stageY);
                 if (target) {
                     found = true;
-                    if (target.$hasFlags(1024 /* TouchEnabled */)) {
+                    if (target.$touchEnabled) {
                         break;
                     }
                     else {
@@ -10057,7 +10092,7 @@ var lark;
                 }
             }
             if (target) {
-                if (this.$hasFlags(2048 /* TouchChildren */)) {
+                if (this.$touchChildren) {
                     return target;
                 }
                 return this;
@@ -10065,7 +10100,7 @@ var lark;
             if (found) {
                 return this;
             }
-            return _super.prototype.$hitTest.call(this, stageX, stageY, shapeFlag);
+            return _super.prototype.$hitTest.call(this, stageX, stageY);
         };
         /**
          * @private

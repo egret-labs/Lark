@@ -1580,7 +1580,7 @@ var lark;
              * @param url 要加载的图像文件的地址。
              */
             p.load = function (url) {
-                if (useXHR && url.indexOf("data:") != 0) {
+                if (useXHR && url.indexOf("data:") != 0 && url.indexOf("http:") != 0 && url.indexOf("https:") != 0) {
                     var request = this.request;
                     if (!request) {
                         request = this.request = new lark.web.WebHttpRequest();

@@ -13496,7 +13496,7 @@ var swan;
             value = !!value;
             var values = this.$Component;
             if (values[3 /* enabled */]) {
-                this.$toggleFlags(2048 /* TouchChildren */, value);
+                _super.prototype.$setTouchChildren.call(this, value);
             }
             else {
                 values[6 /* explicitTouchChildren */] = value;
@@ -13511,7 +13511,7 @@ var swan;
             value = !!value;
             var values = this.$Component;
             if (values[3 /* enabled */]) {
-                this.$toggleFlags(1024 /* TouchEnabled */, value);
+                _super.prototype.$setTouchEnabled.call(this, value);
             }
             else {
                 values[7 /* explicitTouchEnabled */] = value;
@@ -13563,8 +13563,8 @@ var swan;
             }
             values[3 /* enabled */] = value;
             if (value) {
-                values[7 /* explicitTouchEnabled */] = this.touchEnabled;
-                values[6 /* explicitTouchChildren */] = this.touchChildren;
+                values[7 /* explicitTouchEnabled */] = this.$touchEnabled;
+                values[6 /* explicitTouchChildren */] = this.$touchChildren;
             }
             else {
                 _super.prototype.$setTouchEnabled.call(this, values[7 /* explicitTouchEnabled */]);
@@ -14326,18 +14326,13 @@ var swan;
         );
         /**
          * @private
-         *
-         * @param stageX
-         * @param stageY
-         * @param shapeFlag
-         * @returns
          */
-        p.$hitTest = function (stageX, stageY, shapeFlag) {
-            var target = _super.prototype.$hitTest.call(this, stageX, stageY, shapeFlag);
-            if (target || this.$Group[5 /* touchThrough */] || shapeFlag || this.$displayFlags & 1 /* PixelHitTest */) {
+        p.$hitTest = function (stageX, stageY) {
+            var target = _super.prototype.$hitTest.call(this, stageX, stageY);
+            if (target || this.$Group[5 /* touchThrough */]) {
                 return target;
             }
-            if (!this.$visible || !this.$hasFlags(1024 /* TouchEnabled */)) {
+            if (!this.$visible || !this.touchEnabled) {
                 return null;
             }
             var point = this.globalToLocal(stageX, stageY, lark.$TempPoint);

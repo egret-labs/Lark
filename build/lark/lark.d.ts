@@ -6617,11 +6617,6 @@ declare module lark.sys {
     const enum DisplayObjectFlags {
         /**
          * @private
-         * 显示对象是否开启像素级精确碰撞，开启后显示对象的透明区域将可以穿透，Graphics默认开启此功能，。
-         */
-        PixelHitTest = 1,
-        /**
-         * @private
          * 显示对象自身的绘制区域尺寸失效
          */
         InvalidContentBounds = 2,
@@ -6652,12 +6647,6 @@ declare module lark.sys {
         InvalidConcatenatedAlpha = 64,
         /**
          * @private
-         * 显示对象应该被缓存成位图的标志，即使没有设置这个标志，也有可能被缓存成位图，例如含有滤镜的情况。
-         * 而当设置了这个标志，如果内存不足，也会放弃缓存。
-         */
-        CacheAsBitmap = 128,
-        /**
-         * @private
          * 显示对象自身需要重绘的标志
          */
         DirtyRender = 256,
@@ -6666,16 +6655,6 @@ declare module lark.sys {
          * 子项中已经全部含有DirtyRender标志，无需继续遍历。
          */
         DirtyChildren = 512,
-        /**
-         * @private
-         * 对象自身在舞台上的显示尺寸发生改变。
-         */
-        TouchEnabled = 1024,
-        /**
-         * @private
-         * 对象自身以及子项在舞台上显示尺寸发生改变。
-         */
-        TouchChildren = 2048,
         /**
          * @private
          * DirtyRender|DirtyChildren
@@ -6690,7 +6669,7 @@ declare module lark.sys {
          * @private
          * 显示对象初始化时的标志量
          */
-        InitFlags = 3952,
+        InitFlags = 880,
     }
 }
 declare module lark {
@@ -7055,23 +7034,6 @@ declare module lark {
         touchEnabled: boolean;
         /**
          * @language en_US
-         * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
-         * is set to true,the transparent area of the display object will be touched through.<br/>
-         * Enabling this property will cause certain mount of performance loss. This property is set to true in the Shape class,
-         * while the other is set to false by default.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，<br/>
-         * 开启此属性将会有一定量的额外性能损耗，Shape等含有矢量图的类默认开启此属性，其他类默认关闭。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        pixelHitTest: boolean;
-        /**
-         * @language en_US
          * The scroll rectangle bounds of the display object. The display object is cropped to the size defined by the rectangle,
          * and it scrolls within the rectangle when you change the x and y properties of the scrollRect object. A scrolled display
          * object always scrolls in whole pixel increments.You can scroll an object left and right by setting the x property of
@@ -7214,10 +7176,6 @@ declare module lark {
          */
         localToGlobal(localX: number, localY: number, resultPoint?: Point): Point;
         /**
-         * @private
-         */
-        private hitTestPixel(localX, localY);
-        /**
          * @inheritDoc
          * @version Lark 1.0
          * @platform Web,Native
@@ -7309,6 +7267,27 @@ declare module lark {
          * @platform Web,Native
          */
         smoothing: boolean;
+        private _pixelHitTest;
+        /**
+         * @language en_US
+         * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
+         * is set to true,the transparent area of the bitmap will be touched through.
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透。
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        pixelHitTest: boolean;
+        /**
+         * @private
+         */
+        private hitTestPixel(stageX, stageY);
     }
 }
 declare module lark {
