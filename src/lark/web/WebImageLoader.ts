@@ -31,6 +31,12 @@ module lark.web {
 
     var winURL = window["URL"] || window["webkitURL"];
     var useXHR = winURL&&Capabilities.os == "iOS";
+    if(useXHR){
+        var value = window.navigator.userAgent.toLowerCase().match(/cpu [^\d]*\d.*like mac os x/)[0];
+        if(parseInt(value.match(/\d(_\d)*/)[0].charAt(0)) < 7){
+            useXHR = false;
+        }
+    }
 
     /**
      * @private
