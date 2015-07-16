@@ -64,7 +64,6 @@ module lark {
             this.$graphics = new Graphics();
             this.$graphics.$targetDisplay = this;
             this.$renderRegion = new sys.Region();
-            this.pixelHitTest = true;
         }
 
         /**

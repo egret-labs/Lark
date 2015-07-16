@@ -39,11 +39,6 @@ module lark.sys {
 
         /**
          * @private
-         * 显示对象是否开启像素级精确碰撞，开启后显示对象的透明区域将可以穿透，Graphics默认开启此功能，。
-         */
-        PixelHitTest = 0x0001,
-        /**
-         * @private
          * 显示对象自身的绘制区域尺寸失效
          */
         InvalidContentBounds = 0x0002,
@@ -1102,30 +1097,6 @@ module lark {
         }
 
         /**
-         * @language en_US
-         * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
-         * is set to true,the transparent area of the display object will be touched through.<br/>
-         * Enabling this property will cause certain mount of performance loss. This property is set to true in the Shape class,
-         * while the other is set to false by default.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，<br/>
-         * 开启此属性将会有一定量的额外性能损耗，Shape等含有矢量图的类默认开启此属性，其他类默认关闭。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public get pixelHitTest():boolean {
-            return this.$hasFlags(sys.DisplayObjectFlags.PixelHitTest);
-        }
-
-        public set pixelHitTest(value:boolean) {
-            this.$toggleFlags(sys.DisplayObjectFlags.PixelHitTest, !!value);
-        }
-
-        /**
          * @private
          */
         $scrollRect:Rectangle = null;
@@ -1537,7 +1508,7 @@ module lark {
         /**
          * @private
          */
-        $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):DisplayObject {
+        $hitTest(stageX:number, stageY:number):DisplayObject {
             if (!this.$renderRegion || !this.$visible) {
                 return null;
             }
@@ -1550,40 +1521,13 @@ module lark {
                     if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
                         return null;
                     }
-                    if (this.$mask && !this.$mask.$hitTest(stageX, stageY, true)) {
+                    if (this.$mask && !this.$mask.$hitTest(stageX, stageY)) {
                         return null;
                     }
-                }
-                if (shapeFlag || this.$displayFlags & sys.DisplayObjectFlags.PixelHitTest) {
-                    return this.hitTestPixel(localX, localY);
                 }
                 return this;
             }
             return null;
-        }
-
-        /**
-         * @private
-         */
-        private hitTestPixel(localX:number, localY:number):DisplayObject {
-            var context:sys.RenderContext;
-            var data:Uint8Array;
-            var displayList = this.$displayList;
-            if (displayList) {
-                context = displayList.renderContext;
-                data = context.getImageData(localX - displayList.offsetX, localY - displayList.offsetY, 1, 1).data;
-            }
-            else {
-                context = sys.sharedRenderContext;
-                context.surface.width = context.surface.height = 3;
-                context.translate(1 - localX, 1 - localY);
-                this.$render(context);
-                data = context.getImageData(1, 1, 1, 1).data;
-            }
-            if (data[3] === 0) {
-                return null;
-            }
-            return this;
         }
 
         /**
