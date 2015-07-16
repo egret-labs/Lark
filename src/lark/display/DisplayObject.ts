@@ -1449,10 +1449,10 @@ module lark {
             //必须在访问moved属性前调用以下两个方法，因为moved属性在以下两个方法内重置。
             var concatenatedMatrix = this.$getConcatenatedMatrix();
             var bounds = this.$getContentBounds();
-            var displayList = this.$displayList||this.$parentDisplayList;
+            var displayList = this.$displayList || this.$parentDisplayList;
             var region = this.$renderRegion;
-            if(!displayList){
-                region.setTo(0,0,0,0);
+            if (!displayList) {
+                region.setTo(0, 0, 0, 0);
                 region.moved = false;
                 return false;
             }
@@ -1463,7 +1463,7 @@ module lark {
             var matrix = this.$renderMatrix;
             matrix.copyFrom(concatenatedMatrix);
             var root = displayList.root;
-            if(root!==this.$stage){
+            if (root !== this.$stage) {
                 root.$getInvertedConcatenatedMatrix().$preMultiplyInto(matrix, matrix);
             }
             region.updateRegion(bounds, matrix);

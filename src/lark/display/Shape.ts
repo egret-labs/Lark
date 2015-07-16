@@ -86,6 +86,14 @@ module lark {
             return this.$graphics;
         }
 
+        $hitTest(stageX:number, stageY:number):DisplayObject {
+            var target = super.$hitTest(stageX, stageY);
+            if (target) {
+                target = this.$graphics.$hitTest(stageX, stageY);
+            }
+            return target;
+        }
+
         /**
          * @private
          */
@@ -97,7 +105,7 @@ module lark {
          * @private
          */
         $render(context:sys.RenderContext):void {
-            this.$graphics.$render(context);
+            this.$graphics.$render(context,false);
         }
     }
 
