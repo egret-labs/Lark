@@ -160,6 +160,19 @@ module lark {
             this.$screen.updateScreenSize();
         }
 
+        $highResolutionMode: string = "default";
+
+        public get highResolutionMode(): string {
+            return this.$highResolutionMode;
+        }
+
+        public set highResolutionMode(value: string) {
+            if (this.$highResolutionMode == value)
+                return;
+            this.$highResolutionMode = value;
+            this.$screen.updateScreenSize();
+        }
+
         /**
          * @language en_US
          * After you call the invalidate() method, when the display list is next rendered, the Lark runtime sends a render

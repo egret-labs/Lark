@@ -32,7 +32,7 @@ module lark.sys {
     var displayListPool:DisplayList[] = [];
     var blendModes = ["source-over", "lighter", "destination-out"];
     var defaultCompositeOp = "source-over";
-
+    
     /**
      * @private
      * 显示列表
@@ -45,6 +45,7 @@ module lark.sys {
          */
         public static release(displayList:DisplayList):void {
             surfaceFactory.release(displayList.surface);
+            Matrix.release(displayList.$renderMatrix);
             displayList.surface = null;
             displayList.renderContext = null;
             displayList.root = null;
@@ -69,6 +70,10 @@ module lark.sys {
             }
             displayList.surface = surface;
             displayList.renderContext = surface.renderContext;
+            displayList.root = target;
+            displayList.$renderMatrix = Matrix.create();
+            displayList.needRedraw = true;
+            displayList.$isDirty = true;
             return displayList;
         }
 
@@ -86,12 +91,17 @@ module lark.sys {
          * @private
          * 是否需要重绘
          */
-        $isDirty:boolean = false;
+        $isDirty: boolean = false;
         /**
          * @private
          * 在舞台上的透明度
          */
-        $renderAlpha:number = 1;
+        $renderAlpha: number = 1;
+        /**
+         * @private
+         * 设备分辨率与逻辑分辨率比值
+         */
+        $pixelRatio: number = 1;
         /**
          * @private
          * 相对于显示列表根节点或位图缓存根节点的矩阵对象
@@ -161,7 +171,7 @@ module lark.sys {
         $render(context:RenderContext):void {
             var data = this.surface;
             if (data) {
-                context.drawImage(data, this.offsetX, this.offsetY);
+                context.drawImage(data, this.offsetX / this.$pixelRatio, this.offsetY / this.$pixelRatio, this.surface.width / this.$pixelRatio, this.surface.height / this.$pixelRatio);
             }
         }
 
@@ -192,12 +202,13 @@ module lark.sys {
          * 设置剪裁边界，不再绘制完整目标对象，画布尺寸由外部决定，超过边界的节点将跳过绘制。
          */
         public setClipRect(width:number, height:number):void {
-            this.dirtyRegion.setClipRect(width, height);
+            this.dirtyRegion.setClipRect(width * this.$pixelRatio, height * this.$pixelRatio);
             this.rootMatrix = null;//只有舞台画布才能设置ClipRect
             var surface = this.renderContext.surface;
-            surface.width = width;
-            surface.height = height;
+            surface.width = width * this.$pixelRatio;
+            surface.height = height * this.$pixelRatio;
             this.surface = surface;
+            
         }
 
         /**
@@ -279,12 +290,16 @@ module lark.sys {
             if (m) {//对非舞台画布要根据目标显示对象尺寸改变而改变。
                 this.changeSurfaceSize();
             }
+            else {
+                m = Matrix.create();
+                m.setTo(this.$pixelRatio, 0, 0, this.$pixelRatio, 0, 0);
+            }
             var context = this.renderContext;
             //绘制脏矩形区域
             context.save();
             context.beginPath();
             if(m){
-                context.setTransform(1,0,0,1,-this.offsetX,-this.offsetY);
+                context.setTransform(this.$pixelRatio, 0, 0, this.$pixelRatio, -this.offsetX, -this.offsetY);
             }
             var dirtyList = this.dirtyList;
             this.dirtyList = null;
@@ -516,7 +531,7 @@ module lark.sys {
                 }
 
                 if (rootMatrix) {
-                    context.translate(region.minX, region.minY)
+                    context.translate(region.minX, region.minY);
                     context.drawImage(displayContext.surface, 0, 0);
                     context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx, rootMatrix.ty);
                 }
@@ -574,7 +589,8 @@ module lark.sys {
 
             //绘制显示对象自身
             context.save();
-            context.setTransform(m.a, m.b, m.c, m.d, m.tx-this.offsetX, m.ty-this.offsetY);
+            context.setTransform(rootMatrix.a, 0, 0, rootMatrix.d, 0, 0);
+            context.transform(m.a, m.b, m.c, m.d, m.tx - this.offsetX / this.$pixelRatio, m.ty - this.offsetY / this.$pixelRatio);
             context.beginPath();
             context.rect(scrollRect.x, scrollRect.y, scrollRect.width, scrollRect.height);
             context.clip();
@@ -617,14 +633,14 @@ module lark.sys {
             var oldOffsetX = this.offsetX;
             var oldOffsetY = this.offsetY;
             var bounds = this.root.$getOriginalBounds();
-            this.offsetX = bounds.x;
-            this.offsetY = bounds.y;
+            this.offsetX = bounds.x * this.$pixelRatio;
+            this.offsetY = bounds.y * this.$pixelRatio;
             var oldContext = this.renderContext;
             var oldSurface = oldContext.surface;
             if (this.sizeChanged) {
                 this.sizeChanged = false;
-                oldSurface.width = bounds.width;
-                oldSurface.height = bounds.height;
+                oldSurface.width = bounds.width * this.$pixelRatio;
+                oldSurface.height = bounds.height * this.$pixelRatio;
             }
             else {
                 var newContext = sys.sharedRenderContext;
@@ -632,16 +648,16 @@ module lark.sys {
                 sys.sharedRenderContext = oldContext;
                 this.renderContext = newContext;
                 this.surface = newSurface;
-                newSurface.width = bounds.width;
-                newSurface.height = bounds.height;
+                newSurface.width = bounds.width * this.$pixelRatio;
+                newSurface.height = bounds.height * this.$pixelRatio;
                 if (oldSurface.width !== 0 && oldSurface.height !== 0) {
                     newContext.setTransform(1, 0, 0, 1, 0, 0);
-                    newContext.drawImage(oldSurface, oldOffsetX - bounds.x, oldOffsetY - bounds.y);
+                    newContext.drawImage(oldSurface, oldOffsetX - this.offsetX, oldOffsetY - this.offsetY);
                 }
                 oldSurface.height = 1;
                 oldSurface.width = 1;
             }
-            this.rootMatrix.setTo(1, 0, 0, 1, - bounds.x, - bounds.y);
+            this.rootMatrix.setTo(this.$pixelRatio, 0, 0, this.$pixelRatio, - bounds.x * this.$pixelRatio, - bounds.y * this.$pixelRatio);
             this.renderContext.setTransform(1, 0, 0, 1, - bounds.x, - bounds.y);
         }
 

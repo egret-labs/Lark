@@ -201,13 +201,15 @@ module lark.sys {
          * @param stageWidth 舞台宽度（以像素为单位）
          * @param stageHeight 舞台高度（以像素为单位）
          */
-        public updateStageSize(stageWidth:number, stageHeight:number):void {
+        public updateStageSize(stageWidth: number, stageHeight: number, pixelRatio:number = 1):void {
             var stage = this.stage;
             if (stageWidth !== stage.$stageWidth || stageHeight !== stage.$stageHeight) {
                 stage.$stageWidth = stageWidth;
                 stage.$stageHeight = stageHeight;
+                this.screenDisplayList.$pixelRatio = pixelRatio;
                 this.screenDisplayList.setClipRect(stageWidth, stageHeight);
                 if (DEBUG && this.stageDisplayList) {
+                    this.stageDisplayList.$pixelRatio = pixelRatio;
                     this.stageDisplayList.setClipRect(stageWidth, stageHeight);
                 }
                 stage.emitWith(Event.RESIZE);
@@ -352,9 +354,11 @@ module lark.sys {
                 repaintList.shift();
             }
             var context = this.screenDisplayList.renderContext;
+            var pixelRatio = this.stageDisplayList.$pixelRatio;
             context.setTransform(1, 0, 0, 1, 0, 0);
             context.clearRect(0, 0, context.surface.width, context.surface.height);
             context.drawImage(this.stageDisplayList.surface, 0, 0);
+            context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
             length = repaintList.length;
             for (i = 0; i < length; i++) {
                 list = repaintList[i];
@@ -372,6 +376,7 @@ module lark.sys {
                 context.rect(region.minX, region.minY, region.width, region.height);
             }
             context.clip();
+            context.setTransform(1, 0, 0, 1, 0, 0);
             context.drawImage(this.stageDisplayList.surface, 0, 0);
             context.restore();
         }

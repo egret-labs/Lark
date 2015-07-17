@@ -69,7 +69,12 @@ module lark.web {
         /**
          * 过滤日志的正则表达式
          */
-        logFilter?:string;
+        logFilter?: string;
+
+        /**
+         * HighResolution
+         */
+        highResolutionMode?: string;
     }
 
     export class WebPlayer extends LarkObject implements lark.sys.Screen {
@@ -84,6 +89,7 @@ module lark.web {
             var stage = new lark.Stage();
             stage.$screen = this;
             stage.$scaleMode = option.scaleMode;
+            stage.$highResolutionMode = option.highResolutionMode;
             stage.frameRate = option.frameRate;
             var surface = lark.sys.surfaceFactory.create();
             var canvas = <HTMLCanvasElement><any>surface;
@@ -119,6 +125,7 @@ module lark.web {
             option.contentWidth = +container.getAttribute("data-content-width") || 480;
             option.contentHeight = +container.getAttribute("data-content-height") || 800;
             option.orientation = container.getAttribute("data-orientation") || lark.sys.OrientationMode.AUTO;
+            option.highResolutionMode = container.getAttribute("data-resolution-mode") || lark.sys.HighResolutionMode.DEFAULT;
             if (DEBUG) {
                 option.showPaintRect = container.getAttribute("data-show-paint-rect") == "true";
                 option.showFPS = container.getAttribute("data-show-fps") == "true";
@@ -176,49 +183,80 @@ module lark.web {
          */
         public updateScreenSize():void {
             var canvas = this.canvas;
-            if (canvas['userTyping'])
-                return;
             var option = this.playerOption;
+            var devicePixelRatio = Capabilities.$devicePixelRatio;
+            var stagePixelRatio = 1;
             var screenRect = this.container.getBoundingClientRect();
-            var shouldRotate = false;
-            if (option.orientation != sys.OrientationMode.AUTO) {
-                shouldRotate = option.orientation != sys.OrientationMode.PORTRAIT && screenRect.height > screenRect.width
-                    || option.orientation == sys.OrientationMode.PORTRAIT && screenRect.width > screenRect.height;
-            }
+            var ormode = this.calculateOrientationMode(option, screenRect),
+                shouldRotate = ormode.shouldRotate,
+                rotation = ormode.rotation;
+            var scaleMode = this.stage.$scaleMode,
+                highResolutionMode = this.stage.$highResolutionMode;
+
             var screenWidth = shouldRotate ? screenRect.height : screenRect.width;
             var screenHeight = shouldRotate ? screenRect.width : screenRect.height;
-            var stageSize = lark.sys.screenAdapter.calculateStageSize(this.stage.$scaleMode,
+            var stageSize = lark.sys.screenAdapter.calculateStageSize(scaleMode,
                 screenWidth, screenHeight, option.contentWidth, option.contentHeight);
-            var stageWidth = stageSize.stageWidth;
-            var stageHeight = stageSize.stageHeight;
-            var displayWidth = stageSize.displayWidth;
-            var displayHeight = stageSize.displayHeight;
-            if (canvas.width !== stageWidth) {
-                canvas.width = stageWidth;
+            var stageWidth = stageSize.stageWidth,
+                stageHeight = stageSize.stageHeight;
+            var displayWidth = stageSize.displayWidth,
+                displayHeight = stageSize.displayHeight;
+            var canvasWidth = stageWidth,
+                canvasHeight = stageHeight;
+            if (scaleMode == StageScaleMode.NO_SCALE) {
+                if (highResolutionMode != sys.HighResolutionMode.DEFAULT) {
+                    canvasWidth *= devicePixelRatio;
+                    canvasHeight *= devicePixelRatio;
+                    if (highResolutionMode == sys.HighResolutionMode.DEVICE) {
+                        stageWidth *= devicePixelRatio;
+                        stageHeight *= devicePixelRatio;
+                    }
+                    if (highResolutionMode == sys.HighResolutionMode.HIGH_DPI) {
+                        stagePixelRatio = devicePixelRatio;
+                    }
+                }
             }
-            if (canvas.height !== stageHeight) {
-                canvas.height = stageHeight;
-            }
+
             canvas.style.width = displayWidth + "px";
             canvas.style.height = displayHeight + "px";
             canvas.style.top = (screenRect.height - displayHeight) / 2 + "px";
             canvas.style.left = (screenRect.width - displayWidth) / 2 + "px";
+            if (canvas.width !== canvasWidth) 
+                canvas.width = canvasWidth;
+            if (canvas.height !== canvasHeight) 
+                canvas.height = canvasHeight;
+            console.log(canvas.width);
+            var transform = `rotate(${ rotation }deg)`;
+            canvas.style['webkitTransform'] = transform;
+            canvas.style.transform = transform;
+            this.player.updateStageSize(stageWidth, stageHeight, stagePixelRatio);
+            var scaleX = displayWidth / stageWidth;
+            var scaleY = displayHeight / stageHeight;
+            this.webTouchHandler.updateScaleMode(scaleX, scaleY, rotation);
+            this.webTextAdapter.updateScaleMode(scaleX, scaleY, (screenRect.width - displayWidth) / 2,
+                (screenRect.height - displayHeight) / 2, displayWidth / 2, displayHeight / 2, rotation);
+        }
+
+        private calculateOrientationMode(option: PlayerOption, screenRect:ClientRect) {
+
+            var shouldRotate = false;
             var rotation = 0;
+            if (option.orientation != sys.OrientationMode.AUTO) {
+                shouldRotate = option.orientation != sys.OrientationMode.PORTRAIT && screenRect.height > screenRect.width
+                || option.orientation == sys.OrientationMode.PORTRAIT && screenRect.width > screenRect.height;
+            }
+
             if (shouldRotate) {
                 if (option.orientation == sys.OrientationMode.LANDSCAPE)
                     rotation = 90;
                 else
                     rotation = -90;
             }
-            var transform = `rotate(${ rotation }deg)`;
-            canvas.style['webkitTransform'] = transform;
-            canvas.style.transform = transform;
-            this.player.updateStageSize(stageWidth, stageHeight);
-            var scaleX = displayWidth / stageWidth;
-            var scaleY = displayHeight / stageHeight;
-            this.webTouchHandler.updateScaleMode(scaleX, scaleY, rotation);
-            this.webTextAdapter.updateScaleMode(scaleX, scaleY, (screenRect.width - displayWidth) / 2,
-                (screenRect.height - displayHeight) / 2, displayWidth / 2, displayHeight / 2, rotation);
+
+            return {
+                shouldRotate,
+                rotation
+            };
         }
 
     }

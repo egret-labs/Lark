@@ -979,6 +979,16 @@ module lark {
                     if (this.$parentDisplayList) {
                         this.$parentDisplayList.markDirty(displayList);
                     }
+                    if (this.stage)
+                        displayList.$pixelRatio = this.$stage.$displayList.$pixelRatio;
+                    else
+                        this.once(Event.ADDED_TO_STAGE, e=> {
+                            var ratio = this.$stage.$displayList.$pixelRatio;
+                            if (ratio != displayList.$pixelRatio) {
+                                displayList.$pixelRatio = ratio;
+                                this.$cacheAsBitmapChanged();
+                            }
+                        }, this);
                     this.$cacheAsBitmapChanged();
                 }
             }
