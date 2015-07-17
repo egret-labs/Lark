@@ -30,6 +30,7 @@
 
 module lark {
 
+    var localPoint:Point = new Point();
     /**
      * @language en_US
      * The TouchEvent class lets you handle events on devices that detect user contact with the device (such as a finger
@@ -169,6 +170,7 @@ module lark {
             this.touchPointID = +touchPointID || 0;
             this.$stageX = +stageX || 0;
             this.$stageY = +stageY || 0;
+
         }
 
         /**
@@ -213,22 +215,7 @@ module lark {
             return this.$stageY;
         }
 
-        /**
-         * @private
-         */
-        private localPoint:Point;
-
-        /**
-         * @private
-         */
-        private getLocalXY():Point {
-            if (!this.localPoint) {
-                this.localPoint = new Point();
-                var m = (<DisplayObject>this.target).$getInvertedConcatenatedMatrix();
-                m.transformPoint(this.stageX, this.stageY, this.localPoint);
-            }
-            return this.localPoint;
-        }
+        private _localX:number;
 
         /**
          * @language en_US
@@ -243,9 +230,13 @@ module lark {
          * @platform Web,Native
          */
         public get localX():number {
-            return this.getLocalXY().x;
+            if (this.targetChanged) {
+                this.getLocalXY();
+            }
+            return this._localX;
         }
 
+        private _localY:number;
         /**
          * @language en_US
          * The vertical coordinate at which the event occurred relative to the display object.
@@ -259,7 +250,28 @@ module lark {
          * @platform Web,Native
          */
         public get localY():number {
-            return this.getLocalXY().y;
+            if (this.targetChanged) {
+                this.getLocalXY();
+            }
+            return this._localY;
+        }
+
+        private targetChanged:boolean = true;
+
+        /**
+         * @private
+         */
+        private getLocalXY():void {
+            this.targetChanged = false;
+            var m = (<DisplayObject>this.$target).$getInvertedConcatenatedMatrix();
+            m.transformPoint(this.$stageX, this.$stageY, localPoint);
+            this._localX = localPoint.x;
+            this._localY = localPoint.y;
+        }
+
+        $setTarget(target:any):void {
+            this.$target = target;
+            this.targetChanged = !!target;
         }
 
         /**
@@ -340,10 +352,10 @@ module lark {
         }
     }
 
-    if(DEBUG){
-        lark.$markReadOnly(TouchEvent,"stageX");
-        lark.$markReadOnly(TouchEvent,"stageY");
-        lark.$markReadOnly(TouchEvent,"localX");
-        lark.$markReadOnly(TouchEvent,"localY");
+    if (DEBUG) {
+        lark.$markReadOnly(TouchEvent, "stageX");
+        lark.$markReadOnly(TouchEvent, "stageY");
+        lark.$markReadOnly(TouchEvent, "localX");
+        lark.$markReadOnly(TouchEvent, "localY");
     }
 }

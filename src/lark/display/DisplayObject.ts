@@ -1556,7 +1556,7 @@ module lark {
 
             var list = this.$getPropagationList(this);
             var targetIndex = list.length * 0.5;
-            event.$target = this;
+            event.$setTarget(this);
             this.$emitPropagationEvent(event, list, targetIndex);
             return !event.$isDefaultPrevented;
         }
