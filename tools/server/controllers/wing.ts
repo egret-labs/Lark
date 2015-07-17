@@ -52,7 +52,7 @@ function projectFiles(req, res, isValidation) {
 
 function getUserProjectContentFullName(req) {
     var uri = url.parse(req.url);
-    var paths = uri.pathname.split(/[\/_]/).filter(f=>!!f);
+    var paths = uri.pathname.split(/[\/]/).filter(f=> !!f && f != "_");
     var proj = paths.shift();
     var filepath = paths.join('/');
     var projectPath = projs[proj].path;
