@@ -85,7 +85,7 @@ module larkAnimation {
 
         /**
          * @language en_US
-         * Add a call-back-function at the frame.If a call-back-function has existed on the frame, it's will be replaced.
+         * Add a call-back-function at the frame.If a call-back-function has existed on the frame, it's will be replaced.The this pointer points to the BitmapArray instance.
          * @param frame The frame to add call back.The number of first frame is 1.
          * @param callBack The function to call back.
          * @version Lark 1.0
@@ -93,13 +93,17 @@ module larkAnimation {
          */
         /**
          * @language zh_CN
-         * 在对应的帧上添加回调函数。如果之前该帧上已经有回调函数，会被替换成新的回调函数。
+         * 在对应的帧上添加回调函数。如果之前该帧上已经有回调函数，会被替换成新的回调函数。回调函数的作用域被锁定为 BitmapArray 实例本身。
          * @param frame 第几帧添加代码。起始帧编号为1。
          * @param callBack 回调函数。
          * @version Lark 1.0
          * @platform Web,Native
          */
         public addFrameScript(frame:number, callBack:Function):void {
+            frame = frame & ~0 || 1;
+            if (this.$bitmapArrayData && frame >= this.$bitmapArrayData.$length) {
+                frame = this.$bitmapArrayData.$length;
+            }
             frame--;
             this.$callBacks[frame] = callBack;
         }
@@ -125,7 +129,7 @@ module larkAnimation {
          * @platform Web,Native
          */
         public get currentFrame():number {
-            if (this.$bitmapArrayData.$length == 0) return 0;
+            if (!this.$bitmapArrayData) return 0;
             return this.$currentFrame + 1;
         }
 
@@ -133,7 +137,6 @@ module larkAnimation {
          * @private
          */
         private $bitmapArrayData:BitmapArrayData;
-
 
         /**
          * @language en_US
@@ -168,6 +171,7 @@ module larkAnimation {
             if (bitmapArrayData && bitmapArrayData.$length) {
                 this.$currentFrame = 0;
                 this.$isPlaying = true;
+                this.$currentRun = false;
                 this.executeFrameScript();
             }
             else {
