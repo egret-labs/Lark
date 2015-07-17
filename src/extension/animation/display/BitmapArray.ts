@@ -67,7 +67,7 @@ module larkAnimation {
             this.$bitmapArrayData = bitmapArrayData;
             if (bitmapArrayData && bitmapArrayData.$length) {
                 this.$isPlaying = true;
-                this.excuteFrameScript();
+                this.executeFrameScript();
                 this.$invalidateContentBounds();
             }
             this.on(lark.Event.ENTER_FRAME, this.$onFrame, this);
@@ -168,7 +168,7 @@ module larkAnimation {
             if (bitmapArrayData && bitmapArrayData.$length) {
                 this.$currentFrame = 0;
                 this.$isPlaying = true;
-                this.excuteFrameScript();
+                this.executeFrameScript();
             }
             else {
                 this.$currentFrame = 0;
@@ -181,7 +181,7 @@ module larkAnimation {
          * @private
          * 执行当前帧脚本逻辑
          */
-        private excuteFrameScript():void {
+        private executeFrameScript():void {
             var callBack:Function = this.$callBacks[this.$currentFrame];
             if (callBack && !this.$currentRun) {
                 this.$currentRun = true;
@@ -222,7 +222,7 @@ module larkAnimation {
             this.$currentFrame++;
             this.$currentFrame = this.$currentFrame % this.$bitmapArrayData.$length;
             this.$currentRun = false;
-            this.excuteFrameScript();
+            this.executeFrameScript();
             this.$invalidateContentBounds();
         }
 
@@ -268,15 +268,15 @@ module larkAnimation {
                 return;
             }
             frame = frame & ~0 || 1;
-            frame--;
             this.$isPlaying = true;
             if (frame >= this.$bitmapArrayData.$length) frame = this.$bitmapArrayData.$length;
+            frame--;
             if (this.$currentFrame == frame) {
                 return;
             }
             this.$currentFrame = frame;
             this.$currentRun = false;
-            this.excuteFrameScript();
+            this.executeFrameScript();
         }
 
         /**
@@ -298,15 +298,15 @@ module larkAnimation {
                 return;
             }
             frame = frame & ~0 || 1;
-            frame--;
             this.$isPlaying = false;
             if (frame >= this.$bitmapArrayData.$length) frame = this.$bitmapArrayData.$length;
+            frame--;
             if (this.$currentFrame == frame) {
                 return;
             }
             this.$currentFrame = frame;
             this.$currentRun = false;
-            this.excuteFrameScript();
+            this.executeFrameScript();
         }
 
         /**
@@ -326,7 +326,7 @@ module larkAnimation {
             if (!this.$bitmapArrayData) {
                 return;
             }
-            this.excuteFrameScript();
+            this.executeFrameScript();
             if (this.$currentFrame >= this.$bitmapArrayData.$length - 1) {
                 return;
             }
@@ -367,7 +367,7 @@ module larkAnimation {
             if (!this.$bitmapArrayData) {
                 return;
             }
-            this.excuteFrameScript();
+            this.executeFrameScript();
             if (this.$currentFrame == 0) {
                 return;
             }
