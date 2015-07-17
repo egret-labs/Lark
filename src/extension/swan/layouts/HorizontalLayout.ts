@@ -103,7 +103,7 @@ module swan {
                 }
                 layoutElement.getPreferredBounds(bounds);
                 measuredWidth += bounds.width;
-                measuredWidth -= elementSizeTable[index] || typicalWidth;
+                measuredWidth -= isNaN(elementSizeTable[index]) ? typicalWidth : elementSizeTable[index];
                 measuredHeight = Math.max(measuredHeight, bounds.height);
             }
             var hPadding = this.$paddingLeft + this.$paddingRight;
@@ -266,7 +266,7 @@ module swan {
                     }
                 }
                 else {
-                    layoutElementWidth = widthDic[layoutElement.$hashCode] || NaN;
+                    layoutElementWidth = widthDic[layoutElement.$hashCode];
                 }
                 if (vJustify) {
                     y = paddingT;
@@ -388,7 +388,7 @@ module swan {
 
                 contentHeight = Math.max(contentHeight, bounds.height);
                 if (!needInvalidateSize) {
-                    oldElementSize = elementSizeTable[i] || typicalWidth;
+                    oldElementSize = isNaN(elementSizeTable[i]) ? typicalWidth : elementSizeTable[i];
                     if (oldElementSize != bounds.width)
                         needInvalidateSize = true;
                 }
@@ -428,7 +428,11 @@ module swan {
             var gap = this.$gap;
             var elementSizeTable = this.elementSizeTable;
             for (var i = 0; i < index; i++) {
-                startPos += (elementSizeTable[i] || typicalWidth) + gap;
+                var w = elementSizeTable[i];
+                if(isNaN(w)){
+                    w = typicalWidth;
+                }
+                startPos += w + gap;
             }
             return startPos;
         }
@@ -442,9 +446,12 @@ module swan {
          * @platform Web,Native
          */
         protected getElementSize(index:number):number {
-
             if (this.$useVirtualLayout) {
-                return this.elementSizeTable[index] || this.$typicalWidth;
+                var size = this.elementSizeTable[index];
+                if(isNaN(size)){
+                    size = this.$typicalWidth;
+                }
+                return size;
             }
             if (this.$target) {
                 return this.$target.getElementAt(index).width;
@@ -466,7 +473,11 @@ module swan {
             var length = this.$target.numElements;
             var elementSizeTable = this.elementSizeTable;
             for (var i = 0; i < length; i++) {
-                totalSize += (elementSizeTable[i] || typicalWidth) + gap;
+                var w = elementSizeTable[i];
+                if(isNaN(w)){
+                    w = typicalWidth;
+                }
+                totalSize += w + gap;
             }
             totalSize -= gap;
             return totalSize;

@@ -14678,7 +14678,7 @@ var swan;
                 }
                 layoutElement.getPreferredBounds(bounds);
                 measuredHeight += bounds.height;
-                measuredHeight -= elementSizeTable[index] || typicalHeight;
+                measuredHeight -= isNaN(elementSizeTable[index]) ? typicalHeight : elementSizeTable[index];
                 measuredWidth = Math.max(measuredWidth, bounds.width);
             }
             var hPadding = this.$paddingLeft + this.$paddingRight;
@@ -14829,7 +14829,7 @@ var swan;
                     }
                 }
                 else {
-                    layoutElementHeight = heightDic[layoutElement.$hashCode] || NaN;
+                    layoutElementHeight = heightDic[layoutElement.$hashCode];
                 }
                 if (hJustify) {
                     x = paddingL;
@@ -14945,7 +14945,7 @@ var swan;
                 }
                 contentWidth = Math.max(contentWidth, bounds.width);
                 if (!needInvalidateSize) {
-                    oldElementSize = elementSizeTable[i] || typicalHeight;
+                    oldElementSize = isNaN(elementSizeTable[i]) ? typicalHeight : elementSizeTable[i];
                     if (oldElementSize != bounds.height)
                         needInvalidateSize = true;
                 }
@@ -14982,7 +14982,11 @@ var swan;
             var gap = this.$gap;
             var elementSizeTable = this.elementSizeTable;
             for (var i = 0; i < index; i++) {
-                startPos += (elementSizeTable[i] || typicalHeight) + gap;
+                var h = elementSizeTable[i];
+                if (isNaN(h)) {
+                    h = typicalHeight;
+                }
+                startPos += h + gap;
             }
             return startPos;
         };
@@ -14995,7 +14999,11 @@ var swan;
          */
         p.getElementSize = function (index) {
             if (this.$useVirtualLayout) {
-                return this.elementSizeTable[index] || this.$typicalHeight;
+                var size = this.elementSizeTable[index];
+                if (isNaN(size)) {
+                    size = this.$typicalHeight;
+                }
+                return size;
             }
             if (this.$target) {
                 return this.$target.getElementAt(index).height;
@@ -15016,7 +15024,11 @@ var swan;
             var length = this.$target.numElements;
             var elementSizeTable = this.elementSizeTable;
             for (var i = 0; i < length; i++) {
-                totalSize += (elementSizeTable[i] || typicalHeight) + gap;
+                var h = elementSizeTable[i];
+                if (isNaN(h)) {
+                    h = typicalHeight;
+                }
+                totalSize += h + gap;
             }
             totalSize -= gap;
             return totalSize;
@@ -15187,7 +15199,7 @@ var swan;
                 }
                 layoutElement.getPreferredBounds(bounds);
                 measuredWidth += bounds.width;
-                measuredWidth -= elementSizeTable[index] || typicalWidth;
+                measuredWidth -= isNaN(elementSizeTable[index]) ? typicalWidth : elementSizeTable[index];
                 measuredHeight = Math.max(measuredHeight, bounds.height);
             }
             var hPadding = this.$paddingLeft + this.$paddingRight;
@@ -15338,7 +15350,7 @@ var swan;
                     }
                 }
                 else {
-                    layoutElementWidth = widthDic[layoutElement.$hashCode] || NaN;
+                    layoutElementWidth = widthDic[layoutElement.$hashCode];
                 }
                 if (vJustify) {
                     y = paddingT;
@@ -15454,7 +15466,7 @@ var swan;
                 }
                 contentHeight = Math.max(contentHeight, bounds.height);
                 if (!needInvalidateSize) {
-                    oldElementSize = elementSizeTable[i] || typicalWidth;
+                    oldElementSize = isNaN(elementSizeTable[i]) ? typicalWidth : elementSizeTable[i];
                     if (oldElementSize != bounds.width)
                         needInvalidateSize = true;
                 }
@@ -15491,7 +15503,11 @@ var swan;
             var gap = this.$gap;
             var elementSizeTable = this.elementSizeTable;
             for (var i = 0; i < index; i++) {
-                startPos += (elementSizeTable[i] || typicalWidth) + gap;
+                var w = elementSizeTable[i];
+                if (isNaN(w)) {
+                    w = typicalWidth;
+                }
+                startPos += w + gap;
             }
             return startPos;
         };
@@ -15504,7 +15520,11 @@ var swan;
          */
         p.getElementSize = function (index) {
             if (this.$useVirtualLayout) {
-                return this.elementSizeTable[index] || this.$typicalWidth;
+                var size = this.elementSizeTable[index];
+                if (isNaN(size)) {
+                    size = this.$typicalWidth;
+                }
+                return size;
             }
             if (this.$target) {
                 return this.$target.getElementAt(index).width;
@@ -15525,7 +15545,11 @@ var swan;
             var length = this.$target.numElements;
             var elementSizeTable = this.elementSizeTable;
             for (var i = 0; i < length; i++) {
-                totalSize += (elementSizeTable[i] || typicalWidth) + gap;
+                var w = elementSizeTable[i];
+                if (isNaN(w)) {
+                    w = typicalWidth;
+                }
+                totalSize += w + gap;
             }
             totalSize -= gap;
             return totalSize;
