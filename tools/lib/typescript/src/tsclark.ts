@@ -259,20 +259,20 @@ module ts {
                 sortHelper.orderFiles(checker, program);
                 var emitStart = new Date().getTime();
                 var emitErrors: Diagnostic[];
-                if (!changedFiles) {
-                    var emitOutput = checker.emitFiles();
-                    emitErrors = emitOutput.diagnostics;
-                    exitStatus = emitOutput.emitResultStatus;
-                }
-                else {
-                    emitErrors = [];
-                    changedFiles.forEach(file=> {
-                        var emitOutput = checker.emitFiles(program.getSourceFile(file));
-                        emitErrors = emitErrors.concat(emitOutput.diagnostics);
-                        if (emitOutput.emitResultStatus != EmitReturnStatus.Succeeded)
-                            exitStatus = emitOutput.emitResultStatus;
-                    });
-                }
+                //if (!changedFiles) {
+                var emitOutput = checker.emitFiles();
+                emitErrors = emitOutput.diagnostics;
+                exitStatus = emitOutput.emitResultStatus;
+                //}
+                //else {
+                //    emitErrors = [];
+                //    changedFiles.forEach(file=> {
+                //        var emitOutput = checker.emitFiles(program.getSourceFile(file));
+                //        emitErrors = emitErrors.concat(emitOutput.diagnostics);
+                //        if (emitOutput.emitResultStatus != EmitReturnStatus.Succeeded)
+                //            exitStatus = emitOutput.emitResultStatus;
+                //    });
+                //}
                 var reportStart = new Date().getTime();
                 errors = concatenate(errors, emitErrors);
             }

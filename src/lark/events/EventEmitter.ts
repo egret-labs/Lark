@@ -222,7 +222,8 @@ module lark {
          * @platform Web,Native
          */
         public emit(event:Event):boolean {
-            event.$target = event.$currentTarget = this.$EventEmitter[Keys.eventTarget];
+            event.$currentTarget = this.$EventEmitter[Keys.eventTarget];
+            event.$setTarget(event.$currentTarget);
             return this.$notifyListener(event,false);
         }
 

@@ -432,6 +432,10 @@ module lark {
             return this.$target;
         }
 
+        $setTarget(target:any):void {
+            this.$target = target;
+        }
+
         /**
          * @private
          */
@@ -573,7 +577,8 @@ module lark {
          * @platform Web,Native
          */
         protected clean():void {
-            this.data = this.$target = this.$currentTarget = null;
+            this.data = this.$currentTarget = null;
+            this.$setTarget(null);
         }
 
         /**

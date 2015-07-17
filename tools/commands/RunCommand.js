@@ -38,10 +38,10 @@ var RunCommand = (function () {
     };
     RunCommand.prototype.sendBuildCMD = function () {
         service.execCommand({ command: "build", path: lark.options.projectDir }, function (cmd) {
-            if (cmd.exitCode == 0)
+            if (!cmd.exitCode)
                 console.log(utils.tr(10011));
             else
-                console.log(utils.tr(10014));
+                console.log(utils.tr(10014), cmd.exitCode);
             if (cmd.messages) {
                 cmd.messages.forEach(function (m) { return console.log(m); });
             }
