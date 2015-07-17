@@ -13090,6 +13090,9 @@ var swan;
             function (value) {
                 if (this._hostComponent == value)
                     return;
+                if (this._hostComponent) {
+                    this._hostComponent.removeListener(lark.Event.ADDED_TO_STAGE, this.onAddedToStage, this);
+                }
                 this._hostComponent = value;
                 var values = this.$stateValues;
                 values.parent = value;
