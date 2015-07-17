@@ -30,16 +30,25 @@
 module larkAnimation {
     /**
      * @language en_US
-     * The Loader class is used to load MovieClip config files. Use the load() method to initiate loading.
-     * The loaded MovieClip object is in the data property of MovieClipLoader.
+     * The Loader class is used to load BitmapArray's data. Use the load() method to initiate loading.
+     * The loaded BitmapArrayData object is in the data property of BitmapArrayLoader.
+     * @event lark.Event.COMPLETE 加载完成
+     * @event lark.Event.IO_ERROR 加载失败
      * @see lark.HttpRequest
+     * @see larkAnimation.BitmapArray
+     * @see larkAnimation.BitmapArrayData
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * MovieClipLoader 类可用于加载MovieClip配置文件。使用 load() 方法来启动加载。被加载的MovieClip对象数据将存储在 MovieClipLoader.data 属性上 。
+     * BitmapArrayLoader 类可用于加载 BitmapArray 数据。使用 load() 方法来启动加载。
+     * 被加载的 BitmapArrayData 对象数据将存储在 BitmapArrayLoader.data 属性上 。
+     * @event lark.Event.COMPLETE 加载完成
+     * @event lark.Event.IO_ERROR 加载失败
      * @see lark.HttpRequest
+     * @see larkAnimation.BitmapArray
+     * @see larkAnimation.BitmapArrayData
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -47,13 +56,13 @@ module larkAnimation {
 
         /**
          * @private
-         * MovieClip的配置文件，比如Egret MovieClip的.json配置文件
+         * BitmapArray的配置文件，比如Egret MovieClip的.json配置文件
          */
         $config:string;
 
         /**
          * @language en_US
-         * Specifies whether or not cross-site Access-Control requests should be made when loading a MovieClip from foreign origins.<br/>
+         * Specifies whether or not cross-site Access-Control requests should be made when loading a BitmapArray from foreign origins.<br/>
          * possible values are:"anonymous","use-credentials" or null.
          * @default null
          * @version Lark 1.0
@@ -61,7 +70,7 @@ module larkAnimation {
          */
         /**
          * @language zh_CN
-         * 当从其他站点加载一个MovieClip时，指定是否启用跨域资源共享(CORS)，默认值为null。<br/>
+         * 当从其他站点加载一个BitmapArray时，指定是否启用跨域资源共享(CORS)，默认值为null。<br/>
          * 可以设置为"anonymous","use-credentials"或null,设置为其他值将等同于"anonymous"。
          * @version Lark 1.0
          * @platform Web,Native
@@ -77,44 +86,47 @@ module larkAnimation {
         /**
          * @private
          */
-        $data:BitmapArray;
+        $data:BitmapArrayData;
 
         /**
          * @language en_US
          * The data received from the load operation.
-         * @default null
+         * @see larkAnimation.BitmapArrayData
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 使用 load() 方法加载成功的 MovieClip 对象。
-         * @default null
+         * 使用 load() 方法加载成功的 BitmapArray 对象。
+         * @see larkAnimation.BitmapArrayData
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public  get data():BitmapArray {
+        public get data():BitmapArrayData {
             return this.$data;
         }
 
         /**
          * @language en_US
-         * start a load operation。<br/>
+         * Start a load operation。<br/>
          * Note: Calling this method for an already active request (one for which load() has already been
          * called) will abort the last load operation immediately.
+         * At present it supports Egret MovieClip format only.
          * @param type The type of the MovieClip.It's defined by MovieClipType.
-         * @param url The web address of the MovieClip config to load。
-         * @see lark.MovieClipType
+         * @param url The web address of the MovieClip config to load。At present it supports Egret MovieClip format only.
+         * @see larkAnimation.BitmapArray
+         * @see larkAnimation.BitmapArrayData
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 启动一次MovieClip加载。<br/>
+         * 启动一次 BitmapArray 数据加载。<br/>
          * 注意：若之前已经调用过加载请求，重新调用 load() 将终止先前的请求，并开始新的加载。
-         * @param type 要加在的动画类型。类型由MovieClipType定义。
-         * @param url 要加载的MovieClip配置文件的地址。
-         * @see lark.MovieClipType
+         * 目前只支持EgretMovieClip的动画格式。
+         * @param url 要加载的 BitmapArray 配置文件的地址。目前只支持 Egret MovieClip 的动画格式。
+         * @see larkAnimation.BitmapArray
+         * @see larkAnimation.BitmapArrayData
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -165,8 +177,9 @@ module larkAnimation {
                     break;
                 }
             }
-            var imageLoader:lark.ImageLoader = new lark.ImageLoader;
+            var imageLoader = new lark.ImageLoader;
             imageLoader.once(lark.Event.COMPLETE, this.onLoadList, this);
+            imageLoader.crossOrigin = this.crossOrigin;
             imageLoader.load(url);
         }
 
@@ -177,8 +190,8 @@ module larkAnimation {
          */
         private onLoadList(event:lark.Event):void {
             var flag = true;
-            var len:number = this.$loadList.length;
-            for (var i:number = 0; i < len; i++) {
+            var len = this.$loadList.length;
+            for (var i = 0; i < len; i++) {
                 if (this.$loadList[i].content == null) {
                     this.$loadList[i].content = event.currentTarget.data;
                     if (i == len - 1) flag = false;
@@ -188,11 +201,8 @@ module larkAnimation {
             //全部资源加载完毕
             if (flag == false) {
                 var info = JSON.parse(this.$config);
-                var list:Array<any>;
-                for (var key in info.mc) {
-                    list = info.mc[key].frames;
-                    break;
-                }
+                var attributes = Object.keys(info.mc);
+                var list:Array<any> = info.mc[attributes[0]].frames;
                 var len = list.length;
                 var res;
                 var frames:Array<BitmapArrayFrameData> = [];
@@ -200,9 +210,9 @@ module larkAnimation {
                     res = info.res[list[i].res];
                     frames.push(new BitmapArrayFrameData(this.$loadList[0].content, list[i].x, list[i].y, res.w, res.h, res.x, res.y));
                 }
-                var frameMovieClip = new larkAnimation.BitmapArray();
-                frameMovieClip.$setFrames(frames);
-                this.$data = frameMovieClip;
+                var bitmapArrayData = new BitmapArrayData();
+                bitmapArrayData.$frames = frames;
+                this.$data = bitmapArrayData;
                 this.$loadList = null;
                 this.emitWith(lark.Event.COMPLETE);
             }

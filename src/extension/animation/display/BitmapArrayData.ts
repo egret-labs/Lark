@@ -30,20 +30,10 @@
 module larkAnimation {
 
     /**
-     * @language en_US
-     * The data of BitmapArray's single frame.
-     * @see larkAnimation.BitmapArray
-     * @version Lark 1.0
-     * @platform Web,Native
+     * @private
+     * 序列帧动画的单帧数据
      */
-    /**
-     * @language zh_CN
-     * 序列帧动画的单帧数据。
-     * @see larkAnimation.BitmapArray
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    export class BitmapArrayFrameData {
+    export class BitmapArrayFrameData extends lark.LarkObject {
 
         /**
          * @language en_US
@@ -72,6 +62,7 @@ module larkAnimation {
          * @platform Web,Native
          */
         public constructor(bitmapData:lark.BitmapData, x:number, y:number, width:number, height:number, sourceX:number, sourceY:number) {
+            super();
             this.bitmapData = bitmapData;
             this.x = x;
             this.y = y;
@@ -122,5 +113,73 @@ module larkAnimation {
          * 图片在SpriteSheet中的位置y
          */
         public sourceY:number;
+    }
+
+    /**
+     * @private
+     * @language en_US
+     * The data of BitmapArray.
+     * @see larkAnimation.BitmapArray
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @private
+     * @language zh_CN
+     * 序列帧动画的数据。
+     * @see larkAnimation.BitmapArray
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    export class BitmapArrayData extends lark.LarkObject {
+        /**
+         * @private
+         * @language en_US
+         * constructor.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @private
+         * @language zh_CN
+         * 构造函数。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public constructor() {
+            super();
+        }
+
+        /**
+         * @private
+         */
+        get $length():number {
+            if (this.$frames) return this.$frames.length;
+            return 0;
+        }
+
+        /**
+         * @private
+         */
+        $frames:Array<BitmapArrayFrameData>;
+
+        /**
+         * @language en_US
+         * The totalFrames property returns the total number of frames in the BitmapArray.
+         * @readOnly
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * totalFrames 属性会返回动画中帧的总数。
+         * @readOnly
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public get totalFrames():number {
+            if (this.$frames) return this.$frames.length;
+            return 0;
+        }
     }
 }
