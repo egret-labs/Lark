@@ -5908,6 +5908,7 @@ var swan;
                     return null;
                 }
                 if (hasClass && clazz) {
+                    lark.registerClass(clazz, className);
                     var paths = className.split(".");
                     var length = paths.length;
                     var definition = __global;
