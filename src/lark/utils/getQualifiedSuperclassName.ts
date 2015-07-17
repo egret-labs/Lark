@@ -54,7 +54,7 @@ module lark {
      * @platform Web,Native
      */
     export function getQualifiedSuperclassName(value:any):string {
-        if (!value || typeof value != "object") {
+        if (!value || (typeof value != "object" && !value.prototype)) {
             return null;
         }
         var prototype:any = value.prototype ? value.prototype : Object.getPrototypeOf(value);

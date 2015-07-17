@@ -1422,7 +1422,7 @@ var lark;
      * @platform Web,Native
      */
     function getQualifiedSuperclassName(value) {
-        if (!value || typeof value != "object") {
+        if (!value || (typeof value != "object" && !value.prototype)) {
             return null;
         }
         var prototype = value.prototype ? value.prototype : Object.getPrototypeOf(value);
