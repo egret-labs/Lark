@@ -1482,7 +1482,7 @@ var lark;
         lark.registerClass(WebHttpRequest,"lark.web.WebHttpRequest",["lark.HttpRequest"]);
         lark.HttpRequest = WebHttpRequest;
         if (DEBUG) {
-            lark.$markReadOnly(WebHttpRequest.prototype, "response");
+            lark.$markReadOnly(WebHttpRequest, "response");
         }
     })(web = lark.web || (lark.web = {}));
 })(lark || (lark = {}));
@@ -1520,6 +1520,12 @@ var lark;
     (function (web) {
         var winURL = window["URL"] || window["webkitURL"];
         var useXHR = winURL && lark.Capabilities.os == "iOS";
+        if (useXHR) {
+            var value = window.navigator.userAgent.toLowerCase().match(/cpu [^\d]*\d.*like mac os x/)[0];
+            if (parseInt(value.match(/\d(_\d)*/)[0].charAt(0)) < 7) {
+                useXHR = false;
+            }
+        }
         /**
          * @private
          * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
@@ -1580,7 +1586,7 @@ var lark;
              * @param url 要加载的图像文件的地址。
              */
             p.load = function (url) {
-                if (useXHR && url.indexOf("data:") != 0) {
+                if (useXHR && url.indexOf("data:") != 0 && url.indexOf("http:") != 0 && url.indexOf("https:") != 0) {
                     var request = this.request;
                     if (!request) {
                         request = this.request = new lark.web.WebHttpRequest();

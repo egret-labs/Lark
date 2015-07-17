@@ -52,10 +52,14 @@ var lark;
         lark.warn("Warning #" + code + ": " + text);
     }
     lark.$warn = _warn;
-    function _markReadOnly(instance, property) {
+    function _markReadOnly(instance, property, isStatic) {
+        if (!isStatic) {
+            instance = instance.prototype;
+        }
+        var className = lark.getQualifiedClassName(instance);
         var data = Object.getOwnPropertyDescriptor(instance, property);
         data.set = function (value) {
-            lark.$warn(1010, property);
+            lark.$warn(1010, className, property);
         };
         Object.defineProperty(instance, property, data);
     }
@@ -100,13 +104,13 @@ var lark;
      * You don't need to manually call this method.
      *
      * @example the following code shows how to register the runtime class information for the EventEmitter class and do the type checking:
-     * <code>
+     * <pre>
      *      lark.registerClass(lark.EventEmitter,"lark.EventEmitter",["lark.IEventEmitter"]);
      *      var emitter = new lark.EventEmitter();
      *      lark.log(lark.is(emitter, "lark.IEventEmitter"));  //true。
      *      lark.log(lark.is(emitter, "lark.EventEmitter"));   //true。
      *      lark.log(lark.is(emitter, "lark.Bitmap"));   //false。
-     * </code>
+     * </pre>
      * @param classDefinition the class definition to be registered.
      * @param className  a unique identification string of the specific class
      * @param interfaceNames a list of unique identification string of the specific interfaces.
@@ -118,14 +122,14 @@ var lark;
      * 为一个类定义注册运行时类信息,用此方法往类定义上注册它自身以及所有接口对应的字符串。
      * 在运行时，这个类的实例将可以使用 lark.is() 方法传入一个字符串来判断实例类型。
      * @example 以下代码演示了如何为EventEmitter类注册运行时类信息并判断类型：
-     * <code>
+     * <pre>
      *      //为lark.EventEmitter类注册运行时类信息，由于它实现了IEventEmitter接口，这里应同时传入接口名对应的字符串。
      *      lark.registerClass(lark.EventEmitter,"lark.EventEmitter",["lark.IEventEmitter"]);
      *      var emitter = new lark.EventEmitter();
      *      lark.log(lark.is(emitter, "lark.IEventEmitter"));  //true。
      *      lark.log(lark.is(emitter, "lark.EventEmitter"));   //true。
      *      lark.log(lark.is(emitter, "lark.Bitmap"));   //false。
-     * </code>
+     * </pre>
      * 注意：若您使用 TypeScript 来编写程序，lark 命令行会自动帮您生成类信息注册代码行到最终的 Javascript 文件中。因此您不需要手动调用此方法。
      *
      * @param classDefinition 要注册的类定义。
@@ -198,98 +202,37 @@ var lark;
 (function (lark) {
     /**
      * @language en_US
-     * The XML class contains properties for working with XML objects.
+     * Stops the timer started by the lark.startTick() method.
+     * @param callBack the call back method. the timeStamp parameter of this method represents the number of milliseconds
+     * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
+     * to render after processing of this method completes.
+     * @param thisObject the call back method's "this"
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * XML 类包含用于处理 XML 对象的属性。
+     * 停止之前用 startTick() 方法启动的计时器。
+     * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
+     * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
+     * @param thisObject 回调方法的this对象引用。
      * @version Lark 1.0
      * @platform Web,Native
      */
-    lark.XML;
+    function stopTick(callBack, thisObject) {
+        if (DEBUG && !callBack) {
+            lark.$error(1003, "callBack");
+        }
+        lark.sys.$ticker.$stopTick(callBack, thisObject);
+    }
+    lark.stopTick = stopTick;
 })(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
     /**
-     * @private
+     * @copy lark.Motion
      */
-    lark.$START_TIME = 0;
-    /**
-     * @language en_US
-     * Used to compute relative time.this method returns the number of milliseconds since the Lark framework was initialized
-     * @returns The number of milliseconds since the Lark framework was initialized
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 用于计算相对时间。此方法返回自启动 Lark 框架以来经过的毫秒数。
-     * @returns 启动 Lark 框架以来经过的毫秒数。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function getTimer() {
-        return Date.now() - lark.$START_TIME;
-    }
-    lark.getTimer = getTimer;
+    lark.Motion;
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -382,22 +325,6 @@ var lark;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    var sys;
-    (function (sys) {
-        /**
-         * @private
-         * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
-         */
-        sys.sharedRenderContext;
-        /**
-         * @private
-         * surfaceFactory实例
-         */
-        sys.surfaceFactory;
-    })(sys = lark.sys || (lark.sys = {}));
-})(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -426,6 +353,29 @@ var lark;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    var sys;
+    (function (sys) {
+        var stageToTextLayerMap = {};
+        /**
+         * @private
+         * 获取
+         */
+        function $getTextAdapter(textInput) {
+            var stageHash = textInput.stage ? textInput.stage.$hashCode : 0;
+            return stageToTextLayerMap[stageHash];
+        }
+        sys.$getTextAdapter = $getTextAdapter;
+        /**
+         * @private
+         */
+        function $cacheTextAdapter(adapter) {
+            stageToTextLayerMap[adapter.$stage.$hashCode] = adapter;
+        }
+        sys.$cacheTextAdapter = $cacheTextAdapter;
+    })(sys = lark.sys || (lark.sys = {}));
+})(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -607,6 +557,22 @@ var lark;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    var sys;
+    (function (sys) {
+        /**
+         * @private
+         * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
+         */
+        sys.sharedRenderContext;
+        /**
+         * @private
+         * surfaceFactory实例
+         */
+        sys.surfaceFactory;
+    })(sys = lark.sys || (lark.sys = {}));
+})(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -635,13 +601,6 @@ var lark;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @copy lark.Motion
-     */
-    lark.Motion;
-})(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -881,44 +840,6 @@ var lark;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    var sys;
-    (function (sys) {
-        /**
-         * @private
-         * OrientationMode 类为舞台初始旋转模式提供值。
-         */
-        var OrientationMode = (function () {
-            function OrientationMode() {
-            }
-            var d = __define,c=OrientationMode;p=c.prototype;
-            /**
-             * @private
-             * 适配屏幕
-             */
-            OrientationMode.AUTO = "auto";
-            /**
-             * @private
-             * 默认竖屏
-             */
-            OrientationMode.PORTRAIT = "portrait";
-            /**
-             * @private
-             * 默认横屏，舞台顺时针旋转90度
-             */
-            OrientationMode.LANDSCAPE = "landscape";
-            /**
-             * @private
-             * 默认横屏，舞台逆时针旋转90度
-             */
-            OrientationMode.LANDSCAPE_FLIPPED = "landscapeFlipped";
-            return OrientationMode;
-        })();
-        sys.OrientationMode = OrientationMode;
-        lark.registerClass(OrientationMode,"lark.sys.OrientationMode");
-    })(sys = lark.sys || (lark.sys = {}));
-})(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -1060,6 +981,236 @@ var lark;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
+     * The VerticalAlign class defines the possible values for the vertical alignment.
+     * @see lark.TextField#verticalAlign
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * VerticalAlign 类为垂直对齐方式定义可能的值。
+     * @see lark.TextField#verticalAlign
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var VerticalAlign = (function () {
+        function VerticalAlign() {
+        }
+        var d = __define,c=VerticalAlign;p=c.prototype;
+        /**
+         * @language en_US
+         * Vertically align content to the top of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将内容与容器的顶部对齐。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        VerticalAlign.TOP = "top";
+        /**
+         * @language en_US
+         * Vertically align content to the bottom of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将内容与容器的底部对齐。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        VerticalAlign.BOTTOM = "bottom";
+        /**
+         * @language en_US
+         * Vertically align content in the middle of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在容器的垂直中心对齐内容。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        VerticalAlign.MIDDLE = "middle";
+        return VerticalAlign;
+    })();
+    lark.VerticalAlign = VerticalAlign;
+    lark.registerClass(VerticalAlign,"lark.VerticalAlign");
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    var sys;
+    (function (sys) {
+        /**
+         * @private
+         * OrientationMode 类为舞台初始旋转模式提供值。
+         */
+        var OrientationMode = (function () {
+            function OrientationMode() {
+            }
+            var d = __define,c=OrientationMode;p=c.prototype;
+            /**
+             * @private
+             * 适配屏幕
+             */
+            OrientationMode.AUTO = "auto";
+            /**
+             * @private
+             * 默认竖屏
+             */
+            OrientationMode.PORTRAIT = "portrait";
+            /**
+             * @private
+             * 默认横屏，舞台顺时针旋转90度
+             */
+            OrientationMode.LANDSCAPE = "landscape";
+            /**
+             * @private
+             * 默认横屏，舞台逆时针旋转90度
+             */
+            OrientationMode.LANDSCAPE_FLIPPED = "landscapeFlipped";
+            return OrientationMode;
+        })();
+        sys.OrientationMode = OrientationMode;
+        lark.registerClass(OrientationMode,"lark.sys.OrientationMode");
+    })(sys = lark.sys || (lark.sys = {}));
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
+     * The XML class contains properties for working with XML objects.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * XML 类包含用于处理 XML 对象的属性。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    lark.XML;
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -1136,65 +1287,434 @@ var lark;
 (function (lark) {
     /**
      * @language en_US
-     * The VerticalAlign class defines the possible values for the vertical alignment.
-     * @see lark.TextField#verticalAlign
+     * Return the fully qualified class name of an object
+     * @param value The object for which a fully qualified class name is desired. Any JavaScript value may be passed to
+     * this method including all available JavaScript types, object instances, primitive types such as number, and class objects.
+     * @returns A string containing the fully qualified class name.
+     * @example
+     * <pre>
+     *  lark.getQualifiedClassName(lark.DisplayObject) //return "lark.DisplayObject"
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * VerticalAlign 类为垂直对齐方式定义可能的值。
-     * @see lark.TextField#verticalAlign
+     * 返回对象的完全限定类名。
+     * @param value 需要完全限定类名称的对象，可以将任何 JavaScript 值传递给此方法，包括所有可用的 JavaScript 类型、对象实例、原始类型
+     * （如number)和类对象
+     * @returns 包含完全限定类名称的字符串。
+     * @example
+     * <pre>
+     *  lark.getQualifiedClassName(lark.DisplayObject) //返回 "lark.DisplayObject"
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */
-    var VerticalAlign = (function () {
-        function VerticalAlign() {
+    function getQualifiedClassName(value) {
+        var type = typeof value;
+        if (!value || (type != "object" && !value.prototype)) {
+            return type;
         }
-        var d = __define,c=VerticalAlign;p=c.prototype;
+        var prototype = value.prototype ? value.prototype : Object.getPrototypeOf(value);
+        if (prototype.hasOwnProperty("__class__")) {
+            return prototype["__class__"];
+        }
+        var constructorString = prototype.constructor.toString();
+        var index = constructorString.indexOf("(");
+        var className = constructorString.substring(9, index);
+        Object.defineProperty(prototype, "__class__", {
+            value: className,
+            enumerable: false,
+            writable: true
+        });
+        return className;
+    }
+    lark.getQualifiedClassName = getQualifiedClassName;
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @copy lark.Sound
+     */
+    lark.Sound;
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /** @language en_US
+     * Returns the fully qualified class name of the base class of the object specified by the value parameter.
+     * @param value The object for which a parent class is desired. Any JavaScript value may be passed to this method including
+     * all available JavaScript types, object instances, primitive types such as number, and class objects.
+     * @returns  A fully qualified base class name, or null if none exists.
+     * @example
+     * <pre>
+     *  lark.getQualifiedSuperclassName(lark.Bitmap) //return "lark.DisplayObject"
+     * </pre>
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 返回 value 参数指定的对象的基类的完全限定类名。
+     * @param value 需要取得父类的对象，可以将任何 JavaScript 值传递给此方法，包括所有可用的 JavaScript 类型、对象实例、原始类型（如number）和类对象
+     * @returns 完全限定的基类名称，或 null（如果不存在基类名称）。
+     * @example
+     * <pre>
+     *  lark.getQualifiedSuperclassName(lark.Sprite) //返回 "lark.DisplayObject"
+     * </pre>
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function getQualifiedSuperclassName(value) {
+        if (!value || typeof value != "object") {
+            return null;
+        }
+        var prototype = value.prototype ? value.prototype : Object.getPrototypeOf(value);
+        var superProto = Object.getPrototypeOf(prototype);
+        if (!superProto) {
+            return null;
+        }
+        var superClass = lark.getQualifiedClassName(superProto.constructor);
+        if (!superClass) {
+            return null;
+        }
+        return superClass;
+    }
+    lark.getQualifiedSuperclassName = getQualifiedSuperclassName;
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
+     * Indicates whether an object is a instance of the class or interface specified as the parameter.This method is similar
+     * to the instanceOf operator which indicate whether an object is a instance of the specific class,besides, it can indicate
+     * whether an object is a instance of the specific interface.
+     * @param instance the instance to be checked.
+     * @param typeName the string value representing a specific class or interface.
+     * @returns A value of true if the object is a instance of the class or interface specified as the parameter.
+     * @example
+     * <pre>
+     *     var instance = new lark.Sprite();
+     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
+     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
+     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
+     * </pre>
+     * @see lark.registerClass()
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字作用类似，但除了判断类定义也能判断接口的实现。
+     * @param instance 要判断的实例。
+     * @param typeName 类或接口的完全名称.
+     * @returns 返回true表示当前对象是指定类或接口的实例。
+     * @example
+     * <pre>
+     *     var instance = new lark.Sprite();
+     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
+     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
+     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
+     * </pre>
+     * @see lark.registerClass()
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function is(instance, typeName) {
+        if (!instance || typeof instance != "object") {
+            return false;
+        }
+        var prototype = Object.getPrototypeOf(instance);
+        var types = prototype ? prototype.__types__ : null;
+        if (!types) {
+            return false;
+        }
+        return (types.indexOf(typeName) !== -1);
+    }
+    lark.is = is;
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    lark.Video;
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
+     * The HttpMethod class provides values that specify whether the HttpRequest object should use the POST method
+     * or the GET method when sending data to a server.
+     * @see lark.HttpRequest
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * HttpRequestMethod 类提供了一些值，这些值可指定在将数据发送到服务器时，
+     * HttpRequest 对象应使用 POST 方法还是 GET 方法。
+     * @see lark.HttpRequest
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var HttpMethod = (function () {
+        function HttpMethod() {
+        }
+        var d = __define,c=HttpMethod;p=c.prototype;
         /**
          * @language en_US
-         * Vertically align content to the top of the container.
+         * Specifies that the HttpRequest object is a GET.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 将内容与容器的顶部对齐。
+         * 表示 HttpRequest 对象是一个 GET。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        VerticalAlign.TOP = "top";
+        HttpMethod.GET = "GET";
         /**
          * @language en_US
-         * Vertically align content to the bottom of the container.
+         * Specifies that the HttpRequest object is a POST.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 将内容与容器的底部对齐。
+         * 表示 HttpRequest 对象是一个 POST。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        VerticalAlign.BOTTOM = "bottom";
-        /**
-         * @language en_US
-         * Vertically align content in the middle of the container.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在容器的垂直中心对齐内容。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        VerticalAlign.MIDDLE = "middle";
-        return VerticalAlign;
+        HttpMethod.POST = "POST";
+        return HttpMethod;
     })();
-    lark.VerticalAlign = VerticalAlign;
-    lark.registerClass(VerticalAlign,"lark.VerticalAlign");
+    lark.HttpMethod = HttpMethod;
+    lark.registerClass(HttpMethod,"lark.HttpMethod");
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
+     * Register and start a timer,which will notify the callback method at a rate of 60 FPS ,and pass the current time stamp as parameters.<br/>
+     * Note: After the registration,it will notify the callback method continuously,you can call the stopTick () method to stop it.
+     * @param callBack the call back method. the timeStamp parameter of this method represents the number of milliseconds
+     * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
+     * to render after processing of this method completes.
+     * @param thisObject the call back method's "this"
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 注册并启动一个计时器，通常会以60FPS的速率触发回调方法，并传入当前时间戳。注意：注册后将会持续触发回调方法，若要停止回调，需要手动调用stopTick()方法。
+     * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
+     * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
+     * @param thisObject 回调方法的this对象引用。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function startTick(callBack, thisObject) {
+        if (DEBUG && !callBack) {
+            lark.$error(1003, "callBack");
+        }
+        lark.sys.$ticker.$startTick(callBack, thisObject);
+    }
+    lark.startTick = startTick;
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1306,53 +1826,27 @@ var lark;
 var lark;
 (function (lark) {
     /**
+     * @private
+     */
+    lark.$START_TIME = 0;
+    /**
      * @language en_US
-     * Indicates whether an object is a instance of the class or interface specified as the parameter.This method is similar
-     * to the instanceOf operator which indicate whether an object is a instance of the specific class,besides, it can indicate
-     * whether an object is a instance of the specific interface.
-     * @param instance the instance to be checked.
-     * @param typeName the string value representing a specific class or interface.
-     * @returns A value of true if the object is a instance of the class or interface specified as the parameter.
-     * @example
-     * <code>
-     *     var instance = new lark.Sprite();
-     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
-     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
-     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
-     * </code>
-     * @see lark.registerClass()
+     * Used to compute relative time.this method returns the number of milliseconds since the Lark framework was initialized
+     * @returns The number of milliseconds since the Lark framework was initialized
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字作用类似，但除了判断类定义也能判断接口的实现。
-     * @param instance 要判断的实例。
-     * @param typeName 类或接口的完全名称.
-     * @returns 返回true表示当前对象是指定类或接口的实例。
-     * @example
-     * <code>
-     *     var instance = new lark.Sprite();
-     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
-     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
-     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
-     * </code>
-     * @see lark.registerClass()
+     * 用于计算相对时间。此方法返回自启动 Lark 框架以来经过的毫秒数。
+     * @returns 启动 Lark 框架以来经过的毫秒数。
      * @version Lark 1.0
      * @platform Web,Native
      */
-    function is(instance, typeName) {
-        if (!instance || typeof instance != "object") {
-            return false;
-        }
-        var prototype = Object.getPrototypeOf(instance);
-        var types = prototype ? prototype.__types__ : null;
-        if (!types) {
-            return false;
-        }
-        return (types.indexOf(typeName) !== -1);
+    function getTimer() {
+        return Date.now() - lark.$START_TIME;
     }
-    lark.is = is;
+    lark.getTimer = getTimer;
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1397,348 +1891,6 @@ var lark;
      * @platform Web,Native
      */
     lark.HttpRequest;
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @copy lark.Sound
-     */
-    lark.Sound;
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @language en_US
-     * Register and start a timer,which will notify the callback method at a rate of 60 FPS ,and pass the current time stamp as parameters.<br/>
-     * Note: After the registration,it will notify the callback method continuously,you can call the stopTick () method to stop it.
-     * @param callBack the call back method. the timeStamp parameter of this method represents the number of milliseconds
-     * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
-     * to render after processing of this method completes.
-     * @param thisObject the call back method's "this"
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 注册并启动一个计时器，通常会以60FPS的速率触发回调方法，并传入当前时间戳。注意：注册后将会持续触发回调方法，若要停止回调，需要手动调用stopTick()方法。
-     * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
-     * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
-     * @param thisObject 回调方法的this对象引用。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function startTick(callBack, thisObject) {
-        if (DEBUG && !callBack) {
-            lark.$error(1003, "callBack");
-        }
-        lark.sys.$ticker.$startTick(callBack, thisObject);
-    }
-    lark.startTick = startTick;
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @language en_US
-     * Stops the timer started by the lark.startTick() method.
-     * @param callBack the call back method. the timeStamp parameter of this method represents the number of milliseconds
-     * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
-     * to render after processing of this method completes.
-     * @param thisObject the call back method's "this"
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 停止之前用 startTick() 方法启动的计时器。
-     * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
-     * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
-     * @param thisObject 回调方法的this对象引用。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function stopTick(callBack, thisObject) {
-        if (DEBUG && !callBack) {
-            lark.$error(1003, "callBack");
-        }
-        lark.sys.$ticker.$stopTick(callBack, thisObject);
-    }
-    lark.stopTick = stopTick;
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    lark.Video;
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    var sys;
-    (function (sys) {
-        var stageToTextLayerMap = {};
-        /**
-         * @private
-         * 获取
-         */
-        function $getTextAdapter(textInput) {
-            var stageHash = textInput.stage ? textInput.stage.$hashCode : 0;
-            return stageToTextLayerMap[stageHash];
-        }
-        sys.$getTextAdapter = $getTextAdapter;
-        /**
-         * @private
-         */
-        function $cacheTextAdapter(adapter) {
-            stageToTextLayerMap[adapter.$stage.$hashCode] = adapter;
-        }
-        sys.$cacheTextAdapter = $cacheTextAdapter;
-    })(sys = lark.sys || (lark.sys = {}));
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @language en_US
-     * The HttpMethod class provides values that specify whether the HttpRequest object should use the POST method
-     * or the GET method when sending data to a server.
-     * @see lark.HttpRequest
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * HttpRequestMethod 类提供了一些值，这些值可指定在将数据发送到服务器时，
-     * HttpRequest 对象应使用 POST 方法还是 GET 方法。
-     * @see lark.HttpRequest
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var HttpMethod = (function () {
-        function HttpMethod() {
-        }
-        var d = __define,c=HttpMethod;p=c.prototype;
-        /**
-         * @language en_US
-         * Specifies that the HttpRequest object is a GET.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 表示 HttpRequest 对象是一个 GET。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        HttpMethod.GET = "GET";
-        /**
-         * @language en_US
-         * Specifies that the HttpRequest object is a POST.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 表示 HttpRequest 对象是一个 POST。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        HttpMethod.POST = "POST";
-        return HttpMethod;
-    })();
-    lark.HttpMethod = HttpMethod;
-    lark.registerClass(HttpMethod,"lark.HttpMethod");
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -2479,12 +2631,12 @@ var lark;
     lark.Capabilities = Capabilities;
     lark.registerClass(Capabilities,"lark.Capabilities");
     if (DEBUG) {
-        lark.$markReadOnly(Capabilities, "language");
-        lark.$markReadOnly(Capabilities, "isMobile");
-        lark.$markReadOnly(Capabilities, "hasOrientation");
-        lark.$markReadOnly(Capabilities, "hasMotion");
-        lark.$markReadOnly(Capabilities, "hasGeolocation");
-        lark.$markReadOnly(Capabilities, "os");
+        lark.$markReadOnly(Capabilities, "language", true);
+        lark.$markReadOnly(Capabilities, "isMobile", true);
+        lark.$markReadOnly(Capabilities, "hasOrientation", true);
+        lark.$markReadOnly(Capabilities, "hasMotion", true);
+        lark.$markReadOnly(Capabilities, "hasGeolocation", true);
+        lark.$markReadOnly(Capabilities, "os", true);
     }
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -2690,8 +2842,8 @@ var lark;
                     return;
                 }
                 this.lastCount += this.frameInterval;
-                this.broadcastEnterFrame();
                 this.render(true);
+                this.broadcastEnterFrame();
             };
             /**
              * @private
@@ -2751,6 +2903,96 @@ var lark;
 if (DEBUG) {
     var lark_stages = [];
 }
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @private
+     * 哈希计数
+     */
+    lark.$hashCount = 1;
+    /**
+     * @language en_US
+     * The LarkObject class is the base class for all objects in the Lark framework.The LarkObject
+     * class includes a hashCode property, which is a unique identification number of the instance.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Lark顶级对象。框架内所有对象的基类，为对象实例提供唯一的hashCode值。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var LarkObject = (function () {
+        /**
+         * @language en_US
+         * Initializes a LarkObject
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 LarkObject 对象
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function LarkObject() {
+            this.$hashCode = lark.$hashCount++;
+        }
+        var d = __define,c=LarkObject;p=c.prototype;
+        d(p, "hashCode",
+            /**
+             * @language en_US
+             * a unique identification number assigned to this instance.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 返回此对象唯一的哈希值,用于唯一确定一个对象。hashCode为大于等于1的整数。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$hashCode;
+            },undefined
+        );
+        return LarkObject;
+    })();
+    lark.LarkObject = LarkObject;
+    lark.registerClass(LarkObject,"lark.LarkObject");
+    if (DEBUG) {
+        lark.$markReadOnly(LarkObject, "hashCode");
+    }
+})(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -2982,96 +3224,6 @@ var lark;
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
-    /**
-     * @private
-     * 哈希计数
-     */
-    lark.$hashCount = 1;
-    /**
-     * @language en_US
-     * The LarkObject class is the base class for all objects in the Lark framework.The LarkObject
-     * class includes a hashCode property, which is a unique identification number of the instance.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * Lark顶级对象。框架内所有对象的基类，为对象实例提供唯一的hashCode值。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var LarkObject = (function () {
-        /**
-         * @language en_US
-         * Initializes a LarkObject
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个 LarkObject 对象
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        function LarkObject() {
-            this.$hashCode = lark.$hashCount++;
-        }
-        var d = __define,c=LarkObject;p=c.prototype;
-        d(p, "hashCode",
-            /**
-             * @language en_US
-             * a unique identification number assigned to this instance.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 返回此对象唯一的哈希值,用于唯一确定一个对象。hashCode为大于等于1的整数。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$hashCode;
-            },undefined
-        );
-        return LarkObject;
-    })();
-    lark.LarkObject = LarkObject;
-    lark.registerClass(LarkObject,"lark.LarkObject");
-    if (DEBUG) {
-        lark.$markReadOnly(LarkObject.prototype, "hashCode");
-    }
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
     lark.$locale_strings = lark.$locale_strings || {};
     lark.$locale_strings["en_US"] = lark.$locale_strings["en_US"] || {};
     var locale_strings = lark.$locale_strings["en_US"];
@@ -3084,7 +3236,7 @@ var lark;
     locale_strings[1007] = "An index specified for a parameter was out of range.";
     locale_strings[1008] = "Instantiate singleton error，singleton class {0} can not create multiple instances.";
     locale_strings[1009] = "The Stage class does not implement this property or method.";
-    locale_strings[1010] = "the property \"{0}\" is readonly";
+    locale_strings[1010] = "the property \"{1}\" of the class \"{0}\" is readonly";
     locale_strings[1011] = "Stream Error. URL: {0}";
     locale_strings[1012] = "The type of parameter {0} must be Class.";
     locale_strings[3001] = "Please call the play method when the media is loaded";
@@ -3126,6 +3278,115 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+var lark;
+(function (lark) {
+    var sys;
+    (function (sys) {
+        /**
+         * @private
+         * 屏幕适配器实例，开发者可以通过给这个变量赋值实现了IScreenAdapter接口的实例，从而注入自定义的屏幕适配器。
+         */
+        sys.screenAdapter;
+        /**
+         * @private
+         * 屏幕适配器默认实现，开发者可以实现自定义规则的屏幕适配器。并在初始化加载时将适配器的实例赋值给lark.sys.screenAdapter上，从而替换掉默认适配器。
+         */
+        var ScreenAdapter = (function (_super) {
+            __extends(ScreenAdapter, _super);
+            /**
+             * @private
+             */
+            function ScreenAdapter() {
+                _super.call(this);
+            }
+            var d = __define,c=ScreenAdapter;p=c.prototype;
+            /**
+             * @private
+             * 计算舞台显示尺寸
+             * @param scaleMode 当前的缩放模式
+             * @param screenWidth 播放器视口宽度
+             * @param screenHeight 播放器视口高度
+             * @param contentWidth 初始化内容宽度
+             * @param contentHeight 初始化内容高度
+             */
+            p.calculateStageSize = function (scaleMode, screenWidth, screenHeight, contentWidth, contentHeight) {
+                var displayWidth = screenWidth;
+                var displayHeight = screenHeight;
+                var stageWidth = contentWidth;
+                var stageHeight = contentHeight;
+                var scaleX = (screenWidth / stageWidth) || 0;
+                var scaleY = (screenHeight / stageHeight) || 0;
+                switch (scaleMode) {
+                    case lark.StageScaleMode.EXACT_FIT:
+                        break;
+                    case lark.StageScaleMode.FIXED_HEIGHT:
+                        stageWidth = Math.round(screenWidth / scaleY);
+                        break;
+                    case lark.StageScaleMode.FIXED_WIDTH:
+                        stageHeight = Math.round(screenHeight / scaleX);
+                        break;
+                    case lark.StageScaleMode.NO_BORDER:
+                        if (scaleX > scaleY) {
+                            displayHeight = Math.round(stageHeight * scaleX);
+                        }
+                        else {
+                            displayWidth = Math.round(stageWidth * scaleY);
+                        }
+                        break;
+                    case lark.StageScaleMode.SHOW_ALL:
+                        if (scaleX > scaleY) {
+                            displayWidth = Math.round(stageWidth * scaleY);
+                        }
+                        else {
+                            displayHeight = Math.round(stageHeight * scaleX);
+                        }
+                        break;
+                    default:
+                        stageWidth = screenWidth;
+                        stageHeight = screenHeight;
+                        break;
+                }
+                return {
+                    stageWidth: stageWidth,
+                    stageHeight: stageHeight,
+                    displayWidth: displayWidth,
+                    displayHeight: displayHeight
+                };
+            };
+            return ScreenAdapter;
+        })(lark.LarkObject);
+        sys.ScreenAdapter = ScreenAdapter;
+        lark.registerClass(ScreenAdapter,"lark.sys.ScreenAdapter",["lark.sys.IScreenAdapter"]);
+    })(sys = lark.sys || (lark.sys = {}));
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
     var sys;
@@ -3287,768 +3548,13 @@ var lark;
     locale_strings[1007] = "为参数指定的索引不在范围内。";
     locale_strings[1008] = "实例化单例出错，不允许实例化多个 {0} 对象。";
     locale_strings[1009] = "Stage 类不实现此属性或方法。";
-    locale_strings[1010] = "属性 {0} 是只读的";
+    locale_strings[1010] = "类 {0} 的属性 {1} 是只读的";
     locale_strings[1011] = "流错误。URL: {0}";
     locale_strings[1012] = "参数 {0} 的类型必须为 Class。";
     locale_strings[3001] = "请等待媒体加载完成后再调用 play 方法";
     locale_strings[3002] = "请指定要加载的媒体的URL";
     locale_strings[3003] = "全屏幕播放视频时，请先调用 load 方法，等待媒体加载完成后再调用 play 方法";
     locale_strings[3004] = "该设备不支持 Location 服务";
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    var sys;
-    (function (sys) {
-        /**
-         * @private
-         * 屏幕适配器实例，开发者可以通过给这个变量赋值实现了IScreenAdapter接口的实例，从而注入自定义的屏幕适配器。
-         */
-        sys.screenAdapter;
-        /**
-         * @private
-         * 屏幕适配器默认实现，开发者可以实现自定义规则的屏幕适配器。并在初始化加载时将适配器的实例赋值给lark.sys.screenAdapter上，从而替换掉默认适配器。
-         */
-        var ScreenAdapter = (function (_super) {
-            __extends(ScreenAdapter, _super);
-            /**
-             * @private
-             */
-            function ScreenAdapter() {
-                _super.call(this);
-            }
-            var d = __define,c=ScreenAdapter;p=c.prototype;
-            /**
-             * @private
-             * 计算舞台显示尺寸
-             * @param scaleMode 当前的缩放模式
-             * @param screenWidth 播放器视口宽度
-             * @param screenHeight 播放器视口高度
-             * @param contentWidth 初始化内容宽度
-             * @param contentHeight 初始化内容高度
-             */
-            p.calculateStageSize = function (scaleMode, screenWidth, screenHeight, contentWidth, contentHeight) {
-                var displayWidth = screenWidth;
-                var displayHeight = screenHeight;
-                var stageWidth = contentWidth;
-                var stageHeight = contentHeight;
-                var scaleX = (screenWidth / stageWidth) || 0;
-                var scaleY = (screenHeight / stageHeight) || 0;
-                switch (scaleMode) {
-                    case lark.StageScaleMode.EXACT_FIT:
-                        break;
-                    case lark.StageScaleMode.FIXED_HEIGHT:
-                        stageWidth = Math.round(screenWidth / scaleY);
-                        break;
-                    case lark.StageScaleMode.FIXED_WIDTH:
-                        stageHeight = Math.round(screenHeight / scaleX);
-                        break;
-                    case lark.StageScaleMode.NO_BORDER:
-                        if (scaleX > scaleY) {
-                            displayHeight = Math.round(stageHeight * scaleX);
-                        }
-                        else {
-                            displayWidth = Math.round(stageWidth * scaleY);
-                        }
-                        break;
-                    case lark.StageScaleMode.SHOW_ALL:
-                        if (scaleX > scaleY) {
-                            displayWidth = Math.round(stageWidth * scaleY);
-                        }
-                        else {
-                            displayHeight = Math.round(stageHeight * scaleX);
-                        }
-                        break;
-                    default:
-                        stageWidth = screenWidth;
-                        stageHeight = screenHeight;
-                        break;
-                }
-                return {
-                    stageWidth: stageWidth,
-                    stageHeight: stageHeight,
-                    displayWidth: displayWidth,
-                    displayHeight: displayHeight
-                };
-            };
-            return ScreenAdapter;
-        })(lark.LarkObject);
-        sys.ScreenAdapter = ScreenAdapter;
-        lark.registerClass(ScreenAdapter,"lark.sys.ScreenAdapter",["lark.sys.IScreenAdapter"]);
-    })(sys = lark.sys || (lark.sys = {}));
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @language en_US
-     * The Event class is used as the base class for the creation of Event objects, which are passed as parameters to event
-     * listeners when an event occurs.The properties of the Event class carry basic information about an event, such as
-     * the event's type or whether the event's default behavior can be canceled. For many events, such as the events represented
-     * by the Event class constants, this basic information is sufficient. Other events, however, may require more detailed
-     * information. Events associated with a touch tap, for example, need to include additional information about the
-     * location of the touch event. You can pass such additional information to event listeners by extending the Event class,
-     * which is what the TouchEvent class does. Lark API defines several Event subclasses for common events that require
-     * additional information. Events associated with each of the Event subclasses are described in the documentation for
-     * each class.The methods of the Event class can be used in event listener functions to affect the behavior of the event
-     * object. Some events have an associated default behavior. Your event listener can cancel this behavior by calling the
-     * preventDefault() method. You can also make the current event listener the last one to process an event by calling
-     * the stopPropagation() or stopImmediatePropagation() method.
-     * @see lark.EventEmitter
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * Event 类作为创建事件实例的基类，当发生事件时，Event 实例将作为参数传递给事件侦听器。Event 类的属性包含有关事件的基本信息，例如事件
-     * 的类型或者是否可以取消事件的默认行为。对于许多事件（如由 Event 类常量表示的事件），此基本信息就足够了。但其他事件可能需要更详细的信息。
-     * 例如，与触摸关联的事件需要包括有关触摸事件的位置信息。您可以通过扩展 Event 类（TouchEvent 类执行的操作）将此类其他信息传递给事件侦听器。
-     * Lark API 为需要其他信息的常见事件定义多个 Event 子类。与每个 Event 子类关联的事件将在每个类的文档中加以介绍。Event 类的方法可以在
-     * 事件侦听器函数中使用以影响事件对象的行为。某些事件有关联的默认行为，通过调用 preventDefault() 方法，您的事件侦听器可以取消此行为。
-     * 可以通过调用 stopPropagation() 或 stopImmediatePropagation() 方法，将当前事件侦听器作为处理事件的最后一个事件侦听器。
-     * @see lark.EventEmitter
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var Event = (function (_super) {
-        __extends(Event, _super);
-        /**
-         * @language en_US
-         * Creates an Event object to pass as a parameter to event listeners.
-         * @param type  The type of the event, accessible as Event.type.
-         * @param bubbles  Determines whether the Event object participates in the bubbling stage of the event flow. The default value is false.
-         * @param cancelable Determines whether the Event object can be canceled. The default values is false.
-         * @param data the optional data associated with this event
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个作为参数传递给事件侦听器的 Event 对象。
-         * @param type  事件的类型，可以作为 Event.type 访问。
-         * @param bubbles  确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
-         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
-         * @param data 与此事件对象关联的可选数据。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        function Event(type, bubbles, cancelable, data) {
-            _super.call(this);
-            /**
-             * @private
-             */
-            this.$eventPhase = 2;
-            /**
-             * @private
-             */
-            this.$currentTarget = null;
-            /**
-             * @private
-             */
-            this.$target = null;
-            /**
-             * @private
-             */
-            this.$isDefaultPrevented = false;
-            /**
-             * @private
-             */
-            this.$isPropagationStopped = false;
-            /**
-             * @private
-             */
-            this.$isPropagationImmediateStopped = false;
-            this.$type = type;
-            this.$bubbles = !!bubbles;
-            this.$cancelable = !!cancelable;
-            this.data = data;
-        }
-        var d = __define,c=Event;p=c.prototype;
-        d(p, "type",
-            /**
-             * @language en_US
-             * The type of event. The type is case-sensitive.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             *  事件的类型。类型区分大小写。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$type;
-            },undefined
-        );
-        d(p, "bubbles",
-            /**
-             * @language en_US
-             * Indicates whether an event is a bubbling event.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             *  表示事件是否为冒泡事件。如果事件可以冒泡，则此值为 true；否则为 false。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$bubbles;
-            },undefined
-        );
-        d(p, "cancelable",
-            /**
-             * @language en_US
-             * Indicates whether the behavior associated with the event can be prevented. If the behavior can be
-             * canceled, this value is true; otherwise it is false.
-             * @see #preventDefault()
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             *  表示是否可以阻止与事件相关联的行为。如果可以取消该行为，则此值为 true；否则为 false。
-             * @see #preventDefault()
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$cancelable;
-            },undefined
-        );
-        d(p, "eventPhase",
-            /**
-             * @language en_US
-             * The current phase in the event flow. This property can contain the following numeric values:
-             * The capture phase (EventPhase.CAPTURING_PHASE).
-             * The target phase (EventPhase.AT_TARGET)
-             * The bubbling phase (EventPhase.BUBBLING_PHASE).
-             * @see lark.EventPhase
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             *  事件流中的当前阶段。此属性可以包含以下数值：
-             * 捕获阶段 (EventPhase.CAPTURING_PHASE)。
-             * 目标阶段 (EventPhase.AT_TARGET)。
-             * 冒泡阶段 (EventPhase.BUBBLING_PHASE)。
-             * @see lark.EventPhase
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$eventPhase;
-            },undefined
-        );
-        d(p, "currentTarget",
-            /**
-             * @language en_US
-             * The object that is actively processing the Event object with an event listener. For example, if a
-             * user clicks an OK button, the current target could be the node containing that button or one of its ancestors
-             * that has registered an event listener for that event.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             *  当前正在使用某个事件侦听器处理 Event 对象的对象。例如，如果用户单击“确定”按钮，
-             * 则当前目标可以是包含该按钮的节点，也可以是它的已为该事件注册了事件侦听器的始祖之一。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$currentTarget;
-            },undefined
-        );
-        d(p, "target",
-            /**
-             * @language en_US
-             * The event target. This property contains the target node. For example, if a user clicks an OK button,
-             * the target node is the display list node containing that button.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             *  事件目标。此属性包含目标节点。例如，如果用户单击“确定”按钮，则目标节点就是包含该按钮的显示列表节点。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$target;
-            },undefined
-        );
-        /**
-         * @language en_US
-         * Checks whether the preventDefault() method has been called on the event. If the preventDefault() method has been
-         * called, returns true; otherwise, returns false.
-         * @returns If preventDefault() has been called, returns true; otherwise, returns false.
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 检查是否已对事件调用 preventDefault() 方法。
-         * @returns 如果已调用 preventDefault() 方法，则返回 true；否则返回 false。
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.isDefaultPrevented = function () {
-            return this.$isDefaultPrevented;
-        };
-        /**
-         * @language en_US
-         * Cancels an event's default behavior if that behavior can be canceled.Many events have associated behaviors that
-         * are carried out by default. For example, if a user types a character into a text input, the default behavior
-         * is that the character is displayed in the text input. Because the TextEvent.TEXT_INPUT event's default behavior
-         * can be canceled, you can use the preventDefault() method to prevent the character from appearing.
-         * You can use the Event.cancelable property to check whether you can prevent the default behavior associated with
-         * a particular event. If the value of Event.cancelable is true, then preventDefault() can be used to cancel the event;
-         * otherwise, preventDefault() has no effect.
-         * @see #cancelable
-         * @see #isDefaultPrevented
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果可以取消事件的默认行为，则取消该行为。
-         * 许多事件都有默认执行的关联行为。例如，如果用户在文本字段中键入一个字符，则默认行为就是在文本字段中显示该字符。
-         * 由于可以取消 TextEvent.TEXT_INPUT 事件的默认行为，因此您可以使用 preventDefault() 方法来防止显示该字符。
-         * 您可以使用 Event.cancelable 属性来检查是否可以防止与特定事件关联的默认行为。如果 Event.cancelable 的值为 true，
-         * 则可以使用 preventDefault() 来取消事件；否则，preventDefault() 无效。
-         * @see #cancelable
-         * @see #isDefaultPrevented
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.preventDefault = function () {
-            if (this.$cancelable)
-                this.$isDefaultPrevented = true;
-        };
-        /**
-         * @language en_US
-         * Prevents processing of any event listeners in nodes subsequent to the current node in the event flow. This method
-         * does not affect any event listeners in the current node (currentTarget). In contrast, the stopImmediatePropagation()
-         * method prevents processing of event listeners in both the current node and subsequent nodes. Additional calls to this
-         * method have no effect. This method can be called in any phase of the event flow.<br/>
-         * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
-         * @see #stopImmediatePropagation()
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 防止对事件流中当前节点的后续节点中的所有事件侦听器进行处理。此方法不会影响当前节点 currentTarget 中的任何事件侦听器。
-         * 相比之下，stopImmediatePropagation() 方法可以防止对当前节点中和后续节点中的事件侦听器进行处理。
-         * 对此方法的其它调用没有任何效果。可以在事件流的任何阶段中调用此方法。<br/>
-         * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
-         * @see #stopImmediatePropagation()
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.stopPropagation = function () {
-            if (this.$bubbles)
-                this.$isPropagationStopped = true;
-        };
-        /**
-         * @language en_US
-         * Prevents processing of any event listeners in the current node and any subsequent nodes in the event flow.
-         * This method takes effect immediately, and it affects event listeners in the current node. In contrast, the
-         * stopPropagation() method doesn't take effect until all the event listeners in the current node finish processing.<br/>
-         * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
-         * @see #stopPropagation()
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 防止对事件流中当前节点中和所有后续节点中的事件侦听器进行处理。此方法会立即生效，并且会影响当前节点中的事件侦听器。
-         * 相比之下，在当前节点中的所有事件侦听器都完成处理之前，stopPropagation() 方法不会生效。<br/>
-         * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
-         * @see #stopPropagation()
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.stopImmediatePropagation = function () {
-            if (this.$bubbles)
-                this.$isPropagationImmediateStopped = true;
-        };
-        /**
-         * @language en_US
-         * This method will be called automatically when you pass the event object as the parameters to the Event.release() method.
-         * If your custom event is designed for reusable,you should override this method to make sure all the references to external
-         * objects are cleaned. if not,it may cause memory leaking.
-         * @see lark.Event.create()
-         * @see lark.Event.release()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 当事件实例传递给Event.release()静态方法时，实例上的clean()方法将会被自动调用。
-         * 若此自定义事件的实例设计为可以循环复用的，为了避免引起内存泄露，自定义事件需要覆盖此方法来确保实例被缓存前断开对外部对象的一切引用。
-         * @see lark.Event.create()
-         * @see lark.Event.release()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.clean = function () {
-            this.data = this.$target = this.$currentTarget = null;
-        };
-        /**
-         * @language en_US
-         * Gets one event instance from the object pool or create a new one. We highly recommend using the Event.create()
-         * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
-         * which allows you to get better code execution performance.<br/>
-         * Note: If you want to use this method to initialize your custom event object,you must make sure the constructor
-         * of your custom event is the same as the constructor of lark.Event.
-         * @example
-         * <code>
-         *    var event = Event.create(Event,type, bubbles);
-         *    event.data = data;    //optional,initializes custom data here
-         *    this.emit(event);
-         *    Event.release(event);
-         * </code>
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 从对象池中取出或创建一个新的事件实例。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
-         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。<br/>
-         * 注意：若使用此方法来创建自定义事件的实例，自定义的构造函数参数列表必须跟Event类一致。
-         * @example
-         * <code>
-         *    var event = Event.create(Event,type, bubbles);
-         *    event.data = data;  //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
-         *    this.emit(event);
-         *    Event.release(event);
-         * </code>
-         * @see #clean()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.create = function (EventClass, type, bubbles, cancelable) {
-            var eventPool = EventClass.eventPool;
-            if (!eventPool) {
-                eventPool = EventClass.eventPool = [];
-            }
-            if (eventPool.length) {
-                var event = eventPool.pop();
-                event.$type = type;
-                event.$bubbles = !!bubbles;
-                event.$cancelable = !!cancelable;
-                event.$isDefaultPrevented = false;
-                event.$isPropagationStopped = false;
-                event.$isPropagationImmediateStopped = false;
-                event.$eventPhase = 2 /* AT_TARGET */;
-                return event;
-            }
-            return new EventClass(type, bubbles, cancelable);
-        };
-        /**
-         * @language en_US
-         * Releases an event object and cache it into the object pool.We highly recommend using the Event.create()
-         * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
-         * which allows you to get better code execution performance.<br/>
-         * Note: The parameters of this method only accepts an instance created by the Event.create() method.
-         * if not,it may throw an error.
-         * @example
-         * <code>
-         *    var event = Event.create(Event,type, bubbles);
-         *    event.data = data; //optional,initializes custom data here
-         *    this.emit(event);
-         *    Event.release(event);
-         * </code>
-         * @see #clean()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 释放一个事件对象，并缓存到对象池。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
-         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。<br/>
-         * 注意：此方法只能传入由Event.create()创建的事件实例，传入非法对象实例可能会导致报错。
-         * @example
-         * <code>
-         *    var event = Event.create(Event,type, bubbles);
-         *    event.data = data;   //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
-         *    this.emit(event);
-         *    Event.release(event);
-         * </code>
-         * @see #clean()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.release = function (event) {
-            event.clean();
-            var EventClass = Object.getPrototypeOf(event).constructor;
-            EventClass.eventPool.push(event);
-        };
-        /**
-         * @language en_US
-         * Emitted when a display object is added to the on stage display list, either directly or through the addition
-         * of a sub tree in which the display object is contained.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在将显示对象直接添加到舞台显示列表或将包含显示对象的子树添加至舞台显示列表中时调度。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.ADDED_TO_STAGE = "addedToStage";
-        /**
-         * @language en_US
-         * Emitted when a display object is about to be removed from the display list, either directly or through the removal
-         * of a sub tree in which the display object is contained.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在从显示列表中直接删除显示对象或删除包含显示对象的子树时调度。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.REMOVED_FROM_STAGE = "removedFromStage";
-        /**
-         * @language en_US
-         * Emitted when a display object is added to the display list.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将显示对象添加到显示列表中时调度。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.ADDED = "added";
-        /**
-         * @language en_US
-         * Emitted when a display object is about to be removed from the display list.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将要从显示列表中删除显示对象时调度。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.REMOVED = "removed";
-        /**
-         * @language en_US
-         * [broadcast event] Emitted when the playhead is entering a new frame.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * [广播事件] 进入新的一帧,监听此事件将会在下一帧开始时触发一次回调。这是一个广播事件，可以在任何一个显示对象上监听，无论它是否在显示列表中。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.ENTER_FRAME = "enterFrame";
-        /**
-         * @language en_US
-         * Emitted when the display list is about to be updated and rendered.
-         * Note: Every time you want to receive a render event,you must call the stage.invalidate() method.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 渲染事件，监听此事件将会在本帧末即将开始渲染的前一刻触发回调，这是一个广播事件，可以在任何一个显示对象上监听，无论它是否在显示列表中。
-         * 注意：每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 stage.invalidate() 方法，由于每帧只会触发一次屏幕刷新，
-         * 若在 Event.RENDER 回调函数执行期间再次调用stage.invalidate()，将会被忽略。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.RENDER = "render";
-        /**
-         * @language en_US
-         * Emitted when the size of stage or UIComponent is changed.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 舞台尺寸或UI组件尺寸发生改变
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.RESIZE = "resize";
-        /**
-         * @language en_US
-         * Emitted when the value or selection of a property is chaned.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 属性值或状态发生改变。通常是按钮的选中状态，或者列表的选中项索引改变。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.CHANGE = "change";
-        /**
-         * @language en_US
-         * Emitted when the value or selection of a property is going to change.you can cancel this by calling the
-         * preventDefault() method.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 属性值或状态即将发生改变,通常是按钮的选中状态，或者列表的选中项索引改变。可以通过调用 preventDefault() 方法阻止索引发生更改。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.CHANGING = "changing";
-        /**
-         * @language en_US
-         * Emitted when the net request is complete.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 网络请求加载完成
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.COMPLETE = "complete";
-        /**
-         * @language en_US
-         * Emitted when the net request is failed.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 网络请求加载失败
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.IO_ERROR = "ioError";
-        /**
-         * @language en_US
-         * Emitted when the TextInput instance gets focus.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * TextInput实例获得焦点
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.FOCUS_IN = "focusIn";
-        /**
-         * @language en_US
-         * Emitted when the TextInput instance loses focus.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * TextInput实例失去焦点
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.FOCUS_OUT = "focusOut";
-        /**
-         * @language en_US
-         * Emitted when the playback is ended.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 动画声音等播放完成
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.ENDED = "ended";
-        return Event;
-    })(lark.LarkObject);
-    lark.Event = Event;
-    lark.registerClass(Event,"lark.Event");
-    if (DEBUG) {
-        lark.$markReadOnly(Event.prototype, "type");
-        lark.$markReadOnly(Event.prototype, "bubbles");
-        lark.$markReadOnly(Event.prototype, "cancelable");
-        lark.$markReadOnly(Event.prototype, "eventPhase");
-        lark.$markReadOnly(Event.prototype, "currentTarget");
-        lark.$markReadOnly(Event.prototype, "target");
-    }
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -4255,7 +3761,7 @@ var lark;
     lark.Point = Point;
     lark.registerClass(Point,"lark.Point");
     if (DEBUG) {
-        lark.$markReadOnly(Point.prototype, "length");
+        lark.$markReadOnly(Point, "length");
     }
     /**
      * @private
@@ -5079,6 +4585,24 @@ var lark;
         /**
          * @private
          */
+        p.$hitTest = function (stageX, stageY) {
+            var target = this.$targetDisplay;
+            var m = target.$getInvertedConcatenatedMatrix();
+            var localX = m.a * stageX + m.c * stageY + m.tx;
+            var localY = m.b * stageX + m.d * stageY + m.ty;
+            var context = lark.sys.sharedRenderContext;
+            context.surface.width = context.surface.height = 3;
+            context.translate(1 - localX, 1 - localY);
+            this.$render(context, true);
+            var data = context.getImageData(1, 1, 1, 1).data;
+            if (data[3] === 0) {
+                return null;
+            }
+            return target;
+        };
+        /**
+         * @private
+         */
         p.$measureContentBounds = function (bounds) {
             if (!this.hasFill && !this.hasStroke) {
                 bounds.setEmpty();
@@ -5096,7 +4620,7 @@ var lark;
         /**
          * @private
          */
-        p.$render = function (context) {
+        p.$render = function (context, forHitTest) {
             context.save();
             context.fillStyle = "#000000";
             context.lineCap = "butt";
@@ -5111,9 +4635,22 @@ var lark;
             }
             var commands = this.$commands;
             var length = commands.length;
-            for (var i = 0; i < length; i++) {
-                var command = commands[i];
-                map[command.type].apply(context, command.arguments);
+            if (forHitTest) {
+                for (var i = 0; i < length; i++) {
+                    var command = commands[i];
+                    var type = command.type;
+                    //过滤透明填充的样式
+                    if (type === 5 /* fillStyle */ || type == 4 /* strokeStyle */) {
+                        continue;
+                    }
+                    map[command.type].apply(context, command.arguments);
+                }
+            }
+            else {
+                for (var i = 0; i < length; i++) {
+                    var command = commands[i];
+                    map[command.type].apply(context, command.arguments);
+                }
             }
             context.restore();
         };
@@ -5450,6 +4987,1095 @@ var lark;
 (function (lark) {
     /**
      * @language en_US
+     * The Event class is used as the base class for the creation of Event objects, which are passed as parameters to event
+     * listeners when an event occurs.The properties of the Event class carry basic information about an event, such as
+     * the event's type or whether the event's default behavior can be canceled. For many events, such as the events represented
+     * by the Event class constants, this basic information is sufficient. Other events, however, may require more detailed
+     * information. Events associated with a touch tap, for example, need to include additional information about the
+     * location of the touch event. You can pass such additional information to event listeners by extending the Event class,
+     * which is what the TouchEvent class does. Lark API defines several Event subclasses for common events that require
+     * additional information. Events associated with each of the Event subclasses are described in the documentation for
+     * each class.The methods of the Event class can be used in event listener functions to affect the behavior of the event
+     * object. Some events have an associated default behavior. Your event listener can cancel this behavior by calling the
+     * preventDefault() method. You can also make the current event listener the last one to process an event by calling
+     * the stopPropagation() or stopImmediatePropagation() method.
+     * @see lark.EventEmitter
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Event 类作为创建事件实例的基类，当发生事件时，Event 实例将作为参数传递给事件侦听器。Event 类的属性包含有关事件的基本信息，例如事件
+     * 的类型或者是否可以取消事件的默认行为。对于许多事件（如由 Event 类常量表示的事件），此基本信息就足够了。但其他事件可能需要更详细的信息。
+     * 例如，与触摸关联的事件需要包括有关触摸事件的位置信息。您可以通过扩展 Event 类（TouchEvent 类执行的操作）将此类其他信息传递给事件侦听器。
+     * Lark API 为需要其他信息的常见事件定义多个 Event 子类。与每个 Event 子类关联的事件将在每个类的文档中加以介绍。Event 类的方法可以在
+     * 事件侦听器函数中使用以影响事件对象的行为。某些事件有关联的默认行为，通过调用 preventDefault() 方法，您的事件侦听器可以取消此行为。
+     * 可以通过调用 stopPropagation() 或 stopImmediatePropagation() 方法，将当前事件侦听器作为处理事件的最后一个事件侦听器。
+     * @see lark.EventEmitter
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var Event = (function (_super) {
+        __extends(Event, _super);
+        /**
+         * @language en_US
+         * Creates an Event object to pass as a parameter to event listeners.
+         * @param type  The type of the event, accessible as Event.type.
+         * @param bubbles  Determines whether the Event object participates in the bubbling stage of the event flow. The default value is false.
+         * @param cancelable Determines whether the Event object can be canceled. The default values is false.
+         * @param data the optional data associated with this event
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个作为参数传递给事件侦听器的 Event 对象。
+         * @param type  事件的类型，可以作为 Event.type 访问。
+         * @param bubbles  确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
+         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
+         * @param data 与此事件对象关联的可选数据。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function Event(type, bubbles, cancelable, data) {
+            _super.call(this);
+            /**
+             * @private
+             */
+            this.$eventPhase = 2;
+            /**
+             * @private
+             */
+            this.$currentTarget = null;
+            /**
+             * @private
+             */
+            this.$target = null;
+            /**
+             * @private
+             */
+            this.$isDefaultPrevented = false;
+            /**
+             * @private
+             */
+            this.$isPropagationStopped = false;
+            /**
+             * @private
+             */
+            this.$isPropagationImmediateStopped = false;
+            this.$type = type;
+            this.$bubbles = !!bubbles;
+            this.$cancelable = !!cancelable;
+            this.data = data;
+        }
+        var d = __define,c=Event;p=c.prototype;
+        d(p, "type",
+            /**
+             * @language en_US
+             * The type of event. The type is case-sensitive.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             *  事件的类型。类型区分大小写。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$type;
+            },undefined
+        );
+        d(p, "bubbles",
+            /**
+             * @language en_US
+             * Indicates whether an event is a bubbling event.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             *  表示事件是否为冒泡事件。如果事件可以冒泡，则此值为 true；否则为 false。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$bubbles;
+            },undefined
+        );
+        d(p, "cancelable",
+            /**
+             * @language en_US
+             * Indicates whether the behavior associated with the event can be prevented. If the behavior can be
+             * canceled, this value is true; otherwise it is false.
+             * @see #preventDefault()
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             *  表示是否可以阻止与事件相关联的行为。如果可以取消该行为，则此值为 true；否则为 false。
+             * @see #preventDefault()
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$cancelable;
+            },undefined
+        );
+        d(p, "eventPhase",
+            /**
+             * @language en_US
+             * The current phase in the event flow. This property can contain the following numeric values:
+             * The capture phase (EventPhase.CAPTURING_PHASE).
+             * The target phase (EventPhase.AT_TARGET)
+             * The bubbling phase (EventPhase.BUBBLING_PHASE).
+             * @see lark.EventPhase
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             *  事件流中的当前阶段。此属性可以包含以下数值：
+             * 捕获阶段 (EventPhase.CAPTURING_PHASE)。
+             * 目标阶段 (EventPhase.AT_TARGET)。
+             * 冒泡阶段 (EventPhase.BUBBLING_PHASE)。
+             * @see lark.EventPhase
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$eventPhase;
+            },undefined
+        );
+        d(p, "currentTarget",
+            /**
+             * @language en_US
+             * The object that is actively processing the Event object with an event listener. For example, if a
+             * user clicks an OK button, the current target could be the node containing that button or one of its ancestors
+             * that has registered an event listener for that event.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             *  当前正在使用某个事件侦听器处理 Event 对象的对象。例如，如果用户单击“确定”按钮，
+             * 则当前目标可以是包含该按钮的节点，也可以是它的已为该事件注册了事件侦听器的始祖之一。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$currentTarget;
+            },undefined
+        );
+        d(p, "target",
+            /**
+             * @language en_US
+             * The event target. This property contains the target node. For example, if a user clicks an OK button,
+             * the target node is the display list node containing that button.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             *  事件目标。此属性包含目标节点。例如，如果用户单击“确定”按钮，则目标节点就是包含该按钮的显示列表节点。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$target;
+            },undefined
+        );
+        /**
+         * @language en_US
+         * Checks whether the preventDefault() method has been called on the event. If the preventDefault() method has been
+         * called, returns true; otherwise, returns false.
+         * @returns If preventDefault() has been called, returns true; otherwise, returns false.
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 检查是否已对事件调用 preventDefault() 方法。
+         * @returns 如果已调用 preventDefault() 方法，则返回 true；否则返回 false。
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.isDefaultPrevented = function () {
+            return this.$isDefaultPrevented;
+        };
+        /**
+         * @language en_US
+         * Cancels an event's default behavior if that behavior can be canceled.Many events have associated behaviors that
+         * are carried out by default. For example, if a user types a character into a text input, the default behavior
+         * is that the character is displayed in the text input. Because the TextEvent.TEXT_INPUT event's default behavior
+         * can be canceled, you can use the preventDefault() method to prevent the character from appearing.
+         * You can use the Event.cancelable property to check whether you can prevent the default behavior associated with
+         * a particular event. If the value of Event.cancelable is true, then preventDefault() can be used to cancel the event;
+         * otherwise, preventDefault() has no effect.
+         * @see #cancelable
+         * @see #isDefaultPrevented
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果可以取消事件的默认行为，则取消该行为。
+         * 许多事件都有默认执行的关联行为。例如，如果用户在文本字段中键入一个字符，则默认行为就是在文本字段中显示该字符。
+         * 由于可以取消 TextEvent.TEXT_INPUT 事件的默认行为，因此您可以使用 preventDefault() 方法来防止显示该字符。
+         * 您可以使用 Event.cancelable 属性来检查是否可以防止与特定事件关联的默认行为。如果 Event.cancelable 的值为 true，
+         * 则可以使用 preventDefault() 来取消事件；否则，preventDefault() 无效。
+         * @see #cancelable
+         * @see #isDefaultPrevented
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.preventDefault = function () {
+            if (this.$cancelable)
+                this.$isDefaultPrevented = true;
+        };
+        /**
+         * @language en_US
+         * Prevents processing of any event listeners in nodes subsequent to the current node in the event flow. This method
+         * does not affect any event listeners in the current node (currentTarget). In contrast, the stopImmediatePropagation()
+         * method prevents processing of event listeners in both the current node and subsequent nodes. Additional calls to this
+         * method have no effect. This method can be called in any phase of the event flow.<br/>
+         * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
+         * @see #stopImmediatePropagation()
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 防止对事件流中当前节点的后续节点中的所有事件侦听器进行处理。此方法不会影响当前节点 currentTarget 中的任何事件侦听器。
+         * 相比之下，stopImmediatePropagation() 方法可以防止对当前节点中和后续节点中的事件侦听器进行处理。
+         * 对此方法的其它调用没有任何效果。可以在事件流的任何阶段中调用此方法。<br/>
+         * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
+         * @see #stopImmediatePropagation()
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.stopPropagation = function () {
+            if (this.$bubbles)
+                this.$isPropagationStopped = true;
+        };
+        /**
+         * @language en_US
+         * Prevents processing of any event listeners in the current node and any subsequent nodes in the event flow.
+         * This method takes effect immediately, and it affects event listeners in the current node. In contrast, the
+         * stopPropagation() method doesn't take effect until all the event listeners in the current node finish processing.<br/>
+         * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
+         * @see #stopPropagation()
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 防止对事件流中当前节点中和所有后续节点中的事件侦听器进行处理。此方法会立即生效，并且会影响当前节点中的事件侦听器。
+         * 相比之下，在当前节点中的所有事件侦听器都完成处理之前，stopPropagation() 方法不会生效。<br/>
+         * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
+         * @see #stopPropagation()
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.stopImmediatePropagation = function () {
+            if (this.$bubbles)
+                this.$isPropagationImmediateStopped = true;
+        };
+        /**
+         * @language en_US
+         * This method will be called automatically when you pass the event object as the parameters to the Event.release() method.
+         * If your custom event is designed for reusable,you should override this method to make sure all the references to external
+         * objects are cleaned. if not,it may cause memory leaking.
+         * @see lark.Event.create()
+         * @see lark.Event.release()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当事件实例传递给Event.release()静态方法时，实例上的clean()方法将会被自动调用。
+         * 若此自定义事件的实例设计为可以循环复用的，为了避免引起内存泄露，自定义事件需要覆盖此方法来确保实例被缓存前断开对外部对象的一切引用。
+         * @see lark.Event.create()
+         * @see lark.Event.release()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.clean = function () {
+            this.data = this.$target = this.$currentTarget = null;
+        };
+        /**
+         * @language en_US
+         * Gets one event instance from the object pool or create a new one. We highly recommend using the Event.create()
+         * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
+         * which allows you to get better code execution performance.<br/>
+         * Note: If you want to use this method to initialize your custom event object,you must make sure the constructor
+         * of your custom event is the same as the constructor of lark.Event.
+         * @example
+         * <pre>
+         *    var event = Event.create(Event,type, bubbles);
+         *    event.data = data;    //optional,initializes custom data here
+         *    this.emit(event);
+         *    Event.release(event);
+         * </pre>
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从对象池中取出或创建一个新的事件实例。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
+         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。<br/>
+         * 注意：若使用此方法来创建自定义事件的实例，自定义的构造函数参数列表必须跟Event类一致。
+         * @example
+         * <pre>
+         *    var event = Event.create(Event,type, bubbles);
+         *    event.data = data;  //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
+         *    this.emit(event);
+         *    Event.release(event);
+         * </pre>
+         * @see #clean()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.create = function (EventClass, type, bubbles, cancelable) {
+            var eventPool = EventClass.eventPool;
+            if (!eventPool) {
+                eventPool = EventClass.eventPool = [];
+            }
+            if (eventPool.length) {
+                var event = eventPool.pop();
+                event.$type = type;
+                event.$bubbles = !!bubbles;
+                event.$cancelable = !!cancelable;
+                event.$isDefaultPrevented = false;
+                event.$isPropagationStopped = false;
+                event.$isPropagationImmediateStopped = false;
+                event.$eventPhase = 2 /* AT_TARGET */;
+                return event;
+            }
+            return new EventClass(type, bubbles, cancelable);
+        };
+        /**
+         * @language en_US
+         * Releases an event object and cache it into the object pool.We highly recommend using the Event.create()
+         * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
+         * which allows you to get better code execution performance.<br/>
+         * Note: The parameters of this method only accepts an instance created by the Event.create() method.
+         * if not,it may throw an error.
+         * @example
+         * <pre>
+         *    var event = Event.create(Event,type, bubbles);
+         *    event.data = data; //optional,initializes custom data here
+         *    this.emit(event);
+         *    Event.release(event);
+         * </pre>
+         * @see #clean()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 释放一个事件对象，并缓存到对象池。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
+         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。<br/>
+         * 注意：此方法只能传入由Event.create()创建的事件实例，传入非法对象实例可能会导致报错。
+         * @example
+         * <pre>
+         *    var event = Event.create(Event,type, bubbles);
+         *    event.data = data;   //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
+         *    this.emit(event);
+         *    Event.release(event);
+         * </pre>
+         * @see #clean()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.release = function (event) {
+            event.clean();
+            var EventClass = Object.getPrototypeOf(event).constructor;
+            EventClass.eventPool.push(event);
+        };
+        /**
+         * @language en_US
+         * Emitted when a display object is added to the on stage display list, either directly or through the addition
+         * of a sub tree in which the display object is contained.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在将显示对象直接添加到舞台显示列表或将包含显示对象的子树添加至舞台显示列表中时调度。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.ADDED_TO_STAGE = "addedToStage";
+        /**
+         * @language en_US
+         * Emitted when a display object is about to be removed from the display list, either directly or through the removal
+         * of a sub tree in which the display object is contained.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在从显示列表中直接删除显示对象或删除包含显示对象的子树时调度。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.REMOVED_FROM_STAGE = "removedFromStage";
+        /**
+         * @language en_US
+         * Emitted when a display object is added to the display list.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将显示对象添加到显示列表中时调度。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.ADDED = "added";
+        /**
+         * @language en_US
+         * Emitted when a display object is about to be removed from the display list.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将要从显示列表中删除显示对象时调度。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.REMOVED = "removed";
+        /**
+         * @language en_US
+         * [broadcast event] Emitted when the playhead is entering a new frame.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [广播事件] 进入新的一帧,监听此事件将会在下一帧开始时触发一次回调。这是一个广播事件，可以在任何一个显示对象上监听，无论它是否在显示列表中。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.ENTER_FRAME = "enterFrame";
+        /**
+         * @language en_US
+         * Emitted when the display list is about to be updated and rendered.
+         * Note: Every time you want to receive a render event,you must call the stage.invalidate() method.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 渲染事件，监听此事件将会在本帧末即将开始渲染的前一刻触发回调，这是一个广播事件，可以在任何一个显示对象上监听，无论它是否在显示列表中。
+         * 注意：每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 stage.invalidate() 方法，由于每帧只会触发一次屏幕刷新，
+         * 若在 Event.RENDER 回调函数执行期间再次调用stage.invalidate()，将会被忽略。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.RENDER = "render";
+        /**
+         * @language en_US
+         * Emitted when the size of stage or UIComponent is changed.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 舞台尺寸或UI组件尺寸发生改变
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.RESIZE = "resize";
+        /**
+         * @language en_US
+         * Emitted when the value or selection of a property is chaned.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 属性值或状态发生改变。通常是按钮的选中状态，或者列表的选中项索引改变。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.CHANGE = "change";
+        /**
+         * @language en_US
+         * Emitted when the value or selection of a property is going to change.you can cancel this by calling the
+         * preventDefault() method.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 属性值或状态即将发生改变,通常是按钮的选中状态，或者列表的选中项索引改变。可以通过调用 preventDefault() 方法阻止索引发生更改。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.CHANGING = "changing";
+        /**
+         * @language en_US
+         * Emitted when the net request is complete.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 网络请求加载完成
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.COMPLETE = "complete";
+        /**
+         * @language en_US
+         * Emitted when the net request is failed.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 网络请求加载失败
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.IO_ERROR = "ioError";
+        /**
+         * @language en_US
+         * Emitted when the TextInput instance gets focus.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * TextInput实例获得焦点
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.FOCUS_IN = "focusIn";
+        /**
+         * @language en_US
+         * Emitted when the TextInput instance loses focus.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * TextInput实例失去焦点
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.FOCUS_OUT = "focusOut";
+        /**
+         * @language en_US
+         * Emitted when the playback is ended.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 动画声音等播放完成
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.ENDED = "ended";
+        return Event;
+    })(lark.LarkObject);
+    lark.Event = Event;
+    lark.registerClass(Event,"lark.Event");
+    if (DEBUG) {
+        lark.$markReadOnly(Event, "type");
+        lark.$markReadOnly(Event, "bubbles");
+        lark.$markReadOnly(Event, "cancelable");
+        lark.$markReadOnly(Event, "eventPhase");
+        lark.$markReadOnly(Event, "currentTarget");
+        lark.$markReadOnly(Event, "target");
+    }
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
+     * A Timer object emits a TimerEvent objects whenever the Timer object reaches the interval specified by the Timer.delay property.
+     * @see lark.Timer
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 每当 Timer 对象达到由 Timer.delay 属性指定的间隔时，Timer 对象即会调度 TimerEvent 对象。
+     * @see lark.Timer
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var TimerEvent = (function (_super) {
+        __extends(TimerEvent, _super);
+        /**
+         * @language en_US
+         * Creates an Event object with specific information relevant to timer events.
+         * @param type The type of the event. Event listeners can access this information through the inherited type property.
+         * @param bubbles Determines whether the Event object bubbles. Event listeners can access this information through
+         * the inherited bubbles property.
+         * @param cancelable Determines whether the Event object can be canceled. Event listeners can access this information
+         * through the inherited cancelable property.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 Event 对象，其中包含有关 timer 事件的特定信息。
+         * @param type 事件的类型。事件侦听器可以通过继承的 type 属性访问此信息。
+         * @param bubbles 确定 Event 对象是否冒泡。事件侦听器可以通过继承的 bubbles 属性访问此信息。
+         * @param cancelable 确定是否可以取消 Event 对象。事件侦听器可以通过继承的 cancelable 属性访问此信息。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function TimerEvent(type, bubbles, cancelable) {
+            _super.call(this, type, bubbles, cancelable);
+        }
+        var d = __define,c=TimerEvent;p=c.prototype;
+        /**
+         * @language en_US
+         * Instructs Lark runtime to render after processing of this event completes, if the display list has been modified.
+         * @example
+         * <pre>
+         *    function onTimer(event:TimerEvent):void {
+         *        if (40 < mySp.x && mySp.x < 375) {
+         *            mySp.x-= 50;
+         *        } else {
+         *            mySp.x=374;
+         *        }
+         *        event.updateAfterEvent();
+         *    }
+         *
+         *    var moveTimer:Timer=new Timer(50,250);
+         *    moveTimer.on(TimerEvent.TIMER,onTimer);
+         *    moveTimer.start();
+         * </pre>
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果已修改显示列表，调用此方法将会忽略帧频限制，在此事件处理完成后立即重绘屏幕。
+         * @example
+         * <pre>
+         *    function onTimer(event:TimerEvent):void {
+         *        if (40 < mySp.x && mySp.x < 375) {
+         *            mySp.x-= 50;
+         *        } else {
+         *            mySp.x=374;
+         *        }
+         *        event.updateAfterEvent();
+         *    }
+         *
+         *    var moveTimer:Timer=new Timer(50,250);
+         *    moveTimer.on(TimerEvent.TIMER,onTimer);
+         *    moveTimer.start();
+         * </pre>
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.updateAfterEvent = function () {
+            lark.sys.$requestRenderingFlag = true;
+        };
+        /**
+         * @language en_US
+         * uses a specified target to emit an event. Using this method can reduce the number of
+         * reallocate event objects, which allows you to get better code execution performance.
+         * @param target the event target
+         * @param type The type of the event. Event listeners can access this information through the inherited type property.
+         * @param bubbles Determines whether the Event object bubbles. Event listeners can access this information through
+         * the inherited bubbles property.
+         * @param cancelable Determines whether the Event object can be canceled. Event listeners can access this information
+         * through the inherited cancelable property.
+         * @see lark.Event.create()
+         * @see lark.Event.release()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         * @param target 事件派发目标
+         * @param type 事件的类型。事件侦听器可以通过继承的 type 属性访问此信息。
+         * @param bubbles 确定 Event 对象是否冒泡。事件侦听器可以通过继承的 bubbles 属性访问此信息。
+         * @param cancelable 确定是否可以取消 Event 对象。事件侦听器可以通过继承的 cancelable 属性访问此信息。
+         * @see lark.Event.create()
+         * @see lark.Event.release()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        TimerEvent.emitTimerEvent = function (target, type, bubbles, cancelable) {
+            var event = lark.Event.create(TimerEvent, type, bubbles, cancelable);
+            var result = target.emit(event);
+            lark.Event.release(event);
+            return result;
+        };
+        /**
+         * @language en_US
+         * Emitted whenever a Timer object reaches an interval specified according to the Timer.delay property.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 每当 Timer 对象达到根据 Timer.delay 属性指定的间隔时调度。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        TimerEvent.TIMER = "timer";
+        /**
+         * @language en_US
+         * Emitted whenever it has completed the number of requests set by Timer.repeatCount.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 每当它完成 Timer.repeatCount 设置的请求数后调度。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        TimerEvent.TIMER_COMPLETE = "timerComplete";
+        return TimerEvent;
+    })(lark.Event);
+    lark.TimerEvent = TimerEvent;
+    lark.registerClass(TimerEvent,"lark.TimerEvent");
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
+     * A ProgressEvent object is emitted when a load operation has begun. These events are usually generated when data are
+     * loaded into an application.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 当加载操作已开始,将调度 ProgressEvent 事件。这些事件通常在数据加载到应用程序中时生成。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var ProgressEvent = (function (_super) {
+        __extends(ProgressEvent, _super);
+        /**
+         * @language en_US
+         * Creates an Event object that contains information about progress events.
+         * @param type The type of the event. Event listeners can access this information through the inherited type property.
+         * @param bubbles Determines whether the Event object bubbles. Event listeners can access this information through the inherited bubbles property.
+         * @param cancelable Determines whether the Event object can be canceled. Event listeners can access this information through the inherited cancelable property.
+         * @param bytesLoaded The number of items or bytes loaded when the listener processes the event.
+         * @param bytesTotal The total number of items or bytes that will be loaded if the loading process succeeds.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 ProgressEvent 对象
+         * @param type  事件的类型，可以作为 Event.type 访问。
+         * @param bubbles  确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
+         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
+         * @param bytesLoaded 加载的项数或字节数
+         * @param bytesTotal 加载的总项数或总字节数
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function ProgressEvent(type, bubbles, cancelable, bytesLoaded, bytesTotal) {
+            _super.call(this, type, bubbles, cancelable);
+            /**
+             * @language en_US
+             * The number of items or bytes loaded when the listener processes the event.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 在侦听器处理事件时加载的项数或字节数。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            this.bytesLoaded = 0;
+            /**
+             * @language en_US
+             * The total number of items or bytes that will be loaded if the loading process succeeds.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 如果加载过程成功，将加载的总项数或总字节数。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            this.bytesTotal = 0;
+            this.bytesLoaded = +bytesLoaded || 0;
+            this.bytesTotal = +bytesTotal || 0;
+        }
+        var d = __define,c=ProgressEvent;p=c.prototype;
+        /**
+         * @language en_US
+         * uses a specified target to emit an event. Using this method can reduce the number of
+         * reallocate event objects, which allows you to get better code execution performance.
+         * @param target the event target
+         * @param type the type of event
+         * @param bytesLoaded The number of items or bytes loaded when the listener processes the event.
+         * @param bytesTotal The total number of items or bytes that will be loaded if the loading process succeeds.
+         * @see lark.Event.create()
+         * @see lark.Event.release()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用指定的EventEmitter对象来抛出事件对象。使用此方法能够减少事件对象创建的数量，从而获得更高的代码运行性能。
+         * @param target 派发事件目标
+         * @param type 事件类型
+         * @param bytesLoaded 加载的项数或字节数
+         * @param bytesTotal 加载的总项数或总字节数
+         * @see lark.Event.create()
+         * @see lark.Event.release()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        ProgressEvent.emitProgressEvent = function (target, type, bytesLoaded, bytesTotal) {
+            var event = lark.Event.create(ProgressEvent, type);
+            event.bytesLoaded = +bytesLoaded || 0;
+            event.bytesTotal = +bytesTotal || 0;
+            var result = target.emit(event);
+            lark.Event.release(event);
+            return result;
+        };
+        /**
+         * @language en_US
+         * Emitted when data is received as the download operation progresses.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在下载操作过程中收到数据时调度。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        ProgressEvent.PROGRESS = "progress";
+        return ProgressEvent;
+    })(lark.Event);
+    lark.ProgressEvent = ProgressEvent;
+    lark.registerClass(ProgressEvent,"lark.ProgressEvent");
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
+     * MotionEvent represents the device's movement
+     * Acceleration and accelerationIncludingGravity to represents the device's acceleration
+     * RotationRate to represents the device's rotation
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * MotionEvent 类呈现设备运动的具体信息
+     * Acceleration 和 accelerationIncludingGravity 呈现设备三个维度的加速度信息
+     * RotationRate 呈现设备的旋转状态信息
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var MotionEvent = (function (_super) {
+        __extends(MotionEvent, _super);
+        function MotionEvent() {
+            _super.apply(this, arguments);
+        }
+        var d = __define,c=MotionEvent;p=c.prototype;
+        return MotionEvent;
+    })(lark.Event);
+    lark.MotionEvent = MotionEvent;
+    lark.registerClass(MotionEvent,"lark.MotionEvent");
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
+     * The OrientationEvent provides information from the physical orientation of the device.
+     * Note: Currently, Browsers on the iOS and Android does not handle the coordinates the same way.
+     * Take care about this while using them.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * OrientationEvent 提供设备的方向信息
+     * 注意: 目前各个浏览器和操作系统处理方向的方式不完全相同，请根据使用场景做相应的校正，
+     * 比如使用两次方向数据的变化而不是直接使用方向的值
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var OrientationEvent = (function (_super) {
+        __extends(OrientationEvent, _super);
+        function OrientationEvent() {
+            _super.apply(this, arguments);
+        }
+        var d = __define,c=OrientationEvent;p=c.prototype;
+        return OrientationEvent;
+    })(lark.Event);
+    lark.OrientationEvent = OrientationEvent;
+    lark.registerClass(OrientationEvent,"lark.OrientationEvent");
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
      * The TouchEvent class lets you handle events on devices that detect user contact with the device (such as a finger
      * on a touch screen).When a user interacts with a device such as a mobile phone or tablet with a touch screen, the
      * user typically touches the screen with his or her fingers or a pointing device. You can develop applications that
@@ -5727,454 +6353,11 @@ var lark;
     lark.TouchEvent = TouchEvent;
     lark.registerClass(TouchEvent,"lark.TouchEvent");
     if (DEBUG) {
-        lark.$markReadOnly(TouchEvent.prototype, "stageX");
-        lark.$markReadOnly(TouchEvent.prototype, "stageY");
-        lark.$markReadOnly(TouchEvent.prototype, "localX");
-        lark.$markReadOnly(TouchEvent.prototype, "localY");
+        lark.$markReadOnly(TouchEvent, "stageX");
+        lark.$markReadOnly(TouchEvent, "stageY");
+        lark.$markReadOnly(TouchEvent, "localX");
+        lark.$markReadOnly(TouchEvent, "localY");
     }
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @language en_US
-     * MotionEvent represents the device's movement
-     * Acceleration and accelerationIncludingGravity to represents the device's acceleration
-     * RotationRate to represents the device's rotation
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * MotionEvent 类呈现设备运动的具体信息
-     * Acceleration 和 accelerationIncludingGravity 呈现设备三个维度的加速度信息
-     * RotationRate 呈现设备的旋转状态信息
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var MotionEvent = (function (_super) {
-        __extends(MotionEvent, _super);
-        function MotionEvent() {
-            _super.apply(this, arguments);
-        }
-        var d = __define,c=MotionEvent;p=c.prototype;
-        return MotionEvent;
-    })(lark.Event);
-    lark.MotionEvent = MotionEvent;
-    lark.registerClass(MotionEvent,"lark.MotionEvent");
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @language en_US
-     * A Timer object emits a TimerEvent objects whenever the Timer object reaches the interval specified by the Timer.delay property.
-     * @see lark.Timer
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 每当 Timer 对象达到由 Timer.delay 属性指定的间隔时，Timer 对象即会调度 TimerEvent 对象。
-     * @see lark.Timer
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var TimerEvent = (function (_super) {
-        __extends(TimerEvent, _super);
-        /**
-         * @language en_US
-         * Creates an Event object with specific information relevant to timer events.
-         * @param type The type of the event. Event listeners can access this information through the inherited type property.
-         * @param bubbles Determines whether the Event object bubbles. Event listeners can access this information through
-         * the inherited bubbles property.
-         * @param cancelable Determines whether the Event object can be canceled. Event listeners can access this information
-         * through the inherited cancelable property.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个 Event 对象，其中包含有关 timer 事件的特定信息。
-         * @param type 事件的类型。事件侦听器可以通过继承的 type 属性访问此信息。
-         * @param bubbles 确定 Event 对象是否冒泡。事件侦听器可以通过继承的 bubbles 属性访问此信息。
-         * @param cancelable 确定是否可以取消 Event 对象。事件侦听器可以通过继承的 cancelable 属性访问此信息。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        function TimerEvent(type, bubbles, cancelable) {
-            _super.call(this, type, bubbles, cancelable);
-        }
-        var d = __define,c=TimerEvent;p=c.prototype;
-        /**
-         * @language en_US
-         * Instructs Lark runtime to render after processing of this event completes, if the display list has been modified.
-         * @example
-         * <code>
-         *    function onTimer(event:TimerEvent):void {
-         *        if (40 < mySp.x && mySp.x < 375) {
-         *            mySp.x-= 50;
-         *        } else {
-         *            mySp.x=374;
-         *        }
-         *        event.updateAfterEvent();
-         *    }
-         *
-         *    var moveTimer:Timer=new Timer(50,250);
-         *    moveTimer.on(TimerEvent.TIMER,onTimer);
-         *    moveTimer.start();
-         * </code>
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果已修改显示列表，调用此方法将会忽略帧频限制，在此事件处理完成后立即重绘屏幕。
-         * @example
-         * <code>
-         *    function onTimer(event:TimerEvent):void {
-         *        if (40 < mySp.x && mySp.x < 375) {
-         *            mySp.x-= 50;
-         *        } else {
-         *            mySp.x=374;
-         *        }
-         *        event.updateAfterEvent();
-         *    }
-         *
-         *    var moveTimer:Timer=new Timer(50,250);
-         *    moveTimer.on(TimerEvent.TIMER,onTimer);
-         *    moveTimer.start();
-         * </code>
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.updateAfterEvent = function () {
-            lark.sys.$requestRenderingFlag = true;
-        };
-        /**
-         * @language en_US
-         * uses a specified target to emit an event. Using this method can reduce the number of
-         * reallocate event objects, which allows you to get better code execution performance.
-         * @param target the event target
-         * @param type The type of the event. Event listeners can access this information through the inherited type property.
-         * @param bubbles Determines whether the Event object bubbles. Event listeners can access this information through
-         * the inherited bubbles property.
-         * @param cancelable Determines whether the Event object can be canceled. Event listeners can access this information
-         * through the inherited cancelable property.
-         * @see lark.Event.create()
-         * @see lark.Event.release()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 使用指定的EventEmitter对象来抛出事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
-         * @param target 事件派发目标
-         * @param type 事件的类型。事件侦听器可以通过继承的 type 属性访问此信息。
-         * @param bubbles 确定 Event 对象是否冒泡。事件侦听器可以通过继承的 bubbles 属性访问此信息。
-         * @param cancelable 确定是否可以取消 Event 对象。事件侦听器可以通过继承的 cancelable 属性访问此信息。
-         * @see lark.Event.create()
-         * @see lark.Event.release()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        TimerEvent.emitTimerEvent = function (target, type, bubbles, cancelable) {
-            var event = lark.Event.create(TimerEvent, type, bubbles, cancelable);
-            var result = target.emit(event);
-            lark.Event.release(event);
-            return result;
-        };
-        /**
-         * @language en_US
-         * Emitted whenever a Timer object reaches an interval specified according to the Timer.delay property.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 每当 Timer 对象达到根据 Timer.delay 属性指定的间隔时调度。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        TimerEvent.TIMER = "timer";
-        /**
-         * @language en_US
-         * Emitted whenever it has completed the number of requests set by Timer.repeatCount.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 每当它完成 Timer.repeatCount 设置的请求数后调度。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        TimerEvent.TIMER_COMPLETE = "timerComplete";
-        return TimerEvent;
-    })(lark.Event);
-    lark.TimerEvent = TimerEvent;
-    lark.registerClass(TimerEvent,"lark.TimerEvent");
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @language en_US
-     * A ProgressEvent object is emitted when a load operation has begun. These events are usually generated when data are
-     * loaded into an application.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 当加载操作已开始,将调度 ProgressEvent 事件。这些事件通常在数据加载到应用程序中时生成。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var ProgressEvent = (function (_super) {
-        __extends(ProgressEvent, _super);
-        /**
-         * @language en_US
-         * Creates an Event object that contains information about progress events.
-         * @param type The type of the event. Event listeners can access this information through the inherited type property.
-         * @param bubbles Determines whether the Event object bubbles. Event listeners can access this information through the inherited bubbles property.
-         * @param cancelable Determines whether the Event object can be canceled. Event listeners can access this information through the inherited cancelable property.
-         * @param bytesLoaded The number of items or bytes loaded when the listener processes the event.
-         * @param bytesTotal The total number of items or bytes that will be loaded if the loading process succeeds.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个 ProgressEvent 对象
-         * @param type  事件的类型，可以作为 Event.type 访问。
-         * @param bubbles  确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
-         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
-         * @param bytesLoaded 加载的项数或字节数
-         * @param bytesTotal 加载的总项数或总字节数
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        function ProgressEvent(type, bubbles, cancelable, bytesLoaded, bytesTotal) {
-            _super.call(this, type, bubbles, cancelable);
-            /**
-             * @language en_US
-             * The number of items or bytes loaded when the listener processes the event.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 在侦听器处理事件时加载的项数或字节数。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            this.bytesLoaded = 0;
-            /**
-             * @language en_US
-             * The total number of items or bytes that will be loaded if the loading process succeeds.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 如果加载过程成功，将加载的总项数或总字节数。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            this.bytesTotal = 0;
-            this.bytesLoaded = +bytesLoaded || 0;
-            this.bytesTotal = +bytesTotal || 0;
-        }
-        var d = __define,c=ProgressEvent;p=c.prototype;
-        /**
-         * @language en_US
-         * uses a specified target to emit an event. Using this method can reduce the number of
-         * reallocate event objects, which allows you to get better code execution performance.
-         * @param target the event target
-         * @param type the type of event
-         * @param bytesLoaded The number of items or bytes loaded when the listener processes the event.
-         * @param bytesTotal The total number of items or bytes that will be loaded if the loading process succeeds.
-         * @see lark.Event.create()
-         * @see lark.Event.release()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 使用指定的EventEmitter对象来抛出事件对象。使用此方法能够减少事件对象创建的数量，从而获得更高的代码运行性能。
-         * @param target 派发事件目标
-         * @param type 事件类型
-         * @param bytesLoaded 加载的项数或字节数
-         * @param bytesTotal 加载的总项数或总字节数
-         * @see lark.Event.create()
-         * @see lark.Event.release()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        ProgressEvent.emitProgressEvent = function (target, type, bytesLoaded, bytesTotal) {
-            var event = lark.Event.create(ProgressEvent, type);
-            event.bytesLoaded = +bytesLoaded || 0;
-            event.bytesTotal = +bytesTotal || 0;
-            var result = target.emit(event);
-            lark.Event.release(event);
-            return result;
-        };
-        /**
-         * @language en_US
-         * Emitted when data is received as the download operation progresses.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在下载操作过程中收到数据时调度。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        ProgressEvent.PROGRESS = "progress";
-        return ProgressEvent;
-    })(lark.Event);
-    lark.ProgressEvent = ProgressEvent;
-    lark.registerClass(ProgressEvent,"lark.ProgressEvent");
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @language en_US
-     * The OrientationEvent provides information from the physical orientation of the device.
-     * Note: Currently, Browsers on the iOS and Android does not handle the coordinates the same way.
-     * Take care about this while using them.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * OrientationEvent 提供设备的方向信息
-     * 注意: 目前各个浏览器和操作系统处理方向的方式不完全相同，请根据使用场景做相应的校正，
-     * 比如使用两次方向数据的变化而不是直接使用方向的值
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var OrientationEvent = (function (_super) {
-        __extends(OrientationEvent, _super);
-        function OrientationEvent() {
-            _super.apply(this, arguments);
-        }
-        var d = __define,c=OrientationEvent;p=c.prototype;
-        return OrientationEvent;
-    })(lark.Event);
-    lark.OrientationEvent = OrientationEvent;
-    lark.registerClass(OrientationEvent,"lark.OrientationEvent");
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -6255,249 +6438,6 @@ var lark;
     })(lark.Event);
     lark.GeolocationEvent = GeolocationEvent;
     lark.registerClass(GeolocationEvent,"lark.GeolocationEvent");
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @language en_US
-     * The Timer class is the interface to timers, which let you run code on a specified time sequence. Use the start()
-     * method to start a timer. Add an event listener for the timer event to set up code to be run on the timer interval.<br/>
-     * You can create Timer objects to run once or repeat at specified intervals to execute code on a schedule. Depending
-     * on the framerate or the runtime environment (available memory and other factors), the runtime may emit events at
-     * slightly offset intervals.
-     * @see lark.TimerEvent
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * Timer 类是计时器的接口，它使您能按指定的时间序列运行代码。
-     * 使用 start() 方法来启动计时器。为 timer 事件添加事件侦听器，以便将代码设置为按计时器间隔运行。
-     * 可以创建 Timer 对象以运行一次或按指定间隔重复运行，从而按计划执行代码。
-     * 根据 Lark 的帧速率或运行时环境（可用内存和其他因素），运行时调度事件的间隔可能稍有不同。
-     * @see lark.TimerEvent
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var Timer = (function (_super) {
-        __extends(Timer, _super);
-        /**
-         * @language en_US
-         * Constructs a new Timer object with the specified delay and repeatCount states.
-         * @param delay The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.
-         * Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
-         * @param repeatCount Specifies the number of repetitions. If zero, the timer repeats indefinitely.If nonzero,
-         * the timer runs the specified number of times and then stops.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 使用指定的 delay 和 repeatCount 状态构造新的 Timer 对象。
-         * @param delay 计时器事件间的延迟（以毫秒为单位）。建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
-         * @param repeatCount 指定重复次数。如果为零，则计时器将持续不断重复运行。如果不为 0，则将运行计时器，运行次数为指定的次数，然后停止。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        function Timer(delay, repeatCount) {
-            if (repeatCount === void 0) { repeatCount = 0; }
-            _super.call(this);
-            /**
-             * @private
-             */
-            this._delay = 0;
-            /**
-             * @private
-             */
-            this._currentCount = 0;
-            /**
-             * @private
-             */
-            this._running = false;
-            /**
-             * @private
-             */
-            this.updateInterval = 1000;
-            /**
-             * @private
-             */
-            this.lastCount = 1000;
-            this.delay = delay;
-            this.repeatCount = +repeatCount | 0;
-        }
-        var d = __define,c=Timer;p=c.prototype;
-        d(p, "delay",
-            /**
-             * @language en_US
-             * The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.<br/>
-             * Note: Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 计时器事件间的延迟（以毫秒为单位）。如果在计时器正在运行时设置延迟间隔，则计时器将按相同的 repeatCount 迭代重新启动。<br/>
-             * 注意：建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this._delay;
-            },
-            function (value) {
-                value = +value || 0;
-                if (value < 1) {
-                    value = 1;
-                }
-                if (this._delay === value) {
-                    return;
-                }
-                this._delay = value;
-                this.lastCount = this.updateInterval = Math.round(60 * value);
-            }
-        );
-        d(p, "currentCount",
-            /**
-             * @language en_US
-             * The total number of times the timer has fired since it started at zero. If the timer has been reset, only the fires since the reset are counted.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 计时器从 0 开始后触发的总次数。如果已重置了计时器，则只会计入重置后的触发次数。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this._currentCount;
-            },undefined
-        );
-        d(p, "running",
-            /**
-             * @language en_US
-             * The timer's current state; true if the timer is running, otherwise false.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 计时器的当前状态；如果计时器正在运行，则为 true，否则为 false。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this._running;
-            },undefined
-        );
-        /**
-         * @language en_US
-         * Stops the timer, if it is running, and sets the currentCount property back to 0, like the reset button of a stopwatch.
-         * Then, when start() is called, the timer instance runs for the specified number of repetitions, as set by the repeatCount value.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果计时器正在运行，则停止计时器，并将 currentCount 属性设回为 0，这类似于秒表的重置按钮。然后，在调用 start() 后，将运行计时器实例，运行次数为指定的重复次数（由 repeatCount 值设置）。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.reset = function () {
-            this.stop();
-            this._currentCount = 0;
-        };
-        /**
-         * @language en_US
-         * Starts the timer, if it is not already running.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果计时器尚未运行，则启动计时器。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.start = function () {
-            if (this._running)
-                return;
-            lark.startTick(this.$update, this);
-            this._running = true;
-        };
-        /**
-         * @language en_US
-         * Stops the timer. When start() is called after stop(), the timer instance runs for the remaining number of
-         * repetitions, as set by the repeatCount property.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 停止计时器。如果在调用 stop() 后调用 start()，则将继续运行计时器实例，运行次数为剩余的 重复次数（由 repeatCount 属性设置）。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.stop = function () {
-            if (!this._running)
-                return;
-            lark.stopTick(this.$update, this);
-            this._running = false;
-        };
-        /**
-         * @private
-         * Ticker以60FPS频率刷新此方法
-         */
-        p.$update = function (timeStamp) {
-            this.lastCount -= 1000;
-            if (this.lastCount > 0) {
-                return;
-            }
-            this.lastCount += this.updateInterval;
-            this._currentCount++;
-            var complete = (this.repeatCount > 0 && this._currentCount >= this.repeatCount);
-            lark.TimerEvent.emitTimerEvent(this, lark.TimerEvent.TIMER);
-            if (complete) {
-                this.stop();
-                lark.TimerEvent.emitTimerEvent(this, lark.TimerEvent.TIMER_COMPLETE);
-            }
-        };
-        return Timer;
-    })(lark.EventEmitter);
-    lark.Timer = Timer;
-    lark.registerClass(Timer,"lark.Timer");
-    if (DEBUG) {
-        lark.$markReadOnly(Timer.prototype, "currentCount");
-        lark.$markReadOnly(Timer.prototype, "running");
-    }
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -6957,1481 +6897,216 @@ var lark;
 var lark;
 (function (lark) {
     /**
-     * @private
-     * 格式化旋转角度的值
-     */
-    function clampRotation(value) {
-        value %= 360;
-        if (value > 180) {
-            value -= 360;
-        }
-        else if (value < -180) {
-            value += 360;
-        }
-        return value;
-    }
-    /**
      * @language en_US
-     * The DisplayObject class is the base class for all objects that can be placed on the display list. The display list
-     * manages all objects displayed in the runtime. Use the DisplayObjectContainer class to arrange the display
-     * objects in the display list. DisplayObjectContainer objects can have child display objects, while other display objects,
-     * such as Shape and TextField objects, are "leaf" nodes that have only parents and siblings, no children.
-     * The DisplayObject class supports basic functionality like the x and y position of an object, as well as more advanced
-     * properties of the object such as its transformation matrix.<br/>
-     * The DisplayObject class contains several broadcast events.Normally, the target of any particular event is a specific
-     * DisplayObject instance. For example, the target of an added event is the specific DisplayObject instance that was added
-     * to the display list. Having a single target restricts the placement of event listeners to that target and in some cases
-     * the target's ancestors on the display list. With broadcast events, however, the target is not a specific DisplayObject
-     * instance, but rather all DisplayObject instances, including those that are not on the display list. This means that you
-     * can add a listener to any DisplayObject instance to listen for broadcast events.
-     *
-     * @event lark.Event.ADDED Emitted when a display object is added to the display list.
-     * @event lark.Event.ADDED_TO_STAGE Emitted when a display object is added to the on stage display list, either directly or through the addition of a sub tree in which the display object is contained.
-     * @event lark.Event.REMOVED Emitted when a display object is about to be removed from the display list.
-     * @event lark.Event.REMOVED_FROM_STAGE Emitted when a display object is about to be removed from the display list, either directly or through the removal of a sub tree in which the display object is contained.
-     * @event lark.Event.ENTER_FRAME [broadcast event] Emitted when the playhead is entering a new frame.
-     * @event lark.Event.RENDER [broadcast event] Emitted when the display list is about to be updated and rendered.
+     * The Timer class is the interface to timers, which let you run code on a specified time sequence. Use the start()
+     * method to start a timer. Add an event listener for the timer event to set up code to be run on the timer interval.<br/>
+     * You can create Timer objects to run once or repeat at specified intervals to execute code on a schedule. Depending
+     * on the framerate or the runtime environment (available memory and other factors), the runtime may emit events at
+     * slightly offset intervals.
+     * @see lark.TimerEvent
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时中显示的所有对象。使用 DisplayObjectContainer 类排列
-     * 显示列表中的显示对象。DisplayObjectContainer 对象可以有子显示对象，而其他显示对象（如 Shape 和 TextField 对象）是“叶”节点，没有子项，只有父级和
-     * 同级。DisplayObject 类有一些基本的属性（如确定坐标位置的 x 和 y 属性），也有一些高级的对象属性（如 Matrix 矩阵变换）。<br/>
-     * DisplayObject 类包含若干广播事件。通常，任何特定事件的目标均为一个特定的 DisplayObject 实例。例如，added 事件的目标是已添加到显示列表
-     * 的目标 DisplayObject 实例。若只有一个目标，则会将事件侦听器限制为只能监听在该目标上（在某些情况下，可监听在显示列表中该目标的祖代上）。
-     * 但是对于广播事件，目标不是特定的 DisplayObject 实例，而是所有 DisplayObject 实例（包括那些不在显示列表中的实例）。这意味着您可以向任何
-     * DisplayObject 实例添加侦听器来侦听广播事件。
-     *
-     * @event lark.Event.ADDED 将显示对象添加到显示列表中时调度。
-     * @event lark.Event.ADDED_TO_STAGE 在将显示对象直接添加到舞台显示列表或将包含显示对象的子树添加至舞台显示列表中时调度。
-     * @event lark.Event.REMOVED 将要从显示列表中删除显示对象时调度。
-     * @event lark.Event.REMOVED_FROM_STAGE 在从显示列表中直接删除显示对象或删除包含显示对象的子树时调度。
-     * @event lark.Event.ENTER_FRAME [广播事件] 播放头进入新帧时调度。
-     * @event lark.Event.RENDER [广播事件] 将要更新和呈现显示列表时调度。
+     * Timer 类是计时器的接口，它使您能按指定的时间序列运行代码。
+     * 使用 start() 方法来启动计时器。为 timer 事件添加事件侦听器，以便将代码设置为按计时器间隔运行。
+     * 可以创建 Timer 对象以运行一次或按指定间隔重复运行，从而按计划执行代码。
+     * 根据 Lark 的帧速率或运行时环境（可用内存和其他因素），运行时调度事件的间隔可能稍有不同。
+     * @see lark.TimerEvent
      * @version Lark 1.0
      * @platform Web,Native
      */
-    var DisplayObject = (function (_super) {
-        __extends(DisplayObject, _super);
+    var Timer = (function (_super) {
+        __extends(Timer, _super);
         /**
          * @language en_US
-         * Initializes a DisplayObject object
+         * Constructs a new Timer object with the specified delay and repeatCount states.
+         * @param delay The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.
+         * Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
+         * @param repeatCount Specifies the number of repetitions. If zero, the timer repeats indefinitely.If nonzero,
+         * the timer runs the specified number of times and then stops.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 创建一个显示对象
+         * 使用指定的 delay 和 repeatCount 状态构造新的 Timer 对象。
+         * @param delay 计时器事件间的延迟（以毫秒为单位）。建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
+         * @param repeatCount 指定重复次数。如果为零，则计时器将持续不断重复运行。如果不为 0，则将运行计时器，运行次数为指定的次数，然后停止。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        function DisplayObject() {
+        function Timer(delay, repeatCount) {
+            if (repeatCount === void 0) { repeatCount = 0; }
             _super.call(this);
             /**
              * @private
-             * 能够含有子项的类将子项列表存储在这个属性里。
              */
-            this.$children = null;
+            this._delay = 0;
             /**
              * @private
              */
-            this.$parent = null;
+            this._currentCount = 0;
             /**
              * @private
              */
-            this.$stage = null;
-            /**
-             * @private
-             * 这个对象在显示列表中的嵌套深度，舞台为1，它的子项为2，子项的子项为3，以此类推。当对象不在显示列表中时此属性值为0.
-             */
-            this.$nestLevel = 0;
+            this._running = false;
             /**
              * @private
              */
-            this.$visible = true;
-            /**
-             * @private
-             * cacheAsBitmap创建的缓存位图节点。
-             */
-            this.$displayList = null;
+            this.updateInterval = 1000;
             /**
              * @private
              */
-            this.$alpha = 1;
-            /**
-             * @private
-             */
-            this.$scrollRect = null;
-            /**
-             * @private
-             */
-            this.$blendMode = 0;
-            /**
-             * @private
-             * 被遮罩的对象
-             */
-            this.$maskedObject = null;
-            /**
-             * @private
-             */
-            this.$mask = null;
-            /**
-             * @private
-             */
-            this.$parentDisplayList = null;
-            /**
-             * @private
-             * 是否需要重绘的标志，此属性在渲染时会被访问，所以单独声明一个直接的变量。
-             */
-            this.$isDirty = false;
-            /**
-             * @private
-             * 这个对象在舞台上的整体透明度
-             */
-            this.$renderAlpha = 1;
-            /**
-             * @private
-             * 相对于显示列表根节点或位图缓存根节点上的矩阵对象
-             */
-            this.$renderMatrix = new lark.Matrix();
-            /**
-             * @private
-             * 此显示对象自身（不包括子项）在显示列表根节点或位图缓存根节点上的显示尺寸。
-             */
-            this.$renderRegion = null;
-            this.$displayFlags = 3952 /* InitFlags */;
-            this.$DisplayObject = {
-                0: 1,
-                1: 1,
-                2: 0,
-                3: 0,
-                4: 0,
-                5: "",
-                6: new lark.Matrix(),
-                7: new lark.Matrix(),
-                8: new lark.Matrix(),
-                9: new lark.Rectangle(),
-                10: new lark.Rectangle(),
-            };
+            this.lastCount = 1000;
+            this.delay = delay;
+            this.repeatCount = +repeatCount | 0;
         }
-        var d = __define,c=DisplayObject;p=c.prototype;
-        /**
-         * @private
-         * 添加一个标志量
-         */
-        p.$setFlags = function (flags) {
-            this.$displayFlags |= flags;
-        };
-        /**
-         * @private
-         * 开启或关闭一个标志量
-         */
-        p.$toggleFlags = function (flags, on) {
-            if (on) {
-                this.$displayFlags |= flags;
-            }
-            else {
-                this.$displayFlags &= ~flags;
-            }
-        };
-        /**
-         * @private
-         * 移除一个标志量
-         */
-        p.$removeFlags = function (flags) {
-            this.$displayFlags &= ~flags;
-        };
-        /**
-         * @private
-         * 沿着显示列表向上移除标志量，如果标志量没被设置过就停止移除。
-         */
-        p.$removeFlagsUp = function (flags) {
-            if (!this.$hasAnyFlags(flags)) {
-                return;
-            }
-            this.$removeFlags(flags);
-            var parent = this.$parent;
-            if (parent) {
-                parent.$removeFlagsUp(flags);
-            }
-        };
-        /**
-         * @private
-         * 是否含有指定的所有标志量
-         */
-        p.$hasFlags = function (flags) {
-            return (this.$displayFlags & flags) === flags;
-        };
-        /**
-         * @private
-         * 沿着显示列表向上传递标志量，如果标志量已经被设置过就停止传递。
-         */
-        p.$propagateFlagsUp = function (flags) {
-            if (this.$hasFlags(flags)) {
-                return;
-            }
-            this.$setFlags(flags);
-            var parent = this.$parent;
-            if (parent) {
-                parent.$propagateFlagsUp(flags);
-            }
-        };
-        /**
-         * @private
-         * 沿着显示列表向下传递标志量，非容器直接设置自身的flag，此方法会在 DisplayObjectContainer 中被覆盖。
-         */
-        p.$propagateFlagsDown = function (flags) {
-            this.$setFlags(flags);
-        };
-        /**
-         * @private
-         * 是否含有多个标志量其中之一。
-         */
-        p.$hasAnyFlags = function (flags) {
-            return !!(this.$displayFlags & flags);
-        };
-        /**
-         * @private
-         * 标记矩阵失效
-         */
-        p.invalidateMatrix = function () {
-            this.$setFlags(8 /* InvalidMatrix */);
-            this.invalidatePosition();
-        };
-        /**
-         * @private
-         * 标记这个显示对象在父级容器的位置发生了改变。
-         */
-        p.invalidatePosition = function () {
-            this.$invalidateTransform();
-            this.$propagateFlagsDown(16 /* InvalidConcatenatedMatrix */ | 32 /* InvalidInvertedConcatenatedMatrix */);
-            if (this.$parent) {
-                this.$parent.$propagateFlagsUp(4 /* InvalidBounds */);
-            }
-        };
-        d(p, "name",
+        var d = __define,c=Timer;p=c.prototype;
+        d(p, "delay",
             /**
              * @language en_US
-             * Indicates the instance name of the DisplayObject. The object can be identified in the child list of its parent
-             * display object container by calling the getChildByName() method of the display object container.
+             * The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.<br/>
+             * Note: Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
              * @version Lark 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * 表示 DisplayObject 的实例名称。
-             * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
+             * 计时器事件间的延迟（以毫秒为单位）。如果在计时器正在运行时设置延迟间隔，则计时器将按相同的 repeatCount 迭代重新启动。<br/>
+             * 注意：建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
              * @version Lark 1.0
              * @platform Web,Native
              */
             function () {
-                return this.$DisplayObject[5 /* name */];
-            },
-            function (value) {
-                this.$DisplayObject[5 /* name */] = value;
-            }
-        );
-        d(p, "parent",
-            /**
-             * @language en_US
-             * Indicates the DisplayObjectContainer object that contains this display object. Use the parent property to specify
-             * a relative path to display objects that are above the current display object in the display list hierarchy.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 表示包含此显示对象的 DisplayObjectContainer 对象。
-             * 使用 parent 属性可以指定高于显示列表层次结构中当前显示对象的显示对象的相对路径。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$parent;
-            },undefined
-        );
-        /**
-         * @private
-         * 设置父级显示对象
-         */
-        p.$setParent = function (parent) {
-            this.$parent = parent;
-        };
-        /**
-         * @private
-         * 显示对象添加到舞台
-         */
-        p.$onAddToStage = function (stage, nestLevel) {
-            this.$stage = stage;
-            this.$nestLevel = nestLevel;
-            lark.Sprite.$EVENT_ADD_TO_STAGE_LIST.push(this);
-        };
-        /**
-         * @private
-         * 显示对象从舞台移除
-         */
-        p.$onRemoveFromStage = function () {
-            this.$nestLevel = 0;
-            lark.Sprite.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
-        };
-        d(p, "stage",
-            /**
-             * @language en_US
-             * The Stage of the display object. you can create and load multiple display objects into the display list, and
-             * the stage property of each display object refers to the same Stage object.<br/>
-             * If a display object is not added to the display list, its stage property is set to null.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 显示对象的舞台。
-             * 例如，您可以创建多个显示对象并加载到显示列表中，每个显示对象的 stage 属性是指相同的 Stage 对象。<br/>
-             * 如果显示对象未添加到显示列表，则其 stage 属性会设置为 null。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$stage;
-            },undefined
-        );
-        d(p, "matrix",
-            /**
-             * @language en_US
-             * A Matrix object containing values that alter the scaling, rotation, and translation of the display object.<br/>
-             * Note: to change the value of a display object's matrix, you must make a copy of the entire matrix object, then copy
-             * the new object into the matrix property of the display object.
-             * @example the following code increases the tx value of a display object's matrix
-             * <code>
-             *     var myMatrix:Matrix = myDisplayObject.matrix;
-             *     myMatrix.tx += 10;
-             *     myDisplayObject.matrix = myMatrix;
-             * </code>
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。<br/>
-             * 注意：要改变一个显示对象矩阵的值，您必引用整个矩阵对象，然后将它重新赋值给显示对象的 matrix 属性。
-             * @example 以下代码改变了显示对象矩阵的tx属性值：
-             * <code>
-             *     var myMatrix:Matrix = myDisplayObject.matrix;
-             *     myMatrix.tx += 10;
-             *     myDisplayObject.matrix = myMatrix;
-             * </code>
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$getMatrix().clone();
-            },
-            function (value) {
-                this.$setMatrix(value);
-            }
-        );
-        /**
-         * @private
-         * 获取矩阵
-         */
-        p.$getMatrix = function () {
-            var values = this.$DisplayObject;
-            if (this.$hasFlags(8 /* InvalidMatrix */)) {
-                values[6 /* matrix */].$updateScaleAndRotation(values[0 /* scaleX */], values[1 /* scaleY */], values[2 /* skewX */], values[3 /* skewY */]);
-                this.$removeFlags(8 /* InvalidMatrix */);
-            }
-            return values[6 /* matrix */];
-        };
-        /**
-         * @private
-         * 设置矩阵
-         */
-        p.$setMatrix = function (matrix) {
-            var values = this.$DisplayObject;
-            var m = values[6 /* matrix */];
-            if (m.equals(matrix)) {
-                return;
-            }
-            m.copyFrom(matrix);
-            values[0 /* scaleX */] = m.$getScaleX();
-            values[1 /* scaleY */] = m.$getScaleY();
-            values[2 /* skewX */] = matrix.$getSkewX();
-            values[3 /* skewY */] = matrix.$getSkewY();
-            values[4 /* rotation */] = clampRotation(values[3 /* skewY */] * 180 / Math.PI);
-            this.$removeFlags(8 /* InvalidMatrix */);
-            this.invalidatePosition();
-        };
-        /**
-         * @private
-         * 获得这个显示对象以及它所有父级对象的连接矩阵。
-         */
-        p.$getConcatenatedMatrix = function () {
-            var matrix = this.$DisplayObject[7 /* concatenatedMatrix */];
-            if (this.$hasFlags(16 /* InvalidConcatenatedMatrix */)) {
-                if (this.$parent) {
-                    this.$parent.$getConcatenatedMatrix().$preMultiplyInto(this.$getMatrix(), matrix);
-                    var rect = this.$scrollRect;
-                    if (rect) {
-                        matrix.$preMultiplyInto(lark.$TempMatrix.setTo(1, 0, 0, 1, -rect.x, -rect.y), matrix);
-                    }
-                }
-                else {
-                    matrix.copyFrom(this.$getMatrix());
-                }
-                if (this.$displayList) {
-                    this.$displayList.$renderRegion.moved = true;
-                }
-                if (this.$renderRegion) {
-                    this.$renderRegion.moved = true;
-                }
-                this.$removeFlags(16 /* InvalidConcatenatedMatrix */);
-            }
-            return matrix;
-        };
-        /**
-         * @private
-         * 获取链接矩阵
-         */
-        p.$getInvertedConcatenatedMatrix = function () {
-            var values = this.$DisplayObject;
-            if (this.$hasFlags(32 /* InvalidInvertedConcatenatedMatrix */)) {
-                this.$getConcatenatedMatrix().$invertInto(values[8 /* invertedConcatenatedMatrix */]);
-                this.$removeFlags(32 /* InvalidInvertedConcatenatedMatrix */);
-            }
-            return values[8 /* invertedConcatenatedMatrix */];
-        };
-        d(p, "x",
-            /**
-             * @language en_US
-             * Indicates the x coordinate of the DisplayObject instance relative to the local coordinates of the parent
-             * DisplayObjectContainer.<br/>
-             * If the object is inside a DisplayObjectContainer that has transformations, it is in
-             * the local coordinate system of the enclosing DisplayObjectContainer. Thus, for a DisplayObjectContainer
-             * rotated 90° counterclockwise, the DisplayObjectContainer's children inherit a coordinate system that is
-             * rotated 90° counterclockwise. The object's coordinates refer to the registration point position.
-             * @default 0
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。<br/>
-             * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
-             * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
-             * @default 0
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$getX();
-            },
-            function (value) {
-                this.$setX(value);
-            }
-        );
-        /**
-         * @private
-         * 获取x坐标
-         */
-        p.$getX = function () {
-            return this.$DisplayObject[6 /* matrix */].tx;
-        };
-        /**
-         * @private
-         * 设置x坐标
-         */
-        p.$setX = function (value) {
-            value = +value || 0;
-            var m = this.$DisplayObject[6 /* matrix */];
-            if (value === m.tx) {
-                return false;
-            }
-            m.tx = value;
-            this.invalidatePosition();
-            return true;
-        };
-        d(p, "y",
-            /**
-             * @language en_US
-             * Indicates the y coordinate of the DisplayObject instance relative to the local coordinates of the parent
-             * DisplayObjectContainer. <br/>
-             * If the object is inside a DisplayObjectContainer that has transformations, it is in
-             * the local coordinate system of the enclosing DisplayObjectContainer. Thus, for a DisplayObjectContainer rotated
-             * 90° counterclockwise, the DisplayObjectContainer's children inherit a coordinate system that is rotated 90°
-             * counterclockwise. The object's coordinates refer to the registration point position.
-             * @default 0
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 y 坐标。<br/>
-             * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
-             * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
-             * @default 0
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$getY();
-            },
-            function (value) {
-                this.$setY(value);
-            }
-        );
-        /**
-         * @private
-         * 获取y坐标
-         */
-        p.$getY = function () {
-            return this.$DisplayObject[6 /* matrix */].ty;
-        };
-        /**
-         * @private
-         * 设置y坐标
-         */
-        p.$setY = function (value) {
-            value = +value || 0;
-            var m = this.$DisplayObject[6 /* matrix */];
-            if (value === m.ty) {
-                return false;
-            }
-            m.ty = value;
-            this.invalidatePosition();
-            return true;
-        };
-        d(p, "scaleX",
-            /**
-             * @language en_US
-             * Indicates the horizontal scale (percentage) of the object as applied from the registration point. <br/>
-             * The default 1.0 equals 100% scale.Scaling the local coordinate system changes the x and y property values, which are
-             * defined in whole pixels.
-             * @default 1
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 表示从注册点开始应用的对象的水平缩放比例（百分比）。<br/>
-             * 1.0 等于 100% 缩放。缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
-             * @default 1
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$DisplayObject[0 /* scaleX */];
-            },
-            function (value) {
-                this.$setScaleX(value);
-            }
-        );
-        /**
-         * @private
-         * 设置水平缩放值
-         */
-        p.$setScaleX = function (value) {
-            value = +value || 0;
-            var values = this.$DisplayObject;
-            if (value === values[0 /* scaleX */]) {
-                return false;
-            }
-            values[0 /* scaleX */] = value;
-            this.invalidateMatrix();
-            return true;
-        };
-        d(p, "scaleY",
-            /**
-             * @language en_US
-             * Indicates the vertical scale (percentage) of an object as applied from the registration point of the object.
-             * 1.0 is 100% scale.Scaling the local coordinate system changes the x and y property values, which are defined
-             * in whole pixels.
-             * @default 1
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 表示从对象注册点开始应用的对象的垂直缩放比例（百分比）。1.0 是 100% 缩放。
-             * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
-             * @default 1
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$DisplayObject[1 /* scaleY */];
-            },
-            function (value) {
-                this.$setScaleY(value);
-            }
-        );
-        /**
-         * @private
-         * 设置垂直缩放值
-         */
-        p.$setScaleY = function (value) {
-            value = +value || 0;
-            if (value === this.$DisplayObject[1 /* scaleY */]) {
-                return false;
-            }
-            this.$DisplayObject[1 /* scaleY */] = value;
-            this.invalidateMatrix();
-            return true;
-        };
-        d(p, "rotation",
-            /**
-             * @language en_US
-             * Indicates the rotation of the DisplayObject instance, in degrees, from its original orientation. Values from
-             * 0 to 180 represent clockwise rotation; values from 0 to -180 represent counterclockwise rotation. Values outside
-             * this range are added to or subtracted from 360 to obtain a value within the range. For example, the statement
-             * myDisplayObject.rotation = 450 is the same as myDisplayObject.rotation = 90.
-             * @default 0
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 表示 DisplayObject 实例距其原始方向的旋转程度，以度为单位。
-             * 从 0 到 180 的值表示顺时针方向旋转；从 0 到 -180 的值表示逆时针方向旋转。对于此范围之外的值，可以通过加上或
-             * 减去 360 获得该范围内的值。例如，myDisplayObject.rotation = 450语句与 myDisplayObject.rotation = 90 是相同的。
-             * @default 0
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$DisplayObject[4 /* rotation */];
+                return this._delay;
             },
             function (value) {
                 value = +value || 0;
-                value = clampRotation(value);
-                var values = this.$DisplayObject;
-                if (value === values[4 /* rotation */]) {
+                if (value < 1) {
+                    value = 1;
+                }
+                if (this._delay === value) {
                     return;
                 }
-                var delta = value - values[4 /* rotation */];
-                var angle = delta / 180 * Math.PI;
-                values[2 /* skewX */] += angle;
-                values[3 /* skewY */] += angle;
-                values[4 /* rotation */] = value;
-                this.invalidateMatrix();
+                this._delay = value;
+                this.lastCount = this.updateInterval = Math.round(60 * value);
             }
         );
-        d(p, "width",
+        d(p, "currentCount",
             /**
              * @language en_US
-             * Indicates the width of the display object, in pixels. The width is calculated based on the bounds of the content
-             * of the display object. When you set the width property, the scaleX property is adjusted accordingly.
+             * The total number of times the timer has fired since it started at zero. If the timer has been reset, only the fires since the reset are counted.
              * @version Lark 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * 表示显示对象的宽度，以像素为单位。宽度是根据显示对象内容的范围来计算的。如果您设置了 width 属性，则 scaleX 属性会相应调整.
+             * 计时器从 0 开始后触发的总次数。如果已重置了计时器，则只会计入重置后的触发次数。
              * @version Lark 1.0
              * @platform Web,Native
              */
             function () {
-                return this.$getWidth();
-            },
-            function (value) {
-                this.$setWidth(value);
-            }
+                return this._currentCount;
+            },undefined
         );
-        /**
-         * @private
-         * 获取显示宽度
-         */
-        p.$getWidth = function () {
-            return this.$getTransformedBounds(this.$parent, lark.$TempRectangle).width;
-        };
-        /**
-         * @private
-         * 设置显示宽度
-         */
-        p.$setWidth = function (value) {
-            value = +value || 0;
-            if (value < 0) {
-                return;
-            }
-            var values = this.$DisplayObject;
-            var originalBounds = this.$getOriginalBounds();
-            var bounds = this.$getTransformedBounds(this.$parent, lark.$TempRectangle);
-            var angle = values[4 /* rotation */] / 180 * Math.PI;
-            var baseWidth = originalBounds.$getBaseWidth(angle);
-            if (!baseWidth) {
-                return;
-            }
-            var baseHeight = originalBounds.$getBaseHeight(angle);
-            values[1 /* scaleY */] = bounds.height / baseHeight;
-            values[0 /* scaleX */] = value / baseWidth;
-            this.invalidateMatrix();
-        };
-        d(p, "height",
+        d(p, "running",
             /**
              * @language en_US
-             * Indicates the height of the display object, in pixels. The height is calculated based on the bounds of the
-             * content of the display object. When you set the height property, the scaleY property is adjusted accordingly.
+             * The timer's current state; true if the timer is running, otherwise false.
              * @version Lark 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             * 表示显示对象的高度，以像素为单位。高度是根据显示对象内容的范围来计算的。如果您设置了 height 属性，则 scaleY 属性会相应调整。
+             * 计时器的当前状态；如果计时器正在运行，则为 true，否则为 false。
              * @version Lark 1.0
              * @platform Web,Native
              */
             function () {
-                return this.$getHeight();
-            },
-            function (value) {
-                this.$setHeight(value);
-            }
-        );
-        /**
-         * @private
-         * 获取显示高度
-         */
-        p.$getHeight = function () {
-            return this.$getTransformedBounds(this.$parent, lark.$TempRectangle).height;
-        };
-        /**
-         * @private
-         * 设置显示高度
-         */
-        p.$setHeight = function (value) {
-            value = +value || 0;
-            if (value < 0) {
-                return;
-            }
-            var values = this.$DisplayObject;
-            var originalBounds = this.$getOriginalBounds();
-            var bounds = this.$getTransformedBounds(this.$parent, lark.$TempRectangle);
-            var angle = values[4 /* rotation */] / 180 * Math.PI;
-            var baseHeight = originalBounds.$getBaseHeight(angle);
-            if (!baseHeight) {
-                return;
-            }
-            var baseWidth = originalBounds.$getBaseWidth(angle);
-            values[1 /* scaleY */] = value / baseHeight;
-            values[0 /* scaleX */] = bounds.width / baseWidth;
-            this.invalidateMatrix();
-        };
-        d(p, "visible",
-            /**
-             * @language en_US
-             * Whether or not the display object is visible. Display objects that are not visible are disabled. For example,
-             * if visible=false for an DisplayObject instance, it cannot receive touch or other user input.
-             * @default true
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 显示对象是否可见。不可见的显示对象将被禁用。例如，如果实例的 visible 为 false，则无法接受触摸或用户交互操作。
-             * @default true
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$visible;
-            },
-            function (value) {
-                value = !!value;
-                if (value === this.$visible) {
-                    return;
-                }
-                this.$visible = value;
-                this.$invalidateTransform();
-            }
-        );
-        d(p, "cacheAsBitmap",
-            /**
-             * @language en_US
-             * If set to true, Lark runtime caches an internal bitmap representation of the display object. This caching can
-             * increase performance for display objects that contain complex vector content. After you set the cacheAsBitmap
-             * property to true, the rendering does not change, however the display object performs pixel snapping automatically.
-             * The execution speed can be significantly faster depending on the complexity of the content.The cacheAsBitmap
-             * property is best used with display objects that have mostly static content and that do not scale and rotate frequently.<br/>
-             * Note: The display object will not create the bitmap caching when the memory exceeds the upper limit,even if you set it to true.
-             * @default false
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 如果设置为 true，则 Lark 运行时将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
-             * 将 cacheAsBitmap 属性设置为 true 后，呈现并不更改，但是，显示对象将自动执行像素贴紧。执行速度可能会大大加快，
-             * 具体取决于显示对象内容的复杂性。最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放或旋转的显示对象一起使用。<br/>
-             * 注意：在内存超过上限的情况下，即使将 cacheAsBitmap 属性设置为 true，显示对象也不使用位图缓存。
-             * @default false
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$hasFlags(128 /* CacheAsBitmap */);
-            },
-            function (value) {
-                value = !!value;
-                this.$toggleFlags(128 /* CacheAsBitmap */, value);
-                var hasDisplayList = !!this.$displayList;
-                if (hasDisplayList === value) {
-                    return;
-                }
-                if (value) {
-                    var displayList = lark.sys.DisplayList.create(this);
-                    if (displayList) {
-                        this.$displayList = displayList;
-                        if (this.$parentDisplayList) {
-                            this.$parentDisplayList.markDirty(displayList);
-                        }
-                        this.$cacheAsBitmapChanged();
-                    }
-                }
-                else {
-                    lark.sys.DisplayList.release(this.$displayList);
-                    this.$displayList = null;
-                    this.$cacheAsBitmapChanged();
-                }
-            }
-        );
-        /**
-         * @private
-         * cacheAsBitmap属性改变
-         */
-        p.$cacheAsBitmapChanged = function () {
-            var parentCache = this.$displayList || this.$parentDisplayList;
-            if (this.$renderRegion) {
-                parentCache.markDirty(this);
-            }
-        };
-        d(p, "alpha",
-            /**
-             * @language en_US
-             * Indicates the alpha transparency value of the object specified. Valid values are 0 (fully transparent) to 1 (fully opaque).
-             * The default value is 1. Display objects with alpha set to 0 are active, even though they are invisible.
-             * @default 1
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 表示指定对象的 Alpha 透明度值。
-             * 有效值为 0（完全透明）到 1（完全不透明）。alpha 设置为 0 的显示对象是可触摸的，即使它们不可见。
-             * @default 1
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$alpha;
-            },
-            function (value) {
-                value = +value || 0;
-                if (value === this.$alpha) {
-                    return;
-                }
-                this.$alpha = value;
-                this.$propagateFlagsDown(64 /* InvalidConcatenatedAlpha */);
-                this.$invalidate(true);
-            }
-        );
-        /**
-         * @private
-         * 获取这个显示对象跟它所有父级透明度的乘积
-         */
-        p.$getConcatenatedAlpha = function () {
-            if (this.$hasFlags(64 /* InvalidConcatenatedAlpha */)) {
-                if (this.$parent) {
-                    var parentAlpha = this.$parent.$getConcatenatedAlpha();
-                    this.$renderAlpha = parentAlpha * this.$alpha;
-                }
-                else {
-                    this.$renderAlpha = this.$alpha;
-                }
-                this.$removeFlags(64 /* InvalidConcatenatedAlpha */);
-            }
-            return this.$renderAlpha;
-        };
-        d(p, "touchEnabled",
-            /**
-             * @language en_US
-             * Specifies whether this object receives touch or other user input. The default value is true, which means that
-             * by default any DisplayObject instance that is on the display list receives touch events. If touchEnabled is
-             * set to false, the instance does not receive any touch events (or other user input events). Any children of
-             * this instance on the display list are not affected. To change the touchEnabled behavior for all children of
-             * an object on the display list, use DisplayObjectContainer.touchChildren.
-             * @see lark.DisplayObjectContainer#touchChildren
-             * @default true
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 指定此对象是否接收触摸或其他用户输入。默认值为 true，这表示默认情况下，显示列表上的任何 isplayObject 实例都会接收触摸事件或
-             * 其他用户输入事件。如果将 touchEnabled 设置为 false，则实例将不接收任何触摸事件（或其他用户输入事件）。显示列表上的该实例的任
-             * 何子级都不会受到影响。要更改显示列表上对象的所有子级的 touchEnabled 行为，请使用 DisplayObjectContainer.touchChildren。
-             * @see lark.DisplayObjectContainer#touchChildren
-             * @default true
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$hasFlags(1024 /* TouchEnabled */);
-            },
-            function (value) {
-                this.$setTouchEnabled(value);
-            }
-        );
-        /**
-         * @private
-         */
-        p.$setTouchEnabled = function (value) {
-            this.$toggleFlags(1024 /* TouchEnabled */, !!value);
-        };
-        d(p, "pixelHitTest",
-            /**
-             * @language en_US
-             * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
-             * is set to true,the transparent area of the display object will be touched through.<br/>
-             * Enabling this property will cause certain mount of performance loss. This property is set to true in the Shape class,
-             * while the other is set to false by default.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透，<br/>
-             * 开启此属性将会有一定量的额外性能损耗，Shape等含有矢量图的类默认开启此属性，其他类默认关闭。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$hasFlags(1 /* PixelHitTest */);
-            },
-            function (value) {
-                this.$toggleFlags(1 /* PixelHitTest */, !!value);
-            }
-        );
-        d(p, "scrollRect",
-            /**
-             * @language en_US
-             * The scroll rectangle bounds of the display object. The display object is cropped to the size defined by the rectangle,
-             * and it scrolls within the rectangle when you change the x and y properties of the scrollRect object. A scrolled display
-             * object always scrolls in whole pixel increments.You can scroll an object left and right by setting the x property of
-             * the scrollRect Rectangle object. You can scroll an object up and down by setting the y property of the scrollRect
-             * Rectangle object. If the display object is rotated 90° and you scroll it left and right, the display object actually
-             * scrolls up and down.<br/>
-             *
-             * Note: to change the value of a display object's scrollRect, you must make a copy of the entire scrollRect object, then copy
-             * the new object into the scrollRect property of the display object.
-             * @example the following code increases the x value of a display object's scrollRect
-             * <code>
-             *     var myRectangle:Rectangle = myDisplayObject.scrollRect;
-             *     myRectangle.x += 10;
-             *     myDisplayObject.scrollRect = myRectangle;
-             * </code>
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
-             * 滚动的显示对象始终以整像素为增量进行滚动。您可以通过设置 scrollRect Rectangle 对象的 x 属性来左右滚动对象， 还可以通过设置
-             * scrollRect 对象的 y 属性来上下滚动对象。如果显示对象旋转了 90 度，并且您左右滚动它，则实际上显示对象会上下滚动。<br/>
-             *
-             * 注意：要改变一个显示对象 scrollRect 属性的值，您必引用整个 scrollRect 对象，然后将它重新赋值给显示对象的 scrollRect 属性。
-             * @example 以下代码改变了显示对象 scrollRect 的 x 属性值：
-             * <code>
-             *     var myRectangle:Rectangle = myDisplayObject.scrollRect;
-             *     myRectangle.x += 10;
-             *     myDisplayObject.scrollRect = myRectangle;
-             * </code>
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$scrollRect ? this.$scrollRect.clone() : null;
-            },
-            function (value) {
-                if (!value && !this.$scrollRect) {
-                    return;
-                }
-                if (value) {
-                    if (!this.$scrollRect) {
-                        this.$scrollRect = new lark.Rectangle();
-                    }
-                    this.$scrollRect.copyFrom(value);
-                }
-                else {
-                    this.$scrollRect = null;
-                }
-                this.invalidatePosition();
-            }
-        );
-        d(p, "blendMode",
-            /**
-             * @language en_US
-             * A value from the BlendMode class that specifies which blend mode to use. Determine how a source image (new one)
-             * is drawn on the target image (old one).<br/>
-             * If you attempt to set this property to an invalid value, Lark runtime set the value to BlendMode.NORMAL.
-             * @default lark.BlendMode.NORMAL
-             * @see lark.BlendMode
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上<br/>
-             * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
-             * @default lark.BlendMode.NORMAL
-             * @see lark.BlendMode
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return lark.sys.numberToBlendMode(this.$blendMode);
-            },
-            function (value) {
-                var mode = lark.sys.blendModeToNumber(value);
-                if (mode === this.$blendMode) {
-                    return;
-                }
-                this.$blendMode = mode;
-                this.$invalidateTransform();
-            }
-        );
-        d(p, "mask",
-            /**
-             * @language en_US
-             * The calling display object is masked by the specified mask object. To ensure that masking works when the Stage
-             * is scaled, the mask display object must be in an active part of the display list. The mask object itself is not drawn.
-             * Set mask to null to remove the mask. To be able to scale a mask object, it must be on the display list. To be
-             * able to drag a mask Sprite object , it must be on the display list.<br/>
-             * Note: A single mask object cannot be used to mask more than one calling display object. When the mask is assigned
-             * to a second display object, it is removed as the mask of the first object, and that object's mask property becomes null.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
-             * 但不绘制 mask 对象本身。将 mask 设置为 null 可删除蒙版。要能够缩放遮罩对象，它必须在显示列表中。要能够拖动蒙版
-             * Sprite 对象，它必须在显示列表中。<br/>
-             * 注意：单个 mask 对象不能用于遮罩多个执行调用的显示对象。在将 mask 分配给第二个显示对象时，会撤消其作为第一个对象的遮罩，
-             * 该对象的 mask 属性将变为 null。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$mask;
-            },
-            function (value) {
-                if (value === this.$mask || value === this) {
-                    return;
-                }
-                if (value) {
-                    if (value.$maskedObject) {
-                        value.$maskedObject.mask = null;
-                    }
-                    value.$maskedObject = this;
-                }
-                this.$mask = value;
-                this.$invalidateTransform();
-            }
+                return this._running;
+            },undefined
         );
         /**
          * @language en_US
-         * Returns a rectangle that defines the area of the display object relative to the coordinate system of the targetCoordinateSpace object.
-         * @param targetCoordinateSpace The display object that defines the coordinate system to use.
-         * @param resultRect A reusable instance of Rectangle for saving the results. Passing this parameter can reduce the number of reallocate objects
-         *, which allows you to get better code execution performance..
-         * @returns The rectangle that defines the area of the display object relative to the targetCoordinateSpace object's coordinate system.
+         * Stops the timer, if it is running, and sets the currentCount property back to 0, like the reset button of a stopwatch.
+         * Then, when start() is called, the timer instance runs for the specified number of repetitions, as set by the repeatCount value.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 返回一个矩形，该矩形定义相对于 targetCoordinateSpace 对象坐标系的显示对象区域。
-         * @param targetCoordinateSpace 定义要使用的坐标系的显示对象。
-         * @param resultRect 一个用于存储结果的可复用Rectangle实例，传入此参数能够减少内部创建对象的次数，从而获得更高的运行性能。
-         * @returns 定义与 targetCoordinateSpace 对象坐标系统相关的显示对象面积的矩形。
+         * 如果计时器正在运行，则停止计时器，并将 currentCount 属性设回为 0，这类似于秒表的重置按钮。然后，在调用 start() 后，将运行计时器实例，运行次数为指定的重复次数（由 repeatCount 值设置）。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        p.getBounds = function (targetCoordinateSpace, resultRect) {
-            targetCoordinateSpace = targetCoordinateSpace || this;
-            return this.$getTransformedBounds(targetCoordinateSpace, resultRect);
-        };
-        /**
-         * @private
-         */
-        p.$getTransformedBounds = function (targetCoordinateSpace, resultRect) {
-            var bounds = this.$getOriginalBounds();
-            if (!resultRect) {
-                resultRect = new lark.Rectangle();
-            }
-            resultRect.copyFrom(bounds);
-            if (targetCoordinateSpace === this || resultRect.isEmpty()) {
-                return resultRect;
-            }
-            var m;
-            if (targetCoordinateSpace) {
-                m = lark.$TempMatrix;
-                var invertedTargetMatrix = targetCoordinateSpace.$getInvertedConcatenatedMatrix();
-                invertedTargetMatrix.$preMultiplyInto(this.$getConcatenatedMatrix(), m);
-            }
-            else {
-                m = this.$getConcatenatedMatrix();
-            }
-            m.$transformBounds(resultRect);
-            return resultRect;
+        p.reset = function () {
+            this.stop();
+            this._currentCount = 0;
         };
         /**
          * @language en_US
-         * Converts the point object from the Stage (global) coordinates to the display object's (local) coordinates.
-         * @param stageX the x value in the global coordinates
-         * @param stageY the y value in the global coordinates
-         * @param resultPoint A reusable instance of Point for saving the results. Passing this parameter can reduce the
-         * number of reallocate objects, which allows you to get better code execution performance.
-         * @returns A Point object with coordinates relative to the display object.
+         * Starts the timer, if it is not already running.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
-         * @param stageX 舞台坐标x
-         * @param stageY 舞台坐标y
-         * @param resultPoint 一个用于存储结果的可复用 Point 实例，传入此参数能够减少内部创建对象的次数，从而获得更高的运行性能。
-         * @returns 具有相对于显示对象的坐标的 Point 对象。
+         * 如果计时器尚未运行，则启动计时器。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        p.globalToLocal = function (stageX, stageY, resultPoint) {
-            var m = this.$getInvertedConcatenatedMatrix();
-            return m.transformPoint(stageX, stageY, resultPoint);
+        p.start = function () {
+            if (this._running)
+                return;
+            lark.startTick(this.$update, this);
+            this._running = true;
         };
         /**
          * @language en_US
-         * Converts the point object from the display object's (local) coordinates to the Stage (global) coordinates.
-         * @param localX the x value in the local coordinates
-         * @param localY the x value in the local coordinates
-         * @param resultPoint A reusable instance of Point for saving the results. Passing this parameter can reduce the
-         * number of reallocate objects, which allows you to get better code execution performance.
-         * @returns  A Point object with coordinates relative to the Stage.
+         * Stops the timer. When start() is called after stop(), the timer instance runs for the remaining number of
+         * repetitions, as set by the repeatCount property.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 将显示对象的（本地）坐标转换为舞台（全局）坐标。
-         * @param localX 本地坐标 x
-         * @param localY 本地坐标 y
-         * @param resultPoint 一个用于存储结果的可复用 Point 实例，传入此参数能够减少内部创建对象的次数，从而获得更高的运行性能。
-         * @returns 一个具有相对于舞台坐标的 Point 对象。
+         * 停止计时器。如果在调用 stop() 后调用 start()，则将继续运行计时器实例，运行次数为剩余的 重复次数（由 repeatCount 属性设置）。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        p.localToGlobal = function (localX, localY, resultPoint) {
-            var m = this.$getConcatenatedMatrix();
-            return m.transformPoint(localX, localY, resultPoint);
+        p.stop = function () {
+            if (!this._running)
+                return;
+            lark.stopTick(this.$update, this);
+            this._running = false;
         };
         /**
          * @private
-         * 标记自身的测量尺寸失效
+         * Ticker以60FPS频率刷新此方法
          */
-        p.$invalidateContentBounds = function () {
-            this.$invalidate();
-            this.$setFlags(2 /* InvalidContentBounds */);
-            this.$propagateFlagsUp(4 /* InvalidBounds */);
-        };
-        /**
-         * @private
-         * 获取显示对象占用的矩形区域集合，通常包括自身绘制的测量区域，如果是容器，还包括所有子项占据的区域。
-         */
-        p.$getOriginalBounds = function () {
-            var bounds = this.$DisplayObject[9 /* bounds */];
-            if (this.$hasFlags(4 /* InvalidBounds */)) {
-                bounds.copyFrom(this.$getContentBounds());
-                this.$measureChildBounds(bounds);
-                this.$removeFlags(4 /* InvalidBounds */);
-                if (this.$displayList) {
-                    this.$displayList.$renderRegion.moved = true;
-                }
-            }
-            return bounds;
-        };
-        /**
-         * @private
-         * 测量子项占用的矩形区域
-         * 注意：此方法在渲染过程中调用，整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
-         * @param bounds 测量结果存储在这个矩形对象内
-         */
-        p.$measureChildBounds = function (bounds) {
-        };
-        /**
-         * @private
-         */
-        p.$getContentBounds = function () {
-            var bounds = this.$DisplayObject[10 /* contentBounds */];
-            if (this.$hasFlags(2 /* InvalidContentBounds */)) {
-                this.$measureContentBounds(bounds);
-                if (this.$renderRegion) {
-                    this.$renderRegion.moved = true;
-                }
-                this.$removeFlags(2 /* InvalidContentBounds */);
-            }
-            return bounds;
-        };
-        /**
-         * @private
-         * 测量自身占用的矩形区域，注意：此测量结果并不包括子项占据的区域。
-         * 注意：此方法在渲染过程中调用，整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
-         * @param bounds 测量结果存储在这个矩形对象内
-         */
-        p.$measureContentBounds = function (bounds) {
-        };
-        /**
-         * @private
-         * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
-         * @param notiryChildren 是否标记子项也需要重绘。传入false或不传入，将只标记自身需要重绘。通常只有alpha属性改变会需要通知子项重绘。
-         */
-        p.$invalidate = function (notifyChildren) {
-            if (!this.$renderRegion || this.$hasFlags(256 /* DirtyRender */)) {
+        p.$update = function (timeStamp) {
+            this.lastCount -= 1000;
+            if (this.lastCount > 0) {
                 return;
             }
-            this.$setFlags(256 /* DirtyRender */);
-            var displayList = this.$displayList ? this.$displayList : this.$parentDisplayList;
-            if (displayList) {
-                displayList.markDirty(this);
+            this.lastCount += this.updateInterval;
+            this._currentCount++;
+            var complete = (this.repeatCount > 0 && this._currentCount >= this.repeatCount);
+            lark.TimerEvent.emitTimerEvent(this, lark.TimerEvent.TIMER);
+            if (complete) {
+                this.stop();
+                lark.TimerEvent.emitTimerEvent(this, lark.TimerEvent.TIMER_COMPLETE);
             }
         };
-        /**
-         * @private
-         * 标记自身以及所有子项在父级中变换叠加的显示内容失效。此方法不会触发自身的cacheAsBitmap重绘。
-         * 通常用于矩阵改变或从显示列表添加和移除时。若自身的显示内容已经改变需要重绘，应该调用$invalidate()。
-         */
-        p.$invalidateTransform = function () {
-            if (this.$hasFlags(512 /* DirtyChildren */)) {
-                return;
-            }
-            this.$setFlags(512 /* DirtyChildren */);
-            var displayList = this.$displayList;
-            if ((displayList || this.$renderRegion) && this.$parentDisplayList) {
-                this.$parentDisplayList.markDirty(displayList || this);
-            }
-        };
-        /**
-         * @private
-         * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
-         * 注意：此方法在渲染过程中调用，整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
-         */
-        p.$update = function () {
-            this.$removeFlagsUp(768 /* Dirty */);
-            this.$getConcatenatedAlpha();
-            //必须在访问moved属性前调用以下两个方法，因为moved属性在以下两个方法内重置。
-            var concatenatedMatrix = this.$getConcatenatedMatrix();
-            var bounds = this.$getContentBounds();
-            var displayList = this.$displayList || this.$parentDisplayList;
-            var region = this.$renderRegion;
-            if (!displayList) {
-                region.setTo(0, 0, 0, 0);
-                region.moved = false;
-                return false;
-            }
-            if (!region.moved) {
-                return false;
-            }
-            region.moved = false;
-            var matrix = this.$renderMatrix;
-            matrix.copyFrom(concatenatedMatrix);
-            var root = displayList.root;
-            if (root !== this.$stage) {
-                root.$getInvertedConcatenatedMatrix().$preMultiplyInto(matrix, matrix);
-            }
-            region.updateRegion(bounds, matrix);
-            return true;
-        };
-        /**
-         * @private
-         * 执行渲染,绘制自身到屏幕。
-         * 注意：此方法在渲染过程中调用，整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
-         */
-        p.$render = function (context) {
-        };
-        /**
-         * @private
-         */
-        p.$hitTest = function (stageX, stageY, shapeFlag) {
-            if (!this.$renderRegion || !this.$visible) {
-                return null;
-            }
-            var m = this.$getInvertedConcatenatedMatrix();
-            var bounds = this.$getContentBounds();
-            var localX = m.a * stageX + m.c * stageY + m.tx;
-            var localY = m.b * stageX + m.d * stageY + m.ty;
-            if (bounds.contains(localX, localY)) {
-                if (!this.$children) {
-                    if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
-                        return null;
-                    }
-                    if (this.$mask && !this.$mask.$hitTest(stageX, stageY, true)) {
-                        return null;
-                    }
-                }
-                if (shapeFlag || this.$displayFlags & 1 /* PixelHitTest */) {
-                    return this.hitTestPixel(localX, localY);
-                }
-                return this;
-            }
-            return null;
-        };
-        /**
-         * @private
-         */
-        p.hitTestPixel = function (localX, localY) {
-            var alpha = this.$getConcatenatedAlpha();
-            if (alpha === 0) {
-                return null;
-            }
-            var context;
-            var data;
-            var displayList = this.$displayList;
-            if (displayList) {
-                context = displayList.renderContext;
-                data = context.getImageData(localX - displayList.offsetX, localY - displayList.offsetY, 1, 1).data;
-            }
-            else {
-                context = lark.sys.sharedRenderContext;
-                context.surface.width = context.surface.height = 3;
-                context.translate(1 - localX, 1 - localY);
-                this.$render(context);
-                data = context.getImageData(1, 1, 1, 1).data;
-            }
-            if (data[3] === 0) {
-                return null;
-            }
-            return this;
-        };
-        /**
-         * @private
-         */
-        p.$addListener = function (type, listener, thisObject, useCapture, priority, emitOnce) {
-            _super.prototype.$addListener.call(this, type, listener, thisObject, useCapture, priority, emitOnce);
-            var isEnterFrame = (type == lark.Event.ENTER_FRAME);
-            if (isEnterFrame || type == lark.Event.RENDER) {
-                var list = isEnterFrame ? DisplayObject.$enterFrameCallBackList : DisplayObject.$renderCallBackList;
-                if (list.indexOf(this) == -1) {
-                    list.push(this);
-                }
-            }
-        };
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.removeListener = function (type, listener, thisObject, useCapture) {
-            _super.prototype.removeListener.call(this, type, listener, thisObject, useCapture);
-            var isEnterFrame = (type == lark.Event.ENTER_FRAME);
-            if ((isEnterFrame || type == lark.Event.RENDER) && !this.hasListener(type)) {
-                var list = isEnterFrame ? DisplayObject.$enterFrameCallBackList : DisplayObject.$renderCallBackList;
-                var index = list.indexOf(this);
-                if (index !== -1) {
-                    list.splice(index, 1);
-                }
-            }
-        };
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.emit = function (event) {
-            if (!event.$bubbles) {
-                return _super.prototype.emit.call(this, event);
-            }
-            var list = this.$getPropagationList(this);
-            var targetIndex = list.length * 0.5;
-            event.$target = this;
-            this.$emitPropagationEvent(event, list, targetIndex);
-            return !event.$isDefaultPrevented;
-        };
-        /**
-         * @private
-         * 获取事件流列表。注意：Lark框架的事件流与Flash实现并不一致。
-         *
-         * 事件流有三个阶段：捕获，目标，冒泡。
-         * Flash里默认的的事件监听若不开启useCapture将监听目标和冒泡阶段。若开始capture将只能监听捕获当不包括目标的事件。
-         * 可以在Flash中写一个简单的测试：实例化一个非容器显示对象，例如TextField。分别监听useCapture为true和false时的鼠标事件。
-         * 点击后将只有useCapture为false的回调函数输出信息。也就带来一个问题「Flash的捕获阶段不能监听到最内层对象本身，只在父级列表有效」。
-         *
-         * 而HTML里的事件流设置useCapture为true时是能监听到目标阶段的，也就是目标阶段会被触发两次，在捕获和冒泡过程各触发一次。这样可以避免
-         * 前面提到的监听捕获无法监听目标本身的问题。
-         *
-         * Lark最终采用了HTML里目标节点触发两次的事件流方式。
-         */
-        p.$getPropagationList = function (target) {
-            var list = [];
-            while (target) {
-                list.push(target);
-                target = target.$parent;
-            }
-            var captureList = list.concat();
-            captureList.reverse(); //使用一次reverse()方法比多次调用unshift()性能高。
-            list = captureList.concat(list);
-            return list;
-        };
-        /**
-         * @private
-         */
-        p.$emitPropagationEvent = function (event, list, targetIndex) {
-            var length = list.length;
-            var captureIndex = targetIndex - 1;
-            for (var i = 0; i < length; i++) {
-                var currentTarget = list[i];
-                event.$currentTarget = currentTarget;
-                if (i < captureIndex)
-                    event.$eventPhase = 1 /* CAPTURING_PHASE */;
-                else if (i == targetIndex || i == captureIndex)
-                    event.$eventPhase = 2 /* AT_TARGET */;
-                else
-                    event.$eventPhase = 3 /* BUBBLING_PHASE */;
-                currentTarget.$notifyListener(event, i < targetIndex);
-                if (event.$isPropagationStopped || event.$isPropagationImmediateStopped) {
-                    return;
-                }
-            }
-        };
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.willTrigger = function (type) {
-            var parent = this;
-            while (parent) {
-                if (parent.hasListener(type))
-                    return true;
-                parent = parent.$parent;
-            }
-            return false;
-        };
-        /**
-         * @private
-         */
-        DisplayObject.$enterFrameCallBackList = [];
-        /**
-         * @private
-         */
-        DisplayObject.$renderCallBackList = [];
-        return DisplayObject;
+        return Timer;
     })(lark.EventEmitter);
-    lark.DisplayObject = DisplayObject;
-    lark.registerClass(DisplayObject,"lark.DisplayObject",["lark.sys.Renderable"]);
+    lark.Timer = Timer;
+    lark.registerClass(Timer,"lark.Timer");
     if (DEBUG) {
-        lark.$markReadOnly(DisplayObject.prototype, "parent");
-        lark.$markReadOnly(DisplayObject.prototype, "stage");
+        lark.$markReadOnly(Timer, "currentCount");
+        lark.$markReadOnly(Timer, "running");
     }
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -9093,77 +7768,1427 @@ var lark;
 var lark;
 (function (lark) {
     /**
+     * @private
+     * 格式化旋转角度的值
+     */
+    function clampRotation(value) {
+        value %= 360;
+        if (value > 180) {
+            value -= 360;
+        }
+        else if (value < -180) {
+            value += 360;
+        }
+        return value;
+    }
+    /**
      * @language en_US
-     * This class is used to create lightweight shapes using the drawing application program interface (API). The Shape
-     * class includes a graphics property, which lets you access methods from the Graphics class.
-     * @see lark.Graphics
+     * The DisplayObject class is the base class for all objects that can be placed on the display list. The display list
+     * manages all objects displayed in the runtime. Use the DisplayObjectContainer class to arrange the display
+     * objects in the display list. DisplayObjectContainer objects can have child display objects, while other display objects,
+     * such as Shape and TextField objects, are "leaf" nodes that have only parents and siblings, no children.
+     * The DisplayObject class supports basic functionality like the x and y position of an object, as well as more advanced
+     * properties of the object such as its transformation matrix.<br/>
+     * The DisplayObject class contains several broadcast events.Normally, the target of any particular event is a specific
+     * DisplayObject instance. For example, the target of an added event is the specific DisplayObject instance that was added
+     * to the display list. Having a single target restricts the placement of event listeners to that target and in some cases
+     * the target's ancestors on the display list. With broadcast events, however, the target is not a specific DisplayObject
+     * instance, but rather all DisplayObject instances, including those that are not on the display list. This means that you
+     * can add a listener to any DisplayObject instance to listen for broadcast events.
+     *
+     * @event lark.Event.ADDED Emitted when a display object is added to the display list.
+     * @event lark.Event.ADDED_TO_STAGE Emitted when a display object is added to the on stage display list, either directly or through the addition of a sub tree in which the display object is contained.
+     * @event lark.Event.REMOVED Emitted when a display object is about to be removed from the display list.
+     * @event lark.Event.REMOVED_FROM_STAGE Emitted when a display object is about to be removed from the display list, either directly or through the removal of a sub tree in which the display object is contained.
+     * @event lark.Event.ENTER_FRAME [broadcast event] Emitted when the playhead is entering a new frame.
+     * @event lark.Event.RENDER [broadcast event] Emitted when the display list is about to be updated and rendered.
+     * @event lark.TouchEvent.TOUCH_MOVE Emitted when the user touches the device, and is continuously dispatched until the point of contact is removed.
+     * @event lark.TouchEvent.TOUCH_BEGIN Emitted when the user first contacts a touch-enabled device (such as touches a finger to a mobile phone or tablet with a touch screen).
+     * @event lark.TouchEvent.TOUCH_END Emitted when the user removes contact with a touch-enabled device (such as lifts a finger off a mobile phone or tablet with a touch screen).
+     * @event lark.TouchEvent.TOUCH_TAP Emitted when the user lifts the point of contact over the same DisplayObject instance on which the contact was initiated on a touch-enabled device (such as presses and releases a finger from a single point over a display object on a mobile phone or tablet with a touch screen).
+     * @event lark.TouchEvent.TOUCH_RELEASE_OUTSIDE Emitted when the user lifts the point of contact over the different DisplayObject instance on which the contact was initiated on a touch-enabled device (such as presses and releases a finger from a single point over a display object on a mobile phone or tablet with a touch screen).
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 此类用于使用绘图应用程序编程接口 (API) 创建简单形状。Shape 类含有 graphics 属性，通过该属性您可以访问各种矢量绘图方法。
-     * @see lark.Graphics
+     * DisplayObject 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时中显示的所有对象。使用 DisplayObjectContainer 类排列
+     * 显示列表中的显示对象。DisplayObjectContainer 对象可以有子显示对象，而其他显示对象（如 Shape 和 TextField 对象）是“叶”节点，没有子项，只有父级和
+     * 同级。DisplayObject 类有一些基本的属性（如确定坐标位置的 x 和 y 属性），也有一些高级的对象属性（如 Matrix 矩阵变换）。<br/>
+     * DisplayObject 类包含若干广播事件。通常，任何特定事件的目标均为一个特定的 DisplayObject 实例。例如，added 事件的目标是已添加到显示列表
+     * 的目标 DisplayObject 实例。若只有一个目标，则会将事件侦听器限制为只能监听在该目标上（在某些情况下，可监听在显示列表中该目标的祖代上）。
+     * 但是对于广播事件，目标不是特定的 DisplayObject 实例，而是所有 DisplayObject 实例（包括那些不在显示列表中的实例）。这意味着您可以向任何
+     * DisplayObject 实例添加侦听器来侦听广播事件。
+     *
+     * @event lark.Event.ADDED 将显示对象添加到显示列表中时调度。
+     * @event lark.Event.ADDED_TO_STAGE 在将显示对象直接添加到舞台显示列表或将包含显示对象的子树添加至舞台显示列表中时调度。
+     * @event lark.Event.REMOVED 将要从显示列表中删除显示对象时调度。
+     * @event lark.Event.REMOVED_FROM_STAGE 在从显示列表中直接删除显示对象或删除包含显示对象的子树时调度。
+     * @event lark.Event.ENTER_FRAME [广播事件] 播放头进入新帧时调度。
+     * @event lark.Event.RENDER [广播事件] 将要更新和呈现显示列表时调度。
+     * @event lark.TouchEvent.TOUCH_MOVE 当用户触碰设备时进行调度，而且会连续调度，直到接触点被删除。
+     * @event lark.TouchEvent.TOUCH_BEGIN 当用户第一次触摸启用触摸的设备时（例如，用手指触摸配有触摸屏的移动电话或平板电脑）调度。
+     * @event lark.TouchEvent.TOUCH_END 当用户移除与启用触摸的设备的接触时（例如，将手指从配有触摸屏的移动电话或平板电脑上抬起）调度。
+     * @event lark.TouchEvent.TOUCH_TAP 当用户在启用触摸设备上的已启动接触的同一 DisplayObject 实例上抬起接触点时（例如，在配有触摸屏的移动电话或平板电脑的显示对象上的某一点处按下并释放手指）调度。
+     * @event lark.TouchEvent.TOUCH_RELEASE_OUTSIDE 当用户在启用触摸设备上的已启动接触的不同 DisplayObject 实例上抬起接触点时（例如，在配有触摸屏的移动电话或平板电脑的显示对象上的某一点处按下并释放手指）调度。
      * @version Lark 1.0
      * @platform Web,Native
      */
-    var Shape = (function (_super) {
-        __extends(Shape, _super);
+    var DisplayObject = (function (_super) {
+        __extends(DisplayObject, _super);
         /**
          * @language en_US
-         * Creates a new Shape object.
+         * Initializes a DisplayObject object
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 创建一个 Shape 对象
+         * 创建一个显示对象
          * @version Lark 1.0
          * @platform Web,Native
          */
-        function Shape() {
+        function DisplayObject() {
             _super.call(this);
-            this.$graphics = new lark.Graphics();
-            this.$graphics.$targetDisplay = this;
-            this.$renderRegion = new lark.sys.Region();
-            this.pixelHitTest = true;
+            /**
+             * @private
+             * 能够含有子项的类将子项列表存储在这个属性里。
+             */
+            this.$children = null;
+            /**
+             * @private
+             */
+            this.$parent = null;
+            /**
+             * @private
+             */
+            this.$stage = null;
+            /**
+             * @private
+             * 这个对象在显示列表中的嵌套深度，舞台为1，它的子项为2，子项的子项为3，以此类推。当对象不在显示列表中时此属性值为0.
+             */
+            this.$nestLevel = 0;
+            /**
+             * @private
+             */
+            this.$visible = true;
+            /**
+             * @private
+             * cacheAsBitmap创建的缓存位图节点。
+             */
+            this.$displayList = null;
+            /**
+             * @private
+             */
+            this.$alpha = 1;
+            this.$touchEnabled = true;
+            /**
+             * @private
+             */
+            this.$scrollRect = null;
+            /**
+             * @private
+             */
+            this.$blendMode = 0;
+            /**
+             * @private
+             * 被遮罩的对象
+             */
+            this.$maskedObject = null;
+            /**
+             * @private
+             */
+            this.$mask = null;
+            /**
+             * @private
+             */
+            this.$parentDisplayList = null;
+            /**
+             * @private
+             * 是否需要重绘的标志，此属性在渲染时会被访问，所以单独声明一个直接的变量。
+             */
+            this.$isDirty = false;
+            /**
+             * @private
+             * 这个对象在舞台上的整体透明度
+             */
+            this.$renderAlpha = 1;
+            /**
+             * @private
+             * 相对于显示列表根节点或位图缓存根节点上的矩阵对象
+             */
+            this.$renderMatrix = new lark.Matrix();
+            /**
+             * @private
+             * 此显示对象自身（不包括子项）在显示列表根节点或位图缓存根节点上的显示尺寸。
+             */
+            this.$renderRegion = null;
+            this.$displayFlags = 880 /* InitFlags */;
+            this.$DisplayObject = {
+                0: 1,
+                1: 1,
+                2: 0,
+                3: 0,
+                4: 0,
+                5: "",
+                6: new lark.Matrix(),
+                7: new lark.Matrix(),
+                8: new lark.Matrix(),
+                9: new lark.Rectangle(),
+                10: new lark.Rectangle(),
+                11: false,
+            };
         }
-        var d = __define,c=Shape;p=c.prototype;
-        d(p, "graphics",
+        var d = __define,c=DisplayObject;p=c.prototype;
+        /**
+         * @private
+         * 添加一个标志量
+         */
+        p.$setFlags = function (flags) {
+            this.$displayFlags |= flags;
+        };
+        /**
+         * @private
+         * 移除一个标志量
+         */
+        p.$removeFlags = function (flags) {
+            this.$displayFlags &= ~flags;
+        };
+        /**
+         * @private
+         * 沿着显示列表向上移除标志量，如果标志量没被设置过就停止移除。
+         */
+        p.$removeFlagsUp = function (flags) {
+            if (!this.$hasAnyFlags(flags)) {
+                return;
+            }
+            this.$removeFlags(flags);
+            var parent = this.$parent;
+            if (parent) {
+                parent.$removeFlagsUp(flags);
+            }
+        };
+        /**
+         * @private
+         * 是否含有指定的所有标志量
+         */
+        p.$hasFlags = function (flags) {
+            return (this.$displayFlags & flags) === flags;
+        };
+        /**
+         * @private
+         * 沿着显示列表向上传递标志量，如果标志量已经被设置过就停止传递。
+         */
+        p.$propagateFlagsUp = function (flags) {
+            if (this.$hasFlags(flags)) {
+                return;
+            }
+            this.$setFlags(flags);
+            var parent = this.$parent;
+            if (parent) {
+                parent.$propagateFlagsUp(flags);
+            }
+        };
+        /**
+         * @private
+         * 沿着显示列表向下传递标志量，非容器直接设置自身的flag，此方法会在 DisplayObjectContainer 中被覆盖。
+         */
+        p.$propagateFlagsDown = function (flags) {
+            this.$setFlags(flags);
+        };
+        /**
+         * @private
+         * 是否含有多个标志量其中之一。
+         */
+        p.$hasAnyFlags = function (flags) {
+            return !!(this.$displayFlags & flags);
+        };
+        /**
+         * @private
+         * 标记矩阵失效
+         */
+        p.invalidateMatrix = function () {
+            this.$setFlags(8 /* InvalidMatrix */);
+            this.invalidatePosition();
+        };
+        /**
+         * @private
+         * 标记这个显示对象在父级容器的位置发生了改变。
+         */
+        p.invalidatePosition = function () {
+            this.$invalidateTransform();
+            this.$propagateFlagsDown(16 /* InvalidConcatenatedMatrix */ | 32 /* InvalidInvertedConcatenatedMatrix */);
+            if (this.$parent) {
+                this.$parent.$propagateFlagsUp(4 /* InvalidBounds */);
+            }
+        };
+        d(p, "name",
             /**
              * @language en_US
-             * Specifies the Graphics object belonging to this Shape object, where vector drawing commands can occur.
+             * Indicates the instance name of the DisplayObject. The object can be identified in the child list of its parent
+             * display object container by calling the getChildByName() method of the display object container.
              * @version Lark 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             *  获取 Shape 中的 Graphics 对象。可通过此对象执行矢量绘图命令。
+             * 表示 DisplayObject 的实例名称。
+             * 通过调用父显示对象容器的 getChildByName() 方法，可以在父显示对象容器的子列表中标识该对象。
              * @version Lark 1.0
              * @platform Web,Native
              */
             function () {
-                return this.$graphics;
+                return this.$DisplayObject[5 /* name */];
+            },
+            function (value) {
+                this.$DisplayObject[5 /* name */] = value;
+            }
+        );
+        d(p, "parent",
+            /**
+             * @language en_US
+             * Indicates the DisplayObjectContainer object that contains this display object. Use the parent property to specify
+             * a relative path to display objects that are above the current display object in the display list hierarchy.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示包含此显示对象的 DisplayObjectContainer 对象。
+             * 使用 parent 属性可以指定高于显示列表层次结构中当前显示对象的显示对象的相对路径。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$parent;
             },undefined
         );
         /**
          * @private
+         * 设置父级显示对象
          */
-        p.$measureContentBounds = function (bounds) {
-            this.$graphics.$measureContentBounds(bounds);
+        p.$setParent = function (parent) {
+            this.$parent = parent;
+        };
+        /**
+         * @private
+         * 显示对象添加到舞台
+         */
+        p.$onAddToStage = function (stage, nestLevel) {
+            this.$stage = stage;
+            this.$nestLevel = nestLevel;
+            lark.Sprite.$EVENT_ADD_TO_STAGE_LIST.push(this);
+        };
+        /**
+         * @private
+         * 显示对象从舞台移除
+         */
+        p.$onRemoveFromStage = function () {
+            this.$nestLevel = 0;
+            lark.Sprite.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
+        };
+        d(p, "stage",
+            /**
+             * @language en_US
+             * The Stage of the display object. you can create and load multiple display objects into the display list, and
+             * the stage property of each display object refers to the same Stage object.<br/>
+             * If a display object is not added to the display list, its stage property is set to null.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 显示对象的舞台。
+             * 例如，您可以创建多个显示对象并加载到显示列表中，每个显示对象的 stage 属性是指相同的 Stage 对象。<br/>
+             * 如果显示对象未添加到显示列表，则其 stage 属性会设置为 null。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$stage;
+            },undefined
+        );
+        d(p, "matrix",
+            /**
+             * @language en_US
+             * A Matrix object containing values that alter the scaling, rotation, and translation of the display object.<br/>
+             * Note: to change the value of a display object's matrix, you must make a copy of the entire matrix object, then copy
+             * the new object into the matrix property of the display object.
+             * @example the following code increases the tx value of a display object's matrix
+             * <pre>
+             *     var myMatrix:Matrix = myDisplayObject.matrix;
+             *     myMatrix.tx += 10;
+             *     myDisplayObject.matrix = myMatrix;
+             * </pre>
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 一个 Matrix 对象，其中包含更改显示对象的缩放、旋转和平移的值。<br/>
+             * 注意：要改变一个显示对象矩阵的值，您必引用整个矩阵对象，然后将它重新赋值给显示对象的 matrix 属性。
+             * @example 以下代码改变了显示对象矩阵的tx属性值：
+             * <pre>
+             *     var myMatrix:Matrix = myDisplayObject.matrix;
+             *     myMatrix.tx += 10;
+             *     myDisplayObject.matrix = myMatrix;
+             * </pre>
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$getMatrix().clone();
+            },
+            function (value) {
+                this.$setMatrix(value);
+            }
+        );
+        /**
+         * @private
+         * 获取矩阵
+         */
+        p.$getMatrix = function () {
+            var values = this.$DisplayObject;
+            if (this.$hasFlags(8 /* InvalidMatrix */)) {
+                values[6 /* matrix */].$updateScaleAndRotation(values[0 /* scaleX */], values[1 /* scaleY */], values[2 /* skewX */], values[3 /* skewY */]);
+                this.$removeFlags(8 /* InvalidMatrix */);
+            }
+            return values[6 /* matrix */];
+        };
+        /**
+         * @private
+         * 设置矩阵
+         */
+        p.$setMatrix = function (matrix) {
+            var values = this.$DisplayObject;
+            var m = values[6 /* matrix */];
+            if (m.equals(matrix)) {
+                return;
+            }
+            m.copyFrom(matrix);
+            values[0 /* scaleX */] = m.$getScaleX();
+            values[1 /* scaleY */] = m.$getScaleY();
+            values[2 /* skewX */] = matrix.$getSkewX();
+            values[3 /* skewY */] = matrix.$getSkewY();
+            values[4 /* rotation */] = clampRotation(values[3 /* skewY */] * 180 / Math.PI);
+            this.$removeFlags(8 /* InvalidMatrix */);
+            this.invalidatePosition();
+        };
+        /**
+         * @private
+         * 获得这个显示对象以及它所有父级对象的连接矩阵。
+         */
+        p.$getConcatenatedMatrix = function () {
+            var matrix = this.$DisplayObject[7 /* concatenatedMatrix */];
+            if (this.$hasFlags(16 /* InvalidConcatenatedMatrix */)) {
+                if (this.$parent) {
+                    this.$parent.$getConcatenatedMatrix().$preMultiplyInto(this.$getMatrix(), matrix);
+                    var rect = this.$scrollRect;
+                    if (rect) {
+                        matrix.$preMultiplyInto(lark.$TempMatrix.setTo(1, 0, 0, 1, -rect.x, -rect.y), matrix);
+                    }
+                }
+                else {
+                    matrix.copyFrom(this.$getMatrix());
+                }
+                if (this.$displayList) {
+                    this.$displayList.$renderRegion.moved = true;
+                }
+                if (this.$renderRegion) {
+                    this.$renderRegion.moved = true;
+                }
+                this.$removeFlags(16 /* InvalidConcatenatedMatrix */);
+            }
+            return matrix;
+        };
+        /**
+         * @private
+         * 获取链接矩阵
+         */
+        p.$getInvertedConcatenatedMatrix = function () {
+            var values = this.$DisplayObject;
+            if (this.$hasFlags(32 /* InvalidInvertedConcatenatedMatrix */)) {
+                this.$getConcatenatedMatrix().$invertInto(values[8 /* invertedConcatenatedMatrix */]);
+                this.$removeFlags(32 /* InvalidInvertedConcatenatedMatrix */);
+            }
+            return values[8 /* invertedConcatenatedMatrix */];
+        };
+        d(p, "x",
+            /**
+             * @language en_US
+             * Indicates the x coordinate of the DisplayObject instance relative to the local coordinates of the parent
+             * DisplayObjectContainer.<br/>
+             * If the object is inside a DisplayObjectContainer that has transformations, it is in
+             * the local coordinate system of the enclosing DisplayObjectContainer. Thus, for a DisplayObjectContainer
+             * rotated 90° counterclockwise, the DisplayObjectContainer's children inherit a coordinate system that is
+             * rotated 90° counterclockwise. The object's coordinates refer to the registration point position.
+             * @default 0
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 x 坐标。<br/>
+             * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
+             * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
+             * @default 0
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$getX();
+            },
+            function (value) {
+                this.$setX(value);
+            }
+        );
+        /**
+         * @private
+         * 获取x坐标
+         */
+        p.$getX = function () {
+            return this.$DisplayObject[6 /* matrix */].tx;
+        };
+        /**
+         * @private
+         * 设置x坐标
+         */
+        p.$setX = function (value) {
+            value = +value || 0;
+            var m = this.$DisplayObject[6 /* matrix */];
+            if (value === m.tx) {
+                return false;
+            }
+            m.tx = value;
+            this.invalidatePosition();
+            return true;
+        };
+        d(p, "y",
+            /**
+             * @language en_US
+             * Indicates the y coordinate of the DisplayObject instance relative to the local coordinates of the parent
+             * DisplayObjectContainer. <br/>
+             * If the object is inside a DisplayObjectContainer that has transformations, it is in
+             * the local coordinate system of the enclosing DisplayObjectContainer. Thus, for a DisplayObjectContainer rotated
+             * 90° counterclockwise, the DisplayObjectContainer's children inherit a coordinate system that is rotated 90°
+             * counterclockwise. The object's coordinates refer to the registration point position.
+             * @default 0
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示 DisplayObject 实例相对于父级 DisplayObjectContainer 本地坐标的 y 坐标。<br/>
+             * 如果该对象位于具有变形的 DisplayObjectContainer 内，则它也位于包含 DisplayObjectContainer 的本地坐标系中。
+             * 因此，对于逆时针旋转 90 度的 DisplayObjectContainer，该 DisplayObjectContainer 的子级将继承逆时针旋转 90 度的坐标系。
+             * @default 0
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$getY();
+            },
+            function (value) {
+                this.$setY(value);
+            }
+        );
+        /**
+         * @private
+         * 获取y坐标
+         */
+        p.$getY = function () {
+            return this.$DisplayObject[6 /* matrix */].ty;
+        };
+        /**
+         * @private
+         * 设置y坐标
+         */
+        p.$setY = function (value) {
+            value = +value || 0;
+            var m = this.$DisplayObject[6 /* matrix */];
+            if (value === m.ty) {
+                return false;
+            }
+            m.ty = value;
+            this.invalidatePosition();
+            return true;
+        };
+        d(p, "scaleX",
+            /**
+             * @language en_US
+             * Indicates the horizontal scale (percentage) of the object as applied from the registration point. <br/>
+             * The default 1.0 equals 100% scale.Scaling the local coordinate system changes the x and y property values, which are
+             * defined in whole pixels.
+             * @default 1
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示从注册点开始应用的对象的水平缩放比例（百分比）。<br/>
+             * 1.0 等于 100% 缩放。缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
+             * @default 1
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$DisplayObject[0 /* scaleX */];
+            },
+            function (value) {
+                this.$setScaleX(value);
+            }
+        );
+        /**
+         * @private
+         * 设置水平缩放值
+         */
+        p.$setScaleX = function (value) {
+            value = +value || 0;
+            var values = this.$DisplayObject;
+            if (value === values[0 /* scaleX */]) {
+                return false;
+            }
+            values[0 /* scaleX */] = value;
+            this.invalidateMatrix();
+            return true;
+        };
+        d(p, "scaleY",
+            /**
+             * @language en_US
+             * Indicates the vertical scale (percentage) of an object as applied from the registration point of the object.
+             * 1.0 is 100% scale.Scaling the local coordinate system changes the x and y property values, which are defined
+             * in whole pixels.
+             * @default 1
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示从对象注册点开始应用的对象的垂直缩放比例（百分比）。1.0 是 100% 缩放。
+             * 缩放本地坐标系统将更改 x 和 y 属性值，这些属性值是以整像素定义的。
+             * @default 1
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$DisplayObject[1 /* scaleY */];
+            },
+            function (value) {
+                this.$setScaleY(value);
+            }
+        );
+        /**
+         * @private
+         * 设置垂直缩放值
+         */
+        p.$setScaleY = function (value) {
+            value = +value || 0;
+            if (value === this.$DisplayObject[1 /* scaleY */]) {
+                return false;
+            }
+            this.$DisplayObject[1 /* scaleY */] = value;
+            this.invalidateMatrix();
+            return true;
+        };
+        d(p, "rotation",
+            /**
+             * @language en_US
+             * Indicates the rotation of the DisplayObject instance, in degrees, from its original orientation. Values from
+             * 0 to 180 represent clockwise rotation; values from 0 to -180 represent counterclockwise rotation. Values outside
+             * this range are added to or subtracted from 360 to obtain a value within the range. For example, the statement
+             * myDisplayObject.rotation = 450 is the same as myDisplayObject.rotation = 90.
+             * @default 0
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示 DisplayObject 实例距其原始方向的旋转程度，以度为单位。
+             * 从 0 到 180 的值表示顺时针方向旋转；从 0 到 -180 的值表示逆时针方向旋转。对于此范围之外的值，可以通过加上或
+             * 减去 360 获得该范围内的值。例如，myDisplayObject.rotation = 450语句与 myDisplayObject.rotation = 90 是相同的。
+             * @default 0
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$DisplayObject[4 /* rotation */];
+            },
+            function (value) {
+                value = +value || 0;
+                value = clampRotation(value);
+                var values = this.$DisplayObject;
+                if (value === values[4 /* rotation */]) {
+                    return;
+                }
+                var delta = value - values[4 /* rotation */];
+                var angle = delta / 180 * Math.PI;
+                values[2 /* skewX */] += angle;
+                values[3 /* skewY */] += angle;
+                values[4 /* rotation */] = value;
+                this.invalidateMatrix();
+            }
+        );
+        d(p, "width",
+            /**
+             * @language en_US
+             * Indicates the width of the display object, in pixels. The width is calculated based on the bounds of the content
+             * of the display object. When you set the width property, the scaleX property is adjusted accordingly.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示显示对象的宽度，以像素为单位。宽度是根据显示对象内容的范围来计算的。如果您设置了 width 属性，则 scaleX 属性会相应调整.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$getWidth();
+            },
+            function (value) {
+                this.$setWidth(value);
+            }
+        );
+        /**
+         * @private
+         * 获取显示宽度
+         */
+        p.$getWidth = function () {
+            return this.$getTransformedBounds(this.$parent, lark.$TempRectangle).width;
+        };
+        /**
+         * @private
+         * 设置显示宽度
+         */
+        p.$setWidth = function (value) {
+            value = +value || 0;
+            if (value < 0) {
+                return;
+            }
+            var values = this.$DisplayObject;
+            var originalBounds = this.$getOriginalBounds();
+            var bounds = this.$getTransformedBounds(this.$parent, lark.$TempRectangle);
+            var angle = values[4 /* rotation */] / 180 * Math.PI;
+            var baseWidth = originalBounds.$getBaseWidth(angle);
+            if (!baseWidth) {
+                return;
+            }
+            var baseHeight = originalBounds.$getBaseHeight(angle);
+            values[1 /* scaleY */] = bounds.height / baseHeight;
+            values[0 /* scaleX */] = value / baseWidth;
+            this.invalidateMatrix();
+        };
+        d(p, "height",
+            /**
+             * @language en_US
+             * Indicates the height of the display object, in pixels. The height is calculated based on the bounds of the
+             * content of the display object. When you set the height property, the scaleY property is adjusted accordingly.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示显示对象的高度，以像素为单位。高度是根据显示对象内容的范围来计算的。如果您设置了 height 属性，则 scaleY 属性会相应调整。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$getHeight();
+            },
+            function (value) {
+                this.$setHeight(value);
+            }
+        );
+        /**
+         * @private
+         * 获取显示高度
+         */
+        p.$getHeight = function () {
+            return this.$getTransformedBounds(this.$parent, lark.$TempRectangle).height;
+        };
+        /**
+         * @private
+         * 设置显示高度
+         */
+        p.$setHeight = function (value) {
+            value = +value || 0;
+            if (value < 0) {
+                return;
+            }
+            var values = this.$DisplayObject;
+            var originalBounds = this.$getOriginalBounds();
+            var bounds = this.$getTransformedBounds(this.$parent, lark.$TempRectangle);
+            var angle = values[4 /* rotation */] / 180 * Math.PI;
+            var baseHeight = originalBounds.$getBaseHeight(angle);
+            if (!baseHeight) {
+                return;
+            }
+            var baseWidth = originalBounds.$getBaseWidth(angle);
+            values[1 /* scaleY */] = value / baseHeight;
+            values[0 /* scaleX */] = bounds.width / baseWidth;
+            this.invalidateMatrix();
+        };
+        d(p, "visible",
+            /**
+             * @language en_US
+             * Whether or not the display object is visible. Display objects that are not visible are disabled. For example,
+             * if visible=false for an DisplayObject instance, it cannot receive touch or other user input.
+             * @default true
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 显示对象是否可见。不可见的显示对象将被禁用。例如，如果实例的 visible 为 false，则无法接受触摸或用户交互操作。
+             * @default true
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$visible;
+            },
+            function (value) {
+                value = !!value;
+                if (value === this.$visible) {
+                    return;
+                }
+                this.$visible = value;
+                this.$invalidateTransform();
+            }
+        );
+        d(p, "cacheAsBitmap",
+            /**
+             * @language en_US
+             * If set to true, Lark runtime caches an internal bitmap representation of the display object. This caching can
+             * increase performance for display objects that contain complex vector content. After you set the cacheAsBitmap
+             * property to true, the rendering does not change, however the display object performs pixel snapping automatically.
+             * The execution speed can be significantly faster depending on the complexity of the content.The cacheAsBitmap
+             * property is best used with display objects that have mostly static content and that do not scale and rotate frequently.<br/>
+             * Note: The display object will not create the bitmap caching when the memory exceeds the upper limit,even if you set it to true.
+             * @default false
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 如果设置为 true，则 Lark 运行时将缓存显示对象的内部位图表示形式。此缓存可以提高包含复杂矢量内容的显示对象的性能。
+             * 将 cacheAsBitmap 属性设置为 true 后，呈现并不更改，但是，显示对象将自动执行像素贴紧。执行速度可能会大大加快，
+             * 具体取决于显示对象内容的复杂性。最好将 cacheAsBitmap 属性与主要具有静态内容且不频繁缩放或旋转的显示对象一起使用。<br/>
+             * 注意：在内存超过上限的情况下，即使将 cacheAsBitmap 属性设置为 true，显示对象也不使用位图缓存。
+             * @default false
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$DisplayObject[11 /* cacheAsBitmap */];
+            },
+            function (value) {
+                value = !!value;
+                this.$DisplayObject[11 /* cacheAsBitmap */] = value;
+                var hasDisplayList = !!this.$displayList;
+                if (hasDisplayList === value) {
+                    return;
+                }
+                if (value) {
+                    var displayList = lark.sys.DisplayList.create(this);
+                    if (displayList) {
+                        this.$displayList = displayList;
+                        if (this.$parentDisplayList) {
+                            this.$parentDisplayList.markDirty(displayList);
+                        }
+                        this.$cacheAsBitmapChanged();
+                    }
+                }
+                else {
+                    lark.sys.DisplayList.release(this.$displayList);
+                    this.$displayList = null;
+                    this.$cacheAsBitmapChanged();
+                }
+            }
+        );
+        /**
+         * @private
+         * cacheAsBitmap属性改变
+         */
+        p.$cacheAsBitmapChanged = function () {
+            var parentCache = this.$displayList || this.$parentDisplayList;
+            if (this.$renderRegion) {
+                parentCache.markDirty(this);
+            }
+        };
+        d(p, "alpha",
+            /**
+             * @language en_US
+             * Indicates the alpha transparency value of the object specified. Valid values are 0 (fully transparent) to 1 (fully opaque).
+             * The default value is 1. Display objects with alpha set to 0 are active, even though they are invisible.
+             * @default 1
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 表示指定对象的 Alpha 透明度值。
+             * 有效值为 0（完全透明）到 1（完全不透明）。alpha 设置为 0 的显示对象是可触摸的，即使它们不可见。
+             * @default 1
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$alpha;
+            },
+            function (value) {
+                value = +value || 0;
+                if (value === this.$alpha) {
+                    return;
+                }
+                this.$alpha = value;
+                this.$propagateFlagsDown(64 /* InvalidConcatenatedAlpha */);
+                this.$invalidate(true);
+            }
+        );
+        /**
+         * @private
+         * 获取这个显示对象跟它所有父级透明度的乘积
+         */
+        p.$getConcatenatedAlpha = function () {
+            if (this.$hasFlags(64 /* InvalidConcatenatedAlpha */)) {
+                if (this.$parent) {
+                    var parentAlpha = this.$parent.$getConcatenatedAlpha();
+                    this.$renderAlpha = parentAlpha * this.$alpha;
+                }
+                else {
+                    this.$renderAlpha = this.$alpha;
+                }
+                this.$removeFlags(64 /* InvalidConcatenatedAlpha */);
+            }
+            return this.$renderAlpha;
+        };
+        d(p, "touchEnabled",
+            /**
+             * @language en_US
+             * Specifies whether this object receives touch or other user input. The default value is true, which means that
+             * by default any DisplayObject instance that is on the display list receives touch events. If touchEnabled is
+             * set to false, the instance does not receive any touch events (or other user input events). Any children of
+             * this instance on the display list are not affected. To change the touchEnabled behavior for all children of
+             * an object on the display list, use DisplayObjectContainer.touchChildren.
+             * @see lark.DisplayObjectContainer#touchChildren
+             * @default true
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 指定此对象是否接收触摸或其他用户输入。默认值为 true，这表示默认情况下，显示列表上的任何 isplayObject 实例都会接收触摸事件或
+             * 其他用户输入事件。如果将 touchEnabled 设置为 false，则实例将不接收任何触摸事件（或其他用户输入事件）。显示列表上的该实例的任
+             * 何子级都不会受到影响。要更改显示列表上对象的所有子级的 touchEnabled 行为，请使用 DisplayObjectContainer.touchChildren。
+             * @see lark.DisplayObjectContainer#touchChildren
+             * @default true
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$touchEnabled;
+            },
+            function (value) {
+                this.$setTouchEnabled(!!value);
+            }
+        );
+        /**
+         * @private
+         */
+        p.$setTouchEnabled = function (value) {
+            this.$touchEnabled = value;
+        };
+        d(p, "scrollRect",
+            /**
+             * @language en_US
+             * The scroll rectangle bounds of the display object. The display object is cropped to the size defined by the rectangle,
+             * and it scrolls within the rectangle when you change the x and y properties of the scrollRect object. A scrolled display
+             * object always scrolls in whole pixel increments.You can scroll an object left and right by setting the x property of
+             * the scrollRect Rectangle object. You can scroll an object up and down by setting the y property of the scrollRect
+             * Rectangle object. If the display object is rotated 90° and you scroll it left and right, the display object actually
+             * scrolls up and down.<br/>
+             *
+             * Note: to change the value of a display object's scrollRect, you must make a copy of the entire scrollRect object, then copy
+             * the new object into the scrollRect property of the display object.
+             * @example the following code increases the x value of a display object's scrollRect
+             * <pre>
+             *     var myRectangle:Rectangle = myDisplayObject.scrollRect;
+             *     myRectangle.x += 10;
+             *     myDisplayObject.scrollRect = myRectangle;
+             * </pre>
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 显示对象的滚动矩形范围。显示对象被裁切为矩形定义的大小，当您更改 scrollRect 对象的 x 和 y 属性时，它会在矩形内滚动。
+             * 滚动的显示对象始终以整像素为增量进行滚动。您可以通过设置 scrollRect Rectangle 对象的 x 属性来左右滚动对象， 还可以通过设置
+             * scrollRect 对象的 y 属性来上下滚动对象。如果显示对象旋转了 90 度，并且您左右滚动它，则实际上显示对象会上下滚动。<br/>
+             *
+             * 注意：要改变一个显示对象 scrollRect 属性的值，您必引用整个 scrollRect 对象，然后将它重新赋值给显示对象的 scrollRect 属性。
+             * @example 以下代码改变了显示对象 scrollRect 的 x 属性值：
+             * <pre>
+             *     var myRectangle:Rectangle = myDisplayObject.scrollRect;
+             *     myRectangle.x += 10;
+             *     myDisplayObject.scrollRect = myRectangle;
+             * </pre>
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$scrollRect;
+            },
+            function (value) {
+                if (!value && !this.$scrollRect) {
+                    return;
+                }
+                if (value) {
+                    if (!this.$scrollRect) {
+                        this.$scrollRect = new lark.Rectangle();
+                    }
+                    this.$scrollRect.copyFrom(value);
+                }
+                else {
+                    this.$scrollRect = null;
+                }
+                this.invalidatePosition();
+            }
+        );
+        d(p, "blendMode",
+            /**
+             * @language en_US
+             * A value from the BlendMode class that specifies which blend mode to use. Determine how a source image (new one)
+             * is drawn on the target image (old one).<br/>
+             * If you attempt to set this property to an invalid value, Lark runtime set the value to BlendMode.NORMAL.
+             * @default lark.BlendMode.NORMAL
+             * @see lark.BlendMode
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * BlendMode 枚举中的一个值，用于指定要使用的混合模式，确定如何将一个源（新的）图像绘制到目标（已有）的图像上<br/>
+             * 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
+             * @default lark.BlendMode.NORMAL
+             * @see lark.BlendMode
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return lark.sys.numberToBlendMode(this.$blendMode);
+            },
+            function (value) {
+                var mode = lark.sys.blendModeToNumber(value);
+                if (mode === this.$blendMode) {
+                    return;
+                }
+                this.$blendMode = mode;
+                this.$invalidateTransform();
+            }
+        );
+        d(p, "mask",
+            /**
+             * @language en_US
+             * The calling display object is masked by the specified mask object. To ensure that masking works when the Stage
+             * is scaled, the mask display object must be in an active part of the display list. The mask object itself is not drawn.
+             * Set mask to null to remove the mask. To be able to scale a mask object, it must be on the display list. To be
+             * able to drag a mask Sprite object , it must be on the display list.<br/>
+             * Note: A single mask object cannot be used to mask more than one calling display object. When the mask is assigned
+             * to a second display object, it is removed as the mask of the first object, and that object's mask property becomes null.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 调用显示对象被指定的 mask 对象遮罩。要确保当舞台缩放时蒙版仍然有效，mask 显示对象必须处于显示列表的活动部分。
+             * 但不绘制 mask 对象本身。将 mask 设置为 null 可删除蒙版。要能够缩放遮罩对象，它必须在显示列表中。要能够拖动蒙版
+             * Sprite 对象，它必须在显示列表中。<br/>
+             * 注意：单个 mask 对象不能用于遮罩多个执行调用的显示对象。在将 mask 分配给第二个显示对象时，会撤消其作为第一个对象的遮罩，
+             * 该对象的 mask 属性将变为 null。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$mask;
+            },
+            function (value) {
+                if (value === this.$mask || value === this) {
+                    return;
+                }
+                if (value) {
+                    if (value.$maskedObject) {
+                        value.$maskedObject.mask = null;
+                    }
+                    value.$maskedObject = this;
+                }
+                this.$mask = value;
+                this.$invalidateTransform();
+            }
+        );
+        /**
+         * @language en_US
+         * Returns a rectangle that defines the area of the display object relative to the coordinate system of the targetCoordinateSpace object.
+         * @param targetCoordinateSpace The display object that defines the coordinate system to use.
+         * @param resultRect A reusable instance of Rectangle for saving the results. Passing this parameter can reduce the number of reallocate objects
+         *, which allows you to get better code execution performance..
+         * @returns The rectangle that defines the area of the display object relative to the targetCoordinateSpace object's coordinate system.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回一个矩形，该矩形定义相对于 targetCoordinateSpace 对象坐标系的显示对象区域。
+         * @param targetCoordinateSpace 定义要使用的坐标系的显示对象。
+         * @param resultRect 一个用于存储结果的可复用Rectangle实例，传入此参数能够减少内部创建对象的次数，从而获得更高的运行性能。
+         * @returns 定义与 targetCoordinateSpace 对象坐标系统相关的显示对象面积的矩形。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.getBounds = function (targetCoordinateSpace, resultRect) {
+            targetCoordinateSpace = targetCoordinateSpace || this;
+            return this.$getTransformedBounds(targetCoordinateSpace, resultRect);
         };
         /**
          * @private
          */
-        p.$render = function (context) {
-            this.$graphics.$render(context);
+        p.$getTransformedBounds = function (targetCoordinateSpace, resultRect) {
+            var bounds = this.$getOriginalBounds();
+            if (!resultRect) {
+                resultRect = new lark.Rectangle();
+            }
+            resultRect.copyFrom(bounds);
+            if (targetCoordinateSpace === this || resultRect.isEmpty()) {
+                return resultRect;
+            }
+            var m;
+            if (targetCoordinateSpace) {
+                m = lark.$TempMatrix;
+                var invertedTargetMatrix = targetCoordinateSpace.$getInvertedConcatenatedMatrix();
+                invertedTargetMatrix.$preMultiplyInto(this.$getConcatenatedMatrix(), m);
+            }
+            else {
+                m = this.$getConcatenatedMatrix();
+            }
+            m.$transformBounds(resultRect);
+            return resultRect;
         };
-        return Shape;
-    })(lark.DisplayObject);
-    lark.Shape = Shape;
-    lark.registerClass(Shape,"lark.Shape");
+        /**
+         * @language en_US
+         * Converts the point object from the Stage (global) coordinates to the display object's (local) coordinates.
+         * @param stageX the x value in the global coordinates
+         * @param stageY the y value in the global coordinates
+         * @param resultPoint A reusable instance of Point for saving the results. Passing this parameter can reduce the
+         * number of reallocate objects, which allows you to get better code execution performance.
+         * @returns A Point object with coordinates relative to the display object.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将从舞台（全局）坐标转换为显示对象的（本地）坐标。
+         * @param stageX 舞台坐标x
+         * @param stageY 舞台坐标y
+         * @param resultPoint 一个用于存储结果的可复用 Point 实例，传入此参数能够减少内部创建对象的次数，从而获得更高的运行性能。
+         * @returns 具有相对于显示对象的坐标的 Point 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.globalToLocal = function (stageX, stageY, resultPoint) {
+            var m = this.$getInvertedConcatenatedMatrix();
+            return m.transformPoint(stageX, stageY, resultPoint);
+        };
+        /**
+         * @language en_US
+         * Converts the point object from the display object's (local) coordinates to the Stage (global) coordinates.
+         * @param localX the x value in the local coordinates
+         * @param localY the x value in the local coordinates
+         * @param resultPoint A reusable instance of Point for saving the results. Passing this parameter can reduce the
+         * number of reallocate objects, which allows you to get better code execution performance.
+         * @returns  A Point object with coordinates relative to the Stage.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将显示对象的（本地）坐标转换为舞台（全局）坐标。
+         * @param localX 本地坐标 x
+         * @param localY 本地坐标 y
+         * @param resultPoint 一个用于存储结果的可复用 Point 实例，传入此参数能够减少内部创建对象的次数，从而获得更高的运行性能。
+         * @returns 一个具有相对于舞台坐标的 Point 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.localToGlobal = function (localX, localY, resultPoint) {
+            var m = this.$getConcatenatedMatrix();
+            return m.transformPoint(localX, localY, resultPoint);
+        };
+        /**
+         * @private
+         * 标记自身的测量尺寸失效
+         */
+        p.$invalidateContentBounds = function () {
+            this.$invalidate();
+            this.$setFlags(2 /* InvalidContentBounds */);
+            this.$propagateFlagsUp(4 /* InvalidBounds */);
+        };
+        /**
+         * @private
+         * 获取显示对象占用的矩形区域集合，通常包括自身绘制的测量区域，如果是容器，还包括所有子项占据的区域。
+         */
+        p.$getOriginalBounds = function () {
+            var bounds = this.$DisplayObject[9 /* bounds */];
+            if (this.$hasFlags(4 /* InvalidBounds */)) {
+                bounds.copyFrom(this.$getContentBounds());
+                this.$measureChildBounds(bounds);
+                this.$removeFlags(4 /* InvalidBounds */);
+                if (this.$displayList) {
+                    this.$displayList.$renderRegion.moved = true;
+                }
+            }
+            return bounds;
+        };
+        /**
+         * @private
+         * 测量子项占用的矩形区域
+         * 注意：此方法在渲染过程中调用，整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
+         * @param bounds 测量结果存储在这个矩形对象内
+         */
+        p.$measureChildBounds = function (bounds) {
+        };
+        /**
+         * @private
+         */
+        p.$getContentBounds = function () {
+            var bounds = this.$DisplayObject[10 /* contentBounds */];
+            if (this.$hasFlags(2 /* InvalidContentBounds */)) {
+                this.$measureContentBounds(bounds);
+                if (this.$renderRegion) {
+                    this.$renderRegion.moved = true;
+                }
+                this.$removeFlags(2 /* InvalidContentBounds */);
+            }
+            return bounds;
+        };
+        /**
+         * @private
+         * 测量自身占用的矩形区域，注意：此测量结果并不包括子项占据的区域。
+         * 注意：此方法在渲染过程中调用，整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
+         * @param bounds 测量结果存储在这个矩形对象内
+         */
+        p.$measureContentBounds = function (bounds) {
+        };
+        /**
+         * @private
+         * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
+         * @param notiryChildren 是否标记子项也需要重绘。传入false或不传入，将只标记自身需要重绘。通常只有alpha属性改变会需要通知子项重绘。
+         */
+        p.$invalidate = function (notifyChildren) {
+            if (!this.$renderRegion || this.$hasFlags(256 /* DirtyRender */)) {
+                return;
+            }
+            this.$setFlags(256 /* DirtyRender */);
+            var displayList = this.$displayList ? this.$displayList : this.$parentDisplayList;
+            if (displayList) {
+                displayList.markDirty(this);
+            }
+        };
+        /**
+         * @private
+         * 标记自身以及所有子项在父级中变换叠加的显示内容失效。此方法不会触发自身的cacheAsBitmap重绘。
+         * 通常用于矩阵改变或从显示列表添加和移除时。若自身的显示内容已经改变需要重绘，应该调用$invalidate()。
+         */
+        p.$invalidateTransform = function () {
+            if (this.$hasFlags(512 /* DirtyChildren */)) {
+                return;
+            }
+            this.$setFlags(512 /* DirtyChildren */);
+            var displayList = this.$displayList;
+            if ((displayList || this.$renderRegion) && this.$parentDisplayList) {
+                this.$parentDisplayList.markDirty(displayList || this);
+            }
+        };
+        /**
+         * @private
+         * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
+         * 注意：此方法在渲染过程中调用，整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
+         */
+        p.$update = function () {
+            this.$removeFlagsUp(768 /* Dirty */);
+            this.$getConcatenatedAlpha();
+            //必须在访问moved属性前调用以下两个方法，因为moved属性在以下两个方法内重置。
+            var concatenatedMatrix = this.$getConcatenatedMatrix();
+            var bounds = this.$getContentBounds();
+            var displayList = this.$displayList || this.$parentDisplayList;
+            var region = this.$renderRegion;
+            if (!displayList) {
+                region.setTo(0, 0, 0, 0);
+                region.moved = false;
+                return false;
+            }
+            if (!region.moved) {
+                return false;
+            }
+            region.moved = false;
+            var matrix = this.$renderMatrix;
+            matrix.copyFrom(concatenatedMatrix);
+            var root = displayList.root;
+            if (root !== this.$stage) {
+                root.$getInvertedConcatenatedMatrix().$preMultiplyInto(matrix, matrix);
+            }
+            region.updateRegion(bounds, matrix);
+            return true;
+        };
+        /**
+         * @private
+         * 执行渲染,绘制自身到屏幕。
+         * 注意：此方法在渲染过程中调用，整个渲染过程中显示列表应该保持静止，要防止用户代码在渲染过程中对显示列表进行修改，渲染阶段不能抛出任何事件或执行任何回调函数。
+         */
+        p.$render = function (context) {
+        };
+        /**
+         * @private
+         */
+        p.$hitTest = function (stageX, stageY) {
+            if (!this.$renderRegion || !this.$visible) {
+                return null;
+            }
+            var m = this.$getInvertedConcatenatedMatrix();
+            var bounds = this.$getContentBounds();
+            var localX = m.a * stageX + m.c * stageY + m.tx;
+            var localY = m.b * stageX + m.d * stageY + m.ty;
+            if (bounds.contains(localX, localY)) {
+                if (!this.$children) {
+                    if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
+                        return null;
+                    }
+                    if (this.$mask && !this.$mask.$hitTest(stageX, stageY)) {
+                        return null;
+                    }
+                }
+                return this;
+            }
+            return null;
+        };
+        /**
+         * @private
+         */
+        p.$addListener = function (type, listener, thisObject, useCapture, priority, emitOnce) {
+            _super.prototype.$addListener.call(this, type, listener, thisObject, useCapture, priority, emitOnce);
+            var isEnterFrame = (type == lark.Event.ENTER_FRAME);
+            if (isEnterFrame || type == lark.Event.RENDER) {
+                var list = isEnterFrame ? DisplayObject.$enterFrameCallBackList : DisplayObject.$renderCallBackList;
+                if (list.indexOf(this) == -1) {
+                    list.push(this);
+                }
+            }
+        };
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.removeListener = function (type, listener, thisObject, useCapture) {
+            _super.prototype.removeListener.call(this, type, listener, thisObject, useCapture);
+            var isEnterFrame = (type == lark.Event.ENTER_FRAME);
+            if ((isEnterFrame || type == lark.Event.RENDER) && !this.hasListener(type)) {
+                var list = isEnterFrame ? DisplayObject.$enterFrameCallBackList : DisplayObject.$renderCallBackList;
+                var index = list.indexOf(this);
+                if (index !== -1) {
+                    list.splice(index, 1);
+                }
+            }
+        };
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.emit = function (event) {
+            if (!event.$bubbles) {
+                return _super.prototype.emit.call(this, event);
+            }
+            var list = this.$getPropagationList(this);
+            var targetIndex = list.length * 0.5;
+            event.$target = this;
+            this.$emitPropagationEvent(event, list, targetIndex);
+            return !event.$isDefaultPrevented;
+        };
+        /**
+         * @private
+         * 获取事件流列表。注意：Lark框架的事件流与Flash实现并不一致。
+         *
+         * 事件流有三个阶段：捕获，目标，冒泡。
+         * Flash里默认的的事件监听若不开启useCapture将监听目标和冒泡阶段。若开始capture将只能监听捕获当不包括目标的事件。
+         * 可以在Flash中写一个简单的测试：实例化一个非容器显示对象，例如TextField。分别监听useCapture为true和false时的鼠标事件。
+         * 点击后将只有useCapture为false的回调函数输出信息。也就带来一个问题「Flash的捕获阶段不能监听到最内层对象本身，只在父级列表有效」。
+         *
+         * 而HTML里的事件流设置useCapture为true时是能监听到目标阶段的，也就是目标阶段会被触发两次，在捕获和冒泡过程各触发一次。这样可以避免
+         * 前面提到的监听捕获无法监听目标本身的问题。
+         *
+         * Lark最终采用了HTML里目标节点触发两次的事件流方式。
+         */
+        p.$getPropagationList = function (target) {
+            var list = [];
+            while (target) {
+                list.push(target);
+                target = target.$parent;
+            }
+            var captureList = list.concat();
+            captureList.reverse(); //使用一次reverse()方法比多次调用unshift()性能高。
+            list = captureList.concat(list);
+            return list;
+        };
+        /**
+         * @private
+         */
+        p.$emitPropagationEvent = function (event, list, targetIndex) {
+            var length = list.length;
+            var captureIndex = targetIndex - 1;
+            for (var i = 0; i < length; i++) {
+                var currentTarget = list[i];
+                event.$currentTarget = currentTarget;
+                if (i < captureIndex)
+                    event.$eventPhase = 1 /* CAPTURING_PHASE */;
+                else if (i == targetIndex || i == captureIndex)
+                    event.$eventPhase = 2 /* AT_TARGET */;
+                else
+                    event.$eventPhase = 3 /* BUBBLING_PHASE */;
+                currentTarget.$notifyListener(event, i < targetIndex);
+                if (event.$isPropagationStopped || event.$isPropagationImmediateStopped) {
+                    return;
+                }
+            }
+        };
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.willTrigger = function (type) {
+            var parent = this;
+            while (parent) {
+                if (parent.hasListener(type))
+                    return true;
+                parent = parent.$parent;
+            }
+            return false;
+        };
+        /**
+         * @private
+         */
+        DisplayObject.$enterFrameCallBackList = [];
+        /**
+         * @private
+         */
+        DisplayObject.$renderCallBackList = [];
+        return DisplayObject;
+    })(lark.EventEmitter);
+    lark.DisplayObject = DisplayObject;
+    lark.registerClass(DisplayObject,"lark.DisplayObject",["lark.sys.Renderable"]);
     if (DEBUG) {
-        lark.$markReadOnly(Shape.prototype, "graphics");
+        lark.$markReadOnly(DisplayObject, "parent");
+        lark.$markReadOnly(DisplayObject, "stage");
     }
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -9245,6 +9270,7 @@ var lark;
              * @private
              */
             this.$smoothing = true;
+            this._pixelHitTest = false;
             this.$renderRegion = new lark.sys.Region();
             this.bitmapData = bitmapData;
         }
@@ -9306,6 +9332,62 @@ var lark;
                 this.$invalidate();
             }
         );
+        d(p, "pixelHitTest",
+            /**
+             * @language en_US
+             * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
+             * is set to true,the transparent area of the bitmap will be touched through.
+             * @default false
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透。
+             * @default false
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this._pixelHitTest;
+            },
+            function (value) {
+                this._pixelHitTest = !!value;
+            }
+        );
+        p.$hitTest = function (stageX, stageY) {
+            var target = _super.prototype.$hitTest.call(this, stageX, stageY);
+            if (target && this._pixelHitTest) {
+                target = this.hitTestPixel(stageX, stageY);
+            }
+            return target;
+        };
+        /**
+         * @private
+         */
+        p.hitTestPixel = function (stageX, stageY) {
+            var m = this.$getInvertedConcatenatedMatrix();
+            var localX = m.a * stageX + m.c * stageY + m.tx;
+            var localY = m.b * stageX + m.d * stageY + m.ty;
+            var context;
+            var data;
+            var displayList = this.$displayList;
+            if (displayList) {
+                context = displayList.renderContext;
+                data = context.getImageData(localX - displayList.offsetX, localY - displayList.offsetY, 1, 1).data;
+            }
+            else {
+                context = lark.sys.sharedRenderContext;
+                context.surface.width = context.surface.height = 3;
+                context.translate(1 - localX, 1 - localY);
+                this.$render(context);
+                data = context.getImageData(1, 1, 1, 1).data;
+            }
+            if (data[3] === 0) {
+                return null;
+            }
+            return this;
+        };
         /**
          * @private
          */
@@ -9332,6 +9414,709 @@ var lark;
     })(lark.DisplayObject);
     lark.Bitmap = Bitmap;
     lark.registerClass(Bitmap,"lark.Bitmap");
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
+     * This class is used to create lightweight shapes using the drawing application program interface (API). The Shape
+     * class includes a graphics property, which lets you access methods from the Graphics class.
+     * @see lark.Graphics
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 此类用于使用绘图应用程序编程接口 (API) 创建简单形状。Shape 类含有 graphics 属性，通过该属性您可以访问各种矢量绘图方法。
+     * @see lark.Graphics
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var Shape = (function (_super) {
+        __extends(Shape, _super);
+        /**
+         * @language en_US
+         * Creates a new Shape object.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 Shape 对象
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function Shape() {
+            _super.call(this);
+            this.$graphics = new lark.Graphics();
+            this.$graphics.$targetDisplay = this;
+            this.$renderRegion = new lark.sys.Region();
+        }
+        var d = __define,c=Shape;p=c.prototype;
+        d(p, "graphics",
+            /**
+             * @language en_US
+             * Specifies the Graphics object belonging to this Shape object, where vector drawing commands can occur.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             *  获取 Shape 中的 Graphics 对象。可通过此对象执行矢量绘图命令。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$graphics;
+            },undefined
+        );
+        p.$hitTest = function (stageX, stageY) {
+            var target = _super.prototype.$hitTest.call(this, stageX, stageY);
+            if (target) {
+                target = this.$graphics.$hitTest(stageX, stageY);
+            }
+            return target;
+        };
+        /**
+         * @private
+         */
+        p.$measureContentBounds = function (bounds) {
+            this.$graphics.$measureContentBounds(bounds);
+        };
+        /**
+         * @private
+         */
+        p.$render = function (context) {
+            this.$graphics.$render(context, false);
+        };
+        return Shape;
+    })(lark.DisplayObject);
+    lark.Shape = Shape;
+    lark.registerClass(Shape,"lark.Shape");
+    if (DEBUG) {
+        lark.$markReadOnly(Shape, "graphics");
+    }
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
+     * The Sprite class is a basic display list building block: a display list node that can contain children.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var Sprite = (function (_super) {
+        __extends(Sprite, _super);
+        /**
+         * @language en_US
+         * Creates a new Sprite instance.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 实例化一个容器
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function Sprite() {
+            _super.call(this);
+            this.$touchChildren = true;
+            this.$children = [];
+        }
+        var d = __define,c=Sprite;p=c.prototype;
+        /**
+         * @private
+         */
+        p.$propagateFlagsDown = function (flags) {
+            if (this.$hasFlags(flags)) {
+                return;
+            }
+            this.$setFlags(flags);
+            var children = this.$children;
+            for (var i = 0; i < children.length; i++) {
+                children[i].$propagateFlagsDown(flags);
+            }
+        };
+        d(p, "numChildren",
+            /**
+             * @inheritDoc
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$children.length;
+            },undefined
+        );
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.addChild = function (child) {
+            var index = this.$children.length;
+            if (child.$parent == this)
+                index--;
+            return this.doAddChild(child, index);
+        };
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.addChildAt = function (child, index) {
+            index = +index | 0;
+            if (index < 0 || index >= this.$children.length) {
+                index = this.$children.length;
+                if (child.$parent === this) {
+                    index--;
+                }
+            }
+            return this.doAddChild(child, index);
+        };
+        /**
+         * @private
+         */
+        p.doAddChild = function (child, index) {
+            if (DEBUG) {
+                if (child == this) {
+                    lark.$error(1005);
+                }
+                else if (lark.is(child, "lark.DisplayObjectContainer") && child.contains(this)) {
+                    lark.$error(1004);
+                }
+            }
+            var host = child.$parent;
+            if (host == this) {
+                this.doSetChildIndex(child, index);
+                return child;
+            }
+            if (host) {
+                host.removeChild(child);
+            }
+            this.$children.splice(index, 0, child);
+            child.$setParent(this);
+            var stage = this.$stage;
+            if (stage) {
+                child.$onAddToStage(stage, this.$nestLevel + 1);
+            }
+            child.emitWith(lark.Event.ADDED, true);
+            if (stage) {
+                var list = Sprite.$EVENT_ADD_TO_STAGE_LIST;
+                while (list.length) {
+                    var childAddToStage = list.shift();
+                    if (childAddToStage.$stage) {
+                        childAddToStage.emitWith(lark.Event.ADDED_TO_STAGE);
+                    }
+                }
+            }
+            var displayList = this.$displayList || this.$parentDisplayList;
+            this.assignParentDisplayList(child, displayList, displayList);
+            child.$propagateFlagsDown(624 /* DownOnAddedOrRemoved */);
+            this.$propagateFlagsUp(4 /* InvalidBounds */);
+            this.$childAdded(child, index);
+            return child;
+        };
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.contains = function (child) {
+            while (child) {
+                if (child == this) {
+                    return true;
+                }
+                child = child.$parent;
+            }
+            return false;
+        };
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.getChildAt = function (index) {
+            index = +index | 0;
+            if (index >= 0 && index < this.$children.length) {
+                return this.$children[index];
+            }
+            else {
+                DEBUG && lark.$error(1007);
+                return null;
+            }
+        };
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.getChildIndex = function (child) {
+            return this.$children.indexOf(child);
+        };
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.getChildByName = function (name) {
+            var children = this.$children;
+            var length = children.length;
+            var displayObject;
+            for (var i = 0; i < length; i++) {
+                displayObject = children[i];
+                if (displayObject.name == name) {
+                    return displayObject;
+                }
+            }
+            return null;
+        };
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.removeChild = function (child) {
+            var index = this.$children.indexOf(child);
+            if (index >= 0) {
+                return this.doRemoveChild(index);
+            }
+            else {
+                DEBUG && lark.$error(1006);
+                return null;
+            }
+        };
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.removeChildAt = function (index) {
+            index = +index | 0;
+            if (index >= 0 && index < this.$children.length) {
+                return this.doRemoveChild(index);
+            }
+            else {
+                DEBUG && lark.$error(1007);
+                return null;
+            }
+        };
+        /**
+         * @private
+         */
+        p.doRemoveChild = function (index) {
+            index = +index | 0;
+            var children = this.$children;
+            var child = children[index];
+            this.$childRemoved(child, index);
+            child.emitWith(lark.Event.REMOVED, true);
+            if (this.$stage) {
+                child.$onRemoveFromStage();
+                var list = Sprite.$EVENT_REMOVE_FROM_STAGE_LIST;
+                while (list.length > 0) {
+                    var childAddToStage = list.shift();
+                    childAddToStage.emitWith(lark.Event.REMOVED_FROM_STAGE);
+                    childAddToStage.$stage = null;
+                }
+            }
+            var displayList = this.$displayList || this.$parentDisplayList;
+            this.assignParentDisplayList(child, displayList, null);
+            child.$propagateFlagsDown(624 /* DownOnAddedOrRemoved */);
+            child.$setParent(null);
+            children.splice(index, 1);
+            this.$propagateFlagsUp(4 /* InvalidBounds */);
+            return child;
+        };
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.setChildIndex = function (child, index) {
+            index = +index | 0;
+            if (index < 0 || index >= this.$children.length) {
+                index = this.$children.length - 1;
+            }
+            this.doSetChildIndex(child, index);
+        };
+        /**
+         * @private
+         */
+        p.doSetChildIndex = function (child, index) {
+            var lastIndex = this.$children.indexOf(child);
+            if (lastIndex < 0) {
+                DEBUG && lark.$error(1006);
+            }
+            if (lastIndex == index) {
+                return;
+            }
+            this.$childRemoved(child, lastIndex);
+            //从原来的位置删除
+            this.$children.splice(lastIndex, 1);
+            //放到新的位置
+            this.$children.splice(index, 0, child);
+            this.$childAdded(child, index);
+            child.$invalidateTransform();
+            this.$propagateFlagsUp(4 /* InvalidBounds */);
+        };
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.swapChildrenAt = function (index1, index2) {
+            index1 = +index1 | 0;
+            index2 = +index2 | 0;
+            if (index1 >= 0 && index1 < this.$children.length && index2 >= 0 && index2 < this.$children.length) {
+                this.doSwapChildrenAt(index1, index2);
+            }
+            else {
+                DEBUG && lark.$error(1007);
+            }
+        };
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.swapChildren = function (child1, child2) {
+            var index1 = this.$children.indexOf(child1);
+            var index2 = this.$children.indexOf(child2);
+            if (index1 == -1 || index2 == -1) {
+                DEBUG && lark.$error(1006);
+            }
+            else {
+                this.doSwapChildrenAt(index1, index2);
+            }
+        };
+        /**
+         * @private
+         */
+        p.doSwapChildrenAt = function (index1, index2) {
+            if (index1 > index2) {
+                var temp = index2;
+                index2 = index1;
+                index1 = temp;
+            }
+            else if (index1 === index2) {
+                return;
+            }
+            var list = this.$children;
+            var child1 = list[index1];
+            var child2 = list[index2];
+            this.$childRemoved(child1, index1);
+            this.$childRemoved(child2, index2);
+            list[index1] = child2;
+            list[index2] = child1;
+            this.$childAdded(child2, index1);
+            this.$childAdded(child1, index2);
+            child1.$invalidateTransform();
+            child2.$invalidateTransform();
+            this.$propagateFlagsUp(4 /* InvalidBounds */);
+        };
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.removeChildren = function () {
+            var children = this.$children;
+            for (var i = children.length - 1; i >= 0; i--) {
+                this.doRemoveChild(i);
+            }
+        };
+        /**
+         * @private
+         * 一个子项被添加到容器内，此方法不仅在操作addChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
+         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
+         */
+        p.$childAdded = function (child, index) {
+        };
+        /**
+         * @private
+         * 一个子项从容器内移除，此方法不仅在操作removeChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
+         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
+         */
+        p.$childRemoved = function (child, index) {
+        };
+        /**
+         * @private
+         */
+        p.$onAddToStage = function (stage, nestLevel) {
+            _super.prototype.$onAddToStage.call(this, stage, nestLevel);
+            var children = this.$children;
+            var length = children.length;
+            nestLevel++;
+            for (var i = 0; i < length; i++) {
+                var child = this.$children[i];
+                child.$onAddToStage(stage, nestLevel);
+            }
+        };
+        /**
+         * @private
+         *
+         */
+        p.$onRemoveFromStage = function () {
+            _super.prototype.$onRemoveFromStage.call(this);
+            var children = this.$children;
+            var length = children.length;
+            for (var i = 0; i < length; i++) {
+                var child = children[i];
+                child.$onRemoveFromStage();
+            }
+        };
+        /**
+         * @private
+         */
+        p.$measureChildBounds = function (bounds) {
+            var children = this.$children;
+            var length = children.length;
+            if (length === 0) {
+                return;
+            }
+            var xMin = 0, xMax = 0, yMin = 0, yMax = 0;
+            var found = false;
+            for (var i = -1; i < length; i++) {
+                var childBounds = i === -1 ? bounds : children[i].$getTransformedBounds(this, lark.$TempRectangle);
+                if (childBounds.isEmpty()) {
+                    continue;
+                }
+                if (found) {
+                    xMin = Math.min(xMin, childBounds.x);
+                    xMax = Math.max(xMax, childBounds.x + childBounds.width);
+                    yMin = Math.min(yMin, childBounds.y);
+                    yMax = Math.max(yMax, childBounds.y + childBounds.height);
+                }
+                else {
+                    found = true;
+                    xMin = childBounds.x;
+                    xMax = xMin + childBounds.width;
+                    yMin = childBounds.y;
+                    yMax = yMin + childBounds.height;
+                }
+            }
+            bounds.setTo(xMin, yMin, xMax - xMin, yMax - yMin);
+        };
+        d(p, "touchChildren",
+            /**
+             * @inheritDoc
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            function () {
+                return this.$touchChildren;
+            },
+            function (value) {
+                this.$setTouchChildren(!!value);
+            }
+        );
+        /**
+         * @private
+         */
+        p.$setTouchChildren = function (value) {
+            this.$touchChildren = value;
+        };
+        /**
+         * @private
+         * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
+         * @param notiryChildren 是否标记子项也需要重绘。传入false或不传入，将只标记自身需要重绘。通常只有alpha属性改变会需要通知子项重绘。
+         */
+        p.$invalidate = function (notifyChildren) {
+            _super.prototype.$invalidate.call(this, notifyChildren);
+            if (!notifyChildren) {
+                return;
+            }
+            var cacheRoot = this.$displayList || this.$parentDisplayList;
+            var children = this.$children;
+            if (children) {
+                for (var i = children.length - 1; i >= 0; i--) {
+                    this.markChildDirty(children[i], cacheRoot);
+                }
+            }
+        };
+        /**
+         * @private
+         * 标记自身以及所有子项在父级中变换叠加的显示内容失效。此方法不会触发自身的cacheAsBitmap重绘。
+         * 通常用于矩阵改变或从显示列表添加和移除时。若自身的显示内容已经改变需要重绘，应该调用$invalidate()。
+         */
+        p.$invalidateTransform = function () {
+            this.markChildDirty(this, this.$parentDisplayList);
+        };
+        /**
+         * @private
+         */
+        p.markChildDirty = function (child, parentCache) {
+            if (child.$hasFlags(512 /* DirtyChildren */)) {
+                return;
+            }
+            child.$setFlags(512 /* DirtyChildren */);
+            var displayList = child.$displayList;
+            if ((displayList || child.$renderRegion) && parentCache) {
+                parentCache.markDirty(displayList || child);
+            }
+            if (displayList) {
+                return;
+            }
+            var children = child.$children;
+            if (children) {
+                for (var i = children.length - 1; i >= 0; i--) {
+                    this.markChildDirty(children[i], parentCache);
+                }
+            }
+        };
+        /**
+         * @private
+         */
+        p.$cacheAsBitmapChanged = function () {
+            _super.prototype.$cacheAsBitmapChanged.call(this);
+            var cacheRoot = this.$displayList || this.$parentDisplayList;
+            var children = this.$children;
+            for (var i = children.length - 1; i >= 0; i--) {
+                this.assignParentDisplayList(children[i], cacheRoot, cacheRoot);
+            }
+        };
+        /**
+         * @private
+         */
+        p.assignParentDisplayList = function (child, parentCache, newParent) {
+            child.$parentDisplayList = newParent;
+            child.$setFlags(512 /* DirtyChildren */);
+            var displayList = child.$displayList;
+            if ((child.$renderRegion || displayList) && parentCache) {
+                parentCache.markDirty(displayList || child);
+            }
+            if (displayList) {
+                return;
+            }
+            var children = child.$children;
+            if (children) {
+                for (var i = children.length - 1; i >= 0; i--) {
+                    this.assignParentDisplayList(children[i], parentCache, newParent);
+                }
+            }
+        };
+        /**
+         * @private
+         */
+        p.$hitTest = function (stageX, stageY) {
+            if (!this.$visible) {
+                return null;
+            }
+            var m = this.$getInvertedConcatenatedMatrix();
+            var localX = m.a * stageX + m.c * stageY + m.tx;
+            var localY = m.b * stageX + m.d * stageY + m.ty;
+            if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
+                return null;
+            }
+            if (this.$mask && !this.$mask.$hitTest(stageX, stageY)) {
+                return null;
+            }
+            var children = this.$children;
+            var found = false;
+            for (var i = children.length - 1; i >= 0; i--) {
+                var child = children[i];
+                if (child.$maskedObject) {
+                    continue;
+                }
+                var target = child.$hitTest(stageX, stageY);
+                if (target) {
+                    found = true;
+                    if (target.$touchEnabled) {
+                        break;
+                    }
+                    else {
+                        target = null;
+                    }
+                }
+            }
+            if (target) {
+                if (this.$touchChildren) {
+                    return target;
+                }
+                return this;
+            }
+            if (found) {
+                return this;
+            }
+            return _super.prototype.$hitTest.call(this, stageX, stageY);
+        };
+        /**
+         * @private
+         */
+        Sprite.$EVENT_ADD_TO_STAGE_LIST = [];
+        /**
+         * @private
+         */
+        Sprite.$EVENT_REMOVE_FROM_STAGE_LIST = [];
+        return Sprite;
+    })(lark.DisplayObject);
+    lark.Sprite = Sprite;
+    lark.registerClass(Sprite,"lark.Sprite",["lark.DisplayObjectContainer"]);
+    if (DEBUG) {
+        lark.$markReadOnly(Sprite, "numChildren");
+    }
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -10107,603 +10892,11 @@ var lark;
         }
         sys.toColorString = toColorString;
         if (DEBUG) {
-            lark.$markReadOnly(lark.TextField.prototype, "numLines");
-            lark.$markReadOnly(lark.TextField.prototype, "textWidth");
-            lark.$markReadOnly(lark.TextField.prototype, "textHeight");
+            lark.$markReadOnly(lark.TextField, "numLines");
+            lark.$markReadOnly(lark.TextField, "textWidth");
+            lark.$markReadOnly(lark.TextField, "textHeight");
         }
     })(sys = lark.sys || (lark.sys = {}));
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @language en_US
-     * The Sprite class is a basic display list building block: a display list node that can contain children.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var Sprite = (function (_super) {
-        __extends(Sprite, _super);
-        /**
-         * @language en_US
-         * Creates a new Sprite instance.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 实例化一个容器
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        function Sprite() {
-            _super.call(this);
-            this.$children = [];
-        }
-        var d = __define,c=Sprite;p=c.prototype;
-        /**
-         * @private
-         */
-        p.$propagateFlagsDown = function (flags) {
-            if (this.$hasFlags(flags)) {
-                return;
-            }
-            this.$setFlags(flags);
-            var children = this.$children;
-            for (var i = 0; i < children.length; i++) {
-                children[i].$propagateFlagsDown(flags);
-            }
-        };
-        d(p, "numChildren",
-            /**
-             * @inheritDoc
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$children.length;
-            },undefined
-        );
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.addChild = function (child) {
-            var index = this.$children.length;
-            if (child.$parent == this)
-                index--;
-            return this.doAddChild(child, index);
-        };
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.addChildAt = function (child, index) {
-            index = +index | 0;
-            if (index < 0 || index >= this.$children.length) {
-                index = this.$children.length;
-                if (child.$parent === this) {
-                    index--;
-                }
-            }
-            return this.doAddChild(child, index);
-        };
-        /**
-         * @private
-         */
-        p.doAddChild = function (child, index) {
-            if (DEBUG) {
-                if (child == this) {
-                    lark.$error(1005);
-                }
-                else if (lark.is(child, "lark.DisplayObjectContainer") && child.contains(this)) {
-                    lark.$error(1004);
-                }
-            }
-            var host = child.$parent;
-            if (host == this) {
-                this.doSetChildIndex(child, index);
-                return child;
-            }
-            if (host) {
-                host.removeChild(child);
-            }
-            this.$children.splice(index, 0, child);
-            child.$setParent(this);
-            var stage = this.$stage;
-            if (stage) {
-                child.$onAddToStage(stage, this.$nestLevel + 1);
-            }
-            child.emitWith(lark.Event.ADDED, true);
-            if (stage) {
-                var list = Sprite.$EVENT_ADD_TO_STAGE_LIST;
-                while (list.length) {
-                    var childAddToStage = list.shift();
-                    if (childAddToStage.$stage) {
-                        childAddToStage.emitWith(lark.Event.ADDED_TO_STAGE);
-                    }
-                }
-            }
-            var displayList = this.$displayList || this.$parentDisplayList;
-            this.assignParentDisplayList(child, displayList, displayList);
-            child.$propagateFlagsDown(624 /* DownOnAddedOrRemoved */);
-            this.$propagateFlagsUp(4 /* InvalidBounds */);
-            this.$childAdded(child, index);
-            return child;
-        };
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.contains = function (child) {
-            while (child) {
-                if (child == this) {
-                    return true;
-                }
-                child = child.$parent;
-            }
-            return false;
-        };
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.getChildAt = function (index) {
-            index = +index | 0;
-            if (index >= 0 && index < this.$children.length) {
-                return this.$children[index];
-            }
-            else {
-                DEBUG && lark.$error(1007);
-                return null;
-            }
-        };
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.getChildIndex = function (child) {
-            return this.$children.indexOf(child);
-        };
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.getChildByName = function (name) {
-            var children = this.$children;
-            var length = children.length;
-            var displayObject;
-            for (var i = 0; i < length; i++) {
-                displayObject = children[i];
-                if (displayObject.name == name) {
-                    return displayObject;
-                }
-            }
-            return null;
-        };
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.removeChild = function (child) {
-            var index = this.$children.indexOf(child);
-            if (index >= 0) {
-                return this.doRemoveChild(index);
-            }
-            else {
-                DEBUG && lark.$error(1006);
-                return null;
-            }
-        };
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.removeChildAt = function (index) {
-            index = +index | 0;
-            if (index >= 0 && index < this.$children.length) {
-                return this.doRemoveChild(index);
-            }
-            else {
-                DEBUG && lark.$error(1007);
-                return null;
-            }
-        };
-        /**
-         * @private
-         */
-        p.doRemoveChild = function (index) {
-            index = +index | 0;
-            var children = this.$children;
-            var child = children[index];
-            this.$childRemoved(child, index);
-            child.emitWith(lark.Event.REMOVED, true);
-            if (this.$stage) {
-                child.$onRemoveFromStage();
-                var list = Sprite.$EVENT_REMOVE_FROM_STAGE_LIST;
-                while (list.length > 0) {
-                    var childAddToStage = list.shift();
-                    childAddToStage.emitWith(lark.Event.REMOVED_FROM_STAGE);
-                    childAddToStage.$stage = null;
-                }
-            }
-            var displayList = this.$displayList || this.$parentDisplayList;
-            this.assignParentDisplayList(child, displayList, null);
-            child.$propagateFlagsDown(624 /* DownOnAddedOrRemoved */);
-            child.$setParent(null);
-            children.splice(index, 1);
-            this.$propagateFlagsUp(4 /* InvalidBounds */);
-            return child;
-        };
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.setChildIndex = function (child, index) {
-            index = +index | 0;
-            if (index < 0 || index >= this.$children.length) {
-                index = this.$children.length - 1;
-            }
-            this.doSetChildIndex(child, index);
-        };
-        /**
-         * @private
-         */
-        p.doSetChildIndex = function (child, index) {
-            var lastIndex = this.$children.indexOf(child);
-            if (lastIndex < 0) {
-                DEBUG && lark.$error(1006);
-            }
-            if (lastIndex == index) {
-                return;
-            }
-            this.$childRemoved(child, lastIndex);
-            //从原来的位置删除
-            this.$children.splice(lastIndex, 1);
-            //放到新的位置
-            this.$children.splice(index, 0, child);
-            this.$childAdded(child, index);
-            child.$invalidateTransform();
-            this.$propagateFlagsUp(4 /* InvalidBounds */);
-        };
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.swapChildrenAt = function (index1, index2) {
-            index1 = +index1 | 0;
-            index2 = +index2 | 0;
-            if (index1 >= 0 && index1 < this.$children.length && index2 >= 0 && index2 < this.$children.length) {
-                this.doSwapChildrenAt(index1, index2);
-            }
-            else {
-                DEBUG && lark.$error(1007);
-            }
-        };
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.swapChildren = function (child1, child2) {
-            var index1 = this.$children.indexOf(child1);
-            var index2 = this.$children.indexOf(child2);
-            if (index1 == -1 || index2 == -1) {
-                DEBUG && lark.$error(1006);
-            }
-            else {
-                this.doSwapChildrenAt(index1, index2);
-            }
-        };
-        /**
-         * @private
-         */
-        p.doSwapChildrenAt = function (index1, index2) {
-            if (index1 > index2) {
-                var temp = index2;
-                index2 = index1;
-                index1 = temp;
-            }
-            else if (index1 === index2) {
-                return;
-            }
-            var list = this.$children;
-            var child1 = list[index1];
-            var child2 = list[index2];
-            this.$childRemoved(child1, index1);
-            this.$childRemoved(child2, index2);
-            list[index1] = child2;
-            list[index2] = child1;
-            this.$childAdded(child2, index1);
-            this.$childAdded(child1, index2);
-            child1.$invalidateTransform();
-            child2.$invalidateTransform();
-            this.$propagateFlagsUp(4 /* InvalidBounds */);
-        };
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.removeChildren = function () {
-            var children = this.$children;
-            for (var i = children.length - 1; i >= 0; i--) {
-                this.doRemoveChild(i);
-            }
-        };
-        /**
-         * @private
-         * 一个子项被添加到容器内，此方法不仅在操作addChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
-         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
-         */
-        p.$childAdded = function (child, index) {
-        };
-        /**
-         * @private
-         * 一个子项从容器内移除，此方法不仅在操作removeChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
-         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
-         */
-        p.$childRemoved = function (child, index) {
-        };
-        /**
-         * @private
-         */
-        p.$onAddToStage = function (stage, nestLevel) {
-            _super.prototype.$onAddToStage.call(this, stage, nestLevel);
-            var children = this.$children;
-            var length = children.length;
-            nestLevel++;
-            for (var i = 0; i < length; i++) {
-                var child = this.$children[i];
-                child.$onAddToStage(stage, nestLevel);
-            }
-        };
-        /**
-         * @private
-         *
-         */
-        p.$onRemoveFromStage = function () {
-            _super.prototype.$onRemoveFromStage.call(this);
-            var children = this.$children;
-            var length = children.length;
-            for (var i = 0; i < length; i++) {
-                var child = children[i];
-                child.$onRemoveFromStage();
-            }
-        };
-        /**
-         * @private
-         */
-        p.$measureChildBounds = function (bounds) {
-            var children = this.$children;
-            var length = children.length;
-            if (length === 0) {
-                return;
-            }
-            var xMin = 0, xMax = 0, yMin = 0, yMax = 0;
-            var found = false;
-            for (var i = -1; i < length; i++) {
-                var childBounds = i === -1 ? bounds : children[i].$getTransformedBounds(this, lark.$TempRectangle);
-                if (childBounds.isEmpty()) {
-                    continue;
-                }
-                if (found) {
-                    xMin = Math.min(xMin, childBounds.x);
-                    xMax = Math.max(xMax, childBounds.x + childBounds.width);
-                    yMin = Math.min(yMin, childBounds.y);
-                    yMax = Math.max(yMax, childBounds.y + childBounds.height);
-                }
-                else {
-                    found = true;
-                    xMin = childBounds.x;
-                    xMax = xMin + childBounds.width;
-                    yMin = childBounds.y;
-                    yMax = yMin + childBounds.height;
-                }
-            }
-            bounds.setTo(xMin, yMin, xMax - xMin, yMax - yMin);
-        };
-        d(p, "touchChildren",
-            /**
-             * @inheritDoc
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$hasFlags(2048 /* TouchChildren */);
-            },
-            function (value) {
-                this.$setTouchChildren(value);
-            }
-        );
-        /**
-         * @private
-         */
-        p.$setTouchChildren = function (value) {
-            this.$toggleFlags(2048 /* TouchChildren */, !!value);
-        };
-        /**
-         * @private
-         * 标记此显示对象需要重绘。此方法会触发自身的cacheAsBitmap重绘。如果只是矩阵改变，自身显示内容并不改变，应该调用$invalidateTransform().
-         * @param notiryChildren 是否标记子项也需要重绘。传入false或不传入，将只标记自身需要重绘。通常只有alpha属性改变会需要通知子项重绘。
-         */
-        p.$invalidate = function (notifyChildren) {
-            _super.prototype.$invalidate.call(this, notifyChildren);
-            if (!notifyChildren) {
-                return;
-            }
-            var cacheRoot = this.$displayList || this.$parentDisplayList;
-            var children = this.$children;
-            if (children) {
-                for (var i = children.length - 1; i >= 0; i--) {
-                    this.markChildDirty(children[i], cacheRoot);
-                }
-            }
-        };
-        /**
-         * @private
-         * 标记自身以及所有子项在父级中变换叠加的显示内容失效。此方法不会触发自身的cacheAsBitmap重绘。
-         * 通常用于矩阵改变或从显示列表添加和移除时。若自身的显示内容已经改变需要重绘，应该调用$invalidate()。
-         */
-        p.$invalidateTransform = function () {
-            this.markChildDirty(this, this.$parentDisplayList);
-        };
-        /**
-         * @private
-         */
-        p.markChildDirty = function (child, parentCache) {
-            if (child.$hasFlags(512 /* DirtyChildren */)) {
-                return;
-            }
-            child.$setFlags(512 /* DirtyChildren */);
-            var displayList = child.$displayList;
-            if ((displayList || child.$renderRegion) && parentCache) {
-                parentCache.markDirty(displayList || child);
-            }
-            if (displayList) {
-                return;
-            }
-            var children = child.$children;
-            if (children) {
-                for (var i = children.length - 1; i >= 0; i--) {
-                    this.markChildDirty(children[i], parentCache);
-                }
-            }
-        };
-        /**
-         * @private
-         */
-        p.$cacheAsBitmapChanged = function () {
-            _super.prototype.$cacheAsBitmapChanged.call(this);
-            var cacheRoot = this.$displayList || this.$parentDisplayList;
-            var children = this.$children;
-            for (var i = children.length - 1; i >= 0; i--) {
-                this.assignParentDisplayList(children[i], cacheRoot, cacheRoot);
-            }
-        };
-        /**
-         * @private
-         */
-        p.assignParentDisplayList = function (child, parentCache, newParent) {
-            child.$parentDisplayList = newParent;
-            child.$setFlags(512 /* DirtyChildren */);
-            var displayList = child.$displayList;
-            if ((child.$renderRegion || displayList) && parentCache) {
-                parentCache.markDirty(displayList || child);
-            }
-            if (displayList) {
-                return;
-            }
-            var children = child.$children;
-            if (children) {
-                for (var i = children.length - 1; i >= 0; i--) {
-                    this.assignParentDisplayList(children[i], parentCache, newParent);
-                }
-            }
-        };
-        /**
-         * @private
-         */
-        p.$hitTest = function (stageX, stageY, shapeFlag) {
-            if (!this.$visible) {
-                return null;
-            }
-            var m = this.$getInvertedConcatenatedMatrix();
-            var localX = m.a * stageX + m.c * stageY + m.tx;
-            var localY = m.b * stageX + m.d * stageY + m.ty;
-            if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
-                return null;
-            }
-            if (this.$mask && !this.$mask.$hitTest(stageX, stageY, true)) {
-                return null;
-            }
-            var children = this.$children;
-            var found = false;
-            for (var i = children.length - 1; i >= 0; i--) {
-                var child = children[i];
-                if (child.$maskedObject) {
-                    continue;
-                }
-                var target = child.$hitTest(stageX, stageY, shapeFlag);
-                if (target) {
-                    found = true;
-                    if (target.$hasFlags(1024 /* TouchEnabled */)) {
-                        break;
-                    }
-                    else {
-                        target = null;
-                    }
-                }
-            }
-            if (target) {
-                if (this.$hasFlags(2048 /* TouchChildren */)) {
-                    return target;
-                }
-                return this;
-            }
-            if (found) {
-                return this;
-            }
-            return _super.prototype.$hitTest.call(this, stageX, stageY, shapeFlag);
-        };
-        /**
-         * @private
-         */
-        Sprite.$EVENT_ADD_TO_STAGE_LIST = [];
-        /**
-         * @private
-         */
-        Sprite.$EVENT_REMOVE_FROM_STAGE_LIST = [];
-        return Sprite;
-    })(lark.DisplayObject);
-    lark.Sprite = Sprite;
-    lark.registerClass(Sprite,"lark.Sprite",["lark.DisplayObjectContainer"]);
-    if (DEBUG) {
-        lark.$markReadOnly(Sprite.prototype, "numChildren");
-    }
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -11999,8 +12192,8 @@ var lark;
         });
     }
     if (DEBUG) {
-        lark.$markReadOnly(Stage.prototype, "stageWidth");
-        lark.$markReadOnly(Stage.prototype, "stageHeight");
+        lark.$markReadOnly(Stage, "stageWidth");
+        lark.$markReadOnly(Stage, "stageHeight");
     }
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////

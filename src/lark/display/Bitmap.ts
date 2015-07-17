@@ -144,6 +144,68 @@ module lark {
             this.$invalidate();
         }
 
+
+        private _pixelHitTest:boolean = false;
+        /**
+         * @language en_US
+         * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
+         * is set to true,the transparent area of the bitmap will be touched through.
+         * Note:If the image is loaded from cross origin,that we can't access to the pixel data,so it might cause
+         * the pixelHitTest property invalid.
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透。<br/>
+         * 注意：若图片资源是以跨域方式从外部服务器加载的，将无法访问图片的像素数据，而导致此属性失效。
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public get pixelHitTest():boolean {
+            return this._pixelHitTest;
+        }
+
+        public set pixelHitTest(value:boolean) {
+            this._pixelHitTest = !!value;
+        }
+
+        $hitTest(stageX:number,stageY:number):DisplayObject {
+            var target = super.$hitTest(stageX,stageY);
+            if(target&&this._pixelHitTest){
+                target = this.hitTestPixel(stageX,stageY);
+            }
+            return target;
+        }
+        /**
+         * @private
+         */
+        private hitTestPixel(stageX:number, stageY:number):DisplayObject {
+            var m = this.$getInvertedConcatenatedMatrix();
+            var localX = m.a * stageX + m.c * stageY + m.tx;
+            var localY = m.b * stageX + m.d * stageY + m.ty;
+            var context:sys.RenderContext;
+            var data:Uint8Array;
+            var displayList = this.$displayList;
+            if (displayList) {
+                context = displayList.renderContext;
+                data = context.getImageData(localX - displayList.offsetX, localY - displayList.offsetY, 1, 1).data;
+            }
+            else {
+                context = sys.sharedRenderContext;
+                context.surface.width = context.surface.height = 3;
+                context.translate(1 - localX, 1 - localY);
+                this.$render(context);
+                data = context.getImageData(1, 1, 1, 1).data;
+            }
+            if (data[3] === 0) {
+                return null;
+            }
+            return this;
+        }
+
         /**
          * @private
          */

@@ -236,7 +236,12 @@ module swan {
         }
 
         public set scrollPolicyV(value:string) {
-            this.$Scroller[Keys.scrollPolicyV] = value;
+            var values = this.$Scroller;
+            if (value[Keys.scrollPolicyV] == value) {
+                return;
+            }
+            values[Keys.scrollPolicyV] = value;
+            this.checkScrollPolicy();
         }
 
         /**
@@ -271,7 +276,12 @@ module swan {
         }
 
         public set scrollPolicyH(value:string) {
-            this.$Scroller[Keys.scrollPolicyH] = value;
+            var values = this.$Scroller;
+            if (values[Keys.scrollPolicyH] == value) {
+                return;
+            }
+            values[Keys.scrollPolicyH] = value;
+            this.checkScrollPolicy();
         }
 
         /**
@@ -345,7 +355,7 @@ module swan {
 
         /**
          * @inheritDoc
-         * 
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -360,8 +370,8 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param event 
+         *
+         * @param event
          */
         private onTouchEndCapture(event:lark.TouchEvent):void {
             if (this.$Scroller[Keys.delayTouchEvent]) {
@@ -395,8 +405,8 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param event 
+         *
+         * @param event
          */
         private delayEmitEvent(event:lark.TouchEvent):void {
             var values = this.$Scroller;
@@ -417,8 +427,8 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param e 
+         *
+         * @param e
          */
         private onDelayTouchEventTimer(e?:lark.TimerEvent):void {
             var values = this.$Scroller;
@@ -496,8 +506,8 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param event 
+         *
+         * @param event
          */
         private onTouchBegin(event:lark.TouchEvent):void {
             if (event.isDefaultPrevented()) {
@@ -531,8 +541,8 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param event 
+         *
+         * @param event
          */
         private onTouchMove(event:lark.TouchEvent):void {
             var values = this.$Scroller;
@@ -550,7 +560,7 @@ module swan {
                 if (verticalBar && values[Keys.verticalCanScroll]) {
                     verticalBar.visible = true;
                 }
-                if(values[Keys.autoHideTimer]){
+                if (values[Keys.autoHideTimer]) {
                     values[Keys.autoHideTimer].reset();
                 }
             }
@@ -572,8 +582,8 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param event 
+         *
+         * @param event
          */
         private onTouchEnd(event:lark.Event):void {
             var values = this.$Scroller;
@@ -584,18 +594,18 @@ module swan {
 
             var viewport:IViewport = values[Keys.viewport];
             var uiValues = viewport.$UIComponent;
-            if (values[Keys.horizontalCanScroll]) {
+            if (values[Keys.touchScrollH].isStarted()) {
                 values[Keys.touchScrollH].finish(viewport.scrollH, viewport.contentWidth - uiValues[sys.UIKeys.width]);
             }
-            if (values[Keys.verticalCanScroll]) {
+            if (values[Keys.touchScrollV].isStarted()) {
                 values[Keys.touchScrollV].finish(viewport.scrollV, viewport.contentHeight - uiValues[sys.UIKeys.height]);
             }
         }
 
         /**
          * @private
-         * 
-         * @param scrollPos 
+         *
+         * @param scrollPos
          */
         private horizontalUpdateHandler(scrollPos:number):void {
             this.$Scroller[Keys.viewport].scrollH = scrollPos;
@@ -603,8 +613,8 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param scrollPos 
+         *
+         * @param scrollPos
          */
         private verticalUpdateHandler(scrollPos:number):void {
             this.$Scroller[Keys.viewport].scrollV = scrollPos;
@@ -612,29 +622,29 @@ module swan {
 
         /**
          * @private
-         * 
+         *
          */
         private horizontalEndHandler():void {
-            if(!this.$Scroller[Keys.touchScrollV].isPlaying()){
+            if (!this.$Scroller[Keys.touchScrollV].isPlaying()) {
                 this.onChangeEnd();
             }
         }
 
         /**
          * @private
-         * 
+         *
          */
         private verticalEndHanlder():void {
-            if(!this.$Scroller[Keys.touchScrollH].isPlaying()){
+            if (!this.$Scroller[Keys.touchScrollH].isPlaying()) {
                 this.onChangeEnd();
             }
         }
 
         /**
          * @private
-         * 
+         *
          */
-        private onChangeEnd():void{
+        private onChangeEnd():void {
             var values = this.$Scroller;
             var horizontalBar = this.horizontalScrollBar;
             var verticalBar = this.verticalScrollBar;
@@ -647,14 +657,14 @@ module swan {
                 values[Keys.autoHideTimer].start();
             }
 
-            UIEvent.emitUIEvent(this,UIEvent.CHANGE_END);
+            UIEvent.emitUIEvent(this, UIEvent.CHANGE_END);
 
         }
 
         /**
          * @private
-         * 
-         * @param event 
+         *
+         * @param event
          */
         private onAutoHideTimer(event:lark.TimerEvent):void {
             var horizontalBar = this.horizontalScrollBar;
@@ -669,7 +679,7 @@ module swan {
 
         /**
          * @inheritDoc
-         * 
+         *
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native

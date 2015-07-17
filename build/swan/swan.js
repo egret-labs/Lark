@@ -2381,9 +2381,9 @@ var swan;
          * @language en_US
          * Retrieves the current value of the watched property or property chain, or null if the host object is null.
          * @example
-         * <code>
+         * <pre>
          * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
-         * </code>
+         * </pre>
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -2392,9 +2392,9 @@ var swan;
          * @language zh_CN
          * 检索观察的属性或属性链的当前值，当宿主对象为空时此值为空。
          * @example
-         * <code>
+         * <pre>
          * watch(obj, ["a","b","c"], ...).getValue() === obj.a.b.c
-         * </code>
+         * </pre>
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -2542,19 +2542,19 @@ var swan;
      * One component can register only on default property. And the default property can be spare in an EXML.
      *
      * @example：
-     * <code>
+     * <pre>
      *      <s:Scroller>
      *          <s:viewport>
      *          <s:Group/>
      *          </e:viewport>
      *      </e:Scroller>
-     * <code/>
+     * </pre>
      * Cuz <code>viewport</code> is the default property of Scroller. So you can write as follow:
-     * <code>
+     * <pre>
      *      <s:Scroller>
      *          <s:Group/>
      *      </e:Scroller>
-     * <code/>
+     * </pre>
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -2572,20 +2572,20 @@ var swan;
      * @param property 要注册的属性,注意属性名不能以 _ 或 $ 符开头。
      * @param type 要注册的类型,例如：“boolean","number","string","Array","lark.Rectangle"
      * @param asDefault 是否将此属性注册为组件的默认属性,一个组件只可以设置一个默认属性。注册了组件默认属性后，在EXML中可以使用省略属性节点的写法，
-     * 例如：
-     *
+     * @example：
+     * <pre>
      * <s:Scroller>
      *     <s:viewport>
      *         <s:Group/>
      *     </e:viewport>
      * </e:Scroller>
-     *
+     * </pre>
      * 因为 viewport 已经注册为 Scroller 的默认属性，上面的例子可以等效为：
-     *
+     * <pre>
      * <s:Scroller>
      *     <s:Group/>
      * </e:Scroller>
-     *
+     * </pre>
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -4076,7 +4076,7 @@ var swan;
     lark.registerClass(ArrayCollection,"swan.ArrayCollection",["swan.ICollection","lark.IEventEmitter"]);
     swan.registerProperty(ArrayCollection, "source", "Array", true);
     if (DEBUG) {
-        lark.$markReadOnly(ArrayCollection.prototype, "length");
+        lark.$markReadOnly(ArrayCollection, "length");
     }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -4835,7 +4835,7 @@ var swan;
     lark.registerClass(RadioButtonGroup,"swan.RadioButtonGroup");
     swan.registerBindable(RadioButtonGroup.prototype, "selectedValue");
     if (DEBUG) {
-        lark.$markReadOnly(RadioButtonGroup.prototype, "numRadioButtons");
+        lark.$markReadOnly(RadioButtonGroup, "numRadioButtons");
     }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -5612,6 +5612,7 @@ var swan;
                  * 触摸按下时的偏移量
                  */
                 this.offsetPoint = 0;
+                this.started = true;
                 if (DEBUG && !updateFunction) {
                     lark.$error(1003, "updateFunction");
                 }
@@ -5637,6 +5638,14 @@ var swan;
             p.stop = function () {
                 this.animation.stop();
                 lark.stopTick(this.onTick, this);
+                this.started = false;
+            };
+            /**
+             * @private
+             * true表示已经调用过start方法。
+             */
+            p.isStarted = function () {
+                return this.started;
             };
             /**
              * @private
@@ -5644,6 +5653,7 @@ var swan;
              * @param touchPoint 起始触摸位置，以像素为单位，通常是stageX或stageY。
              */
             p.start = function (touchPoint, scrollValue, maxScrollValue) {
+                this.started = true;
                 this.velocity = 0;
                 this.previousVelocity.length = 0;
                 this.previousTime = lark.getTimer();
@@ -5677,6 +5687,7 @@ var swan;
              */
             p.finish = function (currentScrollPos, maxScrollPos) {
                 lark.stopTick(this.onTick, this);
+                this.started = false;
                 var sum = this.velocity * CURRENT_VELOCITY_WEIGHT;
                 var previousVelocityX = this.previousVelocity;
                 var length = previousVelocityX.length;
@@ -9602,8 +9613,8 @@ var swan;
     swan.TileLayout = TileLayout;
     lark.registerClass(TileLayout,"swan.TileLayout");
     if (DEBUG) {
-        lark.$markReadOnly(TileLayout.prototype, "columnCount");
-        lark.$markReadOnly(TileLayout.prototype, "rowCount");
+        lark.$markReadOnly(TileLayout, "columnCount");
+        lark.$markReadOnly(TileLayout, "rowCount");
     }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -11483,8 +11494,8 @@ var swan;
                 };
             }
             if (DEBUG) {
-                lark.$markReadOnly(prototype, "explicitWidth");
-                lark.$markReadOnly(prototype, "explicitHeight");
+                lark.$markReadOnly(descendant, "explicitWidth");
+                lark.$markReadOnly(descendant, "explicitHeight");
                 Object.defineProperty(prototype, "preferredWidth", {
                     get: function () {
                         var bounds = lark.$TempRectangle;
@@ -12870,7 +12881,7 @@ var swan;
      * It can be created by resolving a EXML.<p/>
      *
      * @example You typically write the skin classes in EXML, as the followiong example shows:<p/>
-     * <code>
+     * <pre>
      *      <?xml version="1.0" encoding="utf-8"?>
      *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
      *          <states>
@@ -12878,7 +12889,7 @@ var swan;
      *          </states>
      *          <!-- Define skin. -->
      *      </s:Skin>
-     * <code/>
+     * </pre>
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -12889,7 +12900,7 @@ var swan;
      * 皮肤基类。通常情况下，您不需要手动创建这个类的实例，而是通过解析EXML文件后自动生成。<p/>
      *
      * @example 通常您可以按照如下方式写EXML代码：<p/>
-     * <code>
+     * <pre>
      *      <?xml version="1.0" encoding="utf-8"?>
      *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
      *          <states>
@@ -12897,7 +12908,7 @@ var swan;
      *          </states>
      *          <!-- Define skin. -->
      *      </s:Skin>
-     * <code/>
+     * </pre>
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -13485,7 +13496,7 @@ var swan;
             value = !!value;
             var values = this.$Component;
             if (values[3 /* enabled */]) {
-                this.$toggleFlags(2048 /* TouchChildren */, value);
+                _super.prototype.$setTouchChildren.call(this, value);
             }
             else {
                 values[6 /* explicitTouchChildren */] = value;
@@ -13500,7 +13511,7 @@ var swan;
             value = !!value;
             var values = this.$Component;
             if (values[3 /* enabled */]) {
-                this.$toggleFlags(1024 /* TouchEnabled */, value);
+                _super.prototype.$setTouchEnabled.call(this, value);
             }
             else {
                 values[7 /* explicitTouchEnabled */] = value;
@@ -13552,8 +13563,8 @@ var swan;
             }
             values[3 /* enabled */] = value;
             if (value) {
-                values[7 /* explicitTouchEnabled */] = this.touchEnabled;
-                values[6 /* explicitTouchChildren */] = this.touchChildren;
+                values[7 /* explicitTouchEnabled */] = this.$touchEnabled;
+                values[6 /* explicitTouchChildren */] = this.$touchChildren;
             }
             else {
                 _super.prototype.$setTouchEnabled.call(this, values[7 /* explicitTouchEnabled */]);
@@ -13902,7 +13913,7 @@ var swan;
     swan.registerProperty(Component, "skinName", "Class");
     swan.sys.implementUIComponent(Component, lark.Sprite, true);
     if (DEBUG) {
-        lark.$markReadOnly(Component.prototype, "skin");
+        lark.$markReadOnly(Component, "skin");
     }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -14315,18 +14326,13 @@ var swan;
         );
         /**
          * @private
-         *
-         * @param stageX
-         * @param stageY
-         * @param shapeFlag
-         * @returns
          */
-        p.$hitTest = function (stageX, stageY, shapeFlag) {
-            var target = _super.prototype.$hitTest.call(this, stageX, stageY, shapeFlag);
-            if (target || this.$Group[5 /* touchThrough */] || shapeFlag || this.$displayFlags & 1 /* PixelHitTest */) {
+        p.$hitTest = function (stageX, stageY) {
+            var target = _super.prototype.$hitTest.call(this, stageX, stageY);
+            if (target || this.$Group[5 /* touchThrough */]) {
                 return target;
             }
-            if (!this.$visible || !this.$hasFlags(1024 /* TouchEnabled */)) {
+            if (!this.$visible || !this.touchEnabled) {
                 return null;
             }
             var point = this.globalToLocal(stageX, stageY, lark.$TempPoint);
@@ -14560,9 +14566,9 @@ var swan;
     swan.registerProperty(Group, "elementsContent", "Array", true);
     swan.registerProperty(Group, "states", "State[]");
     if (DEBUG) {
-        lark.$markReadOnly(Group.prototype, "contentWidth");
-        lark.$markReadOnly(Group.prototype, "contentHeight");
-        lark.$markReadOnly(Group.prototype, "numElements");
+        lark.$markReadOnly(Group, "contentWidth");
+        lark.$markReadOnly(Group, "contentHeight");
+        lark.$markReadOnly(Group, "numElements");
     }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -15621,13 +15627,13 @@ var swan;
      * <p>The Group components implement the IViewport interface
      * and can be used as the children of the Scroller control,
      * as the following example shows:</p>
-     * <code>
+     * <pre>
      *       <s:Scroller width="100" height="100">
      *           <s:Group>
      *               <s:Image width="300" height="400" source="assets/logo.jpg"/>
      *           </s:Group>
      *       </s:Scroller>
-     * </code>
+     * </pre>
      * <p>The size of the Image control is set larger than that of its parent Group container.
      * By default, the child extends past the boundaries of the parent container.
      * Rather than allow the child to extend past the boundaries of the parent container,
@@ -15644,13 +15650,13 @@ var swan;
      * @language zh_CN
      * Scroller 组件显示一个称为视域的单个可滚动组件，以及水平滚动条和垂直滚动条。该视域必须实现 IViewport 接口。
      * <p>Group 组件实现 IViewport 接口，且可以用作 Scroller 控件的子代，如下例所示：</p>
-     * <code>
+     * <pre>
      *       <s:Scroller width="100" height="100">
      *           <s:Group>
      *               <s:Image width="300" height="400" source="assets/logo.jpg"/>
      *           </s:Group>
      *       </s:Scroller>
-     * </code>
+     * </pre>
      * Image 控件的大小比其父 Group 容器设置得大。默认情况下，子代超过父容器的边界。
      * Scroller 会指定将子代剪切到边界并显示滚动条，而不是让子代超过父容器的边界。
      *
@@ -15773,7 +15779,12 @@ var swan;
                 return this.$Scroller[0 /* scrollPolicyV */];
             },
             function (value) {
-                this.$Scroller[0 /* scrollPolicyV */] = value;
+                var values = this.$Scroller;
+                if (value[0 /* scrollPolicyV */] == value) {
+                    return;
+                }
+                values[0 /* scrollPolicyV */] = value;
+                this.checkScrollPolicy();
             }
         );
         d(p, "scrollPolicyH",
@@ -15808,7 +15819,12 @@ var swan;
                 return this.$Scroller[1 /* scrollPolicyH */];
             },
             function (value) {
-                this.$Scroller[1 /* scrollPolicyH */] = value;
+                var values = this.$Scroller;
+                if (values[1 /* scrollPolicyH */] == value) {
+                    return;
+                }
+                values[1 /* scrollPolicyH */] = value;
+                this.checkScrollPolicy();
             }
         );
         d(p, "viewport",
@@ -16102,10 +16118,10 @@ var swan;
             stage.removeListener(lark.TouchEvent.TOUCH_END, this.onTouchEnd, this);
             var viewport = values[12 /* viewport */];
             var uiValues = viewport.$UIComponent;
-            if (values[6 /* horizontalCanScroll */]) {
+            if (values[8 /* touchScrollH */].isStarted()) {
                 values[8 /* touchScrollH */].finish(viewport.scrollH, viewport.contentWidth - uiValues[10 /* width */]);
             }
-            if (values[7 /* verticalCanScroll */]) {
+            if (values[9 /* touchScrollV */].isStarted()) {
                 values[9 /* touchScrollV */].finish(viewport.scrollV, viewport.contentHeight - uiValues[11 /* height */]);
             }
         };
@@ -16718,7 +16734,7 @@ var swan;
              * @language zh_CN
              * 最大有效值。<p/>
              *
-             * 规定<code>value<code/>属性的值不能够超过的最大值。该修正过程
+             * 规定<code>value</code>属性的值不能够超过的最大值。该修正过程
              * 将在<code>nearestValidValue()</code>方法中进行。
              *
              * @default 100
@@ -16762,7 +16778,7 @@ var swan;
              * @language zh_CN
              * 最小有效值<p/>
              *
-             * 规定<code>value<code/>属性的值不能够低于的最小值。该修正过程
+             * 规定<code>value</code>属性的值不能够低于的最小值。该修正过程
              * 将在<code>nearestValidValue()</code>方法中进行。
              *
              * @default 0
@@ -18109,8 +18125,8 @@ var swan;
     lark.registerClass(ViewStack,"swan.ViewStack",["swan.ICollection","lark.IEventEmitter"]);
     swan.registerBindable(ViewStack.prototype, "selectedIndex");
     if (DEBUG) {
-        lark.$markReadOnly(ViewStack.prototype, "length");
-        lark.$markReadOnly(ViewStack.prototype, "layout");
+        lark.$markReadOnly(ViewStack, "length");
+        lark.$markReadOnly(ViewStack, "layout");
     }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -19077,7 +19093,7 @@ var swan;
     swan.registerProperty(DataGroup, "itemRenderer", "Class");
     swan.registerProperty(DataGroup, "dataProvider", "swan.ICollection", true);
     if (DEBUG) {
-        lark.$markReadOnly(DataGroup.prototype, "numElements");
+        lark.$markReadOnly(DataGroup, "numElements");
     }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -21344,6 +21360,82 @@ var swan;
 (function (swan) {
     /**
      * @language en_US
+     * The CheckBox component consists of an optional label and a small box
+     * that can contain a check mark or not.<p/>
+     *
+     * When a user clicks a CheckBox component or its associated text,
+     * the CheckBox component sets its <code>selected</code> property
+     * to <code>true</code> for checked, and to <code>false</code> for unchecked.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * CheckBox 组件包含一个可选标签和一个小方框，该方框内可以包含/不包含复选标记。<p/>
+     * 用户单击 CheckBox 组件或其关联文本时，CheckBox 组件会将其 selected 属性设置为 true（表示选中）或 false（表示取消选中）。
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var CheckBox = (function (_super) {
+        __extends(CheckBox, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个CheckBox
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function CheckBox() {
+            _super.call(this);
+        }
+        var d = __define,c=CheckBox;p=c.prototype;
+        return CheckBox;
+    })(swan.ToggleButton);
+    swan.CheckBox = CheckBox;
+    lark.registerClass(CheckBox,"swan.CheckBox");
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
      * The VSlider (vertical slider) control lets users select a value
      * by moving a slider thumb between the end points of the slider track.
      * The current value of the slider is determined by the relative location of the thumb between
@@ -21443,82 +21535,6 @@ var swan;
     })(swan.SliderBase);
     swan.VSlider = VSlider;
     lark.registerClass(VSlider,"swan.VSlider");
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The CheckBox component consists of an optional label and a small box
-     * that can contain a check mark or not.<p/>
-     *
-     * When a user clicks a CheckBox component or its associated text,
-     * the CheckBox component sets its <code>selected</code> property
-     * to <code>true</code> for checked, and to <code>false</code> for unchecked.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * CheckBox 组件包含一个可选标签和一个小方框，该方框内可以包含/不包含复选标记。<p/>
-     * 用户单击 CheckBox 组件或其关联文本时，CheckBox 组件会将其 selected 属性设置为 true（表示选中）或 false（表示取消选中）。
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var CheckBox = (function (_super) {
-        __extends(CheckBox, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个CheckBox
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function CheckBox() {
-            _super.call(this);
-        }
-        var d = __define,c=CheckBox;p=c.prototype;
-        return CheckBox;
-    })(swan.ToggleButton);
-    swan.CheckBox = CheckBox;
-    lark.registerClass(CheckBox,"swan.CheckBox");
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -22063,14 +22079,14 @@ var swan;
      * The appearance of each tab is defined by the <code>ItemRenderer</code> class.</p>
      * <p>You can use the TabBar control to set the active child of a ViewStack container,
      * as the following example shows:</p>
-     * <code>
+     * <pre>
      *       <s:TabBar dataProvider="{viewStack}"/>
      *       <s:ViewStack id="viewStack">
      *          <s:Group name="tab1"/>
      *          <s:Group name="tab2"/>
      *          <s:Group name="tab3"/>
      *       </s:ViewStack>
-     * </code>
+     * </pre>
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -22082,14 +22098,14 @@ var swan;
      * <p>该组选项卡由 <code>dataProvider</code> 属性定义。
      * 每个选项卡的外观由 <code>ItemRenderer</code> 定义。</p>
      * <p>可以使用 TabBar 控件设置 ViewStack 容器的活动子代，如下例所示：</p>
-     * <code>
+     * <pre>
      *       <s:TabBar dataProvider="{viewStack}"/>
      *       <s:ViewStack id="viewStack">
      *          <s:Group name="tab1"/>
      *          <s:Group name="tab2"/>
      *          <s:Group name="tab3"/>
      *       </s:ViewStack>
-     * </code>
+     * </pre>
      *
      * @version Lark 1.0
      * @version Swan 1.0

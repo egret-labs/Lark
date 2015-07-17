@@ -398,7 +398,7 @@ module swan {
             value = !!value;
             var values = this.$Component;
             if (values[sys.ComponentKeys.enabled]) {
-                this.$toggleFlags(lark.sys.DisplayObjectFlags.TouchChildren, value);
+                super.$setTouchChildren(value);
             }
             else {
                 values[sys.ComponentKeys.explicitTouchChildren] = value;
@@ -414,7 +414,7 @@ module swan {
             value = !!value;
             var values = this.$Component;
             if (values[sys.ComponentKeys.enabled]) {
-                this.$toggleFlags(lark.sys.DisplayObjectFlags.TouchEnabled, value);
+                super.$setTouchEnabled(value);
             }
             else {
                 values[sys.ComponentKeys.explicitTouchEnabled] = value;
@@ -468,8 +468,8 @@ module swan {
             }
             values[sys.ComponentKeys.enabled] = value;
             if (value) {
-                values[sys.ComponentKeys.explicitTouchEnabled] = this.touchEnabled;
-                values[sys.ComponentKeys.explicitTouchChildren] = this.touchChildren;
+                values[sys.ComponentKeys.explicitTouchEnabled] = this.$touchEnabled;
+                values[sys.ComponentKeys.explicitTouchChildren] = this.$touchChildren;
             }
             else {
                 super.$setTouchEnabled(values[sys.ComponentKeys.explicitTouchEnabled]);

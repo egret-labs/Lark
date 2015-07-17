@@ -473,24 +473,25 @@ module lark {
             bounds.setTo(xMin, yMin, xMax - xMin, yMax - yMin);
         }
 
+        $touchChildren:boolean = true;
         /**
          * @inheritDoc
          * @version Lark 1.0
          * @platform Web,Native
          */
         public get touchChildren():boolean {
-            return this.$hasFlags(sys.DisplayObjectFlags.TouchChildren);
+            return this.$touchChildren;
         }
 
         public set touchChildren(value:boolean) {
-            this.$setTouchChildren(value);
+            this.$setTouchChildren(!!value);
         }
 
         /**
          * @private
          */
         $setTouchChildren(value:boolean):void {
-            this.$toggleFlags(sys.DisplayObjectFlags.TouchChildren, !!value);
+            this.$touchChildren = value;
         }
 
         /**
@@ -580,7 +581,7 @@ module lark {
         /**
          * @private
          */
-        $hitTest(stageX:number, stageY:number, shapeFlag?:boolean):DisplayObject {
+        $hitTest(stageX:number, stageY:number):DisplayObject {
             if (!this.$visible) {
                 return null;
             }
@@ -590,7 +591,7 @@ module lark {
             if (this.$scrollRect && !this.$scrollRect.contains(localX, localY)) {
                 return null;
             }
-            if (this.$mask && !this.$mask.$hitTest(stageX, stageY, true)) {
+            if (this.$mask && !this.$mask.$hitTest(stageX, stageY)) {
                 return null
             }
             var children = this.$children;
@@ -600,10 +601,10 @@ module lark {
                 if (child.$maskedObject) {
                     continue;
                 }
-                var target = child.$hitTest(stageX, stageY, shapeFlag);
+                var target = child.$hitTest(stageX, stageY);
                 if (target) {
                     found = true;
-                    if(target.$hasFlags(sys.DisplayObjectFlags.TouchEnabled)){
+                    if(target.$touchEnabled){
                         break;
                     }
                     else{
@@ -612,7 +613,7 @@ module lark {
                 }
             }
             if (target) {
-                if (this.$hasFlags(sys.DisplayObjectFlags.TouchChildren)) {
+                if (this.$touchChildren) {
                     return target;
                 }
                 return this;
@@ -620,7 +621,7 @@ module lark {
             if (found) {
                 return this;
             }
-            return super.$hitTest(stageX, stageY, shapeFlag);
+            return super.$hitTest(stageX, stageY);
         }
 
     }
