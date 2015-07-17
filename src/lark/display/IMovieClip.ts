@@ -43,7 +43,7 @@ module lark {
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export interface MovieClip extends DisplayObject {
+    export interface IMovieClip extends DisplayObject {
 
         /**
          * @language en_US

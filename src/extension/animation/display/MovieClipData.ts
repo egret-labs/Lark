@@ -27,17 +27,17 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module larkAnimation {
+module lark.sys {
 
     /**
      * @private
      * 序列帧动画的单帧数据
      */
-    export class BitmapArrayFrameData extends lark.LarkObject {
+    export class MovieClipFrameData extends lark.LarkObject {
 
         /**
          * @language en_US
-         * Create the data of BitmapArray's single frame.
+         * Create the data of MovieClip's single frame.
          * @param bitmapData The source bitmap data.
          * @param x X of the position at the BitmapArray object.
          * @param y Y of the position at the BitmapArray object.
@@ -50,7 +50,7 @@ module larkAnimation {
          */
         /**
          * @language zh_CN
-         * 创建序列帧动画的单帧数据。
+         * 创建影片剪辑的单帧数据。
          * @param bitmapData 源图片数据
          * @param x 图片在BitmapArray对象中的位置x
          * @param y 图片在BitmapArray对象中的位置y
@@ -114,24 +114,27 @@ module larkAnimation {
          */
         public sourceY:number;
     }
+}
+
+module lark {
 
     /**
      * @private
      * @language en_US
-     * The data of BitmapArray.
-     * @see larkAnimation.BitmapArray
+     * The data of MovieClip.
+     * @see lark.MovieClip
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @private
      * @language zh_CN
-     * 序列帧动画的数据。
-     * @see larkAnimation.BitmapArray
+     * MovieClip 的数据。
+     * @see lark.MovieClip
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export class BitmapArrayData extends lark.LarkObject {
+    export class MovieClipData extends lark.LarkObject {
         /**
          * @private
          * @language en_US
@@ -153,32 +156,26 @@ module larkAnimation {
         /**
          * @private
          */
-        get $length():number {
-            if (this.$frames) return this.$frames.length;
-            return 0;
-        }
-
-        /**
-         * @private
-         */
-        $frames:Array<BitmapArrayFrameData>;
+        $frames:Array<lark.sys.MovieClipFrameData> = [];
 
         /**
          * @language en_US
-         * The totalFrames property returns the total number of frames in the BitmapArray.
+         * The totalFrames property returns the total number of frames in the movie clip.
          * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * totalFrames 属性会返回动画中帧的总数。
+         * totalFrames 属性会返回 MovieClip 的总帧数。
          * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
         public get totalFrames():number {
-            if (this.$frames) return this.$frames.length;
+            if (this.$frames) {
+                return this.$frames.length;
+            }
             return 0;
         }
     }

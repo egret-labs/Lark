@@ -27,36 +27,36 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-module larkAnimation {
+module lark {
     /**
      * @language en_US
-     * The Loader class is used to load BitmapArray's data. Use the load() method to initiate loading.
-     * The loaded BitmapArrayData object is in the data property of BitmapArrayLoader.
+     * The Loader class is used to load MovieClip's data. Use the load() method to initiate loading.
+     * The loaded MovieClipData object is in the data property of MovieClipLoader.
      * @event lark.Event.COMPLETE 加载完成
      * @event lark.Event.IO_ERROR 加载失败
      * @see lark.HttpRequest
-     * @see larkAnimation.BitmapArray
-     * @see larkAnimation.BitmapArrayData
+     * @see lark.MovieClip
+     * @see lark.MovieClipData
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * BitmapArrayLoader 类可用于加载 BitmapArray 数据。使用 load() 方法来启动加载。
-     * 被加载的 BitmapArrayData 对象数据将存储在 BitmapArrayLoader.data 属性上 。
+     * MovieClipLoader 类可用于加载 MovieClip 数据。使用 load() 方法来启动加载。
+     * 被加载的 MovieClipData 对象数据将存储在 MovieClipLoader.data 属性上 。
      * @event lark.Event.COMPLETE 加载完成
      * @event lark.Event.IO_ERROR 加载失败
      * @see lark.HttpRequest
-     * @see larkAnimation.BitmapArray
-     * @see larkAnimation.BitmapArrayData
+     * @see lark.MovieClip
+     * @see lark.MovieClipData
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export class BitmapArrayLoader extends lark.EventEmitter {
+    export class MovieClipLoader extends lark.EventEmitter {
 
         /**
          * @private
-         * BitmapArray的配置文件，比如Egret MovieClip的.json配置文件
+         * MovieClip 的配置文件，比如 Egret MovieClip 的json配置文件
          */
         $config:string;
 
@@ -75,7 +75,7 @@ module larkAnimation {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public  crossOrigin:string;
+        public crossOrigin:string;
 
         /**
          * @private
@@ -86,23 +86,23 @@ module larkAnimation {
         /**
          * @private
          */
-        $data:BitmapArrayData;
+        $data:MovieClipData;
 
         /**
          * @language en_US
          * The data received from the load operation.
-         * @see larkAnimation.BitmapArrayData
+         * @see lark.MovieClipData
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 使用 load() 方法加载成功的 BitmapArray 对象。
-         * @see larkAnimation.BitmapArrayData
+         * 使用 load() 方法加载成功的 MovieClipData 对象。
+         * @see lark.MovieClipData
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public get data():BitmapArrayData {
+        public get data():MovieClipData {
             return this.$data;
         }
 
@@ -112,21 +112,20 @@ module larkAnimation {
          * Note: Calling this method for an already active request (one for which load() has already been
          * called) will abort the last load operation immediately.
          * At present it supports Egret MovieClip format only.
-         * @param type The type of the MovieClip.It's defined by MovieClipType.
          * @param url The web address of the MovieClip config to load。At present it supports Egret MovieClip format only.
-         * @see larkAnimation.BitmapArray
-         * @see larkAnimation.BitmapArrayData
+         * @see lark.MovieClip
+         * @see lark.MovieClipData
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 启动一次 BitmapArray 数据加载。<br/>
+         * 启动一次 MovieClip 数据加载。<br/>
          * 注意：若之前已经调用过加载请求，重新调用 load() 将终止先前的请求，并开始新的加载。
-         * 目前只支持EgretMovieClip的动画格式。
-         * @param url 要加载的 BitmapArray 配置文件的地址。目前只支持 Egret MovieClip 的动画格式。
-         * @see larkAnimation.BitmapArray
-         * @see larkAnimation.BitmapArrayData
+         * 目前只支持 Egret MovieClip 的数据格式。
+         * @param url 要加载的 MovieClip 配置文件的地址。目前只支持 Egret MovieClip 的数据格式。
+         * @see lark.MovieClip
+         * @see lark.MovieClipData
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -205,12 +204,12 @@ module larkAnimation {
                 var list:Array<any> = info.mc[attributes[0]].frames;
                 var len = list.length;
                 var res;
-                var frames:Array<BitmapArrayFrameData> = [];
+                var frames:Array<lark.sys.MovieClipFrameData> = [];
                 for (var i = 0; i < len; i++) {
                     res = info.res[list[i].res];
-                    frames.push(new BitmapArrayFrameData(this.$loadList[0].content, list[i].x, list[i].y, res.w, res.h, res.x, res.y));
+                    frames.push(new lark.sys.MovieClipFrameData(this.$loadList[0].content, list[i].x, list[i].y, res.w, res.h, res.x, res.y));
                 }
-                var bitmapArrayData = new BitmapArrayData();
+                var bitmapArrayData = new MovieClipData();
                 bitmapArrayData.$frames = frames;
                 this.$data = bitmapArrayData;
                 this.$loadList = null;
