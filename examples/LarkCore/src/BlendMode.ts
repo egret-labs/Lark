@@ -40,7 +40,7 @@ class BlendMode extends lark.Sprite {
 
         modes.forEach((mode,i)=>{
             var modeText = new lark.TextField(mode.toUpperCase());
-            modeText.x = 200 + 200*i;
+            modeText.x = 100 + 100*i;
             modeText.y = 50;
             modeText.textColor = 0xFFFFFF;
             this.addChild(modeText);
@@ -48,9 +48,9 @@ class BlendMode extends lark.Sprite {
                 var bmp = new lark.Bitmap(image);
                 bmp.blendMode = mode;
                 bmp.y = 100 + 150*j;
-                bmp.x = 200 + 200*i;
-                bmp.width = 128;
-                bmp.height = 128;
+                bmp.x = 100 + 100*i;
+                bmp.width = 64;
+                bmp.height = 64;
                 this.addChild(bmp);
             });
         });

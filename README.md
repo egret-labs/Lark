@@ -113,15 +113,16 @@ Lark 硬件访问能力
 Lark 动画库
 <br/>Lark GUI 矢量库
 
+
+## 更新日志
+
+[Lark 1.0 Beta 更新日志](docs/release-notes/1.0-beta-cn.md)
+
 ##版本声明
 Lark 目前处于 Beta 阶段，根据开发者具体反馈情况，可能会有少量不兼容重构，
 但在正式版发布后会开始持续的向后兼容。欢迎广大开发者试用反馈，或直接发起pull request，
 与我们共同推进 Lark 的版本迭代。
 如果您希望更加深入地参与到 Lark 框架的开发设计中，请参考下方「工作机会」。
-
-### 更新日志
-
-[Lark 1.0 Beta 更新日志](docs/release-notes/1.0-beta-cn.md)
 
 ##工作机会
 Lark 框架团队期待您的加入，现招募核心研发工程师数名：
