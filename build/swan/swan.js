@@ -4762,6 +4762,7 @@ var swan;
                         this.radioButtons.splice(i, 1);
                         foundInstance = true;
                         i--;
+                        length--;
                     }
                 }
             }
