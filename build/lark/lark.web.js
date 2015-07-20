@@ -1361,15 +1361,20 @@ var lark;
                 this.onReadyStateChange = function () {
                     var xhr = _this._xhr;
                     if (xhr.readyState == 4) {
-                        if (xhr.status >= 400 || xhr.status == 0) {
-                            if (DEBUG && !_this.hasListener(lark.Event.IO_ERROR)) {
-                                lark.$error(1011, _this._url);
+                        var ioError = (xhr.status >= 400 || xhr.status == 0);
+                        var url = _this._url;
+                        var self = _this;
+                        setTimeout(function () {
+                            if (ioError) {
+                                if (DEBUG && !self.hasListener(lark.Event.IO_ERROR)) {
+                                    lark.$error(1011, url);
+                                }
+                                self.emitWith(lark.Event.IO_ERROR);
                             }
-                            _this.emitWith(lark.Event.IO_ERROR);
-                        }
-                        else {
-                            _this.emitWith(lark.Event.COMPLETE);
-                        }
+                            else {
+                                self.emitWith(lark.Event.COMPLETE);
+                            }
+                        }, 0);
                     }
                 };
                 /**
@@ -1563,7 +1568,10 @@ var lark;
                         return;
                     }
                     _this.data = web.toBitmapData(image);
-                    _this.emitWith(lark.Event.COMPLETE);
+                    var self = _this;
+                    setTimeout(function () {
+                        self.emitWith(lark.Event.COMPLETE);
+                    }, 0);
                 };
                 /**
                  * @private
@@ -1573,10 +1581,7 @@ var lark;
                     if (!image) {
                         return;
                     }
-                    if (DEBUG && !_this.hasListener(lark.Event.IO_ERROR)) {
-                        lark.$error(1011, image.src);
-                    }
-                    _this.emitWith(lark.Event.IO_ERROR);
+                    _this.emitIOError(image.src);
                 };
             }
             var d = __define,c=WebImageLoader;p=c.prototype;
@@ -1615,10 +1620,7 @@ var lark;
              * @private
              */
             p.onBlobError = function (event) {
-                if (DEBUG && !this.hasListener(lark.Event.IO_ERROR)) {
-                    lark.$error(1011, this.currentURL);
-                }
-                this.emitWith(lark.Event.IO_ERROR);
+                this.emitIOError(this.currentURL);
             };
             /**
              * @private
@@ -1633,6 +1635,15 @@ var lark;
                 image.onload = this.onImageComplete;
                 image.onerror = this.onLoadError;
                 image.src = src;
+            };
+            p.emitIOError = function (url) {
+                var self = this;
+                setTimeout(function () {
+                    if (DEBUG && !self.hasListener(lark.Event.IO_ERROR)) {
+                        lark.$error(1011, url);
+                    }
+                    self.emitWith(lark.Event.IO_ERROR);
+                }, 0);
             };
             /**
              * @private
