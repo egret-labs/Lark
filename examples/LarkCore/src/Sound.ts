@@ -18,7 +18,7 @@ class Sound extends lark.Sprite{
     private onLoaded(){
         
         var play = new Button("Play");
-        play.x = 50;
+        play.x = 30;
         play.y = 100;
         play.on(lark.TouchEvent.TOUCH_END,()=>{
             var r = this.play();
@@ -28,7 +28,7 @@ class Sound extends lark.Sprite{
         this.addChild(play);
         
         var stop = new Button("Stop");
-        stop.x = 300;
+        stop.x = 200;
         stop.y = 100;
         stop.on(lark.TouchEvent.TOUCH_END,this.stop,this);
         this.addChild(stop);
@@ -68,8 +68,8 @@ class Button extends lark.Sprite {
     
     private onLoaded(image:lark.BitmapData){
         var btnBackground = new lark.Bitmap(image);
-        btnBackground.scaleX = 0.5;
-        btnBackground.scaleY = 0.5;
+        btnBackground.scaleX = 0.4;
+        btnBackground.scaleY = 0.4;
         this.label.width = btnBackground.width;
         this.label.height = btnBackground.height;
         this.label.textAlign = lark.HorizontalAlign.CENTER;
