@@ -134,6 +134,7 @@ module lark.sys {
 
 module lark {
 
+    var SplitRegex = /(?=[\u00BF-\u1FFF\u2C00-\uD7FF]|\b|\s)(?![。，！、》…）)}”】\.\,\!\?\]\:])/;
     /**
      * @language en_US
      * The TextField class is used to create display objects for text display. You can use the methods and properties of
@@ -837,7 +838,7 @@ module lark {
          * @private
          */
         protected $splitWords(line:string):string[] {
-            return line.split(/\b/);
+            return line.split(SplitRegex);
         }
 
     }
