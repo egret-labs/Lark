@@ -2,7 +2,7 @@
     "name": "lark",
     "description": "A set of complementary tools to Lark",
     "author": "Egret Technology Inc.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "private": true,
     "scripts": {
         "start": "node app"
