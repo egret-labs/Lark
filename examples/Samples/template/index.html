@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+﻿<!DOCTYPE HTML>
 <html>
 <head>
     <meta charset="utf-8">
@@ -12,12 +12,54 @@
     <style>
         html, body {
             -ms-touch-action: none;
-            background: #888888;
+            background: #363e45;
             padding: 0;
             border: 0;
             margin: 0;
             height: 100%;
+            font-family: Consolas, Lucida Console, monospace;
+            min-width:900px;
         }
+        #menu {
+            float: left;
+            width: 200px;
+            height: 100%;
+            border-right: 1px solid #55616C;
+            overflow:auto;
+        }
+
+            #menu a,#menu .head {
+                display:block;
+                color:white;
+                text-decoration:none;
+                text-indent:10px;
+                line-height:24px;
+                font-size:14px;
+            }
+            #menu a:hover,#menu a.active {
+                background:#4D5E6C;
+            }
+            #menu .head {
+                background:#4D5E6C;
+                font-size:24px;
+                line-height:40px;
+                margin-bottom:1px;
+            }
+
+
+    ::-webkit-scrollbar-corner {
+      -webkit-appearance: none;
+    }
+    ::-webkit-scrollbar {
+      -webkit-appearance: none;
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      background-color: rgba(255,255,255,.3);
+      -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+    }
     </style>
 
     <script src="libs/lark/lark.js" src-release="libs/lark/lark.min.js"></script>
@@ -27,8 +69,17 @@
     <script id="project"></script>
 </head>
 <body>
-
-    <div id="lark-sample" style="margin: auto;width: 100%;height: 100%;" class="lark-player"
+    <div id="menu">
+        <div class="head">Samples</div>
+        <a href="?entry=Main">lark.Bitmap</a>
+        <a href="?entry=Main1">lark.Bitmap</a>
+        <a href="?entry=Main2">lark.Bitmap</a>
+        <a href="?entry=Main3">lark.Bitmap</a>
+        <a href="?entry=Main4">lark.Bitmap</a>
+        <a href="?entry=Main5">lark.Bitmap</a>
+        <a href="?entry=Main6">lark.Bitmap</a>
+    </div>
+    <div id="lark-sample" style="margin-left: 205px;height:100%" class="lark-player"
          data-entry-class="Main"
          data-orientation="auto"
          data-scale-mode="noScale"
@@ -38,5 +89,16 @@
          data-show-paint-rect="false"
          data-show-fps="false" data-show-log="false" data-log-filter="">
     </div>
+
+    <script>
+
+        var entry = location.search && location.search.match(/\?entry\=(.*)/)[1] || "Main";
+        var stage = document.getElementById("lark-sample");
+        stage.setAttribute("data-entry-class", entry);
+        var active = document.querySelector('[href="' + location.search + '"]');
+        if (active) 
+            active.setAttribute('class', 'active');
+        
+    </script>
 </body>
 </html>
