@@ -69,11 +69,11 @@ module lark.web {
          */
         private onError = (error: { code: number; message: string; PERMISSION_DENIED:number } ) => {
 
-            var errorType = GeolocationEvent.UNAVAILABLE;
+            var errorType = ErrorEvent.UNAVAILABLE;
             if (error.code == error.PERMISSION_DENIED)
-                errorType = GeolocationEvent.PERMISSION_DENIED;
+                errorType = ErrorEvent.PERMISSION_DENIED;
 
-            var event = new GeolocationEvent(Event.IO_ERROR);
+            var event = new ErrorEvent(Event.IO_ERROR);
             event.errorType = errorType;
             event.errorMessage = error.message;
             this.emit(event);

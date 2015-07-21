@@ -49,6 +49,7 @@ module lark.web {
      * 网页加载完成，实例化页面中定义的Larksys标签
      */
     function runLark():void {
+        console.log("lark: run");
         if(DEBUG){
             var language = navigator.language || navigator.browserLanguage || "en_US";
             language = language.replace("-", "_");
@@ -141,7 +142,10 @@ module lark.web {
         };
     }
 
-
-    window.addEventListener("load", runLark);
+    if (NATIVE) {
+        document.addEventListener("deviceready", runLark, false);
+    } else {
+        window.addEventListener("load", runLark);
+    }
     window.addEventListener("resize", updateAllScreens);
 }

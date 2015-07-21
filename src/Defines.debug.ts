@@ -45,9 +45,11 @@
 
 declare var DEBUG:boolean;
 declare var RELEASE:boolean;
+declare var NATIVE:boolean;
 
 this["DEBUG"] = true;
 this["RELEASE"] = false;
+this["NATIVE"] = false;
 
 module lark {
     export declare function $error(code:number, ...params:any[]):void;

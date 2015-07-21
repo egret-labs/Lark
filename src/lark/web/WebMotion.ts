@@ -9,7 +9,7 @@ module lark.web {
 
         /**
          * @private
-         * 
+         *
          */
         start() {
             window.addEventListener("devicemotion", this.onChange);
@@ -17,7 +17,7 @@ module lark.web {
 
         /**
          * @private
-         * 
+         *
          */
         stop() {
             window.removeEventListener("devicemotion", this.onChange);
@@ -26,19 +26,19 @@ module lark.web {
         /**
          * @private
          */
-        protected onChange = (e: DeviceMotionEvent) => {
+        protected onChange = (e:DeviceMotionEvent) => {
             var event = new MotionEvent(Event.CHANGE);
-            var acceleration: lark.DeviceAcceleration = {
+            var acceleration:lark.DeviceAcceleration = {
                 x: e.acceleration.x,
                 y: e.acceleration.y,
                 z: e.acceleration.z
             };
-            var accelerationIncludingGravity: lark.DeviceAcceleration = {
+            var accelerationIncludingGravity:lark.DeviceAcceleration = {
                 x: e.accelerationIncludingGravity.x,
                 y: e.accelerationIncludingGravity.y,
                 z: e.accelerationIncludingGravity.z
             };
-            var rotation: lark.DeviceRotationRate = {
+            var rotation:lark.DeviceRotationRate = {
                 alpha: e.rotationRate.alpha,
                 beta: e.rotationRate.beta,
                 gamma: e.rotationRate.gamma
@@ -49,5 +49,7 @@ module lark.web {
             this.emit(event);
         }
     }
-    lark.Motion = lark.web.WebMotion;
+    if (!NATIVE) {
+        lark.Motion = lark.web.WebMotion;
+    }
 }

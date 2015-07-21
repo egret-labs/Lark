@@ -33,5 +33,6 @@ module lark.web {
         }
     }
 }
-
-lark.Orientation = lark.web.WebOrientation;
+if (!NATIVE) {
+    lark.Orientation = lark.web.WebOrientation;
+}
