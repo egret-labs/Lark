@@ -3238,7 +3238,7 @@ var lark;
     locale_strings[1009] = "The Stage class does not implement this property or method.";
     locale_strings[1010] = "the property \"{1}\" of the class \"{0}\" is readonly";
     locale_strings[1011] = "Stream Error. URL: {0}";
-    locale_strings[1012] = "The type of parameter {0} must be Class.";
+    locale_strings[1012] = "The type of parameter {0} is wrong.";
     locale_strings[3001] = "Please call the play method when the media is loaded";
     locale_strings[3002] = "Please pass the URL of media you want to load";
     locale_strings[3003] = "When you want to play video in fullscreen mode, please call the play method when the media is loaded";
@@ -3550,7 +3550,7 @@ var lark;
     locale_strings[1009] = "Stage 类不实现此属性或方法。";
     locale_strings[1010] = "类 {0} 的属性 {1} 是只读的";
     locale_strings[1011] = "流错误。URL: {0}";
-    locale_strings[1012] = "参数 {0} 的类型必须为 Class。";
+    locale_strings[1012] = "参数 {0} 的类型错误。";
     locale_strings[3001] = "请等待媒体加载完成后再调用 play 方法";
     locale_strings[3002] = "请指定要加载的媒体的URL";
     locale_strings[3003] = "全屏幕播放视频时，请先调用 load 方法，等待媒体加载完成后再调用 play 方法";
@@ -5245,8 +5245,13 @@ var lark;
          * @private
          */
         p.$addListener = function (type, listener, thisObject, useCapture, priority, emitOnce) {
-            if (DEBUG && !listener) {
-                lark.$error(1003, "listener");
+            if (DEBUG) {
+                if (!listener) {
+                    lark.$error(1003, "listener");
+                }
+                if (typeof listener != "function") {
+                    lark.$error(1012, "listener");
+                }
             }
             var values = this.$EventEmitter;
             var eventMap = useCapture ? values[2 /* captureEventsMap */] : values[1 /* eventsMap */];
