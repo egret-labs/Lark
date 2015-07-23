@@ -43,7 +43,7 @@ module lark {
     locale_strings[1009] = "The Stage class does not implement this property or method.";
     locale_strings[1010] = "the property \"{1}\" of the class \"{0}\" is readonly";
     locale_strings[1011] = "Stream Error. URL: {0}";
-    locale_strings[1012] = "The type of parameter {0} must be Class.";
+    locale_strings[1012] = "The type of parameter {0} is wrong.";
 
     locale_strings[3001] = "Please call the play method when the media is loaded";
     locale_strings[3002] = "Please pass the URL of media you want to load";

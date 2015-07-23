@@ -132,8 +132,13 @@ module lark {
          * @private
          */
         $addListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority?:number, emitOnce?:boolean):void {
-            if (DEBUG && !listener) {
-                $error(1003, "listener");
+            if (DEBUG) {
+                if(!listener){
+                    $error(1003, "listener");
+                }
+                if(typeof listener != "function"){
+                    $error(1012, "listener")
+                }
             }
             var values = this.$EventEmitter;
             var eventMap:any = useCapture ? values[Keys.captureEventsMap] : values[Keys.eventsMap];

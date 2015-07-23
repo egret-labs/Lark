@@ -219,7 +219,7 @@ module lark.sys {
          * @private
          * 显示FPS，仅在DEBUG模式下有效。
          */
-        public displayFPS:(showFPS:boolean, showLog:boolean, logFilter:string)=>void;
+        public displayFPS:(showFPS:boolean, showLog:boolean, logFilter:string, logColor:number)=>void;
         /**
          * @private
          */
@@ -279,7 +279,7 @@ module lark.sys {
         updateInfo(info:string):void;
     }
 
-    declare var FPS:{new (stage:Stage, showFPS:boolean, showLog:boolean, logFilter:string):FPS};
+    declare var FPS:{new (stage:Stage, showFPS:boolean, showLog:boolean, logFilter:string, logColor:number):FPS};
 
     /**
      * @private
@@ -304,12 +304,12 @@ module lark.sys {
             fpsDisplay.updateInfo(info);
         }
 
-        function displayFPS(showFPS:boolean, showLog:boolean, logFilter:string):void {
+        function displayFPS(showFPS:boolean, showLog:boolean, logFilter:string, logColor:number):void {
             showLog = !!showLog;
             this.showFPS = !!showFPS;
             this.showLog = showLog;
             if (!this.fpsDisplay) {
-                fpsDisplay = this.fpsDisplay = new FPS(this.stage, showFPS, showLog, logFilter);
+                fpsDisplay = this.fpsDisplay = new FPS(this.stage, showFPS, showLog, logFilter, logColor);
                 var length = infoLines.length;
                 for (var i = 0; i < length; i++) {
                     fpsDisplay.updateInfo(infoLines[i]);
@@ -390,7 +390,7 @@ module lark.sys {
          */
         FPS = (function (_super):FPS {
             __extends(FPSImpl, _super);
-            function FPSImpl(stage, showFPS, showLog, logFilter) {
+            function FPSImpl(stage, showFPS, showLog, logFilter, logColor:number) {
                 _super.call(this);
                 this["isFPS"] = true;
                 this.infoLines = [];
@@ -404,7 +404,7 @@ module lark.sys {
                 this.logFilter = logFilter;
                 this.touchChildren = false;
                 this.touchEnabled = false;
-                this.createDisplay();
+                this.createDisplay(logColor);
                 try {
                     var logFilterRegExp = logFilter ? new RegExp(logFilter) : null;
                 }
@@ -418,7 +418,7 @@ module lark.sys {
                 }
             }
 
-            FPSImpl.prototype.createDisplay = function () {
+            FPSImpl.prototype.createDisplay = function (textColor) {
                 this.shape = new lark.Shape();
                 this.addChild(this.shape);
                 var textField = new lark.TextField();
@@ -432,7 +432,7 @@ module lark.sys {
                 var textField = new lark.TextField();
                 this.infoText = textField;
                 this.addChild(textField);
-                textField.textColor = 0xb0b0b0;
+                textField.textColor = textColor;
                 textField.fontFamily = "monospace";
                 textField.x = 10;
                 textField.fontSize = 12;

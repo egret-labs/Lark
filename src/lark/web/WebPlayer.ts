@@ -70,6 +70,10 @@ module lark.web {
          * 过滤日志的正则表达式
          */
         logFilter?:string;
+        /**
+         * 日志的文本颜色
+         */
+        logColor?:number;
     }
 
     export class WebPlayer extends LarkObject implements lark.sys.Screen {
@@ -94,7 +98,7 @@ module lark.web {
             if (DEBUG) {
                 player.showPaintRect(option.showPaintRect);
                 if (option.showFPS || option.showLog) {
-                    player.displayFPS(option.showFPS, option.showLog, option.logFilter);
+                    player.displayFPS(option.showFPS, option.showLog, option.logFilter,option.logColor);
                 }
             }
             this.playerOption = option;
@@ -124,6 +128,11 @@ module lark.web {
                 option.showFPS = container.getAttribute("data-show-fps") == "true";
                 option.showLog = container.getAttribute("data-show-log") == "true";
                 option.logFilter = container.getAttribute("data-log-filter");
+                var color:string = container.getAttribute("data-log-color").trim();
+                if(color.charAt(0)=="#"){
+                    color = color.substring(1);
+                }
+                option.logColor = parseInt("0x"+color);
             }
             return option;
         }
