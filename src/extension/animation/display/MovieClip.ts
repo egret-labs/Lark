@@ -75,6 +75,10 @@ module lark {
          * @private
          */
         private _callBacks:Object = {};
+        /**
+         * @private
+         */
+        private _callBacksThis:Object = {};
 
         /**
          * @private
@@ -98,7 +102,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public addFrameScript(frame:number, callBack:Function):void {
+        public addFrameScript(frame:number, callBack:Function, thisObj:any = null):void {
             if (!this.movieClipData || !this.movieClipData.$frames.length) {
                 return;
             }
@@ -108,6 +112,7 @@ module lark {
                 frame = this.movieClipData.$frames.length - 1;
             }
             this._callBacks[frame] = callBack;
+            this._callBacksThis[frame] = thisObj;
         }
 
         /**
@@ -174,11 +179,13 @@ module lark {
                 this.currentRun = false;
                 this.executeFrameScript();
                 this._callBacks = {};
+                this._callBacksThis = {};
             }
             else {
                 this._currentFrame = 0;
                 this.$isPlaying = false;
                 this._callBacks = null;
+                this._callBacksThis = null;
             }
             this.$invalidateContentBounds();
         }
@@ -192,9 +199,10 @@ module lark {
                 return;
             }
             var callBack:Function = this._callBacks[this._currentFrame];
+            var callBackThis:any = this._callBacksThis[this._currentFrame];
             if (callBack && !this.currentRun) {
                 this.currentRun = true;
-                callBack.apply(this);
+                callBack.apply(callBackThis);
             }
         }
 
