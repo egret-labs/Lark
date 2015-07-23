@@ -6,7 +6,6 @@ Lark中普通文本使用 `lark.TextField` 类来实现。这个类继承自 `Di
 创建一个文本对象非常简单，代码如下：
 
 ```
-super();
 var text = new lark.TextField("Hello Lark");
 text.x = 120;
 text.y = 120;
