@@ -38,12 +38,14 @@ module lark {
      * axis and y represents the vertical axis.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/geom/PointExample.ts
      */
     /**
      * @language zh_CN
      * Point 对象表示二维坐标系统中的某个位置，其中 x 表示水平轴，y 表示垂直轴。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/geom/PointExample.ts
      */
     export class Point extends LarkObject {
 
