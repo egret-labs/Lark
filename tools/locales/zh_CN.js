@@ -41,7 +41,7 @@ var lark;
     locale_strings[10010] = "自动编译正在监视项目文件...";
     locale_strings[10011] = "自动编译完成.";
     locale_strings[10012] = "如果您没有设置 IDE 保存自动编译，可以添加参数 -a 来启动自动编译";
-    locale_strings[10013] = "lark 服务器已经启动, URL: {0}";
+    locale_strings[10013] = "lark 服务器已经启动, 您可以通过以下URL访问: {0}";
     locale_strings[10014] = "自动编译失败，请参考下面的错误信息：";
     locale_strings[10015] = "\"{0}\" 不是一个有效的 Lark 项目目录";
     locale_strings[10016] = "如果浏览器没有启动，请手动打开URL: {0}";
