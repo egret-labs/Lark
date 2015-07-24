@@ -6,13 +6,23 @@ DisplayObject 类从 EventEmitter 类继承。这意味着，每个显示对象�
 例如，一个 Shape 对象可以接收来自用户的触摸事件。
 
 ```
-var shp:lark.Shape = new lark.Shape();
-this.addChild( this.$shp );
-this.shp.graphics.beginPath();
-this.shp.graphics.fillStyle=0xff0000;
-this.shp.graphics.fillRect(0,0,100,100);
+class Main extends lark.Sprite {
 
-this.shp.on(lark.TouchEvent.TOUCH_TAP,this.click,this);
+    public constructor() {
+        super();
+    
+        this.addChild( this.shp );
+        this.shp.graphics.beginPath();
+        this.shp.graphics.fillStyle=0xff0000;
+        this.shp.graphics.fillRect(0,0,100,100);
+
+        this.shp.on(lark.TouchEvent.TOUCH_TAP,this.click,this);
+    }
+    private shp = new lark.Shape();
+    private click() {
+        lark.log("click shape!");
+    }
+}
 ```
 
 多次点击 Shape 后，在控制台打印出内容。

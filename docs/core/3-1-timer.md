@@ -16,7 +16,7 @@ Lark 的 Timer 类提供了一个功能强大的解决方案。使用 Lark 事�
 
 例如，下列代码创建一个每秒调度一个事件且持续 60 秒的 Timer 实例：
 
-```
+``` TypeScript
 var oneMinuteTimer = new lark.Timer(1000, 60);
 ```
 
@@ -26,7 +26,13 @@ Timer 对象在每次达到指定的间隔时都会调度 TimerEvent 对象。Ti
 
 以下是一个用来展示 Timer 类实际操作的小示例应用程序：
 
-```
+``` TypeScript
+class Main extends lark.Sprite {
+    constructor() {
+        super();
+        var sh = new ShortTimer();
+    }   
+}
 class ShortTimer extends lark.Sprite {
     public constructor() {
         super();
