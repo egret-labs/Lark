@@ -49,11 +49,9 @@ lark.log( lark.Point.distance(pt1,pt2) );  //打印 90
 
 ```
 var pt1 = lark.Point.create(10, 20); // x == 10; y == 20
-var pt2 = lark.Point.create();
-pt2.x = 100;
-pt2.y = 20;
+var pt2 = lark.Point.create(100,20);
 var pt3 = lark.Point.create(10, 20);
 
 lark.log( pt1.equals(pt2) );  //打印 false
-lark.log( pt3.equals(pt2) );  //打印 true
+lark.log( pt3.equals(pt1) );  //打印 true
 ```
