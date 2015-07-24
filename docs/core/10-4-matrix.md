@@ -10,8 +10,8 @@ Matrix 类表示一个转换矩阵，它确定如何将点从一个坐标空间�
 
 ```
 var matrix:lark.Matrix = lark.Matrix.create();
-var rotation:Number = Math.PI * (30 / 360); // 30° 由度数计算出弧度
-var scaleFactor:Number = 2;
+var rotation:number = Math.PI * (30 / 360); // 30° 由度数计算出弧度
+var scaleFactor:number = 2;
 matrix.scale(scaleFactor, scaleFactor); //缩放
 matrix.rotate(rotation);   //旋转
 matrix.translate( 30, 25 );  //平移

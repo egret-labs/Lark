@@ -34,12 +34,14 @@ module lark {
      * The Capabilities class provides properties that describe the system and runtime that are hosting the application.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/system/CapabilitiesExample.ts
      */
     /**
      * @language zh_CN
      * Capabilities 类提供一些属性，这些属性描述了承载应用程序的系统和运行时。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/system/CapabilitiesExample.ts
      */
     export class Capabilities {
 

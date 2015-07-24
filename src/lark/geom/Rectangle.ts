@@ -41,6 +41,7 @@ module lark {
      * if you change the bottom property, the value of the height property changes.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/geom/RectangleExample.ts
      */
     /**
      * @language zh_CN
@@ -50,6 +51,7 @@ module lark {
      * 属性的值将发生变化；如果更改 bottom 属性，则 height 属性的值将发生变化。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/geom/RectangleExample.ts
      */
     export class Rectangle extends LarkObject {
 
