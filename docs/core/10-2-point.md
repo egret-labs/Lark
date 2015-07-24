@@ -16,9 +16,7 @@ pt2.y = 20;
 
 ```
 var pt1 = lark.Point.create(10, 20); // x == 10; y == 20
-var pt2 = lark.Point.create();
-pt2.x = 10;
-pt2.y = 20;
+var pt2 = lark.Point.create(20,10);
 
 lark.Point.release( pt1 );
 lark.Point.release( pt2 );
