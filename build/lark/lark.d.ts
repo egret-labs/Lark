@@ -2089,6 +2089,7 @@ declare module lark {
      * @see lark.HttpRequest
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/net/ImageLoaderExample.ts
      */
     /**
      * @language zh_CN
@@ -2098,6 +2099,7 @@ declare module lark {
      * @see lark.HttpRequest
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/net/ImageLoaderExample.ts
      */
     interface ImageLoader extends EventEmitter {
         /**
@@ -3173,12 +3175,14 @@ declare module lark {
      * The Capabilities class provides properties that describe the system and runtime that are hosting the application.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/system/CapabilitiesExample.ts
      */
     /**
      * @language zh_CN
      * Capabilities 类提供一些属性，这些属性描述了承载应用程序的系统和运行时。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/system/CapabilitiesExample.ts
      */
     class Capabilities {
         /**
@@ -4141,6 +4145,7 @@ declare module lark {
      * @see lark.EventEmitter
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/events/EventExample.ts
      */
     /**
      * @language zh_CN
@@ -4153,6 +4158,7 @@ declare module lark {
      * @see lark.EventEmitter
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/events/EventExample.ts
      */
     class Event extends LarkObject {
         /**
@@ -4675,6 +4681,7 @@ declare module lark {
      * @see lark.IEventEmitter
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/events/EventEmitterExample.ts
      */
     /**
      * @language zh_CN
@@ -4688,6 +4695,7 @@ declare module lark {
      * @see lark.IEventEmitter
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/events/EventEmitterExample.ts
      */
     class EventEmitter extends LarkObject implements IEventEmitter {
         /**
@@ -4795,12 +4803,14 @@ declare module lark {
      * axis and y represents the vertical axis.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/geom/PointExample.ts
      */
     /**
      * @language zh_CN
      * Point 对象表示二维坐标系统中的某个位置，其中 x 表示水平轴，y 表示垂直轴。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/geom/PointExample.ts
      */
     class Point extends LarkObject {
         /**
@@ -4969,6 +4979,7 @@ declare module lark {
      * @see lark.Timer
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/events/TimerEventExample.ts
      */
     /**
      * @language zh_CN
@@ -4976,6 +4987,7 @@ declare module lark {
      * @see lark.Timer
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/events/TimerEventExample.ts
      */
     class TimerEvent extends Event {
         /**
@@ -5511,6 +5523,7 @@ declare module lark {
      * if you change the bottom property, the value of the height property changes.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/geom/RectangleExample.ts
      */
     /**
      * @language zh_CN
@@ -5520,6 +5533,7 @@ declare module lark {
      * 属性的值将发生变化；如果更改 bottom 属性，则 height 属性的值将发生变化。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/geom/RectangleExample.ts
      */
     class Rectangle extends LarkObject {
         /**
@@ -5848,6 +5862,7 @@ declare module lark {
      * @see lark.TimerEvent
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/utils/TimerExample.ts
      */
     /**
      * @language zh_CN
@@ -5858,6 +5873,7 @@ declare module lark {
      * @see lark.TimerEvent
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/utils/TimerExample.ts
      */
     class Timer extends EventEmitter {
         /**
@@ -6963,6 +6979,7 @@ declare module lark {
      *
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/events/TouchEventExample.ts
      */
     /**
      * @language zh_CN
@@ -6975,6 +6992,7 @@ declare module lark {
      *
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/events/TouchEventExample.ts
      */
     class TouchEvent extends Event {
         /**

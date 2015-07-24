@@ -2283,11 +2283,17 @@ var lark;
                     option.showFPS = container.getAttribute("data-show-fps") == "true";
                     option.showLog = container.getAttribute("data-show-log") == "true";
                     option.logFilter = container.getAttribute("data-log-filter");
-                    var color = container.getAttribute("data-log-color").trim();
-                    if (color.charAt(0) == "#") {
-                        color = color.substring(1);
+                    var color = container.getAttribute("data-log-color");
+                    if (color) {
+                        color = color.trim();
+                        if (color.charAt(0) == "#") {
+                            color = "0x" + color.substring(1);
+                        }
+                        option.logColor = parseInt(color);
                     }
-                    option.logColor = parseInt("0x" + color);
+                    else {
+                        option.logColor = 0xb0b0b0;
+                    }
                 }
                 return option;
             };
