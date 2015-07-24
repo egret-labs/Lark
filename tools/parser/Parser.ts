@@ -167,3 +167,24 @@ export function parseCommandLine(commandLine: string[]) {
     }
 
 }
+
+
+export function parseJSON(json: lark.LarkToolArgs): lark.LarkToolArgs {
+
+    var options = new CompileOptions();
+    var filenames: string[] = [];
+    var errors: string[] = [];
+    options.larkRoot = json.larkRoot || utils.getLarkRoot();
+    options.projectDir = json.projectDir || process.cwd();
+    options.action = json.action;
+    options.autoCompile = json.autoCompile;
+    options.debug = json.debug;
+    options.esTarget = json.esTarget;
+    options.fileName = json.fileName;
+    options.port = json.port;
+    options.publish = json.publish;
+    options.serverOnly = json.serverOnly;
+    options.sourceMap = json.sourceMap;
+
+    return options;
+}

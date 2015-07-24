@@ -5,6 +5,7 @@ var FileUtil = require('../lib/FileUtil');
 var CompileOptions = (function () {
     function CompileOptions() {
         this._outDir = null;
+        this._host = null;
         this._port = NaN;
         this.esTarget = 'ES5';
         this._tmpDir = null;
@@ -73,7 +74,10 @@ var CompileOptions = (function () {
     });
     Object.defineProperty(CompileOptions.prototype, "host", {
         get: function () {
-            return "localhost";
+            return this._host;
+        },
+        set: function (value) {
+            this._host = value;
         },
         enumerable: true,
         configurable: true
@@ -90,7 +94,7 @@ var CompileOptions = (function () {
     });
     Object.defineProperty(CompileOptions.prototype, "websocketUrl", {
         get: function () {
-            var url = "ws://" + this.host + ':' + this.port;
+            var url = "ws://" + (this.host || "localhost") + ':' + this.port;
             return url;
         },
         enumerable: true,
@@ -98,7 +102,7 @@ var CompileOptions = (function () {
     });
     Object.defineProperty(CompileOptions.prototype, "manageUrl", {
         get: function () {
-            var url = "http://" + this.host + ':' + this.port + '/$/';
+            var url = "http://" + (this.host || "localhost") + ':' + this.port + '/$/';
             return url;
         },
         enumerable: true,
@@ -106,12 +110,16 @@ var CompileOptions = (function () {
     });
     Object.defineProperty(CompileOptions.prototype, "startUrl", {
         get: function () {
-            var url = "http://" + this.host + ':' + this.port + '/bin-debug/index.html';
+            var url = "http://" + (this.host || "localhost") + ':' + this.port + '/bin-debug/index.html';
             return url;
         },
         enumerable: true,
         configurable: true
     });
+    CompileOptions.prototype.getStartURL = function (host) {
+        var url = "http://" + host + ':' + this.port + '/bin-debug/index.html';
+        return url;
+    };
     CompileOptions.prototype.getTmpDir = function () {
         if (this._tmpDir == null) {
             var sha1 = crypto.createHash('sha1');
