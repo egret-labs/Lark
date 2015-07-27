@@ -9,6 +9,7 @@
 class TimerExample extends lark.Sprite {
 
     public constructor() {
+        super();
         var myTimer:lark.Timer = new lark.Timer(1000, 2);
         myTimer.on("timer", this.timerHandler, this);
         myTimer.start();

@@ -41,6 +41,7 @@ module lark {
      * @event egret.Event.COMPLETE Emit when a sound has finished playing
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/media/SoundExample.ts
      */
     /**
     * @language zh_CN
@@ -50,6 +51,7 @@ module lark {
      * @event egret.Event.ENDED 音频播放完成时抛出
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/media/SoundExample.ts
     */
     export interface SoundChannel extends IEventEmitter {
 

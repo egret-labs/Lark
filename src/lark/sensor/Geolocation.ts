@@ -13,6 +13,7 @@ module lark {
      * @event lark.Event.IO_ERROR Error occurred while getting the location
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/sensor/GeolocationExample.ts
      */
     /**
      * @language zh_CN
@@ -24,6 +25,7 @@ module lark {
      * @event lark.Event.IO_ERROR 获取设备位置时发生错误
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/sensor/GeolocationExample.ts
      */
     export interface Geolocation extends IEventEmitter {
         /**
