@@ -1575,6 +1575,9 @@ var lark;
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
+    /**
+     * @copy lark.Video
+     */
     lark.Video;
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -2532,6 +2535,7 @@ var lark;
      * @see lark.DisplayObject#blendMode
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BlendMode.ts
      */
     /**
      * @language zh_CN
@@ -2539,6 +2543,7 @@ var lark;
      * @see lark.DisplayObject#blendMode
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BlendMode.ts
      */
     var BlendMode = (function () {
         function BlendMode() {
@@ -3619,6 +3624,7 @@ var lark;
      * @see lark.Shape
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Graphics.ts
      */
     /**
      * @language zh_CN
@@ -3626,6 +3632,7 @@ var lark;
      * @see lark.Shape
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Graphics.ts
      */
     var Graphics = (function (_super) {
         __extends(Graphics, _super);
@@ -7508,6 +7515,7 @@ var lark;
      * @event lark.TouchEvent.TOUCH_RELEASE_OUTSIDE Emitted when the user lifts the point of contact over the different DisplayObject instance on which the contact was initiated on a touch-enabled device (such as presses and releases a finger from a single point over a display object on a mobile phone or tablet with a touch screen).
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/DisplayObject.ts
      */
     /**
      * @language zh_CN
@@ -7532,6 +7540,7 @@ var lark;
      * @event lark.TouchEvent.TOUCH_RELEASE_OUTSIDE 当用户在启用触摸设备上的已启动接触的不同 DisplayObject 实例上抬起接触点时（例如，在配有触摸屏的移动电话或平板电脑的显示对象上的某一点处按下并释放手指）调度。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/DisplayObject.ts
      */
     var DisplayObject = (function (_super) {
         __extends(DisplayObject, _super);
@@ -9255,6 +9264,7 @@ var lark;
      * @see lark.Graphics
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Shape.ts
      */
     /**
      * @language zh_CN
@@ -9262,6 +9272,7 @@ var lark;
      * @see lark.Graphics
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Shape.ts
      */
     var Shape = (function (_super) {
         __extends(Shape, _super);
@@ -9371,6 +9382,7 @@ var lark;
      * @see lark.BitmapData
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Bitmap.ts
      */
     /**
      * @language zh_CN
@@ -9384,6 +9396,7 @@ var lark;
      * @see lark.BitmapData
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Bitmap.ts
      */
     var Bitmap = (function (_super) {
         __extends(Bitmap, _super);
@@ -9600,6 +9613,7 @@ var lark;
      * @see lark.TextInput
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/TextField.ts
      */
     /**
      * @language zh_CN
@@ -9611,6 +9625,7 @@ var lark;
      * @see lark.TextInput
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/TextField.ts
      */
     var TextField = (function (_super) {
         __extends(TextField, _super);
@@ -10371,12 +10386,14 @@ var lark;
      * The Sprite class is a basic display list building block: a display list node that can contain children.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Sprite.ts
      */
     /**
      * @language zh_CN
      * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Sprite.ts
      */
     var Sprite = (function (_super) {
         __extends(Sprite, _super);
@@ -11584,12 +11601,14 @@ var lark;
          * Creates a new TextInput instance.
          * @version Lark 1.0
          * @platform Web,Native
+         * @includeExample examples/Samples/src/lark/display/TextInput.ts
          */
         /**
          * @language zh_CN
          * 创建一个 TextInput 对象。
          * @version Lark 1.0
          * @platform Web,Native
+         * @includeExample examples/Samples/src/lark/display/TextInput.ts
          */
         function TextInput() {
             _super.call(this);
@@ -11908,6 +11927,7 @@ var lark;
      * @event lark.Event.RESIZE Emitted when the stageWidth or stageHeight property of the Stage object is changed.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Stage.ts
      */
     /**
      * @language zh_CN
@@ -11918,6 +11938,7 @@ var lark;
      * @event lark.Event.RESIZE 当stageWidth或stageHeight属性发生改变时调度
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Stage.ts
      */
     var Stage = (function (_super) {
         __extends(Stage, _super);

@@ -1130,8 +1130,7 @@ module swan {
             var columnWidth = this._columnWidth;
             var rowHeight = this._rowHeight;
             for (var i = this.startIndex; i <= endIndex; i++) {
-                if (this.$useVirtualLayout)
-                    elt = <UIComponent> target.getElementAt(i);
+                elt = <UIComponent> target.getElementAt(i);
                 if (!lark.is(elt, UIComponentClass) || !elt.$includeInLayout) {
                     continue;
                 }

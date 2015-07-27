@@ -122,7 +122,16 @@ var lark;
                     if (!this.audio)
                         return 0;
                     return this.audio.currentTime;
-                },undefined
+                },
+                /**
+                 * @private
+                 * @inheritDoc
+                 */
+                function (value) {
+                    if (!this.audio || this.audio.currentTime == value)
+                        return;
+                    this.audio.currentTime = value;
+                }
             );
             return HtmlSoundChannel;
         })(lark.EventEmitter);
