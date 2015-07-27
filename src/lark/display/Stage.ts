@@ -37,6 +37,7 @@ module lark {
      * @event lark.Event.RESIZE Emitted when the stageWidth or stageHeight property of the Stage object is changed.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Stage.ts
      */
     /**
      * @language zh_CN
@@ -47,6 +48,7 @@ module lark {
      * @event lark.Event.RESIZE 当stageWidth或stageHeight属性发生改变时调度
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Stage.ts
      */
     export class Stage extends Sprite {
 
