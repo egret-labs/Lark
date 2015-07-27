@@ -4,7 +4,7 @@
 
 基本的文本参考 [Lark Core 编程指南 - 处理文本](../core/11-0-text.md)
 
-显示一个标题非常简单，代码如下：
+例如显示一个顶部居中的标题，代码如下：
 
 ```  TypeScript
 var panel = new swan.Component();
