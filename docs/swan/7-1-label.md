@@ -1,4 +1,4 @@
-#Swan (UI库) 编程指南 - 文本 (limengjie)
+#Swan (UI库) 编程指南 - 文本
 
 文本控件对应的类是 swan.Label。swan.Label 继承自 lark.TextField，实现了 swan.UIComponent 接口，因此它不仅拥有基本的文本功能(lark.TextField)，还有自动布局功能(swan.UIComponent)。
 
