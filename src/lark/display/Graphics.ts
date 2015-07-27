@@ -82,6 +82,7 @@ module lark {
      * @see lark.Shape
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Graphics.ts
      */
     /**
      * @language zh_CN
@@ -89,6 +90,7 @@ module lark {
      * @see lark.Shape
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Graphics.ts
      */
     export class Graphics extends LarkObject {
 
