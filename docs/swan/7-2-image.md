@@ -25,13 +25,13 @@ this.addChild(image);
 
 Image 的 scale9Grid 属性是一个制定的矩形区域，矩形区域的 x、y 属性分辨对应 A1 区域的宽、高，width、height 属性分别对应 A5 区域的宽、高。
 
-制定一个九宫格的基本图片，代码如下：
+显示一个指定尺寸为 200x200 的九宫格图片，代码如下：
 
 ```  TypeScript
 var image = new  swan.Image();
 image.source = "image/uibg.png";
 image.scale9Grid = new lark.Rectangle(20,20,80,80);
-image.width = 100;
-image.height = 100;
+image.width = 200;
+image.height = 200;
 this.addChild(image);
 ```
