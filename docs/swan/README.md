@@ -21,7 +21,7 @@ Swan (UI库) 编程指南
 	* [代码中的视图状态]()
 7. [控件](7-0-component.md)(limengjie)
     * [文本](7-1-component.md)(done)
-    * [图片]()
+    * [图片](7-2-image.md)(done)
 	* [按钮]()
 	* [复选框]()
 	* [单选按钮]()
