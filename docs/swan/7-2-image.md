@@ -23,9 +23,9 @@ this.addChild(image);
 
 需要注意的是缩小可能会出现问题。
 
-Image 的 scale9Grid 是一个制定的矩形区域，矩形区域的 x、y 属性分辨对应 A1 区域的宽、高，width、height 属性分别对应 A5 区域的宽、高。
+Image 的 scale9Grid 属性是一个制定的矩形区域，矩形区域的 x、y 属性分辨对应 A1 区域的宽、高，width、height 属性分别对应 A5 区域的宽、高。
 
-制定一个九宫格的基本图片代码如下：
+制定一个九宫格的基本图片，代码如下：
 
 ```  TypeScript
 var image = new  swan.Image();

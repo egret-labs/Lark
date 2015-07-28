@@ -45,7 +45,7 @@ module lark {
      *
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/TouchEventExample.ts
+     * @includeExample examples/Samples/src/lark/events/TouchEventExample.ts
      */
     /**
      * @language zh_CN
@@ -58,7 +58,7 @@ module lark {
      *
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/TouchEventExample.ts
+     * @includeExample examples/Samples/src/lark/events/TouchEventExample.ts
      */
     export class TouchEvent extends Event {
 

@@ -16,7 +16,7 @@ module lark {
      * @event lark.Event.CHANGE device is moved
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/sensor/MotionExample.ts
+     * @includeExample examples/Samples/src/lark/sensor/MotionExample.ts
      */
     /**
      * @language zh_CN
@@ -27,7 +27,7 @@ module lark {
      * @event lark.Event.CHANGE 运动状态发生改变
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/sensor/MotionExample.ts
+     * @includeExample examples/Samples/src/lark/sensor/MotionExample.ts
      */
     export interface Motion extends IEventEmitter {
         /**
