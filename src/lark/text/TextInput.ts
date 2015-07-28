@@ -50,14 +50,14 @@ module lark {
          * Creates a new TextInput instance.
          * @version Lark 1.0
          * @platform Web,Native
-         * @includeExample examples/Samples/src/lark/display/TextInputExample.ts
+         * @includeExample examples/Samples/src/lark/text/TextInputExample.ts
          */
         /**
          * @language zh_CN
          * 创建一个 TextInput 对象。
          * @version Lark 1.0
          * @platform Web,Native
-         * @includeExample examples/Samples/src/lark/display/TextInputExample.ts
+         * @includeExample examples/Samples/src/lark/text/TextInputExample.ts
          */
         constructor() {
             super();
