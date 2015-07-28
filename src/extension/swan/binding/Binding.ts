@@ -36,6 +36,7 @@ module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/swan/binding/BindingExample.ts
      */
     /**
      * @language zh_CN
@@ -43,6 +44,7 @@ module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/swan/binding/BindingExample.ts
      */
     export class Binding {
 
