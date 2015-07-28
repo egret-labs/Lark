@@ -1,12 +1,12 @@
 /**
  * @language en_US
- * The following example uses the class DisplayObject to show how to change the alpha rotation scale width height
+ * The following example uses the class DisplayObjectExample to show how to change the alpha rotation scale width height
  */
 /**
  * @language zh_CN
- * 以下示例使用 DisplayObject 类来说明如何改变alpha、旋转、缩放、大小
+ * 以下示例使用 DisplayObjectExample 类来说明如何改变alpha、旋转、缩放、大小
  */
-class DisplayObject extends lark.Sprite {
+class DisplayObjectExample extends lark.Sprite {
     private sp_alpha: lark.Sprite;
     private sp_rotation: lark.Sprite;
     private sp_scale: lark.Sprite;

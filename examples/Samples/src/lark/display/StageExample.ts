@@ -1,12 +1,12 @@
 /**
  * @language en_US
- * The following example uses the class Stage to show how to change the scale mode
+ * The following example uses the class StageExample to show how to change the scale mode
  */
 /**
  * @language zh_CN
- * 以下示例使用 Stage 类来演示如何修改舞台的缩放模式
+ * 以下示例使用 StageExample 类来演示如何修改舞台的缩放模式
  */
-class Stage extends lark.Sprite {
+class StageExample extends lark.Sprite {
     constructor() {
         super();
         //设定舞台的缩放模式,循环使用

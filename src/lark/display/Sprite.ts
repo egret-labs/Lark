@@ -33,14 +33,14 @@ module lark {
      * The Sprite class is a basic display list building block: a display list node that can contain children.
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/Sprite.ts
+     * @includeExample examples/Samples/src/lark/display/SpriteExample.ts
      */
     /**
      * @language zh_CN
      * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/Sprite.ts
+     * @includeExample examples/Samples/src/lark/display/SpriteExample.ts
      */
     export class Sprite extends DisplayObject implements DisplayObjectContainer {
 

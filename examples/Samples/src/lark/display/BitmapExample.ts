@@ -1,12 +1,12 @@
 /**
  * @language en_US
- * The following example uses the class Bitmap to show how to create a Bitmap object
+ * The following example uses the class BitmapExample to show how to create a Bitmap object
  */
 /**
  * @language zh_CN
- * 以下示例使用 Bitmap 类来说明如何创建一个位图对象
+ * 以下示例使用 BitmapExample 类来说明如何创建一个位图对象
  */
-class Bitmap extends lark.Sprite {
+class BitmapExample extends lark.Sprite {
     constructor() {
         super();
         var imageLoader = new lark.ImageLoader();
