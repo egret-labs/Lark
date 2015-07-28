@@ -5669,7 +5669,7 @@ var swan;
              */
             p.update = function (touchPoint, maxScrollValue) {
                 this.currentPosition = touchPoint;
-                this.maxScrollPos = maxScrollValue;
+                this.maxScrollPos = Math.max(maxScrollValue, 0);
                 var scrollPos = this.offsetPoint - touchPoint;
                 if (scrollPos < 0) {
                     scrollPos *= 0.5;
@@ -16026,6 +16026,9 @@ var swan;
         p.checkScrollPolicy = function () {
             var values = this.$Scroller;
             var viewport = values[12 /* viewport */];
+            if (!viewport) {
+                return false;
+            }
             var hCanScroll;
             var uiValues = viewport.$UIComponent;
             switch (values[1 /* scrollPolicyH */]) {

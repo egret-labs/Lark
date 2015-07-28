@@ -463,6 +463,9 @@ module swan {
         private checkScrollPolicy():boolean {
             var values = this.$Scroller;
             var viewport:IViewport = values[Keys.viewport];
+            if(!viewport){
+                return false;
+            }
             var hCanScroll:boolean;
             var uiValues = viewport.$UIComponent;
             switch (values[Keys.scrollPolicyH]) {
