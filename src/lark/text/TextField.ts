@@ -149,7 +149,7 @@ module lark {
      * @see lark.TextInput
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/TextField.ts
+     * @includeExample examples/Samples/src/lark/display/TextFieldExample.ts
      */
     /**
      * @language zh_CN
@@ -161,7 +161,7 @@ module lark {
      * @see lark.TextInput
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/TextField.ts
+     * @includeExample examples/Samples/src/lark/display/TextFieldExample.ts
      */
     export class TextField extends DisplayObject {
         /**
