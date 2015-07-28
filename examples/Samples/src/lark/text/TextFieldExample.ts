@@ -1,12 +1,12 @@
 /**
  * @language en_US
- * The following example show how to use the methods and properties of the TextField class to manipulate it.
+ * The following example uses the TextFieldExample class show how to use the methods and properties of the TextField class to manipulate it.
  */
 /**
  * @language zh_CN
- * 以下示例使用 TextField 类来说明如何使用它的方法和属性对文本字段进行操作
+ * 以下示例使用 TextFieldExample 类来说明如何使用它的方法和属性对文本字段进行操作
  */
-class TextField extends lark.Sprite {
+class TextFieldExample extends lark.Sprite {
     constructor() {
         super();
         this.on(lark.Event.ADDED_TO_STAGE,this.onAddToStageHandler,this);

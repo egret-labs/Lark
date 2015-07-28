@@ -41,7 +41,7 @@ module lark {
      * @see lark.BitmapData
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/Bitmap.ts
+     * @includeExample examples/Samples/src/lark/display/BitmapExample.ts
      */
     /**
      * @language zh_CN
@@ -55,7 +55,7 @@ module lark {
      * @see lark.BitmapData
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/Bitmap.ts
+     * @includeExample examples/Samples/src/lark/display/BitmapExample.ts
      */
     export class Bitmap extends DisplayObject {
 

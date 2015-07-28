@@ -37,7 +37,7 @@ module lark {
      * @see lark.Graphics
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/Shape.ts
+     * @includeExample examples/Samples/src/lark/display/ShapeExample.ts
      */
     /**
      * @language zh_CN
@@ -45,7 +45,7 @@ module lark {
      * @see lark.Graphics
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/Shape.ts
+     * @includeExample examples/Samples/src/lark/display/ShapeExample.ts
      */
     export class Shape extends DisplayObject {
 
