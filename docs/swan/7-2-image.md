@@ -30,7 +30,7 @@ Image 的 scale9Grid 属性是一个制定的矩形区域，矩形区域的 x、
 ```  TypeScript
 var image = new swan.Image();
 image.source = "image/uibg.png";
-image.scale9Grid = new lark.Rectangle(20,20,80,80);
+image.scale9Grid = new lark.Rectangle(10,10,80,80);
 image.width = 200;
 image.height = 200;
 this.addChild(image);
