@@ -4,7 +4,7 @@
 
 基本的位图参考 [Lark Core 编程指南 - 处理位图的基本知识](../core/12-0-bitmap.md)
 
-例如显示一个图片，代码如下：
+使用 lark.Image 加载并显示一张图片非常简单，代码如下：
 
 ```  TypeScript
 var image = new  swan.Image();
