@@ -6,10 +6,13 @@
 需要注意的是如果控件的父类不是 swan.Component （控件容器的基类），自动布局部分就不会生效。例如显示一个600x400的对象，在这个对象上添加一个顶部居中的文字，代码如下：
 
 ```  TypeScript
+//设置一个 600x400 的容器
 var panel = new swan.Component();
 panel.width = 600;
 panel.height = 400;
 this.addChild(panel);
+
+//添加一个水平居中的标题
 var label = new swan.Label();
 abel.horizontalCenter = 0;
 label.text = "标题";
@@ -19,10 +22,13 @@ panel.addChild(label);
 如果把 panel 改成 Sprite 对象，原本设置居中的文字坐标还是在 (0,0) 点。代码如下：
 
 ```  TypeScript
+//设置一个 600x400 的容器
 var panel = new Sprite();
 panel.width = 600;
 panel.height = 400;
 this.addChild(panel);
+
+//添加一个水平居中的标题
 var label = new swan.Label();
 abel.horizontalCenter = 0;
 label.text = "标题";
@@ -30,3 +36,4 @@ panel.addChild(label);
 ```
 
 * [文本](7-1-label.md)
+* [图片](7-2-image.md)
