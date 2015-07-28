@@ -35,3 +35,6 @@ image.width = 200;
 image.height = 200;
 this.addChild(image);
 ```
+
+* 上一节 [文本](7-1-label.md)
+* 下一节 [按钮](7-3-button.md)
