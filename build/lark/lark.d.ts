@@ -86,6 +86,7 @@ declare module lark {
      * @event lark.Event.CHANGE device is moved
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/sensor/MotionExample.ts
      */
     /**
      * @language zh_CN
@@ -96,6 +97,7 @@ declare module lark {
      * @event lark.Event.CHANGE 运动状态发生改变
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/sensor/MotionExample.ts
      */
     interface Motion extends IEventEmitter {
         /**
@@ -307,6 +309,7 @@ declare module lark {
      * @event lark.Event.IO_ERROR Error occurred while getting the location
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/sensor/GeolocationExample.ts
      */
     /**
      * @language zh_CN
@@ -318,6 +321,7 @@ declare module lark {
      * @event lark.Event.IO_ERROR 获取设备位置时发生错误
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/sensor/GeolocationExample.ts
      */
     interface Geolocation extends IEventEmitter {
         /**
@@ -903,6 +907,7 @@ declare module lark {
      * @event lark.Event.CHANGE device's orientation is changed
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/sensor/OrientationExample.ts
      */
     /**
      * @language zh_CN
@@ -910,6 +915,7 @@ declare module lark {
      * @event lark.Event.CHANGE 设备方向改变时派发
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/sensor/OrientationExample.ts
      */
     interface Orientation extends IEventEmitter {
         /**
@@ -2207,6 +2213,7 @@ declare module lark {
      * @event egret.Event.COMPLETE Emit when the audio resource is loaded and ready to play
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/media/SoundExample.ts
      */
     /**
      * @language zh_CN
@@ -2216,6 +2223,7 @@ declare module lark {
      * @event egret.Event.COMPLETE 音频加载完成时抛出
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/media/SoundExample.ts
      */
     interface Sound extends IEventEmitter {
         /**
@@ -2324,6 +2332,7 @@ declare module lark {
      * @event egret.Event.COMPLETE Emit when a sound has finished playing
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/media/SoundExample.ts
      */
     /**
     * @language zh_CN
@@ -2333,6 +2342,7 @@ declare module lark {
      * @event egret.Event.ENDED 音频播放完成时抛出
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/media/SoundExample.ts
     */
     interface SoundChannel extends IEventEmitter {
         /**
@@ -2427,6 +2437,7 @@ declare module lark {
      * @event egret.Event.ENDED Emit when the video playback ended
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/media/VideoExample.ts
      */
     /**
      * @language zh_CN
@@ -2437,6 +2448,7 @@ declare module lark {
      * @event egret.Event.ENDED 视频播放完成时抛出
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/media/VideoExample.ts
      */
     interface Video extends DisplayObject {
         /**
@@ -2582,6 +2594,9 @@ declare module lark {
          */
         bitmapData: BitmapData;
     }
+    /**
+     * @copy lark.Video
+     */
     var Video: {
         new (src?: string): Video;
     };
@@ -3100,6 +3115,7 @@ declare module lark {
      * @see lark.DisplayObject#blendMode
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BlendMode.ts
      */
     /**
      * @language zh_CN
@@ -3107,6 +3123,7 @@ declare module lark {
      * @see lark.DisplayObject#blendMode
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BlendMode.ts
      */
     class BlendMode {
         /**
@@ -3524,6 +3541,7 @@ declare module lark {
      * @see lark.Shape
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Graphics.ts
      */
     /**
      * @language zh_CN
@@ -3531,6 +3549,7 @@ declare module lark {
      * @see lark.Shape
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Graphics.ts
      */
     class Graphics extends LarkObject {
         /**
@@ -6470,6 +6489,7 @@ declare module lark {
      * @event lark.TouchEvent.TOUCH_RELEASE_OUTSIDE Emitted when the user lifts the point of contact over the different DisplayObject instance on which the contact was initiated on a touch-enabled device (such as presses and releases a finger from a single point over a display object on a mobile phone or tablet with a touch screen).
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/DisplayObject.ts
      */
     /**
      * @language zh_CN
@@ -6494,6 +6514,7 @@ declare module lark {
      * @event lark.TouchEvent.TOUCH_RELEASE_OUTSIDE 当用户在启用触摸设备上的已启动接触的不同 DisplayObject 实例上抬起接触点时（例如，在配有触摸屏的移动电话或平板电脑的显示对象上的某一点处按下并释放手指）调度。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/DisplayObject.ts
      */
     class DisplayObject extends EventEmitter implements sys.Renderable {
         /**
@@ -7220,6 +7241,7 @@ declare module lark {
      * @see lark.Graphics
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Shape.ts
      */
     /**
      * @language zh_CN
@@ -7227,6 +7249,7 @@ declare module lark {
      * @see lark.Graphics
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Shape.ts
      */
     class Shape extends DisplayObject {
         /**
@@ -7271,6 +7294,7 @@ declare module lark {
      * @see lark.BitmapData
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Bitmap.ts
      */
     /**
      * @language zh_CN
@@ -7284,6 +7308,7 @@ declare module lark {
      * @see lark.BitmapData
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Bitmap.ts
      */
     class Bitmap extends DisplayObject {
         /**
@@ -7473,6 +7498,7 @@ declare module lark {
      * @see lark.TextInput
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/TextField.ts
      */
     /**
      * @language zh_CN
@@ -7484,6 +7510,7 @@ declare module lark {
      * @see lark.TextInput
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/TextField.ts
      */
     class TextField extends DisplayObject {
         /**
@@ -7732,12 +7759,14 @@ declare module lark {
      * The Sprite class is a basic display list building block: a display list node that can contain children.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Sprite.ts
      */
     /**
      * @language zh_CN
      * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Sprite.ts
      */
     class Sprite extends DisplayObject implements DisplayObjectContainer {
         /**
@@ -8003,12 +8032,14 @@ declare module lark {
          * Creates a new TextInput instance.
          * @version Lark 1.0
          * @platform Web,Native
+         * @includeExample examples/Samples/src/lark/display/TextInput.ts
          */
         /**
          * @language zh_CN
          * 创建一个 TextInput 对象。
          * @version Lark 1.0
          * @platform Web,Native
+         * @includeExample examples/Samples/src/lark/display/TextInput.ts
          */
         constructor();
         /**
@@ -8152,6 +8183,7 @@ declare module lark {
      * @event lark.Event.RESIZE Emitted when the stageWidth or stageHeight property of the Stage object is changed.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Stage.ts
      */
     /**
      * @language zh_CN
@@ -8162,6 +8194,7 @@ declare module lark {
      * @event lark.Event.RESIZE 当stageWidth或stageHeight属性发生改变时调度
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/Stage.ts
      */
     class Stage extends Sprite {
         /**
