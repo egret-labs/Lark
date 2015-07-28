@@ -203,7 +203,7 @@ module swan.sys {
          */
         public update(touchPoint:number, maxScrollValue:number):void {
             this.currentPosition = touchPoint;
-            this.maxScrollPos = maxScrollValue;
+            this.maxScrollPos = Math.max(maxScrollValue,0);
             var scrollPos = this.offsetPoint - touchPoint;
             if (scrollPos < 0) {
                 scrollPos *= 0.5;
