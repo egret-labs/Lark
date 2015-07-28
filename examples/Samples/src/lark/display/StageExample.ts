@@ -15,7 +15,7 @@ class StageExample extends lark.Sprite {
         ];
 
         var imageLoader = new lark.ImageLoader();
-        imageLoader.load("http://img.lark.egret.com/lark.png");
+        imageLoader.load("resources/lark.png");
         imageLoader.once(lark.Event.COMPLETE, this.showBitmap, this);
     }
 

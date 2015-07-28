@@ -38,6 +38,7 @@ module lark {
      * @see lark.DisplayObject
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/DisplayObjectContainerExample.ts
      */
     /**
      * @language zh_CN
@@ -47,6 +48,7 @@ module lark {
      * @see lark.DisplayObject
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/DisplayObjectContainerExample.ts
      */
     export interface DisplayObjectContainer extends DisplayObject {
 
