@@ -1,6 +1,6 @@
-#Swan (UI库) 编程指南 - 图片
+#Swan (UI库) 编程指南 - 按钮
 
-图片控件对应的类是 swan.Image。swan.Image 继承自 lark.Bitmap，实现了 swan.UIComponent 接口。因此它不仅拥有基本的位图功能(lark.Bitmap)，还有自动布局功能(swan.UIComponent)。
+按钮控件对应的类是 swan.Button。
 
 基本的位图参考 [Lark Core 编程指南 - 处理位图的基本知识](../core/12-0-bitmap.md)
 
