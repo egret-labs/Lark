@@ -37,3 +37,4 @@ panel.addChild(label);
 
 * [文本](7-1-label.md)
 * [图片](7-2-image.md)
+* [按钮](7-2-button.md)
