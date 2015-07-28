@@ -13,7 +13,7 @@ button.skinName = "ButtonSkin.exml";
 this.addChild(button);
 ```
 
-皮肤的代码 ButtonSkin.exml 如下：
+ButtonSkin.exml皮肤的代码如下：
 
 ``` XML
 <s:Skin states="up,over,down,disabled" xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
@@ -24,6 +24,8 @@ this.addChild(button);
     <s:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" fontSize="20"/>
 </s:Skin>
 ```
+
+一个按钮的皮肤通常需要有 up、over、down、disabled 几个状态，并且每个状态都有对应的显示。一般按钮还需要有一个显示文字的 label。exml 中的 includeIn 是指该显示对象在什么状态下显示。
 
 运行后效果如图：
 
