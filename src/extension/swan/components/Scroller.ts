@@ -30,6 +30,8 @@
 
 module swan {
 
+    var scrollerThrowEvent:ScrollerThrowEvent;
+
     /**
      * @private
      */
@@ -157,6 +159,42 @@ module swan {
                 12: null,           //viewport
                 13: false,          //viewprotRemovedEvent
             };
+        }
+
+        /**
+         * @language en_US
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        public set throwSpeed(val:number) {
+            val = +val;
+            val = val<0.01?0.01:val;
+            this.$Scroller[Keys.touchScrollH].$scrollFactor = val;
+            this.$Scroller[Keys.touchScrollV].$scrollFactor = val;
+        }
+
+
+        $getThrowInfo(currentPos:number,toPos:number):swan.ScrollerThrowEvent {
+            if(!scrollerThrowEvent) {
+                scrollerThrowEvent = new swan.ScrollerThrowEvent(ScrollerThrowEvent.THROW,false,false,currentPos,toPos,currentPos==toPos?false:true);
+            }
+            else {
+                scrollerThrowEvent.currentPos = currentPos;
+                scrollerThrowEvent.toPos = toPos;
+                scrollerThrowEvent.moveFlag = currentPos==toPos?false:true;
+            }
+            this.emit(scrollerThrowEvent);
+            return scrollerThrowEvent;
         }
 
         /**

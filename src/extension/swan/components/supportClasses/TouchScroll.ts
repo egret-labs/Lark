@@ -103,6 +103,12 @@ module swan.sys {
 
         /**
          * @private
+         * 当前容器滚动外界可调节的系列
+         */
+        $scrollFactor = 1.0;
+
+        /**
+         * @private
          */
         private target:lark.IEventEmitter;
         /**
@@ -237,6 +243,7 @@ module swan.sys {
 
             var pixelsPerMS = sum / totalWeight;
             var absPixelsPerMS = Math.abs(pixelsPerMS);
+            absPixelsPerMS *= this.$scrollFactor;
             var duration = 0;
             var posTo = 0;
             if (absPixelsPerMS > MINIMUM_VELOCITY) {
@@ -249,7 +256,7 @@ module swan.sys {
                             pixelsPerMS *= FRICTION * EXTRA_FRICTION;
                         }
                         else {
-                            pixelsPerMS *= FRICTION;
+                            pixelsPerMS *= FRICTION * this.$scrollFactor;
                         }
                         duration++;
                     }
@@ -257,6 +264,13 @@ module swan.sys {
                 else {
                     duration = Math.log(MINIMUM_VELOCITY / absPixelsPerMS) / FRICTION_LOG;
                 }
+            }
+            else {
+                posTo = currentScrollPos;
+            }
+            if(this.target["$getThrowInfo"]) {
+                var event:swan.ScrollerThrowEvent = this.target["$getThrowInfo"](currentScrollPos,posTo);
+                posTo = event.toPos;
             }
             if (duration > 0) {
                 this.throwTo(posTo, duration);
