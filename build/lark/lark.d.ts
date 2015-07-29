@@ -2770,6 +2770,7 @@ declare module lark {
      * @event lark.ProgressEvent.PROGRESS Emitted when data is received as the download operation progresses.
      * @see lark.HttpMethod
      * @see lark.HttpResponseType
+     * @includeExample examples/Samples/src/lark/net/HttpRequestExample.ts
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2783,6 +2784,7 @@ declare module lark {
      * @event lark.ProgressEvent.PROGRESS 加载进度，可通过event.bytesLoaded和event.bytesTotal统计进度信息。
      * @see lark.HttpMethod
      * @see lark.HttpResponseType
+     * @includeExample examples/Samples/src/lark/net/HttpRequestExample.ts
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2842,6 +2844,7 @@ declare module lark {
          * called) is the equivalent of calling abort().
          * @param url The URL to send the request to.
          * @param method The HTTP method to use, please use the const value in the HttpMethod class.
+         * @see lark.HttpMethod
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -2851,6 +2854,7 @@ declare module lark {
          * 注意: 若在已经发出请求的对象上调用此方法，相当于立即调用abort().
          * @param url 该请求所要访问的URL该请求所要访问的URL
          * @param method 请求所使用的HTTP方法， 请使用 HttpMethod 定义的枚举值.
+         * @see lark.HttpMethod
          * @version Lark 1.0
          * @platform Web,Native
          */
