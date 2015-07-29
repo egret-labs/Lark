@@ -14912,7 +14912,7 @@ var swan;
             else
                 this.getIndexInView();
             var paddingB = this.$paddingBottom;
-            var paddingL = this.$paddingTop;
+            var paddingL = this.$paddingLeft;
             var paddingR = this.$paddingRight;
             var gap = this.$gap;
             var contentHeight;
