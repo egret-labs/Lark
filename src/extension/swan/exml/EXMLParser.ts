@@ -1450,6 +1450,9 @@ module swan.sys {
                 var length:number = children.length;
                 for (var i:number = 0; i < length; i++) {
                     var node:any = children[i];
+                    if(this.isInnerClass(node)){
+                        continue;
+                    }
                     this.getIds(node, result);
                 }
             }
