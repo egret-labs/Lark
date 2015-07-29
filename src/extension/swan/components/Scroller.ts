@@ -46,7 +46,8 @@ module swan {
         touchScrollV,
         delayTouchTimer,
         delayTouchEvent,
-        viewport
+        viewport,
+        viewprotRemovedEvent //表示是被移除触发的viewport设空
     }
     /**
      * @language en_US
@@ -154,6 +155,7 @@ module swan {
                 10: null,           //delayTouchTimer,
                 11: null,           //delayTouchEvent
                 12: null,           //viewport
+                13: false,          //viewprotRemovedEvent
             };
         }
 
@@ -310,6 +312,7 @@ module swan {
                 return;
             this.uninstallViewport();
             values[Keys.viewport] = value;
+            values[Keys.viewprotRemovedEvent] = false;
             this.installViewport();
         }
 
@@ -325,7 +328,6 @@ module swan {
                 viewport.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
                 viewport.on(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
                 viewport.on(lark.Event.REMOVED,this.onViewPortRemove,this);
-                viewport.on(lark.Event.ADDED,this.onViewPortAdded,this);
             }
             if (this.horizontalScrollBar) {
                 this.horizontalScrollBar.viewport = viewport;
@@ -352,21 +354,15 @@ module swan {
                 viewport.removeListener(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
                 viewport.removeListener(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
                 viewport.removeListener(lark.Event.REMOVED,this.onViewPortRemove,this);
-                viewport.removeListener(lark.Event.ADDED,this.onViewPortAdded,this);
-                if(viewport.parent == this) {
+                if(this.$Scroller[Keys.viewprotRemovedEvent] == false) {
                     this.removeChild(viewport);
                 }
             }
         }
 
-        private onViewPortRemove(e:lark.Event):void {
+        private onViewPortRemove(event:lark.Event):void {
+            this.$Scroller[Keys.viewprotRemovedEvent] = true;
             this.viewport = null;
-        }
-
-        private onViewPortAdded(e:lark.Event):void {
-            if(this.viewport.parent != this) {
-                this.viewport = null;
-            }
         }
 
         /**
