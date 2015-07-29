@@ -37,6 +37,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/DirectionExample.ts
      */
     /**
      * @language zh_CN
@@ -44,6 +45,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/DirectionExample.ts
      */
     var Direction = (function () {
         function Direction() {
@@ -299,6 +301,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/TileOrientationExample.ts
      */
     /**
      * @language zh_CN
@@ -307,6 +310,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/TileOrientationExample.ts
      */
     var TileOrientation = (function () {
         function TileOrientation() {
@@ -418,6 +422,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/JustifyAlignExample.ts
      */
     /**
      * @language zh_CN
@@ -426,6 +431,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/JustifyAlignExample.ts
      */
     var JustifyAlign = (function () {
         function JustifyAlign() {
@@ -515,6 +521,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/ColumnAlignExample.ts
      */
     /**
      * @language zh_CN
@@ -523,6 +530,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/ColumnAlignExample.ts
      */
     var ColumnAlign = (function () {
         function ColumnAlign() {
@@ -1369,6 +1377,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/BitmapFillModeExample.ts
      */
     /**
      * @language zh_CN
@@ -1380,6 +1389,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/BitmapFillModeExample.ts
      */
     var BitmapFillMode = (function () {
         function BitmapFillMode() {
@@ -1473,6 +1483,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/ScrollPolicyExample.ts
      */
     /**
      * @language zh_CN
@@ -1482,6 +1493,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/ScrollPolicyExample.ts
      */
     var ScrollPolicy = (function () {
         function ScrollPolicy() {
@@ -1882,6 +1894,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/RowAlignExample.ts
      */
     /**
      * @language zh_CN
@@ -1890,6 +1903,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/RowAlignExample.ts
      */
     var RowAlign = (function () {
         function RowAlign() {
@@ -2227,6 +2241,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/binding/WatcherExample.ts
      */
     /**
      * @language zh_CN
@@ -2235,6 +2250,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/binding/WatcherExample.ts
      */
     var Watcher = (function () {
         /**
@@ -3004,6 +3020,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/ItemTapEventExample.ts
      */
     /**
      * @language zh_CN
@@ -3011,6 +3028,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/ItemTapEventExample.ts
      */
     var ItemTapEvent = (function (_super) {
         __extends(ItemTapEvent, _super);
@@ -3168,6 +3186,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/binding/BindingExample.ts
      */
     /**
      * @language zh_CN
@@ -3175,6 +3194,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/binding/BindingExample.ts
      */
     var Binding = (function () {
         function Binding() {
@@ -3294,6 +3314,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/ThemeExample.ts
      */
     /**
      * @language zh_CN
@@ -3301,6 +3322,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/ThemeExample.ts
      */
     var Theme = (function (_super) {
         __extends(Theme, _super);
@@ -3532,6 +3554,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/CollectionEventExample.ts
      */
     /**
      * @language zh_CN
@@ -3539,6 +3562,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/CollectionEventExample.ts
      */
     var CollectionEvent = (function (_super) {
         __extends(CollectionEvent, _super);
@@ -3748,6 +3772,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/collection/ArrayCollectionExample.ts
      */
     /**
      * @language zh_CN
@@ -3759,6 +3784,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/collection/ArrayCollectionExample.ts
      */
     var ArrayCollection = (function (_super) {
         __extends(ArrayCollection, _super);
@@ -4116,6 +4142,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/UIEventExample.ts
      */
     /**
      * @language zh_CN
@@ -4123,6 +4150,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/UIEventExample.ts
      */
     var UIEvent = (function (_super) {
         __extends(UIEvent, _super);
@@ -4307,6 +4335,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/PropertyEventExample.ts
      */
     /**
      * @language zh_CN
@@ -4315,6 +4344,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/PropertyEventExample.ts
      */
     var PropertyEvent = (function (_super) {
         __extends(PropertyEvent, _super);
@@ -8210,6 +8240,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/BasicLayoutExample.ts
      */
     /**
      * @language zh_CN
@@ -8220,6 +8251,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/BasicLayoutExample.ts
      */
     var BasicLayout = (function (_super) {
         __extends(BasicLayout, _super);
@@ -8463,6 +8495,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/TileLayoutExample.ts
      */
     /**
      * @language zh_CN
@@ -8472,6 +8505,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/TileLayoutExample.ts
      */
     var TileLayout = (function (_super) {
         __extends(TileLayout, _super);
@@ -14615,6 +14649,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
      */
     /**
      * @language zh_CN
@@ -14623,6 +14658,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
      */
     var VerticalLayout = (function (_super) {
         __extends(VerticalLayout, _super);
@@ -14876,7 +14912,7 @@ var swan;
             else
                 this.getIndexInView();
             var paddingB = this.$paddingBottom;
-            var paddingL = this.$paddingTop;
+            var paddingL = this.$paddingLeft;
             var paddingR = this.$paddingRight;
             var gap = this.$gap;
             var contentHeight;
@@ -15136,6 +15172,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/HorizontalLayoutExample.ts
      */
     /**
      * @language zh_CN
@@ -15144,6 +15181,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/HorizontalLayoutExample.ts
      */
     var HorizontalLayout = (function (_super) {
         __extends(HorizontalLayout, _super);

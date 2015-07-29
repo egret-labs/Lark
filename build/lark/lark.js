@@ -10164,7 +10164,9 @@ var lark;
                     vAlign = 1;
                 drawY += vAlign * (explicitHeight - textHeight);
             }
+            var roundOff = drawY;
             drawY = Math.round(drawY);
+            roundOff = drawY - roundOff;
             var hAlign = 0;
             if (values[9 /* textAlign */] == lark.HorizontalAlign.CENTER) {
                 hAlign = 0.5;
@@ -10180,7 +10182,7 @@ var lark;
             else {
                 maxWidth = values[3 /* textFieldWidth */];
             }
-            var maxYPos = explicitHeight - 2;
+            var maxYPos = explicitHeight - 2 + roundOff;
             for (var i = 0; i < length; i++) {
                 var line = lines[i];
                 var measureW = measuredWidths[i];
