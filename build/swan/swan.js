@@ -5698,8 +5698,9 @@ var swan;
              * @param touchPoint 当前触摸位置，以像素为单位，通常是stageX或stageY。
              */
             p.update = function (touchPoint, maxScrollValue) {
+                maxScrollValue = Math.max(maxScrollValue, 0);
                 this.currentPosition = touchPoint;
-                this.maxScrollPos = Math.max(maxScrollValue, 0);
+                this.maxScrollPos = maxScrollValue;
                 var scrollPos = this.offsetPoint - touchPoint;
                 if (scrollPos < 0) {
                     scrollPos *= 0.5;
@@ -7121,6 +7122,9 @@ var swan;
                     var length = children.length;
                     for (var i = 0; i < length; i++) {
                         var node = children[i];
+                        if (this.isInnerClass(node)) {
+                            continue;
+                        }
                         this.getIds(node, result);
                     }
                 }
@@ -15929,9 +15933,12 @@ var swan;
         p.installViewport = function () {
             var viewport = this.viewport;
             if (viewport) {
+                this.addChildAt(viewport, 0);
                 viewport.scrollEnabled = true;
                 viewport.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
                 viewport.on(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
+                viewport.on(lark.Event.REMOVED, this.onViewPortRemove, this);
+                viewport.on(lark.Event.ADDED, this.onViewPortAdded, this);
             }
             if (this.horizontalScrollBar) {
                 this.horizontalScrollBar.viewport = viewport;
@@ -15956,7 +15963,19 @@ var swan;
                 viewport.scrollEnabled = false;
                 viewport.removeListener(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
                 viewport.removeListener(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
-                this.removeChild(viewport);
+                viewport.removeListener(lark.Event.REMOVED, this.onViewPortRemove, this);
+                viewport.removeListener(lark.Event.ADDED, this.onViewPortAdded, this);
+                if (viewport.parent == this) {
+                    this.removeChild(viewport);
+                }
+            }
+        };
+        p.onViewPortRemove = function (e) {
+            this.viewport = null;
+        };
+        p.onViewPortAdded = function (e) {
+            if (this.viewport.parent != this) {
+                this.viewport = null;
             }
         };
         /**

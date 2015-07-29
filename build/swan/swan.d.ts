@@ -9570,6 +9570,8 @@ declare module swan {
          * 卸载视域组件
          */
         private uninstallViewport();
+        private onViewPortRemove(e);
+        private onViewPortAdded(e);
         /**
          * @inheritDoc
          *
