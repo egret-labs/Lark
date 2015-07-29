@@ -1,3 +1,11 @@
+/**
+ * @language en_US
+ * The following example shows the general use of a Group.
+ */
+/**
+ * @language zh_CN
+ * 下面的例子显示了一个 Group 的常规用法。
+ */
 class GroupExample extends lark.Sprite {
 
     public constructor() {
@@ -12,19 +20,19 @@ class GroupExample extends lark.Sprite {
                     + '<s:layout>'
                         + '<s:VerticalLayout gap="20"/>'
                     + '</s:layout>'
-                    + '<s:Label id="name" text="北京"/>'
-                    + '<s:Label id="weather" text="晴天"/>'
-                    + '<s:Image id="icon" source="resources/sunny.png"/>'
+                    + '<s:Label text="北京" textColor="0xFFFFFF"/>'
+                    + '<s:Label text="晴天" textColor="0xFFFFCC"/>'
+                    + '<s:Image source="resources/sunny.png"/>'
                 + '</s:Group>'
                 + '<s:Group>'
                     + '<s:layout>'
                         + '<s:VerticalLayout gap="20"/>'
                     + '</s:layout>'
-                    + '<s:Label id="name" text="上海"/>'
-                    + '<s:Label id="weather" text="多云"/>'
-                    + '<s:Image id="icon" source="resources/cloudy.png"/>'
+                    + '<s:Label text="上海" textColor="0xFFFFFF"/>'
+                    + '<s:Label text="多云" textColor="0xFFFFCC"/>'
+                    + '<s:Image source="resources/cloudy.png"/>'
                 + '</s:Group>'
-            + '</s:Group>'
+            + '</s:Group>';
 
         var clazz = EXML.parse(exml);
         var group:swan.Group = new clazz();

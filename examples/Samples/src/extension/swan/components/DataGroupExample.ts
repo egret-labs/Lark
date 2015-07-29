@@ -1,6 +1,6 @@
 /**
  * @language en_US
- * he following example demonstrates two methods to create DataGroup.
+ * The following example demonstrates two methods to create DataGroup.
  */
 /**
  * @language zh_CN

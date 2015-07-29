@@ -320,10 +320,12 @@ module swan {
         private installViewport():void {
             var viewport = this.viewport;
             if (viewport) {
+                this.addChildAt(viewport, 0);
                 viewport.scrollEnabled = true;
                 viewport.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
                 viewport.on(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
-                this.addChildAt(viewport, 0);
+                viewport.on(lark.Event.REMOVED,this.onViewPortRemove,this);
+                viewport.on(lark.Event.ADDED,this.onViewPortAdded,this);
             }
             if (this.horizontalScrollBar) {
                 this.horizontalScrollBar.viewport = viewport;
@@ -349,7 +351,21 @@ module swan {
                 viewport.scrollEnabled = false;
                 viewport.removeListener(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
                 viewport.removeListener(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
-                this.removeChild(viewport);
+                viewport.removeListener(lark.Event.REMOVED,this.onViewPortRemove,this);
+                viewport.removeListener(lark.Event.ADDED,this.onViewPortAdded,this);
+                if(viewport.parent == this) {
+                    this.removeChild(viewport);
+                }
+            }
+        }
+
+        private onViewPortRemove(e:lark.Event):void {
+            this.viewport = null;
+        }
+
+        private onViewPortAdded(e:lark.Event):void {
+            if(this.viewport.parent != this) {
+                this.viewport = null;
             }
         }
 
@@ -390,7 +406,7 @@ module swan {
             }
 
             var target:lark.DisplayObject = event.target;
-            while (target != this) {
+            while (target && target != this) {
                 if (target instanceof Scroller) {
                     canScroll = (<Scroller><any> target).checkScrollPolicy();
                     if (canScroll) {
