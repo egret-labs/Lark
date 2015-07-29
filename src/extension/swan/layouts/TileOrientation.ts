@@ -37,7 +37,7 @@ module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/swan/layout/TileOrientationExample.ts
+     * @includeExample examples/Samples/src/extension/swan/layout/TileOrientationExample.ts
      */
     /**
      * @language zh_CN
@@ -46,7 +46,7 @@ module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/swan/layout/TileOrientationExample.ts
+     * @includeExample examples/Samples/src/extension/swan/layout/TileOrientationExample.ts
      */
     export class TileOrientation {
         /**
