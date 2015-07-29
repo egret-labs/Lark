@@ -202,8 +202,9 @@ module swan.sys {
          * @param touchPoint 当前触摸位置，以像素为单位，通常是stageX或stageY。
          */
         public update(touchPoint:number, maxScrollValue:number):void {
+            maxScrollValue = Math.max(maxScrollValue, 0);
             this.currentPosition = touchPoint;
-            this.maxScrollPos = Math.max(maxScrollValue,0);
+            this.maxScrollPos = maxScrollValue;
             var scrollPos = this.offsetPoint - touchPoint;
             if (scrollPos < 0) {
                 scrollPos *= 0.5;
