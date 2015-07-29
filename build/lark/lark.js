@@ -8772,10 +8772,35 @@ var lark;
             matrix.copyFrom(concatenatedMatrix);
             var root = displayList.root;
             if (root !== this.$stage) {
-                root.$getInvertedConcatenatedMatrix().$preMultiplyInto(matrix, matrix);
+                this.$getConcatenatedMatrixAt(root, matrix);
             }
             region.updateRegion(bounds, matrix);
             return true;
+        };
+        /**
+         * @private
+         * 获取相对于指定根节点的连接矩阵。
+         * @param root 根节点显示对象
+         * @param matrix 目标显示对象相对于舞台的完整连接矩阵。
+         */
+        p.$getConcatenatedMatrixAt = function (root, matrix) {
+            var invertMatrix = root.$getInvertedConcatenatedMatrix();
+            if (invertMatrix.a === 0 || invertMatrix.d === 0) {
+                var target = this;
+                var rootLevel = root.$nestLevel;
+                matrix.identity();
+                while (target.$nestLevel > rootLevel) {
+                    var rect = target.$scrollRect;
+                    if (rect) {
+                        matrix.concat(lark.$TempMatrix.setTo(1, 0, 0, 1, -rect.x, -rect.y));
+                    }
+                    matrix.concat(target.$getMatrix());
+                    target = target.$parent;
+                }
+            }
+            else {
+                invertMatrix.$preMultiplyInto(matrix, matrix);
+            }
         };
         /**
          * @private
@@ -11151,7 +11176,7 @@ var lark;
                 matrix.copyFrom(concatenatedMatrix);
                 var root = displayList.root;
                 if (root !== target.$stage) {
-                    root.$getInvertedConcatenatedMatrix().$preMultiplyInto(matrix, matrix);
+                    target.$getConcatenatedMatrixAt(root, matrix);
                 }
                 region.updateRegion(bounds, matrix);
                 return true;

@@ -5698,8 +5698,9 @@ var swan;
              * @param touchPoint 当前触摸位置，以像素为单位，通常是stageX或stageY。
              */
             p.update = function (touchPoint, maxScrollValue) {
+                maxScrollValue = Math.max(maxScrollValue, 0);
                 this.currentPosition = touchPoint;
-                this.maxScrollPos = Math.max(maxScrollValue, 0);
+                this.maxScrollPos = maxScrollValue;
                 var scrollPos = this.offsetPoint - touchPoint;
                 if (scrollPos < 0) {
                     scrollPos *= 0.5;
@@ -7102,13 +7103,13 @@ var swan;
              */
             function getRepeatedIds(xml) {
                 var result = [];
-                this.getIds(xml, result);
                 this.repeatedIdMap = {};
+                this.getIds(xml, result);
                 return result;
             }
             function getIds(xml, result) {
-                if (xml.namespace != sys.NS_W && xml["$id"]) {
-                    var id = xml.$id;
+                if (xml.namespace != sys.NS_W && xml.attributes.id) {
+                    var id = xml.attributes.id;
                     if (this.repeatedIdMap[id]) {
                         result.push(toXMLString(xml));
                     }
@@ -7121,7 +7122,10 @@ var swan;
                     var length = children.length;
                     for (var i = 0; i < length; i++) {
                         var node = children[i];
-                        getIds(node, result);
+                        if (this.isInnerClass(node)) {
+                            continue;
+                        }
+                        this.getIds(node, result);
                     }
                 }
             }
@@ -14047,7 +14051,7 @@ var swan;
         d(p, "elementsContent",undefined,
             /**
              * @language en_US
-             * [write-only] This property is Usually invoked in resolving an EXML for adding multiple children quickly.
+             * This property is Usually invoked in resolving an EXML for adding multiple children quickly.
              *
              * @version Lark 1.0
              * @version Swan 1.0
@@ -14055,7 +14059,7 @@ var swan;
              */
             /**
              * @language zh_CN
-             * [只写] 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
+             * 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
