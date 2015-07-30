@@ -25,6 +25,11 @@ class RunCommand implements lark.Command {
             process.exit(exitCode);
         }
 
+        utils.getAvailablePort(port=> this.onGotPort(port), lark.options.port);
+    }
+
+    private onGotPort(port: number) {
+        lark.options.port = port;
         console.log('\n');
         var addresses = utils.getNetworkAddress();
         if (addresses.length > 0) {
@@ -45,7 +50,7 @@ class RunCommand implements lark.Command {
             this.watchFiles(lark.options.templateDir);
         }
         else {
-            console.log('    '+utils.tr(10012));
+            console.log('    ' + utils.tr(10012));
         }
     }
 

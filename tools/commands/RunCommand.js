@@ -11,33 +11,37 @@ var RunCommand = (function () {
             if (exitCode != 0) {
                 process.exit(exitCode);
             }
-            console.log('\n');
-            var addresses = utils.getNetworkAddress();
-            if (addresses.length > 0) {
-                lark.options.host = addresses[0];
-            }
-            server.startServer(lark.options, lark.options.startUrl);
-            console.log("    " + utils.tr(10013, ''));
-            console.log('\n');
-            console.log('        ' + lark.options.startUrl);
-            for (var i = 1; i < addresses.length; i++) {
-                console.log('        ' + lark.options.getStartURL(addresses[i]));
-            }
-            console.log('\n');
-            if (lark.options.autoCompile) {
-                console.log('    ' + utils.tr(10010));
-                _this.watchFiles(lark.options.srcDir);
-                _this.watchFiles(lark.options.templateDir);
-            }
-            else {
-                console.log('    ' + utils.tr(10012));
-            }
+            utils.getAvailablePort(function (port) { return _this.onGotPort(port); }, lark.options.port);
         };
     }
     RunCommand.prototype.execute = function () {
         var build = new Build();
         build.execute(this.onBuildFinish);
         return 0;
+    };
+    RunCommand.prototype.onGotPort = function (port) {
+        lark.options.port = port;
+        console.log('\n');
+        var addresses = utils.getNetworkAddress();
+        if (addresses.length > 0) {
+            lark.options.host = addresses[0];
+        }
+        server.startServer(lark.options, lark.options.startUrl);
+        console.log("    " + utils.tr(10013, ''));
+        console.log('\n');
+        console.log('        ' + lark.options.startUrl);
+        for (var i = 1; i < addresses.length; i++) {
+            console.log('        ' + lark.options.getStartURL(addresses[i]));
+        }
+        console.log('\n');
+        if (lark.options.autoCompile) {
+            console.log('    ' + utils.tr(10010));
+            this.watchFiles(lark.options.srcDir);
+            this.watchFiles(lark.options.templateDir);
+        }
+        else {
+            console.log('    ' + utils.tr(10012));
+        }
     };
     RunCommand.prototype.watchFiles = function (dir) {
         var _this = this;
