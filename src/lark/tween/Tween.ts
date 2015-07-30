@@ -21,7 +21,7 @@ module lark {
      */
     export class Tween extends lark.EventEmitter {
 
-        public constructor(host:any, time:number, params?:Object) {
+        public constructor(host:any, time:number, params?:Object, ease?:Function) {
             super();
             time = +time;
             this._time = time;
@@ -29,14 +29,8 @@ module lark {
             if (time <= 0) return;
             var controller:BaseTransformation;
             if (params) {
-                var ease = params["ease"];
-                if(ease) {
-                    if(typeof ease == "string") {
-                        this._ease = EasyFactory.getEase(ease);
-                    } else if(lark.is(ease,"lark.IEase")) {
-                        this._ease = ease;
-                    }
-                }
+
+                this._ease = ease;
 
                 var keys = Object.keys(params);
                 for (var i = 0; i < keys.length; i++) {
@@ -64,7 +58,7 @@ module lark {
                 }
             }
             if (!this._ease) {
-                this._ease = EasyFactory.getEase(Ease.None);
+                this._ease = Ease.None;
             }
             if(initTweenFlag) {
                 this._startTime = lark.getTimer();
@@ -153,10 +147,14 @@ module lark {
         /**
          * @private
          */
-        _ease:IEase;
+        _ease:Function;
 
-        public get ease():IEase {
+        public get ease():Function {
             return this._ease;
+        }
+
+        public set ease(val:Function) {
+            this._ease = val;
         }
 
         /**
@@ -310,6 +308,29 @@ module lark {
         }
 
         /**
+         * @private
+         */
+        _complete:Function;
+
+        /**
+         * @private
+         */
+        _completeThis:any;
+
+        /**
+         * @private
+         */
+        _completeParams:any;
+
+
+        public call(callBack:Function,thisObj?:any,params?:any):Tween {
+            this._complete = callBack;
+            this._completeThis = thisObj;
+            this._completeParams = params;
+            return this;
+        }
+
+        /**
          * @language en_US
          * Completely stop the current Tween. And recycling of cyberspace.
          * @see lark.Tween
@@ -348,18 +369,37 @@ module lark {
                 this._currentTime = this._time;
             }
             var length = this._controllers.length;
-            var s = this.ease.update(this._currentTime/this._time);
+            var s = this.ease(this._currentTime/this._time);
             for(var i = 0; i < length; i++) {
                 this._controllers[i].update(s);
             }
-            if(this.hasListener(lark.Event.CHANGE)) {
-                this.emitWith(lark.Event.CHANGE,false);
-            }
+            //if(this.hasListener(lark.Event.CHANGE)) {
+            //    this.emitWith(lark.Event.CHANGE,false);
+            //}
             if (this._currentTime == this._time) {
                 lark.stopTick(this.update, this);
-                if(this.hasListener(lark.Event.COMPLETE)) {
-                    this.emitWith(lark.Event.COMPLETE,false);
+                //if(this.hasListener(lark.Event.COMPLETE)) {
+                //    this.emitWith(lark.Event.COMPLETE,false);
+                //}
+                if(this._waitTime) {
+                    this._waitTime += lark.getTimer();
+                    lark.startTick(this.waitEndTime,this);
                 }
+                else {
+                    if (this._nextTween) {
+                        this._nextTween.$initPlay(time);
+                    }
+                }
+            }
+            return true;
+        }
+
+        /**
+         * @private
+         */
+        private waitEndTime(time:number):boolean {
+            if(time > this._waitTime) {
+                lark.stopTick(this.waitEndTime,this);
                 if (this._nextTween) {
                     this._nextTween.$initPlay(time);
                 }
@@ -393,20 +433,24 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public to(object:any, time:number, params?:Object):Tween {
+        public to(object:any, time:number, params?:Object, ease?:any):Tween {
             initTweenFlag = false;
-            var tween = new Tween(object, time, params);
+            var tween = new Tween(object, time, params, ease);
             initTweenFlag = true;
             return this.concatTween(tween);
         }
 
-        public wait(time:number):void {
+        _waitTime:number = 0;
 
+        public wait(time:number):Tween {
+            time = +time;
+            this._waitTime = time;
+            return this;
         }
 
-        public static get(object:any, time:number, params?:Object):Tween {
+        public static get(object:any, time:number, params?:Object, ease?:any):Tween {
             initTweenFlag = true;
-            var tween = new Tween(object, time, params);
+            var tween = new Tween(object, time, params, ease);
             return tween;
         }
     }
