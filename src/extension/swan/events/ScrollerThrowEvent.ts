@@ -15,19 +15,17 @@ module swan {
         public toPos:number;
 
         /**
-         * 表示是否会滚动
+         * 动画信息，可调节或修改
          */
-        public moveFlag:boolean;
+        //public tween;
 
 
-        public constructor(type:string, bubbles?:boolean, cancelable?:boolean,currentPos?:number,toPos?:number,moveFlag?:boolean) {
+        public constructor(type:string, bubbles?:boolean, cancelable?:boolean,currentPos?:number,toPos?:number) {
             super(type, bubbles, cancelable);
             currentPos = +currentPos;
             toPos = +toPos;
-            moveFlag = !!moveFlag;
             this.currentPos = currentPos;
             this.toPos = toPos;
-            this.moveFlag = moveFlag;
         }
     }
 }

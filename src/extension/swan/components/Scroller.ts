@@ -183,15 +183,18 @@ module swan {
             this.$Scroller[Keys.touchScrollV].$scrollFactor = val;
         }
 
+        public get throwSpeed():number {
+            return this.$Scroller[Keys.touchScrollH].$scrollFactor;
+        }
+
 
         $getThrowInfo(currentPos:number,toPos:number):swan.ScrollerThrowEvent {
             if(!scrollerThrowEvent) {
-                scrollerThrowEvent = new swan.ScrollerThrowEvent(ScrollerThrowEvent.THROW,false,false,currentPos,toPos,currentPos==toPos?false:true);
+                scrollerThrowEvent = new swan.ScrollerThrowEvent(ScrollerThrowEvent.THROW,false,false,currentPos,toPos);
             }
             else {
                 scrollerThrowEvent.currentPos = currentPos;
                 scrollerThrowEvent.toPos = toPos;
-                scrollerThrowEvent.moveFlag = currentPos==toPos?false:true;
             }
             this.emit(scrollerThrowEvent);
             return scrollerThrowEvent;
