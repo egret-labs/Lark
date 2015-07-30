@@ -5,6 +5,20 @@ module lark {
      */
     var initTweenFlag = true;
 
+    /**
+     * @language en_US
+     * The tween.
+     * @see lark.Tween
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 缓动类。
+     * @see lark.Tween
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
     export class Tween extends lark.EventEmitter {
 
         public constructor(time:number, host?:any, params?:Object) {
@@ -13,7 +27,7 @@ module lark {
             this._time = time;
             this._host = host;
             if (time <= 0) return;
-            var controller:BaseTweenController;
+            var controller:BaseTransformation;
             if (params) {
                 var ease = params["ease"];
                 if(ease) {
@@ -43,7 +57,7 @@ module lark {
                         }
                     }
                     if (keys.length) {
-                        controller = new BasicTweenController(this, params);
+                        controller = new BasicTransformation(this, params);
                         if(initTweenFlag) {
                             controller.ready();
                         }
@@ -63,32 +77,93 @@ module lark {
             lark.startTick(this.update, this);
         }
 
+        /**
+         * @private
+         */
         _time:number;
 
+
+        /**
+         * @language en_US
+         * The total transformation time.
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 总的变换时间。
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         public get time():number {
             return this._time;
         }
 
+        /**
+         * @private
+         */
         _startTime:number = -1;
 
+        /**
+         * @private
+         */
         _currentTime:number = 0;
 
+        /**
+         * @language en_US
+         * The current transformation time.
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当前的变换时间。
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         public get currentTime():number {
             return this._currentTime;
         }
 
+        /**
+         * @private
+         */
         _host:any;
 
+        /**
+         * @language en_US
+         * The object to transform.
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要变换的对象。
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         public get host():void {
             return this._host;
         }
 
+        /**
+         * @private
+         */
         _ease:IEase;
 
         public get ease():IEase {
             return this._ease;
         }
 
+        /**
+         * @private
+         */
         _nextTween:Tween;
 
         public get nextTween():Tween {
@@ -99,13 +174,45 @@ module lark {
             this._nextTween = tween;
         }
 
-        _controllers:BaseTweenController[] = [];
+        /**
+         * @private
+         */
+        _controllers:BaseTransformation[] = [];
 
+        /**
+         * @language en_US
+         * Getting the number of transformation properties.
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取变换属性的个数。
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         public get controllerLength():number {
             return this._controllers.length;
         }
 
-        public getControllerAt(index:number):BaseTweenController {
+
+        /**
+         * @language en_US
+         * Getting transformation properties.
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 获取变换属性。
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public getControllerAt(index:number):BaseTransformation {
             index = +index | 0;
             if (index < 0 || index >= this._controllers.length) {
                 return null;
@@ -115,19 +222,19 @@ module lark {
 
         /**
          * @language en_US
-         * Pauses the current Tween.
+         * Setting transformation properties.
          * @see lark.Tween
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 暂停当前 Tween。
+         * 设置变换属性。
          * @see lark.Tween
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public set controllers(vals:BaseTweenController[]) {
+        public set controllers(vals:BaseTransformation[]) {
             if (this._controllers) {
                 return;
             }

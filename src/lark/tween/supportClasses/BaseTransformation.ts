@@ -1,6 +1,6 @@
 module lark {
 
-    export class BaseTweenController extends lark.LarkObject {
+    export class BaseTransformation extends lark.LarkObject {
 
         public constructor(tween:Tween,attributes:Object) {
             super();
