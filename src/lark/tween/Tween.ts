@@ -21,7 +21,7 @@ module lark {
      */
     export class Tween extends lark.EventEmitter {
 
-        public constructor(time:number, host?:any, params?:Object) {
+        public constructor(host:any, time:number, params?:Object) {
             super();
             time = +time;
             this._time = time;
@@ -38,31 +38,29 @@ module lark {
                     }
                 }
 
-                if (host) {
-                    var keys = Object.keys(params);
-                    for (var i = 0; i < keys.length; i++) {
-                        var key = keys[i];
-                        if (typeof (key) != "string") {
-                            delete params[key];
-                            keys.splice(i, 1);
-                            i--;
-                            continue;
-                        }
-                        var attribute = params[key];
-                        if (typeof (attribute) != "number" || !(key in host)) {
-                            delete params[key];
-                            keys.splice(i, 1);
-                            i--;
-                            continue;
-                        }
+                var keys = Object.keys(params);
+                for (var i = 0; i < keys.length; i++) {
+                    var key = keys[i];
+                    if (typeof (key) != "string") {
+                        delete params[key];
+                        keys.splice(i, 1);
+                        i--;
+                        continue;
                     }
-                    if (keys.length) {
-                        controller = new BasicTransformation(this, params);
-                        if(initTweenFlag) {
-                            controller.ready();
-                        }
-                        this._controllers.push(controller);
+                    var attribute = params[key];
+                    if (typeof (attribute) != "number" || !(key in host)) {
+                        delete params[key];
+                        keys.splice(i, 1);
+                        i--;
+                        continue;
                     }
+                }
+                if (keys.length) {
+                    controller = new BasicTransformation(this, params);
+                    if(initTweenFlag) {
+                        controller.ready();
+                    }
+                    this._controllers.push(controller);
                 }
             }
             if (!this._ease) {
@@ -395,16 +393,20 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public concatTweenTo(time:number, object?:any, params?:Object):Tween {
+        public to(object:any, time:number, params?:Object):Tween {
             initTweenFlag = false;
-            var tween = new Tween(time, object, params);
+            var tween = new Tween(object, time, params);
             initTweenFlag = true;
             return this.concatTween(tween);
         }
 
-        public static to(time:number, object?:any, params?:Object):Tween {
+        public wait(time:number):void {
+
+        }
+
+        public static get(object:any, time:number, params?:Object):Tween {
             initTweenFlag = true;
-            var tween = new Tween(time, object, params);
+            var tween = new Tween(object, time, params);
             return tween;
         }
     }
