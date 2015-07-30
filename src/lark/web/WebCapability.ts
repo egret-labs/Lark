@@ -71,6 +71,7 @@ module lark.web {
                 strings[1] = strings[1].toUpperCase();
             }
             capabilities.$language = strings.join("-");
+            capabilities.$devicePixelRatio = window.devicePixelRatio || 1;
         }
 
         /**

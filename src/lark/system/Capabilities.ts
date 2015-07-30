@@ -207,6 +207,26 @@ module lark {
         public static get hasMotion():boolean {
             return Capabilities.$hasMotion;
         }
+
+        static $devicePixelRatio: number;
+
+        /**
+         * @language en_US
+         * The devicePixelRatio read-only property returns the ratio 
+         * of the (vertical) size of one physical pixel on the current display 
+         * device to the size of one logical pixel. 
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * devicePixelRatio 反应设备物理分辨率与逻辑分辨率的比值
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public static get devicePixelRatio(): number {
+            return Capabilities.$devicePixelRatio;
+        }
     }
 
     if (DEBUG) {

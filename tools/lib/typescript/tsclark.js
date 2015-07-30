@@ -11010,32 +11010,27 @@ var ts;
                             write(", ");
                             emitExpressionForPropertyName(member.name);
                             emitEnd(member.name);
-                            write(",");
                             increaseIndent();
                             if (accessors.getAccessor) {
                                 writeLine();
                                 emitLeadingComments(accessors.getAccessor);
                                 emitStart(accessors.getAccessor);
-                                write("function ");
+                                write(",function ");
                                 emitSignatureAndBody(accessors.getAccessor);
                                 emitEnd(accessors.getAccessor);
                                 emitTrailingComments(accessors.getAccessor);
                             }
-                            else {
-                                write("undefined");
+                            else if (accessors.setAccessor) {
+                                write(",undefined");
                             }
-                            write(",");
                             if (accessors.setAccessor) {
                                 writeLine();
                                 emitLeadingComments(accessors.setAccessor);
                                 emitStart(accessors.setAccessor);
-                                write("function ");
+                                write(",function ");
                                 emitSignatureAndBody(accessors.setAccessor);
                                 emitEnd(accessors.setAccessor);
                                 emitTrailingComments(accessors.setAccessor);
-                            }
-                            else {
-                                write("undefined");
                             }
                             decreaseIndent();
                             writeLine();
