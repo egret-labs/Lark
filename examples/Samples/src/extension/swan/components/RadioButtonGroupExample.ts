@@ -51,7 +51,6 @@ class RadioButtonGroupExample extends lark.Sprite {
         this.addChild(group);
         group.x = 50;
         group.y = 50;
-
     }
 
 }

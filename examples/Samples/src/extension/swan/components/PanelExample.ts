@@ -1,3 +1,11 @@
+/**
+ * @language en_US
+ * The exmaple follow shows a panel.
+ */
+/**
+ * @language zh_CN
+ * 下面的例子演示了一个面板。
+ */
 class PanelExample extends lark.Sprite {
 
     public constructor() {

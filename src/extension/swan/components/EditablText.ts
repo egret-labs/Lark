@@ -35,6 +35,7 @@ module swan {
      * @language en_US
      * Editable text for displaying,
      * scrolling, selecting, and editing text.
+     * @includeExample examples/Samples/src/extension/swan/components/EditablTextExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -42,6 +43,7 @@ module swan {
     /**
      * @language zh_CN
      * 可编辑文本，用于显示、滚动、选择和编辑文本。
+     * @includeExample examples/Samples/src/extension/swan/components/EditablTextExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
