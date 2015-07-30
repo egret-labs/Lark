@@ -45,7 +45,7 @@ module lark {
      * @see lark.EventEmitter
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/EventExample.ts
+     * @includeExample examples/Samples/src/lark/events/EventExample.ts
      */
     /**
      * @language zh_CN
@@ -58,7 +58,7 @@ module lark {
      * @see lark.EventEmitter
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/EventExample.ts
+     * @includeExample examples/Samples/src/lark/events/EventExample.ts
      */
     export class Event extends LarkObject {
         /**

@@ -56,6 +56,7 @@ declare module lark {
      * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
      * to render after processing of this method completes.
      * @param thisObject the call back method's "this"
+     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -65,6 +66,7 @@ declare module lark {
      * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
      * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
      * @param thisObject 回调方法的this对象引用。
+     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -86,6 +88,7 @@ declare module lark {
      * @event lark.Event.CHANGE device is moved
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/sensor/MotionExample.ts
      */
     /**
      * @language zh_CN
@@ -96,6 +99,7 @@ declare module lark {
      * @event lark.Event.CHANGE 运动状态发生改变
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/sensor/MotionExample.ts
      */
     interface Motion extends IEventEmitter {
         /**
@@ -307,6 +311,7 @@ declare module lark {
      * @event lark.Event.IO_ERROR Error occurred while getting the location
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/sensor/GeolocationExample.ts
      */
     /**
      * @language zh_CN
@@ -318,6 +323,7 @@ declare module lark {
      * @event lark.Event.IO_ERROR 获取设备位置时发生错误
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/sensor/GeolocationExample.ts
      */
     interface Geolocation extends IEventEmitter {
         /**
@@ -369,6 +375,7 @@ declare module lark {
      * @see lark.DisplayObject
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/DisplayObjectContainerExample.ts
      */
     /**
      * @language zh_CN
@@ -378,6 +385,7 @@ declare module lark {
      * @see lark.DisplayObject
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/DisplayObjectContainerExample.ts
      */
     interface DisplayObjectContainer extends DisplayObject {
         /**
@@ -903,6 +911,7 @@ declare module lark {
      * @event lark.Event.CHANGE device's orientation is changed
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/sensor/OrientationExample.ts
      */
     /**
      * @language zh_CN
@@ -910,6 +919,7 @@ declare module lark {
      * @event lark.Event.CHANGE 设备方向改变时派发
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/sensor/OrientationExample.ts
      */
     interface Orientation extends IEventEmitter {
         /**
@@ -1835,12 +1845,14 @@ declare module lark {
      * The XML class contains properties for working with XML objects.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/utils/XMLExample.ts
      */
     /**
      * @language zh_CN
      * XML 类包含用于处理 XML 对象的属性。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/utils/XMLExample.ts
      */
     interface XML extends XMLNode {
         /**
@@ -2035,6 +2047,7 @@ declare module lark {
      * @see lark.Bitmap
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BitmapDataExample.ts
      */
     /**
      * @language zh_CN
@@ -2045,6 +2058,7 @@ declare module lark {
      * @see lark.Bitmap
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BitmapDataExample.ts
      */
     interface BitmapData extends LarkObject {
         /**
@@ -2089,7 +2103,7 @@ declare module lark {
      * @see lark.HttpRequest
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/net/ImageLoaderExample.ts
+     * @includeExample examples/Samples/src/lark/net/ImageLoaderExample.ts
      */
     /**
      * @language zh_CN
@@ -2099,7 +2113,7 @@ declare module lark {
      * @see lark.HttpRequest
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/net/ImageLoaderExample.ts
+     * @includeExample examples/Samples/src/lark/net/ImageLoaderExample.ts
      */
     interface ImageLoader extends EventEmitter {
         /**
@@ -2207,6 +2221,7 @@ declare module lark {
      * @event egret.Event.COMPLETE Emit when the audio resource is loaded and ready to play
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/media/SoundExample.ts
      */
     /**
      * @language zh_CN
@@ -2216,6 +2231,7 @@ declare module lark {
      * @event egret.Event.COMPLETE 音频加载完成时抛出
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/media/SoundExample.ts
      */
     interface Sound extends IEventEmitter {
         /**
@@ -2324,6 +2340,7 @@ declare module lark {
      * @event egret.Event.COMPLETE Emit when a sound has finished playing
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/media/SoundExample.ts
      */
     /**
     * @language zh_CN
@@ -2333,6 +2350,7 @@ declare module lark {
      * @event egret.Event.ENDED 音频播放完成时抛出
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/media/SoundExample.ts
     */
     interface SoundChannel extends IEventEmitter {
         /**
@@ -2427,6 +2445,7 @@ declare module lark {
      * @event egret.Event.ENDED Emit when the video playback ended
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/media/VideoExample.ts
      */
     /**
      * @language zh_CN
@@ -2437,6 +2456,7 @@ declare module lark {
      * @event egret.Event.ENDED 视频播放完成时抛出
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/media/VideoExample.ts
      */
     interface Video extends DisplayObject {
         /**
@@ -2582,6 +2602,9 @@ declare module lark {
          */
         bitmapData: BitmapData;
     }
+    /**
+     * @copy lark.Video
+     */
     var Video: {
         new (src?: string): Video;
     };
@@ -2641,6 +2664,7 @@ declare module lark {
      * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
      * to render after processing of this method completes.
      * @param thisObject the call back method's "this"
+     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2650,6 +2674,7 @@ declare module lark {
      * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
      * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
      * @param thisObject 回调方法的this对象引用。
+     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2708,6 +2733,12 @@ declare module lark {
      * @language en_US
      * Used to compute relative time.this method returns the number of milliseconds since the Lark framework was initialized
      * @returns The number of milliseconds since the Lark framework was initialized
+     * @example
+     * This example shows getting and printing the number of milliseconds since the Lark framework was initialized
+     * <pre>
+     *  var duration = lark.getTimer();
+     *  console.log("duration: " + duration);
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2715,6 +2746,12 @@ declare module lark {
      * @language zh_CN
      * 用于计算相对时间。此方法返回自启动 Lark 框架以来经过的毫秒数。
      * @returns 启动 Lark 框架以来经过的毫秒数。
+     * @example
+     * 获取并打印自启动 Lark 框架以来经过的毫秒数。
+     * <pre>
+     *  var duration = lark.getTimer();
+     *  console.log("duration: " + duration);
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2733,6 +2770,7 @@ declare module lark {
      * @event lark.ProgressEvent.PROGRESS Emitted when data is received as the download operation progresses.
      * @see lark.HttpMethod
      * @see lark.HttpResponseType
+     * @includeExample examples/Samples/src/lark/net/HttpRequestExample.ts
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2746,6 +2784,7 @@ declare module lark {
      * @event lark.ProgressEvent.PROGRESS 加载进度，可通过event.bytesLoaded和event.bytesTotal统计进度信息。
      * @see lark.HttpMethod
      * @see lark.HttpResponseType
+     * @includeExample examples/Samples/src/lark/net/HttpRequestExample.ts
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2805,6 +2844,7 @@ declare module lark {
          * called) is the equivalent of calling abort().
          * @param url The URL to send the request to.
          * @param method The HTTP method to use, please use the const value in the HttpMethod class.
+         * @see lark.HttpMethod
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -2814,6 +2854,7 @@ declare module lark {
          * 注意: 若在已经发出请求的对象上调用此方法，相当于立即调用abort().
          * @param url 该请求所要访问的URL该请求所要访问的URL
          * @param method 请求所使用的HTTP方法， 请使用 HttpMethod 定义的枚举值.
+         * @see lark.HttpMethod
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -3079,6 +3120,13 @@ declare module lark {
      * @language en_US
      * Returns a reference to the class object of the class specified by the name parameter.
      * @param name The name of a class.
+     * @example
+     * <pre>
+     *  var clazz:any = lark.getDefinitionByName("lark.Shape"); //get definition of class lark.Shape
+     *  var shape:lark.Shape = new clazz();
+     *  shape.graphics.fillStyle = "#ff0000";
+     *  shape.graphics.fillRect(0,0,100,100);
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -3086,6 +3134,13 @@ declare module lark {
      * @language zh_CN
      * 返回 name 参数指定的类的类对象引用。
      * @param name 类的名称。
+     * @example
+     * <pre>
+     *  var clazz:any = lark.getDefinitionByName("lark.Shape"); //获取lark.Shape类定义
+     *  var shape:lark.Shape = new clazz();
+     *  shape.graphics.fillStyle = "#ff0000";
+     *  shape.graphics.fillRect(0,0,100,100);
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -3100,6 +3155,7 @@ declare module lark {
      * @see lark.DisplayObject#blendMode
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BlendModeExample.ts
      */
     /**
      * @language zh_CN
@@ -3107,6 +3163,7 @@ declare module lark {
      * @see lark.DisplayObject#blendMode
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BlendModeExample.ts
      */
     class BlendMode {
         /**
@@ -3175,14 +3232,14 @@ declare module lark {
      * The Capabilities class provides properties that describe the system and runtime that are hosting the application.
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/system/CapabilitiesExample.ts
+     * @includeExample examples/Samples/src/lark/system/CapabilitiesExample.ts
      */
     /**
      * @language zh_CN
      * Capabilities 类提供一些属性，这些属性描述了承载应用程序的系统和运行时。
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/system/CapabilitiesExample.ts
+     * @includeExample examples/Samples/src/lark/system/CapabilitiesExample.ts
      */
     class Capabilities {
         /**
@@ -3524,6 +3581,7 @@ declare module lark {
      * @see lark.Shape
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/GraphicsExample.ts
      */
     /**
      * @language zh_CN
@@ -3531,6 +3589,7 @@ declare module lark {
      * @see lark.Shape
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/GraphicsExample.ts
      */
     class Graphics extends LarkObject {
         /**
@@ -3721,9 +3780,9 @@ declare module lark {
          */
         /**
          * @language zh_CN
-         * 指定用于拐角的连接外观的类型,有3个可能的值，分别是：<br/>
+         * 指定用于拐角的连接外观的类型。有3个可能的值，分别是：<br/>
          * <ul>
-         * <li>"round": 圆角连接</li>
+         * <li>"round": 圆角连接。</li>
          * <li>"bevel": 斜角连接。</li>
          * <li>"miter": 尖角连接。当使用尖角模式时，还可以同时使用 miterLimit 参数限制尖角的长度。</li>
          * </ul>
@@ -4145,7 +4204,7 @@ declare module lark {
      * @see lark.EventEmitter
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/EventExample.ts
+     * @includeExample examples/Samples/src/lark/events/EventExample.ts
      */
     /**
      * @language zh_CN
@@ -4158,7 +4217,7 @@ declare module lark {
      * @see lark.EventEmitter
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/EventExample.ts
+     * @includeExample examples/Samples/src/lark/events/EventExample.ts
      */
     class Event extends LarkObject {
         /**
@@ -4681,7 +4740,7 @@ declare module lark {
      * @see lark.IEventEmitter
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/EventEmitterExample.ts
+     * @includeExample examples/Samples/src/lark/events/EventEmitterExample.ts
      */
     /**
      * @language zh_CN
@@ -4695,7 +4754,7 @@ declare module lark {
      * @see lark.IEventEmitter
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/EventEmitterExample.ts
+     * @includeExample examples/Samples/src/lark/events/EventEmitterExample.ts
      */
     class EventEmitter extends LarkObject implements IEventEmitter {
         /**
@@ -4803,14 +4862,14 @@ declare module lark {
      * axis and y represents the vertical axis.
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/geom/PointExample.ts
+     * @includeExample examples/Samples/src/lark/geom/PointExample.ts
      */
     /**
      * @language zh_CN
      * Point 对象表示二维坐标系统中的某个位置，其中 x 表示水平轴，y 表示垂直轴。
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/geom/PointExample.ts
+     * @includeExample examples/Samples/src/lark/geom/PointExample.ts
      */
     class Point extends LarkObject {
         /**
@@ -4979,7 +5038,7 @@ declare module lark {
      * @see lark.Timer
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/TimerEventExample.ts
+     * @includeExample examples/Samples/src/lark/events/TimerEventExample.ts
      */
     /**
      * @language zh_CN
@@ -4987,7 +5046,7 @@ declare module lark {
      * @see lark.Timer
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/TimerEventExample.ts
+     * @includeExample examples/Samples/src/lark/events/TimerEventExample.ts
      */
     class TimerEvent extends Event {
         /**
@@ -5523,7 +5582,7 @@ declare module lark {
      * if you change the bottom property, the value of the height property changes.
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/geom/RectangleExample.ts
+     * @includeExample examples/Samples/src/lark/geom/RectangleExample.ts
      */
     /**
      * @language zh_CN
@@ -5533,7 +5592,7 @@ declare module lark {
      * 属性的值将发生变化；如果更改 bottom 属性，则 height 属性的值将发生变化。
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/geom/RectangleExample.ts
+     * @includeExample examples/Samples/src/lark/geom/RectangleExample.ts
      */
     class Rectangle extends LarkObject {
         /**
@@ -5862,7 +5921,7 @@ declare module lark {
      * @see lark.TimerEvent
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/utils/TimerExample.ts
+     * @includeExample examples/Samples/src/lark/utils/TimerExample.ts
      */
     /**
      * @language zh_CN
@@ -5873,7 +5932,7 @@ declare module lark {
      * @see lark.TimerEvent
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/utils/TimerExample.ts
+     * @includeExample examples/Samples/src/lark/utils/TimerExample.ts
      */
     class Timer extends EventEmitter {
         /**
@@ -6470,6 +6529,7 @@ declare module lark {
      * @event lark.TouchEvent.TOUCH_RELEASE_OUTSIDE Emitted when the user lifts the point of contact over the different DisplayObject instance on which the contact was initiated on a touch-enabled device (such as presses and releases a finger from a single point over a display object on a mobile phone or tablet with a touch screen).
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/DisplayObjectExample.ts
      */
     /**
      * @language zh_CN
@@ -6494,6 +6554,7 @@ declare module lark {
      * @event lark.TouchEvent.TOUCH_RELEASE_OUTSIDE 当用户在启用触摸设备上的已启动接触的不同 DisplayObject 实例上抬起接触点时（例如，在配有触摸屏的移动电话或平板电脑的显示对象上的某一点处按下并释放手指）调度。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/DisplayObjectExample.ts
      */
     class DisplayObject extends EventEmitter implements sys.Renderable {
         /**
@@ -6979,7 +7040,7 @@ declare module lark {
      *
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/TouchEventExample.ts
+     * @includeExample examples/Samples/src/lark/events/TouchEventExample.ts
      */
     /**
      * @language zh_CN
@@ -6992,7 +7053,7 @@ declare module lark {
      *
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/TouchEventExample.ts
+     * @includeExample examples/Samples/src/lark/events/TouchEventExample.ts
      */
     class TouchEvent extends Event {
         /**
@@ -7220,6 +7281,7 @@ declare module lark {
      * @see lark.Graphics
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/ShapeExample.ts
      */
     /**
      * @language zh_CN
@@ -7227,6 +7289,7 @@ declare module lark {
      * @see lark.Graphics
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/ShapeExample.ts
      */
     class Shape extends DisplayObject {
         /**
@@ -7271,6 +7334,7 @@ declare module lark {
      * @see lark.BitmapData
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BitmapExample.ts
      */
     /**
      * @language zh_CN
@@ -7284,6 +7348,7 @@ declare module lark {
      * @see lark.BitmapData
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BitmapExample.ts
      */
     class Bitmap extends DisplayObject {
         /**
@@ -7473,6 +7538,7 @@ declare module lark {
      * @see lark.TextInput
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/text/TextFieldExample.ts
      */
     /**
      * @language zh_CN
@@ -7484,6 +7550,7 @@ declare module lark {
      * @see lark.TextInput
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/text/TextFieldExample.ts
      */
     class TextField extends DisplayObject {
         /**
@@ -7732,12 +7799,14 @@ declare module lark {
      * The Sprite class is a basic display list building block: a display list node that can contain children.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/SpriteExample.ts
      */
     /**
      * @language zh_CN
      * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/SpriteExample.ts
      */
     class Sprite extends DisplayObject implements DisplayObjectContainer {
         /**
@@ -7989,6 +8058,7 @@ declare module lark {
      * @see lark.TextField
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/text/TextInputExample.ts
      */
     /**
      * @language zh_CN
@@ -7996,6 +8066,7 @@ declare module lark {
      * @see lark.TextField
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/text/TextInputExample.ts
      */
     class TextInput extends TextField {
         /**
@@ -8152,6 +8223,7 @@ declare module lark {
      * @event lark.Event.RESIZE Emitted when the stageWidth or stageHeight property of the Stage object is changed.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/StageExample.ts
      */
     /**
      * @language zh_CN
@@ -8162,6 +8234,7 @@ declare module lark {
      * @event lark.Event.RESIZE 当stageWidth或stageHeight属性发生改变时调度
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/StageExample.ts
      */
     class Stage extends Sprite {
         /**

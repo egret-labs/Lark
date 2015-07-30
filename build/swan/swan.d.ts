@@ -6,6 +6,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/DirectionExample.ts
      */
     /**
      * @language zh_CN
@@ -13,6 +14,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/DirectionExample.ts
      */
     class Direction {
         /**
@@ -292,6 +294,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/TileOrientationExample.ts
      */
     /**
      * @language zh_CN
@@ -300,6 +303,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/TileOrientationExample.ts
      */
     class TileOrientation {
         /**
@@ -430,6 +434,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/JustifyAlignExample.ts
      */
     /**
      * @language zh_CN
@@ -438,6 +443,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/JustifyAlignExample.ts
      */
     class JustifyAlign {
         /**
@@ -492,6 +498,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/ColumnAlignExample.ts
      */
     /**
      * @language zh_CN
@@ -500,6 +507,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/ColumnAlignExample.ts
      */
     class ColumnAlign {
         /**
@@ -1234,6 +1242,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/BitmapFillModeExample.ts
      */
     /**
      * @language zh_CN
@@ -1245,6 +1254,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/BitmapFillModeExample.ts
      */
     class BitmapFillMode {
         /**
@@ -1303,6 +1313,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/ScrollPolicyExample.ts
      */
     /**
      * @language zh_CN
@@ -1312,6 +1323,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/ScrollPolicyExample.ts
      */
     class ScrollPolicy {
         /**
@@ -1569,6 +1581,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/RowAlignExample.ts
      */
     /**
      * @language zh_CN
@@ -1577,6 +1590,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/RowAlignExample.ts
      */
     class RowAlign {
         /**
@@ -1807,6 +1821,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/binding/WatcherExample.ts
      */
     /**
      * @language zh_CN
@@ -1815,6 +1830,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/binding/WatcherExample.ts
      */
     class Watcher {
         /**
@@ -2160,6 +2176,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/ItemTapEventExample.ts
      */
     /**
      * @language zh_CN
@@ -2167,6 +2184,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/ItemTapEventExample.ts
      */
     class ItemTapEvent extends lark.Event {
         /**
@@ -2273,6 +2291,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/binding/BindingExample.ts
      */
     /**
      * @language zh_CN
@@ -2280,6 +2299,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/binding/BindingExample.ts
      */
     class Binding {
         /**
@@ -2348,6 +2368,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/ThemeExample.ts
      */
     /**
      * @language zh_CN
@@ -2355,6 +2376,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/ThemeExample.ts
      */
     class Theme extends lark.EventEmitter {
         /**
@@ -2469,6 +2491,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/CollectionEventExample.ts
      */
     /**
      * @language zh_CN
@@ -2476,6 +2499,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/CollectionEventExample.ts
      */
     class CollectionEvent extends lark.Event {
         /**
@@ -2711,6 +2735,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/collection/ArrayCollectionExample.ts
      */
     /**
      * @language zh_CN
@@ -2722,6 +2747,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/collection/ArrayCollectionExample.ts
      */
     class ArrayCollection extends lark.EventEmitter implements ICollection {
         /**
@@ -2955,6 +2981,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/UIEventExample.ts
      */
     /**
      * @language zh_CN
@@ -2962,6 +2989,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/UIEventExample.ts
      */
     class UIEvent extends lark.Event {
         /**
@@ -3102,6 +3130,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/PropertyEventExample.ts
      */
     /**
      * @language zh_CN
@@ -3110,6 +3139,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/PropertyEventExample.ts
      */
     class PropertyEvent extends lark.Event {
         /**
@@ -4373,6 +4403,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/BasicLayoutExample.ts
      */
     /**
      * @language zh_CN
@@ -4383,6 +4414,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/BasicLayoutExample.ts
      */
     class BasicLayout extends LayoutBase {
         /**
@@ -4459,6 +4491,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/TileLayoutExample.ts
      */
     /**
      * @language zh_CN
@@ -4468,6 +4501,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/TileLayoutExample.ts
      */
     class TileLayout extends LayoutBase {
         /**
@@ -8611,7 +8645,7 @@ declare module swan {
         constructor();
         /**
          * @language en_US
-         * [write-only] This property is Usually invoked in resolving an EXML for adding multiple children quickly.
+         * This property is Usually invoked in resolving an EXML for adding multiple children quickly.
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -8619,7 +8653,7 @@ declare module swan {
          */
         /**
          * @language zh_CN
-         * [只写] 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
+         * 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -9141,6 +9175,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
      */
     /**
      * @language zh_CN
@@ -9149,6 +9184,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
      */
     class VerticalLayout extends LinearLayoutBase {
         /**
@@ -9235,6 +9271,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/HorizontalLayoutExample.ts
      */
     /**
      * @language zh_CN
@@ -9243,6 +9280,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/HorizontalLayoutExample.ts
      */
     class HorizontalLayout extends LinearLayoutBase {
         /**
@@ -9532,6 +9570,8 @@ declare module swan {
          * 卸载视域组件
          */
         private uninstallViewport();
+        private onViewPortRemove(e);
+        private onViewPortAdded(e);
         /**
          * @inheritDoc
          *

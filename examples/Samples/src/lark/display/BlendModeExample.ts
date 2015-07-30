@@ -1,12 +1,12 @@
 /**
  * @language en_US
- * The following example uses the class BlendMode to show the 3 kind of blend mode effects
+ * The following example uses the class BlendModeExample to show the 3 kind of blend mode effects
  */
 /**
  * @language zh_CN
- * 以下示例使用 BlendMode 演示3种混合模式的效果
+ * 以下示例使用 BlendModeExample 演示3种混合模式的效果
  */
-class BlendMode extends lark.Sprite {
+class BlendModeExample extends lark.Sprite {
     constructor() {
         super();
         //画3个方块，点击会设置不同的混合模式

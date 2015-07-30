@@ -62,7 +62,7 @@ module lark {
      * @see lark.IEventEmitter
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/EventEmitterExample.ts
+     * @includeExample examples/Samples/src/lark/events/EventEmitterExample.ts
      */
     /**
      * @language zh_CN
@@ -76,7 +76,7 @@ module lark {
      * @see lark.IEventEmitter
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/EventEmitterExample.ts
+     * @includeExample examples/Samples/src/lark/events/EventEmitterExample.ts
      */
     export class EventEmitter extends LarkObject implements IEventEmitter {
 

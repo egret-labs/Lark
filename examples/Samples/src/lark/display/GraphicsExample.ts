@@ -1,12 +1,12 @@
 /**
  * @language en_US
- * The following example uses the class Shape to show how to create the vector shape
+ * The following example uses the class GraphicsExample to show how to create the vector shape
  */
 /**
  * @language zh_CN
- * 以下示例使用 Shape 类来演示如何绘制矢量图形
+ * 以下示例使用 GraphicsExample 类来演示如何绘制矢量图形
  */
-class Shape extends lark.Sprite {
+class GraphicsExample extends lark.Sprite {
     public constructor() {
         super();
 

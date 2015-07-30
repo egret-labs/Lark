@@ -1430,14 +1430,14 @@ module swan.sys {
          */
         function getRepeatedIds(xml:lark.XML):string[] {
             var result:string[] = [];
-            this.getIds(xml, result);
             this.repeatedIdMap = {};
+            this.getIds(xml, result);
             return result;
         }
 
         function getIds(xml:any, result:Array<any>):void {
-            if (xml.namespace != NS_W && xml["$id"]) {
-                var id:string = xml.$id;
+            if (xml.namespace != NS_W && xml.attributes.id) {
+                var id:string = xml.attributes.id;
                 if (this.repeatedIdMap[id]) {
                     result.push(toXMLString(xml));
                 }
@@ -1450,7 +1450,10 @@ module swan.sys {
                 var length:number = children.length;
                 for (var i:number = 0; i < length; i++) {
                     var node:any = children[i];
-                    getIds(node, result);
+                    if(this.isInnerClass(node)){
+                        continue;
+                    }
+                    this.getIds(node, result);
                 }
             }
         }

@@ -37,6 +37,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/DirectionExample.ts
      */
     /**
      * @language zh_CN
@@ -44,6 +45,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/DirectionExample.ts
      */
     var Direction = (function () {
         function Direction() {
@@ -299,6 +301,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/TileOrientationExample.ts
      */
     /**
      * @language zh_CN
@@ -307,6 +310,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/TileOrientationExample.ts
      */
     var TileOrientation = (function () {
         function TileOrientation() {
@@ -418,6 +422,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/JustifyAlignExample.ts
      */
     /**
      * @language zh_CN
@@ -426,6 +431,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/JustifyAlignExample.ts
      */
     var JustifyAlign = (function () {
         function JustifyAlign() {
@@ -515,6 +521,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/ColumnAlignExample.ts
      */
     /**
      * @language zh_CN
@@ -523,6 +530,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/ColumnAlignExample.ts
      */
     var ColumnAlign = (function () {
         function ColumnAlign() {
@@ -1369,6 +1377,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/BitmapFillModeExample.ts
      */
     /**
      * @language zh_CN
@@ -1380,6 +1389,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/BitmapFillModeExample.ts
      */
     var BitmapFillMode = (function () {
         function BitmapFillMode() {
@@ -1473,6 +1483,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/ScrollPolicyExample.ts
      */
     /**
      * @language zh_CN
@@ -1482,6 +1493,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/ScrollPolicyExample.ts
      */
     var ScrollPolicy = (function () {
         function ScrollPolicy() {
@@ -1882,6 +1894,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/RowAlignExample.ts
      */
     /**
      * @language zh_CN
@@ -1890,6 +1903,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/RowAlignExample.ts
      */
     var RowAlign = (function () {
         function RowAlign() {
@@ -2227,6 +2241,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/binding/WatcherExample.ts
      */
     /**
      * @language zh_CN
@@ -2235,6 +2250,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/binding/WatcherExample.ts
      */
     var Watcher = (function () {
         /**
@@ -3004,6 +3020,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/ItemTapEventExample.ts
      */
     /**
      * @language zh_CN
@@ -3011,6 +3028,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/ItemTapEventExample.ts
      */
     var ItemTapEvent = (function (_super) {
         __extends(ItemTapEvent, _super);
@@ -3168,6 +3186,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/binding/BindingExample.ts
      */
     /**
      * @language zh_CN
@@ -3175,6 +3194,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/binding/BindingExample.ts
      */
     var Binding = (function () {
         function Binding() {
@@ -3294,6 +3314,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/ThemeExample.ts
      */
     /**
      * @language zh_CN
@@ -3301,6 +3322,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/core/ThemeExample.ts
      */
     var Theme = (function (_super) {
         __extends(Theme, _super);
@@ -3532,6 +3554,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/CollectionEventExample.ts
      */
     /**
      * @language zh_CN
@@ -3539,6 +3562,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/CollectionEventExample.ts
      */
     var CollectionEvent = (function (_super) {
         __extends(CollectionEvent, _super);
@@ -3748,6 +3772,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/collection/ArrayCollectionExample.ts
      */
     /**
      * @language zh_CN
@@ -3759,6 +3784,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/collection/ArrayCollectionExample.ts
      */
     var ArrayCollection = (function (_super) {
         __extends(ArrayCollection, _super);
@@ -4116,6 +4142,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/UIEventExample.ts
      */
     /**
      * @language zh_CN
@@ -4123,6 +4150,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/UIEventExample.ts
      */
     var UIEvent = (function (_super) {
         __extends(UIEvent, _super);
@@ -4307,6 +4335,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/PropertyEventExample.ts
      */
     /**
      * @language zh_CN
@@ -4315,6 +4344,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/events/PropertyEventExample.ts
      */
     var PropertyEvent = (function (_super) {
         __extends(PropertyEvent, _super);
@@ -5668,6 +5698,7 @@ var swan;
              * @param touchPoint 当前触摸位置，以像素为单位，通常是stageX或stageY。
              */
             p.update = function (touchPoint, maxScrollValue) {
+                maxScrollValue = Math.max(maxScrollValue, 0);
                 this.currentPosition = touchPoint;
                 this.maxScrollPos = maxScrollValue;
                 var scrollPos = this.offsetPoint - touchPoint;
@@ -7072,13 +7103,13 @@ var swan;
              */
             function getRepeatedIds(xml) {
                 var result = [];
-                this.getIds(xml, result);
                 this.repeatedIdMap = {};
+                this.getIds(xml, result);
                 return result;
             }
             function getIds(xml, result) {
-                if (xml.namespace != sys.NS_W && xml["$id"]) {
-                    var id = xml.$id;
+                if (xml.namespace != sys.NS_W && xml.attributes.id) {
+                    var id = xml.attributes.id;
                     if (this.repeatedIdMap[id]) {
                         result.push(toXMLString(xml));
                     }
@@ -7091,7 +7122,10 @@ var swan;
                     var length = children.length;
                     for (var i = 0; i < length; i++) {
                         var node = children[i];
-                        getIds(node, result);
+                        if (this.isInnerClass(node)) {
+                            continue;
+                        }
+                        this.getIds(node, result);
                     }
                 }
             }
@@ -8210,6 +8244,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/BasicLayoutExample.ts
      */
     /**
      * @language zh_CN
@@ -8220,6 +8255,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/BasicLayoutExample.ts
      */
     var BasicLayout = (function (_super) {
         __extends(BasicLayout, _super);
@@ -8463,6 +8499,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/TileLayoutExample.ts
      */
     /**
      * @language zh_CN
@@ -8472,6 +8509,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/TileLayoutExample.ts
      */
     var TileLayout = (function (_super) {
         __extends(TileLayout, _super);
@@ -9500,8 +9538,7 @@ var swan;
             var columnWidth = this._columnWidth;
             var rowHeight = this._rowHeight;
             for (var i = this.startIndex; i <= endIndex; i++) {
-                if (this.$useVirtualLayout)
-                    elt = target.getElementAt(i);
+                elt = target.getElementAt(i);
                 if (!lark.is(elt, UIComponentClass) || !elt.$includeInLayout) {
                     continue;
                 }
@@ -14014,7 +14051,7 @@ var swan;
         d(p, "elementsContent",undefined,
             /**
              * @language en_US
-             * [write-only] This property is Usually invoked in resolving an EXML for adding multiple children quickly.
+             * This property is Usually invoked in resolving an EXML for adding multiple children quickly.
              *
              * @version Lark 1.0
              * @version Swan 1.0
@@ -14022,7 +14059,7 @@ var swan;
              */
             /**
              * @language zh_CN
-             * [只写] 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
+             * 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
@@ -14616,6 +14653,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
      */
     /**
      * @language zh_CN
@@ -14624,6 +14662,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
      */
     var VerticalLayout = (function (_super) {
         __extends(VerticalLayout, _super);
@@ -14877,7 +14916,7 @@ var swan;
             else
                 this.getIndexInView();
             var paddingB = this.$paddingBottom;
-            var paddingL = this.$paddingTop;
+            var paddingL = this.$paddingLeft;
             var paddingR = this.$paddingRight;
             var gap = this.$gap;
             var contentHeight;
@@ -15137,6 +15176,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/HorizontalLayoutExample.ts
      */
     /**
      * @language zh_CN
@@ -15145,6 +15185,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/HorizontalLayoutExample.ts
      */
     var HorizontalLayout = (function (_super) {
         __extends(HorizontalLayout, _super);
@@ -15892,10 +15933,12 @@ var swan;
         p.installViewport = function () {
             var viewport = this.viewport;
             if (viewport) {
+                this.addChildAt(viewport, 0);
                 viewport.scrollEnabled = true;
                 viewport.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
                 viewport.on(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
-                this.addChildAt(viewport, 0);
+                viewport.on(lark.Event.REMOVED, this.onViewPortRemove, this);
+                viewport.on(lark.Event.ADDED, this.onViewPortAdded, this);
             }
             if (this.horizontalScrollBar) {
                 this.horizontalScrollBar.viewport = viewport;
@@ -15920,7 +15963,19 @@ var swan;
                 viewport.scrollEnabled = false;
                 viewport.removeListener(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
                 viewport.removeListener(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
-                this.removeChild(viewport);
+                viewport.removeListener(lark.Event.REMOVED, this.onViewPortRemove, this);
+                viewport.removeListener(lark.Event.ADDED, this.onViewPortAdded, this);
+                if (viewport.parent == this) {
+                    this.removeChild(viewport);
+                }
+            }
+        };
+        p.onViewPortRemove = function (e) {
+            this.viewport = null;
+        };
+        p.onViewPortAdded = function (e) {
+            if (this.viewport.parent != this) {
+                this.viewport = null;
             }
         };
         /**
@@ -15957,7 +16012,7 @@ var swan;
                 return;
             }
             var target = event.target;
-            while (target != this) {
+            while (target && target != this) {
                 if (target instanceof Scroller) {
                     canScroll = target.checkScrollPolicy();
                     if (canScroll) {
@@ -16027,6 +16082,9 @@ var swan;
         p.checkScrollPolicy = function () {
             var values = this.$Scroller;
             var viewport = values[12 /* viewport */];
+            if (!viewport) {
+                return false;
+            }
             var hCanScroll;
             var uiValues = viewport.$UIComponent;
             switch (values[1 /* scrollPolicyH */]) {
@@ -19731,7 +19789,7 @@ var swan;
                     case swan.Direction.RTL:
                         rect.width = clipWidth;
                         rect.x = thumbWidth - clipWidth;
-                        thumb.x = thumbPosX + rect.x;
+                        thumb.x = rect.x;
                         break;
                     case swan.Direction.TTB:
                         rect.height = clipHeight;
@@ -19740,7 +19798,7 @@ var swan;
                     case swan.Direction.BTT:
                         rect.height = clipHeight;
                         rect.y = thumbHeight - clipHeight;
-                        thumb.y = thumbPosY + rect.y;
+                        thumb.y = rect.y;
                         break;
                 }
                 thumb.scrollRect = rect;

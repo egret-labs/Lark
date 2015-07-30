@@ -39,6 +39,12 @@ module lark {
      * @language en_US
      * Used to compute relative time.this method returns the number of milliseconds since the Lark framework was initialized
      * @returns The number of milliseconds since the Lark framework was initialized
+     * @example
+     * This example shows getting and printing the number of milliseconds since the Lark framework was initialized
+     * <pre>
+     *  var duration = lark.getTimer();
+     *  console.log("duration: " + duration);
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -46,6 +52,12 @@ module lark {
      * @language zh_CN
      * 用于计算相对时间。此方法返回自启动 Lark 框架以来经过的毫秒数。
      * @returns 启动 Lark 框架以来经过的毫秒数。
+     * @example
+     * 获取并打印自启动 Lark 框架以来经过的毫秒数。
+     * <pre>
+     *  var duration = lark.getTimer();
+     *  console.log("duration: " + duration);
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */

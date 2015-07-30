@@ -38,7 +38,7 @@ module lark {
      * @see lark.TimerEvent
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/utils/TimerExample.ts
+     * @includeExample examples/Samples/src/lark/utils/TimerExample.ts
      */
     /**
      * @language zh_CN
@@ -49,7 +49,7 @@ module lark {
      * @see lark.TimerEvent
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/utils/TimerExample.ts
+     * @includeExample examples/Samples/src/lark/utils/TimerExample.ts
      */
     export class Timer extends EventEmitter {
 

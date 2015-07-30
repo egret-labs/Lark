@@ -172,6 +172,7 @@ module lark {
      * @event lark.TouchEvent.TOUCH_RELEASE_OUTSIDE Emitted when the user lifts the point of contact over the different DisplayObject instance on which the contact was initiated on a touch-enabled device (such as presses and releases a finger from a single point over a display object on a mobile phone or tablet with a touch screen).
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/DisplayObjectExample.ts
      */
     /**
      * @language zh_CN
@@ -196,6 +197,7 @@ module lark {
      * @event lark.TouchEvent.TOUCH_RELEASE_OUTSIDE 当用户在启用触摸设备上的已启动接触的不同 DisplayObject 实例上抬起接触点时（例如，在配有触摸屏的移动电话或平板电脑的显示对象上的某一点处按下并释放手指）调度。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/DisplayObjectExample.ts
      */
     export class DisplayObject extends EventEmitter implements sys.Renderable {
 
@@ -1465,12 +1467,39 @@ module lark {
             matrix.copyFrom(concatenatedMatrix);
             var root = displayList.root;
             if (root !== this.$stage) {
-                root.$getInvertedConcatenatedMatrix().$preMultiplyInto(matrix, matrix);
+                this.$getConcatenatedMatrixAt(root,matrix);
             }
             displayList.$ratioMatrix.$preMultiplyInto(matrix, matrix);
             region.updateRegion(bounds, matrix);
             return true;
         }
+
+        /**
+         * @private
+         * 获取相对于指定根节点的连接矩阵。
+         * @param root 根节点显示对象
+         * @param matrix 目标显示对象相对于舞台的完整连接矩阵。
+         */
+        $getConcatenatedMatrixAt(root:DisplayObject,matrix:Matrix):void{
+            var invertMatrix = root.$getInvertedConcatenatedMatrix();
+            if(invertMatrix.a===0||invertMatrix.d===0){//缩放值为0，逆矩阵无效
+                var target = this;
+                var rootLevel = root.$nestLevel;
+                matrix.identity();
+                while (target.$nestLevel > rootLevel) {
+                    var rect = target.$scrollRect;
+                    if(rect){
+                        matrix.concat($TempMatrix.setTo(1, 0, 0, 1, -rect.x, -rect.y));
+                    }
+                    matrix.concat(target.$getMatrix());
+                    target = target.$parent;
+                }
+            }
+            else{
+                invertMatrix.$preMultiplyInto(matrix, matrix);
+            }
+        }
+
 
         /**
          * @private

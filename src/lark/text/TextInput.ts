@@ -36,6 +36,7 @@ module lark {
      * @see lark.TextField
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/text/TextInputExample.ts
      */
     /**
      * @language zh_CN
@@ -43,6 +44,7 @@ module lark {
      * @see lark.TextField
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/text/TextInputExample.ts
      */
     export class TextInput extends TextField {
         /**

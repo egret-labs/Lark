@@ -207,6 +207,7 @@ var lark;
      * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
      * to render after processing of this method completes.
      * @param thisObject the call back method's "this"
+     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -216,6 +217,7 @@ var lark;
      * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
      * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
      * @param thisObject 回调方法的this对象引用。
+     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -1575,6 +1577,9 @@ var lark;
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
+    /**
+     * @copy lark.Video
+     */
     lark.Video;
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -1696,6 +1701,7 @@ var lark;
      * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
      * to render after processing of this method completes.
      * @param thisObject the call back method's "this"
+     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -1705,6 +1711,7 @@ var lark;
      * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
      * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
      * @param thisObject 回调方法的this对象引用。
+     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -1833,6 +1840,12 @@ var lark;
      * @language en_US
      * Used to compute relative time.this method returns the number of milliseconds since the Lark framework was initialized
      * @returns The number of milliseconds since the Lark framework was initialized
+     * @example
+     * This example shows getting and printing the number of milliseconds since the Lark framework was initialized
+     * <pre>
+     *  var duration = lark.getTimer();
+     *  console.log("duration: " + duration);
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -1840,6 +1853,12 @@ var lark;
      * @language zh_CN
      * 用于计算相对时间。此方法返回自启动 Lark 框架以来经过的毫秒数。
      * @returns 启动 Lark 框架以来经过的毫秒数。
+     * @example
+     * 获取并打印自启动 Lark 框架以来经过的毫秒数。
+     * <pre>
+     *  var duration = lark.getTimer();
+     *  console.log("duration: " + duration);
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2453,6 +2472,13 @@ var lark;
      * @language en_US
      * Returns a reference to the class object of the class specified by the name parameter.
      * @param name The name of a class.
+     * @example
+     * <pre>
+     *  var clazz:any = lark.getDefinitionByName("lark.Shape"); //get definition of class lark.Shape
+     *  var shape:lark.Shape = new clazz();
+     *  shape.graphics.fillStyle = "#ff0000";
+     *  shape.graphics.fillRect(0,0,100,100);
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2460,6 +2486,13 @@ var lark;
      * @language zh_CN
      * 返回 name 参数指定的类的类对象引用。
      * @param name 类的名称。
+     * @example
+     * <pre>
+     *  var clazz:any = lark.getDefinitionByName("lark.Shape"); //获取lark.Shape类定义
+     *  var shape:lark.Shape = new clazz();
+     *  shape.graphics.fillStyle = "#ff0000";
+     *  shape.graphics.fillRect(0,0,100,100);
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2532,6 +2565,7 @@ var lark;
      * @see lark.DisplayObject#blendMode
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BlendModeExample.ts
      */
     /**
      * @language zh_CN
@@ -2539,6 +2573,7 @@ var lark;
      * @see lark.DisplayObject#blendMode
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BlendModeExample.ts
      */
     var BlendMode = (function () {
         function BlendMode() {
@@ -2661,14 +2696,14 @@ var lark;
      * The Capabilities class provides properties that describe the system and runtime that are hosting the application.
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/system/CapabilitiesExample.ts
+     * @includeExample examples/Samples/src/lark/system/CapabilitiesExample.ts
      */
     /**
      * @language zh_CN
      * Capabilities 类提供一些属性，这些属性描述了承载应用程序的系统和运行时。
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/system/CapabilitiesExample.ts
+     * @includeExample examples/Samples/src/lark/system/CapabilitiesExample.ts
      */
     var Capabilities = (function () {
         function Capabilities() {
@@ -3619,6 +3654,7 @@ var lark;
      * @see lark.Shape
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/GraphicsExample.ts
      */
     /**
      * @language zh_CN
@@ -3626,6 +3662,7 @@ var lark;
      * @see lark.Shape
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/GraphicsExample.ts
      */
     var Graphics = (function (_super) {
         __extends(Graphics, _super);
@@ -3851,9 +3888,9 @@ var lark;
              */
             /**
              * @language zh_CN
-             * 指定用于拐角的连接外观的类型,有3个可能的值，分别是：<br/>
+             * 指定用于拐角的连接外观的类型。有3个可能的值，分别是：<br/>
              * <ul>
-             * <li>"round": 圆角连接</li>
+             * <li>"round": 圆角连接。</li>
              * <li>"bevel": 斜角连接。</li>
              * <li>"miter": 尖角连接。当使用尖角模式时，还可以同时使用 miterLimit 参数限制尖角的长度。</li>
              * </ul>
@@ -4520,7 +4557,7 @@ var lark;
      * @see lark.EventEmitter
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/EventExample.ts
+     * @includeExample examples/Samples/src/lark/events/EventExample.ts
      */
     /**
      * @language zh_CN
@@ -4533,7 +4570,7 @@ var lark;
      * @see lark.EventEmitter
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/EventExample.ts
+     * @includeExample examples/Samples/src/lark/events/EventExample.ts
      */
     var Event = (function (_super) {
         __extends(Event, _super);
@@ -5175,7 +5212,7 @@ var lark;
      * @see lark.IEventEmitter
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/EventEmitterExample.ts
+     * @includeExample examples/Samples/src/lark/events/EventEmitterExample.ts
      */
     /**
      * @language zh_CN
@@ -5189,7 +5226,7 @@ var lark;
      * @see lark.IEventEmitter
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/EventEmitterExample.ts
+     * @includeExample examples/Samples/src/lark/events/EventEmitterExample.ts
      */
     var EventEmitter = (function (_super) {
         __extends(EventEmitter, _super);
@@ -5431,14 +5468,14 @@ var lark;
      * axis and y represents the vertical axis.
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/geom/PointExample.ts
+     * @includeExample examples/Samples/src/lark/geom/PointExample.ts
      */
     /**
      * @language zh_CN
      * Point 对象表示二维坐标系统中的某个位置，其中 x 表示水平轴，y 表示垂直轴。
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/geom/PointExample.ts
+     * @includeExample examples/Samples/src/lark/geom/PointExample.ts
      */
     var Point = (function (_super) {
         __extends(Point, _super);
@@ -5645,7 +5682,7 @@ var lark;
      * @see lark.Timer
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/TimerEventExample.ts
+     * @includeExample examples/Samples/src/lark/events/TimerEventExample.ts
      */
     /**
      * @language zh_CN
@@ -5653,7 +5690,7 @@ var lark;
      * @see lark.Timer
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/TimerEventExample.ts
+     * @includeExample examples/Samples/src/lark/events/TimerEventExample.ts
      */
     var TimerEvent = (function (_super) {
         __extends(TimerEvent, _super);
@@ -6175,7 +6212,7 @@ var lark;
      * if you change the bottom property, the value of the height property changes.
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/geom/RectangleExample.ts
+     * @includeExample examples/Samples/src/lark/geom/RectangleExample.ts
      */
     /**
      * @language zh_CN
@@ -6185,7 +6222,7 @@ var lark;
      * 属性的值将发生变化；如果更改 bottom 属性，则 height 属性的值将发生变化。
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/geom/RectangleExample.ts
+     * @includeExample examples/Samples/src/lark/geom/RectangleExample.ts
      */
     var Rectangle = (function (_super) {
         __extends(Rectangle, _super);
@@ -6603,7 +6640,7 @@ var lark;
      * @see lark.TimerEvent
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/utils/TimerExample.ts
+     * @includeExample examples/Samples/src/lark/utils/TimerExample.ts
      */
     /**
      * @language zh_CN
@@ -6614,7 +6651,7 @@ var lark;
      * @see lark.TimerEvent
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/utils/TimerExample.ts
+     * @includeExample examples/Samples/src/lark/utils/TimerExample.ts
      */
     var Timer = (function (_super) {
         __extends(Timer, _super);
@@ -7508,6 +7545,7 @@ var lark;
      * @event lark.TouchEvent.TOUCH_RELEASE_OUTSIDE Emitted when the user lifts the point of contact over the different DisplayObject instance on which the contact was initiated on a touch-enabled device (such as presses and releases a finger from a single point over a display object on a mobile phone or tablet with a touch screen).
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/DisplayObjectExample.ts
      */
     /**
      * @language zh_CN
@@ -7532,6 +7570,7 @@ var lark;
      * @event lark.TouchEvent.TOUCH_RELEASE_OUTSIDE 当用户在启用触摸设备上的已启动接触的不同 DisplayObject 实例上抬起接触点时（例如，在配有触摸屏的移动电话或平板电脑的显示对象上的某一点处按下并释放手指）调度。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/DisplayObjectExample.ts
      */
     var DisplayObject = (function (_super) {
         __extends(DisplayObject, _super);
@@ -8733,10 +8772,35 @@ var lark;
             matrix.copyFrom(concatenatedMatrix);
             var root = displayList.root;
             if (root !== this.$stage) {
-                root.$getInvertedConcatenatedMatrix().$preMultiplyInto(matrix, matrix);
+                this.$getConcatenatedMatrixAt(root, matrix);
             }
             region.updateRegion(bounds, matrix);
             return true;
+        };
+        /**
+         * @private
+         * 获取相对于指定根节点的连接矩阵。
+         * @param root 根节点显示对象
+         * @param matrix 目标显示对象相对于舞台的完整连接矩阵。
+         */
+        p.$getConcatenatedMatrixAt = function (root, matrix) {
+            var invertMatrix = root.$getInvertedConcatenatedMatrix();
+            if (invertMatrix.a === 0 || invertMatrix.d === 0) {
+                var target = this;
+                var rootLevel = root.$nestLevel;
+                matrix.identity();
+                while (target.$nestLevel > rootLevel) {
+                    var rect = target.$scrollRect;
+                    if (rect) {
+                        matrix.concat(lark.$TempMatrix.setTo(1, 0, 0, 1, -rect.x, -rect.y));
+                    }
+                    matrix.concat(target.$getMatrix());
+                    target = target.$parent;
+                }
+            }
+            else {
+                invertMatrix.$preMultiplyInto(matrix, matrix);
+            }
         };
         /**
          * @private
@@ -8935,7 +8999,7 @@ var lark;
      *
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/TouchEventExample.ts
+     * @includeExample examples/Samples/src/lark/events/TouchEventExample.ts
      */
     /**
      * @language zh_CN
@@ -8948,7 +9012,7 @@ var lark;
      *
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/events/TouchEventExample.ts
+     * @includeExample examples/Samples/src/lark/events/TouchEventExample.ts
      */
     var TouchEvent = (function (_super) {
         __extends(TouchEvent, _super);
@@ -9255,6 +9319,7 @@ var lark;
      * @see lark.Graphics
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/ShapeExample.ts
      */
     /**
      * @language zh_CN
@@ -9262,6 +9327,7 @@ var lark;
      * @see lark.Graphics
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/ShapeExample.ts
      */
     var Shape = (function (_super) {
         __extends(Shape, _super);
@@ -9371,6 +9437,7 @@ var lark;
      * @see lark.BitmapData
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BitmapExample.ts
      */
     /**
      * @language zh_CN
@@ -9384,6 +9451,7 @@ var lark;
      * @see lark.BitmapData
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BitmapExample.ts
      */
     var Bitmap = (function (_super) {
         __extends(Bitmap, _super);
@@ -9600,6 +9668,7 @@ var lark;
      * @see lark.TextInput
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/text/TextFieldExample.ts
      */
     /**
      * @language zh_CN
@@ -9611,6 +9680,7 @@ var lark;
      * @see lark.TextInput
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/text/TextFieldExample.ts
      */
     var TextField = (function (_super) {
         __extends(TextField, _super);
@@ -10119,7 +10189,9 @@ var lark;
                     vAlign = 1;
                 drawY += vAlign * (explicitHeight - textHeight);
             }
+            var roundOff = drawY;
             drawY = Math.round(drawY);
+            roundOff = drawY - roundOff;
             var hAlign = 0;
             if (values[9 /* textAlign */] == lark.HorizontalAlign.CENTER) {
                 hAlign = 0.5;
@@ -10135,7 +10207,7 @@ var lark;
             else {
                 maxWidth = values[3 /* textFieldWidth */];
             }
-            var maxYPos = explicitHeight - 2;
+            var maxYPos = explicitHeight - 2 + roundOff;
             for (var i = 0; i < length; i++) {
                 var line = lines[i];
                 var measureW = measuredWidths[i];
@@ -10371,12 +10443,14 @@ var lark;
      * The Sprite class is a basic display list building block: a display list node that can contain children.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/SpriteExample.ts
      */
     /**
      * @language zh_CN
      * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/SpriteExample.ts
      */
     var Sprite = (function (_super) {
         __extends(Sprite, _super);
@@ -11102,7 +11176,7 @@ var lark;
                 matrix.copyFrom(concatenatedMatrix);
                 var root = displayList.root;
                 if (root !== target.$stage) {
-                    root.$getInvertedConcatenatedMatrix().$preMultiplyInto(matrix, matrix);
+                    target.$getConcatenatedMatrixAt(root, matrix);
                 }
                 region.updateRegion(bounds, matrix);
                 return true;
@@ -11569,6 +11643,7 @@ var lark;
      * @see lark.TextField
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/text/TextInputExample.ts
      */
     /**
      * @language zh_CN
@@ -11576,6 +11651,7 @@ var lark;
      * @see lark.TextField
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/text/TextInputExample.ts
      */
     var TextInput = (function (_super) {
         __extends(TextInput, _super);
@@ -11908,6 +11984,7 @@ var lark;
      * @event lark.Event.RESIZE Emitted when the stageWidth or stageHeight property of the Stage object is changed.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/StageExample.ts
      */
     /**
      * @language zh_CN
@@ -11918,6 +11995,7 @@ var lark;
      * @event lark.Event.RESIZE 当stageWidth或stageHeight属性发生改变时调度
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/StageExample.ts
      */
     var Stage = (function (_super) {
         __extends(Stage, _super);

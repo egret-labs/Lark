@@ -148,7 +148,7 @@ module lark.sys {
             matrix.copyFrom(concatenatedMatrix);
             var root = displayList.root;
             if(root!==target.$stage){
-                root.$getInvertedConcatenatedMatrix().$preMultiplyInto(matrix, matrix);
+                target.$getConcatenatedMatrixAt(root,matrix);
             }
             this.$ratioMatrix.$preMultiplyInto(matrix, matrix);
             region.updateRegion(bounds, matrix);

@@ -1,12 +1,12 @@
 /**
  * @language en_US
- * The following example uses the class Sprite to show how to drag a Sprite object
+ * The following example uses the class SpriteExample to show how to drag a Sprite object
  */
 /**
  * @language zh_CN
- * 以下示例使用 Sprite 类来拖动一个对象
+ * 以下示例使用 SpriteExample 类来拖动一个对象
  */
-class Sprite extends lark.Sprite {
+class SpriteExample extends lark.Sprite {
     public constructor() {
         super();
         this.once(lark.Event.ADDED_TO_STAGE, this.init, this);

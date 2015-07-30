@@ -97,7 +97,7 @@ module swan {
 
         /**
          * @language en_US
-         * [write-only] This property is Usually invoked in resolving an EXML for adding multiple children quickly.
+         * This property is Usually invoked in resolving an EXML for adding multiple children quickly.
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -105,7 +105,7 @@ module swan {
          */
         /**
          * @language zh_CN
-         * [只写] 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
+         * 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
