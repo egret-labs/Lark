@@ -43,6 +43,7 @@ module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/TileLayoutExample.ts
      */
     /**
      * @language zh_CN
@@ -52,6 +53,7 @@ module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/TileLayoutExample.ts
      */
     export class TileLayout extends LayoutBase {
 
@@ -1130,8 +1132,7 @@ module swan {
             var columnWidth = this._columnWidth;
             var rowHeight = this._rowHeight;
             for (var i = this.startIndex; i <= endIndex; i++) {
-                if (this.$useVirtualLayout)
-                    elt = <UIComponent> target.getElementAt(i);
+                elt = <UIComponent> target.getElementAt(i);
                 if (!lark.is(elt, UIComponentClass) || !elt.$includeInLayout) {
                     continue;
                 }

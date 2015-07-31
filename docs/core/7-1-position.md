@@ -89,7 +89,7 @@ function onMove(e:lark.TouchEvent):void{
  var circle: lark.Shape = new lark.Shape();
  circle.graphics.fillStyle = "rgb(255,0,0)";
  circle.graphics.arc(50, 50, 50, 0, Math.PI * 2, false);
-circle.graphics.fill();
+ circle.graphics.fill();
  this.addChild(circle);
 
  //画一个蓝色的正方形

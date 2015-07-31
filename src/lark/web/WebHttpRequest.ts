@@ -155,15 +155,21 @@ module lark.web {
         private onReadyStateChange = ():void=> {
             var xhr = this._xhr;
             if (xhr.readyState == 4) {// 4 = "loaded"
-                if (xhr.status >= 400 || xhr.status == 0) {//请求错误
-                    if (DEBUG && !this.hasListener(Event.IO_ERROR)) {
-                        $error(1011, this._url);
+                var ioError = (xhr.status >= 400 || xhr.status == 0);
+                var url = this._url;
+                var self = this;
+                setTimeout(function ():void {
+                    if (ioError) {//请求错误
+                        if (DEBUG && !self.hasListener(Event.IO_ERROR)) {
+                            $error(1011, url);
+                        }
+                        self.emitWith(Event.IO_ERROR);
                     }
-                    this.emitWith(Event.IO_ERROR);
-                }
-                else {
-                    this.emitWith(Event.COMPLETE);
-                }
+                    else {
+                        self.emitWith(Event.COMPLETE);
+                    }
+                }, 0)
+
             }
         }
 

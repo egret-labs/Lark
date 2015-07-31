@@ -36,6 +36,7 @@ module lark {
      * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
      * to render after processing of this method completes.
      * @param thisObject the call back method's "this"
+     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -45,6 +46,7 @@ module lark {
      * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
      * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
      * @param thisObject 回调方法的this对象引用。
+     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
      * @version Lark 1.0
      * @platform Web,Native
      */

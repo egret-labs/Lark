@@ -62,6 +62,7 @@ module lark {
      * @see lark.IEventEmitter
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/events/EventEmitterExample.ts
      */
     /**
      * @language zh_CN
@@ -75,6 +76,7 @@ module lark {
      * @see lark.IEventEmitter
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/events/EventEmitterExample.ts
      */
     export class EventEmitter extends LarkObject implements IEventEmitter {
 
@@ -132,8 +134,13 @@ module lark {
          * @private
          */
         $addListener(type:string, listener:(event:Event)=>void, thisObject:any, useCapture?:boolean, priority?:number, emitOnce?:boolean):void {
-            if (DEBUG && !listener) {
-                $error(1003, "listener");
+            if (DEBUG) {
+                if(!listener){
+                    $error(1003, "listener");
+                }
+                if(typeof listener != "function"){
+                    $error(1012, "listener")
+                }
             }
             var values = this.$EventEmitter;
             var eventMap:any = useCapture ? values[Keys.captureEventsMap] : values[Keys.eventsMap];

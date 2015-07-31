@@ -11,22 +11,37 @@ var RunCommand = (function () {
             if (exitCode != 0) {
                 process.exit(exitCode);
             }
-            if (lark.options.autoCompile) {
-                console.log(utils.tr(10010));
-                _this.watchFiles(lark.options.srcDir);
-                _this.watchFiles(lark.options.templateDir);
-            }
-            else {
-                console.log(utils.tr(10012));
-            }
-            server.startServer(lark.options, lark.options.startUrl);
-            console.log(utils.tr(10013, lark.options.startUrl));
+            utils.getAvailablePort(function (port) { return _this.onGotPort(port); }, lark.options.port);
         };
     }
     RunCommand.prototype.execute = function () {
         var build = new Build();
         build.execute(this.onBuildFinish);
         return 0;
+    };
+    RunCommand.prototype.onGotPort = function (port) {
+        lark.options.port = port;
+        console.log('\n');
+        var addresses = utils.getNetworkAddress();
+        if (addresses.length > 0) {
+            lark.options.host = addresses[0];
+        }
+        server.startServer(lark.options, lark.options.startUrl);
+        console.log("    " + utils.tr(10013, ''));
+        console.log('\n');
+        console.log('        ' + lark.options.startUrl);
+        for (var i = 1; i < addresses.length; i++) {
+            console.log('        ' + lark.options.getStartURL(addresses[i]));
+        }
+        console.log('\n');
+        if (lark.options.autoCompile) {
+            console.log('    ' + utils.tr(10010));
+            this.watchFiles(lark.options.srcDir);
+            this.watchFiles(lark.options.templateDir);
+        }
+        else {
+            console.log('    ' + utils.tr(10012));
+        }
     };
     RunCommand.prototype.watchFiles = function (dir) {
         var _this = this;
@@ -39,9 +54,9 @@ var RunCommand = (function () {
     RunCommand.prototype.sendBuildCMD = function () {
         service.execCommand({ command: "build", path: lark.options.projectDir }, function (cmd) {
             if (!cmd.exitCode)
-                console.log(utils.tr(10011));
+                console.log('    ' + utils.tr(10011));
             else
-                console.log(utils.tr(10014), cmd.exitCode);
+                console.log('    ' + utils.tr(10014), cmd.exitCode);
             if (cmd.messages) {
                 cmd.messages.forEach(function (m) { return console.log(m); });
             }

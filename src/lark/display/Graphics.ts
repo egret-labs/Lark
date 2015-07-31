@@ -82,6 +82,7 @@ module lark {
      * @see lark.Shape
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/GraphicsExample.ts
      */
     /**
      * @language zh_CN
@@ -89,6 +90,7 @@ module lark {
      * @see lark.Shape
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/GraphicsExample.ts
      */
     export class Graphics extends LarkObject {
 
@@ -336,9 +338,9 @@ module lark {
          */
         /**
          * @language zh_CN
-         * 指定用于拐角的连接外观的类型,有3个可能的值，分别是：<br/>
+         * 指定用于拐角的连接外观的类型。有3个可能的值，分别是：<br/>
          * <ul>
-         * <li>"round": 圆角连接</li>
+         * <li>"round": 圆角连接。</li>
          * <li>"bevel": 斜角连接。</li>
          * <li>"miter": 尖角连接。当使用尖角模式时，还可以同时使用 miterLimit 参数限制尖角的长度。</li>
          * </ul>

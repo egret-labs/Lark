@@ -38,6 +38,7 @@ module lark {
      * @see lark.HttpRequest
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/net/ImageLoaderExample.ts
      */
     /**
      * @language zh_CN
@@ -47,6 +48,7 @@ module lark {
      * @see lark.HttpRequest
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/net/ImageLoaderExample.ts
      */
     export interface ImageLoader extends EventEmitter {
         /**

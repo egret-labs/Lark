@@ -37,6 +37,7 @@ module swan {
 	 * @version Lark 1.0
 	 * @version Swan 1.0
 	 * @platform Web,Native
+	 * @includeExample examples/Samples/src/extension/swan/core/ScrollPolicyExample.ts
 	 */
 	/**
 	 * @language zh_CN
@@ -46,6 +47,7 @@ module swan {
 	 * @version Lark 1.0
 	 * @version Swan 1.0
 	 * @platform Web,Native
+	 * @includeExample examples/Samples/src/extension/swan/core/ScrollPolicyExample.ts
 	 */
 	export class ScrollPolicy{
 		/**

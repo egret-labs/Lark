@@ -27,10 +27,11 @@ Timer 对象在每次达到指定的间隔时都会调度 TimerEvent 对象。Ti
 以下是一个用来展示 Timer 类实际操作的小示例应用程序：
 
 ```
-class ShortTimer extends Sprite {
+class ShortTimer extends lark.Sprite {
     public constructor() {
+        super();
         // 创建一个时间间隔1秒持续5次的计时器
-        var minuteTimer:Timer = new lark.Timer(1000, 5);
+        var minuteTimer:lark.Timer = new lark.Timer(1000, 5);
 
         // 添加间隔触发和计时完成的事件监听
         minuteTimer.on(lark.TimerEvent.TIMER, this.onTick, this);
@@ -40,12 +41,12 @@ class ShortTimer extends Sprite {
         minuteTimer.start();
     }
 
-    public onTick(event:TimerEvent):void {
+    public onTick(event:lark.TimerEvent):void {
         // 输出当前的触发次数，event的target属性就是计时器本身
         lark.log("tick " + event.target.currentCount);
     }
 
-    public onTimerComplete(event:TimerEvent):void {
+    public onTimerComplete(event:lark.TimerEvent):void {
         lark.log("Time's Up!");
     }
 } 

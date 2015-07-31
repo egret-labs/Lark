@@ -37,6 +37,7 @@ module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ProgressBarExample.ts
      */
     /**
      * @language zh_CN
@@ -45,6 +46,7 @@ module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ProgressBarExample.ts
      */
     export class ProgressBar extends Range {
 
@@ -388,7 +390,7 @@ module swan {
                     case Direction.RTL:
                         rect.width = clipWidth;
                         rect.x = thumbWidth - clipWidth;
-                        thumb.x = thumbPosX + rect.x;
+                        thumb.x = rect.x;
                         break;
                     case Direction.TTB:
                         rect.height = clipHeight;
@@ -397,7 +399,7 @@ module swan {
                     case Direction.BTT:
                         rect.height = clipHeight;
                         rect.y = thumbHeight - clipHeight;
-                        thumb.y = thumbPosY + rect.y;
+                        thumb.y = rect.y;
                         break;
                 }
                 thumb.scrollRect = rect;

@@ -110,10 +110,7 @@ module lark.web {
          * @private
          */
         private onBlobError(event:lark.Event):void {
-            if (DEBUG && !this.hasListener(Event.IO_ERROR)) {
-                $error(1011, this.currentURL);
-            }
-            this.emitWith(Event.IO_ERROR);
+            this.emitIOError(this.currentURL);
         }
 
         /**
@@ -140,7 +137,10 @@ module lark.web {
                 return;
             }
             this.data = toBitmapData(image);
-            this.emitWith(Event.COMPLETE);
+            var self = this;
+            setTimeout(function():void{
+                self.emitWith(Event.COMPLETE);
+            },0);
         }
 
         /**
@@ -151,10 +151,17 @@ module lark.web {
             if (!image) {
                 return;
             }
-            if (DEBUG && !this.hasListener(Event.IO_ERROR)) {
-                $error(1011, image.src);
-            }
-            this.emitWith(Event.IO_ERROR);
+            this.emitIOError(image.src);
+        }
+
+        private emitIOError(url:string):void{
+            var self = this;
+            setTimeout(function():void{
+                if (DEBUG && !self.hasListener(Event.IO_ERROR)) {
+                    $error(1011, url);
+                }
+                self.emitWith(Event.IO_ERROR);
+            },0);
         }
 
         /**

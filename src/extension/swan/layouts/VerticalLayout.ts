@@ -39,6 +39,7 @@ module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
      */
     /**
      * @language zh_CN
@@ -47,6 +48,7 @@ module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
      */
     export class VerticalLayout extends LinearLayoutBase {
 
@@ -102,7 +104,7 @@ module swan {
                 }
                 layoutElement.getPreferredBounds(bounds);
                 measuredHeight += bounds.height;
-                measuredHeight -= elementSizeTable[index] || typicalHeight;
+                measuredHeight -= isNaN(elementSizeTable[index]) ? typicalHeight : elementSizeTable[index];
                 measuredWidth = Math.max(measuredWidth, bounds.width);
             }
             var hPadding = this.$paddingLeft + this.$paddingRight;
@@ -265,7 +267,7 @@ module swan {
                     }
                 }
                 else {
-                    layoutElementHeight = heightDic[layoutElement.$hashCode] || NaN;
+                    layoutElementHeight = heightDic[layoutElement.$hashCode];
                 }
                 if (hJustify) {
                     x = paddingL;
@@ -310,7 +312,7 @@ module swan {
             else
                 this.getIndexInView();
             var paddingB = this.$paddingBottom;
-            var paddingL = this.$paddingTop;
+            var paddingL = this.$paddingLeft;
             var paddingR = this.$paddingRight;
             var gap = this.$gap;
             var contentHeight:number;
@@ -387,7 +389,7 @@ module swan {
 
                 contentWidth = Math.max(contentWidth, bounds.width);
                 if (!needInvalidateSize) {
-                    oldElementSize = elementSizeTable[i] || typicalHeight;
+                    oldElementSize = isNaN(elementSizeTable[i]) ? typicalHeight : elementSizeTable[i];
                     if (oldElementSize != bounds.height)
                         needInvalidateSize = true;
                 }
@@ -427,7 +429,11 @@ module swan {
             var gap = this.$gap;
             var elementSizeTable = this.elementSizeTable;
             for (var i = 0; i < index; i++) {
-                startPos += (elementSizeTable[i] || typicalHeight) + gap;
+                var h = elementSizeTable[i];
+                if(isNaN(h)) {
+                    h = typicalHeight;
+                }
+                startPos += h + gap;
             }
             return startPos;
         }
@@ -443,7 +449,11 @@ module swan {
         protected getElementSize(index:number):number {
 
             if (this.$useVirtualLayout) {
-                return this.elementSizeTable[index] || this.$typicalHeight;
+                var size = this.elementSizeTable[index];
+                if (isNaN(size)) {
+                    size = this.$typicalHeight;
+                }
+                return size;
             }
             if (this.$target) {
                 return this.$target.getElementAt(index).height;
@@ -465,7 +475,11 @@ module swan {
             var length = this.$target.numElements;
             var elementSizeTable = this.elementSizeTable;
             for (var i = 0; i < length; i++) {
-                totalSize += (elementSizeTable[i] || typicalHeight) + gap;
+                var h = elementSizeTable[i];
+                if(isNaN(h)) {
+                    h = typicalHeight;
+                }
+                totalSize += h + gap;
             }
             totalSize -= gap;
             return totalSize;

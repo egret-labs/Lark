@@ -39,6 +39,13 @@ module lark {
      * @language en_US
      * Returns a reference to the class object of the class specified by the name parameter.
      * @param name The name of a class.
+     * @example
+     * <pre>
+     *  var clazz:any = lark.getDefinitionByName("lark.Shape"); //get definition of class lark.Shape
+     *  var shape:lark.Shape = new clazz();
+     *  shape.graphics.fillStyle = "#ff0000";
+     *  shape.graphics.fillRect(0,0,100,100);
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -46,6 +53,13 @@ module lark {
      * @language zh_CN
      * 返回 name 参数指定的类的类对象引用。
      * @param name 类的名称。
+     * @example
+     * <pre>
+     *  var clazz:any = lark.getDefinitionByName("lark.Shape"); //获取lark.Shape类定义
+     *  var shape:lark.Shape = new clazz();
+     *  shape.graphics.fillStyle = "#ff0000";
+     *  shape.graphics.fillRect(0,0,100,100);
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */

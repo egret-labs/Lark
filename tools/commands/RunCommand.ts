@@ -25,17 +25,33 @@ class RunCommand implements lark.Command {
             process.exit(exitCode);
         }
 
+        utils.getAvailablePort(port=> this.onGotPort(port), lark.options.port);
+    }
+
+    private onGotPort(port: number) {
+        lark.options.port = port;
+        console.log('\n');
+        var addresses = utils.getNetworkAddress();
+        if (addresses.length > 0) {
+            lark.options.host = addresses[0];
+        }
+        server.startServer(lark.options, lark.options.startUrl);
+        console.log("    " + utils.tr(10013, ''));
+        console.log('\n');
+        console.log('        ' + lark.options.startUrl);
+        for (var i = 1; i < addresses.length; i++) {
+            console.log('        ' + lark.options.getStartURL(addresses[i]));
+        }
+
+        console.log('\n');
         if (lark.options.autoCompile) {
-            console.log(utils.tr(10010));
+            console.log('    ' + utils.tr(10010));
             this.watchFiles(lark.options.srcDir);
             this.watchFiles(lark.options.templateDir);
         }
         else {
-            console.log(utils.tr(10012));
+            console.log('    ' + utils.tr(10012));
         }
-
-        server.startServer(lark.options, lark.options.startUrl);
-        console.log(utils.tr(10013, lark.options.startUrl));
     }
 
     private watchFiles(dir:string) {
@@ -49,9 +65,9 @@ class RunCommand implements lark.Command {
     private sendBuildCMD() {
         service.execCommand({ command: "build", path: lark.options.projectDir }, (cmd: lark.ServiceCommandResult) => {
             if (!cmd.exitCode)
-                console.log(utils.tr(10011));
+                console.log('    ' +utils.tr(10011));
             else
-                console.log(utils.tr(10014),cmd.exitCode);
+                console.log('    ' +utils.tr(10014),cmd.exitCode);
             if (cmd.messages) {
                 cmd.messages.forEach(m=> console.log(m));
             }

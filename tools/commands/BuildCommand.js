@@ -12,7 +12,7 @@ var BuildCommand = (function () {
             FileUtil.exists(options.templateDir) == false) {
             utils.exit(10015, options.projectDir);
         }
-        if (FileUtil.exists(FileUtil.joinPath(options.srcDir, 'libs/lark/lark.js')) == false) {
+        if (FileUtil.exists(FileUtil.joinPath(options.srcDir, 'libs/lark/')) == false) {
             CopyFiles.copyLark();
         }
         service.execCommand({ path: lark.options.projectDir, command: "build" }, function (cmd) {

@@ -48,6 +48,7 @@ module swan {
      * group (Give the instance of Group to <code>viewport</code> property of Scroller component).
      * The scroller component can adds a scrolling touch operation for the Group.
      *
+     * @includeExample examples/Samples/src/extension/swan/components/GroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -57,6 +58,7 @@ module swan {
      * Group 是自动布局的容器基类。如果包含的子项内容太大需要滚动显示，可以在在 Group 外部包裹一层 Scroller 组件
      * (将 Group 实例赋值给 Scroller 组件的 viewport 属性)。Scroller 会为 Group 添加滚动的触摸操作功能，并显示垂直或水平的滚动条。
      *
+     * @includeExample examples/Samples/src/extension/swan/components/GroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -97,7 +99,7 @@ module swan {
 
         /**
          * @language en_US
-         * [write-only] This property is Usually invoked in resolving an EXML for adding multiple children quickly.
+         * This property is Usually invoked in resolving an EXML for adding multiple children quickly.
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -105,7 +107,7 @@ module swan {
          */
         /**
          * @language zh_CN
-         * [只写] 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
+         * 此属性通常在 EXML 的解析器中调用，便于快速添加多个子项。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native

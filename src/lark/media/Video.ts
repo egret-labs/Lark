@@ -39,6 +39,7 @@ module lark {
      * @event egret.Event.ENDED Emit when the video playback ended
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/media/VideoExample.ts
      */
     /**
      * @language zh_CN
@@ -49,6 +50,7 @@ module lark {
      * @event egret.Event.ENDED 视频播放完成时抛出
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/media/VideoExample.ts
      */
     export interface Video extends DisplayObject {
 
@@ -203,6 +205,8 @@ module lark {
          */
         bitmapData: BitmapData;
     }
-
+    /**
+     * @copy lark.Video
+     */
     export var Video: { new (src?:string): Video };
 }

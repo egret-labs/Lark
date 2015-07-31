@@ -48,6 +48,7 @@ declare module lark {
         manageUrl: string;
         startUrl: string;
         debug?: boolean;
+        getStartURL(address: string): string;
 
         publish?: boolean;
         includeLark?: boolean;

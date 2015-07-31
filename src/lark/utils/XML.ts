@@ -74,12 +74,14 @@ module lark {
      * The XML class contains properties for working with XML objects.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/utils/XMLExample.ts
      */
     /**
      * @language zh_CN
      * XML 类包含用于处理 XML 对象的属性。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/utils/XMLExample.ts
      */
     export interface XML extends XMLNode {
         /**

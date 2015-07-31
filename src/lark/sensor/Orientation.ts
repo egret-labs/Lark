@@ -15,6 +15,7 @@ module lark {
      * @event lark.Event.CHANGE device's orientation is changed
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/sensor/OrientationExample.ts
      */
     /**
      * @language zh_CN
@@ -22,6 +23,7 @@ module lark {
      * @event lark.Event.CHANGE 设备方向改变时派发
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/sensor/OrientationExample.ts
      */
     export interface Orientation extends IEventEmitter {
         /**

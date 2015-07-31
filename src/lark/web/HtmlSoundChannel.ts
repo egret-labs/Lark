@@ -119,5 +119,14 @@ module lark.web {
                 return 0;
             return this.audio.currentTime;
         }
+        /**
+         * @private
+         * @inheritDoc
+         */
+        public set position(value: number) {
+            if (!this.audio || this.audio.currentTime==value)
+                return;
+            this.audio.currentTime = value;
+        }
     }
 }

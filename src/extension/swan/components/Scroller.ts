@@ -30,6 +30,8 @@
 
 module swan {
 
+    var scrollerThrowEvent:ScrollerThrowEvent;
+
     /**
      * @private
      */
@@ -46,7 +48,8 @@ module swan {
         touchScrollV,
         delayTouchTimer,
         delayTouchEvent,
-        viewport
+        viewport,
+        viewprotRemovedEvent //表示是被移除触发的viewport设空
     }
     /**
      * @language en_US
@@ -74,6 +77,7 @@ module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ScrollerExample.ts
      */
     /**
      * @language zh_CN
@@ -94,6 +98,7 @@ module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ScrollerExample.ts
      */
     export class Scroller extends Component {
 
@@ -154,7 +159,47 @@ module swan {
                 10: null,           //delayTouchTimer,
                 11: null,           //delayTouchEvent
                 12: null,           //viewport
+                13: false,          //viewprotRemovedEvent
             };
+        }
+
+        /**
+         * @language en_US
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         *
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        public set throwSpeed(val:number) {
+            val = +val;
+            val = val<0.01?0.01:val;
+            this.$Scroller[Keys.touchScrollH].$scrollFactor = val;
+            this.$Scroller[Keys.touchScrollV].$scrollFactor = val;
+        }
+
+        public get throwSpeed():number {
+            return this.$Scroller[Keys.touchScrollH].$scrollFactor;
+        }
+
+
+        $getThrowInfo(currentPos:number,toPos:number):swan.ScrollerThrowEvent {
+            if(!scrollerThrowEvent) {
+                scrollerThrowEvent = new swan.ScrollerThrowEvent(ScrollerThrowEvent.THROW,false,false,currentPos,toPos);
+            }
+            else {
+                scrollerThrowEvent.currentPos = currentPos;
+                scrollerThrowEvent.toPos = toPos;
+            }
+            this.emit(scrollerThrowEvent);
+            return scrollerThrowEvent;
         }
 
         /**
@@ -310,6 +355,7 @@ module swan {
                 return;
             this.uninstallViewport();
             values[Keys.viewport] = value;
+            values[Keys.viewprotRemovedEvent] = false;
             this.installViewport();
         }
 
@@ -320,10 +366,11 @@ module swan {
         private installViewport():void {
             var viewport = this.viewport;
             if (viewport) {
+                this.addChildAt(viewport, 0);
                 viewport.scrollEnabled = true;
                 viewport.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
                 viewport.on(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
-                this.addChildAt(viewport, 0);
+                viewport.on(lark.Event.REMOVED,this.onViewPortRemove,this);
             }
             if (this.horizontalScrollBar) {
                 this.horizontalScrollBar.viewport = viewport;
@@ -349,8 +396,16 @@ module swan {
                 viewport.scrollEnabled = false;
                 viewport.removeListener(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
                 viewport.removeListener(lark.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
-                this.removeChild(viewport);
+                viewport.removeListener(lark.Event.REMOVED,this.onViewPortRemove,this);
+                if(this.$Scroller[Keys.viewprotRemovedEvent] == false) {
+                    this.removeChild(viewport);
+                }
             }
+        }
+
+        private onViewPortRemove(event:lark.Event):void {
+            this.$Scroller[Keys.viewprotRemovedEvent] = true;
+            this.viewport = null;
         }
 
         /**
@@ -390,7 +445,7 @@ module swan {
             }
 
             var target:lark.DisplayObject = event.target;
-            while (target != this) {
+            while (target && target != this) {
                 if (target instanceof Scroller) {
                     canScroll = (<Scroller><any> target).checkScrollPolicy();
                     if (canScroll) {
@@ -463,6 +518,9 @@ module swan {
         private checkScrollPolicy():boolean {
             var values = this.$Scroller;
             var viewport:IViewport = values[Keys.viewport];
+            if(!viewport){
+                return false;
+            }
             var hCanScroll:boolean;
             var uiValues = viewport.$UIComponent;
             switch (values[Keys.scrollPolicyH]) {

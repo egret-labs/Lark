@@ -134,6 +134,7 @@ module lark.sys {
 
 module lark {
 
+    var SplitRegex = /(?=[\u00BF-\u1FFF\u2C00-\uD7FF]|\b|\s)(?![。，！、》…）)}”】\.\,\!\?\]\:])/;
     /**
      * @language en_US
      * The TextField class is used to create display objects for text display. You can use the methods and properties of
@@ -148,6 +149,7 @@ module lark {
      * @see lark.TextInput
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/text/TextFieldExample.ts
      */
     /**
      * @language zh_CN
@@ -159,6 +161,7 @@ module lark {
      * @see lark.TextInput
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/text/TextFieldExample.ts
      */
     export class TextField extends DisplayObject {
         /**
@@ -679,7 +682,9 @@ module lark {
                     vAlign = 1;
                 drawY += vAlign * (explicitHeight - textHeight);
             }
+            var roundOff = drawY;
             drawY = Math.round(drawY);
+            roundOff = drawY - roundOff;
             var hAlign = 0;
             if (values[sys.TextKeys.textAlign] == HorizontalAlign.CENTER) {
                 hAlign = 0.5;
@@ -695,7 +700,7 @@ module lark {
             else {
                 maxWidth = values[sys.TextKeys.textFieldWidth];
             }
-            var maxYPos = explicitHeight - 2;
+            var maxYPos = explicitHeight - 2 + roundOff;
             for (var i = 0; i < length; i++) {
                 var line = lines[i];
                 var measureW = measuredWidths[i];
@@ -837,7 +842,7 @@ module lark {
          * @private
          */
         protected $splitWords(line:string):string[] {
-            return line.split(/\b/);
+            return line.split(SplitRegex);
         }
 
     }

@@ -33,6 +33,7 @@ import cp = require('child_process');
 import path = require('path');
 import file = require('./FileUtil');
 import UglifyJS = require("./uglify-js/uglifyjs");
+import net = require('net');
 
 
 global["$locale_strings"] = global["$locale_strings"] || {};
@@ -48,7 +49,7 @@ export function tr(code: number, ...args): string {
     if (!text) {
         return "{" + code + "}";
     }
-    text = format(text, args);
+    text = format.apply(this, [text].concat(args));
     return text;
 }
 
@@ -80,18 +81,16 @@ export function getLarkRoot() {
         var existsFlag = false;
         for (var i = 0; i < globalpath.length; i++) {
             var prefix = globalpath[i];
-            var url = path.join(prefix, "../lark");
-            if (file.isDirectory(url)) {
+            var url = file.joinPath(prefix, '../');
+            if (file.exists(file.joinPath(url,'tools/bin/lark'))) {
                 existsFlag = true;
                 break;
             }
-            var url = path.join(prefix, "lark");
-            if (file.isDirectory(url)) {
+            url = prefix;
+            if (file.exists(file.joinPath(url, 'tools/bin/lark'))) {
                 existsFlag = true;
                 break;
             }
-
-
         }
         if (!existsFlag) {
             throw new Error("can't find Lark");
@@ -177,4 +176,44 @@ export function clean(path: string,...excludes:string[]) {
             continue;
         file.remove(path);
     }
+}
+
+export function getNetworkAddress(): string[] {
+    var os = require('os');
+    var ifaces = os.networkInterfaces();
+    var ips: string[] = [];
+    Object.keys(ifaces).forEach(function (ifname) {
+        var alias = 0;
+        ifaces[ifname].forEach(function (iface) {
+            if ('IPv4' !== iface.family || iface.internal !== false) {
+                // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+                return;
+            }
+            ips.push(iface.address);
+        });
+    });
+
+    return ips;
+}
+
+export function getAvailablePort(callback: (port: number) => void, port= 0) {
+
+    function getPort() {
+        var server = net.createServer();
+        server.on('listening', function () {
+            port = server.address().port
+            server.close()
+        })
+        server.on('close', function () {
+            console.log("Got port", port);
+            callback(port)
+        })
+        server.on('error', function (err) {
+            port++;
+            getPort();
+        })
+        server.listen(port, '0.0.0.0')
+    }
+
+    getPort();
 }

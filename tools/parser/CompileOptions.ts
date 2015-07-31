@@ -51,9 +51,12 @@ class CompileOptions implements lark.LarkToolArgs {
         return FileUtil.joinPath(this.projectDir, "template/");
     }
 
-
+    private _host: string = null;
     get host(): string {
-        return "localhost";
+        return this._host;
+    }
+    set host(value: string) {
+        this._host = value;
     }
     private _port: number = NaN;
     get port(): number {
@@ -63,15 +66,21 @@ class CompileOptions implements lark.LarkToolArgs {
         this._port = value;
     }
     get websocketUrl(): string {
-        var url = "ws://" + this.host + ':' + this.port;
+        var url = "ws://" + (this.host || "localhost") + ':' + this.port;
         return url;
     }
     get manageUrl(): string {
-        var url = "http://" + this.host + ':' + this.port + '/$/';
+        var url = "http://" + (this.host || "localhost") + ':' + this.port + '/$/';
         return url;
     }
     get startUrl(): string {
-        var url = "http://" + this.host + ':' + this.port + '/bin-debug/index.html';
+        var url = "http://" + (this.host || "localhost") + ':' + this.port + '/bin-debug/index.html';
+        return url;
+    }
+
+    getStartURL(host: string) {
+
+        var url = "http://" + host + ':' + this.port + '/bin-debug/index.html';
         return url;
     }
 

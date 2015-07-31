@@ -49,6 +49,7 @@ module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
      */
     /**
      * @language zh_CN
@@ -68,6 +69,7 @@ module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
      */
     export class Skin extends lark.LarkObject {
 
@@ -254,6 +256,9 @@ module swan {
         public set hostComponent(value:Component) {
             if (this._hostComponent == value)
                 return;
+            if(this._hostComponent){
+                this._hostComponent.removeListener(lark.Event.ADDED_TO_STAGE,this.onAddedToStage,this);
+            }
             this._hostComponent = value;
             var values = this.$stateValues;
             values.parent = value;

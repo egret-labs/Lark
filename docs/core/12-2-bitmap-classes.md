@@ -27,5 +27,6 @@ imgLoadHandler( evt:lark.Event ):void{
     var loader:lark.ImageLoader = evt.currentTarget;
     var bmd:lark.BitmapData = loader.data;
     var bmp:lark.Bitmap = new lark.Bitmap( bmd );
+    this.addChild(bmp);
 }
 ```

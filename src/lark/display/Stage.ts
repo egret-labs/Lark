@@ -37,6 +37,7 @@ module lark {
      * @event lark.Event.RESIZE Emitted when the stageWidth or stageHeight property of the Stage object is changed.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/StageExample.ts
      */
     /**
      * @language zh_CN
@@ -47,6 +48,7 @@ module lark {
      * @event lark.Event.RESIZE 当stageWidth或stageHeight属性发生改变时调度
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/StageExample.ts
      */
     export class Stage extends Sprite {
 
@@ -157,6 +159,38 @@ module lark {
                 return;
             }
             this.$scaleMode = value;
+            this.$screen.updateScreenSize();
+        }
+
+        $highResolutionMode: string = "default";
+
+        /**
+         * @language en_US
+         * HighResolutionMode defines render modes for high resolution devices
+         *  HighResolutionMode.DEFAULT = "default" use device's logic resolution as the stage resolution and rendering resolution
+         *  HighResolutionMode.RETINA = "retina"   use device's logic resolution as the stage resolution but rendering with high resolution
+         *  HighResolutionMode.DEVICE = "device"   use device's phyical resolution as the stage resolution and rendering resolution
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * HighResolutionMode 类为高分辨率屏幕显示模式提供可选值。
+         * 可选值为<br/>
+         *  HighResolutionMode.DEFAULT = "default" 使用设备的逻辑分辨率作为舞台的尺寸和渲染分辨率。
+         *  HighResolutionMode.RETINA = "retina"   使用设备的逻辑分辨率作为舞台的尺寸，但使用高清分辨率来渲染。
+         *  HighResolutionMode.DEVICE = "device"   使用设备的物理分辨率作为舞台的尺寸
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public get highResolutionMode(): string {
+            return this.$highResolutionMode;
+        }
+
+        public set highResolutionMode(value: string) {
+            if (this.$highResolutionMode == value)
+                return;
+            this.$highResolutionMode = value;
             this.$screen.updateScreenSize();
         }
 

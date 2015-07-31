@@ -34,12 +34,14 @@ module lark {
      * The Capabilities class provides properties that describe the system and runtime that are hosting the application.
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/system/CapabilitiesExample.ts
      */
     /**
      * @language zh_CN
      * Capabilities 类提供一些属性，这些属性描述了承载应用程序的系统和运行时。
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/system/CapabilitiesExample.ts
      */
     export class Capabilities {
 
@@ -204,6 +206,26 @@ module lark {
          */
         public static get hasMotion():boolean {
             return Capabilities.$hasMotion;
+        }
+
+        static $devicePixelRatio: number;
+
+        /**
+         * @language en_US
+         * The devicePixelRatio read-only property returns the ratio 
+         * of the (vertical) size of one physical pixel on the current display 
+         * device to the size of one logical pixel. 
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * devicePixelRatio 反应设备物理分辨率与逻辑分辨率的比值
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public static get devicePixelRatio(): number {
+            return Capabilities.$devicePixelRatio;
         }
     }
 

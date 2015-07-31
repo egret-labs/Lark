@@ -7,16 +7,33 @@ scrollRect 属性用于设置显示对象的滚动矩形范围。显示对象被
 
 如下代码将位图bmp在其本身大小的矩形区域内进行水平向右移动，并会判断当移动到消失时，重新出现在左侧。
 ``` TypeScript
-var rect:lark.Rectangle = bmp.scrollRect = new lark.Rectangle( 0, 0, bmp.width, bmp.height );
+class Main extends lark.Sprite {
+    constructor() {
+        super();
+        
+        var imgLoader:lark.ImageLoader = new lark.ImageLoader;
+        imgLoader.once( lark.Event.COMPLETE, this.imgLoadHandler, this ); 
+        imgLoader.load( "resources/lark.png" );  
+    }
 
-var move = function():void{
-   rect.x -= 2;
-   if( rect.x < bmp.x - bmp.width ){
-       rect.x = bmp.width;
-   }
-   bmp.scrollRect = rect;
-   console.log( rect.x, bmp.x );
+    imgLoadHandler( evt:lark.Event ):void{
+        var loader:lark.ImageLoader = evt.currentTarget;
+        var bmd:lark.BitmapData = loader.data;
+        var bmp:lark.Bitmap = new lark.Bitmap( bmd );
+        this.addChild(bmp);
+
+        var rect:lark.Rectangle = bmp.scrollRect = new lark.Rectangle( 0, 0, bmp.width, bmp.height );
+        var move = function():void{
+            rect.x -= 2;
+            if( rect.x < bmp.x - bmp.width ){
+                rect.x = bmp.width;
+            }
+            bmp.scrollRect = rect;
+            console.log( rect.x, bmp.x );
+        }
+
+        this.on( lark.Event.ENTER_FRAME, move, this );
+    }
+
 }
-
-this._container.on( lark.Event.ENTER_FRAME, move, this );
 ```

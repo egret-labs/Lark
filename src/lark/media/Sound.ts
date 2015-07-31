@@ -40,6 +40,7 @@ module lark {
      * @event egret.Event.COMPLETE Emit when the audio resource is loaded and ready to play
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/media/SoundExample.ts
      */
     /**
      * @language zh_CN
@@ -49,6 +50,7 @@ module lark {
      * @event egret.Event.COMPLETE 音频加载完成时抛出
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/media/SoundExample.ts
      */
     export interface Sound extends IEventEmitter {
 

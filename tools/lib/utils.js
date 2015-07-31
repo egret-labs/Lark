@@ -31,6 +31,7 @@ var cp = require('child_process');
 var path = require('path');
 var file = require('./FileUtil');
 var UglifyJS = require("./uglify-js/uglifyjs");
+var net = require('net');
 global["$locale_strings"] = global["$locale_strings"] || {};
 var $locale_strings = global["$locale_strings"];
 /**
@@ -48,7 +49,7 @@ function tr(code) {
     if (!text) {
         return "{" + code + "}";
     }
-    text = format(text, args);
+    text = format.apply(this, [text].concat(args));
     return text;
 }
 exports.tr = tr;
@@ -86,13 +87,13 @@ function getLarkRoot() {
         var existsFlag = false;
         for (var i = 0; i < globalpath.length; i++) {
             var prefix = globalpath[i];
-            var url = path.join(prefix, "../lark");
-            if (file.isDirectory(url)) {
+            var url = file.joinPath(prefix, '../');
+            if (file.exists(file.joinPath(url, 'tools/bin/lark'))) {
                 existsFlag = true;
                 break;
             }
-            var url = path.join(prefix, "lark");
-            if (file.isDirectory(url)) {
+            url = prefix;
+            if (file.exists(file.joinPath(url, 'tools/bin/lark'))) {
                 existsFlag = true;
                 break;
             }
@@ -175,3 +176,41 @@ function clean(path) {
     }
 }
 exports.clean = clean;
+function getNetworkAddress() {
+    var os = require('os');
+    var ifaces = os.networkInterfaces();
+    var ips = [];
+    Object.keys(ifaces).forEach(function (ifname) {
+        var alias = 0;
+        ifaces[ifname].forEach(function (iface) {
+            if ('IPv4' !== iface.family || iface.internal !== false) {
+                // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+                return;
+            }
+            ips.push(iface.address);
+        });
+    });
+    return ips;
+}
+exports.getNetworkAddress = getNetworkAddress;
+function getAvailablePort(callback, port) {
+    if (port === void 0) { port = 0; }
+    function getPort() {
+        var server = net.createServer();
+        server.on('listening', function () {
+            port = server.address().port;
+            server.close();
+        });
+        server.on('close', function () {
+            console.log("Got port", port);
+            callback(port);
+        });
+        server.on('error', function (err) {
+            port++;
+            getPort();
+        });
+        server.listen(port, '0.0.0.0');
+    }
+    getPort();
+}
+exports.getAvailablePort = getAvailablePort;
