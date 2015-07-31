@@ -2669,6 +2669,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/DefaultAssetAdapterExample.ts
      */
     /**
      * @language zh_CN
@@ -2676,6 +2677,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/DefaultAssetAdapterExample.ts
      */
     var DefaultAssetAdapter = (function () {
         function DefaultAssetAdapter() {
@@ -3815,7 +3817,7 @@ var swan;
             }
         }
         var d = __define,c=ArrayCollection;p=c.prototype;
-        d(p, "source",
+        d(p, "source"
             /**
              * @language en_US
              * The source of data in the ArrayCollection.
@@ -3834,10 +3836,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._source;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (!value)
                     value = [];
                 this._source = value;
@@ -3865,7 +3867,7 @@ var swan;
         p.refresh = function () {
             this.emitCoEvent(swan.CollectionEventKind.REFRESH);
         };
-        d(p, "length",
+        d(p, "length"
             //--------------------------------------------------------------------------
             //
             // ICollection接口实现方法
@@ -3878,9 +3880,9 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._source.length;
-            },undefined
+            }
         );
         /**
          * @language en_US
@@ -4504,6 +4506,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/RadioButtonGroupExample.ts
      */
     /**
      * @language zh_CN
@@ -4514,6 +4517,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/RadioButtonGroupExample.ts
      */
     var RadioButtonGroup = (function (_super) {
         __extends(RadioButtonGroup, _super);
@@ -4595,7 +4599,7 @@ var swan;
         p.getRadioButtonAt = function (index) {
             return this.radioButtons[index];
         };
-        d(p, "enabled",
+        d(p, "enabled"
             /**
              * @language en_US
              * Determines whether selection is allowed.  Note that the value returned
@@ -4620,10 +4624,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$enabled;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = !!value;
                 if (this.$enabled === value)
                     return;
@@ -4634,7 +4638,7 @@ var swan;
                     buttons[i].invalidateState();
             }
         );
-        d(p, "numRadioButtons",
+        d(p, "numRadioButtons"
             /**
              * @language en_US
              * The number of RadioButtons that belong to this RadioButtonGroup.
@@ -4655,11 +4659,11 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.radioButtons.length;
-            },undefined
+            }
         );
-        d(p, "selectedValue",
+        d(p, "selectedValue"
             /**
              * @language en_US
              * The <code>value</code> property of the selected
@@ -4692,13 +4696,13 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 if (this.selection) {
                     return this.selection.value != null ? this.selection.value : this.selection.label;
                 }
                 return null;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this._selectedValue = value;
                 if (value == null) {
                     this.$setSelection(null, false);
@@ -4716,7 +4720,7 @@ var swan;
                 }
             }
         );
-        d(p, "selection",
+        d(p, "selection"
             /**
              * @language en_US
              * Contains a reference to the currently selected
@@ -4739,10 +4743,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._selection;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (this._selection == value)
                     return;
                 this.$setSelection(value, false);
@@ -5000,15 +5004,15 @@ var swan;
             function StateClient() {
             }
             var d = __define,c=StateClient;p=c.prototype;
-            d(p, "states",
+            d(p, "states"
                 /**
                  * @private
                  * 为此组件定义的视图状态。
                  */
-                function () {
+                ,function () {
                     return this.$stateValues.states;
-                },
-                function (value) {
+                }
+                ,function (value) {
                     if (!value)
                         value = [];
                     var values = this.$stateValues;
@@ -5025,15 +5029,15 @@ var swan;
                     }
                 }
             );
-            d(p, "currentState",
+            d(p, "currentState"
                 /**
                  * @private
                  * 组件的当前视图状态。将其设置为 "" 或 null 可将组件重置回其基本状态。
                  */
-                function () {
+                ,function () {
                     return this.$stateValues.currentState;
-                },
-                function (value) {
+                }
+                ,function (value) {
                     var values = this.$stateValues;
                     values.explicitState = value;
                     values.currentState = value;
@@ -5994,7 +5998,7 @@ var swan;
             this.$typicalHeight = 22;
         }
         var d = __define,c=LayoutBase;p=c.prototype;
-        d(p, "target",
+        d(p, "target"
             /**
              * @language en_US
              * The Group container whose elements are measured, sized and positioned
@@ -6012,17 +6016,17 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$target;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (this.$target === value)
                     return;
                 this.$target = value;
                 this.clearVirtualLayoutCache();
             }
         );
-        d(p, "useVirtualLayout",
+        d(p, "useVirtualLayout"
             /**
              * @language en_US
              * To configure a container to use virtual layout, set the <code>useVirtualLayout</code> property
@@ -6050,10 +6054,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$useVirtualLayout;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = !!value;
                 if (this.$useVirtualLayout == value)
                     return;
@@ -7628,6 +7632,9 @@ var swan;
 })(swan || (swan = {}));
 var swan;
 (function (swan) {
+    /**
+     * @private
+     */
     var ScrollerThrowEvent = (function (_super) {
         __extends(ScrollerThrowEvent, _super);
         /**
@@ -8361,7 +8368,7 @@ var swan;
             this.indexInViewCalculated = false;
         }
         var d = __define,c=TileLayout;p=c.prototype;
-        d(p, "horizontalGap",
+        d(p, "horizontalGap"
             /**
              * @language en_US
              * Horizontal space between columns, in pixels.
@@ -8382,10 +8389,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._horizontalGap;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value;
                 if (value === this._horizontalGap)
                     return;
@@ -8394,7 +8401,7 @@ var swan;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "verticalGap",
+        d(p, "verticalGap"
             /**
              * @language en_US
              * Vertical space between rows, in pixels.
@@ -8415,10 +8422,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._verticalGap;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value;
                 if (value === this._verticalGap)
                     return;
@@ -8427,7 +8434,7 @@ var swan;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "columnCount",
+        d(p, "columnCount"
             /**
              * @language en_US
              * Contain the actual column count.
@@ -8448,11 +8455,11 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._columnCount;
-            },undefined
+            }
         );
-        d(p, "requestedColumnCount",
+        d(p, "requestedColumnCount"
             /**
              * @language en_US
              * Number of columns to be displayed.
@@ -8482,10 +8489,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._requestedColumnCount;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 if (this._requestedColumnCount === value)
                     return;
@@ -8494,7 +8501,7 @@ var swan;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "rowCount",
+        d(p, "rowCount"
             /**
              * @language en_US
              * The row count.
@@ -8511,11 +8518,11 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._rowCount;
-            },undefined
+            }
         );
-        d(p, "requestedRowCount",
+        d(p, "requestedRowCount"
             /**
              * @language en_US
              * Number of rows to be displayed.
@@ -8545,10 +8552,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._requestedRowCount;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 if (this._requestedRowCount == value)
                     return;
@@ -8557,7 +8564,7 @@ var swan;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "columnWidth",
+        d(p, "columnWidth"
             /**
              * @language en_US
              * Contain the actual column width, in pixels.
@@ -8581,10 +8588,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._columnWidth;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value;
                 if (value === this._columnWidth)
                     return;
@@ -8593,7 +8600,7 @@ var swan;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "rowHeight",
+        d(p, "rowHeight"
             /**
              * @language en_US
              * The row height, in pixels.
@@ -8617,10 +8624,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._rowHeight;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value;
                 if (value === this._rowHeight)
                     return;
@@ -8629,7 +8636,7 @@ var swan;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "paddingLeft",
+        d(p, "paddingLeft"
             /**
              * @copy swan.LinearLayoutBase#paddingLeft
              *
@@ -8637,10 +8644,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._paddingLeft;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 if (this._paddingLeft == value)
                     return;
@@ -8648,7 +8655,7 @@ var swan;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "paddingRight",
+        d(p, "paddingRight"
             /**
              * @copy swan.LinearLayoutBase#paddingRight
              *
@@ -8656,10 +8663,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._paddingRight;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 if (this._paddingRight === value)
                     return;
@@ -8667,7 +8674,7 @@ var swan;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "paddingTop",
+        d(p, "paddingTop"
             /**
              * @copy swan.LinearLayoutBase#paddingTop
              *
@@ -8675,10 +8682,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._paddingTop;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 if (this._paddingTop == value)
                     return;
@@ -8686,7 +8693,7 @@ var swan;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "paddingBottom",
+        d(p, "paddingBottom"
             /**
              * @copy swan.LinearLayoutBase#paddingBottom
              *
@@ -8694,10 +8701,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._paddingBottom;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 if (this._paddingBottom === value)
                     return;
@@ -8705,7 +8712,7 @@ var swan;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "horizontalAlign",
+        d(p, "horizontalAlign"
             /**
              * @language en_US
              * Specifies how to align the elements within the cells in the horizontal direction.
@@ -8731,17 +8738,17 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._horizontalAlign;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (this._horizontalAlign == value)
                     return;
                 this._horizontalAlign = value;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "verticalAlign",
+        d(p, "verticalAlign"
             /**
              * @language en_US
              * 指定如何在垂直方向上对齐单元格内的元素。
@@ -8768,17 +8775,17 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._verticalAlign;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (this._verticalAlign == value)
                     return;
                 this._verticalAlign = value;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "columnAlign",
+        d(p, "columnAlign"
             /**
              * @language en_US
              * Specifies how to justify the fully visible columns to the container width.
@@ -8832,17 +8839,17 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._columnAlign;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (this._columnAlign == value)
                     return;
                 this._columnAlign = value;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "rowAlign",
+        d(p, "rowAlign"
             /**
              * @language en_US
              * Specifies how to justify the fully visible rows to the container height.
@@ -8895,17 +8902,17 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._rowAlign;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (this._rowAlign == value)
                     return;
                 this._rowAlign = value;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "orientation",
+        d(p, "orientation"
             /**
              * @language en_US
              * Specifies whether elements are arranged row by row or
@@ -8927,10 +8934,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._orientation;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (this._orientation == value)
                     return;
                 this._orientation = value;
@@ -10000,7 +10007,7 @@ var swan;
             this.maxElementSize = 0;
         }
         var d = __define,c=LinearLayoutBase;p=c.prototype;
-        d(p, "horizontalAlign",
+        d(p, "horizontalAlign"
             /**
              * @language en_US
              * The horizontal alignment of layout elements.
@@ -10025,10 +10032,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$horizontalAlign;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (this.$horizontalAlign == value)
                     return;
                 this.$horizontalAlign = value;
@@ -10036,7 +10043,7 @@ var swan;
                     this.$target.invalidateDisplayList();
             }
         );
-        d(p, "verticalAlign",
+        d(p, "verticalAlign"
             /**
              * @language en_US
              * The vertical alignment of layout elements.
@@ -10061,10 +10068,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$verticalAlign;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (this.$verticalAlign == value)
                     return;
                 this.$verticalAlign = value;
@@ -10072,7 +10079,7 @@ var swan;
                     this.$target.invalidateDisplayList();
             }
         );
-        d(p, "gap",
+        d(p, "gap"
             /**
              * @language en_US
              * The space between layout elements, in pixels.
@@ -10093,10 +10100,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$gap;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 if (this.$gap === value)
                     return;
@@ -10104,7 +10111,7 @@ var swan;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "paddingLeft",
+        d(p, "paddingLeft"
             /**
              * @language en_US
              * Number of pixels between the container's left edge
@@ -10126,10 +10133,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$paddingLeft;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 if (this.$paddingLeft === value)
                     return;
@@ -10137,7 +10144,7 @@ var swan;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "paddingRight",
+        d(p, "paddingRight"
             /**
              * @language en_US
              * Number of pixels between the container's right edge
@@ -10159,10 +10166,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$paddingRight;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 if (this.$paddingRight === value)
                     return;
@@ -10170,7 +10177,7 @@ var swan;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "paddingTop",
+        d(p, "paddingTop"
             /**
              * @language en_US
              * The minimum number of pixels between the container's top edge and
@@ -10192,10 +10199,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$paddingTop;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 if (this.$paddingTop === value)
                     return;
@@ -10203,7 +10210,7 @@ var swan;
                 this.invalidateTargetLayout();
             }
         );
-        d(p, "paddingBottom",
+        d(p, "paddingBottom"
             /**
              * @language en_US
              * The minimum number of pixels between the container's bottom edge and
@@ -10225,10 +10232,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$paddingBottom;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 if (this.$paddingBottom === value)
                     return;
@@ -10766,16 +10773,16 @@ var swan;
              */
             p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
             };
-            d(p, "includeInLayout",
+            d(p, "includeInLayout"
                 /**
                  * @private
                  * 指定此组件是否包含在父容器的布局中。若为false，则父级容器在测量和布局阶段都忽略此组件。默认值为true。
                  * 注意，visible属性与此属性不同，设置visible为false，父级容器仍会对其布局。
                  */
-                function () {
+                ,function () {
                     return this.$includeInLayout;
-                },
-                function (value) {
+                }
+                ,function (value) {
                     value = !!value;
                     if (this.$includeInLayout === value)
                         return;
@@ -10817,15 +10824,15 @@ var swan;
                     validator.invalidateDisplayList(this);
                 }
             };
-            d(p, "left",
+            d(p, "left"
                 /**
                  * @private
                  * 距父级容器离左边距离
                  */
-                function () {
+                ,function () {
                     return this.$UIComponent[0 /* left */];
-                },
-                function (value) {
+                }
+                ,function (value) {
                     value = +value;
                     var values = this.$UIComponent;
                     if (values[0 /* left */] === value)
@@ -10834,15 +10841,15 @@ var swan;
                     this.invalidateParentLayout();
                 }
             );
-            d(p, "right",
+            d(p, "right"
                 /**
                  * @private
                  * 距父级容器右边距离
                  */
-                function () {
+                ,function () {
                     return this.$UIComponent[1 /* right */];
-                },
-                function (value) {
+                }
+                ,function (value) {
                     value = +value;
                     var values = this.$UIComponent;
                     if (values[1 /* right */] === value)
@@ -10851,15 +10858,15 @@ var swan;
                     this.invalidateParentLayout();
                 }
             );
-            d(p, "top",
+            d(p, "top"
                 /**
                  * @private
                  * 距父级容器顶部距离
                  */
-                function () {
+                ,function () {
                     return this.$UIComponent[2 /* top */];
-                },
-                function (value) {
+                }
+                ,function (value) {
                     value = +value;
                     var values = this.$UIComponent;
                     if (values[2 /* top */] === value)
@@ -10868,15 +10875,15 @@ var swan;
                     this.invalidateParentLayout();
                 }
             );
-            d(p, "bottom",
+            d(p, "bottom"
                 /**
                  * @private
                  * 距父级容器底部距离
                  */
-                function () {
+                ,function () {
                     return this.$UIComponent[3 /* bottom */];
-                },
-                function (value) {
+                }
+                ,function (value) {
                     value = +value;
                     var values = this.$UIComponent;
                     if (values[3 /* bottom */] == value)
@@ -10885,15 +10892,15 @@ var swan;
                     this.invalidateParentLayout();
                 }
             );
-            d(p, "horizontalCenter",
+            d(p, "horizontalCenter"
                 /**
                  * @private
                  * 在父级容器中距水平中心位置的距离
                  */
-                function () {
+                ,function () {
                     return this.$UIComponent[4 /* horizontalCenter */];
-                },
-                function (value) {
+                }
+                ,function (value) {
                     value = +value;
                     var values = this.$UIComponent;
                     if (values[4 /* horizontalCenter */] === value)
@@ -10902,15 +10909,15 @@ var swan;
                     this.invalidateParentLayout();
                 }
             );
-            d(p, "verticalCenter",
+            d(p, "verticalCenter"
                 /**
                  * @private
                  * 在父级容器中距竖直中心位置的距离
                  */
-                function () {
+                ,function () {
                     return this.$UIComponent[5 /* verticalCenter */];
-                },
-                function (value) {
+                }
+                ,function (value) {
                     value = +value;
                     var values = this.$UIComponent;
                     if (values[5 /* verticalCenter */] === value)
@@ -10919,15 +10926,15 @@ var swan;
                     this.invalidateParentLayout();
                 }
             );
-            d(p, "percentWidth",
+            d(p, "percentWidth"
                 /**
                  * @private
                  * 相对父级容器宽度的百分比
                  */
-                function () {
+                ,function () {
                     return this.$UIComponent[6 /* percentWidth */];
-                },
-                function (value) {
+                }
+                ,function (value) {
                     value = +value;
                     var values = this.$UIComponent;
                     if (values[6 /* percentWidth */] === value)
@@ -10936,15 +10943,15 @@ var swan;
                     this.invalidateParentLayout();
                 }
             );
-            d(p, "percentHeight",
+            d(p, "percentHeight"
                 /**
                  * @private
                  * 相对父级容器高度的百分比
                  */
-                function () {
+                ,function () {
                     return this.$UIComponent[7 /* percentHeight */];
-                },
-                function (value) {
+                }
+                ,function (value) {
                     value = +value;
                     var values = this.$UIComponent;
                     if (values[7 /* percentHeight */] === value)
@@ -10953,23 +10960,23 @@ var swan;
                     this.invalidateParentLayout();
                 }
             );
-            d(p, "explicitWidth",
+            d(p, "explicitWidth"
                 /**
                  * @private
                  * 外部显式指定的宽度
                  */
-                function () {
+                ,function () {
                     return this.$UIComponent[8 /* explicitWidth */];
-                },undefined
+                }
             );
-            d(p, "explicitHeight",
+            d(p, "explicitHeight"
                 /**
                  * @private
                  * 外部显式指定的高度
                  */
-                function () {
+                ,function () {
                     return this.$UIComponent[9 /* explicitHeight */];
-                },undefined
+                }
             );
             /**
              * @private
@@ -11057,15 +11064,15 @@ var swan;
                 }
                 return change;
             };
-            d(p, "minWidth",
+            d(p, "minWidth"
                 /**
                  * @private
                  * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
                  */
-                function () {
+                ,function () {
                     return this.$UIComponent[12 /* minWidth */];
-                },
-                function (value) {
+                }
+                ,function (value) {
                     value = +value || 0;
                     var values = this.$UIComponent;
                     if (value < 0 || values[12 /* minWidth */] === value) {
@@ -11076,15 +11083,15 @@ var swan;
                     this.invalidateParentLayout();
                 }
             );
-            d(p, "maxWidth",
+            d(p, "maxWidth"
                 /**
                  * @private
                  * 组件的最大高度。同时影响测量和自动布局的尺寸。
                  */
-                function () {
+                ,function () {
                     return this.$UIComponent[13 /* maxWidth */];
-                },
-                function (value) {
+                }
+                ,function (value) {
                     value = +value || 0;
                     var values = this.$UIComponent;
                     if (value < 0 || values[13 /* maxWidth */] === value) {
@@ -11095,15 +11102,15 @@ var swan;
                     this.invalidateParentLayout();
                 }
             );
-            d(p, "minHeight",
+            d(p, "minHeight"
                 /**
                  * @private
                  * 组件的最小高度,此属性设置为大于maxHeight的值时无效。同时影响测量和自动布局的尺寸。
                  */
-                function () {
+                ,function () {
                     return this.$UIComponent[14 /* minHeight */];
-                },
-                function (value) {
+                }
+                ,function (value) {
                     value = +value || 0;
                     var values = this.$UIComponent;
                     if (value < 0 || values[14 /* minHeight */] === value) {
@@ -11114,15 +11121,15 @@ var swan;
                     this.invalidateParentLayout();
                 }
             );
-            d(p, "maxHeight",
+            d(p, "maxHeight"
                 /**
                  * @private
                  * 组件的最大高度,同时影响测量和自动布局的尺寸。
                  */
-                function () {
+                ,function () {
                     return this.$UIComponent[15 /* maxHeight */];
-                },
-                function (value) {
+                }
+                ,function (value) {
                     value = +value || 0;
                     var values = this.$UIComponent;
                     if (value < 0 || values[15 /* maxHeight */] === value) {
@@ -11754,6 +11761,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/LabelExample.ts
      */
     /**
      * @language zh_CN
@@ -11766,6 +11774,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/LabelExample.ts
      */
     var Label = (function (_super) {
         __extends(Label, _super);
@@ -12080,6 +12089,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ImageExample.ts
      */
     /**
      * @language zh_CN
@@ -12091,6 +12101,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ImageExample.ts
      */
     var Image = (function (_super) {
         __extends(Image, _super);
@@ -12139,7 +12150,7 @@ var swan;
             }
         }
         var d = __define,c=Image;p=c.prototype;
-        d(p, "scale9Grid",
+        d(p, "scale9Grid"
             /**
              * @language en_US
              * Represent a Rectangle Area that the 9 scale area of Image.
@@ -12159,15 +12170,15 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._scale9Grid;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this._scale9Grid = value;
                 this.invalidateDisplayList();
             }
         );
-        d(p, "fillMode",
+        d(p, "fillMode"
             /**
              * @language en_US
              * Determines how the bitmap fills in the dimensions.
@@ -12197,10 +12208,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._fillMode;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (value == this._fillMode) {
                     return;
                 }
@@ -12208,7 +12219,7 @@ var swan;
                 this.invalidateDisplayList();
             }
         );
-        d(p, "source",
+        d(p, "source"
             /**
              * @language en_US
              * The source used for the bitmap fill. the value can be
@@ -12226,10 +12237,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._source;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (value == this._source) {
                     return;
                 }
@@ -12646,6 +12657,7 @@ var swan;
      * @language en_US
      * Editable text for displaying,
      * scrolling, selecting, and editing text.
+     * @includeExample examples/Samples/src/extension/swan/components/EditablTextExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -12653,6 +12665,7 @@ var swan;
     /**
      * @language zh_CN
      * 可编辑文本，用于显示、滚动、选择和编辑文本。
+     * @includeExample examples/Samples/src/extension/swan/components/EditablTextExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -12968,6 +12981,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
      */
     /**
      * @language zh_CN
@@ -12987,6 +13001,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
      */
     var Skin = (function (_super) {
         __extends(Skin, _super);
@@ -13137,12 +13152,12 @@ var swan;
             this.$stateValues = new swan.sys.StateValues();
         }
         var d = __define,c=Skin;p=c.prototype;
-        d(p, "elementsContent",undefined,
-            function (value) {
+        d(p, "elementsContent",undefined
+            ,function (value) {
                 this.$elementsContent = value;
             }
         );
-        d(p, "hostComponent",
+        d(p, "hostComponent"
             /**
              * @language en_US
              * The host component which the skin will be attached.
@@ -13157,10 +13172,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._hostComponent;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (this._hostComponent == value)
                     return;
                 if (this._hostComponent) {
@@ -13235,6 +13250,7 @@ var swan;
      * @copy swan.UIComponents
      * @event lark.Event.COMPLETE Emit when <code>skinName</code> property is set the path of external EXML file and the EXML file is resolved.
      *
+     * @includeExample examples/Samples/src/extension/swan/components/ComponentExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -13245,6 +13261,7 @@ var swan;
      * @copy swan.UIComponents
      * @event lark.Event.COMPLETE 当设置skinName为外部exml文件路径时，加载并完成EXML解析后调度。
      *
+     * @includeExample examples/Samples/src/extension/swan/components/ComponentExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -13283,7 +13300,7 @@ var swan;
             };
         }
         var d = __define,c=Component;p=c.prototype;
-        d(p, "hostComponentKey",
+        d(p, "hostComponentKey"
             /**
              * @language en_US
              * A identifier of host component which can determine only one component names.
@@ -13304,14 +13321,14 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$Component[0 /* hostComponentKey */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$Component[0 /* hostComponentKey */] = value;
             }
         );
-        d(p, "skinName",
+        d(p, "skinName"
             /**
              * @language en_US
              * Identifier of skin. Valid values: class definition of skin,
@@ -13327,10 +13344,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$Component[1 /* skinName */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 var values = this.$Component;
                 values[5 /* skinNameExplicitlySet */] = true;
                 if (values[1 /* skinName */] == value)
@@ -13391,7 +13408,7 @@ var swan;
             this.setSkin(skin);
             this.emitWith(lark.Event.COMPLETE);
         };
-        d(p, "skin",
+        d(p, "skin"
             /**
              * @language en_US
              * The instance of the skin class for this component instance.
@@ -13406,9 +13423,9 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$Component[8 /* skin */];
-            },undefined
+            }
         );
         /**
          * @language en_US
@@ -13594,7 +13611,7 @@ var swan;
                 values[7 /* explicitTouchEnabled */] = value;
             }
         };
-        d(p, "enabled",
+        d(p, "enabled"
             /**
              * @language en_US
              * Whether the component can accept user interaction.
@@ -13620,10 +13637,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$Component[3 /* enabled */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = !!value;
                 this.$setEnabled(value);
             }
@@ -13649,7 +13666,7 @@ var swan;
             }
             this.invalidateState();
         };
-        d(p, "currentState",
+        d(p, "currentState"
             //========================皮肤视图状态=====================start=======================
             /**
              * @language en_US
@@ -13671,11 +13688,11 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 var values = this.$Component;
                 return values[2 /* explicitState */] ? values[2 /* explicitState */] : this.getCurrentState();
-            },
-            function (value) {
+            }
+            ,function (value) {
                 var values = this.$Component;
                 if (value == values[2 /* explicitState */]) {
                     return;
@@ -14030,6 +14047,7 @@ var swan;
      * group (Give the instance of Group to <code>viewport</code> property of Scroller component).
      * The scroller component can adds a scrolling touch operation for the Group.
      *
+     * @includeExample examples/Samples/src/extension/swan/components/GroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -14039,6 +14057,7 @@ var swan;
      * Group 是自动布局的容器基类。如果包含的子项内容太大需要滚动显示，可以在在 Group 外部包裹一层 Scroller 组件
      * (将 Group 实例赋值给 Scroller 组件的 viewport 属性)。Scroller 会为 Group 添加滚动的触摸操作功能，并显示垂直或水平的滚动条。
      *
+     * @includeExample examples/Samples/src/extension/swan/components/GroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -14083,7 +14102,7 @@ var swan;
             this.$stateValues.parent = this;
         }
         var d = __define,c=Group;p=c.prototype;
-        d(p, "elementsContent",undefined,
+        d(p, "elementsContent",undefined
             /**
              * @language en_US
              * This property is Usually invoked in resolving an EXML for adding multiple children quickly.
@@ -14099,7 +14118,7 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function (value) {
+            ,function (value) {
                 if (value) {
                     var length = value.length;
                     for (var i = 0; i < length; i++) {
@@ -14108,7 +14127,7 @@ var swan;
                 }
             }
         );
-        d(p, "layout",
+        d(p, "layout"
             /**
              * @language en_US
              * The layout object for this container.
@@ -14131,10 +14150,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$layout;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$setLayout(value);
             }
         );
@@ -14156,27 +14175,27 @@ var swan;
             this.invalidateSize();
             this.invalidateDisplayList();
         };
-        d(p, "contentWidth",
+        d(p, "contentWidth"
             /**
              * @copy swan.IViewport#contentWidth
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$Group[0 /* contentWidth */];
-            },undefined
+            }
         );
-        d(p, "contentHeight",
+        d(p, "contentHeight"
             /**
              * @copy swan.IViewport#contentHeight
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$Group[1 /* contentHeight */];
-            },undefined
+            }
         );
         /**
          * @language en_US
@@ -14225,7 +14244,7 @@ var swan;
                 swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "contentHeight");
             }
         };
-        d(p, "scrollEnabled",
+        d(p, "scrollEnabled"
             /**
              * @copy swan.IViewport#scrollEnabled
              *
@@ -14233,10 +14252,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$Group[4 /* scrollEnabled */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = !!value;
                 var values = this.$Group;
                 if (value === values[4 /* scrollEnabled */])
@@ -14245,7 +14264,7 @@ var swan;
                 this.updateScrollRect();
             }
         );
-        d(p, "scrollH",
+        d(p, "scrollH"
             /**
              * @copy swan.IViewport#scrollH
              *
@@ -14253,10 +14272,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$Group[2 /* scrollH */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 var values = this.$Group;
                 if (value === values[2 /* scrollH */])
@@ -14268,7 +14287,7 @@ var swan;
                 swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "scrollH");
             }
         );
-        d(p, "scrollV",
+        d(p, "scrollV"
             /**
              * @copy swan.IViewport#scrollV
              *
@@ -14276,10 +14295,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$Group[3 /* scrollV */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 var values = this.$Group;
                 if (value == values[3 /* scrollV */])
@@ -14308,7 +14327,7 @@ var swan;
             }
             return hasClip;
         };
-        d(p, "numElements",
+        d(p, "numElements"
             /**
              * @language en_US
              * The number of layout element in this container.
@@ -14325,9 +14344,9 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$children.length;
-            },undefined
+            }
         );
         /**
          * @language en_US
@@ -14375,7 +14394,7 @@ var swan;
          */
         p.setVirtualElementIndicesInView = function (startIndex, endIndex) {
         };
-        d(p, "touchThrough",
+        d(p, "touchThrough"
             /**
              * @language en_US
              * When <code>true</code>, this property
@@ -14394,10 +14413,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$Group[5 /* touchThrough */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$Group[5 /* touchThrough */] = !!value;
             }
         );
@@ -15735,6 +15754,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/PanelExample.ts
      */
     /**
      * @language zh_CN
@@ -15746,6 +15766,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/PanelExample.ts
      */
     var Panel = (function (_super) {
         __extends(Panel, _super);
@@ -15853,7 +15874,7 @@ var swan;
         p.onWindowTouchBegin = function (event) {
             this.$parent.addChild(this);
         };
-        d(p, "elementsContent",undefined,
+        d(p, "elementsContent",undefined
             /**
              * @language en_US
              * [write-only] This property is Usually invoked in resolving an EXML for adding multiple children quickly.
@@ -15869,7 +15890,7 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function (value) {
+            ,function (value) {
                 if (value) {
                     var length = value.length;
                     for (var i = 0; i < length; i++) {
@@ -15878,7 +15899,7 @@ var swan;
                 }
             }
         );
-        d(p, "title",
+        d(p, "title"
             /**
              * @language en_US
              * Title or caption displayed in the title bar.
@@ -15899,10 +15920,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._title;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this._title = value;
                 if (this.titleDisplay)
                     this.titleDisplay.text = this.title;
@@ -16098,6 +16119,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample src/extension/swan/components/HScrollBar.ts
      */
     /**
      * @language zh_CN
@@ -16110,6 +16132,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample src/extension/swan/components/HScrollBar.ts
      */
     var ScrollBarBase = (function (_super) {
         __extends(ScrollBarBase, _super);
@@ -16152,7 +16175,7 @@ var swan;
             this.$viewport = null;
         }
         var d = __define,c=ScrollBarBase;p=c.prototype;
-        d(p, "viewport",
+        d(p, "viewport"
             /**
              * @language en_US
              * The viewport controlled by this scrollbar.
@@ -16196,10 +16219,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$viewport;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (value == this.$viewport) {
                     return;
                 }
@@ -16285,6 +16308,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ButtonExample.ts
      */
     /**
      * @language zh_CN
@@ -16292,6 +16316,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ButtonExample.ts
      */
     var Button = (function (_super) {
         __extends(Button, _super);
@@ -16362,7 +16387,7 @@ var swan;
             this.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
         var d = __define,c=Button;p=c.prototype;
-        d(p, "label",
+        d(p, "label"
             /**
              * @language en_US
              * Text to appear on the Button control.
@@ -16377,17 +16402,17 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._label;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this._label = value;
                 if (this.labelDisplay) {
                     this.labelDisplay.text = value;
                 }
             }
         );
-        d(p, "icon",
+        d(p, "icon"
             /**
              * @language en_US
              * Icon to appear on the Button control.
@@ -16402,10 +16427,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._icon;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this._icon = value;
                 if (this.iconDisplay) {
                     this.iconDisplay.source = value;
@@ -16549,19 +16574,21 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/RangeExample.ts
      */
     /**
      * @language zh_CN
      * 范围选取组件,该组件包含一个值和这个值所允许的最大最小约束范围。
      *
      * <code>value</code>属性的值永远被限制于当前的<code>minimum</code>和
-     * <code>maximum</code>之间，并且<code>minimum</code>和 <code>maximum</code>永远按照固定的书序排列，
+     * <code>maximum</code>之间，并且<code>minimum</code>和 <code>maximum</code>永远按照固定的顺序排列，
      * 即<code>(minimum <= value <= maximum)</code> 为真。
      *
      * 如果<code>snapInterval</code>属性的值不是0，那么<code>value</code>的值也会被<code>snapInterval</code>所约束。
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/RangeExample.ts
      */
     var Range = (function (_super) {
         __extends(Range, _super);
@@ -16595,7 +16622,7 @@ var swan;
             };
         }
         var d = __define,c=Range;p=c.prototype;
-        d(p, "maximum",
+        d(p, "maximum"
             /**
              * @language en_US
              * The maximum valid <code>value</code>.<p/>
@@ -16625,10 +16652,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$Range[0 /* maximum */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 var values = this.$Range;
                 if (value === values[0 /* maximum */])
@@ -16639,7 +16666,7 @@ var swan;
                 this.invalidateDisplayList();
             }
         );
-        d(p, "minimum",
+        d(p, "minimum"
             /**
              * @language en_US
              * The minimum valid <code>value</code>.<p/>
@@ -16669,10 +16696,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$Range[2 /* minimum */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 var values = this.$Range;
                 if (value === values[2 /* minimum */])
@@ -16683,7 +16710,7 @@ var swan;
                 this.invalidateDisplayList();
             }
         );
-        d(p, "value",
+        d(p, "value"
             /**
              * @language en_US
              * The current value for this range.<p/>
@@ -16717,11 +16744,11 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 var values = this.$Range;
                 return values[6 /* valueChanged */] ? values[5 /* changedValue */] : values[4 /* value */];
-            },
-            function (newValue) {
+            }
+            ,function (newValue) {
                 newValue = +newValue || 0;
                 this.$setValue(newValue);
             }
@@ -16739,7 +16766,7 @@ var swan;
             values[6 /* valueChanged */] = true;
             this.invalidateProperties();
         };
-        d(p, "snapInterval",
+        d(p, "snapInterval"
             /**
              * @language en_US
              * The snapInterval property controls the valid values of the <code>value</code> property.
@@ -16776,10 +16803,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$Range[7 /* snapInterval */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 var values = this.$Range;
                 values[9 /* explicitSnapInterval */] = true;
                 value = +value || 0;
@@ -17040,6 +17067,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ViewStackExample.ts
      */
     /**
      * @language zh_CN
@@ -17052,6 +17080,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ViewStackExample.ts
      */
     var ViewStack = (function (_super) {
         __extends(ViewStack, _super);
@@ -17088,7 +17117,7 @@ var swan;
             this._selectedIndex = -1;
         }
         var d = __define,c=ViewStack;p=c.prototype;
-        d(p, "layout",
+        d(p, "layout"
             /**
              * @language en_US
              * The layout object for this container.
@@ -17111,11 +17140,11 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$layout;
-            },undefined
+            }
         );
-        d(p, "selectedChild",
+        d(p, "selectedChild"
             /**
              * @language en_US
              * A reference to the currently visible child container.
@@ -17134,19 +17163,19 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 var index = this.selectedIndex;
                 if (index >= 0 && index < this.numChildren)
                     return this.getChildAt(index);
                 return null;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 var index = this.getChildIndex(value);
                 if (index >= 0 && index < this.numChildren)
                     this.setSelectedIndex(index);
             }
         );
-        d(p, "selectedIndex",
+        d(p, "selectedIndex"
             /**
              * @language en_US
              * The zero-based index of the currently visible child container.
@@ -17168,10 +17197,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.proposedSelectedIndex != swan.ListBase.NO_PROPOSED_SELECTION ? this.proposedSelectedIndex : this._selectedIndex;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value | 0;
                 this.setSelectedIndex(value);
             }
@@ -17278,7 +17307,7 @@ var swan;
             }
             child.visible = visible;
         };
-        d(p, "length",
+        d(p, "length"
             /**
              * @language en_US
              * number of children
@@ -17295,9 +17324,9 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$children.length;
-            },undefined
+            }
         );
         /**
          * @inheritDoc
@@ -17374,6 +17403,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ItemRendererExample.ts
      */
     /**
      * @language zh_CN
@@ -17382,6 +17412,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ItemRendererExample.ts
      */
     var ItemRenderer = (function (_super) {
         __extends(ItemRenderer, _super);
@@ -17437,7 +17468,7 @@ var swan;
             this.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
         var d = __define,c=ItemRenderer;p=c.prototype;
-        d(p, "data",
+        d(p, "data"
             /**
              * @language en_US
              * The data to render or edit.
@@ -17454,10 +17485,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._data;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this._data = value;
                 swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "data");
                 this.dataChanged();
@@ -17481,7 +17512,7 @@ var swan;
          */
         p.dataChanged = function () {
         };
-        d(p, "selected",
+        d(p, "selected"
             /**
              * @language en_US
              * Contains <code>true</code> if the item renderer
@@ -17499,10 +17530,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._selected;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (this._selected == value)
                     return;
                 this._selected = value;
@@ -17622,6 +17653,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ScrollerExample.ts
      */
     /**
      * @language zh_CN
@@ -17642,6 +17674,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ScrollerExample.ts
      */
     var Scroller = (function (_super) {
         __extends(Scroller, _super);
@@ -17725,32 +17758,34 @@ var swan;
             };
         }
         var d = __define,c=Scroller;p=c.prototype;
-        d(p, "throwSpeed",
-            function () {
+        d(p, "throwSpeed"
+            ,function () {
                 return this.$Scroller[8 /* touchScrollH */].$scrollFactor;
-            },
+            }
             /**
              * @language en_US
-             *
+             * Adjust the speed to get out of the slide end.
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             *
-             *
+             * 调节滑动结束时滚出的速度。
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function (val) {
+            ,function (val) {
                 val = +val;
                 val = val < 0.01 ? 0.01 : val;
                 this.$Scroller[8 /* touchScrollH */].$scrollFactor = val;
                 this.$Scroller[9 /* touchScrollV */].$scrollFactor = val;
             }
         );
+        /**
+         * @private
+         */
         p.$getThrowInfo = function (currentPos, toPos) {
             if (!scrollerThrowEvent) {
                 scrollerThrowEvent = new swan.ScrollerThrowEvent(swan.ScrollerThrowEvent.THROW, false, false, currentPos, toPos);
@@ -17759,10 +17794,10 @@ var swan;
                 scrollerThrowEvent.currentPos = currentPos;
                 scrollerThrowEvent.toPos = toPos;
             }
-            this.emit(scrollerThrowEvent);
+            //this.emit(scrollerThrowEvent);
             return scrollerThrowEvent;
         };
-        d(p, "scrollPolicyV",
+        d(p, "scrollPolicyV"
             /**
              * @language en_US
              * Indicates under what conditions the vertical scroll bar is displayed.
@@ -17790,10 +17825,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$Scroller[0 /* scrollPolicyV */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 var values = this.$Scroller;
                 if (value[0 /* scrollPolicyV */] == value) {
                     return;
@@ -17802,7 +17837,7 @@ var swan;
                 this.checkScrollPolicy();
             }
         );
-        d(p, "scrollPolicyH",
+        d(p, "scrollPolicyH"
             /**
              * @language en_US
              * Indicates under what conditions the horizontal scroll bar is displayed.
@@ -17830,10 +17865,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$Scroller[1 /* scrollPolicyH */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 var values = this.$Scroller;
                 if (values[1 /* scrollPolicyH */] == value) {
                     return;
@@ -17842,7 +17877,7 @@ var swan;
                 this.checkScrollPolicy();
             }
         );
-        d(p, "viewport",
+        d(p, "viewport"
             /**
              * @language en_US
              * The viewport component to be scrolled.
@@ -17859,10 +17894,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$Scroller[12 /* viewport */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 var values = this.$Scroller;
                 if (value == values[12 /* viewport */])
                     return;
@@ -17915,8 +17950,10 @@ var swan;
             }
         };
         p.onViewPortRemove = function (event) {
-            this.$Scroller[13 /* viewprotRemovedEvent */] = true;
-            this.viewport = null;
+            if (event.target == this.viewport) {
+                this.$Scroller[13 /* viewprotRemovedEvent */] = true;
+                this.viewport = null;
+            }
         };
         /**
          * @inheritDoc
@@ -18324,6 +18361,7 @@ var swan;
      *
      * @see swan.Group
      *
+     * @includeExample examples/Samples/src/extension/swan/components/DataGroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -18335,6 +18373,7 @@ var swan;
      *
      * @see swan.Group
      *
+     * @includeExample examples/Samples/src/extension/swan/components/DataGroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -18389,7 +18428,7 @@ var swan;
             };
         }
         var d = __define,c=DataGroup;p=c.prototype;
-        d(p, "useVirtualLayout",
+        d(p, "useVirtualLayout"
             /**
              * @copy swan.LayoutBase#useVirtualLayout
              *
@@ -18397,10 +18436,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$layout ? this.$layout.$useVirtualLayout : this.$DataGroup[0 /* useVirtualLayout */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = !!value;
                 var values = this.$DataGroup;
                 if (value === values[0 /* useVirtualLayout */])
@@ -18561,7 +18600,7 @@ var swan;
             this.addChild(renderer);
             return renderer;
         };
-        d(p, "dataProvider",
+        d(p, "dataProvider"
             /**
              * @language en_US
              * The data provider for this DataGroup.
@@ -18585,10 +18624,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$dataProvider;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$setDataProvider(value);
             }
         );
@@ -18821,7 +18860,7 @@ var swan;
             if (renderer)
                 renderer.itemIndex = index;
         };
-        d(p, "itemRenderer",
+        d(p, "itemRenderer"
             /**
              * @language en_US
              * The item renderer to use for data items.
@@ -18842,10 +18881,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$DataGroup[6 /* itemRenderer */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 var values = this.$DataGroup;
                 if (values[6 /* itemRenderer */] == value)
                     return;
@@ -18857,7 +18896,7 @@ var swan;
                 this.invalidateProperties();
             }
         );
-        d(p, "itemRendererFunction",
+        d(p, "itemRendererFunction"
             /**
              * @language en_US
              * Function that returns an item renderer for a
@@ -18878,10 +18917,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$DataGroup[7 /* itemRendererFunction */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 var values = this.$DataGroup;
                 if (values[7 /* itemRendererFunction */] == value)
                     return;
@@ -19167,7 +19206,7 @@ var swan;
             values[11 /* renderersBeingUpdated */] = false;
             return renderer;
         };
-        d(p, "numElements",
+        d(p, "numElements"
             /**
              * @inheritDoc
              *
@@ -19175,11 +19214,11 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 if (!this.$dataProvider)
                     return 0;
                 return this.$dataProvider.length;
-            },undefined
+            }
         );
         /**
          * @language en_US
@@ -19292,6 +19331,7 @@ var swan;
      * you usually combine it as part of another group of components to
      * provide scrolling functionality.</p>
      *
+     * @includeExample examples/Samples/src/extension/swan/components/HScrollBarExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -19301,6 +19341,7 @@ var swan;
      * HScrollBar（水平 ScrollBar）控件可以在因数据太多而不能在显示区域中以水平方向完全显示时控制显示的数据部分。
      * <p>虽然 HScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。</p>
      *
+     * @includeExample examples/Samples/src/extension/swan/components/HScrollBarExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -19407,6 +19448,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ProgressBarExample.ts
      */
     /**
      * @language zh_CN
@@ -19415,6 +19457,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ProgressBarExample.ts
      */
     var ProgressBar = (function (_super) {
         __extends(ProgressBar, _super);
@@ -19502,7 +19545,7 @@ var swan;
             this.animation = new swan.sys.Animation(this.animationUpdateHandler, this);
         }
         var d = __define,c=ProgressBar;p=c.prototype;
-        d(p, "labelFunction",
+        d(p, "labelFunction"
             /**
              * @language en_US
              * a text format callback function。example：
@@ -19521,10 +19564,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._labelFunction;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (this._labelFunction == value)
                     return;
                 this._labelFunction = value;
@@ -19563,7 +19606,7 @@ var swan;
             }
             return value + " / " + maximum;
         };
-        d(p, "slideDuration",
+        d(p, "slideDuration"
             /**
              * @language en_US
              * Duration in milliseconds for a sliding animation
@@ -19585,10 +19628,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._slideDuration;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value | 0;
                 if (this._slideDuration === value)
                     return;
@@ -19599,7 +19642,7 @@ var swan;
                 }
             }
         );
-        d(p, "direction",
+        d(p, "direction"
             /**
              * @language en_US
              * Direction in which the fill of the ProgressBar expands toward completion.
@@ -19621,10 +19664,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._direction;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (this._direction == value)
                     return;
                 this._direction = value;
@@ -19806,6 +19849,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/VScrollBarExample.ts
      */
     /**
      * @language zh_CN
@@ -19815,6 +19859,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/VScrollBarExample.ts
      */
     var VScrollBar = (function (_super) {
         __extends(VScrollBar, _super);
@@ -19929,6 +19974,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ToggleButtonExample.ts
      */
     /**
      * @language zh_CN
@@ -19942,6 +19988,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ToggleButtonExample.ts
      */
     var ToggleButton = (function (_super) {
         __extends(ToggleButton, _super);
@@ -19958,7 +20005,7 @@ var swan;
             this.$autoSelected = true;
         }
         var d = __define,c=ToggleButton;p=c.prototype;
-        d(p, "selected",
+        d(p, "selected"
             /**
              * @language en_US
              * Contains <code>true</code> if the button is in the down state,
@@ -19976,10 +20023,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$selected;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$setSelected(value);
             }
         );
@@ -20103,6 +20150,7 @@ var swan;
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
+         * @includeExample src/extension/swan/components/HSlider.ts
          */
         /**
          * @language zh_CN
@@ -20110,6 +20158,7 @@ var swan;
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
+         * @includeExample src/extension/swan/components/HSlider.ts
          */
         function SliderBase() {
             _super.call(this);
@@ -20180,7 +20229,7 @@ var swan;
             this.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
         var d = __define,c=SliderBase;p=c.prototype;
-        d(p, "slideDuration",
+        d(p, "slideDuration"
             /**
              * @language en_US
              * Duration in milliseconds for the sliding animation when you tap on the track to move a thumb.
@@ -20201,10 +20250,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$SliderBase[6 /* slideDuration */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$SliderBase[6 /* slideDuration */] = +value || 0;
             }
         );
@@ -20236,7 +20285,7 @@ var swan;
         p.pointToValue = function (x, y) {
             return this.minimum;
         };
-        d(p, "liveDragging",
+        d(p, "liveDragging"
             /**
              * @language en_US
              * Specifies whether live dragging is enabled for the slider. If true, sets the value
@@ -20259,14 +20308,14 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$SliderBase[9 /* liveDragging */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$SliderBase[9 /* liveDragging */] = !!value;
             }
         );
-        d(p, "pendingValue",
+        d(p, "pendingValue"
             /**
              * @language en_US
              * The value the slider will have when the touch is end.
@@ -20292,10 +20341,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$SliderBase[7 /* pendingValue */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 var values = this.$SliderBase;
                 if (value === values[7 /* pendingValue */])
@@ -20622,6 +20671,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample src/extension/swan/components/TabBar.ts
      */
     /**
      * @language zh_CN
@@ -20635,6 +20685,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample src/extension/swan/components/TabBar.ts
      */
     var ListBase = (function (_super) {
         __extends(ListBase, _super);
@@ -20664,7 +20715,7 @@ var swan;
             };
         }
         var d = __define,c=ListBase;p=c.prototype;
-        d(p, "requireSelection",
+        d(p, "requireSelection"
             /**
              * @language en_US
              * If <code>true</code>, a data item must always be selected in the control.
@@ -20682,10 +20733,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$ListBase[0 /* requireSelection */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = !!value;
                 var values = this.$ListBase;
                 if (value === values[0 /* requireSelection */]) {
@@ -20698,7 +20749,7 @@ var swan;
                 }
             }
         );
-        d(p, "selectedIndex",
+        d(p, "selectedIndex"
             /**
              * @language en_US
              * he 0-based index of the selected item, or -1 if no item is selected.
@@ -20749,10 +20800,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$getSelectedIndex();
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value | 0;
                 this.setSelectedIndex(value, false);
             }
@@ -20798,7 +20849,7 @@ var swan;
             values[2 /* proposedSelectedIndex */] = value;
             this.invalidateProperties();
         };
-        d(p, "selectedItem",
+        d(p, "selectedItem"
             /**
              * @language en_US
              * The item that is currently selected.
@@ -20850,7 +20901,7 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 var values = this.$ListBase;
                 if (values[5 /* pendingSelectedItem */] !== undefined)
                     return values[5 /* pendingSelectedItem */];
@@ -20858,8 +20909,8 @@ var swan;
                 if (selectedIndex == ListBase.NO_SELECTION || this.$dataProvider == null)
                     return undefined;
                 return this.$dataProvider.length > selectedIndex ? this.$dataProvider.getItemAt(selectedIndex) : undefined;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.setSelectedItem(value, false);
             }
         );
@@ -21403,6 +21454,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/TabBarExample.ts
      */
     /**
      * @language zh_CN
@@ -21422,6 +21474,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/TabBarExample.ts
      */
     var TabBar = (function (_super) {
         __extends(TabBar, _super);
@@ -21545,6 +21598,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ToggleSwitchExample.ts
      */
     /**
      * @language zh_CN
@@ -21553,6 +21607,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ToggleSwitchExample.ts
      */
     var ToggleSwitch = (function (_super) {
         __extends(ToggleSwitch, _super);
@@ -21621,6 +21676,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/VSliderExample.ts
      */
     /**
      * @language zh_CN
@@ -21630,6 +21686,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/VSliderExample.ts
      */
     var VSlider = (function (_super) {
         __extends(VSlider, _super);
@@ -21755,6 +21812,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/CheckboxExample.ts
      */
     /**
      * @language zh_CN
@@ -21763,6 +21821,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/CheckboxExample.ts
      */
     var CheckBox = (function (_super) {
         __extends(CheckBox, _super);
@@ -21828,6 +21887,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ListExample.ts
      */
     /**
      * @language zh_CN
@@ -21836,6 +21896,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ListExample.ts
      */
     var List = (function (_super) {
         __extends(List, _super);
@@ -21879,7 +21940,7 @@ var swan;
             };
         }
         var d = __define,c=List;p=c.prototype;
-        d(p, "selectedIndices",
+        d(p, "selectedIndices"
             /**
              * @language en_US
              * An Array of numbers representing the indices of the currently selected
@@ -21901,16 +21962,16 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 if (this._proposedSelectedIndices)
                     return this._proposedSelectedIndices;
                 return this._selectedIndices;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.setSelectedIndices(value, false);
             }
         );
-        d(p, "selectedIndex",
+        d(p, "selectedIndex"
             /**
              * @inheritDoc
              *
@@ -21918,19 +21979,19 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 if (this._proposedSelectedIndices) {
                     if (this._proposedSelectedIndices.length > 0)
                         return this._proposedSelectedIndices[0];
                     return -1;
                 }
                 return this.$getSelectedIndex();
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.setSelectedIndex(value);
             }
         );
-        d(p, "selectedItems",
+        d(p, "selectedItems"
             /**
              * @language en_US
              * An Array representing the currently selected data items.
@@ -21947,7 +22008,7 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 var result = [];
                 var list = this.selectedIndices;
                 if (list) {
@@ -21957,8 +22018,8 @@ var swan;
                     }
                 }
                 return result;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 var indices = [];
                 if (value) {
                     var count = value.length;
@@ -22264,6 +22325,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/RadioButtonExample.ts
      */
     /**
      * @language zh_CN
@@ -22272,6 +22334,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/RadioButtonExample.ts
      */
     var RadioButton = (function (_super) {
         __extends(RadioButton, _super);
@@ -22322,7 +22385,7 @@ var swan;
             this.groupName = "radioGroup";
         }
         var d = __define,c=RadioButton;p=c.prototype;
-        d(p, "enabled",
+        d(p, "enabled"
             /**
              * @language en_US
              * The RadioButton component is enabled if the
@@ -22340,17 +22403,17 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 if (!this.$Component[3 /* enabled */]) {
                     return false;
                 }
                 return !this.$radioButtonGroup || this.$radioButtonGroup.$enabled;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$setEnabled(value);
             }
         );
-        d(p, "group",
+        d(p, "group"
             /**
              * @language en_US
              * The RadioButtonGroup component to which this RadioButton belongs.
@@ -22374,7 +22437,7 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 if (!this._group && this._groupName) {
                     var g = automaticRadioButtonGroups[this._groupName];
                     if (!g) {
@@ -22385,8 +22448,8 @@ var swan;
                     this._group = g;
                 }
                 return this._group;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (this._group == value)
                     return;
                 if (this.$radioButtonGroup)
@@ -22398,7 +22461,7 @@ var swan;
                 this.invalidateDisplayList();
             }
         );
-        d(p, "groupName",
+        d(p, "groupName"
             /**
              * @language en_US
              * Specifies the name of the group to which this RadioButton component belongs
@@ -22423,10 +22486,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._groupName;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (!value || value == "")
                     return;
                 this._groupName = value;
@@ -22447,7 +22510,7 @@ var swan;
             _super.prototype.$setSelected.call(this, value);
             this.invalidateDisplayList();
         };
-        d(p, "value",
+        d(p, "value"
             /**
              * @language en_US
              * Optional user-defined value
@@ -22469,10 +22532,10 @@ var swan;
              * @version Swan 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._value;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (this._value == value)
                     return;
                 this._value = value;
@@ -22578,6 +22641,7 @@ var swan;
      * The current value of the slider is determined by the relative location of the thumb between
      * the end points of the slider, corresponding to the slider's minimum and maximum values.
      *
+     * @includeExample examples/Samples/src/extension/swan/components/HSliderExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -22587,6 +22651,7 @@ var swan;
      * 使用 HSlider（水平滑块）控件，用户可通过在滑块轨道的端点之间移动滑块来选择值。
      * 滑块的当前值由滑块端点（对应于滑块的最小值和最大值）之间滑块的相对位置确定。
      *
+     * @includeExample examples/Samples/src/extension/swan/components/HSliderExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native

@@ -387,7 +387,8 @@ module lark.sys {
                     if (!child.$visible || child.$alpha <= 0 || child.$maskedObject) {
                         continue;
                     }
-                    if (child.$blendMode !== 0 || child.$mask) {
+                    if (child.$blendMode !== 0 ||
+                        (child.$mask&&child.$mask.$parentDisplayList)) {//若遮罩不在显示列表中，放弃绘制遮罩。
                         drawCalls += this.drawWithClip(child, context, dirtyList, rootMatrix, clipRegion);
                     }
                     else if (child.$scrollRect) {
@@ -422,6 +423,9 @@ module lark.sys {
 
             var scrollRect = displayObject.$scrollRect;
             var mask = displayObject.$mask;
+            if(mask&&!mask.$parentDisplayList){
+                mask = null; //如果遮罩不在显示列表中，放弃绘制遮罩。
+            }
 
             //计算scrollRect和mask的clip区域是否需要绘制，不需要就直接返回，跳过所有子项的遍历。
             var maskRegion:Region;
