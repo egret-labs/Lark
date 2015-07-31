@@ -34,7 +34,7 @@ class DataGroupExample extends lark.Sprite {
             '<s:DataGroup class="Example.DataGroup" xmlns:s="http://ns.egret.com/swan" x="300" y="50">'
                 + '<s:layout>'
                     + '<s:VerticalLayout gap="20"/>'
-                 + '</s:layout>'
+                + '</s:layout>'
                 + '<s:itemRenderer>'
                     + '<s:ItemRenderer>'
                      + '<s:Label text="{data.label}" textColor="{data.color}"/>'

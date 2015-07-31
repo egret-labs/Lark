@@ -9,33 +9,42 @@
  * 以下示例使用 PropertyEventExample 类来演示对象的一个属性发生更改时传递到事件侦听器的事件
  */
 class PropertyEventExample extends lark.Sprite {
-  private txt:swan.EditableText;
-  private group:swan.Group;
+    private txt: swan.EditableText;
+    private group: swan.Group;
     constructor() {
         super();
-        this.once(lark.Event.ADDED_TO_STAGE,this.init,this);
+        this.once(lark.Event.ADDED_TO_STAGE, this.init, this);
     }
-    private init():void{
-      var theme = new swan.Theme("resources/green-theme.json", this.stage);
+    private init(): void {
+        this.group = new swan.Group();
+        this.group.on(swan.PropertyEvent.PROPERTY_CHANGE, this.onChangeHandler, this);
 
-      this.group = new swan.Group();
-      this.group.on(swan.PropertyEvent.PROPERTY_CHANGE,this.onChangeHandler,this);
+        this.addChild(this.group);
 
-      this.addChild(this.group);
+        var layout = new swan.TileLayout();
+        layout.horizontalGap = 20;
+        layout.verticalGap = 20;
+        layout.requestedColumnCount = 3;
+        this.group.layout = layout;
 
-      var layout = new swan.TileLayout();
-      layout.horizontalGap = 20;
-      layout.verticalGap = 20;
-      layout.requestedColumnCount = 3;
-      this.group.layout = layout;
-
-      this.stage.on(lark.TouchEvent.TOUCH_TAP,this.onTouchHandler,this);
+        this.stage.on(lark.TouchEvent.TOUCH_TAP, this.onTouchHandler, this);
     }
-    private onTouchHandler():void{
-        var btn = new swan.Button();
+    private onTouchHandler(): void {
+        var btn = this.getButton();
         this.group.addChild(btn);
     }
-    private onChangeHandler(e:swan.PropertyEvent):void{
-      console.log(e.type);
+    private onChangeHandler(e: swan.PropertyEvent): void {
+        console.log(e.type);
+    }
+    private getButton(): swan.Button {
+        var exml =
+            '<s:Skin class="skins.ButtonSkin" states="up,down,disabled" minHeight="50" minWidth="100" xmlns:s="http://ns.egret.com/swan">'
+            + '<s:Image source="resources/button_up.png" source.down="resources/button_down.png" scale9Grid="1,3,8,8" width="100%" height="100%"/>'
+            + '<s:Label id="labelDisplay" top="8" bottom="8" left="8" right="8" fontSize="20" fontFamily="Tahoma" textColor="0xFFFFFF" verticalAlign="middle" textAlign="center"/>'
+            + '</s:Skin>';
+        var clazz = EXML.parse(exml);
+        var btn = new swan.Button();
+        btn.skinName = "skins.ButtonSkin";
+        return btn;
     }
 }
