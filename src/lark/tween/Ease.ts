@@ -374,75 +374,145 @@ module lark {
             return (t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * 16 + 0.5;
         }
 
-        /**
-         * @language en_US
-         * x to the 6 power curve fade in.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * x 的 6 次方曲线淡入。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public static EaseInExpo(t:number):number {
-            return t * t * t * t * t * t;
-        }
+        ///**
+        // * @language en_US
+        // * x to the 6 power curve fade in.
+        // * @version Lark 1.0
+        // * @platform Web,Native
+        // */
+        ///**
+        // * @language zh_CN
+        // * x 的 6 次方曲线淡入。
+        // * @version Lark 1.0
+        // * @platform Web,Native
+        // */
+        //public static EaseInExpo(t:number):number {
+        //    return t * t * t * t * t * t;
+        //}
+        //
+        ///**
+        // * @language en_US
+        // * x to the 6 power curve fade out.
+        // * @version Lark 1.0
+        // * @platform Web,Native
+        // */
+        ///**
+        // * @language zh_CN
+        // * x 的 6 次方曲线淡出。
+        // * @version Lark 1.0
+        // * @platform Web,Native
+        // */
+        //public static EaseOutExpo(t:number):number {
+        //    return -(t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) + 1;
+        //}
+        //
+        ///**
+        // * @language en_US
+        // * x to the 6 power curve fade in and fade out.
+        // * @version Lark 1.0
+        // * @platform Web,Native
+        // */
+        ///**
+        // * @language zh_CN
+        // * x 的 6 次方曲线淡入淡出。
+        // * @version Lark 1.0
+        // * @platform Web,Native
+        // */
+        //public static EaseInOutExpo(t:number):number {
+        //    if (t < 0.5) {
+        //        return t * t * t * t * t * t * 32;
+        //    }
+        //    return -(t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) * 32 + 1;
+        //}
+        //
+        ///**
+        // * @language en_US
+        // * x to the 6 power curve fade out and fade in.
+        // * @version Lark 1.0
+        // * @platform Web,Native
+        // */
+        ///**
+        // * @language zh_CN
+        // * x 的 6 次方曲线淡出淡入。
+        // * @version Lark 1.0
+        // * @platform Web,Native
+        // */
+        //public static EaseOutInExpo(t:number):number {
+        //    if (t < 0.5) {
+        //        return -(t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * 32 + 0.5;
+        //    }
+        //    return (t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * 32 + 0.5;
+        //}
 
-        /**
-         * @language en_US
-         * x to the 6 power curve fade out.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * x 的 6 次方曲线淡出。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public static EaseOutExpo(t:number):number {
-            return -(t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) + 1;
-        }
-
-        /**
-         * @language en_US
-         * x to the 6 power curve fade in and fade out.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * x 的 6 次方曲线淡入淡出。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public static EaseInOutExpo(t:number):number {
-            if (t < 0.5) {
-                return t * t * t * t * t * t * 32;
-            }
-            return -(t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) * 32 + 1;
-        }
-
-        /**
-         * @language en_US
-         * x to the 6 power curve fade out and fade in.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * x 的 6 次方曲线淡出淡入。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public static EaseOutInExpo(t:number):number {
-            if (t < 0.5) {
-                return -(t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * 32 + 0.5;
-            }
-            return (t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * 32 + 0.5;
-        }
+        ///**
+        // * @language en_US
+        // * x to the circle curve fade in.
+        // * @version Lark 1.0
+        // * @platform Web,Native
+        // */
+        ///**
+        // * @language zh_CN
+        // * x 的圆形曲线淡入。
+        // * @version Lark 1.0
+        // * @platform Web,Native
+        // */
+        //public static EaseInCirc(t:number):number {
+        //    return 1 - Math.sqrt((1 - t)*(1 - t));
+        //}
+        //
+        ///**
+        // * @language en_US
+        // * x to the circle curve fade out.
+        // * @version Lark 1.0
+        // * @platform Web,Native
+        // */
+        ///**
+        // * @language zh_CN
+        // * x 的圆形曲线淡出。
+        // * @version Lark 1.0
+        // * @platform Web,Native
+        // */
+        //public static EaseOutCirc(t:number):number {
+        //    return -(t - 1) * (t - 1) + 1;
+        //}
+        //
+        ///**
+        // * @language en_US
+        // * x to the circle curve fade in and fade out.
+        // * @version Lark 1.0
+        // * @platform Web,Native
+        // */
+        ///**
+        // * @language zh_CN
+        // * x 的圆形曲线淡入淡出。
+        // * @version Lark 1.0
+        // * @platform Web,Native
+        // */
+        //public static EaseInOutCirc(t:number):number {
+        //    if (t < 0.5) {
+        //        return t * t * 2;
+        //    }
+        //    return -(t - 1) * (t - 1) * 2 + 1;
+        //}
+        //
+        ///**
+        // * @language en_US
+        // * x to the circle curve fade out and fade in.
+        // * @version Lark 1.0
+        // * @platform Web,Native
+        // */
+        ///**
+        // * @language zh_CN
+        // * x 的圆形曲线淡出淡入。
+        // * @version Lark 1.0
+        // * @platform Web,Native
+        // */
+        //public static EaseOutInCirc(t:number):number {
+        //    if (t < 0.5) {
+        //        return -(t - 0.5) * (t - 0.5) * 2 + 0.5;
+        //    }
+        //    return (t - 0.5) * (t - 0.5) * 2 + 0.5;
+        //}
     }
 
 
