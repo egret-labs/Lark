@@ -12,20 +12,20 @@ class PanelExample extends lark.Sprite {
         super();
 
         var exml =
-                '<s:Panel title="title panel" xmlns:s="http://ns.egret.com/swan">'
-                    + '<s:Skin>'
-                        + '<s:Image width="100%" height="100%" source="resources/track.png" scale9Grid="1,1,4,4"/>'
-                        + '<s:Group id="moveArea" width="100%" height="40">'
-                            + '<s:Image width="100%" height="100%" source="resources/thumb.png" scale9Grid="1,1,4,4"/>'
-                            + '<s:Label id="titleDisplay" text="标题" textColor="0" horizontalCenter="0" verticalCenter="0"/>'
-                        + '</s:Group>'
-                        + '<s:Button id="closeButton" right="-15" y="-15">'
-                            + '<s:Skin states="up,down,disabled">'
-                                + '<s:Image width="50" height="50" source="resources/close.png" scaleX.up="1" scaleX.down="0.95" scaleY.up="1" scaleY.down="0.95"/>'
-                            + '</s:Skin>'
-                        + '</s:Button>'
-                    + '</s:Skin>'
-                + '</s:Panel>';
+                `<s:Panel title="title panel" xmlns:s="http://ns.egret.com/swan">
+                    <s:Skin>
+                        <s:Image width="100%" height="100%" source="resources/track.png" scale9Grid="1,1,4,4"/>
+                        <s:Group id="moveArea" width="100%" height="40">
+                            <s:Image width="100%" height="100%" source="resources/thumb.png" scale9Grid="1,1,4,4"/>
+                            <s:Label id="titleDisplay" text="标题" textColor="0" horizontalCenter="0" verticalCenter="0"/>
+                        </s:Group>
+                        <s:Button id="closeButton" right="-15" y="-15">
+                            <s:Skin states="up,down,disabled">
+                                <s:Image width="50" height="50" source="resources/close.png" scaleX.up="1" scaleX.down="0.95" scaleY.up="1" scaleY.down="0.95"/>
+                            </s:Skin>
+                        </s:Button>
+                    </s:Skin>
+                </s:Panel>`;
 
         var clazz = EXML.parse(exml);
         var panel = new clazz();

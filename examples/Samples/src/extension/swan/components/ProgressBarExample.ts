@@ -4,12 +4,12 @@ class ProgressBarExample extends lark.Sprite {
         super();
 
         var exml =
-            '<s:ProgressBar xmlns:s="http://ns.egret.com/swan">'
-                + '<s:Skin>'
-                    + '<s:Image id="thumb" width="100%" height="100%" source="resources/thumb.png" scale9Grid="1,1,4,4"/>'
-                    + '<s:Label id="labelDisplay" textColor="0xffffff" horizontalCenter="0" verticalCenter="0"/>'
-                + '</s:Skin>'
-            + '</s:ProgressBar>';
+            `<s:ProgressBar xmlns:s="http://ns.egret.com/swan">
+                <s:Skin>
+                    <s:Image id="thumb" width="100%" height="100%" source="resources/thumb.png" scale9Grid="1,1,4,4"/>
+                    <s:Label id="labelDisplay" textColor="0xffffff" horizontalCenter="0" verticalCenter="0"/>
+                </s:Skin>
+            </s:ProgressBar>`;
 
         var clazz = EXML.parse(exml);
         var progressBar = new clazz();

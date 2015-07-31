@@ -17,10 +17,10 @@ class ComponentExample extends lark.Sprite {
         this.addChild(shape);
 
         var exml =
-            '<s:Skin xmlns:s="http://ns.egret.com/swan">'
-                + '<s:Label text="标题" horizontalCenter="0"/>'
-                + '<s:Label text="lark" right="0" bottom="0"/>'
-            + '</s:Skin>';
+            `<s:Skin xmlns:s="http://ns.egret.com/swan">
+                <s:Label text="标题" horizontalCenter="0"/>
+                <s:Label text="lark" right="0" bottom="0"/>
+            </s:Skin>`;
 
         var component = new swan.Component();
         component.width = 400;

@@ -12,11 +12,11 @@ class HSliderExample extends lark.Sprite {
         super();
 
         var exml =
-            '<s:Skin minWidth="20" minHeight="8"  xmlns:s="http://ns.egret.com/swan">'
-                + '<s:Image id="track" source="resources/slider/track.png"  scale9Grid="1,1,4,4" width="100%" height="6" verticalCenter="0"/>'
-                + '<s:Image id="trackHighlight" source="resources/slider/tracklight.png" scale9Grid="1,1,4,4" width="100%" height="6" verticalCenter="0"/>'
-                + '<s:Image id="thumb" source="resources/slider/thumb.png" verticalCenter="0"/>'
-            + '</s:Skin>';
+            `<s:Skin minWidth="20" minHeight="8"  xmlns:s="http://ns.egret.com/swan">
+                <s:Image id="track" source="resources/slider/track.png"  scale9Grid="1,1,4,4" width="100%" height="6" verticalCenter="0"/>
+                <s:Image id="trackHighlight" source="resources/slider/tracklight.png" scale9Grid="1,1,4,4" width="100%" height="6" verticalCenter="0"/>
+                <s:Image id="thumb" source="resources/slider/thumb.png" verticalCenter="0"/>
+            </s:Skin>`;
 
         var hslider = new swan.HSlider();
         hslider.skinName = exml;

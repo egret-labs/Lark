@@ -12,24 +12,24 @@ class ItemRendererExample extends lark.Sprite {
         super();
 
         var exml =
-            '<s:DataGroup class="Example.DataGroup" xmlns:s="http://ns.egret.com/swan" x="300" y="50">'
-                + '<s:layout>'
-                    + '<s:VerticalLayout gap="20"/>'
-                + '</s:layout>'
-                    + '<s:itemRenderer>'
-                        + '<s:ItemRenderer>'
-                            + '<s:Label text="{data.label}" textColor="{data.color}"/>'
-                        + '</s:ItemRenderer>'
-                    + '</s:itemRenderer>'
-                + '<s:ArrayCollection>'
-                    + '<s:Array>'
-                        + '<s:Object label="a" color="0xcc9999"/>'
-                        + '<s:Object label="b" color="0xff9966"/>'
-                        + '<s:Object label="c" color="0xcc3333"/>'
-                        + '<s:Object label="d" color="0xff6666"/>'
-                    + '</s:Array>'
-                + '</s:ArrayCollection>'
-            + '</s:DataGroup>';
+            `<s:DataGroup class="Example.DataGroup" xmlns:s="http://ns.egret.com/swan" x="300" y="50">
+                <s:layout>
+                    <s:VerticalLayout gap="20"/>
+                </s:layout>
+                    <s:itemRenderer>
+                        <s:ItemRenderer>
+                            <s:Label text="{data.label}" textColor="{data.color}"/>
+                        </s:ItemRenderer>
+                    </s:itemRenderer>
+                <s:ArrayCollection>
+                    <s:Array>
+                        <s:Object label="a" color="0xcc9999"/>
+                        <s:Object label="b" color="0xff9966"/>
+                        <s:Object label="c" color="0xcc3333"/>
+                        <s:Object label="d" color="0xff6666"/>
+                    </s:Array>
+                </s:ArrayCollection>
+            </s:DataGroup>`;
 
         var clazz = EXML.parse(exml);
         var dataGroup:swan.DataGroup = new clazz();
