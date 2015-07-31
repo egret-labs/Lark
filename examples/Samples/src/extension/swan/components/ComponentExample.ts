@@ -16,20 +16,16 @@ class ComponentExample extends lark.Sprite {
         shape.graphics.fillRect(0,0,400,300);
         this.addChild(shape);
 
-        var base = new swan.Component();
-        base.width = 400;
-        base.height = 300;
-        this.addChild(base);
+        var exml =
+            '<s:Skin xmlns:s="http://ns.egret.com/swan">'
+                + '<s:Label text="标题" horizontalCenter="0"/>'
+                + '<s:Label text="lark" right="0" bottom="0"/>'
+            + '</s:Skin>';
 
-        var label = new swan.Label();
-        label.text = "标题";
-        label.horizontalCenter = 0;
-        base.addChild(label);
-
-        var signature = new swan.Label();
-        signature.text = "Mr.Lark";
-        signature.right = 0;
-        signature.bottom = 0;
-        base.addChild(signature);
+        var component = new swan.Component();
+        component.width = 400;
+        component.height = 300;
+        component.skinName = exml;
+        this.addChild(component);
     }
 }
