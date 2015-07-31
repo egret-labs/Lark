@@ -33,6 +33,7 @@ import cp = require('child_process');
 import path = require('path');
 import file = require('./FileUtil');
 import UglifyJS = require("./uglify-js/uglifyjs");
+import net = require('net');
 
 
 global["$locale_strings"] = global["$locale_strings"] || {};
@@ -193,4 +194,26 @@ export function getNetworkAddress(): string[] {
     });
 
     return ips;
+}
+
+export function getAvailablePort(callback: (port: number) => void, port= 0) {
+
+    function getPort() {
+        var server = net.createServer();
+        server.on('listening', function () {
+            port = server.address().port
+            server.close()
+        })
+        server.on('close', function () {
+            console.log("Got port", port);
+            callback(port)
+        })
+        server.on('error', function (err) {
+            port++;
+            getPort();
+        })
+        server.listen(port, '0.0.0.0')
+    }
+
+    getPort();
 }

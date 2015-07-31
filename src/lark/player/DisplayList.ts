@@ -45,10 +45,13 @@ module lark.sys {
          */
         public static release(displayList:DisplayList):void {
             surfaceFactory.release(displayList.surface);
+            Matrix.release(displayList.$renderMatrix);
+            Matrix.release(displayList.$ratioMatrix);
             displayList.surface = null;
             displayList.renderContext = null;
             displayList.root = null;
             displayList.$renderMatrix = null;
+            displayList.$ratioMatrix = null;
             displayList.needRedraw = false;
             displayList.$isDirty = false;
             displayListPool.push(displayList);
@@ -69,6 +72,10 @@ module lark.sys {
             }
             displayList.surface = surface;
             displayList.renderContext = surface.renderContext;
+            displayList.root = target;
+            displayList.$renderMatrix = Matrix.create();
+            displayList.needRedraw = true;
+            displayList.$isDirty = true;
             return displayList;
         }
 
@@ -96,7 +103,14 @@ module lark.sys {
          * @private
          * 相对于显示列表根节点或位图缓存根节点的矩阵对象
          */
-        $renderMatrix:Matrix = new Matrix();
+        $renderMatrix: Matrix = new Matrix();
+
+        $ratioMatrix: Matrix;
+
+        $ratioChanged: boolean = false;
+
+        $pixelRatio: number = 1;
+
         /**
          * @private
          * 在显示列表根节点或位图缓存根节点上的显示区域
@@ -107,7 +121,7 @@ module lark.sys {
          * @private
          * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
          */
-        $update():boolean {
+        $update(): boolean {
             var target = this.root;
             target.$removeFlagsUp(DisplayObjectFlags.Dirty);
             this.$renderAlpha = target.$getConcatenatedAlpha();
@@ -115,6 +129,7 @@ module lark.sys {
             var concatenatedMatrix = target.$getConcatenatedMatrix();
             var bounds = target.$getOriginalBounds();
             var displayList = target.$parentDisplayList;
+            this.setDevicePixelRatio(displayList.$pixelRatio);
             var region = this.$renderRegion;
             if (this.needRedraw) {
                 this.updateDirtyRegions();
@@ -125,7 +140,7 @@ module lark.sys {
                 return false;
             }
 
-            if (!region.moved) {
+            if (!region.moved && !displayList.$ratioChanged) {
                 return false;
             }
             region.moved = false;
@@ -133,8 +148,9 @@ module lark.sys {
             matrix.copyFrom(concatenatedMatrix);
             var root = displayList.root;
             if(root!==target.$stage){
-                root.$getInvertedConcatenatedMatrix().$preMultiplyInto(matrix, matrix);
+                target.$getConcatenatedMatrixAt(root,matrix);
             }
+            this.$ratioMatrix.$preMultiplyInto(matrix, matrix);
             region.updateRegion(bounds, matrix);
             return true;
         }
@@ -161,7 +177,7 @@ module lark.sys {
         $render(context:RenderContext):void {
             var data = this.surface;
             if (data) {
-                context.drawImage(data, this.offsetX, this.offsetY);
+                context.drawImage(data, this.offsetX / this.$pixelRatio, this.offsetY / this.$pixelRatio, data.width / this.$pixelRatio, data.height / this.$pixelRatio);
             }
         }
 
@@ -191,7 +207,9 @@ module lark.sys {
          * @private
          * 设置剪裁边界，不再绘制完整目标对象，画布尺寸由外部决定，超过边界的节点将跳过绘制。
          */
-        public setClipRect(width:number, height:number):void {
+        public setClipRect(width: number, height: number): void {
+            width *= this.$pixelRatio;
+            height *= this.$pixelRatio;
             this.dirtyRegion.setClipRect(width, height);
             this.rootMatrix = null;//只有舞台画布才能设置ClipRect
             var surface = this.renderContext.surface;
@@ -304,6 +322,7 @@ module lark.sys {
             context.restore();
             this.dirtyRegion.clear();
             this.needRedraw = false;
+            this.$ratioChanged = false;
             return drawCalls;
         }
 
@@ -415,6 +434,7 @@ module lark.sys {
                 invertedMatrix.$preMultiplyInto(displayMatrix,displayMatrix);
             }
 
+            this.$ratioMatrix.$preMultiplyInto(displayMatrix, displayMatrix);
             if (mask) {
                 var bounds = mask.$getOriginalBounds();
                 maskRegion = Region.create();
@@ -423,6 +443,7 @@ module lark.sys {
                 if(invertedMatrix){
                     invertedMatrix.$preMultiplyInto(m,m);
                 }
+                this.$ratioMatrix.$preMultiplyInto(m, m);
                 maskRegion.updateRegion(bounds, m);
                 Matrix.release(m);
             }
@@ -549,6 +570,7 @@ module lark.sys {
             if(root!==displayObject.$stage){
                 root.$getInvertedConcatenatedMatrix().$preMultiplyInto(m,m)
             }
+            this.$ratioMatrix.$preMultiplyInto(m, m);
             var region:Region = Region.create();
             if (!scrollRect.isEmpty()) {
                 region.updateRegion(scrollRect, m);
@@ -574,7 +596,7 @@ module lark.sys {
 
             //绘制显示对象自身
             context.save();
-            context.setTransform(m.a, m.b, m.c, m.d, m.tx-this.offsetX, m.ty-this.offsetY);
+            context.setTransform(m.a, m.b, m.c, m.d, m.tx - this.offsetX / this.$pixelRatio, m.ty - this.offsetY / this.$pixelRatio);
             context.beginPath();
             context.rect(scrollRect.x, scrollRect.y, scrollRect.width, scrollRect.height);
             context.clip();
@@ -612,19 +634,21 @@ module lark.sys {
          * @private
          * 改变画布的尺寸，由于画布尺寸修改会清空原始画布。所以这里将原始画布绘制到一个新画布上，再与原始画布交换。
          */
-        public changeSurfaceSize():void {
+        public changeSurfaceSize(): void {
             var root = this.root;
             var oldOffsetX = this.offsetX;
             var oldOffsetY = this.offsetY;
             var bounds = this.root.$getOriginalBounds();
-            this.offsetX = bounds.x;
-            this.offsetY = bounds.y;
+            var scaleX = this.$pixelRatio;
+            var scaleY = this.$pixelRatio;
+            this.offsetX = bounds.x * scaleX;
+            this.offsetY = bounds.y * scaleY;
             var oldContext = this.renderContext;
             var oldSurface = oldContext.surface;
             if (this.sizeChanged) {
                 this.sizeChanged = false;
-                oldSurface.width = bounds.width;
-                oldSurface.height = bounds.height;
+                oldSurface.width = bounds.width * scaleX;
+                oldSurface.height = bounds.height * scaleY;
             }
             else {
                 var newContext = sys.sharedRenderContext;
@@ -632,18 +656,28 @@ module lark.sys {
                 sys.sharedRenderContext = oldContext;
                 this.renderContext = newContext;
                 this.surface = newSurface;
-                newSurface.width = bounds.width;
-                newSurface.height = bounds.height;
+                newSurface.width = bounds.width * scaleX;
+                newSurface.height = bounds.height * scaleY;
                 if (oldSurface.width !== 0 && oldSurface.height !== 0) {
                     newContext.setTransform(1, 0, 0, 1, 0, 0);
-                    newContext.drawImage(oldSurface, oldOffsetX - bounds.x, oldOffsetY - bounds.y);
+                    newContext.drawImage(oldSurface, oldOffsetX - this.offsetX, oldOffsetY - this.offsetY);
                 }
                 oldSurface.height = 1;
                 oldSurface.width = 1;
             }
-            this.rootMatrix.setTo(1, 0, 0, 1, - bounds.x, - bounds.y);
+            this.rootMatrix.setTo(1, 0, 0, 1, - this.offsetX, - this.offsetY);
             this.renderContext.setTransform(1, 0, 0, 1, - bounds.x, - bounds.y);
         }
 
+        public setDevicePixelRatio(ratio: number = 1) {
+            if (this.$pixelRatio == ratio && this.$ratioMatrix)
+                return;
+            if (!this.$ratioMatrix)
+                this.$ratioMatrix = Matrix.create();
+            this.$ratioChanged = true;
+            this.$pixelRatio = ratio;
+            this.$ratioMatrix.setTo(ratio, 0, 0, ratio, 0, 0);
+            this.root.$invalidate(true);
+        }
     }
 }

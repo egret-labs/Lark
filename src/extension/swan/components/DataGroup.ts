@@ -55,6 +55,7 @@ module swan {
      *
      * @see swan.Group
      *
+     * @includeExample examples/Samples/src/extension/swan/components/DataGroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -66,6 +67,7 @@ module swan {
      *
      * @see swan.Group
      *
+     * @includeExample examples/Samples/src/extension/swan/components/DataGroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native

@@ -201,16 +201,19 @@ module lark.sys {
          * @param stageWidth 舞台宽度（以像素为单位）
          * @param stageHeight 舞台高度（以像素为单位）
          */
-        public updateStageSize(stageWidth:number, stageHeight:number):void {
+        public updateStageSize(stageWidth: number, stageHeight: number, pixelRatio: number = 1): void {
             var stage = this.stage;
-            if (stageWidth !== stage.$stageWidth || stageHeight !== stage.$stageHeight) {
+            if (stageWidth !== stage.$stageWidth || stageHeight !== stage.$stageHeight || this.screenDisplayList.$pixelRatio !== pixelRatio) {
                 stage.$stageWidth = stageWidth;
                 stage.$stageHeight = stageHeight;
+                this.screenDisplayList.setDevicePixelRatio(pixelRatio);
                 this.screenDisplayList.setClipRect(stageWidth, stageHeight);
                 if (DEBUG && this.stageDisplayList) {
+                    this.stageDisplayList.setDevicePixelRatio(pixelRatio);
                     this.stageDisplayList.setClipRect(stageWidth, stageHeight);
                 }
                 stage.emitWith(Event.RESIZE);
+                stage.$invalidate(true);
             }
         }
 

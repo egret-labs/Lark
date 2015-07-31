@@ -31,6 +31,7 @@ var cp = require('child_process');
 var path = require('path');
 var file = require('./FileUtil');
 var UglifyJS = require("./uglify-js/uglifyjs");
+var net = require('net');
 global["$locale_strings"] = global["$locale_strings"] || {};
 var $locale_strings = global["$locale_strings"];
 /**
@@ -192,3 +193,24 @@ function getNetworkAddress() {
     return ips;
 }
 exports.getNetworkAddress = getNetworkAddress;
+function getAvailablePort(callback, port) {
+    if (port === void 0) { port = 0; }
+    function getPort() {
+        var server = net.createServer();
+        server.on('listening', function () {
+            port = server.address().port;
+            server.close();
+        });
+        server.on('close', function () {
+            console.log("Got port", port);
+            callback(port);
+        });
+        server.on('error', function (err) {
+            port++;
+            getPort();
+        });
+        server.listen(port, '0.0.0.0');
+    }
+    getPort();
+}
+exports.getAvailablePort = getAvailablePort;

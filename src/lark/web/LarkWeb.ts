@@ -34,7 +34,8 @@ module lark.web {
      * 刷新所有Lark播放器的显示区域尺寸。仅当使用外部JavaScript代码动态修改了Lark容器大小时，需要手动调用此方法刷新显示区域。
      * 当网页尺寸发生改变时此方法会自动被调用。
      */
-    export function updateAllScreens():void {
+    export function updateAllScreens(): void {
+        Capabilities.$devicePixelRatio = window.devicePixelRatio || 1;
         var containerList = document.querySelectorAll(".lark-player");
         var length = containerList.length;
         for (var i = 0; i < length; i++) {

@@ -682,7 +682,9 @@ module lark {
                     vAlign = 1;
                 drawY += vAlign * (explicitHeight - textHeight);
             }
+            var roundOff = drawY;
             drawY = Math.round(drawY);
+            roundOff = drawY - roundOff;
             var hAlign = 0;
             if (values[sys.TextKeys.textAlign] == HorizontalAlign.CENTER) {
                 hAlign = 0.5;
@@ -698,7 +700,7 @@ module lark {
             else {
                 maxWidth = values[sys.TextKeys.textFieldWidth];
             }
-            var maxYPos = explicitHeight - 2;
+            var maxYPos = explicitHeight - 2 + roundOff;
             for (var i = 0; i < length; i++) {
                 var line = lines[i];
                 var measureW = measuredWidths[i];

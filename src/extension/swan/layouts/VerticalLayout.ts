@@ -39,7 +39,7 @@ module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/swan/layout/VerticalLayoutExample.ts
+     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
      */
     /**
      * @language zh_CN
@@ -48,7 +48,7 @@ module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/swan/layout/VerticalLayoutExample.ts
+     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
      */
     export class VerticalLayout extends LinearLayoutBase {
 
@@ -312,7 +312,7 @@ module swan {
             else
                 this.getIndexInView();
             var paddingB = this.$paddingBottom;
-            var paddingL = this.$paddingTop;
+            var paddingL = this.$paddingLeft;
             var paddingR = this.$paddingRight;
             var gap = this.$gap;
             var contentHeight:number;
