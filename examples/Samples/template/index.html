@@ -27,6 +27,10 @@
             border-right: 1px solid #55616C;
             overflow:auto;
         }
+        #samples {
+            position:fixed;
+            width: 200px;
+        }
 
             #menu a,#menu .head {
                 display:block;
@@ -44,6 +48,10 @@
                 font-size:24px;
                 line-height:40px;
                 margin-bottom:1px;
+            }
+            #menu .head1 {
+                line-height:30px;
+                font-size:20px;
             }
 
 
@@ -70,7 +78,9 @@
 </head>
 <body>
     <div id="menu">
-        <div class="head">Samples</div>
+        <div id="samples" class="head">Samples</div>
+        <div class="head">.</div>
+        <div class="head head1">Lark</div>
         <a href="?entry=BitmapExample">lark.Bitmap</a>
         <a href="?entry=BitmapDataExample">lark.BitmapData</a>
         <a href="?entry=BlendModeExample">lark.BlendMode</a>
@@ -98,12 +108,17 @@
         <a href="?entry=TouchEventExample">lark.TouchEvent</a>
         <a href="?entry=VideoExample">lark.Video</a>
 
+        <div class="head head1">Swan</div>
         <a href="?entry=ArrayCollectionExample">swan.ArrayCollection</a>
         <a href="?entry=BasicLayoutExample">swan.BasicLayout</a>
         <a href="?entry=BindingExample">swan.Binding</a>
         <a href="?entry=BitmapFillModeExample">swan.BitmapFillMode</a>
         <a href="?entry=CollectionEventExample">swan.CollectionEvent</a>
         <a href="?entry=ColumnAlignExample">swan.ColumnAlign</a>
+        <a href="?entry=DefaultAssetAdapterExample">swan.DefaultAssetAdapter</a>
+        <a href="?entry=RangeExample">swan.Range</a>
+        <a href="?entry=ButtonExample">swan.Button</a>
+        <a href="?entry=CheckboxExample">swan.Checkbox</a>
         <a href="?entry=ComponentExample">swan.Component</a>
         <a href="?entry=DataGroupExample">swan.DataGroup</a>
         <a href="?entry=DirectionExample">swan.Direction</a>
@@ -157,8 +172,11 @@
         var stage = document.getElementById("lark-sample");
         stage.setAttribute("data-entry-class", entry);
         var active = document.querySelector('[href="' + location.search + '"]');
-        if (active)
+        if (active) {
             active.setAttribute('class', 'active');
+            active.setAttribute('name', entry);
+            location.hash = entry;
+        }
 
     </script>
 </body>
