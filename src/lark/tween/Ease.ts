@@ -392,18 +392,18 @@ module lark {
 
         /**
          * @language en_US
-         * x to the 6 power curve fade out.
+         * Exponential curve fade out.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * x 的 6 次方曲线淡出。
+         * 指数曲线淡出。
          * @version Lark 1.0
          * @platform Web,Native
          */
         public static EaseOutExpo(t:number):number {
-            return Math.tan(Math.PI * 0.25 * (t - 1)) + 1;
+            return -Math.pow(2,-10 * t) + 1;
         }
 
         /**
