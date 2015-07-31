@@ -6,32 +6,46 @@ module lark {
     var initTweenFlag = true;
 
     /**
+     * @private
+     */
+    var easeCache = {};
+
+    /**
      * @language en_US
      * The tween.
-     * @see lark.Tween
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
      * 缓动类。
-     * @see lark.Tween
      * @version Lark 1.0
      * @platform Web,Native
      */
     export class Tween extends lark.EventEmitter {
 
-        public constructor(host:any, time:number, params?:Object, ease?:Function) {
+        /**
+         * @language en_US
+         * Constructor.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         * @param target 要变换的属性
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public constructor(target:any, time:number, params?:Object, ease?:string) {
             super();
             time = +time;
             this._time = time;
-            this._host = host;
+            this._target = target;
             if (time <= 0) return;
             var controller:BaseTransformation;
+            this.ease = ease;
             if (params) {
-
-                this._ease = ease;
-
                 var keys = Object.keys(params);
                 for (var i = 0; i < keys.length; i++) {
                     var key = keys[i];
@@ -42,7 +56,7 @@ module lark {
                         continue;
                     }
                     var attribute = params[key];
-                    if (typeof (attribute) != "number" || !(key in host)) {
+                    if (typeof (attribute) != "number" || !(key in target)) {
                         delete params[key];
                         keys.splice(i, 1);
                         i--;
@@ -52,13 +66,13 @@ module lark {
                 if (keys.length) {
                     controller = new BasicTransformation(this, params);
                     if(initTweenFlag) {
-                        controller.ready();
+                        controller.onReady();
                     }
                     this._controllers.push(controller);
                 }
             }
             if (!this._ease) {
-                this._ease = Ease.None;
+                this.ease = Ease.None;
             }
             if(initTweenFlag) {
                 this._startTime = lark.getTimer();
@@ -124,37 +138,67 @@ module lark {
         /**
          * @private
          */
-        _host:any;
+        _target:any;
 
         /**
          * @language en_US
          * The object to transform.
-         * @see lark.Tween
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 要变换的对象。
-         * @see lark.Tween
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public get host():void {
-            return this._host;
+        public get target():void {
+            return this._target;
         }
 
         /**
          * @private
          */
-        _ease:Function;
+        _ease:string;
 
-        public get ease():Function {
+        /**
+         * @private
+         */
+        _easeData:Object;
+
+        /**
+         * @language en_US
+         * The type of ease.
+         * @see lark.Ease
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 缓动类型。
+         * @see lark.Ease
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public get ease():string {
             return this._ease;
         }
 
-        public set ease(val:Function) {
+        public set ease(val:string) {
+            if(!easeCache[val]) {
+                var func = EaseFunction[val];
+                if(func == null) {
+                    //warn
+                    return;
+                }
+                var cache = [];
+                for(var i = 0; i <= 1000; i++) {
+                    cache[i] = func(i/1000);
+                }
+                easeCache[val] = cache;
+            }
             this._ease = val;
+            this._easeData = easeCache[val];
         }
 
         /**
@@ -162,6 +206,20 @@ module lark {
          */
         _nextTween:Tween;
 
+        /**
+         * @language en_US
+         * The next tween.
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 下一个Tween。
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         public get nextTween():Tween {
             return this._nextTween;
         }
@@ -300,7 +358,7 @@ module lark {
             if(this._startTime) {
                 var length = this._controllers.length;
                 for(var i = 0; i < length; i++) {
-                    this._controllers[i].ready();
+                    this._controllers[i].onReady();
                 }
             }
             this._startTime = time;
@@ -323,6 +381,18 @@ module lark {
         _completeParams:any;
 
 
+        /**
+         * @language en_US
+         * Tween end callback function.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * Tween 结束回调函数。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         public call(callBack:Function,thisObj?:any,params?:any):Tween {
             this._complete = callBack;
             this._completeThis = thisObj;
@@ -333,14 +403,12 @@ module lark {
         /**
          * @language en_US
          * Completely stop the current Tween. And recycling of cyberspace.
-         * @see lark.Tween
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 完全停止当前 Tween。并回收资源。
-         * @see lark.Tween
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -369,18 +437,15 @@ module lark {
                 this._currentTime = this._time;
             }
             var length = this._controllers.length;
-            var s = this.ease(this._currentTime/this._time);
+            var s = this._easeData[1000*(this._currentTime/this._time)|0];
             for(var i = 0; i < length; i++) {
                 this._controllers[i].update(s);
             }
-            //if(this.hasListener(lark.Event.CHANGE)) {
-            //    this.emitWith(lark.Event.CHANGE,false);
-            //}
             if (this._currentTime == this._time) {
                 lark.stopTick(this.update, this);
-                //if(this.hasListener(lark.Event.COMPLETE)) {
-                //    this.emitWith(lark.Event.COMPLETE,false);
-                //}
+                if(this._complete != null) {
+                    this._complete.apply(this._completeThis,this._completeParams);
+                }
                 if(this._waitTime) {
                     this._waitTime += lark.getTimer();
                     lark.startTick(this.waitEndTime,this);
@@ -433,24 +498,51 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public to(object:any, time:number, params?:Object, ease?:any):Tween {
+        public to(target:any, time:number, params?:Object, ease?:any):Tween {
             initTweenFlag = false;
-            var tween = new Tween(object, time, params, ease);
+            var tween = new Tween(target, time, params, ease);
             initTweenFlag = true;
             return this.concatTween(tween);
         }
 
+        /**
+         * @privbate
+         */
         _waitTime:number = 0;
 
+        /**
+         * @language en_US
+         * The time to wait before the next tween starts.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在下一个动画开始前等待多少时间。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         public wait(time:number):Tween {
             time = +time;
             this._waitTime = time;
             return this;
         }
 
-        public static get(object:any, time:number, params?:Object, ease?:any):Tween {
+        /**
+         * @language en_US
+         * Create a Tween object.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 Tween 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public static get(target:any, time:number, params?:Object, ease?:any):Tween {
             initTweenFlag = true;
-            var tween = new Tween(object, time, params, ease);
+            var tween = new Tween(target, time, params, ease);
             return tween;
         }
     }

@@ -1143,14 +1143,719 @@ var lark;
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
-    var TweenControllerFactory = (function () {
-        function TweenControllerFactory() {
+    /**
+     * @private
+     */
+    var EaseFunction = (function () {
+        function EaseFunction() {
         }
-        var d = __define,c=TweenControllerFactory;p=c.prototype;
-        return TweenControllerFactory;
+        var d = __define,c=EaseFunction;p=c.prototype;
+        /**
+         * @language en_US
+         * Uniform type of easing.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 匀速缓动类型。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.None = function (t) {
+            return t;
+        };
+        /**
+         * @language en_US
+         * sine curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * sin 曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.SineEaseIn = function (t) {
+            return Math.sin((t - 1) * Math.PI * .5) + 1;
+        };
+        /**
+         * @language en_US
+         * sine curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * sin 曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.SineEaseOut = function (t) {
+            return Math.sin(t * Math.PI * .5);
+        };
+        /**
+         * @language en_US
+         * sine curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * sin 曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,NativeEaseInOutSine
+         */
+        EaseFunction.SineEaseInOut = function (t) {
+            return Math.sin((t - .5) * Math.PI) * .5 + .5;
+        };
+        /**
+         * @language en_US
+         * sine curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * sin 曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,NativeEaseInOutSine
+         */
+        EaseFunction.SineEaseOutIn = function (t) {
+            if (t < 0.5) {
+                return Math.sin(t * Math.PI) * .5;
+            }
+            return Math.sin((t - 1) * Math.PI) * .5 + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 2 power curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 2 次方曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuadEaseIn = function (t) {
+            return t * t;
+        };
+        /**
+         * @language en_US
+         * x to the 2 power curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 2 次方曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuadEaseOut = function (t) {
+            return -(t - 1) * (t - 1) + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 2 power curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 2 次方曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuadEaseInOut = function (t) {
+            if (t < .5) {
+                return t * t * 2;
+            }
+            return -(t - 1) * (t - 1) * 2 + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 2 power curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 2 次方曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuadEaseOutIn = function (t) {
+            var s = (t - .5) * (t - .5) * 2;
+            if (t < .5) {
+                return .5 - s;
+            }
+            return .5 + s;
+        };
+        /**
+         * @language en_US
+         * x to the third 3 curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.CubicEaseIn = function (t) {
+            return t * t * t;
+        };
+        /**
+         * @language en_US
+         * x to the third 3 curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.CubicEaseOut = function (t) {
+            return (t - 1) * (t - 1) * (t - 1) + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 3 power curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.CubicEaseInOut = function (t) {
+            if (t < .5) {
+                return t * t * t * 4;
+            }
+            return (t - 1) * (t - 1) * (t - 1) * 4 + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 3 power curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.CubicEaseOutIn = function (t) {
+            return (t - .5) * (t - .5) * (t - .5) * 4 + .5;
+        };
+        /**
+         * @language en_US
+         * x to the 4 power curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 4 次方曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuartEaseIn = function (t) {
+            return t * t * t * t;
+        };
+        /**
+         * @language en_US
+         * x to the 4 power curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 4 次方曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuartEaseOut = function (t) {
+            var a = (t - 1);
+            return -a * a * a * a + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 4 power curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 4 次方曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuartEaseInOut = function (t) {
+            if (t < .5) {
+                return t * t * t * t * 8;
+            }
+            var a = (t - 1);
+            return -a * a * a * a * 8 + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 4 power curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 4 次方曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuartEaseOutIn = function (t) {
+            var s = (t - .5) * (t - .5) * (t - .5) * (t - .5) * 8;
+            if (t < .5) {
+                return .5 - s;
+            }
+            return .5 + s;
+        };
+        /**
+         * @language en_US
+         * x to the 5 power curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 5 次方曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuintEaseIn = function (t) {
+            return t * t * t * t * t;
+        };
+        /**
+         * @language en_US
+         * x to the 5 power curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 5 次方曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuintEaseOut = function (t) {
+            var a = t - 1;
+            return a * a * a * a * a + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 5 power curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 5 次方曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuintEaseInOut = function (t) {
+            if (t < .5) {
+                return t * t * t * t * t * 16;
+            }
+            var a = t - 1;
+            return a * a * a * a * a * 16 + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 5 power curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 5 次方曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuintEaseOutIn = function (t) {
+            var a = t - .5;
+            return a * a * a * a * a * 16 + 0.5;
+        };
+        /**
+         * @language en_US
+         * Exponential curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.ExpoEaseIn = function (t) {
+            return Math.pow(2, 10 * (t - 1));
+        };
+        /**
+         * @language en_US
+         * Exponential curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.ExpoEaseOut = function (t) {
+            return -Math.pow(2, -10 * t) + 1;
+        };
+        /**
+         * @language en_US
+         * Exponential curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.ExpoEaseInOut = function (t) {
+            if (t < .5) {
+                return Math.pow(2, 10 * (t * 2 - 1)) * .5;
+            }
+            return -Math.pow(2, -10 * (t - .5) * 2) * .5 + 1.00048828125;
+        };
+        /**
+         * @language en_US
+         * Exponential curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.ExpoEaseOutIn = function (t) {
+            if (t < .5) {
+                return -Math.pow(2, -20 * t) * .5 + .5;
+            }
+            return Math.pow(2, 10 * ((t - .5) * 2 - 1)) * .5 + .5;
+        };
+        /**
+         * @language en_US
+         * Circle curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.CircEaseIn = function (t) {
+            return 1 - Math.sqrt(1 - t * t);
+        };
+        /**
+         * @language en_US
+         * Circle curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.CircEaseOut = function (t) {
+            return Math.sqrt(1 - (1 - t) * (1 - t));
+        };
+        /**
+         * @language en_US
+         * Circle curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.CircEaseInOut = function (t) {
+            if (t < .5) {
+                return .5 - Math.sqrt(.25 - t * t);
+            }
+            return Math.sqrt(.25 - (1 - t) * (1 - t)) + .5;
+        };
+        /**
+         * @language en_US
+         * Circle curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.CircEaseOutIn = function (t) {
+            var s = Math.sqrt(.25 - (.5 - t) * (.5 - t));
+            if (t < .5) {
+                return s;
+            }
+            return 1 - s;
+        };
+        /**
+         * @language en_US
+         * 3 power curve x of Rebound curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方回弹曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.BackEaseIn = function (t) {
+            return 2.70158 * t * t * t - 1.70158 * t * t;
+        };
+        /**
+         * @language en_US
+         * 3 power curve x of Rebound curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方回弹曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.BackEaseOut = function (t) {
+            var a = t - 1;
+            return 2.70158 * a * a * a + 1.70158 * a * a + 1;
+        };
+        /**
+         * @language en_US
+         * 3 power curve x of Rebound curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方回弹曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.BackEaseInOut = function (t) {
+            var a = t - 1;
+            if (t < .5) {
+                return 10.80632 * t * t * t - 3.40316 * t * t;
+            }
+            return 10.80632 * a * a * a + 3.40316 * a * a + 1;
+        };
+        /**
+         * @language en_US
+         * 3 power curve x of Rebound curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方回弹曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.BackEaseOutIn = function (t) {
+            var a = t - .5;
+            if (t < .5) {
+                return 10.80632 * a * a * a + 3.40316 * a * a + .5;
+            }
+            return 10.80632 * a * a * a - 3.40316 * a * a + .5;
+        };
+        /**
+         * @language en_US
+         * Exponential Decay curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数衰减曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.ElasticEaseIn = function (t) {
+            if (t == 0 || t == 1)
+                return t;
+            return -(Math.pow(2, 10 * (t - 1)) * Math.sin((t - 1.075) * 2 * Math.PI / .3));
+        };
+        /**
+         * @language en_US
+         * Exponential Decay curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数衰减曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.ElasticEaseOut = function (t) {
+            if (t == 0 || t == .5 || t == 1)
+                return t;
+            return (Math.pow(2, 10 * -t) * Math.sin((-t - .075) * 2 * Math.PI / .3)) + 1;
+        };
+        /**
+         * @language en_US
+         * Exponential Decay curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数衰减曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.ElasticEaseInOut = function (t) {
+            if (t == 0 || t == .5 || t == 1)
+                return t;
+            if (t < .5) {
+                return -(Math.pow(2, 10 * t - 10) * Math.sin((t * 2 - 2.15) * Math.PI / .3));
+            }
+            return (Math.pow(2, 10 - 20 * t) * Math.sin((-4 * t + 1.85) * Math.PI / .3)) * .5 + 1;
+        };
+        /**
+         * @language en_US
+         * Exponential Decay curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数衰减曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.ElasticEaseOutIn = function (t) {
+            if (t == 0 || t == .5 || t == 1)
+                return t;
+            if (t < .5) {
+                return (Math.pow(2, -20 * t) * Math.sin((-t * 4 - .15) * Math.PI / .3)) * .5 + .5;
+            }
+            return -(Math.pow(2, 20 * (t - 1)) * Math.sin((t * 4 - 4.15) * Math.PI / .3)) * .5 + .5;
+        };
+        EaseFunction.bounceEaseIn = function (t) {
+            return 1 - EaseFunction.bounceEaseOut(1 - t);
+        };
+        EaseFunction.bounceEaseOut = function (t) {
+            var s;
+            var a = 7.5625;
+            var b = 2.75;
+            if (t < (1 / 2.75)) {
+                s = a * t * t;
+            }
+            else if (t < (2 / b)) {
+                s = (a * (t - (1.5 / b)) * (t - (1.5 / b)) + .75);
+            }
+            else if (t < (2.5 / b)) {
+                s = (a * (t - (2.25 / b)) * (t - (2.25 / b)) + .9375);
+            }
+            else {
+                s = (a * (t - (2.625 / b)) * (t - (2.625 / b)) + .984375);
+            }
+            return s;
+        };
+        /**
+         * @language en_US
+         * Circle curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.BounceEaseInOut = function (t) {
+            if (t < .5)
+                return EaseFunction.bounceEaseIn(t * 2) * .5;
+            else
+                return EaseFunction.bounceEaseOut(t * 2 - 1) * .5 + .5;
+        };
+        /**
+         * @language en_US
+         * Circle curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.BounceEaseOutIn = function (t) {
+            if (t < .5)
+                return EaseFunction.bounceEaseOut(t * 2) * .5;
+            else
+                return EaseFunction.bounceEaseIn(t * 2 - 1) * .5 + .5;
+        };
+        /**
+         * @language en_US
+         * Circle curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.BounceEaseIn = EaseFunction.bounceEaseIn;
+        /**
+         * @language en_US
+         * Circle curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.BounceEaseOut = EaseFunction.bounceEaseOut;
+        return EaseFunction;
     })();
-    lark.TweenControllerFactory = TweenControllerFactory;
-    lark.registerClass(TweenControllerFactory,"lark.TweenControllerFactory");
+    lark.EaseFunction = EaseFunction;
+    lark.registerClass(EaseFunction,"lark.EaseFunction");
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1923,9 +2628,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.None = function (t) {
-            return t;
-        };
+        Ease.None = "None";
         /**
          * @language en_US
          * sine curve fade in.
@@ -1938,9 +2641,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.SineEaseIn = function (t) {
-            return Math.sin((t - 1) * Math.PI * 0.5) + 1;
-        };
+        Ease.SineEaseIn = "SineEaseIn";
         /**
          * @language en_US
          * sine curve fade out.
@@ -1953,9 +2654,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.SineEaseOut = function (t) {
-            return Math.sin(t * Math.PI * 0.5);
-        };
+        Ease.SineEaseOut = "SineEaseOut";
         /**
          * @language en_US
          * sine curve fade in and fade out.
@@ -1968,12 +2667,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,NativeEaseInOutSine
          */
-        Ease.SineEaseInOut = function (t) {
-            if (t < 0.5) {
-                return Math.sin((t * 2 - 1) * Math.PI * 0.5) * 0.5 + 0.5;
-            }
-            return Math.sin((t - 0.5) * Math.PI) * 0.5 + 0.5;
-        };
+        Ease.SineEaseInOut = "SineEaseInOut";
         /**
          * @language en_US
          * sine curve fade out and fade in.
@@ -1986,12 +2680,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,NativeEaseInOutSine
          */
-        Ease.SineEaseOutIn = function (t) {
-            if (t < 0.5) {
-                return Math.sin(t * Math.PI) * 0.5;
-            }
-            return Math.sin(((t - 0.5) * 2 - 1) * Math.PI * 0.5) * 0.5 + 1;
-        };
+        Ease.SineEaseOutIn = "SineEaseOutIn";
         /**
          * @language en_US
          * x to the 2 power curve fade in.
@@ -2004,9 +2693,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.QuadEaseIn = function (t) {
-            return t * t;
-        };
+        Ease.QuadEaseIn = "QuadEaseIn";
         /**
          * @language en_US
          * x to the 2 power curve fade out.
@@ -2019,9 +2706,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.QuadEaseOut = function (t) {
-            return -(t - 1) * (t - 1) + 1;
-        };
+        Ease.QuadEaseOut = "QuadEaseOut";
         /**
          * @language en_US
          * x to the 2 power curve fade in and fade out.
@@ -2034,12 +2719,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.QuadEaseInOut = function (t) {
-            if (t < 0.5) {
-                return t * t * 2;
-            }
-            return -(t - 1) * (t - 1) * 2 + 1;
-        };
+        Ease.QuadEaseInOut = "QuadEaseInOut";
         /**
          * @language en_US
          * x to the 2 power curve fade out and fade in.
@@ -2052,12 +2732,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.QuadEaseOutIn = function (t) {
-            if (t < 0.5) {
-                return -(t - 0.5) * (t - 0.5) * 2 + 0.5;
-            }
-            return (t - 0.5) * (t - 0.5) * 2 + 0.5;
-        };
+        Ease.QuadEaseOutIn = "QuadEaseOutIn";
         /**
          * @language en_US
          * x to the third 3 curve fade in.
@@ -2070,9 +2745,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.CubicEaseIn = function (t) {
-            return t * t * t;
-        };
+        Ease.CubicEaseIn = "CubicEaseIn";
         /**
          * @language en_US
          * x to the third 3 curve fade out.
@@ -2085,9 +2758,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.CubicEaseOut = function (t) {
-            return (t - 1) * (t - 1) * (t - 1) + 1;
-        };
+        Ease.CubicEaseOut = "CubicEaseOut";
         /**
          * @language en_US
          * x to the 3 power curve fade in and fade out.
@@ -2100,12 +2771,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.CubicEaseInOut = function (t) {
-            if (t < 0.5) {
-                return t * t * t * 4;
-            }
-            return (t - 1) * (t - 1) * (t - 1) * 4 + 1;
-        };
+        Ease.CubicEaseInOut = "CubicEaseInOut";
         /**
          * @language en_US
          * x to the 3 power curve fade out and fade in.
@@ -2118,9 +2784,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.CubicEaseOutIn = function (t) {
-            return (t - 0.5) * (t - 0.5) * (t - 0.5) * 4 + 0.5;
-        };
+        Ease.CubicEaseOutIn = "CubicEaseOutIn";
         /**
          * @language en_US
          * x to the 4 power curve fade in.
@@ -2133,9 +2797,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.QuartEaseIn = function (t) {
-            return t * t * t * t;
-        };
+        Ease.QuartEaseIn = "QuartEaseIn";
         /**
          * @language en_US
          * x to the 4 power curve fade out.
@@ -2148,9 +2810,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.QuartEaseOut = function (t) {
-            return -(t - 1) * (t - 1) * (t - 1) * (t - 1) + 1;
-        };
+        Ease.QuartEaseOut = "QuartEaseOut";
         /**
          * @language en_US
          * x to the 4 power curve fade in and fade out.
@@ -2163,12 +2823,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.QuartEaseInOut = function (t) {
-            if (t < 0.5) {
-                return t * t * t * t * 8;
-            }
-            return -(t - 1) * (t - 1) * (t - 1) * (t - 1) * 8 + 1;
-        };
+        Ease.QuartEaseInOut = "QuartEaseInOut";
         /**
          * @language en_US
          * x to the 4 power curve fade out and fade in.
@@ -2181,12 +2836,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.QuartEaseOutIn = function (t) {
-            if (t < 0.5) {
-                return -(t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * 8 + 0.5;
-            }
-            return (t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * 8 + 0.5;
-        };
+        Ease.QuartEaseOutIn = "QuartEaseOutIn";
         /**
          * @language en_US
          * x to the 5 power curve fade in.
@@ -2199,9 +2849,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.QuintEaseIn = function (t) {
-            return t * t * t * t * t;
-        };
+        Ease.QuintEaseIn = "QuintEaseIn";
         /**
          * @language en_US
          * x to the 5 power curve fade out.
@@ -2214,9 +2862,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.QuintEaseOut = function (t) {
-            return (t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) + 1;
-        };
+        Ease.QuintEaseOut = "QuintEaseOut";
         /**
          * @language en_US
          * x to the 5 power curve fade in and fade out.
@@ -2229,12 +2875,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.QuintEaseInOut = function (t) {
-            if (t < 0.5) {
-                return t * t * t * t * t * 16;
-            }
-            return (t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) * 16 + 1;
-        };
+        Ease.QuintEaseInOut = "QuintEaseInOut";
         /**
          * @language en_US
          * x to the 5 power curve fade out and fade in.
@@ -2247,9 +2888,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.QuintEaseOutIn = function (t) {
-            return (t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * (t - 0.5) * 16 + 0.5;
-        };
+        Ease.QuintEaseOutIn = "QuintEaseOutIn";
         /**
          * @language en_US
          * Exponential curve fade in.
@@ -2262,9 +2901,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.ExpoEaseIn = function (t) {
-            return Math.pow(2, 10 * (t - 1));
-        };
+        Ease.ExpoEaseIn = "ExpoEaseIn";
         /**
          * @language en_US
          * Exponential curve fade out.
@@ -2277,9 +2914,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.ExpoEaseOut = function (t) {
-            return -Math.pow(2, -10 * t) + 1;
-        };
+        Ease.ExpoEaseOut = "ExpoEaseOut";
         /**
          * @language en_US
          * Exponential curve fade in and fade out.
@@ -2292,12 +2927,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.ExpoEaseInOut = function (t) {
-            if (t < 0.5) {
-                return Math.pow(2, 10 * (t * 2 - 1)) * 0.5;
-            }
-            return -Math.pow(2, -10 * (t - 0.5) * 2) * 0.5 + 1.00048828125;
-        };
+        Ease.ExpoEaseInOut = "ExpoEaseInOut";
         /**
          * @language en_US
          * Exponential curve fade out and fade in.
@@ -2310,12 +2940,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.ExpoEaseOutIn = function (t) {
-            if (t < 0.5) {
-                return -Math.pow(2, -20 * t) * 0.5 + 0.5;
-            }
-            return Math.pow(2, 10 * ((t - 0.5) * 2 - 1)) * 0.5 + 0.5;
-        };
+        Ease.ExpoEaseOutIn = "ExpoEaseOutIn";
         /**
          * @language en_US
          * Circle curve fade in.
@@ -2328,9 +2953,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.CircEaseIn = function (t) {
-            return 1 - Math.sqrt(1 - t * t);
-        };
+        Ease.CircEaseIn = "CircEaseIn";
         /**
          * @language en_US
          * Circle curve fade out.
@@ -2343,9 +2966,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.CircEaseOut = function (t) {
-            return Math.sqrt(1 - (1 - t) * (1 - t));
-        };
+        Ease.CircEaseOut = "CircEaseOut";
         /**
          * @language en_US
          * Circle curve fade in and fade out.
@@ -2358,12 +2979,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.CircEaseInOut = function (t) {
-            if (t < 0.5) {
-                return 0.5 - Math.sqrt(0.25 - t * t);
-            }
-            return Math.sqrt(0.25 - (1 - t) * (1 - t)) + 0.5;
-        };
+        Ease.CircEaseInOut = "CircEaseInOut";
         /**
          * @language en_US
          * Circle curve fade out and fade in.
@@ -2376,12 +2992,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.CircEaseOutIn = function (t) {
-            if (t < 0.5) {
-                return Math.sqrt(0.25 - (0.5 - t) * (0.5 - t));
-            }
-            return 1 - Math.sqrt(0.25 - (t - 0.5) * (t - 0.5));
-        };
+        Ease.CircEaseOutIn = "CircEaseOutIn";
         /**
          * @language en_US
          * 3 power curve x of Rebound curve fade in.
@@ -2394,9 +3005,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.BackEaseIn = function (t) {
-            return 2.70158 * t * t * t - 1.70158 * t * t;
-        };
+        Ease.BackEaseIn = "BackEaseIn";
         /**
          * @language en_US
          * 3 power curve x of Rebound curve fade out.
@@ -2409,9 +3018,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.BackEaseOut = function (t) {
-            return 2.70158 * (t - 1) * (t - 1) * (t - 1) + 1.70158 * (t - 1) * (t - 1) + 1;
-        };
+        Ease.BackEaseOut = "BackEaseOut";
         /**
          * @language en_US
          * 3 power curve x of Rebound curve fade in and fade out.
@@ -2424,12 +3031,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.BackEaseInOut = function (t) {
-            if (t < 0.5) {
-                return 10.80632 * t * t * t - 3.40316 * t * t;
-            }
-            return 10.80632 * (t - 1) * (t - 1) * (t - 1) + 3.40316 * (t - 1) * (t - 1) + 1;
-        };
+        Ease.BackEaseInOut = "BackEaseInOut";
         /**
          * @language en_US
          * 3 power curve x of Rebound curve fade out and fade in.
@@ -2442,12 +3044,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.BackEaseOutIn = function (t) {
-            if (t < 0.5) {
-                return 10.80632 * (t - 0.5) * (t - 0.5) * (t - 0.5) + 3.40316 * (t - 0.5) * (t - 0.5) + 0.5;
-            }
-            return 10.80632 * (t - 0.5) * (t - 0.5) * (t - 0.5) - 3.40316 * (t - 0.5) * (t - 0.5) + 0.5;
-        };
+        Ease.BackEaseOutIn = "BackEaseOutIn";
         /**
          * @language en_US
          * Exponential Decay curve fade in.
@@ -2460,11 +3057,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.ElasticEaseIn = function (t) {
-            if (t == 0 || t == 1)
-                return t;
-            return -(Math.pow(2, 10 * (t - 1)) * Math.sin((t - 1.075) * 2 * Math.PI / 0.3));
-        };
+        Ease.ElasticEaseIn = "ElasticEaseIn";
         /**
          * @language en_US
          * Exponential Decay curve fade out.
@@ -2477,11 +3070,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.ElasticEaseOut = function (t) {
-            if (t == 0 || t == 1)
-                return t;
-            return (Math.pow(2, 10 * -t) * Math.sin((-t - 0.075) * 2 * Math.PI / 0.3)) + 1;
-        };
+        Ease.ElasticEaseOut = "ElasticEaseOut";
         /**
          * @language en_US
          * Exponential Decay curve fade in and fade out.
@@ -2494,14 +3083,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.ElasticEaseInOut = function (t) {
-            if (t == 0 || t == 0.5 || t == 1)
-                return t;
-            if (t < 0.5) {
-                return -(Math.pow(2, 10 * (t - 1)) * Math.sin((t - 1.075) * 2 * Math.PI / 0.3));
-            }
-            return (Math.pow(2, 10 * -(t - 0.5) * 2) * Math.sin((-(t - 0.5) * 2 - 0.075) * 2 * Math.PI / 0.3)) * 0.5 + 1;
-        };
+        Ease.ElasticEaseInOut = "ElasticEaseInOut";
         /**
          * @language en_US
          * Exponential Decay curve fade out and fade in.
@@ -2514,14 +3096,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.ElasticEaseOutIn = function (t) {
-            if (t == 0 || t == 0.5 || t == 1)
-                return t;
-            if (t < 0.5) {
-                return (Math.pow(2, 20 * -t) * Math.sin((-t * 2 - 0.075) * 2 * Math.PI / 0.3)) * 0.5 + 0.5;
-            }
-            return -(Math.pow(2, 10 * ((t - 0.5) * 2 - 1)) * Math.sin(((t - 0.5) * 2 - 1.075) * 2 * Math.PI / 0.3)) * 0.5 + 0.5;
-        };
+        Ease.ElasticEaseOutIn = "ElasticEaseOutIn";
         /**
          * @language en_US
          * Circle curve fade in.
@@ -2534,18 +3109,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.BounceEaseIn = function (t) {
-            if (1 - t < (1 / 2.75)) {
-                return 1 - 7.5625 * (1 - t) * (1 - t);
-            }
-            else if (1 - t < (2 / 2.75)) {
-                return 1 - (7.5625 * ((1 - t) - (1.5 / 2.75)) * ((1 - t) - (1.5 / 2.75)) + .75);
-            }
-            else if (1 - t < (2.5 / 2.75)) {
-                return 1 - (7.5625 * ((1 - t) - (2.25 / 2.75)) * ((1 - t) - (2.25 / 2.75)) + .9375);
-            }
-            return 1 - (7.5625 * ((1 - t) - (2.625 / 2.75)) * ((1 - t) - (2.625 / 2.75)) + .984375);
-        };
+        Ease.BounceEaseIn = "BounceEaseIn";
         /**
          * @language en_US
          * Circle curve fade out.
@@ -2558,18 +3122,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.BounceEaseOut = function (t) {
-            if (t < (1 / 2.75)) {
-                return 7.5625 * t * t;
-            }
-            else if (t < (2 / 2.75)) {
-                return (7.5625 * (t - (1.5 / 2.75)) * (t - (1.5 / 2.75)) + .75);
-            }
-            else if (t < (2.5 / 2.75)) {
-                return (7.5625 * (t - (2.25 / 2.75)) * (t - (2.25 / 2.75)) + .9375);
-            }
-            return (7.5625 * (t - (2.625 / 2.75)) * (t - (2.625 / 2.75)) + .984375);
-        };
+        Ease.BounceEaseOut = "BounceEaseOut";
         /**
          * @language en_US
          * Circle curve fade in and fade out.
@@ -2582,37 +3135,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.BounceEaseInOut = function (t) {
-            if (t < 0.5) {
-                if (1 - t * 2 < (1 / 2.75)) {
-                    return 0.5 - 7.5625 * (1 - t * 2) * (0.5 - t);
-                }
-                else if (1 - t * 2 < (2 / 2.75)) {
-                    return 0.5 - 0.5 * (7.5625 * ((1 - t * 2) - (1.5 / 2.75)) * ((1 - t * 2) - (1.5 / 2.75)) + .75);
-                }
-                else if (1 - t * 2 < (2.5 / 2.75)) {
-                    return 0.5 - 0.5 * (7.5625 * ((1 - t * 2) - (2.25 / 2.75)) * ((1 - t * 2) - (2.25 / 2.75)) + .9375);
-                }
-                else {
-                    return 0.5 - 0.5 * (7.5625 * ((1 - t * 2) - (2.625 / 2.75)) * ((1 - t * 2) - (2.625 / 2.75)) + .984375);
-                }
-            }
-            else {
-                if ((t - 0.5) * 2 < (1 / 2.75)) {
-                    return 7.5625 * (t - 0.5) * (t - 0.5) * 2 + 0.5;
-                }
-                else if ((t - 0.5) * 2 < (2 / 2.75)) {
-                    return (7.5625 * ((t - 0.5) * 2 - (1.5 / 2.75)) * ((t - 0.5) * 2 - (1.5 / 2.75)) + .75) * 0.5 + 0.5;
-                }
-                else if ((t - 0.5) * 2 < (2.5 / 2.75)) {
-                    return (7.5625 * ((t - 0.5) * 2 - (2.25 / 2.75)) * ((t - 0.5) * 2 - (2.25 / 2.75)) + .9375) * 0.5 + 0.5;
-                }
-                else {
-                    return (7.5625 * ((t - 0.5) * 2 - (2.625 / 2.75)) * ((t - 0.5) * 2 - (2.625 / 2.75)) + .984375) * 0.5 + 0.5;
-                }
-            }
-            return 0;
-        };
+        Ease.BounceEaseInOut = "BounceEaseInOut";
         /**
          * @language en_US
          * Circle curve fade out and fade in.
@@ -2625,37 +3148,7 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        Ease.BounceEaseOutIn = function (t) {
-            if (t < 0.5) {
-                if (t * 2 < (1 / 2.75)) {
-                    return 7.5625 * t * t * 2;
-                }
-                else if (t * 2 < (2 / 2.75)) {
-                    return (7.5625 * (t * 2 - (1.5 / 2.75)) * (t * 2 - (1.5 / 2.75)) + .75) * 0.5;
-                }
-                else if (t * 2 < (2.5 / 2.75)) {
-                    return (7.5625 * (t * 2 - (2.25 / 2.75)) * (t * 2 - (2.25 / 2.75)) + .9375) * 0.5;
-                }
-                else {
-                    return (7.5625 * (t * 2 - (2.625 / 2.75)) * (t * 2 - (2.625 / 2.75)) + .984375) * 0.5;
-                }
-            }
-            else {
-                if (1 - (t - 0.5) * 2 < (1 / 2.75)) {
-                    return 1 - 7.5625 * (1 - (t - 0.5) * 2) * (1 - (t - 0.5) * 2) * 0.5;
-                }
-                else if (1 - (t - 0.5) * 2 < (2 / 2.75)) {
-                    return 1 - (7.5625 * ((1 - (t - 0.5) * 2) - (1.5 / 2.75)) * ((1 - (t - 0.5) * 2) - (1.5 / 2.75)) + .75) * 0.5;
-                }
-                else if (1 - (t - 0.5) * 2 < (2.5 / 2.75)) {
-                    return 1 - (7.5625 * ((1 - (t - 0.5) * 2) - (2.25 / 2.75)) * ((1 - (t - 0.5) * 2) - (2.25 / 2.75)) + .9375) * 0.5;
-                }
-                else {
-                    return 1 - (7.5625 * ((1 - (t - 0.5) * 2) - (2.625 / 2.75)) * ((1 - (t - 0.5) * 2) - (2.625 / 2.75)) + .984375) * 0.5;
-                }
-            }
-            return 0;
-        };
+        Ease.BounceEaseOutIn = "BounceEaseOutIn";
         return Ease;
     })();
     lark.Ease = Ease;
@@ -6663,6 +7156,11 @@ var lark;
                 return this._tween;
             }
         );
+        d(p, "attributes",undefined
+            ,function (atrs) {
+                this._attributes = atrs;
+            }
+        );
         /**
          * @language en_US
          * Tween ready. Measurement start value of the property.
@@ -6675,14 +7173,14 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        p.ready = function () {
-            var host = this._tween.host;
+        p.onReady = function () {
+            var target = this._tween.target;
             var startAttributes = {};
             var keys = this.keys;
             var length = keys.length;
             for (var i = 0; i < length; i++) {
                 var key = keys[i];
-                startAttributes[key] = host[key];
+                startAttributes[key] = target[key];
             }
             this.startAttributes = startAttributes;
         };
@@ -6706,63 +7204,6 @@ var lark;
     })(lark.LarkObject);
     lark.BaseTransformation = BaseTransformation;
     lark.registerClass(BaseTransformation,"lark.BaseTransformation");
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @language en_US
-     * MotionEvent represents the device's movement
-     * Acceleration and accelerationIncludingGravity to represents the device's acceleration
-     * RotationRate to represents the device's rotation
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * MotionEvent 类呈现设备运动的具体信息
-     * Acceleration 和 accelerationIncludingGravity 呈现设备三个维度的加速度信息
-     * RotationRate 呈现设备的旋转状态信息
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var MotionEvent = (function (_super) {
-        __extends(MotionEvent, _super);
-        function MotionEvent() {
-            _super.apply(this, arguments);
-        }
-        var d = __define,c=MotionEvent;p=c.prototype;
-        return MotionEvent;
-    })(lark.Event);
-    lark.MotionEvent = MotionEvent;
-    lark.registerClass(MotionEvent,"lark.MotionEvent");
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -7264,218 +7705,30 @@ var lark;
 (function (lark) {
     /**
      * @language en_US
-     * The Timer class is the interface to timers, which let you run code on a specified time sequence. Use the start()
-     * method to start a timer. Add an event listener for the timer event to set up code to be run on the timer interval.<br/>
-     * You can create Timer objects to run once or repeat at specified intervals to execute code on a schedule. Depending
-     * on the framerate or the runtime environment (available memory and other factors), the runtime may emit events at
-     * slightly offset intervals.
-     * @see lark.TimerEvent
+     * MotionEvent represents the device's movement
+     * Acceleration and accelerationIncludingGravity to represents the device's acceleration
+     * RotationRate to represents the device's rotation
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/utils/TimerExample.ts
      */
     /**
      * @language zh_CN
-     * Timer 类是计时器的接口，它使您能按指定的时间序列运行代码。
-     * 使用 start() 方法来启动计时器。为 timer 事件添加事件侦听器，以便将代码设置为按计时器间隔运行。
-     * 可以创建 Timer 对象以运行一次或按指定间隔重复运行，从而按计划执行代码。
-     * 根据 Lark 的帧速率或运行时环境（可用内存和其他因素），运行时调度事件的间隔可能稍有不同。
-     * @see lark.TimerEvent
+     * MotionEvent 类呈现设备运动的具体信息
+     * Acceleration 和 accelerationIncludingGravity 呈现设备三个维度的加速度信息
+     * RotationRate 呈现设备的旋转状态信息
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/utils/TimerExample.ts
      */
-    var Timer = (function (_super) {
-        __extends(Timer, _super);
-        /**
-         * @language en_US
-         * Constructs a new Timer object with the specified delay and repeatCount states.
-         * @param delay The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.
-         * Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
-         * @param repeatCount Specifies the number of repetitions. If zero, the timer repeats indefinitely.If nonzero,
-         * the timer runs the specified number of times and then stops.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 使用指定的 delay 和 repeatCount 状态构造新的 Timer 对象。
-         * @param delay 计时器事件间的延迟（以毫秒为单位）。建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
-         * @param repeatCount 指定重复次数。如果为零，则计时器将持续不断重复运行。如果不为 0，则将运行计时器，运行次数为指定的次数，然后停止。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        function Timer(delay, repeatCount) {
-            if (repeatCount === void 0) { repeatCount = 0; }
-            _super.call(this);
-            /**
-             * @private
-             */
-            this._delay = 0;
-            /**
-             * @private
-             */
-            this._currentCount = 0;
-            /**
-             * @private
-             */
-            this._running = false;
-            /**
-             * @private
-             */
-            this.updateInterval = 1000;
-            /**
-             * @private
-             */
-            this.lastCount = 1000;
-            this.delay = delay;
-            this.repeatCount = +repeatCount | 0;
+    var MotionEvent = (function (_super) {
+        __extends(MotionEvent, _super);
+        function MotionEvent() {
+            _super.apply(this, arguments);
         }
-        var d = __define,c=Timer;p=c.prototype;
-        d(p, "delay"
-            /**
-             * @language en_US
-             * The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.<br/>
-             * Note: Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 计时器事件间的延迟（以毫秒为单位）。如果在计时器正在运行时设置延迟间隔，则计时器将按相同的 repeatCount 迭代重新启动。<br/>
-             * 注意：建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            ,function () {
-                return this._delay;
-            }
-            ,function (value) {
-                value = +value || 0;
-                if (value < 1) {
-                    value = 1;
-                }
-                if (this._delay === value) {
-                    return;
-                }
-                this._delay = value;
-                this.lastCount = this.updateInterval = Math.round(60 * value);
-            }
-        );
-        d(p, "currentCount"
-            /**
-             * @language en_US
-             * The total number of times the timer has fired since it started at zero. If the timer has been reset, only the fires since the reset are counted.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 计时器从 0 开始后触发的总次数。如果已重置了计时器，则只会计入重置后的触发次数。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            ,function () {
-                return this._currentCount;
-            }
-        );
-        d(p, "running"
-            /**
-             * @language en_US
-             * The timer's current state; true if the timer is running, otherwise false.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 计时器的当前状态；如果计时器正在运行，则为 true，否则为 false。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            ,function () {
-                return this._running;
-            }
-        );
-        /**
-         * @language en_US
-         * Stops the timer, if it is running, and sets the currentCount property back to 0, like the reset button of a stopwatch.
-         * Then, when start() is called, the timer instance runs for the specified number of repetitions, as set by the repeatCount value.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果计时器正在运行，则停止计时器，并将 currentCount 属性设回为 0，这类似于秒表的重置按钮。然后，在调用 start() 后，将运行计时器实例，运行次数为指定的重复次数（由 repeatCount 值设置）。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.reset = function () {
-            this.stop();
-            this._currentCount = 0;
-        };
-        /**
-         * @language en_US
-         * Starts the timer, if it is not already running.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果计时器尚未运行，则启动计时器。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.start = function () {
-            if (this._running)
-                return;
-            lark.startTick(this.$update, this);
-            this._running = true;
-        };
-        /**
-         * @language en_US
-         * Stops the timer. When start() is called after stop(), the timer instance runs for the remaining number of
-         * repetitions, as set by the repeatCount property.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 停止计时器。如果在调用 stop() 后调用 start()，则将继续运行计时器实例，运行次数为剩余的 重复次数（由 repeatCount 属性设置）。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.stop = function () {
-            if (!this._running)
-                return;
-            lark.stopTick(this.$update, this);
-            this._running = false;
-        };
-        /**
-         * @private
-         * Ticker以60FPS频率刷新此方法
-         */
-        p.$update = function (timeStamp) {
-            this.lastCount -= 1000;
-            if (this.lastCount > 0) {
-                return;
-            }
-            this.lastCount += this.updateInterval;
-            this._currentCount++;
-            var complete = (this.repeatCount > 0 && this._currentCount >= this.repeatCount);
-            lark.TimerEvent.emitTimerEvent(this, lark.TimerEvent.TIMER);
-            if (complete) {
-                this.stop();
-                lark.TimerEvent.emitTimerEvent(this, lark.TimerEvent.TIMER_COMPLETE);
-            }
-        };
-        return Timer;
-    })(lark.EventEmitter);
-    lark.Timer = Timer;
-    lark.registerClass(Timer,"lark.Timer");
-    if (DEBUG) {
-        lark.$markReadOnly(Timer, "currentCount");
-        lark.$markReadOnly(Timer, "running");
-    }
+        var d = __define,c=MotionEvent;p=c.prototype;
+        return MotionEvent;
+    })(lark.Event);
+    lark.MotionEvent = MotionEvent;
+    lark.registerClass(MotionEvent,"lark.MotionEvent");
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -7936,603 +8189,220 @@ var lark;
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
-    var PI = Math.PI;
-    var HalfPI = PI / 2;
-    var PacPI = PI + HalfPI;
-    var TwoPI = PI * 2;
-    /**
-     * @private
-     */
-    function cos(angle) {
-        switch (angle) {
-            case HalfPI:
-            case -PacPI:
-                return 0;
-            case PI:
-            case -PI:
-                return -1;
-            case PacPI:
-            case -HalfPI:
-                return 0;
-            default:
-                return Math.cos(angle);
-        }
-    }
-    /**
-     * @private
-     */
-    function sin(angle) {
-        switch (angle) {
-            case HalfPI:
-            case -PacPI:
-                return 1;
-            case PI:
-            case -PI:
-                return 0;
-            case PacPI:
-            case -HalfPI:
-                return -1;
-            default:
-                return Math.sin(angle);
-        }
-    }
-    var matrixPool = [];
     /**
      * @language en_US
-     * The Matrix class represents a transformation matrix that determines how to map points from one coordinate space to
-     * another. You can perform various graphical transformations on a display object by setting the properties of a Matrix
-     * object, applying that Matrix object to the matrix property of a display object, These transformation functions include
-     * translation (x and y repositioning), rotation, scaling, and skewing.
+     * The Timer class is the interface to timers, which let you run code on a specified time sequence. Use the start()
+     * method to start a timer. Add an event listener for the timer event to set up code to be run on the timer interval.<br/>
+     * You can create Timer objects to run once or repeat at specified intervals to execute code on a schedule. Depending
+     * on the framerate or the runtime environment (available memory and other factors), the runtime may emit events at
+     * slightly offset intervals.
+     * @see lark.TimerEvent
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/utils/TimerExample.ts
      */
     /**
      * @language zh_CN
-     * Matrix 类表示一个转换矩阵，它确定如何将点从一个坐标空间映射到另一个坐标空间。
-     * 您可以对一个显示对象执行不同的图形转换，方法是设置 Matrix 对象的属性，将该 Matrix
-     * 对象应用于显示对象的 matrix 属性。这些转换函数包括平移（x 和 y 重新定位）、旋转、缩放和倾斜。
+     * Timer 类是计时器的接口，它使您能按指定的时间序列运行代码。
+     * 使用 start() 方法来启动计时器。为 timer 事件添加事件侦听器，以便将代码设置为按计时器间隔运行。
+     * 可以创建 Timer 对象以运行一次或按指定间隔重复运行，从而按计划执行代码。
+     * 根据 Lark 的帧速率或运行时环境（可用内存和其他因素），运行时调度事件的间隔可能稍有不同。
+     * @see lark.TimerEvent
      * @version Lark 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/utils/TimerExample.ts
      */
-    var Matrix = (function (_super) {
-        __extends(Matrix, _super);
+    var Timer = (function (_super) {
+        __extends(Timer, _super);
         /**
          * @language en_US
-         * Creates a new Matrix object with the specified parameters.
-         * @param a The value that affects the positioning of pixels along the x axis when scaling or rotating an image.
-         * @param b The value that affects the positioning of pixels along the y axis when rotating or skewing an image.
-         * @param c The value that affects the positioning of pixels along the x axis when rotating or skewing an image.
-         * @param d The value that affects the positioning of pixels along the y axis when scaling or rotating an image..
-         * @param tx The distance by which to translate each point along the x axis.
-         * @param ty The distance by which to translate each point along the y axis.
+         * Constructs a new Timer object with the specified delay and repeatCount states.
+         * @param delay The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.
+         * Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
+         * @param repeatCount Specifies the number of repetitions. If zero, the timer repeats indefinitely.If nonzero,
+         * the timer runs the specified number of times and then stops.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 使用指定参数创建一个 Matrix 对象
-         * @param a 缩放或旋转图像时影响像素沿 x 轴定位的值。
-         * @param b 旋转或倾斜图像时影响像素沿 y 轴定位的值。
-         * @param c 旋转或倾斜图像时影响像素沿 x 轴定位的值。
-         * @param d 缩放或旋转图像时影响像素沿 y 轴定位的值。
-         * @param tx 沿 x 轴平移每个点的距离。
-         * @param ty 沿 y 轴平移每个点的距离。
+         * 使用指定的 delay 和 repeatCount 状态构造新的 Timer 对象。
+         * @param delay 计时器事件间的延迟（以毫秒为单位）。建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
+         * @param repeatCount 指定重复次数。如果为零，则计时器将持续不断重复运行。如果不为 0，则将运行计时器，运行次数为指定的次数，然后停止。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        function Matrix(a, b, c, d, tx, ty) {
-            if (a === void 0) { a = 1; }
-            if (b === void 0) { b = 0; }
-            if (c === void 0) { c = 0; }
-            if (d === void 0) { d = 1; }
-            if (tx === void 0) { tx = 0; }
-            if (ty === void 0) { ty = 0; }
+        function Timer(delay, repeatCount) {
+            if (repeatCount === void 0) { repeatCount = 0; }
             _super.call(this);
-            this.a = a;
-            this.b = b;
-            this.c = c;
-            this.d = d;
-            this.tx = tx;
-            this.ty = ty;
+            /**
+             * @private
+             */
+            this._delay = 0;
+            /**
+             * @private
+             */
+            this._currentCount = 0;
+            /**
+             * @private
+             */
+            this._running = false;
+            /**
+             * @private
+             */
+            this.updateInterval = 1000;
+            /**
+             * @private
+             */
+            this.lastCount = 1000;
+            this.delay = delay;
+            this.repeatCount = +repeatCount | 0;
         }
-        var d = __define,c=Matrix;p=c.prototype;
-        /**
-         * @language en_US
-         * Releases a matrix instance to the object pool
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 释放一个Matrix实例到对象池
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Matrix.release = function (matrix) {
-            if (!matrix) {
-                return;
+        var d = __define,c=Timer;p=c.prototype;
+        d(p, "delay"
+            /**
+             * @language en_US
+             * The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.<br/>
+             * Note: Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 计时器事件间的延迟（以毫秒为单位）。如果在计时器正在运行时设置延迟间隔，则计时器将按相同的 repeatCount 迭代重新启动。<br/>
+             * 注意：建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this._delay;
             }
-            matrixPool.push(matrix);
-        };
-        /**
-         * @language en_US
-         * get a matrix instance from the object pool or create a new one.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 从对象池中取出或创建一个新的Matrix对象。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Matrix.create = function () {
-            var matrix = matrixPool.pop();
-            if (!matrix) {
-                matrix = new Matrix();
-            }
-            return matrix;
-        };
-        /**
-         * @language en_US
-         * Returns a new Matrix object that is a clone of this matrix, with an exact copy of the contained object.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回一个新的 Matrix 对象，它是此矩阵的克隆，带有与所含对象完全相同的副本。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.clone = function () {
-            return new Matrix(this.a, this.b, this.c, this.d, this.tx, this.ty);
-        };
-        /**
-         * @language en_US
-         * Concatenates a matrix with the current matrix, effectively combining the geometric effects of the two. In mathematical
-         * terms, concatenating two matrixes is the same as combining them using matrix multiplication.
-         * @param other The matrix to be concatenated to the source matrix.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将某个矩阵与当前矩阵连接，从而将这两个矩阵的几何效果有效地结合在一起。在数学术语中，将两个矩阵连接起来与使用矩阵乘法将它们结合起来是相同的。
-         * @param other 要连接到源矩阵的矩阵。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.concat = function (other) {
-            var a = this.a * other.a;
-            var b = 0.0;
-            var c = 0.0;
-            var d = this.d * other.d;
-            var tx = this.tx * other.a + other.tx;
-            var ty = this.ty * other.d + other.ty;
-            if (this.b !== 0.0 || this.c !== 0.0 || other.b !== 0.0 || other.c !== 0.0) {
-                a += this.b * other.c;
-                d += this.c * other.b;
-                b += this.a * other.b + this.b * other.d;
-                c += this.c * other.a + this.d * other.c;
-                tx += this.ty * other.c;
-                ty += this.tx * other.b;
-            }
-            this.a = a;
-            this.b = b;
-            this.c = c;
-            this.d = d;
-            this.tx = tx;
-            this.ty = ty;
-        };
-        /**
-         * @language en_US
-         * Copies all of the matrix data from the source Point object into the calling Matrix object.
-         * @param other  The Matrix object from which to copy the data.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将源 Matrix 对象中的所有矩阵数据复制到调用方 Matrix 对象中。
-         * @param other 要拷贝的目标矩阵
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.copyFrom = function (other) {
-            this.a = other.a;
-            this.b = other.b;
-            this.c = other.c;
-            this.d = other.d;
-            this.tx = other.tx;
-            this.ty = other.ty;
-            return this;
-        };
-        /**
-         * @language en_US
-         * Sets each matrix property to a value that causes a null transformation. An object transformed by applying an
-         * identity matrix will be identical to the original. After calling the identity() method, the resulting matrix
-         * has the following properties: a=1, b=0, c=0, d=1, tx=0, ty=0.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 为每个矩阵属性设置一个值，该值将导致矩阵无转换。通过应用恒等矩阵转换的对象将与原始对象完全相同。
-         * 调用 identity() 方法后，生成的矩阵具有以下属性：a=1、b=0、c=0、d=1、tx=0 和 ty=0。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.identity = function () {
-            this.a = this.d = 1;
-            this.b = this.c = this.tx = this.ty = 0;
-        };
-        /**
-         * @language en_US
-         * Performs the opposite transformation of the original matrix. You can apply an inverted matrix to an object to
-         * undo the transformation performed when applying the original matrix.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 执行原始矩阵的逆转换。
-         * 您可以将一个逆矩阵应用于对象来撤消在应用原始矩阵时执行的转换。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.invert = function () {
-            this.$invertInto(this);
-        };
-        /**
-         * @private
-         */
-        p.$invertInto = function (target) {
-            var a = this.a;
-            var b = this.b;
-            var c = this.c;
-            var d = this.d;
-            var tx = this.tx;
-            var ty = this.ty;
-            if (b === 0 && c === 0) {
-                target.b = target.c = 0;
-                if (a === 0 || d === 0) {
-                    target.a = target.d = target.tx = target.ty = 0;
+            ,function (value) {
+                value = +value || 0;
+                if (value < 1) {
+                    value = 1;
                 }
-                else {
-                    a = target.a = 1 / a;
-                    d = target.d = 1 / d;
-                    target.tx = -a * tx;
-                    target.ty = -d * ty;
+                if (this._delay === value) {
+                    return;
                 }
+                this._delay = value;
+                this.lastCount = this.updateInterval = Math.round(60 * value);
+            }
+        );
+        d(p, "currentCount"
+            /**
+             * @language en_US
+             * The total number of times the timer has fired since it started at zero. If the timer has been reset, only the fires since the reset are counted.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 计时器从 0 开始后触发的总次数。如果已重置了计时器，则只会计入重置后的触发次数。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this._currentCount;
+            }
+        );
+        d(p, "running"
+            /**
+             * @language en_US
+             * The timer's current state; true if the timer is running, otherwise false.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 计时器的当前状态；如果计时器正在运行，则为 true，否则为 false。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this._running;
+            }
+        );
+        /**
+         * @language en_US
+         * Stops the timer, if it is running, and sets the currentCount property back to 0, like the reset button of a stopwatch.
+         * Then, when start() is called, the timer instance runs for the specified number of repetitions, as set by the repeatCount value.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果计时器正在运行，则停止计时器，并将 currentCount 属性设回为 0，这类似于秒表的重置按钮。然后，在调用 start() 后，将运行计时器实例，运行次数为指定的重复次数（由 repeatCount 值设置）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.reset = function () {
+            this.stop();
+            this._currentCount = 0;
+        };
+        /**
+         * @language en_US
+         * Starts the timer, if it is not already running.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果计时器尚未运行，则启动计时器。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.start = function () {
+            if (this._running)
+                return;
+            lark.startTick(this.$update, this);
+            this._running = true;
+        };
+        /**
+         * @language en_US
+         * Stops the timer. When start() is called after stop(), the timer instance runs for the remaining number of
+         * repetitions, as set by the repeatCount property.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 停止计时器。如果在调用 stop() 后调用 start()，则将继续运行计时器实例，运行次数为剩余的 重复次数（由 repeatCount 属性设置）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.stop = function () {
+            if (!this._running)
+                return;
+            lark.stopTick(this.$update, this);
+            this._running = false;
+        };
+        /**
+         * @private
+         * Ticker以60FPS频率刷新此方法
+         */
+        p.$update = function (timeStamp) {
+            this.lastCount -= 1000;
+            if (this.lastCount > 0) {
                 return;
             }
-            var determinant = a * d - b * c;
-            if (determinant === 0) {
-                target.identity();
-                return;
-            }
-            determinant = 1 / determinant;
-            var k = target.a = d * determinant;
-            b = target.b = -b * determinant;
-            c = target.c = -c * determinant;
-            d = target.d = a * determinant;
-            target.tx = -(k * tx + c * ty);
-            target.ty = -(b * tx + d * ty);
-        };
-        /**
-         * @language en_US
-         * Applies a rotation transformation to the Matrix object.
-         * The rotate() method alters the a, b, c, and d properties of the Matrix object.
-         * @param angle The rotation angle in radians.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 对 Matrix 对象应用旋转转换。
-         * rotate() 方法将更改 Matrix 对象的 a、b、c 和 d 属性。
-         * @param angle 以弧度为单位的旋转角度。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.rotate = function (angle) {
-            angle = +angle;
-            if (angle !== 0) {
-                var u = cos(angle);
-                var v = sin(angle);
-                var ta = this.a;
-                var tb = this.b;
-                var tc = this.c;
-                var td = this.d;
-                var ttx = this.tx;
-                var tty = this.ty;
-                this.a = ta * u - tb * v;
-                this.b = ta * v + tb * u;
-                this.c = tc * u - td * v;
-                this.d = tc * v + td * u;
-                this.tx = ttx * u - tty * v;
-                this.ty = ttx * v + tty * u;
+            this.lastCount += this.updateInterval;
+            this._currentCount++;
+            var complete = (this.repeatCount > 0 && this._currentCount >= this.repeatCount);
+            lark.TimerEvent.emitTimerEvent(this, lark.TimerEvent.TIMER);
+            if (complete) {
+                this.stop();
+                lark.TimerEvent.emitTimerEvent(this, lark.TimerEvent.TIMER_COMPLETE);
             }
         };
-        /**
-         * @language en_US
-         * Applies a scaling transformation to the matrix. The x axis is multiplied by sx, and the y axis it is multiplied by sy.
-         * The scale() method alters the a and d properties of the Matrix object.
-         * @param sx A multiplier used to scale the object along the x axis.
-         * @param sy A multiplier used to scale the object along the y axis.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 对矩阵应用缩放转换。x 轴乘以 sx，y 轴乘以 sy。
-         * scale() 方法将更改 Matrix 对象的 a 和 d 属性。
-         * @param sx 用于沿 x 轴缩放对象的乘数。
-         * @param sy 用于沿 y 轴缩放对象的乘数。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.scale = function (sx, sy) {
-            if (sx !== 1) {
-                this.a *= sx;
-                this.c *= sx;
-                this.tx *= sx;
-            }
-            if (sy !== 1) {
-                this.b *= sy;
-                this.d *= sy;
-                this.ty *= sy;
-            }
-        };
-        /**
-         * @language en_US
-         * Sets the members of Matrix to the specified values
-         * @param a The value that affects the positioning of pixels along the x axis when scaling or rotating an image.
-         * @param b The value that affects the positioning of pixels along the y axis when rotating or skewing an image.
-         * @param c The value that affects the positioning of pixels along the x axis when rotating or skewing an image.
-         * @param d The value that affects the positioning of pixels along the y axis when scaling or rotating an image..
-         * @param tx The distance by which to translate each point along the x axis.
-         * @param ty The distance by which to translate each point along the y axis.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将 Matrix 的成员设置为指定值
-         * @param a 缩放或旋转图像时影响像素沿 x 轴定位的值。
-         * @param b 旋转或倾斜图像时影响像素沿 y 轴定位的值。
-         * @param c 旋转或倾斜图像时影响像素沿 x 轴定位的值。
-         * @param d 缩放或旋转图像时影响像素沿 y 轴定位的值。
-         * @param tx 沿 x 轴平移每个点的距离。
-         * @param ty 沿 y 轴平移每个点的距离。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.setTo = function (a, b, c, d, tx, ty) {
-            this.a = a;
-            this.b = b;
-            this.c = c;
-            this.d = d;
-            this.tx = tx;
-            this.ty = ty;
-            return this;
-        };
-        /**
-         * @language en_US
-         * Returns the result of applying the geometric transformation represented by the Matrix object to the specified point.
-         * @param pointX The x coordinate for which you want to get the result of the Matrix transformation.
-         * @param pointY The y coordinate for which you want to get the result of the Matrix transformation.
-         * @param resultPoint A reusable instance of Point for saving the results. Passing this parameter can reduce the
-         * number of reallocate objects, which allows you to get better code execution performance.
-         * @returns The point resulting from applying the Matrix transformation.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回将 Matrix 对象表示的几何转换应用于指定点所产生的结果。
-         * @param pointX 想要获得其矩阵转换结果的点的x坐标。
-         * @param pointY 想要获得其矩阵转换结果的点的y坐标。
-         * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，若不传入将创建一个新的Point对象返回。
-         * @returns 由应用矩阵转换所产生的点。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.transformPoint = function (pointX, pointY, resultPoint) {
-            var x = this.a * pointX + this.c * pointY + this.tx;
-            var y = this.b * pointX + this.d * pointY + this.ty;
-            if (resultPoint) {
-                resultPoint.setTo(x, y);
-                return resultPoint;
-            }
-            return new lark.Point(x, y);
-        };
-        /**
-         * @language en_US
-         * Translates the matrix along the x and y axes, as specified by the dx and dy parameters.
-         * @param dx The amount of movement along the x axis to the right, in pixels.
-         * @param dy The amount of movement down along the y axis, in pixels.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 沿 x 和 y 轴平移矩阵，由 dx 和 dy 参数指定。
-         * @param dx 沿 x 轴向右移动的量（以像素为单位）。
-         * @param dy 沿 y 轴向下移动的量（以像素为单位）。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.translate = function (dx, dy) {
-            this.tx += dx;
-            this.ty += dy;
-        };
-        /**
-         * @language en_US
-         * Determines whether two matrixes are equal.
-         * @param other The matrix to be compared.
-         * @returns A value of true if the object is equal to this Matrix object; false if it is not equal.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 是否与另一个矩阵数据相等
-         * @param other 要比较的另一个矩阵对象。
-         * @returns 是否相等，ture表示相等。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.equals = function (other) {
-            return this.a === other.a && this.b === other.b && this.c === other.c && this.d === other.d && this.tx === other.tx && this.ty === other.ty;
-        };
-        /**
-         * @private
-         */
-        p.$transformBounds = function (bounds) {
-            var a = this.a;
-            var b = this.b;
-            var c = this.c;
-            var d = this.d;
-            var tx = this.tx;
-            var ty = this.ty;
-            var x = bounds.x;
-            var y = bounds.y;
-            var xMax = x + bounds.width;
-            var yMax = y + bounds.height;
-            var x0 = a * x + c * y + tx;
-            var y0 = b * x + d * y + ty;
-            var x1 = a * xMax + c * y + tx;
-            var y1 = b * xMax + d * y + ty;
-            var x2 = a * xMax + c * yMax + tx;
-            var y2 = b * xMax + d * yMax + ty;
-            var x3 = a * x + c * yMax + tx;
-            var y3 = b * x + d * yMax + ty;
-            var tmp = 0;
-            if (x0 > x1) {
-                tmp = x0;
-                x0 = x1;
-                x1 = tmp;
-            }
-            if (x2 > x3) {
-                tmp = x2;
-                x2 = x3;
-                x3 = tmp;
-            }
-            bounds.x = Math.floor(x0 < x2 ? x0 : x2);
-            bounds.width = Math.ceil((x1 > x3 ? x1 : x3) - bounds.x);
-            if (y0 > y1) {
-                tmp = y0;
-                y0 = y1;
-                y1 = tmp;
-            }
-            if (y2 > y3) {
-                tmp = y2;
-                y2 = y3;
-                y3 = tmp;
-            }
-            bounds.y = Math.floor(y0 < y2 ? y0 : y2);
-            bounds.height = Math.ceil((y1 > y3 ? y1 : y3) - bounds.y);
-        };
-        /**
-         * @private
-         */
-        p.getDeterminant = function () {
-            return this.a * this.d - this.b * this.c;
-        };
-        /**
-         * @private
-         */
-        p.$getScaleX = function () {
-            var m = this;
-            if (m.a === 1 && m.b === 0) {
-                return 1;
-            }
-            var result = Math.sqrt(m.a * m.a + m.b * m.b);
-            return this.getDeterminant() < 0 ? -result : result;
-        };
-        /**
-         * @private
-         */
-        p.$getScaleY = function () {
-            var m = this;
-            if (m.c === 0 && m.d === 1) {
-                return 1;
-            }
-            var result = Math.sqrt(m.c * m.c + m.d * m.d);
-            return this.getDeterminant() < 0 ? -result : result;
-        };
-        /**
-         * @private
-         */
-        p.$getSkewX = function () {
-            return Math.atan2(this.d, this.c) - (PI / 2);
-        };
-        /**
-         * @private
-         */
-        p.$getSkewY = function () {
-            return Math.atan2(this.b, this.a);
-        };
-        /**
-         * @private
-         */
-        p.$updateScaleAndRotation = function (scaleX, scaleY, skewX, skewY) {
-            if ((skewX === 0 || skewX === TwoPI) && (skewY === 0 || skewY === TwoPI)) {
-                this.a = scaleX;
-                this.b = this.c = 0;
-                this.d = scaleY;
-                return;
-            }
-            var u = cos(skewX);
-            var v = sin(skewX);
-            if (skewX === skewY) {
-                this.a = u * scaleX;
-                this.b = v * scaleX;
-            }
-            else {
-                this.a = cos(skewY) * scaleX;
-                this.b = sin(skewY) * scaleX;
-            }
-            this.c = -v * scaleY;
-            this.d = u * scaleY;
-        };
-        /**
-         * @private
-         * target = other * this
-         */
-        p.$preMultiplyInto = function (other, target) {
-            var a = other.a * this.a;
-            var b = 0.0;
-            var c = 0.0;
-            var d = other.d * this.d;
-            var tx = other.tx * this.a + this.tx;
-            var ty = other.ty * this.d + this.ty;
-            if (other.b !== 0.0 || other.c !== 0.0 || this.b !== 0.0 || this.c !== 0.0) {
-                a += other.b * this.c;
-                d += other.c * this.b;
-                b += other.a * this.b + other.b * this.d;
-                c += other.c * this.a + other.d * this.c;
-                tx += other.ty * this.c;
-                ty += other.tx * this.b;
-            }
-            target.a = a;
-            target.b = b;
-            target.c = c;
-            target.d = d;
-            target.tx = tx;
-            target.ty = ty;
-        };
-        return Matrix;
-    })(lark.LarkObject);
-    lark.Matrix = Matrix;
-    lark.registerClass(Matrix,"lark.Matrix");
-    /**
-     * @private
-     * 仅供框架内复用，要防止暴露引用到外部。
-     */
-    lark.$TempMatrix = new Matrix();
+        return Timer;
+    })(lark.EventEmitter);
+    lark.Timer = Timer;
+    lark.registerClass(Timer,"lark.Timer");
+    if (DEBUG) {
+        lark.$markReadOnly(Timer, "currentCount");
+        lark.$markReadOnly(Timer, "running");
+    }
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -10031,19 +9901,647 @@ var lark;
          * @platform Web,Native
          */
         p.update = function (value) {
-            var host = this._tween.host;
+            var target = this._tween.target;
             var keys = this.keys;
             var length = keys.length;
             var startAttributes = this.startAttributes;
             for (var i = 0; i < length; i++) {
                 var key = keys[i];
-                host[key] = (this._attributes[key] - startAttributes[key]) * value + startAttributes[key];
+                target[key] = (this._attributes[key] - startAttributes[key]) * value + startAttributes[key];
             }
         };
         return BasicTransformation;
     })(lark.BaseTransformation);
     lark.BasicTransformation = BasicTransformation;
     lark.registerClass(BasicTransformation,"lark.BasicTransformation");
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    var PI = Math.PI;
+    var HalfPI = PI / 2;
+    var PacPI = PI + HalfPI;
+    var TwoPI = PI * 2;
+    /**
+     * @private
+     */
+    function cos(angle) {
+        switch (angle) {
+            case HalfPI:
+            case -PacPI:
+                return 0;
+            case PI:
+            case -PI:
+                return -1;
+            case PacPI:
+            case -HalfPI:
+                return 0;
+            default:
+                return Math.cos(angle);
+        }
+    }
+    /**
+     * @private
+     */
+    function sin(angle) {
+        switch (angle) {
+            case HalfPI:
+            case -PacPI:
+                return 1;
+            case PI:
+            case -PI:
+                return 0;
+            case PacPI:
+            case -HalfPI:
+                return -1;
+            default:
+                return Math.sin(angle);
+        }
+    }
+    var matrixPool = [];
+    /**
+     * @language en_US
+     * The Matrix class represents a transformation matrix that determines how to map points from one coordinate space to
+     * another. You can perform various graphical transformations on a display object by setting the properties of a Matrix
+     * object, applying that Matrix object to the matrix property of a display object, These transformation functions include
+     * translation (x and y repositioning), rotation, scaling, and skewing.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Matrix 类表示一个转换矩阵，它确定如何将点从一个坐标空间映射到另一个坐标空间。
+     * 您可以对一个显示对象执行不同的图形转换，方法是设置 Matrix 对象的属性，将该 Matrix
+     * 对象应用于显示对象的 matrix 属性。这些转换函数包括平移（x 和 y 重新定位）、旋转、缩放和倾斜。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var Matrix = (function (_super) {
+        __extends(Matrix, _super);
+        /**
+         * @language en_US
+         * Creates a new Matrix object with the specified parameters.
+         * @param a The value that affects the positioning of pixels along the x axis when scaling or rotating an image.
+         * @param b The value that affects the positioning of pixels along the y axis when rotating or skewing an image.
+         * @param c The value that affects the positioning of pixels along the x axis when rotating or skewing an image.
+         * @param d The value that affects the positioning of pixels along the y axis when scaling or rotating an image..
+         * @param tx The distance by which to translate each point along the x axis.
+         * @param ty The distance by which to translate each point along the y axis.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 使用指定参数创建一个 Matrix 对象
+         * @param a 缩放或旋转图像时影响像素沿 x 轴定位的值。
+         * @param b 旋转或倾斜图像时影响像素沿 y 轴定位的值。
+         * @param c 旋转或倾斜图像时影响像素沿 x 轴定位的值。
+         * @param d 缩放或旋转图像时影响像素沿 y 轴定位的值。
+         * @param tx 沿 x 轴平移每个点的距离。
+         * @param ty 沿 y 轴平移每个点的距离。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function Matrix(a, b, c, d, tx, ty) {
+            if (a === void 0) { a = 1; }
+            if (b === void 0) { b = 0; }
+            if (c === void 0) { c = 0; }
+            if (d === void 0) { d = 1; }
+            if (tx === void 0) { tx = 0; }
+            if (ty === void 0) { ty = 0; }
+            _super.call(this);
+            this.a = a;
+            this.b = b;
+            this.c = c;
+            this.d = d;
+            this.tx = tx;
+            this.ty = ty;
+        }
+        var d = __define,c=Matrix;p=c.prototype;
+        /**
+         * @language en_US
+         * Releases a matrix instance to the object pool
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 释放一个Matrix实例到对象池
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Matrix.release = function (matrix) {
+            if (!matrix) {
+                return;
+            }
+            matrixPool.push(matrix);
+        };
+        /**
+         * @language en_US
+         * get a matrix instance from the object pool or create a new one.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从对象池中取出或创建一个新的Matrix对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Matrix.create = function () {
+            var matrix = matrixPool.pop();
+            if (!matrix) {
+                matrix = new Matrix();
+            }
+            return matrix;
+        };
+        /**
+         * @language en_US
+         * Returns a new Matrix object that is a clone of this matrix, with an exact copy of the contained object.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回一个新的 Matrix 对象，它是此矩阵的克隆，带有与所含对象完全相同的副本。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.clone = function () {
+            return new Matrix(this.a, this.b, this.c, this.d, this.tx, this.ty);
+        };
+        /**
+         * @language en_US
+         * Concatenates a matrix with the current matrix, effectively combining the geometric effects of the two. In mathematical
+         * terms, concatenating two matrixes is the same as combining them using matrix multiplication.
+         * @param other The matrix to be concatenated to the source matrix.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将某个矩阵与当前矩阵连接，从而将这两个矩阵的几何效果有效地结合在一起。在数学术语中，将两个矩阵连接起来与使用矩阵乘法将它们结合起来是相同的。
+         * @param other 要连接到源矩阵的矩阵。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.concat = function (other) {
+            var a = this.a * other.a;
+            var b = 0.0;
+            var c = 0.0;
+            var d = this.d * other.d;
+            var tx = this.tx * other.a + other.tx;
+            var ty = this.ty * other.d + other.ty;
+            if (this.b !== 0.0 || this.c !== 0.0 || other.b !== 0.0 || other.c !== 0.0) {
+                a += this.b * other.c;
+                d += this.c * other.b;
+                b += this.a * other.b + this.b * other.d;
+                c += this.c * other.a + this.d * other.c;
+                tx += this.ty * other.c;
+                ty += this.tx * other.b;
+            }
+            this.a = a;
+            this.b = b;
+            this.c = c;
+            this.d = d;
+            this.tx = tx;
+            this.ty = ty;
+        };
+        /**
+         * @language en_US
+         * Copies all of the matrix data from the source Point object into the calling Matrix object.
+         * @param other  The Matrix object from which to copy the data.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将源 Matrix 对象中的所有矩阵数据复制到调用方 Matrix 对象中。
+         * @param other 要拷贝的目标矩阵
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.copyFrom = function (other) {
+            this.a = other.a;
+            this.b = other.b;
+            this.c = other.c;
+            this.d = other.d;
+            this.tx = other.tx;
+            this.ty = other.ty;
+            return this;
+        };
+        /**
+         * @language en_US
+         * Sets each matrix property to a value that causes a null transformation. An object transformed by applying an
+         * identity matrix will be identical to the original. After calling the identity() method, the resulting matrix
+         * has the following properties: a=1, b=0, c=0, d=1, tx=0, ty=0.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 为每个矩阵属性设置一个值，该值将导致矩阵无转换。通过应用恒等矩阵转换的对象将与原始对象完全相同。
+         * 调用 identity() 方法后，生成的矩阵具有以下属性：a=1、b=0、c=0、d=1、tx=0 和 ty=0。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.identity = function () {
+            this.a = this.d = 1;
+            this.b = this.c = this.tx = this.ty = 0;
+        };
+        /**
+         * @language en_US
+         * Performs the opposite transformation of the original matrix. You can apply an inverted matrix to an object to
+         * undo the transformation performed when applying the original matrix.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 执行原始矩阵的逆转换。
+         * 您可以将一个逆矩阵应用于对象来撤消在应用原始矩阵时执行的转换。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.invert = function () {
+            this.$invertInto(this);
+        };
+        /**
+         * @private
+         */
+        p.$invertInto = function (target) {
+            var a = this.a;
+            var b = this.b;
+            var c = this.c;
+            var d = this.d;
+            var tx = this.tx;
+            var ty = this.ty;
+            if (b === 0 && c === 0) {
+                target.b = target.c = 0;
+                if (a === 0 || d === 0) {
+                    target.a = target.d = target.tx = target.ty = 0;
+                }
+                else {
+                    a = target.a = 1 / a;
+                    d = target.d = 1 / d;
+                    target.tx = -a * tx;
+                    target.ty = -d * ty;
+                }
+                return;
+            }
+            var determinant = a * d - b * c;
+            if (determinant === 0) {
+                target.identity();
+                return;
+            }
+            determinant = 1 / determinant;
+            var k = target.a = d * determinant;
+            b = target.b = -b * determinant;
+            c = target.c = -c * determinant;
+            d = target.d = a * determinant;
+            target.tx = -(k * tx + c * ty);
+            target.ty = -(b * tx + d * ty);
+        };
+        /**
+         * @language en_US
+         * Applies a rotation transformation to the Matrix object.
+         * The rotate() method alters the a, b, c, and d properties of the Matrix object.
+         * @param angle The rotation angle in radians.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 对 Matrix 对象应用旋转转换。
+         * rotate() 方法将更改 Matrix 对象的 a、b、c 和 d 属性。
+         * @param angle 以弧度为单位的旋转角度。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.rotate = function (angle) {
+            angle = +angle;
+            if (angle !== 0) {
+                var u = cos(angle);
+                var v = sin(angle);
+                var ta = this.a;
+                var tb = this.b;
+                var tc = this.c;
+                var td = this.d;
+                var ttx = this.tx;
+                var tty = this.ty;
+                this.a = ta * u - tb * v;
+                this.b = ta * v + tb * u;
+                this.c = tc * u - td * v;
+                this.d = tc * v + td * u;
+                this.tx = ttx * u - tty * v;
+                this.ty = ttx * v + tty * u;
+            }
+        };
+        /**
+         * @language en_US
+         * Applies a scaling transformation to the matrix. The x axis is multiplied by sx, and the y axis it is multiplied by sy.
+         * The scale() method alters the a and d properties of the Matrix object.
+         * @param sx A multiplier used to scale the object along the x axis.
+         * @param sy A multiplier used to scale the object along the y axis.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 对矩阵应用缩放转换。x 轴乘以 sx，y 轴乘以 sy。
+         * scale() 方法将更改 Matrix 对象的 a 和 d 属性。
+         * @param sx 用于沿 x 轴缩放对象的乘数。
+         * @param sy 用于沿 y 轴缩放对象的乘数。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.scale = function (sx, sy) {
+            if (sx !== 1) {
+                this.a *= sx;
+                this.c *= sx;
+                this.tx *= sx;
+            }
+            if (sy !== 1) {
+                this.b *= sy;
+                this.d *= sy;
+                this.ty *= sy;
+            }
+        };
+        /**
+         * @language en_US
+         * Sets the members of Matrix to the specified values
+         * @param a The value that affects the positioning of pixels along the x axis when scaling or rotating an image.
+         * @param b The value that affects the positioning of pixels along the y axis when rotating or skewing an image.
+         * @param c The value that affects the positioning of pixels along the x axis when rotating or skewing an image.
+         * @param d The value that affects the positioning of pixels along the y axis when scaling or rotating an image..
+         * @param tx The distance by which to translate each point along the x axis.
+         * @param ty The distance by which to translate each point along the y axis.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将 Matrix 的成员设置为指定值
+         * @param a 缩放或旋转图像时影响像素沿 x 轴定位的值。
+         * @param b 旋转或倾斜图像时影响像素沿 y 轴定位的值。
+         * @param c 旋转或倾斜图像时影响像素沿 x 轴定位的值。
+         * @param d 缩放或旋转图像时影响像素沿 y 轴定位的值。
+         * @param tx 沿 x 轴平移每个点的距离。
+         * @param ty 沿 y 轴平移每个点的距离。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.setTo = function (a, b, c, d, tx, ty) {
+            this.a = a;
+            this.b = b;
+            this.c = c;
+            this.d = d;
+            this.tx = tx;
+            this.ty = ty;
+            return this;
+        };
+        /**
+         * @language en_US
+         * Returns the result of applying the geometric transformation represented by the Matrix object to the specified point.
+         * @param pointX The x coordinate for which you want to get the result of the Matrix transformation.
+         * @param pointY The y coordinate for which you want to get the result of the Matrix transformation.
+         * @param resultPoint A reusable instance of Point for saving the results. Passing this parameter can reduce the
+         * number of reallocate objects, which allows you to get better code execution performance.
+         * @returns The point resulting from applying the Matrix transformation.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回将 Matrix 对象表示的几何转换应用于指定点所产生的结果。
+         * @param pointX 想要获得其矩阵转换结果的点的x坐标。
+         * @param pointY 想要获得其矩阵转换结果的点的y坐标。
+         * @param resultPoint 框架建议尽可能减少创建对象次数来优化性能，可以从外部传入一个复用的Point对象来存储结果，若不传入将创建一个新的Point对象返回。
+         * @returns 由应用矩阵转换所产生的点。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.transformPoint = function (pointX, pointY, resultPoint) {
+            var x = this.a * pointX + this.c * pointY + this.tx;
+            var y = this.b * pointX + this.d * pointY + this.ty;
+            if (resultPoint) {
+                resultPoint.setTo(x, y);
+                return resultPoint;
+            }
+            return new lark.Point(x, y);
+        };
+        /**
+         * @language en_US
+         * Translates the matrix along the x and y axes, as specified by the dx and dy parameters.
+         * @param dx The amount of movement along the x axis to the right, in pixels.
+         * @param dy The amount of movement down along the y axis, in pixels.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 沿 x 和 y 轴平移矩阵，由 dx 和 dy 参数指定。
+         * @param dx 沿 x 轴向右移动的量（以像素为单位）。
+         * @param dy 沿 y 轴向下移动的量（以像素为单位）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.translate = function (dx, dy) {
+            this.tx += dx;
+            this.ty += dy;
+        };
+        /**
+         * @language en_US
+         * Determines whether two matrixes are equal.
+         * @param other The matrix to be compared.
+         * @returns A value of true if the object is equal to this Matrix object; false if it is not equal.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 是否与另一个矩阵数据相等
+         * @param other 要比较的另一个矩阵对象。
+         * @returns 是否相等，ture表示相等。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.equals = function (other) {
+            return this.a === other.a && this.b === other.b && this.c === other.c && this.d === other.d && this.tx === other.tx && this.ty === other.ty;
+        };
+        /**
+         * @private
+         */
+        p.$transformBounds = function (bounds) {
+            var a = this.a;
+            var b = this.b;
+            var c = this.c;
+            var d = this.d;
+            var tx = this.tx;
+            var ty = this.ty;
+            var x = bounds.x;
+            var y = bounds.y;
+            var xMax = x + bounds.width;
+            var yMax = y + bounds.height;
+            var x0 = a * x + c * y + tx;
+            var y0 = b * x + d * y + ty;
+            var x1 = a * xMax + c * y + tx;
+            var y1 = b * xMax + d * y + ty;
+            var x2 = a * xMax + c * yMax + tx;
+            var y2 = b * xMax + d * yMax + ty;
+            var x3 = a * x + c * yMax + tx;
+            var y3 = b * x + d * yMax + ty;
+            var tmp = 0;
+            if (x0 > x1) {
+                tmp = x0;
+                x0 = x1;
+                x1 = tmp;
+            }
+            if (x2 > x3) {
+                tmp = x2;
+                x2 = x3;
+                x3 = tmp;
+            }
+            bounds.x = Math.floor(x0 < x2 ? x0 : x2);
+            bounds.width = Math.ceil((x1 > x3 ? x1 : x3) - bounds.x);
+            if (y0 > y1) {
+                tmp = y0;
+                y0 = y1;
+                y1 = tmp;
+            }
+            if (y2 > y3) {
+                tmp = y2;
+                y2 = y3;
+                y3 = tmp;
+            }
+            bounds.y = Math.floor(y0 < y2 ? y0 : y2);
+            bounds.height = Math.ceil((y1 > y3 ? y1 : y3) - bounds.y);
+        };
+        /**
+         * @private
+         */
+        p.getDeterminant = function () {
+            return this.a * this.d - this.b * this.c;
+        };
+        /**
+         * @private
+         */
+        p.$getScaleX = function () {
+            var m = this;
+            if (m.a === 1 && m.b === 0) {
+                return 1;
+            }
+            var result = Math.sqrt(m.a * m.a + m.b * m.b);
+            return this.getDeterminant() < 0 ? -result : result;
+        };
+        /**
+         * @private
+         */
+        p.$getScaleY = function () {
+            var m = this;
+            if (m.c === 0 && m.d === 1) {
+                return 1;
+            }
+            var result = Math.sqrt(m.c * m.c + m.d * m.d);
+            return this.getDeterminant() < 0 ? -result : result;
+        };
+        /**
+         * @private
+         */
+        p.$getSkewX = function () {
+            return Math.atan2(this.d, this.c) - (PI / 2);
+        };
+        /**
+         * @private
+         */
+        p.$getSkewY = function () {
+            return Math.atan2(this.b, this.a);
+        };
+        /**
+         * @private
+         */
+        p.$updateScaleAndRotation = function (scaleX, scaleY, skewX, skewY) {
+            if ((skewX === 0 || skewX === TwoPI) && (skewY === 0 || skewY === TwoPI)) {
+                this.a = scaleX;
+                this.b = this.c = 0;
+                this.d = scaleY;
+                return;
+            }
+            var u = cos(skewX);
+            var v = sin(skewX);
+            if (skewX === skewY) {
+                this.a = u * scaleX;
+                this.b = v * scaleX;
+            }
+            else {
+                this.a = cos(skewY) * scaleX;
+                this.b = sin(skewY) * scaleX;
+            }
+            this.c = -v * scaleY;
+            this.d = u * scaleY;
+        };
+        /**
+         * @private
+         * target = other * this
+         */
+        p.$preMultiplyInto = function (other, target) {
+            var a = other.a * this.a;
+            var b = 0.0;
+            var c = 0.0;
+            var d = other.d * this.d;
+            var tx = other.tx * this.a + this.tx;
+            var ty = other.ty * this.d + this.ty;
+            if (other.b !== 0.0 || other.c !== 0.0 || this.b !== 0.0 || this.c !== 0.0) {
+                a += other.b * this.c;
+                d += other.c * this.b;
+                b += other.a * this.b + other.b * this.d;
+                c += other.c * this.a + other.d * this.c;
+                tx += other.ty * this.c;
+                ty += other.tx * this.b;
+            }
+            target.a = a;
+            target.b = b;
+            target.c = c;
+            target.d = d;
+            target.tx = tx;
+            target.ty = ty;
+        };
+        return Matrix;
+    })(lark.LarkObject);
+    lark.Matrix = Matrix;
+    lark.registerClass(Matrix,"lark.Matrix");
+    /**
+     * @private
+     * 仅供框架内复用，要防止暴露引用到外部。
+     */
+    lark.$TempMatrix = new Matrix();
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -10405,6 +10903,118 @@ var lark;
 (function (lark) {
     /**
      * @language en_US
+     * This class is used to create lightweight shapes using the drawing application program interface (API). The Shape
+     * class includes a graphics property, which lets you access methods from the Graphics class.
+     * @see lark.Graphics
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/ShapeExample.ts
+     */
+    /**
+     * @language zh_CN
+     * 此类用于使用绘图应用程序编程接口 (API) 创建简单形状。Shape 类含有 graphics 属性，通过该属性您可以访问各种矢量绘图方法。
+     * @see lark.Graphics
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/ShapeExample.ts
+     */
+    var Shape = (function (_super) {
+        __extends(Shape, _super);
+        /**
+         * @language en_US
+         * Creates a new Shape object.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 Shape 对象
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function Shape() {
+            _super.call(this);
+            this.$graphics = new lark.Graphics();
+            this.$graphics.$targetDisplay = this;
+            this.$renderRegion = new lark.sys.Region();
+        }
+        var d = __define,c=Shape;p=c.prototype;
+        d(p, "graphics"
+            /**
+             * @language en_US
+             * Specifies the Graphics object belonging to this Shape object, where vector drawing commands can occur.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             *  获取 Shape 中的 Graphics 对象。可通过此对象执行矢量绘图命令。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$graphics;
+            }
+        );
+        p.$hitTest = function (stageX, stageY) {
+            var target = _super.prototype.$hitTest.call(this, stageX, stageY);
+            if (target) {
+                target = this.$graphics.$hitTest(stageX, stageY);
+            }
+            return target;
+        };
+        /**
+         * @private
+         */
+        p.$measureContentBounds = function (bounds) {
+            this.$graphics.$measureContentBounds(bounds);
+        };
+        /**
+         * @private
+         */
+        p.$render = function (context) {
+            this.$graphics.$render(context, false);
+        };
+        return Shape;
+    })(lark.DisplayObject);
+    lark.Shape = Shape;
+    lark.registerClass(Shape,"lark.Shape");
+    if (DEBUG) {
+        lark.$markReadOnly(Shape, "graphics");
+    }
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
      * The Bitmap class represents display objects that represent bitmap images.
      * The Bitmap() constructor allows you to create a Bitmap object that contains a reference to a BitmapData object.
      * After you create a Bitmap object, use the addChild() or addChildAt() method of the parent DisplayObjectContainer
@@ -10601,118 +11211,6 @@ var lark;
     })(lark.DisplayObject);
     lark.Bitmap = Bitmap;
     lark.registerClass(Bitmap,"lark.Bitmap");
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @language en_US
-     * This class is used to create lightweight shapes using the drawing application program interface (API). The Shape
-     * class includes a graphics property, which lets you access methods from the Graphics class.
-     * @see lark.Graphics
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/ShapeExample.ts
-     */
-    /**
-     * @language zh_CN
-     * 此类用于使用绘图应用程序编程接口 (API) 创建简单形状。Shape 类含有 graphics 属性，通过该属性您可以访问各种矢量绘图方法。
-     * @see lark.Graphics
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/ShapeExample.ts
-     */
-    var Shape = (function (_super) {
-        __extends(Shape, _super);
-        /**
-         * @language en_US
-         * Creates a new Shape object.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个 Shape 对象
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        function Shape() {
-            _super.call(this);
-            this.$graphics = new lark.Graphics();
-            this.$graphics.$targetDisplay = this;
-            this.$renderRegion = new lark.sys.Region();
-        }
-        var d = __define,c=Shape;p=c.prototype;
-        d(p, "graphics"
-            /**
-             * @language en_US
-             * Specifies the Graphics object belonging to this Shape object, where vector drawing commands can occur.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             *  获取 Shape 中的 Graphics 对象。可通过此对象执行矢量绘图命令。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            ,function () {
-                return this.$graphics;
-            }
-        );
-        p.$hitTest = function (stageX, stageY) {
-            var target = _super.prototype.$hitTest.call(this, stageX, stageY);
-            if (target) {
-                target = this.$graphics.$hitTest(stageX, stageY);
-            }
-            return target;
-        };
-        /**
-         * @private
-         */
-        p.$measureContentBounds = function (bounds) {
-            this.$graphics.$measureContentBounds(bounds);
-        };
-        /**
-         * @private
-         */
-        p.$render = function (context) {
-            this.$graphics.$render(context, false);
-        };
-        return Shape;
-    })(lark.DisplayObject);
-    lark.Shape = Shape;
-    lark.registerClass(Shape,"lark.Shape");
-    if (DEBUG) {
-        lark.$markReadOnly(Shape, "graphics");
-    }
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -13464,22 +13962,37 @@ var lark;
      */
     var initTweenFlag = true;
     /**
+     * @private
+     */
+    var easeCache = {};
+    /**
      * @language en_US
      * The tween.
-     * @see lark.Tween
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
      * 缓动类。
-     * @see lark.Tween
      * @version Lark 1.0
      * @platform Web,Native
      */
     var Tween = (function (_super) {
         __extends(Tween, _super);
-        function Tween(host, time, params, ease) {
+        /**
+         * @language en_US
+         * Constructor.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         * @param target 要变换的属性
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function Tween(target, time, params, ease) {
             _super.call(this);
             /**
              * @private
@@ -13497,15 +14010,18 @@ var lark;
              * @private
              */
             this._bePlay = false;
+            /**
+             * @privbate
+             */
             this._waitTime = 0;
             time = +time;
             this._time = time;
-            this._host = host;
+            this._target = target;
             if (time <= 0)
                 return;
             var controller;
+            this.ease = ease;
             if (params) {
-                this._ease = ease;
                 var keys = Object.keys(params);
                 for (var i = 0; i < keys.length; i++) {
                     var key = keys[i];
@@ -13516,7 +14032,7 @@ var lark;
                         continue;
                     }
                     var attribute = params[key];
-                    if (typeof (attribute) != "number" || !(key in host)) {
+                    if (typeof (attribute) != "number" || !(key in target)) {
                         delete params[key];
                         keys.splice(i, 1);
                         i--;
@@ -13526,13 +14042,13 @@ var lark;
                 if (keys.length) {
                     controller = new lark.BasicTransformation(this, params);
                     if (initTweenFlag) {
-                        controller.ready();
+                        controller.onReady();
                     }
                     this._controllers.push(controller);
                 }
             }
             if (!this._ease) {
-                this._ease = lark.Ease.None;
+                this.ease = lark.Ease.None;
             }
             if (initTweenFlag) {
                 this._startTime = lark.getTimer();
@@ -13582,34 +14098,73 @@ var lark;
                 return this._currentTime;
             }
         );
-        d(p, "host"
+        d(p, "target"
             /**
              * @language en_US
              * The object to transform.
-             * @see lark.Tween
              * @version Lark 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
              * 要变换的对象。
-             * @see lark.Tween
              * @version Lark 1.0
              * @platform Web,Native
              */
             ,function () {
-                return this._host;
+                return this._target;
             }
         );
         d(p, "ease"
+            /**
+             * @language en_US
+             * The type of ease.
+             * @see lark.Ease
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 缓动类型。
+             * @see lark.Ease
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             ,function () {
                 return this._ease;
             }
             ,function (val) {
+                if (!easeCache[val]) {
+                    var func = lark.EaseFunction[val];
+                    if (func == null) {
+                        //warn
+                        return;
+                    }
+                    var cache = [];
+                    for (var i = 0; i <= 1000; i++) {
+                        cache[i] = func(i / 1000);
+                    }
+                    easeCache[val] = cache;
+                }
                 this._ease = val;
+                this._easeData = easeCache[val];
             }
         );
         d(p, "nextTween"
+            /**
+             * @language en_US
+             * The next tween.
+             * @see lark.Tween
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 下一个Tween。
+             * @see lark.Tween
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
             ,function () {
                 return this._nextTween;
             }
@@ -13734,12 +14289,24 @@ var lark;
             if (this._startTime) {
                 var length = this._controllers.length;
                 for (var i = 0; i < length; i++) {
-                    this._controllers[i].ready();
+                    this._controllers[i].onReady();
                 }
             }
             this._startTime = time;
             this._isPlaying = true;
         };
+        /**
+         * @language en_US
+         * Tween end callback function.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * Tween 结束回调函数。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.call = function (callBack, thisObj, params) {
             this._complete = callBack;
             this._completeThis = thisObj;
@@ -13749,14 +14316,12 @@ var lark;
         /**
          * @language en_US
          * Completely stop the current Tween. And recycling of cyberspace.
-         * @see lark.Tween
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 完全停止当前 Tween。并回收资源。
-         * @see lark.Tween
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -13779,18 +14344,15 @@ var lark;
                 this._currentTime = this._time;
             }
             var length = this._controllers.length;
-            var s = this.ease(this._currentTime / this._time);
+            var s = this._easeData[1000 * (this._currentTime / this._time) | 0];
             for (var i = 0; i < length; i++) {
                 this._controllers[i].update(s);
             }
-            //if(this.hasListener(lark.Event.CHANGE)) {
-            //    this.emitWith(lark.Event.CHANGE,false);
-            //}
             if (this._currentTime == this._time) {
                 lark.stopTick(this.update, this);
-                //if(this.hasListener(lark.Event.COMPLETE)) {
-                //    this.emitWith(lark.Event.COMPLETE,false);
-                //}
+                if (this._complete != null) {
+                    this._complete.apply(this._completeThis, this._completeParams);
+                }
                 if (this._waitTime) {
                     this._waitTime += lark.getTimer();
                     lark.startTick(this.waitEndTime, this);
@@ -13840,20 +14402,44 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        p.to = function (object, time, params, ease) {
+        p.to = function (target, time, params, ease) {
             initTweenFlag = false;
-            var tween = new Tween(object, time, params, ease);
+            var tween = new Tween(target, time, params, ease);
             initTweenFlag = true;
             return this.concatTween(tween);
         };
+        /**
+         * @language en_US
+         * The time to wait before the next tween starts.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在下一个动画开始前等待多少时间。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         p.wait = function (time) {
             time = +time;
             this._waitTime = time;
             return this;
         };
-        Tween.get = function (object, time, params, ease) {
+        /**
+         * @language en_US
+         * Create a Tween object.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 Tween 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Tween.get = function (target, time, params, ease) {
             initTweenFlag = true;
-            var tween = new Tween(object, time, params, ease);
+            var tween = new Tween(target, time, params, ease);
             return tween;
         };
         return Tween;

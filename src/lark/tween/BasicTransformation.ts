@@ -13,13 +13,13 @@ module lark {
          */
         public update(value:number):void
         {
-            var host = this._tween.host;
+            var target = this._tween.target;
             var keys = this.keys;
             var length = keys.length;
             var startAttributes = this.startAttributes;
             for(var i = 0; i < length; i++) {
                 var key = keys[i];
-                host[key] = (this._attributes[key] - startAttributes[key])*value + startAttributes[key];
+                target[key] = (this._attributes[key] - startAttributes[key])*value + startAttributes[key];
             }
         }
     }

@@ -15,6 +15,10 @@ module lark {
             return this._tween;
         }
 
+        public set attributes(atrs:Object) {
+            this._attributes = atrs;
+        }
+
         /**
          * @private
          */
@@ -42,14 +46,14 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public ready():void {
-            var host = this._tween.host;
+        public onReady():void {
+            var target = this._tween.target;
             var startAttributes = {};
             var keys = this.keys;
             var length = keys.length;
             for(var i  = 0; i < length; i++) {
                 var key = keys[i];
-                startAttributes[key] = host[key];
+                startAttributes[key] = target[key];
             }
             this.startAttributes = startAttributes;
         }
