@@ -74,6 +74,8 @@ module lark.sys {
             displayList.renderContext = surface.renderContext;
             displayList.root = target;
             displayList.$renderMatrix = Matrix.create();
+            displayList.$ratioMatrix = Matrix.create();
+            displayList.$ratioMatrix.setTo(1, 0, 0, 1, 0, 0);
             displayList.needRedraw = true;
             displayList.$isDirty = true;
             return displayList;
@@ -105,7 +107,7 @@ module lark.sys {
          */
         $renderMatrix: Matrix = new Matrix();
 
-        $ratioMatrix: Matrix;
+        $ratioMatrix: Matrix = new Matrix();
 
         $ratioChanged: boolean = false;
 
