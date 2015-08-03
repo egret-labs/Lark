@@ -204,8 +204,8 @@ module lark {
                     return;
                 }
                 var cache = [];
-                for(var i = 0; i <= 1000; i++) {
-                    cache[i] = func(i/1000);
+                for(var i = 0; i <= 2000; i++) {
+                    cache[i] = func(i/2000);
                 }
                 easeCache[val] = cache;
             }
@@ -382,7 +382,7 @@ module lark {
                 this._currentTime = this._time;
             }
             var length = this._pugins.length;
-            var s = this._easeData[1000*(this._currentTime/this._time)|0];
+            var s = this._easeData[2000*(this._currentTime/this._time)|0];
             for(var i = 0; i < length; i++) {
                 this._pugins[i].update(s);
             }
