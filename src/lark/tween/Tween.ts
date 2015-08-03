@@ -37,14 +37,37 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public constructor(target:any, time:number, params?:Object, ease?:string) {
+        public constructor(target:any, time:number, params:Object, ease?:string) {
             super();
             time = +time;
             this._time = time;
             this._target = target;
             if (time <= 0) return;
-            var controller:BaseTransformation;
+            this.params = params;
             this.ease = ease;
+            if (!this._ease) {
+                this.ease = Ease.None;
+            }
+            if(initTweenFlag) {
+                this._startTime = lark.getTimer();
+                this._isPlaying = true;
+                this.initParmas();
+            } else {
+                this._isPlaying = false;
+            }
+        }
+
+        /**
+         * @private
+         */
+        private params:Object;
+
+        /**
+         * @private
+         */
+        private initParmas():void {
+            var controller:IPlugin;
+            var params = this.params;
             if (params) {
                 var keys = Object.keys(params);
                 for (var i = 0; i < keys.length; i++) {
@@ -56,7 +79,7 @@ module lark {
                         continue;
                     }
                     var attribute = params[key];
-                    if (typeof (attribute) != "number" || !(key in target)) {
+                    if (typeof (attribute) != "number" || !(key in this._target)) {
                         delete params[key];
                         keys.splice(i, 1);
                         i--;
@@ -64,21 +87,10 @@ module lark {
                     }
                 }
                 if (keys.length) {
-                    controller = new BasicTransformation(this, params);
-                    if(initTweenFlag) {
-                        controller.onReady();
-                    }
-                    this._controllers.push(controller);
+                    controller = new BasicPlugin();
+                    controller.init(this, params);
+                    this._pugins.push(controller);
                 }
-            }
-            if (!this._ease) {
-                this.ease = Ease.None;
-            }
-            if(initTweenFlag) {
-                this._startTime = lark.getTimer();
-                this._isPlaying = true;
-            } else {
-                this._isPlaying = false;
             }
             lark.startTick(this.update, this);
         }
@@ -231,69 +243,7 @@ module lark {
         /**
          * @private
          */
-        _controllers:BaseTransformation[] = [];
-
-        /**
-         * @language en_US
-         * Getting the number of transformation properties.
-         * @see lark.Tween
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取变换属性的个数。
-         * @see lark.Tween
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public get controllerLength():number {
-            return this._controllers.length;
-        }
-
-
-        /**
-         * @language en_US
-         * Getting transformation properties.
-         * @see lark.Tween
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 获取变换属性。
-         * @see lark.Tween
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public getControllerAt(index:number):BaseTransformation {
-            index = +index | 0;
-            if (index < 0 || index >= this._controllers.length) {
-                return null;
-            }
-            return this._controllers[index];
-        }
-
-        /**
-         * @language en_US
-         * Setting transformation properties.
-         * @see lark.Tween
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 设置变换属性。
-         * @see lark.Tween
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public set controllers(vals:BaseTransformation[]) {
-            if (this._controllers) {
-                return;
-            }
-            this._controllers = vals;
-        }
+        _pugins:IPlugin[] = [];
 
         /**
          * @language en_US
@@ -355,14 +305,9 @@ module lark {
         }
 
         $initPlay(time:number):void {
-            if(this._startTime) {
-                var length = this._controllers.length;
-                for(var i = 0; i < length; i++) {
-                    this._controllers[i].onReady();
-                }
-            }
             this._startTime = time;
             this._isPlaying = true;
+            this.initParmas();
         }
 
         /**
@@ -436,10 +381,10 @@ module lark {
             if (this._currentTime > this._time) {
                 this._currentTime = this._time;
             }
-            var length = this._controllers.length;
+            var length = this._pugins.length;
             var s = this._easeData[1000*(this._currentTime/this._time)|0];
             for(var i = 0; i < length; i++) {
-                this._controllers[i].update(s);
+                this._pugins[i].update(s);
             }
             if (this._currentTime == this._time) {
                 lark.stopTick(this.update, this);
@@ -544,6 +489,12 @@ module lark {
             initTweenFlag = true;
             var tween = new Tween(target, time, params, ease);
             return tween;
+        }
+
+        private static plugins = {};
+
+        public static registerPlugin(paramName:string,plugin:IPlugin) {
+            Tween.plugins[paramName] = plugin;
         }
     }
 }
