@@ -135,7 +135,7 @@ private loaded(e:lark.Event):void {
 
 ``` TypeScript
  private onChange(e:lark.Event){              //在RadioButtonDemo类中添加
-        console.log(e.target.selectedValue);
+        console.log(e.target.selectedValue);  //通过RadioButtonGroup的selectedValue值来获取当前单选按钮的value值
     }
 ```
 
