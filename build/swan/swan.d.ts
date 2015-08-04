@@ -2737,7 +2737,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/collection/ArrayCollectionExample.ts
+     * @includeExample examples/Samples/src/extension/swan/collections/ArrayCollectionExample.ts
      */
     /**
      * @language zh_CN
@@ -2749,7 +2749,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/collection/ArrayCollectionExample.ts
+     * @includeExample examples/Samples/src/extension/swan/collections/ArrayCollectionExample.ts
      */
     class ArrayCollection extends lark.EventEmitter implements ICollection {
         /**
@@ -6693,6 +6693,282 @@ declare module swan.sys {
 declare module swan {
     /**
      * @language en_US
+     * The Skin class defines the base class for all skins.
+     * You typically don't need to manually create the instance of this class.
+     * It can be created by resolving a EXML.<p/>
+     *
+     * @example You typically write the skin classes in EXML, as the followiong example shows:<p/>
+     * <pre>
+     *      <?xml version="1.0" encoding="utf-8"?>
+     *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
+     *          <states>
+     *              <!-- Specify the states controlled by this skin. -->
+     *          </states>
+     *          <!-- Define skin. -->
+     *      </s:Skin>
+     * </pre>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
+     */
+    /**
+     * @language zh_CN
+     * 皮肤基类。通常情况下，您不需要手动创建这个类的实例，而是通过解析EXML文件后自动生成。<p/>
+     *
+     * @example 通常您可以按照如下方式写EXML代码：<p/>
+     * <pre>
+     *      <?xml version="1.0" encoding="utf-8"?>
+     *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
+     *          <states>
+     *              <!-- Specify the states controlled by this skin. -->
+     *          </states>
+     *          <!-- Define skin. -->
+     *      </s:Skin>
+     * </pre>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
+     */
+    class Skin extends lark.LarkObject {
+        /**
+         * @language en_US
+         * The list of skin parts name
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 皮肤部件名称列表
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        skinParts: string[];
+        /**
+         * @language en_US
+         * The maximum recommended width of the component to be considered.
+         * This property can only affect measure result of host component.
+         *
+         * @default 100000
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 皮肤的最大宽度。仅影响主机组件的测量结果。
+         *
+         * @default 100000
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        maxWidth: number;
+        /**
+         * @language en_US
+         * The minimum recommended width of the component to be considered.
+         * This property can only affect measure result of host component.
+         *
+         * @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 皮肤的最小宽度,此属性设置为大于maxWidth的值时无效。仅影响主机组件的测量结果。
+         *
+         * @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        minWidth: number;
+        /**
+         * @language en_US
+         * The maximum recommended height of the component to be considered.
+         * This property can only affect measure result of host component.
+         *
+         * @default 100000
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 皮肤的最大高度。仅影响主机组件的测量结果。
+         *
+         * @default 100000
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        maxHeight: number;
+        /**
+         * @language en_US
+         * The minimum recommended height of the component to be considered.
+         * This property can only affect measure result of host component.
+         *
+         * @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 皮肤的最小高度,此属性设置为大于maxHeight的值时无效。仅影响主机组件的测量结果。
+         *
+         * @default 0
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        minHeight: number;
+        /**
+         * @language en_US
+         * Number that specifies the explicit width of the skin.
+         * This property can only affect measure result of host component.
+         * @default NaN
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 皮肤显式设置宽度,设置为 NaN 表示不显式设置。仅影响主机组件的测量结果。
+         *
+         * @default NaN
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        width: number;
+        /**
+         * @language en_US
+         * Number that specifies the explicit height of the skin.
+         * This property can only affect measure result of host component.
+         *
+         * @default NaN
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 皮肤显式设置高度,设置为 NaN 表示不显式设置。仅影响主机组件的测量结果。
+         *
+         * @default NaN
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        height: number;
+        elementsContent: lark.DisplayObject[];
+        /**
+         * @private
+         */
+        private _hostComponent;
+        /**
+         * @language en_US
+         * The host component which the skin will be attached.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 此皮肤附加到的主机组件
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        hostComponent: Component;
+        /**
+         * @private
+         *
+         * @param event
+         */
+        private onAddedToStage(event?);
+        /**
+         * @language en_US
+         * The list of state for host component.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 为此组件定义的视图状态。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        states: State[];
+        /**
+         * @language en_US
+         * The current state of host component.
+         * Set to <code>""</code> or <code>null</code> to reset the component back to its base state.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 组件的当前视图状态。将其设置为 "" 或 null 可将组件重置回其基本状态。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        currentState: string;
+        /**
+         * @language en_US
+         * Check if contains the specifies state name.
+         * @param stateName the state name need to be checked
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回是否含有指定名称的视图状态
+         * @param stateName 要检查的视图状态名称
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        hasState: (stateName: string) => boolean;
+        /**
+         * @private
+         * 初始化所有视图状态
+         */
+        private initializeStates;
+        /**
+         * @private
+         * 应用当前的视图状态。子类覆盖此方法在视图状态发生改变时执行相应更新操作。
+         */
+        private commitCurrentState;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
      * Label is an UIComponent that can render one or more lines of text.
      * The text to be displayed is determined by the <code>text</code> property.
      * The formatting of the text is specified by the styles，
@@ -7756,282 +8032,6 @@ declare module swan {
          * @platform Web,Native
          */
         getPreferredBounds(bounds: lark.Rectangle): void;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The Skin class defines the base class for all skins.
-     * You typically don't need to manually create the instance of this class.
-     * It can be created by resolving a EXML.<p/>
-     *
-     * @example You typically write the skin classes in EXML, as the followiong example shows:<p/>
-     * <pre>
-     *      <?xml version="1.0" encoding="utf-8"?>
-     *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
-     *          <states>
-     *              <!-- Specify the states controlled by this skin. -->
-     *          </states>
-     *          <!-- Define skin. -->
-     *      </s:Skin>
-     * </pre>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
-     */
-    /**
-     * @language zh_CN
-     * 皮肤基类。通常情况下，您不需要手动创建这个类的实例，而是通过解析EXML文件后自动生成。<p/>
-     *
-     * @example 通常您可以按照如下方式写EXML代码：<p/>
-     * <pre>
-     *      <?xml version="1.0" encoding="utf-8"?>
-     *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
-     *          <states>
-     *              <!-- Specify the states controlled by this skin. -->
-     *          </states>
-     *          <!-- Define skin. -->
-     *      </s:Skin>
-     * </pre>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
-     */
-    class Skin extends lark.LarkObject {
-        /**
-         * @language en_US
-         * The list of skin parts name
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 皮肤部件名称列表
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        skinParts: string[];
-        /**
-         * @language en_US
-         * The maximum recommended width of the component to be considered.
-         * This property can only affect measure result of host component.
-         *
-         * @default 100000
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 皮肤的最大宽度。仅影响主机组件的测量结果。
-         *
-         * @default 100000
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        maxWidth: number;
-        /**
-         * @language en_US
-         * The minimum recommended width of the component to be considered.
-         * This property can only affect measure result of host component.
-         *
-         * @default 0
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 皮肤的最小宽度,此属性设置为大于maxWidth的值时无效。仅影响主机组件的测量结果。
-         *
-         * @default 0
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        minWidth: number;
-        /**
-         * @language en_US
-         * The maximum recommended height of the component to be considered.
-         * This property can only affect measure result of host component.
-         *
-         * @default 100000
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 皮肤的最大高度。仅影响主机组件的测量结果。
-         *
-         * @default 100000
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        maxHeight: number;
-        /**
-         * @language en_US
-         * The minimum recommended height of the component to be considered.
-         * This property can only affect measure result of host component.
-         *
-         * @default 0
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 皮肤的最小高度,此属性设置为大于maxHeight的值时无效。仅影响主机组件的测量结果。
-         *
-         * @default 0
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        minHeight: number;
-        /**
-         * @language en_US
-         * Number that specifies the explicit width of the skin.
-         * This property can only affect measure result of host component.
-         * @default NaN
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 皮肤显式设置宽度,设置为 NaN 表示不显式设置。仅影响主机组件的测量结果。
-         *
-         * @default NaN
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        width: number;
-        /**
-         * @language en_US
-         * Number that specifies the explicit height of the skin.
-         * This property can only affect measure result of host component.
-         *
-         * @default NaN
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 皮肤显式设置高度,设置为 NaN 表示不显式设置。仅影响主机组件的测量结果。
-         *
-         * @default NaN
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        height: number;
-        elementsContent: lark.DisplayObject[];
-        /**
-         * @private
-         */
-        private _hostComponent;
-        /**
-         * @language en_US
-         * The host component which the skin will be attached.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 此皮肤附加到的主机组件
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        hostComponent: Component;
-        /**
-         * @private
-         *
-         * @param event
-         */
-        private onAddedToStage(event?);
-        /**
-         * @language en_US
-         * The list of state for host component.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 为此组件定义的视图状态。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        states: State[];
-        /**
-         * @language en_US
-         * The current state of host component.
-         * Set to <code>""</code> or <code>null</code> to reset the component back to its base state.
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 组件的当前视图状态。将其设置为 "" 或 null 可将组件重置回其基本状态。
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        currentState: string;
-        /**
-         * @language en_US
-         * Check if contains the specifies state name.
-         * @param stateName the state name need to be checked
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回是否含有指定名称的视图状态
-         * @param stateName 要检查的视图状态名称
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        hasState: (stateName: string) => boolean;
-        /**
-         * @private
-         * 初始化所有视图状态
-         */
-        private initializeStates;
-        /**
-         * @private
-         * 应用当前的视图状态。子类覆盖此方法在视图状态发生改变时执行相应更新操作。
-         */
-        private commitCurrentState;
     }
 }
 declare module swan.sys {
@@ -9205,25 +9205,25 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * The HorizontalLayout class arranges the layout elements in a horizontal sequence,
-     * left to right, with optional gaps between the elements and optional padding
-     * around the elements.
+     * The VerticalLayout class arranges the layout elements in a vertical sequence,
+     * top to bottom, with optional gaps between the elements and optional padding
+     * around the sequence of elements.
      *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/layout/HorizontalLayoutExample.ts
+     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
      */
     /**
      * @language zh_CN
-     * HorizontalLayout 类按水平顺序从左到右排列布局元素，在元素和围绕元素的可选填充之间带有可选间隙。
+     * VerticalLayout 类按垂直顺序从上向下排列布局元素，在元素和围绕元素顺序的可选填充之间带有可选间隙。
      *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/layout/HorizontalLayoutExample.ts
+     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
      */
-    class HorizontalLayout extends LinearLayoutBase {
+    class VerticalLayout extends LinearLayoutBase {
         /**
          * @inheritDoc
          *
@@ -9301,25 +9301,25 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * The VerticalLayout class arranges the layout elements in a vertical sequence,
-     * top to bottom, with optional gaps between the elements and optional padding
-     * around the sequence of elements.
+     * The HorizontalLayout class arranges the layout elements in a horizontal sequence,
+     * left to right, with optional gaps between the elements and optional padding
+     * around the elements.
      *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
+     * @includeExample examples/Samples/src/extension/swan/layout/HorizontalLayoutExample.ts
      */
     /**
      * @language zh_CN
-     * VerticalLayout 类按垂直顺序从上向下排列布局元素，在元素和围绕元素顺序的可选填充之间带有可选间隙。
+     * HorizontalLayout 类按水平顺序从左到右排列布局元素，在元素和围绕元素的可选填充之间带有可选间隙。
      *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
+     * @includeExample examples/Samples/src/extension/swan/layout/HorizontalLayoutExample.ts
      */
-    class VerticalLayout extends LinearLayoutBase {
+    class HorizontalLayout extends LinearLayoutBase {
         /**
          * @inheritDoc
          *
@@ -10300,192 +10300,6 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * An ViewStack navigator container consists of a collection of child
-     * containers stacked on top of each other, where only one child
-     * at a time is visible.
-     * When a different child container is selected, it seems to replace
-     * the old one because it appears in the same location.
-     * However, the old child container still exists; it is just invisible.
-     *
-     * @event swan.CollectionEvent.COLLECTION_CHANGE Emitted when the ICollection has been updated in some way.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/ViewStackExample.ts
-     */
-    /**
-     * @language zh_CN
-     * ViewStack 导航器容器由一组彼此上下堆叠的子容器组成，其中一次只可以显示一个子容器。
-     * 选择另一个子容器后，它将显示在原来子容器的位置处，所以看起来好像此子容器替换了原来的子容器。
-     * 但是，原来的子容器仍然存在，只不过它现在处于不可见状态。
-     *
-     * @event swan.CollectionEvent.COLLECTION_CHANGE 以某种方式更新 ICollection 后分派。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/ViewStackExample.ts
-     */
-    class ViewStack extends Group implements ICollection {
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        constructor();
-        /**
-         * @language en_US
-         * The layout object for this container.
-         * This object is responsible for the measurement and layout of
-         * the visual elements in the container.
-         *
-         * @default swan.BasicLayout
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 此容器的 layout 对象。此对象负责容器中可视元素的测量和布局。
-         *
-         * @default swan.BasicLayout
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        layout: LayoutBase;
-        /**
-         * @private
-         */
-        private _selectedChild;
-        /**
-         * @language en_US
-         * A reference to the currently visible child container.
-         * The default is a reference to the first child.
-         * If there are no children, this property is <code>null</code>.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 对当前可见子容器的引用。默认设置为对第一个子容器的引用。如果没有子项，则此属性为 <code>null</code>。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        selectedChild: lark.DisplayObject;
-        /**
-         * @private
-         * 在属性提交前缓存选中项索引
-         */
-        private proposedSelectedIndex;
-        /**
-         * @private
-         */
-        _selectedIndex: number;
-        /**
-         * @language en_US
-         * The zero-based index of the currently visible child container.
-         * Child indexes are in the range 0, 1, 2, ..., n - 1,
-         * where <code>n</code> is the number of children.
-         * The default value is 0, corresponding to the first child.
-         * If there are no children, the value of this property is <code>-1</code>.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 当前可见子容器的从零开始的索引。子索引的范围是 0、1、2、...、n - 1，其中 <code>n</code> 是子项的数目。
-         * 默认值是 0，对应于第一个子项。如果不存在子容器，则此属性的值为 -1。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        selectedIndex: number;
-        /**
-         * @private
-         * 设置选中项索引
-         */
-        private setSelectedIndex(value);
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected commitProperties(): void;
-        /**
-         * @private
-         *
-         * @param newIndex
-         */
-        private commitSelection(newIndex);
-        /**
-         * @private
-         *
-         * @param child
-         * @param visible
-         */
-        private showOrHide(child, visible);
-        /**
-         * @language en_US
-         * number of children
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 子项数量
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        length: number;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        getItemAt(index: number): any;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        getItemIndex(item: any): number;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
      * The ItemRenderer class is the base class for item renderers.
      *
      * @version Lark 1.0
@@ -10974,6 +10788,192 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
+     * An ViewStack navigator container consists of a collection of child
+     * containers stacked on top of each other, where only one child
+     * at a time is visible.
+     * When a different child container is selected, it seems to replace
+     * the old one because it appears in the same location.
+     * However, the old child container still exists; it is just invisible.
+     *
+     * @event swan.CollectionEvent.COLLECTION_CHANGE Emitted when the ICollection has been updated in some way.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ViewStackExample.ts
+     */
+    /**
+     * @language zh_CN
+     * ViewStack 导航器容器由一组彼此上下堆叠的子容器组成，其中一次只可以显示一个子容器。
+     * 选择另一个子容器后，它将显示在原来子容器的位置处，所以看起来好像此子容器替换了原来的子容器。
+     * 但是，原来的子容器仍然存在，只不过它现在处于不可见状态。
+     *
+     * @event swan.CollectionEvent.COLLECTION_CHANGE 以某种方式更新 ICollection 后分派。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ViewStackExample.ts
+     */
+    class ViewStack extends Group implements ICollection {
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        constructor();
+        /**
+         * @language en_US
+         * The layout object for this container.
+         * This object is responsible for the measurement and layout of
+         * the visual elements in the container.
+         *
+         * @default swan.BasicLayout
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 此容器的 layout 对象。此对象负责容器中可视元素的测量和布局。
+         *
+         * @default swan.BasicLayout
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        layout: LayoutBase;
+        /**
+         * @private
+         */
+        private _selectedChild;
+        /**
+         * @language en_US
+         * A reference to the currently visible child container.
+         * The default is a reference to the first child.
+         * If there are no children, this property is <code>null</code>.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 对当前可见子容器的引用。默认设置为对第一个子容器的引用。如果没有子项，则此属性为 <code>null</code>。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        selectedChild: lark.DisplayObject;
+        /**
+         * @private
+         * 在属性提交前缓存选中项索引
+         */
+        private proposedSelectedIndex;
+        /**
+         * @private
+         */
+        _selectedIndex: number;
+        /**
+         * @language en_US
+         * The zero-based index of the currently visible child container.
+         * Child indexes are in the range 0, 1, 2, ..., n - 1,
+         * where <code>n</code> is the number of children.
+         * The default value is 0, corresponding to the first child.
+         * If there are no children, the value of this property is <code>-1</code>.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当前可见子容器的从零开始的索引。子索引的范围是 0、1、2、...、n - 1，其中 <code>n</code> 是子项的数目。
+         * 默认值是 0，对应于第一个子项。如果不存在子容器，则此属性的值为 -1。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        selectedIndex: number;
+        /**
+         * @private
+         * 设置选中项索引
+         */
+        private setSelectedIndex(value);
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected commitProperties(): void;
+        /**
+         * @private
+         *
+         * @param newIndex
+         */
+        private commitSelection(newIndex);
+        /**
+         * @private
+         *
+         * @param child
+         * @param visible
+         */
+        private showOrHide(child, visible);
+        /**
+         * @language en_US
+         * number of children
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 子项数量
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        length: number;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        getItemAt(index: number): any;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        getItemIndex(item: any): number;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
      * The DataGroup class is the base container class for data items.
      * The DataGroup class converts data items to visual elements for display.
      * While this container can hold visual elements, it is often used only
@@ -11415,51 +11415,6 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * The HScrollBar (horizontal scrollbar) control lets you control
-     * the portion of data that is displayed when there is too much data
-     * to fit horizontally in a display area.
-     *
-     * <p>Although you can use the HScrollBar control as a stand-alone control,
-     * you usually combine it as part of another group of components to
-     * provide scrolling functionality.</p>
-     *
-     * @includeExample examples/Samples/src/extension/swan/components/HScrollBarExample.ts
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * HScrollBar（水平 ScrollBar）控件可以在因数据太多而不能在显示区域中以水平方向完全显示时控制显示的数据部分。
-     * <p>虽然 HScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。</p>
-     *
-     * @includeExample examples/Samples/src/extension/swan/components/HScrollBarExample.ts
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    class HScrollBar extends ScrollBarBase {
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected onPropertyChanged(event: swan.PropertyEvent): void;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
      * The ProgressBar control provides a visual representation of the progress of a task over time.
      *
      * @version Lark 1.0
@@ -11736,6 +11691,51 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
+     * The HScrollBar (horizontal scrollbar) control lets you control
+     * the portion of data that is displayed when there is too much data
+     * to fit horizontally in a display area.
+     *
+     * <p>Although you can use the HScrollBar control as a stand-alone control,
+     * you usually combine it as part of another group of components to
+     * provide scrolling functionality.</p>
+     *
+     * @includeExample examples/Samples/src/extension/swan/components/HScrollBarExample.ts
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * HScrollBar（水平 ScrollBar）控件可以在因数据太多而不能在显示区域中以水平方向完全显示时控制显示的数据部分。
+     * <p>虽然 HScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。</p>
+     *
+     * @includeExample examples/Samples/src/extension/swan/components/HScrollBarExample.ts
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    class HScrollBar extends ScrollBarBase {
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected onPropertyChanged(event: swan.PropertyEvent): void;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
      * The ToggleButton component defines a toggle button.
      * Clicking the button toggles it between the up and an down states.
      * If you click the button while it is in the up state,
@@ -11854,7 +11854,6 @@ declare module swan {
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
-         * @includeExample src/extension/swan/components/HSlider.ts
          */
         /**
          * @language zh_CN
@@ -11862,7 +11861,6 @@ declare module swan {
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
-         * @includeExample src/extension/swan/components/HSlider.ts
          */
         constructor();
         /**
@@ -12205,7 +12203,6 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample src/extension/swan/components/TabBar.ts
      */
     /**
      * @language zh_CN
@@ -12219,7 +12216,6 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample src/extension/swan/components/TabBar.ts
      */
     class ListBase extends DataGroup {
         /**
@@ -12691,91 +12687,6 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * The TabBar class displays a set of identical tabs.
-     * One tab can be selected at a time, and the first tab is selected by default.
-     * <p>The set of tabs is defined by the <code>dataProvider</code> property.
-     * The appearance of each tab is defined by the <code>ItemRenderer</code> class.</p>
-     * <p>You can use the TabBar control to set the active child of a ViewStack container,
-     * as the following example shows:</p>
-     * <pre>
-     *       <s:TabBar dataProvider="{viewStack}"/>
-     *       <s:ViewStack id="viewStack">
-     *          <s:Group name="tab1"/>
-     *          <s:Group name="tab2"/>
-     *          <s:Group name="tab3"/>
-     *       </s:ViewStack>
-     * </pre>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/TabBarExample.ts
-     */
-    /**
-     * @language zh_CN
-     * TabBar 类显示一组相同的选项卡。一次可以选择一个选项卡，且默认情况下选择第一个选项卡。
-     * <p>该组选项卡由 <code>dataProvider</code> 属性定义。
-     * 每个选项卡的外观由 <code>ItemRenderer</code> 定义。</p>
-     * <p>可以使用 TabBar 控件设置 ViewStack 容器的活动子代，如下例所示：</p>
-     * <pre>
-     *       <s:TabBar dataProvider="{viewStack}"/>
-     *       <s:ViewStack id="viewStack">
-     *          <s:Group name="tab1"/>
-     *          <s:Group name="tab2"/>
-     *          <s:Group name="tab3"/>
-     *       </s:ViewStack>
-     * </pre>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/TabBarExample.ts
-     */
-    class TabBar extends ListBase {
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        constructor();
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected createChildren(): void;
-        /**
-         * @private
-         */
-        private indexBeingUpdated;
-        /**
-         * @private
-         * 触摸点击的选中项改变
-         */
-        private onIndexChanged(event);
-        /**
-         * @private
-         * ViewStack选中项发生改变
-         */
-        private onViewStackIndexChange(event);
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
      * The ToggleSwitch control defines an on-off control.
      *
      * @version Lark 1.0
@@ -12810,71 +12721,6 @@ declare module swan {
          * @platform Web,Native
          */
         constructor();
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
-     * The VSlider (vertical slider) control lets users select a value
-     * by moving a slider thumb between the end points of the slider track.
-     * The current value of the slider is determined by the relative location of the thumb between
-     * the end points of the slider, corresponding to the slider's minimum and maximum values.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/VSliderExample.ts
-     */
-    /**
-     * @language zh_CN
-     * 使用 VSlider（垂直滑块）控件，用户可通过在滑块轨道的端点之间移动滑块来选择值。
-     * 滑块的当前值由滑块端点（对应于滑块的最小值和最大值）之间滑块的相对位置确定。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/VSliderExample.ts
-     */
-    class VSlider extends SliderBase {
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        constructor();
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected pointToValue(x: number, y: number): number;
-        /**
-         * @private
-         *
-         * @returns
-         */
-        private getThumbRange();
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        updateSkinDisplayList(): void;
     }
 }
 declare module swan {
@@ -13105,6 +12951,156 @@ declare module swan {
          * @platform Web,Native
          */
         protected onRendererTouchEnd(event: lark.TouchEvent): void;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The TabBar class displays a set of identical tabs.
+     * One tab can be selected at a time, and the first tab is selected by default.
+     * <p>The set of tabs is defined by the <code>dataProvider</code> property.
+     * The appearance of each tab is defined by the <code>ItemRenderer</code> class.</p>
+     * <p>You can use the TabBar control to set the active child of a ViewStack container,
+     * as the following example shows:</p>
+     * <pre>
+     *       <s:TabBar dataProvider="{viewStack}"/>
+     *       <s:ViewStack id="viewStack">
+     *          <s:Group name="tab1"/>
+     *          <s:Group name="tab2"/>
+     *          <s:Group name="tab3"/>
+     *       </s:ViewStack>
+     * </pre>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/TabBarExample.ts
+     */
+    /**
+     * @language zh_CN
+     * TabBar 类显示一组相同的选项卡。一次可以选择一个选项卡，且默认情况下选择第一个选项卡。
+     * <p>该组选项卡由 <code>dataProvider</code> 属性定义。
+     * 每个选项卡的外观由 <code>ItemRenderer</code> 定义。</p>
+     * <p>可以使用 TabBar 控件设置 ViewStack 容器的活动子代，如下例所示：</p>
+     * <pre>
+     *       <s:TabBar dataProvider="{viewStack}"/>
+     *       <s:ViewStack id="viewStack">
+     *          <s:Group name="tab1"/>
+     *          <s:Group name="tab2"/>
+     *          <s:Group name="tab3"/>
+     *       </s:ViewStack>
+     * </pre>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/TabBarExample.ts
+     */
+    class TabBar extends ListBase {
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        constructor();
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected createChildren(): void;
+        /**
+         * @private
+         */
+        private indexBeingUpdated;
+        /**
+         * @private
+         * 触摸点击的选中项改变
+         */
+        private onIndexChanged(event);
+        /**
+         * @private
+         * ViewStack选中项发生改变
+         */
+        private onViewStackIndexChange(event);
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
+     * The VSlider (vertical slider) control lets users select a value
+     * by moving a slider thumb between the end points of the slider track.
+     * The current value of the slider is determined by the relative location of the thumb between
+     * the end points of the slider, corresponding to the slider's minimum and maximum values.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/VSliderExample.ts
+     */
+    /**
+     * @language zh_CN
+     * 使用 VSlider（垂直滑块）控件，用户可通过在滑块轨道的端点之间移动滑块来选择值。
+     * 滑块的当前值由滑块端点（对应于滑块的最小值和最大值）之间滑块的相对位置确定。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/VSliderExample.ts
+     */
+    class VSlider extends SliderBase {
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        constructor();
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected pointToValue(x: number, y: number): number;
+        /**
+         * @private
+         *
+         * @returns
+         */
+        private getThumbRange();
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        updateSkinDisplayList(): void;
     }
 }
 declare module swan {
