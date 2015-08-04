@@ -2084,6 +2084,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/DefaultAssetAdapterExample.ts
      */
     /**
      * @language zh_CN
@@ -2091,6 +2092,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/DefaultAssetAdapterExample.ts
      */
     class DefaultAssetAdapter implements IAssetAdapter {
         /**
@@ -3242,6 +3244,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/RadioButtonGroupExample.ts
      */
     /**
      * @language zh_CN
@@ -3252,6 +3255,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/RadioButtonGroupExample.ts
      */
     class RadioButtonGroup extends lark.EventEmitter {
         /**
@@ -4281,6 +4285,9 @@ declare module swan.sys {
     }
 }
 declare module swan {
+    /**
+     * @private
+     */
     class ScrollerThrowEvent extends lark.Event {
         static THROW: string;
         /**
@@ -6711,6 +6718,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/LabelExample.ts
      */
     /**
      * @language zh_CN
@@ -6723,6 +6731,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/LabelExample.ts
      */
     class Label extends lark.TextField implements UIComponent {
         /**
@@ -7033,6 +7042,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ImageExample.ts
      */
     /**
      * @language zh_CN
@@ -7044,6 +7054,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ImageExample.ts
      */
     class Image extends lark.Bitmap implements UIComponent {
         /**
@@ -7443,6 +7454,7 @@ declare module swan {
      * @language en_US
      * Editable text for displaying,
      * scrolling, selecting, and editing text.
+     * @includeExample examples/Samples/src/extension/swan/components/EditablTextExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -7450,6 +7462,7 @@ declare module swan {
     /**
      * @language zh_CN
      * 可编辑文本，用于显示、滚动、选择和编辑文本。
+     * @includeExample examples/Samples/src/extension/swan/components/EditablTextExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -7766,6 +7779,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
      */
     /**
      * @language zh_CN
@@ -7785,6 +7799,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
      */
     class Skin extends lark.LarkObject {
         /**
@@ -8039,6 +8054,7 @@ declare module swan {
      * @copy swan.UIComponents
      * @event lark.Event.COMPLETE Emit when <code>skinName</code> property is set the path of external EXML file and the EXML file is resolved.
      *
+     * @includeExample examples/Samples/src/extension/swan/components/ComponentExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -8049,6 +8065,7 @@ declare module swan {
      * @copy swan.UIComponents
      * @event lark.Event.COMPLETE 当设置skinName为外部exml文件路径时，加载并完成EXML解析后调度。
      *
+     * @includeExample examples/Samples/src/extension/swan/components/ComponentExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -8630,6 +8647,7 @@ declare module swan {
      * group (Give the instance of Group to <code>viewport</code> property of Scroller component).
      * The scroller component can adds a scrolling touch operation for the Group.
      *
+     * @includeExample examples/Samples/src/extension/swan/components/GroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -8639,6 +8657,7 @@ declare module swan {
      * Group 是自动布局的容器基类。如果包含的子项内容太大需要滚动显示，可以在在 Group 外部包裹一层 Scroller 组件
      * (将 Group 实例赋值给 Scroller 组件的 viewport 属性)。Scroller 会为 Group 添加滚动的触摸操作功能，并显示垂直或水平的滚动条。
      *
+     * @includeExample examples/Samples/src/extension/swan/components/GroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -9387,6 +9406,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/PanelExample.ts
      */
     /**
      * @language zh_CN
@@ -9398,6 +9418,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/PanelExample.ts
      */
     class Panel extends Component {
         /**
@@ -9652,6 +9673,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample src/extension/swan/components/HScrollBar.ts
      */
     /**
      * @language zh_CN
@@ -9664,6 +9686,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample src/extension/swan/components/HScrollBar.ts
      */
     class ScrollBarBase extends Component {
         /**
@@ -9776,6 +9799,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ButtonExample.ts
      */
     /**
      * @language zh_CN
@@ -9783,6 +9807,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ButtonExample.ts
      */
     class Button extends Component {
         /**
@@ -9969,19 +9994,21 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/RangeExample.ts
      */
     /**
      * @language zh_CN
      * 范围选取组件,该组件包含一个值和这个值所允许的最大最小约束范围。
      *
      * <code>value</code>属性的值永远被限制于当前的<code>minimum</code>和
-     * <code>maximum</code>之间，并且<code>minimum</code>和 <code>maximum</code>永远按照固定的书序排列，
+     * <code>maximum</code>之间，并且<code>minimum</code>和 <code>maximum</code>永远按照固定的顺序排列，
      * 即<code>(minimum <= value <= maximum)</code> 为真。
      *
      * 如果<code>snapInterval</code>属性的值不是0，那么<code>value</code>的值也会被<code>snapInterval</code>所约束。
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/RangeExample.ts
      */
     class Range extends Component {
         /**
@@ -10285,6 +10312,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ViewStackExample.ts
      */
     /**
      * @language zh_CN
@@ -10297,6 +10325,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ViewStackExample.ts
      */
     class ViewStack extends Group implements ICollection {
         /**
@@ -10462,6 +10491,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ItemRendererExample.ts
      */
     /**
      * @language zh_CN
@@ -10470,6 +10500,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ItemRendererExample.ts
      */
     class ItemRenderer extends Group implements IItemRenderer {
         /**
@@ -10631,6 +10662,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ScrollerExample.ts
      */
     /**
      * @language zh_CN
@@ -10651,6 +10683,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ScrollerExample.ts
      */
     class Scroller extends Component {
         /**
@@ -10694,15 +10727,14 @@ declare module swan {
         constructor();
         /**
          * @language en_US
-         *
+         * Adjust the speed to get out of the slide end.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         *
-         *
+         * 调节滑动结束时滚出的速度。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -10949,6 +10981,7 @@ declare module swan {
      *
      * @see swan.Group
      *
+     * @includeExample examples/Samples/src/extension/swan/components/DataGroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -10960,6 +10993,7 @@ declare module swan {
      *
      * @see swan.Group
      *
+     * @includeExample examples/Samples/src/extension/swan/components/DataGroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -11389,6 +11423,7 @@ declare module swan {
      * you usually combine it as part of another group of components to
      * provide scrolling functionality.</p>
      *
+     * @includeExample examples/Samples/src/extension/swan/components/HScrollBarExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -11398,6 +11433,7 @@ declare module swan {
      * HScrollBar（水平 ScrollBar）控件可以在因数据太多而不能在显示区域中以水平方向完全显示时控制显示的数据部分。
      * <p>虽然 HScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。</p>
      *
+     * @includeExample examples/Samples/src/extension/swan/components/HScrollBarExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -11429,6 +11465,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ProgressBarExample.ts
      */
     /**
      * @language zh_CN
@@ -11437,6 +11474,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ProgressBarExample.ts
      */
     class ProgressBar extends Range {
         /**
@@ -11664,6 +11702,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/VScrollBarExample.ts
      */
     /**
      * @language zh_CN
@@ -11673,6 +11712,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/VScrollBarExample.ts
      */
     class VScrollBar extends ScrollBarBase {
         /**
@@ -11712,6 +11752,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ToggleButtonExample.ts
      */
     /**
      * @language zh_CN
@@ -11725,6 +11766,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ToggleButtonExample.ts
      */
     class ToggleButton extends Button {
         /**
@@ -11812,6 +11854,7 @@ declare module swan {
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
+         * @includeExample src/extension/swan/components/HSlider.ts
          */
         /**
          * @language zh_CN
@@ -11819,6 +11862,7 @@ declare module swan {
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
+         * @includeExample src/extension/swan/components/HSlider.ts
          */
         constructor();
         /**
@@ -12161,6 +12205,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample src/extension/swan/components/TabBar.ts
      */
     /**
      * @language zh_CN
@@ -12174,6 +12219,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample src/extension/swan/components/TabBar.ts
      */
     class ListBase extends DataGroup {
         /**
@@ -12663,6 +12709,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/TabBarExample.ts
      */
     /**
      * @language zh_CN
@@ -12682,6 +12729,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/TabBarExample.ts
      */
     class TabBar extends ListBase {
         /**
@@ -12733,6 +12781,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ToggleSwitchExample.ts
      */
     /**
      * @language zh_CN
@@ -12741,6 +12790,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ToggleSwitchExample.ts
      */
     class ToggleSwitch extends ToggleButton {
         /**
@@ -12773,6 +12823,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/VSliderExample.ts
      */
     /**
      * @language zh_CN
@@ -12782,6 +12833,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/VSliderExample.ts
      */
     class VSlider extends SliderBase {
         /**
@@ -12838,6 +12890,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/CheckboxExample.ts
      */
     /**
      * @language zh_CN
@@ -12846,6 +12899,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/CheckboxExample.ts
      */
     class CheckBox extends ToggleButton {
         /**
@@ -12875,6 +12929,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ListExample.ts
      */
     /**
      * @language zh_CN
@@ -12883,6 +12938,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ListExample.ts
      */
     class List extends ListBase {
         /**
@@ -13060,6 +13116,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/RadioButtonExample.ts
      */
     /**
      * @language zh_CN
@@ -13068,6 +13125,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/RadioButtonExample.ts
      */
     class RadioButton extends ToggleButton {
         /**
@@ -13231,6 +13289,7 @@ declare module swan {
      * The current value of the slider is determined by the relative location of the thumb between
      * the end points of the slider, corresponding to the slider's minimum and maximum values.
      *
+     * @includeExample examples/Samples/src/extension/swan/components/HSliderExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -13240,6 +13299,7 @@ declare module swan {
      * 使用 HSlider（水平滑块）控件，用户可通过在滑块轨道的端点之间移动滑块来选择值。
      * 滑块的当前值由滑块端点（对应于滑块的最小值和最大值）之间滑块的相对位置确定。
      *
+     * @includeExample examples/Samples/src/extension/swan/components/HSliderExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
