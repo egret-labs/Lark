@@ -32,7 +32,7 @@ class SliderDemo extends swan.Group{
 
 跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用skinName属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定。若是外部文件资源可以监听其加载完成。
 
-需要注意的是，我们需要制定滑块控件的宽度才能让他显示出来，例如我们在下面添加他的属性，宽度为500，最大值1024，最小值0，并用上面的 lable 来显示滑块的值。修改上面的代码如下：
+需要注意的是，我们需要指定滑块控件的宽度才能让他很好的显示出来，例如我们在下面添加他的属性，宽度为500，最大值1024，最小值0，并用上面的 lable 来显示滑块的值。修改上面的代码如下：
 
 ``` TypeScript
 class SliderDemo extends swan.Group{
@@ -83,3 +83,6 @@ this.myHSlider.on(lark.Event.CHANGE,this.onHChange,this);       //监听滑块�
 ![](image/7-7-slider-2.png)
 
 需要注意的是 liveDragging 属性如果被设置为 false 那么 pendingValue 将不会时时变化。
+
+* 上一节 [单选按钮](7-6-toggle.md)
+* 下一节 [滑动选择器](7-8-progressbar.md)
