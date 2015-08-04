@@ -1,14 +1,14 @@
 #Swan (UI库) 编程指南 - 复选框
 
-复选框组件swan.CheckBox继承自切换按钮swan.ToggleButton，单击该按钮会在弹起状态和按下状态之间进行切换。如果在按钮处于弹起状态时单击该按钮，则它会切换到按下状态。必须再次单击该按钮才可将其切换回弹起状态。可以使用 selected 属性以编程方式获取或设置此状态。
+复选框组件 swan.CheckBox 继承自切换按钮s wan.ToggleButton ，单击该按钮会在弹起状态和按下状态之间进行切换。如果在按钮处于弹起状态时单击该按钮，则它会切换到按下状态。必须再次单击该按钮才可将其切换回弹起状态。可以使用 selected 属性以编程方式获取或设置此状态。
 
-当然复选框按钮也继承自按钮swan.Button和容器swan.Component,他具有按钮和容器的基本功能。
+当然复选框按钮也继承自按钮 swan.Button 和容器 swan.Component ,他具有按钮和容器的基本功能。
 
 显示一个复选框我们通常需要一个对应的皮肤，这里我们先准备好皮肤的图片资源，如下图：
 
 ![](image/7-4-checkbox-skin.png)
 
-在项目中src目录下新建一个skins目录，存放我们的皮肤CheckBoxSkin.exml,具体内容如下（图片资源已经在相应路径内）:
+在项目中src目录下新建一个 skins 目录，存放我们的皮肤 CheckBoxSkin.exml ,具体内容如下（图片资源已经在相应路径内）:
 
 ``` XML
 <?xml version="1.0" encoding="utf-8"?>
@@ -40,7 +40,7 @@ class CheckBoxDemo extends swan.Group {
 }
 ```
 
-跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用skinName属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定。若是外部文件资源可以通过监听其加载完成。修改上面的代码如下：
+跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用skinName属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定。若是外部文件资源可以监听其加载完成。修改上面的代码如下：
 
 ``` TypeScript
     public constructor() {
@@ -48,23 +48,23 @@ class CheckBoxDemo extends swan.Group {
         this.myCheckBox.skinName = "skins/CheckBoxSkin.exml"; // 指定外部皮肤.
         this.myCheckBox.once(lark.Event.COMPLETE,this.onLoaded,this); // 监听皮肤加载完成.
     }
-    private onLoaded(e:lark.Event):void {
+    private onLoaded(e:lark.Event):void {   //添加事件处理
         console.log("skin load complete"); //皮肤加载完成
         this.addChild(this.myCheckBox);    //将我们的复选框添加到显示列表当中
     }
 ```
 
-需要注意的是，我们的CheckBoxDemo类需要被添加至舞台，具体可参见其他章节。编译运行项目我们可以看到myCheckBox已经显示出来了。
+需要注意的是，我们的 CheckBoxDemo 类需要被添加至舞台，具体可参见其他章节。编译运行项目我们可以看到 myCheckBox 已经显示出来了。
 
 ![](image/7-4-checkbox-1.png)
 
-同Button一样，我们可以指定其label属性，来添加一段描述性的文字。在以上onLoaded函数中添加如下代码，指定其描述文字.
+同Button一样，我们可以指定其label属性，来添加一段描述性的文字。在以上 onLoaded 函数中添加如下代码，指定其描述文字.
 
 ``` TypeScript
     this.myCheckBox.label = "This is my Check Box"; //在onLoaded添加lable属性.
 ```
 
-通常，我们希望能指定复选框的行为，包括选中，不被选中下的表现，可以通过监听lark.Event.CHANGE来实现，比如我们在onLoaded中添加如下代码，并添加函数onChange：
+通常，我们希望能指定复选框的行为，包括选中，不被选中下的表现，可以通过监听 lark.Event.CHANGE 来实现，比如我们在 onLoaded 中添加如下代码，并添加函数 onChange ：
 
 ``` TypeScript
     private onLoaded(e:lark.Event):void {
@@ -84,6 +84,9 @@ class CheckBoxDemo extends swan.Group {
     }
 ```
 
-同Button一样，我们也可以禁用复选框组件，设置其enabled为false即可。 这样我们就得到了如下效果的复选框了:
+同 Button 一样，我们也可以禁用复选框组件，设置其 enabled 为 false 即可。 这样我们就得到了如下效果的复选框了:
 
 ![](image/7-4-checkbox-2.png)
+
+* 上一节 [按钮](7-3-button.md)
+* 下一节 [单选按钮](7-5-radiobutton.md)
