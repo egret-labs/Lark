@@ -52,7 +52,7 @@ class ToggleDemo extends swan.Group{
 }
 ```
 
-需要注意的是，我们的 ToggleDemo 类需要被添加至舞台，具体可参见其他章节。编译运行项目我们可以看到 ToggleDemo 已经显示出来了。
+需要注意的是，我们的 ToggleDemo 类的实例需要被添加至舞台，具体可参见其他章节。编译运行项目我们可以看到 ToggleDemo 已经显示出来了。
 
 ![](image/7-6-toggle-1.png)
 

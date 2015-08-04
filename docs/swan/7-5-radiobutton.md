@@ -56,7 +56,7 @@ class RadioButtonDemo extends swan.Group {
     }
 ```
 
-需要注意的是，我们的 RadioButtonDemo 类需要被添加至舞台，具体可参见其他章节。编译运行项目我们可以看到 RadioButtonDemo 已经显示出来了。
+需要注意的是，我们的 RadioButtonDemo 类的实例需要被添加至舞台，具体可参见其他章节。编译运行项目我们可以看到 RadioButtonDemo 已经显示出来了。
 
 ![](image/7-5-radiobutton-1.png)
 
@@ -70,7 +70,7 @@ class RadioButtonDemo extends swan.Group {
     }
 ```
 
-### 设置按钮组
+## 设置按钮组
 
 单选按钮一般跟其他单选按钮组成一个按钮组，通过指定 groupName 属性来确定属于哪一个组。下面我们继续完善我们的 RadioButtonDemo 类。添加一个 myRadioButtonGroup 属性，并添加一个 myGroup() 方法，给他加入三个单选按钮。代码如下：
 
