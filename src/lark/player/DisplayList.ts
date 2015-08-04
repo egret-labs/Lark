@@ -380,7 +380,7 @@ module lark.sys {
                     if (rootMatrix) {
                         context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
                         node.$render(context);
-                        context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx, rootMatrix.ty);
+                        context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx * this.$pixelRatio, rootMatrix.ty * this.$pixelRatio);
                     }
                     else {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
                         context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
@@ -556,7 +556,7 @@ module lark.sys {
                 if (rootMatrix) {
                     context.translate(region.minX, region.minY)
                     context.drawImage(displayContext.surface, 0, 0);
-                    context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx, rootMatrix.ty);
+                    context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx * this.$pixelRatio, rootMatrix.ty * this.$pixelRatio);
                 }
                 else {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
                     context.setTransform(1, 0, 0, 1, region.minX, region.minY);
@@ -613,7 +613,13 @@ module lark.sys {
 
             //绘制显示对象自身
             context.save();
-            context.setTransform(m.a, m.b, m.c, m.d, m.tx - this.offsetX, m.ty - this.offsetY);
+            if (rootMatrix) {
+                context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx * this.$pixelRatio, rootMatrix.ty * this.$pixelRatio);
+                context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+            }
+            else {
+                context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+            }
             context.beginPath();
             context.rect(scrollRect.x, scrollRect.y, scrollRect.width, scrollRect.height);
             context.clip();
