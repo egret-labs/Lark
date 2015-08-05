@@ -3,7 +3,7 @@
   <component id="BasicLayout" super="swan.LayoutBase" show="false" module="swan"/>
   <component id="Button" super="swan.Component" state="up,down,disabled" show="true" module="swan"/>
   <component id="CheckBox" super="swan.ToggleButton" show="true" module="swan"/>
-  <component id="Component" super="lark.Sprite" state="normal,disabled" show="true" module="swan"/>
+  <component id="Component" super="lark.Sprite" state="" show="true" module="swan"/>
   <component id="DataGroup" super="swan.Group" default="dataProvider" show="true" module="swan"/>
   <component id="EditableText" super="lark.TextInput" show="true" module="swan"/>
   <component id="Group" super="lark.Sprite" default="elementsContent" show="true" module="swan"/>
