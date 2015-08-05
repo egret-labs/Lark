@@ -1,6 +1,6 @@
 #Swan (UI库) 编程指南 - 输入文本
 
-在 Swan 中为我们提供了输入文本控件，使用 swan.EditableText 可以创建可供用户输入的文本控件。 swan.EditableText 继承自 lark.TextInput ,也就是说使用它也可以  使用 lark.TextFild 和 lark.TextInput 的属性和方法。具体可以参照前面的章节.
+在 Swan 中为我们提供了输入文本控件，使用 swan.EditableText 可以创建可供用户输入的文本控件。 swan.EditableText 继承自 lark.TextInput ,也就是说使用它也可以使用 lark.TextFild 和 lark.TextInput 的属性和方法。具体可以参照前面的章节.
 
 这里我们准备一张图片作为背景素材:
 
