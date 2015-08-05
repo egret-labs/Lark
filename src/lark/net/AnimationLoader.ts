@@ -113,14 +113,14 @@ module lark {
         /**
          * @language en_US
          * The data received from the load operation.
-         * @see lark.MovieClipData
+         * @see lark.Animation
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 使用 load() 方法加载成功的 MovieClipData 对象。
-         * @see lark.MovieClipData
+         * 使用 load() 方法加载成功的 Animation 对象。
+         * @see lark.Animation
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -134,9 +134,8 @@ module lark {
          * Note: Calling this method for an already active request (one for which load() has already been
          * called) will abort the last load operation immediately.
          * At present it supports Egret MovieClip format only.
-         * @param url The web address of the MovieClip config to load。At present it supports Egret MovieClip format only.
-         * @see lark.MovieClip
-         * @see lark.MovieClipData
+         * @param url The web address of the Animation config to load。At present it supports Egret MovieClip format only.
+         * @see lark.Animation
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -145,9 +144,8 @@ module lark {
          * 启动一次 MovieClip 数据加载。<br/>
          * 注意：若之前已经调用过加载请求，重新调用 load() 将终止先前的请求，并开始新的加载。
          * 目前只支持 Egret MovieClip 的数据格式。
-         * @param url 要加载的 MovieClip 配置文件的地址。目前只支持 Egret MovieClip 的数据格式。
-         * @see lark.MovieClip
-         * @see lark.MovieClipData
+         * @param url 要加载的 Animation 配置文件的地址。目前只支持 Egret MovieClip 的数据格式。
+         * @see lark.Animation
          * @version Lark 1.0
          * @platform Web,Native
          */
