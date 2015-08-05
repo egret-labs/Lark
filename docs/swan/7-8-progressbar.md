@@ -1,6 +1,6 @@
 #Swan (UI库) 编程指南 - 进度条
 
-swan.ProgressBar 进度条控件，可以用来显示随时间变化的进度任务。跟前面的滑块 swan.Slider 控件一样，进度条控件也继承自 swan.Range 控件。也就是说 swan.Progress 进度条控件也可以设置 maximum 、minimum 、value 、等属性。
+我们可以使用 swan.ProgressBar 进度条控件来显示随时间变化的进度任务。跟前面的滑块 swan.Slider 控件一样，进度条控件也继承自 swan.Range 控件。也就是说 swan.Progress 进度条控件也可以设置 maximum 、minimum 、value 、等属性。
 
 首先，我们准备好组件皮肤所需要的素材，如下图所示：
 
@@ -84,3 +84,4 @@ this.myProgress.on(lark.Event.ENTER_FRAME,this.onFrame,this);
 ![](image/7-8-progressbar-2.png)
 
 * 上一节 [滑动选择器](7-7-slider.md)
+* 下一节 [输入文本](7-9-editabletext.md)
