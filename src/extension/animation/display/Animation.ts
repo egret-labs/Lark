@@ -27,58 +27,127 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
+
 module lark {
+
+    export module sys {
+        /**
+         * @private
+         * Animation的每一帧
+         */
+        export class AnimationFrame {
+
+            public constructor(bitmapData:lark.BitmapData, x?:number, y?:number, clip?:Rectangle) {
+                this.bitmapData = bitmapData;
+                this.x = +x;
+                this.y = +y;
+                this.clip = clip;
+            }
+
+            public bitmapData:lark.BitmapData;
+
+            public clip:lark.Rectangle;
+
+            public x:number;
+
+            public y:number;
+        }
+    }
+
 
     /**
      * @private
      * @language en_US
-     * The MovieClip object unlike the Sprite object, a MovieClip object has a timeline.
+     * Frame by frame animation.
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @private
      * @language zh_CN
-     * MovieClip 对象不同于 Sprite 对象，MovieClip 对象拥有一个时间轴。
+     * 逐帧动画。与 Sprite 不同是 Animation 有
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export class MovieClip extends lark.DisplayObject {
+    export class Animation extends lark.DisplayObject {
 
         /**
          * @language en_US
-         * Specifies the number of the frame in which the playhead is located in the timeline of the MovieClip instance. If the movie clip has multiple scenes, this value is the frame number in the current scene.
+         * Constructor.
          * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 指定播放头在 MovieClip 实例的时间轴中所处的帧的编号。如果影片剪辑有多个场景，该值是当前场景中的帧编号。
+         * 构造函数。
          * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public constructor(movieClipData?:MovieClipData) {
+        public constructor() {
             super();
             this.$renderRegion = new lark.sys.Region();
-            this._movieClipData = movieClipData;
-            if (movieClipData && movieClipData.$frames.length) {
+            this.on(lark.Event.ENTER_FRAME, this.$onFrame, this);
+        }
+
+        $init(frames:Array<sys.AnimationFrame>):void {
+            this.frames = frames;
+            if (frames.length) {
+                this._currentFrame = 0;
                 this.$isPlaying = true;
+                this._callBacks = {};
+                this._callBacksThis = {};
+                this._callBacksArgs = {};
+                this.currentRun = false;
                 this.executeFrameScript();
                 this.$invalidateContentBounds();
             }
-            this.on(lark.Event.ENTER_FRAME, this.$onFrame, this);
+            else {
+                this._currentFrame = 0;
+                this.$isPlaying = false;
+                this._callBacks = null;
+                this._callBacksThis = null;
+                this._callBacksArgs = null;
+                this.currentRun = false;
+            }
+        }
+
+        /**
+         * @language en_US
+         * Add a frame.
+         * @param offX offset x, x position of the frame image is displayed.
+         * @param offY offset y, y position of the frame image is displayed.
+         * @param clipRect clipping region, need to cut the area shown in the figure at the source.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 添加一个帧。
+         * @param bitmapData 帧图片。
+         * @param offX 偏移量 x，该帧图片显示时的位置 x。
+         * @param offY 偏移量 y，该帧图片显示时的位置 y。
+         * @param clipRect 裁剪区域，需要在源图中显示的裁剪区域。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public addFrame(bitmapData:BitmapData, offX:number, offY:number, clipRect:Rectangle):void {
+            this.frames.push(new sys.AnimationFrame(bitmapData, offX, offY, clipRect));
         }
 
         /**
          * @private
          */
-        private _callBacks:Object = {};
+        private _callBacks:Object;
         /**
          * @private
          */
-        private _callBacksThis:Object = {};
+        private _callBacksThis:Object;
+        /**
+         * @private
+         */
+        private _callBacksArgs:Object;
 
         /**
          * @private
@@ -88,31 +157,35 @@ module lark {
 
         /**
          * @language en_US
-         * Add a call-back-function at the frame.If a call-back-function has existed on the frame, it's will be replaced.The this pointer points to the MovieClip instance.
+         * Add a call-back-function at the frame.If a call-back-function has existed on the frame, it's will be replaced. To delete of the frame callback, callBack property is set to null.
          * @param frame The frame to add call back.The number of first frame is 1.
          * @param callBack The function to call back.
+         * @param args The arguments of the function to call back.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 在对应的帧上添加回调函数。如果之前该帧上已经有回调函数，会被替换成新的回调函数。回调函数的作用域被锁定为 MovieClip 实例本身。
+         * 在对应的帧上添加回调函数。如果之前该帧上已经有回调函数，会被替换成新的回调函数。若要清除掉该帧回调函数， callBack 属性设置为 null 即可。
          * @param frame 第几帧添加代码。起始帧编号为1。
          * @param callBack 回调函数。
+         * @param args 回调函数参数。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public addFrameScript(frame:number, callBack:Function, thisObj:any = null):void {
-            if (!this.movieClipData || !this.movieClipData.$frames.length) {
+        public addFrameScript(frame:number, callBack:Function, thisObj?:any, ...args):void {
+            var length = this.frames.length;
+            if (!length) {
                 return;
             }
             frame = +frame | 0;
             frame = frame < 0 ? 0 : frame;
-            if (this.movieClipData && frame >= this.movieClipData.$frames.length) {
-                frame = this.movieClipData.$frames.length - 1;
+            if (frame >= length) {
+                frame = length - 1;
             }
             this._callBacks[frame] = callBack;
             this._callBacksThis[frame] = thisObj;
+            this._callBacksArgs[frame] = args;
         }
 
         /**
@@ -122,14 +195,14 @@ module lark {
 
         /**
          * @language en_US
-         * Specifies the number of the frame in which the playhead is located in the timeline of the MovieClip instance. If the movie clip has multiple scenes, this value is the frame number in the current scene.
+         * Current playhead frame sequence.
          * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 指定播放头在 MovieClip 实例的时间轴中所处的帧的编号。如果影片剪辑有多个场景，该值是当前场景中的帧编号。
+         * 当前播放头所在帧序列。
          * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
@@ -141,68 +214,22 @@ module lark {
         /**
          * @private
          */
-        private _movieClipData:MovieClipData;
-
-        /**
-         * @language en_US
-         * bitmapData The MovieClipData object being referenced.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 被引用的 MovieClipData 对象。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public get movieClipData():MovieClipData {
-            return this._movieClipData;
-        }
-
-        /**
-         * @language en_US
-         * bitmapData The BitmapArrayData object being referenced.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 被引用的 BitmapArrayData 对象。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public set movieClipData(movieClipData:MovieClipData) {
-            this._movieClipData = movieClipData;
-            if (movieClipData && movieClipData.$frames.length) {
-                this._currentFrame = 0;
-                this.$isPlaying = true;
-                this.currentRun = false;
-                this.executeFrameScript();
-                this._callBacks = {};
-                this._callBacksThis = {};
-            }
-            else {
-                this._currentFrame = 0;
-                this.$isPlaying = false;
-                this._callBacks = null;
-                this._callBacksThis = null;
-            }
-            this.$invalidateContentBounds();
-        }
+        private frames:Array<sys.AnimationFrame> = [];
 
         /**
          * @private
          * 执行当前帧脚本逻辑
          */
         private executeFrameScript():void {
-            if (!this._movieClipData || !this._movieClipData.$frames.length || !this._callBacks) {
+            if (!this.frames.length || !this._callBacks) {
                 return;
             }
             var callBack:Function = this._callBacks[this._currentFrame];
             var callBackThis:any = this._callBacksThis[this._currentFrame];
+            var callBackArgs:any = this._callBacksArgs[this._currentFrame];
             if (callBack && !this.currentRun) {
                 this.currentRun = true;
-                callBack.apply(callBackThis);
+                callBack.apply(callBackThis, callBackArgs);
             }
         }
 
@@ -213,14 +240,14 @@ module lark {
 
         /**
          * @language en_US
-         * A movie clip is playing or not.
+         * The animation is playing or not.
          * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         *  MovieClip 实例当前是否正在播放。
+         * Animation 实例当前是否正在播放。
          * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
@@ -237,7 +264,7 @@ module lark {
                 return;
             }
             this._currentFrame++;
-            this._currentFrame = this._currentFrame % this._movieClipData.$frames.length;
+            this._currentFrame = this._currentFrame % this.frames.length;
             this.currentRun = false;
             this.executeFrameScript();
             this.$invalidateContentBounds();
@@ -247,9 +274,14 @@ module lark {
          * @private
          */
         $measureContentBounds(bounds:lark.Rectangle):void {
-            if (this._movieClipData && this._movieClipData.$frames.length) {
-                var frameInfo = this._movieClipData.$frames[this._currentFrame];
-                bounds.setTo(frameInfo.x, frameInfo.y, frameInfo.width, frameInfo.height);
+            if (this.frames.length) {
+                var frameData = this.frames[this._currentFrame];
+                if (frameData.clip) {
+                    bounds.setTo(frameData.x, frameData.y, frameData.clip.width, frameData.clip.height);
+                }
+                else {
+                    bounds.setTo(frameData.x, frameData.y, frameData.bitmapData.width, frameData.bitmapData.height);
+                }
             }
             else {
                 bounds.setEmpty();
@@ -260,35 +292,42 @@ module lark {
          * @private
          */
         $render(context:lark.sys.RenderContext):void {
-            if (this._movieClipData) {
-                var frameInfo = this._movieClipData.$frames[this._currentFrame];
-                context.drawImage(frameInfo.bitmapData, frameInfo.sourceX, frameInfo.sourceY, frameInfo.width,
-                    frameInfo.height, frameInfo.x, frameInfo.y, frameInfo.width, frameInfo.height);
+            if (this.frames.length) {
+                var frameData = this.frames[this._currentFrame];
+                var bitmapData = frameData.bitmapData;
+                var clip = frameData.clip;
+                if (clip) {
+                    context.drawImage(bitmapData, clip.x, clip.y, clip.width, clip.height, frameData.x, frameData.y, clip.width, clip.height);
+                }
+                else {
+                    context.drawImage(bitmapData, 0, 0, bitmapData.width, bitmapData.height, frameData.x, frameData.y, bitmapData.width, bitmapData.height);
+                }
             }
         }
 
         /**
          * @language en_US
-         * Starts playing the MovieClip at the specified frame.
+         * Starts playing the animation at the specified frame. This happens after all remaining actions in the frame have finished executing.
          * @param frame A number representing the frame number, or a string representing the label of the frame, to which the playhead is sent.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 从指定帧开始播放 MovieClip 。
+         * 从指定帧开始播放 Animation 。这会在帧中的所有剩余动作执行完毕后发生。
          * @param frame 表示播放头转到的帧编号的数字，或者表示播放头转到的帧标签的字符串。
          * @version Lark 1.0
          * @platform Web,Native
          */
         public gotoAndPlay(frame:number):void {
-            if (!this._movieClipData || !this._movieClipData.$frames.length) {
+            var length = this.frames.length;
+            if (!length) {
                 return;
             }
             frame = +frame | 0;
             frame = frame < 0 ? 0 : frame;
-            if (frame >= this._movieClipData.$frames.length) {
-                frame = this._movieClipData.$frames.length - 1;
+            if (frame >= length) {
+                frame = length - 1;
             }
             this.$isPlaying = true;
             if (this._currentFrame == frame) {
@@ -301,27 +340,28 @@ module lark {
 
         /**
          * @language en_US
-         * Brings the playhead to the specified frame of the movie clip and stops it there.
+         * Brings the playhead to the specified frame of the animation and stops it there. This happens after all remaining actions in the frame have finished executing.
          * @param frame A number representing the frame number, or a string representing the label of the frame, to which the playhead is sent.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 将播放头移到影片剪辑的指定帧并停在那里。
+         * 将播放头移到 Animation 的指定帧并停在那里。这会在帧中的所有剩余动作执行完毕后发生。
          * @param frame 表示播放头转到的帧编号的数字，或者表示播放头转到的帧标签的字符串。
          * @version Lark 1.0
          * @platform Web,Native
          */
         public gotoAndStop(frame:number):void {
-            if (!this._movieClipData || !this._movieClipData.$frames.length) {
+            var length = this.frames.length;
+            if (!length) {
                 return;
             }
             frame = +frame | 0;
             frame = frame < 0 ? 0 : frame;
             this.$isPlaying = false;
-            if (frame >= this._movieClipData.$frames.length) {
-                frame = this._movieClipData.$frames.length - 1;
+            if (frame >= length) {
+                frame = length - 1;
             }
             if (this._currentFrame == frame) {
                 return;
@@ -344,11 +384,12 @@ module lark {
          * @platform Web,Native
          */
         public nextFrame():void {
+            var length = this.frames.length;
             this.$isPlaying = false;
-            if (!this._movieClipData || !this._movieClipData.$frames.length) {
+            if (!length) {
                 return;
             }
-            if (this._currentFrame == this._movieClipData.$frames.length - 1) {
+            if (this._currentFrame == length - 1) {
                 this.executeFrameScript();
                 return;
             }
@@ -359,13 +400,13 @@ module lark {
 
         /**
          * @language en_US
-         * Moves the playhead in the timeline of the movie clip.
+         * Moves the playhead in the timeline of the animation.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 在影片剪辑的时间轴中移动播放头。
+         * 在 Animation 的时间轴中移动播放头。
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -387,7 +428,7 @@ module lark {
          */
         public prevFrame():void {
             this.$isPlaying = false;
-            if (!this._movieClipData || !this._movieClipData.$frames.length) {
+            if (!this.frames.length) {
                 return;
             }
             if (this._currentFrame == 0) {
@@ -401,13 +442,13 @@ module lark {
 
         /**
          * @language en_US
-         * Stops the playhead in the bitmap array.
+         * Stops the playhead in the animation.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 停止序列帧动画中的播放头。
+         * 停止 Animation 中的播放头。
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -417,20 +458,20 @@ module lark {
 
         /**
          * @language en_US
-         * The totalFrames property returns the total number of frames in the movie clip.
+         * The totalFrames property returns the total number of frames in the animation.
          * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * totalFrames 属性会返回影片剪辑中帧的总数。
+         * totalFrames 属性会返回 Animation 帧的总数。
          * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
         public get totalFrames():number {
-            return this._movieClipData ? this._movieClipData.totalFrames : 0;
+            return this.frames.length;
         }
     }
 }

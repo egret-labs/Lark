@@ -52,7 +52,28 @@ module lark {
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export class MovieClipLoader extends lark.EventEmitter {
+    export class AnimationLoader extends lark.Sprite {
+
+        /**
+         * @language en_US
+         * Constructor.
+         * @param url Configuration file path to load.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         * @param url 要加载的配置文件路径。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public constructor(url?:string) {
+            super();
+            if (url) {
+                this.load(url);
+            }
+        }
 
         /**
          * @private
@@ -72,6 +93,7 @@ module lark {
          * @language zh_CN
          * 当从其他站点加载一个BitmapArray时，指定是否启用跨域资源共享(CORS)，默认值为null。<br/>
          * 可以设置为"anonymous","use-credentials"或null,设置为其他值将等同于"anonymous"。
+         * @default null
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -86,7 +108,7 @@ module lark {
         /**
          * @private
          */
-        $data:MovieClipData;
+        $data:Animation;
 
         /**
          * @language en_US
@@ -102,7 +124,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public get data():MovieClipData {
+        public get data():Animation {
             return this.$data;
         }
 
@@ -204,15 +226,17 @@ module lark {
                 var list:Array<any> = info.mc[attributes[0]].frames;
                 var len = list.length;
                 var res;
-                var frames:Array<lark.sys.MovieClipFrameData> = [];
+                var frames:Array<sys.AnimationFrame> = [];
                 for (var i = 0; i < len; i++) {
                     res = info.res[list[i].res];
-                    frames.push(new lark.sys.MovieClipFrameData(this.$loadList[0].content, list[i].x, list[i].y, res.w, res.h, res.x, res.y));
+                    var rect = lark.Rectangle.create();
+                    rect.setTo(res.x, res.y, res.w, res.h);
+                    frames.push(new lark.sys.AnimationFrame(this.$loadList[0].content, list[i].x, list[i].y, rect));
                 }
-                var bitmapArrayData = new MovieClipData();
-                bitmapArrayData.$frames = frames;
-                this.$data = bitmapArrayData;
+                this.$data = new Animation();
+                this.$data.$init(frames);
                 this.$loadList = null;
+                this.addChild(this.$data);
                 this.emitWith(lark.Event.COMPLETE);
             }
             else {
