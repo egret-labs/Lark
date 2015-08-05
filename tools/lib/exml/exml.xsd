@@ -2,13 +2,14 @@
   <xs:attributeGroup name="lark.Bitmap">
     <xs:attributeGroup ref="lark.DisplayObject"/>
     <xs:attribute name="bitmapData" type="xs:string"/>
+    <xs:attribute name="pixelHitTest" type="xs:boolean"/>
     <xs:attribute name="smoothing" type="xs:boolean"/>
   </xs:attributeGroup>
   <xs:group name="lark.BitmapData">
     <xs:choice/>
   </xs:group>
   <xs:complexType name="lark.BitmapData">
-    <xs:group ref="lark.BitmapData" minOccurs="0"/>
+    <xs:group ref="lark.BitmapData"/>
   </xs:complexType>
   <xs:group name="boolean">
     <xs:choice>
@@ -22,6 +23,7 @@
     <xs:choice>
       <xs:group ref="DisplayObject_attributeElement"/>
       <xs:element name="bitmapData" type="lark.BitmapData"/>
+      <xs:element name="pixelHitTest" type="boolean"/>
       <xs:element name="smoothing" type="boolean"/>
     </xs:choice>
   </xs:group>
@@ -54,7 +56,6 @@
     <xs:attribute name="mask" type="xs:string"/>
     <xs:attribute name="matrix" type="xs:string"/>
     <xs:attribute name="name" type="xs:string"/>
-    <xs:attribute name="pixelHitTest" type="xs:boolean"/>
     <xs:attribute name="rotation" type="xs:decimal"/>
     <xs:attribute name="scaleX" type="xs:decimal"/>
     <xs:attribute name="scaleY" type="xs:decimal"/>
@@ -152,7 +153,6 @@
       <xs:element name="mask" type="lark.DisplayObject"/>
       <xs:element name="matrix" type="lark.Matrix"/>
       <xs:element name="name" type="string"/>
-      <xs:element name="pixelHitTest" type="boolean"/>
       <xs:element name="rotation" type="number"/>
       <xs:element name="scaleX" type="number"/>
       <xs:element name="scaleY" type="number"/>
@@ -178,9 +178,9 @@
     <xs:attribute name="data" type="xs:string"/>
   </xs:attributeGroup>
   <xs:group name="any">
-    <xs:sequence>
-      <xs:any namespace="##any" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
+    <xs:choice>
+      <xs:any/>
+    </xs:choice>
   </xs:group>
   <xs:complexType name="any">
     <xs:group ref="any"/>
@@ -215,6 +215,23 @@
         <xs:group ref="EventEmitter_attributeElement"/>
       </xs:choice>
       <xs:attributeGroup ref="lark.EventEmitter"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="lark.GeolocationEvent">
+    <xs:attributeGroup ref="lark.Event"/>
+  </xs:attributeGroup>
+  <xs:group name="GeolocationEvent_attributeElement">
+    <xs:choice>
+      <xs:group ref="Event_attributeElement"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="GeolocationEvent">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:any namespace="##other"/>
+        <xs:group ref="GeolocationEvent_attributeElement"/>
+      </xs:choice>
+      <xs:attributeGroup ref="lark.GeolocationEvent"/>
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="lark.Graphics">
@@ -290,6 +307,46 @@
         <xs:group ref="Matrix_attributeElement"/>
       </xs:choice>
       <xs:attributeGroup ref="lark.Matrix"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="lark.MotionEvent">
+    <xs:attributeGroup ref="lark.Event"/>
+  </xs:attributeGroup>
+  <xs:group name="MotionEvent_attributeElement">
+    <xs:choice>
+      <xs:group ref="Event_attributeElement"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="MotionEvent">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:any namespace="##other"/>
+        <xs:group ref="MotionEvent_attributeElement"/>
+      </xs:choice>
+      <xs:attributeGroup ref="lark.MotionEvent"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="lark.OrientationEvent">
+    <xs:attributeGroup ref="lark.Event"/>
+    <xs:attribute name="alpha" type="xs:decimal"/>
+    <xs:attribute name="beta" type="xs:decimal"/>
+    <xs:attribute name="gamma" type="xs:decimal"/>
+  </xs:attributeGroup>
+  <xs:group name="OrientationEvent_attributeElement">
+    <xs:choice>
+      <xs:group ref="Event_attributeElement"/>
+      <xs:element name="alpha" type="number"/>
+      <xs:element name="beta" type="number"/>
+      <xs:element name="gamma" type="number"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="OrientationEvent">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:any namespace="##other"/>
+        <xs:group ref="OrientationEvent_attributeElement"/>
+      </xs:choice>
+      <xs:attributeGroup ref="lark.OrientationEvent"/>
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="lark.Point">
@@ -406,11 +463,15 @@
   <xs:attributeGroup name="lark.Stage">
     <xs:attributeGroup ref="lark.Sprite"/>
     <xs:attribute name="frameRate" type="xs:decimal"/>
+    <xs:attribute name="highResolutionMode" type="xs:string"/>
+    <xs:attribute name="scaleMode" type="xs:string"/>
   </xs:attributeGroup>
   <xs:group name="Stage_attributeElement">
     <xs:choice>
       <xs:group ref="Sprite_attributeElement"/>
       <xs:element name="frameRate" type="number"/>
+      <xs:element name="highResolutionMode" type="string"/>
+      <xs:element name="scaleMode" type="string"/>
     </xs:choice>
   </xs:group>
   <xs:element name="Stage">
@@ -630,10 +691,13 @@
     <xs:group ref="swan.Image"/>
   </xs:complexType>
   <xs:group name="swan.IDisplayText">
-    <xs:choice/>
+    <xs:choice>
+      <xs:element ref="EditableText"/>
+      <xs:element ref="Label"/>
+    </xs:choice>
   </xs:group>
   <xs:complexType name="swan.IDisplayText">
-    <xs:group ref="swan.IDisplayText" minOccurs="0"/>
+    <xs:group ref="swan.IDisplayText"/>
   </xs:complexType>
   <xs:group name="Button_attributeElement">
     <xs:choice>
@@ -702,8 +766,6 @@
     <xs:attribute name="bottom" type="xs:decimal"/>
     <xs:attribute name="currentState" type="xs:string"/>
     <xs:attribute name="enabled" type="xs:boolean"/>
-    <xs:attribute name="explicitHeight" type="xs:decimal"/>
-    <xs:attribute name="explicitWidth" type="xs:decimal"/>
     <xs:attribute name="horizontalCenter" type="xs:decimal"/>
     <xs:attribute name="hostComponentKey" type="xs:string"/>
     <xs:attribute name="includeInLayout" type="xs:boolean"/>
@@ -725,8 +787,6 @@
       <xs:element name="bottom" type="number"/>
       <xs:element name="currentState" type="string"/>
       <xs:element name="enabled" type="boolean"/>
-      <xs:element name="explicitHeight" type="number"/>
-      <xs:element name="explicitWidth" type="number"/>
       <xs:element name="horizontalCenter" type="number"/>
       <xs:element name="hostComponentKey" type="string"/>
       <xs:element name="includeInLayout" type="boolean"/>
@@ -773,7 +833,7 @@
     <xs:choice/>
   </xs:group>
   <xs:complexType name="Function">
-    <xs:group ref="Function" minOccurs="0"/>
+    <xs:group ref="Function"/>
   </xs:complexType>
   <xs:group name="DataGroup_attributeElement">
     <xs:choice>
@@ -800,8 +860,6 @@
   <xs:attributeGroup name="swan.EditableText">
     <xs:attributeGroup ref="lark.TextInput"/>
     <xs:attribute name="bottom" type="xs:decimal"/>
-    <xs:attribute name="explicitHeight" type="xs:decimal"/>
-    <xs:attribute name="explicitWidth" type="xs:decimal"/>
     <xs:attribute name="horizontalCenter" type="xs:decimal"/>
     <xs:attribute name="includeInLayout" type="xs:boolean"/>
     <xs:attribute name="left" type="xs:decimal"/>
@@ -819,8 +877,6 @@
     <xs:choice>
       <xs:group ref="TextInput_attributeElement"/>
       <xs:element name="bottom" type="number"/>
-      <xs:element name="explicitHeight" type="number"/>
-      <xs:element name="explicitWidth" type="number"/>
       <xs:element name="horizontalCenter" type="number"/>
       <xs:element name="includeInLayout" type="boolean"/>
       <xs:element name="left" type="number"/>
@@ -849,8 +905,6 @@
     <xs:attribute name="bottom" type="xs:decimal"/>
     <xs:attribute name="currentState" type="xs:string"/>
     <xs:attribute name="elementsContent" type="xs:string"/>
-    <xs:attribute name="explicitHeight" type="xs:decimal"/>
-    <xs:attribute name="explicitWidth" type="xs:decimal"/>
     <xs:attribute name="horizontalCenter" type="xs:decimal"/>
     <xs:attribute name="includeInLayout" type="xs:boolean"/>
     <xs:attribute name="layout" type="xs:string"/>
@@ -900,8 +954,6 @@
       <xs:element name="bottom" type="number"/>
       <xs:element name="currentState" type="string"/>
       <xs:element name="elementsContent" type="Array_lark.DisplayObject"/>
-      <xs:element name="explicitHeight" type="number"/>
-      <xs:element name="explicitWidth" type="number"/>
       <xs:element name="horizontalCenter" type="number"/>
       <xs:element name="includeInLayout" type="boolean"/>
       <xs:element name="layout" type="swan.LayoutBase"/>
@@ -993,8 +1045,6 @@
   <xs:attributeGroup name="swan.Image">
     <xs:attributeGroup ref="lark.Bitmap"/>
     <xs:attribute name="bottom" type="xs:decimal"/>
-    <xs:attribute name="explicitHeight" type="xs:decimal"/>
-    <xs:attribute name="explicitWidth" type="xs:decimal"/>
     <xs:attribute name="fillMode" type="swan.BitmapFillMode"/>
     <xs:attribute name="horizontalCenter" type="xs:decimal"/>
     <xs:attribute name="includeInLayout" type="xs:boolean"/>
@@ -1015,8 +1065,6 @@
     <xs:choice>
       <xs:group ref="Bitmap_attributeElement"/>
       <xs:element name="bottom" type="number"/>
-      <xs:element name="explicitHeight" type="number"/>
-      <xs:element name="explicitWidth" type="number"/>
       <xs:element name="fillMode" type="string"/>
       <xs:element name="horizontalCenter" type="number"/>
       <xs:element name="includeInLayout" type="boolean"/>
@@ -1101,8 +1149,6 @@
   <xs:attributeGroup name="swan.Label">
     <xs:attributeGroup ref="lark.TextField"/>
     <xs:attribute name="bottom" type="xs:decimal"/>
-    <xs:attribute name="explicitHeight" type="xs:decimal"/>
-    <xs:attribute name="explicitWidth" type="xs:decimal"/>
     <xs:attribute name="horizontalCenter" type="xs:decimal"/>
     <xs:attribute name="includeInLayout" type="xs:boolean"/>
     <xs:attribute name="left" type="xs:decimal"/>
@@ -1120,8 +1166,6 @@
     <xs:choice>
       <xs:group ref="TextField_attributeElement"/>
       <xs:element name="bottom" type="number"/>
-      <xs:element name="explicitHeight" type="number"/>
-      <xs:element name="explicitWidth" type="number"/>
       <xs:element name="horizontalCenter" type="number"/>
       <xs:element name="includeInLayout" type="boolean"/>
       <xs:element name="left" type="number"/>
@@ -1539,6 +1583,7 @@
     <xs:attribute name="horizontalScrollBar" type="xs:string"/>
     <xs:attribute name="scrollPolicyH" type="swan.ScrollPolicy"/>
     <xs:attribute name="scrollPolicyV" type="swan.ScrollPolicy"/>
+    <xs:attribute name="throwSpeed" type="xs:decimal"/>
     <xs:attribute name="verticalScrollBar" type="xs:string"/>
     <xs:attribute name="viewport" type="xs:string"/>
   </xs:attributeGroup>
@@ -1564,6 +1609,7 @@
       <xs:element name="horizontalScrollBar" type="swan.HScrollBar"/>
       <xs:element name="scrollPolicyH" type="string"/>
       <xs:element name="scrollPolicyV" type="string"/>
+      <xs:element name="throwSpeed" type="number"/>
       <xs:element name="verticalScrollBar" type="swan.VScrollBar"/>
       <xs:element name="viewport" type="swan.IViewport"/>
     </xs:choice>
@@ -1576,6 +1622,27 @@
         <xs:group ref="swan.IViewport"/>
       </xs:choice>
       <xs:attributeGroup ref="swan.Scroller"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="swan.ScrollerThrowEvent">
+    <xs:attributeGroup ref="lark.Event"/>
+    <xs:attribute name="currentPos" type="xs:decimal"/>
+    <xs:attribute name="toPos" type="xs:decimal"/>
+  </xs:attributeGroup>
+  <xs:group name="ScrollerThrowEvent_attributeElement">
+    <xs:choice>
+      <xs:group ref="Event_attributeElement"/>
+      <xs:element name="currentPos" type="number"/>
+      <xs:element name="toPos" type="number"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="ScrollerThrowEvent">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:any namespace="##other"/>
+        <xs:group ref="ScrollerThrowEvent_attributeElement"/>
+      </xs:choice>
+      <xs:attributeGroup ref="swan.ScrollerThrowEvent"/>
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="swan.SetProperty">
