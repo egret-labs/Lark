@@ -79,7 +79,7 @@ this.myProgress.on(lark.Event.ENTER_FRAME,this.onFrame,this);
     }
 ```
 
-这样可以看到我们的进度条 myProgress 在随着时间的增长而增长。
+这样可以看到我们的进度条 myProgress 在随着时间的增长而增长。需要注意的是 value 值是不会大于 maximum 的。
 
 ![](image/7-8-progressbar-2.png)
 
