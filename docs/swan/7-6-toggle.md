@@ -34,7 +34,7 @@ class ToggleDemo extends swan.Group{
     private myToggleSwitcher: swan.ToggleSwitch = new swan.ToggleSwitch(); //新建一个开关
 }
 ```
-跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用skinName属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定。若是外部文件资源可以监听其加载完成。修改上面的代码如下：
+跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用 skinName 属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定。若是外部文件资源可以监听其加载完成。修改上面的代码如下：
 
 ``` TypeScript
 class ToggleDemo extends swan.Group{

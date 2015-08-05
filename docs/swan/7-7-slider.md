@@ -1,6 +1,6 @@
 #Swan (UI库) 编程指南 - 滑动选择器
 
-Swan库中给我们提供了两种滑块控件，swan.HSlider 水平滑块控件和 swan.VSlider 垂直滑块控件。他们都继承自 swan.SliderBase 基类，效果也相同，只是一个是水平控件，一个是垂直控件。他们都可以使用基类 swan.SliderBase 的属性和方法。下面以 swan.HSlider 为例，介绍如何使用滑动选择器控件.
+Swan 库中给我们提供了两种滑块控件，swan.HSlider 水平滑块控件和 swan.VSlider 垂直滑块控件。他们都继承自 swan.SliderBase 基类，效果也相同，只是一个是水平控件，一个是垂直控件。他们都可以使用基类 swan.SliderBase 的属性和方法。下面以 swan.HSlider 为例，介绍如何使用滑动选择器控件.
 
 ## 水平滑块控件
 
@@ -30,7 +30,7 @@ class SliderDemo extends swan.Group{
 }
 ```
 
-跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用skinName属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定。若是外部文件资源可以监听其加载完成。
+跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用 skinName 属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定。若是外部文件资源可以监听其加载完成。
 
 需要注意的是，我们需要指定滑块控件的宽度才能让他很好的显示出来，例如我们在下面添加他的属性，宽度为500，最大值1024，最小值0，并用上面的 lable 来显示滑块的值。修改上面的代码如下：
 
@@ -58,7 +58,7 @@ class SliderDemo extends swan.Group{
 }
 ```
 
-需要注意的是，我们的 SliderDemo 类的实例需要被添加至舞台，具体可参见其他章节。编译运行项目我们可以看到 ToggleDemo 已经显示出来了。
+需要注意的是，我们的 SliderDemo 类的实例需要被添加至舞台，具体可参见其他章节。编译运行项目我们可以看到 SliderDemo 已经显示出来了。
 
 ![](image/7-7-slider-1.png)
 
@@ -84,5 +84,5 @@ this.myHSlider.on(lark.Event.CHANGE,this.onHChange,this);       //监听滑块�
 
 需要注意的是 liveDragging 属性如果被设置为 false 那么 pendingValue 将不会时时变化。
 
-* 上一节 [单选按钮](7-6-toggle.md)
-* 下一节 [滑动选择器](7-8-progressbar.md)
+* 上一节 [切换按钮](7-6-toggle.md)
+* 下一节 [进度条](7-8-progressbar.md)

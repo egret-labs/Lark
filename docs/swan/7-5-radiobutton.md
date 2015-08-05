@@ -1,6 +1,6 @@
 #Swan (UI库) 编程指南 - 单选按钮
 
-单选框组件可以让用户在一组互相排斥的内容中做出一种选择。通过 swan.RadioButton 可以添加一个单选按钮。多个单选按钮可以指定一套单选按钮组RadioButtonGroup，在按钮组里用户每次只能选择一个 RadioButton 组件。
+单选框组件可以让用户在一组互相排斥的内容中做出一种选择。通过 swan.RadioButton 可以添加一个单选按钮。多个单选按钮可以指定一套单选按钮组 RadioButtonGroup ，在按钮组里用户每次只能选择一个 RadioButton 组件。
 
 单选框组件继承自 ToggleButton 组件。可以使用 selected 属性以编程方式获取或设置此状态。当然他们都继承自 Button 组件，可以使用前几节 Button 组件的属性和方法。 
 
@@ -134,7 +134,7 @@ private loaded(e:lark.Event):void {
 再添加onChange函数来处理，以上事件:
 
 ``` TypeScript
- private onChange(e:lark.Event){              //在RadioButtonDemo类中添加
+private onChange(e:lark.Event){              //在RadioButtonDemo类中添加
         console.log(e.target.selectedValue);  //通过RadioButtonGroup的selectedValue值来获取当前单选按钮的value值
     }
 ```
