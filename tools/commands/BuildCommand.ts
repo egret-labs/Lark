@@ -19,7 +19,7 @@ class BuildCommand implements lark.Command {
         if (FileUtil.exists(FileUtil.joinPath(options.srcDir, 'libs/lark/')) == false) {
             CopyFiles.copyLark();
         }
-        service.execCommand({ path: lark.options.projectDir, command: "build" },(cmd: lark.ServiceCommandResult)=>{
+        service.execCommand({ path: lark.options.projectDir, command: "build", option: lark.options }, (cmd: lark.ServiceCommandResult) => {
             if (cmd.messages) {
                 cmd.messages.forEach(m=> console.log(m));
             }

@@ -52,7 +52,7 @@ var RunCommand = (function () {
         });
     };
     RunCommand.prototype.sendBuildCMD = function () {
-        service.execCommand({ command: "build", path: lark.options.projectDir }, function (cmd) {
+        service.execCommand({ command: "build", path: lark.options.projectDir, option: lark.options }, function (cmd) {
             if (!cmd.exitCode)
                 console.log('    ' + utils.tr(10011));
             else

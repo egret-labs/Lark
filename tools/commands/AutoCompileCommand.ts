@@ -10,6 +10,7 @@ import FileUtil = require('../lib/FileUtil');
 import CopyFiles = require('../actions/CopyFiles');
 import CompileProject = require('../actions/CompileProject');
 import CompileTemplate = require('../actions/CompileTemplate');
+import parser = require('../parser/Parser');
 
 class AutoCompileCommand implements lark.Command {
     private compileProject:CompileProject; 
@@ -17,7 +18,8 @@ class AutoCompileCommand implements lark.Command {
     execute():number {
         this._request = service.execCommand({
             command: "init",
-            path: lark.options.projectDir
+            path: lark.options.projectDir,
+            option: lark.options
         }, m=> this.onServiceMessage(m), false);
         this._request.once('end', () => process.exit());
         this._request.once('close', () => process.exit());
@@ -26,7 +28,8 @@ class AutoCompileCommand implements lark.Command {
             this.sendCommand({
                 command: "status",
                 status: process.memoryUsage(),
-                path: lark.options.projectDir
+                path: lark.options.projectDir,
+                option: lark.options
             });
             this.exitAfter5Minutes();
         }, 60000);
@@ -140,6 +143,9 @@ class AutoCompileCommand implements lark.Command {
     }
 
     private onServiceMessage(msg: lark.ServiceBuildCommand) {
+        console.log(msg);
+        if (msg.command == 'build' && msg.option)
+            lark.options = parser.parseJSON(msg.option);
         if (msg.command == 'build')
             this.buildChanges(msg.changes);
         if (msg.command == 'shutdown')
@@ -153,7 +159,8 @@ class AutoCompileCommand implements lark.Command {
                 command: 'buildResult',
                 exitCode: this._lastExitCode,
                 messages: msg,
-                path:lark.options.projectDir
+                path: lark.options.projectDir,
+                option: lark.options
             }
         }
         this._request.send(cmd);

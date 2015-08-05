@@ -59,7 +59,10 @@ declare module lark {
         serverOnly?: boolean;
         declaration?: boolean;
         autoCompile?: boolean;
-        fileName?:string;
+        fileName?: string;
+        added: string[];
+        removed: string[];
+        modified: string[];
 
         toJSON: () => any;
         getProject(empty?:boolean): lark.ILarkProject;
@@ -94,6 +97,7 @@ declare module lark {
         command: string;
         path?: string;
         version?: string;
+        option: LarkToolArgs;
     }
 
     export interface ServiceBuildCommand extends ServiceCommand {
