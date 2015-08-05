@@ -2805,11 +2805,8 @@ var swan;
             var d = __define,c=EXMLConfig;p=c.prototype;
             /**
              * @private
-             *
-             * @param instance
-             * @returns
              */
-            p.describe = function (instance) {
+            p.$describe = function (instance) {
                 if (!instance) {
                     return null;
                 }
@@ -2829,7 +2826,7 @@ var swan;
                     return null;
                 }
                 var superInstance = getInstanceOf(superProto.constructor);
-                var superInfo = this.describe(superInstance);
+                var superInfo = this.$describe(superInstance);
                 if (superInfo) {
                     function factory() {
                     }
@@ -2937,7 +2934,7 @@ var swan;
                             }
                             return resultType;
                         }
-                        this.describe(instance);
+                        this.$describe(instance);
                     }
                     var info = properties[prototype.__hashCode__];
                     if (info) {

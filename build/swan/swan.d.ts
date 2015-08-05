@@ -2142,13 +2142,6 @@ declare module swan.sys {
     class EXMLConfig {
         /**
          * @private
-         *
-         * @param instance
-         * @returns
-         */
-        private describe(instance);
-        /**
-         * @private
          * 根据类的短名ID和命名空间获取完整类名(以"."分隔)
          * @param id 类的短名ID
          * @param ns 命名空间

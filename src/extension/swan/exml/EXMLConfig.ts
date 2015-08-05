@@ -55,11 +55,8 @@ module swan.sys {
 
         /**
          * @private
-         * 
-         * @param instance 
-         * @returns 
          */
-        private describe(instance:any):any {
+        $describe(instance:any):any {
             if (!instance) {
                 return null;
             }
@@ -82,7 +79,7 @@ module swan.sys {
             }
 
             var superInstance = getInstanceOf(superProto.constructor);
-            var superInfo = this.describe(superInstance);
+            var superInfo = this.$describe(superInstance);
             if (superInfo) {
                 function factory():void {
                 }
@@ -195,7 +192,7 @@ module swan.sys {
                         }
                         return resultType;
                     }
-                    this.describe(instance);
+                    this.$describe(instance);
                 }
                 var info = properties[prototype.__hashCode__];
                 if (info) {
