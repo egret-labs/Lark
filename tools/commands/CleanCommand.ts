@@ -18,7 +18,11 @@ class CleanCommand implements lark.Command {
             utils.exit(10015, options.projectDir);
         }
 
-        service.execCommand({ path: options.projectDir, command: "shutdown" }, null, false);
+        service.execCommand({
+            path: options.projectDir,
+            command: "shutdown",
+            option: lark.options
+        }, null, false);
         utils.clean(options.debugDir)
         CopyFiles.copyLark();
         var compileProject = new CompileProject();

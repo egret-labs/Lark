@@ -1,5 +1,4 @@
 /// <reference path="../lib/types.d.ts" />
-var server = require('../server/server');
 var utils = require('../lib/utils');
 var HelpCommand = (function () {
     function HelpCommand() {

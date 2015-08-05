@@ -18,7 +18,11 @@ class ShutdownCommand implements lark.Command {
             utils.exit(10015, options.projectDir);
         }
 
-        service.execCommand({ path: lark.options.projectDir, command: "shutdown" }, () => process.exit(0), true);
+        service.execCommand({
+            path: lark.options.projectDir,
+            command: "shutdown",
+            option: lark.options
+        }, () => process.exit(0), true);
         return 0;
     }
 }

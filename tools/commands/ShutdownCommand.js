@@ -11,7 +11,11 @@ var ShutdownCommand = (function () {
             FileUtil.exists(options.templateDir) == false) {
             utils.exit(10015, options.projectDir);
         }
-        service.execCommand({ path: lark.options.projectDir, command: "shutdown" }, function () { return process.exit(0); }, true);
+        service.execCommand({
+            path: lark.options.projectDir,
+            command: "shutdown",
+            option: lark.options
+        }, function () { return process.exit(0); }, true);
         return 0;
     };
     return ShutdownCommand;

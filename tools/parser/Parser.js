@@ -54,6 +54,15 @@ exports.optionDeclarations = [
     }, {
         name: 'debug',
         type: 'boolean'
+    }, {
+        name: 'added',
+        type: 'array'
+    }, {
+        name: 'removed',
+        type: 'array'
+    }, {
+        name: 'modified',
+        type: 'array'
     }
 ];
 var shortOptionNames = {};
@@ -99,7 +108,7 @@ function parseCommandLine(commandLine) {
                             options[opt.name] = args[i++] || "";
                             break;
                         case "array":
-                            options[opt.name] = (args[i++] || "").split(',');
+                            options[opt.name] = (args[i++] || "").split(',').map(function (p) { return decodeURIComponent(p); });
                     }
                 }
                 else {
@@ -157,6 +166,9 @@ function parseJSON(json) {
     options.publish = json.publish;
     options.serverOnly = json.serverOnly;
     options.sourceMap = json.sourceMap;
+    options.added = json.added;
+    options.modified = json.modified;
+    options.removed = json.removed;
     return options;
 }
 exports.parseJSON = parseJSON;

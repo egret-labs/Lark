@@ -15,7 +15,7 @@ var BuildCommand = (function () {
         if (FileUtil.exists(FileUtil.joinPath(options.srcDir, 'libs/lark/')) == false) {
             CopyFiles.copyLark();
         }
-        service.execCommand({ path: lark.options.projectDir, command: "build" }, function (cmd) {
+        service.execCommand({ path: lark.options.projectDir, command: "build", option: lark.options }, function (cmd) {
             if (cmd.messages) {
                 cmd.messages.forEach(function (m) { return console.log(m); });
             }

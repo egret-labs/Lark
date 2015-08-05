@@ -8,7 +8,7 @@
     <xs:choice/>
   </xs:group>
   <xs:complexType name="lark.BitmapData">
-    <xs:group ref="lark.BitmapData"/>
+    <xs:group ref="lark.BitmapData" minOccurs="0"/>
   </xs:complexType>
   <xs:group name="boolean">
     <xs:choice>
@@ -178,9 +178,9 @@
     <xs:attribute name="data" type="xs:string"/>
   </xs:attributeGroup>
   <xs:group name="any">
-    <xs:choice>
-      <xs:any/>
-    </xs:choice>
+    <xs:sequence>
+      <xs:any namespace="##any" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
   </xs:group>
   <xs:complexType name="any">
     <xs:group ref="any"/>
@@ -633,7 +633,7 @@
     <xs:choice/>
   </xs:group>
   <xs:complexType name="swan.IDisplayText">
-    <xs:group ref="swan.IDisplayText"/>
+    <xs:group ref="swan.IDisplayText" minOccurs="0"/>
   </xs:complexType>
   <xs:group name="Button_attributeElement">
     <xs:choice>
@@ -773,7 +773,7 @@
     <xs:choice/>
   </xs:group>
   <xs:complexType name="Function">
-    <xs:group ref="Function"/>
+    <xs:group ref="Function" minOccurs="0"/>
   </xs:complexType>
   <xs:group name="DataGroup_attributeElement">
     <xs:choice>

@@ -60,6 +60,15 @@ export var optionDeclarations: lark.CommandLineOption[] = [
     }, {
         name: 'debug',
         type: 'boolean'
+    }, {
+        name: 'added',
+        type: 'array'
+    }, {
+        name: 'removed',
+        type: 'array'
+    }, {
+        name: 'modified',
+        type: 'array'
     }
 ];
 
@@ -122,7 +131,7 @@ export function parseCommandLine(commandLine: string[]) {
                             options[opt.name] = args[i++] || "";
                             break;
                         case "array":
-                            options[opt.name] = (args[i++] || "").split(',');
+                            options[opt.name] = (args[i++] || "").split(',').map(p=> decodeURIComponent(p));
                     }
                 }
                 else
@@ -185,6 +194,9 @@ export function parseJSON(json: lark.LarkToolArgs): lark.LarkToolArgs {
     options.publish = json.publish;
     options.serverOnly = json.serverOnly;
     options.sourceMap = json.sourceMap;
+    options.added = json.added;
+    options.modified = json.modified;
+    options.removed = json.removed;
 
     return options;
 }
