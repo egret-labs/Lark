@@ -102,6 +102,9 @@ class CompileOptions implements lark.LarkToolArgs {
     scaleMode: string;
     orientation: string;
     background: string;
+    added: string[];
+    removed: string[];
+    modified: string[];
 
     private _tmpDir = null;
     private _tmpProj: lark.ILarkProject;

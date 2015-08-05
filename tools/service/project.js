@@ -27,7 +27,7 @@ var Project = (function () {
         stat.init();
         this.state = stat;
     };
-    Project.prototype.fileChanged = function (socket, path, changeType) {
+    Project.prototype.fileChanged = function (socket, task, path, changeType) {
         var _this = this;
         if (this.pendingRequest)
             this.pendingRequest.end({ command: "build", exitCode: 0 });
@@ -43,6 +43,7 @@ var Project = (function () {
     Project.prototype.build = function () {
         this.timer = null;
         if (this.changes == null) {
+            console.log("scan file changes.......................");
             this.changes = this.state.checkChanges();
         }
         if (this.showBuildWholeProject()) {
@@ -59,7 +60,7 @@ var Project = (function () {
         console.log('buildWholeProject');
         this.shutdown(11);
         var larkPath = FileUtil.joinPath(utils.getLarkRoot(), 'tools/bin/lark');
-        var build = cprocess.spawn(process.execPath, ['--expose-gc', larkPath, 'autocompile'], {
+        var build = cprocess.spawn(process.execPath, ['--expose-gc', larkPath, 'autocompile', (this.option.sourceMap ? "-sourcemap" : "")], {
             detached: true,
             cwd: this.path
         });
@@ -75,7 +76,8 @@ var Project = (function () {
         console.log(this.changes);
         this.sendCommand({
             command: "build",
-            changes: this.changes.added.concat(this.changes.modified).concat(this.changes.removed)
+            changes: this.changes.added.concat(this.changes.modified).concat(this.changes.removed),
+            option: this.option
         });
         global.gc && global.gc();
     };
@@ -88,7 +90,10 @@ var Project = (function () {
         var _this = this;
         if (retry === void 0) { retry = 0; }
         if (this.pendingRequest == null || retry >= 10) {
-            this.sendCommand({ command: 'shutdown' });
+            this.sendCommand({
+                command: 'shutdown',
+                option: lark.options
+            });
             if (this.buildProcess) {
                 this.buildProcess.removeAllListeners('exit');
                 this.buildProcess.kill();

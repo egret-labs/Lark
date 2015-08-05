@@ -4,6 +4,7 @@ var Project = require('./project');
 var ServiceSocket = require('./ServiceSocket');
 var file = require('../lib/FileUtil');
 var childProcess = require('child_process');
+var parser = require('../parser/Parser');
 exports.LARK_SERVICE_PORT = 51598;
 //Lark version, use to shutdown if the version is different to the value passed by the build command
 var version = process.argv[2];
@@ -29,19 +30,33 @@ function run() {
 }
 exports.run = run;
 function handleCommands(task, res) {
-    console.log("task.version:", task.version);
-    console.log('version:', version);
+    console.log("Got task:", task);
     //|| task.version && task.version != version
     if (task.command == 'shutdown') {
         res.send({});
         shutdown();
     }
     var proj = getProject(task.path);
+    proj.option = parser.parseJSON(task.option);
     if (task.command == 'init') {
         proj.buildPort = res;
     }
     else if (task.command == 'build') {
-        proj.fileChanged(res);
+        var buildHandled = false;
+        if (task.option.added && task.option.added.length) {
+            task.option.added.forEach(function (file) { return proj.fileChanged(res, task, file, "added"); });
+            buildHandled = true;
+        }
+        if (task.option.removed && task.option.removed.length) {
+            task.option.removed.forEach(function (file) { return proj.fileChanged(res, task, file, "removed"); });
+            buildHandled = true;
+        }
+        if (task.option.modified && task.option.modified.length) {
+            task.option.modified.forEach(function (file) { return proj.fileChanged(res, task, file, "modified"); });
+            buildHandled = true;
+        }
+        if (!buildHandled)
+            proj.fileChanged(res, task);
     }
     else if (task.command == 'status') {
         var heapTotal = task['status']['heapTotal'];
