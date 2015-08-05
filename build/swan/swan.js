@@ -11733,288 +11733,6 @@ var swan;
 //////////////////////////////////////////////////////////////////////////////////////
 var swan;
 (function (swan) {
-    /**
-     * @language en_US
-     * The Skin class defines the base class for all skins.
-     * You typically don't need to manually create the instance of this class.
-     * It can be created by resolving a EXML.<p/>
-     *
-     * @example You typically write the skin classes in EXML, as the followiong example shows:<p/>
-     * <pre>
-     *      <?xml version="1.0" encoding="utf-8"?>
-     *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
-     *          <states>
-     *              <!-- Specify the states controlled by this skin. -->
-     *          </states>
-     *          <!-- Define skin. -->
-     *      </s:Skin>
-     * </pre>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
-     */
-    /**
-     * @language zh_CN
-     * 皮肤基类。通常情况下，您不需要手动创建这个类的实例，而是通过解析EXML文件后自动生成。<p/>
-     *
-     * @example 通常您可以按照如下方式写EXML代码：<p/>
-     * <pre>
-     *      <?xml version="1.0" encoding="utf-8"?>
-     *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
-     *          <states>
-     *              <!-- Specify the states controlled by this skin. -->
-     *          </states>
-     *          <!-- Define skin. -->
-     *      </s:Skin>
-     * </pre>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
-     */
-    var Skin = (function (_super) {
-        __extends(Skin, _super);
-        function Skin() {
-            _super.apply(this, arguments);
-            /**
-             * @language en_US
-             * The maximum recommended width of the component to be considered.
-             * This property can only affect measure result of host component.
-             *
-             * @default 100000
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 皮肤的最大宽度。仅影响主机组件的测量结果。
-             *
-             * @default 100000
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.maxWidth = 100000;
-            /**
-             * @language en_US
-             * The minimum recommended width of the component to be considered.
-             * This property can only affect measure result of host component.
-             *
-             * @default 0
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 皮肤的最小宽度,此属性设置为大于maxWidth的值时无效。仅影响主机组件的测量结果。
-             *
-             * @default 0
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.minWidth = 0;
-            /**
-             * @language en_US
-             * The maximum recommended height of the component to be considered.
-             * This property can only affect measure result of host component.
-             *
-             * @default 100000
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 皮肤的最大高度。仅影响主机组件的测量结果。
-             *
-             * @default 100000
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.maxHeight = 100000;
-            /**
-             * @language en_US
-             * The minimum recommended height of the component to be considered.
-             * This property can only affect measure result of host component.
-             *
-             * @default 0
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 皮肤的最小高度,此属性设置为大于maxHeight的值时无效。仅影响主机组件的测量结果。
-             *
-             * @default 0
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.minHeight = 0;
-            /**
-             * @language en_US
-             * Number that specifies the explicit width of the skin.
-             * This property can only affect measure result of host component.
-             * @default NaN
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 皮肤显式设置宽度,设置为 NaN 表示不显式设置。仅影响主机组件的测量结果。
-             *
-             * @default NaN
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.width = NaN;
-            /**
-             * @language en_US
-             * Number that specifies the explicit height of the skin.
-             * This property can only affect measure result of host component.
-             *
-             * @default NaN
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 皮肤显式设置高度,设置为 NaN 表示不显式设置。仅影响主机组件的测量结果。
-             *
-             * @default NaN
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.height = NaN;
-            /**
-             * @private
-             */
-            this.$elementsContent = [];
-            /**
-             * @private
-             */
-            this._hostComponent = null;
-            /**
-             * @private
-             */
-            this.$stateValues = new swan.sys.StateValues();
-        }
-        var d = __define,c=Skin;p=c.prototype;
-        d(p, "elementsContent",undefined
-            ,function (value) {
-                this.$elementsContent = value;
-            }
-        );
-        d(p, "hostComponent"
-            /**
-             * @language en_US
-             * The host component which the skin will be attached.
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 此皮肤附加到的主机组件
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            ,function () {
-                return this._hostComponent;
-            }
-            ,function (value) {
-                if (this._hostComponent == value)
-                    return;
-                if (this._hostComponent) {
-                    this._hostComponent.removeListener(lark.Event.ADDED_TO_STAGE, this.onAddedToStage, this);
-                }
-                this._hostComponent = value;
-                var values = this.$stateValues;
-                values.parent = value;
-                if (value) {
-                    this.commitCurrentState();
-                    if (!this.$stateValues.intialized) {
-                        if (value.$stage) {
-                            this.initializeStates(value.$stage);
-                        }
-                        else {
-                            value.once(lark.Event.ADDED_TO_STAGE, this.onAddedToStage, this);
-                        }
-                    }
-                }
-            }
-        );
-        /**
-         * @private
-         *
-         * @param event
-         */
-        p.onAddedToStage = function (event) {
-            this.initializeStates(this._hostComponent.$stage);
-        };
-        return Skin;
-    })(lark.LarkObject);
-    swan.Skin = Skin;
-    lark.registerClass(Skin,"swan.Skin");
-    swan.sys.mixin(Skin, swan.sys.StateClient);
-    swan.registerProperty(Skin, "elementsContent", "Array", true);
-    swan.registerProperty(Skin, "states", "State[]");
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
     var UIImpl = swan.sys.UIComponentImpl;
     /**
      * @language en_US
@@ -12321,7 +12039,7 @@ var swan;
         return Label;
     })(lark.TextField);
     swan.Label = Label;
-    lark.registerClass(Label,"swan.Label",["swan.UIComponent"]);
+    lark.registerClass(Label,"swan.Label",["swan.UIComponent","swan.IDisplayText"]);
     swan.sys.implementUIComponent(Label, lark.TextField);
     swan.registerBindable(Label.prototype, "text");
 })(swan || (swan = {}));
@@ -13209,9 +12927,291 @@ var swan;
         return EditableText;
     })(lark.TextInput);
     swan.EditableText = EditableText;
-    lark.registerClass(EditableText,"swan.EditableText",["swan.UIComponent"]);
+    lark.registerClass(EditableText,"swan.EditableText",["swan.UIComponent","swan.IDisplayText"]);
     swan.sys.implementUIComponent(EditableText, lark.TextInput);
     swan.registerBindable(EditableText.prototype, "text");
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * The Skin class defines the base class for all skins.
+     * You typically don't need to manually create the instance of this class.
+     * It can be created by resolving a EXML.<p/>
+     *
+     * @example You typically write the skin classes in EXML, as the followiong example shows:<p/>
+     * <pre>
+     *      <?xml version="1.0" encoding="utf-8"?>
+     *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
+     *          <states>
+     *              <!-- Specify the states controlled by this skin. -->
+     *          </states>
+     *          <!-- Define skin. -->
+     *      </s:Skin>
+     * </pre>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
+     */
+    /**
+     * @language zh_CN
+     * 皮肤基类。通常情况下，您不需要手动创建这个类的实例，而是通过解析EXML文件后自动生成。<p/>
+     *
+     * @example 通常您可以按照如下方式写EXML代码：<p/>
+     * <pre>
+     *      <?xml version="1.0" encoding="utf-8"?>
+     *      <s:Skin xmlns:s="http://ns.egret.com/swan" xmlns:w="http://ns.egret.com/wing">
+     *          <states>
+     *              <!-- Specify the states controlled by this skin. -->
+     *          </states>
+     *          <!-- Define skin. -->
+     *      </s:Skin>
+     * </pre>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
+     */
+    var Skin = (function (_super) {
+        __extends(Skin, _super);
+        function Skin() {
+            _super.apply(this, arguments);
+            /**
+             * @language en_US
+             * The maximum recommended width of the component to be considered.
+             * This property can only affect measure result of host component.
+             *
+             * @default 100000
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 皮肤的最大宽度。仅影响主机组件的测量结果。
+             *
+             * @default 100000
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.maxWidth = 100000;
+            /**
+             * @language en_US
+             * The minimum recommended width of the component to be considered.
+             * This property can only affect measure result of host component.
+             *
+             * @default 0
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 皮肤的最小宽度,此属性设置为大于maxWidth的值时无效。仅影响主机组件的测量结果。
+             *
+             * @default 0
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.minWidth = 0;
+            /**
+             * @language en_US
+             * The maximum recommended height of the component to be considered.
+             * This property can only affect measure result of host component.
+             *
+             * @default 100000
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 皮肤的最大高度。仅影响主机组件的测量结果。
+             *
+             * @default 100000
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.maxHeight = 100000;
+            /**
+             * @language en_US
+             * The minimum recommended height of the component to be considered.
+             * This property can only affect measure result of host component.
+             *
+             * @default 0
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 皮肤的最小高度,此属性设置为大于maxHeight的值时无效。仅影响主机组件的测量结果。
+             *
+             * @default 0
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.minHeight = 0;
+            /**
+             * @language en_US
+             * Number that specifies the explicit width of the skin.
+             * This property can only affect measure result of host component.
+             * @default NaN
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 皮肤显式设置宽度,设置为 NaN 表示不显式设置。仅影响主机组件的测量结果。
+             *
+             * @default NaN
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.width = NaN;
+            /**
+             * @language en_US
+             * Number that specifies the explicit height of the skin.
+             * This property can only affect measure result of host component.
+             *
+             * @default NaN
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 皮肤显式设置高度,设置为 NaN 表示不显式设置。仅影响主机组件的测量结果。
+             *
+             * @default NaN
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.height = NaN;
+            /**
+             * @private
+             */
+            this.$elementsContent = [];
+            /**
+             * @private
+             */
+            this._hostComponent = null;
+            /**
+             * @private
+             */
+            this.$stateValues = new swan.sys.StateValues();
+        }
+        var d = __define,c=Skin;p=c.prototype;
+        d(p, "elementsContent",undefined
+            ,function (value) {
+                this.$elementsContent = value;
+            }
+        );
+        d(p, "hostComponent"
+            /**
+             * @language en_US
+             * The host component which the skin will be attached.
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 此皮肤附加到的主机组件
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this._hostComponent;
+            }
+            ,function (value) {
+                if (this._hostComponent == value)
+                    return;
+                if (this._hostComponent) {
+                    this._hostComponent.removeListener(lark.Event.ADDED_TO_STAGE, this.onAddedToStage, this);
+                }
+                this._hostComponent = value;
+                var values = this.$stateValues;
+                values.parent = value;
+                if (value) {
+                    this.commitCurrentState();
+                    if (!this.$stateValues.intialized) {
+                        if (value.$stage) {
+                            this.initializeStates(value.$stage);
+                        }
+                        else {
+                            value.once(lark.Event.ADDED_TO_STAGE, this.onAddedToStage, this);
+                        }
+                    }
+                }
+            }
+        );
+        /**
+         * @private
+         *
+         * @param event
+         */
+        p.onAddedToStage = function (event) {
+            this.initializeStates(this._hostComponent.$stage);
+        };
+        return Skin;
+    })(lark.LarkObject);
+    swan.Skin = Skin;
+    lark.registerClass(Skin,"swan.Skin");
+    swan.sys.mixin(Skin, swan.sys.StateClient);
+    swan.registerProperty(Skin, "elementsContent", "Array", true);
+    swan.registerProperty(Skin, "states", "State[]");
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -14700,529 +14700,6 @@ var swan;
     var UIComponentClass = "swan.UIComponent";
     /**
      * @language en_US
-     * The VerticalLayout class arranges the layout elements in a vertical sequence,
-     * top to bottom, with optional gaps between the elements and optional padding
-     * around the sequence of elements.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
-     */
-    /**
-     * @language zh_CN
-     * VerticalLayout 类按垂直顺序从上向下排列布局元素，在元素和围绕元素顺序的可选填充之间带有可选间隙。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
-     */
-    var VerticalLayout = (function (_super) {
-        __extends(VerticalLayout, _super);
-        function VerticalLayout() {
-            _super.apply(this, arguments);
-        }
-        var d = __define,c=VerticalLayout;p=c.prototype;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.measureReal = function () {
-            var target = this.$target;
-            var count = target.numElements;
-            var numElements = count;
-            var measuredWidth = 0;
-            var measuredHeight = 0;
-            var bounds = lark.$TempRectangle;
-            for (var i = 0; i < count; i++) {
-                var layoutElement = (target.getElementAt(i));
-                if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
-                    numElements--;
-                    continue;
-                }
-                layoutElement.getPreferredBounds(bounds);
-                measuredHeight += bounds.height;
-                measuredWidth = Math.max(measuredWidth, bounds.width);
-            }
-            measuredHeight += (numElements - 1) * this.$gap;
-            var hPadding = this.$paddingLeft + this.$paddingRight;
-            var vPadding = this.$paddingTop + this.$paddingBottom;
-            target.setMeasuredSize(measuredWidth + hPadding, measuredHeight + vPadding);
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.measureVirtual = function () {
-            var target = this.$target;
-            var typicalHeight = this.$typicalHeight;
-            var measuredHeight = this.getElementTotalSize();
-            var measuredWidth = Math.max(this.maxElementSize, this.$typicalWidth);
-            var bounds = lark.$TempRectangle;
-            var endIndex = this.endIndex;
-            var elementSizeTable = this.elementSizeTable;
-            for (var index = this.startIndex; index < endIndex; index++) {
-                var layoutElement = (target.getElementAt(index));
-                if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
-                    continue;
-                }
-                layoutElement.getPreferredBounds(bounds);
-                measuredHeight += bounds.height;
-                measuredHeight -= isNaN(elementSizeTable[index]) ? typicalHeight : elementSizeTable[index];
-                measuredWidth = Math.max(measuredWidth, bounds.width);
-            }
-            var hPadding = this.$paddingLeft + this.$paddingRight;
-            var vPadding = this.$paddingTop + this.$paddingBottom;
-            target.setMeasuredSize(measuredWidth + hPadding, measuredHeight + vPadding);
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.updateDisplayListReal = function (width, height) {
-            var target = this.$target;
-            var paddingL = this.$paddingLeft;
-            var paddingR = this.$paddingRight;
-            var paddingT = this.$paddingTop;
-            var paddingB = this.$paddingBottom;
-            var gap = this.$gap;
-            var targetWidth = Math.max(0, width - paddingL - paddingR);
-            var targetHeight = Math.max(0, height - paddingT - paddingB);
-            var vJustify = this.$verticalAlign == swan.JustifyAlign.JUSTIFY;
-            var hJustify = this.$horizontalAlign == swan.JustifyAlign.JUSTIFY || this.$horizontalAlign == swan.JustifyAlign.CONTENT_JUSTIFY;
-            var hAlign = 0;
-            if (!hJustify) {
-                if (this.$horizontalAlign == lark.HorizontalAlign.CENTER) {
-                    hAlign = 0.5;
-                }
-                else if (this.$horizontalAlign == lark.HorizontalAlign.RIGHT) {
-                    hAlign = 1;
-                }
-            }
-            var count = target.numElements;
-            var numElements = count;
-            var x = paddingL;
-            var y = paddingT;
-            var i;
-            var layoutElement;
-            var totalPreferredHeight = 0;
-            var totalPercentHeight = 0;
-            var childInfoArray = [];
-            var childInfo;
-            var heightToDistribute = targetHeight;
-            var maxElementWidth = this.maxElementSize;
-            var bounds = lark.$TempRectangle;
-            for (i = 0; i < count; i++) {
-                var layoutElement = (target.getElementAt(i));
-                if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
-                    numElements--;
-                    continue;
-                }
-                layoutElement.getPreferredBounds(bounds);
-                maxElementWidth = Math.max(maxElementWidth, bounds.width);
-                if (vJustify) {
-                    totalPreferredHeight += bounds.height;
-                }
-                else {
-                    var values = layoutElement.$UIComponent;
-                    if (!isNaN(values[7 /* percentHeight */])) {
-                        totalPercentHeight += values[7 /* percentHeight */];
-                        childInfo = new swan.sys.ChildInfo();
-                        childInfo.layoutElement = layoutElement;
-                        childInfo.percent = values[7 /* percentHeight */];
-                        childInfo.min = values[14 /* minHeight */];
-                        childInfo.max = values[15 /* maxHeight */];
-                        childInfoArray.push(childInfo);
-                    }
-                    else {
-                        heightToDistribute -= bounds.height;
-                    }
-                }
-            }
-            heightToDistribute -= gap * (numElements - 1);
-            heightToDistribute = heightToDistribute > 0 ? heightToDistribute : 0;
-            var excessSpace = targetHeight - totalPreferredHeight - gap * (numElements - 1);
-            var averageHeight;
-            var largeChildrenCount = numElements;
-            var heightDic = {};
-            if (vJustify) {
-                if (excessSpace < 0) {
-                    averageHeight = heightToDistribute / numElements;
-                    for (i = 0; i < count; i++) {
-                        layoutElement = (target.getElementAt(i));
-                        if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
-                            continue;
-                        }
-                        layoutElement.getPreferredBounds(bounds);
-                        if (bounds.height <= averageHeight) {
-                            heightToDistribute -= bounds.height;
-                            largeChildrenCount--;
-                            continue;
-                        }
-                    }
-                    heightToDistribute = heightToDistribute > 0 ? heightToDistribute : 0;
-                }
-            }
-            else {
-                if (totalPercentHeight > 0) {
-                    this.flexChildrenProportionally(targetHeight, heightToDistribute, totalPercentHeight, childInfoArray);
-                    var roundOff = 0;
-                    var length = childInfoArray.length;
-                    for (i = 0; i < length; i++) {
-                        childInfo = childInfoArray[i];
-                        var childSize = Math.round(childInfo.size + roundOff);
-                        roundOff += childInfo.size - childSize;
-                        heightDic[childInfo.layoutElement.$hashCode] = childSize;
-                        heightToDistribute -= childSize;
-                    }
-                    heightToDistribute = heightToDistribute > 0 ? heightToDistribute : 0;
-                }
-            }
-            if (this.$verticalAlign == lark.VerticalAlign.MIDDLE) {
-                y = paddingT + heightToDistribute * 0.5;
-            }
-            else if (this.$verticalAlign == lark.VerticalAlign.BOTTOM) {
-                y = paddingT + heightToDistribute;
-            }
-            var maxX = paddingL;
-            var maxY = paddingT;
-            var dx = 0;
-            var dy = 0;
-            var justifyWidth = Math.ceil(targetWidth);
-            if (this.$horizontalAlign == swan.JustifyAlign.CONTENT_JUSTIFY)
-                justifyWidth = Math.ceil(Math.max(targetWidth, maxElementWidth));
-            roundOff = 0;
-            var layoutElementHeight;
-            var childHeight;
-            for (i = 0; i < count; i++) {
-                var exceesWidth = 0;
-                layoutElement = (target.getElementAt(i));
-                if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
-                    continue;
-                }
-                layoutElement.getPreferredBounds(bounds);
-                layoutElementHeight = NaN;
-                if (vJustify) {
-                    childHeight = NaN;
-                    if (excessSpace > 0) {
-                        childHeight = heightToDistribute * bounds.height / totalPreferredHeight;
-                    }
-                    else if (excessSpace < 0 && bounds.height > averageHeight) {
-                        childHeight = heightToDistribute / largeChildrenCount;
-                    }
-                    if (!isNaN(childHeight)) {
-                        layoutElementHeight = Math.round(childHeight + roundOff);
-                        roundOff += childHeight - layoutElementHeight;
-                    }
-                }
-                else {
-                    layoutElementHeight = heightDic[layoutElement.$hashCode];
-                }
-                if (hJustify) {
-                    x = paddingL;
-                    layoutElement.setLayoutBoundsSize(justifyWidth, layoutElementHeight);
-                    layoutElement.getLayoutBounds(bounds);
-                }
-                else {
-                    var layoutElementWidth = NaN;
-                    var values = layoutElement.$UIComponent;
-                    if (!isNaN(values[6 /* percentWidth */])) {
-                        var percent = Math.min(100, values[6 /* percentWidth */]);
-                        layoutElementWidth = Math.round(targetWidth * percent * 0.01);
-                    }
-                    layoutElement.setLayoutBoundsSize(layoutElementWidth, layoutElementHeight);
-                    layoutElement.getLayoutBounds(bounds);
-                    exceesWidth = (targetWidth - bounds.width) * hAlign;
-                    exceesWidth = exceesWidth > 0 ? exceesWidth : 0;
-                    x = paddingL + exceesWidth;
-                }
-                layoutElement.setLayoutBoundsPosition(Math.round(x), Math.round(y));
-                dx = Math.ceil(bounds.width);
-                dy = Math.ceil(bounds.height);
-                maxX = Math.max(maxX, x + dx);
-                maxY = Math.max(maxY, y + dy);
-                y += dy + gap;
-            }
-            this.maxElementSize = maxElementWidth;
-            target.setContentSize(maxX + paddingR, maxY + paddingB);
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.updateDisplayListVirtual = function (width, height) {
-            var target = this.$target;
-            if (this.indexInViewCalculated)
-                this.indexInViewCalculated = false;
-            else
-                this.getIndexInView();
-            var paddingB = this.$paddingBottom;
-            var paddingL = this.$paddingLeft;
-            var paddingR = this.$paddingRight;
-            var gap = this.$gap;
-            var contentHeight;
-            var numElements = target.numElements;
-            if (this.startIndex == -1 || this.endIndex == -1) {
-                contentHeight = this.getStartPosition(numElements) - gap + paddingB;
-                target.setContentSize(target.contentWidth, contentHeight);
-                return;
-            }
-            var endIndex = this.endIndex;
-            target.setVirtualElementIndicesInView(this.startIndex, endIndex);
-            //获取垂直布局参数
-            var justify = this.$horizontalAlign == swan.JustifyAlign.JUSTIFY || this.$horizontalAlign == swan.JustifyAlign.CONTENT_JUSTIFY;
-            var contentJustify = this.$horizontalAlign == swan.JustifyAlign.CONTENT_JUSTIFY;
-            var hAlign = 0;
-            if (!justify) {
-                if (this.$horizontalAlign == lark.HorizontalAlign.CENTER) {
-                    hAlign = 0.5;
-                }
-                else if (this.$horizontalAlign == lark.HorizontalAlign.RIGHT) {
-                    hAlign = 1;
-                }
-            }
-            var bounds = lark.$TempRectangle;
-            var targetWidth = Math.max(0, width - paddingL - paddingR);
-            var justifyWidth = Math.ceil(targetWidth);
-            var layoutElement;
-            var typicalHeight = this.$typicalHeight;
-            var typicalWidth = this.$typicalWidth;
-            var maxElementWidth = this.maxElementSize;
-            var oldMaxW = Math.max(typicalWidth, this.maxElementSize);
-            if (contentJustify) {
-                for (var index = this.startIndex; index <= endIndex; index++) {
-                    layoutElement = (target.getElementAt(index));
-                    if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
-                        continue;
-                    }
-                    layoutElement.getPreferredBounds(bounds);
-                    maxElementWidth = Math.max(maxElementWidth, bounds.width);
-                }
-                justifyWidth = Math.ceil(Math.max(targetWidth, maxElementWidth));
-            }
-            var x = 0;
-            var y = 0;
-            var contentWidth = 0;
-            var oldElementSize;
-            var needInvalidateSize = false;
-            var elementSizeTable = this.elementSizeTable;
-            for (var i = this.startIndex; i <= endIndex; i++) {
-                var exceesWidth = 0;
-                layoutElement = (target.getElementAt(i));
-                if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
-                    continue;
-                }
-                layoutElement.getPreferredBounds(bounds);
-                if (!contentJustify) {
-                    maxElementWidth = Math.max(maxElementWidth, bounds.width);
-                }
-                if (justify) {
-                    x = paddingL;
-                    layoutElement.setLayoutBoundsSize(justifyWidth, NaN);
-                    layoutElement.getLayoutBounds(bounds);
-                }
-                else {
-                    layoutElement.getLayoutBounds(bounds);
-                    exceesWidth = (targetWidth - bounds.width) * hAlign;
-                    exceesWidth = exceesWidth > 0 ? exceesWidth : 0;
-                    x = paddingL + exceesWidth;
-                }
-                contentWidth = Math.max(contentWidth, bounds.width);
-                if (!needInvalidateSize) {
-                    oldElementSize = isNaN(elementSizeTable[i]) ? typicalHeight : elementSizeTable[i];
-                    if (oldElementSize != bounds.height)
-                        needInvalidateSize = true;
-                }
-                elementSizeTable[i] = bounds.height;
-                y = this.getStartPosition(i);
-                layoutElement.setLayoutBoundsPosition(Math.round(x), Math.round(y));
-            }
-            contentWidth += paddingL + paddingR;
-            contentHeight = this.getStartPosition(numElements) - gap + paddingB;
-            this.maxElementSize = maxElementWidth;
-            target.setContentSize(contentWidth, contentHeight);
-            if (needInvalidateSize || oldMaxW < this.maxElementSize) {
-                target.invalidateSize();
-            }
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getStartPosition = function (index) {
-            if (!this.$useVirtualLayout) {
-                if (this.$target) {
-                    var element = this.$target.getElementAt(index);
-                    if (element) {
-                        return element.y;
-                    }
-                }
-            }
-            var typicalHeight = this.$typicalHeight;
-            var startPos = this.$paddingTop;
-            var gap = this.$gap;
-            var elementSizeTable = this.elementSizeTable;
-            for (var i = 0; i < index; i++) {
-                var h = elementSizeTable[i];
-                if (isNaN(h)) {
-                    h = typicalHeight;
-                }
-                startPos += h + gap;
-            }
-            return startPos;
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getElementSize = function (index) {
-            if (this.$useVirtualLayout) {
-                var size = this.elementSizeTable[index];
-                if (isNaN(size)) {
-                    size = this.$typicalHeight;
-                }
-                return size;
-            }
-            if (this.$target) {
-                return this.$target.getElementAt(index).height;
-            }
-            return 0;
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getElementTotalSize = function () {
-            var typicalHeight = this.$typicalHeight;
-            var gap = this.$gap;
-            var totalSize = 0;
-            var length = this.$target.numElements;
-            var elementSizeTable = this.elementSizeTable;
-            for (var i = 0; i < length; i++) {
-                var h = elementSizeTable[i];
-                if (isNaN(h)) {
-                    h = typicalHeight;
-                }
-                totalSize += h + gap;
-            }
-            totalSize -= gap;
-            return totalSize;
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.elementAdded = function (index) {
-            if (!this.$useVirtualLayout)
-                return;
-            _super.prototype.elementAdded.call(this, index);
-            this.elementSizeTable.splice(index, 0, this.$typicalHeight);
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getIndexInView = function () {
-            var target = this.$target;
-            if (!target || target.numElements == 0) {
-                this.startIndex = this.endIndex = -1;
-                return false;
-            }
-            var values = target.$UIComponent;
-            if (values[10 /* width */] == 0 || values[11 /* height */] == 0) {
-                this.startIndex = this.endIndex = -1;
-                return false;
-            }
-            var numElements = target.numElements;
-            var contentHeight = this.getStartPosition(numElements - 1) + this.elementSizeTable[numElements - 1] + this.$paddingBottom;
-            var minVisibleY = target.scrollV;
-            if (minVisibleY > contentHeight - this.$paddingBottom) {
-                this.startIndex = -1;
-                this.endIndex = -1;
-                return false;
-            }
-            var maxVisibleY = target.scrollV + values[11 /* height */];
-            if (maxVisibleY < this.$paddingTop) {
-                this.startIndex = -1;
-                this.endIndex = -1;
-                return false;
-            }
-            var oldStartIndex = this.startIndex;
-            var oldEndIndex = this.endIndex;
-            this.startIndex = this.findIndexAt(minVisibleY, 0, numElements - 1);
-            if (this.startIndex == -1)
-                this.startIndex = 0;
-            this.endIndex = this.findIndexAt(maxVisibleY, 0, numElements - 1);
-            if (this.endIndex == -1)
-                this.endIndex = numElements - 1;
-            return oldStartIndex != this.startIndex || oldEndIndex != this.endIndex;
-        };
-        return VerticalLayout;
-    })(swan.LinearLayoutBase);
-    swan.VerticalLayout = VerticalLayout;
-    lark.registerClass(VerticalLayout,"swan.VerticalLayout");
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    var UIComponentClass = "swan.UIComponent";
-    /**
-     * @language en_US
      * The HorizontalLayout class arranges the layout elements in a horizontal sequence,
      * left to right, with optional gaps between the elements and optional padding
      * around the elements.
@@ -15712,6 +15189,529 @@ var swan;
     })(swan.LinearLayoutBase);
     swan.HorizontalLayout = HorizontalLayout;
     lark.registerClass(HorizontalLayout,"swan.HorizontalLayout");
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    var UIComponentClass = "swan.UIComponent";
+    /**
+     * @language en_US
+     * The VerticalLayout class arranges the layout elements in a vertical sequence,
+     * top to bottom, with optional gaps between the elements and optional padding
+     * around the sequence of elements.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
+     */
+    /**
+     * @language zh_CN
+     * VerticalLayout 类按垂直顺序从上向下排列布局元素，在元素和围绕元素顺序的可选填充之间带有可选间隙。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/layout/VerticalLayoutExample.ts
+     */
+    var VerticalLayout = (function (_super) {
+        __extends(VerticalLayout, _super);
+        function VerticalLayout() {
+            _super.apply(this, arguments);
+        }
+        var d = __define,c=VerticalLayout;p=c.prototype;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.measureReal = function () {
+            var target = this.$target;
+            var count = target.numElements;
+            var numElements = count;
+            var measuredWidth = 0;
+            var measuredHeight = 0;
+            var bounds = lark.$TempRectangle;
+            for (var i = 0; i < count; i++) {
+                var layoutElement = (target.getElementAt(i));
+                if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
+                    numElements--;
+                    continue;
+                }
+                layoutElement.getPreferredBounds(bounds);
+                measuredHeight += bounds.height;
+                measuredWidth = Math.max(measuredWidth, bounds.width);
+            }
+            measuredHeight += (numElements - 1) * this.$gap;
+            var hPadding = this.$paddingLeft + this.$paddingRight;
+            var vPadding = this.$paddingTop + this.$paddingBottom;
+            target.setMeasuredSize(measuredWidth + hPadding, measuredHeight + vPadding);
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.measureVirtual = function () {
+            var target = this.$target;
+            var typicalHeight = this.$typicalHeight;
+            var measuredHeight = this.getElementTotalSize();
+            var measuredWidth = Math.max(this.maxElementSize, this.$typicalWidth);
+            var bounds = lark.$TempRectangle;
+            var endIndex = this.endIndex;
+            var elementSizeTable = this.elementSizeTable;
+            for (var index = this.startIndex; index < endIndex; index++) {
+                var layoutElement = (target.getElementAt(index));
+                if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
+                    continue;
+                }
+                layoutElement.getPreferredBounds(bounds);
+                measuredHeight += bounds.height;
+                measuredHeight -= isNaN(elementSizeTable[index]) ? typicalHeight : elementSizeTable[index];
+                measuredWidth = Math.max(measuredWidth, bounds.width);
+            }
+            var hPadding = this.$paddingLeft + this.$paddingRight;
+            var vPadding = this.$paddingTop + this.$paddingBottom;
+            target.setMeasuredSize(measuredWidth + hPadding, measuredHeight + vPadding);
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.updateDisplayListReal = function (width, height) {
+            var target = this.$target;
+            var paddingL = this.$paddingLeft;
+            var paddingR = this.$paddingRight;
+            var paddingT = this.$paddingTop;
+            var paddingB = this.$paddingBottom;
+            var gap = this.$gap;
+            var targetWidth = Math.max(0, width - paddingL - paddingR);
+            var targetHeight = Math.max(0, height - paddingT - paddingB);
+            var vJustify = this.$verticalAlign == swan.JustifyAlign.JUSTIFY;
+            var hJustify = this.$horizontalAlign == swan.JustifyAlign.JUSTIFY || this.$horizontalAlign == swan.JustifyAlign.CONTENT_JUSTIFY;
+            var hAlign = 0;
+            if (!hJustify) {
+                if (this.$horizontalAlign == lark.HorizontalAlign.CENTER) {
+                    hAlign = 0.5;
+                }
+                else if (this.$horizontalAlign == lark.HorizontalAlign.RIGHT) {
+                    hAlign = 1;
+                }
+            }
+            var count = target.numElements;
+            var numElements = count;
+            var x = paddingL;
+            var y = paddingT;
+            var i;
+            var layoutElement;
+            var totalPreferredHeight = 0;
+            var totalPercentHeight = 0;
+            var childInfoArray = [];
+            var childInfo;
+            var heightToDistribute = targetHeight;
+            var maxElementWidth = this.maxElementSize;
+            var bounds = lark.$TempRectangle;
+            for (i = 0; i < count; i++) {
+                var layoutElement = (target.getElementAt(i));
+                if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
+                    numElements--;
+                    continue;
+                }
+                layoutElement.getPreferredBounds(bounds);
+                maxElementWidth = Math.max(maxElementWidth, bounds.width);
+                if (vJustify) {
+                    totalPreferredHeight += bounds.height;
+                }
+                else {
+                    var values = layoutElement.$UIComponent;
+                    if (!isNaN(values[7 /* percentHeight */])) {
+                        totalPercentHeight += values[7 /* percentHeight */];
+                        childInfo = new swan.sys.ChildInfo();
+                        childInfo.layoutElement = layoutElement;
+                        childInfo.percent = values[7 /* percentHeight */];
+                        childInfo.min = values[14 /* minHeight */];
+                        childInfo.max = values[15 /* maxHeight */];
+                        childInfoArray.push(childInfo);
+                    }
+                    else {
+                        heightToDistribute -= bounds.height;
+                    }
+                }
+            }
+            heightToDistribute -= gap * (numElements - 1);
+            heightToDistribute = heightToDistribute > 0 ? heightToDistribute : 0;
+            var excessSpace = targetHeight - totalPreferredHeight - gap * (numElements - 1);
+            var averageHeight;
+            var largeChildrenCount = numElements;
+            var heightDic = {};
+            if (vJustify) {
+                if (excessSpace < 0) {
+                    averageHeight = heightToDistribute / numElements;
+                    for (i = 0; i < count; i++) {
+                        layoutElement = (target.getElementAt(i));
+                        if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
+                            continue;
+                        }
+                        layoutElement.getPreferredBounds(bounds);
+                        if (bounds.height <= averageHeight) {
+                            heightToDistribute -= bounds.height;
+                            largeChildrenCount--;
+                            continue;
+                        }
+                    }
+                    heightToDistribute = heightToDistribute > 0 ? heightToDistribute : 0;
+                }
+            }
+            else {
+                if (totalPercentHeight > 0) {
+                    this.flexChildrenProportionally(targetHeight, heightToDistribute, totalPercentHeight, childInfoArray);
+                    var roundOff = 0;
+                    var length = childInfoArray.length;
+                    for (i = 0; i < length; i++) {
+                        childInfo = childInfoArray[i];
+                        var childSize = Math.round(childInfo.size + roundOff);
+                        roundOff += childInfo.size - childSize;
+                        heightDic[childInfo.layoutElement.$hashCode] = childSize;
+                        heightToDistribute -= childSize;
+                    }
+                    heightToDistribute = heightToDistribute > 0 ? heightToDistribute : 0;
+                }
+            }
+            if (this.$verticalAlign == lark.VerticalAlign.MIDDLE) {
+                y = paddingT + heightToDistribute * 0.5;
+            }
+            else if (this.$verticalAlign == lark.VerticalAlign.BOTTOM) {
+                y = paddingT + heightToDistribute;
+            }
+            var maxX = paddingL;
+            var maxY = paddingT;
+            var dx = 0;
+            var dy = 0;
+            var justifyWidth = Math.ceil(targetWidth);
+            if (this.$horizontalAlign == swan.JustifyAlign.CONTENT_JUSTIFY)
+                justifyWidth = Math.ceil(Math.max(targetWidth, maxElementWidth));
+            roundOff = 0;
+            var layoutElementHeight;
+            var childHeight;
+            for (i = 0; i < count; i++) {
+                var exceesWidth = 0;
+                layoutElement = (target.getElementAt(i));
+                if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
+                    continue;
+                }
+                layoutElement.getPreferredBounds(bounds);
+                layoutElementHeight = NaN;
+                if (vJustify) {
+                    childHeight = NaN;
+                    if (excessSpace > 0) {
+                        childHeight = heightToDistribute * bounds.height / totalPreferredHeight;
+                    }
+                    else if (excessSpace < 0 && bounds.height > averageHeight) {
+                        childHeight = heightToDistribute / largeChildrenCount;
+                    }
+                    if (!isNaN(childHeight)) {
+                        layoutElementHeight = Math.round(childHeight + roundOff);
+                        roundOff += childHeight - layoutElementHeight;
+                    }
+                }
+                else {
+                    layoutElementHeight = heightDic[layoutElement.$hashCode];
+                }
+                if (hJustify) {
+                    x = paddingL;
+                    layoutElement.setLayoutBoundsSize(justifyWidth, layoutElementHeight);
+                    layoutElement.getLayoutBounds(bounds);
+                }
+                else {
+                    var layoutElementWidth = NaN;
+                    var values = layoutElement.$UIComponent;
+                    if (!isNaN(values[6 /* percentWidth */])) {
+                        var percent = Math.min(100, values[6 /* percentWidth */]);
+                        layoutElementWidth = Math.round(targetWidth * percent * 0.01);
+                    }
+                    layoutElement.setLayoutBoundsSize(layoutElementWidth, layoutElementHeight);
+                    layoutElement.getLayoutBounds(bounds);
+                    exceesWidth = (targetWidth - bounds.width) * hAlign;
+                    exceesWidth = exceesWidth > 0 ? exceesWidth : 0;
+                    x = paddingL + exceesWidth;
+                }
+                layoutElement.setLayoutBoundsPosition(Math.round(x), Math.round(y));
+                dx = Math.ceil(bounds.width);
+                dy = Math.ceil(bounds.height);
+                maxX = Math.max(maxX, x + dx);
+                maxY = Math.max(maxY, y + dy);
+                y += dy + gap;
+            }
+            this.maxElementSize = maxElementWidth;
+            target.setContentSize(maxX + paddingR, maxY + paddingB);
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.updateDisplayListVirtual = function (width, height) {
+            var target = this.$target;
+            if (this.indexInViewCalculated)
+                this.indexInViewCalculated = false;
+            else
+                this.getIndexInView();
+            var paddingB = this.$paddingBottom;
+            var paddingL = this.$paddingLeft;
+            var paddingR = this.$paddingRight;
+            var gap = this.$gap;
+            var contentHeight;
+            var numElements = target.numElements;
+            if (this.startIndex == -1 || this.endIndex == -1) {
+                contentHeight = this.getStartPosition(numElements) - gap + paddingB;
+                target.setContentSize(target.contentWidth, contentHeight);
+                return;
+            }
+            var endIndex = this.endIndex;
+            target.setVirtualElementIndicesInView(this.startIndex, endIndex);
+            //获取垂直布局参数
+            var justify = this.$horizontalAlign == swan.JustifyAlign.JUSTIFY || this.$horizontalAlign == swan.JustifyAlign.CONTENT_JUSTIFY;
+            var contentJustify = this.$horizontalAlign == swan.JustifyAlign.CONTENT_JUSTIFY;
+            var hAlign = 0;
+            if (!justify) {
+                if (this.$horizontalAlign == lark.HorizontalAlign.CENTER) {
+                    hAlign = 0.5;
+                }
+                else if (this.$horizontalAlign == lark.HorizontalAlign.RIGHT) {
+                    hAlign = 1;
+                }
+            }
+            var bounds = lark.$TempRectangle;
+            var targetWidth = Math.max(0, width - paddingL - paddingR);
+            var justifyWidth = Math.ceil(targetWidth);
+            var layoutElement;
+            var typicalHeight = this.$typicalHeight;
+            var typicalWidth = this.$typicalWidth;
+            var maxElementWidth = this.maxElementSize;
+            var oldMaxW = Math.max(typicalWidth, this.maxElementSize);
+            if (contentJustify) {
+                for (var index = this.startIndex; index <= endIndex; index++) {
+                    layoutElement = (target.getElementAt(index));
+                    if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
+                        continue;
+                    }
+                    layoutElement.getPreferredBounds(bounds);
+                    maxElementWidth = Math.max(maxElementWidth, bounds.width);
+                }
+                justifyWidth = Math.ceil(Math.max(targetWidth, maxElementWidth));
+            }
+            var x = 0;
+            var y = 0;
+            var contentWidth = 0;
+            var oldElementSize;
+            var needInvalidateSize = false;
+            var elementSizeTable = this.elementSizeTable;
+            for (var i = this.startIndex; i <= endIndex; i++) {
+                var exceesWidth = 0;
+                layoutElement = (target.getElementAt(i));
+                if (!lark.is(layoutElement, UIComponentClass) || !layoutElement.$includeInLayout) {
+                    continue;
+                }
+                layoutElement.getPreferredBounds(bounds);
+                if (!contentJustify) {
+                    maxElementWidth = Math.max(maxElementWidth, bounds.width);
+                }
+                if (justify) {
+                    x = paddingL;
+                    layoutElement.setLayoutBoundsSize(justifyWidth, NaN);
+                    layoutElement.getLayoutBounds(bounds);
+                }
+                else {
+                    layoutElement.getLayoutBounds(bounds);
+                    exceesWidth = (targetWidth - bounds.width) * hAlign;
+                    exceesWidth = exceesWidth > 0 ? exceesWidth : 0;
+                    x = paddingL + exceesWidth;
+                }
+                contentWidth = Math.max(contentWidth, bounds.width);
+                if (!needInvalidateSize) {
+                    oldElementSize = isNaN(elementSizeTable[i]) ? typicalHeight : elementSizeTable[i];
+                    if (oldElementSize != bounds.height)
+                        needInvalidateSize = true;
+                }
+                elementSizeTable[i] = bounds.height;
+                y = this.getStartPosition(i);
+                layoutElement.setLayoutBoundsPosition(Math.round(x), Math.round(y));
+            }
+            contentWidth += paddingL + paddingR;
+            contentHeight = this.getStartPosition(numElements) - gap + paddingB;
+            this.maxElementSize = maxElementWidth;
+            target.setContentSize(contentWidth, contentHeight);
+            if (needInvalidateSize || oldMaxW < this.maxElementSize) {
+                target.invalidateSize();
+            }
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getStartPosition = function (index) {
+            if (!this.$useVirtualLayout) {
+                if (this.$target) {
+                    var element = this.$target.getElementAt(index);
+                    if (element) {
+                        return element.y;
+                    }
+                }
+            }
+            var typicalHeight = this.$typicalHeight;
+            var startPos = this.$paddingTop;
+            var gap = this.$gap;
+            var elementSizeTable = this.elementSizeTable;
+            for (var i = 0; i < index; i++) {
+                var h = elementSizeTable[i];
+                if (isNaN(h)) {
+                    h = typicalHeight;
+                }
+                startPos += h + gap;
+            }
+            return startPos;
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getElementSize = function (index) {
+            if (this.$useVirtualLayout) {
+                var size = this.elementSizeTable[index];
+                if (isNaN(size)) {
+                    size = this.$typicalHeight;
+                }
+                return size;
+            }
+            if (this.$target) {
+                return this.$target.getElementAt(index).height;
+            }
+            return 0;
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getElementTotalSize = function () {
+            var typicalHeight = this.$typicalHeight;
+            var gap = this.$gap;
+            var totalSize = 0;
+            var length = this.$target.numElements;
+            var elementSizeTable = this.elementSizeTable;
+            for (var i = 0; i < length; i++) {
+                var h = elementSizeTable[i];
+                if (isNaN(h)) {
+                    h = typicalHeight;
+                }
+                totalSize += h + gap;
+            }
+            totalSize -= gap;
+            return totalSize;
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.elementAdded = function (index) {
+            if (!this.$useVirtualLayout)
+                return;
+            _super.prototype.elementAdded.call(this, index);
+            this.elementSizeTable.splice(index, 0, this.$typicalHeight);
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getIndexInView = function () {
+            var target = this.$target;
+            if (!target || target.numElements == 0) {
+                this.startIndex = this.endIndex = -1;
+                return false;
+            }
+            var values = target.$UIComponent;
+            if (values[10 /* width */] == 0 || values[11 /* height */] == 0) {
+                this.startIndex = this.endIndex = -1;
+                return false;
+            }
+            var numElements = target.numElements;
+            var contentHeight = this.getStartPosition(numElements - 1) + this.elementSizeTable[numElements - 1] + this.$paddingBottom;
+            var minVisibleY = target.scrollV;
+            if (minVisibleY > contentHeight - this.$paddingBottom) {
+                this.startIndex = -1;
+                this.endIndex = -1;
+                return false;
+            }
+            var maxVisibleY = target.scrollV + values[11 /* height */];
+            if (maxVisibleY < this.$paddingTop) {
+                this.startIndex = -1;
+                this.endIndex = -1;
+                return false;
+            }
+            var oldStartIndex = this.startIndex;
+            var oldEndIndex = this.endIndex;
+            this.startIndex = this.findIndexAt(minVisibleY, 0, numElements - 1);
+            if (this.startIndex == -1)
+                this.startIndex = 0;
+            this.endIndex = this.findIndexAt(maxVisibleY, 0, numElements - 1);
+            if (this.endIndex == -1)
+                this.endIndex = numElements - 1;
+            return oldStartIndex != this.startIndex || oldEndIndex != this.endIndex;
+        };
+        return VerticalLayout;
+    })(swan.LinearLayoutBase);
+    swan.VerticalLayout = VerticalLayout;
+    lark.registerClass(VerticalLayout,"swan.VerticalLayout");
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -17055,6 +17055,349 @@ var swan;
 (function (swan) {
     /**
      * @language en_US
+     * An ViewStack navigator container consists of a collection of child
+     * containers stacked on top of each other, where only one child
+     * at a time is visible.
+     * When a different child container is selected, it seems to replace
+     * the old one because it appears in the same location.
+     * However, the old child container still exists; it is just invisible.
+     *
+     * @event swan.CollectionEvent.COLLECTION_CHANGE Emitted when the ICollection has been updated in some way.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ViewStackExample.ts
+     */
+    /**
+     * @language zh_CN
+     * ViewStack 导航器容器由一组彼此上下堆叠的子容器组成，其中一次只可以显示一个子容器。
+     * 选择另一个子容器后，它将显示在原来子容器的位置处，所以看起来好像此子容器替换了原来的子容器。
+     * 但是，原来的子容器仍然存在，只不过它现在处于不可见状态。
+     *
+     * @event swan.CollectionEvent.COLLECTION_CHANGE 以某种方式更新 ICollection 后分派。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ViewStackExample.ts
+     */
+    var ViewStack = (function (_super) {
+        __extends(ViewStack, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function ViewStack() {
+            _super.call(this);
+            /**
+             * @private
+             */
+            this._selectedChild = null;
+            /**
+             * @private
+             * 在属性提交前缓存选中项索引
+             */
+            this.proposedSelectedIndex = swan.ListBase.NO_PROPOSED_SELECTION;
+            /**
+             * @private
+             */
+            this._selectedIndex = -1;
+        }
+        var d = __define,c=ViewStack;p=c.prototype;
+        d(p, "layout"
+            /**
+             * @language en_US
+             * The layout object for this container.
+             * This object is responsible for the measurement and layout of
+             * the visual elements in the container.
+             *
+             * @default swan.BasicLayout
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 此容器的 layout 对象。此对象负责容器中可视元素的测量和布局。
+             *
+             * @default swan.BasicLayout
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$layout;
+            }
+        );
+        d(p, "selectedChild"
+            /**
+             * @language en_US
+             * A reference to the currently visible child container.
+             * The default is a reference to the first child.
+             * If there are no children, this property is <code>null</code>.
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 对当前可见子容器的引用。默认设置为对第一个子容器的引用。如果没有子项，则此属性为 <code>null</code>。
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                var index = this.selectedIndex;
+                if (index >= 0 && index < this.numChildren)
+                    return this.getChildAt(index);
+                return null;
+            }
+            ,function (value) {
+                var index = this.getChildIndex(value);
+                if (index >= 0 && index < this.numChildren)
+                    this.setSelectedIndex(index);
+            }
+        );
+        d(p, "selectedIndex"
+            /**
+             * @language en_US
+             * The zero-based index of the currently visible child container.
+             * Child indexes are in the range 0, 1, 2, ..., n - 1,
+             * where <code>n</code> is the number of children.
+             * The default value is 0, corresponding to the first child.
+             * If there are no children, the value of this property is <code>-1</code>.
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 当前可见子容器的从零开始的索引。子索引的范围是 0、1、2、...、n - 1，其中 <code>n</code> 是子项的数目。
+             * 默认值是 0，对应于第一个子项。如果不存在子容器，则此属性的值为 -1。
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.proposedSelectedIndex != swan.ListBase.NO_PROPOSED_SELECTION ? this.proposedSelectedIndex : this._selectedIndex;
+            }
+            ,function (value) {
+                value = +value | 0;
+                this.setSelectedIndex(value);
+            }
+        );
+        /**
+         * @private
+         * 设置选中项索引
+         */
+        p.setSelectedIndex = function (value) {
+            if (value == this.selectedIndex) {
+                return;
+            }
+            this.proposedSelectedIndex = value;
+            this.invalidateProperties();
+            swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selectedIndex");
+        };
+        /**
+         * @private
+         * 一个子项被添加到容器内，此方法不仅在操作addChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
+         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
+         */
+        p.$childAdded = function (child, index) {
+            _super.prototype.$childAdded.call(this, child, index);
+            this.showOrHide(child, false);
+            var selectedIndex = this.selectedIndex;
+            if (selectedIndex == -1) {
+                this.setSelectedIndex(index);
+            }
+            else if (index <= this.selectedIndex && this.$stage) {
+                this.setSelectedIndex(selectedIndex + 1);
+            }
+            swan.CollectionEvent.emitCollectionEvent(this, swan.CollectionEvent.COLLECTION_CHANGE, swan.CollectionEventKind.ADD, index, -1, [child.name]);
+        };
+        /**
+         * @private
+         * 一个子项从容器内移除，此方法不仅在操作removeChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
+         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
+         */
+        p.$childRemoved = function (child, index) {
+            _super.prototype.$childRemoved.call(this, child, index);
+            this.showOrHide(child, true);
+            var selectedIndex = this.selectedIndex;
+            if (index == selectedIndex) {
+                if (this.numChildren > 0) {
+                    if (index == 0) {
+                        this.proposedSelectedIndex = 0;
+                        this.invalidateProperties();
+                    }
+                    else
+                        this.setSelectedIndex(0);
+                }
+                else
+                    this.setSelectedIndex(-1);
+            }
+            else if (index < selectedIndex) {
+                this.setSelectedIndex(selectedIndex - 1);
+            }
+            swan.CollectionEvent.emitCollectionEvent(this, swan.CollectionEvent.COLLECTION_CHANGE, swan.CollectionEventKind.REMOVE, index, -1, [child.name]);
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.commitProperties = function () {
+            _super.prototype.commitProperties.call(this);
+            if (this.proposedSelectedIndex != swan.ListBase.NO_PROPOSED_SELECTION) {
+                this.commitSelection(this.proposedSelectedIndex);
+                this.proposedSelectedIndex = swan.ListBase.NO_PROPOSED_SELECTION;
+            }
+        };
+        /**
+         * @private
+         *
+         * @param newIndex
+         */
+        p.commitSelection = function (newIndex) {
+            if (newIndex >= 0 && newIndex < this.numChildren) {
+                this._selectedIndex = newIndex;
+                if (this._selectedChild) {
+                    this.showOrHide(this._selectedChild, false);
+                }
+                this._selectedChild = this.getElementAt(this._selectedIndex);
+                this.showOrHide(this._selectedChild, true);
+            }
+            else {
+                this._selectedChild = null;
+                this._selectedIndex = -1;
+            }
+            this.invalidateSize();
+            this.invalidateDisplayList();
+        };
+        /**
+         * @private
+         *
+         * @param child
+         * @param visible
+         */
+        p.showOrHide = function (child, visible) {
+            if (lark.is(child, "swan.UIComponent")) {
+                child.includeInLayout = visible;
+            }
+            child.visible = visible;
+        };
+        d(p, "length"
+            /**
+             * @language en_US
+             * number of children
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 子项数量
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$children.length;
+            }
+        );
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getItemAt = function (index) {
+            var element = this.$children[index];
+            return element ? element.name : "";
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getItemIndex = function (item) {
+            var list = this.$children;
+            var length = list.length;
+            for (var i = 0; i < length; i++) {
+                if (list[i].name == item) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+        return ViewStack;
+    })(swan.Group);
+    swan.ViewStack = ViewStack;
+    lark.registerClass(ViewStack,"swan.ViewStack",["swan.ICollection","lark.IEventEmitter"]);
+    swan.registerBindable(ViewStack.prototype, "selectedIndex");
+    if (DEBUG) {
+        lark.$markReadOnly(ViewStack, "length");
+        lark.$markReadOnly(ViewStack, "layout");
+    }
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
      * The ItemRenderer class is the base class for item renderers.
      *
      * @version Lark 1.0
@@ -17978,349 +18321,6 @@ var swan;
     swan.Scroller = Scroller;
     lark.registerClass(Scroller,"swan.Scroller");
     swan.registerProperty(Scroller, "viewport", "swan.IViewport", true);
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * An ViewStack navigator container consists of a collection of child
-     * containers stacked on top of each other, where only one child
-     * at a time is visible.
-     * When a different child container is selected, it seems to replace
-     * the old one because it appears in the same location.
-     * However, the old child container still exists; it is just invisible.
-     *
-     * @event swan.CollectionEvent.COLLECTION_CHANGE Emitted when the ICollection has been updated in some way.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/ViewStackExample.ts
-     */
-    /**
-     * @language zh_CN
-     * ViewStack 导航器容器由一组彼此上下堆叠的子容器组成，其中一次只可以显示一个子容器。
-     * 选择另一个子容器后，它将显示在原来子容器的位置处，所以看起来好像此子容器替换了原来的子容器。
-     * 但是，原来的子容器仍然存在，只不过它现在处于不可见状态。
-     *
-     * @event swan.CollectionEvent.COLLECTION_CHANGE 以某种方式更新 ICollection 后分派。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/ViewStackExample.ts
-     */
-    var ViewStack = (function (_super) {
-        __extends(ViewStack, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function ViewStack() {
-            _super.call(this);
-            /**
-             * @private
-             */
-            this._selectedChild = null;
-            /**
-             * @private
-             * 在属性提交前缓存选中项索引
-             */
-            this.proposedSelectedIndex = swan.ListBase.NO_PROPOSED_SELECTION;
-            /**
-             * @private
-             */
-            this._selectedIndex = -1;
-        }
-        var d = __define,c=ViewStack;p=c.prototype;
-        d(p, "layout"
-            /**
-             * @language en_US
-             * The layout object for this container.
-             * This object is responsible for the measurement and layout of
-             * the visual elements in the container.
-             *
-             * @default swan.BasicLayout
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 此容器的 layout 对象。此对象负责容器中可视元素的测量和布局。
-             *
-             * @default swan.BasicLayout
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            ,function () {
-                return this.$layout;
-            }
-        );
-        d(p, "selectedChild"
-            /**
-             * @language en_US
-             * A reference to the currently visible child container.
-             * The default is a reference to the first child.
-             * If there are no children, this property is <code>null</code>.
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 对当前可见子容器的引用。默认设置为对第一个子容器的引用。如果没有子项，则此属性为 <code>null</code>。
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            ,function () {
-                var index = this.selectedIndex;
-                if (index >= 0 && index < this.numChildren)
-                    return this.getChildAt(index);
-                return null;
-            }
-            ,function (value) {
-                var index = this.getChildIndex(value);
-                if (index >= 0 && index < this.numChildren)
-                    this.setSelectedIndex(index);
-            }
-        );
-        d(p, "selectedIndex"
-            /**
-             * @language en_US
-             * The zero-based index of the currently visible child container.
-             * Child indexes are in the range 0, 1, 2, ..., n - 1,
-             * where <code>n</code> is the number of children.
-             * The default value is 0, corresponding to the first child.
-             * If there are no children, the value of this property is <code>-1</code>.
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 当前可见子容器的从零开始的索引。子索引的范围是 0、1、2、...、n - 1，其中 <code>n</code> 是子项的数目。
-             * 默认值是 0，对应于第一个子项。如果不存在子容器，则此属性的值为 -1。
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            ,function () {
-                return this.proposedSelectedIndex != swan.ListBase.NO_PROPOSED_SELECTION ? this.proposedSelectedIndex : this._selectedIndex;
-            }
-            ,function (value) {
-                value = +value | 0;
-                this.setSelectedIndex(value);
-            }
-        );
-        /**
-         * @private
-         * 设置选中项索引
-         */
-        p.setSelectedIndex = function (value) {
-            if (value == this.selectedIndex) {
-                return;
-            }
-            this.proposedSelectedIndex = value;
-            this.invalidateProperties();
-            swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "selectedIndex");
-        };
-        /**
-         * @private
-         * 一个子项被添加到容器内，此方法不仅在操作addChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
-         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
-         */
-        p.$childAdded = function (child, index) {
-            _super.prototype.$childAdded.call(this, child, index);
-            this.showOrHide(child, false);
-            var selectedIndex = this.selectedIndex;
-            if (selectedIndex == -1) {
-                this.setSelectedIndex(index);
-            }
-            else if (index <= this.selectedIndex && this.$stage) {
-                this.setSelectedIndex(selectedIndex + 1);
-            }
-            swan.CollectionEvent.emitCollectionEvent(this, swan.CollectionEvent.COLLECTION_CHANGE, swan.CollectionEventKind.ADD, index, -1, [child.name]);
-        };
-        /**
-         * @private
-         * 一个子项从容器内移除，此方法不仅在操作removeChild()时会被回调，在操作setChildIndex()或swapChildren时也会回调。
-         * 当子项索引发生改变时，会先触发$childRemoved()方法，然后触发$childAdded()方法。
-         */
-        p.$childRemoved = function (child, index) {
-            _super.prototype.$childRemoved.call(this, child, index);
-            this.showOrHide(child, true);
-            var selectedIndex = this.selectedIndex;
-            if (index == selectedIndex) {
-                if (this.numChildren > 0) {
-                    if (index == 0) {
-                        this.proposedSelectedIndex = 0;
-                        this.invalidateProperties();
-                    }
-                    else
-                        this.setSelectedIndex(0);
-                }
-                else
-                    this.setSelectedIndex(-1);
-            }
-            else if (index < selectedIndex) {
-                this.setSelectedIndex(selectedIndex - 1);
-            }
-            swan.CollectionEvent.emitCollectionEvent(this, swan.CollectionEvent.COLLECTION_CHANGE, swan.CollectionEventKind.REMOVE, index, -1, [child.name]);
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.commitProperties = function () {
-            _super.prototype.commitProperties.call(this);
-            if (this.proposedSelectedIndex != swan.ListBase.NO_PROPOSED_SELECTION) {
-                this.commitSelection(this.proposedSelectedIndex);
-                this.proposedSelectedIndex = swan.ListBase.NO_PROPOSED_SELECTION;
-            }
-        };
-        /**
-         * @private
-         *
-         * @param newIndex
-         */
-        p.commitSelection = function (newIndex) {
-            if (newIndex >= 0 && newIndex < this.numChildren) {
-                this._selectedIndex = newIndex;
-                if (this._selectedChild) {
-                    this.showOrHide(this._selectedChild, false);
-                }
-                this._selectedChild = this.getElementAt(this._selectedIndex);
-                this.showOrHide(this._selectedChild, true);
-            }
-            else {
-                this._selectedChild = null;
-                this._selectedIndex = -1;
-            }
-            this.invalidateSize();
-            this.invalidateDisplayList();
-        };
-        /**
-         * @private
-         *
-         * @param child
-         * @param visible
-         */
-        p.showOrHide = function (child, visible) {
-            if (lark.is(child, "swan.UIComponent")) {
-                child.includeInLayout = visible;
-            }
-            child.visible = visible;
-        };
-        d(p, "length"
-            /**
-             * @language en_US
-             * number of children
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 子项数量
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            ,function () {
-                return this.$children.length;
-            }
-        );
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getItemAt = function (index) {
-            var element = this.$children[index];
-            return element ? element.name : "";
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getItemIndex = function (item) {
-            var list = this.$children;
-            var length = list.length;
-            for (var i = 0; i < length; i++) {
-                if (list[i].name == item) {
-                    return i;
-                }
-            }
-            return -1;
-        };
-        return ViewStack;
-    })(swan.Group);
-    swan.ViewStack = ViewStack;
-    lark.registerClass(ViewStack,"swan.ViewStack",["swan.ICollection","lark.IEventEmitter"]);
-    swan.registerBindable(ViewStack.prototype, "selectedIndex");
-    if (DEBUG) {
-        lark.$markReadOnly(ViewStack, "length");
-        lark.$markReadOnly(ViewStack, "layout");
-    }
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -19323,6 +19323,126 @@ var swan;
 (function (swan) {
     /**
      * @language en_US
+     * The HScrollBar (horizontal scrollbar) control lets you control
+     * the portion of data that is displayed when there is too much data
+     * to fit horizontally in a display area.
+     *
+     * <p>Although you can use the HScrollBar control as a stand-alone control,
+     * you usually combine it as part of another group of components to
+     * provide scrolling functionality.</p>
+     *
+     * @includeExample examples/Samples/src/extension/swan/components/HScrollBarExample.ts
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * HScrollBar（水平 ScrollBar）控件可以在因数据太多而不能在显示区域中以水平方向完全显示时控制显示的数据部分。
+     * <p>虽然 HScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。</p>
+     *
+     * @includeExample examples/Samples/src/extension/swan/components/HScrollBarExample.ts
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     */
+    var HScrollBar = (function (_super) {
+        __extends(HScrollBar, _super);
+        function HScrollBar() {
+            _super.apply(this, arguments);
+        }
+        var d = __define,c=HScrollBar;p=c.prototype;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
+            _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
+            var thumb = this.thumb;
+            var viewport = this.$viewport;
+            if (!thumb || !viewport) {
+                return;
+            }
+            var bounds = lark.$TempRectangle;
+            thumb.getPreferredBounds(bounds);
+            var thumbWidth = bounds.width;
+            var thumbY = bounds.y;
+            var hsp = viewport.scrollH;
+            var contentWidth = viewport.contentWidth;
+            var width = viewport.width;
+            if (hsp <= 0) {
+                var scaleWidth = thumbWidth * (1 - (-hsp) / (width * 0.5));
+                scaleWidth = Math.max(5, Math.round(scaleWidth));
+                thumb.setLayoutBoundsSize(scaleWidth, NaN);
+                thumb.setLayoutBoundsPosition(0, thumbY);
+            }
+            else if (hsp >= contentWidth - width) {
+                scaleWidth = thumbWidth * (1 - (hsp - contentWidth + width) / (width * 0.5));
+                scaleWidth = Math.max(5, Math.round(scaleWidth));
+                thumb.setLayoutBoundsSize(scaleWidth, NaN);
+                thumb.setLayoutBoundsPosition(unscaledWidth - scaleWidth, thumbY);
+            }
+            else {
+                var thumbX = (unscaledWidth - thumbWidth) * hsp / (contentWidth - width);
+                thumb.setLayoutBoundsSize(NaN, NaN);
+                thumb.setLayoutBoundsPosition(thumbX, thumbY);
+            }
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.onPropertyChanged = function (event) {
+            switch (event.property) {
+                case "scrollH":
+                case "contentWidth":
+                    this.invalidateDisplayList();
+                    break;
+            }
+        };
+        return HScrollBar;
+    })(swan.ScrollBarBase);
+    swan.HScrollBar = HScrollBar;
+    lark.registerClass(HScrollBar,"swan.HScrollBar");
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
      * The ProgressBar control provides a visual representation of the progress of a task over time.
      *
      * @version Lark 1.0
@@ -19805,126 +19925,6 @@ var swan;
     })(swan.ScrollBarBase);
     swan.VScrollBar = VScrollBar;
     lark.registerClass(VScrollBar,"swan.VScrollBar");
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The HScrollBar (horizontal scrollbar) control lets you control
-     * the portion of data that is displayed when there is too much data
-     * to fit horizontally in a display area.
-     *
-     * <p>Although you can use the HScrollBar control as a stand-alone control,
-     * you usually combine it as part of another group of components to
-     * provide scrolling functionality.</p>
-     *
-     * @includeExample examples/Samples/src/extension/swan/components/HScrollBarExample.ts
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * HScrollBar（水平 ScrollBar）控件可以在因数据太多而不能在显示区域中以水平方向完全显示时控制显示的数据部分。
-     * <p>虽然 HScrollBar 控件可以单独使用，但通常将它与其他组件一起使用来提供滚动功能。</p>
-     *
-     * @includeExample examples/Samples/src/extension/swan/components/HScrollBarExample.ts
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     */
-    var HScrollBar = (function (_super) {
-        __extends(HScrollBar, _super);
-        function HScrollBar() {
-            _super.apply(this, arguments);
-        }
-        var d = __define,c=HScrollBar;p=c.prototype;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.updateDisplayList = function (unscaledWidth, unscaledHeight) {
-            _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
-            var thumb = this.thumb;
-            var viewport = this.$viewport;
-            if (!thumb || !viewport) {
-                return;
-            }
-            var bounds = lark.$TempRectangle;
-            thumb.getPreferredBounds(bounds);
-            var thumbWidth = bounds.width;
-            var thumbY = bounds.y;
-            var hsp = viewport.scrollH;
-            var contentWidth = viewport.contentWidth;
-            var width = viewport.width;
-            if (hsp <= 0) {
-                var scaleWidth = thumbWidth * (1 - (-hsp) / (width * 0.5));
-                scaleWidth = Math.max(5, Math.round(scaleWidth));
-                thumb.setLayoutBoundsSize(scaleWidth, NaN);
-                thumb.setLayoutBoundsPosition(0, thumbY);
-            }
-            else if (hsp >= contentWidth - width) {
-                scaleWidth = thumbWidth * (1 - (hsp - contentWidth + width) / (width * 0.5));
-                scaleWidth = Math.max(5, Math.round(scaleWidth));
-                thumb.setLayoutBoundsSize(scaleWidth, NaN);
-                thumb.setLayoutBoundsPosition(unscaledWidth - scaleWidth, thumbY);
-            }
-            else {
-                var thumbX = (unscaledWidth - thumbWidth) * hsp / (contentWidth - width);
-                thumb.setLayoutBoundsSize(NaN, NaN);
-                thumb.setLayoutBoundsPosition(thumbX, thumbY);
-            }
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.onPropertyChanged = function (event) {
-            switch (event.property) {
-                case "scrollH":
-                case "contentWidth":
-                    this.invalidateDisplayList();
-                    break;
-            }
-        };
-        return HScrollBar;
-    })(swan.ScrollBarBase);
-    swan.HScrollBar = HScrollBar;
-    lark.registerClass(HScrollBar,"swan.HScrollBar");
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -21432,6 +21432,163 @@ var swan;
 (function (swan) {
     /**
      * @language en_US
+     * The TabBar class displays a set of identical tabs.
+     * One tab can be selected at a time, and the first tab is selected by default.
+     * <p>The set of tabs is defined by the <code>dataProvider</code> property.
+     * The appearance of each tab is defined by the <code>ItemRenderer</code> class.</p>
+     * <p>You can use the TabBar control to set the active child of a ViewStack container,
+     * as the following example shows:</p>
+     * <pre>
+     *       <s:TabBar dataProvider="{viewStack}"/>
+     *       <s:ViewStack id="viewStack">
+     *          <s:Group name="tab1"/>
+     *          <s:Group name="tab2"/>
+     *          <s:Group name="tab3"/>
+     *       </s:ViewStack>
+     * </pre>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/TabBarExample.ts
+     */
+    /**
+     * @language zh_CN
+     * TabBar 类显示一组相同的选项卡。一次可以选择一个选项卡，且默认情况下选择第一个选项卡。
+     * <p>该组选项卡由 <code>dataProvider</code> 属性定义。
+     * 每个选项卡的外观由 <code>ItemRenderer</code> 定义。</p>
+     * <p>可以使用 TabBar 控件设置 ViewStack 容器的活动子代，如下例所示：</p>
+     * <pre>
+     *       <s:TabBar dataProvider="{viewStack}"/>
+     *       <s:ViewStack id="viewStack">
+     *          <s:Group name="tab1"/>
+     *          <s:Group name="tab2"/>
+     *          <s:Group name="tab3"/>
+     *       </s:ViewStack>
+     * </pre>
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/TabBarExample.ts
+     */
+    var TabBar = (function (_super) {
+        __extends(TabBar, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function TabBar() {
+            _super.call(this);
+            /**
+             * @private
+             */
+            this.indexBeingUpdated = false;
+            this.requireSelection = true;
+            this.useVirtualLayout = false;
+        }
+        var d = __define,c=TabBar;p=c.prototype;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.createChildren = function () {
+            if (!this.$layout) {
+                var layout = new swan.HorizontalLayout();
+                layout.gap = 0;
+                layout.horizontalAlign = swan.JustifyAlign.JUSTIFY;
+                layout.verticalAlign = swan.JustifyAlign.CONTENT_JUSTIFY;
+                this.$setLayout(layout);
+            }
+            _super.prototype.createChildren.call(this);
+        };
+        /**
+         * @private
+         *
+         * @param value
+         */
+        p.$setDataProvider = function (value) {
+            var dp = this.$dataProvider;
+            if (dp && dp instanceof swan.ViewStack) {
+                dp.removeListener(swan.PropertyEvent.PROPERTY_CHANGE, this.onViewStackIndexChange, this);
+                this.removeListener(lark.Event.CHANGE, this.onIndexChanged, this);
+            }
+            if (value && value instanceof swan.ViewStack) {
+                value.on(swan.PropertyEvent.PROPERTY_CHANGE, this.onViewStackIndexChange, this);
+                this.on(lark.Event.CHANGE, this.onIndexChanged, this);
+            }
+            _super.prototype.$setDataProvider.call(this, value);
+        };
+        /**
+         * @private
+         * 触摸点击的选中项改变
+         */
+        p.onIndexChanged = function (event) {
+            this.indexBeingUpdated = true;
+            (this.$dataProvider).selectedIndex = this.selectedIndex;
+            this.indexBeingUpdated = false;
+        };
+        /**
+         * @private
+         * ViewStack选中项发生改变
+         */
+        p.onViewStackIndexChange = function (event) {
+            if (event.property == "selectedIndex" && !this.indexBeingUpdated) {
+                this.setSelectedIndex((this.$dataProvider).selectedIndex, false);
+            }
+        };
+        return TabBar;
+    })(swan.ListBase);
+    swan.TabBar = TabBar;
+    lark.registerClass(TabBar,"swan.TabBar");
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
      * The ToggleSwitch control defines an on-off control.
      *
      * @version Lark 1.0
@@ -21474,6 +21631,140 @@ var swan;
     })(swan.ToggleButton);
     swan.ToggleSwitch = ToggleSwitch;
     lark.registerClass(ToggleSwitch,"swan.ToggleSwitch");
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
+     * The VSlider (vertical slider) control lets users select a value
+     * by moving a slider thumb between the end points of the slider track.
+     * The current value of the slider is determined by the relative location of the thumb between
+     * the end points of the slider, corresponding to the slider's minimum and maximum values.
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/VSliderExample.ts
+     */
+    /**
+     * @language zh_CN
+     * 使用 VSlider（垂直滑块）控件，用户可通过在滑块轨道的端点之间移动滑块来选择值。
+     * 滑块的当前值由滑块端点（对应于滑块的最小值和最大值）之间滑块的相对位置确定。
+     *
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/VSliderExample.ts
+     */
+    var VSlider = (function (_super) {
+        __extends(VSlider, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function VSlider() {
+            _super.call(this);
+        }
+        var d = __define,c=VSlider;p=c.prototype;
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.pointToValue = function (x, y) {
+            if (!this.thumb || !this.track)
+                return 0;
+            var values = this.$Range;
+            var range = values[0 /* maximum */] - values[2 /* minimum */];
+            var thumbRange = this.getThumbRange();
+            return values[2 /* minimum */] + ((thumbRange != 0) ? ((thumbRange - y) / thumbRange) * range : 0);
+        };
+        /**
+         * @private
+         *
+         * @returns
+         */
+        p.getThumbRange = function () {
+            var bounds = lark.$TempRectangle;
+            this.track.getLayoutBounds(bounds);
+            var thumbRange = bounds.height;
+            this.thumb.getLayoutBounds(bounds);
+            return thumbRange - bounds.height;
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.updateSkinDisplayList = function () {
+            if (!this.thumb || !this.track)
+                return;
+            var values = this.$Range;
+            var thumbRange = this.getThumbRange();
+            var range = values[0 /* maximum */] - values[2 /* minimum */];
+            var thumbPosTrackY = (range > 0) ? thumbRange - (((this.pendingValue - values[2 /* minimum */]) / range) * thumbRange) : 0;
+            var thumbPos = this.track.localToGlobal(0, thumbPosTrackY, lark.$TempPoint);
+            var thumbPosX = thumbPos.x;
+            var thumbPosY = thumbPos.y;
+            var thumbPosParentY = this.thumb.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).y;
+            var bounds = lark.$TempRectangle;
+            var thumbHeight = bounds.height;
+            this.thumb.getLayoutBounds(bounds);
+            this.thumb.setLayoutBoundsPosition(bounds.x, Math.round(thumbPosParentY));
+            if (this.trackHighlight) {
+                var trackHighlightY = this.trackHighlight.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).y;
+                this.trackHighlight.y = Math.round(trackHighlightY + thumbHeight);
+                this.trackHighlight.height = Math.round(thumbRange - trackHighlightY);
+            }
+        };
+        return VSlider;
+    })(swan.SliderBase);
+    swan.VSlider = VSlider;
+    lark.registerClass(VSlider,"swan.VSlider");
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -21986,297 +22277,6 @@ var swan;
     })(swan.ListBase);
     swan.List = List;
     lark.registerClass(List,"swan.List");
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The TabBar class displays a set of identical tabs.
-     * One tab can be selected at a time, and the first tab is selected by default.
-     * <p>The set of tabs is defined by the <code>dataProvider</code> property.
-     * The appearance of each tab is defined by the <code>ItemRenderer</code> class.</p>
-     * <p>You can use the TabBar control to set the active child of a ViewStack container,
-     * as the following example shows:</p>
-     * <pre>
-     *       <s:TabBar dataProvider="{viewStack}"/>
-     *       <s:ViewStack id="viewStack">
-     *          <s:Group name="tab1"/>
-     *          <s:Group name="tab2"/>
-     *          <s:Group name="tab3"/>
-     *       </s:ViewStack>
-     * </pre>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/TabBarExample.ts
-     */
-    /**
-     * @language zh_CN
-     * TabBar 类显示一组相同的选项卡。一次可以选择一个选项卡，且默认情况下选择第一个选项卡。
-     * <p>该组选项卡由 <code>dataProvider</code> 属性定义。
-     * 每个选项卡的外观由 <code>ItemRenderer</code> 定义。</p>
-     * <p>可以使用 TabBar 控件设置 ViewStack 容器的活动子代，如下例所示：</p>
-     * <pre>
-     *       <s:TabBar dataProvider="{viewStack}"/>
-     *       <s:ViewStack id="viewStack">
-     *          <s:Group name="tab1"/>
-     *          <s:Group name="tab2"/>
-     *          <s:Group name="tab3"/>
-     *       </s:ViewStack>
-     * </pre>
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/TabBarExample.ts
-     */
-    var TabBar = (function (_super) {
-        __extends(TabBar, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function TabBar() {
-            _super.call(this);
-            /**
-             * @private
-             */
-            this.indexBeingUpdated = false;
-            this.requireSelection = true;
-            this.useVirtualLayout = false;
-        }
-        var d = __define,c=TabBar;p=c.prototype;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.createChildren = function () {
-            if (!this.$layout) {
-                var layout = new swan.HorizontalLayout();
-                layout.gap = 0;
-                layout.horizontalAlign = swan.JustifyAlign.JUSTIFY;
-                layout.verticalAlign = swan.JustifyAlign.CONTENT_JUSTIFY;
-                this.$setLayout(layout);
-            }
-            _super.prototype.createChildren.call(this);
-        };
-        /**
-         * @private
-         *
-         * @param value
-         */
-        p.$setDataProvider = function (value) {
-            var dp = this.$dataProvider;
-            if (dp && dp instanceof swan.ViewStack) {
-                dp.removeListener(swan.PropertyEvent.PROPERTY_CHANGE, this.onViewStackIndexChange, this);
-                this.removeListener(lark.Event.CHANGE, this.onIndexChanged, this);
-            }
-            if (value && value instanceof swan.ViewStack) {
-                value.on(swan.PropertyEvent.PROPERTY_CHANGE, this.onViewStackIndexChange, this);
-                this.on(lark.Event.CHANGE, this.onIndexChanged, this);
-            }
-            _super.prototype.$setDataProvider.call(this, value);
-        };
-        /**
-         * @private
-         * 触摸点击的选中项改变
-         */
-        p.onIndexChanged = function (event) {
-            this.indexBeingUpdated = true;
-            (this.$dataProvider).selectedIndex = this.selectedIndex;
-            this.indexBeingUpdated = false;
-        };
-        /**
-         * @private
-         * ViewStack选中项发生改变
-         */
-        p.onViewStackIndexChange = function (event) {
-            if (event.property == "selectedIndex" && !this.indexBeingUpdated) {
-                this.setSelectedIndex((this.$dataProvider).selectedIndex, false);
-            }
-        };
-        return TabBar;
-    })(swan.ListBase);
-    swan.TabBar = TabBar;
-    lark.registerClass(TabBar,"swan.TabBar");
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
-    /**
-     * @language en_US
-     * The VSlider (vertical slider) control lets users select a value
-     * by moving a slider thumb between the end points of the slider track.
-     * The current value of the slider is determined by the relative location of the thumb between
-     * the end points of the slider, corresponding to the slider's minimum and maximum values.
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/VSliderExample.ts
-     */
-    /**
-     * @language zh_CN
-     * 使用 VSlider（垂直滑块）控件，用户可通过在滑块轨道的端点之间移动滑块来选择值。
-     * 滑块的当前值由滑块端点（对应于滑块的最小值和最大值）之间滑块的相对位置确定。
-     *
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/VSliderExample.ts
-     */
-    var VSlider = (function (_super) {
-        __extends(VSlider, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function VSlider() {
-            _super.call(this);
-        }
-        var d = __define,c=VSlider;p=c.prototype;
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.pointToValue = function (x, y) {
-            if (!this.thumb || !this.track)
-                return 0;
-            var values = this.$Range;
-            var range = values[0 /* maximum */] - values[2 /* minimum */];
-            var thumbRange = this.getThumbRange();
-            return values[2 /* minimum */] + ((thumbRange != 0) ? ((thumbRange - y) / thumbRange) * range : 0);
-        };
-        /**
-         * @private
-         *
-         * @returns
-         */
-        p.getThumbRange = function () {
-            var bounds = lark.$TempRectangle;
-            this.track.getLayoutBounds(bounds);
-            var thumbRange = bounds.height;
-            this.thumb.getLayoutBounds(bounds);
-            return thumbRange - bounds.height;
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.updateSkinDisplayList = function () {
-            if (!this.thumb || !this.track)
-                return;
-            var values = this.$Range;
-            var thumbRange = this.getThumbRange();
-            var range = values[0 /* maximum */] - values[2 /* minimum */];
-            var thumbPosTrackY = (range > 0) ? thumbRange - (((this.pendingValue - values[2 /* minimum */]) / range) * thumbRange) : 0;
-            var thumbPos = this.track.localToGlobal(0, thumbPosTrackY, lark.$TempPoint);
-            var thumbPosX = thumbPos.x;
-            var thumbPosY = thumbPos.y;
-            var thumbPosParentY = this.thumb.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).y;
-            var bounds = lark.$TempRectangle;
-            var thumbHeight = bounds.height;
-            this.thumb.getLayoutBounds(bounds);
-            this.thumb.setLayoutBoundsPosition(bounds.x, Math.round(thumbPosParentY));
-            if (this.trackHighlight) {
-                var trackHighlightY = this.trackHighlight.$parent.globalToLocal(thumbPosX, thumbPosY, lark.$TempPoint).y;
-                this.trackHighlight.y = Math.round(trackHighlightY + thumbHeight);
-                this.trackHighlight.height = Math.round(thumbRange - trackHighlightY);
-            }
-        };
-        return VSlider;
-    })(swan.SliderBase);
-    swan.VSlider = VSlider;
-    lark.registerClass(VSlider,"swan.VSlider");
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
