@@ -22,6 +22,7 @@ class EditableTextDemo extends swan.Group {
 
 我们通过 swan.EditableText() 新建了一个输入文本控件，我们接下来继续完善我们的程序，这里面涉及到前面的图片控件章节，大家可以复习一下。
 
+``` TypeScript
 class EditableTextDemo extends swan.Group {
     public constructor () {
         super();
@@ -68,16 +69,13 @@ this.myEditableText.displayAsPassword = true;                             //添�
 当用户输入了文本之后我们可以通过 text 属性获得用户输入的内容.首先修改一下上面的代码，添加在 constructor () 内，具体如下：
 
 ``` TypeScript
-
 this.myEditableText.displayAsPassword = fale;                            //让文本能被显示出来.
 this.myEditableText.wordWrap = true;                                     //添加自动换行.
 
 this.myEditableText.on(lark.Event.CHANGE,this.onChang,this);             //添加监听，监听用户的输入
-
 ```
 
 接下来添加一个处理函数，在 EditableTextDemo 内添加：
-
 ``` TypeScript
 private onChang(e:lark.Event){
     lark.log(e.target.text);
