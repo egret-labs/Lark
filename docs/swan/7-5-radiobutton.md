@@ -144,4 +144,4 @@ private onChange(e:lark.Event){              //在RadioButtonDemo类中添加
 ![](image/7-5-radiobutton-3.png)
 
 * 上一节 [复选框](7-4-checkbox.md)
-* 下一节 [切换按钮](7-5-toggle.md)
+* 下一节 [切换按钮](7-6-toggle.md)
