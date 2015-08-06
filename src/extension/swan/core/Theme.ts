@@ -191,7 +191,7 @@ module swan {
                 if (this.delayList.indexOf(client) == -1) {
                     this.delayList.push(client);
                 }
-                return;
+                return "";
             }
             var skinMap = this.skinMap;
             var skinName:string = skinMap[client.hostComponentKey];
