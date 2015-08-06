@@ -74,80 +74,41 @@ module lark {
         /**
          * @language en_US
          * Constructor.
-         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 构造函数。
-         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public constructor() {
+        public constructor(bitmapDatas:BitmapData[], offXs?:number[], offYs?:number[], clipRects?:Rectangle[]) {
             super();
+            for (var i = 0; i < bitmapDatas.length; i++) {
+                this.frames.push(new sys.AnimationFrame(bitmapDatas[i], offXs?offXs[i]:0, offYs?offYs[i]:0, clipRects?clipRects[i]:null));
+            }
             this.$renderRegion = new lark.sys.Region();
             this.on(lark.Event.ENTER_FRAME, this.$onFrame, this);
-        }
-
-        $init(frames:Array<sys.AnimationFrame>):void {
-            this.frames = frames;
-            if (frames.length) {
-                this._currentFrame = 0;
-                this.$isPlaying = true;
-                this._callBacks = {};
-                this._callBacksThis = {};
-                this._callBacksArgs = {};
-                this.currentRun = false;
+            this.$isPlaying = !!bitmapDatas.length;
+            if(this.$isPlaying) {
                 this.executeFrameScript();
                 this.$invalidateContentBounds();
             }
-            else {
-                this._currentFrame = 0;
-                this.$isPlaying = false;
-                this._callBacks = null;
-                this._callBacksThis = null;
-                this._callBacksArgs = null;
-                this.currentRun = false;
-            }
-        }
-
-        /**
-         * @language en_US
-         * Add a frame.
-         * @param offX offset x, x position of the frame image is displayed.
-         * @param offY offset y, y position of the frame image is displayed.
-         * @param clipRect clipping region, need to cut the area shown in the figure at the source.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 添加一个帧。
-         * @param bitmapData 帧图片。
-         * @param offX 偏移量 x，该帧图片显示时的位置 x。
-         * @param offY 偏移量 y，该帧图片显示时的位置 y。
-         * @param clipRect 裁剪区域，需要在源图中显示的裁剪区域。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public addFrame(bitmapData:BitmapData, offX:number, offY:number, clipRect:Rectangle):void {
-            this.frames.push(new sys.AnimationFrame(bitmapData, offX, offY, clipRect));
         }
 
         /**
          * @private
          */
-        private _callBacks:Object;
+        private _callBacks:Object = {};
         /**
          * @private
          */
-        private _callBacksThis:Object;
+        private _callBacksThis:Object = {};
         /**
          * @private
          */
-        private _callBacksArgs:Object;
+        private _callBacksArgs:Object = {};
 
         /**
          * @private
@@ -196,14 +157,12 @@ module lark {
         /**
          * @language en_US
          * Current playhead frame sequence.
-         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 当前播放头所在帧序列。
-         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -241,14 +200,12 @@ module lark {
         /**
          * @language en_US
          * The animation is playing or not.
-         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * Animation 实例当前是否正在播放。
-         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -459,14 +416,12 @@ module lark {
         /**
          * @language en_US
          * The totalFrames property returns the total number of frames in the animation.
-         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * totalFrames 属性会返回 Animation 帧的总数。
-         * @readOnly
          * @version Lark 1.0
          * @platform Web,Native
          */

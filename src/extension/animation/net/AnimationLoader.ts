@@ -52,7 +52,7 @@ module lark {
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export class AnimationLoader extends lark.Sprite {
+    export class AnimationLoader extends EventEmitter {
 
         /**
          * @language en_US
@@ -70,7 +70,7 @@ module lark {
          */
         public constructor(url?:string) {
             super();
-            if (url) {
+            if(url) {
                 this.load(url);
             }
         }
@@ -108,7 +108,7 @@ module lark {
         /**
          * @private
          */
-        $data:Animation;
+        $data:AnimationData;
 
         /**
          * @language en_US
@@ -124,7 +124,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public get data():Animation {
+        public get data():AnimationData {
             return this.$data;
         }
 
@@ -141,7 +141,7 @@ module lark {
          */
         /**
          * @language zh_CN
-         * 启动一次 MovieClip 数据加载。<br/>
+         * 启动一次 Animation 数据加载。<br/>
          * 注意：若之前已经调用过加载请求，重新调用 load() 将终止先前的请求，并开始新的加载。
          * 目前只支持 Egret MovieClip 的数据格式。
          * @param url 要加载的 Animation 配置文件的地址。目前只支持 Egret MovieClip 的数据格式。
@@ -210,9 +210,10 @@ module lark {
         private onLoadList(event:lark.Event):void {
             var flag = true;
             var len = this.$loadList.length;
+            var bitmapData = event.currentTarget.data;
             for (var i = 0; i < len; i++) {
                 if (this.$loadList[i].content == null) {
-                    this.$loadList[i].content = event.currentTarget.data;
+                    this.$loadList[i].content = bitmapData;
                     if (i == len - 1) flag = false;
                     break;
                 }
@@ -224,17 +225,16 @@ module lark {
                 var list:Array<any> = info.mc[attributes[0]].frames;
                 var len = list.length;
                 var res;
-                var frames:Array<sys.AnimationFrame> = [];
+                this.$data = new AnimationData();
                 for (var i = 0; i < len; i++) {
                     res = info.res[list[i].res];
                     var rect = lark.Rectangle.create();
                     rect.setTo(res.x, res.y, res.w, res.h);
-                    frames.push(new lark.sys.AnimationFrame(this.$loadList[0].content, list[i].x, list[i].y, rect));
+                    this.$data.$bitmapDatas[i] = bitmapData;
+                    this.$data.$xs[i] = list[i].x;
+                    this.$data.$ys[i] = list[i].y;
+                    this.$data.$clipRects[i] = rect;
                 }
-                this.$data = new Animation();
-                this.$data.$init(frames);
-                this.$loadList = null;
-                this.addChild(this.$data);
                 this.emitWith(lark.Event.COMPLETE);
             }
             else {
