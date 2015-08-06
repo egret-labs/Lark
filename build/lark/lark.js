@@ -10338,7 +10338,7 @@ var lark;
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
-    var SplitRegex = /(?=[\u00BF-\u1FFF\u2C00-\uD7FF]|\b|\s)(?![。，！、》…）)}”】\.\,\!\?\]\:])/;
+    var SplitRegex = new RegExp("(?=[\u00BF-\u1FFF\u2C00-\uD7FF]|\b|\s)(?![。，！、》…）)}”】\.\,\!\?\]\:])");
     /**
      * @language en_US
      * The TextField class is used to create display objects for text display. You can use the methods and properties of
@@ -11784,6 +11784,8 @@ var lark;
      * @language en_US
      * The TextInput class is used to create display objects for text display and input.The methods of the TextInput class
      * let you set, select, and manipulate the text inputted by a user.
+     * @event lark.Event.FOCUS_IN Dispatched after a display object gains focus.
+     * @event lark.Event.FOCUS_OUT Dispatched after a display object loses focus.
      * @see lark.TextField
      * @version Lark 1.0
      * @platform Web,Native
@@ -11792,6 +11794,8 @@ var lark;
     /**
      * @language zh_CN
      * TextInput 类用于创建显示对象以显示和输入文本。TextInput 类的方法允许您设置、选择并操作用户输入的文本。
+     * @event lark.Event.FOCUS_IN 显示对象获得焦点后调度。
+     * @event lark.Event.FOCUS_OUT 显示对象失去焦点后调度。
      * @see lark.TextField
      * @version Lark 1.0
      * @platform Web,Native

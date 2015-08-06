@@ -10993,7 +10993,6 @@ var swan;
                 var values = this.$UIComponent;
                 if (value < 0 || values[10 /* width */] === value && values[8 /* explicitWidth */] === value)
                     return;
-                values[10 /* width */] = value;
                 values[8 /* explicitWidth */] = value;
                 if (isNaN(value))
                     this.invalidateSize();
@@ -11027,7 +11026,6 @@ var swan;
                 var values = this.$UIComponent;
                 if (value < 0 || values[11 /* height */] === value && values[9 /* explicitHeight */] === value)
                     return;
-                values[11 /* height */] = value;
                 values[9 /* explicitHeight */] = value;
                 if (isNaN(value))
                     this.invalidateSize();
