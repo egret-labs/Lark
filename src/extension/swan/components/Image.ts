@@ -208,15 +208,13 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param value 
          */
-        $setBitmapData(value:lark.BitmapData):void {
-            if (value == this.$bitmapData) {
+        $setBitmapData(value:lark.BitmapData|lark.Texture):void {
+            var values = this.$Bitmap;
+            if (value == values[lark.sys.BitmapKeys.bitmapData]) {
                 return;
             }
             super.$setBitmapData(value);
-            this._source = value;
             this.sourceChanged = false;
             this.invalidateSize();
             this.invalidateDisplayList();
@@ -248,7 +246,7 @@ module swan {
         private contentChanged(data:any, source:any):void {
             if (source !== this._source)
                 return;
-            if (!lark.is(data, "lark.BitmapData")) {
+            if (!lark.is(data, "lark.BitmapData")&&!(data instanceof lark.Texture)) {
                 return;
             }
             this.$setBitmapData(data);
@@ -262,25 +260,24 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param bounds 
          */
         $measureContentBounds(bounds:lark.Rectangle):void {
-            var bitmapData = this.$bitmapData;
-            if (bitmapData) {
-                var values = this.$UIComponent;
-                var width = values[sys.UIKeys.width];
-                var height = values[sys.UIKeys.height];
+            var values = this.$Bitmap;
+            var image = values[lark.sys.BitmapKeys.image];
+            if (image) {
+                var uiValues = this.$UIComponent;
+                var width = uiValues[sys.UIKeys.width];
+                var height = uiValues[sys.UIKeys.height];
                 if (isNaN(width) || isNaN(height)) {
                     bounds.setEmpty();
                     return;
                 }
                 if (this._fillMode == "clip") {
-                    if (width > bitmapData.width) {
-                        width = bitmapData.width;
+                    if (width > values[lark.sys.BitmapKeys.width]) {
+                        width = values[lark.sys.BitmapKeys.width];
                     }
-                    if (height > bitmapData.height) {
-                        height = bitmapData.height;
+                    if (height > values[lark.sys.BitmapKeys.height]) {
+                        height = values[lark.sys.BitmapKeys.height];
                     }
                 }
                 bounds.setTo(0, 0, width, height);
@@ -296,40 +293,41 @@ module swan {
          * @param context 
          */
         $render(context:lark.sys.RenderContext):void {
-            var bitmapData = this.$bitmapData;
-            if (!bitmapData) {
+            var values = this.$Bitmap;
+            var image = values[lark.sys.BitmapKeys.image];
+            if (!image) {
                 return;
             }
-            var values = this.$UIComponent;
-            var width = values[sys.UIKeys.width];
-            var height = values[sys.UIKeys.height];
+            var uiValues = this.$UIComponent;
+            var width = uiValues[sys.UIKeys.width];
+            var height = uiValues[sys.UIKeys.height];
             if (width === 0 || height === 0) {
                 return;
             }
             switch (this._fillMode) {
                 case "clip":
-                    if (width > bitmapData.width) {
-                        width = bitmapData.width;
+                    if (width > values[lark.sys.BitmapKeys.width]) {
+                        width = values[lark.sys.BitmapKeys.width];
                     }
-                    if (height > bitmapData.height) {
-                        height = bitmapData.height;
+                    if (height > values[lark.sys.BitmapKeys.height]) {
+                        height = values[lark.sys.BitmapKeys.height];
                     }
-                    context.drawImage(bitmapData, 0, 0, width, height, 0, 0, width, height);
+                    context.drawImage(image, 0, 0, width, height, 0, 0, width, height);
                     break;
                 case "repeat":
-                    var pattern = context.createPattern(bitmapData, "repeat");
+                    var pattern = context.createPattern(image, "repeat");
                     context.beginPath();
                     context.rect(0, 0, width, height);
                     context.fillStyle = pattern;
                     context.fill();
                     break;
                 default ://scale
-                    context.imageSmoothingEnabled = this.$smoothing;
+                    context.imageSmoothingEnabled = values[lark.sys.BitmapKeys.smoothing];
                     if (this._scale9Grid) {
-                        this.drawScale9GridImage(context, bitmapData, this._scale9Grid, width, height);
+                        this.drawScale9GridImage(context, image, this._scale9Grid, width, height);
                     }
                     else {
-                        context.drawImage(bitmapData, 0, 0, width, height);
+                        context.drawImage(image, 0, 0, width, height);
                     }
                     break;
             }
@@ -466,9 +464,10 @@ module swan {
          * @platform Web,Native
          */
         protected measure():void {
-            var bitmapData = this.$bitmapData;
-            if (bitmapData) {
-                this.setMeasuredSize(bitmapData.width, bitmapData.height);
+            var values = this.$Bitmap;
+            var image = values[lark.sys.BitmapKeys.image];
+            if (image) {
+                this.setMeasuredSize(values[lark.sys.BitmapKeys.width], values[lark.sys.BitmapKeys.height]);
             }
             else {
                 this.setMeasuredSize(0, 0);
