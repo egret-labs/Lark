@@ -58,10 +58,10 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public constructor(frames:BitmapData[]|Texture[]) {
+        public constructor(frames:(BitmapData|Texture)[]) {
             super();
             this.setFrames(frames);
-            this.on(Event.ENTER_FRAME, this.$onFrame, this);
+            this.on(Event.ENTER_FRAME, this.onEnterFrame, this);
         }
 
         /**
@@ -99,12 +99,12 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public setFrames(frames:BitmapData[]|Texture[]) {
+        public setFrames(frames:(BitmapData|Texture)[]) {
             this.frames = frames;
             if (frames && frames.length) {
                 this.$isPlaying = true;
                 this._currentFrame = 0;
-                this.setFrame(0);
+                this.gotoFrame(0);
             }
             else {
                 this.$isPlaying = false;
@@ -130,19 +130,25 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public addFrameScript(frame:number, callBack:Function, thisObj?:any, ...args):void {
+        public addFrameScript(frame:number, callBack:Function, thisObject?:any, ...args):void {
             var length = this.frames.length;
-            if (!length) {
-                return;
-            }
             frame = +frame | 0;
-            frame = frame < 0 ? 0 : frame;
+            if(frame<0){
+                frame = 0;
+            }
             if (frame >= length) {
                 frame = length - 1;
             }
-            this._callBacks[frame] = callBack;
-            this._callBacksThis[frame] = thisObj;
-            this._callBacksArgs[frame] = args;
+            if(callBack){
+                this._callBacks[frame] = callBack;
+                this._callBacksThis[frame] = thisObject;
+                this._callBacksArgs[frame] = args;
+            }
+            else{
+                delete this._callBacks[frame];
+                delete this._callBacksThis[frame];
+                delete this._callBacksArgs[frame];
+            }
         }
 
         /**
@@ -153,7 +159,7 @@ module lark {
         /**
          * @private
          */
-        private setFrame(frame:number):void {
+        private gotoFrame(frame:number):void {
             if (this._currentFrame != frame) {
                 this.currentRun = false;
                 this.executeFrameScript();
@@ -183,19 +189,20 @@ module lark {
         /**
          * @private
          */
-        private frames:BitmapData[]|Texture[] = [];
+        private frames:(BitmapData|Texture)[] = [];
 
         /**
          * @private
          * 执行当前帧脚本逻辑
          */
         private executeFrameScript():void {
-            if (!this.frames.length || !this._callBacks) {
+            if (!this.frames.length) {
                 return;
             }
-            var callBack:Function = this._callBacks[this._currentFrame];
-            var callBackThis:any = this._callBacksThis[this._currentFrame];
-            var callBackArgs:any = this._callBacksArgs[this._currentFrame];
+            var currentFrame = this._currentFrame;
+            var callBack:Function = this._callBacks[currentFrame];
+            var callBackThis:any = this._callBacksThis[currentFrame];
+            var callBackArgs:any = this._callBacksArgs[currentFrame];
             if (callBack && !this.currentRun) {
                 this.currentRun = true;
                 callBack.apply(callBackThis, callBackArgs);
@@ -226,11 +233,11 @@ module lark {
         /**
          * @private
          */
-        private $onFrame():void {
+        private onEnterFrame(event:Event):void {
             if (!this.$isPlaying) {
                 return;
             }
-            this.setFrame((this._currentFrame + 1) % this.frames.length);
+            this.gotoFrame((this._currentFrame + 1) % this.frames.length);
         }
 
         /**
@@ -261,7 +268,7 @@ module lark {
             if (this._currentFrame == frame) {
                 return;
             }
-            this.setFrame(frame);
+            this.gotoFrame(frame);
         }
 
         /**
@@ -292,7 +299,7 @@ module lark {
             if (this._currentFrame == frame) {
                 return;
             }
-            this.setFrame(frame);
+            this.gotoFrame(frame);
         }
 
         /**
@@ -317,7 +324,7 @@ module lark {
                 this.executeFrameScript();
                 return;
             }
-            this.setFrame(this._currentFrame + 1);
+            this.gotoFrame(this._currentFrame + 1);
         }
 
         /**
@@ -357,7 +364,7 @@ module lark {
                 this.executeFrameScript();
                 return;
             }
-            this.setFrame(this._currentFrame - 1);
+            this.gotoFrame(this._currentFrame - 1);
         }
 
         /**
