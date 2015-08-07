@@ -108,7 +108,7 @@ module lark {
         /**
          * @private
          */
-        $data:AnimationData;
+        $data:(BitmapData|Texture)[];
 
         /**
          * @language en_US
@@ -124,7 +124,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public get data():AnimationData {
+        public get data():(BitmapData|Texture)[] {
             return this.$data;
         }
 
@@ -225,15 +225,10 @@ module lark {
                 var list:Array<any> = info.mc[attributes[0]].frames;
                 var len = list.length;
                 var res;
-                this.$data = new AnimationData();
+                this.$data = [];
                 for (var i = 0; i < len; i++) {
                     res = info.res[list[i].res];
-                    var rect = lark.Rectangle.create();
-                    rect.setTo(res.x, res.y, res.w, res.h);
-                    this.$data.$bitmapDatas[i] = bitmapData;
-                    this.$data.$xs[i] = list[i].x;
-                    this.$data.$ys[i] = list[i].y;
-                    this.$data.$clipRects[i] = rect;
+                    this.$data[i] = new Texture(bitmapData,res.x,res.y,res.w,res.h,list[i].x,list[i].y,res.w,res.h);
                 }
                 this.emitWith(lark.Event.COMPLETE);
             }

@@ -30,35 +30,10 @@
 
 module lark {
 
-    export module sys {
-        /**
-         * @private
-         * Animation的每一帧
-         */
-        export class AnimationFrame {
-
-            public constructor(bitmapData:lark.BitmapData, x?:number, y?:number, clip?:Rectangle) {
-                this.bitmapData = bitmapData;
-                this.x = +x;
-                this.y = +y;
-                this.clip = clip;
-            }
-
-            public bitmapData:lark.BitmapData;
-
-            public clip:lark.Rectangle;
-
-            public x:number;
-
-            public y:number;
-        }
-    }
-
-
     /**
      * @private
      * @language en_US
-     * Frame by frame animation.
+     * Bitmap array animation.
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -69,7 +44,7 @@ module lark {
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export class Animation extends lark.DisplayObject {
+    export class Animation extends lark.Bitmap {
 
         /**
          * @language en_US
@@ -83,18 +58,10 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public constructor(bitmapDatas:BitmapData[], offXs?:number[], offYs?:number[], clipRects?:Rectangle[]) {
+        public constructor(frames:BitmapData[]|Texture[]) {
             super();
-            for (var i = 0; i < bitmapDatas.length; i++) {
-                this.frames.push(new sys.AnimationFrame(bitmapDatas[i], offXs?offXs[i]:0, offYs?offYs[i]:0, clipRects?clipRects[i]:null));
-            }
-            this.$renderRegion = new lark.sys.Region();
-            this.on(lark.Event.ENTER_FRAME, this.$onFrame, this);
-            this.$isPlaying = !!bitmapDatas.length;
-            if(this.$isPlaying) {
-                this.executeFrameScript();
-                this.$invalidateContentBounds();
-            }
+            this.setFrames(frames);
+            this.on(Event.ENTER_FRAME,this.$onFrame,this);
         }
 
         /**
@@ -115,6 +82,34 @@ module lark {
          * 当前帧的回调函数是否运行过，每帧的回调函数在一帧内
          */
         private currentRun:boolean = false;
+
+        /**
+         * @language en_US
+         * Set the frames of animation. Every frame is a bitmap data. Reset process will point the player to the first frame, and automatically play. But if the frame count is 0 or null, it will automatically stop.
+         * @see BitmapData
+         * @see Texture
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设置序列帧内容。每一帧代表一个图片内容。重设过程会把播放头指向第一帧，并且自动开启播放。但是如果帧数为 0 或者 设置 null，则会自动停止播放。
+         * @see BitmapData
+         * @see Texture
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public setFrames(frames:BitmapData[]|Texture[]) {
+            this.frames = frames;
+            if (frames && frames.length) {
+                this.$isPlaying = true;
+                this.setFrame(0);
+            }
+            else {
+                this.$isPlaying = false;
+                this._currentFrame = 0;
+            }
+        }
 
         /**
          * @language en_US
@@ -155,6 +150,18 @@ module lark {
         private _currentFrame:number = 0;
 
         /**
+         * @private
+         */
+        private setFrame(frame:number):void {
+            this._currentFrame = frame;
+            if (this.bitmapData != this.frames[this._currentFrame]) {
+                this.bitmapData = this.frames[this._currentFrame];
+            }
+            this.currentRun = false;
+            this.executeFrameScript();
+        }
+
+        /**
          * @language en_US
          * Current playhead frame sequence.
          * @version Lark 1.0
@@ -173,7 +180,7 @@ module lark {
         /**
          * @private
          */
-        private frames:Array<sys.AnimationFrame> = [];
+        private frames:BitmapData[]|Texture[] = [];
 
         /**
          * @private
@@ -220,46 +227,7 @@ module lark {
             if (!this.$isPlaying) {
                 return;
             }
-            this._currentFrame++;
-            this._currentFrame = this._currentFrame % this.frames.length;
-            this.currentRun = false;
-            this.executeFrameScript();
-            this.$invalidateContentBounds();
-        }
-
-        /**
-         * @private
-         */
-        $measureContentBounds(bounds:lark.Rectangle):void {
-            if (this.frames.length) {
-                var frameData = this.frames[this._currentFrame];
-                if (frameData.clip) {
-                    bounds.setTo(frameData.x, frameData.y, frameData.clip.width, frameData.clip.height);
-                }
-                else {
-                    bounds.setTo(frameData.x, frameData.y, frameData.bitmapData.width, frameData.bitmapData.height);
-                }
-            }
-            else {
-                bounds.setEmpty();
-            }
-        }
-
-        /**
-         * @private
-         */
-        $render(context:lark.sys.RenderContext):void {
-            if (this.frames.length) {
-                var frameData = this.frames[this._currentFrame];
-                var bitmapData = frameData.bitmapData;
-                var clip = frameData.clip;
-                if (clip) {
-                    context.drawImage(bitmapData, clip.x, clip.y, clip.width, clip.height, frameData.x, frameData.y, clip.width, clip.height);
-                }
-                else {
-                    context.drawImage(bitmapData, 0, 0, bitmapData.width, bitmapData.height, frameData.x, frameData.y, bitmapData.width, bitmapData.height);
-                }
-            }
+            this.setFrame((++this._currentFrame) % this.frames.length);
         }
 
         /**
@@ -290,9 +258,7 @@ module lark {
             if (this._currentFrame == frame) {
                 return;
             }
-            this._currentFrame = frame;
-            this.currentRun = false;
-            this.executeFrameScript();
+            this.setFrame(frame);
         }
 
         /**
@@ -323,9 +289,7 @@ module lark {
             if (this._currentFrame == frame) {
                 return;
             }
-            this._currentFrame = frame;
-            this.currentRun = false;
-            this.executeFrameScript();
+            this.setFrame(frame);
         }
 
         /**
@@ -350,9 +314,7 @@ module lark {
                 this.executeFrameScript();
                 return;
             }
-            this._currentFrame++;
-            this.currentRun = false;
-            this.executeFrameScript();
+            this.setFrame(this._currentFrame++);
         }
 
         /**
@@ -392,9 +354,7 @@ module lark {
                 this.executeFrameScript();
                 return;
             }
-            this._currentFrame--;
-            this.currentRun = false;
-            this.executeFrameScript();
+            this.setFrame(this._currentFrame--);
         }
 
         /**

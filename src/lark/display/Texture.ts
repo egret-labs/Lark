@@ -51,6 +51,7 @@ module lark {
          */
         /**
          * @language zh_CN
+
          * 创建一个 Texture 对象
          * @version Lark 1.0
          * @platform Web,Native
