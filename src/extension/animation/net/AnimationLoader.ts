@@ -30,25 +30,21 @@
 module lark {
     /**
      * @language en_US
-     * The Loader class is used to load MovieClip's data. Use the load() method to initiate loading.
-     * The loaded MovieClipData object is in the data property of MovieClipLoader.
+     * The Loader class is used to load animation's data. Use the load() method to initiate loading.
      * @event lark.Event.COMPLETE 加载完成
      * @event lark.Event.IO_ERROR 加载失败
      * @see lark.HttpRequest
-     * @see lark.MovieClip
-     * @see lark.MovieClipData
+     * @see lark.Animation
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * MovieClipLoader 类可用于加载 MovieClip 数据。使用 load() 方法来启动加载。
-     * 被加载的 MovieClipData 对象数据将存储在 MovieClipLoader.data 属性上 。
+     * AnimationLoader 类可用于加载 Animation 数据。使用 load() 方法来启动加载。
      * @event lark.Event.COMPLETE 加载完成
      * @event lark.Event.IO_ERROR 加载失败
      * @see lark.HttpRequest
-     * @see lark.MovieClip
-     * @see lark.MovieClipData
+     * @see lark.Animation
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -77,13 +73,13 @@ module lark {
 
         /**
          * @private
-         * MovieClip 的配置文件，比如 Egret MovieClip 的json配置文件
+         * Animation 的配置文件，比如 Egret Animation 的json配置文件
          */
         $config:string;
 
         /**
          * @language en_US
-         * Specifies whether or not cross-site Access-Control requests should be made when loading a BitmapArray from foreign origins.<br/>
+         * Specifies whether or not cross-site Access-Control requests should be made when loading a animation from foreign origins.<br/>
          * possible values are:"anonymous","use-credentials" or null.
          * @default null
          * @version Lark 1.0
@@ -91,7 +87,7 @@ module lark {
          */
         /**
          * @language zh_CN
-         * 当从其他站点加载一个BitmapArray时，指定是否启用跨域资源共享(CORS)，默认值为null。<br/>
+         * 当从其他站点加载一个 Animation 时，指定是否启用跨域资源共享(CORS)，默认值为null。<br/>
          * 可以设置为"anonymous","use-credentials"或null,设置为其他值将等同于"anonymous"。
          * @default null
          * @version Lark 1.0
