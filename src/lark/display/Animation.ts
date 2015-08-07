@@ -230,6 +230,9 @@ module lark {
         private $isPlaying:boolean = false;
 
 
+        /**
+         * @private
+         */
         private setPlaying(flag:boolean):void {
             this.$isPlaying = flag;
             if (this.$isPlaying && this.stage && !this.enterFrameFlag) {
