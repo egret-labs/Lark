@@ -61,7 +61,7 @@ module lark {
         public constructor(frames:BitmapData[]|Texture[]) {
             super();
             this.setFrames(frames);
-            this.on(Event.ENTER_FRAME,this.$onFrame,this);
+            this.on(Event.ENTER_FRAME, this.$onFrame, this);
         }
 
         /**
@@ -154,7 +154,7 @@ module lark {
          * @private
          */
         private setFrame(frame:number):void {
-            if(this._currentFrame != frame) {
+            if (this._currentFrame != frame) {
                 this.currentRun = false;
                 this.executeFrameScript();
             }
