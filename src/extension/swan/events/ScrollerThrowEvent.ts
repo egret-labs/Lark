@@ -1,4 +1,8 @@
 module swan {
+
+    /**
+     * @private
+     */
     export class ScrollerThrowEvent extends lark.Event {
 
         public static THROW:string = "throw";

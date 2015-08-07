@@ -9,16 +9,16 @@
 
 ``` TypeScript
 // 将用于闹铃的 Timer。
-public var alarmTimer:Timer;
+public alarmTimer:lark.Timer;
 
 // 实例化指定大小的新 Alarmer。
 public initClock( ):void{
     this.alarmTimer = new Timer(0, 1);
-    this.alarmTimer.on( TimerEvent.TIMER, this.alarmHandler, this);
+    this.alarmTimer.on( lark.TimerEvent.TIMER, this.alarmHandler, this);
 }
 ```
 
-Alarmer 类中定义的 Timer 实例被命名为 alarmTimer。initClock() 方法执行 Alarmer 实例的所需设置操作，使用 alarmTimer 变量执行两个任务。首先，使用指示 Timer 实例等待 0 毫秒且仅触发其 timer 事件一次的参数实例化变量。实例化 alarmTimer 后，代码调用变量的 on() 方法，指示它要监听该变量的 timer 事件。Timer 实例的工作方式是：在经过指定时间后调度其 timer 事件。Alarmer 类需要了解何时调度 timer 事件，以便触发自己的闹铃。通过调用 on()，Alarmer 代码将自身作为侦听器在 alarmTimer 中进行注册。两个参数指示 Alarmer 类要侦听 timer 事件（由常量 TimerEvent.TIMER 指示），并且当事件发生时，应调用 Alarmer 类的 alarmHandler() 方法以响应事件。
+Alarmer 类中定义的 Timer 实例被命名为 alarmTimer。initClock() 方法执行 Alarmer 实例的所需设置操作，使用 alarmTimer 变量执行两个任务。首先，使用指示 Timer 实例等待 0 毫秒且仅触发其 timer 事件一次的参数实例化变量。实例化 alarmTimer 后，代码调用变量的 on() 方法，指示它要监听该变量的 timer 事件。Timer 实例的工作方式是：在经过指定时间后调度其 timer 事件。Alarmer 类需要了解何时调度 timer 事件，以便触发自己的闹铃。通过调用 on()，Alarmer 代码将自身作为侦听器在 alarmTimer 中进行注册。两个参数指示 Alarmer 类要侦听 timer 事件（由常量 lark.TimerEvent.TIMER 指示），并且当事件发生时，应调用 Alarmer 类的 alarmHandler() 方法以响应事件。
 
 为了实际设置闹铃，代码调用了 Alarmer 类的 setAlarm() 方法，如下所示： 
 ``` TypeScript
@@ -42,7 +42,7 @@ public setAlarm( sec:number = 0 ):void{
  // 调度 timer 事件时调用。
 public  alarmHandler( event:TimerEvent ):void{
     lark.log("Alarm!");
-    this.emitWidth(“alarm",false,false,data);//使用事件对象池工具方法快速抛出事件。
+    this.emitWidth("alarm",false,false,data);//使用事件对象池工具方法快速抛出事件。
 }
 ```
 

@@ -72,7 +72,7 @@ module swan {
      * @platform Web,Native
      * @includeExample examples/Samples/src/extension/swan/components/LabelExample.ts
      */
-    export class Label extends lark.TextField implements UIComponent {
+    export class Label extends lark.TextField implements UIComponent,IDisplayText {
 
         /**
          * @language en_US
@@ -101,7 +101,7 @@ module swan {
 
         /**
          * @private
-         * 
+         *
          */
         $invalidateContentBounds():void {
             super.$invalidateContentBounds();
@@ -110,8 +110,8 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param value 
+         *
+         * @param value
          */
         $setWidth(value:number):void {
             super.$setWidth(value);
@@ -120,8 +120,8 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param value 
+         *
+         * @param value
          */
         $setHeight(value:number):void {
             super.$setHeight(value);
@@ -130,12 +130,12 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param value 
+         *
+         * @param value
          */
-        $setText(value:string):void{
+        $setText(value:string):void {
             super.$setText(value);
-            PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"text");
+            PropertyEvent.emitPropertyEvent(this, PropertyEvent.PROPERTY_CHANGE, "text");
         }
 
         /**
@@ -150,6 +150,7 @@ module swan {
          * UIComponentImpl 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
          */
         private initializeUIValues:()=>void;
+
         /**
          * @copy swan.UIComponent#createChildren
          *
@@ -168,7 +169,7 @@ module swan {
          * @version Swan 1.0
          * @platform Web,Native
          */
-        protected childrenCreated():void{
+        protected childrenCreated():void {
 
         }
 
@@ -465,11 +466,11 @@ module swan {
          */
         public setLayoutBoundsSize(layoutWidth:number, layoutHeight:number):void {
             UIImpl.prototype.setLayoutBoundsSize.call(this, layoutWidth, layoutHeight);
-            if(isNaN(layoutWidth)||layoutWidth===this._widthConstraint||layoutWidth == 0){
+            if (isNaN(layoutWidth) || layoutWidth === this._widthConstraint || layoutWidth == 0) {
                 return;
             }
             var values = this.$UIComponent;
-            if(!isNaN(values[sys.UIKeys.explicitHeight])){
+            if (!isNaN(values[sys.UIKeys.explicitHeight])) {
                 return;
             }
             if (layoutWidth == values[sys.UIKeys.measuredWidth]) {
@@ -511,5 +512,5 @@ module swan {
     }
 
     sys.implementUIComponent(Label, lark.TextField);
-    registerBindable(Label.prototype,"text");
+    registerBindable(Label.prototype, "text");
 }

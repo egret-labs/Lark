@@ -74,6 +74,10 @@ module lark.sys {
             displayList.renderContext = surface.renderContext;
             displayList.root = target;
             displayList.$renderMatrix = Matrix.create();
+            displayList.$renderMatrix.setTo(1, 0, 0, 1, 0, 0);
+            displayList.$pixelRatio = 1;
+            displayList.$ratioMatrix = Matrix.create();
+            displayList.$ratioMatrix.setTo(1, 0, 0, 1, 0, 0);
             displayList.needRedraw = true;
             displayList.$isDirty = true;
             return displayList;
@@ -105,7 +109,7 @@ module lark.sys {
          */
         $renderMatrix: Matrix = new Matrix();
 
-        $ratioMatrix: Matrix;
+        $ratioMatrix: Matrix = new Matrix();
 
         $ratioChanged: boolean = false;
 
@@ -123,13 +127,22 @@ module lark.sys {
          */
         $update(): boolean {
             var target = this.root;
+            //当cache对象的显示列表已经加入dirtyList，对象又取消cache的时候，root为空
+            if (target == null) {
+                return false;
+            }
             target.$removeFlagsUp(DisplayObjectFlags.Dirty);
             this.$renderAlpha = target.$getConcatenatedAlpha();
             //必须在访问moved属性前调用以下两个方法，因为moved属性在以下两个方法内重置。
             var concatenatedMatrix = target.$getConcatenatedMatrix();
             var bounds = target.$getOriginalBounds();
             var displayList = target.$parentDisplayList;
-            this.setDevicePixelRatio(displayList.$pixelRatio);
+            var pixelRatio = 1;
+            if (displayList)
+                pixelRatio = displayList.$pixelRatio;
+            else if (target.stage && target.stage.$displayList)
+                pixelRatio = target.stage.$displayList.$pixelRatio;
+            this.setDevicePixelRatio(pixelRatio);
             var region = this.$renderRegion;
             if (this.needRedraw) {
                 this.updateDirtyRegions();
@@ -177,7 +190,7 @@ module lark.sys {
         $render(context:RenderContext):void {
             var data = this.surface;
             if (data) {
-                context.drawImage(data, this.offsetX / this.$pixelRatio, this.offsetY / this.$pixelRatio, data.width / this.$pixelRatio, data.height / this.$pixelRatio);
+                context.drawImage(data, this.offsetX, this.offsetY, data.width / this.$pixelRatio, data.height / this.$pixelRatio);
             }
         }
 
@@ -301,8 +314,8 @@ module lark.sys {
             //绘制脏矩形区域
             context.save();
             context.beginPath();
-            if(m){
-                context.setTransform(1,0,0,1,-this.offsetX,-this.offsetY);
+            if (m) {
+                context.setTransform(1, 0, 0, 1, -this.offsetX * this.$pixelRatio, -this.offsetY* this.$pixelRatio);
             }
             var dirtyList = this.dirtyList;
             this.dirtyList = null;
@@ -367,7 +380,7 @@ module lark.sys {
                     if (rootMatrix) {
                         context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
                         node.$render(context);
-                        context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx, rootMatrix.ty);
+                        context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx * this.$pixelRatio, rootMatrix.ty * this.$pixelRatio);
                     }
                     else {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
                         context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
@@ -387,7 +400,8 @@ module lark.sys {
                     if (!child.$visible || child.$alpha <= 0 || child.$maskedObject) {
                         continue;
                     }
-                    if (child.$blendMode !== 0 || child.$mask) {
+                    if (child.$blendMode !== 0 ||
+                        (child.$mask&&child.$mask.$parentDisplayList)) {//若遮罩不在显示列表中，放弃绘制遮罩。
                         drawCalls += this.drawWithClip(child, context, dirtyList, rootMatrix, clipRegion);
                     }
                     else if (child.$scrollRect) {
@@ -422,6 +436,9 @@ module lark.sys {
 
             var scrollRect = displayObject.$scrollRect;
             var mask = displayObject.$mask;
+            if(mask&&!mask.$parentDisplayList){
+                mask = null; //如果遮罩不在显示列表中，放弃绘制遮罩。
+            }
 
             //计算scrollRect和mask的clip区域是否需要绘制，不需要就直接返回，跳过所有子项的遍历。
             var maskRegion:Region;
@@ -539,7 +556,7 @@ module lark.sys {
                 if (rootMatrix) {
                     context.translate(region.minX, region.minY)
                     context.drawImage(displayContext.surface, 0, 0);
-                    context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx, rootMatrix.ty);
+                    context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx * this.$pixelRatio, rootMatrix.ty * this.$pixelRatio);
                 }
                 else {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
                     context.setTransform(1, 0, 0, 1, region.minX, region.minY);
@@ -596,12 +613,18 @@ module lark.sys {
 
             //绘制显示对象自身
             context.save();
-            context.setTransform(m.a, m.b, m.c, m.d, m.tx - this.offsetX / this.$pixelRatio, m.ty - this.offsetY / this.$pixelRatio);
+            if (rootMatrix) {
+                context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx * this.$pixelRatio, rootMatrix.ty * this.$pixelRatio);
+                context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+            }
+            else {
+                context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+            }
             context.beginPath();
             context.rect(scrollRect.x, scrollRect.y, scrollRect.width, scrollRect.height);
             context.clip();
-            if(rootMatrix){
-                context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx, rootMatrix.ty);
+            if (rootMatrix) {
+                context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx * this.$pixelRatio, rootMatrix.ty * this.$pixelRatio);
             }
             drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, rootMatrix, displayObject.$displayList, region);
             context.restore();
@@ -619,6 +642,7 @@ module lark.sys {
             if (!surface) {
                 return null;
             }
+            //在chrome里，小等于256*256的canvas会不启用GPU加速。
             surface.width = Math.max(257, width);
             surface.height = Math.max(257, height);
             return surface.renderContext;
@@ -641,8 +665,8 @@ module lark.sys {
             var bounds = this.root.$getOriginalBounds();
             var scaleX = this.$pixelRatio;
             var scaleY = this.$pixelRatio;
-            this.offsetX = bounds.x * scaleX;
-            this.offsetY = bounds.y * scaleY;
+            this.offsetX = bounds.x;
+            this.offsetY = bounds.y;
             var oldContext = this.renderContext;
             var oldSurface = oldContext.surface;
             if (this.sizeChanged) {
@@ -660,7 +684,7 @@ module lark.sys {
                 newSurface.height = bounds.height * scaleY;
                 if (oldSurface.width !== 0 && oldSurface.height !== 0) {
                     newContext.setTransform(1, 0, 0, 1, 0, 0);
-                    newContext.drawImage(oldSurface, oldOffsetX - this.offsetX, oldOffsetY - this.offsetY);
+                    newContext.drawImage(oldSurface, (oldOffsetX - this.offsetX) * scaleX, (oldOffsetY - this.offsetY) * scaleY);
                 }
                 oldSurface.height = 1;
                 oldSurface.width = 1;

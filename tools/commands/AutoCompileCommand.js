@@ -5,6 +5,7 @@ var FileUtil = require('../lib/FileUtil');
 var CopyFiles = require('../actions/CopyFiles');
 var CompileProject = require('../actions/CompileProject');
 var CompileTemplate = require('../actions/CompileTemplate');
+var parser = require('../parser/Parser');
 var AutoCompileCommand = (function () {
     function AutoCompileCommand() {
         this._lastExitCode = 0;
@@ -16,7 +17,8 @@ var AutoCompileCommand = (function () {
         var _this = this;
         this._request = service.execCommand({
             command: "init",
-            path: lark.options.projectDir
+            path: lark.options.projectDir,
+            option: lark.options
         }, function (m) { return _this.onServiceMessage(m); }, false);
         this._request.once('end', function () { return process.exit(); });
         this._request.once('close', function () { return process.exit(); });
@@ -24,7 +26,8 @@ var AutoCompileCommand = (function () {
             _this.sendCommand({
                 command: "status",
                 status: process.memoryUsage(),
-                path: lark.options.projectDir
+                path: lark.options.projectDir,
+                option: lark.options
             });
             _this.exitAfter5Minutes();
         }, 60000);
@@ -113,6 +116,9 @@ var AutoCompileCommand = (function () {
         return 0;
     };
     AutoCompileCommand.prototype.onServiceMessage = function (msg) {
+        console.log(msg);
+        if (msg.command == 'build' && msg.option)
+            lark.options = parser.parseJSON(msg.option);
         if (msg.command == 'build')
             this.buildChanges(msg.changes);
         if (msg.command == 'shutdown')
@@ -125,7 +131,8 @@ var AutoCompileCommand = (function () {
                 command: 'buildResult',
                 exitCode: this._lastExitCode,
                 messages: msg,
-                path: lark.options.projectDir
+                path: lark.options.projectDir,
+                option: lark.options
             };
         }
         this._request.send(cmd);

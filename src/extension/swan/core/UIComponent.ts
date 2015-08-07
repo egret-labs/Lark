@@ -954,7 +954,7 @@ module swan.sys {
          * @private
          *
          * @param stage
-         * @param nestLevel 
+         * @param nestLevel
          */
         $onAddToStage(stage:lark.Stage, nestLevel:number):void {
             this.$super.$onAddToStage.call(this, stage, nestLevel);
@@ -1150,15 +1150,14 @@ module swan.sys {
 
         /**
          * @private
-         * 
-         * @param value 
+         *
+         * @param value
          */
         $setWidth(value:number) {
             value = +value;
             var values = this.$UIComponent;
             if (value < 0 || values[UIKeys.width] === value && values[UIKeys.explicitWidth] === value)
                 return;
-            values[UIKeys.width] = value;
             values[UIKeys.explicitWidth] = value;
             if (isNaN(value))
                 this.invalidateSize();
@@ -1187,15 +1186,14 @@ module swan.sys {
 
         /**
          * @private
-         * 
-         * @param value 
+         *
+         * @param value
          */
         $setHeight(value:number) {
             value = +value;
             var values = this.$UIComponent;
             if (value < 0 || values[UIKeys.height] === value && values[UIKeys.explicitHeight] === value)
                 return;
-            values[UIKeys.height] = value;
             values[UIKeys.explicitHeight] = value;
             if (isNaN(value))
                 this.invalidateSize();
@@ -1206,9 +1204,9 @@ module swan.sys {
 
         /**
          * @private
-         * 
-         * @param value 
-         * @returns 
+         *
+         * @param value
+         * @returns
          */
         $setScaleX(value:number):boolean {
             var change = this.$super.$setScaleX.call(this, value);
@@ -1220,9 +1218,9 @@ module swan.sys {
 
         /**
          * @private
-         * 
-         * @param value 
-         * @returns 
+         *
+         * @param value
+         * @returns
          */
         $setScaleY(value:number):boolean {
             var change = this.$super.$setScaleY.call(this, value);
@@ -1346,9 +1344,9 @@ module swan.sys {
 
         /**
          * @private
-         * 
-         * @param value 
-         * @returns 
+         *
+         * @param value
+         * @returns
          */
         $setX(value:number):boolean {
             var change = this.$super.$setX.call(this, value);
@@ -1361,9 +1359,9 @@ module swan.sys {
 
         /**
          * @private
-         * 
-         * @param value 
-         * @returns 
+         *
+         * @param value
+         * @returns
          */
         $setY(value:number):boolean {
             var change = this.$super.$setY.call(this, value);
@@ -1560,7 +1558,7 @@ module swan.sys {
         public setLayoutBoundsSize(layoutWidth:number, layoutHeight:number):void {
             layoutHeight = +layoutHeight;
             layoutWidth = +layoutWidth;
-            if(layoutHeight<0||layoutWidth<0){
+            if (layoutHeight < 0 || layoutWidth < 0) {
                 return;
             }
             var values = this.$UIComponent;
@@ -1655,8 +1653,8 @@ module swan.sys {
 
         /**
          * @private
-         * 
-         * @returns 
+         *
+         * @returns
          */
         private getPreferredUWidth():number {
             var values = this.$UIComponent;
@@ -1666,8 +1664,8 @@ module swan.sys {
 
         /**
          * @private
-         * 
-         * @returns 
+         *
+         * @returns
          */
         private getPreferredUHeight():number {
             var values = this.$UIComponent;
@@ -1690,10 +1688,10 @@ module swan.sys {
 
         /**
          * @private
-         * 
-         * @param bounds 
-         * @param w 
-         * @param h 
+         *
+         * @param bounds
+         * @param w
+         * @param h
          */
         private applyMatrix(bounds:lark.Rectangle, w:number, h:number):void {
             var bounds = bounds.setTo(0, 0, w, h);
@@ -1777,8 +1775,8 @@ module swan.sys {
         }
 
         if (DEBUG) {//用于调试时查看布局尺寸的便利属性，发行版时移除。
-            lark.$markReadOnly(descendant,"explicitWidth");
-            lark.$markReadOnly(descendant,"explicitHeight");
+            lark.$markReadOnly(descendant, "explicitWidth");
+            lark.$markReadOnly(descendant, "explicitHeight");
 
             Object.defineProperty(prototype, "preferredWidth", {
                 get: function () {

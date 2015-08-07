@@ -165,15 +165,14 @@ module swan {
 
         /**
          * @language en_US
-         *
+         * Adjust the speed to get out of the slide end.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         *
-         *
+         * 调节滑动结束时滚出的速度。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -190,6 +189,9 @@ module swan {
         }
 
 
+        /**
+         * @private
+         */
         $getThrowInfo(currentPos:number,toPos:number):swan.ScrollerThrowEvent {
             if(!scrollerThrowEvent) {
                 scrollerThrowEvent = new swan.ScrollerThrowEvent(ScrollerThrowEvent.THROW,false,false,currentPos,toPos);
@@ -198,7 +200,7 @@ module swan {
                 scrollerThrowEvent.currentPos = currentPos;
                 scrollerThrowEvent.toPos = toPos;
             }
-            this.emit(scrollerThrowEvent);
+            //this.emit(scrollerThrowEvent);
             return scrollerThrowEvent;
         }
 
@@ -404,8 +406,10 @@ module swan {
         }
 
         private onViewPortRemove(event:lark.Event):void {
-            this.$Scroller[Keys.viewprotRemovedEvent] = true;
-            this.viewport = null;
+            if(event.target == this.viewport) {
+                this.$Scroller[Keys.viewprotRemovedEvent] = true;
+                this.viewport = null;
+            }
         }
 
         /**

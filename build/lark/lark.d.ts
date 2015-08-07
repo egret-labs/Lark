@@ -69,6 +69,7 @@ declare module lark {
      * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
      * @version Lark 1.0
      * @platform Web,Native
+<<<<<<< HEAD
      */
     function stopTick(callBack: (timeStamp: number) => boolean, thisObject: any): void;
 }
@@ -136,6 +137,10 @@ declare module lark {
     var Geolocation: {
         new (): Geolocation;
     };
+=======
+     */
+    function stopTick(callBack: (timeStamp: number) => boolean, thisObject: any): void;
+>>>>>>> master
 }
 declare module lark {
     /**
@@ -1044,6 +1049,7 @@ declare module lark {
 }
 declare module lark {
     /**
+<<<<<<< HEAD
      * @language en_US
      * The IEventEmitter interface defines methods for adding or removing event listeners, checks whether specific types
      * of event listeners are registered, and emits events. Event targets are an important part of the Lark event model.
@@ -1059,6 +1065,74 @@ declare module lark {
      * @see lark.EventEmitter
      * @version Lark 1.0
      * @platform Web,Native
+=======
+     * @private
+     */
+    interface Renderable extends LarkObject {
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The HorizontalAlign class defines the possible values for the horizontal alignment.
+     * @see lark.TextField#textAlign
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * HorizontalAlign 类为水平对齐方式定义可能的值。
+     * @see lark.TextField#textAlign
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class HorizontalAlign {
+        /**
+         * @language en_US
+         * Horizontally align content to the left of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将内容与容器的左侧对齐。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static LEFT: string;
+        /**
+         * @language en_US
+         * Horizontally align content to the right of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将内容与容器的右侧对齐。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static RIGHT: string;
+        /**
+         * @language en_US
+         * Horizontally align content in the center of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在容器的水平中心对齐内容。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static CENTER: string;
+    }
+}
+declare module lark.sys {
+    /**
+     * @private
+     * 绘图上下文
+>>>>>>> master
      */
     /**
      * @language zh_CN
@@ -1845,6 +1919,201 @@ declare module lark.sys {
 }
 declare module lark {
     /**
+<<<<<<< HEAD
+=======
+     * @language en_US
+     * The XMLNode class is the base class for all xml node.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * XML节点基类
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    interface XMLNode {
+        /**
+         * @language en_US
+         * a integer representing the type of the node, 1：XML，2：XMLAttribute，3：XMLText
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点类型，1：XML，2：XMLAttribute，3：XMLText
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        nodeType: number;
+        /**
+         * @language en_US
+         * the parent node of this xml node.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点所属的父级节点
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        parent: XML;
+    }
+    /**
+     * @language en_US
+     * The XML class contains properties for working with XML objects.
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/utils/XMLExample.ts
+     */
+    /**
+     * @language zh_CN
+     * XML 类包含用于处理 XML 对象的属性。
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/utils/XMLExample.ts
+     */
+    interface XML extends XMLNode {
+        /**
+         * @language en_US
+         * the attributes of this xml node.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当前节点上的属性列表
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        attributes: any;
+        /**
+         * @language en_US
+         * the children of the xml node.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当前节点的子节点列表
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        children: XMLNode[];
+        /**
+         * @language en_US
+         * the full name of this xml node. For example,the name of <s:Button/> is "s:Button".
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点完整名称。例如节点 <s:Button/> 的 name 为："s:Button"
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        name: string;
+        /**
+         * @language en_US
+         * thie namesapce prefix of this xml node.For example,the prefix of <s:Button/> is "s".
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点的命名空间前缀。例如节点 <s:Button/> 的 prefix 为：s
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        prefix: string;
+        /**
+         * @language en_US
+         * the local name of this xml node. For example,the local name of <s:Button/> is "Button".
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点的本地名称。例如节点 <s:Button/> 的 localName 为：Button
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        localName: string;
+        /**
+         * @language en_US
+         * the namesapce uri of this xml node.For example,the namespace uri of <s:Skin xmlns:s="http://ns.egret.com/swan"/> is "http://ns.egret.com/swan".
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点的命名空间地址。例如节点 <s:Skin xmlns:s="http://ns.egret.com/swan"/> 的 namespace 为： http://ns.egret.com/swan
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        namespace: string;
+    }
+    /**
+     * @language en_US
+     * The XMLText class represents a string node in the XML.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * XMLText 类表示在XML中的文本节点
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    interface XMLText extends XMLNode {
+        /**
+         * @language en_US
+         * the text content
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 文本内容
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        text: string;
+    }
+    /**
+     * @language en_US
+     * The XML class contains properties for working with XML objects.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * XML 类包含用于处理 XML 对象的属性。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var XML: {
+        /**
+         * @language en_US
+         * parses a text to XML instance.
+         * @param text the text to be parsed.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 解析字符串为XML对象
+         * @param text 要解析的XML对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        parse(text: string): XML;
+    };
+}
+declare module lark.sys {
+    /**
+>>>>>>> master
      * @private
      */
     class EaseFunction {
@@ -1964,7 +2233,67 @@ declare module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
+<<<<<<< HEAD
         static QuadEaseOutIn(t: number): number;
+=======
+        new (url?: string): Sound;
+    };
+}
+declare module lark {
+    /**
+     * @language en_US
+     * Return the fully qualified class name of an object
+     * @param value The object for which a fully qualified class name is desired. Any JavaScript value may be passed to
+     * this method including all available JavaScript types, object instances, primitive types such as number, and class objects.
+     * @returns A string containing the fully qualified class name.
+     * @example
+     * <pre>
+     *  lark.getQualifiedClassName(lark.DisplayObject) //return "lark.DisplayObject"
+     * </pre>
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 返回对象的完全限定类名。
+     * @param value 需要完全限定类名称的对象，可以将任何 JavaScript 值传递给此方法，包括所有可用的 JavaScript 类型、对象实例、原始类型
+     * （如number)和类对象
+     * @returns 包含完全限定类名称的字符串。
+     * @example
+     * <pre>
+     *  lark.getQualifiedClassName(lark.DisplayObject) //返回 "lark.DisplayObject"
+     * </pre>
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function getQualifiedClassName(value: any): string;
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The SoundChannel class controls a sound in an application.
+     * Every sound is assigned to a sound channel, and the application
+     * can have multiple sound channels that are mixed together.
+     * The SoundChannel class contains a stop() method, properties for
+     * set the volume of the channel
+     *
+     * @event egret.Event.COMPLETE Emit when a sound has finished playing
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/media/SoundExample.ts
+     */
+    /**
+    * @language zh_CN
+     * SoundChannel 类控制应用程序中的声音。每个声音均分配给一个声道，而且应用程序可以具有混合在一起的多个声道。
+     * SoundChannel 类包含 stop() 方法、用于设置音量和监视播放进度的属性。
+     *
+     * @event egret.Event.ENDED 音频播放完成时抛出
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/media/SoundExample.ts
+    */
+    interface SoundChannel extends IEventEmitter {
+>>>>>>> master
         /**
          * @language en_US
          * x to the third 3 curve fade in.
@@ -2003,7 +2332,65 @@ declare module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
+<<<<<<< HEAD
         static CubicEaseInOut(t: number): number;
+=======
+        stop(): void;
+    }
+}
+declare module lark {
+    /** @language en_US
+     * Returns the fully qualified class name of the base class of the object specified by the value parameter.
+     * @param value The object for which a parent class is desired. Any JavaScript value may be passed to this method including
+     * all available JavaScript types, object instances, primitive types such as number, and class objects.
+     * @returns  A fully qualified base class name, or null if none exists.
+     * @example
+     * <pre>
+     *  lark.getQualifiedSuperclassName(lark.Bitmap) //return "lark.DisplayObject"
+     * </pre>
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 返回 value 参数指定的对象的基类的完全限定类名。
+     * @param value 需要取得父类的对象，可以将任何 JavaScript 值传递给此方法，包括所有可用的 JavaScript 类型、对象实例、原始类型（如number）和类对象
+     * @returns 完全限定的基类名称，或 null（如果不存在基类名称）。
+     * @example
+     * <pre>
+     *  lark.getQualifiedSuperclassName(lark.Sprite) //返回 "lark.DisplayObject"
+     * </pre>
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function getQualifiedSuperclassName(value: any): string;
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The Video class lets you work with video in an application.
+     * The Video class lets you create a Video object, load and play an external video file into that object.
+     * Note: On most mobile device, the video is playback in the full screen mode.<br/>
+     *
+     * @event egret.Event.COMPLETE Emit when the video resource is loaded and ready to play
+     * @event egret.Event.ENDED Emit when the video playback ended
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/media/VideoExample.ts
+     */
+    /**
+     * @language zh_CN
+     * Video 允许您在应用程序中使用视频。使用 Video 类可以创建 Video 对象、将外部视频文件加载到该对象并播放该文件。<br/>
+     * 注意: 在大多数移动设备中，视频是强制全屏播放的，所以你可以直接调用 play() 方法全屏播放视频，不用将它绘制在Stage中。
+     *
+     * @event egret.Event.COMPLETE 视频加载完成时抛出
+     * @event egret.Event.ENDED 视频播放完成时抛出
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/media/VideoExample.ts
+     */
+    interface Video extends DisplayObject {
+>>>>>>> master
         /**
          * @language en_US
          * x to the 3 power curve fade out and fade in.
@@ -2133,7 +2520,76 @@ declare module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
+<<<<<<< HEAD
         static ExpoEaseIn(t: number): number;
+=======
+        bitmapData: BitmapData;
+    }
+    /**
+     * @copy lark.Video
+     */
+    var Video: {
+        new (src?: string): Video;
+    };
+}
+declare module lark {
+    /**
+     * @language en_US
+     * Indicates whether an object is a instance of the class or interface specified as the parameter.This method is similar
+     * to the instanceOf operator which indicate whether an object is a instance of the specific class,besides, it can indicate
+     * whether an object is a instance of the specific interface.
+     * @param instance the instance to be checked.
+     * @param typeName the string value representing a specific class or interface.
+     * @returns A value of true if the object is a instance of the class or interface specified as the parameter.
+     * @example
+     * <pre>
+     *     var instance = new lark.Sprite();
+     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
+     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
+     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
+     * </pre>
+     * @see lark.registerClass()
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字作用类似，但除了判断类定义也能判断接口的实现。
+     * @param instance 要判断的实例。
+     * @param typeName 类或接口的完全名称.
+     * @returns 返回true表示当前对象是指定类或接口的实例。
+     * @example
+     * <pre>
+     *     var instance = new lark.Sprite();
+     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
+     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
+     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
+     * </pre>
+     * @see lark.registerClass()
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function is(instance: any, typeName: string): boolean;
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The HttpMethod class provides values that specify whether the HttpRequest object should use the POST method
+     * or the GET method when sending data to a server.
+     * @see lark.HttpRequest
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * HttpRequestMethod 类提供了一些值，这些值可指定在将数据发送到服务器时，
+     * HttpRequest 对象应使用 POST 方法还是 GET 方法。
+     * @see lark.HttpRequest
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class HttpMethod {
+>>>>>>> master
         /**
          * @language en_US
          * Exponential curve fade out.
@@ -2146,20 +2602,69 @@ declare module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
+<<<<<<< HEAD
         static ExpoEaseOut(t: number): number;
         /**
          * @language en_US
          * Exponential curve fade in and fade out.
+=======
+        static GET: string;
+        /**
+         * @language en_US
+         * Specifies that the HttpRequest object is a POST.
+>>>>>>> master
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
+<<<<<<< HEAD
          * 指数曲线淡入淡出。
          * @version Lark 1.0
          * @platform Web,Native
          */
         static ExpoEaseInOut(t: number): number;
+=======
+         * 表示 HttpRequest 对象是一个 POST。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static POST: string;
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The HttpRequest class downloads data from a URL as text or binary data. It is useful for downloading text files,
+     * XML, or other information to be used in a dynamic, data-driven application. A HttpRequest object downloads all
+     * of the data from a URL before making it available to code in the applications. It sends out notifications about
+     * the progress of the download, which you can monitor through the bytesLoaded and bytesTotal properties,
+     * as well as through emitted events.
+     * @event lark.Event.COMPLETE Emitted when the net request is complete.
+     * @event lark.Event.IO_ERROR Emitted when the net request is failed.
+     * @event lark.ProgressEvent.PROGRESS Emitted when data is received as the download operation progresses.
+     * @see lark.HttpMethod
+     * @see lark.HttpResponseType
+     * @includeExample examples/Samples/src/lark/net/HttpRequestExample.ts
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * HttpRequest 类以文本或二进制数据的形式从 URL 下载数据。
+     * HttpRequest 对象会先从 URL 中下载所有数据，然后才将数据用于应用程序中的代码。它会发出有关下载进度的通知，
+     * 通过 bytesLoaded 和 bytesTotal 属性以及已调度的事件，可以监视下载进度。
+     * @event lark.Event.COMPLETE 加载完成
+     * @event lark.Event.IO_ERROR 加载失败
+     * @event lark.ProgressEvent.PROGRESS 加载进度，可通过event.bytesLoaded和event.bytesTotal统计进度信息。
+     * @see lark.HttpMethod
+     * @see lark.HttpResponseType
+     * @includeExample examples/Samples/src/lark/net/HttpRequestExample.ts
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    interface HttpRequest extends EventEmitter {
+>>>>>>> master
         /**
          * @language en_US
          * Exponential curve fade out and fade in.
@@ -2276,7 +2781,76 @@ declare module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
+<<<<<<< HEAD
         static BackEaseOutIn(t: number): number;
+=======
+        getResponseHeader(header: string): string;
+    }
+    /**
+     * @language en_US
+     * Creates a HttpRequest object.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 创建一个 HttpRequest 实例。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var HttpRequest: {
+        new (): HttpRequest;
+    };
+}
+declare module lark {
+    /**
+     * @language en_US
+     * Register and start a timer,which will notify the callback method at a rate of 60 FPS ,and pass the current time stamp as parameters.<br/>
+     * Note: After the registration,it will notify the callback method continuously,you can call the stopTick () method to stop it.
+     * @param callBack the call back method. the timeStamp parameter of this method represents the number of milliseconds
+     * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
+     * to render after processing of this method completes.
+     * @param thisObject the call back method's "this"
+     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 注册并启动一个计时器，通常会以60FPS的速率触发回调方法，并传入当前时间戳。注意：注册后将会持续触发回调方法，若要停止回调，需要手动调用stopTick()方法。
+     * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
+     * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
+     * @param thisObject 回调方法的this对象引用。
+     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function startTick(callBack: (timeStamp: number) => boolean, thisObject: any): void;
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The Loader class is used to load image (JPG, PNG, or GIF) files. Use the load() method to initiate loading.
+     * The loaded image data is in the data property of ImageLoader.
+     * @event lark.Event.COMPLETE Emitted when the net request is complete.
+     * @event lark.Event.IO_ERROR Emitted when the net request is failed.
+     * @see lark.HttpRequest
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/net/ImageLoaderExample.ts
+     */
+    /**
+     * @language zh_CN
+     * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
+     * @event lark.Event.COMPLETE 加载完成
+     * @event lark.Event.IO_ERROR 加载失败
+     * @see lark.HttpRequest
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/net/ImageLoaderExample.ts
+     */
+    interface ImageLoader extends EventEmitter {
+>>>>>>> master
         /**
          * @language en_US
          * Exponential Decay curve fade in.
@@ -2712,6 +3286,7 @@ declare module lark {
 declare module lark {
     /**
      * @language en_US
+<<<<<<< HEAD
      * The HttpRequest class downloads data from a URL as text or binary data. It is useful for downloading text files,
      * XML, or other information to be used in a dynamic, data-driven application. A HttpRequest object downloads all
      * of the data from a URL before making it available to code in the applications. It sends out notifications about
@@ -2723,6 +3298,43 @@ declare module lark {
      * @see lark.HttpMethod
      * @see lark.HttpResponseType
      * @includeExample examples/Samples/src/lark/net/HttpRequestExample.ts
+=======
+     * Returns a reference to the class object of the class specified by the name parameter.
+     * @param name The name of a class.
+     * @example
+     * <pre>
+     *  var clazz:any = lark.getDefinitionByName("lark.Shape"); //get definition of class lark.Shape
+     *  var shape:lark.Shape = new clazz();
+     *  shape.graphics.fillStyle = "#ff0000";
+     *  shape.graphics.fillRect(0,0,100,100);
+     * </pre>
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 返回 name 参数指定的类的类对象引用。
+     * @param name 类的名称。
+     * @example
+     * <pre>
+     *  var clazz:any = lark.getDefinitionByName("lark.Shape"); //获取lark.Shape类定义
+     *  var shape:lark.Shape = new clazz();
+     *  shape.graphics.fillStyle = "#ff0000";
+     *  shape.graphics.fillRect(0,0,100,100);
+     * </pre>
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function getDefinitionByName(name: string): any;
+}
+declare var __global: any;
+declare module lark {
+    /**
+     * @language en_US
+     * A class that provides constant values for visual blend mode effects. These constants are used in the blendMode
+     * property of the DisplayObject class.
+     * @see lark.DisplayObject#blendMode
+>>>>>>> master
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2783,8 +3395,74 @@ declare module lark {
          */
         /**
          * @language zh_CN
+<<<<<<< HEAD
          * 表明在进行跨站(cross-site)的访问控制(Access-Control)请求时，是否使用认证信息(例如cookie或授权的header)。(这个标志不会影响同站的请求)
          * @default false
+=======
+         * 根据显示对象的 Alpha 值擦除背景。Alpha 值不为0的区域将被擦除。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static ERASE: string;
+    }
+}
+declare module lark.sys {
+    /**
+     * @private
+     * 转换 blendMode 字符串为数字。
+     */
+    function blendModeToNumber(blendMode: string): number;
+    /**
+     * @private
+     * 转换数字为 blendMode 字符串。
+     */
+    function numberToBlendMode(blendMode: number): string;
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The Capabilities class provides properties that describe the system and runtime that are hosting the application.
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/system/CapabilitiesExample.ts
+     */
+    /**
+     * @language zh_CN
+     * Capabilities 类提供一些属性，这些属性描述了承载应用程序的系统和运行时。
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/system/CapabilitiesExample.ts
+     */
+    class Capabilities {
+        /**
+         * @language en_US
+         * Specifies the language code of the system on which the content is running. The language is specified as a lowercase
+         * two-letter language code from ISO 639-1. For Chinese, an additional uppercase two-letter country code from ISO 3166
+         * distinguishes between Simplified and Traditional Chinese.<br/>
+         * The following table lists the possible values,but not limited to them:
+         * <ul>
+         * <li>Simplified    Chinese  zh-CN</li>
+         * <li>Traditional   Chinese  zh-TW</li>
+         * <li>English       en</li>
+         * <li>Japanese      ja</li>
+         * <li>Korean        ko</li>
+         * </ul>
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 表示运行内容的系统的语言代码。语言指定为 ISO 639-1 中的小写双字母语言代码。
+         * 对于中文，另外使用 ISO 3166 中的大写双字母国家/地区代码，以区分简体中文和繁体中文。<br/>
+         * 以下是可能但不限于的语言和值：
+         * <ul>
+         * <li>简体中文  zh-CN</li>
+         * <li>繁体中文  zh-TW</li>
+         * <li>英语      en</li>
+         * <li>日语      ja</li>
+         * <li>韩语      ko</li>
+         * </ul>
+>>>>>>> master
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -8934,6 +9612,178 @@ declare module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
+<<<<<<< HEAD
+        graphics: Graphics;
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The Bitmap class represents display objects that represent bitmap images.
+     * The Bitmap() constructor allows you to create a Bitmap object that contains a reference to a BitmapData object.
+     * After you create a Bitmap object, use the addChild() or addChildAt() method of the parent DisplayObjectContainer
+     * instance to place the bitmap on the display list.A Bitmap object can share its BitmapData reference among several
+     * Bitmap objects, independent of translation or rotation properties. Because you can create multiple Bitmap objects
+     * that reference the same BitmapData object, multiple display objects can use the same complex BitmapData object
+     * without incurring the memory overhead of a BitmapData object for each display object instance.
+     *
+     * @see lark.BitmapData
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BitmapExample.ts
+     */
+    /**
+     * @language zh_CN
+     * Bitmap 类表示用于显示位图图片的显示对象。
+     * 利用 Bitmap() 构造函数，可以创建包含对 BitmapData 对象引用的 Bitmap 对象。创建了 Bitmap 对象后，
+     * 使用父级 DisplayObjectContainer 实例的 addChild() 或 addChildAt() 方法可以将位图放在显示列表中。
+     * 一个 Bitmap 对象可在若干 Bitmap 对象之中共享其 BitmapData 引用，与缩放或旋转属性无关。
+     * 由于能够创建引用相同 BitmapData 对象的多个 Bitmap 对象，因此，多个显示对象可以使用相同的 BitmapData 对象，
+     * 而不会因为每个显示对象实例使用一个 BitmapData 对象而产生额外内存开销。
+     *
+     * @see lark.BitmapData
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BitmapExample.ts
+     */
+    class Bitmap extends DisplayObject {
+        /**
+         * @language en_US
+         * Initializes a Bitmap object to refer to the specified BitmapData object.
+         * @param bitmapData The BitmapData object being referenced.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个引用指定 BitmapData 实例的 Bitmap 对象
+         * @param bitmapData 被引用的 BitmapData 实例
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        constructor(bitmapData?: BitmapData);
+        /**
+         * @language en_US
+         * bitmapData The BitmapData object being referenced.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 被引用的 BitmapData 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        bitmapData: BitmapData;
+        /**
+         * @language en_US
+         * Whether or not the bitmap is smoothed when scaled.
+         * @default true。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 控制在缩放时是否对位图进行平滑处理。
+         * @default true。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        smoothing: boolean;
+        private _pixelHitTest;
+        /**
+         * @language en_US
+         * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
+         * is set to true,the transparent area of the bitmap will be touched through.
+         * Note:If the image is loaded from cross origin,that we can't access to the pixel data,so it might cause
+         * the pixelHitTest property invalid.
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透。<br/>
+         * 注意：若图片资源是以跨域方式从外部服务器加载的，将无法访问图片的像素数据，而导致此属性失效。
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        pixelHitTest: boolean;
+        /**
+         * @private
+         */
+        private hitTestPixel(stageX, stageY);
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The Sprite class is a basic display list building block: a display list node that can contain children.
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/SpriteExample.ts
+     */
+    /**
+     * @language zh_CN
+     * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/SpriteExample.ts
+     */
+    class Sprite extends DisplayObject implements DisplayObjectContainer {
+        /**
+         * @language en_US
+         * Creates a new Sprite instance.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 实例化一个容器
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        constructor();
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        numChildren: number;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        addChild(child: DisplayObject): DisplayObject;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        addChildAt(child: DisplayObject, index: number): DisplayObject;
+        /**
+         * @private
+         */
+        private doAddChild(child, index);
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        contains(child: DisplayObject): boolean;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        getChildAt(index: number): DisplayObject;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         getChildIndex(child: DisplayObject): number;
         /**
          * @inheritDoc
@@ -8941,11 +9791,32 @@ declare module lark {
          * @platform Web,Native
          */
         getChildByName(name: string): DisplayObject;
+=======
+        getChildIndex(child: DisplayObject): number;
+>>>>>>> master
         /**
          * @inheritDoc
          * @version Lark 1.0
          * @platform Web,Native
          */
+<<<<<<< HEAD
+        removeChild(child: DisplayObject): DisplayObject;
+=======
+        getChildByName(name: string): DisplayObject;
+>>>>>>> master
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+<<<<<<< HEAD
+        removeChildAt(index: number): DisplayObject;
+        /**
+         * @private
+         */
+        private doRemoveChild(index);
+        /**
+=======
         removeChild(child: DisplayObject): DisplayObject;
         /**
          * @inheritDoc
@@ -8958,6 +9829,7 @@ declare module lark {
          */
         private doRemoveChild(index);
         /**
+>>>>>>> master
          * @inheritDoc
          * @version Lark 1.0
          * @platform Web,Native
@@ -9361,6 +10233,26 @@ declare module lark {
         private updateTextLines();
     }
 }
+<<<<<<< HEAD
+=======
+declare module lark.sys {
+    /**
+     * @private
+     * 返回格式化的字体样式文本
+     */
+    function toFontString(style: {
+        fontFamily?: string;
+        fontSize?: number;
+        bold?: boolean;
+        italic?: boolean;
+    }): string;
+    /**
+     * @private
+     * 返回字符串形式的颜色值
+     */
+    function toColorString(value: number): string;
+}
+>>>>>>> master
 declare module lark.sys {
     /**
      * @private
@@ -9502,6 +10394,8 @@ declare module lark {
      * @language en_US
      * The TextInput class is used to create display objects for text display and input.The methods of the TextInput class
      * let you set, select, and manipulate the text inputted by a user.
+     * @event lark.Event.FOCUS_IN Dispatched after a display object gains focus.
+     * @event lark.Event.FOCUS_OUT Dispatched after a display object loses focus.
      * @see lark.TextField
      * @version Lark 1.0
      * @platform Web,Native
@@ -9510,6 +10404,8 @@ declare module lark {
     /**
      * @language zh_CN
      * TextInput 类用于创建显示对象以显示和输入文本。TextInput 类的方法允许您设置、选择并操作用户输入的文本。
+     * @event lark.Event.FOCUS_IN 显示对象获得焦点后调度。
+     * @event lark.Event.FOCUS_OUT 显示对象失去焦点后调度。
      * @see lark.TextField
      * @version Lark 1.0
      * @platform Web,Native

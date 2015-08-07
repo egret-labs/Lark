@@ -2669,6 +2669,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/DefaultAssetAdapterExample.ts
      */
     /**
      * @language zh_CN
@@ -2676,6 +2677,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/DefaultAssetAdapterExample.ts
      */
     var DefaultAssetAdapter = (function () {
         function DefaultAssetAdapter() {
@@ -2803,11 +2805,8 @@ var swan;
             var d = __define,c=EXMLConfig;p=c.prototype;
             /**
              * @private
-             *
-             * @param instance
-             * @returns
              */
-            p.describe = function (instance) {
+            p.$describe = function (instance) {
                 if (!instance) {
                     return null;
                 }
@@ -2827,7 +2826,7 @@ var swan;
                     return null;
                 }
                 var superInstance = getInstanceOf(superProto.constructor);
-                var superInfo = this.describe(superInstance);
+                var superInfo = this.$describe(superInstance);
                 if (superInfo) {
                     function factory() {
                     }
@@ -2935,7 +2934,7 @@ var swan;
                             }
                             return resultType;
                         }
-                        this.describe(instance);
+                        this.$describe(instance);
                     }
                     var info = properties[prototype.__hashCode__];
                     if (info) {
@@ -3772,7 +3771,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/collection/ArrayCollectionExample.ts
+     * @includeExample examples/Samples/src/extension/swan/collections/ArrayCollectionExample.ts
      */
     /**
      * @language zh_CN
@@ -3784,7 +3783,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/collection/ArrayCollectionExample.ts
+     * @includeExample examples/Samples/src/extension/swan/collections/ArrayCollectionExample.ts
      */
     var ArrayCollection = (function (_super) {
         __extends(ArrayCollection, _super);
@@ -7630,6 +7629,9 @@ var swan;
 })(swan || (swan = {}));
 var swan;
 (function (swan) {
+    /**
+     * @private
+     */
     var ScrollerThrowEvent = (function (_super) {
         __extends(ScrollerThrowEvent, _super);
         /**
@@ -10991,7 +10993,6 @@ var swan;
                 var values = this.$UIComponent;
                 if (value < 0 || values[10 /* width */] === value && values[8 /* explicitWidth */] === value)
                     return;
-                values[10 /* width */] = value;
                 values[8 /* explicitWidth */] = value;
                 if (isNaN(value))
                     this.invalidateSize();
@@ -11025,7 +11026,6 @@ var swan;
                 var values = this.$UIComponent;
                 if (value < 0 || values[11 /* height */] === value && values[9 /* explicitHeight */] === value)
                     return;
-                values[11 /* height */] = value;
                 values[9 /* explicitHeight */] = value;
                 if (isNaN(value))
                     this.invalidateSize();
@@ -12034,7 +12034,7 @@ var swan;
         return Label;
     })(lark.TextField);
     swan.Label = Label;
-    lark.registerClass(Label,"swan.Label",["swan.UIComponent"]);
+    lark.registerClass(Label,"swan.Label",["swan.UIComponent","swan.IDisplayText"]);
     swan.sys.implementUIComponent(Label, lark.TextField);
     swan.registerBindable(Label.prototype, "text");
 })(swan || (swan = {}));
@@ -12922,7 +12922,7 @@ var swan;
         return EditableText;
     })(lark.TextInput);
     swan.EditableText = EditableText;
-    lark.registerClass(EditableText,"swan.EditableText",["swan.UIComponent"]);
+    lark.registerClass(EditableText,"swan.EditableText",["swan.UIComponent","swan.IDisplayText"]);
     swan.sys.implementUIComponent(EditableText, lark.TextInput);
     swan.registerBindable(EditableText.prototype, "text");
 })(swan || (swan = {}));
@@ -16114,6 +16114,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample src/extension/swan/components/HScrollBar.ts
      */
     /**
      * @language zh_CN
@@ -16126,6 +16127,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample src/extension/swan/components/HScrollBar.ts
      */
     var ScrollBarBase = (function (_super) {
         __extends(ScrollBarBase, _super);
@@ -16301,6 +16303,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ButtonExample.ts
      */
     /**
      * @language zh_CN
@@ -16308,6 +16311,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ButtonExample.ts
      */
     var Button = (function (_super) {
         __extends(Button, _super);
@@ -16565,19 +16569,21 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/RangeExample.ts
      */
     /**
      * @language zh_CN
      * 范围选取组件,该组件包含一个值和这个值所允许的最大最小约束范围。
      *
      * <code>value</code>属性的值永远被限制于当前的<code>minimum</code>和
-     * <code>maximum</code>之间，并且<code>minimum</code>和 <code>maximum</code>永远按照固定的书序排列，
+     * <code>maximum</code>之间，并且<code>minimum</code>和 <code>maximum</code>永远按照固定的顺序排列，
      * 即<code>(minimum <= value <= maximum)</code> 为真。
      *
      * 如果<code>snapInterval</code>属性的值不是0，那么<code>value</code>的值也会被<code>snapInterval</code>所约束。
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/RangeExample.ts
      */
     var Range = (function (_super) {
         __extends(Range, _super);
@@ -17753,15 +17759,14 @@ var swan;
             }
             /**
              * @language en_US
-             *
+             * Adjust the speed to get out of the slide end.
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
              */
             /**
              * @language zh_CN
-             *
-             *
+             * 调节滑动结束时滚出的速度。
              * @version Lark 1.0
              * @version Swan 1.0
              * @platform Web,Native
@@ -17773,6 +17778,9 @@ var swan;
                 this.$Scroller[9 /* touchScrollV */].$scrollFactor = val;
             }
         );
+        /**
+         * @private
+         */
         p.$getThrowInfo = function (currentPos, toPos) {
             if (!scrollerThrowEvent) {
                 scrollerThrowEvent = new swan.ScrollerThrowEvent(swan.ScrollerThrowEvent.THROW, false, false, currentPos, toPos);
@@ -17781,7 +17789,7 @@ var swan;
                 scrollerThrowEvent.currentPos = currentPos;
                 scrollerThrowEvent.toPos = toPos;
             }
-            this.emit(scrollerThrowEvent);
+            //this.emit(scrollerThrowEvent);
             return scrollerThrowEvent;
         };
         d(p, "scrollPolicyV"
@@ -17937,8 +17945,10 @@ var swan;
             }
         };
         p.onViewPortRemove = function (event) {
-            this.$Scroller[13 /* viewprotRemovedEvent */] = true;
-            this.viewport = null;
+            if (event.target == this.viewport) {
+                this.$Scroller[13 /* viewprotRemovedEvent */] = true;
+                this.viewport = null;
+            }
         };
         /**
          * @inheritDoc
@@ -21793,6 +21803,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/CheckboxExample.ts
      */
     /**
      * @language zh_CN
@@ -21801,6 +21812,7 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/CheckboxExample.ts
      */
     var CheckBox = (function (_super) {
         __extends(CheckBox, _super);

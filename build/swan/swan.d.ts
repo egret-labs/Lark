@@ -2084,6 +2084,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/DefaultAssetAdapterExample.ts
      */
     /**
      * @language zh_CN
@@ -2091,6 +2092,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/DefaultAssetAdapterExample.ts
      */
     class DefaultAssetAdapter implements IAssetAdapter {
         /**
@@ -2138,13 +2140,6 @@ declare module swan.sys {
      * @private
      */
     class EXMLConfig {
-        /**
-         * @private
-         *
-         * @param instance
-         * @returns
-         */
-        private describe(instance);
         /**
          * @private
          * 根据类的短名ID和命名空间获取完整类名(以"."分隔)
@@ -2735,7 +2730,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/collection/ArrayCollectionExample.ts
+     * @includeExample examples/Samples/src/extension/swan/collections/ArrayCollectionExample.ts
      */
     /**
      * @language zh_CN
@@ -2747,7 +2742,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/collection/ArrayCollectionExample.ts
+     * @includeExample examples/Samples/src/extension/swan/collections/ArrayCollectionExample.ts
      */
     class ArrayCollection extends lark.EventEmitter implements ICollection {
         /**
@@ -4283,6 +4278,9 @@ declare module swan.sys {
     }
 }
 declare module swan {
+    /**
+     * @private
+     */
     class ScrollerThrowEvent extends lark.Event {
         static THROW: string;
         /**
@@ -6728,7 +6726,7 @@ declare module swan {
      * @platform Web,Native
      * @includeExample examples/Samples/src/extension/swan/components/LabelExample.ts
      */
-    class Label extends lark.TextField implements UIComponent {
+    class Label extends lark.TextField implements UIComponent, IDisplayText {
         /**
          * @language en_US
          * Constructor.
@@ -7462,7 +7460,7 @@ declare module swan {
      * @version Swan 1.0
      * @platform Web,Native
      */
-    class EditableText extends lark.TextInput implements UIComponent {
+    class EditableText extends lark.TextInput implements UIComponent, IDisplayText {
         /**
          * @language en_US
          * Constructor.
@@ -9668,6 +9666,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample src/extension/swan/components/HScrollBar.ts
      */
     /**
      * @language zh_CN
@@ -9680,6 +9679,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample src/extension/swan/components/HScrollBar.ts
      */
     class ScrollBarBase extends Component {
         /**
@@ -9792,6 +9792,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ButtonExample.ts
      */
     /**
      * @language zh_CN
@@ -9799,6 +9800,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ButtonExample.ts
      */
     class Button extends Component {
         /**
@@ -9985,19 +9987,21 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/RangeExample.ts
      */
     /**
      * @language zh_CN
      * 范围选取组件,该组件包含一个值和这个值所允许的最大最小约束范围。
      *
      * <code>value</code>属性的值永远被限制于当前的<code>minimum</code>和
-     * <code>maximum</code>之间，并且<code>minimum</code>和 <code>maximum</code>永远按照固定的书序排列，
+     * <code>maximum</code>之间，并且<code>minimum</code>和 <code>maximum</code>永远按照固定的顺序排列，
      * 即<code>(minimum <= value <= maximum)</code> 为真。
      *
      * 如果<code>snapInterval</code>属性的值不是0，那么<code>value</code>的值也会被<code>snapInterval</code>所约束。
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/RangeExample.ts
      */
     class Range extends Component {
         /**
@@ -10716,15 +10720,14 @@ declare module swan {
         constructor();
         /**
          * @language en_US
-         *
+         * Adjust the speed to get out of the slide end.
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         *
-         *
+         * 调节滑动结束时滚出的速度。
          * @version Lark 1.0
          * @version Swan 1.0
          * @platform Web,Native
@@ -12876,6 +12879,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/CheckboxExample.ts
      */
     /**
      * @language zh_CN
@@ -12884,6 +12888,7 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/CheckboxExample.ts
      */
     class CheckBox extends ToggleButton {
         /**

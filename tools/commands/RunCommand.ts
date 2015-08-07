@@ -63,7 +63,7 @@ class RunCommand implements lark.Command {
         })
     }
     private sendBuildCMD() {
-        service.execCommand({ command: "build", path: lark.options.projectDir }, (cmd: lark.ServiceCommandResult) => {
+        service.execCommand({ command: "build", path: lark.options.projectDir, option: lark.options }, (cmd: lark.ServiceCommandResult) => {
             if (!cmd.exitCode)
                 console.log('    ' +utils.tr(10011));
             else

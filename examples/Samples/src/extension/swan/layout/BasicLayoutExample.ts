@@ -30,12 +30,12 @@ class BasicLayoutExample extends lark.Sprite {
         group.addChild(btn3);
     }
     private getButton(): swan.Button {
-        var exml =
-            '<s:Skin class="skins.ButtonSkin" states="up,down,disabled" minHeight="50" minWidth="100" xmlns:s="http://ns.egret.com/swan">'
-            + '<s:Image source="resources/button_up.png" source.down="resources/button_down.png" scale9Grid="1,3,8,8" width="100%" height="100%"/>'
-            + '<s:Label id="labelDisplay" top="8" bottom="8" left="8" right="8" fontSize="20" fontFamily="Tahoma" textColor="0xFFFFFF" verticalAlign="middle" textAlign="center"/>'
-            + '</s:Skin>';
-        var clazz = EXML.parse(exml);
+        var exmlButton =
+        `<s:Skin class="skins.ButtonSkin" states="up,down,disabled" minHeight="50" minWidth="100" xmlns:s="http://ns.egret.com/swan">
+            <s:Image source="resources/button_up.png" source.down="resources/button_down.png" scale9Grid="1,3,8,8" width="100%" height="100%"/>
+            <s:Label id="labelDisplay" top="8" bottom="8" left="8" right="8" fontSize="20" fontFamily="Tahoma" textColor="0xFFFFFF" verticalAlign="middle" textAlign="center"/>
+        </s:Skin>`;
+        var clazz = EXML.parse(exmlButton);
         var btn = new swan.Button();
         btn.skinName = "skins.ButtonSkin";
         return btn;

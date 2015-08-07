@@ -64,19 +64,21 @@ module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/RangeExample.ts
      */
     /**
      * @language zh_CN
      * 范围选取组件,该组件包含一个值和这个值所允许的最大最小约束范围。
      *
      * <code>value</code>属性的值永远被限制于当前的<code>minimum</code>和
-     * <code>maximum</code>之间，并且<code>minimum</code>和 <code>maximum</code>永远按照固定的书序排列，
+     * <code>maximum</code>之间，并且<code>minimum</code>和 <code>maximum</code>永远按照固定的顺序排列，
      * 即<code>(minimum <= value <= maximum)</code> 为真。
      *
      * 如果<code>snapInterval</code>属性的值不是0，那么<code>value</code>的值也会被<code>snapInterval</code>所约束。
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/supportClasses/RangeExample.ts
      */
     export class Range extends Component {
         /**
