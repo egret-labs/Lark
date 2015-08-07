@@ -79,13 +79,13 @@ module lark {
 
         /**
          * @private
-         * 当前帧的回调函数是否运行过，每帧的回调函数在一帧内只执行一次。gotoAndPlay当前帧多少次。
+         * 当前帧的回调函数是否运行过，每帧的回调函数在一帧内只执行一次。
          */
         private currentRun:boolean = false;
 
         /**
          * @language en_US
-         * Set the frames of animation. Every frame is a bitmap data. Reset process will point the player to the first frame, and automatically play. But if the frame count is 0 or null, it will automatically stop.
+         * Set the frames of animation. Every frame is a bitmap data. Reset process will point the player to the first frame, and automatically play. But if the frame count is less than 2 or null, it will automatically stop.
          * @see BitmapData
          * @see Texture
          * @version Lark 1.0
@@ -93,7 +93,7 @@ module lark {
          */
         /**
          * @language zh_CN
-         * 设置序列帧内容。每一帧代表一个图片内容。重设过程会把播放头指向第一帧，并且自动开启播放。但是如果帧数为 0 或者 设置 null，则会自动停止播放。
+         * 设置序列帧内容。每一帧代表一个图片内容。重设过程会把播放头指向第一帧，并且自动开启播放。但是如果帧数小于 2 或者 设置 null，则会自动停止播放。
          * @see BitmapData
          * @see Texture
          * @version Lark 1.0
@@ -103,6 +103,7 @@ module lark {
             this.frames = frames;
             if (frames && frames.length) {
                 this.$isPlaying = true;
+                this._currentFrame = 0;
                 this.setFrame(0);
             }
             else {
@@ -153,12 +154,14 @@ module lark {
          * @private
          */
         private setFrame(frame:number):void {
+            if(this._currentFrame != frame) {
+                this.currentRun = false;
+                this.executeFrameScript();
+            }
             this._currentFrame = frame;
             if (this.bitmapData != this.frames[this._currentFrame]) {
                 this.bitmapData = this.frames[this._currentFrame];
             }
-            this.currentRun = false;
-            this.executeFrameScript();
         }
 
         /**
@@ -227,7 +230,7 @@ module lark {
             if (!this.$isPlaying) {
                 return;
             }
-            this.setFrame((++this._currentFrame) % this.frames.length);
+            this.setFrame((this._currentFrame + 1) % this.frames.length);
         }
 
         /**
@@ -314,7 +317,7 @@ module lark {
                 this.executeFrameScript();
                 return;
             }
-            this.setFrame(this._currentFrame++);
+            this.setFrame(this._currentFrame + 1);
         }
 
         /**
@@ -354,7 +357,7 @@ module lark {
                 this.executeFrameScript();
                 return;
             }
-            this.setFrame(this._currentFrame--);
+            this.setFrame(this._currentFrame - 1);
         }
 
         /**
