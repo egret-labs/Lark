@@ -281,7 +281,7 @@ module lark {
                 if(x>0){//裁切的透明区域要可以点击
                     x = 0;
                 }
-                var y = values[sys.BitmapKeys.offsetX];
+                var y = values[sys.BitmapKeys.offsetY];
                 if(y>0){
                     y = 0;
                 }
