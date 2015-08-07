@@ -58,10 +58,29 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public constructor(frames:(BitmapData|Texture)[]) {
+        public constructor(frames?:(BitmapData|Texture)[]) {
             super();
             this.setFrames(frames);
-            this.on(Event.ENTER_FRAME, this.onEnterFrame, this);
+            this.on(Event.ADDED_TO_STAGE, this.onAddToStage, this);
+            this.on(Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
+        }
+
+        /**
+         * @private
+         */
+        private onAddToStage(event:Event):void {
+            if (this.$isPlaying && !this.enterFrameFlag) {
+                this.on(Event.ENTER_FRAME, this.onEnterFrame, this);
+            }
+        }
+
+        /**
+         * @private
+         */
+        private onRemoveFromStage(event:Event):void {
+            if (this.enterFrameFlag) {
+                this.removeListener(Event.ENTER_FRAME, this.onEnterFrame, this);
+            }
         }
 
         /**
@@ -76,12 +95,6 @@ module lark {
          * @private
          */
         private _callBacksArgs:Object = {};
-
-        /**
-         * @private
-         * 当前帧的回调函数是否运行过，每帧的回调函数在一帧内只执行一次。
-         */
-        private currentRun:boolean = false;
 
         /**
          * @language en_US
@@ -102,15 +115,22 @@ module lark {
         public setFrames(frames:(BitmapData|Texture)[]) {
             this.frames = frames;
             if (frames && frames.length) {
-                this.$isPlaying = true;
-                this._currentFrame = 0;
+                this.setPlaying(true);
+                if(this._currentFrame != -1) {
+                    this._currentFrame = 0;
+                }
                 this.gotoFrame(0);
             }
             else {
-                this.$isPlaying = false;
-                this._currentFrame = 0;
+                this.setPlaying(false);
+                this._currentFrame = -1;
             }
         }
+
+        /**
+         * @private
+         */
+        private enterFrameFlag:boolean = false;
 
         /**
          * @language en_US
@@ -131,20 +151,16 @@ module lark {
          * @platform Web,Native
          */
         public addFrameScript(frame:number, callBack:Function, thisObject?:any, ...args):void {
-            var length = this.frames.length;
             frame = +frame | 0;
-            if(frame<0){
+            if (frame < 0) {
                 frame = 0;
             }
-            if (frame >= length) {
-                frame = length - 1;
-            }
-            if(callBack){
+            if (callBack) {
                 this._callBacks[frame] = callBack;
                 this._callBacksThis[frame] = thisObject;
                 this._callBacksArgs[frame] = args;
             }
-            else{
+            else {
                 delete this._callBacks[frame];
                 delete this._callBacksThis[frame];
                 delete this._callBacksArgs[frame];
@@ -154,17 +170,17 @@ module lark {
         /**
          * @private
          */
-        private _currentFrame:number = 0;
+        private _currentFrame:number = -1;
 
         /**
          * @private
          */
         private gotoFrame(frame:number):void {
-            if (this._currentFrame != frame) {
-                this.currentRun = false;
-                this.executeFrameScript();
+            if (this._currentFrame == frame) {
+                return;
             }
             this._currentFrame = frame;
+            this.executeFrameScript();
             if (this.bitmapData != this.frames[this._currentFrame]) {
                 this.bitmapData = this.frames[this._currentFrame];
             }
@@ -203,8 +219,7 @@ module lark {
             var callBack:Function = this._callBacks[currentFrame];
             var callBackThis:any = this._callBacksThis[currentFrame];
             var callBackArgs:any = this._callBacksArgs[currentFrame];
-            if (callBack && !this.currentRun) {
-                this.currentRun = true;
+            if (callBack) {
                 callBack.apply(callBackThis, callBackArgs);
             }
         }
@@ -213,6 +228,17 @@ module lark {
          * @private
          */
         private $isPlaying:boolean = false;
+
+
+        private setPlaying(flag:boolean):void {
+            this.$isPlaying = flag;
+            if (this.$isPlaying && this.stage && !this.enterFrameFlag) {
+                this.on(Event.ENTER_FRAME, this.onEnterFrame, this);
+            }
+            if (!this.$isPlaying && this.enterFrameFlag) {
+                this.removeListener(Event.ENTER_FRAME, this.onEnterFrame, this);
+            }
+        }
 
         /**
          * @language en_US
@@ -264,7 +290,7 @@ module lark {
             if (frame >= length) {
                 frame = length - 1;
             }
-            this.$isPlaying = true;
+            this.setPlaying(true);
             if (this._currentFrame == frame) {
                 return;
             }
@@ -292,7 +318,7 @@ module lark {
             }
             frame = +frame | 0;
             frame = frame < 0 ? 0 : frame;
-            this.$isPlaying = false;
+            this.setPlaying(false);
             if (frame >= length) {
                 frame = length - 1;
             }
@@ -304,24 +330,23 @@ module lark {
 
         /**
          * @language en_US
-         * Sends the playhead to the next frame and stops it.This happens after all remaining actions in the frame have finished executing.
+         * Sends the playhead to the next frame and stops it.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 将播放头转到下一帧并停止。这会在帧中的所有剩余动作执行完毕后发生。
+         * 将播放头转到下一帧并停止。
          * @version Lark 1.0
          * @platform Web,Native
          */
         public nextFrame():void {
             var length = this.frames.length;
-            this.$isPlaying = false;
+            this.setPlaying(false);
             if (!length) {
                 return;
             }
             if (this._currentFrame == length - 1) {
-                this.executeFrameScript();
                 return;
             }
             this.gotoFrame(this._currentFrame + 1);
@@ -340,28 +365,27 @@ module lark {
          * @platform Web,Native
          */
         public play():void {
-            this.$isPlaying = true;
+            this.setPlaying(true);
         }
 
         /**
          * @language en_US
-         * Sends the playhead to the last frame and stops it.This happens after all remaining actions in the frame have finished executing.
+         * Sends the playhead to the last frame and stops it.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 将播放头转到前一帧并停止。这会在帧中的所有剩余动作执行完毕后发生。
+         * 将播放头转到前一帧并停止。
          * @version Lark 1.0
          * @platform Web,Native
          */
         public prevFrame():void {
-            this.$isPlaying = false;
+            this.setPlaying(false);
             if (!this.frames.length) {
                 return;
             }
             if (this._currentFrame == 0) {
-                this.executeFrameScript();
                 return;
             }
             this.gotoFrame(this._currentFrame - 1);
@@ -380,7 +404,7 @@ module lark {
          * @platform Web,Native
          */
         public stop():void {
-            this.$isPlaying = false;
+            this.setPlaying(false);
         }
 
         /**
