@@ -108,23 +108,23 @@ module lark {
         /**
          * @private
          */
-        $data:(BitmapData|Texture)[];
+        $data:BitmapData[]|Texture[];
 
         /**
          * @language en_US
-         * The data received from the load operation.
+         * The bitmap data received from the load operation.
          * @see lark.Animation
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 使用 load() 方法加载成功的 Animation 对象。
+         * 使用 load() 方法加载成功的图像数据。
          * @see lark.Animation
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public get data():(BitmapData|Texture)[] {
+        public get data():BitmapData[]|Texture[] {
             return this.$data;
         }
 
@@ -228,7 +228,7 @@ module lark {
                 this.$data = [];
                 for (var i = 0; i < len; i++) {
                     res = info.res[list[i].res];
-                    this.$data[i] = new Texture(bitmapData,res.x,res.y,res.w,res.h,list[i].x,list[i].y,res.w,res.h);
+                    this.$data[i] = new Texture(bitmapData,res.x,res.y,res.w,res.h,list[i].x,list[i].y,list[i].sourceW,list[i].sourceH);
                 }
                 this.emitWith(lark.Event.COMPLETE);
             }

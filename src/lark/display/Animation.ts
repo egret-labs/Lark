@@ -40,7 +40,7 @@ module lark {
     /**
      * @private
      * @language zh_CN
-     * 逐帧动画。与 Sprite 不同是 Animation 有
+     * 逐帧动画。
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -79,7 +79,7 @@ module lark {
 
         /**
          * @private
-         * 当前帧的回调函数是否运行过，每帧的回调函数在一帧内
+         * 当前帧的回调函数是否运行过，每帧的回调函数在一帧内只执行一次。gotoAndPlay当前帧多少次。
          */
         private currentRun:boolean = false;
 
