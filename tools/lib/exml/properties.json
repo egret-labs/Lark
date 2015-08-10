@@ -51,6 +51,7 @@
 	"lark.Bitmap":
 	{
 		"bitmapData":"lark.BitmapData",
+		"pixelHitTest":"boolean",
 		"smoothing":"boolean",
 		"super":"lark.DisplayObject"
 	},
@@ -64,7 +65,6 @@
 		"mask":"lark.DisplayObject",
 		"matrix":"lark.Matrix",
 		"name":"string",
-		"pixelHitTest":"boolean",
 		"rotation":"number",
 		"scaleX":"number",
 		"scaleY":"number",
@@ -85,6 +85,10 @@
 	{
 		"implements":["lark.IEventEmitter"],
 		"super":"lark.LarkObject"
+	},
+	"lark.GeolocationEvent":
+	{
+		"super":"lark.Event"
 	},
 	"lark.Graphics":
 	{
@@ -109,6 +113,17 @@
 		"super":"lark.LarkObject",
 		"tx":"number",
 		"ty":"number"
+	},
+	"lark.MotionEvent":
+	{
+		"super":"lark.Event"
+	},
+	"lark.OrientationEvent":
+	{
+		"alpha":"number",
+		"beta":"number",
+		"gamma":"number",
+		"super":"lark.Event"
 	},
 	"lark.Point":
 	{
@@ -147,6 +162,8 @@
 	"lark.Stage":
 	{
 		"frameRate":"number",
+		"highResolutionMode":"string",
+		"scaleMode":"string",
 		"super":"lark.Sprite"
 	},
 	"lark.TextField":
@@ -232,8 +249,6 @@
 		"bottom":"number",
 		"currentState":"string",
 		"enabled":"boolean",
-		"explicitHeight":"number",
-		"explicitWidth":"number",
 		"horizontalCenter":"number",
 		"hostComponentKey":"string",
 		"implements":["swan.UIComponent"],
@@ -266,10 +281,8 @@
 	"swan.EditableText":
 	{
 		"bottom":"number",
-		"explicitHeight":"number",
-		"explicitWidth":"number",
 		"horizontalCenter":"number",
-		"implements":["swan.UIComponent"],
+		"implements":["swan.UIComponent","swan.IDisplayText"],
 		"includeInLayout":"boolean",
 		"left":"number",
 		"maxHeight":"number",
@@ -288,8 +301,6 @@
 		"bottom":"number",
 		"currentState":"string",
 		"elementsContent":"Array",
-		"explicitHeight":"number",
-		"explicitWidth":"number",
 		"horizontalCenter":"number",
 		"implements":["swan.IViewport"],
 		"includeInLayout":"boolean",
@@ -326,8 +337,6 @@
 	"swan.Image":
 	{
 		"bottom":"number",
-		"explicitHeight":"number",
-		"explicitWidth":"number",
 		"fillMode":"string",
 		"horizontalCenter":"number",
 		"implements":["swan.UIComponent"],
@@ -364,10 +373,8 @@
 	"swan.Label":
 	{
 		"bottom":"number",
-		"explicitHeight":"number",
-		"explicitWidth":"number",
 		"horizontalCenter":"number",
-		"implements":["swan.UIComponent"],
+		"implements":["swan.UIComponent","swan.IDisplayText"],
 		"includeInLayout":"boolean",
 		"left":"number",
 		"maxHeight":"number",
@@ -469,8 +476,15 @@
 		"scrollPolicyH":"string",
 		"scrollPolicyV":"string",
 		"super":"swan.Component",
+		"throwSpeed":"number",
 		"verticalScrollBar":"swan.VScrollBar",
 		"viewport":"swan.IViewport"
+	},
+	"swan.ScrollerThrowEvent":
+	{
+		"currentPos":"number",
+		"super":"lark.Event",
+		"toPos":"number"
 	},
 	"swan.SetProperty":
 	{

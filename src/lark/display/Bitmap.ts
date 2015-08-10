@@ -27,7 +27,27 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
+module lark.sys {
+    /**
+     * @private
+     */
+    export const enum BitmapKeys {
+        bitmapData,
+        image,
+        clipX,
+        clipY,
+        clipWidth,
+        clipHeight,
+        offsetX,
+        offsetY,
+        width,
+        height,
+        smoothing
+    }
+}
+
 module lark {
+
     /**
      * @language en_US
      * The Bitmap class represents display objects that represent bitmap images.
@@ -73,20 +93,33 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public constructor(bitmapData?:BitmapData) {
+        public constructor(bitmapData?:BitmapData|Texture) {
             super();
             this.$renderRegion = new sys.Region();
-            this.bitmapData = bitmapData;
+            this.$Bitmap = {
+                0: null,     // bitmapData,
+                1: null,     // image,
+                2: 0,        // clipX,
+                3: 0,        // clipY,
+                4: 0,        // clipWidth,
+                5: 0,        // clipHeight,
+                6: 0,        // offsetX,
+                7: 0,        // offsetY,
+                8: 0,        // width,
+                9: 0,        // height
+                10: true,    // smoothing
+            };
+            this.$setBitmapData(bitmapData);
         }
 
         /**
          * @private
          */
-        $bitmapData:BitmapData;
+        $Bitmap:Object;
 
         /**
          * @language en_US
-         * bitmapData The BitmapData object being referenced.
+         * The BitmapData object being referenced.
          * @version Lark 1.0
          * @platform Web,Native
          */
@@ -96,29 +129,56 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public get bitmapData():BitmapData{
-            return this.$bitmapData;
+        public get bitmapData():BitmapData|Texture {
+            return this.$Bitmap[sys.BitmapKeys.bitmapData];
         }
 
-        public set bitmapData(value:BitmapData){
+        public set bitmapData(value:BitmapData|Texture) {
             this.$setBitmapData(value);
         }
 
         /**
          * @private
          */
-        $setBitmapData(value:BitmapData):void{
-            if(value==this.$bitmapData){
+        $setBitmapData(value:BitmapData|Texture):void {
+            var values = this.$Bitmap;
+            if (value == values[sys.BitmapKeys.bitmapData]) {
                 return;
             }
-            this.$bitmapData = value;
+            values[sys.BitmapKeys.bitmapData] = value;
+            if (value) {
+                if (value instanceof Texture) {
+                    var texture = <Texture>value;
+                    this.setImageData(texture.$bitmapData, texture.$clipX, texture.$clipY, texture.$clipWidth,
+                        texture.$clipHeight, texture.$offsetX, texture.$offsetY, texture.$width, texture.$height);
+                }
+                else {
+                    this.setImageData(value, 0, 0, value.width, value.height, 0, 0, value.width, value.height);
+                }
+            }
+            else {
+                this.setImageData(null, 0, 0, 0, 0, 0, 0, 0, 0);
+            }
             this.$invalidateContentBounds();
         }
 
         /**
          * @private
          */
-        $smoothing:boolean = true;
+        private setImageData(image:BitmapData, clipX:number, clipY:number, clipWidth:number, clipHeight:number,
+                             offsetX:number, offsetY:number, width:number, height:number):void {
+            var values = this.$Bitmap;
+            values[sys.BitmapKeys.image] = image;
+            values[sys.BitmapKeys.clipX] = clipX;
+            values[sys.BitmapKeys.clipY] = clipY;
+            values[sys.BitmapKeys.clipWidth] = clipWidth;
+            values[sys.BitmapKeys.clipHeight] = clipHeight;
+            values[sys.BitmapKeys.offsetX] = offsetX;
+            values[sys.BitmapKeys.offsetY] = offsetY;
+            values[sys.BitmapKeys.width] = width;
+            values[sys.BitmapKeys.height] = height;
+        }
+
         /**
          * @language en_US
          * Whether or not the bitmap is smoothed when scaled.
@@ -133,16 +193,17 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public get smoothing():boolean{
-            return this.$smoothing;
+        public get smoothing():boolean {
+            return this.$Bitmap[sys.BitmapKeys.smoothing];
         }
 
         public set smoothing(value:boolean) {
             value = !!value;
-            if(value===this.$smoothing){
+            var values = this.$Bitmap;
+            if (value === values[sys.BitmapKeys.smoothing]) {
                 return;
             }
-            this.$smoothing = value;
+            values[sys.BitmapKeys.smoothing] = value;
             this.$invalidate();
         }
 
@@ -174,13 +235,14 @@ module lark {
             this._pixelHitTest = !!value;
         }
 
-        $hitTest(stageX:number,stageY:number):DisplayObject {
-            var target = super.$hitTest(stageX,stageY);
-            if(target&&this._pixelHitTest){
-                target = this.hitTestPixel(stageX,stageY);
+        $hitTest(stageX:number, stageY:number):DisplayObject {
+            var target = super.$hitTest(stageX, stageY);
+            if (target && this._pixelHitTest) {
+                target = this.hitTestPixel(stageX, stageY);
             }
             return target;
         }
+
         /**
          * @private
          */
@@ -212,11 +274,20 @@ module lark {
          * @private
          */
         $measureContentBounds(bounds:Rectangle):void {
-            var bitmapData = this.$bitmapData;
-            if(bitmapData){
-                bounds.setTo(0,0,bitmapData.width,bitmapData.height);
+            var values = this.$Bitmap;
+            var image = values[sys.BitmapKeys.image];
+            if (image) {
+                var x = values[sys.BitmapKeys.offsetX];
+                if(x>0){//裁切的透明区域要可以点击
+                    x = 0;
+                }
+                var y = values[sys.BitmapKeys.offsetY];
+                if(y>0){
+                    y = 0;
+                }
+                bounds.setTo(x, y, values[sys.BitmapKeys.width], values[sys.BitmapKeys.height]);
             }
-            else{
+            else {
                 bounds.setEmpty();
             }
         }
@@ -224,11 +295,14 @@ module lark {
         /**
          * @private
          */
-        $render(context:sys.RenderContext):void{
-            var bitmapData = this.$bitmapData;
-            if (bitmapData) {
-                context.imageSmoothingEnabled = this.$smoothing;
-                context.drawImage(bitmapData,0,0);
+        $render(context:sys.RenderContext):void {
+            var values = this.$Bitmap;
+            var image = values[sys.BitmapKeys.image];
+            if (image) {
+                context.imageSmoothingEnabled = values[sys.BitmapKeys.smoothing];
+                context.drawImage(image, values[sys.BitmapKeys.clipX], values[sys.BitmapKeys.clipY], values[sys.BitmapKeys.clipWidth],
+                    values[sys.BitmapKeys.clipHeight], values[sys.BitmapKeys.offsetX], values[sys.BitmapKeys.offsetY],
+                    values[sys.BitmapKeys.clipWidth], values[sys.BitmapKeys.clipHeight]);
             }
         }
     }

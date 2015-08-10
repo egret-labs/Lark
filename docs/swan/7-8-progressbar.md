@@ -1,6 +1,6 @@
 #Swan (UI库) 编程指南 - 进度条
 
-swan.ProgressBar 进度条控件，可以用来显示随时间变化的进度任务。跟前面的滑块 swan.Slider 控件一样，进度条控件也继承自 swan.Range 控件。也就是说 swan.Progress 进度条控件也可以设置 maximum 、minimum 、value 、等属性。
+我们可以使用 swan.ProgressBar 进度条控件来显示随时间变化的进度任务。跟前面的滑块 swan.Slider 控件一样，进度条控件也继承自 swan.Range 控件。也就是说 swan.Progress 进度条控件也可以设置 maximum 、minimum 、value 、等属性。
 
 首先，我们准备好组件皮肤所需要的素材，如下图所示：
 
@@ -31,7 +31,7 @@ class ProgressDemo extends swan.Group {
 }
 ```
 
-跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用skinName属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定。若是外部文件资源可以监听其加载完成。
+跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用 skinName 属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定。若是外部文件资源可以监听其加载完成。
 
 需要注意的是，我们需要指定进度条控件的宽度才能让他很好的显示出来，例如我们在下面添加他的属性，宽度为500，最大值1024，最小值0。修改上面的代码如下：
 
@@ -63,7 +63,7 @@ class ProgressDemo extends swan.Group {
 
 ![](image/7-8-progressbar-1.png)
 
-下面我们模拟一下时间进度时间，在 myProgress 上面监听 swan.ENTER_FRAME 事件，让他每一帧增加给 value 的值 1。
+下面我们模拟一下时间进度事件，在 myProgress 上面监听 swan.ENTER_FRAME 事件，让他每一帧增加给 value 的值 1。
 
 在 loaded() 中添加如下监听：
 
@@ -79,8 +79,9 @@ this.myProgress.on(lark.Event.ENTER_FRAME,this.onFrame,this);
     }
 ```
 
-这样可以看到我们的进度条 myProgress 在随着时间的增长而增长。
+这样可以看到我们的进度条 myProgress 在随着时间的增长而增长。需要注意的是 value 值是不会大于 maximum 的。
 
 ![](image/7-8-progressbar-2.png)
 
 * 上一节 [滑动选择器](7-7-slider.md)
+* 下一节 [输入文本](7-9-editabletext.md)

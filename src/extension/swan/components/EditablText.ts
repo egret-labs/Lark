@@ -48,7 +48,7 @@ module swan {
      * @version Swan 1.0
      * @platform Web,Native
      */
-    export class EditableText extends lark.TextInput implements UIComponent {
+    export class EditableText extends lark.TextInput implements UIComponent,IDisplayText {
 
         /**
          * @language en_US
@@ -71,7 +71,7 @@ module swan {
 
         /**
          * @private
-         * 
+         *
          */
         $invalidateContentBounds():void {
             super.$invalidateContentBounds();
@@ -80,8 +80,8 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param value 
+         *
+         * @param value
          */
         $setWidth(value:number):void {
             super.$setWidth(value);
@@ -90,8 +90,8 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param value 
+         *
+         * @param value
          */
         $setHeight(value:number):void {
             super.$setHeight(value);
@@ -100,12 +100,12 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param value 
+         *
+         * @param value
          */
-        $setText(value:string):void{
+        $setText(value:string):void {
             super.$setText(value);
-            PropertyEvent.emitPropertyEvent(this,PropertyEvent.PROPERTY_CHANGE,"text");
+            PropertyEvent.emitPropertyEvent(this, PropertyEvent.PROPERTY_CHANGE, "text");
         }
 
         /**
@@ -483,5 +483,5 @@ module swan {
     }
 
     sys.implementUIComponent(EditableText, lark.TextInput);
-    registerBindable(EditableText.prototype,"text");
+    registerBindable(EditableText.prototype, "text");
 }

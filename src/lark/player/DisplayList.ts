@@ -642,6 +642,7 @@ module lark.sys {
             if (!surface) {
                 return null;
             }
+            //在chrome里，小等于256*256的canvas会不启用GPU加速。
             surface.width = Math.max(257, width);
             surface.height = Math.max(257, height);
             return surface.renderContext;
