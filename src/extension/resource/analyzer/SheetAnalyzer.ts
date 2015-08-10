@@ -73,7 +73,7 @@ module RES {
                     var imageUrl:string = this.analyzeConfig(resItem, request.response);
                     if (imageUrl) {
                         this.loadImage(imageUrl, data);
-                        //this.recycler.push(request);
+                        this.recycler.push(request);
                         return;
                     }
                 }
@@ -82,7 +82,7 @@ module RES {
                 }
             }
             if (request instanceof lark.HttpRequest) {
-                //this.recycler.push(request);
+                this.recycler.push(request);
             }
             else {
                 this.recyclerIamge.push(request);

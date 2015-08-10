@@ -39,9 +39,6 @@ module lark.web {
          */
         public constructor() {
             super();
-            this._xhr = new XMLHttpRequest();
-            this._xhr.onreadystatechange = this.onReadyStateChange;
-            this._xhr.onprogress = this.updateProgress
         }
 
         /**
@@ -54,37 +51,53 @@ module lark.web {
          * 本次请求返回的数据，数据类型根据responseType设置的值确定。
          */
         public get response():any {
-            if (this._xhr.response)
+            if (!this._xhr) {
+                return null;
+            }
+            if (this._xhr.response) {
                 return this._xhr.response;
-            if (this._xhr.responseXML)
+            }
+            if (this._xhr.responseXML) {
                 return this._xhr.responseXML;
-            if (this._xhr.responseText)
+            }
+            if (this._xhr.responseText) {
                 return this._xhr.responseText;
+            }
             return null;
         }
+
+        /**
+         * @private
+         */
+        private _responseType:string;
 
         /**
          * @private
          * 设置返回的数据格式，请使用 HttpResponseType 里定义的枚举值。设置非法的值或不设置，都将使用HttpResponseType.TEXT。
          */
         public get responseType():string {
-            return this._xhr.responseType;
+            return this._responseType;
         }
 
         public set responseType(value:string) {
-            this._xhr.responseType = value;
+            this._responseType = value;
         }
+
+        /**
+         * @private
+         */
+        private _withCredentials:boolean;
 
         /**
          * @private
          * 表明在进行跨站(cross-site)的访问控制(Access-Control)请求时，是否使用认证信息(例如cookie或授权的header)。 默认为 false。(这个标志不会影响同站的请求)
          */
         public get withCredentials():boolean {
-            return this._xhr.withCredentials;
+            return this._withCredentials;
         }
 
         public set withCredentials(value:boolean) {
-            this._xhr.withCredentials = !!value;
+            this._withCredentials = value;
         }
 
         /**
@@ -100,6 +113,22 @@ module lark.web {
          */
         public open(url:string, method:string = "GET"):void {
             this._url = url;
+            if (this._xhr) {
+                this._xhr.abort();
+                this._xhr = null;
+            }
+            this._xhr = new XMLHttpRequest();
+            this._xhr.onreadystatechange = this.onReadyStateChange;
+            this._xhr.onprogress = this.updateProgress;
+            if (this._responseType != null) {
+                this._xhr.responseType = this.responseType;
+            }
+            if (this._withCredentials != null) {
+                this._xhr.withCredentials = this._withCredentials;
+            }
+            if (this.header != null) {
+                this._xhr.setRequestHeader(this.header, this.headerValue);
+            }
             this._xhr.open(method, url, true);
         }
 
@@ -117,7 +146,9 @@ module lark.web {
          * 如果请求已经被发送,则立刻中止请求.
          */
         public abort():void {
-            this._xhr.abort();
+            if (this._xhr) {
+                this._xhr.abort();
+            }
         }
 
         /**
@@ -125,9 +156,15 @@ module lark.web {
          * 返回所有响应头信息(响应头名和值), 如果响应头还没接受,则返回"".
          */
         public getAllResponseHeaders():string {
+            if (!this._xhr) {
+                return null;
+            }
             var result = this._xhr.getAllResponseHeaders();
             return result ? result : "";
         }
+
+        private header:string;
+        private headerValue:string;
 
         /**
          * @private
@@ -136,7 +173,8 @@ module lark.web {
          * @param value 给指定的请求头赋的值.
          */
         public setRequestHeader(header:string, value:string):void {
-            this._xhr.setRequestHeader(header, value);
+            this.header = header;
+            this.headerValue = value;
         }
 
         /**
@@ -145,6 +183,9 @@ module lark.web {
          * @param header 要返回的响应头名称
          */
         public getResponseHeader(header:string):string {
+            if (!this._xhr) {
+                return null;
+            }
             var result = this._xhr.getResponseHeader(header);
             return result ? result : "";
         }

@@ -57,7 +57,7 @@ module RES {
                     var imageUrl:string = this.analyzeConfig(resItem, request.response);
                     if (imageUrl) {
                         this.loadImage(imageUrl, data);
-                        //this.recycler.push(request);
+                        this.recycler.push(request);
                         return;
                     }
                 }
@@ -66,7 +66,7 @@ module RES {
                 }
             }
             if (request instanceof lark.HttpRequest) {
-                //this.recycler.push(request);
+                this.recycler.push(request);
             }
             else {
                 this.recyclerIamge.push(request);
@@ -92,10 +92,19 @@ module RES {
             }
             if (config) {
                 this.sheetMap[name] = config;
-                imageUrl = this.getRelativePath(resItem.url, config["file"]);
-            }
-            if(!imageUrl) {
-                imageUrl = "";
+                if (config["file"]) {
+                    imageUrl = this.getRelativePath(resItem.url, config["file"]);
+                }
+                else {
+                    var arr = resItem.url.split("?");
+                    var arr2 = arr[0].split("/");
+                    arr2[arr2.length - 1] = arr2[arr2.length - 1].split(".")[0] + ".png";
+                    imageUrl = "";
+                    for (var i = 0; i < arr2.length; i++) {
+                        imageUrl += arr2[i] + (i < arr2.length - 1 ? "/" : "");
+                    }
+                    if (arr.length == 2) imageUrl += arr[2];
+                }
             }
             return imageUrl;
         }
@@ -130,15 +139,15 @@ module RES {
             return url;
         }
 
-        private parseAnimation(texture:lark.BitmapData, data:any, name:string):any {
-            var frames:any = data.frames;
-            if (!frames) {
-                return null;
-            }
+        private parseAnimation(texture:lark.BitmapData, data:any, name:string):lark.Texture[] {
+            var attributes = Object.keys(data.mc);
+            var list:Array<any> = data.mc[attributes[0]].frames;
+            var len = list.length;
+            var config;
             var animationFrames:lark.Texture[] = [];
-            for (var subkey in frames) {
-                var config:any = frames[subkey];
-                animationFrames.push(new lark.Texture(texture, config.x, config.y, config.w, config.h, config.offX, config.offY, config.sourceW, config.sourceH));
+            for (var i = 0; i < len; i++) {
+                config = data.res[list[i].res];
+                animationFrames[i] = new lark.Texture(texture, config.x, config.y, config.w, config.h, list[i].x, list[i].y, list[i].sourceW, list[i].sourceH);
             }
             return animationFrames;
         }
