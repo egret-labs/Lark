@@ -30,6 +30,12 @@
 
 module RES {
 
+    var jsonAnalyzer = JsonAnalyzer;
+    var binAnalyzer = BinAnalyzer;
+    var soundAnalyzer = SoundAnalyzer;
+    var textAnalyzer = TextAnalyzer;
+    var xmlAnalyzer = XMLAnalyzer;
+
     export class Resource extends lark.EventEmitter{
         /**
          * 构造函数
