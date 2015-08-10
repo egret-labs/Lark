@@ -90,7 +90,7 @@ module RES {
             analyzerClassMap[ResourceItem.TYPE_IMAGE] = ImageAnalyzer;
             analyzerClassMap[ResourceItem.TYPE_TEXT] = TextAnalyzer;
             analyzerClassMap[ResourceItem.TYPE_JSON] = JsonAnalyzer;
-           // analyzerClassMap[ResourceItem.TYPE_SHEET] = SheetAnalyzer;
+            analyzerClassMap[ResourceItem.TYPE_SHEET] = SheetAnalyzer;
            // analyzerClassMap[ResourceItem.TYPE_FONT] = FontAnalyzer;
             analyzerClassMap[ResourceItem.TYPE_SOUND] = SoundAnalyzer;
             analyzerClassMap[ResourceItem.TYPE_XML] = XMLAnalyzer;
