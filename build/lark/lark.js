@@ -3266,7 +3266,7 @@ var lark;
      * @version Lark 1.0
      * @platform Web,Native
      */
-    var LarkObject = (function () {
+    var HashObject = (function () {
         /**
          * @language en_US
          * Initializes a LarkObject
@@ -3279,10 +3279,10 @@ var lark;
          * @version Lark 1.0
          * @platform Web,Native
          */
-        function LarkObject() {
+        function HashObject() {
             this.$hashCode = lark.$hashCount++;
         }
-        var d = __define,c=LarkObject;p=c.prototype;
+        var d = __define,c=HashObject;p=c.prototype;
         d(p, "hashCode"
             /**
              * @language en_US
@@ -3300,12 +3300,12 @@ var lark;
                 return this.$hashCode;
             }
         );
-        return LarkObject;
+        return HashObject;
     })();
-    lark.LarkObject = LarkObject;
-    lark.registerClass(LarkObject,"lark.LarkObject");
+    lark.HashObject = HashObject;
+    lark.registerClass(HashObject,"lark.HashObject");
     if (DEBUG) {
-        lark.$markReadOnly(LarkObject, "hashCode");
+        lark.$markReadOnly(HashObject, "hashCode");
     }
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -3506,7 +3506,7 @@ var lark;
                 return target;
             };
             return TouchHandler;
-        })(lark.LarkObject);
+        })(lark.HashObject);
         sys.TouchHandler = TouchHandler;
         lark.registerClass(TouchHandler,"lark.sys.TouchHandler");
     })(sys = lark.sys || (lark.sys = {}));
@@ -3665,7 +3665,7 @@ var lark;
                 };
             };
             return ScreenAdapter;
-        })(lark.LarkObject);
+        })(lark.HashObject);
         sys.ScreenAdapter = ScreenAdapter;
         lark.registerClass(ScreenAdapter,"lark.sys.ScreenAdapter",["lark.sys.IScreenAdapter"]);
     })(sys = lark.sys || (lark.sys = {}));
@@ -4310,7 +4310,7 @@ var lark;
          */
         Event.ENDED = "ended";
         return Event;
-    })(lark.LarkObject);
+    })(lark.HashObject);
     lark.Event = Event;
     lark.registerClass(Event,"lark.Event");
     if (DEBUG) {
@@ -4492,7 +4492,7 @@ var lark;
             }
         );
         return Texture;
-    })(lark.LarkObject);
+    })(lark.HashObject);
     lark.Texture = Texture;
     lark.registerClass(Texture,"lark.Texture");
 })(lark || (lark = {}));
@@ -5384,7 +5384,7 @@ var lark;
             context.restore();
         };
         return Graphics;
-    })(lark.LarkObject);
+    })(lark.HashObject);
     lark.Graphics = Graphics;
     lark.registerClass(Graphics,"lark.Graphics");
     function mapGraphicsFunction(context) {
@@ -5626,7 +5626,7 @@ var lark;
             return Math.sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
         };
         return Point;
-    })(lark.LarkObject);
+    })(lark.HashObject);
     lark.Point = Point;
     lark.registerClass(Point,"lark.Point");
     if (DEBUG) {
@@ -5903,7 +5903,7 @@ var lark;
             return true;
         };
         return EventEmitter;
-    })(lark.LarkObject);
+    })(lark.HashObject);
     lark.EventEmitter = EventEmitter;
     lark.registerClass(EventEmitter,"lark.EventEmitter",["lark.IEventEmitter"]);
 })(lark || (lark = {}));
@@ -7296,7 +7296,7 @@ var lark;
             target.ty = ty;
         };
         return Matrix;
-    })(lark.LarkObject);
+    })(lark.HashObject);
     lark.Matrix = Matrix;
     lark.registerClass(Matrix,"lark.Matrix");
     /**
@@ -9926,7 +9926,7 @@ var lark;
             return v * this.width + u * this.height;
         };
         return Rectangle;
-    })(lark.LarkObject);
+    })(lark.HashObject);
     lark.Rectangle = Rectangle;
     lark.registerClass(Rectangle,"lark.Rectangle");
     /**
@@ -11967,7 +11967,7 @@ var lark;
                 this.root.$invalidate(true);
             };
             return DisplayList;
-        })(lark.LarkObject);
+        })(lark.HashObject);
         sys.DisplayList = DisplayList;
         lark.registerClass(DisplayList,"lark.sys.DisplayList",["lark.sys.Renderable"]);
     })(sys = lark.sys || (lark.sys = {}));
@@ -12899,7 +12899,7 @@ var lark;
                 }
             };
             return Player;
-        })(lark.LarkObject);
+        })(lark.HashObject);
         sys.Player = Player;
         lark.registerClass(Player,"lark.sys.Player");
         /**

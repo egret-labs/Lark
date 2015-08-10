@@ -53,7 +53,7 @@ module lark {
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/display/BitmapDataExample.ts
      */
-    export interface BitmapData extends LarkObject{
+    export interface BitmapData extends HashObject{
         /**
          * @language en_US
          * The width of the bitmap image in pixels.

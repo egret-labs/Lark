@@ -358,7 +358,7 @@ declare module RES {
      * @classic
      * @private
      */
-    class AnalyzerBase extends lark.LarkObject {
+    class AnalyzerBase extends lark.HashObject {
         constructor();
         private resourceConfig;
         /**

@@ -33,7 +33,7 @@ module RES {
      * @classic
      * @private
      */
-    export class AnalyzerBase extends lark.LarkObject{
+    export class AnalyzerBase extends lark.HashObject{
 
         public constructor(){
             super();

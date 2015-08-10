@@ -58,7 +58,7 @@ module lark {
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export interface IEventEmitter extends LarkObject {
+    export interface IEventEmitter extends HashObject {
 
         /**
          * @language en_US

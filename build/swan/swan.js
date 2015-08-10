@@ -4986,7 +4986,7 @@ var swan;
             }
         };
         return State;
-    })(lark.LarkObject);
+    })(lark.HashObject);
     swan.State = State;
     lark.registerClass(State,"swan.State");
 })(swan || (swan = {}));
@@ -13200,7 +13200,7 @@ var swan;
             this.initializeStates(this._hostComponent.$stage);
         };
         return Skin;
-    })(lark.LarkObject);
+    })(lark.HashObject);
     swan.Skin = Skin;
     lark.registerClass(Skin,"swan.Skin");
     swan.sys.mixin(Skin, swan.sys.StateClient);

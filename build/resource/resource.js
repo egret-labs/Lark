@@ -866,7 +866,7 @@ var RES;
             return "";
         };
         return AnalyzerBase;
-    })(lark.LarkObject);
+    })(lark.HashObject);
     RES.AnalyzerBase = AnalyzerBase;
     lark.registerClass(AnalyzerBase,"RES.AnalyzerBase");
 })(RES || (RES = {}));

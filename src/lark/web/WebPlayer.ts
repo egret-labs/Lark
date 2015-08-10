@@ -80,7 +80,7 @@ module lark.web {
         highResolutionMode?: string;
     }
 
-    export class WebPlayer extends LarkObject implements lark.sys.Screen {
+    export class WebPlayer extends HashObject implements lark.sys.Screen {
 
         public constructor(container:HTMLDivElement) {
             super();

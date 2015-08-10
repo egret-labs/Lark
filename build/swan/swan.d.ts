@@ -3456,7 +3456,7 @@ declare module swan {
      * @version Swan 1.0
      * @platform Web,Native
      */
-    class State extends lark.LarkObject {
+    class State extends lark.HashObject {
         /**
          * @language en_US
          * Constructor.
@@ -7794,7 +7794,7 @@ declare module swan {
      * @platform Web,Native
      * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
      */
-    class Skin extends lark.LarkObject {
+    class Skin extends lark.HashObject {
         /**
          * @language en_US
          * The list of skin parts name

@@ -41,7 +41,7 @@ module lark {
      * @platform Web,Native
      * @includeExample egret/display/Texture.ts
      */
-    export class Texture extends LarkObject {
+    export class Texture extends HashObject {
 
         /**
          * @language en_US

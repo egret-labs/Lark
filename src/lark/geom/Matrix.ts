@@ -91,7 +91,7 @@ module lark {
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export class Matrix extends LarkObject {
+    export class Matrix extends HashObject {
 
         /**
          * @language en_US

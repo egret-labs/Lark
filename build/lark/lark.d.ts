@@ -978,7 +978,7 @@ declare module lark.sys {
     /**
      * @private
      */
-    interface Renderable extends LarkObject {
+    interface Renderable extends HashObject {
     }
 }
 declare module lark {
@@ -1064,7 +1064,7 @@ declare module lark {
      * @version Lark 1.0
      * @platform Web,Native
      */
-    interface IEventEmitter extends LarkObject {
+    interface IEventEmitter extends HashObject {
         /**
          * @language en_US
          * Registers an event listener object with an EventEmitter object so that the listener receives notification of an
@@ -1962,7 +1962,7 @@ declare module lark {
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/display/BitmapDataExample.ts
      */
-    interface BitmapData extends LarkObject {
+    interface BitmapData extends HashObject {
         /**
          * @language en_US
          * The width of the bitmap image in pixels.
@@ -3497,7 +3497,7 @@ declare module lark {
      * @version Lark 1.0
      * @platform Web,Native
      */
-    class LarkObject {
+    class HashObject {
         /**
          * @language en_US
          * Initializes a LarkObject
@@ -3533,7 +3533,7 @@ declare module lark.sys {
      * @private
      * 用户交互操作管理器
      */
-    class TouchHandler extends LarkObject {
+    class TouchHandler extends HashObject {
         /**
          * @private
          */
@@ -3601,7 +3601,7 @@ declare module lark.sys {
      * @private
      * 屏幕适配器默认实现，开发者可以实现自定义规则的屏幕适配器。并在初始化加载时将适配器的实例赋值给lark.sys.screenAdapter上，从而替换掉默认适配器。
      */
-    class ScreenAdapter extends LarkObject implements IScreenAdapter {
+    class ScreenAdapter extends HashObject implements IScreenAdapter {
         /**
          * @private
          */
@@ -3651,7 +3651,7 @@ declare module lark {
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/events/EventExample.ts
      */
-    class Event extends LarkObject {
+    class Event extends HashObject {
         /**
          * @language en_US
          * Emitted when a display object is added to the on stage display list, either directly or through the addition
@@ -4165,7 +4165,7 @@ declare module lark {
      * @platform Web,Native
      * @includeExample egret/display/Texture.ts
      */
-    class Texture extends LarkObject {
+    class Texture extends HashObject {
         /**
          * @language en_US
          * Create an Texture object
@@ -4238,7 +4238,7 @@ declare module lark {
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/display/GraphicsExample.ts
      */
-    class Graphics extends LarkObject {
+    class Graphics extends HashObject {
         /**
          * @language en_US
          * creates a radial gradient given by the coordinates of the two circles represented by the parameters.
@@ -4849,7 +4849,7 @@ declare module lark {
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/geom/PointExample.ts
      */
-    class Point extends LarkObject {
+    class Point extends HashObject {
         /**
          * @language en_US
          * Releases a point instance to the object pool
@@ -5045,7 +5045,7 @@ declare module lark {
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/events/EventEmitterExample.ts
      */
-    class EventEmitter extends LarkObject implements IEventEmitter {
+    class EventEmitter extends HashObject implements IEventEmitter {
         /**
          * @language en_US
          * create an instance of the EventEmitter class.
@@ -5866,7 +5866,7 @@ declare module lark {
      * @version Lark 1.0
      * @platform Web,Native
      */
-    class Matrix extends LarkObject {
+    class Matrix extends HashObject {
         /**
          * @language en_US
          * Releases a matrix instance to the object pool
@@ -7239,7 +7239,7 @@ declare module lark {
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/geom/RectangleExample.ts
      */
-    class Rectangle extends LarkObject {
+    class Rectangle extends HashObject {
         /**
          * @language en_US
          * Releases a rectangle instance to the object pool.
@@ -8072,7 +8072,7 @@ declare module lark.sys {
      * @private
      * 显示列表
      */
-    class DisplayList extends LarkObject implements Renderable {
+    class DisplayList extends HashObject implements Renderable {
         /**
          * @private
          * 释放一个DisplayList实例到对象池
@@ -8523,7 +8523,7 @@ declare module lark.sys {
      * @private
      * Lark播放器
      */
-    class Player extends LarkObject {
+    class Player extends HashObject {
         /**
          * @private
          * 实例化一个播放器对象。

@@ -37,7 +37,7 @@ module lark.sys {
      * @private
      * 显示列表
      */
-    export class DisplayList extends LarkObject implements Renderable {
+    export class DisplayList extends HashObject implements Renderable {
 
         /**
          * @private

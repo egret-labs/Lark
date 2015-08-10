@@ -687,7 +687,7 @@ var lark;
                 this.rotation = rotation;
             };
             return WebTouchHandler;
-        })(lark.LarkObject);
+        })(lark.HashObject);
         web.WebTouchHandler = WebTouchHandler;
         lark.registerClass(WebTouchHandler,"lark.web.WebTouchHandler");
     })(web = lark.web || (lark.web = {}));
@@ -1286,7 +1286,7 @@ var lark;
                 }
             };
             return WebTextAdapter;
-        })(lark.LarkObject);
+        })(lark.HashObject);
         web.WebTextAdapter = WebTextAdapter;
         lark.registerClass(WebTextAdapter,"lark.web.WebTextAdapter",["lark.sys.ITextAdapter"]);
         /**
@@ -2390,7 +2390,7 @@ var lark;
                 };
             };
             return WebPlayer;
-        })(lark.LarkObject);
+        })(lark.HashObject);
         web.WebPlayer = WebPlayer;
         lark.registerClass(WebPlayer,"lark.web.WebPlayer",["lark.sys.Screen"]);
     })(web = lark.web || (lark.web = {}));
