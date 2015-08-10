@@ -59,7 +59,7 @@ var Entry = (function () {
     }
     Entry.prototype.executeOption = function (options) {
         var exitCode = 0;
-        switch (options.action) {
+        switch (options.command) {
             case "publish":
                 var publish = new Publish();
                 exitCode = publish.execute();

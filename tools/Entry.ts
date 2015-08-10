@@ -71,7 +71,7 @@ class Entry {
 
     executeOption(options: lark.LarkToolArgs) {
         var exitCode = 0;
-        switch (options.action) {
+        switch (options.command) {
             case "publish":
                 var publish = new Publish();
                 exitCode = publish.execute();

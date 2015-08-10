@@ -24,8 +24,12 @@ class RunCommand implements lark.Command {
         if (exitCode != 0) {
             process.exit(exitCode);
         }
-
-        utils.getAvailablePort(port=> this.onGotPort(port), lark.options.port);
+        if (lark.options.platform == undefined || lark.options.platform == 'web') {
+            utils.getAvailablePort(port=> this.onGotPort(port), lark.options.port);
+        }
+        else {
+            process.exit(0);
+        }
     }
 
     private onGotPort(port: number) {

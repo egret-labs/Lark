@@ -30,7 +30,11 @@ declare module lark {
         Message,
     }
     export interface LarkToolArgs {
-        action: string;
+        command: string;
+        action?: string;
+        params?: string[];
+        platform?: string;
+
         projectDir: string;
         getTmpDir(): string;
         srcDir: string;
@@ -50,8 +54,9 @@ declare module lark {
         debug?: boolean;
         getStartURL(address: string): string;
 
+
+
         publish?: boolean;
-        includeLark?: boolean;
         minify?: boolean;
         sourceMap?: boolean;
         removeComments?: boolean;
