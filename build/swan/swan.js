@@ -3456,7 +3456,7 @@ var swan;
                 if (this.delayList.indexOf(client) == -1) {
                     this.delayList.push(client);
                 }
-                return;
+                return "";
             }
             var skinMap = this.skinMap;
             var skinName = skinMap[client.hostComponentKey];
@@ -12246,15 +12246,13 @@ var swan;
         );
         /**
          * @private
-         *
-         * @param value
          */
         p.$setBitmapData = function (value) {
-            if (value == this.$bitmapData) {
+            var values = this.$Bitmap;
+            if (value == values[0 /* bitmapData */]) {
                 return;
             }
             _super.prototype.$setBitmapData.call(this, value);
-            this._source = value;
             this.sourceChanged = false;
             this.invalidateSize();
             this.invalidateDisplayList();
@@ -12284,7 +12282,7 @@ var swan;
         p.contentChanged = function (data, source) {
             if (source !== this._source)
                 return;
-            if (!lark.is(data, "lark.BitmapData")) {
+            if (!lark.is(data, "lark.BitmapData") && !(data instanceof lark.Texture)) {
                 return;
             }
             this.$setBitmapData(data);
@@ -12297,25 +12295,24 @@ var swan;
         };
         /**
          * @private
-         *
-         * @param bounds
          */
         p.$measureContentBounds = function (bounds) {
-            var bitmapData = this.$bitmapData;
-            if (bitmapData) {
-                var values = this.$UIComponent;
-                var width = values[10 /* width */];
-                var height = values[11 /* height */];
+            var values = this.$Bitmap;
+            var image = values[1 /* image */];
+            if (image) {
+                var uiValues = this.$UIComponent;
+                var width = uiValues[10 /* width */];
+                var height = uiValues[11 /* height */];
                 if (isNaN(width) || isNaN(height)) {
                     bounds.setEmpty();
                     return;
                 }
                 if (this._fillMode == "clip") {
-                    if (width > bitmapData.width) {
-                        width = bitmapData.width;
+                    if (width > values[8 /* width */]) {
+                        width = values[8 /* width */];
                     }
-                    if (height > bitmapData.height) {
-                        height = bitmapData.height;
+                    if (height > values[9 /* height */]) {
+                        height = values[9 /* height */];
                     }
                 }
                 bounds.setTo(0, 0, width, height);
@@ -12330,40 +12327,41 @@ var swan;
          * @param context
          */
         p.$render = function (context) {
-            var bitmapData = this.$bitmapData;
-            if (!bitmapData) {
+            var values = this.$Bitmap;
+            var image = values[1 /* image */];
+            if (!image) {
                 return;
             }
-            var values = this.$UIComponent;
-            var width = values[10 /* width */];
-            var height = values[11 /* height */];
+            var uiValues = this.$UIComponent;
+            var width = uiValues[10 /* width */];
+            var height = uiValues[11 /* height */];
             if (width === 0 || height === 0) {
                 return;
             }
             switch (this._fillMode) {
                 case "clip":
-                    if (width > bitmapData.width) {
-                        width = bitmapData.width;
+                    if (width > values[8 /* width */]) {
+                        width = values[8 /* width */];
                     }
-                    if (height > bitmapData.height) {
-                        height = bitmapData.height;
+                    if (height > values[9 /* height */]) {
+                        height = values[9 /* height */];
                     }
-                    context.drawImage(bitmapData, 0, 0, width, height, 0, 0, width, height);
+                    context.drawImage(image, 0, 0, width, height, 0, 0, width, height);
                     break;
                 case "repeat":
-                    var pattern = context.createPattern(bitmapData, "repeat");
+                    var pattern = context.createPattern(image, "repeat");
                     context.beginPath();
                     context.rect(0, 0, width, height);
                     context.fillStyle = pattern;
                     context.fill();
                     break;
                 default:
-                    context.imageSmoothingEnabled = this.$smoothing;
+                    context.imageSmoothingEnabled = values[10 /* smoothing */];
                     if (this._scale9Grid) {
-                        this.drawScale9GridImage(context, bitmapData, this._scale9Grid, width, height);
+                        this.drawScale9GridImage(context, image, this._scale9Grid, width, height);
                     }
                     else {
-                        context.drawImage(bitmapData, 0, 0, width, height);
+                        context.drawImage(image, 0, 0, width, height);
                     }
                     break;
             }
@@ -12475,9 +12473,10 @@ var swan;
          * @platform Web,Native
          */
         p.measure = function () {
-            var bitmapData = this.$bitmapData;
-            if (bitmapData) {
-                this.setMeasuredSize(bitmapData.width, bitmapData.height);
+            var values = this.$Bitmap;
+            var image = values[1 /* image */];
+            if (image) {
+                this.setMeasuredSize(values[8 /* width */], values[9 /* height */]);
             }
             else {
                 this.setMeasuredSize(0, 0);

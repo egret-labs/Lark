@@ -40,7 +40,7 @@
             "dependencies": [ "lark" ]
         },
         {
-            "name": "RES",
+            "name": "resource",
             "description": "RES资源加载库",
             "files": [
                 { "path": "i18n/en_US.ts", "debug": true },
