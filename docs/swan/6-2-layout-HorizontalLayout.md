@@ -1,1 +1,27 @@
-#Swan (UI¿â) ±à³ÌÖ¸ÄÏ - ºáÏò²¼¾ÖÔÚºáÏò²¼¾Ö£¬ÒÔ¼°ÏÂÃæ½«Òª½²µÄ´¹Ö±²¼¾Ö£¬¸ñ×Ó²¼¾ÖÖĞ£¬¶¼»áºöÂÔÄúÔÚ×ÓÏîÉÏµÄ×ø±êÉèÖÃ£¬ËùÓĞ×ÓÏîµÄÎ»ÖÃ½«ÓÉ²¼¾ÖÀàÍ³Ò»¹ÜÀí¡£ºáÏò²¼¾Ö»á×Ô¶¯½«ËùÓĞµÄ×ÓÏîºá×ÅÅÅÁĞ£¬Äú¿ÉÒÔ×öÒÔÏÂµÄÉèÖÃ£º* gapÊôĞÔ£¬ÉèÖÃ×ÓÏîÖ®¼äµÄ¼ä¾à* horizontalAlignÊôĞÔ£¬ÉèÖÃË®Æ½¶ÔÆë·½Ê½* verticalAlignÊôĞÔ£¬ÉèÖÃ´¹Ö±¶ÔÆë·½Ê½* paddingÊôĞÔ£¬ÉèÖÃÈİÆ÷ÄÚ¼ä¾à£¬Èç¹ûĞèÒª·Ö¿ªÉèÖÃ¿ÉÒÔÊ¹ÓÃpaddingTop,paddingBottom,paddingLeft,paddingRightÊ¾Àı£º    ``` TypeScriptvar hLayout:egret.gui.HorizontalLayout = new egret.gui.HorizontalLayout();hLayout.gap = 10;hLayout.horizontalAlign = egret.HorizontalAlign.CENTER;hLayout.padding = 10;hLayout.verticalAlign = egret.VerticalAlign.MIDDLE;this.myGroup.layout = hLayout;//ºáÏò²¼¾Ö```              Ğ§¹ûÈçÍ¼£º<!--![][6-1-layout-BasicLayout-center]     [6-1-layout-BasicLayout-center]: image/6/6-1-layout-BasicLayout-center.png-->
+#Swan (UIåº“) ç¼–ç¨‹æŒ‡å— - æ¨ªå‘å¸ƒå±€
+
+åœ¨æ¨ªå‘å¸ƒå±€ï¼Œä»¥åŠä¸‹é¢å°†è¦è®²çš„å‚ç›´å¸ƒå±€ï¼Œæ ¼å­å¸ƒå±€ä¸­ï¼Œéƒ½ä¼šå¿½ç•¥æ‚¨åœ¨å­é¡¹ä¸Šçš„åæ ‡è®¾ç½®ï¼Œæ‰€æœ‰å­é¡¹çš„ä½ç½®å°†ç”±å¸ƒå±€ç±»ç»Ÿä¸€ç®¡ç†ã€‚
+
+æ¨ªå‘å¸ƒå±€ä¼šè‡ªåŠ¨å°†æ‰€æœ‰çš„å­é¡¹æ¨ªç€æ’åˆ—ï¼Œæ‚¨å¯ä»¥åšä»¥ä¸‹çš„è®¾ç½®ï¼š
+* gapå±æ€§ï¼Œè®¾ç½®å­é¡¹ä¹‹é—´çš„é—´è·
+* horizontalAlignå±æ€§ï¼Œè®¾ç½®æ°´å¹³å¯¹é½æ–¹å¼
+* verticalAlignå±æ€§ï¼Œè®¾ç½®å‚ç›´å¯¹é½æ–¹å¼
+* paddingå±æ€§ï¼Œè®¾ç½®å®¹å™¨å†…é—´è·ï¼Œå¦‚æœéœ€è¦åˆ†å¼€è®¾ç½®å¯ä»¥ä½¿ç”¨paddingTop,paddingBottom,paddingLeft,paddingRight
+
+ç¤ºä¾‹ï¼š    
+``` TypeScript
+var hLayout:egret.gui.HorizontalLayout = new egret.gui.HorizontalLayout();
+hLayout.gap = 10;
+hLayout.horizontalAlign = egret.HorizontalAlign.CENTER;
+hLayout.padding = 10;
+hLayout.verticalAlign = egret.VerticalAlign.MIDDLE;
+this.myGroup.layout = hLayout;//æ¨ªå‘å¸ƒå±€
+```              
+æ•ˆæœå¦‚å›¾ï¼š
+<!--
+![][6-1-layout-BasicLayout-center]     
+
+
+[6-1-layout-BasicLayout-center]: image/6/6-1-layout-BasicLayout-center.png
+-->
+

@@ -1,1 +1,71 @@
-#Swan (UI¿â) ±à³ÌÖ¸ÄÏ - »ù±¾²¼¾ÖÕâÊÇGroupµÄÄ¬ÈÏ²¼¾ÖÄ£Ê½¡£ÔÚ»ù±¾²¼¾ÖÄ£Ê½ÏÂ£¬ÈİÆ÷ÄÚµÄ×ÓÏîµÄ¶¨Î»·½Ê½£¬È¡¾öÓÚÃ¿¸ö×ÓÏîµÄ×ø±êÉèÖÃ¡£±ÈÈç£º  ``` TypeScriptthis.myGroup = new swan.Group();this.addChild( this.myGroup );this.myGroup.layout = new swan.BasicLayout();   ///ÓÃ¾ø¶Ô¶¨Î»£¬¿ØÖÆxy×ø±êfor(var i:number=0;i<4;i++) {    var btn:swan.Button = new swan.Button();    btn.x = i*50;    btn.y = 40+i*100;    this.myGroup.addElement(btn);}```     Ğ§¹ûÈçÍ¼£º    ![][6-1-layout-BasicLayout-4-buttons]ÉÏÃæÉèÖÃµÄÊÇ×ÓÏîµÄÎ»ÖÃ£¬ÖÁÓÚ³ß´ç£¬ÔòÊÇÉèÖÃÃ¿¸ö×ÓÏîµÄwidthºÍheight¾Í¿ÉÒÔÁË¡£ÉÏÃæËùÊöµÄÇé¿ö±È½Ï¼òµ¥£¬¼´Ã¿¸ö×ÓÏîµÄÎ»ÖÃºÍ³ß´çÊÇÈ·¶¨µÄ£¬ÊÇ¶¨Öµ¡£µ«ÎÒÃÇµÄÊµ¼ÊĞèÇó£¬±ÈÕâ¸öÒª¸´ÔÓÒ»µã¡£±ÈÈçÎÒÓĞÒ»¸ö°´Å¥£¬ÎÒÏ£ÍûËüÄÜ¸ù¾İÈİÆ÷µÄ³ß´ç£¬×Ô¶¯´¦ÓÚ¾ÓÖĞÎ»ÖÃ£¬²»ĞèÒªÎÒ×Ô¼ºÈ¥Ğ´´úÂëÀ´ÉèÖÃxºÍy×ø±ê¡£Õâ¸öÊ±ºò¾ÍÓĞÁ½¸öÊôĞÔ¿ÉÓÃ£º     - horizontalCenter- verticalCenter      Äú¿ÉÒÔÈÏÎªÕâÁ½¸öÖµ¾ÍÊÇ¶¨Òå¶ÔÏóµÄÖĞĞÄµãÓëÈİÆ÷µÄÖĞĞÄµãÖ®¼äµÄ²îÖµ¡£Èç¹ûÁ½Ïî¶¼ÉèÖÃÎª0£¬´ú±íÖĞĞÄµãÍêÈ«ÖØºÏ£¬Ò²¾ÍÊµÏÖÁËÎÒÃÇËùĞèÒªµÄ×Ô¶¯¾ÓÖĞ¹¦ÄÜ¡£``` TypeScriptbtn.horizontalCenter = 0;btn.verticalCenter = 0;```       Ğ§¹ûÈçÍ¼£º    ![][6-1-layout-BasicLayout-center]     ¼ÙÈçĞèÇó¸ü¸´ÔÓÒ»Ğ©£¬ÎÒÃÇĞèÒª°´Å¥²»½ö½öÊÇ¾ÓÖĞ£¬»¹Ê¼ÖÕºÍÈİÆ÷±ß½ç±£³Ö20ÏñËØµÄ²îÖµ£¬ÄÇÄú¿ÉÒÔÉèÖÃµÄÊôĞÔÊÇ£º     - top- bottom- left- righttopµÄÖµ£¬¾ÍÊÇ¶¨Òå¶ÔÏóµÄÉÏ±ß½çºÍÈİÆ÷µÄÉÏ±ß½çÖ®¼äµÄ¾àÀë£¬ÆäËû3¸öÖµÒÔ´ËÀàÍÆ¡£»Øµ½ÉÏÃæÄÇ¸öÎÊÌâ£¬Ó¦¸ÃÔÚ°´Å¥ÉÏÕâÑùÉèÖÃ£º    ``` TypeScriptbtn.top = 20;btn.bottom = 20;btn.left = 20;btn.right = 20;```              Ğ§¹ûÈçÍ¼£º    ![][6-1-layout-BasicLayout-center]     ÔÚ³ß´çµÄ¶¨ÒåÉÏ£¬Äú»¹¿ÉÒÔÊ¹ÓÃ°Ù·Ö±È¡£±ÈÈçÒªÈÃ°´Å¥ºÍÈİÆ÷µÄ³ß´çÒ»ÖÂ£¬¿ÉÒÔÉèÖÃ£º    ``` TypeScriptbtn.percentWidth = 100;btn.percentHeight = 100;```              > Õâ¸öÉèÖÃĞ§¹ûÉÏµÈÍ¬ÓÚ½«top,bottom,left,right¶¼ÉèÖÃÎª0¡£Äú¿ÉÒÔ¸ù¾İ×Ô¼ºµÄĞèÒª£¬¾ö¶¨Ê¹ÓÃpercentWidth,percentHeight»¹ÊÇtop,bottom,left,right¡£percentWidth,percentHeightÖ»ÄÜÔ¼Êø¿í¸ß£¬¶øtop,bottom,left,rightÔòÍ¬Ê±Ô¼ÊøÁË³ß´çºÍÎ»ÖÃ(x,y)¡£ÕâĞ©ÊôĞÔÄú¿ÉÒÔ×ÛºÏÀûÓÃ(ÏàÃ¬¶ÜµÄÉèÖÃ³ıÍâ)£¬±ÈÈç³ß´çÊÇÈİÆ÷µÄÒ»°ë£¬²¢ÇÒ¾ÓÖĞ£¬Ó¦¸ÃÕâÑùÉèÖÃ£º   ``` TypeScriptbtn.percentWidth = 50;btn.percentHeight = 50;btn.horizontalCenter = 0;btn.verticalCenter = 0;```              Ğ§¹ûÈçÍ¼£º    ![][6-1-layout-BasicLayout-percent]     [6-1-layout-BasicLayout-percent]: image/6/6-1-layout-BasicLayout-percent.png[6-1-layout-BasicLayout-side-dist]: image/6/6-1-layout-BasicLayout-side-dist.png[6-1-layout-BasicLayout-4-buttons]: image/6/6-1-layout-BasicLayout-4-buttons.png[6-1-layout-BasicLayout-center]: image/6/6-1-layout-BasicLayout-center.png
+#Swan (UIåº“) ç¼–ç¨‹æŒ‡å— - åŸºæœ¬å¸ƒå±€
+
+è¿™æ˜¯Groupçš„é»˜è®¤å¸ƒå±€æ¨¡å¼ã€‚åœ¨åŸºæœ¬å¸ƒå±€æ¨¡å¼ä¸‹ï¼Œå®¹å™¨å†…çš„å­é¡¹çš„å®šä½æ–¹å¼ï¼Œå–å†³äºæ¯ä¸ªå­é¡¹çš„åæ ‡è®¾ç½®ã€‚æ¯”å¦‚ï¼š  
+``` TypeScript
+this.myGroup = new swan.Group();
+this.addChild( this.myGroup );
+
+this.myGroup.layout = new swan.BasicLayout();   ///ç”¨ç»å¯¹å®šä½ï¼Œæ§åˆ¶xyåæ ‡
+
+for(var i:number=0;i<4;i++) {
+    var btn:swan.Button = new swan.Button();
+    btn.x = i*50;
+    btn.y = 40+i*100;
+    this.myGroup.addElement(btn);
+}
+```     
+æ•ˆæœå¦‚å›¾ï¼š    
+![][6-1-layout-BasicLayout-4-buttons]
+
+ä¸Šé¢è®¾ç½®çš„æ˜¯å­é¡¹çš„ä½ç½®ï¼Œè‡³äºå°ºå¯¸ï¼Œåˆ™æ˜¯è®¾ç½®æ¯ä¸ªå­é¡¹çš„widthå’Œheightå°±å¯ä»¥äº†ã€‚ä¸Šé¢æ‰€è¿°çš„æƒ…å†µæ¯”è¾ƒç®€å•ï¼Œå³æ¯ä¸ªå­é¡¹çš„ä½ç½®å’Œå°ºå¯¸æ˜¯ç¡®å®šçš„ï¼Œæ˜¯å®šå€¼ã€‚ä½†æˆ‘ä»¬çš„å®é™…éœ€æ±‚ï¼Œæ¯”è¿™ä¸ªè¦å¤æ‚ä¸€ç‚¹ã€‚æ¯”å¦‚æˆ‘æœ‰ä¸€ä¸ªæŒ‰é’®ï¼Œæˆ‘å¸Œæœ›å®ƒèƒ½æ ¹æ®å®¹å™¨çš„å°ºå¯¸ï¼Œè‡ªåŠ¨å¤„äºå±…ä¸­ä½ç½®ï¼Œä¸éœ€è¦æˆ‘è‡ªå·±å»å†™ä»£ç æ¥è®¾ç½®xå’Œyåæ ‡ã€‚è¿™ä¸ªæ—¶å€™å°±æœ‰ä¸¤ä¸ªå±æ€§å¯ç”¨ï¼š     
+- horizontalCenter
+- verticalCenter      
+
+æ‚¨å¯ä»¥è®¤ä¸ºè¿™ä¸¤ä¸ªå€¼å°±æ˜¯å®šä¹‰å¯¹è±¡çš„ä¸­å¿ƒç‚¹ä¸å®¹å™¨çš„ä¸­å¿ƒç‚¹ä¹‹é—´çš„å·®å€¼ã€‚å¦‚æœä¸¤é¡¹éƒ½è®¾ç½®ä¸º0ï¼Œä»£è¡¨ä¸­å¿ƒç‚¹å®Œå…¨é‡åˆï¼Œä¹Ÿå°±å®ç°äº†æˆ‘ä»¬æ‰€éœ€è¦çš„è‡ªåŠ¨å±…ä¸­åŠŸèƒ½ã€‚
+``` TypeScript
+btn.horizontalCenter = 0;
+btn.verticalCenter = 0;
+```       
+æ•ˆæœå¦‚å›¾ï¼š    
+![][6-1-layout-BasicLayout-center]     
+
+å‡å¦‚éœ€æ±‚æ›´å¤æ‚ä¸€äº›ï¼Œæˆ‘ä»¬éœ€è¦æŒ‰é’®ä¸ä»…ä»…æ˜¯å±…ä¸­ï¼Œè¿˜å§‹ç»ˆå’Œå®¹å™¨è¾¹ç•Œä¿æŒ20åƒç´ çš„å·®å€¼ï¼Œé‚£æ‚¨å¯ä»¥è®¾ç½®çš„å±æ€§æ˜¯ï¼š     
+- top
+- bottom
+- left
+- right
+
+topçš„å€¼ï¼Œå°±æ˜¯å®šä¹‰å¯¹è±¡çš„ä¸Šè¾¹ç•Œå’Œå®¹å™¨çš„ä¸Šè¾¹ç•Œä¹‹é—´çš„è·ç¦»ï¼Œå…¶ä»–3ä¸ªå€¼ä»¥æ­¤ç±»æ¨ã€‚å›åˆ°ä¸Šé¢é‚£ä¸ªé—®é¢˜ï¼Œåº”è¯¥åœ¨æŒ‰é’®ä¸Šè¿™æ ·è®¾ç½®ï¼š    
+``` TypeScript
+btn.top = 20;
+btn.bottom = 20;
+btn.left = 20;
+btn.right = 20;
+```              
+æ•ˆæœå¦‚å›¾ï¼š    
+![][6-1-layout-BasicLayout-center]     
+
+åœ¨å°ºå¯¸çš„å®šä¹‰ä¸Šï¼Œæ‚¨è¿˜å¯ä»¥ä½¿ç”¨ç™¾åˆ†æ¯”ã€‚æ¯”å¦‚è¦è®©æŒ‰é’®å’Œå®¹å™¨çš„å°ºå¯¸ä¸€è‡´ï¼Œå¯ä»¥è®¾ç½®ï¼š    
+``` TypeScript
+btn.percentWidth = 100;
+btn.percentHeight = 100;
+```              
+> è¿™ä¸ªè®¾ç½®æ•ˆæœä¸Šç­‰åŒäºå°†top,bottom,left,rightéƒ½è®¾ç½®ä¸º0ã€‚æ‚¨å¯ä»¥æ ¹æ®è‡ªå·±çš„éœ€è¦ï¼Œå†³å®šä½¿ç”¨percentWidth,percentHeightè¿˜æ˜¯top,bottom,left,rightã€‚percentWidth,percentHeightåªèƒ½çº¦æŸå®½é«˜ï¼Œè€Œtop,bottom,left,rightåˆ™åŒæ—¶çº¦æŸäº†å°ºå¯¸å’Œä½ç½®(x,y)ã€‚
+
+è¿™äº›å±æ€§æ‚¨å¯ä»¥ç»¼åˆåˆ©ç”¨(ç›¸çŸ›ç›¾çš„è®¾ç½®é™¤å¤–)ï¼Œæ¯”å¦‚å°ºå¯¸æ˜¯å®¹å™¨çš„ä¸€åŠï¼Œå¹¶ä¸”å±…ä¸­ï¼Œåº”è¯¥è¿™æ ·è®¾ç½®ï¼š   
+``` TypeScript
+btn.percentWidth = 50;
+btn.percentHeight = 50;
+btn.horizontalCenter = 0;
+btn.verticalCenter = 0;
+```              
+æ•ˆæœå¦‚å›¾ï¼š    
+![][6-1-layout-BasicLayout-percent]     
+
+
+[6-1-layout-BasicLayout-percent]: image/6/6-1-layout-BasicLayout-percent.png
+[6-1-layout-BasicLayout-side-dist]: image/6/6-1-layout-BasicLayout-side-dist.png
+[6-1-layout-BasicLayout-4-buttons]: image/6/6-1-layout-BasicLayout-4-buttons.png
+[6-1-layout-BasicLayout-center]: image/6/6-1-layout-BasicLayout-center.png
+
+
