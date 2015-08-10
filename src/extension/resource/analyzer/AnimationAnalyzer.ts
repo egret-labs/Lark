@@ -94,6 +94,9 @@ module RES {
                 this.sheetMap[name] = config;
                 imageUrl = this.getRelativePath(resItem.url, config["file"]);
             }
+            if(!imageUrl) {
+                imageUrl = "";
+            }
             return imageUrl;
         }
 
@@ -108,7 +111,7 @@ module RES {
             var config:any = this.sheetMap[name];
             delete this.sheetMap[name];
             var targetName:string = resItem.data && resItem.data.subkeys ? "" : name;
-            var spriteSheet:any = this.parseSpriteSheet(data, config, targetName);
+            var spriteSheet:any = this.parseAnimation(data, config, targetName);
             this.fileDic[name] = spriteSheet;
         }
 
@@ -127,23 +130,17 @@ module RES {
             return url;
         }
 
-        private parseSpriteSheet(texture:lark.BitmapData, data:any, name:string):any {
+        private parseAnimation(texture:lark.BitmapData, data:any, name:string):any {
             var frames:any = data.frames;
             if (!frames) {
                 return null;
             }
-            var spriteSheet = [];
+            var animationFrames:lark.Texture[] = [];
             for (var subkey in frames) {
                 var config:any = frames[subkey];
-                var subTexture = new lark.Texture(texture, config.x, config.y, config.w, config.h, config.offX, config.offY, config.sourceW, config.sourceH);
-                spriteSheet.push(subTexture);
-                if (config["scale9grid"]) {
-                    var str:string = config["scale9grid"];
-                    var list:Array<string> = str.split(",");
-                    texture["scale9Grid"] = new lark.Rectangle(parseInt(list[0]), parseInt(list[1]), parseInt(list[2]), parseInt(list[3]));
-                }
+                animationFrames.push(new lark.Texture(texture, config.x, config.y, config.w, config.h, config.offX, config.offY, config.sourceW, config.sourceH));
             }
-            return spriteSheet;
+            return animationFrames;
         }
 
         public destroyRes(name:string):boolean {
