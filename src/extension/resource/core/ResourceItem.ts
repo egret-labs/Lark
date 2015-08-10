@@ -36,6 +36,11 @@ module RES {
 	 */
 	export class ResourceItem{
 		/**
+		 * Animation文件
+		 * @constant {string} RES.ResourceItem.TYPE_Animation
+		 */
+		public static TYPE_ANIMATION:string = "animation";
+		/**
 		 * XML文件  
 		 * @constant {string} RES.ResourceItem.TYPE_XML
 		 */		

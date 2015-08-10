@@ -29,12 +29,12 @@
 
 
 module RES {
+
     /**
-     * @classic
      * @private
+     * 加载器基类
      */
     export class AnalyzerBase extends lark.LarkObject {
-
 
         public constructor() {
             super();
@@ -44,16 +44,18 @@ module RES {
         private resourceConfig:ResourceConfig = null;
 
         /**
+         * @private
          * 添加一个二级键名到配置列表。
          * @method RES.ResourceConfig#addSubkey
-         * @param subkey {string} 要添加的二级键名
-         * @param name {string} 二级键名所属的资源name属性
+         * @param subkey 要添加的二级键名
+         * @param name 二级键名所属的资源name属性
          */
         protected addSubkey(subkey:string, name:string):void {
             this.resourceConfig.addSubkey(subkey, name);
         }
 
         /**
+         * @private
          * 加载一个资源文件
          * @param resItem 加载项信息
          * @param compFunc 加载完成回调函数,示例:compFunc(resItem:ResourceItem):void;
@@ -64,6 +66,7 @@ module RES {
         }
 
         /**
+         * @private
          * 同步方式获取解析完成的数据
          * @param name 对应配置文件里的name属性。
          */
@@ -72,6 +75,7 @@ module RES {
         }
 
         /**
+         * @private
          * 销毁某个资源文件的二进制数据,返回是否删除成功。
          * @param name 配置文件中加载项的name属性
          */
@@ -80,8 +84,9 @@ module RES {
         }
 
         /**
+         * @private
          * 读取一个字符串里第一个点之前的内容。
-         * @param name {string} 要读取的字符串
+         * @param name 要读取的字符串
          */
         public static getStringPrefix(name:string):string {
             if (!name) {
@@ -95,8 +100,9 @@ module RES {
         }
 
         /**
+         * @private
          * 读取一个字符串里第一个点之后的内容。
-         * @param name {string} 要读取的字符串
+         * @param name 要读取的字符串
          */
         public static getStringTail(name:string):string {
             if (!name) {

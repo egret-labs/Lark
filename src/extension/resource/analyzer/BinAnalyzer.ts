@@ -34,6 +34,7 @@ module RES {
      * @private
      */
     export class BinAnalyzer extends AnalyzerBase {
+
         /**
          * 构造函数
          */
@@ -65,6 +66,7 @@ module RES {
         }
 
         protected responseType:string = lark.HttpResponseType.ARRAY_BUFFER;
+
         /**
          * Loader对象池
          */

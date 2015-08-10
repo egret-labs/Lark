@@ -35,6 +35,7 @@ module RES {
     var soundAnalyzer = SoundAnalyzer;
     var textAnalyzer = TextAnalyzer;
     var xmlAnalyzer = XMLAnalyzer;
+    var animationAnalyzer = AnimationAnalyzer;
 
     export class Resource extends lark.EventEmitter{
         /**
@@ -86,6 +87,7 @@ module RES {
          */
         private init():void{
             var analyzerClassMap = this.analyzerClassMap;
+            analyzerClassMap[ResourceItem.TYPE_ANIMATION] = AnimationAnalyzer;
             analyzerClassMap[ResourceItem.TYPE_BIN] = BinAnalyzer;
             analyzerClassMap[ResourceItem.TYPE_IMAGE] = ImageAnalyzer;
             analyzerClassMap[ResourceItem.TYPE_TEXT] = TextAnalyzer;

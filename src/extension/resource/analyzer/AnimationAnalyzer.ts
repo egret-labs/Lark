@@ -34,27 +34,11 @@ module RES {
      * SpriteSheet解析器
      * @private
      */
-    export class SheetAnalyzer extends BinAnalyzer {
+    export class AnimationAnalyzer extends BinAnalyzer {
 
         public constructor() {
             super();
             this.responseType = lark.HttpResponseType.TEXT;
-        }
-
-        public getRes(name:string):any {
-            var res:any = this.fileDic[name];
-            if (!res) {
-                res = this.textureMap[name];
-            }
-            if (!res) {
-                var prefix:string = RES.AnalyzerBase.getStringPrefix(name);
-                res = this.fileDic[prefix];
-                if (res) {
-                    var tail:string = RES.AnalyzerBase.getStringTail(name);
-                    res = res[tail];
-                }
-            }
-            return res;
         }
 
         /**
@@ -91,8 +75,6 @@ module RES {
         }
 
         public sheetMap:any = {};
-
-        private textureMap:any = {};
 
         /**
          * 解析并缓存加载成功的配置文件
@@ -150,22 +132,15 @@ module RES {
             if (!frames) {
                 return null;
             }
-            var spriteSheet = {};
-            var textureMap:any = this.textureMap;
+            var spriteSheet = [];
             for (var subkey in frames) {
                 var config:any = frames[subkey];
                 var subTexture = new lark.Texture(texture, config.x, config.y, config.w, config.h, config.offX, config.offY, config.sourceW, config.sourceH);
-                spriteSheet[subkey] = subTexture;
+                spriteSheet.push(subTexture);
                 if (config["scale9grid"]) {
                     var str:string = config["scale9grid"];
                     var list:Array<string> = str.split(",");
                     texture["scale9Grid"] = new lark.Rectangle(parseInt(list[0]), parseInt(list[1]), parseInt(list[2]), parseInt(list[3]));
-                }
-                if (textureMap[subkey] == null) {
-                    textureMap[subkey] = texture;
-                    if (name) {
-                        this.addSubkey(subkey, name);
-                    }
                 }
             }
             return spriteSheet;
@@ -175,11 +150,6 @@ module RES {
             var sheet:any = this.fileDic[name];
             if (sheet) {
                 delete this.fileDic[name];
-                for (var subkey in sheet) {
-                    if (this.textureMap[subkey]) {
-                        delete this.textureMap[subkey];
-                    }
-                }
                 return true;
             }
             return false;
