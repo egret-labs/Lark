@@ -31,7 +31,7 @@
         },
         {
             "name": "swan",
-            "description": "Swan图形界面库",
+            "description": "Swan 图形界面库",
             "files": [
                 { "path": "i18n/en_US.ts", "debug": true },
                 { "path": "i18n/zh_CN.ts", "debug": true }
@@ -41,7 +41,7 @@
         },
         {
             "name": "resource",
-            "description": "RES资源加载库",
+            "description": "RES 资源加载库",
             "files": [
                 { "path": "i18n/en_US.ts", "debug": true },
                 { "path": "i18n/zh_CN.ts", "debug": true }
