@@ -20,12 +20,22 @@ outline.graphics.strokeStyle = "#00ff00";
 outline.graphics.beginPath();
 outline.graphics.strokeRect( 0, 0, 500, 300 );
 this.myGroup.addChild( outline );
-var hLayout:egret.gui.HorizontalLayout = new egret.gui.HorizontalLayout();
+
+var btn1:swan.Button = new swan.Button();
+btn1.label = "Lark 按钮 A";
+var btn2:swan.Button = new swan.Button();
+btn2.label = "Lark 按钮 B";
+var btn3:swan.Button = new swan.Button();
+btn3.label = "Lark 按钮 C";
+this.myGroup.addChild( btn1 );
+this.myGroup.addChild( btn2 );
+this.myGroup.addChild( btn3 );
+
+var hLayout:swan.HorizontalLayout = new swan.HorizontalLayout();
 hLayout.gap = 10;
-hLayout.horizontalAlign = egret.HorizontalAlign.CENTER;
-hLayout.padding = 10;
-hLayout.verticalAlign = egret.VerticalAlign.MIDDLE;
-this.myGroup.layout = hLayout;//横向布局
+hLayout.paddingTop = 30;
+hLayout.horizontalAlign = lark.HorizontalAlign.CENTER;
+this.myGroup.layout = hLayout;  //横向布局
 ```              
 效果如图：
 ![][6-2-layout-HLayout]     
