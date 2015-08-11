@@ -4356,13 +4356,13 @@ var lark;
      * @language en_US
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample egret/display/Texture.ts
+     * @includeExample examples/Samples/src/lark/display/TextureExample.ts
      */
     /**
      * @language zh_CN
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample egret/display/Texture.ts
+     * @includeExample examples/Samples/src/lark/display/TextureExample.ts
      */
     var Texture = (function (_super) {
         __extends(Texture, _super);
