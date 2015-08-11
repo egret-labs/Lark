@@ -35,7 +35,7 @@ var hLayout:swan.HorizontalLayout = new swan.HorizontalLayout();
 hLayout.gap = 10;
 hLayout.paddingTop = 30;
 hLayout.horizontalAlign = lark.HorizontalAlign.CENTER;
-this.myGroup.layout = hLayout;  //横向布局
+this.myGroup.layout = hLayout;   /// 横向布局
 ```              
 效果如图：
 ![][6-2-layout-HLayout]     
