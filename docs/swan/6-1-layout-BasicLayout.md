@@ -66,7 +66,7 @@ btn.right = 20;
 this.myGroup.addChild( btn );
 ```              
 效果如图：    
-![][6-1-layout-BasicLayout-center]     
+![][6-1-layout-BasicLayout-side-dist]     
 
 #### 百分比设定
 在尺寸的定义上，您还可以使用百分比。比如要让按钮容器的尺寸一致，可以设置：    
@@ -86,7 +86,7 @@ btn.verticalCenter = 0;
 ```              
 效果如图：    
 ![][6-1-layout-BasicLayout-percent]     
-如图中效果所示，这些属性可以混合利用(相矛盾的设置除外)。
+如图中效果所示，这些属性可以混合利用(相矛盾的设置除外)。   
 
 [6-1-layout-BasicLayout-percent]: image/6/6-1-layout-BasicLayout-percent.jpg
 [6-1-layout-BasicLayout-side-dist]: image/6/6-1-layout-BasicLayout-side-dist.jpg
