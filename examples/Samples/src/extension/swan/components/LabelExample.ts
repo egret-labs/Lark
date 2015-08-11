@@ -13,11 +13,11 @@ class LabelExample extends lark.Sprite {
 
         var exml =
             `<s:Group width="600" height="400" xmlns:s="http://ns.egret.com/swan">
-                <s:Label text="左上角" left="0" top="0" textColor="0xFFFFFF"/>
-                <s:Label text="右上角" right="0" top="0" textColor="0xFFFFFF"/>
-                <s:Label text="左下角" left="0" bottom="0" textColor="0xFFFFFF"/>
-                <s:Label text="右下角" right="0" bottom="0" textColor="0xFFFFFF"/>
-                <s:Label text="居中" horizontalCenter="0" verticalCenter="0" textColor="0xFFFFFF"/>
+                <s:Label text="LeftTop" left="0" top="0" textColor="0xFFFFFF"/>
+                <s:Label text="RightTop" right="0" top="0" textColor="0xFFFFFF"/>
+                <s:Label text="LeftBottom" left="0" bottom="0" textColor="0xFFFFFF"/>
+                <s:Label text="RightBottom" right="0" bottom="0" textColor="0xFFFFFF"/>
+                <s:Label text="Center" horizontalCenter="0" verticalCenter="0" textColor="0xFFFFFF"/>
             </s:Group>`;
 
         var clazz = EXML.parse(exml);

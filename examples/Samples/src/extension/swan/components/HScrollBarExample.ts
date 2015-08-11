@@ -26,22 +26,22 @@ class HScrollBarExample extends lark.Sprite {
                             </s:itemRenderer>
                             <s:ArrayCollection>
                                 <s:Array>
-                                    <s:Object label="项目1"/>
-                                    <s:Object label="项目2"/>
-                                    <s:Object label="项目3"/>
-                                    <s:Object label="项目4"/>
-                                    <s:Object label="项目5"/>
-                                    <s:Object label="项目6"/>
-                                    <s:Object label="项目7"/>
-                                    <s:Object label="项目8"/>
-                                    <s:Object label="项目9"/>
-                                    <s:Object label="项目10"/>
-                                    <s:Object label="项目11"/>
-                                    <s:Object label="项目12"/>
-                                    <s:Object label="项目13"/>
-                                    <s:Object label="项目14"/>
-                                    <s:Object label="项目15"/>
-                                    <s:Object label="项目16"/>
+                                    <s:Object label="Item1"/>
+                                    <s:Object label="Item2"/>
+                                    <s:Object label="Item3"/>
+                                    <s:Object label="Item4"/>
+                                    <s:Object label="Item5"/>
+                                    <s:Object label="Item6"/>
+                                    <s:Object label="Item7"/>
+                                    <s:Object label="Item8"/>
+                                    <s:Object label="Item9"/>
+                                    <s:Object label="Item10"/>
+                                    <s:Object label="Item11"/>
+                                    <s:Object label="Item12"/>
+                                    <s:Object label="Item13"/>
+                                    <s:Object label="Item14"/>
+                                    <s:Object label="Item15"/>
+                                    <s:Object label="Item16"/>
                                 </s:Array>
                             </s:ArrayCollection>
                         </s:List>

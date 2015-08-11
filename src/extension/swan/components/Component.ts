@@ -28,6 +28,10 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module swan.sys {
+
+    /**
+     * @private
+     */
     export const enum ComponentKeys {
         hostComponentKey,
         skinName,

@@ -27,14 +27,14 @@ class MotionExample extends lark.Sprite {
 
     onMove(e: lark.MotionEvent) {
         this.labelMotion.text =
-        "加速度（包括重力）: \nx:" + e.accelerationIncludingGravity.x
+        "Acceleration (including gravity): \nx:" + e.accelerationIncludingGravity.x
         + ",\ny:" + e.accelerationIncludingGravity.y
         + ",\nz:" + e.accelerationIncludingGravity.z
-        + "\n加速度: "
+        + "\nAcceleration: "
         + "\nx:" + e.acceleration.x
         + ",\ny:" + e.acceleration.y
         + ",\nz:" + e.acceleration.z
-        + "\n角速度: "
+        + "\nAngular velocity: "
         + "\nalpha:" + e.rotationRate.alpha
         + ",\nbeta:" + e.rotationRate.beta
         + ",\ngamma:" + e.rotationRate.gamma;

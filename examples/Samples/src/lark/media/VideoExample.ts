@@ -18,7 +18,6 @@ class VideoExample extends lark.Sprite {
         video.height = 240;
         video.fullscreen = true;
 
-        //The URL of an image you want to display before the video is loaded or video cannot been draw on the canvas on some mobile device.
         //视频加载前，或者在不支持将 video 画在 canvas 的设备上，想要显示的视频截图地址。
         video.poster = "resources/posterfullscreen.jpg";
 
