@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <s:Group class="components.MainGroup" touchThrough="true" xmlns:s="http://ns.egret.com/swan" xmlns:c="components.*"
     verticalCenter="0" horizontalCenter="0" width="880" height="405">
     <s:Image source="resource/assets/whiteBg.png" top="0" bottom="0" left="0" right="0" />
-    <c:TabBar dataProvider="{viewStack}" width="180"/>
+  <c:TabBar dataProvider="{viewStack}" width="180"/>
     <s:ViewStack id="viewStack" verticalCenter="0" left="180" top="0" right="0" bottom="0">
         <s:Group name="Button" left="100" height = "300">
             <s:layout>
@@ -13,7 +13,7 @@
                 <s:Button x="150" label="禁用" enabled="false"/>
             </s:Group>
             <s:Group>
-                <c:CancelButton label="取消" height="50" width="100"/>
+                <s:Button label="取消" height="50" width="100" skinName="skins.red.ButtonSkin"/>
                 <c:CloseButton width="30" x="150" height="30" top="10" />
             </s:Group>
              <s:Group>
