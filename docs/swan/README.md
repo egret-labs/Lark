@@ -38,11 +38,11 @@ Swan (UI库) 编程指南
 	* [层叠容器]()	
 	* [面板容器]()	
 	* [滚动控制]()		
-9. [数据集合]()	
-	* [数据容器](editing)
-	* [数组集合](editing)
-	* [列表](editing)	
-	* [选项卡](editing)	
-	* [自定义项呈示器](editing)	
+9. [数据集合]()	(editing)
+	* [数据容器]()(editing)
+	* [数组集合]()(editing)
+	* [列表]()(editing)	
+	* [选项卡]()(editing)	
+	* [自定义项呈示器]()(editing)	
 
 	
