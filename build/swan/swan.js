@@ -16113,7 +16113,6 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample src/extension/swan/components/HScrollBar.ts
      */
     /**
      * @language zh_CN
@@ -16126,7 +16125,6 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample src/extension/swan/components/HScrollBar.ts
      */
     var ScrollBarBase = (function (_super) {
         __extends(ScrollBarBase, _super);

@@ -29,6 +29,9 @@
 
 module lark.web {
 
+    /**
+     * @private
+     */
     interface PlayerOption {
         /**
          * 入口类完整类名
@@ -80,6 +83,9 @@ module lark.web {
         highResolutionMode?: string;
     }
 
+    /**
+     * @private
+     */
     export class WebPlayer extends HashObject implements lark.sys.Screen {
 
         public constructor(container:HTMLDivElement) {

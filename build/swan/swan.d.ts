@@ -6396,6 +6396,9 @@ declare module swan {
     }
 }
 declare module swan.sys {
+    /**
+     * @private
+     */
     const enum UIKeys {
         left = 0,
         right = 1,
@@ -8028,6 +8031,9 @@ declare module swan {
     }
 }
 declare module swan.sys {
+    /**
+     * @private
+     */
     const enum ComponentKeys {
         hostComponentKey = 0,
         skinName = 1,
@@ -9666,7 +9672,6 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample src/extension/swan/components/HScrollBar.ts
      */
     /**
      * @language zh_CN
@@ -9679,7 +9684,6 @@ declare module swan {
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample src/extension/swan/components/HScrollBar.ts
      */
     class ScrollBarBase extends Component {
         /**
@@ -9954,6 +9958,9 @@ declare module swan {
     }
 }
 declare module swan.sys {
+    /**
+     * @private
+     */
     const enum RangeKeys {
         maximum = 0,
         maxChanged = 1,
@@ -11799,6 +11806,9 @@ declare module swan {
     }
 }
 declare module swan {
+    /**
+     * @private
+     */
     const enum Keys {
         clickOffsetX = 0,
         clickOffsetY = 1,

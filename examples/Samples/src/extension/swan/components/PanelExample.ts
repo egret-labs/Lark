@@ -17,7 +17,7 @@ class PanelExample extends lark.Sprite {
                         <s:Image width="100%" height="100%" source="resources/track.png" scale9Grid="1,1,4,4"/>
                         <s:Group id="moveArea" width="100%" height="40">
                             <s:Image width="100%" height="100%" source="resources/thumb.png" scale9Grid="1,1,4,4"/>
-                            <s:Label id="titleDisplay" text="标题" textColor="0" horizontalCenter="0" verticalCenter="0"/>
+                            <s:Label id="titleDisplay" text="Title" textColor="0" horizontalCenter="0" verticalCenter="0"/>
                         </s:Group>
                         <s:Button id="closeButton" right="-15" y="-15">
                             <s:Skin states="up,down,disabled">

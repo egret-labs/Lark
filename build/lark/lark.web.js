@@ -2242,6 +2242,9 @@ var lark;
 (function (lark) {
     var web;
     (function (web) {
+        /**
+         * @private
+         */
         var WebPlayer = (function (_super) {
             __extends(WebPlayer, _super);
             function WebPlayer(container) {

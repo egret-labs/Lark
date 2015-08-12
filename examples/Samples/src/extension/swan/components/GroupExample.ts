@@ -20,16 +20,16 @@ class GroupExample extends lark.Sprite {
                     <s:layout>
                         <s:VerticalLayout gap="20"/>
                     </s:layout>
-                    <s:Label text="北京" textColor="0xFFFFFF"/>
-                    <s:Label text="晴天" textColor="0xFFFFCC"/>
+                    <s:Label text="BeiJIng" textColor="0xFFFFFF"/>
+                    <s:Label text="sunny" textColor="0xFFFFCC"/>
                     <s:Image source="resources/sunny.png"/>
                 </s:Group>
                 <s:Group>
                     <s:layout>
                         <s:VerticalLayout gap="20"/>
                     </s:layout>
-                    <s:Label text="上海" textColor="0xFFFFFF"/>
-                    <s:Label text="多云" textColor="0xFFFFCC"/>
+                    <s:Label text="ShangHai" textColor="0xFFFFFF"/>
+                    <s:Label text="cloudy" textColor="0xFFFFCC"/>
                     <s:Image source="resources/cloudy.png"/>
                 </s:Group>
             </s:Group>`;

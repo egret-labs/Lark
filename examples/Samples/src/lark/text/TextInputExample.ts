@@ -12,14 +12,14 @@ class TextInputExample extends lark.Sprite {
         super();
         var input = new lark.TextInput();
         input.textColor = 0xff0000;
-        input.text = "请输入文字";
+        input.text = "Please input account";
         this.addChild(input);
         input.on(lark.Event.CHANGE,this.onChange,this);
 
         var password = new lark.TextInput();
         password.displayAsPassword = true;
         password.textColor = 0xff0000;
-        password.text = "请输入密码";
+        password.text = "Please input password";
         password.y = 100;
         this.addChild(password);
         password.on(lark.Event.CHANGE,this.onChange,this);
