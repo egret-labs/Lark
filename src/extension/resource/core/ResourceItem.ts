@@ -29,122 +29,281 @@
 
 module RES {
 
-	/**
-	 * @class RES.ResourceItem
-	 * @classdesc
-	 * @private
-	 */
-	export class ResourceItem{
-		/**
-		 * Animation文件
-		 * @constant {string} RES.ResourceItem.TYPE_Animation
-		 */
-		public static TYPE_ANIMATION:string = "animation";
-		/**
-		 * XML文件  
-		 * @constant {string} RES.ResourceItem.TYPE_XML
-		 */		
-		public static TYPE_XML:string = "xml";
-		/** 
-		 * 图片文件 
-		 * @constant {string} RES.ResourceItem.TYPE_IMAGE
-		 */		
-		public static TYPE_IMAGE:string = "image";
-		/** 
-		 * 二进制流文件
-		 * @constant {string} RES.ResourceItem.TYPE_BIN
-		 * @platform Web
-		 */		
-		public static TYPE_BIN:string = "bin";
-		/**
-		 * 文本文件(解析为字符串)
-		 * @constant {string} RES.ResourceItem.TYPE_TEXT
-		 */		
-		public static TYPE_TEXT:string = "text";
+    /**
+     * @language en_US
+     * Resource term. One of the resources arrays in resource.json.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 资源项。对应 resource.json 中 resources 数组中的一项。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    export class ResourceItem {
+
         /**
-         * JSON文件
-		 * @constant {string} RES.ResourceItem.TYPE_JSON
+         * @language en_US
+         * Animation configuration file. Currently supports Egret MovieClip file format.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * Animation 配置文件。目前支持 Egret MovieClip 文件格式。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public static TYPE_ANIMATION:string = "animation";
+
+        /**
+         * @language en_US
+         * XML file.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * XML 文件。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public static TYPE_XML:string = "xml";
+
+        /**
+         * @language en_US
+         * Picture file.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 图片文件。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public static TYPE_IMAGE:string = "image";
+
+        /**
+         * @language en_US
+         * Binary file.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 二进制文件。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public static TYPE_BIN:string = "bin";
+
+        /**
+         * @language en_US
+         * Text file.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 文本文件。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public static TYPE_TEXT:string = "text";
+
+        /**
+         * @language en_US
+         * JSON file.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * JSON 文件。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public static TYPE_JSON:string = "json";
+
         /**
-         * SpriteSheet文件
-		 * @constant {string} RES.ResourceItem.TYPE_SHEET
+         * @language en_US
+         * SpriteSheet file.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * SpriteSheet 文件。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public static TYPE_SHEET:string = "sheet";
+
         /**
-         * BitmapTextSpriteSheet文件
-		 * @constant {string} RES.ResourceItem.TYPE_FONT
+         * @language en_US
+         * BitmapTextSpriteSheet file.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * BitmapTextSpriteSheet 文件。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public static TYPE_FONT:string = "font";
+
         /**
-         * 声音文件
-		 * @constant {string} RES.ResourceItem.TYPE_SOUND
+         * @language en_US
+         * Sound file.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 声音文件。
+         * @version Lark 1.0
+         * @platform Web,Native
          */
         public static TYPE_SOUND:string = "sound";
 
-		/**
-		 * 构造函数
-		 * @method RES.ResourceItem#constructor
-		 * @param name {string} 加载项名称
-		 * @param url {string} 要加载的文件地址 
-		 * @param type {string} 加载项文件类型
-		 */
-		public constructor(name:string,url:string,type:string){
-			this.name = name;
-			this.url = url;
-			this.type = type;
-		}
-		
-		/**
-		 * 加载项名称
-		 * @member {string} RES.ResourceItem#name
-		 */
-		public name:string;
-		/**
-		 * 要加载的文件地址 
-		 * @member {string} RES.ResourceItem#url
-		 */
-		public url:string;
-		/**
-		 * 加载项文件类型
-		 * @member {string} RES.ResourceItem#type
-		 */
-		public type:string;
+        /**
+         * @language en_US
+         * Constructor.
+         * @param name Name of resource term.
+         * @param url URL of resource term.
+         * @param type Type of resource term.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         * @param name 加载项名称。
+         * @param url 要加载的文件地址。
+         * @param type 加载项文件类型。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public constructor(name:string, url:string, type:string) {
+            this.name = name;
+            this.url = url;
+            this.type = type;
+        }
 
         /**
-         * 所属组名
-		 * @member {string} RES.ResourceItem#groupName
+         * @language en_US
+         * Name of resource term.
+         * @version Lark 1.0
+         * @platform Web,Native
          */
-		public groupName:string = "";
-		/**
-		 * 被引用的原始数据对象
-		 * @member {any} RES.ResourceItem#data
-		 */		
-		public data:any = null;
-		
-		private _loaded:boolean = false;
-		/**
-		 * 加载完成的标志
-		 * @member {boolean} RES.ResourceItem#loaded
-		 */
-		public get loaded():boolean{
-			return this.data?this.data.loaded:this._loaded;
-		}
+        /**
+         * @language zh_CN
+         * 加载项名称。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public name:string;
 
-		public set loaded(value:boolean){
-			if(this.data)
-				this.data.loaded = value;
-			this._loaded = value;
-		}
+        /**
+         * @language en_US
+         * URL of resource term.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要加载的文件地址。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public url:string;
 
-		
-		/**
-		 * 转成字符串
-		 * @method RES.ResourceItem#toString
-		 * @returns {string}
-		 */
-		public toString():string{
-			return "[ResourceItem name=\""+this.name+"\" url=\""+this.url+"\" type=\""+this.type+"\"]";
-		}
-	}
+        /**
+         * @language en_US
+         * Type of resource term.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 加载项文件类型。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public type:string;
+
+        /**
+         * @language en_US
+         * Name of the resource term group.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 资源所属的组名。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public groupName:string = "";
+
+        /**
+         * @language en_US
+         * The raw data object to be referenced.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 被引用的原始数据对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public data:any = null;
+
+        /**
+         * @private
+         */
+        private _loaded:boolean = false;
+
+        /**
+         * @language en_US
+         * Load complete flag.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 加载完成的标志。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public get loaded():boolean {
+            return this.data ? this.data.loaded : this._loaded;
+        }
+
+        public set loaded(value:boolean) {
+            if (this.data)
+                this.data.loaded = value;
+            this._loaded = value;
+        }
+
+        /**
+         * @language en_US
+         * Turn into a string.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 转成字符串。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public toString():string {
+            return "[ResourceItem name=\"" + this.name + "\" url=\"" + this.url + "\" type=\"" + this.type + "\"]";
+        }
+    }
 }

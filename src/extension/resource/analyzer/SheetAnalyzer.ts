@@ -162,7 +162,7 @@ module RES {
                     texture["scale9Grid"] = new lark.Rectangle(parseInt(list[0]), parseInt(list[1]), parseInt(list[2]), parseInt(list[3]));
                 }
                 if (textureMap[subkey] == null) {
-                    textureMap[subkey] = texture;
+                    textureMap[subkey] = subTexture;
                     if (name) {
                         this.addSubkey(subkey, name);
                     }
