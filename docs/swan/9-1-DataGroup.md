@@ -89,7 +89,61 @@ dataGroup.itemRenderer = LabelRenderer;
 
 ![](./image/9/9_1_1.png)
 
+完整代码如下：
 
+Main.ts
+
+```
+class Main extends swan.Group {
+
+    public constructor() {
+        super();
+    }
+
+    protected createChildren():void 
+    {
+        this.width = this.stage.stageWidth;
+        this.height = this.stage.stageHeight;
+
+        //先创建一个数组
+        var sourceArr:any[] = [];
+        for (var i:number = 1; i < 5; i++)
+        {
+            sourceArr.push({label:"item"+i});
+        }
+        //用ArrayCollection包装
+        var myCollection:swan.ArrayCollection = new swan.ArrayCollection(sourceArr);
+
+        var dataGroup:swan.DataGroup = new swan.DataGroup();
+        dataGroup.dataProvider = myCollection;
+        dataGroup.percentWidth = 100;
+        dataGroup.percentHeight = 100;
+        this.addChild(dataGroup);
+
+        dataGroup.itemRenderer = LabelRenderer;
+    }
+}
+```
+
+LabelRenderer.ts
+
+```
+class LabelRenderer extends swan.ItemRenderer
+{
+
+	private labelDisplay:swan.Label;
+    public constructor(){
+        super();
+        this.touchChildren = true;
+
+        this.labelDisplay = new swan.Label();
+        this.addChild( this.labelDisplay );
+    }
+    public dataChanged():void{
+        this.labelDisplay.text = this.data.label;
+    }
+}
+```
 
 
 
