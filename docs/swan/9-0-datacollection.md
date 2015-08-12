@@ -9,4 +9,4 @@
  * [列表](9-3-list.md)	
  * [选项卡](9-4-TabBar.md)	
  * [自定义项呈示器]()	
- * [自定义项呈示器](9-5-ItemRenderer.md)(editing)	
+ * [自定义项呈示器](9-5-ItemRenderer.md)
