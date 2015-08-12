@@ -6,7 +6,7 @@ Swan (UI库) 编程指南
 	* [引用Swan库]()
 	* [注入素材适配器]()
 3. [EXML](3-0-exml-overview.md)（done）
-	* [如何使用EXML](3-1-use-exml.md)（加载EXML，解析EXML,内嵌EXML）
+	* [如何使用EXML](3-1-use-exml.md)（done）
 	* [EXML基本语法](3-2-exml-syntax.md)（根节点继承，节点默认属性，数据绑定，内部类，视图状态，描述自定义组件）
 4. [皮肤机制]()
 	* [自定义皮肤]()（先用内部类定义自身皮肤，需要复用的情况才定义独立文件）
