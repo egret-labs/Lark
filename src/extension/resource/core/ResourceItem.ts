@@ -142,12 +142,14 @@ module RES {
         public static TYPE_SHEET:string = "sheet";
 
         /**
+         * @private
          * @language en_US
          * BitmapTextSpriteSheet file.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
+         * @private
          * @language zh_CN
          * BitmapTextSpriteSheet 文件。
          * @version Lark 1.0
