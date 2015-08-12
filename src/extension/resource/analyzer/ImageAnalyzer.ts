@@ -32,14 +32,15 @@ module RES {
     /**
      * @private
      */
-    export class ImageAnalyzer extends AnalyzerBase{
+    export class ImageAnalyzer extends AnalyzerBase {
 
         /**
          * 构造函数
          */
-        public constructor(){
+        public constructor() {
             super();
         }
+
         /**
          * 字节流数据缓存字典
          */
@@ -48,16 +49,17 @@ module RES {
          * 加载项字典
          */
         protected resItemDic:Array<any> = [];
+
         /**
          * @inheritDoc
          */
-        public loadFile(resItem:ResourceItem,compFunc:Function,thisObject:any):void{
-            if(this.fileDic[resItem.name]){
-                compFunc.call(thisObject,resItem);
+        public loadFile(resItem:ResourceItem, compFunc:Function, thisObject:any):void {
+            if (this.fileDic[resItem.name]) {
+                compFunc.call(thisObject, resItem);
                 return;
             }
             var loader = this.getLoader();
-            this.resItemDic[loader.$hashCode] = {item:resItem,func:compFunc,thisObject:thisObject};
+            this.resItemDic[loader.$hashCode] = {item: resItem, func: compFunc, thisObject: thisObject};
             loader.load(resItem.url);
         }
 
@@ -65,68 +67,74 @@ module RES {
          * Loader对象池
          */
         protected recycler:lark.ImageLoader[] = [];
+
         /**
          * 获取一个Loader对象
          */
-        private getLoader():lark.ImageLoader{
+        private getLoader():lark.ImageLoader {
             var loader = this.recycler.pop();
-            if(!loader){
+            if (!loader) {
                 loader = new lark.ImageLoader();
-                loader.on(lark.Event.COMPLETE,this.onLoadFinish,this);
-                loader.on(lark.Event.IO_ERROR,this.onLoadFinish,this);
+                loader.on(lark.Event.COMPLETE, this.onLoadFinish, this);
+                loader.on(lark.Event.IO_ERROR, this.onLoadFinish, this);
             }
             return loader;
         }
+
         /**
          * 一项加载结束
          */
-        protected onLoadFinish(event:lark.Event):void{
+        protected onLoadFinish(event:lark.Event):void {
             var request = <lark.ImageLoader> (event.$target);
             var data:any = this.resItemDic[request.$hashCode];
             delete this.resItemDic[request.$hashCode];
             var resItem:ResourceItem = data.item;
             var compFunc:Function = data.func;
-            resItem.loaded = (event.$type==lark.Event.COMPLETE);
-            if(resItem.loaded){
-                this.analyzeData(resItem,request.data)
+            resItem.loaded = (event.$type == lark.Event.COMPLETE);
+            if (resItem.loaded) {
+                this.analyzeData(resItem, request.data)
             }
             this.recycler.push(request);
-            compFunc.call(data.thisObject,resItem);
+            compFunc.call(data.thisObject, resItem);
         }
+
         /**
          * 解析并缓存加载成功的数据
          */
-        protected analyzeData(resItem:ResourceItem,data:lark.BitmapData):void{
+        protected analyzeData(resItem:ResourceItem, data:lark.BitmapData):void {
             var name:string = resItem.name;
-            if(this.fileDic[name]||!data){
+            if (this.fileDic[name] || !data) {
                 return;
             }
             this.fileDic[name] = data;
             var config:any = resItem.data;
-            if(config&&config["scale9grid"]){
+            if (config && config["scale9grid"]) {
                 var str:string = config["scale9grid"];
                 var list:Array<string> = str.split(",");
-                data["scale9Grid"] = new lark.Rectangle(parseInt(list[0]),parseInt(list[1]),parseInt(list[2]),parseInt(list[3]));
+                data["scale9Grid"] = new lark.Rectangle(parseInt(list[0]), parseInt(list[1]), parseInt(list[2]), parseInt(list[3]));
             }
         }
+
         /**
          * @inheritDoc
          */
-        public getRes(name:string):any{
+        public getRes(name:string):any {
             return this.fileDic[name];
         }
+
         /**
          * @inheritDoc
          */
-        public hasRes(name:string):boolean{
+        public hasRes(name:string):boolean {
             var res:any = this.getRes(name);
-            return res!=null;
+            return res != null;
         }
+
         /**
          * @inheritDoc
          */
-        public destroyRes(name:string):boolean{
-            if(this.fileDic[name]){
+        public destroyRes(name:string):boolean {
+            if (this.fileDic[name]) {
                 delete this.fileDic[name];
                 return true;
             }

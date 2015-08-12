@@ -29,6 +29,7 @@
 
 
 module RES {
+
     /**
      * @private
      */
