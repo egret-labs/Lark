@@ -47,7 +47,7 @@ module lark {
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/geom/PointExample.ts
      */
-    export class Point extends LarkObject {
+    export class Point extends HashObject {
 
         /**
          * @language en_US

@@ -19,7 +19,7 @@ class TextFieldExample extends lark.Sprite {
         var text1 = new lark.TextField();
         text1.width = stageWidth;
         text1.textColor = 0xff0000;
-        text1.text = "左对齐文本";
+        text1.text = "Left aligned text";
         this.addChild(text1);
 
         var text2 = new lark.TextField();
@@ -27,14 +27,14 @@ class TextFieldExample extends lark.Sprite {
         text2.y = 60;
         text2.textColor = 0xff0000;
         text2.textAlign = lark.HorizontalAlign.CENTER;
-        text2.text = "水平居中文本";
+        text2.text = "Horizontal center text";
         this.addChild(text2);
 
         var text3 = new lark.TextField();
         text3.width = stageWidth;
         text3.textColor = 0xff0000;
         text3.textAlign = lark.HorizontalAlign.RIGHT;
-        text3.text = "右对齐文本";
+        text3.text = "Horizontal right text";
         this.addChild(text3);
 
         var text4 = new lark.TextField();
@@ -43,7 +43,7 @@ class TextFieldExample extends lark.Sprite {
         text4.textColor = 0x009aff;
         text4.verticalAlign = lark.VerticalAlign.MIDDLE;
         text4.textAlign = lark.HorizontalAlign.CENTER;
-        text4.text = "垂直居中文本";
+        text4.text = "VerticalAlign middle text";
         this.addChild(text4);
 
         var text5 = new lark.TextField();
@@ -52,7 +52,7 @@ class TextFieldExample extends lark.Sprite {
         text5.textColor = 0x009aff;
         text5.verticalAlign = lark.VerticalAlign.BOTTOM;
         text5.textAlign = lark.HorizontalAlign.CENTER;
-        text5.text = "底对齐文本";
+        text5.text = "VerticalAlign bottom text";
         this.addChild(text5);
 
         var textMulti = new lark.TextField();
@@ -61,7 +61,7 @@ class TextFieldExample extends lark.Sprite {
         textMulti.y = 100;
         textMulti.textColor = 0xff0000;
         textMulti.lineSpacing = 10;
-        textMulti.text = "多行文字,Multi line,多行文字,Multi line,多行文字,Multi line";
+        textMulti.text = "Multi line,Multi line,Multi line,Multi line,Multi line,Multi line";
         this.addChild(textMulti);
 
     }

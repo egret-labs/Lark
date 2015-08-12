@@ -33,15 +33,15 @@ module lark {
      * @language en_US
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample egret/display/Texture.ts
+     * @includeExample examples/Samples/src/lark/display/TextureExample.ts
      */
     /**
      * @language zh_CN
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample egret/display/Texture.ts
+     * @includeExample examples/Samples/src/lark/display/TextureExample.ts
      */
-    export class Texture extends LarkObject {
+    export class Texture extends HashObject {
 
         /**
          * @language en_US
@@ -51,6 +51,7 @@ module lark {
          */
         /**
          * @language zh_CN
+
          * 创建一个 Texture 对象
          * @version Lark 1.0
          * @platform Web,Native

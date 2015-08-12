@@ -46,6 +46,7 @@ module swan {
      *      </s:Skin>
      * </pre>
      *
+     * @defaultProperty elementsContent
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -66,12 +67,13 @@ module swan {
      *      </s:Skin>
      * </pre>
      *
+     * @defaultProperty elementsContent
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
      */
-    export class Skin extends lark.LarkObject {
+    export class Skin extends lark.HashObject {
 
         /**
          * @language en_US

@@ -5,9 +5,12 @@ Swan (UI库) 编程指南
 2. [项目初始化]()
 	* [引用Swan库]()
 	* [注入素材适配器]()
-3. [EXML]()
-	* [如何使用EXML]()（加载EXML，解析EXML）
-	* [基本语法]()（根节点继承，节点默认属性，数据绑定，内部类，视图状态）
+	* [UI显示列表最佳实践]()
+3. [EXML](3-0-exml-overview.md)（done）
+	* [如何使用EXML](3-1-use-exml.md)（done）
+	* [EXML基本语法(一)](3-2-exml-syntax-1.md)（done)
+	* [EXML基本语法(二)](3-2-exml-syntax-2.md)
+	* [启用EXML语法提示](3-4-exml-auto-complete.md)
 4. [皮肤机制]()
 	* [自定义皮肤]()（先用内部类定义自身皮肤，需要复用的情况才定义独立文件）
 	* [皮肤部件]()（如何跟逻辑组件通讯）
@@ -17,12 +20,12 @@ Swan (UI库) 编程指南
 	* [自动布局原理]()
 	* [组件布局属性]()
 	* [调试技巧]()	
-6. [使用布局类](6-0-layout-overview.md)(doing) 
-	* [基本布局](6-1-layout-BasicLayout.md)(doing) 
-	* [水平布局]()(doing)
-	* [垂直布局]()
-	* [网格布局]()	
-	* [自定义布局]()
+6. [使用布局类](6-0-layout-overview.md)(done) 
+	* [基本布局](6-1-layout-BasicLayout.md)(done) 
+	* [水平布局](6-2-layout-HorizontalLayout.md)(done)
+	* [垂直布局](6-3-layout-VerticalLayout.md)(done)
+	* [网格布局](6-4-layout-TileLayout.md)	(done)
+	* [自定义布局](6-5-layout-Custom.md)	(done)
 7. [控件](7-0-component.md)(limengjie)
     * [文本](7-1-label.md)(limengjie)
     * [图片](7-2-image.md)(limengjie)
@@ -38,11 +41,11 @@ Swan (UI库) 编程指南
 	* [层叠容器]()	
 	* [面板容器]()	
 	* [滚动控制]()		
-9. [数据集合]()	
-	* [数据容器]()
-	* [数组集合]()
-	* [列表]()	
-	* [选项卡]()	
-	* [自定义项呈示器]()	
+9. [数据集合](9-0-datacollection.md)	(editing)
+	* [数据容器](9-1-DataGroup.md)(editing)
+	* [数组集合](9-2-ArrayCollection.md)(editing)
+	* [列表](9-3-list.md)(editing)	
+	* [选项卡](9-4-TabBar.md)(editing)	
+	* [自定义项呈示器](9-5-ItemRenderer.md)(editing)	
 
 	

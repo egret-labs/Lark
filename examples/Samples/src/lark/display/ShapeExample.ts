@@ -21,7 +21,7 @@ class ShapeExample extends lark.Sprite {
     private bgColor: number = 0xFFCC00;
     private borderColor: number = 0xFF0000;
     private borderSize: number = 4;
-    //划线
+
     private doDrawLine(): void {
         var child = new lark.Shape();
         child.graphics.strokeStyle = this.borderColor;
@@ -31,7 +31,7 @@ class ShapeExample extends lark.Sprite {
         this.addChild(child);
         child.x = 200;
     }
-    //画弧线
+
     private doDrawnRadian(): void {
         var child = new lark.Shape();
         child.graphics.strokeStyle = this.borderColor;
@@ -47,8 +47,6 @@ class ShapeExample extends lark.Sprite {
         this.addChild(child);
     }
 
-
-    //画圆
     private doDrawCircle(): void {
         var child = new lark.Shape();
         var halfSize = Math.round(this.size / 2);
@@ -63,7 +61,6 @@ class ShapeExample extends lark.Sprite {
         this.addChild(child);
     }
 
-    //画矩形
     private doDrawRect(): void {
         var child = new lark.Shape();
         child.graphics.fillStyle = this.bgColor;
@@ -76,7 +73,6 @@ class ShapeExample extends lark.Sprite {
         this.addChild(child);
     }
 
-    //画圆角矩形
     private doDrawRoundRect(): void {
         var r = this.size / 8;
         var child = new lark.Shape();

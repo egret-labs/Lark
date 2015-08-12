@@ -53,7 +53,7 @@ module lark {
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/geom/RectangleExample.ts
      */
-    export class Rectangle extends LarkObject {
+    export class Rectangle extends HashObject {
 
         /**
          * @language en_US
