@@ -48,7 +48,7 @@ module lark {
      * @version Lark 1.0
      * @platform Web,Native
      */
-    export class LarkObject {
+    export class HashObject {
 
         /**
          * @language en_US
@@ -88,6 +88,6 @@ module lark {
     }
 
     if (DEBUG) {
-        lark.$markReadOnly(LarkObject, "hashCode");
+        lark.$markReadOnly(HashObject, "hashCode");
     }
 }

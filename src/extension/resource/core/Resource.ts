@@ -37,6 +37,9 @@ module RES {
     var xmlAnalyzer = XMLAnalyzer;
     var animationAnalyzer = AnimationAnalyzer;
 
+    /**
+     * @private
+     */
     export class Resource extends lark.EventEmitter{
         /**
          * 构造函数

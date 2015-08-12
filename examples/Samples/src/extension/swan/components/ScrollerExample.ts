@@ -40,16 +40,16 @@ class ScrollerExample extends lark.Sprite {
                         </s:itemRenderer>
                         <s:ArrayCollection>
                             <s:Array>
-                                <s:Object label="文字1"/>
-                                <s:Object label="文字2"/>
-                                <s:Object label="文字3"/>
-                                <s:Object label="文字4"/>
-                                <s:Object label="文字5"/>
-                                <s:Object label="文字6"/>
-                                <s:Object label="文字7"/>
-                                <s:Object label="文字8"/>
-                                <s:Object label="文字9"/>
-                                <s:Object label="文字10"/>
+                                <s:Object label="Text1"/>
+                                <s:Object label="Text2"/>
+                                <s:Object label="Text3"/>
+                                <s:Object label="Text4"/>
+                                <s:Object label="Text5"/>
+                                <s:Object label="Text6"/>
+                                <s:Object label="Text7"/>
+                                <s:Object label="Text8"/>
+                                <s:Object label="Text9"/>
+                                <s:Object label="Text10"/>
                             </s:Array>
                         </s:ArrayCollection>
                     </s:List>

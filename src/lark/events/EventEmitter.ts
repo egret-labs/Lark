@@ -78,7 +78,7 @@ module lark {
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/events/EventEmitterExample.ts
      */
-    export class EventEmitter extends LarkObject implements IEventEmitter {
+    export class EventEmitter extends HashObject implements IEventEmitter {
 
         /**
          * @language en_US

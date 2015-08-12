@@ -33,7 +33,7 @@ module lark.sys {
      * @private
      * 用户交互操作管理器
      */
-    export class TouchHandler extends LarkObject {
+    export class TouchHandler extends HashObject {
 
         /**
          * @private

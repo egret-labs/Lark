@@ -17,10 +17,10 @@ class TabBarExample extends lark.Sprite {
                 </s:TabBar>
                 <s:ViewStack y="50" id="viewStack">
                     <s:Group name="tab1">
-                        <s:Label text="测试面板1" x="50" y="50"/>
+                        <s:Label text="TestPanel1" x="50" y="50"/>
                     </s:Group>
                     <s:Group name="tab2">
-                        <s:Label text="测试面板2" x="50" y="50"/>
+                        <s:Label text="TestPanel2" x="50" y="50"/>
                     </s:Group>
                 </s:ViewStack>
             </s:Group>`;

@@ -32,7 +32,7 @@ module lark.sys {
      * @private
      * Lark播放器
      */
-    export class Player extends LarkObject {
+    export class Player extends HashObject {
 
         /**
          * @private

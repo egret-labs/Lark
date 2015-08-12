@@ -46,7 +46,7 @@ module lark.web {
      * @private
      * Web 环境下的输入文本
      */
-    export class WebTextAdapter extends LarkObject implements sys.ITextAdapter {
+    export class WebTextAdapter extends HashObject implements sys.ITextAdapter {
         /**
          * @private
          */

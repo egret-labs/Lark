@@ -52,7 +52,7 @@ module swan {
      * @version Swan 1.0
      * @platform Web,Native
      */
-    export class State extends lark.LarkObject {
+    export class State extends lark.HashObject {
         /**
          * @language en_US
          * Constructor.

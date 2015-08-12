@@ -31,7 +31,7 @@ module lark.web {
     /**
      * @private
      */
-    export class WebTouchHandler extends LarkObject {
+    export class WebTouchHandler extends HashObject {
 
         /**
          * @private

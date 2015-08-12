@@ -34,7 +34,7 @@ module RES {
      * @private
      * 加载器基类
      */
-    export class AnalyzerBase extends lark.LarkObject {
+    export class AnalyzerBase extends lark.HashObject{
 
         public constructor() {
             super();

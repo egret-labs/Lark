@@ -60,7 +60,7 @@ module lark {
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/events/EventExample.ts
      */
-    export class Event extends LarkObject {
+    export class Event extends HashObject {
         /**
          * @language en_US
          * Emitted when a display object is added to the on stage display list, either directly or through the addition
